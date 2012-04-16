@@ -588,15 +588,13 @@ void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiT
         append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
-    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName, rTokens, 0 );
-    OSL_ENSURE( xNamedRange.is(), "SheetDataBuffer::createSharedFormula - cannot create shared formula" );
-    PropertySet aNameProps( xNamedRange );
-    aNameProps.setProperty( PROP_IsSharedFormula, true );
+    ScRangeData* pScRangeData = createNamedRangeObject( aName, rTokens, 0 );
+    pScRangeData->SetType(RT_SHARED);
 
     // get and store the token index of the defined name
     OSL_ENSURE( maSharedFormulas.count( rMapKey ) == 0, "SheetDataBuffer::createSharedFormula - shared formula exists already" );
-    sal_Int32 nTokenIndex = 0;
-    if( aNameProps.getProperty( nTokenIndex, PROP_TokenIndex ) && (nTokenIndex >= 0) ) try
+    sal_Int32 nTokenIndex = static_cast< sal_Int32 >( pScRangeData->GetIndex() );
+    if( nTokenIndex >= 0 ) try
     {
         // store the token index in the map
         maSharedFormulas[ rMapKey ] = nTokenIndex;

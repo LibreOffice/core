@@ -30,6 +30,7 @@
 #define OOX_XLS_DEFINEDNAMESBUFFER_HXX
 
 #include "formulabase.hxx"
+#include "rangenam.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace sheet { class XNamedRange; }
@@ -155,8 +156,7 @@ private:
     typedef ::std::auto_ptr< StreamDataSequence >   StreamDataSeqPtr;
     typedef ::std::auto_ptr< BiffInputStreamPos >   BiffStreamPosPtr;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
-                        mxNamedRange;       /// XNamedRange interface of the defined name.
+    ScRangeData*        mpScRangeData;       /// ScRangeData of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Int16           mnCalcSheet;        /// Calc sheet index for sheet-local names.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.

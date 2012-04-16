@@ -33,6 +33,7 @@
 #include <rtl/ref.hxx>
 #include "oox/helper/storagebase.hxx"
 #include "biffhelper.hxx"
+#include "rangenam.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
@@ -183,8 +184,7 @@ public:
     /** Creates and returns a defined name on-the-fly in the Calc document.
         The name will not be buffered in the global defined names buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
-                        createNamedRangeObject(
+    ScRangeData* createNamedRangeObject(
                             ::rtl::OUString& orName,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
@@ -193,8 +193,7 @@ public:
     /** Creates and returns a defined name on-the-fly in the sheet.
         The name will not be buffered in the global defined names buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
-                        createLocalNamedRangeObject(
+    ScRangeData* createLocalNamedRangeObject(
                             ::rtl::OUString& orName,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,

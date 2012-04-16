@@ -35,7 +35,6 @@
 #include "worksheethelper.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace sheet { class XNamedRange; }
     namespace util { struct DateTime; }
 } } }
 

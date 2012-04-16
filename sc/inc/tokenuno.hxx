@@ -53,7 +53,7 @@ public:
                         ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
                         const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence );
-    static bool ConvertToTokenSequence(
+    static SC_DLLPUBLIC bool ConvertToTokenSequence(
                         ScDocument& rDoc,
                         com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray );

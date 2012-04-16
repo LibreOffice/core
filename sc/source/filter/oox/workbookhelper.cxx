@@ -165,9 +165,9 @@ public:
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
-    Reference< XNamedRange > createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const;
+    ScRangeData* createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const;
     /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
-    Reference< XNamedRange > createLocalNamedRangeObject( OUString& orName, const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const;
+    ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const;
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
@@ -358,7 +358,7 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
     OSL_ENSURE( xStyle.is(), "WorkbookGlobals::getStyleObject - cannot access style object" );
     return xStyle;
 }
-void lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, const Sequence<FormulaToken>& rTokens, sal_Int16 nIndex, sal_Int32 nUnoType )
+ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUString& rName, const Sequence<FormulaToken>& rTokens, sal_Int16 nIndex, sal_Int32 nUnoType )
 {
     bool bDone = false;
     sal_uInt16 nNewType = RT_NAME;
@@ -376,12 +376,14 @@ void lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, const OUS
         bDone = true;
     if (!bDone)
         throw RuntimeException();
+    return pNew;
 }
 
-Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
+ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
 {
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
+    ScRangeData* pScRangeData;
     if( !orName.isEmpty() ) try
     {
         // find an unused name
@@ -392,20 +394,19 @@ Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orNa
         // create the named range
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName();
-        lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
-        xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
+        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xNamedRange.is(), "WorkbookGlobals::createNamedRangeObject - cannot create defined name" );
-    return xNamedRange;
+    return pScRangeData;
 }
 
-Reference< XNamedRange > WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
+ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
 {
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
+    ScRangeData* pScRangeData;
     if( !orName.isEmpty() ) try
     {
         // find an unused name
@@ -420,14 +421,12 @@ Reference< XNamedRange > WorkbookGlobals::createLocalNamedRangeObject( OUString&
         // create the named range
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName( nTab );
-        lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
-        xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
+        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
     catch( Exception& )
     {
     }
-    OSL_ENSURE( xNamedRange.is(), "WorkbookGlobals::createLocalNamedRangeObject - cannot create defined name" );
-    return xNamedRange;
+    return pScRangeData;
 }
 
 Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
@@ -743,12 +742,12 @@ Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, 
     return mrBookGlob.getStyleObject( rStyleName, bPageStyle );
 }
 
-Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
+ScRangeData* WorkbookHelper::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
 {
     return mrBookGlob.createNamedRangeObject( orName, rTokens, nIndex, nNameFlags );
 }
 
-Reference< XNamedRange > WorkbookHelper::createLocalNamedRangeObject( OUString& orName, const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
+ScRangeData* WorkbookHelper::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
 {
     return mrBookGlob.createLocalNamedRangeObject( orName, rTokens, nIndex, nNameFlags, nTab );
 }

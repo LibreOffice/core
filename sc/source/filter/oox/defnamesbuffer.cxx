@@ -44,6 +44,8 @@
 #include "externallinkbuffer.hxx"
 #include "formulaparser.hxx"
 #include "worksheetbuffer.hxx"
+#include "tokenarray.hxx"
+#include "tokenuno.hxx"
 
 namespace oox {
 namespace xls {
@@ -380,9 +382,9 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
     if (maModel.mnSheet >= 0)
-        mxNamedRange = createLocalNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags, maModel.mnSheet );
+        mpScRangeData = createLocalNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags, maModel.mnSheet );
     else
-        mxNamedRange = createNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags );
+        mpScRangeData = createNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags );
     mnTokenIndex = nIndex;
 }
 
@@ -424,9 +426,9 @@ DefinedName::getTokens()
 
 void DefinedName::convertFormula()
 {
-    Reference< XFormulaTokens > xTokens( mxNamedRange, UNO_QUERY );
-    if( !xTokens.is() )
-        return;
+    ScTokenArray* pTokenArray = mpScRangeData->GetCode();
+    Sequence< FormulaToken > aFTokenSeq;
+    (void)ScTokenConversion::ConvertToTokenSequence( this->getScDocument(), aFTokenSeq, *pTokenArray );
     // set built-in names (print ranges, repeated titles, filter ranges)
     if( !isGlobalName() ) switch( mcBuiltinId )
     {
@@ -434,7 +436,7 @@ void DefinedName::convertFormula()
         {
             Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
             ApiCellRangeList aPrintRanges;
-            getFormulaParser().extractCellRangeList( aPrintRanges, xTokens->getTokens(), false, mnCalcSheet );
+            getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, false, mnCalcSheet );
             if( xPrintAreas.is() && !aPrintRanges.empty() )
                 xPrintAreas->setPrintAreas( ContainerHelper::vectorToSequence( aPrintRanges ) );
         }
@@ -443,7 +445,7 @@ void DefinedName::convertFormula()
         {
             Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
             ApiCellRangeList aTitleRanges;
-            getFormulaParser().extractCellRangeList( aTitleRanges, xTokens->getTokens(), false, mnCalcSheet );
+            getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, false, mnCalcSheet );
             if( xPrintAreas.is() && !aTitleRanges.empty() )
             {
                 bool bHasRowTitles = false;
@@ -474,10 +476,10 @@ void DefinedName::convertFormula()
 
 bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
 {
-    /*  ScNamedRangeObj::XCellRangeReferrer::getReferredCells is buggy with
-        relative references, so we extract an absolute reference by hand. */
-    Reference< XFormulaTokens > xTokens( mxNamedRange, UNO_QUERY );
-    return xTokens.is() && getFormulaParser().extractCellRange( orRange, xTokens->getTokens(), false );
+    ScTokenArray* pTokenArray = mpScRangeData->GetCode();
+    Sequence< FormulaToken > aFTokenSeq;
+    ScTokenConversion::ConvertToTokenSequence( this->getScDocument(), aFTokenSeq, *pTokenArray );
+    return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
 }
 
 // ============================================================================
