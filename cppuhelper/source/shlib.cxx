@@ -467,6 +467,7 @@ extern "C"
     extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * expwrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fastsax_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * introspection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -542,6 +543,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
         { "configmgr.uno.a", configmgr_component_getFactory },
         { "expwrap.uno.a", expwrap_component_getFactory },
+        { "fastsax.uno.a", fastsax_component_getFactory },
         { "introspection.uno.a", introspection_component_getFactory },
         { "i18npool.uno.a", i18npool_component_getFactory },
         { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
@@ -572,13 +574,13 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             if ( rLibName.equalsAscii( map[i].lib ) )
                 pSym = (oslGenericFunction) map[i].component_getFactory_function;
         }
-#if OSL_DEBUG_LEVEL > 1
         if ( pSym == NULL )
         {
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
             assert( !"Attempt to load unknown library" );
         }
-#endif
     }
 #else
 
