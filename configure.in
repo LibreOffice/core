@@ -435,7 +435,7 @@ AC_ARG_ENABLE(ext-hunart,
 
 AC_ARG_ENABLE(ext-languagetool,
     AS_HELP_STRING([--enable-ext-languagetool],
-        [Enable the LanguageTool extension. Does not work --without-java.])
+        [Enable the LanguageTool extension.])
 )
 
 AC_ARG_ENABLE(ext-mysql-connector,
@@ -9656,9 +9656,6 @@ dnl Test whether to include LanguageTool extension
 dnl ===================================================================
 AC_MSG_CHECKING([for LanguageTool extension integration])
 if test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    if test -z "$SOLAR_JAVA"; then
-        AC_MSG_ERROR([--enable_ext_languagetool requires --with-java])
-    fi
     BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
     AC_MSG_RESULT([yes])
