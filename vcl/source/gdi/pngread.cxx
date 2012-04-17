@@ -194,6 +194,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpScanCurrent   ( NULL ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
     mnPass ( 0 ),
+    mbPalette( sal_False ),
     mbzCodecInUse   ( sal_False ),
     mbStatus( sal_True),
     mbIDAT( sal_False ),
@@ -297,7 +298,7 @@ bool PNGReaderImpl::ReadNextChunk()
             nCRC32 = rtl_crc32( nCRC32, &rChunkData.aData[ 0 ], mnChunkLen );
             maDataIter = rChunkData.aData.begin();
         }
-        sal_uInt32 nCheck;
+        sal_uInt32 nCheck(0);
         mrPNGStream >> nCheck;
         if( nCRC32 != nCheck )
             return false;
@@ -339,14 +340,23 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     // reset to the first chunk
     maChunkIter = maChunkSeq.begin();
 
-    // parse the chunks
+    // first chunk must be IDHR
+    if( mbStatus && ReadNextChunk() )
+    {
+        if (mnChunkType == PNGCHUNK_IHDR)
+            mbStatus = ImplReadHeader( rPreviewSizeHint );
+        else
+            mbStatus = false;
+    }
+
+    // parse the remaining chunks
     while( mbStatus && !mbIDAT && ReadNextChunk() )
     {
         switch( mnChunkType )
         {
             case PNGCHUNK_IHDR :
             {
-                mbStatus = ImplReadHeader( rPreviewSizeHint );
+                mbStatus = false; //IHDR should only appear as the first chunk
             }
             break;
 
@@ -756,14 +766,17 @@ sal_Bool PNGReaderImpl::ImplReadTransparent()
             {
                 if ( mnChunkLen <= 256 )
                 {
+                    mbTransparent = true;
                     mpTransTab = new sal_uInt8 [ 256 ];
                     rtl_fillMemory( mpTransTab, 256, 0xff );
-                    rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
-                    maDataIter += mnChunkLen;
-                    mbTransparent = true;
-                    // need alpha transparency if not on/off masking
-                    for( int i = 0; i < mnChunkLen; ++i )
-                       bNeedAlpha |= (mpTransTab[i]!=0x00) && (mpTransTab[i]!=0xFF);
+                    if (mnChunkLen > 0)
+                    {
+                        rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
+                        maDataIter += mnChunkLen;
+                        // need alpha transparency if not on/off masking
+                        for( int i = 0; i < mnChunkLen; ++i )
+                           bNeedAlpha |= (mpTransTab[i]!=0x00) && (mpTransTab[i]!=0xFF);
+                    }
                 }
             }
             break;
