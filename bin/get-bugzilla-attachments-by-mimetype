@@ -77,6 +77,11 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                         print 'skipping'
                         break
                 elif node.nodeName == 'data':
+                    # check if attachment is deleted (i.e. https://bugs.kde.org/show_bug.cgi?id=53343&ctype=xml)
+                    if not node.firstChild:
+                        print 'deleted attachment, skipping'
+                        continue
+
                     download = suffix + '/' +prefix + id + '-' + str(attachmentid) + '.' + suffix
                     print 'downloading as', download
                     f = open(download, 'w')
