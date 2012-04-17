@@ -1881,8 +1881,16 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
     // factor in bottom-up scanline order case
     nScanlineStride *= bTopDown ? 1 : -1;
 
-    const std::size_t nMemSize(
-        (nScanlineStride < 0 ? -nScanlineStride : nScanlineStride)*rSize.getY() );
+    const sal_uInt32 nWidth(nScanlineStride < 0 ? -nScanlineStride : nScanlineStride);
+    const sal_uInt32 nHeight(rSize.getY());
+
+    if (nHeight && nWidth && nWidth > SAL_MAX_INT32 / nHeight)
+    {
+        SAL_WARN( "basebmp", "suspicious massive alloc " << nWidth << " * " << nHeight);
+        return BitmapDeviceSharedPtr();
+    }
+
+    const std::size_t nMemSize(nWidth * nHeight);
 
     if( !pMem )
     {
