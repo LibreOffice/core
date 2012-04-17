@@ -1140,7 +1140,8 @@ AC_ARG_WITH(system-jpeg,
 
 AC_ARG_WITH(system-clucene,
     AS_HELP_STRING([--with-system-clucene],
-        [Use clucene already on system.]),,)
+        [Use clucene already on system.]),,
+    [with_system_clucene="$with_system_libs"])
 
 AC_ARG_WITH(system-expat,
     AS_HELP_STRING([--with-system-expat],
