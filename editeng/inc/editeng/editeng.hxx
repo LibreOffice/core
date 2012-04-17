@@ -564,6 +564,8 @@ public:
     EditPaM ConnectContents(sal_uInt16 nLeftNode, bool bBackward);
 
     EditPaM InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
+
+    EditSelection MoveParagraphs(const Range& rParagraphs, sal_uInt16 nNewPos, EditView* pCurView);
 };
 
 #endif // _MyEDITENG_HXX

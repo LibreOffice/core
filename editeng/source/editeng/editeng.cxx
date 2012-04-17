@@ -787,6 +787,11 @@ EditPaM EditEngine::InsertFeature(const EditSelection& rEditSelection, const Sfx
     return pImpEditEngine->ImpInsertFeature(rEditSelection, rItem);
 }
 
+EditSelection EditEngine::MoveParagraphs(const Range& rParagraphs, sal_uInt16 nNewPos, EditView* pCurView)
+{
+    return pImpEditEngine->MoveParagraphs(rParagraphs, nNewPos, pCurView);
+}
+
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
 {
     return pImpEditEngine->CreateTransferable(rSelection);

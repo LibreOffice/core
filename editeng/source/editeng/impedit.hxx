@@ -380,12 +380,8 @@ public:
 
 class ImpEditEngine : public SfxListener, boost::noncopyable
 {
-    // The Undos have to manipulate directly ( private-Methods ),
-    // do that no new Undo is inserted!
-    friend class EditUndoMoveParagraphs;
-
-    friend class EditEngine;        // For access to Imp-Methods
-    friend class EditDbg;           // Debug Routines
+    friend class EditEngine;
+    friend class EditDbg;
 
 public:
     typedef std::vector<EditView*> ViewsType;

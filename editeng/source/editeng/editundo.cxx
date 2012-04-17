@@ -448,7 +448,7 @@ EditUndoMoveParagraphs::~EditUndoMoveParagraphs()
 
 void EditUndoMoveParagraphs::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     Range aTmpRange( nParagraphs );
     long nTmpDest = aTmpRange.Min();
 
@@ -465,15 +465,15 @@ void EditUndoMoveParagraphs::Undo()
     else
         nTmpDest += aTmpRange.Len();
 
-    EditSelection aNewSel( GetImpEditEngine()->MoveParagraphs( aTmpRange, (sal_uInt16)nTmpDest, 0 ) );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, (sal_uInt16)nTmpDest, 0);
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
 void EditUndoMoveParagraphs::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditSelection aNewSel( GetImpEditEngine()->MoveParagraphs( nParagraphs, nDest, 0 ) );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(nParagraphs, nDest, 0);
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
 EditUndoSetStyleSheet::EditUndoSetStyleSheet( ImpEditEngine* _pImpEE, sal_uInt16 nP,
