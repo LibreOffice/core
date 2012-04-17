@@ -332,7 +332,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
 
                     for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
                     {
-                        String aModName = pModNames[ i ];
+                        ::rtl::OUString aModName = pModNames[ i ];
                         SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
                         if ( !pModuleEntry )
                             pModuleEntry = AddEntry(
@@ -408,10 +408,10 @@ void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEnt
 {
 
     ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > > aEntries;
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS,  String( IDEResId( RID_STR_USERFORMS ) ) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, String( IDEResId( RID_STR_NORMAL_MODULES ) ) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES,  String( IDEResId( RID_STR_CLASS_MODULES ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, ResId::toString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS, ResId::toString( IDEResId( RID_STR_USERFORMS ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, ResId::toString( IDEResId( RID_STR_NORMAL_MODULES ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES, ResId::toString( IDEResId( RID_STR_CLASS_MODULES ) ) ) );
 
     ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > >::iterator iter;
     for( iter = aEntries.begin(); iter != aEntries.end(); ++iter )
@@ -798,8 +798,8 @@ void BasicTreeListBox::SetCurrentEntry( BasicEntryDescriptor& rDesc )
     {
         aDesc = BasicEntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
-            LIBRARY_LOCATION_USER, String::CreateFromAscii( "Standard" ),
-            String(), String::CreateFromAscii( "." ), OBJ_TYPE_UNKNOWN );
+            LIBRARY_LOCATION_USER, "Standard",
+            ::rtl::OUString(), ".", OBJ_TYPE_UNKNOWN );
     }
     ScriptDocument aDocument( aDesc.GetDocument() );
     OSL_ENSURE( aDocument.isValid(), "BasicTreeListBox::SetCurrentEntry: invalid document!" );

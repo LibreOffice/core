@@ -67,8 +67,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
     }
     else if ( eType == OBJ_TYPE_LIBRARY )
     {
-        String aLibName( aDesc.GetLibName() );
-        ::rtl::OUString aOULibName( aLibName );
+        ::rtl::OUString aOULibName( aDesc.GetLibName() );
 
         // check password
         sal_Bool bOK = sal_True;
@@ -79,7 +78,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
                 ::rtl::OUString aPassword;
-                bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
+                bOK = QueryPassword( xModLibContainer, aOULibName, aPassword );
             }
         }
 
@@ -115,7 +114,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             if ( bModLibLoaded || bDlgLibLoaded )
             {
                 // create the sub entries
-                ImpCreateLibSubEntries( pEntry, aDocument, aLibName );
+                ImpCreateLibSubEntries( pEntry, aDocument, aOULibName );
 
                 // exchange image
                 bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
@@ -133,7 +132,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             || eType == OBJ_TYPE_NORMAL_MODULES
             || eType == OBJ_TYPE_CLASS_MODULES )
     {
-        String aLibName( aDesc.GetLibName() );
+        ::rtl::OUString aLibName( aDesc.GetLibName() );
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
@@ -178,7 +177,6 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
     if ( !pEntry )
         return 0;
 
-    String aLib, aModOrObj, aSubOrPropOrSObj, aPropOrSubInSObj;
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     EntryArray aEntries;
 
