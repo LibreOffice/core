@@ -183,13 +183,12 @@ XubString EditUndo::GetComment() const
     return aComment;
 }
 
-EditUndoDelContent::EditUndoDelContent( ImpEditEngine* _pImpEE, ContentNode* pNode, sal_uInt16 n )
-                    : EditUndo( EDITUNDO_DELCONTENT, _pImpEE )
-{
-    pContentNode = pNode;
-    nNode = n;
-    bDelObject = sal_True;
-}
+EditUndoDelContent::EditUndoDelContent(
+    ImpEditEngine* _pImpEE, ContentNode* pNode, size_t nPortion) :
+    EditUndo(EDITUNDO_DELCONTENT, _pImpEE),
+    bDelObject(true),
+    nNode(nPortion),
+    pContentNode(pNode) {}
 
 EditUndoDelContent::~EditUndoDelContent()
 {
@@ -199,44 +198,44 @@ EditUndoDelContent::~EditUndoDelContent()
 
 void EditUndoDelContent::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    GetImpEditEngine()->InsertContent( pContentNode, nNode );
-    bDelObject = sal_False; // belongs to the Engine again
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    GetEditEngine()->InsertContent( pContentNode, nNode );
+    bDelObject = false; // belongs to the Engine again
     EditSelection aSel( EditPaM( pContentNode, 0 ), EditPaM( pContentNode, pContentNode->Len() ) );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
 void EditUndoDelContent::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
 
-    ImpEditEngine* _pImpEE = GetImpEditEngine();
+    EditEngine* pEE = GetEditEngine();
 
     // pNode is no longer correct, if the paragraphs where merged
     // in between Undos
-    pContentNode = _pImpEE->GetEditDoc().GetObject( nNode );
+    pContentNode = pEE->GetEditDoc().GetObject( nNode );
     DBG_ASSERT( pContentNode, "EditUndoDelContent::Redo(): Node?!" );
 
-    _pImpEE->GetParaPortions().Remove( nNode );
+    pEE->RemoveParaPortion(nNode);
 
     // Do not delete node, depends on the undo!
-    _pImpEE->GetEditDoc().Remove( nNode );
-    if( _pImpEE->IsCallParaInsertedOrDeleted() )
-        _pImpEE->GetEditEnginePtr()->ParagraphDeleted( nNode );
+    pEE->GetEditDoc().Remove( nNode );
+    if (pEE->IsCallParaInsertedOrDeleted())
+        pEE->ParagraphDeleted( nNode );
 
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pContentNode, nNode );
-    _pImpEE->aDeletedNodes.push_back(pInf);
-    _pImpEE->UpdateSelections();
+    pEE->AppendDeletedNodeInfo(pInf);
+    pEE->UpdateSelections();
 
-    ContentNode* pN = ( nNode < _pImpEE->GetEditDoc().Count() )
-        ? _pImpEE->GetEditDoc().GetObject( nNode )
-        : _pImpEE->GetEditDoc().GetObject( nNode-1 );
+    ContentNode* pN = ( nNode < pEE->GetEditDoc().Count() )
+        ? pEE->GetEditDoc().GetObject( nNode )
+        : pEE->GetEditDoc().GetObject( nNode-1 );
     DBG_ASSERT( pN && ( pN != pContentNode ), "?! RemoveContent !? " );
     EditPaM aPaM( pN, pN->Len() );
 
-    bDelObject = sal_True;  // belongs to the Engine again
+    bDelObject = true;  // belongs to the Engine again
 
-    _pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    pEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 EditUndoConnectParas::EditUndoConnectParas( ImpEditEngine* _pImpEE, sal_uInt16 nN, sal_uInt16 nSP,

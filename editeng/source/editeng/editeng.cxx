@@ -742,6 +742,31 @@ sal_uInt16 EditEngine::GetScriptType(const EditSelection& rSel) const
     return pImpEditEngine->GetScriptType(rSel);
 }
 
+void EditEngine::RemoveParaPortion(size_t nNode)
+{
+    pImpEditEngine->GetParaPortions().Remove(nNode);
+}
+
+bool EditEngine::IsCallParaInsertedOrDeleted() const
+{
+    return pImpEditEngine->IsCallParaInsertedOrDeleted();
+}
+
+void EditEngine::AppendDeletedNodeInfo(DeletedNodeInfo* pInfo)
+{
+    pImpEditEngine->aDeletedNodes.push_back(pInfo);
+}
+
+void EditEngine::UpdateSelections()
+{
+    pImpEditEngine->UpdateSelections();
+}
+
+void EditEngine::InsertContent(ContentNode* pNode, sal_uInt16 nPos)
+{
+    pImpEditEngine->InsertContent(pNode, nPos);
+}
+
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
 {
     return pImpEditEngine->CreateTransferable(rSelection);

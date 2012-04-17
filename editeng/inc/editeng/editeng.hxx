@@ -110,6 +110,7 @@ class EditDoc;
 struct PasteOrDropInfos;
 class Range;
 struct EPaM;
+class DeletedNodeInfo;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -549,6 +550,15 @@ public:
     String GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
 
     sal_uInt16 GetScriptType(const EditSelection& rSel) const;
+
+    void RemoveParaPortion(size_t nNode);
+
+    bool IsCallParaInsertedOrDeleted() const;
+
+    void AppendDeletedNodeInfo(DeletedNodeInfo* pInfo);
+    void UpdateSelections();
+
+    void InsertContent(ContentNode* pNode, sal_uInt16 nPos);
 };
 
 #endif // _MyEDITENG_HXX

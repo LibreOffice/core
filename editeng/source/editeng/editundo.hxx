@@ -48,15 +48,15 @@ class EditView;
 class EditUndoDelContent : public EditUndo
 {
 private:
-    sal_Bool            bDelObject;
-    sal_uInt16          nNode;
+    bool            bDelObject;
+    size_t          nNode;
     ContentNode*    pContentNode;   // Points to the valid,
                                     // undestroyed object!
 
 public:
-                    TYPEINFO();
-                    EditUndoDelContent( ImpEditEngine* pImpEE, ContentNode* pNode, sal_uInt16 nPortio );
-                    ~EditUndoDelContent();
+    TYPEINFO();
+    EditUndoDelContent(ImpEditEngine* pImpEE, ContentNode* pNode, size_t nPortion);
+    virtual ~EditUndoDelContent();
 
     virtual void    Undo();
     virtual void    Redo();
