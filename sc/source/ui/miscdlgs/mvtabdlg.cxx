@@ -70,6 +70,7 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const rtl::OUString& rDefault)
         maStrTabNameInvalid( ResId::toString(ScResId(STR_TABNAME_WARN_INVALID)) ),
         //
         maDefaultName( rDefault ),
+        mnCurrentDocPos( 0 ),
         nDocument   ( 0 ),
         nTable      ( 0 ),
         bCopyTable  ( false ),
@@ -127,8 +128,13 @@ void ScMoveTableDlg::EnableRenameTable(sal_Bool bFlag)
 void ScMoveTableDlg::ResetRenameInput()
 {
     if (mbEverEdited)
+    {
         // Don't reset the name when the sheet name has ever been edited.
+        // But check the name, as this is also called for change of copy/move
+        // buttons and document listbox selection.
+        CheckNewTabName();
         return;
+    }
 
     if (!aEdTabName.IsEnabled())
     {
@@ -178,19 +184,15 @@ void ScMoveTableDlg::CheckNewTabName()
         return;
     }
 
-    bool   bFound = false;
+    bool bMoveInCurrentDoc = (aBtnMove.IsChecked() && IsCurrentDocSelected());
+    bool bFound = false;
     sal_uInt16 nLast  = aLbTable.GetEntryCount() - 1;
-    for ( sal_uInt16 i=0; i<=nLast; ++i )
+    for ( sal_uInt16 i=0; i<=nLast && !bFound; ++i )
     {
         if ( aNewName.equals(aLbTable.GetEntry(i)) )
         {
-            if (aBtnMove.IsChecked() &&
-                aLbDoc.GetSelectEntryPos() == 0 &&
-                maDefaultName.equals(aEdTabName.GetText()))
-
-                // Move inside same document, thus same name is allowed.
-                bFound = false;
-            else
+            // Only for move within same document the same name is allowed.
+            if (!bMoveInCurrentDoc || !maDefaultName.equals( aEdTabName.GetText()))
                 bFound = true;
         }
     }
@@ -212,6 +214,11 @@ ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
     sal_uInt16 nPos = aLbDoc.GetSelectEntryPos();
     return static_cast<ScDocument*>(aLbDoc.GetEntryData(nPos));
+}
+
+bool ScMoveTableDlg::IsCurrentDocSelected() const
+{
+    return aLbDoc.GetSelectEntryPos() == mnCurrentDocPos;
 }
 
 //------------------------------------------------------------------------
@@ -254,7 +261,7 @@ void ScMoveTableDlg::InitDocListBox()
 
             if ( pScSh == SfxObjectShell::Current() )
             {
-                nSelPos = i;
+                mnCurrentDocPos = nSelPos = i;
                 aEntryName += sal_Unicode( ' ' );
                 aEntryName += String( ScResId( STR_CURRENTDOC ) );
             }
