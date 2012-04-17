@@ -1024,23 +1024,18 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             default: break;
                         } // switch
                         if (aEntry.bIsNum) aEntry.bCanNum = true;
-                        bool bGetPres = true;
-                        if (bGetPres) {
-                            rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
-                                                  pPool->GetMetric(nWhich),
-                                                  SFX_MAPUNIT_MM,aEntry.aValue);
-                            if (aEntry.bCanNum) {
-                                aEntry.aValue.InsertAscii(": ",0);
-                                aEntry.aValue.Insert(UniString::CreateFromInt32(aEntry.nVal),0);
-                            }
-                        } else {
-                            if (aEntry.eItemType==ITEM_BOOL) aEntry.aValue.AppendAscii(aEntry.nVal!=0 ? "True" : "False");
-                            else if (aEntry.bCanNum) aEntry.aValue = UniString::CreateFromInt32(aEntry.nVal);
-                            else if (aEntry.eItemType==ITEM_STRING) aEntry.aValue=((SfxStringItem&)rItem).GetValue();
-                            else if (aEntry.eItemType==ITEM_ENUM && nWhich!=EE_CHAR_WEIGHT) aEntry.aValue=((SfxEnumItemInterface&)rItem).GetValueTextByPos((sal_Bool)aEntry.nVal);
-                            else aEntry.aValue = String("GPF", aTextEncoding);
+
+                        rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
+                                              pPool->GetMetric(nWhich),
+                                              SFX_MAPUNIT_MM, aEntry.aValue);
+                        if (aEntry.bCanNum)
+                        {
+                            aEntry.aValue.InsertAscii(": ",0);
+                            aEntry.aValue.Insert(UniString::CreateFromInt32(aEntry.nVal),0);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         aEntry.aValue = String("InvalidItem", aTextEncoding);
                     }
                     ImpSetEntry(aEntry,nEntryNum);
