@@ -1536,7 +1536,15 @@ sal_uInt16 Application::GetSystemWindowMode()
 
 // -----------------------------------------------------------------------
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" { UnoWrapperBase* CreateUnoWrapper(); }
+
+#else
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#endif
 
 UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
 {
@@ -1544,6 +1552,7 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
     static sal_Bool bAlreadyTriedToCreate = sal_False;
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
+#ifndef DISABLE_DYNLOADING
         ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName(
 #ifdef LIBO_MERGELIBS
                                                                        "merged",
@@ -1563,6 +1572,9 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
             }
         }
         DBG_ASSERT( pSVData->mpUnoWrapper, "UnoWrapper could not be created!" );
+#else
+        pSVData->mpUnoWrapper = CreateUnoWrapper();
+#endif
         bAlreadyTriedToCreate = sal_True;
     }
     return pSVData->mpUnoWrapper;
