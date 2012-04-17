@@ -6383,7 +6383,7 @@ if test "$with_system_db" = "yes"; then
     AC_MSG_RESULT([external])
 
     db_header=
-    for dbver in 5.1 5.0 5 4.8 4.7 4; do
+    for dbver in 5.3 5.1 5.0 5 4.8 4.7 4; do
         for dash in - ''; do
             AC_CHECK_HEADER([db$dash$dbver/db.h],
                 [ db_header="db$dash$dbver/db.h"; break 2 ])
