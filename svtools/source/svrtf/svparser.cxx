@@ -59,10 +59,6 @@ struct SvParser_Impl
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
 
-#ifdef DBG_UTIL
-    SvFileStream aOut;
-#endif
-
     SvParser_Impl() :
         nSaveToken(0), hConv( 0 ), hContext( (rtl_TextToUnicodeContext)1 )
     {
@@ -92,32 +88,10 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
         nTokenStackSize = 3;
     pTokenStack = new TokenStackType[ nTokenStackSize ];
     pTokenStackPos = pTokenStack;
-
-#ifdef DBG_UTIL
-
-    // wenn die Datei schon existiert, dann Anhaengen:
-    if( !pImplData )
-        pImplData = new SvParser_Impl;
-    pImplData->aOut.Open( String::CreateFromAscii( "\\parser.dmp" ),
-                          STREAM_STD_WRITE | STREAM_NOCREATE );
-    if( pImplData->aOut.GetError() || !pImplData->aOut.IsOpen() )
-        pImplData->aOut.Close();
-    else
-    {
-        pImplData->aOut.Seek( STREAM_SEEK_TO_END );
-        pImplData->aOut << "\x0c\n\n >>>>>>>>>>>>>>> Dump Start <<<<<<<<<<<<<<<\n";
-    }
-#endif
 }
 
 SvParser::~SvParser()
 {
-#ifdef DBG_UTIL
-    if( pImplData->aOut.IsOpen() )
-        pImplData->aOut << "\n\n >>>>>>>>>>>>>>> Dump Ende <<<<<<<<<<<<<<<\n";
-    pImplData->aOut.Close();
-#endif
-
     if( pImplData && pImplData->hConv )
     {
         rtl_destroyTextToUnicodeContext( pImplData->hConv,
@@ -409,11 +383,6 @@ sal_Unicode SvParser::GetNextChar()
         else
             return sal_Unicode(EOF);
     }
-
-#ifdef DBG_UTIL
-    if( pImplData->aOut.IsOpen() )
-        pImplData->aOut << rtl::OUStringToOString(rtl::OUString(c), RTL_TEXTENCODING_MS_1251).getStr();
-#endif
 
     if( c == '\n' )
     {
