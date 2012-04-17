@@ -79,7 +79,7 @@
 #include "global.hxx"
 #include "scmod.hxx"
 #include "docoptio.hxx"
-#include "appoptio.hxx"
+#include "defaultsoptions.hxx"
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
@@ -939,8 +939,8 @@ ScVbaApplication::setEnableCancelKey(sal_Int32 /*lEnableCancelKey*/) throw (uno:
 
 sal_Int32 SAL_CALL ScVbaApplication::getSheetsInNewWorkbook() throw (uno::RuntimeException)
 {
-    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    return rAppOpt.GetTabCountInNewSpreadsheet();
+    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    return rOpt.GetInitTabCount();
 }
 
 void SAL_CALL ScVbaApplication::setSheetsInNewWorkbook( sal_Int32 SheetsInNewWorkbook ) throw (script::BasicErrorException, uno::RuntimeException)
@@ -952,8 +952,8 @@ void SAL_CALL ScVbaApplication::setSheetsInNewWorkbook( sal_Int32 SheetsInNewWor
     }
     else
     {
-        ScAppOptions& rAppOpt = const_cast< ScAppOptions& >(SC_MOD()->GetAppOptions());
-        rAppOpt.SetTabCountInNewSpreadsheet( SheetsInNewWorkbook );
+        ScDefaultsOptions& rOpt = const_cast< ScDefaultsOptions& >(SC_MOD()->GetDefaultsOptions());
+        rOpt.SetInitTabCount( SheetsInNewWorkbook );
     }
 }
 

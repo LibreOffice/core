@@ -78,9 +78,6 @@ ScAppOptions::~ScAppOptions()
 
 void ScAppOptions::SetDefaults()
 {
-    // Set default tab count for new spreadsheet.
-    nTabCountInNewSpreadsheet = 0;
-
     if ( ScOptionsUtil::IsMetricSystem() )
         eMetric     = FUNIT_CM;             // default for countries with metric system
     else
@@ -118,7 +115,6 @@ void ScAppOptions::SetDefaults()
 
 const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
-    nTabCountInNewSpreadsheet = rCpy.nTabCountInNewSpreadsheet;
     eMetric         = rCpy.eMetric;
     eZoomType       = rCpy.eZoomType;
     bSynchronizeZoom = rCpy.bSynchronizeZoom;

@@ -1605,19 +1605,10 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
             // append additional sheets (not for OLE object)
             if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
-                // Get the customized initial tab count...
-
-                // ... from option dialog.
+                // Get the customized initial tab count
                 const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
                 SCTAB nInitTabCount = rOpt.GetInitTabCount();
 
-                // ... by VBA API.
-                const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-                SCTAB nNewTabCount = rAppOpt.GetTabCountInNewSpreadsheet();
-                if ( nNewTabCount >= 1 && nNewTabCount <= MAXTAB )
-                {
-                    nInitTabCount = nNewTabCount;
-                }
                 for (SCTAB i=1; i<nInitTabCount; i++)
                     pDoc->MakeTable(i,false);
             }
