@@ -70,9 +70,13 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <math.h>
+
+using namespace com::sun::star;
 
 //! Autofilter-Breite mit column.cxx zusammenfassen
 #define DROPDOWN_BITMAP_SIZE        18
@@ -1329,6 +1333,29 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     rParam.maClipRect.Justify();
 }
 
+namespace {
+
+bool beginsWithRTLCharacter(const rtl::OUString& rStr)
+{
+    if (rStr.isEmpty())
+        return false;
+
+    switch (ScGlobal::pCharClass->getCharacterDirection(rStr, 0))
+    {
+        case i18n::DirectionProperty_RIGHT_TO_LEFT:
+        case i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC:
+        case i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING:
+        case i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE:
+            return true;
+        default:
+            ;
+    }
+
+    return false;
+}
+
+}
+
 void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 {
     OSL_ENSURE( pDev == pRefDevice ||
@@ -1563,18 +1590,8 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     if (aVars.GetHorJust() == SVX_HOR_JUSTIFY_STANDARD)
                     {
                         // fdo#32530: Default alignment depends on value vs
-                        // string, and the script type of the 1st letter.
-                        sal_uInt8 nScript1st = 0;
-                        rtl::OUString aStr = aVars.GetString();
-                        if (!aStr.isEmpty())
-                        {
-                            aStr = aStr.copy(0, 1);
-                            nScript1st = pDoc->GetStringScriptType(aStr);
-                            if (!nScript1st)
-                                nScript1st = ScGlobal::GetDefaultScriptType();
-                        }
-
-                        if (nScript1st == SCRIPTTYPE_COMPLEX)
+                        // string, and the direction of the 1st letter.
+                        if (beginsWithRTLCharacter(aVars.GetString()))
                             eOutHorJust = bCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
                         else
                             eOutHorJust = bCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
@@ -2154,12 +2171,12 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mnArrY(0),
     mnX(0), mnY(0), mnCellX(0), mnCellY(0),
     mnPosX(0), mnPosY(0), mnInitPosX(0),
-    mnScript(0),
     mbBreak( (meHorJust == SVX_HOR_JUSTIFY_BLOCK) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
     mbCellIsValue(bCellIsValue),
     mbAsianVertical(false),
     mbPixelToLogic(false),
     mbHyphenatorSet(false),
+    mbRTL(false),
     mpEngine(NULL),
     mpCell(NULL),
     mpPattern(pPattern),
@@ -2580,8 +2597,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     if (eOutHorJust == SVX_HOR_JUSTIFY_STANDARD)
     {
         // fdo#32530: Default alignment depends on value vs string, and the
-        // script type of the 1st letter.
-        if (rParam.mnScript == SCRIPTTYPE_COMPLEX)
+        // direction of the 1st letter.
+        if (rParam.mbRTL)
             eOutHorJust = rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
         else
             eOutHorJust = rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
@@ -4586,20 +4603,13 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
-                        // fdo#32530: Get the script type of the first letter.
-                        sal_uInt8 nScript = 0;
+                        // fdo#32530: Check if the first character is RTL.
                         rtl::OUString aStr = pDoc->GetString(nCellX, nCellY, nTab);
-                        if (!aStr.isEmpty())
-                        {
-                            aStr = aStr.copy(0, 1);
-                            nScript = pDoc->GetStringScriptType(aStr);
-                        }
-                        if (nScript == 0)
-                            nScript = ScGlobal::GetDefaultScriptType();
 
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
+                        aParam.mbRTL = beginsWithRTLCharacter(aStr);
                         aParam.mpEngine = pEngine;
                         aParam.mpCell = pCell;
                         aParam.mnArrY = nArrY;
@@ -4610,7 +4620,6 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mnPosX = nPosX;
                         aParam.mnPosY = nPosY;
                         aParam.mnInitPosX = nInitPosX;
-                        aParam.mnScript = nScript;
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
