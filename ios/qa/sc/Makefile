@@ -39,7 +39,7 @@ SRCS = filters-test.m
 
 CFLAGS = $(SOLARINC)
 
-LIBS = -Wl,$(WORKDIR)/LinkTarget/CppunitTest/libtest_sc_filters_test.a $(foreach LIB, bin/cppunit/cppunittester lib/bootstrap.uno lib/configmgr.uno lib/expwrap.uno lib/i18npool.uno lib/introspection.uno lib/reflection.uno lib/stocservices.uno lib/unobootstrapprotector lib/unoexceptionprotector, -Wl,$(OUTDIR)/$(LIB).a) $(SOLARLIB) -lanalysislo -lavmedialo -lbasegfxlo -lcanvastoolslo -lcomphelpgcc3 -lcppcanvaslo -lcppunit -ldatelo -ldrawinglayerlo -leditenglo -lexpat_xmlparse -lexpat_xmltok -lfilterconfiglo -lforlo -lforuilo -lfwelo -lfwilo -lfwklo -lgcc3_uno -li18nisolang1gcc3 -li18npaperlo -li18nutilgcc3 -licudata -licui18n -licuuc -ljpeg -ljvmfwk -llnglo -lmsfilterlo -looxlo -lpackage2 -lreg -lsal_textenc -lsalcpprt -lsaxlo -lscfiltlo -lsclo -lsfxlo -lsotlo -lstore -lsvllo -lsvtlo -lsvxlo -lsvxcorelo -ltest -ltklo -ltllo -lucb1 -lucbhelper4gcc3 -lucpfile1 -lunoxmllo -luno_cppuhelpergcc3 -luno_cppu -luno_sal -luno_salhelpergcc3 -lunotest -lutllo -lvcllo -lxml2 -lxmlreader -lxolo -lxstor -lz $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -liconv -lobjc
+LIBS = -Wl,$(WORKDIR)/LinkTarget/CppunitTest/libtest_sc_filters_test.a $(foreach LIB, bin/cppunit/cppunittester lib/bootstrap.uno lib/configmgr.uno lib/expwrap.uno lib/fastsax.uno lib/i18npool.uno lib/introspection.uno lib/reflection.uno lib/stocservices.uno lib/unobootstrapprotector lib/unoexceptionprotector, -Wl,$(OUTDIR)/$(LIB).a) $(SOLARLIB) -lanalysislo -lavmedialo -lbasegfxlo -lcanvastoolslo -lcollator_data -lcomphelpgcc3 -lcppcanvaslo -lcppunit -lcrypto -ldatelo -ldict_ja -ldict_zh -ldrawinglayerlo -leditenglo -lexpat_xmlparse -lexpat_xmltok -lfilterconfiglo -lforlo -lforuilo -lfwelo -lfwilo -lfwklo -lgcc3_uno -li18nisolang1gcc3 -li18npaperlo -li18nutilgcc3 -licudata -licui18n -licuuc -lindex_data -ljpeg -ljvmfwk -llnglo -llocaledata_en -llocaledata_es -llocaledata_euro -llocaledata_others -lmsfilterlo -looxlo -lpackage2 -lreg -lsal_textenc -lsalcpprt -lsaxlo -lscfiltlo -lsclo -lsfxlo -lsotlo -lstore -lsvllo -lsvtlo -lsvxlo -lsvxcorelo -ltest -ltextconv_dict -ltklo -ltllo -lucb1 -lucbhelper4gcc3 -lucpfile1 -lunoxmllo -luno_cppuhelpergcc3 -luno_cppu -luno_sal -luno_salhelpergcc3 -lunotest -lutllo -lvcllo -lxcrlo -lxml2 -lxmlreader -lxolo -lxstor -lz $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -liconv -lobjc
 
 all: $(APPDIR)/$(APP) stuff
 
@@ -87,7 +87,7 @@ stuff:
 	done
 #
 # Test documents for filters_test
-	(cd $(SRC_ROOT) && tar cf - sc/qa/unit/data) | (cd $(APPDIR) && tar xvf -)
+	(cd $(SRC_ROOT) && tar cf - sc/qa/unit/data) | (cd $(APPDIR) && tar xf -)
 
 
 clean:
