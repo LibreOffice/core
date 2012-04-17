@@ -436,6 +436,8 @@ MetaAction* SvxURLField::createBeginComment() const
 
 SV_IMPL_PERSIST1( SvxPageField, SvxFieldData );
 
+SvxPageField::SvxPageField() {}
+
 SvxFieldData* SvxPageField::Clone() const
 {
     return new SvxPageField;        // empty
@@ -462,6 +464,8 @@ MetaAction* SvxPageField::createBeginComment() const
 
 SV_IMPL_PERSIST1( SvxPagesField, SvxFieldData );
 
+SvxPagesField::SvxPagesField() {}
+
 SvxFieldData* SvxPagesField::Clone() const
 {
     return new SvxPagesField;   // empty
@@ -481,6 +485,8 @@ void SvxPagesField::Save( SvPersistStream & /*rStm*/ )
 }
 
 SV_IMPL_PERSIST1( SvxTimeField, SvxFieldData );
+
+SvxTimeField::SvxTimeField() {}
 
 SvxFieldData* SvxTimeField::Clone() const
 {
@@ -507,6 +513,8 @@ MetaAction* SvxTimeField::createBeginComment() const
 
 SV_IMPL_PERSIST1( SvxFileField, SvxFieldData );
 
+SvxFileField::SvxFileField() {}
+
 SvxFieldData* SvxFileField::Clone() const
 {
     return new SvxFileField;    // empty
@@ -526,6 +534,8 @@ void SvxFileField::Save( SvPersistStream & /*rStm*/ )
 }
 
 SV_IMPL_PERSIST1( SvxTableField, SvxFieldData );
+
+SvxTableField::SvxTableField() {}
 
 SvxFieldData* SvxTableField::Clone() const
 {
@@ -969,6 +979,8 @@ SvClassManager& SvxFieldItem::GetClassManager()
 
 SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
 
+SvxHeaderField::SvxHeaderField() {}
+
 SvxFieldData* SvxHeaderField::Clone() const
 {
     return new SvxHeaderField;      // empty
@@ -990,6 +1002,7 @@ void SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
 ///////////////////////////////////////////////////////////////////////
 
 SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
+SvxFooterField::SvxFooterField() {}
 
 SvxFieldData* SvxFooterField::Clone() const
 {
@@ -1030,6 +1043,8 @@ void SvxDateTimeField::Load( SvPersistStream & /*rStm*/ )
 void SvxDateTimeField::Save( SvPersistStream & /*rStm*/ )
 {
 }
+
+SvxDateTimeField::SvxDateTimeField() {}
 
 rtl::OUString SvxDateTimeField::GetFormatted(
     Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )

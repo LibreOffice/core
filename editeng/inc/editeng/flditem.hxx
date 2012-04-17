@@ -194,8 +194,9 @@ public:
 class EDITENG_DLLPUBLIC SvxPageField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxPageField, SvxFieldData, SVX_PAGEFIELD )
-                            SvxPageField() {}
+    SV_DECL_PERSIST1( SvxPageField, SvxFieldData, SVX_PAGEFIELD )
+    SvxPageField();
+
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 
@@ -205,8 +206,9 @@ public:
 class EDITENG_DLLPUBLIC SvxPagesField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, SVX_PAGESFIELD )
-                            SvxPagesField() {}
+    SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, SVX_PAGESFIELD )
+    SvxPagesField();
+
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 };
@@ -214,8 +216,9 @@ public:
 class EDITENG_DLLPUBLIC SvxTimeField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, SVX_TIMEFIELD )
-                            SvxTimeField() {}
+    SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, SVX_TIMEFIELD )
+    SvxTimeField();
+
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 
@@ -225,8 +228,9 @@ public:
 class EDITENG_DLLPUBLIC SvxFileField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxFileField, SvxFieldData, SVX_FILEFIELD )
-                            SvxFileField() {}
+    SV_DECL_PERSIST1( SvxFileField, SvxFieldData, SVX_FILEFIELD )
+    SvxFileField();
+
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 };
@@ -234,8 +238,9 @@ public:
 class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxTableField, SvxFieldData, SVX_TABLEFIELD )
-                            SvxTableField() {}
+    SV_DECL_PERSIST1( SvxTableField, SvxFieldData, SVX_TABLEFIELD )
+    SvxTableField();
+
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 };
@@ -382,8 +387,9 @@ public:
 class EDITENG_DLLPUBLIC SvxHeaderField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, SVX_HEADERFIELD )
-                            SvxHeaderField() {}
+    SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, SVX_HEADERFIELD )
+    SvxHeaderField();
+
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 };
@@ -393,8 +399,8 @@ public:
 class EDITENG_DLLPUBLIC SvxFooterField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, SVX_FOOTERFIELD )
-                            SvxFooterField() {}
+    SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, SVX_FOOTERFIELD )
+    SvxFooterField();
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
 };
@@ -404,8 +410,8 @@ public:
 class EDITENG_DLLPUBLIC SvxDateTimeField : public SvxFieldData
 {
 public:
-                            SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, SVX_DATEFIMEFIELD )
-                            SvxDateTimeField() {}
+    SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, SVX_DATEFIMEFIELD )
+    SvxDateTimeField();
 
     static rtl::OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
