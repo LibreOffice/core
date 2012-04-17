@@ -1766,7 +1766,7 @@ AC_ARG_WITH(intro-progressbar-frame-color,
 AC_ARG_WITH(flat-logo-svg,
 [  --with-flat-logo-svg    Allows specification of the flat Logo SVG.
 
-                          Usage:     --with-about-background-svg=/path/my_flat_logo.svg
+                          Usage:     --with-flat-logo-svg=/path/my_flat_logo.svg
 ],,)
 
 AC_ARG_WITH(about-background-svg,
