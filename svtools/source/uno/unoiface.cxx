@@ -1998,11 +1998,6 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
     DoubleCurrencyField* pField = (DoubleCurrencyField*)GetFormattedField();
     if ( pField )
     {
-#ifdef DBG_UTIL
-        String sAssertion( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SVTXCurrencyField::setProperty(" ) ) );
-        sAssertion += String( PropertyName );
-        sAssertion.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ") : invalid value !" ) );
-#endif
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch (nPropType)
         {
