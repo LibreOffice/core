@@ -778,7 +778,6 @@ sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 
 sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 {
-    const ::rtl::OUString&      rDesktopEnvironment = Application::GetDesktopEnvironment();
     sal_uLong                       nRet = STYLE_SYMBOLS_DEFAULT;
     bool                        bCont = true;
 
