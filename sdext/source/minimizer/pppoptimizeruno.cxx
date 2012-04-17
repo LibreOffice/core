@@ -42,7 +42,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-    sal_Bool SAL_CALL component_writeInfo(
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
         SAL_UNUSED_PARAMETER void* /*pServiceManager*/, void* pRegistryKey )
     {
         if (pRegistryKey)
