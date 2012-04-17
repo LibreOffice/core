@@ -1324,7 +1324,7 @@ throw(uno::RuntimeException)
         if (!bByEmpty && !rEntry.GetQueryItems().empty())
         {
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItems().front();
-            aField.IsNumeric     = !rItem.meType != ScQueryEntry::ByString;
+            aField.IsNumeric     = rItem.meType != ScQueryEntry::ByString;
             aField.StringValue   = rItem.maString;
             aField.NumericValue  = rItem.mfVal;
         }
