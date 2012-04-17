@@ -534,6 +534,11 @@ void EditEngine::TransliterateText( const ESelection& rSelection, sal_Int32 nTra
     pImpEditEngine->TransliterateText( pImpEditEngine->CreateSel( rSelection ), nTransliterationMode );
 }
 
+EditSelection EditEngine::TransliterateText(const EditSelection& rSelection, sal_Int32 nTransliterationMode)
+{
+    return pImpEditEngine->TransliterateText(rSelection, nTransliterationMode);
+}
+
 void EditEngine::SetAsianCompressionMode( sal_uInt16 n )
 {
     DBG_CHKTHIS( EditView, 0 );
@@ -792,6 +797,16 @@ EditSelection EditEngine::MoveParagraphs(const Range& rParagraphs, sal_uInt16 nN
     return pImpEditEngine->MoveParagraphs(rParagraphs, nNewPos, pCurView);
 }
 
+void EditEngine::RemoveCharAttribs(sal_uInt16 nPara, sal_uInt16 nWhich, bool bRemoveFeatures)
+{
+    pImpEditEngine->RemoveCharAttribs(nPara, nWhich, bRemoveFeatures);
+}
+
+void EditEngine::RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich)
+{
+    pImpEditEngine->RemoveCharAttribs(rSel, bRemoveParaAttribs, nWhich);
+}
+
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
 {
     return pImpEditEngine->CreateTransferable(rSelection);
@@ -821,6 +836,11 @@ EditPaM EditEngine::InsertField(const EditSelection& rEditSelection, const SvxFi
 EditPaM EditEngine::InsertText(const EditSelection& aCurEditSelection, const String& rStr)
 {
     return pImpEditEngine->InsertText(aCurEditSelection, rStr);
+}
+
+EditSelection EditEngine::InsertText(const EditTextObject& rTextObject, const EditSelection& rSel)
+{
+    return pImpEditEngine->InsertText(rTextObject, rSel);
 }
 
 EditSelection EditEngine::InsertText(
@@ -909,6 +929,11 @@ ESelection EditEngine::CreateESelection(const EditSelection& rSel)
     return pImpEditEngine->CreateESel(rSel);
 }
 
+EditSelection EditEngine::CreateSelection(const ESelection& rSel)
+{
+    return pImpEditEngine->CreateSel(rSel);
+}
+
 const SfxItemSet& EditEngine::GetBaseParaAttribs(sal_uInt16 nPara) const
 {
     return pImpEditEngine->GetParaAttribs(nPara);
@@ -927,6 +952,11 @@ void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, s
 String EditEngine::GetSelected(const EditSelection& rSel, const LineEnd eParaSep) const
 {
     return pImpEditEngine->GetSelected(rSel, eParaSep);
+}
+
+EditPaM EditEngine::DeleteSelected(const EditSelection& rSel)
+{
+    return pImpEditEngine->DeleteSelected(rSel);
 }
 
 void EditEngine::HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos)

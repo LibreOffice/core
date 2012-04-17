@@ -171,8 +171,6 @@ private:
     EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(
         const ParaPortion* pParaPortion, const EditLine* pLine) const;
 
-    EDITENG_DLLPRIVATE bool IsFormatted() const;
-
     EDITENG_DLLPRIVATE sal_uInt16 GetOnePixelInRef() const;
     EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
 
@@ -233,6 +231,7 @@ public:
     LanguageType    GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const;
 
     void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
+    EditSelection   TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
 
     void            SetAsianCompressionMode( sal_uInt16 nCompression );
 
@@ -514,6 +513,7 @@ public:
     EditDoc& GetEditDoc();
     const EditDoc& GetEditDoc() const;
 
+    bool IsFormatted() const;
     bool IsImportHandlerSet() const;
     bool IsImportRTFStyleSheetsSet() const;
 
@@ -527,6 +527,7 @@ public:
 
     EditPaM InsertField(const EditSelection& rEditSelection, const SvxFieldItem& rFld);
     EditPaM InsertText(const EditSelection& aCurEditSelection, const String& rStr);
+    EditSelection InsertText(const EditTextObject& rTextObject, const EditSelection& rSel);
     EditPaM InsertParaBreak(
         const EditSelection& rEditSelection, bool bKeepEndingAttribs = true);
     EditPaM InsertLineBreak(const EditSelection& rEditSelection);
@@ -542,12 +543,14 @@ public:
     EditPaM DeleteSelection(const EditSelection& rSel);
 
     ESelection CreateESelection(const EditSelection& rSel);
+    EditSelection CreateSelection(const ESelection& rSel);
 
     const SfxItemSet& GetBaseParaAttribs(sal_uInt16 nPara) const;
     void SetParaAttribsOnly(sal_uInt16 nPara, const SfxItemSet& rSet);
     void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
 
     String GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
+    EditPaM DeleteSelected(const EditSelection& rSel);
 
     sal_uInt16 GetScriptType(const EditSelection& rSel) const;
 
@@ -566,6 +569,9 @@ public:
     EditPaM InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
 
     EditSelection MoveParagraphs(const Range& rParagraphs, sal_uInt16 nNewPos, EditView* pCurView);
+
+    void RemoveCharAttribs(sal_uInt16 nPara, sal_uInt16 nWhich = 0, bool bRemoveFeatures = false);
+    void RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich = 0);
 };
 
 #endif // _MyEDITENG_HXX
