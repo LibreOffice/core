@@ -54,7 +54,6 @@ private:
                                     // undestroyed object!
 
 public:
-    TYPEINFO();
     EditUndoDelContent(EditEngine* pEE, ContentNode* pNode, size_t nPortion);
     virtual ~EditUndoDelContent();
 
@@ -82,7 +81,6 @@ private:
     bool            bBackward;
 
 public:
-    TYPEINFO();
     EditUndoConnectParas(EditEngine* pEE, sal_uInt16 nNode, sal_uInt16 nSepPos,
                          const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
                          const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, bool bBackward);
@@ -102,7 +100,6 @@ private:
     sal_uInt16          nSepPos;
 
 public:
-    TYPEINFO();
     EditUndoSplitPara(EditEngine* pEE, sal_uInt16 nNode, sal_uInt16 nSepPos);
     ~EditUndoSplitPara();
 
@@ -120,7 +117,6 @@ private:
     String          aText;
 
 public:
-    TYPEINFO();
     EditUndoInsertChars(EditEngine* pEE, const EPaM& rEPaM, const String& rStr);
 
     const EPaM&     GetEPaM() { return aEPaM; }
@@ -142,7 +138,6 @@ private:
     String          aText;
 
 public:
-    TYPEINFO();
     EditUndoRemoveChars(EditEngine* pEE, const EPaM& rEPaM, const String& rStr);
 
     const EPaM&     GetEPaM() { return aEPaM; }
@@ -162,7 +157,6 @@ private:
     SfxPoolItem*    pFeature;
 
 public:
-    TYPEINFO();
     EditUndoInsertFeature(EditEngine* pEE, const EPaM& rEPaM, const SfxPoolItem& rFeature);
     virtual ~EditUndoInsertFeature();
 
@@ -180,7 +174,6 @@ private:
     sal_uInt16          nDest;
 
 public:
-    TYPEINFO();
     EditUndoMoveParagraphs(EditEngine* pEE, const Range& rParas, sal_uInt16 nDest);
     virtual ~EditUndoMoveParagraphs();
 
@@ -202,7 +195,6 @@ private:
     SfxItemSet      aPrevParaAttribs;
 
 public:
-    TYPEINFO();
     EditUndoSetStyleSheet(EditEngine* pEE, sal_uInt16 nPara,
         const String& rPrevName, SfxStyleFamily ePrevFamily,
         const String& rNewName, SfxStyleFamily eNewFamily,
@@ -224,7 +216,6 @@ private:
     SfxItemSet      aNewItems;
 
 public:
-    TYPEINFO();
     EditUndoSetParaAttribs(EditEngine* pEE, sal_uInt16 nPara, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems);
     virtual ~EditUndoSetParaAttribs();
 
@@ -253,7 +244,6 @@ private:
 
 
 public:
-    TYPEINFO();
     EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel, const SfxItemSet& rNewItems);
     virtual ~EditUndoSetAttribs();
 
@@ -284,7 +274,6 @@ private:
     String              aText;
 
 public:
-    TYPEINFO();
     EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nMode);
     virtual ~EditUndoTransliteration();
 
@@ -305,7 +294,6 @@ private:
     ESelection      aSelection;
 
 public:
-    TYPEINFO();
     EditUndoMarkSelection(EditEngine* pEE, const ESelection& rSel);
     virtual ~EditUndoMarkSelection();
 

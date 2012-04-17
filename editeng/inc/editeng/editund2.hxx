@@ -57,7 +57,6 @@ private:
     EditEngine* mpEditEngine;
 
 public:
-    TYPEINFO();
     EditUndo(sal_uInt16 nI, EditEngine* pEE);
     virtual ~EditUndo();
 
