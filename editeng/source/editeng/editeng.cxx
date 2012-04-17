@@ -782,6 +782,11 @@ EditPaM EditEngine::ConnectContents(sal_uInt16 nLeftNode, bool bBackward)
     return pImpEditEngine->ConnectContents(nLeftNode, bBackward);
 }
 
+EditPaM EditEngine::InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem)
+{
+    return pImpEditEngine->ImpInsertFeature(rEditSelection, rItem);
+}
+
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
 {
     return pImpEditEngine->CreateTransferable(rSelection);

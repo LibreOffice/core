@@ -412,26 +412,26 @@ EditUndoInsertFeature::~EditUndoInsertFeature()
 
 void EditUndoInsertFeature::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     // Attributes are then corrected implicitly by the document ...
     aSel.Max().GetIndex()++;
-    GetImpEditEngine()->ImpDeleteSelection( aSel );
+    GetEditEngine()->DeleteSelection(aSel);
     aSel.Max().GetIndex()--;    // For Selection
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
 void EditUndoInsertFeature::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
-    GetImpEditEngine()->ImpInsertFeature( aSel, *pFeature );
+    GetEditEngine()->InsertFeature(aSel, *pFeature);
     if ( pFeature->Which() == EE_FEATURE_FIELD )
-        GetImpEditEngine()->UpdateFields();
+        GetEditEngine()->UpdateFieldsOnly();
     aSel.Max().GetIndex()++;
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
 EditUndoMoveParagraphs::EditUndoMoveParagraphs

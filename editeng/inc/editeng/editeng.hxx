@@ -562,6 +562,8 @@ public:
     void InsertContent(ContentNode* pNode, sal_uInt16 nPos);
     EditPaM SplitContent(sal_uInt16 nNode, sal_uInt16 nSepPos);
     EditPaM ConnectContents(sal_uInt16 nLeftNode, bool bBackward);
+
+    EditPaM InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
 };
 
 #endif // _MyEDITENG_HXX
