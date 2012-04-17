@@ -42,7 +42,6 @@
 #include <implpolypolygon.hxx>
 #include <implbitmap.hxx>
 #include <implrenderer.hxx>
-#include <impltext.hxx>
 #include <implsprite.hxx>
 
 using namespace ::com::sun::star;

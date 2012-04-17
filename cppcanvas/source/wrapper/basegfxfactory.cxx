@@ -39,10 +39,16 @@
 
 #include <cppcanvas/basegfxfactory.hxx>
 
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/StringContext.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XCanvasFont.hpp>
+
+#include <cppcanvas/text.hxx>
+#include <canvasgraphichelper.hxx>
+
 #include "implpolypolygon.hxx"
 #include "implbitmap.hxx"
-#include "impltext.hxx"
-
 
 using namespace ::com::sun::star;
 

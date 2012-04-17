@@ -82,7 +82,6 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/wrapper/implpolypolygon \
 	cppcanvas/source/wrapper/implsprite \
 	cppcanvas/source/wrapper/implspritecanvas \
-	cppcanvas/source/wrapper/impltext \
 	cppcanvas/source/wrapper/vclfactory \
 ))
 
