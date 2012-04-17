@@ -58,6 +58,7 @@ private:
     void ResetRenameInput();
     void CheckNewTabName();
     ScDocument* GetSelectedDoc();
+    bool IsCurrentDocSelected() const;
 
 private:
     FixedLine       aFlAction;
@@ -82,6 +83,7 @@ private:
 
     const rtl::OUString maDefaultName;
 
+    sal_uInt16      mnCurrentDocPos;
     sal_uInt16      nDocument;
     SCTAB           nTable;
     bool            bCopyTable:1;
