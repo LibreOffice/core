@@ -240,7 +240,7 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight )
     {
         if( items.empty())
             return 0;
-        sal_Int32 itemZOrder;
+        sal_Int32 itemZOrder(0);
         --it;
         if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
             .GetName( PROP_Z_ORDER )) >>= itemZOrder )
@@ -248,7 +248,7 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight )
     }
     else
     {
-        sal_Int32 itemZOrder;
+        sal_Int32 itemZOrder(0);
         if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
             .GetName( PROP_Z_ORDER )) >>= itemZOrder )
             return itemZOrder; // before the item
