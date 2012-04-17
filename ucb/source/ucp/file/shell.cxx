@@ -2491,54 +2491,57 @@ shell::getv(
                                  osl_FileStatus_Mask_FileURL |
                                  osl_FileStatus_Mask_Type |
                                  osl_FileStatus_Mask_LinkTargetURL );
-    aDirItem.getFileStatus( aFileStatus );
-    aUnqPath = aFileStatus.getFileURL();
 
-    // If the directory item type is a link retrieve the type of the target
-
-    if ( aFileStatus.getFileType() == osl::FileStatus::Link )
+    osl::FileBase::RC aRes = aDirItem.getFileStatus( aFileStatus );
+    if ( aRes == osl::FileBase::E_None )
     {
-        // Assume failure
-        aIsRegular = false;
-        osl::FileBase::RC result = osl::FileBase::E_INVAL;
-        osl::DirectoryItem aTargetItem;
-        osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
-        if ( aTargetItem.is() )
+        aUnqPath = aFileStatus.getFileURL();
+
+        // If the directory item type is a link retrieve the type of the target
+
+        if ( aFileStatus.getFileType() == osl::FileStatus::Link )
         {
-            osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
+            // Assume failure
+            aIsRegular = false;
+            osl::FileBase::RC result = osl::FileBase::E_INVAL;
+            osl::DirectoryItem aTargetItem;
+            osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
+            if ( aTargetItem.is() )
+            {
+                osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
 
-            if ( osl::FileBase::E_None ==
-                 ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
-                aIsRegular =
-                    aTargetStatus.getFileType() == osl::FileStatus::Regular;
+                if ( osl::FileBase::E_None ==
+                     ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
+                    aIsRegular =
+                        aTargetStatus.getFileType() == osl::FileStatus::Regular;
+            }
         }
-    }
-    else
-        aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
+        else
+            aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
-    registerNotifier( aUnqPath,pNotifier );
-    insertDefaultProperties( aUnqPath );
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-
-        shell::ContentMap::iterator it = m_aContent.find( aUnqPath );
-        commit( it,aFileStatus );
-
-        shell::PropertySet::iterator it1;
-        PropertySet& propset = *(it->second.properties);
-
-        for( sal_Int32 i = 0; i < seq.getLength(); ++i )
+        registerNotifier( aUnqPath,pNotifier );
+        insertDefaultProperties( aUnqPath );
         {
-            MyProperty readProp( properties[i].Name );
-            it1 = propset.find( readProp );
-            if( it1 == propset.end() )
-                seq[i] = uno::Any();
-            else
-                seq[i] = it1->getValue();
-        }
-    }
-    deregisterNotifier( aUnqPath,pNotifier );
+            osl::MutexGuard aGuard( m_aMutex );
 
+            shell::ContentMap::iterator it = m_aContent.find( aUnqPath );
+            commit( it,aFileStatus );
+
+            shell::PropertySet::iterator it1;
+            PropertySet& propset = *(it->second.properties);
+
+            for( sal_Int32 i = 0; i < seq.getLength(); ++i )
+            {
+                MyProperty readProp( properties[i].Name );
+                it1 = propset.find( readProp );
+                if( it1 == propset.end() )
+                    seq[i] = uno::Any();
+                else
+                    seq[i] = it1->getValue();
+            }
+        }
+        deregisterNotifier( aUnqPath,pNotifier );
+    }
     XRow_impl* p = new XRow_impl( this,seq );
     return uno::Reference< sdbc::XRow >( p );
 }
