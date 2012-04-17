@@ -132,17 +132,40 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     return (nCount1 == nCount2);
 }
 
-TextToPinyin_zh_CN::TextToPinyin_zh_CN() : TextToPronounce_zh("get_zh_pinyin")
+#ifdef DISABLE_DYNLOADING
+
+extern "C" {
+
+sal_uInt16** get_zh_zhuyin();
+sal_uInt16** get_zh_pinyin();
+
+}
+
+#endif
+
+TextToPinyin_zh_CN::TextToPinyin_zh_CN() :
+#ifndef DISABLE_DYNLOADING
+    TextToPronounce_zh("get_zh_pinyin")
+#else
+    TextToPronounce_zh(get_zh_pinyin)
+#endif
 {
         transliterationName = "ChineseCharacterToPinyin";
         implementationName = "com.sun.star.i18n.Transliteration.TextToPinyin_zh_CN";
 }
 
-TextToChuyin_zh_TW::TextToChuyin_zh_TW() : TextToPronounce_zh("get_zh_zhuyin")
+TextToChuyin_zh_TW::TextToChuyin_zh_TW() :
+#ifndef DISABLE_DYNLOADING
+    TextToPronounce_zh("get_zh_zhuyin")
+#else
+    TextToPronounce_zh(get_zh_zhuyin)
+#endif
 {
         transliterationName = "ChineseCharacterToChuyin";
         implementationName = "com.sun.star.i18n.Transliteration.TextToChuyin_zh_TW";
 }
+
+#ifndef DISABLE_DYNLOADING
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
@@ -162,9 +185,21 @@ TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
             idx=function();
     }
 }
+
+#else
+
+TextToPronounce_zh::TextToPronounce_zh(sal_uInt16 ** (*function)())
+{
+    idx = function();
+}
+
+#endif
+
 TextToPronounce_zh::~TextToPronounce_zh()
 {
+#ifndef DISABLE_DYNLOADING
     if (hModule) osl_unloadModule(hModule);
+#endif
 }
 } } } }
 

@@ -36,10 +36,15 @@ using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#endif
 
 TextConversion::TextConversion()
 {
+#ifndef DISABLE_DYNLOADING
 #ifdef SAL_DLLPREFIX
     OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"textconv_dict" SAL_DLLEXTENSION));
 #else
@@ -47,12 +52,17 @@ TextConversion::TextConversion()
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
+#endif
 }
 
 TextConversion::~TextConversion()
 {
+#ifndef DISABLE_DYNLOADING
     if (hModule) osl_unloadModule(hModule);
+#endif
 }
+
+#ifndef DISABLE_DYNLOADING
 
 static void* nullFunc()
 {
@@ -67,6 +77,8 @@ TextConversion::getFunctionBySymbol(const sal_Char* func)
     else
         return reinterpret_cast< oslGenericFunction >(nullFunc);
 }
+
+#endif
 
 OUString SAL_CALL
 TextConversion::getImplementationName() throw( RuntimeException )

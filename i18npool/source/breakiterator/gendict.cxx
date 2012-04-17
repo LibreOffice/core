@@ -73,13 +73,21 @@ static inline void printIncludes(FILE* source_fp)
     fputs("#include <sal/types.h>\n\n", source_fp);
 }
 
-static inline void printFunctions(FILE* source_fp)
+static inline void printFunctions(FILE* source_fp, const char *lang)
 {
-    fputs ("\tconst sal_uInt8* getExistMark() { return existMark; }\n", source_fp);
-    fputs ("\tconst sal_Int16* getIndex1() { return index1; }\n", source_fp);
-    fputs ("\tconst sal_Int32* getIndex2() { return index2; }\n", source_fp);
-    fputs ("\tconst sal_Int32* getLenArray() { return lenArray; }\n", source_fp);
-    fputs ("\tconst sal_Unicode* getDataArea() { return dataArea; }\n", source_fp);
+    fputs ("#ifndef DISABLE_DYNLOADING\n", source_fp);
+    fputs ("SAL_DLLPUBLIC_EXPORT const sal_uInt8* getExistMark() { return existMark; }\n", source_fp);
+    fputs ("SAL_DLLPUBLIC_EXPORT const sal_Int16* getIndex1() { return index1; }\n", source_fp);
+    fputs ("SAL_DLLPUBLIC_EXPORT const sal_Int32* getIndex2() { return index2; }\n", source_fp);
+    fputs ("SAL_DLLPUBLIC_EXPORT const sal_Int32* getLenArray() { return lenArray; }\n", source_fp);
+    fputs ("SAL_DLLPUBLIC_EXPORT const sal_Unicode* getDataArea() { return dataArea; }\n", source_fp);
+    fputs ("#else\n", source_fp);
+    fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_uInt8* getExistMark_%s() { return existMark; }\n", lang);
+    fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_Int16* getIndex1_%s() { return index1; }\n", lang);
+    fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_Int32* getIndex2_%s() { return index2; }\n", lang);
+    fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_Int32* getLenArray_%s() { return lenArray; }\n", lang);
+    fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_Unicode* getDataArea_%s() { return dataArea; }\n", lang);
+    fputs ("#endif\n", source_fp);
 }
 
 static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt32>& lenArray)
@@ -199,9 +207,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     FILE *dictionary_fp, *source_fp;
 
-    if (argc == 1 || argc > 3)
+    if (argc == 1 || argc > 4)
     {
-        fputs("2 arguments required: dictionary_file_name source_file_name", stderr);
+        fputs("3 arguments required: dictionary_file_name source_file_name language_code", stderr);
         exit(-1);
     }
 
@@ -235,7 +243,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         printIndex1(source_fp, set);
         printIndex2(source_fp, set);
         printExistsMask(source_fp);
-        printFunctions(source_fp);
+        printFunctions(source_fp, argv[3]);
     fputs("}\n", source_fp);
 
     fclose(dictionary_fp);

@@ -36,12 +36,18 @@ namespace com { namespace sun { namespace star { namespace i18n {
 class TextToPronounce_zh : public transliteration_Ignore
 {
 protected:
+#ifndef DISABLE_DYNLOADING
         oslModule hModule;
+#endif
         sal_uInt16 **idx;
         const sal_Unicode* SAL_CALL getPronounce(const sal_Unicode ch);
 
 public:
+#ifndef DISABLE_DYNLOADING
         TextToPronounce_zh(const sal_Char* func_name);
+#else
+        TextToPronounce_zh(sal_uInt16 ** (*function)());
+#endif
         ~TextToPronounce_zh();
 
         rtl::OUString SAL_CALL

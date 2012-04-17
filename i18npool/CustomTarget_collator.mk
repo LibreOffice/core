@@ -39,9 +39,7 @@ $(IPCO)/collator_%.cxx : $(SRCDIR)/i18npool/source/collator/data/%.txt \
 		$(call gb_Executable_get_target_for_build,gencoll_rule) | $(IPCO)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLR,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
-		$(call gb_Helper_execute,gencoll_rule) $< $@.tmp $* && \
-		sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
-		rm $@.tmp)
+		$(call gb_Helper_execute,gencoll_rule) $< $@ $*)
 
 $(IPCO)/lrl_include.hxx : $(SRCDIR)/i18npool/source/collator/data | $(IPCO)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)

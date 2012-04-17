@@ -50,10 +50,16 @@ typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode**** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
+#ifndef DISABLE_DYNLOADING
+
 static const char *lcl_DATA_EN = "localedata_en";
 static const char *lcl_DATA_ES = "localedata_es";
 static const char *lcl_DATA_EURO = "localedata_euro";
 static const char *lcl_DATA_OTHERS = "localedata_others";
+
+#endif
+
+#ifndef DISABLE_DYNLOADING
 
 static const struct {
     const char* pLocale;
@@ -261,6 +267,12 @@ static const struct {
     { "pjt_AU", lcl_DATA_OTHERS }
 };
 
+#else
+
+#include "localedata_static.hxx"
+
+#endif
+
 static const sal_Unicode under = sal_Unicode('_');
 
 static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
@@ -358,7 +370,11 @@ LocaleData::getLocaleItem( const Locale& rLocale ) throw(RuntimeException)
     }
 }
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#endif
 
 namespace
 {
@@ -432,6 +448,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
         if (localeName.equalsAscii(aLibTable[i].pLocale) ||
                 (bFallback && localeName == aFallback))
         {
+#ifndef DISABLE_DYNLOADING
             LocaleDataLookupTableItem* pCurrent = 0;
             OUStringBuffer aBuf(strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction));
             {
@@ -482,6 +499,46 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             }
             else
                 delete module;
+#else
+            (void) pOutCachedItem;
+
+            if( strcmp(pFunction, "getAllCalendars") == 0 )
+                return aLibTable[i].getAllCalendars;
+            else if( strcmp(pFunction, "getAllCurrencies") == 0 )
+                return aLibTable[i].getAllCurrencies;
+            else if( strcmp(pFunction, "getAllFormats0") == 0 )
+                return aLibTable[i].getAllFormats0;
+            else if( strcmp(pFunction, "getBreakIteratorRules") == 0 )
+                return aLibTable[i].getBreakIteratorRules;
+            else if( strcmp(pFunction, "getCollationOptions") == 0 )
+                return aLibTable[i].getCollationOptions;
+            else if( strcmp(pFunction, "getCollatorImplementation") == 0 )
+                return aLibTable[i].getCollatorImplementation;
+            else if( strcmp(pFunction, "getContinuousNumberingLevels") == 0 )
+                return aLibTable[i].getContinuousNumberingLevels;
+            else if( strcmp(pFunction, "getDateAcceptancePatterns") == 0 )
+                return aLibTable[i].getDateAcceptancePatterns;
+            else if( strcmp(pFunction, "getFollowPageWords") == 0 )
+                return aLibTable[i].getFollowPageWords;
+            else if( strcmp(pFunction, "getForbiddenCharacters") == 0 )
+                return aLibTable[i].getForbiddenCharacters;
+            else if( strcmp(pFunction, "getIndexAlgorithm") == 0 )
+                return aLibTable[i].getIndexAlgorithm;
+            else if( strcmp(pFunction, "getLCInfo") == 0 )
+                return aLibTable[i].getLCInfo;
+            else if( strcmp(pFunction, "getLocaleItem") == 0 )
+                return aLibTable[i].getLocaleItem;
+            else if( strcmp(pFunction, "getOutlineNumberingLevels") == 0 )
+                return aLibTable[i].getOutlineNumberingLevels;
+            else if( strcmp(pFunction, "getReservedWords") == 0 )
+                return aLibTable[i].getReservedWords;
+            else if( strcmp(pFunction, "getSearchOptions") == 0 )
+                return aLibTable[i].getSearchOptions;
+            else if( strcmp(pFunction, "getTransliterations") == 0 )
+                return aLibTable[i].getTransliterations;
+            else if( strcmp(pFunction, "getUnicodeScripts") == 0 )
+                return aLibTable[i].getUnicodeScripts;
+#endif
         }
     }
     return NULL;

@@ -57,7 +57,9 @@ private:
     const sal_Int32 * index2;
     const sal_Int32 * lenArray;
     const sal_Unicode* dataArea;
+#ifndef DISABLE_DYNLOADING
     oslModule hModule;
+#endif
     Boundary boundary;
     sal_Bool japaneseWordBreak;
 

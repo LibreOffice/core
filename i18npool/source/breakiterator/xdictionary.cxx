@@ -49,7 +49,29 @@ using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" {
+
+sal_uInt8* getExistMark_ja();
+sal_Int16* getIndex1_ja();
+sal_Int32* getIndex2_ja();
+sal_Int32* getLenArray_ja();
+sal_Unicode* getDataArea_ja();
+
+sal_uInt8* getExistMark_zh();
+sal_Int16* getIndex1_zh();
+sal_Int32* getIndex2_zh();
+sal_Int32* getLenArray_zh();
+sal_Unicode* getDataArea_zh();
+
+}
+
+#endif
 
 xdictionary::xdictionary(const sal_Char *lang) :
     existMark( NULL ),
@@ -57,11 +79,14 @@ xdictionary::xdictionary(const sal_Char *lang) :
     index2( NULL ),
     lenArray( NULL ),
     dataArea( NULL ),
+#ifndef DISABLE_DYNLOADING
     hModule( NULL ),
+#endif
     boundary(),
     japaneseWordBreak( sal_False )
 {
     index1 = 0;
+#ifndef DISABLE_DYNLOADING
 #ifdef SAL_DLLPREFIX
     OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
     aBuf.appendAscii( SAL_DLLPREFIX );
@@ -92,6 +117,31 @@ xdictionary::xdictionary(const sal_Char *lang) :
             dataArea = NULL;
         }
 
+#else
+        if( strcmp( lang, "ja" ) == 0 ) {
+            existMark = getExistMark_ja();
+            index1 = getIndex1_ja();
+            index2 = getIndex2_ja();
+            lenArray = getLenArray_ja();
+            dataArea = getDataArea_ja();
+        }
+        else if( strcmp( lang, "zh" ) == 0 ) {
+            existMark = getExistMark_zh();
+            index1 = getIndex1_zh();
+            index2 = getIndex2_zh();
+            lenArray = getLenArray_zh();
+            dataArea = getDataArea_zh();
+        }
+        else
+        {
+            existMark = NULL;
+            index1 = NULL;
+            index2 = NULL;
+            lenArray = NULL;
+            dataArea = NULL;
+        }
+#endif
+
         for (sal_Int32 i = 0; i < CACHE_MAX; i++)
             cache[i].size = 0;
 
@@ -99,7 +149,9 @@ xdictionary::xdictionary(const sal_Char *lang) :
 }
 
 xdictionary::~xdictionary() {
+#ifndef DISABLE_DYNLOADING
         osl_unloadModule(hModule);
+#endif
         for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
             if (cache[i].size > 0) {
                 delete [] cache[i].contents;

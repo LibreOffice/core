@@ -37,9 +37,7 @@ $(IPBI)/dict_%.cxx : $(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
 		$(call gb_Executable_get_target_for_build,gendict) | $(IPBI)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
 	$(call gb_Helper_abbreviate_dirs_native,\
-		$(call gb_Helper_execute,gendict) $< $@.tmp && \
-		sed 's/\tconst/\tSAL_DLLPUBLIC_EXPORT const/' $@.tmp > $@  && \
-		rm $@.tmp)
+		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(IPBI)/dict_%.cxx,%,$@))
 
 ifeq ($(SYSTEM_GENBRK),)
 GENBRKTARGET := $(call gb_Executable_get_target_for_build,genbrk)

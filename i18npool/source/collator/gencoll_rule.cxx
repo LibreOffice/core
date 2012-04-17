@@ -72,7 +72,12 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     }
     fprintf(fp, "\n};\n\n");
 
-    fprintf(fp, "const sal_uInt8* get_%s() { return %s; }\n\n", name, name);
+    fprintf(fp, "#ifndef DISABLE_DYNLOADING\n");
+    fprintf(fp, "SAL_DLLPUBLIC_EXPORT const sal_uInt8* get_%s() { return %s; }\n", name, name);
+    fprintf(fp, "#else\n");
+    fprintf(fp, "SAL_DLLPUBLIC_EXPORT const sal_uInt8* get_collator_data_%s() { return %s; }\n", name, name);
+    fprintf(fp, "#endif\n");
+    fprintf(fp, "\n");
     fprintf (fp, "}\n");
 
     fclose(fp);

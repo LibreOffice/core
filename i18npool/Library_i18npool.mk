@@ -136,6 +136,17 @@ $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/transliteration/transliteration_OneToOne \
 ))
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(call gb_CxxObject_get_target,i18npool/source/localedata/localedata): $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx
+
+$(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx : $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl
+	$(PERL) $(SRCDIR)/i18npool/source/localedata/genstaticheader.pl $(patsubst $(SRCDIR)/i18npool/source/localedata/data/%.xml,%,$(shell echo $(SRCDIR)/i18npool/source/localedata/data/*.xml)) >$@
+
+$(call gb_CxxObject_get_target,i18npool/source/localedata/localedata) : \
+	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/localedata)
+
+endif
+
 # collator_unicode.cxx includes generated lrl_include.hxx
 $(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) : \
 	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/collator)

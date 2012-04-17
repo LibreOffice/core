@@ -123,16 +123,32 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
     return (i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
 }
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" {
+
+const sal_Unicode* getHangul2HanjaData();
+const Hangul_Index* getHangul2HanjaIndex();
+sal_Int16 getHangul2HanjaIndexCount();
+const sal_uInt16* getHanja2HangulIndex();
+const sal_Unicode* getHanja2HangulData();
+
+}
+
+#endif
+
 Sequence< OUString > SAL_CALL
 TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja)
 {
     sal_Unicode ch;
     Sequence< OUString > output;
+#ifndef DISABLE_DYNLOADING
     const sal_Unicode* (*getHangul2HanjaData)() = (const sal_Unicode* (*)())getFunctionBySymbol("getHangul2HanjaData");
     const Hangul_Index* (*getHangul2HanjaIndex)() = (const Hangul_Index* (*)()) getFunctionBySymbol("getHangul2HanjaIndex");
     sal_Int16 (*getHangul2HanjaIndexCount)() = (sal_Int16 (*)()) getFunctionBySymbol("getHangul2HanjaIndexCount");
     const sal_uInt16* (*getHanja2HangulIndex)() = (const sal_uInt16* (*)()) getFunctionBySymbol("getHanja2HangulIndex");
     const sal_Unicode* (*getHanja2HangulData)() = (const sal_Unicode* (*)()) getFunctionBySymbol("getHanja2HangulData");
+#endif
     if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {
         ch = aText[nStartPos];
         const Hangul_Index *Hangul_ko = getHangul2HanjaIndex();

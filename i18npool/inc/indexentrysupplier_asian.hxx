@@ -58,8 +58,10 @@ public:
     rtl::OUString SAL_CALL getPhoneticCandidate( const rtl::OUString& rIndexEntry,
             const com::sun::star::lang::Locale& rLocale )
             throw (com::sun::star::uno::RuntimeException);
+#ifndef DISABLE_DYNLOADING
 private:
     oslModule hModule;
+#endif
 };
 
 } } } }

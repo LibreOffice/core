@@ -47,15 +47,52 @@ Collator_Unicode::Collator_Unicode()
     implementationName = "com.sun.star.i18n.Collator_Unicode";
     collator = NULL;
     uca_base = NULL;
+#ifndef DISABLE_DYNLOADING
     hModule = NULL;
+#endif
 }
 
 Collator_Unicode::~Collator_Unicode()
 {
     if (collator) delete collator;
     if (uca_base) delete uca_base;
+#ifndef DISABLE_DYNLOADING
     if (hModule) osl_unloadModule(hModule);
+#endif
 }
+
+#ifdef DISABLE_DYNLOADING
+
+extern "C" {
+
+// For DISABLE_DYNLOADING the generated functions have names that
+// start with get_collator_data_ to avoid clashing with a few
+// functions in the generated libindex_data that are called just
+// get_zh_pinyin for instance.
+
+const sal_uInt8* get_collator_data_ca_charset();
+const sal_uInt8* get_collator_data_dz_charset();
+const sal_uInt8* get_collator_data_hu_charset();
+const sal_uInt8* get_collator_data_ja_charset();
+const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_first();
+const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_last();
+const sal_uInt8* get_collator_data_ko_charset();
+const sal_uInt8* get_collator_data_ku_alphanumeric();
+const sal_uInt8* get_collator_data_ln_charset();
+const sal_uInt8* get_collator_data_my_dictionary();
+const sal_uInt8* get_collator_data_ne_charset();
+const sal_uInt8* get_collator_data_zh_TW_charset();
+const sal_uInt8* get_collator_data_zh_TW_radical();
+const sal_uInt8* get_collator_data_zh_TW_stroke();
+const sal_uInt8* get_collator_data_zh_charset();
+const sal_uInt8* get_collator_data_zh_pinyin();
+const sal_uInt8* get_collator_data_zh_radical();
+const sal_uInt8* get_collator_data_zh_stroke();
+const sal_uInt8* get_collator_data_zh_zhuyin();
+
+}
+
+#endif
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
@@ -70,7 +107,11 @@ Collator_Unicode::compareString( const OUString& str1, const OUString& str2) thr
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   // UChar != sal_Unicode in MinGW
 }
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#endif
 
 sal_Int32 SAL_CALL
 Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::Locale& rLocale, sal_Int32 options)
@@ -84,6 +125,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString::createFromAscii(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
+            const sal_uInt8* (*func)() = NULL;
+
+#ifndef DISABLE_DYNLOADING
             OUStringBuffer aBuf;
 #ifdef SAL_DLLPREFIX
             aBuf.appendAscii(SAL_DLLPREFIX);
@@ -91,7 +135,6 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             aBuf.appendAscii( "collator_data" ).appendAscii( SAL_DLLEXTENSION );
             hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
-                const sal_uInt8* (*func)() = NULL;
                 aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
@@ -114,13 +157,65 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     }
                     func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, aBuf.makeStringAndClear().pData);
                 }
-                if (func) {
-                    const sal_uInt8* ruleImage=func();
-                    uca_base = new RuleBasedCollator(static_cast<UChar*>(NULL), status);
-                    if (! U_SUCCESS(status)) throw RuntimeException();
-                    collator = new RuleBasedCollator(reinterpret_cast<const uint8_t*>(ruleImage), -1, uca_base, status);
-                    if (! U_SUCCESS(status)) throw RuntimeException();
-                }
+            }
+#else
+            if ( rLocale.Language == "ca" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_ca_charset;
+            } else if ( rLocale.Language == "dz" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_dz_charset;
+            } else if ( rLocale.Language == "hu" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_hu_charset;
+            } else if ( rLocale.Language == "ja" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_hu_charset;
+                else if ( rAlgorithm == "phonetic (alphanumeric first)" )
+                    func = get_collator_data_ja_phonetic_alphanumeric_first;
+                else if ( rAlgorithm == "phonetic (alphanumeric last)" )
+                    func = get_collator_data_ja_phonetic_alphanumeric_last;
+            } else if ( rLocale.Language == "ko" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_ko_charset;
+            } else if ( rLocale.Language == "ku" ) {
+                if ( rAlgorithm == "alphanumeric" )
+                    func = get_collator_data_ku_alphanumeric;
+            } else if ( rLocale.Language == "ln" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_ln_charset;
+            } else if ( rLocale.Language == "my" ) {
+                if ( rAlgorithm == "dictionary" )
+                    func = get_collator_data_my_dictionary;
+            } else if ( rLocale.Language == "ne" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_ne_charset;
+            } else if ( rLocale.Language == "zh" && (rLocale.Country == "TW" || rLocale.Country == "HK" || rLocale.Country == "MO") ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_zh_TW_charset;
+                else if ( rAlgorithm == "radical" )
+                    func = get_collator_data_zh_TW_radical;
+                else if ( rAlgorithm == "stroke" )
+                    func = get_collator_data_zh_TW_stroke;
+            } else if ( rLocale.Language == "zh" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_zh_charset;
+                else if ( rAlgorithm == "pinyin" )
+                    func = get_collator_data_zh_pinyin;
+                else if ( rAlgorithm == "radical" )
+                    func = get_collator_data_zh_radical;
+                else if ( rAlgorithm == "stroke" )
+                    func = get_collator_data_zh_stroke;
+                else if ( rAlgorithm == "zhuyin" )
+                    func = get_collator_data_zh_zhuyin;
+            }
+#endif
+            if (func) {
+                const sal_uInt8* ruleImage=func();
+                uca_base = new RuleBasedCollator(static_cast<UChar*>(NULL), status);
+                if (! U_SUCCESS(status)) throw RuntimeException();
+                collator = new RuleBasedCollator(reinterpret_cast<const uint8_t*>(ruleImage), -1, uca_base, status);
+                if (! U_SUCCESS(status)) throw RuntimeException();
             }
         }
         if (!collator) {

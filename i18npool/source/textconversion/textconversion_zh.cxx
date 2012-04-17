@@ -67,12 +67,35 @@ sal_Unicode SAL_CALL getOneCharConversion(sal_Unicode ch, const sal_Unicode* Dat
     }
 }
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" {
+
+const sal_Unicode* getSTC_CharData_T2S();
+const sal_uInt16* getSTC_CharIndex_T2S();
+const sal_Unicode* getSTC_CharData_S2V();
+const sal_uInt16* getSTC_CharIndex_S2V();
+const sal_Unicode* getSTC_CharData_S2T();
+const sal_uInt16* getSTC_CharIndex_S2T();
+
+const sal_Unicode *getSTC_WordData(sal_Int32&);
+
+const sal_uInt16 *getSTC_WordIndex_T2S(sal_Int32&);
+const sal_uInt16 *getSTC_WordEntry_T2S();
+const sal_uInt16 *getSTC_WordIndex_S2T(sal_Int32&);
+const sal_uInt16 *getSTC_WordEntry_S2T();
+
+}
+
+#endif
+
 OUString SAL_CALL
 TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
 {
     const sal_Unicode *Data;
     const sal_uInt16 *Index;
 
+#ifndef DISABLE_DYNLOADING
     if (toSChinese) {
         Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_T2S"))();
         Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_T2S"))();
@@ -83,6 +106,18 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
         Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_S2T"))();
         Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2T"))();
     }
+#else
+    if (toSChinese) {
+        Data = getSTC_CharData_T2S();
+        Index = getSTC_CharIndex_T2S();
+    } else if (nConversionOptions & TextConversionOption::USE_CHARACTER_VARIANTS) {
+        Data = getSTC_CharData_S2V();
+        Index = getSTC_CharIndex_S2V();
+    } else {
+        Data = getSTC_CharData_S2T();
+        Index = getSTC_CharIndex_S2T();
+    }
+#endif
 
     rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nLength);
     for (sal_Int32 i = 0; i < nLength; i++)
@@ -102,6 +137,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     const sal_uInt16 *charIndex;
     sal_Bool one2one=sal_True;
 
+#ifndef DISABLE_DYNLOADING
     const sal_Unicode *wordData = ((const sal_Unicode* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordData"))(dictLen);
     if (toSChinese) {
         index = ((const sal_uInt16* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordIndex_T2S"))(maxLen);
@@ -119,6 +155,25 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
             charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_S2T"))();
         }
     }
+#else
+    const sal_Unicode *wordData = getSTC_WordData(dictLen);
+    if (toSChinese) {
+        index = getSTC_WordIndex_T2S(maxLen);
+        entry = getSTC_WordEntry_T2S();
+        charData = getSTC_CharData_T2S();
+        charIndex = getSTC_CharIndex_T2S();
+    } else {
+        index = getSTC_WordIndex_S2T(maxLen);
+        entry = getSTC_WordEntry_S2T();
+        if (nConversionOptions & TextConversionOption::USE_CHARACTER_VARIANTS) {
+            charData = getSTC_CharData_S2V();
+            charIndex = getSTC_CharIndex_S2V();
+        } else {
+            charData = getSTC_CharData_S2T();
+            charIndex = getSTC_CharIndex_S2T();
+        }
+    }
+#endif
 
     if ((!wordData || !index || !entry) && !xCDL.is()) // no word mapping defined, do char2char conversion.
         return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
