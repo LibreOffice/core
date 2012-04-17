@@ -379,28 +379,6 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
     return pNew;
 }
 
-ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
-{
-    // create the name and insert it into the Calc document
-    ScRangeData* pScRangeData = NULL;
-    if( !orName.isEmpty() ) try
-    {
-        // find an unused name
-        PropertySet aDocProps( mxDoc );
-        Reference< XNamedRanges > xNamedRanges( aDocProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
-        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
-        // create the named range
-        ScDocument& rDoc =  getScDocument();
-        ScRangeName* pNames = rDoc.GetRangeName();
-        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
-    }
-    catch (const Exception&)
-    {
-    }
-    return pScRangeData;
-}
-
 namespace {
 
 rtl::OUString findUnusedName( const ScRangeName* pRangeName, const rtl::OUString& rSuggestedName )
@@ -414,6 +392,23 @@ rtl::OUString findUnusedName( const ScRangeName* pRangeName, const rtl::OUString
 }
 
 }
+
+ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
+{
+    // create the name and insert it into the Calc document
+    ScRangeData* pScRangeData = NULL;
+    if( !orName.isEmpty() )
+    {
+        ScDocument& rDoc =  getScDocument();
+        ScRangeName* pNames = rDoc.GetRangeName();
+        // find an unused name
+        orName = findUnusedName( pNames, orName );
+        // create the named range
+        pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
+    }
+    return pScRangeData;
+}
+
 
 ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
 {
