@@ -553,12 +553,15 @@ public:
 
     void RemoveParaPortion(size_t nNode);
 
+    void SetCallParaInsertedOrDeleted(bool b);
     bool IsCallParaInsertedOrDeleted() const;
 
     void AppendDeletedNodeInfo(DeletedNodeInfo* pInfo);
     void UpdateSelections();
 
     void InsertContent(ContentNode* pNode, sal_uInt16 nPos);
+    EditPaM SplitContent(sal_uInt16 nNode, sal_uInt16 nSepPos);
+    EditPaM ConnectContents(sal_uInt16 nLeftNode, bool bBackward);
 };
 
 #endif // _MyEDITENG_HXX

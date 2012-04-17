@@ -268,39 +268,39 @@ EditUndoConnectParas::~EditUndoConnectParas()
 
 void EditUndoConnectParas::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
 
     // For SplitContent ParagraphInserted can not be called yet because the
     // Outliner relies on the attributes to initialize the depth
 
-    sal_Bool bCall = GetImpEditEngine()->IsCallParaInsertedOrDeleted();
-    GetImpEditEngine()->SetCallParaInsertedOrDeleted( sal_False );
+    sal_Bool bCall = GetEditEngine()->IsCallParaInsertedOrDeleted();
+    GetEditEngine()->SetCallParaInsertedOrDeleted(false);
 
-    EditPaM aPaM = GetImpEditEngine()->SplitContent( nNode, nSepPos );
-    GetImpEditEngine()->SetParaAttribs( nNode, aLeftParaAttribs );
-    GetImpEditEngine()->SetParaAttribs( nNode+1, aRightParaAttribs );
+    EditPaM aPaM = GetEditEngine()->SplitContent(nNode, nSepPos);
+    GetEditEngine()->SetParaAttribs( nNode, aLeftParaAttribs );
+    GetEditEngine()->SetParaAttribs( nNode+1, aRightParaAttribs );
 
-    GetImpEditEngine()->SetCallParaInsertedOrDeleted( bCall );
-    if ( GetImpEditEngine()->IsCallParaInsertedOrDeleted() )
-        GetImpEditEngine()->GetEditEnginePtr()->ParagraphInserted( nNode+1 );
+    GetEditEngine()->SetCallParaInsertedOrDeleted( bCall );
+    if (GetEditEngine()->IsCallParaInsertedOrDeleted())
+        GetEditEngine()->ParagraphInserted( nNode+1 );
 
-    if ( GetImpEditEngine()->GetStyleSheetPool() )
+    if (GetEditEngine()->GetStyleSheetPool())
     {
         if ( aLeftStyleName.Len() )
-            GetImpEditEngine()->SetStyleSheet( (sal_uInt16)nNode, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
+            GetEditEngine()->SetStyleSheet( (sal_uInt16)nNode, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
         if ( aRightStyleName.Len() )
-            GetImpEditEngine()->SetStyleSheet( nNode+1, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily ) );
+            GetEditEngine()->SetStyleSheet( nNode+1, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily ) );
     }
 
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 void EditUndoConnectParas::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Np Active View!" );
-    EditPaM aPaM = GetImpEditEngine()->ConnectContents( nNode, bBackward );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Np Active View!" );
+    EditPaM aPaM = GetEditEngine()->ConnectContents( nNode, bBackward );
 
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 EditUndoSplitPara::EditUndoSplitPara( ImpEditEngine* _pImpEE, sal_uInt16 nN, sal_uInt16 nSP )

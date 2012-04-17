@@ -747,6 +747,11 @@ void EditEngine::RemoveParaPortion(size_t nNode)
     pImpEditEngine->GetParaPortions().Remove(nNode);
 }
 
+void EditEngine::SetCallParaInsertedOrDeleted(bool b)
+{
+    pImpEditEngine->SetCallParaInsertedOrDeleted(b);
+}
+
 bool EditEngine::IsCallParaInsertedOrDeleted() const
 {
     return pImpEditEngine->IsCallParaInsertedOrDeleted();
@@ -765,6 +770,16 @@ void EditEngine::UpdateSelections()
 void EditEngine::InsertContent(ContentNode* pNode, sal_uInt16 nPos)
 {
     pImpEditEngine->InsertContent(pNode, nPos);
+}
+
+EditPaM EditEngine::SplitContent(sal_uInt16 nNode, sal_uInt16 nSepPos)
+{
+    return pImpEditEngine->SplitContent(nNode, nSepPos);
+}
+
+EditPaM EditEngine::ConnectContents(sal_uInt16 nLeftNode, bool bBackward)
+{
+    return pImpEditEngine->ConnectContents(nLeftNode, bBackward);
 }
 
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
