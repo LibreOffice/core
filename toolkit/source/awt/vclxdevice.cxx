@@ -59,12 +59,6 @@ VCLXDevice::VCLXDevice()
 
 VCLXDevice::~VCLXDevice()
 {
-// Was thought for #88347#, but didn't help, because the interface will not be released
-// But would be a good idea anyway, check after 6.0, it's a little bit dangerous now
-//    if( mpOutputDevice && IsCreatedWithToolkit() )
-//    {
-//        delete mpOutputDevice;
-//    }
 }
 
 void VCLXDevice::DestroyOutputDevice()
