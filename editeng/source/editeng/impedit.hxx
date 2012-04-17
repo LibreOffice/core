@@ -384,7 +384,6 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EditEngine;
     friend class EditDbg;
 
-public:
     typedef EditEngine::ViewsType ViewsType;
 
 private:
