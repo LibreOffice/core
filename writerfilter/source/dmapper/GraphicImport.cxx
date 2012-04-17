@@ -209,6 +209,7 @@ public:
     sal_Int32 nBottomCrop;
 
     bool      bUseSimplePos;
+    sal_Int32 zOrder;
 
     sal_Int16 nHoriOrient;
     sal_Int16 nHoriRelation;
@@ -274,6 +275,7 @@ public:
         ,nRightCrop (0)
         ,nBottomCrop(0)
         ,bUseSimplePos(false)
+        ,zOrder(-1)
         ,nHoriOrient(   text::HoriOrientation::NONE )
         ,nHoriRelation( text::RelOrientation::FRAME )
         ,bPageToggle( false )
@@ -829,7 +831,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             m_pImpl->bUseSimplePos = nIntValue > 0;
         break;
         case NS_ooxml::LN_CT_Anchor_relativeHeight: // 90988;
-            //z-order
+            m_pImpl->zOrder = nIntValue;
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
             if( nIntValue > 0 )
@@ -1447,6 +1449,14 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         uno::makeAny( m_pImpl->bVertFlip ));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
                     uno::makeAny( m_pImpl->nFillColor ));
+
+                if( m_pImpl->zOrder >= 0 )
+                {
+                    GraphicZOrderHelper* zOrderHelper = m_pImpl->rDomainMapper.graphicZOrderHelper();
+                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_Z_ORDER ),
+                        uno::makeAny( zOrderHelper->findZOrder( m_pImpl->zOrder )));
+                    zOrderHelper->addItem( xGraphicObjectProperties, m_pImpl->zOrder );
+                }
 
                 //there seems to be no way to detect the original size via _real_ API
                 uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );

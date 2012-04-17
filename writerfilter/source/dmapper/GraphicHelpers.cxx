@@ -216,6 +216,47 @@ sal_Int32 WrapHandler::getWrapMode( )
     return nMode;
 }
 
+
+void GraphicZOrderHelper::addItem( uno::Reference< beans::XPropertySet > props, sal_Int32 relativeHeight )
+{
+    items[ relativeHeight ] = props;
+}
+
+// The relativeHeight value in .docx is an arbitrary number, where only the relative ordering matters.
+// But in Writer, the z-order is index in 0..(numitems-1) range, so whenever a new item needs to be
+// added in the proper z-order, it is necessary to find the proper index.
+sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight )
+{
+    Items::const_iterator it = items.begin();
+    while( it != items.end())
+    {
+        // std::map is iterated sorted by key
+        if( it->first > relativeHeight )
+            break; // this is the first one higher, we belong right before it
+        else
+            ++it;
+    }
+    if( it == items.end()) // we're topmost
+    {
+        if( items.empty())
+            return 0;
+        sal_Int32 itemZOrder;
+        --it;
+        if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
+            .GetName( PROP_Z_ORDER )) >>= itemZOrder )
+            return itemZOrder + 1; // after the topmost
+    }
+    else
+    {
+        sal_Int32 itemZOrder;
+        if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
+            .GetName( PROP_Z_ORDER )) >>= itemZOrder )
+            return itemZOrder; // before the item
+    }
+    SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );
+    return 0; // this should not(?) happen
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

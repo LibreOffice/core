@@ -36,6 +36,7 @@
 
 #include <map>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 namespace com{ namespace sun {namespace star{
     namespace beans{
@@ -65,6 +66,7 @@ class PropertyMap;
 class DomainMapper_Impl;
 class ListsManager;
 class StyleSheetTable;
+class GraphicZOrderHelper;
 
 // different context types require different sprm handling (e.g. names)
 enum SprmType
@@ -113,6 +115,7 @@ public:
 
     ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
     boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
+    GraphicZOrderHelper* graphicZOrderHelper();
 
 private:
     // Stream
@@ -150,6 +153,7 @@ private:
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
+    boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };
 
 } // namespace dmapper
