@@ -118,6 +118,9 @@ public:
     void testBugFixesXLSX();
     void testBrokenQuotesCSV();
 
+    //change this test file only in excel and not in calc
+    void testSharedFormulaXLSX();
+
     //misc tests unrelated to the import filters
     void testPasswordNew();
     void testPasswordOld();
@@ -142,6 +145,8 @@ public:
 #if 0
     CPPUNIT_TEST(testBrokenQuotesCSV);
 #endif
+    CPPUNIT_TEST(testSharedFormulaXLSX);
+
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
 #if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
@@ -665,6 +670,33 @@ void ScFiltersTest::testBrokenQuotesCSV()
     testFile( aCSVPath, pDoc, 0, PureString);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("shared-formula."));
+    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load shared-formula.xlsx", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+
+    rtl::OUString aCSVPath;
+    createCSVPath( aFileNameBase, aCSVPath );
+    testFile( aCSVPath, pDoc, 0 );
+
+    //test some additional properties
+    ScRangeName* pName = pDoc->GetRangeName();
+    for (ScRangeName::iterator itr = pName->begin(); itr != pName->end(); ++itr)
+    {
+        CPPUNIT_ASSERT(itr->second->GetType() & RT_SHARED);
+    }
 }
 
 void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
