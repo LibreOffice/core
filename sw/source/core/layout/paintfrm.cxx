@@ -4616,8 +4616,13 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
             nExtentOE = lcl_GetExtent( pBottomBorder, NULL );
         }
 
-        basegfx::B2DPoint aStart( aRect.Left() + aRect.Width() / 2.0, aRect.Top() + lcl_GetLineWidth( pTopBorder ) / 2.0 );
-        basegfx::B2DPoint aEnd( aRect.Left() + aRect.Width() / 2.0, aRect.Bottom() - lcl_GetLineWidth( pBottomBorder ) / 2.0 );
+        double const fStartX( (_bLeft) // fdo#38635: always from outer edge
+                ? aRect.Left()  + (aRect.Width() / 2.0)
+                : aRect.Right() - (aRect.Width() / 2.0));
+        basegfx::B2DPoint const aStart(fStartX,
+            aRect.Top() + lcl_AlignHeight(lcl_GetLineWidth(pTopBorder))/2.0 );
+        basegfx::B2DPoint const aEnd(fStartX,
+            aRect.Bottom() - lcl_AlignHeight(lcl_GetLineWidth(pBottomBorder))/2.0 );
 
         double nLeftWidth = !_bLeft ? pLeftRightBorder->GetOutWidth() : pLeftRightBorder->GetInWidth( );
         double nRightWidth = !_bLeft ? pLeftRightBorder->GetInWidth() : pLeftRightBorder->GetOutWidth( );
@@ -4691,8 +4696,15 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
             nExtentOE = lcl_GetExtent( NULL, pRightBorder );
         }
 
-        basegfx::B2DPoint aStart( aRect.Left() + lcl_GetLineWidth( pLeftBorder ) / 2.0, aRect.Top() + aRect.Height() / 2.0 );
-        basegfx::B2DPoint aEnd( aRect.Right() - lcl_GetLineWidth( pRightBorder ) / 2.0, aRect.Top() + aRect.Height() / 2.0 );
+        double const fStartY( (_bTop) // fdo#38635: always from outer edge
+                ? aRect.Top()    + (aRect.Height() / 2.0)
+                : aRect.Bottom() - (aRect.Height() / 2.0));
+        basegfx::B2DPoint const aStart(
+            aRect.Left() + lcl_AlignWidth(lcl_GetLineWidth(pLeftBorder))/2.0,
+            fStartY );
+        basegfx::B2DPoint const aEnd(
+            aRect.Right() - lcl_AlignWidth(lcl_GetLineWidth(pRightBorder))/2.0,
+            fStartY );
 
         double nLeftWidth = !_bTop ? pTopBottomBorder->GetOutWidth() : pTopBottomBorder->GetInWidth( );
         double nRightWidth = !_bTop ? pTopBottomBorder->GetInWidth() : pTopBottomBorder->GetOutWidth( );
