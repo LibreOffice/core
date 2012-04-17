@@ -95,7 +95,11 @@ const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
-
+// Limit the initial tab count to prevent users to set the count too high,
+// which could cause the memory usage of blank documents to exceed the
+// available system memory.
+const SCTAB       MAXINITTAB = 1024;
+const SCTAB       MININITTAB = 1;
 
 // Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;

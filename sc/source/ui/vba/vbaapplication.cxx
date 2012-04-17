@@ -945,9 +945,10 @@ sal_Int32 SAL_CALL ScVbaApplication::getSheetsInNewWorkbook() throw (uno::Runtim
 
 void SAL_CALL ScVbaApplication::setSheetsInNewWorkbook( sal_Int32 SheetsInNewWorkbook ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    if ( SheetsInNewWorkbook < 1 || SheetsInNewWorkbook > MAXTAB )
+    if ( SheetsInNewWorkbook < MININITTAB
+      || SheetsInNewWorkbook > MAXINITTAB )
     {
-        DebugHelper::exception( OUString(RTL_CONSTASCII_USTRINGPARAM("The number must be between 1 and 255")),
+        DebugHelper::exception( OUString(RTL_CONSTASCII_USTRINGPARAM("The number must be between 1 and 10000")),
             uno::Exception(), SbERR_METHOD_FAILED, OUString() );
     }
     else

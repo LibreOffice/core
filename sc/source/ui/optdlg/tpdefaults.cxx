@@ -36,9 +36,6 @@
 #include "defaultsoptions.hxx"
 #include "document.hxx"
 
-#define INIT_SHEETS_MIN 1
-#define INIT_SHEETS_MAX 1024
-
 using ::rtl::OUString;
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
@@ -119,10 +116,10 @@ int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 void ScTpDefaultsOptions::CheckNumSheets()
 {
     sal_Int64 nVal = aEdNSheets.GetValue();
-    if (nVal > INIT_SHEETS_MAX)
-        aEdNSheets.SetValue(INIT_SHEETS_MAX);
-    if (nVal < INIT_SHEETS_MIN)
-        aEdNSheets.SetValue(INIT_SHEETS_MIN);
+    if (nVal > MAXINITTAB)
+        aEdNSheets.SetValue(MAXINITTAB);
+    if (nVal < MININITTAB)
+        aEdNSheets.SetValue(MININITTAB);
 }
 
 void ScTpDefaultsOptions::CheckPrefix(Edit* pEdit)
