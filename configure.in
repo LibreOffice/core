@@ -1095,9 +1095,8 @@ AC_ARG_WITH(myspell-dicts,
 ,)
 
 AC_ARG_WITH(system-dicts,
-    AS_HELP_STRING([--with-system-dicts],
-        [Use dictionaries from system paths- Specify them via
-         --with-{dict,hyph,thes}-path=/path if you want to override the default ones.]),
+    AS_HELP_STRING([--without-system-dicts],
+        [Do not use dictionaries from system paths.]),
 ,)
 
 AC_ARG_WITH(external-dict-dir,
@@ -3593,7 +3592,7 @@ fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
 AC_MSG_CHECKING([whether to use dicts from external paths])
-if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
+if test -z "$with_system_dicts" -o "$with_system_dicts" != "no"; then
     AC_MSG_RESULT([yes])
     SYSTEM_DICTS=YES
     AC_MSG_CHECKING([for spelling dictionary directory])
@@ -3601,6 +3600,9 @@ if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
         DICT_SYSTEM_DIR=file://$with_external_dict_dir
     else
         DICT_SYSTEM_DIR=file:///usr/share/hunspell
+        if test ! -d /usr/share/hunspell -a -d /usr/share/myspell; then
+            DICT_SYSTEM_DIR=file:///usr/share/myspell
+        fi
     fi
     AC_MSG_RESULT([$DICT_SYSTEM_DIR])
     AC_MSG_CHECKING([for hyphenation patterns directory])
