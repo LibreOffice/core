@@ -109,6 +109,7 @@ class EditSelectionEngine;
 class EditDoc;
 struct PasteOrDropInfos;
 class Range;
+struct EPaM;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -519,6 +520,7 @@ public:
 
     void ParaAttribsToCharAttribs(ContentNode* pNode);
 
+    EditPaM CreateEditPaM(const EPaM& rEPaM);
     EditPaM ConnectParagraphs(
         ContentNode* pLeft, ContentNode* pRight, bool bBackward = false);
 

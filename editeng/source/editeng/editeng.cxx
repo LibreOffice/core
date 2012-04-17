@@ -752,6 +752,11 @@ void EditEngine::ParaAttribsToCharAttribs(ContentNode* pNode)
     pImpEditEngine->ParaAttribsToCharAttribs(pNode);
 }
 
+EditPaM EditEngine::CreateEditPaM(const EPaM& rEPaM)
+{
+    return pImpEditEngine->CreateEditPaM(rEPaM);
+}
+
 EditPaM EditEngine::ConnectParagraphs(
         ContentNode* pLeft, ContentNode* pRight, bool bBackward)
 {
@@ -2543,7 +2548,7 @@ void EditEngine::ParagraphHeightChanged( sal_uInt16 nPara )
 XubString EditEngine::GetUndoComment( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    rtl::OUString aComment;
+    XubString aComment;
     switch ( nId )
     {
         case EDITUNDO_REMOVECHARS:
@@ -2552,12 +2557,12 @@ XubString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_DELCONTENT:
         case EDITUNDO_DELETE:
         case EDITUNDO_CUT:
-            aComment = EE_RESSTR(RID_EDITUNDO_DEL);
+            aComment = XubString( EditResId( RID_EDITUNDO_DEL ) );
         break;
         case EDITUNDO_MOVEPARAGRAPHS:
         case EDITUNDO_MOVEPARAS:
         case EDITUNDO_DRAGANDDROP:
-            aComment = EE_RESSTR(RID_EDITUNDO_MOVE);
+            aComment = XubString( EditResId( RID_EDITUNDO_MOVE ) );
         break;
         case EDITUNDO_INSERTFEATURE:
         case EDITUNDO_SPLITPARA:
@@ -2565,29 +2570,29 @@ XubString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_PASTE:
         case EDITUNDO_INSERT:
         case EDITUNDO_READ:
-            aComment = EE_RESSTR(RID_EDITUNDO_INSERT);
+            aComment = XubString( EditResId( RID_EDITUNDO_INSERT ) );
         break;
         case EDITUNDO_SRCHANDREPL:
         case EDITUNDO_REPLACEALL:
-            aComment = EE_RESSTR(RID_EDITUNDO_REPLACE);
+            aComment = XubString( EditResId( RID_EDITUNDO_REPLACE ) );
         break;
         case EDITUNDO_ATTRIBS:
         case EDITUNDO_PARAATTRIBS:
         case EDITUNDO_STRETCH:
-            aComment = EE_RESSTR(RID_EDITUNDO_SETATTRIBS);
+            aComment = XubString( EditResId( RID_EDITUNDO_SETATTRIBS ) );
         break;
         case EDITUNDO_RESETATTRIBS:
-            aComment = EE_RESSTR(RID_EDITUNDO_RESETATTRIBS);
+            aComment = XubString( EditResId( RID_EDITUNDO_RESETATTRIBS ) );
         break;
         case EDITUNDO_STYLESHEET:
-            aComment = EE_RESSTR(RID_EDITUNDO_SETSTYLE);
+            aComment = XubString( EditResId( RID_EDITUNDO_SETSTYLE ) );
         break;
         case EDITUNDO_TRANSLITERATE:
-            aComment = EE_RESSTR(RID_EDITUNDO_TRANSLITERATE);
+            aComment = XubString( EditResId( RID_EDITUNDO_TRANSLITERATE ) );
         break;
         case EDITUNDO_INDENTBLOCK:
         case EDITUNDO_UNINDENTBLOCK:
-            aComment = EE_RESSTR(RID_EDITUNDO_INDENT);
+            aComment = XubString( EditResId( RID_EDITUNDO_INDENT ) );
         break;
     }
     return aComment;

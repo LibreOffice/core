@@ -337,22 +337,22 @@ EditUndoInsertChars::EditUndoInsertChars( ImpEditEngine* _pImpEE, const EPaM& rE
 
 void EditUndoInsertChars::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
-    EditPaM aNewPaM( GetImpEditEngine()->ImpDeleteSelection( aSel ) );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
+    EditPaM aNewPaM( GetEditEngine()->DeleteSelection(aSel) );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
 }
 
 void EditUndoInsertChars::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
-    EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
-    GetImpEditEngine()->ImpInsertText( EditSelection( aPaM, aPaM ), aText );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
+    GetEditEngine()->InsertText(EditSelection(aPaM, aPaM), aText);
     EditPaM aNewPaM( aPaM );
     aNewPaM.GetIndex() = aNewPaM.GetIndex() + aText.Len();
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
 }
 
 sal_Bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
