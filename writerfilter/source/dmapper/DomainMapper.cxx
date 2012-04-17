@@ -71,6 +71,7 @@
 #include <tools/color.hxx>
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
+#include <GraphicHelpers.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -3753,6 +3754,13 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
 StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
 {
     return m_pImpl->GetStyleSheetTable( );
+}
+
+GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
+{
+    if( zOrderHelper.get() == NULL )
+        zOrderHelper.reset( new GraphicZOrderHelper );
+    return zOrderHelper.get();
 }
 
 } //namespace dmapper
