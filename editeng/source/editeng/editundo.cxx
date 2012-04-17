@@ -316,16 +316,16 @@ EditUndoSplitPara::~EditUndoSplitPara()
 
 void EditUndoSplitPara::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM = GetImpEditEngine()->ConnectContents( nNode, sal_False );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditPaM aPaM = GetEditEngine()->ConnectContents(nNode, false);
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 void EditUndoSplitPara::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM = GetImpEditEngine()->SplitContent( nNode, nSepPos );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditPaM aPaM = GetEditEngine()->SplitContent(nNode, nSepPos);
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
 EditUndoInsertChars::EditUndoInsertChars( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const XubString& rStr )

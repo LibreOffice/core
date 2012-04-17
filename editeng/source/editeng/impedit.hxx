@@ -382,7 +382,6 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
 {
     // The Undos have to manipulate directly ( private-Methods ),
     // do that no new Undo is inserted!
-    friend class EditUndoSplitPara;
     friend class EditUndoInsertFeature;
     friend class EditUndoMoveParagraphs;
 
