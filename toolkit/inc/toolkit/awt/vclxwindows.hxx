@@ -338,7 +338,6 @@ public:
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getFirstActionListener ();
 };
 
 //  ----------------------------------------------------

@@ -81,11 +81,6 @@ void VCLXDevice::SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit )
         nFlags &= ~FLAGS_CREATEDWITHTOOLKIT;
 }
 
-sal_Bool VCLXDevice::IsCreatedWithToolkit() const
-{
-    return ( nFlags & FLAGS_CREATEDWITHTOOLKIT ) != 0;
-}
-
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXDevice::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {

@@ -717,16 +717,6 @@ void SAL_CALL OResultSet::release() throw()
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
-void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
-{
-    if(!_rRow.is())
-    {
-        _rRow   = new OValueVector(_nColumnCount);
-        (_rRow->get())[0].setBound(sal_True);
-        ::std::for_each(_rRow->get().begin()+1,_rRow->get().end(),TSetBound(sal_False));
-    }
-}
 
 // -------------------------------------------------------------------------
 void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString )
@@ -1204,10 +1194,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
     fillRowData();
 
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
-
-    // sal_Int32 nColumnCount = m_xColumns->size();
-    // initializeRow(m_aRow,nColumnCount);
-    // initializeRow(m_aEvaluateRow,nColumnCount);
 
     switch( m_pSQLIterator->getStatementType() )
     {

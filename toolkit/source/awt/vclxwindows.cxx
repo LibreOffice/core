@@ -1335,13 +1335,6 @@ void VCLXRadioButton::ImplClickedOrToggled( sal_Bool bToggled )
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > VCLXRadioButton::getFirstActionListener ()
-{
-    if (!maItemListeners.getLength ())
-        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
-    return maActionListeners.getElements()[0];
-}
-
 //  ----------------------------------------------------
 //  class VCLXSpinField
 //  ----------------------------------------------------

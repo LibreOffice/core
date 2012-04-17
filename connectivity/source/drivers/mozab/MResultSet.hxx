@@ -258,7 +258,6 @@ protected:
 
             void parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString );
             void fillRowData() throw( ::com::sun::star::sdbc::SQLException );
-            void initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount);
             void analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                    &queryExpression);
 
