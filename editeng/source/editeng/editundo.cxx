@@ -381,22 +381,22 @@ EditUndoRemoveChars::EditUndoRemoveChars( ImpEditEngine* _pImpEE, const EPaM& rE
 
 void EditUndoRemoveChars::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
-    EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
-    GetImpEditEngine()->ImpInsertText( aSel, aText );
+    GetEditEngine()->InsertText(aSel, aText);
     aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
 void EditUndoRemoveChars::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
-    EditPaM aNewPaM = GetImpEditEngine()->ImpDeleteSelection( aSel );
-    GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewPaM );
+    EditPaM aNewPaM = GetEditEngine()->DeleteSelection(aSel);
+    GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aNewPaM);
 }
 
 EditUndoInsertFeature::EditUndoInsertFeature( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const SfxPoolItem& rFeature)
