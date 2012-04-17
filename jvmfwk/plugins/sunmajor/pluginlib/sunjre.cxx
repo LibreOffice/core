@@ -97,7 +97,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
     *size = sizeof(ar) / sizeof (char*);
     return ar;
 #else
-    size = 0;
+    *size = 0;
     return NULL;
 #endif
 }
