@@ -688,7 +688,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     {
         if (mpAccessibleNotes.is())
         {
-            mpAccessibleConsole->RemoveChild(mpAccessibleConsole.get());
+            mpAccessibleConsole->RemoveChild(mpAccessibleNotes);
             mpAccessibleNotes = NULL;
         }
 
