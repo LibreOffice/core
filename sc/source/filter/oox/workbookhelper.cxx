@@ -401,28 +401,32 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Se
     return pScRangeData;
 }
 
+namespace {
+
+rtl::OUString findUnusedName( const ScRangeName* pRangeName, const rtl::OUString& rSuggestedName )
+{
+    rtl::OUString aNewName = rSuggestedName;
+    sal_Int32 nIndex = 0;
+    while(pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aNewName)))
+        aNewName = rtl::OUStringBuffer(rSuggestedName).append( '_' ).append( nIndex++ ).makeStringAndClear();
+
+    return aNewName;
+}
+
+}
+
 ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
 {
     // create the name and insert it into the Calc document
     ScRangeData* pScRangeData = NULL;
-    if( !orName.isEmpty() ) try
+    if( !orName.isEmpty() )
     {
-        // find an unused name
-        Reference< XIndexAccess > xSheets(mxDoc->getSheets(), UNO_QUERY_THROW);
-        Reference< XSpreadsheet > xSheet (xSheets->getByIndex(nTab), UNO_QUERY_THROW);
-        Reference< com::sun::star::container::XNamed > xNamed(xSheet, UNO_QUERY_THROW);
-        rtl::OUString aName = xNamed->getName();
-        PropertySet aSheetProps( xSheet );
-        Reference< XNamedRanges > xNamedRanges( aSheetProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
-        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
-        // create the named range
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName( nTab );
+        // find an unused name
+        orName = findUnusedName( pNames, orName );
+        // create the named range
         pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
-    }
-    catch (const Exception&)
-    {
     }
     return pScRangeData;
 }
