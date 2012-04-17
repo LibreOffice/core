@@ -108,10 +108,11 @@ sal_Bool IsValidSbxName( const String& rName )
 {
     for ( sal_uInt16 nChar = 0; nChar < rName.Len(); nChar++ )
     {
-        sal_Bool bValid = ( ( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
-                        ( rName.GetChar(nChar) >= 'a' && rName.GetChar(nChar) <= 'z' ) ||
-                        ( rName.GetChar(nChar) >= '0' && rName.GetChar(nChar) <= '9' && nChar ) ||
-                        ( rName.GetChar(nChar) == '_' ) );
+        sal_Unicode c = rName.GetChar(nChar);
+        sal_Bool bValid = ( ( c >= 'A' && c <= 'Z' ) ||
+                            ( c >= 'a' && c <= 'z' ) ||
+                            ( c >= '0' && c <= '9' && nChar ) ||
+                            ( c == '_' ) );
         if ( !bValid )
             return sal_False;
     }
