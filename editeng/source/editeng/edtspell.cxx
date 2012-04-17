@@ -64,6 +64,7 @@ EditSpellWrapper::EditSpellWrapper( Window* _pWin,
 
 void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 {
+    EditEngine* pEE = pEditView->GetEditEngine();
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
 
@@ -77,13 +78,13 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
             pSpellInfo->bSpellToEnd = sal_False;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
             pEditView->GetImpEditView()->SetEditSelection(
-                    pImpEE->GetEditDoc().GetStartPaM() );
+                    pEE->GetEditDoc().GetStartPaM() );
         }
         else
         {
             pSpellInfo->bSpellToEnd = sal_True;
             pSpellInfo->aSpellTo = pImpEE->CreateEPaM(
-                    pImpEE->GetEditDoc().GetStartPaM() );
+                    pEE->GetEditDoc().GetStartPaM() );
         }
     }
     else if ( eArea == SVX_SPELL_BODY_END )
@@ -95,14 +96,14 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
         {
             pSpellInfo->bSpellToEnd = sal_True;
             pSpellInfo->aSpellTo = pImpEE->CreateEPaM(
-                    pImpEE->GetEditDoc().GetEndPaM() );
+                    pEE->GetEditDoc().GetEndPaM() );
         }
         else
         {
             pSpellInfo->bSpellToEnd = sal_False;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
             pEditView->GetImpEditView()->SetEditSelection(
-                    pImpEE->GetEditDoc().GetEndPaM() );
+                    pEE->GetEditDoc().GetEndPaM() );
         }
     }
     else if ( eArea == SVX_SPELL_BODY )
@@ -134,19 +135,20 @@ sal_Bool EditSpellWrapper::HasOtherCnt()
 
 sal_Bool EditSpellWrapper::SpellMore()
 {
+    EditEngine* pEE = pEditView->GetEditEngine();
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
     sal_Bool bMore = sal_False;
     if ( pSpellInfo->bMultipleDoc )
     {
-        bMore = pImpEE->GetEditEnginePtr()->SpellNextDocument();
+        bMore = pEE->SpellNextDocument();
         if ( bMore )
         {
             // The text has been entered into the engine, when backwords then
             // it must be behind the selection.
             Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
             pEditView->GetImpEditView()->SetEditSelection(
-                        pImpEE->GetEditDoc().GetStartPaM() );
+                        pEE->GetEditDoc().GetStartPaM() );
         }
     }
     return bMore;

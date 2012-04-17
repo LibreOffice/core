@@ -236,7 +236,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     }
 }
 
-void ImpEditEngine::InitDoc( sal_Bool bKeepParaAttribs )
+void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 {
     sal_uInt16 nParas = aEditDoc.Count();
     for ( sal_uInt16 n = bKeepParaAttribs ? 1 : 0; n < nParas; n++ )

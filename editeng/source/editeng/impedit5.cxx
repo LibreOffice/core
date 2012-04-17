@@ -442,7 +442,8 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_u
         if ( nFlags & GETATTRIBS_CHARATTRIBS )
         {
             // Make testing easier...
-            pNode->GetCharAttribs().OptimizeRanges( ((ImpEditEngine*)this)->GetEditDoc().GetItemPool() );
+            const SfxItemPool& rPool = GetEditDoc().GetItemPool();
+            pNode->GetCharAttribs().OptimizeRanges(const_cast<SfxItemPool&>(rPool));
 
             const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
             for (size_t nAttr = 0; nAttr < rAttrs.size(); ++nAttr)

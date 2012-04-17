@@ -72,6 +72,8 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#define PIMPEE pImpEditView->pEditEngine->pImpEditEngine
+
 using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -242,14 +244,14 @@ void EditView::SetSelection( const ESelection& rESel )
     if ( !pPortion->IsVisible() )
     {
         pPortion = PIMPE->GetPrevVisPortion( pPortion );
-        ContentNode* pNode = pPortion ? pPortion->GetNode() : PIMPEE->GetEditDoc().GetObject( 0 );
+        ContentNode* pNode = pPortion ? pPortion->GetNode() : PIMPE->GetEditDoc().GetObject( 0 );
         aNewSelection.Min() = EditPaM( pNode, pNode->Len() );
     }
     pPortion = PIMPE->FindParaPortion( aNewSelection.Max().GetNode() );
     if ( !pPortion->IsVisible() )
     {
         pPortion = PIMPE->GetPrevVisPortion( pPortion );
-        ContentNode* pNode = pPortion ? pPortion->GetNode() : PIMPEE->GetEditDoc().GetObject( 0 );
+        ContentNode* pNode = pPortion ? pPortion->GetNode() : PIMPE->GetEditDoc().GetObject( 0 );
         aNewSelection.Max() = EditPaM( pNode, pNode->Len() );
     }
 
@@ -267,8 +269,8 @@ ESelection EditView::GetSelection() const
 
     ESelection aSelection;
 
-    aSelection.nStartPara = PIMPEE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Min().GetNode() );
-    aSelection.nEndPara = PIMPEE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Max().GetNode() );
+    aSelection.nStartPara = PIMPE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Min().GetNode() );
+    aSelection.nEndPara = PIMPE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Max().GetNode() );
 
     aSelection.nStartPos = pImpEditView->GetEditSelection().Min().GetIndex();
     aSelection.nEndPos = pImpEditView->GetEditSelection().Max().GetIndex();
@@ -309,7 +311,7 @@ void EditView::SetEditEngine( EditEngine* pEditEng )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->pEditEngine = pEditEng;
     EditSelection aStartSel;
-    aStartSel = PIMPEE->GetEditDoc().GetStartPaM();
+    aStartSel = PIMPE->GetEditDoc().GetStartPaM();
     pImpEditView->SetEditSelection( aStartSel );
 }
 
@@ -376,30 +378,30 @@ void EditView::InsertText( const XubString& rStr, sal_Bool bSelect )
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
-    ImpEditEngine* pImpEE = PIMPEE;
+    EditEngine* pEE = PIMPE;
     pImpEditView->DrawSelection();
 
     EditPaM aPaM1;
     if ( bSelect )
     {
         EditSelection aTmpSel( pImpEditView->GetEditSelection() );
-        aTmpSel.Adjust( pImpEE->GetEditDoc() );
+        aTmpSel.Adjust( pEE->GetEditDoc() );
         aPaM1 = aTmpSel.Min();
     }
 
-    pImpEE->UndoActionStart( EDITUNDO_INSERT );
-    EditPaM aPaM2( pImpEE->InsertText( pImpEditView->GetEditSelection(), rStr ) );
-    pImpEE->UndoActionEnd( EDITUNDO_INSERT );
+    pEE->UndoActionStart( EDITUNDO_INSERT );
+    EditPaM aPaM2( pEE->InsertText( pImpEditView->GetEditSelection(), rStr ) );
+    pEE->UndoActionEnd( EDITUNDO_INSERT );
 
     if ( bSelect )
     {
-        DBG_ASSERT( !aPaM1.DbgIsBuggy( pImpEE->GetEditDoc() ), "Insert: PaM broken" );
+        DBG_ASSERT( !aPaM1.DbgIsBuggy( pEE->GetEditDoc() ), "Insert: PaM broken" );
         pImpEditView->SetEditSelection( EditSelection( aPaM1, aPaM2 ) );
     }
     else
         pImpEditView->SetEditSelection( EditSelection( aPaM2, aPaM2 ) );
 
-    pImpEE->FormatAndUpdate( this );
+    pEE->FormatAndUpdate( this );
 }
 
 sal_Bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
@@ -468,7 +470,7 @@ const SfxItemSet& EditView::GetEmptyItemSet()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return PIMPEE->GetEmptyItemSet();
+    return PIMPE->GetEmptyItemSet();
 }
 
 void EditView::SetAttribs( const SfxItemSet& rSet )
@@ -478,8 +480,8 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
     DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
 
     pImpEditView->DrawSelection();
-    PIMPEE->SetAttribs( pImpEditView->GetEditSelection(), rSet, ATTRSPECIAL_WHOLEWORD );
-    PIMPEE->FormatAndUpdate( this );
+    PIMPE->SetAttribs( pImpEditView->GetEditSelection(), rSet, ATTRSPECIAL_WHOLEWORD );
+    PIMPE->FormatAndUpdate( this );
 }
 
 void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
@@ -488,7 +490,7 @@ void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     pImpEditView->DrawSelection();
-    PIMPEE->UndoActionStart( EDITUNDO_RESETATTRIBS );
+    PIMPE->UndoActionStart( EDITUNDO_RESETATTRIBS );
     EditSelection aSelection( pImpEditView->GetEditSelection() );
 
     for (sal_uInt16 nWID = EE_ITEMS_START; nWID <= EE_ITEMS_END; ++nWID)
@@ -497,11 +499,11 @@ void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
                         EE_CHAR_LANGUAGE_CJK == nWID ||
                         EE_CHAR_LANGUAGE_CTL == nWID;
         if (!bIsLang)
-            PIMPEE->RemoveCharAttribs( aSelection, bRemoveParaAttribs, nWID );
+            PIMPE->RemoveCharAttribs( aSelection, bRemoveParaAttribs, nWID );
     }
 
-    PIMPEE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
-    PIMPEE->FormatAndUpdate( this );
+    PIMPE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    PIMPE->FormatAndUpdate( this );
 }
 
 void EditView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
@@ -510,20 +512,20 @@ void EditView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     pImpEditView->DrawSelection();
-    PIMPEE->UndoActionStart( EDITUNDO_RESETATTRIBS );
-    PIMPEE->RemoveCharAttribs( pImpEditView->GetEditSelection(), bRemoveParaAttribs, nWhich  );
-    PIMPEE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
-    PIMPEE->FormatAndUpdate( this );
+    PIMPE->UndoActionStart( EDITUNDO_RESETATTRIBS );
+    PIMPE->RemoveCharAttribs( pImpEditView->GetEditSelection(), bRemoveParaAttribs, nWhich  );
+    PIMPE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    PIMPE->FormatAndUpdate( this );
 }
 
 void EditView::RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->UndoActionStart( EDITUNDO_RESETATTRIBS );
-    PIMPEE->RemoveCharAttribs( nPara, nWhich );
-    PIMPEE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
-    PIMPEE->FormatAndUpdate( this );
+    PIMPE->UndoActionStart( EDITUNDO_RESETATTRIBS );
+    PIMPE->RemoveCharAttribs( nPara, nWhich );
+    PIMPE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    PIMPE->FormatAndUpdate( this );
 }
 
 SfxItemSet EditView::GetAttribs()
@@ -538,14 +540,14 @@ void EditView::Undo()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->Undo( this );
+    PIMPE->Undo( this );
 }
 
 void EditView::Redo()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->Redo( this );
+    PIMPE->Redo( this );
 }
 
 sal_uLong EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
@@ -560,7 +562,7 @@ sal_uLong EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat
     EditSelection aNewSel( aEndPaM, aEndPaM );
     if ( bSelect )
     {
-        aOldSel.Adjust( PIMPEE->GetEditDoc() );
+        aOldSel.Adjust( PIMPE->GetEditDoc() );
         aNewSel.Min() = aOldSel.Min();
     }
 
@@ -690,13 +692,13 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->DrawSelection();
 
-    PIMPEE->UndoActionStart( EDITUNDO_INSERT );
-    EditSelection aTextSel( PIMPEE->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
-    PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
+    PIMPE->UndoActionStart( EDITUNDO_INSERT );
+    EditSelection aTextSel( PIMPE->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
+    PIMPE->UndoActionEnd( EDITUNDO_INSERT );
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
-    PIMPEE->FormatAndUpdate( this );
+    PIMPE->FormatAndUpdate( this );
 }
 
 void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, sal_Bool bUseSpecial )
@@ -704,15 +706,15 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
-    PIMPEE->UndoActionStart( EDITUNDO_INSERT );
+    PIMPE->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();
     EditSelection aTextSel =
         PIMPE->InsertText(xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial);
-    PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
+    PIMPE->UndoActionEnd( EDITUNDO_INSERT );
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
-    PIMPEE->FormatAndUpdate( this );
+    PIMPE->FormatAndUpdate( this );
 }
 
 void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
@@ -736,14 +738,14 @@ SfxStyleSheet* EditView::GetStyleSheet()
 
 
     EditSelection aSel( pImpEditView->GetEditSelection() );
-    aSel.Adjust( PIMPEE->GetEditDoc() );
-    sal_uInt16 nStartPara = PIMPEE->GetEditDoc().GetPos( aSel.Min().GetNode() );
-    sal_uInt16 nEndPara = PIMPEE->GetEditDoc().GetPos( aSel.Max().GetNode() );
+    aSel.Adjust( PIMPE->GetEditDoc() );
+    sal_uInt16 nStartPara = PIMPE->GetEditDoc().GetPos( aSel.Min().GetNode() );
+    sal_uInt16 nEndPara = PIMPE->GetEditDoc().GetPos( aSel.Max().GetNode() );
 
     SfxStyleSheet* pStyle = NULL;
     for ( sal_uInt16 n = nStartPara; n <= nEndPara; n++ )
     {
-        SfxStyleSheet* pTmpStyle = PIMPEE->GetStyleSheet( n );
+        SfxStyleSheet* pTmpStyle = PIMPE->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
             return NULL;    // Not unique.
         pStyle = pTmpStyle;
@@ -784,7 +786,7 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
 {
     DBG_CHKTHIS( EditView, 0 );
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
-    EditSelection aNewSel = PIMPEE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
+    EditSelection aNewSel = PIMPE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
     if ( aNewSel != aOldSel )
     {
         pImpEditView->DrawSelection();
@@ -804,8 +806,8 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
         aSel = PIMPE->EndOfWord( aSel.Max() );
         aSel = PIMPEE->AutoCorrect( aSel, 0, !IsInsertMode(), pFrameWin );
         pImpEditView->SetEditSelection( aSel );
-        if ( PIMPEE->IsModified() )
-            PIMPEE->FormatAndUpdate( this );
+        if ( PIMPE->IsModified() )
+            PIMPE->FormatAndUpdate( this );
     }
 }
 
@@ -1185,14 +1187,14 @@ void EditView::InsertField( const SvxFieldItem& rFld )
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
-    ImpEditEngine* pImpEE = PIMPEE;
+    EditEngine* pEE = PIMPE;
     pImpEditView->DrawSelection();
-    pImpEE->UndoActionStart( EDITUNDO_INSERT );
-    EditPaM aPaM( pImpEE->InsertField( pImpEditView->GetEditSelection(), rFld ) );
-    pImpEE->UndoActionEnd( EDITUNDO_INSERT );
+    pEE->UndoActionStart( EDITUNDO_INSERT );
+    EditPaM aPaM( pEE->InsertField( pImpEditView->GetEditSelection(), rFld ) );
+    pEE->UndoActionEnd( EDITUNDO_INSERT );
     pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
-    pImpEE->UpdateFields();
-    pImpEE->FormatAndUpdate( this );
+    pEE->UpdateFields();
+    pEE->FormatAndUpdate( this );
 }
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
@@ -1221,7 +1223,7 @@ const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_uInt16& nPara, sal_
 const SvxFieldItem* EditView::GetFieldAtSelection() const
 {
     EditSelection aSel( pImpEditView->GetEditSelection() );
-    aSel.Adjust( pImpEditView->pEditEngine->pImpEditEngine->GetEditDoc() );
+    aSel.Adjust( pImpEditView->pEditEngine->GetEditDoc() );
     // Only when cursor is in font of field, no selection,
     // or only selecting field
     if ( ( aSel.Min().GetNode() == aSel.Max().GetNode() ) &&
@@ -1419,11 +1421,11 @@ String EditView::GetSurroundingText() const
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     EditSelection aSel( pImpEditView->GetEditSelection() );
-    aSel.Adjust( PIMPEE->GetEditDoc() );
+    aSel.Adjust( PIMPE->GetEditDoc() );
 
     if( HasSelection() )
     {
-        XubString aStr = PIMPEE->GetSelected( aSel );
+        String aStr = PIMPE->GetSelected(aSel);
 
         // Stop reconversion if the selected text includes a line break.
         if ( aStr.Search( 0x0A ) == STRING_NOTFOUND )
@@ -1435,7 +1437,7 @@ String EditView::GetSurroundingText() const
     {
         aSel.Min().SetIndex( 0 );
         aSel.Max().SetIndex( aSel.Max().GetNode()->Len() );
-        return PIMPEE->GetSelected( aSel );
+        return PIMPE->GetSelected(aSel);
     }
 }
 
@@ -1449,8 +1451,8 @@ Selection EditView::GetSurroundingTextSelection() const
     if( HasSelection() )
     {
         EditSelection aSel( pImpEditView->GetEditSelection() );
-        aSel.Adjust( PIMPEE->GetEditDoc() );
-        XubString aStr = PIMPEE->GetSelected( aSel );
+        aSel.Adjust( PIMPE->GetEditDoc() );
+        String aStr = PIMPE->GetSelected(aSel);
 
         // Stop reconversion if the selected text includes a line break.
         if ( aStr.Search( 0x0A ) == STRING_NOTFOUND )

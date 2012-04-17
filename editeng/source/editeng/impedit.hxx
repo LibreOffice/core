@@ -65,7 +65,6 @@
 DBG_NAMEEX( EditView )
 DBG_NAMEEX( EditEngine )
 
-#define PIMPEE      pImpEditView->pEditEngine->pImpEditEngine
 #define PIMPE       pImpEditView->pEditEngine
 
 #define DEL_LEFT    1
@@ -674,25 +673,25 @@ private:
     SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
 
     ImpEditEngine(); // disabled
+    ImpEditEngine(EditEngine* pEditEngine, SfxItemPool* pPool);
+    void InitDoc(bool bKeepParaAttribs);
+    EditDoc&                GetEditDoc()            { return aEditDoc; }
+    const EditDoc&          GetEditDoc() const      { return aEditDoc; }
+
+    const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
+    ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:
-                            ImpEditEngine( EditEngine* pEditEngine, SfxItemPool* pPool );
                             ~ImpEditEngine();
-
-    void                    InitDoc( sal_Bool bKeepParaAttribs );
-    EditDoc&                GetEditDoc()            { return aEditDoc; }
-    const EditDoc&          GetEditDoc() const      { return aEditDoc; }
 
     inline EditUndoManager& GetUndoManager();
 
     void                    SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
     bool                GetUpdateMode() const   { return bUpdate; }
 
-    const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
-    ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
     ViewsType& GetEditViews() { return aEditViews; }
     const ViewsType& GetEditViews() const { return aEditViews; }
 

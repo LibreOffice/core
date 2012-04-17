@@ -163,17 +163,18 @@ sal_Bool TextConvWrapper::ConvMore_impl()
 {
     // modified version of SvxSpellWrapper::SpellMore
 
-    sal_Bool bMore = sal_False;
+    bool bMore = false;
+    EditEngine* pEE = pEditView->GetEditEngine();
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     ConvInfo* pConvInfo = pImpEE->GetConvInfo();
     if ( pConvInfo->bMultipleDoc )
     {
-        bMore = pImpEE->GetEditEnginePtr()->ConvertNextDocument();
+        bMore = pEE->ConvertNextDocument();
         if ( bMore )
         {
             // The text has been entered in this engine ...
             pEditView->GetImpEditView()->SetEditSelection(
-                        pImpEE->GetEditDoc().GetStartPaM() );
+                        pEE->GetEditDoc().GetStartPaM() );
         }
     }
     return bMore;
@@ -184,6 +185,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 {
     // modified version of EditSpellWrapper::SpellStart
 
+    EditEngine* pEE = pEditView->GetEditEngine();
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     ConvInfo* pConvInfo = pImpEE->GetConvInfo();
 
@@ -196,13 +198,13 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
             pConvInfo->aConvTo = pConvInfo->aConvStart;
             pConvInfo->aConvContinue = EPaM( 0, 0 );
             pEditView->GetImpEditView()->SetEditSelection(
-                    pImpEE->GetEditDoc().GetStartPaM() );
+                    pEE->GetEditDoc().GetStartPaM() );
         }
         else
         {
             pConvInfo->bConvToEnd = sal_True;
             pConvInfo->aConvTo = pImpEE->CreateEPaM(
-                    pImpEE->GetEditDoc().GetStartPaM() );
+                    pEE->GetEditDoc().GetStartPaM() );
         }
     }
     else if ( eArea == SVX_SPELL_BODY_END )
@@ -220,7 +222,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         {
             // nothing selected: convert to end of document
             pConvInfo->aConvTo = pImpEE->CreateEPaM(
-                pImpEE->GetEditDoc().GetEndPaM() );
+                pEE->GetEditDoc().GetEndPaM() );
         }
     }
     else if ( eArea == SVX_SPELL_BODY )
@@ -228,7 +230,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         // called by ConvNext_impl...
         pConvInfo->aConvContinue = pConvInfo->aConvStart;
         pConvInfo->aConvTo = pImpEE->CreateEPaM(
-            pImpEE->GetEditDoc().GetEndPaM() );
+            pEE->GetEditDoc().GetEndPaM() );
     }
     else
     {

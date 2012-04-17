@@ -111,6 +111,7 @@ struct PasteOrDropInfos;
 class Range;
 struct EPaM;
 class DeletedNodeInfo;
+class ParaPortionList;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -517,6 +518,9 @@ public:
     EditDoc& GetEditDoc();
     const EditDoc& GetEditDoc() const;
 
+    ParaPortionList& GetParaPortions();
+    const ParaPortionList& GetParaPortions() const;
+
     bool IsFormatted() const;
     bool IsImportHandlerSet() const;
     bool IsImportRTFStyleSheetsSet() const;
@@ -582,6 +586,9 @@ public:
 
     void SetUndoMode(bool b);
     void FormatAndUpdate(EditView* pCurView = NULL);
+
+    bool Undo(EditView* pView);
+    bool Redo(EditView* pView);
 };
 
 #endif // _MyEDITENG_HXX

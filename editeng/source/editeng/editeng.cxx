@@ -832,6 +832,16 @@ void EditEngine::FormatAndUpdate(EditView* pCurView)
     pImpEditEngine->FormatAndUpdate(pCurView);
 }
 
+bool EditEngine::Undo(EditView* pView)
+{
+    return pImpEditEngine->Undo(pView);
+}
+
+bool EditEngine::Redo(EditView* pView)
+{
+    return pImpEditEngine->Redo(pView);
+}
+
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)
 {
     return pImpEditEngine->CreateTransferable(rSelection);
@@ -936,6 +946,16 @@ EditDoc& EditEngine::GetEditDoc()
 const EditDoc& EditEngine::GetEditDoc() const
 {
     return pImpEditEngine->GetEditDoc();
+}
+
+ParaPortionList& EditEngine::GetParaPortions()
+{
+    return pImpEditEngine->GetParaPortions();
+}
+
+const ParaPortionList& EditEngine::GetParaPortions() const
+{
+    return pImpEditEngine->GetParaPortions();
 }
 
 void EditEngine::SeekCursor(
