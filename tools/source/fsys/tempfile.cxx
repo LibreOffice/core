@@ -169,11 +169,7 @@ String TempFile::CreateTempName( const String* pParent )
     // get TempFile name with default naming scheme
     CreateTempName_Impl( aName, sal_False );
 
-    // convert to file URL
-    rtl::OUString aTmp;
-    if ( aName.Len() )
-        aTmp = aName;
-    return aTmp;
+    return aName;
 }
 
 TempFile::TempFile( const String* pParent, sal_Bool bDirectory )
