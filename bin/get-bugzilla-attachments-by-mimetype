@@ -66,8 +66,9 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
         sock = urlopen_retry(url+"&ctype=xml")
         dom = minidom.parse(sock)
         sock.close()
-        attachmentid=1
+        attachmentid=0
         for attachment in dom.getElementsByTagName('attachment'):
+            attachmentid += 1
             print " mimetype is",
             for node in attachment.childNodes:
                 if node.nodeName == 'type':
@@ -82,7 +83,6 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                     f.write(base64.b64decode(node.firstChild.nodeValue))
                     f.close()
                     break
-            attachmentid += 1
 
 def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
     id = url.rsplit('=', 2)[1]
@@ -94,20 +94,24 @@ def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
         sock = urlopen_retry(url+"&ctype=xml")
         dom = minidom.parse(sock)
         sock.close()
-        attachmentid=1
+        attachmentid=0
         for comment in dom.getElementsByTagName('thetext'):
             commentText = comment.firstChild.nodeValue
             match = re.search(r".*Created an attachment \(id=([0-9]+)\)", commentText)
             if not match:
                 continue
 
+            attachmentid += 1
+
             realAttachmentId = match.group(1)
             handle = urlopen_retry(novellattach + realAttachmentId)
             if not handle:
                 print "attachment %s is not accessible", realAttachmentId
                 continue 
+            print " mimetype is",
 
             remoteMime = handle.info().gettype()
+            print remoteMime,
             if remoteMime != mimetype:
                 print "skipping"
                 continue
@@ -117,8 +121,6 @@ def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
             f = open(download, 'w')
             f.write(handle.read())
             f.close()
-            break
-            attachmentid += 1
 
 def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
     try:
@@ -175,8 +177,9 @@ def get_launchpad_bugs(prefix):
         bug = bugtask.bug
         id = str(bug.id)
         print "parsing ", id, "status:", bugtask.status, "title:", bug.title[:50]
-        attachmentid = 1
+        attachmentid = 0
         for attachment in bug.attachments:
+            attachmentid += 1
             handle = attachment.data.open()
             if not handle.content_type in mimetypes:
                 #print "skipping"
@@ -200,7 +203,6 @@ def get_launchpad_bugs(prefix):
             f = open(download, "w")
             f.write(handle.read())
             f.close()
-            attachmentid += 1
 
 freedesktop = 'http://bugs.freedesktop.org/buglist.cgi'
 abisource = 'http://bugzilla.abisource.com/buglist.cgi' #added for abiword
