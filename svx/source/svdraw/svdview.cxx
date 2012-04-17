@@ -1167,12 +1167,13 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     return Pointer(POINTER_ARROW);
 }
 
+#define STR_NOTHING "nothing"
 XubString SdrView::GetStatusText()
 {
     XubString aStr;
     XubString aName;
 
-    aStr.AppendAscii("nothing");
+    aStr.AppendAscii(STR_NOTHING);
 
     if (pAktCreate!=NULL)
     {
@@ -1267,7 +1268,7 @@ XubString SdrView::GetStatusText()
 #endif
     }
 
-    if(aStr.EqualsAscii("nix"))
+    if(aStr.EqualsAscii(STR_NOTHING))
     {
         if (AreObjectsMarked()) {
             ImpTakeDescriptionStr(STR_ViewMarked,aStr);
