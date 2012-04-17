@@ -2227,6 +2227,8 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
     return bOk;
 }
 
+#ifndef DISABLE_DYNLOADING
+
 #define RETURN_ERROR { return eERR_INTERN; }
 class ScFormatFilterMissing : public ScFormatFilterPlugin {
   public:
@@ -2260,6 +2262,15 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
 };
 
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" {
+ScFormatFilterPlugin* ScFilterCreate();
+}
+
+#endif
+
 typedef ScFormatFilterPlugin * (*FilterFn)(void);
 ScFormatFilterPlugin &ScFormatFilter::Get()
 {
@@ -2268,6 +2279,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
     if (plugin != NULL)
         return *plugin;
 
+#ifndef DISABLE_DYNLOADING
     ::rtl::OUString sFilterLib(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("scfilt")));
     static ::osl::Module aModule;
     bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
@@ -2281,6 +2293,9 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
     }
     if (plugin == NULL)
         plugin = new ScFormatFilterMissing();
+#else
+    plugin = ScFilterCreate();
+#endif
 
     return *plugin;
 }
