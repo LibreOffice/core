@@ -61,17 +61,6 @@ inline sal_Int32 lclEmuToHmm( sal_Int64 nValue )
     return (nValue < 0) ? -1 : convertEmuToHmm( nValue );
 }
 
-/** Reads the cell anchor model from a BIFF or DFF stream. */
-BinaryInputStream& operator>>( BinaryInputStream& rStrm, CellAnchorModel& rModel )
-{
-    // all members are given as 16-bit unsigned values
-    rModel.mnCol = rStrm.readuInt16();
-    rModel.mnColOffset = rStrm.readuInt16();
-    rModel.mnRow = rStrm.readuInt16();
-    rModel.mnRowOffset = rStrm.readuInt16();
-    return rStrm;
-}
-
 } // namespace
 
 // ============================================================================
