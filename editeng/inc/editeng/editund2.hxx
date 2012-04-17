@@ -33,17 +33,15 @@
 #include <svl/undo.hxx>
 
 class EditEngine;
-class ImpEditEngine;
 
 class EDITENG_DLLPRIVATE EditUndoManager : public SfxUndoManager
 {
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
 
-private:
-    ImpEditEngine*  pImpEE;
+    EditEngine* mpEditEngine;
 public:
-                    EditUndoManager( ImpEditEngine* pImpEE );
+    EditUndoManager(EditEngine* pEE);
 
     virtual sal_Bool Undo();
     virtual sal_Bool Redo();
@@ -56,15 +54,14 @@ class EDITENG_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:
     sal_uInt16          nId;
-    ImpEditEngine* mpEditEngine;
+    EditEngine* mpEditEngine;
 
 public:
     TYPEINFO();
-    EditUndo(sal_uInt16 nI, ImpEditEngine* pEE);
+    EditUndo(sal_uInt16 nI, EditEngine* pEE);
     virtual ~EditUndo();
 
     EditEngine* GetEditEngine();
-    ImpEditEngine* GetImpEditEngine();
 
     virtual void    Undo()      = 0;
     virtual void    Redo()      = 0;

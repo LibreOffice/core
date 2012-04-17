@@ -92,7 +92,7 @@ void ImpEditEngine::SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle )
                 aNewStyleName = pStyle->GetName();
 
             InsertUndo(
-                new EditUndoSetStyleSheet( this, aEditDoc.GetPos( pNode ),
+                new EditUndoSetStyleSheet(pEditEngine, aEditDoc.GetPos( pNode ),
                         aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
                         aNewStyleName, pStyle ? pStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
                         pNode->GetContentAttribs().GetItems() ) );
@@ -205,11 +205,11 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
     {
         SfxItemSet aTmpSet( GetEmptyItemSet() );
         aTmpSet.Put( rSet );
-        pUndo = new EditUndoSetAttribs( this, aESel, aTmpSet );
+        pUndo = new EditUndoSetAttribs(pEditEngine, aESel, aTmpSet);
     }
     else
     {
-        pUndo = new EditUndoSetAttribs( this, aESel, rSet );
+        pUndo = new EditUndoSetAttribs(pEditEngine, aESel, rSet);
     }
 
     SfxItemPool* pPool = pUndo->GetNewAttribs().GetPool();
@@ -268,7 +268,7 @@ void ImpEditEngine::InsertUndo( EditUndo* pUndo, bool bTryMerge )
     DBG_ASSERT( !IsInUndo(), "InsertUndo in Undomodus!" );
     if ( pUndoMarkSelection )
     {
-        EditUndoMarkSelection* pU = new EditUndoMarkSelection( this, *pUndoMarkSelection );
+        EditUndoMarkSelection* pU = new EditUndoMarkSelection(pEditEngine, *pUndoMarkSelection);
         GetUndoManager().AddUndoAction( pU, false );
         delete pUndoMarkSelection;
         pUndoMarkSelection = NULL;
@@ -709,11 +709,11 @@ void ImpEditEngine::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
             {
                 SfxItemSet aTmpSet( GetEmptyItemSet() );
                 aTmpSet.Put( rSet );
-                InsertUndo( new EditUndoSetParaAttribs( this, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet ) );
+                InsertUndo(new EditUndoSetParaAttribs(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
             }
             else
             {
-                InsertUndo( new EditUndoSetParaAttribs( this, nPara, pNode->GetContentAttribs().GetItems(), rSet ) );
+                InsertUndo(new EditUndoSetParaAttribs(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
             }
         }
         pNode->GetContentAttribs().GetItems().Set( rSet );

@@ -132,6 +132,9 @@ class EDITENG_DLLPUBLIC EditEngine
     friend class EditDbg;
     friend class Outliner;
 
+public:
+    typedef std::vector<EditView*> ViewsType;
+
 private:
     ImpEditEngine*  pImpEditEngine;
 
@@ -214,6 +217,7 @@ public:
     size_t          GetViewCount() const;
     sal_Bool            HasView( EditView* pView ) const;
     EditView*       GetActiveView() const;
+    void SetActiveView(EditView* pView);
 
     void            SetPaperSize( const Size& rSize );
     const Size&     GetPaperSize() const;
@@ -572,6 +576,12 @@ public:
 
     void RemoveCharAttribs(sal_uInt16 nPara, sal_uInt16 nWhich = 0, bool bRemoveFeatures = false);
     void RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich = 0);
+
+    ViewsType& GetEditViews();
+    const ViewsType& GetEditViews() const;
+
+    void SetUndoMode(bool b);
+    void FormatAndUpdate(EditView* pCurView = NULL);
 };
 
 #endif // _MyEDITENG_HXX

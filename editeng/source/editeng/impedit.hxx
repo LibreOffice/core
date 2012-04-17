@@ -37,6 +37,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <editeng/eedata.hxx>
+#include "editeng/editeng.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
@@ -384,7 +385,7 @@ class ImpEditEngine : public SfxListener, boost::noncopyable
     friend class EditDbg;
 
 public:
-    typedef std::vector<EditView*> ViewsType;
+    typedef EditEngine::ViewsType ViewsType;
 
 private:
 
@@ -1073,7 +1074,7 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
-        pUndoManager = new EditUndoManager( this );
+        pUndoManager = new EditUndoManager(pEditEngine);
     return *pUndoManager;
 }
 

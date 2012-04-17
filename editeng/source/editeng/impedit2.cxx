@@ -2136,7 +2136,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, Edit
         if ( pCurUndo && ( CreateEditPaM( pCurUndo->GetEPaM() ) == rPaM ) )
             pCurUndo->GetStr() += aStr;
         else
-            InsertUndo( new EditUndoRemoveChars( this, CreateEPaM( rPaM ), aStr ) );
+            InsertUndo(new EditUndoRemoveChars(pEditEngine, CreateEPaM(rPaM), aStr));
     }
 
     aEditDoc.RemoveChars( rPaM, nChars );
@@ -2196,7 +2196,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_uInt16 
     aBeginMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
 
     if ( IsUndoEnabled() && !IsInUndo())
-        InsertUndo( new EditUndoMoveParagraphs( this, aOldPositions, nNewPos ) );
+        InsertUndo(new EditUndoMoveParagraphs(pEditEngine, aOldPositions, nNewPos));
 
     // do not lose sight of the Position !
     ParaPortion* pDestPortion = GetParaPortions().SafeGetObject( nNewPos );
@@ -2275,7 +2275,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        InsertUndo( new EditUndoConnectParas( this,
+        InsertUndo( new EditUndoConnectParas(pEditEngine,
             aEditDoc.GetPos( pLeft ), pLeft->Len(),
             pLeft->GetContentAttribs().GetItems(), pRight->GetContentAttribs().GetItems(),
             pLeft->GetStyleSheet(), pRight->GetStyleSheet(), bBackward ) );
@@ -2514,7 +2514,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
         ParaAttribsChanged( pNextNode );
 
     if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo( new EditUndoDelContent( this, pNode, nPara ) );
+        InsertUndo(new EditUndoDelContent(pEditEngine, pNode, nPara));
     else
     {
         aEditDoc.RemoveItemsFromPool(*pNode);
@@ -2670,7 +2670,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
         if ( IsUndoEnabled() && !IsInUndo() )
         {
-            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars( this, CreateEPaM( aPaM ), c );
+            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), c);
             sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
             InsertUndo( pNewUndo, bTryMerge );
         }
@@ -2738,7 +2738,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const String&
                 aLine.Erase( nMaxNewChars );            // Delete the Rest...
             }
             if ( IsUndoEnabled() && !IsInUndo() )
-                InsertUndo( new EditUndoInsertChars( this, CreateEPaM( aPaM ), aLine ) );
+                InsertUndo(new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), aLine));
             // Tabs ?
             if ( aLine.Search( '\t' ) == STRING_NOTFOUND )
                 aPaM = aEditDoc.InsertText( aPaM, aLine );
@@ -2798,7 +2798,7 @@ EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const XubString& rStr )
     if ( ( aPaM.GetNode()->Len() + rStr.Len() ) < MAXCHARSINPARA )
     {
         if ( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( new EditUndoInsertChars( this, CreateEPaM( aPaM ), rStr ) );
+            InsertUndo(new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), rStr));
 
         aPaM = aEditDoc.InsertText( aPaM, rStr );
         TextModified();
@@ -2823,7 +2823,7 @@ EditPaM ImpEditEngine::ImpInsertFeature( EditSelection aCurSel, const SfxPoolIte
         return aPaM;
 
     if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo( new EditUndoInsertFeature( this, CreateEPaM( aPaM ), rItem ) );
+        InsertUndo(new EditUndoInsertFeature(pEditEngine, CreateEPaM(aPaM), rItem));
     aPaM = aEditDoc.InsertFeature( aPaM, rItem );
 
     ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
@@ -2855,7 +2855,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
     }
 
     if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo( new EditUndoSplitPara( this, aEditDoc.GetPos( rPaM.GetNode() ), rPaM.GetIndex() ) );
+        InsertUndo(new EditUndoSplitPara(pEditEngine, aEditDoc.GetPos(rPaM.GetNode()), rPaM.GetIndex()));
 
     EditPaM aPaM( aEditDoc.InsertParaBreak( rPaM, bKeepEndingAttribs ) );
 
@@ -2914,10 +2914,10 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_uInt16 nPara )
         if ( nPara )
         {
             OSL_ENSURE( aEditDoc.GetObject( nPara-1 ), "FastInsertParagraph: Prev does not exist" );
-            InsertUndo( new EditUndoSplitPara( this, nPara-1, aEditDoc.GetObject( nPara-1 )->Len() ) );
+            InsertUndo(new EditUndoSplitPara(pEditEngine, nPara-1, aEditDoc.GetObject( nPara-1 )->Len()));
         }
         else
-            InsertUndo( new EditUndoSplitPara( this, 0, 0 ) );
+            InsertUndo(new EditUndoSplitPara(pEditEngine, 0, 0));
     }
 
     ContentNode* pNode = new ContentNode( aEditDoc.GetItemPool() );

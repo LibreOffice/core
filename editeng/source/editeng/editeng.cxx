@@ -421,6 +421,11 @@ EditView* EditEngine::GetActiveView() const
     return pImpEditEngine->GetActiveView();
 }
 
+void EditEngine::SetActiveView(EditView* pView)
+{
+    pImpEditEngine->SetActiveView(pView);
+}
+
 void EditEngine::SetDefTab( sal_uInt16 nDefTab )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -805,6 +810,26 @@ void EditEngine::RemoveCharAttribs(sal_uInt16 nPara, sal_uInt16 nWhich, bool bRe
 void EditEngine::RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich)
 {
     pImpEditEngine->RemoveCharAttribs(rSel, bRemoveParaAttribs, nWhich);
+}
+
+EditEngine::ViewsType& EditEngine::GetEditViews()
+{
+    return pImpEditEngine->GetEditViews();
+}
+
+const EditEngine::ViewsType& EditEngine::GetEditViews() const
+{
+    return pImpEditEngine->GetEditViews();
+}
+
+void EditEngine::SetUndoMode(bool b)
+{
+    pImpEditEngine->SetUndoMode(b);
+}
+
+void EditEngine::FormatAndUpdate(EditView* pCurView)
+{
+    pImpEditEngine->FormatAndUpdate(pCurView);
 }
 
 uno::Reference<datatransfer::XTransferable> EditEngine::CreateTransferable(const EditSelection& rSelection)

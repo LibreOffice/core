@@ -2948,7 +2948,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 aNewSel = aSel;
 
                 ESelection aESel( CreateESel( aSel ) );
-                pUndo = new EditUndoTransliteration( this, aESel, nTransliterationMode );
+                pUndo = new EditUndoTransliteration(pEditEngine, aESel, nTransliterationMode);
 
                 const bool bSingleNode = aSel.Min().GetNode()== aSel.Max().GetNode();
                 const bool bHasAttribs = aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
