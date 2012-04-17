@@ -347,7 +347,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     sal_Int32  nLenList,
     JavaInfo ** ppInfo)
 {
-    javaPluginError errcode = JFW_PLUGIN_E_NONE;
+    javaPluginError errorcode = JFW_PLUGIN_E_NONE;
 
     OSL_ASSERT(path);
     OSL_ASSERT(sVendor);
@@ -444,7 +444,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     }
     *ppInfo = createJavaInfo(aVendorInfo);
 
-    return errcode;
+    return errorcode;
 }
 
 #if defined(WNT)
@@ -571,9 +571,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // unless guard is volatile the following warning occurs on gcc:
     // warning: variable 't' might be clobbered by `longjmp' or `vfork'
     volatile osl::MutexGuard guard(PluginMutex::get());
-    // unless errcode is volatile the following warning occurs on gcc:
-    // warning: variable 'errcode' might be clobbered by `longjmp' or `vfork'
-    volatile javaPluginError errcode = JFW_PLUGIN_E_NONE;
+    // unless errorcode is volatile the following warning occurs on gcc:
+    // warning: variable 'errorcode' might be clobbered by `longjmp' or `vfork'
+    volatile javaPluginError errorcode = JFW_PLUGIN_E_NONE;
     if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
     //Check if the Vendor (pInfo->sVendor) is supported by this plugin
@@ -737,13 +737,13 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         {
             fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
                     "Can not create Java Virtual Machine\n");
-            errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
+            errorcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
         else if( err > 0)
         {
             fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
                     "Can not create JavaVirtualMachine, abort handler was called.\n");
-            errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
+            errorcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
     }
     else
@@ -760,7 +760,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     fprintf(stderr, "lo_get_javavm returns %p", *ppVm);
 #endif
 
-   return errcode;
+   return errorcode;
 }
 
 extern "C"
