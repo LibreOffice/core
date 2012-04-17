@@ -32,6 +32,7 @@
 #include "editeng/editengdllapi.h"
 #include <svl/undo.hxx>
 
+class EditEngine;
 class ImpEditEngine;
 
 class EDITENG_DLLPRIVATE EditUndoManager : public SfxUndoManager
@@ -55,14 +56,15 @@ class EDITENG_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:
     sal_uInt16          nId;
-    ImpEditEngine*  pImpEE;
+    ImpEditEngine* mpEditEngine;
 
 public:
-                    TYPEINFO();
-                    EditUndo( sal_uInt16 nI, ImpEditEngine* pImpEE );
-    virtual         ~EditUndo();
+    TYPEINFO();
+    EditUndo(sal_uInt16 nI, ImpEditEngine* pEE);
+    virtual ~EditUndo();
 
-    ImpEditEngine*  GetImpEditEngine() const    { return pImpEE; }
+    EditEngine* GetEditEngine();
+    ImpEditEngine* GetImpEditEngine();
 
     virtual void    Undo()      = 0;
     virtual void    Redo()      = 0;

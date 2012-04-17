@@ -140,16 +140,25 @@ sal_Bool EditUndoManager::Redo()
     return bDone;
 }
 
-EditUndo::EditUndo( sal_uInt16 nI, ImpEditEngine* p )
+EditUndo::EditUndo(sal_uInt16 nI, ImpEditEngine* pEE) :
+    nId(nI), mpEditEngine(pEE)
 {
     DBG_CTOR( EditUndo, 0 );
-    nId = nI;
-    pImpEE = p;
 }
 
 EditUndo::~EditUndo()
 {
     DBG_DTOR( EditUndo, 0 );
+}
+
+EditEngine* EditUndo::GetEditEngine()
+{
+    return mpEditEngine->GetEditEnginePtr();
+}
+
+ImpEditEngine* EditUndo::GetImpEditEngine()
+{
+    return mpEditEngine;
 }
 
 sal_uInt16 EditUndo::GetId() const
@@ -166,9 +175,9 @@ sal_Bool EditUndo::CanRepeat(SfxRepeatTarget&) const
 XubString EditUndo::GetComment() const
 {
     XubString aComment;
-    if ( pImpEE )
+    if ( mpEditEngine )
     {
-        EditEngine* pEditEng = pImpEE->GetEditEnginePtr();
+        EditEngine* pEditEng = mpEditEngine->GetEditEnginePtr();
         aComment = pEditEng->GetUndoComment( GetId() );
     }
     return aComment;
