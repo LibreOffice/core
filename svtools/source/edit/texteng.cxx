@@ -217,26 +217,15 @@ void TextEngine::SetFont( const Font& rFont )
         maFont.SetAlign( ALIGN_TOP );
         mpRefDev->SetFont( maFont);
         Size aTextSize;
-        aTextSize.Width() = mpRefDev->GetTextWidth( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "    " ) ) );
+        aTextSize.Width() = mpRefDev->GetTextWidth(rtl::OUString("    "));
         aTextSize.Height() = mpRefDev->GetTextHeight();
         if ( !aTextSize.Width() )
-            aTextSize.Width() = mpRefDev->GetTextWidth( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "XXXX" ) ) );
+            aTextSize.Width() = mpRefDev->GetTextWidth(rtl::OUString("XXXX"));
 
         mnDefTab = (sal_uInt16)aTextSize.Width();
         if ( !mnDefTab )
             mnDefTab = 1;
         mnCharHeight = (sal_uInt16)aTextSize.Height();
-/*
-        // #93746# Doesn't work with CJK HalfWidth/FullWidth
-        FontMetric aRealFont( mpRefDev->GetFontMetric() );
-        if ( aRealFont.GetPitch() == PITCH_FIXED )
-        {
-            String aX100;
-            aX100.Fill( 100, 'X' );
-            mnFixCharWidth100 = (sal_uInt16)mpRefDev->GetTextWidth( aX100 );
-        }
-        else
-*/
         mnFixCharWidth100 = 0;
 
         FormatFullDoc();

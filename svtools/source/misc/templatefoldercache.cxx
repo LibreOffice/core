@@ -480,7 +480,7 @@ namespace svt
 
         sal_Bool    implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 
-        static  String      getCacheFileName();
+        static  rtl::OUString getCacheFileName();
         static  sal_Int32   getMagicNumber();
         static  void        normalize( TemplateFolderContent& _rState );
 
@@ -523,9 +523,9 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    String TemplateFolderCacheImpl::getCacheFileName()
+    rtl::OUString TemplateFolderCacheImpl::getCacheFileName()
     {
-        return String::CreateFromAscii( ".templdir.cache" );
+        return rtl::OUString(".templdir.cache");
     }
 
 
