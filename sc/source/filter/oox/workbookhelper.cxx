@@ -382,8 +382,7 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
 ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
 {
     // create the name and insert it into the Calc document
-    Reference< XNamedRange > xNamedRange;
-    ScRangeData* pScRangeData;
+    ScRangeData* pScRangeData = NULL;
     if( !orName.isEmpty() ) try
     {
         // find an unused name
@@ -396,7 +395,7 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Se
         ScRangeName* pNames = rDoc.GetRangeName();
         pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
     return pScRangeData;
@@ -405,8 +404,7 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Se
 ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
 {
     // create the name and insert it into the Calc document
-    Reference< XNamedRange > xNamedRange;
-    ScRangeData* pScRangeData;
+    ScRangeData* pScRangeData = NULL;
     if( !orName.isEmpty() ) try
     {
         // find an unused name
@@ -423,7 +421,7 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, con
         ScRangeName* pNames = rDoc.GetRangeName( nTab );
         pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
     return pScRangeData;
