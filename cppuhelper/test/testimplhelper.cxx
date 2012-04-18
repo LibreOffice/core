@@ -352,7 +352,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
     OSL_ENSURE( xa->a() == "a", "### A failed!" );
     Reference< BA > xba( xa, UNO_QUERY );
     OSL_ENSURE( xba->ba() == "ba", "### BA failed!" );
-    OSL_ENSURE( xba->a() == "a" ), "### BA failed!" );
+    OSL_ENSURE( xba->a() == "a", "### BA failed!" );
     Reference< CA > xca( xba, UNO_QUERY );
     OSL_ENSURE( xca->ca() == "ca", "### CA failed!" );
     OSL_ENSURE( xca->a() == "a", "### CA failed!" );
