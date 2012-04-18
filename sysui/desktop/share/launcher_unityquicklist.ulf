@@ -1,0 +1,23 @@
+[writer]
+en-US = "New Document"
+
+[impress]
+en-US = "New Presentation"
+
+[calc]
+en-US = "New Spreadsheet"
+
+[base]
+en-US = "New Database"
+
+[math]
+en-US = "New Formula"
+
+[draw]
+en-US = "New Drawing"
+
+[startcenter]
+en-US = ""
+
+[javafilter]
+en-US = ""
