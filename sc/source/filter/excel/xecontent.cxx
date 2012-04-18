@@ -573,10 +573,11 @@ void XclExpLabelranges::Save( XclExpStream& rStrm )
 class XclExpCFImpl : protected XclExpRoot
 {
 public:
-    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry );
+    explicit            XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority = 0 );
 
     /** Writes the body of the CF record. */
     void                WriteBody( XclExpStream& rStrm );
+    void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
     const ScCondFormatEntry& mrFormatEntry; /// Calc conditional format entry.
@@ -588,6 +589,7 @@ private:
     sal_uInt32          mnFontColorId;      /// Font color ID.
     sal_uInt8           mnType;             /// Type of the condition (cell/formula).
     sal_uInt8           mnOperator;         /// Comparison operator for cell type.
+    sal_Int32           mnPriority;         /// Priority of this entry; needed for oox export
     bool                mbFontUsed;         /// true = Any font attribute used.
     bool                mbHeightUsed;       /// true = Font height used.
     bool                mbWeightUsed;       /// true = Font weight used.
@@ -601,12 +603,13 @@ private:
 
 // ----------------------------------------------------------------------------
 
-XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
+XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority ) :
     XclExpRoot( rRoot ),
     mrFormatEntry( rFormatEntry ),
     mnFontColorId( 0 ),
     mnType( EXC_CF_TYPE_CELL ),
     mnOperator( EXC_CF_CMP_NONE ),
+    mnPriority( nPriority ),
     mbFontUsed( false ),
     mbHeightUsed( false ),
     mbWeightUsed( false ),
@@ -778,12 +781,64 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
         mxTokArr2->WriteArray( rStrm );
 }
 
+namespace {
+
+const char* GetOperatorString(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case SC_COND_EQUAL:
+            return "equal";
+        case SC_COND_LESS:
+            return "lessThan";
+        case SC_COND_GREATER:
+            return "greaterThan";
+        case SC_COND_EQLESS:
+            return "lessThanOrEqual";
+        case SC_COND_EQGREATER:
+            return "greaterThanOrEqual";
+        case SC_COND_NOTEQUAL:
+            return "notEqual";
+        case SC_COND_BETWEEN:
+            return "between";
+        case SC_COND_NOTBETWEEN:
+            return "notBetween";
+        case SC_COND_DUPLICATE:
+        case SC_COND_NOTDUPLICATE:
+        case SC_COND_DIRECT:
+        case SC_COND_NONE:
+        default:
+            return "";
+            break;
+    }
+    return "";
+}
+
+const char* GetTypeString()
+{
+    return "cellIs";
+}
+
+}
+
+void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_cfRule,
+            XML_type, GetTypeString(),
+            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_operator, GetOperatorString( mrFormatEntry.GetOperation() ),
+            FSEND );
+    // OOXTODO: XML_extLst
+    rWorksheet->endElement( XML_cfRule );
+}
+
 // ----------------------------------------------------------------------------
 
-XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
+XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority = 0 ) :
     XclExpRecord( EXC_ID_CF ),
     XclExpRoot( rRoot ),
-    mxImpl( new XclExpCFImpl( rRoot, rFormatEntry ) )
+    mxImpl( new XclExpCFImpl( rRoot, rFormatEntry, nPriority ) )
 {
 }
 
@@ -794,6 +849,11 @@ XclExpCF::~XclExpCF()
 void XclExpCF::WriteBody( XclExpStream& rStrm )
 {
     mxImpl->WriteBody( rStrm );
+}
+
+void XclExpCF::SaveXml( XclExpXmlStream& rStrm )
+{
+    mxImpl->SaveXml( rStrm );
 }
 
 // ----------------------------------------------------------------------------
@@ -809,7 +869,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     {
         for( sal_uInt16 nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
-                maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
+                maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry, nIndex ) );
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
 }

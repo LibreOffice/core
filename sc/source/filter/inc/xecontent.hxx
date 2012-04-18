@@ -179,8 +179,10 @@ class XclExpCFImpl;
 class XclExpCF : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry );
+    explicit            XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry, sal_Int32 nPriority );
     virtual             ~XclExpCF();
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the body of the CF record. */

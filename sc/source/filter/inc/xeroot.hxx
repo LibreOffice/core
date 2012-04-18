@@ -59,6 +59,7 @@ class XclExpNameManager;
 class XclExpObjectManager;
 class XclExpFilterManager;
 class XclExpPivotTableManager;
+class XclExpDxfs;
 
 /** Stores global buffers and data needed for Excel export filter. */
 struct XclExpRootData : public XclRootData
@@ -78,6 +79,7 @@ struct XclExpRootData : public XclRootData
     typedef boost::shared_ptr< XclExpObjectManager >       XclExpObjectMgrRef;
     typedef boost::shared_ptr< XclExpFilterManager >       XclExpFilterMgrRef;
     typedef boost::shared_ptr< XclExpPivotTableManager >   XclExpPTableMgrRef;
+    typedef boost::shared_ptr< XclExpDxfs >                XclExpDxfsRef;
 
     XclExpTabInfoRef    mxTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpAddrConvRef   mxAddrConv;         /// The address converter.
@@ -95,6 +97,7 @@ struct XclExpRootData : public XclRootData
     XclExpObjectMgrRef  mxObjMgr;           /// All drawing objects.
     XclExpFilterMgrRef  mxFilterMgr;        /// Manager for filtered areas in all sheets.
     XclExpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
+    XclExpDxfsRef       mxDxfs;             /// All delta formatting entries
 
     bool                mbRelUrl;           /// true = Store URLs relative.
 
@@ -147,6 +150,8 @@ public:
     XclExpFilterManager& GetFilterManager() const;
     /** Returns the pivot table manager. */
     XclExpPivotTableManager& GetPivotTableManager() const;
+    /** Returns the differential formatting list */
+    XclExpDxfs&          GetDxfs() const;
 
     /** Is called when export filter starts to create the Excel document (all BIFF versions). */
     void                InitializeConvert();

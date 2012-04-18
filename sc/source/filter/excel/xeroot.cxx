@@ -199,6 +199,7 @@ void XclExpRoot::InitializeGlobals()
         mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
         // BIFF8: only one link manager for all sheets
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
+        mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
     }
 
     GetXFBuffer().Initialize();
@@ -233,6 +234,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_SST:            xRec = mrExpData.mxSst;         break;
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
+        case EXC_ID_DXFS:           xRec = mrExpData.mxDxfs;        break;
     }
     OSL_ENSURE( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;

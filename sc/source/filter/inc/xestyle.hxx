@@ -38,7 +38,9 @@
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
+#include "conditio.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -47,6 +49,7 @@
 const sal_uInt16 EXC_ID_FONTLIST    = 0x8031;   /// For internal use only.
 const sal_uInt16 EXC_ID_FORMATLIST  = 0x801E;   /// For internal use only.
 const sal_uInt16 EXC_ID_XFLIST      = 0x8043;   /// For internal use only.
+const sal_uInt16 EXC_ID_DXFS        = 0x9999;   /// For internal use only. TODO:moggi: find a better/correct value
 
 // PALETTE record - color information =========================================
 
@@ -276,6 +279,8 @@ struct XclExpNumFmt
 
     inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt ) :
                             mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ) {}
+
+    void SaveXml( XclExpXmlStream& rStrm, const String& rFormatCode );
 };
 
 // ----------------------------------------------------------------------------
@@ -718,6 +723,42 @@ private:
 
 };
 
+struct XclDxfStyle
+{
+};
+
+class XclExpDxf : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
+            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpCellArea* pCellArea);
+    virtual ~XclExpDxf();
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+
+private:
+    XclExpCellAlign* mpAlign;
+    XclExpCellBorder* mpBorder;
+    XclExpFont* mpFont;
+    XclExpNumFmt* mpNumberFmt;
+    XclExpCellProt* mpProt;
+    XclExpCellArea* mpCellArea;
+};
+
+class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpDxfs( const XclExpRoot& rRoot );
+
+    sal_Int32 GetDxfId(const rtl::OUString& rName);
+
+    virtual void SaveXml( XclExpXmlStream& rStrm);
+private:
+    typedef boost::ptr_vector<XclExpDxf> DxfContainer;
+    std::map<rtl::OUString, sal_Int32> maStyleNameToDxfId;
+    DxfContainer maDxf;
+};
+
 // ============================================================================
 
 class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot
@@ -727,6 +768,7 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
+    bool mbDxfs;
 };
 
 // ============================================================================

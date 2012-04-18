@@ -54,6 +54,7 @@
 #include "attrib.hxx"
 #include "globstr.hrc"
 #include "xestring.hxx"
+#include "conditio.hxx"
 
 #include <oox/token/tokens.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -1214,6 +1215,17 @@ struct XclExpNumFmtPred
 
 // ----------------------------------------------------------------------------
 
+void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm, const String& rFormatCode )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->singleElement( XML_numFmt,
+            XML_numFmtId,   OString::valueOf( mnXclNumFmt ).getStr(),
+            XML_formatCode, XclXmlUtils::ToOString( rFormatCode ).getStr(),
+            FSEND );
+}
+
+// ----------------------------------------------------------------------------
+
 XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     /*  Compiler needs a hint, this doesn't work: new NfKeywordTable;
@@ -1278,12 +1290,9 @@ void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->startElement( XML_numFmts,
             XML_count,  OString::valueOf( (sal_Int32) maFormatMap.size() ).getStr(),
             FSEND );
-    for( XclExpNumFmtVec::const_iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
+    for( XclExpNumFmtVec::iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
     {
-        rStyleSheet->singleElement( XML_numFmt,
-                XML_numFmtId,   OString::valueOf( sal_Int32(aIt->mnXclNumFmt) ).getStr(),
-                XML_formatCode, XclXmlUtils::ToOString( GetFormatCode( *aIt ) ).getStr(),
-                FSEND );
+        aIt->SaveXml( rStrm, GetFormatCode( *aIt ) );
     }
     rStyleSheet->endElement( XML_numFmts );
 }
@@ -2816,11 +2825,142 @@ void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
     }
 }
 
+
+XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
+    : XclExpRoot( rRoot )
+{
+    ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList();
+    if (pList)
+    {
+        sal_Int32 nFormatCount = pList->Count();
+        sal_Int32 nIndex = 0;
+        for(sal_Int32 nItem = 0; nItem < nFormatCount; ++nItem)
+        {
+            ScConditionalFormat* pFormat = (*pList)[nItem];
+            sal_Int32 nEntryCount = pFormat->Count();
+            for (sal_Int32 nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
+            {
+                const ScCondFormatEntry* pEntry = pFormat->GetEntry(nFormatEntry);
+                if (!pEntry)
+                    continue;
+
+                rtl::OUString aStyleName = pEntry->GetStyle();
+                if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())
+                {
+                    maStyleNameToDxfId.insert(std::pair<rtl::OUString, sal_Int32>(aStyleName, nIndex));
+
+                    SfxItemSet& rSet = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName)->GetItemSet();
+
+                    XclExpCellBorder* pBorder = new XclExpCellBorder;
+                    if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
+                    {
+                        delete pBorder;
+                        pBorder = NULL;
+                    }
+
+                    XclExpCellAlign* pAlign = new XclExpCellAlign;
+                    if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
+                    {
+                        delete pAlign;
+                        pAlign = NULL;
+                    }
+
+                    XclExpCellProt* pCellProt = new XclExpCellProt;
+                    if (!pCellProt->FillFromItemSet( rSet ))
+                    {
+                        delete pCellProt;
+                        pCellProt = NULL;
+                    }
+
+                    XclExpCellArea* pCellArea = new XclExpCellArea;
+                    if(!pCellArea->FillFromItemSet( rSet, GetPalette(), GetBiff() ))
+                    {
+                        delete pCellArea;
+                        pCellArea = NULL;
+                    }
+                    //XclExpFont* pFont = new XclExpFont( GetRoot(), XclFontData( rFont ), EXC_COLOR_CELLTEXT );
+
+                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, NULL, NULL, pCellProt, pCellArea ));
+                    ++nIndex;
+                }
+
+            }
+        }
+    }
+}
+
+void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_dxfs, FSEND,
+            XML_count, rtl::OString::valueOf( static_cast<sal_Int32>(maDxf.size())).getStr() );
+
+    for ( DxfContainer::iterator itr = maDxf.begin(); itr != maDxf.end(); ++itr )
+    {
+        itr->SaveXml( rStrm );
+    }
+
+    rStyleSheet->endElement( XML_dxfs );
+}
+
+// ============================================================================
+
+XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
+            XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpCellArea* pCellArea)
+    : XclExpRoot( rRoot ),
+    mpAlign(pAlign),
+    mpBorder(pBorder),
+    mpFont(pFont),
+    mpNumberFmt(pNumberFmt),
+    mpProt(pProt),
+    mpCellArea(pCellArea)
+{
+
+}
+
+XclExpDxf::~XclExpDxf()
+{
+    delete mpAlign;
+    delete mpBorder;
+    delete mpFont;
+    delete mpNumberFmt;
+    delete mpProt;
+    delete mpCellArea;
+}
+
+void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_dxf, FSEND );
+
+    if (mpAlign)
+        mpAlign->SaveXml(rStrm);
+    if (mpBorder)
+        mpBorder->SaveXml(rStrm);
+    if (mpFont)
+        mpFont->SaveXml(rStrm);
+    if (mpNumberFmt)
+        mpNumberFmt->SaveXml(rStrm, String());
+    if (mpProt)
+        mpProt->SaveXml(rStrm);
+    if (mpCellArea)
+        mpCellArea->SaveXml(rStrm);
+    rStyleSheet->endElement( XML_dxf );
+}
+
 // ============================================================================
 
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
-    : XclExpRoot( rRoot )
+    : XclExpRoot( rRoot ),
+    mbDxfs(false)
 {
+    if ( ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList() )
+    {
+        if ( pList->Count() )
+        {
+            mbDxfs = true;
+        }
+    }
 }
 
 void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
@@ -2841,6 +2981,10 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_XFLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
+    if(mbDxfs)
+    {
+        CreateRecord( EXC_ID_DXFS )->SaveXml( rStrm );
+    }
 
     aStyleSheet->endElement( XML_styleSheet );
 
