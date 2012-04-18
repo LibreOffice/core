@@ -333,7 +333,7 @@ Reference< registry::XSimpleRegistry > readRdbDirectory(
         }
         nXML++;
     }
-    if (nXML == aURLs.size())
+    if (nXML > 0 && nXML == aURLs.size())
     {
         OSL_TRACE (OSL_LOG_PREFIX "no legacy rdbs in directory '%s'\n",
                    rtl::OUStringToOString( url, RTL_TEXTENCODING_UTF8 ).getStr());
