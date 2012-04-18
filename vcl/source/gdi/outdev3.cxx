@@ -7408,7 +7408,8 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     aSysLayoutData.nSize = sizeof(aSysLayoutData);
     aSysLayoutData.rGlyphData.reserve( 256 );
 
-    if ( mpMetaFile ) {
+    if ( mpMetaFile )
+    {
         if (pDXAry)
             mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
         else
@@ -7417,12 +7418,14 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 
     if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
 
-    SalLayout* rLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
+    SalLayout* pLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
+
+    if ( !pLayout ) return aSysLayoutData;
 
     // setup glyphs
     Point aPos;
     sal_GlyphId aGlyphId;
-    for( int nStart = 0; rLayout->GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    for( int nStart = 0; pLayout->GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
     {
         // NOTE: Windows backend is producing unicode chars (ucs4), so on windows,
         //       ETO_GLYPH_INDEX is unusable, unless extra glyph conversion is made.
@@ -7437,9 +7440,9 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     }
 
     // Get font data
-    aSysLayoutData.orientation = rLayout->GetOrientation();
+    aSysLayoutData.orientation = pLayout->GetOrientation();
 
-    rLayout->Release();
+    pLayout->Release();
 
     return aSysLayoutData;
 }
