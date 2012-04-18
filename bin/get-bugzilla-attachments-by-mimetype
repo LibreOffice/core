@@ -41,6 +41,7 @@ import feedparser
 import base64
 import re
 import os, os.path
+import sys
 import xmlrpclib
 from xml.dom import minidom
 from xml.sax.saxutils import escape
