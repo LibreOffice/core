@@ -1512,7 +1512,7 @@ namespace cppcanvas
                                 TextActionFactory::createTextAction(
                                                                     // position is just rough guess for now
                                                                     // we should calculate it exactly from layoutRect or font
-                                    ::vcl::unotools::pointFromB2DPoint ( Map( lx + 0.35*cellSize, ly + cellSize ) ),
+                                    ::vcl::unotools::pointFromB2DPoint ( Map( lx + 0.15*cellSize, ly + cellSize ) ),
                                     ::Size(),
                                     ::Color(),
                                     ::Size(),
