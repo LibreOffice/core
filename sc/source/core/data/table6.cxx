@@ -202,13 +202,13 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                     else if (bDoBack)
                     {
                         xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                        bRepeat = ((bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd)));
+                        bRepeat = ((bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult)));
                         // change results to definition before 614:
                         --nEnd;
                     }
                     else
                     {
-                        bRepeat = ((bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd)));
+                        bRepeat = ((bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult)));
                         // change results to definition before 614:
                         --nEnd;
                     }
