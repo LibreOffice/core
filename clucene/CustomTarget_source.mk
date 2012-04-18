@@ -66,6 +66,7 @@ $(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-gcc-atomics.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-debug.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-narrowing-conversions.patch && \
+	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-multimap-put.patch && \
 	for i in `find $(CLSO)/ -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done)
 	#FIXME ?, our rules expect .cxx
 ifneq ($(OS),WNT)
