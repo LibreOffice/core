@@ -61,6 +61,46 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+
+bool checkDumpAgainstFile( const rtl::OUString& rDump, const rtl::OUString aFilePath )
+{
+    rtl::OString aOFile = rtl::OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
+    std::ifstream aFile(aOFile.getStr());
+
+    CPPUNIT_ASSERT_MESSAGE("file not open", aFile.is_open());
+    CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
+
+    sal_Int32 nLine = 1;
+    sal_Int32 nIndex = 0;
+    while(!aFile.eof())
+    {
+        std::string aLineFile;
+
+        std::getline(aFile, aLineFile);
+        sal_Int32 nNewIndex = rDump.indexOf('\n', nIndex);
+        //CPPUNIT_ASSERT( nNewIndex != -1 );
+        if (nNewIndex == -1)
+            nNewIndex = rDump.getLength();
+        rtl::OUString aLineDump = rDump.copy(nIndex, nNewIndex-nIndex);
+        nIndex = nNewIndex+1;
+        rtl::OString aOLineDump = rtl::OUStringToOString(aLineDump, RTL_TEXTENCODING_UTF8);
+
+        if( aLineFile.compare(aOLineDump.getStr()) )
+        {
+            rtl::OStringBuffer aErrorMessage("Mismatch between reference file and dump in line ");
+            std::cout << rtl::OUStringToOString(rDump, RTL_TEXTENCODING_UTF8).getStr();
+            aErrorMessage.append(nLine).append(".\nExpected: ");
+            aErrorMessage.append(aLineFile.c_str()).append("\nFound   : ").append(aOLineDump);
+            CPPUNIT_ASSERT_MESSAGE(aErrorMessage.getStr(), false);
+        }
+        nLine++;
+    }
+    return true;
+}
+
+}
+
 class ScChartRegressionTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
@@ -129,7 +169,8 @@ void ScChartRegressionTest::test()
     CPPUNIT_ASSERT(xDumper.is());
 
     rtl::OUString aDump = xDumper->dump();
-    std::cout << aDump << std::endl;
+    bool bCompare = checkDumpAgainstFile( aDump, getPathFromSrc("/chart2/qa/unit/data/reference/testChart.xml") );
+    CPPUNIT_ASSERT(bCompare);
 }
 
 ScChartRegressionTest::ScChartRegressionTest()

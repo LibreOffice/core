@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape position="0,0" size="16000x9000" type="com.sun.star.drawing.RectangleShape" name="CID/Page="/>
+ <XShape position="770,854" size="13068x7546" type="com.sun.star.drawing.GroupShape" name="CID/D=0">
+  <XShapes>
+   <XShape position="1206,1054" size="12632x6699" type="com.sun.star.drawing.RectangleShape" name="MarkHandles"/>
+   <XShape position="770,855" size="13068x7545" type="com.sun.star.drawing.RectangleShape" name="PlotAreaIncludingAxes"/>
+   <XShape position="770,854" size="13068x7546" type="com.sun.star.drawing.GroupShape">
+    <XShapes>
+     <XShape position="1056,1052" size="12782x6850" type="com.sun.star.drawing.GroupShape">
+      <XShapes>
+       <XShape position="1206,1054" size="12632x6699" type="com.sun.star.drawing.GroupShape" name="PlotAreaExcludingAxes">
+        <XShapes>
+         <XShape position="1206,1054" size="12632x6699" type="com.sun.star.drawing.RectangleShape" name="CID/DiagramWall="/>
+        </XShapes>
+       </XShape>
+       <XShape position="1056,1052" size="12782x6850" type="com.sun.star.drawing.GroupShape" name="testonly;CooContainer=XXX_CID">
+        <XShapes>
+         <XShape position="1206,1052" size="12632x6700" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape position="1206,1052" size="12632x6700" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,0:Grid=0">
+            <XShapes>
+             <XShape position="1206,1052" size="12632x6700" type="com.sun.star.drawing.PolyLineShape"/>
+             <XShape position="1206,1052" size="0x6700" type="com.sun.star.drawing.PolyLineShape" name="HandlesOnly"/>
+            </XShapes>
+           </XShape>
+          </XShapes>
+         </XShape>
+         <XShape position="1056,1052" size="12782x6850" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape position="1206,7752" size="12632x150" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=0,0">
+            <XShapes>
+             <XShape position="1206,7752" size="12632x150" type="com.sun.star.drawing.PolyLineShape"/>
+             <XShape position="1206,7752" size="12632x0" type="com.sun.star.drawing.LineShape" name="MarkHandles"/>
+            </XShapes>
+           </XShape>
+           <XShape position="1056,1052" size="150x6700" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,0">
+            <XShapes>
+             <XShape position="1056,1052" size="150x6700" type="com.sun.star.drawing.PolyLineShape"/>
+             <XShape position="1206,1052" size="0x6700" type="com.sun.star.drawing.LineShape" name="MarkHandles"/>
+            </XShapes>
+           </XShape>
+          </XShapes>
+         </XShape>
+         <XShape position="1627,2169" size="11789x5583" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape position="1627,2169" size="10947x5583" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:CT=0:Series=0">
+            <XShapes>
+             <XShape position="11732,2169" size="842x5583" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=4"/>
+             <XShape position="9206,3285" size="842x4467" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=3"/>
+             <XShape position="6679,4402" size="843x3350" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2"/>
+             <XShape position="4153,5519" size="842x2233" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1"/>
+             <XShape position="1627,6635" size="842x1117" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0"/>
+            </XShapes>
+           </XShape>
+           <XShape position="2469,3285" size="10947x4467" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:CT=0:Series=1">
+            <XShapes>
+             <XShape position="12574,5519" size="842x2233" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=4"/>
+             <XShape position="10048,3285" size="842x4467" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=3"/>
+             <XShape position="7522,4402" size="842x3350" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=2"/>
+             <XShape position="4995,6635" size="842x1117" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=1"/>
+             <XShape position="2469,5519" size="842x2233" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=0"/>
+            </XShapes>
+           </XShape>
+          </XShapes>
+         </XShape>
+        </XShapes>
+       </XShape>
+      </XShapes>
+     </XShape>
+     <XShape position="770,854" size="11898x7546" type="com.sun.star.drawing.GroupShape">
+      <XShapes>
+       <XShape position="2376,8002" size="10292x398" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=0,0">
+        <XShapes>
+         <XShape position="2376,8002" size="187x398" type="com.sun.star.drawing.TextShape" text="1"/>
+         <XShape position="4902,8002" size="187x398" type="com.sun.star.drawing.TextShape" text="2"/>
+         <XShape position="7429,8002" size="187x398" type="com.sun.star.drawing.TextShape" text="3"/>
+         <XShape position="9955,8002" size="187x398" type="com.sun.star.drawing.TextShape" text="4"/>
+         <XShape position="12481,8002" size="187x398" type="com.sun.star.drawing.TextShape" text="5"/>
+        </XShapes>
+       </XShape>
+       <XShape position="770,854" size="187x7098" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,0">
+        <XShapes>
+         <XShape position="770,7554" size="187x398" type="com.sun.star.drawing.TextShape" text="0"/>
+         <XShape position="770,6437" size="187x398" type="com.sun.star.drawing.TextShape" text="1"/>
+         <XShape position="770,5321" size="187x398" type="com.sun.star.drawing.TextShape" text="2"/>
+         <XShape position="770,4204" size="187x398" type="com.sun.star.drawing.TextShape" text="3"/>
+         <XShape position="770,3087" size="187x398" type="com.sun.star.drawing.TextShape" text="4"/>
+         <XShape position="770,1971" size="187x398" type="com.sun.star.drawing.TextShape" text="5"/>
+         <XShape position="770,854" size="187x398" type="com.sun.star.drawing.TextShape" text="6"/>
+        </XShapes>
+       </XShape>
+      </XShapes>
+     </XShape>
+    </XShapes>
+   </XShape>
+  </XShapes>
+ </XShape>
+ <XShape position="14478,3952" size="1312x1096" type="com.sun.star.drawing.GroupShape" name="CID/D=0:Legend=">
+  <XShapes>
+   <XShape position="14478,3952" size="1312x1096" type="com.sun.star.drawing.RectangleShape" name="MarkHandles"/>
+   <XShape position="14594,4145" size="211x211" type="com.sun.star.drawing.GroupShape">
+    <XShapes>
+     <XShape position="14594,4145" size="211x211" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:LegendEntry=0">
+      <XShapes>
+       <XShape position="14594,4145" size="211x211" type="com.sun.star.drawing.RectangleShape"/>
+       <XShape position="14594,4145" size="211x211" type="com.sun.star.drawing.RectangleShape"/>
+      </XShapes>
+     </XShape>
+    </XShapes>
+   </XShape>
+   <XShape position="14594,4643" size="211x211" type="com.sun.star.drawing.GroupShape">
+    <XShapes>
+     <XShape position="14594,4643" size="211x211" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=1:LegendEntry=0">
+      <XShapes>
+       <XShape position="14594,4643" size="211x211" type="com.sun.star.drawing.RectangleShape"/>
+       <XShape position="14594,4643" size="211x211" type="com.sun.star.drawing.RectangleShape"/>
+      </XShapes>
+     </XShape>
+    </XShapes>
+   </XShape>
+   <XShape position="14905,4052" size="769x398" type="com.sun.star.drawing.TextShape" text="test1"/>
+   <XShape position="14905,4550" size="769x398" type="com.sun.star.drawing.TextShape" text="test2"/>
+  </XShapes>
+ </XShape>
+</XShapes>
