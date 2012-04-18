@@ -1420,8 +1420,8 @@ namespace cppcanvas
                                 ReadPoint (rMF, x3, y3, flags);
 
                                 BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (Map (sx, sy)),
-                                                           ::vcl::unotools::sizeFromB2DSize (MapSize(sw, sh)));
+                                const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (basegfx::B2DPoint (sx, sy)),
+                                                           ::vcl::unotools::sizeFromB2DSize (basegfx::B2DSize(sw, sh)));
                                 aBmp.Crop( aCropRect );
 
 
