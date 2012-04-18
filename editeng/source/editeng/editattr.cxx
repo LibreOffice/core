@@ -328,6 +328,23 @@ void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
         rFont.SetColor( *pTxtColor );
 }
 
+const rtl::OUString& EditCharAttribField::GetFieldValue() const
+{
+    return aFieldValue;
+}
+
+void EditCharAttribField::SetFieldValue(const rtl::OUString& rVal)
+{
+    aFieldValue = rVal;
+}
+
+void EditCharAttribField::Reset()
+{
+    aFieldValue = rtl::OUString();
+    delete pTxtColor; pTxtColor = NULL;
+    delete pFldColor; pFldColor = NULL;
+}
+
 EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
     : EditCharAttrib( *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd() ),
         aFieldValue( rAttr.aFieldValue )
@@ -342,22 +359,22 @@ EditCharAttribField::~EditCharAttribField()
     Reset();
 }
 
-sal_Bool EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
+bool EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
 {
     if ( aFieldValue != rAttr.aFieldValue )
-        return sal_False;
+        return false;
 
     if ( ( pTxtColor && !rAttr.pTxtColor ) || ( !pTxtColor && rAttr.pTxtColor ) )
-        return sal_False;
+        return false;
     if ( ( pTxtColor && rAttr.pTxtColor ) && ( *pTxtColor != *rAttr.pTxtColor ) )
-        return sal_False;
+        return false;
 
     if ( ( pFldColor && !rAttr.pFldColor ) || ( !pFldColor && rAttr.pFldColor ) )
-        return sal_False;
+        return false;
     if ( ( pFldColor && rAttr.pFldColor ) && ( *pFldColor != *rAttr.pFldColor ) )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 // -------------------------------------------------------------------------

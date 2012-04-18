@@ -1003,10 +1003,10 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                         aTmpFont.SetPhysFont( GetRefDevice() );
                         ImplInitDigitMode( GetRefDevice(), 0, 0, 0, aTmpFont.GetLanguage() );
 
-                        String aFieldValue = cChar ? String(cChar) : ((EditCharAttribField*)pNextFeature)->GetFieldValue();
+                        rtl::OUString aFieldValue = cChar ? rtl::OUString(cChar) : ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                         if ( bCalcCharPositions || !pPortion->HasValidSize() )
                         {
-                            pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), aFieldValue, 0, aFieldValue.Len(), 0 );
+                            pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), 0 );
                             // So no scrolling for oversized fields
                             if ( pPortion->GetSize().Width() > nXWidth )
                                 pPortion->GetSize().Width() = nXWidth;

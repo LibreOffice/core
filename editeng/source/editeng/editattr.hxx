@@ -342,7 +342,7 @@ public:
 // -------------------------------------------------------------------------
 class EditCharAttribField: public EditCharAttrib
 {
-    XubString       aFieldValue;
+    rtl::OUString   aFieldValue;
     Color*          pTxtColor;
     Color*          pFldColor;
 
@@ -353,23 +353,18 @@ public:
     EditCharAttribField( const EditCharAttribField& rAttr );
     ~EditCharAttribField();
 
-    sal_Bool operator == ( const EditCharAttribField& rAttr ) const;
-    sal_Bool operator != ( const EditCharAttribField& rAttr ) const
+    bool operator == ( const EditCharAttribField& rAttr ) const;
+    bool operator != ( const EditCharAttribField& rAttr ) const
                                     { return !(operator == ( rAttr ) ); }
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
     Color*&         GetTxtColor()           { return pTxtColor; }
     Color*&         GetFldColor()           { return pFldColor; }
 
-    const XubString&    GetFieldValue() const   { return aFieldValue; }
-    XubString&      GetFieldValue()         { return aFieldValue; }
+    const rtl::OUString& GetFieldValue() const;
+    void SetFieldValue(const rtl::OUString& rVal);
 
-    void            Reset()
-                    {
-                        aFieldValue.Erase();
-                        delete pTxtColor; pTxtColor = 0;
-                        delete pFldColor; pFldColor = 0;
-                    }
+    void Reset();
 };
 
 // -------------------------------------------------------------------------

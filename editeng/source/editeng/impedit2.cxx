@@ -2999,7 +2999,7 @@ sal_Bool ImpEditEngine::UpdateFields()
                         static_cast<const SvxFieldItem&>(*rField.GetItem()),
                         nPara, rField.GetStart(), rField.GetTxtColor(), rField.GetFldColor());
 
-                rField.GetFieldValue() = aFldValue;
+                rField.SetFieldValue(aFldValue);
                 if (rField != *pCurrent)
                 {
                     bChanges = true;

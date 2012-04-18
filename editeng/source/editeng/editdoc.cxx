@@ -2146,7 +2146,7 @@ sal_uLong EditDoc::GetTextLen() const
             const EditCharAttrib& rAttr = rAttrs[--nAttr];
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                sal_uInt16 nFieldLen = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().Len();
+                sal_Int32 nFieldLen = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
                 if ( !nFieldLen )
                     nLen--;
                 else
