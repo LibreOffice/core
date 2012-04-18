@@ -54,7 +54,7 @@
 #define PAPERSIZE_C65           16
 #define PAPERSIZE_DL            17
 #define PAPERSIZE_DIA           18
-#define PAPERSIZE_SCREEN        19
+#define PAPERSIZE_SCREEN_4_3    19
 #define PAPERSIZE_C             20
 #define PAPERSIZE_D             21
 #define PAPERSIZE_E             22
@@ -74,6 +74,7 @@
 #define PAPERSIZE_B6_JIS        36
 #define PAPERSIZE_POSTCARD_JP   46
 #define PAPERSIZE_A6            56
+#define PAPERSIZE_SCREEN_16_9   78
 
 #endif
 

@@ -452,7 +452,8 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C5 Envelope" ; PAPERSIZE_C5 ; > ;
         < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
         < "Dia Slide" ; PAPERSIZE_DIA ; > ;
-        < "Screen" ; PAPERSIZE_SCREEN ; > ;
+        < "Screen 4:3" ; PAPERSIZE_SCREEN_4_3 ; > ;
+        < "Screen 16:9" ; PAPERSIZE_SCREEN_16_9 ; > ;
         < "Japanese Postcard" ; PAPERSIZE_POSTCARD_JP; > ;
     };
 };

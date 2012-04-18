@@ -624,7 +624,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             else
             {
                 // Impress: stets Bildschirmformat, quer
-                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN, MAP_100TH_MM) );
+                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_4_3, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }

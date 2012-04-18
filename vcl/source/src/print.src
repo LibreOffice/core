@@ -513,7 +513,6 @@ StringArray RID_STR_PAPERNAMES
         < "C6/5 Envelope"; >;
         < "DL Envelope"; >;
         < "Dia Slide"; >;
-        < "Screen"; >;
         < "C"; >;
         < "D"; >;
         < "E"; >;

@@ -866,6 +866,16 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
         }
         break;
 
+        case OUTPUT_WIDESCREEN:
+        {
+            aNewSize = Size(28000, 15750);
+            nLeft =0;
+            nRight=0;
+            nUpper=0;
+            nLower=0;
+        }
+        break;
+
         case OUTPUT_PRESENTATION:
         {
             aNewSize = Size(28000, 21000);

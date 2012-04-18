@@ -53,6 +53,7 @@
 #define RB_PAGE2_MEDIUM3            37
 #define RB_PAGE2_MEDIUM4            38
 #define RB_PAGE2_MEDIUM5            39
+#define RB_PAGE2_MEDIUM6            66
 
 #define FB_PAGE3                    40
 #define FL_PAGE3_EFFECT         41

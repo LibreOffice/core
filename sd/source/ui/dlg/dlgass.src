@@ -239,6 +239,16 @@ ModalDialog DLG_ASS
         Text [ en-US ] = "P~aper" ;
     };
 
+    RadioButton RB_PAGE2_MEDIUM6
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM6";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 149  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "W~idescreen" ;
+    };
+
     // Seite 3
     FixedBitmap FB_PAGE3
     {

@@ -322,6 +322,7 @@ public:
     RadioButton*        mpPage2Medium3RB;
     RadioButton*        mpPage2Medium4RB;
     RadioButton*        mpPage2Medium5RB;
+    RadioButton*        mpPage2Medium6RB;
 
     // Seite 3
     FixedBitmap*        mpPage3FB;
@@ -488,6 +489,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage2Medium1RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM1) ));
     maAssistentFunc.InsertControl(2,
         mpPage2Medium2RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM2) ));
+    maAssistentFunc.InsertControl(2,
+        mpPage2Medium6RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM6) ));
     mpPage2Medium5RB->Check();
 
     mpPage2RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
@@ -710,6 +713,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage2Medium3RB;
     delete mpPage2Medium4RB;
     delete mpPage2Medium5RB;
+    delete mpPage2Medium6RB;
 
     // Seite 3
     delete mpPage3FB;
@@ -1918,6 +1922,8 @@ OutputType AssistentDlg::GetOutputMedium() const
         return OUTPUT_OVERHEAD;
     else if(mpImpl->mpPage2Medium4RB->IsChecked())
         return OUTPUT_PAGE;
+    else if(mpImpl->mpPage2Medium6RB->IsChecked())
+        return OUTPUT_WIDESCREEN;
     else
         return OUTPUT_ORIGINAL;
 }

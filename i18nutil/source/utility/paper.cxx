@@ -93,7 +93,7 @@ static PageDesc aDinTab[] =
     { MM2MM100( 114 ),   MM2MM100( 229 ),    "EnvC65", NULL },
     { MM2MM100( 110 ),   MM2MM100( 220 ),    "EnvDL",  "DL" },
     { MM2MM100( 180),    MM2MM100( 270 ),    NULL,  NULL }, //Dia
-    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, //Screen
+    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, //Screen 4:3
     { IN2MM100( 17 ),    IN2MM100( 22 ),     "AnsiC",  "CSheet" },
     { IN2MM100( 22 ),    IN2MM100( 34 ),     "AnsiD",  "DSheet" },
     { IN2MM100( 34 ),    IN2MM100( 44 ),     "AnsiE",  "ESheet" },
@@ -155,7 +155,9 @@ static PageDesc aDinTab[] =
     { IN2MM100( 12 ),    IN2MM100( 18 ),     "ARCHB",  NULL },
     { IN2MM100( 18 ),    IN2MM100( 24 ),     "ARCHC",  NULL },
     { IN2MM100( 24 ),    IN2MM100( 36 ),     "ARCHD",  NULL },
-    { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL }
+    { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL },
+    { MM2MM100( 157.5),  MM2MM100( 280 ),    NULL,  NULL } //Screen 16:9
+
 };
 
 static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
