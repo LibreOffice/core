@@ -95,15 +95,15 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
             osl_File_MapFlag_WillNeed);
     }
     if (e != osl_File_E_None) {
-        e = osl_closeFile(fileHandle_);
-        if (e != osl_File_E_None) {
+        oslFileError e2 = osl_closeFile(fileHandle_);
+        if (e2 != osl_File_E_None) {
             SAL_WARN(
                 "xmlreader",
-                "osl_closeFile of \"" << fileUrl_ << "\" failed with " << +e);
+                "osl_closeFile of \"" << fileUrl_ << "\" failed with " << +e2);
         }
         throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot mmap ")) +
-             fileUrl_),
+            ("cannot mmap " + fileUrl_ + " (" +
+             rtl::OUString::valueOf(static_cast< sal_Int32 >(e)) + ")"),
             css::uno::Reference< css::uno::XInterface >());
     }
     namespaceIris_.push_back(
