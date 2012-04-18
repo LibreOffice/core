@@ -166,7 +166,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
-    return ((jlong)hWnd);
+    return ((jlong)(LONG)hWnd);
 }
 
 
