@@ -1447,6 +1447,8 @@ namespace cppcanvas
                             } else {
                                 EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
                             }
+                        } else {
+                            EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme) - possibly unsupported source units for crop rectangle\n"));
                         }
                         break;
                     }
