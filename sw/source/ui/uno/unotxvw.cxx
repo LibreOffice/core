@@ -97,8 +97,6 @@ using comphelper::HelperBaseNoState;
 
 using ::rtl::OUString;
 
-SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
-
 SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 {
     SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
@@ -141,23 +139,23 @@ void SwXTextView::Invalidate()
 
     m_refCount++; //prevent second d'tor call
 
-    sal_uInt16 nCount = aSelChangedListeners.Count();
+    sal_uInt16 nCount = aSelChangedListeners.size();
     if(nCount)
     {
         uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
         lang::EventObject aEvent(xInt);
         for ( sal_uInt16 i = nCount; i--; )
         {
-            uno::Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+            uno::Reference< view::XSelectionChangeListener >  *pObj = &aSelChangedListeners[i];
             (*pObj)->disposing(aEvent);
         }
     }
 
     // #i85580: now clean up any possibly remaining entries in the array...
     // (i.e. listeners that did not call removeSelectionChangeListener in their disposing.)
-    while ((nCount = aSelChangedListeners.Count()) != 0)
+    while ((nCount = aSelChangedListeners.size()) != 0)
     {
-        removeSelectionChangeListener( *aSelChangedListeners[0] );
+        removeSelectionChangeListener( aSelChangedListeners[0] );
     }
 
     m_refCount--;
@@ -610,7 +608,7 @@ void SwXTextView::addSelectionChangeListener(
     SolarMutexGuard aGuard;
     uno::Reference< view::XSelectionChangeListener > * pInsert = new uno::Reference< view::XSelectionChangeListener > ;
     *pInsert = rxListener;
-    aSelChangedListeners.Insert(pInsert, aSelChangedListeners.Count());
+    aSelChangedListeners.push_back(pInsert);
 }
 
 void SwXTextView::removeSelectionChangeListener(
@@ -619,13 +617,14 @@ void SwXTextView::removeSelectionChangeListener(
 {
     SolarMutexGuard aGuard;
     view::XSelectionChangeListener* pLeft = rxListener.get();
-    for(sal_uInt16 i = 0; i < aSelChangedListeners.Count(); i++)
+    for(SelectionChangeListenerArr::iterator it = aSelChangedListeners.begin();
+        it != aSelChangedListeners.end(); ++it)
     {
-        uno::Reference< view::XSelectionChangeListener > * pElem = aSelChangedListeners.GetObject(i);
-         view::XSelectionChangeListener* pRight = pElem->get();
+        uno::Reference< view::XSelectionChangeListener > * pElem = &*it;
+        view::XSelectionChangeListener* pRight = pElem->get();
         if(pLeft == pRight)
         {
-            aSelChangedListeners.Remove(i);
+            aSelChangedListeners.erase(it);
             delete pElem;
             break;
         }
@@ -885,10 +884,10 @@ void SwXTextView::NotifySelChanged()
 
      lang::EventObject aEvent(xInt);
 
-    sal_uInt16 nCount = aSelChangedListeners.Count();
+    sal_uInt16 nCount = aSelChangedListeners.size();
     for ( sal_uInt16 i = nCount; i--; )
     {
-        uno::Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+        uno::Reference< view::XSelectionChangeListener >  *pObj = &aSelChangedListeners[i];
         (*pObj)->selectionChanged(aEvent);
     }
 }
@@ -898,10 +897,10 @@ void SwXTextView::NotifyDBChanged()
     URL aURL;
     aURL.Complete = rtl::OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
 
-    sal_uInt16 nCount = aSelChangedListeners.Count();
+    sal_uInt16 nCount = aSelChangedListeners.size();
     for ( sal_uInt16 i = nCount; i--; )
     {
-        uno::Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
+        uno::Reference< view::XSelectionChangeListener >  *pObj = &aSelChangedListeners[i];
         uno::Reference<XDispatch> xDispatch((*pObj), UNO_QUERY);
         if(xDispatch.is())
             xDispatch->dispatch(aURL, Sequence<PropertyValue>(0));
