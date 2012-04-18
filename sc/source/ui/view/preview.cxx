@@ -257,7 +257,7 @@ void ScPreview::CalcPages()
             nPages.push_back(0);
         if ( i == static_cast<SCTAB>(nFirstAttr.size()))
             nFirstAttr.push_back(0);
-        if (!aOptions.GetAllSheets() && !maSelectedTabs.count(i) > 0)
+        if (!aOptions.GetAllSheets() && maSelectedTabs.count(i) == 0)
         {
             nPages[i] = 0;
             nFirstAttr[i] = 0;
