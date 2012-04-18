@@ -10,3 +10,8 @@ Name=%PRODUCTNAME Draw
 GenericName=Drawing Program
 Comment=Create and edit drawings, flow charts, and logos by using Draw.
 InitialPreference=5
+X-Ayatana-Desktop-Shortcuts=New
+[New Shortcut Group]
+UnityQuicklist=New Drawing
+Exec=libreoffice --draw %U
+TargetEnvironment=Unity

@@ -10,3 +10,8 @@ Name=%PRODUCTNAME Impress
 GenericName=Presentation
 Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
 InitialPreference=5
+X-Ayatana-Desktop-Shortcuts=New
+[New Shortcut Group]
+UnityQuicklist=New Presentation
+Exec=libreoffice --impress %U
+TargetEnvironment=Unity

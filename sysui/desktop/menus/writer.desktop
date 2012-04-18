@@ -10,3 +10,8 @@ Name=%PRODUCTNAME Writer
 GenericName=Word Processor
 Comment=Create and edit text and graphics in letters, reports, documents and Web pages by using Writer.
 InitialPreference=5
+X-Ayatana-Desktop-Shortcuts=New
+[New Shortcut Group]
+UnityQuicklist=New Document
+Exec=libreoffice --writer %U
+TargetEnvironment=Unity

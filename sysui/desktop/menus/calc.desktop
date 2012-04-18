@@ -10,3 +10,8 @@ Name=%PRODUCTNAME Calc
 GenericName=Spreadsheet
 Comment=Perform calculations, analyze information and manage lists in spreadsheets by using Calc.
 InitialPreference=5
+X-Ayatana-Desktop-Shortcuts=New
+[New Shortcut Group]
+UnityQuicklist=New Spreadsheet
+Exec=libreoffice --calc %U
+TargetEnvironment=Unity

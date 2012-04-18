@@ -64,6 +64,12 @@ while ($_ = $ARGV[0], /^-/) {
     }
 }
 
+# hack for unity section
+$outkey = $key;
+if ( $outkey eq "UnityQuicklist" ) {
+    $outkey = "Name";
+}
+
 # open input file
 unless (open(SOURCE, $ARGV[0])) {
     print STDERR "Can't open $ARGV[0] file: $!\n";
@@ -106,9 +112,12 @@ while (<SOURCE>) {
 
         # Pass the head of the template to the output file
 KEY:    while (<TEMPLATE>) {
-            print OUTFILE;
+            $keyline = $_;
             last KEY if (/$key/);
+            print OUTFILE;
         }
+        $keyline=~s/^$key/$outkey/;
+        print OUTFILE $keyline;
 
     } else {
         # split locale = "value" into 2 strings
@@ -125,10 +134,13 @@ KEY:    while (<TEMPLATE>) {
             $value=~s/%PRODUCTNAME/$productname/g;
 
             $locale=~s/-/_/;
+
+            if (not $value eq '') {
             if ($ext eq "desktop") {
-                print OUTFILE "$key\[$locale\]=$value\n";
+                print OUTFILE "$outkey\[$locale\]=$value\n";
             } else {
-                print OUTFILE  "\t\[$locale\]$key=$value\n";
+                print OUTFILE  "\t\[$locale\]$outkey=$value\n";
+            }
             }
         }
     }

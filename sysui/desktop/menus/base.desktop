@@ -10,3 +10,8 @@ Name=%PRODUCTNAME Base
 GenericName=Database Development
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.
 InitialPreference=5
+X-Ayatana-Desktop-Shortcuts=New
+[New Shortcut Group]
+UnityQuicklist=New Database
+Exec=libreoffice --base %U
+TargetEnvironment=Unity
