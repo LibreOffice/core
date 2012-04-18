@@ -114,9 +114,14 @@ namespace drawinglayer
                             aLeft.append(aTmpStart);
                             aLeft.append(aTmpEnd);
 
-                            xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                                aLeft,
-                                getRGBColorLeft()));
+                            basegfx::B2DPolyPolygon const aClipped =
+                                basegfx::tools::clipPolygonOnPolyPolygon(
+                                    aLeft, aClipRegion, true, true);
+
+                            xRetval[nInsert++] =
+                                new PolyPolygonHairlinePrimitive2D(
+                                    aClipped,
+                                    getRGBColorLeft());
 
                             aGap.append( getStart() - getExtendLeftStart() * aVector );
                             aGap.append( getEnd() + getExtendLeftEnd() * aVector );
@@ -159,9 +164,14 @@ namespace drawinglayer
                             aRight.append(aTmpStart);
                             aRight.append(aTmpEnd);
 
-                            xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                                aRight,
-                                getRGBColorRight()));
+                            basegfx::B2DPolyPolygon const aClipped =
+                                basegfx::tools::clipPolygonOnPolyPolygon(
+                                    aRight, aClipRegion, true, true);
+
+                            xRetval[nInsert++] =
+                                new PolyPolygonHairlinePrimitive2D(
+                                    aClipped,
+                                    getRGBColorRight());
 
                             aGap.append( getStart() - getExtendRightStart() * aVector );
                             aGap.append( getEnd() + getExtendRightEnd() * aVector );
