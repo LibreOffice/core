@@ -3028,7 +3028,7 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
 
 namespace {
 
-#define DEBUG_DUMPER 1
+#define DEBUG_DUMPER 0
 
 int writeCallback(void* pContext, const char* sBuffer, int nLen)
 {
