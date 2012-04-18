@@ -354,6 +354,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     void componentLiveRemoval(ComponentBackendDb::Data const & data);
 
+    css::uno::Reference< css::uno::XComponentContext > getRootContext() const;
+
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
@@ -1252,8 +1254,10 @@ void BackendImpl::componentLiveInsertion(
     std::vector< css::uno::Reference< css::uno::XInterface > > const &
         factories)
 {
+    css::uno::Reference< css::uno::XComponentContext > rootContext(
+        getRootContext());
     css::uno::Reference< css::container::XSet > set(
-        getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW);
+        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
     std::vector< css::uno::Reference< css::uno::XInterface > >::const_iterator
         factory(factories.begin());
     for (t_stringlist::const_iterator i(data.implementationNames.begin());
@@ -1268,54 +1272,49 @@ void BackendImpl::componentLiveInsertion(
         }
     }
     if (!data.singletons.empty()) {
-        css::uno::Reference< css::container::XNameContainer >
-            rootContext(
-                getComponentContext()->getValueByName(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_root"))),
-                css::uno::UNO_QUERY);
-        if (rootContext.is()) {
-            for (t_stringpairvec::const_iterator i(data.singletons.begin());
-                 i != data.singletons.end(); ++i)
-            {
-                rtl::OUString name(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
-                    i->first);
-                try {
-                    rootContext->removeByName(
-                        name +
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("/arguments")));
-                } catch (const container::NoSuchElementException &) {}
-                try {
-                    rootContext->insertByName(
-                        (name +
-                         rtl::OUString(
-                             RTL_CONSTASCII_USTRINGPARAM("/service"))),
-                        css::uno::Any(i->second));
-                } catch (const container::ElementExistException &) {
-                    rootContext->replaceByName(
-                        (name +
-                         rtl::OUString(
-                             RTL_CONSTASCII_USTRINGPARAM("/service"))),
-                        css::uno::Any(i->second));
-                }
-                try {
-                    rootContext->insertByName(name, css::uno::Any());
-                } catch (const container::ElementExistException &) {
-                    OSL_TRACE(
-                        "singleton %s already registered",
-                        rtl::OUStringToOString(
-                            i->first, RTL_TEXTENCODING_UTF8).getStr());
-                    rootContext->replaceByName(name, css::uno::Any());
-                }
+        css::uno::Reference< css::container::XNameContainer > cont(
+            rootContext, css::uno::UNO_QUERY_THROW);
+        for (t_stringpairvec::const_iterator i(data.singletons.begin());
+             i != data.singletons.end(); ++i)
+        {
+            rtl::OUString name(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
+                i->first);
+            //TODO: Update should be atomic:
+            try {
+                cont->removeByName(
+                    name +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/arguments")));
+            } catch (const container::NoSuchElementException &) {}
+            try {
+                cont->insertByName(
+                    (name +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service"))),
+                    css::uno::Any(i->second));
+            } catch (const container::ElementExistException &) {
+                cont->replaceByName(
+                    (name +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service"))),
+                    css::uno::Any(i->second));
+            }
+            try {
+                cont->insertByName(name, css::uno::Any());
+            } catch (const container::ElementExistException &) {
+                OSL_TRACE(
+                    "singleton %s already registered",
+                    rtl::OUStringToOString(
+                        i->first, RTL_TEXTENCODING_UTF8).getStr());
+                cont->replaceByName(name, css::uno::Any());
             }
         }
     }
 }
 
 void BackendImpl::componentLiveRemoval(ComponentBackendDb::Data const & data) {
+    css::uno::Reference< css::uno::XComponentContext > rootContext(
+        getRootContext());
     css::uno::Reference< css::container::XSet > set(
-        getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW);
+        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
     for (t_stringlist::const_iterator i(data.implementationNames.begin());
          i != data.implementationNames.end(); ++i)
     {
@@ -1326,30 +1325,40 @@ void BackendImpl::componentLiveRemoval(ComponentBackendDb::Data const & data) {
         }
     }
     if (!data.singletons.empty()) {
-        css::uno::Reference< css::container::XNameContainer > rootContext(
-            getComponentContext()->getValueByName(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_root"))),
-            css::uno::UNO_QUERY);
-        if (rootContext.is()) {
-            for (t_stringpairvec::const_iterator i(data.singletons.begin());
-                 i != data.singletons.end(); ++i)
-            {
-                rtl::OUString name(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
-                    i->first);
-                try {
-                    rootContext->removeByName(
-                        name +
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("/arguments")));
-                    rootContext->removeByName(
-                        name +
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service")));
-                    rootContext->removeByName(name);
-                } catch (const container::NoSuchElementException &) {}
-            }
+        css::uno::Reference< css::container::XNameContainer > cont(
+            rootContext, css::uno::UNO_QUERY_THROW);
+        for (t_stringpairvec::const_iterator i(data.singletons.begin());
+             i != data.singletons.end(); ++i)
+        {
+            rtl::OUString name(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
+                i->first);
+            //TODO: Removal should be atomic:
+            try {
+                cont->removeByName(name);
+            } catch (const container::NoSuchElementException &) {}
+            try {
+                cont->removeByName(
+                    name +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service")));
+            } catch (const container::NoSuchElementException &) {}
+            try {
+                cont->removeByName(
+                    name +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/arguments")));
+            } catch (const container::NoSuchElementException &) {}
         }
     }
+}
+
+css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
+    const
+{
+    css::uno::Reference< css::uno::XComponentContext > rootContext(
+        getComponentContext()->getValueByName(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_root"))),
+        css::uno::UNO_QUERY);
+    return rootContext.is() ? rootContext : getComponentContext();
 }
 
 //______________________________________________________________________________
