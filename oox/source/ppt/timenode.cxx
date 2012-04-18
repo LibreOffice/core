@@ -239,7 +239,7 @@ namespace oox { namespace ppt {
 
             if( mpTarget )
             {
-                sal_Int16 nSubType;
+                sal_Int16 nSubType(0);
                 maNodeProperties[ NP_TARGET ] = mpTarget->convert( pSlide, nSubType );
                 if( mpTarget->mnType == XML_spTgt )
                 {
