@@ -100,7 +100,7 @@ Bootstrap const & get_unorc() SAL_THROW(())
     {
 #ifdef ANDROID
         // Wouldn't it be lovely to avoid this fugly hard-coding.
-        // The problem is that the 'create_boostrap_macro_expander_factory()'
+        // The problem is that the 'create_bootstrap_macro_expander_factory()'
         // required for bootstrapping services, calls cppu::get_unorc directly
         // instead of re-using the BoostrapHandle from:
         //     defaultBootstrap_InitialComponentContext

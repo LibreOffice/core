@@ -58,6 +58,8 @@
 #include <stdio.h>
 #endif
 
+#include "macro_expander.hxx"
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
@@ -72,9 +74,6 @@ namespace cppu
 
 Reference< security::XAccessController >
 createDefaultAccessController() SAL_THROW(());
-
-Reference< lang::XSingleComponentFactory >
-create_boostrap_macro_expander_factory() SAL_THROW(());
 
 OUString const & get_this_libpath();
 
@@ -435,7 +434,8 @@ Reference< XComponentContext > bootstrapInitialContext(
     // macro expander singleton for loader
     entry.bLateInitService = true;
     entry.name = OUSTR("/singletons/com.sun.star.util.theMacroExpander");
-    entry.value <<= create_boostrap_macro_expander_factory();
+    entry.value
+        <<= cppuhelper::detail::create_bootstrap_macro_expander_factory();
     context_values.push_back( entry );
 
     // tdmgr singleton

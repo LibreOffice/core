@@ -181,11 +181,9 @@ Reference< XInterface > SAL_CALL service_create(
 
 }
 
-namespace cppu
-{
+namespace cppuhelper { namespace detail {
 
-//##################################################################################################
-Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW(())
+Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_factory() SAL_THROW(())
 {
     Reference< lang::XSingleComponentFactory > free(::cppu::createSingleComponentFactory(
                                                         service_create,
@@ -203,6 +201,6 @@ Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factor
         SAL_NO_ACQUIRE);
 }
 
-}
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

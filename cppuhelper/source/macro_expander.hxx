@@ -31,6 +31,12 @@
 
 #include "sal/config.h"
 
+#include "com/sun/star/uno/Reference.hxx"
+#include "sal/types.h"
+
+namespace com { namespace sun { namespace star { namespace lang {
+    class XSingleComponentFactory;
+} } } }
 namespace rtl { class OUString; }
 
 namespace cppuhelper {
@@ -53,6 +59,9 @@ namespace detail {
  * macros.
  */
 ::rtl::OUString expandMacros(rtl::OUString const & text);
+
+com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+create_bootstrap_macro_expander_factory() SAL_THROW(());
 
 }
 
