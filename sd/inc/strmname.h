@@ -30,24 +30,24 @@
 #define _SD_STRMNAME_H
 
 // Alter Name des Dokument-Streams
-static const String pStarDrawDoc( RTL_CONSTASCII_USTRINGPARAM( "StarDrawDocument" ));
+static const rtl::OUString pStarDrawDoc("StarDrawDocument");
 
 // Name des Dokument-Streams
-static const String pStarDrawDoc3( RTL_CONSTASCII_USTRINGPARAM( "StarDrawDocument3" ));
+static const rtl::OUString pStarDrawDoc3( "StarDrawDocument3" );
 
 // Sonstige
-static const String pSfxStyleSheets( RTL_CONSTASCII_USTRINGPARAM( "SfxStyleSheets" ));
-static const String pVCItemPoolName( RTL_CONSTASCII_USTRINGPARAM( "VCPool" ));
-static const String pPreviewName( RTL_CONSTASCII_USTRINGPARAM( "StarDrawTemplatePreview" ));
+static const rtl::OUString pSfxStyleSheets( "SfxStyleSheets" );
+static const rtl::OUString pVCItemPoolName( "VCPool" );
+static const rtl::OUString pPreviewName( "StarDrawTemplatePreview" );
 
 // PowerPoint-Filter
-static const String pFilterPowerPoint97( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97" ));
-static const String pFilterPowerPoint97Template( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97 Vorlage" ));
-static const String pFilterPowerPoint97AutoPlay( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97 AutoPlay" ));
+static const rtl::OUString pFilterPowerPoint97( "MS PowerPoint 97" );
+static const rtl::OUString pFilterPowerPoint97Template( "MS PowerPoint 97 Vorlage" );
+static const rtl::OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" );
 
 // XML content stream
-static const String pStarDrawXMLContent( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ));
-static const String pStarDrawOldXMLContent( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ));
+static const rtl::OUString pStarDrawXMLContent( "content.xml" );
+static const rtl::OUString pStarDrawOldXMLContent( "Content.xml" );
 
 #endif  // _SD_STRMNAME_H
 

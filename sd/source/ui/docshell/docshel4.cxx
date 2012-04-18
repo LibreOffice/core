@@ -440,7 +440,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
-    const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
+    const rtl::OUString    aFilterName( rMedium.GetFilter()->GetFilterName() );
     sal_Bool            bRet = sal_False;
     bool    bStartPresentation = false;
 
@@ -469,8 +469,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->StopWorkStartupDelay();
         bRet = SdPPTFilter( rMedium, *this, sal_True ).Import();
     }
-    else if (aFilterName.SearchAscii("impress8" )  != STRING_NOTFOUND ||
-             aFilterName.SearchAscii("draw8")  != STRING_NOTFOUND )
+    else if (aFilterName.match("impress8" ) || aFilterName.match("draw8"))
     {
         // TODO/LATER: nobody is interested in the error code?!
         mpDoc->CreateFirstPages();
@@ -479,7 +478,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         bRet = SdXMLFilter( rMedium, *this, sal_True ).Import( nError );
 
     }
-    else if (aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND || aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND )
+    else if (aFilterName.match("StarOffice XML (Draw)") || aFilterName.match("StarOffice XML (Impress)"))
     {
         // TODO/LATER: nobody is interested in the error code?!
         mpDoc->CreateFirstPages();
@@ -487,7 +486,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         ErrCode nError = ERRCODE_NONE;
         bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
-    else if( aFilterName.EqualsAscii( "CGM - Computer Graphics Metafile" ) )
+    else if( aFilterName.equals( "CGM - Computer Graphics Metafile" ) )
     {
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
@@ -593,30 +592,28 @@ sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
     if( mpDoc->GetPageCount() )
     {
         const SfxFilter*    pMediumFilter = rMedium.GetFilter();
-        const String        aTypeName( pMediumFilter->GetTypeName() );
+        const rtl::OUString aTypeName( pMediumFilter->GetTypeName() );
         SdFilter*           pFilter = NULL;
 
-        if( aTypeName.SearchAscii( "graphic_HTML" ) != STRING_NOTFOUND )
+        if( aTypeName.match( "graphic_HTML" ) )
         {
             pFilter = new SdHTMLFilter( rMedium, *this, sal_True );
         }
-        else if( aTypeName.SearchAscii( "MS_PowerPoint_97" ) != STRING_NOTFOUND )
+        else if( aTypeName.match( "MS_PowerPoint_97" ) )
         {
             pFilter = new SdPPTFilter( rMedium, *this, sal_True );
             ((SdPPTFilter*)pFilter)->PreSaveBasic();
         }
-        else if ( aTypeName.SearchAscii( "CGM_Computer_Graphics_Metafile" ) != STRING_NOTFOUND )
+        else if ( aTypeName.match( "CGM_Computer_Graphics_Metafile" ) )
         {
             pFilter = new SdCGMFilter( rMedium, *this, sal_True );
         }
-        else if( ( aTypeName.SearchAscii( "draw8" ) != STRING_NOTFOUND ) ||
-                 ( aTypeName.SearchAscii( "impress8" ) != STRING_NOTFOUND ) )
+        else if( aTypeName.match( "draw8" ) || aTypeName.match( "impress8" ) )
         {
             pFilter = new SdXMLFilter( rMedium, *this, sal_True );
             UpdateDocInfoForSave();
         }
-        else if( ( aTypeName.SearchAscii( "StarOffice_XML_Impress" ) != STRING_NOTFOUND ) ||
-                 ( aTypeName.SearchAscii( "StarOffice_XML_Draw" ) != STRING_NOTFOUND ) )
+        else if( aTypeName.match( "StarOffice_XML_Impress" ) || aTypeName.match( "StarOffice_XML_Draw" ) )
         {
             pFilter = new SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
             UpdateDocInfoForSave();
