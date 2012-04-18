@@ -1169,6 +1169,39 @@ namespace cppcanvas
             }
         }
 
+        static XubString readString (SvMemoryStream& rMF, sal_uInt32 stringLength)
+        {
+            sal_uInt16 *chars = new sal_uInt16[stringLength];
+
+            for( sal_uInt32 i=0; i<stringLength; i++) {
+                rMF >> chars[i];
+                EMFP_DEBUG (printf ("EMF+\tglyph[%u]: 0x%04x\n",
+                (unsigned int)i, chars[i]));
+            }
+
+            // create and add the text action
+            XubString text( chars, stringLength );
+
+            delete[] chars;
+
+            return text;
+        }
+
+        double ImplRenderer::setFont (sal_uInt8 objectId, const ActionFactoryParameters& rParms, OutDevState& rState)
+        {
+            EMFPFont *font = (EMFPFont*) aObjects[ objectId ];
+
+            rendering::FontRequest aFontRequest;
+            aFontRequest.FontDescription.FamilyName = font->family;
+            double cellSize = font->emSize;
+            aFontRequest.CellSize = (rState.mapModeTransform*MapSize( cellSize, 0 )).getX();
+            rState.xFont = rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
+                                               uno::Sequence< beans::PropertyValue >(),
+                                               geometry::Matrix2D() );
+
+            return cellSize;
+        }
+
         void ImplRenderer::processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms,
                                            OutDevState& rState, const CanvasSharedPtr& rCanvas )
         {
@@ -1453,8 +1486,61 @@ namespace cppcanvas
                         break;
                     }
                 case EmfPlusRecordTypeDrawString:
-                    EMFP_DEBUG (printf ("EMF+ DrawString\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    {
+                        EMFP_DEBUG (printf ("EMF+ DrawString\n"));
+
+                        sal_uInt32 brushId;
+                        sal_uInt32 formatId;
+                        sal_uInt32 stringLength;
+
+                        rMF >> brushId >> formatId >> stringLength;
+                        EMFP_DEBUG (printf ("EMF+ DrawString brushId: %x formatId: %x length: %x\n", brushId, formatId, stringLength));
+
+                        if (flags & 0x8000) {
+                            float lx, ly, lw, lh;
+
+                            rMF >> lx >> ly >> lw >> lh;
+
+                            EMFP_DEBUG (printf ("EMF+ DrawString layoutRect: %f,%f - %fx%f\n", lx, ly, lw, lh));
+
+                            XubString text = readString ( rMF, stringLength );
+
+                            double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
+                            SET_TEXT_COLOR( brushId );
+
+                            ActionSharedPtr pTextAction(
+                                TextActionFactory::createTextAction(
+                                                                    // position is just rough guess for now
+                                                                    // we should calculate it exactly from layoutRect or font
+                                    ::vcl::unotools::pointFromB2DPoint ( Map( lx + 0.35*cellSize, ly + cellSize ) ),
+                                    ::Size(),
+                                    ::Color(),
+                                    ::Size(),
+                                    ::Color(),
+                                    text,
+                                    0,
+                                    stringLength,
+                                    NULL,
+                                    rFactoryParms.mrVDev,
+                                    rFactoryParms.mrCanvas,
+                                    rState,
+                                    rFactoryParms.mrParms,
+                                    false ) );
+                            if( pTextAction )
+                            {
+                                EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+
+                                maActions.push_back(
+                                                    MtfAction(
+                                                              pTextAction,
+                                                              rFactoryParms.mrCurrActionIndex ) );
+
+                                rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
+                            }
+                        } else {
+                            EMFP_DEBUG (printf ("EMF+ DrawString TODO - drawing with brush not yet supported\n"));
+                        }
+                    }
                     break;
                 case EmfPlusRecordTypeSetPageTransform:
                     rMF >> fPageScale;
@@ -1570,15 +1656,11 @@ namespace cppcanvas
             EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
 
             if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
-            sal_uInt16 *chars = new sal_uInt16[glyphsCount];
             float *charsPosX = new float[glyphsCount];
             float *charsPosY = new float[glyphsCount];
 
-            for( sal_uInt32 i=0; i<glyphsCount; i++) {
-                rMF >> chars[i];
-                EMFP_DEBUG (printf ("EMF+\tglyph[%u]: 0x%04x\n",
-                (unsigned int)i, chars[i]));
-            }
+            XubString text = readString (rMF, glyphsCount);
+
             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                 rMF >> charsPosX[i] >> charsPosY[i];
                 EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
@@ -1590,17 +1672,9 @@ namespace cppcanvas
                 EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
             }
 
-            // create and add the text action
-            XubString text( chars, glyphsCount );
+            // add the text action
+            setFont (flags & 0xff, rFactoryParms, rState);
 
-                        EMFPFont *font = (EMFPFont*) aObjects[ flags & 0xff ];
-
-            rendering::FontRequest aFontRequest;
-            aFontRequest.FontDescription.FamilyName = font->family;
-            aFontRequest.CellSize = (rState.mapModeTransform*MapSize( font->emSize, 0 )).getX();
-            rState.xFont = rFactoryParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
-                                               uno::Sequence< beans::PropertyValue >(),
-                                               geometry::Matrix2D() );
             if( flags & 0x8000 )
                 SET_TEXT_COLOR(brushIndexOrColor);
 
@@ -1633,7 +1707,6 @@ namespace cppcanvas
                 rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
             }
 
-            delete[] chars;
             delete[] charsPosX;
             delete[] charsPosY;
             } else {
