@@ -520,6 +520,11 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
                     aString.Erase( nPos, 2 );
                 }
             }
+            else
+            {
+                nPos = STRING_NOTFOUND;
+                nChar = 0x0;
+            }
             if (aString.Len() > DRAWTEXT_MAX)
                 aString.Erase(DRAWTEXT_MAX);
 
