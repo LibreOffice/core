@@ -114,6 +114,35 @@
 
 // filter flags
 // TODO/LATER: The flags should be part of the UNO specification
+
+// Note that these flag bits have parallel names in
+// filter/source/config/cache/constant.hxx. Some of the bits are
+// missing from there, and some have different names. But the meaning
+// is presumably the same, and the values are the same.
+
+// http://www.mail-archive.com/dev@openoffice.org/msg05047.html says:
+
+// I can just sum up what comes into my mind, hope I don't miss one:
+
+// Import                  - should be self explaining
+// Export                  - should be self explaining
+// Template                - deprecated
+// TemplatePath            - filter for a documenttemplate
+// Own                     - one of the OOo file formats
+// Alien                   - no zip container based format
+// Preferred               - preferred filter for a particular type
+// Asynchron               - deprecated, only HTML-filter isn't synchron
+// 3rdPartyFilter          - implemented as a UNO component
+// Default                 - default filter for this document type
+// NotInFileDialog         - should be self explaining
+// NotInChooser            - as above
+
+// (The 3rdPartyFilter flag is here called StarONE)
+
+// At some point (4.0?) we should drop the duplicate set of names over
+// in filter, and rename the obscure ones to describe their meaning
+// using terms that are understandable.
+
 #define SFX_FILTER_IMPORT            0x00000001L
 #define SFX_FILTER_EXPORT            0x00000002L
 #define SFX_FILTER_TEMPLATE          0x00000004L

@@ -115,6 +115,10 @@ extern rtl::OUString pFilterStrings[];
 #define  CFGDIRECTKEY_FORMATVERSION         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooXMLFileFormatVersion"          )
 #define  CFGDIRECTKEY_PRODUCTNAME           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooName"                          )
 
+// Note that these flag bits have parallel names in
+// comphelper/inc/comphelper/documentconstants.hxx . See that file for
+// documentation on their meaning.
+
 /** @short  names of filter flags, sorted in alphabetical order */
 #define  FLAGNAME_3RDPARTYFILTER    _FILTER_CONFIG_FROM_ASCII_("3RDPARTYFILTER"   )
 #define  FLAGNAME_ALIEN             _FILTER_CONFIG_FROM_ASCII_("ALIEN"            )
