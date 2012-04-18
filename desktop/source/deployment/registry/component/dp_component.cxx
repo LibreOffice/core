@@ -1408,7 +1408,7 @@ Reference<XComponentContext> raise_uno_process(
     // jar typelibs
 
     ::std::vector<OUString> args;
-#if OSL_DEBUG_LEVEL <= 1
+#if OSL_DEBUG_LEVEL == 0
     args.push_back( OUSTR("--quiet") );
 #endif
     args.push_back( OUSTR("--singleaccept") );
