@@ -159,7 +159,11 @@ def get_through_rss_query_url(url, mimetype, prefix, suffix):
     get_bug_function = get_novell_bug_via_xml if prefix == "novell" else get_from_bug_url_via_xml
 
     for entry in d['entries']:
-        get_bug_function(entry['id'], mimetype, prefix, suffix)
+        try:
+            get_bug_function(entry['id'], mimetype, prefix, suffix)
+        except:
+            print >> sys.stderr, entry['id'], "failed:", sys.exc_info()[0]
+            pass
 
 def get_through_rss_query(queryurl, mimetype, prefix, suffix):
     url = queryurl + '?query_format=advanced&field0-0-0=attachments.mimetype&type0-0-0=equals&value0-0-0=' + escape(mimetype) + '&ctype=rss'
