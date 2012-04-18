@@ -108,18 +108,6 @@ const SCROW SCROWS32K         = 32000;
 const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
 const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
-
-// We hope to get rid of the binary file format. If not, these are the places
-// we'd have to investigate because variable types changed. Just place code in
-// #if SC_ROWLIMIT_STREAM_ACCESS for now.
-#define SC_ROWLIMIT_STREAM_ACCESS 0
-// usage:
-//#if SC_ROWLIMIT_STREAM_ACCESS
-//#error address types changed!
-//... code ...
-//#endif // SC_ROWLIMIT_STREAM_ACCESS
-
-
 // For future reference, place in code where more than 64k rows would need a
 // special handling:
 // #if SC_ROWLIMIT_MORE_THAN_64K
