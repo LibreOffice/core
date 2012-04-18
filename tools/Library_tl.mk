@@ -88,7 +88,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/memtools/contnr \
     tools/source/memtools/mempool \
     tools/source/memtools/multisel \
-    tools/source/memtools/table \
     tools/source/memtools/unqidx \
     tools/source/misc/appendunixshellword \
     tools/source/misc/extendapplicationenvironment \

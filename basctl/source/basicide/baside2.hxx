@@ -57,8 +57,6 @@ class SvxSearchItem;
 #include "objdlg.hxx"
 #include <set>
 
-#include <tools/table.hxx>
-
 DBG_NAMEEX( ModulWindow )
 
 #define MARKER_NOMARKER 0xFFFF
