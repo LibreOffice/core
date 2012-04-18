@@ -77,7 +77,7 @@ public class DocumentLoader
             if (input == null)
                 input = "/assets/test1.odt";
 
-            // We need to fake up abn argv, and the argv[0] even needs to
+            // We need to fake up an argv, and the argv[0] even needs to
             // point to some file name that we can pretend is the "program".
             // setCommandArgs() will prefix argv[0] with the app's data
             // directory.
@@ -102,22 +102,27 @@ public class DocumentLoader
 
             Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
 
-            // Loading the wanted document
-            com.sun.star.beans.PropertyValue propertyValues[] =
-                new com.sun.star.beans.PropertyValue[2];
-            propertyValues[0] = new com.sun.star.beans.PropertyValue();
-            propertyValues[0].Name = "Hidden";
-            propertyValues[0].Value = new Boolean(true);
-            propertyValues[1] = new com.sun.star.beans.PropertyValue();
-            propertyValues[1].Name = "ReadOnly";
-            propertyValues[1].Value = new Boolean(true);
+            // Load the wanted document(s)
+            String[] inputs = input.split(":");
+            for (int i = 0; i < inputs.length; i++) {
+                com.sun.star.beans.PropertyValue propertyValues[] =
+                    new com.sun.star.beans.PropertyValue[2];
+                propertyValues[0] = new com.sun.star.beans.PropertyValue();
+                propertyValues[0].Name = "Hidden";
+                propertyValues[0].Value = new Boolean(true);
+                propertyValues[1] = new com.sun.star.beans.PropertyValue();
+                propertyValues[1].Name = "ReadOnly";
+                propertyValues[1].Value = new Boolean(true);
 
-            String sUrl = "file://" + input;
+                String sUrl = "file://" + inputs[i];
 
-            Object oDoc =
-                xCompLoader.loadComponentFromURL
-                (sUrl, "_blank", 0, propertyValues);
-            Log.i(TAG, "oDoc is " + (oDoc!=null ? oDoc.toString() : "null"));
+                Log.i(TAG, "Attempting to load " + sUrl);
+
+                Object oDoc =
+                    xCompLoader.loadComponentFromURL
+                    (sUrl, "_blank", 0, propertyValues);
+                Log.i(TAG, "oDoc is " + (oDoc!=null ? oDoc.toString() : "null"));
+            }
         }
         catch (Exception e) {
             e.printStackTrace(System.err);

@@ -155,7 +155,11 @@ copy-stuff:
 	for F in xml/services xml/ure/services; do \
 		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$(APP_DATA_PATH)/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
 	done
-	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt assets
+	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt \
+	   $(SRC_ROOT)/sc/qa/unit/data/xls/border.xls \
+	   $(SRC_ROOT)/sw/qa/core/data/odt/test.odt \
+	   $(SRC_ROOT)/sw/qa/core/data/doc/testVba.doc \
+		assets
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
 	mkdir -p assets/ure/share/misc assets/share/registry/res assets/share/config/soffice.cfg
@@ -259,7 +263,7 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
+	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt:/assets/border.xls:/assets/test.odt:/assets/testVba.doc
 
 clean:
 	$(ANT) clean
