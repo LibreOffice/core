@@ -72,7 +72,7 @@ struct SvXMLNumFmtEntry
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
-class SvXMLNumFmtEntryArr : public boost::ptr_vector<SvXMLNumFmtEntry> {};
+typedef ::boost::ptr_vector<SvXMLNumFmtEntry> SvXMLNumFmtEntryArr;
 
 struct SvXMLEmbeddedElement
 {

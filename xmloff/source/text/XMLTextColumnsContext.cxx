@@ -342,11 +342,10 @@ XMLTextColumnsContext::~XMLTextColumnsContext()
 {
     if( pColumns )
     {
-        while( !pColumns->empty() )
+        for (XMLTextColumnsArray_Impl::iterator it = pColumns->begin();
+                it != pColumns->end(); ++it)
         {
-            XMLTextColumnContext_Impl *pColumn = *pColumns->begin();
-            pColumns->erase( pColumns->begin() );
-            pColumn->ReleaseRef();
+           (*it)->ReleaseRef();
         }
     }
     if( pColumnSep )
