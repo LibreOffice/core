@@ -3284,7 +3284,7 @@ if test "$cross_compiling" = "yes"; then
     tar cf - \
         bin/repo-list.in \
         android/Bootstrap/local.properties.in \
-        android/experiments/DocumentLoader/local.properties.in \
+        android/experimental/DocumentLoader/local.properties.in \
         android/experimental/eagles051387/.classpath.in \
         android/qa/sc/local.properties.in \
         android/qa/desktop/local.properties.in \
@@ -11367,7 +11367,7 @@ fi
 
 AC_CONFIG_FILES([config_host.mk ooo.lst bin/repo-list \
 android/Bootstrap/local.properties \
-android/experiments/DocumentLoader/local.properties \
+android/experimental/DocumentLoader/local.properties \
 android/experimental/eagles051387/.classpath \
 android/qa/sc/local.properties \
 android/qa/desktop/local.properties])
