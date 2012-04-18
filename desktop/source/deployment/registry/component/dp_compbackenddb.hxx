@@ -94,9 +94,8 @@ public:
         Data(): javaTypeLibrary(false) {};
 
         ::std::list< ::rtl::OUString> implementationNames;
-        /* every singleton has a key and a value
-         */
         ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> >singletons;
+            // map from singleton names to implementation names
         bool javaTypeLibrary;
     };
 
