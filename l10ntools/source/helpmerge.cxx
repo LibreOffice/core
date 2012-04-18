@@ -178,9 +178,12 @@ bool HelpParser::CreateSDF(
                 if( !data.isEmpty() )
                     aSDFStream << sOut.getStr() << '\n';
                 pXMLElement=NULL;
-            }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.getStr() );
+            }
+            else
+            {
+                fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF, Language %s, File %s\n", sCur.getStr(), sHelpFile.getStr());
+            }
         }
-
     }
     aSDFStream.close();
 
