@@ -362,7 +362,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
                 storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
             Sequence< Reference< storage::XScriptInfo > > results =
                 xScriptInfoAccess->getAllImplementations( );
-            Reference < lang::XEventListener > xEL_ScriptStorageMgr(( xScriptStorageMgr ,UNO_QUERY_THROW );
+            Reference < lang::XEventListener > xEL_ScriptStorageMgr( xScriptStorageMgr ,UNO_QUERY_THROW );
             lang::EventObject event( results[ 0 ] );
             xEL_ScriptStorageMgr->disposing( event );
         }
