@@ -489,8 +489,8 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, rXPropSet, rtl::OUString( "TextPortionType" ), sal_True ) )
     {
-        String  aTextFieldType( *(::rtl::OUString*)aAny.getValue() );
-        if ( aTextFieldType == String( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) ) )
+        rtl::OUString  aTextFieldType( *(::rtl::OUString*)aAny.getValue() );
+        if ( aTextFieldType == "TextField" )
         {
             if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, sal_True ) )
             {
@@ -503,8 +503,8 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             xFieldPropSet( aXTextField, ::com::sun::star::uno::UNO_QUERY );
                         if ( xFieldPropSet.is() )
                         {
-                            String aFieldKind( aXTextField->getPresentation( sal_True ) );
-                            if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
+                            rtl::OUString aFieldKind( aXTextField->getPresentation( sal_True ) );
+                            if ( aFieldKind == "Date" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                 {
@@ -532,21 +532,21 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                     }
                                 }
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) )
+                            else if ( aFieldKind == "URL" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "URL" ) ), sal_True )
                                     rURL = String( *(::rtl::OUString*)aAny.getValue() );
                                 nRetValue = 4 << 28;
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Page" ) ) )
+                            else if ( aFieldKind == "Page" )
                             {
                                 nRetValue = 3 << 28 | 0x800000;
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) )
+                            else if ( aFieldKind == "Pages" )
                             {
 
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Time" ) ) )
+                            else if ( aFieldKind == "Time" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                 {
@@ -562,15 +562,15 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                     }
                                 }
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) )
+                            else if ( aFieldKind == "File" )
                             {
 
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Table" ) ) )
+                            else if ( aFieldKind == "Table" )
                             {
 
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtTime" ) ) )
+                            else if ( aFieldKind == "ExtTime" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "IsFix" ) ), sal_True )
                                 {
@@ -598,23 +598,23 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                     }
                                 }
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtFile" ) ) )
+                            else if ( aFieldKind == "ExtFile" )
                             {
 
                             }
-                            else if ( aFieldKind ==  String( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
+                            else if ( aFieldKind ==  "Author" )
                             {
 
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "DateTime" ) ) )
+                            else if ( aFieldKind == "DateTime" )
                             {
                                 nRetValue = 5 << 28 | 0x800000;
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Header" ) ) )
+                            else if ( aFieldKind == "Header" )
                             {
                                 nRetValue = 6 << 28 | 0x800000;
                             }
-                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Footer" ) ) )
+                            else if ( aFieldKind == "Footer" )
                             {
                                 nRetValue = 7 << 28 | 0x800000;
                             }
@@ -747,19 +747,19 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 }
 
 // from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
-static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, String& rFontName)
+static void lcl_SubstituteBullet(rtl::OUString& rNumStr, rtl_TextEncoding& rChrSet, rtl::OUString& rFontName)
 {
-    sal_Unicode cChar = rNumStr.GetChar(0);
+    sal_Unicode cChar = rNumStr[0];
     StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
-    String sFont = pConvert->ConvertChar(cChar);
+    rtl::OUString sFont = pConvert->ConvertChar(cChar);
     delete pConvert;
-    if (sFont.Len())
+    if (!sFont.isEmpty())
     {
-        rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
+        rNumStr = rtl::OUString(static_cast< sal_Unicode >(cChar | 0xF000));
         rFontName = sFont;
         rChrSet = RTL_TEXTENCODING_SYMBOL;
     }
-    else if ( (rNumStr.GetChar(0) < 0xE000 || rNumStr.GetChar(0) > 0xF8FF) )
+    else if ( (rNumStr[0] < 0xE000 || rNumStr[0] > 0xF8FF) )
     {
         /*
         Ok we can't fit into a known windows unicode font, but
@@ -777,8 +777,8 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
         in our private area, so give up and show a standard
         bullet symbol
         */
-        rFontName.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Wingdings"));
-        rNumStr = static_cast< sal_Unicode >(0x6C);
+        rFontName = "Wingdings";
+        rNumStr = rtl::OUString(static_cast< sal_Unicode >(0x6C));
      }
 }
 
@@ -831,9 +831,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             nHorzAdjust = *( (sal_Int16*)pValue );
                         else if ( aPropName == "BulletChar" )
                         {
-                            String aString( *( (String*)pValue ) );
-                            if ( aString.Len() )
-                                cBulletId = aString.GetChar( 0 );
+                            rtl::OUString aString( *( (::rtl::OUString*)pValue ) );
+                            if ( !aString.isEmpty() )
+                                cBulletId = aString[ 0 ];
                         }
                         else if ( aPropName == "BulletFont" )
                         {
@@ -885,8 +885,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             sSuffix = ( *(::rtl::OUString*)pValue );
 #ifdef DBG_UTIL
                         else if ( ! (
-                                ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SymbolTextDistance" ) ) )
-                            ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Graphic" ) ) ) ) )
+                                ( aPropName == "SymbolTextDistance" )
+                            ||  ( aPropName == "Graphic" ) ) )
                         {
                             OSL_FAIL( "Unbekanntes Property" );
                         }
@@ -929,15 +929,14 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
-                            aFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )
+                        if ( aFontDesc.Name.equals("starsymbol") ||  aFontDesc.Name.equals("opensymbol") )
                         {
-                            String sFontName = aFontDesc.Name;
-                            String sNumStr = cBulletId;
+                            rtl::OUString sFontName(aFontDesc.Name);
+                            rtl::OUString sNumStr(cBulletId);
                             rtl_TextEncoding eChrSet = aFontDesc.CharSet;
                             lcl_SubstituteBullet(sNumStr,eChrSet,sFontName);
                             aFontDesc.Name = sFontName;
-                            cBulletId = sNumStr.GetChar( 0 );
+                            cBulletId = sNumStr[ 0 ];
                             aFontDesc.CharSet = eChrSet;
                          }
 

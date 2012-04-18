@@ -113,7 +113,7 @@ FileFormat aFileFormats[] = {
         rtl::OUString(), pFmt->nFormatType, nFormat,
         rtl::OUString::createFromAscii( pFmt->pTypeName ),
         0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw*")) );
+        rtl::OUString("private:factory/sdraw*") );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -176,9 +176,9 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
 
 void SdFiltersTest::testCVEs()
 {
-    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS PowerPoint 97")),
+    testDir(rtl::OUString("MS PowerPoint 97"),
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdfilt")));
+            rtl::OUString("sdfilt"));
 }
 
 SdFiltersTest::SdFiltersTest()
@@ -192,8 +192,7 @@ void SdFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xDrawComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresentationDocument")));
+        getMultiServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
     CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
 }
 

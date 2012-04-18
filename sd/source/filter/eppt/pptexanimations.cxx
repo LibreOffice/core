@@ -1414,10 +1414,10 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
 Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::OUString& rAttributeName )
 {
     rtl::OUString aDest;
-    if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "X" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Y" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) )
+    if ( rAttributeName == "X"
+            || rAttributeName == "Y"
+            || rAttributeName == "Width"
+            || rAttributeName == "Height"
         )
     {
         rtl::OUString aStr;
@@ -1427,20 +1427,20 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             aDest += aStr;
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Rotate" ) )         // "r" or "style.rotation" ?
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SkewX" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Opacity" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharHeight" ) )
+    else if ( rAttributeName == "Rotate"         // "r" or "style.rotation" ?
+            || rAttributeName == "SkewX"
+            || rAttributeName == "Opacity"
+            || rAttributeName == "CharHeight"
         )
     {
         double fNumber = 0.0;
         if ( rSourceValue >>= fNumber )
             aDest += rtl::OUString::valueOf( fNumber );
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Color" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillColor" ) )     // "Fillcolor" or "FillColor" ?
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LineColor" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharColor" ) )
+    else if ( rAttributeName == "Color"
+            || rAttributeName == "FillColor"     // "Fillcolor" or "FillColor" ?
+            || rAttributeName == "LineColor"
+            || rAttributeName == "CharColor"
         )
     {
         sal_Int32 nColor = 0;

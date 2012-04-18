@@ -122,7 +122,7 @@ void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::Property
     if ( !mpPicStrm )
         mpPicStrm = mrStg->OpenSotStream( rtl::OUString( "Pictures" ) );
 
-    const String sBaseURI( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) );
+    const rtl::OUString sBaseURI( "BaseURI" );
     std::vector< com::sun::star::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() );
     while( aIter != rMediaData.end() )
     {
@@ -1310,7 +1310,7 @@ void PPTWriter::ImplWriteOLE( )
                         aOleExport.ExportOLEObject( xObj, *xTempStorage );
 
                         //TODO/MBA: testing
-                        String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
+                        rtl::OUString aPersistStream( SVEXT_PERSIST_STREAM );
                         SvMemoryStream aStream;
                         SvStorageRef xCleanStorage( new SvStorage( sal_False, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
