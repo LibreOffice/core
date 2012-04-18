@@ -881,49 +881,6 @@ void Font::importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm )
     }
 }
 
-void Font::importCfRule( BiffInputStream& rStrm )
-{
-    OSL_ENSURE( mbDxf, "Font::importCfRule - missing conditional formatting flag" );
-
-    sal_Int32 nHeight, nColor;
-    sal_uInt32 nStyle, nFontFlags1, nFontFlags2, nFontFlags3;
-    sal_uInt16 nWeight, nEscapement;
-    sal_uInt8 nUnderline;
-
-    OSL_ENSURE( rStrm.getRemaining() >= 118, "Font::importCfRule - missing record data" );
-    sal_Int64 nRecPos = rStrm.tell();
-    maModel.maName = rStrm.readUniStringBody( rStrm.readuInt8() );
-    maUsedFlags.mbNameUsed = !maModel.maName.isEmpty();
-    OSL_ENSURE( !rStrm.isEof() && (rStrm.tell() <= nRecPos + 64), "Font::importCfRule - font name too long" );
-    rStrm.seek( nRecPos + 64 );
-    rStrm >> nHeight >> nStyle >> nWeight >> nEscapement >> nUnderline;
-    rStrm.skip( 3 );
-    rStrm >> nColor;
-    rStrm.skip( 4 );
-    rStrm >> nFontFlags1 >> nFontFlags2 >> nFontFlags3;
-    rStrm.skip( 18 );
-
-    if( (maUsedFlags.mbColorUsed = (0 <= nColor) && (nColor <= 0x7FFF)) == true )
-        maModel.maColor.setIndexed( nColor );
-    if( (maUsedFlags.mbHeightUsed = (0 < nHeight) && (nHeight <= 0x7FFF)) == true )
-        maModel.setBiffHeight( static_cast< sal_uInt16 >( nHeight ) );
-    if( (maUsedFlags.mbUnderlineUsed = !getFlag( nFontFlags3, BIFF_CFRULE_FONT_UNDERL )) == true )
-        maModel.setBiffUnderline( nUnderline );
-    if( (maUsedFlags.mbEscapementUsed = !getFlag( nFontFlags2, BIFF_CFRULE_FONT_ESCAPEM )) == true )
-        maModel.setBiffEscapement( nEscapement );
-    if( (maUsedFlags.mbWeightUsed = maUsedFlags.mbPostureUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_STYLE )) == true )
-    {
-        maModel.setBiffWeight( nWeight );
-        maModel.mbItalic = getFlag( nStyle, BIFF_CFRULE_FONT_STYLE );
-    }
-    if( (maUsedFlags.mbStrikeoutUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_STRIKEOUT )) == true )
-        maModel.mbStrikeout = getFlag( nStyle, BIFF_CFRULE_FONT_STRIKEOUT );
-    if( (maUsedFlags.mbOutlineUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_OUTLINE )) == true )
-        maModel.mbOutline = getFlag( nStyle, BIFF_CFRULE_FONT_OUTLINE );
-    if( (maUsedFlags.mbShadowUsed = !getFlag( nFontFlags1, BIFF_CFRULE_FONT_SHADOW )) == true )
-        maModel.mbShadow = getFlag( nStyle, BIFF_CFRULE_FONT_SHADOW );
-}
-
 void Font::finalizeImport()
 {
     namespace cssawt = ::com::sun::star::awt;
@@ -1608,12 +1565,6 @@ void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
     mnStyle = STATIC_ARRAY_SELECT( spnStyleIds, nLineStyle, XML_none );
 }
 
-void BorderLineModel::setBiffData( sal_uInt8 nLineStyle, sal_uInt16 nLineColor )
-{
-    maColor.setIndexed( nLineColor );
-    setBiffStyle( nLineStyle );
-}
-
 // ----------------------------------------------------------------------------
 
 BorderModel::BorderModel( bool bDxf ) :
@@ -1741,24 +1692,6 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
         pBorderLine->setBiffStyle( nStyle );
         pBorderLine->mbUsed = true;
     }
-}
-
-void Border::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
-{
-    OSL_ENSURE( mbDxf, "Border::importCfRule - missing conditional formatting flag" );
-    OSL_ENSURE( getFlag( nFlags, BIFF_CFRULE_BORDERBLOCK ), "Border::importCfRule - missing border block flag" );
-    sal_uInt16 nStyle;
-    sal_uInt32 nColor;
-    rStrm >> nStyle >> nColor;
-    rStrm.skip( 2 );
-    maModel.maLeft.setBiffData(   extractValue< sal_uInt8 >( nStyle,  0, 4 ), extractValue< sal_uInt16 >( nColor,  0, 7 ) );
-    maModel.maRight.setBiffData(  extractValue< sal_uInt8 >( nStyle,  4, 4 ), extractValue< sal_uInt16 >( nColor,  7, 7 ) );
-    maModel.maTop.setBiffData(    extractValue< sal_uInt8 >( nStyle,  8, 4 ), extractValue< sal_uInt16 >( nColor, 16, 7 ) );
-    maModel.maBottom.setBiffData( extractValue< sal_uInt8 >( nStyle, 12, 4 ), extractValue< sal_uInt16 >( nColor, 23, 7 ) );
-    maModel.maLeft.mbUsed   = !getFlag( nFlags, BIFF_CFRULE_BORDER_LEFT );
-    maModel.maRight.mbUsed  = !getFlag( nFlags, BIFF_CFRULE_BORDER_RIGHT );
-    maModel.maTop.mbUsed    = !getFlag( nFlags, BIFF_CFRULE_BORDER_TOP );
-    maModel.maBottom.mbUsed = !getFlag( nFlags, BIFF_CFRULE_BORDER_BOTTOM );
 }
 
 void Border::finalizeImport()
@@ -1922,14 +1855,6 @@ void PatternFillModel::setBiffPattern( sal_Int32 nPattern )
         XML_lightVertical, XML_lightDown, XML_lightUp, XML_lightGrid,
         XML_lightTrellis, XML_gray125, XML_gray0625 };
     mnPattern = STATIC_ARRAY_SELECT( spnPatternIds, nPattern, XML_none );
-}
-
-void PatternFillModel::setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillColor, sal_uInt8 nPattern )
-{
-    maPatternColor.setIndexed( nPatternColor );
-    maFillColor.setIndexed( nFillColor );
-    // patterns equal in all BIFFs
-    setBiffPattern( nPattern );
 }
 
 // ----------------------------------------------------------------------------
@@ -2122,22 +2047,6 @@ void Fill::importDxfStop( SequenceInputStream& rStrm )
     if( !mxGradientModel )
         mxGradientModel.reset( new GradientFillModel );
     mxGradientModel->readGradientStop( rStrm, true );
-}
-
-void Fill::importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags )
-{
-    OSL_ENSURE( mbDxf, "Fill::importCfRule - missing conditional formatting flag" );
-    OSL_ENSURE( getFlag( nFlags, BIFF_CFRULE_FILLBLOCK ), "Fill::importCfRule - missing fill block flag" );
-    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-    sal_uInt32 nFillData;
-    rStrm >> nFillData;
-    mxPatternModel->setBiffData(
-        extractValue< sal_uInt16 >( nFillData, 16, 7 ),
-        extractValue< sal_uInt16 >( nFillData, 23, 7 ),
-        extractValue< sal_uInt8 >( nFillData, 10, 6 ) );
-    mxPatternModel->mbPattColorUsed = !getFlag( nFlags, BIFF_CFRULE_FILL_PATTCOLOR );
-    mxPatternModel->mbFillColorUsed = !getFlag( nFlags, BIFF_CFRULE_FILL_FILLCOLOR );
-    mxPatternModel->mbPatternUsed   = !getFlag( nFlags, BIFF_CFRULE_FILL_PATTERN );
 }
 
 void Fill::finalizeImport()

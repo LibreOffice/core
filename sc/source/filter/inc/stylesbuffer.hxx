@@ -275,9 +275,6 @@ public:
     /** Imports a font style flag from a DXF record. */
     void                importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm );
 
-    /** Sets the font attributes from the font block of a CFRULE record. */
-    void                importCfRule( BiffInputStream& rStrm );
-
     /** Returns the font model structure. This function can be called before
         finalizeImport() has been called. */
     inline const FontModel& getModel() const { return maModel; }
@@ -461,8 +458,6 @@ struct BorderLineModel
 
     /** Sets the passed BIFF line style. */
     void                setBiffStyle( sal_Int32 nLineStyle );
-    /** Sets line style and line color from the passed BIFF data. */
-    void                setBiffData( sal_uInt8 nLineStyle, sal_uInt16 nLineColor );
 };
 
 // ----------------------------------------------------------------------------
@@ -524,9 +519,6 @@ public:
     /** Imports a border from a DXF record from the passed stream. */
     void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
 
-    /** Sets the border attributes from the border block of a CFRULE record. */
-    void                importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags );
-
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
@@ -575,8 +567,6 @@ struct PatternFillModel
 
     /** Sets the passed BIFF pattern identifier. */
     void                setBiffPattern( sal_Int32 nPattern );
-    /** Sets the pattern and pattern colors from the passed BIFF data. */
-    void                setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillColor, sal_uInt8 nPattern );
 };
 
 // ----------------------------------------------------------------------------
@@ -647,9 +637,6 @@ public:
     void                importDxfGradient( SequenceInputStream& rStrm );
     /** Imports gradient stop settings from a DXF record. */
     void                importDxfStop( SequenceInputStream& rStrm );
-
-    /** Sets the fill attributes from the fill block of a CFRULE record. */
-    void                importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

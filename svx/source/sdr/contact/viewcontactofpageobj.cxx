@@ -50,12 +50,6 @@ namespace sdr
             return *pRetval;
         }
 
-        // Access to referenced page
-        const SdrPage* ViewContactOfPageObj::GetReferencedPage() const
-        {
-            return GetPageObj().GetReferencedPage();
-        }
-
         ViewContactOfPageObj::ViewContactOfPageObj(SdrPageObj& rPageObj)
         :   ViewContactOfSdrObj(rPageObj)
         {

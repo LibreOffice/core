@@ -281,22 +281,6 @@ bool AddressConverter::parseOoxRange2d(
     return false;
 }
 
-namespace {
-
-bool lclAppendUrlChar( OUStringBuffer& orUrl, sal_Unicode cChar, bool bEncodeSpecial )
-{
-    // #126855# encode special characters
-    if( bEncodeSpecial ) switch( cChar )
-    {
-        case '#':   orUrl.appendAscii( "%23" );  return true;
-        case '%':   orUrl.appendAscii( "%25" );  return true;
-    }
-    orUrl.append( cChar );
-    return cChar >= ' ';
-}
-
-} // namespace
-
 // ----------------------------------------------------------------------------
 
 bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )

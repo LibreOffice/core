@@ -130,7 +130,6 @@ SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
 SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(SearchAttrItem const&, void*), void*)
 StgCache::Pos2Page(int)
 SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, unsigned char)
-SvLBoxButtonData::SvLBoxButtonData()
 SvLBoxEntryArr::DeleteAndDestroy(unsigned short, unsigned short)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
 SvStringsISortDtor::Insert(String* const*, unsigned short)
@@ -702,7 +701,6 @@ canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const
 canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRange const&, basegfx::B2IRange const&)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
-comphelper::EventLogger::EventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&)
 comphelper::OSelectionChangeListener::disposeAdapter()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
@@ -759,7 +757,6 @@ sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
 sdr::animation::Scheduler::Reset(unsigned int)
-sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
 sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
 sfx2::TaskPaneWrapper::GetChildWindowId()

@@ -77,13 +77,6 @@ SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bR
     InitData( sal_True, _bRadioBtn, pControlForSettings );
 }
 
-SvLBoxButtonData::SvLBoxButtonData()
-{
-    DBG_CTOR(SvLBoxButtonData,0);
-
-    InitData( sal_False, false );
-}
-
 SvLBoxButtonData::~SvLBoxButtonData()
 {
     DBG_DTOR(SvLBoxButtonData,0);

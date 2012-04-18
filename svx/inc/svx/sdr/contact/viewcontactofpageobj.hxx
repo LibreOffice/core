@@ -53,10 +53,6 @@ namespace sdr
 
             // create graphical visualisation data
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
-
-            // Access to referenced page
-            const SdrPage* GetReferencedPage() const;
-
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfPageObj(SdrPageObj& rPageObj);

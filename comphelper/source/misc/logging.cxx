@@ -110,12 +110,6 @@ namespace comphelper
     //= EventLogger
     //====================================================================
     //--------------------------------------------------------------------
-    EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rLoggerName )
-        :m_pImpl( new EventLogger_Impl( _rxContext, _rLoggerName ) )
-    {
-    }
-
-    //--------------------------------------------------------------------
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pAsciiLoggerName )
         :m_pImpl( new EventLogger_Impl( _rxContext, ::rtl::OUString::createFromAscii( _pAsciiLoggerName ) ) )
     {

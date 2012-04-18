@@ -74,7 +74,6 @@ public:
                             SvLBoxButtonData( const Control* pControlForSettings );
                             SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn );
 
-                            SvLBoxButtonData();
                             ~SvLBoxButtonData();
 
     sal_uInt16                  GetIndex( sal_uInt16 nItemState );

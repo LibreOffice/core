@@ -107,19 +107,6 @@ namespace comphelper
 
     public:
         /** creates an <code>EventLogger</code> instance working with a css.logging.XLogger
-            instance given by name.
-
-            @param _rxContext
-                the component context to create services
-            @param _rLoggerName
-                the name of the logger to create. If empty, the office-wide default logger will be used.
-        */
-        EventLogger(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::rtl::OUString& _rLoggerName = ::rtl::OUString()
-        );
-
-        /** creates an <code>EventLogger</code> instance working with a css.logging.XLogger
             instance given by ASCII name.
 
             @param _rxContext
