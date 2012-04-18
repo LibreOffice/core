@@ -148,6 +148,7 @@ void ImpSvNumberInputScan::Reset()
     nMayBeMonthDate = 0;
     nAcceptedDatePattern = -2;
     nDatePatternStart = 0;
+    nCanForceToIso8601 = 0;
 }
 
 
@@ -999,6 +1000,50 @@ bool ImpSvNumberInputScan::MayBeIso8601()
 
 //---------------------------------------------------------------------------
 
+bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
+{
+    if (nCanForceToIso8601 == 0)
+    {
+        nCanForceToIso8601 = 1;
+        do
+        {
+            if (!MayBeIso8601())
+                break;
+
+            if (nMayBeIso8601 >= 3)
+            {
+                nCanForceToIso8601 = 2; // at least 3 digits in year
+                break;
+            }
+
+            if (pFormatter->GetDateSep() != '-')
+            {
+                nCanForceToIso8601 = 2; // date separator does not interfere
+                break;
+            }
+
+            sal_Int32 n;
+            switch (eDateFormat)
+            {
+                case DMY:               // "day" value out of range => ISO 8601 year
+                    if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 31)
+                        nCanForceToIso8601 = 2;
+                    break;
+                case MDY:               // "month" value out of range => ISO 8601 year
+                    if ((n = sStrArray[nNums[0]].ToInt32()) < 1 || n > 12)
+                        nCanForceToIso8601 = 2;
+                    break;
+                case YMD:               // always possible
+                    nCanForceToIso8601 = 2;
+                    break;
+            }
+        } while (0);
+    }
+    return nCanForceToIso8601 > 1;
+}
+
+//---------------------------------------------------------------------------
+
 bool ImpSvNumberInputScan::MayBeMonthDate()
 {
     if (nMayBeMonthDate == 0)
@@ -1596,7 +1641,7 @@ input for the following reasons:
                             }
                         }
                         // ISO 8601 yyyy-mm-dd forced recognition
-                        DateFormat eDF = (MayBeIso8601() ? YMD : DateFmt);
+                        DateFormat eDF = (CanForceToIso8601( DateFmt) ? YMD : DateFmt);
                         switch (eDF)
                         {
                             case MDY:

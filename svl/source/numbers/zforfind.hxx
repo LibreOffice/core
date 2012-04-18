@@ -71,19 +71,17 @@ public:
     /// get threshold of two-digit year input
     sal_uInt16  GetYear2000() const { return nYear2000; }
 
-    /** Whether input may be an ISO 8601 date format, yyyy-mm-dd...
+    /** Whether input can be forced to ISO 8601 format.
 
-        Checks if input has at least 3 numbers for yyyy-mm-dd and the separator
-        is '-', and 1<=mm<=12 and 1<=dd<=31.
+        Depends on locale's date separator and a specific date format order.
 
-        @see nMayBeIso8601
+        @param eDateFormat
+            Evaluated only on first call during one scan process, subsequent
+            calls return state of nCanForceToIso8601!
+
+        @see nCanForceToIso8601
      */
-    bool MayBeIso8601();
-
-    /** Whether input may be a dd-month-yy format, with month name, not
-        number.
-     */
-    bool MayBeMonthDate();
+    bool CanForceToIso8601( DateFormat eDateFormat );
 
 private:
     SvNumberFormatter*  pFormatter;
@@ -153,6 +151,16 @@ private:
         @see MayBeIso8601()
      */
     sal_uInt8    nMayBeIso8601;
+
+    /** State of ISO 8601 can be forced.
+
+        0:= don't know yet
+        1:= no
+        2:= yes
+
+        @see CanForceToIso8601()
+     */
+    sal_uInt8   nCanForceToIso8601;
 
     /** State of dd-month-yy or yy-month-dd detection, with month name.
 
@@ -363,6 +371,22 @@ private:
         otherwise the locale's default order.
      */
     DateFormat GetDateOrder();
+
+    /** Whether input may be an ISO 8601 date format, yyyy-mm-dd...
+
+        Checks if input has at least 3 numbers for yyyy-mm-dd and the separator
+        is '-', and 1<=mm<=12 and 1<=dd<=31.
+
+        @see nMayBeIso8601
+     */
+    bool MayBeIso8601();
+
+    /** Whether input may be a dd-month-yy format, with month name, not
+        number.
+
+        @see nMayBeMonthDate
+     */
+    bool MayBeMonthDate();
 
 #endif  // _ZFORFIND_CXX
 };

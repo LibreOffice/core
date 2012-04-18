@@ -1180,7 +1180,7 @@ bool SvNumberFormatter::IsNumberFormat(const String& sString,
         {
             case NUMBERFORMAT_DATE :
                 // Preserve ISO 8601 input.
-                if (pStringScanner->MayBeIso8601())
+                if (pStringScanner->CanForceToIso8601( DMY))
                     F_Index = GetFormatIndex( NF_DATE_DIN_YYYYMMDD, ActLnge );
                 else
                     F_Index = GetStandardFormat( RType, ActLnge );
