@@ -551,11 +551,11 @@ private:
     void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth, sal_Bool bCanHyphenate );
     void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
     EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, sal_Bool bBackward = sal_False );
-    EditPaM             ImpDeleteSelection( EditSelection aEditSelection);
+    EditPaM             ImpDeleteSelection(const EditSelection& rCurSel);
     EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
     EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection, bool bKeepEndingAttribs = true );
     EditPaM             ImpInsertText(const EditSelection& aCurEditSelection, const String& rStr);
-    EditPaM             ImpInsertFeature( EditSelection aEditSelection, const SfxPoolItem& rItem );
+    EditPaM             ImpInsertFeature(const EditSelection& rCurSel, const SfxPoolItem& rItem);
     void                ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, EditUndoRemoveChars* pCurUndo = 0 );
     void                ImpRemoveParagraph( sal_uInt16 nPara );
     EditSelection       ImpMoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
@@ -760,7 +760,7 @@ public:
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
     EditPaM         InsertTab( EditSelection aEditSelection );
-    EditPaM         InsertField( EditSelection aEditSelection, const SvxFieldItem& rFld );
+    EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
     sal_Bool        UpdateFields();
 
     EditPaM         Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );

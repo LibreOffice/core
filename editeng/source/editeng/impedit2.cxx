@@ -2425,14 +2425,15 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
     return ImpConnectParagraphs( aDelStart.GetNode(), aDelEnd.GetNode(), bSpecialBackward );
 }
 
-EditPaM ImpEditEngine::ImpDeleteSelection( EditSelection aSel )
+EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
 {
-    if ( !aSel.HasRange() )
-        return aSel.Min();
+    if ( !rCurSel.HasRange() )
+        return rCurSel.Min();
 
-    aSel.Adjust( aEditDoc );
-    EditPaM aStartPaM( aSel.Min() );
-    EditPaM aEndPaM( aSel.Max() );
+    EditSelection aCurSel(rCurSel);
+    aCurSel.Adjust( aEditDoc );
+    EditPaM aStartPaM(aCurSel.Min());
+    EditPaM aEndPaM(aCurSel.Max());
 
     CursorMoved( aStartPaM.GetNode() ); // only so that newly set Attributes dissapear...
     CursorMoved( aEndPaM.GetNode() );   // only so that newly set Attributes dissapear...
@@ -2811,13 +2812,13 @@ EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const XubString& rStr )
     return aPaM;
 }
 
-EditPaM ImpEditEngine::ImpInsertFeature( EditSelection aCurSel, const SfxPoolItem& rItem )
+EditPaM ImpEditEngine::ImpInsertFeature(const EditSelection& rCurSel, const SfxPoolItem& rItem)
 {
     EditPaM aPaM;
-    if ( aCurSel.HasRange() )
-        aPaM = ImpDeleteSelection( aCurSel );
+    if ( rCurSel.HasRange() )
+        aPaM = ImpDeleteSelection( rCurSel );
     else
-        aPaM = aCurSel.Max();
+        aPaM = rCurSel.Max();
 
     if ( aPaM.GetIndex() >= 0xfffe )
         return aPaM;
@@ -2966,10 +2967,9 @@ EditPaM ImpEditEngine::InsertTab( EditSelection aCurSel )
     return aPaM;
 }
 
-EditPaM ImpEditEngine::InsertField( EditSelection aCurSel, const SvxFieldItem& rFld )
+EditPaM ImpEditEngine::InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld)
 {
-    EditPaM aPaM( ImpInsertFeature( aCurSel, rFld ) );
-    return aPaM;
+    return ImpInsertFeature(rCurSel, rFld);
 }
 
 sal_Bool ImpEditEngine::UpdateFields()
