@@ -2376,7 +2376,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         // to inside this method to work even when outliner is fetched here.
         pOutl->SetStyleSheet(0, pObj->GetStyleSheet());
 
-        String aString;
+        rtl::OUString aString;
 
         switch( eObjKind )
         {
@@ -2384,29 +2384,29 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             {
                 pOutl->Init( OUTLINERMODE_OUTLINEOBJECT );
 
-                aString += sal_Unicode( '\t' );
+                aString += "\t";
                 aString += rString;
 
                 if (mbMaster)
                 {
                     pOutl->SetStyleSheet( 0, GetStyleSheetForPresObj(eObjKind) );
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER2 ) );
+                    aString += "\n\t\t";
+                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER2 ) );
 
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER3 ) );
+                    aString += "\n\t\t\t";
+                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER3 ) );
 
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER4 ) );
+                    aString += "\n\t\t\t\t";
+                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER4 ) );
 
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER5 ) );
+                    aString += "\n\t\t\t\t\t";
+                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER5 ) );
 
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER6 ) );
+                    aString += "\n\t\t\t\t\t\t";
+                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER6 ) );
 
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER7 ) );
+                    aString += "\n\t\t\t\t\t\t\t";
+                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER7 ) );
 
                 }
             }
@@ -2458,7 +2458,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 
         pOutl->SetPaperSize( pObj->GetLogicRect().GetSize() );
 
-        if( aString.Len() )
+        if( !aString.isEmpty() )
             pOutl->SetText( aString, pOutl->GetParagraph( 0 ) );
 
         ( (SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );

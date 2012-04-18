@@ -553,7 +553,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
     SfxStyleSheetBase*      pSheet = NULL;
     String                  aHelpFile;
 
-    //const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
     Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
 
     // ---- Default -----------------------------------------------
@@ -635,7 +634,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     Any aGray2( implMakeSolidCellStyle( pSSPool, "gray2" , aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
     Any aGray3( implMakeSolidCellStyle( pSSPool, "gray3" , aDefaultCellStyleName, RGB_COLORDATA(179,179,179)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("default") ), aGray1, aGray3, aGray2 );
+    implCreateTableTemplate( xTableFamily, "default" , aGray1, aGray3, aGray2 );
 
     // ---- BW ------------------------------------------------
 
