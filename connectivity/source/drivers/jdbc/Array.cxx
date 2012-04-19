@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         // submit Java-Call
-        (jobjectArray)t.pEnv->CallObjectMethod( object, mID, obj);
+        t.pEnv->CallObjectMethod( object, mID, obj);
         ThrowSQLException(t.pEnv,*this);
         // and clean up
         t.pEnv->DeleteLocalRef(obj);
@@ -89,7 +89,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        (jobjectArray)t.pEnv->CallObjectMethod( object, mID, index,count,obj);
+        t.pEnv->CallObjectMethod( object, mID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
         // and clean up
         t.pEnv->DeleteLocalRef(obj);
