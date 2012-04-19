@@ -2304,7 +2304,9 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     LoopGrids(GA_FORCE_SYNC);
 
     // und zum Feld (dazu habe ich vor dem Start des Suchens die XVclComponent-Interfaces eingesammelt)
-    DBG_ASSERT(pfriWhere->nFieldPos < m_arrSearchedControls.Count(), "FmXFormShell::OnFoundData : ungueltige Daten uebergeben !");
+    SAL_WARN_IF(static_cast<size_t>(pfriWhere->nFieldPos) >=
+            m_arrSearchedControls.size(),
+        "svx.form", "FmXFormShell::OnFoundData : invalid index!");
     SdrObject* pObject = m_arrSearchedControls.at(pfriWhere->nFieldPos);
 
     m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());

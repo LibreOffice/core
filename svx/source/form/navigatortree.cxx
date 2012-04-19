@@ -1639,7 +1639,9 @@ namespace svxform
             return;
 
         CollectSelectionData(SDI_ALL);
-        DBG_ASSERT( m_nFormsSelected + m_nControlsSelected + (m_bRootSelected ? 1 : 0) == m_arrCurrentSelection.size(),
+        SAL_WARN_IF(static_cast<size_t>(m_nFormsSelected + m_nControlsSelected
+                + (m_bRootSelected ? 1 : 0)) != m_arrCurrentSelection.size(),
+            "svx.form",
             "NavigatorTree::ShowSelectionProperties : selection meta data invalid !");
 
 
