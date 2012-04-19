@@ -54,7 +54,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     JunitTest_sc_complex \
     JunitTest_sc_unoapi \
     CppunitTest_sc_cellrangeobj \
-    CppunitTest_sc_chart_regression_test \
     $(if $(filter-out $(OS),IOS), \
 	    CppunitTest_sc_databaserangeobj) \
     CppunitTest_sc_datapilottableobj \
