@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Configuration_minimizer \
     Extension_minimizer \
     Library_minimizer \
+    Rdb_minimizer \
     Zip_minimizer \
 ))
 endif

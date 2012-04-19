@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd">
 <manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
-  <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-component;type=native"
-                       manifest:full-path="SunPresentationMinimizer.uno@SHARED_EXTENSION@"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-components;platform=@PLATFORM@"
+                       manifest:full-path="components.rdb"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-schema"
                        manifest:full-path="registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"

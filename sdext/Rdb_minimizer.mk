@@ -25,36 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,SunPresentationMinimizer))
+$(eval $(call gb_Rdb_Rdb,minimizer))
 
-$(eval $(call gb_Library_set_componentfile,SunPresentationMinimizer,sdext/source/minimizer/minimizer))
-
-$(eval $(call gb_Library_use_api,SunPresentationMinimizer,\
-    offapi \
-    udkapi \
-))
-
-$(eval $(call gb_Library_use_libraries,SunPresentationMinimizer,\
-    cppu \
-    cppuhelper \
-    sal \
-))
-
-$(eval $(call gb_Library_add_exception_objects,SunPresentationMinimizer,\
-    sdext/source/minimizer/configurationaccess \
-    sdext/source/minimizer/fileopendialog \
-    sdext/source/minimizer/graphiccollector \
-    sdext/source/minimizer/impoptimizer \
-    sdext/source/minimizer/informationdialog \
-    sdext/source/minimizer/optimizationstats \
-    sdext/source/minimizer/optimizerdialog \
-    sdext/source/minimizer/optimizerdialogcontrols \
-    sdext/source/minimizer/pagecollector \
-    sdext/source/minimizer/pppoptimizer \
-    sdext/source/minimizer/pppoptimizerdialog \
-    sdext/source/minimizer/pppoptimizertoken \
-    sdext/source/minimizer/pppoptimizeruno \
-    sdext/source/minimizer/unodialog \
+$(eval $(call gb_Rdb_add_components,minimizer,\
+    sdext/source/minimizer/minimizer \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

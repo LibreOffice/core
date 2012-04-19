@@ -499,7 +499,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     simplecanvas \
     slideshow \
     stringresource \
-	SunPresentationMinimizer \
     ucpcmis1 \
     ucpexpand1 \
     ucpext \
@@ -557,6 +556,10 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
     jvmfwk \
     sal \
+))
+
+$(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
+	SunPresentationMinimizer \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \

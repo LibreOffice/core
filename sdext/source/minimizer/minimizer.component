@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<component xmlns="http://openoffice.org/2010/uno-components"
+        loader="com.sun.star.loader.SharedLibrary">
+    <implementation name="com.sun.star.comp.PPPOptimizerImp">
+        <service name="com.sun.star.comp.PPPOptimizer"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.SunPresentationMinimizerImp">
+        <service name="com.sun.star.comp.SunPresentationMinimizer"/>
+    </implementation>
+</component>

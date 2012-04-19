@@ -35,6 +35,8 @@ $(eval $(call gb_Extension_add_files,presentation-minimizer,,\
     $(call gb_Library_get_target,SunPresentationMinimizer) \
 ))
 
+$(eval $(call gb_Extension_add_file,presentation-minimizer,components.rdb,$(call gb_Rdb_get_target,minimizer)))
+
 $(eval $(call gb_Extension_add_files,presentation-minimizer,bitmaps,\
     $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
     $(SRCDIR)/icon-themes/galaxy/minimizer/minimizepresi_80.png \
