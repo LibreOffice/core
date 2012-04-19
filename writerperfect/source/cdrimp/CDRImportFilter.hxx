@@ -27,8 +27,8 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _VISIOIMPORTFILTER_HXX
-#define _VISIOIMPORTFILTER_HXX
+#ifndef _CDRIMPORTFILTER_HXX
+#define _CDRIMPORTFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -40,11 +40,6 @@
 
 #include <stdio.h>
 
-enum FilterType
-{
-    FILTER_IMPORT,
-    FILTER_EXPORT
-};
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
@@ -64,11 +59,9 @@ protected:
     ::rtl::OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    FilterType meType;
-
 public:
     CDRImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ), meType((FilterType)0) {}
+        : mxMSF( rxMSF ) {}
     virtual ~CDRImportFilter() {}
 
     // XFilter

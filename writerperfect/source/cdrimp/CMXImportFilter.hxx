@@ -27,8 +27,8 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _WPGIMPORTFILTER_HXX
-#define _WPGIMPORTFILTER_HXX
+#ifndef _CMXIMPORTFILTER_HXX
+#define _CMXIMPORTFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -40,15 +40,10 @@
 
 #include <stdio.h>
 
-enum FilterType
-{
-    FILTER_IMPORT,
-    FILTER_EXPORT
-};
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class WPGImportFilter : public cppu::WeakImplHelper5
+class CMXImportFilter : public cppu::WeakImplHelper5
     <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
@@ -65,9 +60,9 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
 public:
-    WPGImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
+    CMXImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
         : mxMSF( rxMSF ) {}
-    virtual ~WPGImportFilter() {}
+    virtual ~CMXImportFilter() {}
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
@@ -97,17 +92,17 @@ public:
 
 };
 
-::rtl::OUString WPGImportFilter_getImplementationName()
+::rtl::OUString CMXImportFilter_getImplementationName()
 throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL WPGImportFilter_supportsService( const ::rtl::OUString &ServiceName )
+sal_Bool SAL_CALL CMXImportFilter_supportsService( const ::rtl::OUString &ServiceName )
 throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames(  )
 throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL WPGImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+SAL_CALL CMXImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
 throw ( ::com::sun::star::uno::Exception );
 
 #endif

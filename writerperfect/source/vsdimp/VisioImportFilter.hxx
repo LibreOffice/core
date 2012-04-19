@@ -64,11 +64,9 @@ protected:
     ::rtl::OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    FilterType meType;
-
 public:
     VisioImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ), meType((FilterType)0) {}
+        : mxMSF( rxMSF ) {}
     virtual ~VisioImportFilter() {}
 
     // XFilter

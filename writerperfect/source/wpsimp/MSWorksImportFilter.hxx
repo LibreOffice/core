@@ -38,11 +38,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-enum FilterType
-{
-    FILTER_IMPORT,
-    FILTER_EXPORT
-};
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
@@ -62,15 +57,12 @@ protected:
     ::rtl::OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    FilterType meType;
-
     sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (::com::sun::star::uno::RuntimeException);
 
 public:
     MSWorksImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
         : mxMSF( rxMSF )
-        , meType( FILTER_IMPORT )
     {}
     virtual ~MSWorksImportFilter() {}
 

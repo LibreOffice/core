@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "CDRImportFilter.hxx"
+#include "CMXImportFilter.hxx"
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -53,6 +54,19 @@ extern "C"
                         reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                         OUString::createFromAscii( pImplName ),
                         CDRImportFilter_createInstance, CDRImportFilter_getSupportedServiceNames() ) );
+
+            if (xFactory.is())
+            {
+                xFactory->acquire();
+                pRet = xFactory.get();
+            }
+        }
+        if ( pServiceManager && implName.equals(CMXImportFilter_getImplementationName()) )
+        {
+            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                        OUString::createFromAscii( pImplName ),
+                        CMXImportFilter_createInstance, CMXImportFilter_getSupportedServiceNames() ) );
 
             if (xFactory.is())
             {

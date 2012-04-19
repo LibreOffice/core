@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* VisioImportFilter: Sets up the filter, and calls OdgExporter
+/* CMXImportFilter: Sets up the filter, and calls OdgExporter
  * to do the actual filtering
  *
  * Copyright (C) 2000 by Sun Microsystems, Inc.
@@ -44,10 +44,10 @@
 
 #include <xmloff/attrlist.hxx>
 
-#include <libvisio/libvisio.h>
+#include <libcdr/libcdr.h>
 #include "filter/DocumentHandler.hxx"
 #include "filter/OdgGenerator.hxx"
-#include "VisioImportFilter.hxx"
+#include "CMXImportFilter.hxx"
 #include "stream/WPXSvStream.h"
 
 #include <iostream>
@@ -80,11 +80,11 @@ using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
 
-sal_Bool SAL_CALL VisioImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+sal_Bool SAL_CALL CMXImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::filter" << std::endl;
+    std::cerr << "CMXImportFilter::filter" << std::endl;
 #endif
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
@@ -120,34 +120,34 @@ throw (RuntimeException)
     WPXSvInputStream input( xInputStream );
 
     OdgGenerator exporter(&xHandler, ODF_FLAT_XML);
-    bool tmpParseResult = libvisio::VisioDocument::parse(&input, &exporter);
+    bool tmpParseResult = libcdr::CMXDocument::parse(&input, &exporter);
     return tmpParseResult;
 }
 
-void SAL_CALL VisioImportFilter::cancel(  )
+void SAL_CALL CMXImportFilter::cancel(  )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::cancel" << std::endl;
+    std::cerr << "CMXImportFilter::cancel" << std::endl;
 #endif
 }
 
 // XImporter
-void SAL_CALL VisioImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL CMXImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::setTargetDocument" << std::endl;
+    std::cerr << "CMXImportFilter::setTargetDocument" << std::endl;
 #endif
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
+OUString SAL_CALL CMXImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::detect" << std::endl;
+    std::cerr << "CMXImportFilter::detect" << std::endl;
 #endif
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
@@ -164,10 +164,10 @@ throw( com::sun::star::uno::RuntimeException )
 
     WPXSvInputStream input( xInputStream );
 
-    if (libvisio::VisioDocument::isSupported(&input))
-        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_Visio_Document" ) );
+    if (libcdr::CMXDocument::isSupported(&input))
+        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_CorelDraw_Document" ) );
 
-    if (!sTypeName.isEmpty())
+    if (sTypeName.getLength())
     {
         if ( location == Descriptor.getLength() )
         {
@@ -182,11 +182,11 @@ throw( com::sun::star::uno::RuntimeException )
 
 
 // XInitialization
-void SAL_CALL VisioImportFilter::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL CMXImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::initialize" << std::endl;
+    std::cerr << "CMXImportFilter::initialize" << std::endl;
 #endif
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -204,30 +204,30 @@ throw (Exception, RuntimeException)
         }
     }
 }
-OUString VisioImportFilter_getImplementationName ()
+OUString CMXImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter_getImplementationName" << std::endl;
+    std::cerr << "CMXImportFilter_getImplementationName" << std::endl;
 #endif
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.VisioImportFilter" ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.CMXImportFilter" ) );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL VisioImportFilter_supportsService( const OUString &ServiceName )
+sal_Bool SAL_CALL CMXImportFilter_supportsService( const OUString &ServiceName )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter_supportsService" << std::endl;
+    std::cerr << "CMXImportFilter_supportsService" << std::endl;
 #endif
     return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
 }
-Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter_getSupportedServiceNames" << std::endl;
+    std::cerr << "CMXImportFilter_getSupportedServiceNames" << std::endl;
 #endif
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
@@ -238,39 +238,39 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL VisioImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL CMXImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 throw( Exception )
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter_createInstance" << std::endl;
+    std::cerr << "CMXImportFilter_createInstance" << std::endl;
 #endif
-    return (cppu::OWeakObject *) new VisioImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new CMXImportFilter( rSMgr );
 }
 
 // XServiceInfo
-OUString SAL_CALL VisioImportFilter::getImplementationName(  )
+OUString SAL_CALL CMXImportFilter::getImplementationName(  )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::getImplementationName" << std::endl;
+    std::cerr << "CMXImportFilter::getImplementationName" << std::endl;
 #endif
-    return VisioImportFilter_getImplementationName();
+    return CMXImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString &rServiceName )
+sal_Bool SAL_CALL CMXImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::supportsService" << std::endl;
+    std::cerr << "CMXImportFilter::supportsService" << std::endl;
 #endif
-    return VisioImportFilter_supportsService( rServiceName );
+    return CMXImportFilter_supportsService( rServiceName );
 }
-Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CMXImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
 {
 #ifdef DEBUG
-    std::cerr << "VisioImportFilter::getSupportedServiceNames" << std::endl;
+    std::cerr << "CMXImportFilter::getSupportedServiceNames" << std::endl;
 #endif
-    return VisioImportFilter_getSupportedServiceNames();
+    return CMXImportFilter_getSupportedServiceNames();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

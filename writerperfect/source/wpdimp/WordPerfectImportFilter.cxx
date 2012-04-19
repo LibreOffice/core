@@ -199,7 +199,6 @@ void SAL_CALL WordPerfectImportFilter::setTargetDocument( const uno::Reference< 
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::getTargetDocument: Got here!\n"));
-    meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 

@@ -546,6 +546,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw_WordPerfect_Graphics \
 	draw_Visio_Document \
 	draw_CorelDraw_Document \
+	draw_Corel_Presentation_Exchange \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -557,6 +558,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	WordPerfectGraphics \
 	VisioDocument \
 	CorelDrawDocument \
+	CorelPresentationExchange \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\

@@ -66,14 +66,12 @@ protected:
     ::rtl::OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    FilterType meType;
-
     sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (::com::sun::star::uno::RuntimeException);
 
 public:
     WordPerfectImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ), meType((FilterType)0) {}
+        : mxMSF( rxMSF ) {}
     virtual ~WordPerfectImportFilter() {}
 
     // XFilter

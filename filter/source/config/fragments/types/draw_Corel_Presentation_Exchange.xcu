@@ -1,0 +1,12 @@
+        <node oor:name="draw_Corel_Presentation_Exchange" oor:op="replace" >
+            <prop oor:name="DetectService"><value>com.sun.star.comp.Draw.CMXImportFilter</value></prop>
+            <prop oor:name="URLPattern"/>
+            <prop oor:name="Extensions"><value>cmx</value></prop>
+            <prop oor:name="MediaType"><value>image/x-cmx</value></prop>
+            <prop oor:name="Preferred"><value>true</value></prop>
+            <prop oor:name="PreferredFilter"><value>Corel Presentation Exchange</value></prop>
+            <prop oor:name="UIName">
+                <value>Corel Presentation Exchange</value>
+            </prop>
+            <prop oor:name="ClipboardFormat"/>
+        </node>

@@ -5931,7 +5931,7 @@ AC_MSG_CHECKING([which libcdr to use])
 if test "$with_system_libcdr" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBCDR=YES
-    PKG_CHECK_MODULES( CDR, libcdr-0.0 )
+    PKG_CHECK_MODULES( CDR, libcdr-0.0 >= 0.0.5 )
 elif test $_os = iOS; then
     # libcdr depends on libwpd and libwpg and those are LGPL
     AC_MSG_RESULT([none])

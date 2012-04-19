@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_externals,cdrimport,\
 
 $(eval $(call gb_Library_add_exception_objects,cdrimport,\
 	writerperfect/source/cdrimp/CDRImportFilter \
+	writerperfect/source/cdrimp/CMXImportFilter \
 	writerperfect/source/cdrimp/cdrimport_genericfilter \
 ))
 

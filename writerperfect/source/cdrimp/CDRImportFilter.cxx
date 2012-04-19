@@ -139,7 +139,6 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 #ifdef DEBUG
     std::cerr << "CDRImportFilter::setTargetDocument" << std::endl;
 #endif
-    meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 

@@ -137,7 +137,6 @@ void SAL_CALL MSWorksImportFilter::setTargetDocument( const Reference< ::com::su
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::getTargetDocument: Got here!\n"));
-    meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 
