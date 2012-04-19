@@ -2889,11 +2889,20 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     }
 }
 
+sal_Int32 XclExpDxfs::GetDxfId( const rtl::OUString& rStyleName )
+{
+    std::map<rtl::OUString, sal_Int32>::iterator itr = maStyleNameToDxfId.find(rStyleName);
+    if(itr!= maStyleNameToDxfId.end())
+        return itr->second;
+    return -1;
+}
+
 void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_dxfs, FSEND,
-            XML_count, rtl::OString::valueOf( static_cast<sal_Int32>(maDxf.size())).getStr() );
+    rStyleSheet->startElement( XML_dxfs,
+            XML_count, rtl::OString::valueOf( static_cast<sal_Int32>(maDxf.size())).getStr(),
+            FSEND );
 
     for ( DxfContainer::iterator itr = maDxf.begin(); itr != maDxf.end(); ++itr )
     {

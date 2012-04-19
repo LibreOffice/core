@@ -828,7 +828,11 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_type, GetTypeString(),
             XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
             XML_operator, GetOperatorString( mrFormatEntry.GetOperation() ),
+            XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
+    rWorksheet->startElement( XML_formula, FSEND );
+    rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
+    rWorksheet->endElement( XML_formula );
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
 }

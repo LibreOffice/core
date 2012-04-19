@@ -161,6 +161,12 @@ XclExpFilterManager& XclExpRoot::GetFilterManager() const
     return *mrExpData.mxFilterMgr;
 }
 
+XclExpDxfs& XclExpRoot::GetDxfs() const
+{
+    OSL_ENSURE( mrExpData.mxDxfs, "XclExpRoot::GetDxfs - missing object ( wrong BIFF?)" );
+    return *mrExpData.mxDxfs;
+}
+
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
     OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
