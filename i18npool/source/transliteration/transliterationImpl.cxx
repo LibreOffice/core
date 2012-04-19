@@ -32,10 +32,6 @@
 
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/string.h>
@@ -50,7 +46,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
 
 using ::rtl::OUString;
 
@@ -595,44 +590,15 @@ TransliterationImpl::clear()
 void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTransliteration>& body )
     throw (RuntimeException)
 {
+    assert(!implName.isEmpty());
     ::osl::MutexGuard guard(lastTransBody.mutex);
-
-    if (implName.equals(lastTransBody.Name))
+    if (implName != lastTransBody.Name)
     {
-        // Use the cached body instead of going through the expensive looping again.
-        body = lastTransBody.Body;
-        return;
+        lastTransBody.Body.set(
+            xSMgr->createInstance(implName), UNO_QUERY_THROW);
+        lastTransBody.Name = implName;
     }
-
-    Reference< XContentEnumerationAccess > xEnumAccess( xSMgr, UNO_QUERY );
-    Reference< XEnumeration > xEnum(xEnumAccess->createContentEnumeration(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_SERVICELNAME_L10N))));
-    if (xEnum.is()) {
-        while (xEnum->hasMoreElements()) {
-            Any a = xEnum->nextElement();
-            Reference< XServiceInfo > xsInfo;
-            if (a >>= xsInfo) {
-                if (implName.equals(xsInfo->getImplementationName())) {
-                    Reference< XSingleServiceFactory > xFactory;
-                    if (a >>= xFactory) {
-                        Reference< XInterface > xI = xFactory->createInstance();
-                        if (xI.is()) {
-                            a = xI->queryInterface(::getCppuType((
-                                        const Reference<XExtendedTransliteration>*)0));
-                            a >>= body;
-                            lastTransBody.Name = implName;
-                            lastTransBody.Body = body;
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    throw RuntimeException(
-        ("cannot find " TRLT_SERVICELNAME_L10N " service implementation named "
-         + implName),
-        Reference< XInterface >());
+    body = lastTransBody.Body;
 }
 
 sal_Bool SAL_CALL
