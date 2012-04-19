@@ -46,7 +46,6 @@
 #include "DrawDocShell.hxx"
 #include <sfx2/app.hxx>
 #include "PaneChildWindows.hxx"
-#include "NotesChildWindow.hxx"
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
 #include "FrameView.hxx"
