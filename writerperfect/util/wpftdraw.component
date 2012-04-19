@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component loader="com.sun.star.loader.SharedLibrary" prefix="cdrfilter"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="wpftdraw"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Draw.CDRImportFilter">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
   <implementation name="com.sun.star.comp.Draw.CMXImportFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.VisioImportFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Draw.WPGImportFilter">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>

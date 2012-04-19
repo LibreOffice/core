@@ -205,11 +205,8 @@ my_components += \
 
 my_components += \
     component/writerfilter/util/writerfilter \
-    component/writerperfect/util/msworksfilter \
-    component/writerperfect/util/visiofilter \
-    component/writerperfect/util/wpft \
-    component/writerperfect/util/wpgfilter \
-    component/writerperfect/util/cdrfilter \
+    component/writerperfect/util/wpftwriter \
+    component/writerperfect/util/wpftdraw \
 
 .ENDIF
 

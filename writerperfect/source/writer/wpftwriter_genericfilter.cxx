@@ -28,10 +28,10 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include "VisioImportFilter.hxx"
+#include "WordPerfectImportFilter.hxx"
+#include "MSWorksImportFilter.hxx"
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -41,18 +41,31 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void *SAL_CALL visiofilter_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftwriter_component_getFactory(
         const sal_Char *pImplName, void *pServiceManager, void * /* pRegistryKey */ )
     {
         void *pRet = 0;
 
         OUString implName = OUString::createFromAscii( pImplName );
-        if ( pServiceManager && implName.equals(VisioImportFilter_getImplementationName()) )
+        if ( pServiceManager && implName.equals(WordPerfectImportFilter_getImplementationName()) )
         {
             Reference< XSingleServiceFactory > xFactory( createSingleFactory(
                         reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                         OUString::createFromAscii( pImplName ),
-                        VisioImportFilter_createInstance, VisioImportFilter_getSupportedServiceNames() ) );
+                        WordPerfectImportFilter_createInstance, WordPerfectImportFilter_getSupportedServiceNames() ) );
+
+            if (xFactory.is())
+            {
+                xFactory->acquire();
+                pRet = xFactory.get();
+            }
+        }
+        if ( pServiceManager && implName.equals(MSWorksImportFilter_getImplementationName()) )
+        {
+            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                        OUString::createFromAscii( pImplName ),
+                        MSWorksImportFilter_createInstance, MSWorksImportFilter_getSupportedServiceNames() ) );
 
             if (xFactory.is())
             {

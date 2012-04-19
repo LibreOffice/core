@@ -888,9 +888,7 @@ End
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Wpft,wpft)
-
-STD_LIB_FILE(gid_File_Lib_Msworks,msworks)
+STD_LIB_FILE(gid_File_Lib_WpftWriter,wpftwriter)
 
 STD_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 

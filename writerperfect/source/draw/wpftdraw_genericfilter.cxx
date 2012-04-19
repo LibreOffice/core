@@ -31,6 +31,9 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
+#include "CDRImportFilter.hxx"
+#include "CMXImportFilter.hxx"
+#include "VisioImportFilter.hxx"
 #include "WPGImportFilter.hxx"
 
 using namespace ::rtl;
@@ -41,18 +44,57 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpgfilter_component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftdraw_component_getFactory(
         const sal_Char *pImplName, void *pServiceManager, void * /* pRegistryKey */ )
     {
         void *pRet = 0;
 
         OUString implName = OUString::createFromAscii( pImplName );
+        if ( pServiceManager && implName.equals(CDRImportFilter_getImplementationName()) )
+        {
+            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                        OUString::createFromAscii( pImplName ),
+                        CDRImportFilter_createInstance, CDRImportFilter_getSupportedServiceNames() ) );
+
+            if (xFactory.is())
+            {
+                xFactory->acquire();
+                pRet = xFactory.get();
+            }
+        }
+        if ( pServiceManager && implName.equals(CMXImportFilter_getImplementationName()) )
+        {
+            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                        OUString::createFromAscii( pImplName ),
+                        CMXImportFilter_createInstance, CMXImportFilter_getSupportedServiceNames() ) );
+
+            if (xFactory.is())
+            {
+                xFactory->acquire();
+                pRet = xFactory.get();
+            }
+        }
         if ( pServiceManager && implName.equals(WPGImportFilter_getImplementationName()) )
         {
             Reference< XSingleServiceFactory > xFactory( createSingleFactory(
                         reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                         OUString::createFromAscii( pImplName ),
                         WPGImportFilter_createInstance, WPGImportFilter_getSupportedServiceNames() ) );
+
+            if (xFactory.is())
+            {
+                xFactory->acquire();
+                pRet = xFactory.get();
+            }
+        }
+        if ( pServiceManager && implName.equals(VisioImportFilter_getImplementationName()) )
+        {
+            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                        OUString::createFromAscii( pImplName ),
+                        VisioImportFilter_createInstance, VisioImportFilter_getSupportedServiceNames() ) );
 
             if (xFactory.is())
             {

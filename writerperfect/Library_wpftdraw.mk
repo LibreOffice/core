@@ -26,21 +26,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Library_Library,cdrimport))
+$(eval $(call gb_Library_Library,wpftdraw))
 
-$(eval $(call gb_Library_set_componentfile,cdrimport,writerperfect/util/cdrfilter))
+$(eval $(call gb_Library_set_componentfile,wpftdraw,writerperfect/util/wpftdraw))
 
-$(eval $(call gb_Library_set_include,cdrimport,\
+$(eval $(call gb_Library_set_include,wpftdraw,\
 	$$(INCLUDE) \
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_use_api,cdrimport,\
+$(eval $(call gb_Library_use_api,wpftdraw,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_libraries,cdrimport,\
+$(eval $(call gb_Library_use_libraries,wpftdraw,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -51,22 +51,25 @@ $(eval $(call gb_Library_use_libraries,cdrimport,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,cdrimport,\
+$(eval $(call gb_Library_use_static_libraries,wpftdraw,\
 	writerperfect \
 ))
 
-$(eval $(call gb_Library_use_externals,cdrimport,\
+$(eval $(call gb_Library_use_externals,wpftdraw,\
 	wpd \
 	wpg \
+	visio \
 	cdr \
 	lcms2 \
 	zlib \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,cdrimport,\
-	writerperfect/source/cdrimp/CDRImportFilter \
-	writerperfect/source/cdrimp/CMXImportFilter \
-	writerperfect/source/cdrimp/cdrimport_genericfilter \
+$(eval $(call gb_Library_add_exception_objects,wpftdraw,\
+	writerperfect/source/draw/CDRImportFilter \
+	writerperfect/source/draw/CMXImportFilter \
+	writerperfect/source/draw/VisioImportFilter \
+	writerperfect/source/draw/WPGImportFilter \
+	writerperfect/source/draw/wpftdraw_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

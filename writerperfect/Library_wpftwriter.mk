@@ -26,21 +26,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Library_Library,wpft))
+$(eval $(call gb_Library_Library,wpftwriter))
 
-$(eval $(call gb_Library_set_componentfile,wpft,writerperfect/util/wpft))
+$(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/util/wpftwriter))
 
-$(eval $(call gb_Library_set_include,wpft,\
+$(eval $(call gb_Library_set_include,wpftwriter,\
 	$$(INCLUDE) \
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_use_api,wpft,\
+$(eval $(call gb_Library_use_api,wpftwriter,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_libraries,wpft,\
+$(eval $(call gb_Library_use_libraries,wpftwriter,\
 	cppu \
 	cppuhelper \
 	vcl \
@@ -54,18 +54,20 @@ $(eval $(call gb_Library_use_libraries,wpft,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,wpft,\
+$(eval $(call gb_Library_use_static_libraries,wpftwriter,\
 	writerperfect \
 ))
 
-$(eval $(call gb_Library_use_externals,wpft,\
+$(eval $(call gb_Library_use_externals,wpftwriter,\
 	wpd \
 	wpg \
+	wps \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,wpft,\
-	writerperfect/source/wpdimp/WordPerfectImportFilter \
-	writerperfect/source/wpdimp/wpft_genericfilter \
+$(eval $(call gb_Library_add_exception_objects,wpftwriter,\
+	writerperfect/source/writer/MSWorksImportFilter \
+	writerperfect/source/writer/WordPerfectImportFilter \
+	writerperfect/source/writer/wpftwriter_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

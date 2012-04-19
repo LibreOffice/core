@@ -26,8 +26,12 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="wpft"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="wpftwriter"
     xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Writer.MSWorksImportFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Writer.WordPerfectImportFilter">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
