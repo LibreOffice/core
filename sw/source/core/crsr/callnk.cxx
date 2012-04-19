@@ -87,6 +87,25 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     }
 }
 
+void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
+{
+    if ( pNode != NULL )
+    {
+        SwFrm *myFrm = pNode->getLayoutFrm( rShell.GetLayout() );
+        if (myFrm!=NULL)
+        {
+            // We need to emulated a change of the row height in order
+            // to have the complete row redrawn
+            SwRowFrm* pRow = myFrm->FindRowFrm();
+            if ( pRow )
+            {
+                const SwTableLine* pLine = pRow->GetTabLine( );
+                SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
+                pRow->ModifyNotification( NULL, &pSize );
+            }
+        }
+    }
+}
 
 SwCallLink::~SwCallLink()
 {
@@ -100,19 +119,7 @@ SwCallLink::~SwCallLink()
     if( !pCNd )
         return;
 
-    SwFrm *myFrm = pCNd->getLayoutFrm( rShell.GetLayout() );
-    if (myFrm!=NULL)
-    {
-        // We need to emulated a change of the row height in order
-        // to have the complete row redrawn
-        SwRowFrm* pRow = myFrm->FindRowFrm( );
-        if ( pRow )
-        {
-            const SwTableLine* pLine = pRow->GetTabLine( );
-            SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-            pRow->ModifyNotification( NULL, &pSize );
-        }
-    }
+    lcl_notifyRow(pCNd, rShell);
 
     const SwDoc *pDoc=rShell.GetDoc();
     const SwCntntNode *pNode = NULL;
@@ -120,22 +127,7 @@ SwCallLink::~SwCallLink()
     {
         pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
     }
-    if ( pNode != NULL )
-    {
-        SwFrm *myFrm2 = pNode->getLayoutFrm( rShell.GetLayout() );
-        if (myFrm2!=NULL)
-        {
-            // We need to emulated a change of the row height in order
-            // to have the complete row redrawn
-            SwRowFrm* pRow = myFrm2->FindRowFrm();
-            if ( pRow )
-            {
-                const SwTableLine* pLine = pRow->GetTabLine( );
-                SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-                pRow->ModifyNotification( NULL, &pSize );
-            }
-        }
-    }
+    lcl_notifyRow(pNode, rShell);
 
     xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
     sal_uInt16 nNdWhich = pCNd->GetNodeType();
