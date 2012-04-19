@@ -5,4 +5,8 @@
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Draw.CMXImportFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
 </component>
