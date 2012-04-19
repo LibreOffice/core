@@ -57,16 +57,13 @@ copy-stuff:
 		   expwrap.uno \
 		   fastsax.uno \
 		   fileacc \
-		   fontconfig \
 		   forlo \
 		   foruilo \
-		   freetype \
 		   frmlo \
 		   fsstorage.uno \
 		   gcc3_uno \
 		   hwplo \
 		   i18nisolang1gcc3 \
-		   i18npaperlo \
 		   i18npool.uno \
 		   i18nutilgcc3 \
 		   icudatalo \
@@ -86,11 +83,9 @@ copy-stuff:
 		   lwpftlo \
 		   mergedlo \
 		   msfilterlo \
+		   mswordlo \
 		   msworkslo \
 		   ooxlo \
-		   raptor \
-		   rasqal \
-		   rdf \
 		   reflection.uno \
 		   reg \
 		   saxlo \
@@ -110,6 +105,7 @@ copy-stuff:
 		   textinstream.uno \
 		   tllo \
 		   ucbhelper4gcc3 \
+		   ucppkg1 \
 		   uno_cppu \
 		   uno_cppuhelpergcc3 \
 		   uno_sal \
@@ -119,6 +115,7 @@ copy-stuff:
 		   unoxmllo \
 		   utllo \
 		   vbahelperlo \
+		   vbaswobj.uno \
 		   vcllo \
 		   visioimportlo \
 		   wpftlo \
