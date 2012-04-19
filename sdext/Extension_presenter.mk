@@ -35,6 +35,8 @@ $(eval $(call gb_Extension_add_files,presenter-screen,,\
     $(call gb_Library_get_target,PresenterScreen) \
 ))
 
+$(eval $(call gb_Extension_add_file,presenter-screen,components.rdb,$(call gb_Rdb_get_target,presenter)))
+
 $(eval $(call gb_Extension_add_files,presenter-screen,bitmaps,\
     $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
     $(SRCDIR)/sdext/source/presenter/bitmaps/Background.png \

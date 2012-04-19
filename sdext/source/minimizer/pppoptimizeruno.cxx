@@ -42,42 +42,6 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        SAL_UNUSED_PARAMETER void* /*pServiceManager*/, void* pRegistryKey )
-    {
-        if (pRegistryKey)
-        {
-            try
-            {
-                Reference< XRegistryKey >   xNewKey;
-                sal_Int32                   nPos;
-
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizer_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
-                const Sequence< OUString > & rSNL1 = PPPOptimizer_getSupportedServiceNames();
-                const OUString * pArray1 = rSNL1.getConstArray();
-                for ( nPos = rSNL1.getLength(); nPos--; )
-                    xNewKey->createKey( pArray1[nPos] );
-
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizerDialog_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
-                const Sequence< OUString > & rSNL2 = PPPOptimizerDialog_getSupportedServiceNames();
-                const OUString * pArray2 = rSNL2.getConstArray();
-                for ( nPos = rSNL2.getLength(); nPos--; )
-                    xNewKey->createKey( pArray2[nPos] );
-
-                return sal_True;
-            }
-            catch (InvalidRegistryException &)
-            {
-                OSL_FAIL( "### InvalidRegistryException!" );
-            }
-        }
-        return sal_False;
-    }
-
-    // -------------------------------------------------------------------------
-
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
         const sal_Char * pImplName, void * pServiceManager,
         SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )

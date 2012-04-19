@@ -25,44 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sdext))
+$(eval $(call gb_Rdb_Rdb,presenter))
 
-ifeq ($(ENABLE_MINIMIZER),YES)
-$(eval $(call gb_Module_add_targets,sdext,\
-    Configuration_minimizer \
-    Extension_minimizer \
-    Library_minimizer \
-    Rdb_minimizer \
-    Zip_minimizer \
+$(eval $(call gb_Rdb_add_components,presenter,\
+    sdext/source/presenter/presenter \
 ))
-endif
-
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(eval $(call gb_Module_add_targets,sdext,\
-    CustomTarget_pdfimport \
-    Executable_pdf2xml \
-    Executable_pdfunzip \
-    Executable_xpdfimport \
-    Extension_pdfimport \
-    Library_pdfimport \
-    Rdb_pdfimport \
-    StaticLibrary_pdfimport_s \
-))
-
-$(eval $(call gb_Module_add_check_targets,sdext,\
-    CppunitTest_pdfimport \
-))
-endif
-
-ifeq ($(ENABLE_PRESENTER_SCREEN),YES)
-$(eval $(call gb_Module_add_targets,sdext,\
-    Configuration_presenter \
-    CustomTarget_presenter \
-    Extension_presenter \
-    Library_presenter \
-    Rdb_presenter \
-    Zip_presenter \
-))
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

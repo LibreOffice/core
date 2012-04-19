@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<component xmlns="http://openoffice.org/2010/uno-components"
+        loader="com.sun.star.loader.SharedLibrary">
+    <implementation name="com.sun.star.comp.Draw.framework.PresenterScreenJob">
+        <service name="com.sun.star.drawing.framework.PresenterScreenJob"/>
+    </implementation>
+    <implementation name="vnd.sun.star.sdext.presenter.PresenterProtocolHandler">
+        <service name="com.sun.star.frame.ProtocolHandler"/>
+    </implementation>
+</component>
