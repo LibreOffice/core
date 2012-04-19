@@ -287,7 +287,6 @@ mimetypes = {
     'application/docbook+xml': 'docbook',
 # misc
     'text/spreadsheet': 'slk',
-    'application/pdf': 'pdf',
     'application/vnd.corel-draw': 'cdr',
     'application/vnd.lotus-wordpro': 'lwp',
     'application/vnd.lotus-1-2-3': 'wks',
@@ -312,19 +311,23 @@ mimetypes = {
     'application/x-starwriter': 'sdw',
     'application/vnd.stardivision.writer': 'sdw5',
     'application/vnd.stardivision.writer-global': 'sgl5',
-# unusual image mimetypes
+# relatively uncommon image mimetypes
     'image/cgm': 'cgm',
+    'image/tiff': 'tiff',
+    'image/vnd.dxf': 'dxf',
+    'image/x-emf': 'emf',
     'image/x-targa': 'tga',
+    'image/x-sgf': 'sgf',
+    'image/x-svm': 'svm',
+    'image/x-wmf': 'wmf',
 }
 
 # disabled for now, this would download gigs of pngs/jpegs...
-common_image_mimetypes = [
+common_noncore_mimetypes = [
 # graphics
     ('image/svg+xml', 'svg'),
     ('image/x-MS-bmp', 'bmp'),
     ('image/x-wpg', 'wpg'),
-    ('image/vnd.dxf', 'dxf'),
-    ('image/x-emf', 'emf'),
     ('image/x-eps', 'eps'),
     ('image/x-met', 'met'),
     ('image/x-portable-bitmap', 'pbm'),
@@ -335,15 +338,13 @@ common_image_mimetypes = [
     ('image/x-portable-pixmap', 'ppm'),
     ('image/vnd.adobe.photoshop', 'psd'),
     ('image/x-cmu-raster', 'ras'),
-    ('image/x-sgf', 'sgf'),
-    ('image/x-svm', 'svm'),
-    ('image/tiff', 'tiff'),
-    ('image/x-wmf', 'wmf'),
     ('image/x-xbitmap', 'xbm'),
     ('image/x-xpixmap', 'xpm'),
     ('image/gif', 'gif'),
     ('image/jpeg', 'jpeg'),
     ('image/png', 'png'),
+# pdf, etc.
+    ('application/pdf', 'pdf'),
 ]
 
 for (mimetype,extension) in mimetypes.items():
@@ -367,6 +368,9 @@ for (mimetype,extension) in mimetypes.items():
 for (mimetype,extension) in mimetypes.items():
     get_through_rss_query(openoffice, mimetype, "ooo", extension)
 
-get_launchpad_bugs("lp")
+try:
+    get_launchpad_bugs("lp")
+except ImportError:
+    print "launchpadlib unavailable, skipping Ubuntu tracker"
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
