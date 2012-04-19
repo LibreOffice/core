@@ -278,7 +278,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nCurrentStyleIndex(0),
     m_bEq(false),
     m_bFormField(false),
-    m_bWasInFrame(false),
     m_bIsInFrame(false),
     m_aUnicodeBuffer(),
     m_aHexBuffer()
@@ -1408,8 +1407,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
-                m_bWasInFrame = m_aStates.top().aFrame.inFrame();
-                if (!m_bWasInFrame)
+                if (!m_aStates.top().aFrame.inFrame())
                     m_bNeedPar = false;
             }
             break;

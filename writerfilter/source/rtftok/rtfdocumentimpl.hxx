@@ -478,8 +478,6 @@ namespace writerfilter {
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
                 bool m_bFormField;
-                /// If we were in a frame.
-                bool m_bWasInFrame;
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
                 bool m_bIsInFrame;
                 // Unicode characters are collected here so we don't have to send them one by one.
