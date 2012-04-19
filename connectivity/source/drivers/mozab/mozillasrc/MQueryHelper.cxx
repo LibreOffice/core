@@ -195,7 +195,7 @@ MQueryHelperResultEntry*
 MQueryHelper::next( )
 {
     MQueryHelperResultEntry* result;
-    sal_Int32                     index;
+    sal_uInt32 index;
 
     m_aMutex.acquire();
     index = m_nIndex;

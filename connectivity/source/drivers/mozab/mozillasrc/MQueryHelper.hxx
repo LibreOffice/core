@@ -76,7 +76,7 @@ namespace connectivity
             mutable ::osl::Mutex        m_aMutex;
             ::osl::Condition    m_aCondition;
             resultsArray        m_aResults;
-            sal_Int32           m_nIndex;
+            sal_uInt32          m_nIndex;
             sal_Bool            m_bHasMore;
             sal_Bool            m_bAtEnd;
             sal_Bool            m_bErrorCondition;
