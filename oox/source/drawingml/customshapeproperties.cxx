@@ -56,6 +56,7 @@ CustomShapeProperties::CustomShapeProperties()
 : mnShapePresetType ( -1 )
 , mbMirroredX   ( sal_False )
 , mbMirroredY   ( sal_False )
+, mnTextRotateAngle ( 0 )
 , mnArcNum ( 0 )
 {
 }
