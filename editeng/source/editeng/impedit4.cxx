@@ -86,7 +86,6 @@
 #include <editeng/edtdlg.hxx>
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -179,7 +178,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
     DBG_ASSERT(pPool && pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EditEngineItemPool")),
         "ReadRTF: no EditEnginePool!");
 
-    boost::scoped_ptr<EditRTFParser> xPrsr(new EditRTFParser(rInput, aSel, *pPool, pEditEngine));
+    EditRTFParserRef xPrsr = new EditRTFParser(rInput, aSel, *pPool, pEditEngine);
     SvParserState eState = xPrsr->CallParser();
     if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
     {
