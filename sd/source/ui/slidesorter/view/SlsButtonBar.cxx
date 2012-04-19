@@ -734,9 +734,9 @@ ButtonBar::BackgroundTheme::BackgroundTheme (
     const ::boost::shared_ptr<Theme>& rpTheme,
     const ::std::vector<SharedButton>& rButtons)
     : mpTheme(rpTheme),
+      meIconSize( Button::IconSize_Large ),
       maButtonArea(),
       maBackgroundLocation(),
-      meIconSize(IconSize_Large),
       mePosition( BOTTOM )
 {
     UpdateMinimumIconSizes(rButtons);
