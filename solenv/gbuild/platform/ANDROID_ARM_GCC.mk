@@ -51,6 +51,8 @@ gb_CppunitTest_CPPTESTPRECOMMAND := :
 
 gb_LinkTarget_LDFLAGS += \
     -Wl,-z,defs \
+	-Wl,--as-needed \
+	-Wl,--no-add-needed
 
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\

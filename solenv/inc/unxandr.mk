@@ -47,8 +47,11 @@ CDEFS !:= $(subst,-D_REENTRANT, $(CDEFS))
 # Thus for Android we never build executable programs, just shared
 # libraries that the NativeActivity Java code will load.
 
-LINKFLAGSAPPGUI=-shared
-LINKFLAGSAPPCUI=-shared
+LINKFLAGSAPPGUI=-shared -Wl,--as-needed -Wl,--no-add-needed
+LINKFLAGSAPPCUI=-shared -Wl,--as-needed -Wl,--no-add-needed
+
+LINKFLAGSSHLGUI+= -Wl,--as-needed -Wl,--no-add-needed
+LINKFLAGSSHLCUI+= -Wl,--as-needed -Wl,--no-add-needed
 
 STDLIBGUIMT+=-llog -landroid -lgnustl_shared
 STDLIBCUIMT+=-llog -landroid -lgnustl_shared
