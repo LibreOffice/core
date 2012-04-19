@@ -2231,6 +2231,8 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
                 // to do this we need to synchronize with the XServer
                 GetGenericData()->ErrorTrapPush();
                 XSetInputFocus( getDisplay()->GetDisplay(), widget_get_xid(m_pWindow), RevertToParent, CurrentTime );
+                // fdo#46687 - an XSync should not be necessary - but for some reason it is.
+                XSync( getDisplay()->GetDisplay(), False );
                 GetGenericData()->ErrorTrapPop();
             }
 #endif
@@ -3239,9 +3241,11 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 #if !GTK_CHECK_VERSION(3,0,0)
     if( bSetFocus )
     {
+        GetGenericData()->ErrorTrapPush();
         XSetInputFocus( pThis->getDisplay()->GetDisplay(),
                         widget_get_xid(pWidget),
                         RevertToParent, CurrentTime );
+        GetGenericData()->ErrorTrapPop();
     }
 #else
     (void)pWidget; (void)bSetFocus;
