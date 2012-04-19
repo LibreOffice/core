@@ -613,14 +613,6 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 
     mnScansize = static_cast< sal_uInt32 >( nScansize64 );
 
-    // TODO: switch between both scanlines instead of copying
-    mpInflateInBuf = new (std::nothrow) sal_uInt8[ mnScansize ];
-    mpScanCurrent = mpInflateInBuf;
-    mpScanPrior = new (std::nothrow) sal_uInt8[ mnScansize ];
-
-    if ( !mpInflateInBuf || !mpScanPrior )
-        return sal_False;
-
     // calculate target size from original size and the preview hint
     if( rPreviewSizeHint.Width() || rPreviewSizeHint.Height() )
     {
@@ -654,6 +646,25 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 
     maTargetSize.Width()  = (maOrigSize.Width() + mnPreviewMask) >> mnPreviewShift;
     maTargetSize.Height() = (maOrigSize.Height() + mnPreviewMask) >> mnPreviewShift;
+
+    //round bits up to nearest multiple of 8 and divide by 8 to get num of bytes per pixel
+    int nBytesPerPixel = ((mnTargetDepth + 7) & ~7)/8;
+
+    //stupidly big, forget about it
+    if (maTargetSize.Width() >= SAL_MAX_INT32 / nBytesPerPixel / maTargetSize.Height())
+    {
+        SAL_WARN( "vcl", "overlarge png dimensions: " <<
+            maTargetSize.Width() << " x " << maTargetSize.Height() << " depth: " << mnTargetDepth);
+        return sal_False;
+    }
+
+    // TODO: switch between both scanlines instead of copying
+    mpInflateInBuf = new (std::nothrow) sal_uInt8[ mnScansize ];
+    mpScanCurrent = mpInflateInBuf;
+    mpScanPrior = new (std::nothrow) sal_uInt8[ mnScansize ];
+
+    if ( !mpInflateInBuf || !mpScanPrior )
+        return sal_False;
 
     mpBmp = new Bitmap( maTargetSize, mnTargetDepth );
     mpAcc = mpBmp->AcquireWriteAccess();
