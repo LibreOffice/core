@@ -167,6 +167,9 @@ CONFIGURE_ACTION=.$/configure
 
 .IF "$(OS)"=="IOS"
 CONFIGURE_ACTION+=LIBS=-liconv
+.ENDIF
+
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
@@ -202,11 +205,8 @@ OUT2INC+=src$/raptor.h
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libraptor-lo.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib
 OUT2BIN+=src/raptor-config
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 OUT2LIB+=src$/.libs$/libraptor.a
-OUT2BIN+=src/raptor-config
-.ELIF "$(OS)"=="ANDROID"
-OUT2LIB+=src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="AIX"
 OUT2LIB+=src$/.libs$/libraptor-lo.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so

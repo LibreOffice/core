@@ -404,6 +404,8 @@ endef
 
 else # !SYSTEM_REDLAND
 
+ifneq ($(OS),ANDROID)
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	rdf \
 ))
@@ -420,6 +422,26 @@ $(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal.1 libraptor.1,-
 endif
 
 endef
+
+else # ANDROID
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	rdf \
+	rasqal \
+	raptor \
+))
+
+define gb_LinkTarget__use_librdf
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	rdf \
+	rasqal \
+	raptor \
+	crypto \
+)
+
+endef
+
+endif # ANDROID
 
 endif # SYSTEM_REDLAND
 

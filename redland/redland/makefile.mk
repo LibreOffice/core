@@ -144,7 +144,7 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
 CONFIGURE_FLAGS=--disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
-.IF "$(OS)"=="IOS"
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 CONFIGURE_FLAGS+= --disable-shared
 .ELSE
 CONFIGURE_FLAGS+= --disable-static
@@ -169,10 +169,8 @@ OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=librdf$/.libs$/librdf-lo.$(REDLAND_MAJOR).dylib
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 OUT2LIB+=librdf$/.libs$/librdf.a
-.ELIF "$(OS)"=="ANDROID"
-OUT2LIB+=librdf$/.libs$/librdf.so
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=librdf$/.libs$/*.a
