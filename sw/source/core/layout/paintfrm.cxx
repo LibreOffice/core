@@ -643,9 +643,9 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
     SvPtrarr   aCheck( 64 );
 
-    for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
+    for (size_t i = 0; i < this->size(); )
     {
-        SwLineRect &rL1 = (*it);
+        SwLineRect &rL1 = (*this)[i];
         if ( !rL1.GetTab() || rL1.IsPainted() || rL1.IsLocked() )
             continue;
 
@@ -737,6 +737,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
                             {
+                                --i;
                                 k = aCheck.Count();
                                 break;
                             }
@@ -776,6 +777,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
                             {
+                                --i;
                                 k = aCheck.Count();
                                 break;
                             }
@@ -790,7 +792,11 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         }
         if ( bRemove )
         {
-            this->erase( it );
+            this->erase(this->begin() + i);
+        }
+        else
+        {
+            ++i;
         }
     }
 }
@@ -806,11 +812,11 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 {
     // All help lines that are covered by any border will be removed or split
 
-    for (SwSubsRects::iterator it = this->begin(); it != this->end(); ++it)
+    for (size_t i = 0; i < this->size(); ++i)
     {
         // get a copy instead of a reference, because an <insert> may destroy
         // the object due to a necessary array resize.
-        const SwLineRect aSubsLineRect = SwLineRect(*it);
+        const SwLineRect aSubsLineRect = SwLineRect((*this)[i]);
 
         // add condition <aSubsLineRect.IsLocked()> in order to consider only
         // border lines, which are *not* locked.
@@ -865,7 +871,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                             this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        this->erase(it);
+                        this->erase(this->begin() + i);
+                        --i;
                         break;
                     }
                 }
@@ -890,7 +897,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                             this->push_back(  SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        this->erase(it);
+                        this->erase(this->begin() + i);
+                        --i;
                         break;
                     }
                 }
