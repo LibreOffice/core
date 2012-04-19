@@ -34,12 +34,6 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#if defined LINUX /* bad hack */
-int pthread_mutexattr_setkind_np(pthread_mutexattr_t *, int);
-#define pthread_mutexattr_settype pthread_mutexattr_setkind_np
-#define PTHREAD_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE_NP
-#endif
-
 typedef struct _oslMutexImpl
 {
     pthread_mutex_t mutex;
