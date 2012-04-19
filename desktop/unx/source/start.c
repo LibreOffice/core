@@ -766,7 +766,7 @@ exec_javaldx (Args *args)
 #endif
 
 // has to be a global :(
-oslProcess * g_pProcess = 0;
+oslProcess * volatile g_pProcess = 0;
 
 void sigterm_handler(int ignored)
 {
@@ -776,7 +776,9 @@ void sigterm_handler(int ignored)
         // forward signal to soffice.bin
         osl_terminateProcess(g_pProcess);
     }
+    _exit(255);
 }
+
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
@@ -787,10 +789,18 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     Args *args;
     int status = 0;
     struct splash* splash = NULL;
+    struct sigaction sigpipe_action;
+    struct sigaction sigterm_action;
 
     /* turn SIGPIPE into an error */
-    signal( SIGPIPE, SIG_IGN );
-    signal( SIGTERM, &sigterm_handler );
+    memset(&sigpipe_action, 0, sizeof(struct sigaction));
+    sigpipe_action.sa_handler = SIG_IGN;
+    sigemptyset(&sigpipe_action.sa_mask);
+    sigaction(SIGPIPE, &sigpipe_action, 0);
+    memset(&sigterm_action, 0, sizeof(struct sigaction));
+    sigterm_action.sa_handler = &sigterm_handler;
+    sigemptyset(&sigterm_action.sa_mask);
+    sigaction(SIGTERM, &sigterm_action, 0);
 
     args = args_parse ();
     args->pAppPath = get_app_path( argv[0] );
