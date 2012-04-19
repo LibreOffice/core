@@ -157,6 +157,7 @@ gb_LinkTarget__RPATHS := \
 	UREBIN: \
 	OOO:@__________________________________________________OOO/ \
 	SDKBIN: \
+	OXT: \
 	NONE:@__VIA_LIBRARY_PATH__@ \
 
 # $(call gb_LinkTarget__get_installname,libfilename,soversion,layerprefix)

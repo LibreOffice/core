@@ -204,6 +204,7 @@ gb_LinkTarget__RPATHS := \
 	UREBIN:\dORIGIN/../lib:\dORIGIN \
 	OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
+	OXT:\dORIGIN/../lib:\dORIGIN \
 	NONE:\dORIGIN/../lib:\dORIGIN \
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
