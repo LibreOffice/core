@@ -3968,22 +3968,27 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& r
 }
 
 
-bool ScCompiler::HandleRange()
+ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 {
     ScRangeData* pRangeData = NULL;
-
-    bool bGlobal = pToken->IsGlobal();
+    bool bGlobal = rToken.IsGlobal();
     if (bGlobal)
         // global named range.
-        pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
+        pRangeData = pDoc->GetRangeName()->findByIndex( rToken.GetIndex());
     else
     {
         // sheet local named range.
-        ScRangeName* pRN = pDoc->GetRangeName(aPos.Tab());
+        const ScRangeName* pRN = pDoc->GetRangeName( aPos.Tab());
         if (pRN)
-            pRangeData = pRN->findByIndex( pToken->GetIndex() );
+            pRangeData = pRN->findByIndex( rToken.GetIndex());
     }
+    return pRangeData;
+}
 
+
+bool ScCompiler::HandleRange()
+{
+    const ScRangeData* pRangeData = GetRangeData( *pToken);
     if (pRangeData)
     {
         sal_uInt16 nErr = pRangeData->GetErrCode();
@@ -4108,7 +4113,7 @@ bool ScCompiler::HasModifiedRange()
         OpCode eOpCode = t->GetOpCode();
         if ( eOpCode == ocName )
         {
-            ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+            const ScRangeData* pRangeData = GetRangeData( *t);
             if (pRangeData && pRangeData->IsModified())
                 return true;
         }
@@ -4229,7 +4234,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( j->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( j->GetIndex() );
+                ScRangeData* pName = GetRangeData( *j);
                 if (pName && pName->HasType(RT_SHARED))
                     pRangeData = pName;
             }
@@ -4282,7 +4287,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( t->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( t->GetIndex() );
+                ScRangeData* pName = GetRangeData( *t);
                 if (pName && pName->HasType(RT_SHAREDMOD))
                 {
                     pRangeData = pName;     // maybe need a replacement of shared with own code
@@ -4444,7 +4449,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
 bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      const ScRange& r,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     bool& rChanged, bool bSharedFormula)
+                                     bool& rChanged, bool bSharedFormula, bool bLocal)
 {
     bool bRelRef = false;   // set if relative reference
     rChanged = false;
@@ -4464,15 +4469,12 @@ bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
         if (!bUpdate && t->GetType() == svDoubleRef)
             bUpdate = !rRef.Ref2.IsColRel() || !rRef.Ref2.IsRowRel() ||
                 !rRef.Ref2.IsTabRel();
-        if (!bSharedFormula)
+        if (!bSharedFormula && !bLocal)
         {
             // We cannot update names with sheet-relative references, they may
             // be used on other sheets as well and the resulting reference
             // would be wrong. This is a dilemma if col/row would need to be
             // updated for the current usage.
-            // TODO: seems the only way out of this would be to not allow
-            // relative sheet references and have sheet-local names that can be
-            // copied along with sheets.
             bUpdate = bUpdate && !rRef.Ref1.IsTabRel() && !rRef.Ref2.IsTabRel();
         }
         if (bUpdate)
@@ -4575,7 +4577,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, bool bIsName , SCTAB nNe
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+                ScRangeData* pName = GetRangeData( *t);
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4686,7 +4688,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, bool /* bIsMove */, bool 
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+                ScRangeData* pName = GetRangeData( *t);
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4896,7 +4898,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+                ScRangeData* pName = GetRangeData( *t);
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -5150,19 +5152,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            bool bGlobal = _pTokenP->IsGlobal();
-            ScRangeData* pData = NULL;
-            if (bGlobal)
-                // global named range.
-                pData = pDoc->GetRangeName()->findByIndex(_pTokenP->GetIndex());
-            else
-            {
-                // sheet local named range.
-                ScRangeName* pRN = pDoc->GetRangeName(aPos.Tab());
-                if (pRN)
-                    pData = pRN->findByIndex(_pTokenP->GetIndex());
-            }
-
+            ScRangeData* pData = GetRangeData( *_pTokenP);
             if (pData)
             {
                 if (pData->HasType(RT_SHARED))
