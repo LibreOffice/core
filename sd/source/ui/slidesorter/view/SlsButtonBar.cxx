@@ -736,6 +736,7 @@ ButtonBar::BackgroundTheme::BackgroundTheme (
     : mpTheme(rpTheme),
       maButtonArea(),
       maBackgroundLocation(),
+      meIconSize(IconSize_Large),
       mePosition( BOTTOM )
 {
     UpdateMinimumIconSizes(rButtons);
