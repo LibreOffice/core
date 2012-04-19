@@ -768,7 +768,7 @@ const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
     return itr == maData.end() ? NULL : itr->second;
 }
 
-ScRangeData* ScRangeName::findByIndex(sal_uInt16 i)
+ScRangeData* ScRangeName::findByIndex(sal_uInt16 i) const
 {
     if (!i)
         // index should never be zero.

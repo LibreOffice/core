@@ -1372,15 +1372,17 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         i = 0;
         iMax = MAXCOL;
     }
-    for ( ; i<=iMax; i++)
-        bUpdated |= aCol[i].UpdateReference(
-            eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, pUndoDoc );
 
+    // Named expressions need to be updated before formulas acessing them.
     if (mpRangeName)
     {
         ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );;
         mpRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, true );
     }
+
+    for ( ; i<=iMax; i++)
+        bUpdated |= aCol[i].UpdateReference(
+            eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, pUndoDoc );
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );

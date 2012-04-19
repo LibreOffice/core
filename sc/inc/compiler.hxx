@@ -364,6 +364,13 @@ private:
 
     void SetRelNameReference();
 
+    /** Obtain range data for ocName token, global or sheet local.
+
+        Prerequisite: rToken is a FormulaIndexToken so IsGlobal() and
+        GetIndex() can be called on it. We don't check with RTTI.
+     */
+    ScRangeData* GetRangeData( const formula::FormulaToken& pToken ) const;
+
     static void InitCharClassEnglish();
 
 public:

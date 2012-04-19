@@ -201,7 +201,7 @@ public:
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
     SC_DLLPUBLIC ScRangeData* findByUpperName(const rtl::OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
-    SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);
+    SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false);
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
