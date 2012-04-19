@@ -126,15 +126,6 @@ private:
     com::sun::star::uno::Reference< XLocaleData > localedata;
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > caseignore;
 
-    /** structure to cache the last transliteration body used. */
-    struct TransBody
-    {
-        ::osl::Mutex mutex;
-        ::rtl::OUString Name;
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedTransliteration > Body;
-    };
-    static TransBody lastTransBody;
-
     virtual sal_Bool SAL_CALL loadModuleByName( const rtl::OUString& implName,
         com::sun::star::uno::Reference<com::sun::star::i18n::XExtendedTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
         throw(com::sun::star::uno::RuntimeException);

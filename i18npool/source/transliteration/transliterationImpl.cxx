@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <rtl/instance.hxx>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -142,8 +143,6 @@ static struct TMlist {
 //  TmItem2 (NumToCharThai),            // () (70)
   {(TransliterationModules)0, (TransliterationModulesNew)0,  NULL}
 };
-
-TransliterationImpl::TransBody TransliterationImpl::lastTransBody;
 
 // Constructor/Destructor
 TransliterationImpl::TransliterationImpl(const Reference <XMultiServiceFactory>& xMSF) : xSMgr(xMSF)
@@ -587,11 +586,23 @@ TransliterationImpl::clear()
     caseignoreOnly = sal_True;
 }
 
+namespace
+{
+    /** structure to cache the last transliteration body used. */
+    struct TransBody
+    {
+        ::rtl::OUString Name;
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedTransliteration > Body;
+    };
+    class theTransBodyMutex : public rtl::Static<osl::Mutex, theTransBodyMutex> {};
+}
+
 void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTransliteration>& body )
     throw (RuntimeException)
 {
     assert(!implName.isEmpty());
-    ::osl::MutexGuard guard(lastTransBody.mutex);
+    ::osl::MutexGuard guard(theTransBodyMutex::get());
+    static TransBody lastTransBody;
     if (implName != lastTransBody.Name)
     {
         lastTransBody.Body.set(
