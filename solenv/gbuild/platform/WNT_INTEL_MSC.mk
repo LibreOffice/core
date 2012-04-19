@@ -432,6 +432,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -454,6 +455,7 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
+	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))

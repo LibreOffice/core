@@ -136,6 +136,7 @@ gb_Library__COMPONENTPREFIXES := \
     NONE:vnd.sun.star.expand:\dLO_LIB_DIR/ \
     OOO:vnd.sun.star.expand:\dLO_LIB_DIR/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+    OXT:./ \
 
 define gb_Library__forward_to_Linktarget
 gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktargetname,$$(1)),$$(2),$$(3))
