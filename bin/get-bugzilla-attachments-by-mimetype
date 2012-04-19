@@ -348,10 +348,16 @@ common_noncore_mimetypes = [
 ]
 
 for (mimetype,extension) in mimetypes.items():
-    get_through_rss_query(novell, mimetype, "novell", extension)
+    get_through_rss_query(freedesktop, mimetype, "fdo", extension)
 
 for (mimetype,extension) in mimetypes.items():
-    get_through_rss_query(kde, mimetype, "kde", extension)
+    get_through_rpc_query(redhatrpc, redhatbug, mimetype, "rhbz", extension)
+
+for (mimetype,extension) in mimetypes.items():
+    get_through_rss_query(openoffice, mimetype, "ooo", extension)
+
+for (mimetype,extension) in mimetypes.items():
+    get_through_rss_query(novell, mimetype, "novell", extension)
 
 for (mimetype,extension) in mimetypes.items():
     get_through_rss_query(gnome, mimetype, "gnome", extension)
@@ -360,13 +366,7 @@ for (mimetype,extension) in mimetypes.items():
     get_through_rss_query(abisource, mimetype, "abi", extension)
 
 for (mimetype,extension) in mimetypes.items():
-    get_through_rss_query(freedesktop, mimetype, "fdo", extension)
-
-for (mimetype,extension) in mimetypes.items():
-    get_through_rpc_query(redhatrpc, redhatbug, mimetype, "rhbz", extension)
-
-for (mimetype,extension) in mimetypes.items():
-    get_through_rss_query(openoffice, mimetype, "ooo", extension)
+    get_through_rss_query(kde, mimetype, "kde", extension)
 
 try:
     get_launchpad_bugs("lp")
