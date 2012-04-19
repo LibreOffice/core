@@ -1219,7 +1219,7 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm, const String& rFormatCode )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->singleElement( XML_numFmt,
-            XML_numFmtId,   OString::valueOf( mnXclNumFmt ).getStr(),
+            XML_numFmtId,   OString::valueOf( static_cast<sal_Int32>(mnXclNumFmt) ).getStr(),
             XML_formatCode, XclXmlUtils::ToOString( rFormatCode ).getStr(),
             FSEND );
 }
