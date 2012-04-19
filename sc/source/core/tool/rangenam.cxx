@@ -300,7 +300,7 @@ void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& r
 
 void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal )
 {
     bool bChanged = false;
 
@@ -312,7 +312,7 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
         aComp.SetGrammar(pDoc->GetGrammar());
         const bool bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
                                                     nDx, nDy, nDz,
-                                                    bChanged, bSharedFormula);
+                                                    bChanged, bSharedFormula, bLocal);
         if (bSharedFormula)
         {
             if (bRelRef)
@@ -796,7 +796,7 @@ const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
     return itr == maData.end() ? NULL : itr->second;
 }
 
-ScRangeData* ScRangeName::findByIndex(sal_uInt16 i)
+ScRangeData* ScRangeName::findByIndex(sal_uInt16 i) const
 {
     if (!i)
         // index should never be zero.
@@ -807,11 +807,11 @@ ScRangeData* ScRangeName::findByIndex(sal_uInt16 i)
 }
 
 void ScRangeName::UpdateReference(
-    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
+    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->second->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+        itr->second->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz, bLocal);
 }
 
 void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets)
