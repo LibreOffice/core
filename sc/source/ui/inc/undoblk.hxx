@@ -199,7 +199,7 @@ class ScUndoPaste: public ScMultiBlockUndo
 {
 public:
     TYPEINFO();
-    SC_DLLPUBLIC ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
+    ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                 sal_uInt16 nNewFlags,

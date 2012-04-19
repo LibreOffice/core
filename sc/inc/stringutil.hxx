@@ -93,7 +93,7 @@ public:
      *
      * @return true if the string is a valid number, false otherwise.
      */
-    SC_DLLPUBLIC static bool parseSimpleNumber(
+    static bool parseSimpleNumber(
         const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
 };
 

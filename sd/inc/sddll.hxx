@@ -31,7 +31,6 @@
 
 #include <sfx2/module.hxx>
 #include <sfx2/sfxdefs.hxx>
-#include "sddllapi.h"
 
 class SvFactory;
 class SotFactory;
@@ -49,7 +48,7 @@ class SfxFilter;
 |*
 \************************************************************************/
 
-class SD_DLLPUBLIC SdDLL
+class SdDLL
 {
 protected:
     static void     RegisterFactorys();

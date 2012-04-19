@@ -32,7 +32,6 @@
 #include "rangelst.hxx"
 #include "rangenam.hxx"
 #include "charthelper.hxx"
-#include "scdllapi.h"
 
 #include <vector>
 
@@ -51,7 +50,7 @@ struct ScClipParam
     ScRangeListVector   maProtectedChartRangesVector;
 
     ScClipParam();
-    SC_DLLPUBLIC ScClipParam(const ScRange& rRange, bool bCutMode);
+    ScClipParam(const ScRange& rRange, bool bCutMode);
     explicit ScClipParam(const ScClipParam& r);
 
     bool isMultiRange() const;

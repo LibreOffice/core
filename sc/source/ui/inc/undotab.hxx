@@ -143,7 +143,7 @@ class ScUndoRenameTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-    SC_DLLPUBLIC    ScUndoRenameTab(
+                    ScUndoRenameTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
                             const String& rOldName,
@@ -228,7 +228,7 @@ class ScUndoTabColor: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-    SC_DLLPUBLIC    ScUndoTabColor(
+                    ScUndoTabColor(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
                             const Color& aOTabBgColor,

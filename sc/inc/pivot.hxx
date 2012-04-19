@@ -105,9 +105,9 @@ struct ScPivotParam
     bool            bMakeTotalCol;
     bool            bMakeTotalRow;
 
-    SC_DLLPUBLIC ScPivotParam();
+    ScPivotParam();
     ScPivotParam( const ScPivotParam& r );
-    SC_DLLPUBLIC ~ScPivotParam();
+    ~ScPivotParam();
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
     bool            operator==      ( const ScPivotParam& r ) const;

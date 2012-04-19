@@ -30,7 +30,6 @@
 
 #include <i18npool/lang.h>
 #include <modeltoviewhelper.hxx>
-#include "swdllapi.h"
 
 class SwTxtNode;
 
@@ -40,7 +39,7 @@ class SwTxtNode;
  * nacheinander zur Verfuegung stellt.
  *************************************************************************/
 
-class SW_DLLPUBLIC SwScanner
+class SwScanner
 {
     rtl::OUString aWord;
     const SwTxtNode& rNode;

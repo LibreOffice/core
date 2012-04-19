@@ -195,7 +195,7 @@ public:
     typedef DataType::const_iterator const_iterator;
     typedef DataType::iterator iterator;
 
-    SC_DLLPUBLIC ScRangeName();
+    ScRangeName();
     SC_DLLPUBLIC ScRangeName(const ScRangeName& r);
 
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
@@ -236,7 +236,7 @@ public:
      * valid.
      */
     void erase(const iterator& itr);
-    SC_DLLPUBLIC void clear();
+    void clear();
     bool operator== (const ScRangeName& r) const;
 };
 

@@ -75,8 +75,8 @@ public:
     SC_DLLPUBLIC void SetRangeName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC const ::rtl::OUString& GetRangeName() const;
     bool HasRangeName() const;
-    SC_DLLPUBLIC void SetQueryParam(const ScQueryParam& rParam);
-    SC_DLLPUBLIC const ScQueryParam& GetQueryParam() const;
+    void SetQueryParam(const ScQueryParam& rParam);
+    const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
     SC_DLLPUBLIC const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;

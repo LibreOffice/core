@@ -609,7 +609,7 @@ public:
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();
-    SC_DLLPUBLIC static ScFunctionMgr*   GetStarCalcFunctionMgr();
+    static ScFunctionMgr*   GetStarCalcFunctionMgr();
     static void             ResetFunctionList();
 
     static String           GetErrorString(sal_uInt16 nErrNumber);
