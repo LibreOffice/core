@@ -437,9 +437,15 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	cairo \
 ))
 ifneq ($(OS),WNT)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	pixman-1 \
+))
+else
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pixman-1 \
 ))
+endif # MACOSX
 endif # WNT
 
 define gb_LinkTarget__use_cairo
