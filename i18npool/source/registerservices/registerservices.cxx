@@ -592,7 +592,8 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Cha
             aServiceNames.getArray()[0] =
                 ::rtl::OUString::createFromAscii( pArr->pServiceNm );
             xFactory = ::cppu::createSingleFactory(
-                    pServiceManager, aServiceNames.getArray()[0],
+                    pServiceManager,
+                    ::rtl::OUString::createFromAscii( pArr->pImplementationNm ),
                     *pArr->pFn, aServiceNames );
             break;
         }
