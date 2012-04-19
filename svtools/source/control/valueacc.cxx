@@ -951,16 +951,17 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    String              aRet;
+    rtl::OUString aRet;
 
     if( mpParent )
     {
         aRet = mpParent->maText;
 
-        if( !aRet.Len() )
+        if( aRet.isEmpty() )
         {
-            aRet = String( RTL_CONSTASCII_USTRINGPARAM( "Item " ) );
-            aRet += String::CreateFromInt32( mpParent->mnId );
+            rtl::OUStringBuffer aBuffer("Item ");
+            aBuffer.append(static_cast<sal_Int32>(mpParent->mnId));
+            aRet = aBuffer.makeStringAndClear();
         }
     }
 

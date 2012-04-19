@@ -510,7 +510,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         nMaxWidth /= nTickUnit;
     else
         nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
-    UniString aNumStr( UniString::CreateFromInt32( nMaxWidth ) );
+    UniString aNumStr(rtl::OUString::valueOf(static_cast<sal_Int32>(nMaxWidth)));
     long nTxtWidth = GetTextWidth( aNumStr );
     const long nTextOff   = 4;
     if ( nTickWidth < nTxtWidth+nTextOff )
@@ -593,7 +593,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 // Tick3 - Output (Text)
                 if ( !(nTick % nTick3) )
                 {
-                    //aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
                     if ( ( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ) )
                         aNumStr = UniString::CreateFromInt32( nTick / nTickUnit );
                     else

@@ -232,8 +232,8 @@ void Calendar::ImplInit( WinBits nWinStyle )
     maWeekText = XubString( SvtResId( STR_SVT_CALENDAR_WEEK ) );
 
     // Tagestexte anlegen
-    for ( sal_uInt16 i = 0; i < 31; i++ )
-        mpDayText[i] = new UniString( UniString::CreateFromInt32( i+1 ) );
+    for (sal_Int32 i = 0; i < 31; ++i)
+        mpDayText[i] = new UniString(rtl::OUString::valueOf(i+1));
 
     maDragScrollTimer.SetTimeoutHdl( STATIC_LINK( this, Calendar, ScrollHdl ) );
     maDragScrollTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
@@ -979,8 +979,8 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 maCalendarWrapper.setGregorianDateTime( aDate);
                 for ( sal_uInt16 nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
                 {
-                    sal_Int16 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
-                    String  aWeekText( String::CreateFromInt32( nWeek));
+                    sal_Int32 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
+                    rtl::OUString aWeekText(rtl::OUString::valueOf(nWeek));
                     long    nOffX = (mnWeekWidth-WEEKNUMBER_OFFX)-GetTextWidth( aWeekText );
                     long    nOffY = (mnDayHeight-GetTextHeight())/2;
                     DrawText( Point( nDayX+nOffX, nDayY+nOffY ), aWeekText );
