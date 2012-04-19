@@ -125,7 +125,6 @@ sal_Bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
 
         if (aSfxRequest.GetSlot() == SID_DRAW_CAPTION_VERTICAL)

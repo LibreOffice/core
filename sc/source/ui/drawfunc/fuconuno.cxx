@@ -109,7 +109,6 @@ sal_Bool FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
         bReturn = sal_True;
     }
