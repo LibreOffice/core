@@ -1,4 +1,4 @@
-..\%__SRC%\misc\build\freetype*\objs\.libs\*.so %_DEST%\lib
+..\%__SRC%\misc\build\freetype*\objs\.libs\*.a %_DEST%\lib
 
 ..\%__SRC%\misc\build\freetype*\builds\unix\freetype-config %_DEST%\bin
 

@@ -183,6 +183,12 @@ $(call gb_LinkTarget__use_expat,$(1),expat_xmlparse)
 
 endef
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	fontconfig \
+	freetype \
+))
+endif
 
 ifeq ($(SYSTEM_HUNSPELL),YES)
 
@@ -478,7 +484,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(FREETYPE_CFLAGS) \
 )
+
+ifneq ($(OS),ANDROID)
 $(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
+else
+$(call gb_LinkTarget_use_static_libraries,$(1),freetype)
+endif
 
 endef
 
@@ -487,7 +498,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(FONTCONFIG_CFLAGS) \
 )
+
+ifneq ($(OS),ANDROID)
 $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
+else
+$(call gb_LinkTarget_use_static_libraries,$(1),fontconfig)
+endif
 
 endef
 

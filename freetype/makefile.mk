@@ -44,7 +44,7 @@ PATCH_FILES=$(TARFILE_NAME).patch
 CONFIGURE_ACTION=./configure
 
 CONFIGURE_FLAGS=\
-    --disable-static \
+    --disable-shared \
     --without-zlib \
     --without-bzip2 \
     --prefix=$(SOLARVER)/$(INPATH) --includedir=$(SOLARVER)/$(INPATH)/inc/external \

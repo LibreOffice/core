@@ -47,8 +47,10 @@ CONFIGURE_ACTION=./configure
 CONFIGURE_ACTION!:=CFLAGS=-g $(CONFIGURE_ACTION)
 .ENDIF
 
+# This "bundled" fontconfig is built only when cross-compiling for Android
+
 CONFIGURE_FLAGS=\
-    --disable-static \
+    --disable-shared \
     --with-arch=arm \
     --with-expat-includes=$(SOLARVER)/$(INPATH)/inc/external \
     --with-expat-lib=$(SOLARVER)/$(INPATH)/lib \
