@@ -87,12 +87,6 @@ void SfxStylesInfo_Impl::setModel(const ::com::sun::star::uno::Reference< ::com:
     m_xDoc = xModel;
 }
 
-static ::rtl::OUString FAMILY_CHARACTERSTYLE (RTL_CONSTASCII_USTRINGPARAM("CharacterStyles") );
-static ::rtl::OUString FAMILY_PARAGRAPHSTYLE (RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
-static ::rtl::OUString FAMILY_FRAMESTYLE     (RTL_CONSTASCII_USTRINGPARAM("FrameStyles"    ) );
-static ::rtl::OUString FAMILY_PAGESTYLE      (RTL_CONSTASCII_USTRINGPARAM("PageStyles"     ) );
-static ::rtl::OUString FAMILY_NUMBERINGSTYLE (RTL_CONSTASCII_USTRINGPARAM("NumberingStyles") );
-
 static ::rtl::OUString CMDURL_SPART  (RTL_CONSTASCII_USTRINGPARAM(".uno:StyleApply?Style:string=") );
 static ::rtl::OUString CMDURL_FPART2 (RTL_CONSTASCII_USTRINGPARAM("&FamilyName:string=") );
 

@@ -52,8 +52,6 @@ using ::std::vector;
 
 DBG_NAME( IDEBaseWindow )
 
-const char* pRegName = "BasicIDETabBar";
-
 TYPEINIT0( IDEBaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 

@@ -109,12 +109,6 @@ const long STD_WIN_SIZE_Y = 350;
 const long STD_MIN_SIZE_X = 250;
 const long STD_MIN_SIZE_Y = 250;
 
-const long STD_WIN_POS_X = 50;
-const long STD_WIN_POS_Y = 50;
-const long WIN_BORDER = 2;
-const long MIN_WIN_SIZE_X = 50;
-const long MIN_WIN_SIZE_Y = 50;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;

@@ -63,14 +63,8 @@
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
-const long STD_WIN_POS_X = 50;
-const long STD_WIN_POS_Y = 50;
-
 const long STD_WIN_SIZE_X = 120;
 const long STD_WIN_SIZE_Y = 150;
-
-const long MIN_WIN_SIZE_X = 50;
-const long MIN_WIN_SIZE_Y = 50;
 
 const long LISTBOX_BORDER = 2;
 
