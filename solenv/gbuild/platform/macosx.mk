@@ -162,8 +162,7 @@ gb_LinkTarget__RPATHS := \
 
 # $(call gb_LinkTarget__get_installname,libfilename,soversion,layerprefix)
 define gb_LinkTarget__get_installname
-$(if $(3),-install_name '$(3)$(1)$(if $(2),.$(2))',
-	$(call gb_Output_error,cannot determine -install_name for $(3)))
+$(if $(3),-install_name '$(3)$(1)$(if $(2),.$(2))')
 endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
