@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_api,wpftdraw,\
 ))
 
 $(eval $(call gb_Library_use_libraries,wpftdraw,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

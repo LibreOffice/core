@@ -23,88 +23,43 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#include <stdio.h>
 
-#include <osl/mutex.hxx>
-#include <osl/thread.h>
-#include <cppuhelper/factory.hxx>
+#include "sal/config.h"
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "sal/types.h"
 
 #include "CDRImportFilter.hxx"
 #include "CMXImportFilter.hxx"
 #include "VisioImportFilter.hxx"
 #include "WPGImportFilter.hxx"
 
-using namespace ::rtl;
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+namespace {
 
-extern "C"
+static cppu::ImplementationEntry const services[] = {
+    { &CDRImportFilter_createInstance, &CDRImportFilter_getImplementationName,
+      &CDRImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &CMXImportFilter_createInstance, &CMXImportFilter_getImplementationName,
+      &CMXImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &VisioImportFilter_createInstance,
+      &VisioImportFilter_getImplementationName,
+      &VisioImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &WPGImportFilter_createInstance, &WPGImportFilter_getImplementationName,
+      &WPGImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 } };
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wpftdraw_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
-    SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftdraw_component_getFactory(
-        const sal_Char *pImplName, void *pServiceManager, void * /* pRegistryKey */ )
-    {
-        void *pRet = 0;
-
-        OUString implName = OUString::createFromAscii( pImplName );
-        if ( pServiceManager && implName.equals(CDRImportFilter_getImplementationName()) )
-        {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                        OUString::createFromAscii( pImplName ),
-                        CDRImportFilter_createInstance, CDRImportFilter_getSupportedServiceNames() ) );
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        if ( pServiceManager && implName.equals(CMXImportFilter_getImplementationName()) )
-        {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                        OUString::createFromAscii( pImplName ),
-                        CMXImportFilter_createInstance, CMXImportFilter_getSupportedServiceNames() ) );
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        if ( pServiceManager && implName.equals(WPGImportFilter_getImplementationName()) )
-        {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                        OUString::createFromAscii( pImplName ),
-                        WPGImportFilter_createInstance, WPGImportFilter_getSupportedServiceNames() ) );
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        if ( pServiceManager && implName.equals(VisioImportFilter_getImplementationName()) )
-        {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                        OUString::createFromAscii( pImplName ),
-                        VisioImportFilter_createInstance, VisioImportFilter_getSupportedServiceNames() ) );
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-
-        return pRet;
-    }
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
