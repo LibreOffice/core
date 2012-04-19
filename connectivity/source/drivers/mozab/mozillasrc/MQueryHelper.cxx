@@ -470,7 +470,7 @@ nsIAbCard * getUpdatedCard( nsIAbCard*  card)
         return sal_False;   \
     }
 
-sal_Int32 MQueryHelper::commitCard(const sal_Int32 rowIndex,nsIAbDirectory * directory)
+sal_Int32 MQueryHelper::commitCard(const sal_uInt32 rowIndex,nsIAbDirectory * directory)
 {
     ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory);
 
@@ -508,7 +508,7 @@ sal_Int32 MQueryHelper::commitCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
     return !(NS_FAILED(rv));
 }
 
-sal_Int32 MQueryHelper::deleteCard(const sal_Int32 rowIndex,nsIAbDirectory * directory)
+sal_Int32 MQueryHelper::deleteCard(const sal_uInt32 rowIndex,nsIAbDirectory * directory)
 {
     ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory);
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
@@ -555,7 +555,7 @@ sal_Int32 MQueryHelper::deleteCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
     return !(NS_FAILED(rv));
 }
 
-sal_Bool MQueryHelper::setCardValues(const sal_Int32 rowIndex)
+sal_Bool MQueryHelper::setCardValues(const sal_uInt32 rowIndex)
 {
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
@@ -574,7 +574,7 @@ sal_Bool MQueryHelper::setCardValues(const sal_Int32 rowIndex)
     return sal_True;
 }
 
-void MQueryHelper::getCardValues(nsIAbCard *card,sal_Int32 rowIndex)
+void MQueryHelper::getCardValues(nsIAbCard *card,sal_uInt32 rowIndex)
 {
     MQueryHelperResultEntry *resEntry;
     if (rowIndex>0)
@@ -589,7 +589,7 @@ void MQueryHelper::getCardValues(nsIAbCard *card,sal_Int32 rowIndex)
     if (!rowIndex)
         append( resEntry );
 }
-sal_Bool MQueryHelper::resyncRow(sal_Int32 rowIndex)
+sal_Bool MQueryHelper::resyncRow(sal_uInt32 rowIndex)
 {
 
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);

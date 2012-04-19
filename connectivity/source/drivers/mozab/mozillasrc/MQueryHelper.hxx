@@ -90,7 +90,7 @@ namespace connectivity
             void            clearResultOrComplete();
             void            notifyResultOrComplete();
             sal_Bool        waitForResultOrComplete( );
-            void            getCardValues(nsIAbCard  *card,sal_Int32 rowIndex=0);
+            void            getCardValues(nsIAbCard  *card,sal_uInt32 rowIndex=0);
 #if OSL_DEBUG_LEVEL > 0
             oslThreadIdentifier m_oThreadID;
 #endif
@@ -120,12 +120,12 @@ namespace connectivity
             sal_Int32                  getResultCount() const;
             sal_uInt32                 getRealCount() const;
             sal_Int32                  createNewCard(); //return Row count number
-            sal_Bool                   resyncRow(sal_Int32 rowIndex);
+            sal_Bool                   resyncRow(sal_uInt32 rowIndex);
 
             void                       notifyQueryError() ;
-            sal_Bool                   setCardValues(const sal_Int32 rowIndex);
-            sal_Int32                  commitCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
-            sal_Int32                  deleteCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
+            sal_Bool                   setCardValues(const sal_uInt32 rowIndex);
+            sal_Int32                  commitCard(const sal_uInt32 rowIndex, nsIAbDirectory * directory);
+            sal_Int32                  deleteCard(const sal_uInt32 rowIndex, nsIAbDirectory * directory);
         };
     }
 }

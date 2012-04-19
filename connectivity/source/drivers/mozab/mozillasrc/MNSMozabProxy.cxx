@@ -179,19 +179,19 @@ nsresult MNSMozabProxy::QueryHelperStub()
     case ProxiedFunc::FUNC_QUERYHELPER_DELETE_CARD:
         if (m_Args->arg2 && m_Args->arg3 )  //m_Args->arg2 used to get the cord number
         {
-            rv = mHelper->deleteCard(*((sal_Int32*)m_Args->arg2),(nsIAbDirectory*)m_Args->arg3);
+            rv = mHelper->deleteCard(*((sal_uInt32*)m_Args->arg2),(nsIAbDirectory*)m_Args->arg3);
         }
         break;
     case ProxiedFunc::FUNC_QUERYHELPER_COMMIT_CARD:
         if (m_Args->arg2 && m_Args->arg3 )  //m_Args->arg2 used to get the cord number
         {
-            rv = mHelper->commitCard(*((sal_Int32*)m_Args->arg2),(nsIAbDirectory*)m_Args->arg3);
+            rv = mHelper->commitCard(*((sal_uInt32*)m_Args->arg2),(nsIAbDirectory*)m_Args->arg3);
         }
         break;
     case ProxiedFunc::FUNC_QUERYHELPER_RESYNC_CARD:
         if (m_Args->arg2)  //m_Args->arg2 used to get the cord number
         {
-            rv = mHelper->resyncRow(*((sal_Int32*)m_Args->arg2));
+            rv = mHelper->resyncRow(*((sal_uInt32*)m_Args->arg2));
         }
         break;
     default:
