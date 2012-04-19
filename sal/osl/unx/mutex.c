@@ -40,13 +40,6 @@ int pthread_mutexattr_setkind_np(pthread_mutexattr_t *, int);
 #define PTHREAD_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE_NP
 #endif
 
-/*
-    Implementation notes:
-    oslMutex hides a pointer to the oslMutexImpl structure, which
-    ist needed to manage recursive locks on a mutex.
-
-*/
-
 typedef struct _oslMutexImpl
 {
     pthread_mutex_t mutex;
