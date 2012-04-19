@@ -130,9 +130,9 @@ Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
         rCache.xTextSearch->setOptions( rPara );
         rCache.Options = rPara;
     }
-    catch ( Exception& )
+    catch ( Exception& e )
     {
-        SAL_WARN( "unotools.i18n", "TextSearch ctor: Exception caught!" );
+        SAL_WARN( "unotools.i18n", "caught " << e.Message );
     }
     return rCache.xTextSearch;
 }
