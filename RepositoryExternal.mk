@@ -453,7 +453,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 )
 ifneq ($(OS),WNT)
 ifeq ($(OS),MACOSX)
-$(call gb_LinkTarget_add_static_libs,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	pixman-1 \
 )
 else
