@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<component xmlns="http://openoffice.org/2010/uno-components"
+        loader="com.sun.star.loader.SharedLibrary">
+    <implementation name="com.sun.star.comp.documents.HybridPDFImport">
+        <service name="com.sun.star.document.ImportFilter"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.documents.WriterPDFImport">
+        <service name="com.sun.star.document.ImportFilter"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.documents.DrawPDFImport">
+        <service name="com.sun.star.document.ImportFilter"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.documents.ImpressPDFImport">
+        <service name="com.sun.star.document.ImportFilter"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.documents.PDFDetector">
+        <service name="com.sun.star.document.ImportFilter"/>
+    </implementation>
+</component>

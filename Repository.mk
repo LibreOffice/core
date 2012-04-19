@@ -494,7 +494,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
-    pdfimport \
     PresenterScreen \
     simplecanvas \
     slideshow \
@@ -559,6 +558,7 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
+    pdfimport \
 	SunPresentationMinimizer \
 ))
 

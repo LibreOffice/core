@@ -25,33 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
+$(eval $(call gb_Rdb_Rdb,pdfimport))
 
-$(eval $(call gb_Extension_Extension,pdfimport,sdext/source/pdfimport))
-
-$(eval $(call gb_Extension_set_platform,pdfimport,$(sdext_PLATFORM)))
-
-$(eval $(call gb_Extension_add_file,pdfimport,components.rdb,$(call gb_Rdb_get_target,pdfimport)))
-
-$(eval $(call gb_Extension_add_files,pdfimport,,\
-    $(call gb_Executable_get_target,xpdfimport) \
-    $(call gb_Library_get_target,pdfimport) \
-    $(SRCDIR)/sdext/source/pdfimport/config/pdf_import_filter.xcu \
-    $(SRCDIR)/sdext/source/pdfimport/config/pdf_types.xcu \
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/xpdfimport_err.pdf \
-))
-
-$(eval $(call gb_Extension_add_files,pdfimport,basic,\
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/dialog.xlb \
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/impress.png \
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/Module1.xba \
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/script.xlb \
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/TargetChooser.xdl \
-    $(SRCDIR)/sdext/source/pdfimport/dialogs/writer.png \
-))
-
-$(eval $(call gb_Extension_add_files,pdfimport,images,\
-    $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
+$(eval $(call gb_Rdb_add_components,pdfimport,\
+    sdext/source/pdfimport/pdfimport \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

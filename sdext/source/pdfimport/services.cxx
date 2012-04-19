@@ -119,36 +119,6 @@ namespace
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-component_writeInfo(
-    SAL_UNUSED_PARAMETER void* /*pServiceManager*/, void* pRegistryKey )
-{
-    Reference< XRegistryKey > xRootKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-
-    ::rtl::OUString sRootKey( "/", 1, RTL_TEXTENCODING_ASCII_US );
-
-    const ComponentDescription* pComponents = lcl_getComponents();
-    while ( pComponents->pAsciiServiceName != NULL )
-    {
-        ::rtl::OUString sMainKeyName( sRootKey );
-        sMainKeyName += ::rtl::OUString::createFromAscii( pComponents->pAsciiImplementationName );
-        sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-        try
-        {
-            Reference< XRegistryKey >  xNewKey( xRootKey->createKey( sMainKeyName ) );
-            xNewKey->createKey( ::rtl::OUString::createFromAscii( pComponents->pAsciiServiceName ) );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
-            return sal_False;
-        }
-        ++pComponents;
-    }
-    return sal_True;
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName,
     SAL_UNUSED_PARAMETER void* /*pServiceManager*/,
