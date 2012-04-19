@@ -193,7 +193,7 @@ void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
 class _FndBox;
 class _FndLine;
 
-SV_DECL_PTRARR_DEL( _FndBoxes, _FndBox*, 10 )
+typedef std::vector<_FndBox*> _FndBoxes;
 SV_DECL_PTRARR_DEL( _FndLines, _FndLine*,10 )
 
 class _FndBox

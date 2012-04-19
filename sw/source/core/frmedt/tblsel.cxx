@@ -103,7 +103,6 @@ struct _CmpLPt
 SV_DECL_VARARR_SORT( _MergePos, _CmpLPt, 0 )
 SV_IMPL_VARARR_SORT( _MergePos, _CmpLPt )
 
-SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
 SV_IMPL_PTRARR( _FndLines, _FndLine* )
 
 
@@ -1450,28 +1449,30 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 }
 
 
-static sal_Bool lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara );
+static sal_Bool lcl_CheckCol( _FndBox* pFndBox, sal_Bool* pPara );
 
 static sal_Bool lcl_CheckRow( const _FndLine*& rpFndLine, void* pPara )
 {
-    ((_FndLine*)rpFndLine)->GetBoxes().ForEach( &lcl_CheckCol, pPara );
+    for (_FndBoxes::const_iterator it = ((_FndLine*)rpFndLine)->GetBoxes().begin();
+         it != ((_FndLine*)rpFndLine)->GetBoxes().end(); ++it)
+        lcl_CheckCol(*it, (sal_Bool*)pPara);
     return *(sal_Bool*)pPara;
 }
 
-static sal_Bool lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara )
+static sal_Bool lcl_CheckCol( _FndBox* pFndBox, sal_Bool* pPara )
 {
-    if( !rpFndBox->GetBox()->GetSttNd() )
+    if( !pFndBox->GetBox()->GetSttNd() )
     {
-        if( rpFndBox->GetLines().Count() !=
-            rpFndBox->GetBox()->GetTabLines().Count() )
-            *((sal_Bool*)pPara) = sal_False;
+        if( pFndBox->GetLines().Count() !=
+            pFndBox->GetBox()->GetTabLines().Count() )
+            *pPara = sal_False;
         else
-            ((_FndBox*)rpFndBox)->GetLines().ForEach( &lcl_CheckRow, pPara );
+            pFndBox->GetLines().ForEach( &lcl_CheckRow, pPara );
     }
     // is box protected ??
-    else if( rpFndBox->GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected() )
-        *((sal_Bool*)pPara) = sal_False;
-    return *(sal_Bool*)pPara;
+    else if( pFndBox->GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected() )
+        *pPara = sal_False;
+    return *pPara;
 }
 
 
@@ -1513,15 +1514,17 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
             while( pFndBox && 1 == pFndBox->GetLines().Count() )
             {
                 pFndLine = pFndBox->GetLines()[0];
-                if( 1 == pFndLine->GetBoxes().Count() )
-                    pFndBox = pFndLine->GetBoxes()[0];
+                if( 1 == pFndLine->GetBoxes().size() )
+                    pFndBox = pFndLine->GetBoxes().front();
                 else
                     pFndBox = 0;
             }
             if( pFndBox )
                 pFndBox->GetLines().ForEach( &lcl_CheckRow, &bMergeSelOk );
             else if( pFndLine )
-                pFndLine->GetBoxes().ForEach( &lcl_CheckCol, &bMergeSelOk );
+                for (_FndBoxes::const_iterator it = pFndLine->GetBoxes().begin();
+                     it != pFndLine->GetBoxes().end(); ++it)
+                    lcl_CheckCol(*it, &bMergeSelOk);
             if( !bMergeSelOk )
                 eRet = TBLMERGE_TOOCOMPLEX;
         }
@@ -2112,8 +2115,7 @@ sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
             return sal_True;
         }
     }
-    pFndPara->pFndLine->GetBoxes().C40_INSERT( _FndBox, pFndBox,
-                    pFndPara->pFndLine->GetBoxes().Count() );
+    pFndPara->pFndLine->GetBoxes().push_back( pFndBox );
     return sal_True;
 }
 
@@ -2123,7 +2125,7 @@ sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
     _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
     _FndPara aPara( *pFndPara, pFndLine );
     pFndLine->GetLine()->GetTabBoxes().ForEach( &_FndBoxCopyCol, &aPara );
-    if( pFndLine->GetBoxes().Count() )
+    if( pFndLine->GetBoxes().size() )
     {
         pFndPara->pFndBox->GetLines().C40_INSERT( _FndLine, pFndLine,
                 pFndPara->pFndBox->GetLines().Count() );

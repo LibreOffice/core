@@ -810,10 +810,10 @@ sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
         const _FndBoxes& rBoxes = pLn->GetBoxes();
 
         // Amount of Boxes of all Lines is uneven -> no symmetry
-        if( i  && nBoxes != rBoxes.Count())
+        if( i  && nBoxes != rBoxes.size())
             return sal_False;
 
-        nBoxes = rBoxes.Count();
+        nBoxes = rBoxes.size();
         if( !CheckBoxSymmetry( *pLn ) )
             return sal_False;
     }
@@ -830,7 +830,7 @@ sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
     sal_uInt16 nLines(0);
 
     // Iterate over Boxes
-    for(sal_uInt16 i=0; i < rBoxes.Count(); ++i)
+    for(sal_uInt16 i=0; i < rBoxes.size(); ++i)
     {   // The Boxes of a Line
         _FndBox* pBox = rBoxes[i];
         const _FndLines& rLines = pBox->GetLines();
@@ -862,7 +862,7 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
         // The Boxes of a Line
         sal_uInt16 nCount = 0;
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
-        for( sal_uInt16 j=0; j < rBoxes.Count(); ++j )
+        for( sal_uInt16 j=0; j < rBoxes.size(); ++j )
             // Iterate recursively over the Lines
             nCount += rBoxes[j]->GetLines().Count()
                         ? GetColCount(*rBoxes[j]) : 1;
@@ -887,7 +887,7 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
     {   // The Boxes of a Line
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         sal_uInt16 nLn = 1;
-        for(sal_uInt16 j=0; j < rBoxes.Count(); ++j)
+        for(sal_uInt16 j=0; j < rBoxes.size(); ++j)
             if( rBoxes[j]->GetLines().Count() )
                 // Iterate recursively over the Lines
                 nLn = Max(GetRowCount(*rBoxes[j]), nLn);
@@ -912,7 +912,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
         // The Boxes of a Line
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         sal_uInt16 nOldCol = nCol;
-        for( sal_uInt16 j = 0; j < rBoxes.Count(); ++j )
+        for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
         {
             // Check the Box if it's an atomic one
             const _FndBox*   pBox   = rBoxes[ j ];
@@ -946,7 +946,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
             else
             {
                 // Iterate recursively over the Lines of a Box
-                FillFlat( *pBox, ( j == rBoxes.Count()-1 ) );
+                FillFlat( *pBox, ( j == rBoxes.size()-1 ) );
             }
             nCol++;
         }

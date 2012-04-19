@@ -224,7 +224,7 @@ namespace
                         SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
                         _FndLine *pInsLine = new _FndLine( pLine2, &rFndBox );
                         _FndBox *pFndBox = new _FndBox( pTmpBox, pInsLine );
-                        pInsLine->GetBoxes().C40_INSERT( _FndBox, pFndBox, 0 );
+                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), pFndBox);
                         rFndLines.C40_INSERT( _FndLine, pInsLine, rFndLines.Count() );
                     }
                 }
@@ -945,22 +945,22 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // We insert a new row into the FndBox
                 if( pLine->GetTabBoxes().Count() < nSttBox ||
                     ( pLine->GetTabBoxes().Count() - nSttBox ) <
-                    pFLine->GetBoxes().Count() )
+                    pFLine->GetBoxes().size() )
                     return sal_False;
 
                 // Test for nesting
-                for( nBx = 0; nBx < pFLine->GetBoxes().Count(); ++nBx )
+                for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
                         ->GetSttNd() )
                         return sal_False;
                     // if Ok, insert the Box into the FndLine
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
-                    pInsFLine->GetBoxes().C40_INSERT( _FndBox, pFndBox, nBx );
+                    pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx, pFndBox );
                 }
                 aFndBox.GetLines().C40_INSERT( _FndLine, pInsFLine, nLn );
             }
-            else if( pFLine->GetBoxes().Count() == 1 )
+            else if( pFLine->GetBoxes().size() == 1 )
             {
                 if( pLine->GetTabBoxes().Count() < nSttBox  ||
                     ( pLine->GetTabBoxes().Count() - nSttBox ) <
@@ -974,10 +974,10 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         ->GetSttNd() )
                         return sal_False;
                     // if Ok, insert the Box into the FndLine
-                    if( nBx == pFLine->GetBoxes().Count() )
+                    if( nBx == pFLine->GetBoxes().size() )
                     {
                         pFndBox = new _FndBox( pTmpBox, pFLine );
-                        pFLine->GetBoxes().C40_INSERT( _FndBox, pFndBox, nBx );
+                        pFLine->GetBoxes().insert( pFLine->GetBoxes().begin() + nBx, pFndBox );
                     }
                 }
             }
@@ -985,12 +985,12 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             {
                 // Match the selected Boxes with the ones in the Clipboard
                 // (n times)
-                if( 0 != ( pFLine->GetBoxes().Count() %
+                if( 0 != ( pFLine->GetBoxes().size() %
                             pCpyLn->GetTabBoxes().Count() ))
                     return sal_False;
 
                 // Test for nesting
-                for( nBx = 0; nBx < pFLine->GetBoxes().Count(); ++nBx )
+                for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                     if( !pFLine->GetBoxes()[ nBx ]->GetBox()->GetSttNd() )
                         return sal_False;
             }
@@ -1024,7 +1024,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             pFLine = aFndBox.GetLines()[ nLn ];
             SwTableLine* pCpyLn = rCpyTbl.GetTabLines()[
                                 nLn % rCpyTbl.GetTabLines().Count() ];
-            for( nBx = 0; nBx < pFLine->GetBoxes().Count(); ++nBx )
+            for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
             {
                 // Copy the pCpyBox into pMyBox
                 lcl_CpyBox( rCpyTbl, pCpyLn->GetTabBoxes()[

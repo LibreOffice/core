@@ -54,7 +54,6 @@
 #include <sfx2/request.hxx>
 
 // sw/inc/tblsel.hxx
-SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
 SV_IMPL_PTRARR( _FndLines, _FndLine* )
 
 static sal_Bool bCheck1 = sal_True;
@@ -116,7 +115,7 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     if( !rX )
         return sal_False;
 
-    rY = aFndBox.GetLines()[0]->GetBoxes().Count();
+    rY = aFndBox.GetLines()[0]->GetBoxes().size();
     return sal_True;
 }
 

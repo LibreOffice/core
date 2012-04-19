@@ -325,12 +325,10 @@ struct _CpyPara
     void SetBoxWidth( SwTableBox* pBox );
 };
 
-sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
+sal_Bool lcl_CopyCol( _FndBox* pFndBox, _CpyPara* pCpyPara )
 {
-    _CpyPara* pCpyPara = (_CpyPara*)pPara;
-
     // Look up the Frame Format in the Frame Format Array
-    SwTableBox* pBox = (SwTableBox*)rpFndBox->GetBox();
+    SwTableBox* pBox = (SwTableBox*)pFndBox->GetBox();
     _CpyTabFrm aFindFrm( (SwTableBoxFmt*)pBox->GetFrmFmt() );
 
     sal_uInt16 nFndPos;
@@ -348,8 +346,8 @@ sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
             bool bDiffCount = false;
             if( pBox->GetTabLines().Count() )
             {
-                pCmpLine = rpFndBox->GetLines()[ 0 ];
-                if ( pCmpLine->GetBoxes().Count() != pCmpLine->GetLine()->GetTabBoxes().Count() )
+                pCmpLine = pFndBox->GetLines()[ 0 ];
+                if ( pCmpLine->GetBoxes().size() != pCmpLine->GetLine()->GetTabBoxes().Count() )
                     bDiffCount = true;
             }
 
@@ -358,7 +356,7 @@ sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
                 // The first Line should be enough
                 _FndBoxes& rFndBoxes = pCmpLine->GetBoxes();
                 long nSz = 0;
-                for( sal_uInt16 n = rFndBoxes.Count(); n; )
+                for( sal_uInt16 n = rFndBoxes.size(); n; )
                     nSz += rFndBoxes[ --n ]->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
                 aFrmSz.SetWidth( aFrmSz.GetWidth() -
                                             nSz / ( pCpyPara->nCpyCnt + 1 ) );
@@ -397,25 +395,25 @@ sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
             aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
     }
 
-    if( rpFndBox->GetLines().Count() )
+    if( pFndBox->GetLines().Count() )
     {
         pBox = new SwTableBox( aFindFrm.pNewFrmFmt,
-                    rpFndBox->GetLines().Count(), pCpyPara->pInsLine );
+                    pFndBox->GetLines().Count(), pCpyPara->pInsLine );
         pCpyPara->pInsLine->GetTabBoxes().C40_INSERT( SwTableBox, pBox, pCpyPara->nInsPos++);
         _CpyPara aPara( *pCpyPara, pBox );
         aPara.nDelBorderFlag &= 7;
 
-        ((_FndBox*)rpFndBox)->GetLines().ForEach( &lcl_CopyRow, &aPara );
+        pFndBox->GetLines().ForEach( &lcl_CopyRow, &aPara );
     }
     else
     {
         ::_InsTblBox( pCpyPara->pDoc, pCpyPara->pTblNd, pCpyPara->pInsLine,
                     aFindFrm.pNewFrmFmt, pBox, pCpyPara->nInsPos++ );
 
-        const _FndBoxes& rFndBxs = rpFndBox->GetUpper()->GetBoxes();
+        const _FndBoxes& rFndBxs = pFndBox->GetUpper()->GetBoxes();
         if( 8 > pCpyPara->nDelBorderFlag
                 ? pCpyPara->nDelBorderFlag
-                : rpFndBox == rFndBxs[ rFndBxs.Count() - 1 ] )
+                : pFndBox == rFndBxs[ rFndBxs.size() - 1 ] )
         {
             const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();
             if( 8 > pCpyPara->nDelBorderFlag
@@ -457,7 +455,7 @@ sal_Bool lcl_CopyRow( const _FndLine*& rpFndLine, void* pPara )
     _CpyPara* pCpyPara = (_CpyPara*)pPara;
     SwTableLine* pNewLine = new SwTableLine(
                             (SwTableLineFmt*)rpFndLine->GetLine()->GetFrmFmt(),
-                        rpFndLine->GetBoxes().Count(), pCpyPara->pInsBox );
+                        rpFndLine->GetBoxes().size(), pCpyPara->pInsBox );
     if( pCpyPara->pInsBox )
     {
         pCpyPara->pInsBox->GetTabLines().C40_INSERT( SwTableLine, pNewLine, pCpyPara->nInsPos++ );
@@ -469,7 +467,9 @@ sal_Bool lcl_CopyRow( const _FndLine*& rpFndLine, void* pPara )
     }
 
     _CpyPara aPara( *pCpyPara, pNewLine );
-    ((_FndLine*)rpFndLine)->GetBoxes().ForEach( &lcl_CopyCol, &aPara );
+    for (_FndBoxes::const_iterator it = ((_FndLine*)rpFndLine)->GetBoxes().begin();
+         it != ((_FndLine*)rpFndLine)->GetBoxes().end(); ++it)
+        lcl_CopyCol(*it, &aPara);
 
     pCpyPara->nDelBorderFlag &= 0xf8;
     return sal_True;
@@ -480,7 +480,7 @@ void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
 {
     // Bug 29124: Not only copy in the BaseLines. If possible, we go down as far as possible
     _FndBox* pFBox;
-    if( 1 == pFndLn->GetBoxes().Count() &&
+    if( 1 == pFndLn->GetBoxes().size() &&
         !( pFBox = pFndLn->GetBoxes()[ 0 ] )->GetBox()->GetSttNd() )
     {
         // A Box with multiple Lines, so insert into these Lines
@@ -491,7 +491,7 @@ void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
     {
         rCpyPara.pInsLine = pFndLn->GetLine();
         SwTableBox* pBox = pFndLn->GetBoxes()[ bBehind ?
-                    pFndLn->GetBoxes().Count()-1 : 0 ]->GetBox();
+                    pFndLn->GetBoxes().size()-1 : 0 ]->GetBox();
         rCpyPara.nInsPos = pFndLn->GetLine()->GetTabBoxes().C40_GETPOS( SwTableBox, pBox );
         if( bBehind )
             ++rCpyPara.nInsPos;
@@ -502,7 +502,9 @@ void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
                 rCpyPara.nDelBorderFlag = 9;
             else
                 rCpyPara.nDelBorderFlag = 8;
-            pFndLn->GetBoxes().ForEach( &lcl_CopyCol, &rCpyPara );
+            for (_FndBoxes::const_iterator it = pFndLn->GetBoxes().begin();
+                 it != pFndLn->GetBoxes().end(); ++it)
+                lcl_CopyCol(*it, &rCpyPara);
         }
     }
 }
@@ -594,7 +596,7 @@ sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     {
         _FndLine* pFndLine;
         while( 1 == pFndBox->GetLines().Count() &&
-                1 == ( pFndLine = pFndBox->GetLines()[ 0 ])->GetBoxes().Count() )
+                1 == ( pFndLine = pFndBox->GetLines()[ 0 ])->GetBoxes().size() )
         {
             // Don't go down too far! One Line with Box needs to remain!
             _FndBox* pTmpBox = pFndLine->GetBoxes()[ 0 ];
@@ -684,8 +686,7 @@ sal_Bool _FndBoxAppendRowBox( const SwTableBox*& rpBox, void* pPara )
             delete pFndBox;
     }
     else
-        pFndPara->pFndLine->GetBoxes().C40_INSERT( _FndBox, pFndBox,
-                        pFndPara->pFndLine->GetBoxes().Count() );
+        pFndPara->pFndLine->GetBoxes().push_back( pFndBox );
     return sal_True;
 }
 
@@ -695,7 +696,7 @@ sal_Bool _FndBoxAppendRowLine( const SwTableLine*& rpLine, void* pPara )
     _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
     _FndPara aPara( *pFndPara, pFndLine );
     pFndLine->GetLine()->GetTabBoxes().ForEach( &_FndBoxAppendRowBox, &aPara );
-    if( pFndLine->GetBoxes().Count() )
+    if( pFndLine->GetBoxes().size() )
     {
         pFndPara->pFndBox->GetLines().C40_INSERT( _FndLine, pFndLine,
                 pFndPara->pFndBox->GetLines().Count() );
@@ -1474,27 +1475,26 @@ struct _InsULPara
         { bUL_LR = sal_True;    bUL = sal_False; if( pLine ) pInsLine = pLine; }
 };
 
-sal_Bool lcl_Merge_MoveBox( const _FndBox*& rpFndBox, void* pPara )
+sal_Bool lcl_Merge_MoveBox( _FndBox* pFndBox, _InsULPara* pULPara )
 {
-    _InsULPara* pULPara = (_InsULPara*)pPara;
     SwTableBoxes* pBoxes;
 
-    sal_uInt16 nStt = 0, nEnd = rpFndBox->GetLines().Count();
+    sal_uInt16 nStt = 0, nEnd = pFndBox->GetLines().Count();
     sal_uInt16 nInsPos = USHRT_MAX;
     if( !pULPara->bUL_LR )  // Left/Right
     {
         sal_uInt16 nPos;
-        SwTableBox* pFndBox = (SwTableBox*)rpFndBox->GetBox();
-        pBoxes = &pFndBox->GetUpper()->GetTabBoxes();
+        SwTableBox* pFndTableBox = (SwTableBox*)pFndBox->GetBox();
+        pBoxes = &pFndTableBox->GetUpper()->GetTabBoxes();
         if( pULPara->bUL )  // Left ?
         {
             // if there are Boxes before it, move them
-            if( 0 != ( nPos = pBoxes->C40_GETPOS( SwTableBox, pFndBox )) )
+            if( 0 != ( nPos = pBoxes->C40_GETPOS( SwTableBox, pFndTableBox )) )
                 lcl_CpyBoxes( 0, nPos, *pBoxes, pULPara->pInsLine );
         }
         else                // Right
             // if there are Boxes behind it, move them
-            if( (nPos = pBoxes->C40_GETPOS( SwTableBox, pFndBox )) +1 < pBoxes->Count() )
+            if( (nPos = pBoxes->C40_GETPOS( SwTableBox, pFndTableBox )) +1 < pBoxes->Count() )
             {
                 nInsPos = pULPara->pInsLine->GetTabBoxes().Count();
                 lcl_CpyBoxes( nPos+1, pBoxes->Count(),
@@ -1502,23 +1502,23 @@ sal_Bool lcl_Merge_MoveBox( const _FndBox*& rpFndBox, void* pPara )
             }
     }
     // Upper/Lower and still deeper?
-    else if( rpFndBox->GetLines().Count() )
+    else if( pFndBox->GetLines().Count() )
     {
         // Only search the Line from which we need to move
-        nStt = pULPara->bUL ? 0 : rpFndBox->GetLines().Count()-1;
+        nStt = pULPara->bUL ? 0 : pFndBox->GetLines().Count()-1;
         nEnd = nStt+1;
     }
 
     pBoxes = &pULPara->pInsLine->GetTabBoxes();
 
     // Is there still a level to step down to?
-    if( rpFndBox->GetBox()->GetTabLines().Count() )
+    if( pFndBox->GetBox()->GetTabLines().Count() )
     {
         SwTableBox* pBox = new SwTableBox(
-                (SwTableBoxFmt*)rpFndBox->GetBox()->GetFrmFmt(), 0, pULPara->pInsLine );
+                (SwTableBoxFmt*)pFndBox->GetBox()->GetFrmFmt(), 0, pULPara->pInsLine );
         _InsULPara aPara( *pULPara );
         aPara.pInsBox = pBox;
-        ((_FndBox*)rpFndBox)->GetLines().ForEach( nStt, nEnd,
+        pFndBox->GetLines().ForEach( nStt, nEnd,
                                                 &lcl_Merge_MoveLine, &aPara );
         if( pBox->GetTabLines().Count() )
         {
@@ -1538,7 +1538,7 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
     _InsULPara* pULPara = (_InsULPara*)pPara;
     SwTableLines* pLines;
 
-    sal_uInt16 nStt = 0, nEnd = rpFndLine->GetBoxes().Count();
+    sal_uInt16 nStt = 0, nEnd = rpFndLine->GetBoxes().size();
     sal_uInt16 nInsPos = USHRT_MAX;
     if( pULPara->bUL_LR )   // UpperLower ?
     {
@@ -1550,7 +1550,7 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
 
         SwTableBox* pLBx = rpFndLine->GetBoxes()[0]->GetBox();
         SwTableBox* pRBx = rpFndLine->GetBoxes()[
-                            rpFndLine->GetBoxes().Count()-1]->GetBox();
+                            rpFndLine->GetBoxes().size()-1]->GetBox();
         sal_uInt16 nLeft = pFndLn->GetTabBoxes().C40_GETPOS( SwTableBox, pLBx );
         sal_uInt16 nRight = pFndLn->GetTabBoxes().C40_GETPOS( SwTableBox, pRBx );
 
@@ -1687,7 +1687,7 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
     else
     {
         // Find only the Line from which we need to move
-        nStt = pULPara->bUL ? 0 : rpFndLine->GetBoxes().Count()-1;
+        nStt = pULPara->bUL ? 0 : rpFndLine->GetBoxes().size()-1;
         nEnd = nStt+1;
     }
     pLines = &pULPara->pInsBox->GetTabLines();
@@ -1696,8 +1696,11 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
         (SwTableLineFmt*)rpFndLine->GetLine()->GetFrmFmt(), 0, pULPara->pInsBox );
     _InsULPara aPara( *pULPara );       // kopieren
     aPara.pInsLine = pNewLine;
-    ((_FndLine*)rpFndLine)->GetBoxes().ForEach( nStt, nEnd,
-                                                &lcl_Merge_MoveBox, &aPara );
+    _FndBoxes& rLineBoxes = ((_FndLine*)rpFndLine)->GetBoxes();
+    for (_FndBoxes::const_iterator it = rLineBoxes.begin() + nStt;
+         it != rLineBoxes.begin() + nEnd; ++it)
+        lcl_Merge_MoveBox(*it, &aPara);
+
     if( pNewLine->GetTabBoxes().Count() )
     {
         if( USHRT_MAX == nInsPos )
@@ -1743,8 +1746,8 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().Count() &&
-            1 == pFndBox->GetLines()[0]->GetBoxes().Count() )
-        pFndBox = pFndBox->GetLines()[0]->GetBoxes()[0];
+            1 == pFndBox->GetLines()[0]->GetBoxes().size() )
+        pFndBox = pFndBox->GetLines()[0]->GetBoxes().front();
 
     SwTableLine* pInsLine = new SwTableLine(
                 (SwTableLineFmt*)pFndBox->GetLines()[0]->GetLine()->GetFrmFmt(), 0,
@@ -1773,12 +1776,14 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     _InsULPara aPara( pTblNd, sal_True, sal_True, pLeftBox, pMergeBox, pRightBox, pInsLine );
 
     // Move the overlapping upper/lower Lines of the selected Area
-    pFndBox->GetLines()[0]->GetBoxes().ForEach( &lcl_Merge_MoveBox,
-                                                &aPara );
+    _FndBoxes& rLineBoxes = pFndBox->GetLines()[0]->GetBoxes();
+    for (_FndBoxes::const_iterator it = rLineBoxes.begin(); it != rLineBoxes.end(); ++it)
+        lcl_Merge_MoveBox(*it, &aPara);
     aPara.SetLower( pInsLine );
     sal_uInt16 nEnd = pFndBox->GetLines().Count()-1;
-    pFndBox->GetLines()[nEnd]->GetBoxes().ForEach( &lcl_Merge_MoveBox,
-                                                    &aPara );
+    rLineBoxes = pFndBox->GetLines()[nEnd]->GetBoxes();
+    for (_FndBoxes::const_iterator it = rLineBoxes.begin(); it != rLineBoxes.end(); ++it)
+        lcl_Merge_MoveBox(*it, &aPara);
 
     // Move the Boxes extending into the selected Area from left/right
     aPara.SetLeft( pLeftBox );
@@ -1864,7 +1869,7 @@ sal_uInt16 lcl_GetBoxOffset( const _FndBox& rBox )
 sal_uInt16 lcl_GetLineWidth( const _FndLine& rLine )
 {
     sal_uInt16 nRet = 0;
-    for( sal_uInt16 n = rLine.GetBoxes().Count(); n; )
+    for( sal_uInt16 n = rLine.GetBoxes().size(); n; )
         nRet = nRet + (sal_uInt16)rLine.GetBoxes()[ --n ]->GetBox()->GetFrmFmt()
                         ->GetFrmSize().GetWidth();
     return nRet;
@@ -1884,7 +1889,7 @@ void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
         {
             std::vector< sal_uLong > &rWidth = (*rPara.pWidths.get())[ nLine ];
             const _FndLine *pFndLine = rFndLines[ nLine ];
-            if( pFndLine && pFndLine->GetBoxes().Count() )
+            if( pFndLine && pFndLine->GetBoxes().size() )
             {
                 const SwTableLine *pLine = pFndLine->GetLine();
                 if( pLine && pLine->GetTabBoxes().Count() )
@@ -1906,7 +1911,7 @@ void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
                     // nPos is now the left border of the first selected box
                     if( rPara.nMinLeft > nPos )
                         rPara.nMinLeft = nPos;
-                    nBoxCount = pFndLine->GetBoxes().Count();
+                    nBoxCount = pFndLine->GetBoxes().size();
                     rWidth = std::vector< sal_uLong >( nBoxCount+2 );
                     rWidth[ 0 ] = nPos;
                     // Add now the widths of all selected boxes and store
@@ -1952,10 +1957,8 @@ void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
     }
 }
 
-sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
+sal_Bool lcl_CopyBoxToDoc( _FndBox* pFndBox, _CpyPara* pCpyPara )
 {
-    _CpyPara* pCpyPara = (_CpyPara*)pPara;
-
     // Calculation of new size
     sal_uLong nRealSize;
     sal_uLong nDummy1 = 0;
@@ -1971,7 +1974,7 @@ sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
     else
     {
         nRealSize = pCpyPara->nNewSize;
-        nRealSize *= rpFndBox->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+        nRealSize *= pFndBox->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
         nRealSize /= pCpyPara->nOldSize;
     }
 
@@ -1987,7 +1990,7 @@ sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
     do
     {
         // Find the Frame Format in the list of all Frame Formats
-        _CpyTabFrm aFindFrm( (SwTableBoxFmt*)rpFndBox->GetBox()->GetFrmFmt() );
+        _CpyTabFrm aFindFrm( (SwTableBoxFmt*)pFndBox->GetBox()->GetFrmFmt() );
 
         SwFmtFrmSize aFrmSz;
         sal_uInt16 nFndPos;
@@ -1997,7 +2000,7 @@ sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
         {
             // It doesn't exist yet, so copy it
             aFindFrm.pNewFrmFmt = pCpyPara->pDoc->MakeTableBoxFmt();
-            aFindFrm.pNewFrmFmt->CopyAttrs( *rpFndBox->GetBox()->GetFrmFmt() );
+            aFindFrm.pNewFrmFmt->CopyAttrs( *pFndBox->GetBox()->GetFrmFmt() );
             if( !pCpyPara->bCpyCntnt )
                 aFindFrm.pNewFrmFmt->ResetFmtAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
             aFrmSz.SetWidth( nSize );
@@ -2006,14 +2009,14 @@ sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
         }
 
         SwTableBox* pBox;
-        if( rpFndBox->GetLines().Count() )
+        if( pFndBox->GetLines().Count() )
         {
             pBox = new SwTableBox( aFindFrm.pNewFrmFmt,
-                        rpFndBox->GetLines().Count(), pCpyPara->pInsLine );
+                        pFndBox->GetLines().Count(), pCpyPara->pInsLine );
             pCpyPara->pInsLine->GetTabBoxes().C40_INSERT( SwTableBox, pBox, pCpyPara->nInsPos++ );
             _CpyPara aPara( *pCpyPara, pBox );
             aPara.nNewSize = nSize;     // get the size
-            ((_FndBox*)rpFndBox)->GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
+            pFndBox->GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
         }
         else
         {
@@ -2028,13 +2031,13 @@ sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
             else if( pCpyPara->bCpyCntnt )
             {
                 // Copy the content into this empty Box
-                pBox->setRowSpan( rpFndBox->GetBox()->getRowSpan() );
+                pBox->setRowSpan( pFndBox->GetBox()->getRowSpan() );
 
                 // We can also copy formulas and values, if we copy the content
                 {
                     SfxItemSet aBoxAttrSet( pCpyPara->pDoc->GetAttrPool(),
                                             RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
-                    aBoxAttrSet.Put( rpFndBox->GetBox()->GetFrmFmt()->GetAttrSet() );
+                    aBoxAttrSet.Put( pFndBox->GetBox()->GetFrmFmt()->GetAttrSet() );
                     if( aBoxAttrSet.Count() )
                     {
                         const SfxPoolItem* pItem;
@@ -2050,9 +2053,9 @@ sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
                         pBox->ClaimFrmFmt()->SetFmtAttr( aBoxAttrSet );
                     }
                 }
-                SwDoc* pFromDoc = rpFndBox->GetBox()->GetFrmFmt()->GetDoc();
-                SwNodeRange aCpyRg( *rpFndBox->GetBox()->GetSttNd(), 1,
-                            *rpFndBox->GetBox()->GetSttNd()->EndOfSectionNode() );
+                SwDoc* pFromDoc = pFndBox->GetBox()->GetFrmFmt()->GetDoc();
+                SwNodeRange aCpyRg( *pFndBox->GetBox()->GetSttNd(), 1,
+                            *pFndBox->GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
                 pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, sal_False );
@@ -2096,7 +2099,7 @@ sal_Bool lcl_CopyLineToDoc( const _FndLine*& rpFndLine, void* pPara )
         aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
 
     SwTableLine* pNewLine = new SwTableLine( (SwTableLineFmt*)aFindFrm.pNewFrmFmt,
-                        rpFndLine->GetBoxes().Count(), pCpyPara->pInsBox );
+                        rpFndLine->GetBoxes().size(), pCpyPara->pInsBox );
     if( pCpyPara->pInsBox )
     {
         pCpyPara->pInsBox->GetTabLines().C40_INSERT( SwTableLine, pNewLine, pCpyPara->nInsPos++ );
@@ -2114,7 +2117,7 @@ sal_Bool lcl_CopyLineToDoc( const _FndLine*& rpFndLine, void* pPara )
         aPara.nOldSize = 0; // will not be used
         aPara.nBoxIdx = 1;
     }
-    else if( rpFndLine->GetBoxes().Count() ==
+    else if( rpFndLine->GetBoxes().size() ==
                     rpFndLine->GetLine()->GetTabBoxes().Count() )
     {
         // Get the Parent's size
@@ -2128,11 +2131,13 @@ sal_Bool lcl_CopyLineToDoc( const _FndLine*& rpFndLine, void* pPara )
     }
     else
         // Calculate it
-        for( sal_uInt16 n = 0; n < rpFndLine->GetBoxes().Count(); ++n )
+        for( sal_uInt16 n = 0; n < rpFndLine->GetBoxes().size(); ++n )
             aPara.nOldSize += rpFndLine->GetBoxes()[n]
                         ->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
 
-    ((_FndLine*)rpFndLine)->GetBoxes().ForEach( &lcl_CopyBoxToDoc, &aPara );
+    _FndBoxes& rBoxes = ((_FndLine*)rpFndLine)->GetBoxes();
+    for (_FndBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it)
+        lcl_CopyBoxToDoc(*it, &aPara);
     if( pCpyPara->pTblNd->GetTable().IsNewModel() )
         ++pCpyPara->nLnIdx;
     return sal_True;
