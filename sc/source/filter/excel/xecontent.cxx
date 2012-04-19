@@ -783,7 +783,7 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
 namespace {
 
-const char* GetOperatorString(ScConditionMode eMode)
+const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
 {
     switch(eMode)
     {
@@ -800,8 +800,10 @@ const char* GetOperatorString(ScConditionMode eMode)
         case SC_COND_NOTEQUAL:
             return "notEqual";
         case SC_COND_BETWEEN:
+            bFrmla2 = true;
             return "between";
         case SC_COND_NOTBETWEEN:
+            bFrmla2 = true;
             return "notBetween";
         case SC_COND_DUPLICATE:
         case SC_COND_NOTDUPLICATE:
@@ -814,8 +816,10 @@ const char* GetOperatorString(ScConditionMode eMode)
     return "";
 }
 
-const char* GetTypeString()
+const char* GetTypeString(ScConditionMode eMode)
 {
+    if (eMode == SC_COND_DIRECT)
+        return "expression";
     return "cellIs";
 }
 
@@ -823,15 +827,18 @@ const char* GetTypeString()
 
 void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
+    bool bFmla2 = false;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_cfRule,
-            XML_type, GetTypeString(),
+            XML_type, GetTypeString( mrFormatEntry.GetOperation() ),
             XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
-            XML_operator, GetOperatorString( mrFormatEntry.GetOperation() ),
+            XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
             XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
     rWorksheet->startElement( XML_formula, FSEND );
     rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
+    if (bFmla2)
+        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
     rWorksheet->endElement( XML_formula );
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
