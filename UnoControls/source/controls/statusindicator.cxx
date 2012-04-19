@@ -70,23 +70,23 @@ StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFact
     ++m_refCount ;
 
     // Create instances for fixedtext and progress ...
-    m_xText         = Reference< XFixedText >   ( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME )) ), UNO_QUERY );
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSBAR   )) ), UNO_QUERY );
+    m_xText         = Reference< XFixedText >   ( xFactory->createInstance( FIXEDTEXT_SERVICENAME ), UNO_QUERY );
+    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance( SERVICENAME_PROGRESSBAR ), UNO_QUERY );
     // ... cast controls to Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
     Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
     Reference< XControl > xProgressControl  ( m_xProgressBar, UNO_QUERY );
-    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) );
+    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( FIXEDTEXT_MODELNAME ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
-    addControl( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT          )), xTextControl    );
-    addControl( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_PROGRESSBAR   )), xProgressControl    );
+    addControl( CONTROLNAME_TEXT, xTextControl    );
+    addControl( CONTROLNAME_PROGRESSBAR, xProgressControl    );
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     Reference< XWindow > xProgressWindow( m_xProgressBar, UNO_QUERY );
     xProgressWindow->setVisible( sal_True );
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xText->setText( OUString(RTL_CONSTASCII_USTRINGPARAM( STATUSINDICATOR_DEFAULT_TEXT )) );
+    m_xText->setText( STATUSINDICATOR_DEFAULT_TEXT );
 
     --m_refCount ;
 }
@@ -432,7 +432,7 @@ const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames(
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_STATUSINDICATOR ));
+    seqServiceNames.getArray() [0] = SERVICENAME_STATUSINDICATOR;
     return seqServiceNames ;
 }
 
@@ -458,7 +458,7 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XW
     WindowDescriptor* pDescriptor = new WindowDescriptor ;
 
     pDescriptor->Type               =   WindowClass_SIMPLE                              ;
-    pDescriptor->WindowServiceName  =   OUString(RTL_CONSTASCII_USTRINGPARAM("floatingwindow")) ;
+    pDescriptor->WindowServiceName  =   "floatingwindow"                                ;
     pDescriptor->ParentIndex        =   -1                                              ;
     pDescriptor->Parent             =   xParentPeer                                     ;
     pDescriptor->Bounds             =   getPosSize ()                                   ;

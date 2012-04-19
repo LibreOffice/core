@@ -560,7 +560,7 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
     WindowDescriptor    *   aDescriptor = new WindowDescriptor ;
 
     aDescriptor->Type               = WindowClass_CONTAINER                             ;
-    aDescriptor->WindowServiceName  = OUString(RTL_CONSTASCII_USTRINGPARAM("window"))   ;
+    aDescriptor->WindowServiceName  = "window"                                          ;
     aDescriptor->ParentIndex        = -1                                                ;
     aDescriptor->Parent             = rParentPeer                                       ;
     aDescriptor->Bounds             = getPosSize ()                                     ;

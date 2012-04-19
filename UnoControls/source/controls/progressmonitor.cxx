@@ -77,12 +77,12 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     ++m_refCount ;
 
     // Create instances for fixedtext, button and progress ...
-    m_xTopic_Top    = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
-    m_xText_Top     = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
-    m_xTopic_Bottom = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
-    m_xText_Bottom  = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
-    m_xButton       = Reference< XButton >      ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( BUTTON_SERVICENAME       )) ), UNO_QUERY ) ;
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSBAR  )) ), UNO_QUERY ) ;
+    m_xTopic_Top    = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
+    m_xText_Top     = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
+    m_xTopic_Bottom = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
+    m_xText_Bottom  = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
+    m_xButton       = Reference< XButton >      ( xFactory->createInstance ( BUTTON_SERVICENAME ), UNO_QUERY ) ;
+    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance ( SERVICENAME_PROGRESSBAR ), UNO_QUERY ) ;
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
     Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY ) ;
@@ -93,20 +93,20 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     Reference< XControl >   xRef_ProgressBar    ( m_xProgressBar  , UNO_QUERY ) ;
 
     // ... set models ...
-    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
-    xRef_Text_Top->setModel     ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
-    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
-    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
-    xRef_Button->setModel       ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( BUTTON_MODELNAME    )) ), UNO_QUERY ) ) ;
+    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
+    xRef_Text_Top->setModel     ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
+    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
+    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
+    xRef_Button->setModel       ( Reference< XControlModel > ( xFactory->createInstance ( BUTTON_MODELNAME ), UNO_QUERY ) ) ;
     // ProgressBar has no model !!!
 
     // ... and add controls to basecontainercontrol!
-    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Topic_Top     ) ;
-    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Text_Top      ) ;
-    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Topic_Bottom  ) ;
-    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Text_Bottom   ) ;
-    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_BUTTON       )) , xRef_Button            ) ;
-    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_PROGRESSBAR  )) , xRef_ProgressBar   ) ;
+    addControl ( CONTROLNAME_TEXT, xRef_Topic_Top           ) ;
+    addControl ( CONTROLNAME_TEXT, xRef_Text_Top            ) ;
+    addControl ( CONTROLNAME_TEXT, xRef_Topic_Bottom        ) ;
+    addControl ( CONTROLNAME_TEXT, xRef_Text_Bottom         ) ;
+    addControl ( CONTROLNAME_BUTTON, xRef_Button            ) ;
+    addControl ( CONTROLNAME_PROGRESSBAR, xRef_ProgressBar  ) ;
 
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
@@ -115,11 +115,11 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
 
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xButton->setLabel      ( OUString(RTL_CONSTASCII_USTRINGPARAM( DEFAULT_BUTTONLABEL           )) ) ;
-    m_xTopic_Top->setText    ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TOPIC )) ) ;
-    m_xText_Top->setText     ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TEXT  )) ) ;
-    m_xTopic_Bottom->setText ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TOPIC )) ) ;
-    m_xText_Bottom->setText  ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TEXT  )) ) ;
+    m_xButton->setLabel      ( DEFAULT_BUTTONLABEL ) ;
+    m_xTopic_Top->setText    ( PROGRESSMONITOR_DEFAULT_TOPIC ) ;
+    m_xText_Top->setText     ( PROGRESSMONITOR_DEFAULT_TEXT ) ;
+    m_xTopic_Bottom->setText ( PROGRESSMONITOR_DEFAULT_TOPIC ) ;
+    m_xText_Bottom->setText  ( PROGRESSMONITOR_DEFAULT_TEXT ) ;
 
     --m_refCount ;
 }
@@ -674,7 +674,7 @@ const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames(
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSMONITOR ));
+    seqServiceNames.getArray() [0] = SERVICENAME_PROGRESSMONITOR;
     return seqServiceNames ;
 }
 
@@ -891,9 +891,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sTopic ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
+            aCollectString  +=  "\n";
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  "\0";   // It's better :-)
 
         m_xTopic_Top->setText ( aCollectString ) ;
     }
@@ -909,9 +909,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sText ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
+            aCollectString  +=  "\n";
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  "\0";   // It's better :-)
 
         m_xText_Top->setText ( aCollectString ) ;
     }
@@ -929,9 +929,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sTopic ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
+            aCollectString  +=  "\n";
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  "\0";   // It's better :-)
 
         m_xTopic_Bottom->setText ( aCollectString ) ;
     }
@@ -947,9 +947,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sText ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
+            aCollectString  +=  "\n";
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  "\0";   // It's better :-)
 
         m_xText_Bottom->setText ( aCollectString ) ;
     }

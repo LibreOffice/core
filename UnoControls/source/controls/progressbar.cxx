@@ -364,7 +364,7 @@ const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSBAR ));
+    seqServiceNames.getArray() [0] = SERVICENAME_PROGRESSBAR;
     return seqServiceNames ;
 }
 
