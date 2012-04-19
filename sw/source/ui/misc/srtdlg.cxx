@@ -53,9 +53,6 @@
 #include <tblsel.hxx>
 #include <sfx2/request.hxx>
 
-// sw/inc/tblsel.hxx
-SV_IMPL_PTRARR( _FndLines, _FndLine* )
-
 static sal_Bool bCheck1 = sal_True;
 static sal_Bool bCheck2 = sal_False;
 static sal_Bool bCheck3 = sal_False;
@@ -111,11 +108,11 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
         const SwTable& rTbl = pTblNd->GetTable();
         ((SwTableLines&)rTbl.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
     }
-    rX = aFndBox.GetLines().Count();
+    rX = aFndBox.GetLines().size();
     if( !rX )
         return sal_False;
 
-    rY = aFndBox.GetLines()[0]->GetBoxes().size();
+    rY = aFndBox.GetLines().front().GetBoxes().size();
     return sal_True;
 }
 

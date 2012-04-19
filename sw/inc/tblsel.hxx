@@ -35,6 +35,7 @@
 
 #include <map>
 #include <deque>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwCrsrShell;
 class SwCursor;
@@ -194,7 +195,7 @@ class _FndBox;
 class _FndLine;
 
 typedef std::vector<_FndBox*> _FndBoxes;
-SV_DECL_PTRARR_DEL( _FndLines, _FndLine*,10 )
+typedef boost::ptr_vector<_FndLine> _FndLines;
 
 class _FndBox
 {

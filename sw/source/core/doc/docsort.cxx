@@ -505,7 +505,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );;
     }
 
-    if(!aFndBox.GetLines().Count())
+    if(aFndBox.GetLines().empty())
         return sal_False;
 
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
@@ -517,11 +517,11 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         // Uppermost selected Cell
         _FndLines& rLines = aFndBox.GetLines();
 
-        while( nStart < rLines.Count() )
+        while( nStart < rLines.size() )
         {
             // Respect Split Merge nesting,
             // extract the upper most
-            SwTableLine* pLine = rLines[nStart]->GetLine();
+            SwTableLine* pLine = rLines[nStart].GetLine();
             while ( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
 
@@ -531,7 +531,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
                 break;
         }
         // Are all selected in the HeaderLine?  -> no Offset
-        if( nStart == rLines.Count() )
+        if( nStart == rLines.size() )
             nStart = 0;
     }
 
@@ -804,9 +804,9 @@ sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
     sal_uInt16 nBoxes(0);
 
     // Iterate over Lines
-    for(sal_uInt16 i=0; i < rLines.Count(); ++i)
+    for(sal_uInt16 i=0; i < rLines.size(); ++i)
     {   // A List's Box
-        _FndLine* pLn = rLines[i];
+        const _FndLine* pLn = &rLines[i];
         const _FndBoxes& rBoxes = pLn->GetBoxes();
 
         // Amount of Boxes of all Lines is uneven -> no symmetry
@@ -836,10 +836,10 @@ sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
         const _FndLines& rLines = pBox->GetLines();
 
         // Amount of Boxes of all Lines is uneven -> no symmetry
-        if( i && nLines != rLines.Count() )
+        if( i && nLines != rLines.size() )
             return sal_False;
 
-        nLines = rLines.Count();
+        nLines = rLines.size();
         if( nLines && !CheckLineSymmetry( *pBox ) )
             return sal_False;
     }
@@ -853,18 +853,18 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
     // Iterate over Lines
-    if( !rLines.Count() )
+    if( rLines.empty() )
         return 1;
 
     sal_uInt16 nSum = 0;
-    for( sal_uInt16 i=0; i < rLines.Count(); ++i )
+    for( sal_uInt16 i=0; i < rLines.size(); ++i )
     {
         // The Boxes of a Line
         sal_uInt16 nCount = 0;
-        const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
+        const _FndBoxes& rBoxes = rLines[i].GetBoxes();
         for( sal_uInt16 j=0; j < rBoxes.size(); ++j )
             // Iterate recursively over the Lines
-            nCount += rBoxes[j]->GetLines().Count()
+            nCount += rBoxes[j]->GetLines().size()
                         ? GetColCount(*rBoxes[j]) : 1;
 
         if( nSum < nCount )
@@ -879,16 +879,16 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
-    if( !rLines.Count() )
+    if( rLines.empty() )
         return 1;
 
     sal_uInt16 nLines = 0;
-    for(sal_uInt16 i=0; i < rLines.Count(); ++i)
+    for(sal_uInt16 i=0; i < rLines.size(); ++i)
     {   // The Boxes of a Line
-        const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
+        const _FndBoxes& rBoxes = rLines[i].GetBoxes();
         sal_uInt16 nLn = 1;
         for(sal_uInt16 j=0; j < rBoxes.size(); ++j)
-            if( rBoxes[j]->GetLines().Count() )
+            if( rBoxes[j]->GetLines().size() )
                 // Iterate recursively over the Lines
                 nLn = Max(GetRowCount(*rBoxes[j]), nLn);
 
@@ -907,17 +907,17 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
 
     // Iterate over Lines
     sal_uInt16 nOldRow = nRow;
-    for( sal_uInt16 i=0; i < rLines.Count(); ++i )
+    for( sal_uInt16 i=0; i < rLines.size(); ++i )
     {
         // The Boxes of a Line
-        const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
+        const _FndBoxes& rBoxes = rLines[i].GetBoxes();
         sal_uInt16 nOldCol = nCol;
         for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
         {
             // Check the Box if it's an atomic one
             const _FndBox*   pBox   = rBoxes[ j ];
 
-            if( !pBox->GetLines().Count() )
+            if( !pBox->GetLines().size() )
             {
                 // save it
                 sal_uInt16 nOff = nRow * nCols + nCol;

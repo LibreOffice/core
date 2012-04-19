@@ -47,19 +47,21 @@ class SwCntntNode;
 class SfxPoolItem;
 class SwShareBoxFmts;
 class SwFmtFrmSize;
+class _CpyPara;
+class _InsULPara;
 
 // Funktions Deklarationen:
-sal_Bool lcl_CopyRow( const _FndLine*& rpFndLine, void* pPara );
+sal_Bool lcl_CopyRow( const _FndLine& rFndLine, _CpyPara* pCpyPara );
 sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara );
 
 sal_Bool lcl_MergeGCBox( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara );
 
 sal_Bool lcl_Merge_MoveBox( const _FndBox*& rpFndBox, void* pPara );
-sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara );
+sal_Bool lcl_Merge_MoveLine( const _FndLine& rFndLine, _InsULPara* pULPara );
 
 sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara );
-sal_Bool lcl_CopyLineToDoc( const _FndLine*& rpFndLn, void* pPara );
+sal_Bool lcl_CopyLineToDoc( const _FndLine& rpFndLn, _CpyPara* pPara );
 
 sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );

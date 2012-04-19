@@ -94,6 +94,7 @@
 #include <rootfrm.hxx>
 #include <fldupde.hxx>
 #include <switerator.hxx>
+#include <boost/foreach.hpp>
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
@@ -1819,7 +1820,7 @@ sal_Bool SwDoc::DeleteRow( const SwCursor& rCursor )
             pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
         }
 
-        if( !aFndBox.GetLines().Count() )
+        if( !aFndBox.GetLines().size() )
             return sal_False;
 
         SwEditShell* pESh = GetEditShell();
@@ -1830,17 +1831,16 @@ sal_Bool SwDoc::DeleteRow( const SwCursor& rCursor )
         }
 
         _FndBox* pFndBox = &aFndBox;
-        while( 1 == pFndBox->GetLines().Count() &&
-                1 == pFndBox->GetLines()[0]->GetBoxes().size() )
+        while( 1 == pFndBox->GetLines().size() &&
+                1 == pFndBox->GetLines().front().GetBoxes().size() )
         {
-            _FndBox* pTmp = pFndBox->GetLines()[0]->GetBoxes()[0];
+            _FndBox* pTmp = pFndBox->GetLines().front().GetBoxes()[0];
             if( pTmp->GetBox()->GetSttNd() )
                 break;      // das ist sonst zu weit
             pFndBox = pTmp;
         }
 
-        SwTableLine* pDelLine = pFndBox->GetLines()[
-                        pFndBox->GetLines().Count()-1 ]->GetLine();
+        SwTableLine* pDelLine = pFndBox->GetLines().back().GetLine();
         SwTableBox* pDelBox = pDelLine->GetTabBoxes()[
                             pDelLine->GetTabBoxes().Count() - 1 ];
         while( !pDelBox->GetSttNd() )
@@ -1857,7 +1857,7 @@ sal_Bool SwDoc::DeleteRow( const SwCursor& rCursor )
 
         if( !pNextBox )         // keine nachfolgende? dann die vorhergehende
         {
-            pDelLine = pFndBox->GetLines()[ 0 ]->GetLine();
+            pDelLine = pFndBox->GetLines().front().GetLine();
             pDelBox = pDelLine->GetTabBoxes()[ 0 ];
             while( !pDelBox->GetSttNd() )
                 pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
@@ -3640,13 +3640,13 @@ struct _SetAFmtTabPara
 // forward deklarieren damit sich die Lines und Boxen rekursiv aufrufen
 // koennen.
 sal_Bool lcl_SetAFmtBox( _FndBox* pBox, _SetAFmtTabPara *pSetPara );
-sal_Bool lcl_SetAFmtLine( const _FndLine*&, void *pPara );
+sal_Bool lcl_SetAFmtLine( const _FndLine&, _SetAFmtTabPara *pPara );
 
-sal_Bool lcl_SetAFmtLine( const _FndLine*& rpLine, void *pPara )
+sal_Bool lcl_SetAFmtLine( const _FndLine& rLine, _SetAFmtTabPara *pPara )
 {
-    for (_FndBoxes::const_iterator it = ((_FndLine*&)rpLine)->GetBoxes().begin();
-         it != ((_FndLine*&)rpLine)->GetBoxes().end(); ++it)
-        lcl_SetAFmtBox(*it, (_SetAFmtTabPara *)pPara);
+    for (_FndBoxes::const_iterator it = rLine.GetBoxes().begin();
+         it != rLine.GetBoxes().end(); ++it)
+        lcl_SetAFmtBox(*it, pPara);
     return sal_True;
 }
 
@@ -3696,7 +3696,8 @@ sal_Bool lcl_SetAFmtBox( _FndBox* pBox, _SetAFmtTabPara *pSetPara )
         }
     }
     else
-        pBox->GetLines().ForEach( &lcl_SetAFmtLine, pSetPara );
+        BOOST_FOREACH( _FndLine& rFndLine, pBox->GetLines() )
+            lcl_SetAFmtLine( rFndLine, pSetPara );
 
     if( !pBox->GetUpper()->GetUpper() )        // eine BaseLine
         ++pSetPara->nCurBox;
@@ -3718,17 +3719,17 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
         _FndPara aPara( rBoxes, &aFndBox );
         pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
     }
-    if( !aFndBox.GetLines().Count() )
+    if( aFndBox.GetLines().empty() )
         return sal_False;
 
     pTblNd->GetTable().SetHTMLTableLayout( 0 );
 
     _FndBox* pFndBox = &aFndBox;
-    while( 1 == pFndBox->GetLines().Count() &&
-            1 == pFndBox->GetLines()[0]->GetBoxes().size() )
-        pFndBox = pFndBox->GetLines()[0]->GetBoxes()[0];
+    while( 1 == pFndBox->GetLines().size() &&
+            1 == pFndBox->GetLines().front().GetBoxes().size() )
+        pFndBox = pFndBox->GetLines().front().GetBoxes()[0];
 
-    if( !pFndBox->GetLines().Count() )      // eine zu weit? (nur 1 sel.Box)
+    if( pFndBox->GetLines().empty() )      // eine zu weit? (nur 1 sel.Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
 
@@ -3746,9 +3747,9 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
     _FndLines& rFLns = pFndBox->GetLines();
     _FndLine* pLine;
 
-    for( sal_uInt16 n = 0; n < rFLns.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFLns.size(); ++n )
     {
-        pLine = rFLns[n];
+        pLine = &rFLns[n];
 
         // Upper auf 0 setzen (Base-Line simulieren!)
         _FndBox* pSaveBox = pLine->GetUpper();
@@ -3756,7 +3757,7 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
 
         if( !n )
             aPara.nAFmtLine = 0;
-        else if( n+1 == rFLns.Count() )
+        else if( n+1 == rFLns.size() )
             aPara.nAFmtLine = 3;
         else
             aPara.nAFmtLine = (sal_uInt8)(1 + ((n-1) & 1 ));
@@ -3798,28 +3799,28 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
         _FndPara aPara( rBoxes, &aFndBox );
         pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
     }
-    if( !aFndBox.GetLines().Count() )
+    if( aFndBox.GetLines().empty() )
         return sal_False;
 
     _FndBox* pFndBox = &aFndBox;
-    while( 1 == pFndBox->GetLines().Count() &&
-            1 == pFndBox->GetLines()[0]->GetBoxes().size() )
-        pFndBox = pFndBox->GetLines()[0]->GetBoxes()[0];
+    while( 1 == pFndBox->GetLines().size() &&
+            1 == pFndBox->GetLines().front().GetBoxes().size() )
+        pFndBox = pFndBox->GetLines().front().GetBoxes()[0];
 
-    if( !pFndBox->GetLines().Count() )      // eine zu weit? (nur 1 sel.Box)
+    if( pFndBox->GetLines().empty() )      // eine zu weit? (nur 1 sel.Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
     _FndLines& rFLns = pFndBox->GetLines();
 
     sal_uInt16 aLnArr[4];
     aLnArr[0] = 0;
-    aLnArr[1] = 1 < rFLns.Count() ? 1 : 0;
-    aLnArr[2] = 2 < rFLns.Count() ? 2 : aLnArr[1];
-    aLnArr[3] = rFLns.Count() - 1;
+    aLnArr[1] = 1 < rFLns.size() ? 1 : 0;
+    aLnArr[2] = 2 < rFLns.size() ? 2 : aLnArr[1];
+    aLnArr[3] = rFLns.size() - 1;
 
     for( sal_uInt8 nLine = 0; nLine < 4; ++nLine )
     {
-        _FndLine& rLine = *rFLns[ aLnArr[ nLine ] ];
+        _FndLine& rLine = rFLns[ aLnArr[ nLine ] ];
 
         sal_uInt16 aBoxArr[4];
         aBoxArr[0] = 0;

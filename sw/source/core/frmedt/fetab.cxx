@@ -380,7 +380,7 @@ sal_Bool SwFEShell::DeleteRow()
                 pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
             }
 
-            if( !aFndBox.GetLines().Count() )
+            if( aFndBox.GetLines().empty() )
             {
                 EndAllActionAndCall();
                 return sal_False;
@@ -389,17 +389,16 @@ sal_Bool SwFEShell::DeleteRow()
             KillPams();
 
             _FndBox* pFndBox = &aFndBox;
-            while( 1 == pFndBox->GetLines().Count() &&
-                    1 == pFndBox->GetLines()[0]->GetBoxes().size() )
+            while( 1 == pFndBox->GetLines().size() &&
+                    1 == pFndBox->GetLines().front().GetBoxes().size() )
             {
-                _FndBox* pTmp = pFndBox->GetLines()[0]->GetBoxes()[0];
+                _FndBox* pTmp = pFndBox->GetLines().front().GetBoxes()[0];
                 if( pTmp->GetBox()->GetSttNd() )
                     break;      // otherwise too far
                 pFndBox = pTmp;
             }
 
-            SwTableLine* pDelLine = pFndBox->GetLines()[
-                            pFndBox->GetLines().Count()-1 ]->GetLine();
+            SwTableLine* pDelLine = pFndBox->GetLines().back().GetLine();
             SwTableBox* pDelBox = pDelLine->GetTabBoxes()[
                                 pDelLine->GetTabBoxes().Count() - 1 ];
             while( !pDelBox->GetSttNd() )
@@ -416,7 +415,7 @@ sal_Bool SwFEShell::DeleteRow()
 
             if( !pNextBox )         // no next? then the previous
             {
-                pDelLine = pFndBox->GetLines()[ 0 ]->GetLine();
+                pDelLine = pFndBox->GetLines().front().GetLine();
                 pDelBox = pDelLine->GetTabBoxes()[ 0 ];
                 while( !pDelBox->GetSttNd() )
                     pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];

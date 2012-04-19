@@ -193,17 +193,17 @@ namespace
         LineStructure::size_type nMinSize )
         : mnStartCol(USHRT_MAX), mnAddLine(0)
     {
-        if( rFndBox.GetLines().Count() )
+        if( !rFndBox.GetLines().empty() )
         {
             bool bNoSelection = rSelBoxes.size() < 2;
             _FndLines &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
-            const SwTableLine* pLine = rFndLines[0]->GetLine();
+            const SwTableLine* pLine = rFndLines.front().GetLine();
             sal_uInt16 nStartLn = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
             sal_uInt16 nEndLn = nStartLn;
-            if( rFndLines.Count() > 1 )
+            if( rFndLines.size() > 1 )
             {
-                pLine = rFndLines[ rFndLines.Count()-1 ]->GetLine();
+                pLine = rFndLines.back().GetLine();
                 nEndLn = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
             }
             if( nStartLn < USHRT_MAX && nEndLn < USHRT_MAX )
@@ -225,7 +225,7 @@ namespace
                         _FndLine *pInsLine = new _FndLine( pLine2, &rFndBox );
                         _FndBox *pFndBox = new _FndBox( pTmpBox, pInsLine );
                         pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), pFndBox);
-                        rFndLines.C40_INSERT( _FndLine, pInsLine, rFndLines.Count() );
+                        rFndLines.push_back( pInsLine );
                     }
                 }
                 maLines.resize( nEndLn - nStartLn + 1 );
@@ -854,13 +854,13 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         sal_uInt16 nSttLine = GetTabLines().C40_GETPOS( SwTableLine, pSttLine );
         _FndBox* pFndBox;
 
-        sal_uInt16 nFndCnt = aFndBox.GetLines().Count();
+        sal_uInt16 nFndCnt = aFndBox.GetLines().size();
         if( !nFndCnt )
             return sal_False;
 
         // Check if we have enough space for all Lines and Boxes
         sal_uInt16 nTstLns = 0;
-        pFLine = aFndBox.GetLines()[ 0 ];
+        pFLine = &aFndBox.GetLines().front();
         pSttLine = pFLine->GetLine();
         nSttLine = GetTabLines().C40_GETPOS( SwTableLine, pSttLine );
         // Do we have as many rows, actually?
@@ -925,7 +925,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         for( nLn = 0; nLn < nTstLns; ++nLn )
         {
             // We have enough rows, so check the Boxes per row
-            pFLine = aFndBox.GetLines()[ nLn % nFndCnt ];
+            pFLine = &aFndBox.GetLines()[ nLn % nFndCnt ];
             SwTableLine* pLine = pFLine->GetLine();
             pSttBox = pFLine->GetBoxes()[0]->GetBox();
             nSttBox = pLine->GetTabBoxes().C40_GETPOS( SwTableBox, pSttBox );
@@ -958,7 +958,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
                     pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx, pFndBox );
                 }
-                aFndBox.GetLines().C40_INSERT( _FndLine, pInsFLine, nLn );
+                aFndBox.GetLines().insert( aFndBox.GetLines().begin() + nLn, pInsFLine );
             }
             else if( pFLine->GetBoxes().size() == 1 )
             {
@@ -996,7 +996,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             }
         }
 
-        if( !aFndBox.GetLines().Count() )
+        if( aFndBox.GetLines().empty() )
             return sal_False;
     }
 
@@ -1019,9 +1019,9 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         it->second, sal_True, pUndo );
     }
     else
-        for( nLn = 0; nLn < aFndBox.GetLines().Count(); ++nLn )
+        for( nLn = 0; nLn < aFndBox.GetLines().size(); ++nLn )
         {
-            pFLine = aFndBox.GetLines()[ nLn ];
+            pFLine = &aFndBox.GetLines()[ nLn ];
             SwTableLine* pCpyLn = rCpyTbl.GetTabLines()[
                                 nLn % rCpyTbl.GetTabLines().Count() ];
             for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )

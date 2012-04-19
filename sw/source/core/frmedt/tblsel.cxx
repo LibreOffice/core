@@ -57,6 +57,7 @@
 #include <frmtool.hxx>
 #include <switerator.hxx>
 #include <deque>
+#include <boost/foreach.hpp>
 
 // see also swtable.cxx
 #define COLFUZZY 20L
@@ -102,8 +103,6 @@ struct _CmpLPt
 
 SV_DECL_VARARR_SORT( _MergePos, _CmpLPt, 0 )
 SV_IMPL_VARARR_SORT( _MergePos, _CmpLPt )
-
-SV_IMPL_PTRARR( _FndLines, _FndLine* )
 
 
 struct _Sort_CellFrm
@@ -1451,23 +1450,24 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
 static sal_Bool lcl_CheckCol( _FndBox* pFndBox, sal_Bool* pPara );
 
-static sal_Bool lcl_CheckRow( const _FndLine*& rpFndLine, void* pPara )
+static sal_Bool lcl_CheckRow( const _FndLine& rFndLine, sal_Bool* pPara )
 {
-    for (_FndBoxes::const_iterator it = ((_FndLine*)rpFndLine)->GetBoxes().begin();
-         it != ((_FndLine*)rpFndLine)->GetBoxes().end(); ++it)
-        lcl_CheckCol(*it, (sal_Bool*)pPara);
-    return *(sal_Bool*)pPara;
+    for (_FndBoxes::const_iterator it = rFndLine.GetBoxes().begin();
+         it != rFndLine.GetBoxes().end(); ++it)
+        lcl_CheckCol(*it, pPara);
+    return *pPara;
 }
 
 static sal_Bool lcl_CheckCol( _FndBox* pFndBox, sal_Bool* pPara )
 {
     if( !pFndBox->GetBox()->GetSttNd() )
     {
-        if( pFndBox->GetLines().Count() !=
+        if( pFndBox->GetLines().size() !=
             pFndBox->GetBox()->GetTabLines().Count() )
             *pPara = sal_False;
         else
-            pFndBox->GetLines().ForEach( &lcl_CheckRow, pPara );
+            BOOST_FOREACH( _FndLine& rFndLine, pFndBox->GetLines() )
+                lcl_CheckRow( rFndLine, pPara );
     }
     // is box protected ??
     else if( pFndBox->GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected() )
@@ -1506,21 +1506,22 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
         const SwTableNode* pTblNd = aPara.rBoxes.begin()->second->GetSttNd()->FindTableNode();
         ((SwTable&)pTblNd->GetTable()).GetTabLines().ForEach(
                     &_FndLineCopyCol, &aPara );
-        if( aFndBox.GetLines().Count() )
+        if( !aFndBox.GetLines().empty() )
         {
             sal_Bool bMergeSelOk = sal_True;
             _FndBox* pFndBox = &aFndBox;
             _FndLine* pFndLine = 0;
-            while( pFndBox && 1 == pFndBox->GetLines().Count() )
+            while( pFndBox && 1 == pFndBox->GetLines().size() )
             {
-                pFndLine = pFndBox->GetLines()[0];
+                pFndLine = &pFndBox->GetLines().front();
                 if( 1 == pFndLine->GetBoxes().size() )
                     pFndBox = pFndLine->GetBoxes().front();
                 else
                     pFndBox = 0;
             }
             if( pFndBox )
-                pFndBox->GetLines().ForEach( &lcl_CheckRow, &bMergeSelOk );
+                BOOST_FOREACH( _FndLine& rFndLine, pFndBox->GetLines() )
+                    lcl_CheckRow( rFndLine, &bMergeSelOk );
             else if( pFndLine )
                 for (_FndBoxes::const_iterator it = pFndLine->GetBoxes().begin();
                      it != pFndLine->GetBoxes().end(); ++it)
@@ -2101,7 +2102,7 @@ sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
     {
         _FndPara aPara( *pFndPara, pFndBox );
         pFndBox->GetBox()->GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-        if( !pFndBox->GetLines().Count() )
+        if( pFndBox->GetLines().empty() )
         {
             delete pFndBox;
             return sal_True;
@@ -2127,8 +2128,7 @@ sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
     pFndLine->GetLine()->GetTabBoxes().ForEach( &_FndBoxCopyCol, &aPara );
     if( pFndLine->GetBoxes().size() )
     {
-        pFndPara->pFndBox->GetLines().C40_INSERT( _FndLine, pFndLine,
-                pFndPara->pFndBox->GetLines().Count() );
+        pFndPara->pFndBox->GetLines().push_back( pFndLine );
     }
     else
         delete pFndLine;
@@ -2176,16 +2176,16 @@ void _FndBox::SetTableLines( const SwTable &rTable )
     // of the SwTable are in FndBox. In order to use 0 for 'no line'
     // we adjust the positions by 1.
 
-    if( !GetLines().Count() )
+    if( GetLines().empty() )
         return;
 
-    SwTableLine* pTmpLine = GetLines()[0]->GetLine();
+    SwTableLine* pTmpLine = GetLines().front().GetLine();
     sal_uInt16 nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( nPos )
         pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
 
-    pTmpLine = GetLines()[GetLines().Count()-1]->GetLine();
+    pTmpLine = GetLines().back().GetLine();
     nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( ++nPos < rTable.GetTabLines().Count() )

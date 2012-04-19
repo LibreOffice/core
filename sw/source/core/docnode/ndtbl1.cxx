@@ -57,6 +57,7 @@
 #include "undobj.hxx"
 #include "switerator.hxx"
 #include <UndoTable.hxx>
+#include <boost/foreach.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -200,20 +201,21 @@ struct LinesAndTable
 };
 
 
-sal_Bool _FindLine( const _FndLine*& rpLine, void* pPara );
+sal_Bool _FindLine( const _FndLine& rLine, LinesAndTable* pPara );
 
 sal_Bool _FindBox( _FndBox* pBox, LinesAndTable* pPara )
 {
-    if ( pBox->GetLines().Count() )
+    if ( !pBox->GetLines().empty() )
     {
         pPara->bInsertLines = sal_True;
-        pBox->GetLines().ForEach( _FindLine, pPara );
+        BOOST_FOREACH( _FndLine& rFndLine, pBox->GetLines() )
+            _FindLine( rFndLine, pPara );
         if ( pPara->bInsertLines )
         {
             const SwTableLines &rLines = pBox->GetBox()
                                     ? pBox->GetBox()->GetTabLines()
                                     : pPara->rTable.GetTabLines();
-            if ( pBox->GetLines().Count() == rLines.Count() )
+            if ( pBox->GetLines().size() == rLines.Count() )
             {
                 for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
                     ::InsertLine( pPara->rLines,
@@ -229,11 +231,11 @@ sal_Bool _FindBox( _FndBox* pBox, LinesAndTable* pPara )
     return sal_True;
 }
 
-sal_Bool _FindLine( const _FndLine*& rpLine, void* pPara )
+sal_Bool _FindLine( const _FndLine& rLine, LinesAndTable* pPara )
 {
-    for (_FndBoxes::const_iterator it = ((_FndLine*)rpLine)->GetBoxes().begin();
-         it != ((_FndLine*)rpLine)->GetBoxes().end(); ++it)
-        _FindBox(*it, (LinesAndTable *)pPara);
+    for (_FndBoxes::const_iterator it = rLine.GetBoxes().begin();
+         it != rLine.GetBoxes().end(); ++it)
+        _FindBox(*it, pPara);
     return sal_True;
 }
 
