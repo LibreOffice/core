@@ -139,7 +139,7 @@ public:
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
-                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false );
     bool            IsModified() const              { return bModified; }
 
     SC_DLLPUBLIC void           GuessPosition();
@@ -203,7 +203,7 @@ public:
     SC_DLLPUBLIC const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
-                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false);
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);

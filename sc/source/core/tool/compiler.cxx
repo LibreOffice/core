@@ -4454,7 +4454,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
 bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      const ScRange& r,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     bool& rChanged, bool bSharedFormula)
+                                     bool& rChanged, bool bSharedFormula, bool bLocal)
 {
     bool bRelRef = false;   // set if relative reference
     rChanged = false;
@@ -4474,15 +4474,12 @@ bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
         if (!bUpdate && t->GetType() == svDoubleRef)
             bUpdate = !rRef.Ref2.IsColRel() || !rRef.Ref2.IsRowRel() ||
                 !rRef.Ref2.IsTabRel();
-        if (!bSharedFormula)
+        if (!bSharedFormula && !bLocal)
         {
             // We cannot update names with sheet-relative references, they may
             // be used on other sheets as well and the resulting reference
             // would be wrong. This is a dilemma if col/row would need to be
             // updated for the current usage.
-            // TODO: seems the only way out of this would be to not allow
-            // relative sheet references and have sheet-local names that can be
-            // copied along with sheets.
             bUpdate = bUpdate && !rRef.Ref1.IsTabRel() && !rRef.Ref2.IsTabRel();
         }
         if (bUpdate)

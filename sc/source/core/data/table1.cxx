@@ -1379,7 +1379,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
     if (mpRangeName)
     {
         ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );;
-        mpRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+        mpRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, true );
     }
 
     if ( bIncludeDraw )
