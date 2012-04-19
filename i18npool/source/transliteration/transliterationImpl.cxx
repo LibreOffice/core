@@ -629,7 +629,10 @@ void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTrans
             }
         }
     }
-    throw ERROR;
+    throw RuntimeException(
+        ("cannot find " TRLT_SERVICELNAME_L10N " service implementation named "
+         + implName),
+        Reference< XInterface >());
 }
 
 sal_Bool SAL_CALL
