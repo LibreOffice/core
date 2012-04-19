@@ -73,13 +73,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-
-// -----------
-// - Defines -
-// -----------
-
-#define MAXPATH 1024
-
 // ----------------
 // - SearchThread -
 // ----------------

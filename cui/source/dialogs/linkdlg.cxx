@@ -53,11 +53,6 @@
 
 #include <svl/svstdarr.hxx>
 
-#define MAX_FILENAME    18
-#define MAX_LINKNAME    18
-#define MAX_TYPENAME    15
-#define MAX_UPDATENAME  10
-
 #define FILEOBJECT ( OBJECT_CLIENT_FILE & ~OBJECT_CLIENT_SO )
 
 using namespace sfx2;

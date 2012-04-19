@@ -42,8 +42,6 @@
 #define MACRO_OK_RUN        11
 #define MACRO_NEW           12
 #define MACRO_EDIT          14
-#define MACRO_ORGANIZE      15
-#define MACRO_ASSIGN        16
 
 #define MACROCHOOSER_ALL            1
 #define MACROCHOOSER_CHOOSEONLY     2

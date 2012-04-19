@@ -51,12 +51,6 @@
 #define OBJTYPE_SCRIPTCONTAINER     3L
 #define OBJTYPE_SFROOT      4L
 
-#define BROWSEMODE_MODULES      0x01
-#define BROWSEMODE_SUBS         0x02
-#define BROWSEMODE_OBJS         0x04
-#define BROWSEMODE_PROPS        0x08
-#define BROWSEMODE_SUBOBJS      0x10
-
 #define INPUTMODE_NEWLIB        1
 #define INPUTMODE_NEWMACRO      2
 #define INPUTMODE_RENAME        3

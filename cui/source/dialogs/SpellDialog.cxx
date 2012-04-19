@@ -79,7 +79,6 @@ using namespace ::com::sun::star::linguistic2;
 
 using ::rtl::OUString;
 
-#define C2U(cChar)                  ::rtl::OUString::createFromAscii(cChar)
 // struct SpellDialog_Impl ---------------------------------------------
 
 struct SpellDialog_Impl

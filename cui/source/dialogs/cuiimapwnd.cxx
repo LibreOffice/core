@@ -53,8 +53,6 @@
 
 #include <sot/formats.hxx>
 
-#define TRANSCOL Color( COL_WHITE )
-
 /*************************************************************************
 |*
 |*  URLDlg
