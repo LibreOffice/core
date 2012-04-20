@@ -266,7 +266,7 @@ void doTestDouble(char const*const pis, double const rd,
     Converter::convertDouble(buf, od, true, nTargetUnit, nSourceUnit);
     OSL_TRACE("%s",
         ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
-    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+    CPPUNIT_ASSERT(buf.makeStringAndClear().equals(is));
 }
 
 void ConverterTest::testDouble()
