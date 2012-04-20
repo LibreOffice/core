@@ -122,6 +122,8 @@ public:
     virtual sal_Bool SAL_CALL getEnableEvents() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) throw (css::uno::RuntimeException);
 
+    virtual sal_Bool SAL_CALL getDisplayFullScreen() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDisplayFullScreen( sal_Bool bSet ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL wait( double time ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);

@@ -74,6 +74,7 @@ interface XApplication
     [attribute] boolean Visible;
     [attribute] boolean Iteration;
     [attribute] long EnableCancelKey;
+    [attribute] boolean DisplayFullScreen;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 

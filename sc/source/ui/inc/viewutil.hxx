@@ -50,7 +50,7 @@ enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 
 // ---------------------------------------------------------------------------
 
-class ScViewUtil                                // static Methoden
+class SC_DLLPUBLIC ScViewUtil								// static Methoden
 {
 public:
     static sal_Bool ExecuteCharMap( const SvxFontItem&  rOldFont,

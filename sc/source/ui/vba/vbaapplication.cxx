@@ -119,6 +119,8 @@
 #include <basic/sbxobj.hxx>
 
 #include "vbafiledialog.hxx"
+#include "viewutil.hxx"
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -872,6 +874,24 @@ sal_Bool SAL_CALL
 ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
 {
     return mrAppSettings.mbEnableEvents;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getDisplayFullScreen()  throw (uno::RuntimeException)
+{
+    SfxViewShell* pShell  = excel::getCurrentBestViewShell( mxContext );
+    if ( pShell )
+        return ScViewUtil::IsFullScreen( *pShell );
+    return sal_False;
+}
+
+void SAL_CALL
+ScVbaApplication::setDisplayFullScreen( sal_Bool bSet )  throw (uno::RuntimeException)
+{
+    // #FIXME calling  ScViewUtil::SetFullScreen( *pShell, bSet );
+    // directly results in a strange crash, using dispatch instead
+    if ( bSet != getDisplayFullScreen() )
+        dispatchRequests( getCurrentDocument(), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:FullScreen") ) );
 }
 
 sal_Bool SAL_CALL
