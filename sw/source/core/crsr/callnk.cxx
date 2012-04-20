@@ -100,8 +100,21 @@ void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
             if ( pRow )
             {
                 const SwTableLine* pLine = pRow->GetTabLine( );
-                SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-                pRow->ModifyNotification( NULL, &pSize );
+                // Avoid redrawing the complete row if there are no nested tables
+                bool bHasTable = false;
+                SwFrm *pCell = pRow->GetLower();
+                for (; pCell && !bHasTable; pCell = pCell->GetNext())
+                {
+                    SwFrm *pContent = pCell->GetLower();
+                    for (; pContent && !bHasTable; pContent = pContent->GetNext())
+                        if (pContent->GetType() == FRM_TAB)
+                            bHasTable = true;
+                }
+                if (bHasTable)
+                {
+                    SwFmtFrmSize pSize = pLine->GetFrmFmt()->GetFrmSize();
+                    pRow->ModifyNotification(NULL, &pSize);
+                }
             }
         }
     }
