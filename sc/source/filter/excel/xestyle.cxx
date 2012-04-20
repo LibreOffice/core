@@ -28,12 +28,14 @@
 
 #include "xestyle.hxx"
 
+#include <iostream>
 #include <algorithm>
 #include <iterator>
 #include <set>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/font.hxx>
 #include <svl/zformat.hxx>
+#include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/printer.hxx>
 #include "scitems.hxx"
@@ -2878,9 +2880,16 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         delete pCellArea;
                         pCellArea = NULL;
                     }
-                    //XclExpFont* pFont = new XclExpFont( GetRoot(), XclFontData( rFont ), EXC_COLOR_CELLTEXT );
 
-                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, NULL, NULL, pCellProt, pCellArea ));
+                    XclExpFont* pFont = NULL;
+                    // check if non default font is set and only export then
+                    if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ))>SFX_ITEM_DEFAULT )
+                    {
+                        Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
+                        pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
+                    }
+
+                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, NULL, pCellProt, pCellArea ));
                     ++nIndex;
                 }
 
