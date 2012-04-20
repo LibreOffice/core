@@ -32,26 +32,30 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <xmloff/attrlist.hxx>
 #include <ucbhelper/content.hxx>
+
+#include <libwps/libwps.h>
 
 #include "filter/FilterInternal.hxx"
 #include "filter/DocumentHandler.hxx"
 #include "filter/OdtGenerator.hxx"
+#include "MSWorksImportFilter.hxx"
 #include "stream/WPXSvStream.h"
 
-#include <libwps/WPSDocument.h>
-#include "MSWorksImportFilter.hxx"
+#include <iostream>
 
-// using namespace ::rtl;
+using namespace ::com::sun::star::uno;
 using rtl::OString;
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
@@ -61,7 +65,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::document::XFilter;
 using com::sun::star::document::XExtendedFilterDetection;
@@ -102,7 +105,7 @@ throw (RuntimeException)
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
-    Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+    Reference < XDocumentHandler > xInternalHandler( comphelper::ComponentContext( mxContext ).createComponent( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
@@ -251,10 +254,10 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-Reference< XInterface > SAL_CALL MSWorksImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL MSWorksImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-    return (cppu::OWeakObject *) new MSWorksImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new MSWorksImportFilter( rContext );
 }
 
 // XServiceInfo

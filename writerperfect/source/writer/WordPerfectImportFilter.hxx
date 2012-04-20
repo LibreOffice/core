@@ -37,16 +37,12 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-enum FilterType
-{
-    FILTER_IMPORT,
-    FILTER_EXPORT
-};
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
@@ -60,8 +56,7 @@ class WordPerfectImportFilter : public cppu::WeakImplHelper5
     >
 {
 protected:
-    // oo.org declares
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
     ::rtl::OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
@@ -70,8 +65,8 @@ protected:
     throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    WordPerfectImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ) {}
+    WordPerfectImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext )
+        : mxContext( rxContext ) {}
     virtual ~WordPerfectImportFilter() {}
 
     // XFilter
@@ -112,7 +107,7 @@ throw ( ::com::sun::star::uno::RuntimeException );
 throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL WordPerfectImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+SAL_CALL WordPerfectImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
 throw ( ::com::sun::star::uno::Exception );
 
 
@@ -122,7 +117,7 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
     com::sun::star::beans::XPropertyAccess
     >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::rtl::OUString msPassword;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxInputStream;
 
@@ -154,7 +149,7 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
            ::com::sun::star::uno::RuntimeException);
 
 public:
-    WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r );
+    WordPerfectImportFilterDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext);
 
 };
 
@@ -168,7 +163,7 @@ throw ( ::com::sun::star::uno::RuntimeException );
 throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL WordPerfectImportFilterDialog_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+SAL_CALL WordPerfectImportFilterDialog_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
 throw ( ::com::sun::star::uno::Exception );
 
 #endif

@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_api,wpftwriter,\
 ))
 
 $(eval $(call gb_Library_use_libraries,wpftwriter,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	vcl \

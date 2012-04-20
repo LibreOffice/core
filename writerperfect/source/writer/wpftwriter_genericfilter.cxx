@@ -23,59 +23,33 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#include <stdio.h>
+#include "sal/config.h"
 
-#include <osl/mutex.hxx>
-#include <osl/thread.h>
-#include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "sal/types.h"
 
 #include "WordPerfectImportFilter.hxx"
 #include "MSWorksImportFilter.hxx"
 
-using namespace ::rtl;
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+namespace {
 
-extern "C"
+static cppu::ImplementationEntry const services[] = {
+    { &WordPerfectImportFilter_createInstance, &WordPerfectImportFilter_getImplementationName,
+      &WordPerfectImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &MSWorksImportFilter_createInstance, &MSWorksImportFilter_getImplementationName,
+      &MSWorksImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 } };
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wpftwriter_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
-    SAL_DLLPUBLIC_EXPORT void *SAL_CALL wpftwriter_component_getFactory(
-        const sal_Char *pImplName, void *pServiceManager, void * /* pRegistryKey */ )
-    {
-        void *pRet = 0;
-
-        OUString implName = OUString::createFromAscii( pImplName );
-        if ( pServiceManager && implName.equals(WordPerfectImportFilter_getImplementationName()) )
-        {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                        OUString::createFromAscii( pImplName ),
-                        WordPerfectImportFilter_createInstance, WordPerfectImportFilter_getSupportedServiceNames() ) );
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        if ( pServiceManager && implName.equals(MSWorksImportFilter_getImplementationName()) )
-        {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                        OUString::createFromAscii( pImplName ),
-                        MSWorksImportFilter_createInstance, MSWorksImportFilter_getSupportedServiceNames() ) );
-
-            if (xFactory.is())
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-
-        return pRet;
-    }
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

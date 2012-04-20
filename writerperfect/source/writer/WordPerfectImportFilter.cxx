@@ -29,35 +29,31 @@
 
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <xmloff/attrlist.hxx>
-#include <ucbhelper/content.hxx>
 #include <sfx2/passwd.hxx>
+#include <ucbhelper/content.hxx>
+
+#include <libwpd/libwpd.h>
 
 #include "filter/FilterInternal.hxx"
 #include "filter/DocumentHandler.hxx"
-#include "stream/WPXSvStream.h"
-
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
-#include <libwpd/WPDocument.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
-
-#include "filter/OdtGenerator.hxx"
 #include "filter/OdgGenerator.hxx"
+#include "filter/OdtGenerator.hxx"
+#include "stream/WPXSvStream.h"
 #include "WordPerfectImportFilter.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 using rtl::OString;
@@ -69,7 +65,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::document::XFilter;
 using com::sun::star::document::XExtendedFilterDetection;
@@ -164,7 +159,7 @@ throw (RuntimeException)
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
-    uno::Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+    Reference < XDocumentHandler > xInternalHandler( comphelper::ComponentContext( mxContext ).createComponent( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
@@ -203,8 +198,8 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-throw( com::sun::star::uno::RuntimeException )
+OUString SAL_CALL WordPerfectImportFilter::detect( uno::Sequence< PropertyValue >& Descriptor )
+throw( uno::RuntimeException )
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::detect: Got here!\n"));
 
@@ -313,10 +308,10 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-uno::Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
+uno::Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const uno::Reference< uno::XComponentContext > & rContext)
 throw( Exception )
 {
-    return (cppu::OWeakObject *) new WordPerfectImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new WordPerfectImportFilter( rContext );
 }
 
 // XServiceInfo
@@ -337,20 +332,20 @@ throw (RuntimeException)
 }
 
 
-WordPerfectImportFilterDialog::WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
-    mxMSF( r ) {}
+WordPerfectImportFilterDialog::WordPerfectImportFilterDialog( const uno::Reference< uno::XComponentContext > & rContext) :
+    mxContext( rContext ) {}
 
 WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 {
 }
 
 void SAL_CALL WordPerfectImportFilterDialog::setTitle( const ::rtl::OUString & )
-throw (::com::sun::star::uno::RuntimeException)
+throw (uno::RuntimeException)
 {
 }
 
 sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
-throw (::com::sun::star::uno::RuntimeException)
+throw (uno::RuntimeException)
 {
     WPXSvInputStream input( mxInputStream );
 
@@ -452,10 +447,10 @@ throw (RuntimeException)
 }
 #undef SERVICE_NAME
 
-uno::Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
+uno::Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const uno::Reference< uno::XComponentContext > & rContext)
 throw( Exception )
 {
-    return (cppu::OWeakObject *) new WordPerfectImportFilterDialog( rSMgr );
+    return (cppu::OWeakObject *) new WordPerfectImportFilterDialog( rContext );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
