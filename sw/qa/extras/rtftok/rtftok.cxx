@@ -81,6 +81,7 @@ public:
     void testFdo45182();
     void testFdo44176();
     void testFdo39053();
+    void testFdo48356();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testFdo45182);
     CPPUNIT_TEST(testFdo44176);
     CPPUNIT_TEST(testFdo39053);
+    CPPUNIT_TEST(testFdo48356);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -552,6 +554,24 @@ void RtfModelTest::testFdo39053()
     }
     // The image in binary format was ignored.
     CPPUNIT_ASSERT_EQUAL(1, nAsCharacter);
+}
+
+void RtfModelTest::testFdo48356()
+{
+    load("fdo48356.rtf");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    OUStringBuffer aBuf;
+    int i = 0;
+    while (xParaEnum->hasMoreElements())
+    {
+        xParaEnum->nextElement();
+        i++;
+    }
+    // The document used to be imported as two paragraphs.
+    CPPUNIT_ASSERT_EQUAL(1, i);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

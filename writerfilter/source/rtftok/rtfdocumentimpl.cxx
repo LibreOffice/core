@@ -765,7 +765,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     bool bSkipped = false;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
-        if (ch != 0x0d && ch != 0x0a)
+        if (m_aStates.top().nInternalState == INTERNAL_HEX || (ch != 0x0d && ch != 0x0a))
         {
             if (m_aStates.top().nCharsToSkip == 0)
             {
