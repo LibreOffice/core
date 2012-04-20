@@ -610,7 +610,7 @@ AC_ARG_ENABLE(atl,
 AC_ARG_ENABLE(symbols,
     AS_HELP_STRING([--enable-symbols],
         [Include debugging symbols in output. WARNING - a complete build needs
-         8 Gb of space and takes much longer (enables -g compiler flag).
+         a lot of space (roughly 10 GiB) and takes much longer (enables -g compiler flag).
          You can also use this switch as follows:
          --enable-symbols="all -sw/ -Library_sc" to enable symbols only for
          the specified gbuild-build targets (all means everything, - prepended
