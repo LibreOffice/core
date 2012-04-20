@@ -1951,7 +1951,8 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
                 {
                     editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
-                    pLine->SetStyle( eBorderStyle );
+                    if( pLine )
+                        pLine->SetStyle( eBorderStyle );
                 }
                 return sal_True;
             }
