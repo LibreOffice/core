@@ -176,7 +176,7 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
         OSL_FAIL( sMessage.getStr() );
 #else
-    #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
+    #define DISPLAY_EXCEPTION( ClassName, MethodName, e ) (void)e;
 #endif
 
 #define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( ClassName, InterfaceName, MethodName, ParamType1, ParamType2 ) \
