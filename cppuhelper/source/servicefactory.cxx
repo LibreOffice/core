@@ -59,6 +59,8 @@
 #endif
 
 #include "macro_expander.hxx"
+#include "paths.hxx"
+#include "servicefactory_detail.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -74,9 +76,6 @@ namespace cppu
 
 Reference< security::XAccessController >
 createDefaultAccessController() SAL_THROW(());
-
-OUString const & get_this_libpath();
-
 
 static Reference< XInterface > SAL_CALL createInstance(
     Reference< XInterface > const & xFactory,
@@ -182,7 +181,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     UNO_AC_POLICYFILE=<file_url> [optional]
       -- read policy out of simple text file
 */
-static void add_access_control_entries(
+void add_access_control_entries(
     ::std::vector< ContextEntry_Init > * values,
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )

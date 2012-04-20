@@ -53,9 +53,6 @@ public:
 
     virtual ~TextualServices();
 
-    void merge(const rtl::OUString &uri)
-        throw (com::sun::star::registry::InvalidRegistryException);
-
     inline rtl::OUString getUri() { return uri_; }
 
     com::sun::star::uno::Reference< com::sun::star::registry::XRegistryKey >

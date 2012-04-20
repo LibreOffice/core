@@ -48,6 +48,10 @@ namespace cppu
 
     @rBootstrapPath optional bootstrap path for initial components
     @return simple registry service instance
+
+    @deprecated Registry-based type/service information is successively
+    replaced with more modern formats; client code should exclusively use
+    ::cppu::defaultBootstrap_InitialComponentContext (or ::cppu::bootstrap).
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
 SAL_CALL createSimpleRegistry(
@@ -58,6 +62,10 @@ SAL_CALL createSimpleRegistry(
 
     @rBootstrapPath optional bootstrap path for initial components
     @return nested registry service instance
+
+    @deprecated Registry-based type/service information is successively
+    replaced with more modern formats; client code should exclusively use
+    ::cppu::defaultBootstrap_InitialComponentContext (or ::cppu::bootstrap).
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
 SAL_CALL createNestedRegistry(
@@ -83,6 +91,10 @@ CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
     @param xRegistry registry for service manager and singleton objects of context (may be null)
     @param rBootstrapPath optional bootstrap path for initial components
     @return component context
+
+    @deprecated Registry-based type/service information is successively
+    replaced with more modern formats; client code should exclusively use
+    ::cppu::defaultBootstrap_InitialComponentContext (or ::cppu::bootstrap).
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 bootstrap_InitialComponentContext(
@@ -91,19 +103,13 @@ bootstrap_InitialComponentContext(
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-/** Bootstraps an initial component context with service manager upon default types and
-    services registry.
-    This includes insertion of initial services:
-      - (registry) service manager, shared lib loader,
-      - simple registry, nested registry,
-      - implementation registration
-      - registry typedescription provider, typedescription manager (also installs it into cppu core)
+/** Bootstraps an initial component context with service manager upon
+    information from bootstrap variables.
 
     This function tries to find its parameters via these bootstrap variables:
 
       - UNO_TYPES         -- a space separated list of file urls of type rdbs
       - UNO_SERVICES      -- a space separated list of file urls of service rdbs
-      - UNO_WRITERDB      -- a file url of a write rdb (e.g. user.rdb)
 
     Please look at http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
     for further info.
@@ -114,19 +120,13 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XC
 defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-/** Bootstraps an initial component context with service manager upon default types and
-    services registry.
-    This includes insertion of initial services:
-      - (registry) service manager, shared lib loader,
-      - simple registry, nested registry,
-      - implementation registration
-      - registry typedescription provider, typedescription manager (also installs it into cppu core)
+/** Bootstraps an initial component context with service manager upon
+    information from an ini file.
 
     This function tries to find its parameters via these bootstrap variables:
 
       - UNO_TYPES         -- a space separated list of file urls of type rdbs
       - UNO_SERVICES      -- a space separated list of file urls of service rdbs
-      - UNO_WRITERDB      -- a file url of a write rdb (e.g. user.rdb)
 
     Please look at http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
     for further info.

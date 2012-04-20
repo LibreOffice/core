@@ -132,6 +132,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                 factories,
             Reference<XComponentContext> const & xContext );
 
+        void componentLiveInsertion(
+            ComponentBackendDb::Data const & data,
+            std::vector< css::uno::Reference< css::uno::XInterface > > const &
+                factories);
+
+        void componentLiveRemoval(ComponentBackendDb::Data const & data);
+
         virtual void SAL_CALL disposing();
 
         // Package
@@ -337,22 +344,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     css::uno::Reference< css::registry::XRegistryKey > openRegistryKey(
         css::uno::Reference< css::registry::XRegistryKey > const & base,
         rtl::OUString const & path);
-
-    void extractComponentData(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
-        css::uno::Reference< css::registry::XRegistryKey > const & registry,
-        ComponentBackendDb::Data * data,
-        std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
-        css::uno::Reference< css::loader::XImplementationLoader > const *
-            componentLoader,
-        rtl::OUString const * componentUrl);
-
-    void componentLiveInsertion(
-        ComponentBackendDb::Data const & data,
-        std::vector< css::uno::Reference< css::uno::XInterface > > const &
-            factories);
-
-    void componentLiveRemoval(ComponentBackendDb::Data const & data);
 
     css::uno::Reference< css::uno::XComponentContext > getRootContext() const;
 
@@ -1173,184 +1164,6 @@ css::uno::Reference< css::registry::XRegistryKey > BackendImpl::openRegistryKey(
     return key;
 }
 
-void BackendImpl::extractComponentData(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
-    css::uno::Reference< css::registry::XRegistryKey > const & registry,
-    ComponentBackendDb::Data * data,
-    std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
-    css::uno::Reference< css::loader::XImplementationLoader > const *
-        componentLoader,
-    rtl::OUString const * componentUrl)
-{
-    OSL_ASSERT(context.is() && registry.is() && data != 0);
-    rtl::OUString registryName(registry->getKeyName());
-    sal_Int32 prefix = registryName.getLength();
-    if (!registryName.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
-        prefix += RTL_CONSTASCII_LENGTH("/");
-    }
-    css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
-        keys(registry->openKeys());
-    css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
-        context->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    for (sal_Int32 i = 0; i < keys.getLength(); ++i) {
-        rtl::OUString name(keys[i]->getKeyName().copy(prefix));
-        data->implementationNames.push_back(name);
-        css::uno::Reference< css::registry::XRegistryKey > singletons(
-            keys[i]->openKey(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/SINGLETONS"))));
-        if (singletons.is()) {
-            sal_Int32 prefix2 = keys[i]->getKeyName().getLength() +
-                RTL_CONSTASCII_LENGTH("/UNO/SINGLETONS/");
-            css::uno::Sequence<
-                css::uno::Reference< css::registry::XRegistryKey > >
-                singletonKeys(singletons->openKeys());
-            for (sal_Int32 j = 0; j < singletonKeys.getLength(); ++j) {
-                data->singletons.push_back(
-                    std::pair< rtl::OUString, rtl::OUString >(
-                        singletonKeys[j]->getKeyName().copy(prefix2), name));
-            }
-        }
-        if (factories != 0) {
-            css::uno::Reference< css::loader::XImplementationLoader > loader;
-            if (componentLoader == 0) {
-                rtl::OUString activator(
-                    openRegistryKey(
-                        keys[i],
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("UNO/ACTIVATOR")))->
-                    getAsciiValue());
-                loader.set(
-                    smgr->createInstanceWithContext(activator, context),
-                    css::uno::UNO_QUERY);
-                if (!loader.is()) {
-                    throw css::deployment::DeploymentException(
-                        (rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "cannot instantiate loader ")) +
-                         activator),
-                        static_cast< OWeakObject * >(this), Any());
-                }
-            } else {
-                OSL_ASSERT(componentLoader->is());
-                loader = *componentLoader;
-            }
-            factories->push_back(
-                loader->activate(
-                    name, rtl::OUString(),
-                    (componentUrl == 0
-                     ? (openRegistryKey(
-                            keys[i],
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM("UNO/LOCATION")))->
-                        getAsciiValue())
-                     : *componentUrl),
-                    keys[i]));
-        }
-    }
-}
-
-void BackendImpl::componentLiveInsertion(
-    ComponentBackendDb::Data const & data,
-    std::vector< css::uno::Reference< css::uno::XInterface > > const &
-        factories)
-{
-    css::uno::Reference< css::uno::XComponentContext > rootContext(
-        getRootContext());
-    css::uno::Reference< css::container::XSet > set(
-        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    std::vector< css::uno::Reference< css::uno::XInterface > >::const_iterator
-        factory(factories.begin());
-    for (t_stringlist::const_iterator i(data.implementationNames.begin());
-         i != data.implementationNames.end(); ++i)
-    {
-        try {
-            set->insert(css::uno::Any(*factory++));
-        } catch (const container::ElementExistException &) {
-            OSL_TRACE(
-                "implementation %s already registered",
-                rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-    if (!data.singletons.empty()) {
-        css::uno::Reference< css::container::XNameContainer > cont(
-            rootContext, css::uno::UNO_QUERY_THROW);
-        for (t_stringpairvec::const_iterator i(data.singletons.begin());
-             i != data.singletons.end(); ++i)
-        {
-            rtl::OUString name(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
-                i->first);
-            //TODO: Update should be atomic:
-            try {
-                cont->removeByName(
-                    name +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/arguments")));
-            } catch (const container::NoSuchElementException &) {}
-            try {
-                cont->insertByName(
-                    (name +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service"))),
-                    css::uno::Any(i->second));
-            } catch (const container::ElementExistException &) {
-                cont->replaceByName(
-                    (name +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service"))),
-                    css::uno::Any(i->second));
-            }
-            try {
-                cont->insertByName(name, css::uno::Any());
-            } catch (const container::ElementExistException &) {
-                OSL_TRACE(
-                    "singleton %s already registered",
-                    rtl::OUStringToOString(
-                        i->first, RTL_TEXTENCODING_UTF8).getStr());
-                cont->replaceByName(name, css::uno::Any());
-            }
-        }
-    }
-}
-
-void BackendImpl::componentLiveRemoval(ComponentBackendDb::Data const & data) {
-    css::uno::Reference< css::uno::XComponentContext > rootContext(
-        getRootContext());
-    css::uno::Reference< css::container::XSet > set(
-        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    for (t_stringlist::const_iterator i(data.implementationNames.begin());
-         i != data.implementationNames.end(); ++i)
-    {
-        try {
-            set->remove(css::uno::Any(*i));
-        } catch (const css::container::NoSuchElementException &) {
-            // ignore if factory has not been live deployed
-        }
-    }
-    if (!data.singletons.empty()) {
-        css::uno::Reference< css::container::XNameContainer > cont(
-            rootContext, css::uno::UNO_QUERY_THROW);
-        for (t_stringpairvec::const_iterator i(data.singletons.begin());
-             i != data.singletons.end(); ++i)
-        {
-            rtl::OUString name(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
-                i->first);
-            //TODO: Removal should be atomic:
-            try {
-                cont->removeByName(name);
-            } catch (const container::NoSuchElementException &) {}
-            try {
-                cont->removeByName(
-                    name +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service")));
-            } catch (const container::NoSuchElementException &) {}
-            try {
-                cont->removeByName(
-                    name +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/arguments")));
-            } catch (const container::NoSuchElementException &) {}
-        }
-    }
-}
-
 css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
     const
 {
@@ -1448,6 +1261,56 @@ Reference<XComponentContext> raise_uno_process(
 }
 
 //------------------------------------------------------------------------------
+namespace {
+
+void extractComponentData(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< css::registry::XRegistryKey > const & registry,
+    ComponentBackendDb::Data * data,
+    std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
+    css::uno::Reference< css::loader::XImplementationLoader > const &
+        componentLoader,
+    rtl::OUString const & componentUrl)
+{
+    OSL_ASSERT(
+        context.is() && registry.is() && data != 0 && componentLoader.is());
+    rtl::OUString registryName(registry->getKeyName());
+    sal_Int32 prefix = registryName.getLength();
+    if (!registryName.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
+        prefix += RTL_CONSTASCII_LENGTH("/");
+    }
+    css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+        keys(registry->openKeys());
+    css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
+        context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    for (sal_Int32 i = 0; i < keys.getLength(); ++i) {
+        rtl::OUString name(keys[i]->getKeyName().copy(prefix));
+        data->implementationNames.push_back(name);
+        css::uno::Reference< css::registry::XRegistryKey > singletons(
+            keys[i]->openKey(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/SINGLETONS"))));
+        if (singletons.is()) {
+            sal_Int32 prefix2 = keys[i]->getKeyName().getLength() +
+                RTL_CONSTASCII_LENGTH("/UNO/SINGLETONS/");
+            css::uno::Sequence<
+                css::uno::Reference< css::registry::XRegistryKey > >
+                singletonKeys(singletons->openKeys());
+            for (sal_Int32 j = 0; j < singletonKeys.getLength(); ++j) {
+                data->singletons.push_back(
+                    std::pair< rtl::OUString, rtl::OUString >(
+                        singletonKeys[j]->getKeyName().copy(prefix2), name));
+            }
+        }
+        if (factories != 0) {
+            factories->push_back(
+                componentLoader->activate(
+                    name, rtl::OUString(), componentUrl, keys[i]));
+        }
+    }
+}
+
+}
+
 void BackendImpl::ComponentPackageImpl::getComponentInfo(
     ComponentBackendDb::Data * data,
     std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
@@ -1478,8 +1341,112 @@ void BackendImpl::ComponentPackageImpl::getComponentInfo(
         UNO_QUERY_THROW );
     xMemReg->open( OUString() /* in mem */, false, true );
     xLoader->writeRegistryInfo( xMemReg->getRootKey(), OUString(), url );
-    getMyBackend()->extractComponentData(
-        xContext, xMemReg->getRootKey(), data, factories, &xLoader, &url);
+    extractComponentData(
+        xContext, xMemReg->getRootKey(), data, factories, xLoader, url);
+}
+
+void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
+    ComponentBackendDb::Data const & data,
+    std::vector< css::uno::Reference< css::uno::XInterface > > const &
+        factories)
+{
+    css::uno::Reference< css::uno::XComponentContext > rootContext(
+        getMyBackend()->getRootContext());
+    css::uno::Reference< css::container::XSet > set(
+        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    std::vector< css::uno::Reference< css::uno::XInterface > >::const_iterator
+        factory(factories.begin());
+    for (t_stringlist::const_iterator i(data.implementationNames.begin());
+         i != data.implementationNames.end(); ++i)
+    {
+        try {
+            set->insert(css::uno::Any(*factory++));
+        } catch (const container::ElementExistException &) {
+            OSL_TRACE(
+                "implementation %s already registered",
+                rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+    if (!data.singletons.empty()) {
+        css::uno::Reference< css::container::XNameContainer > cont(
+            rootContext, css::uno::UNO_QUERY_THROW);
+        for (t_stringpairvec::const_iterator i(data.singletons.begin());
+             i != data.singletons.end(); ++i)
+        {
+            rtl::OUString name(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
+                i->first);
+            //TODO: Update should be atomic:
+            try {
+                cont->removeByName(
+                    name +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/arguments")));
+            } catch (const container::NoSuchElementException &) {}
+            try {
+                cont->insertByName(
+                    (name +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service"))),
+                    css::uno::Any(i->second));
+            } catch (const container::ElementExistException &) {
+                cont->replaceByName(
+                    (name +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service"))),
+                    css::uno::Any(i->second));
+            }
+            try {
+                cont->insertByName(name, css::uno::Any());
+            } catch (const container::ElementExistException &) {
+                OSL_TRACE(
+                    "singleton %s already registered",
+                    rtl::OUStringToOString(
+                        i->first, RTL_TEXTENCODING_UTF8).getStr());
+                cont->replaceByName(name, css::uno::Any());
+            }
+        }
+    }
+}
+
+void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
+    ComponentBackendDb::Data const & data)
+{
+    css::uno::Reference< css::uno::XComponentContext > rootContext(
+        getMyBackend()->getRootContext());
+    css::uno::Reference< css::container::XSet > set(
+        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    for (t_stringlist::const_iterator i(data.implementationNames.begin());
+         i != data.implementationNames.end(); ++i)
+    {
+        try {
+            set->remove(css::uno::Any(*i));
+        } catch (const css::container::NoSuchElementException &) {
+            // ignore if factory has not been live deployed
+        }
+    }
+    if (!data.singletons.empty()) {
+        css::uno::Reference< css::container::XNameContainer > cont(
+            rootContext, css::uno::UNO_QUERY_THROW);
+        for (t_stringpairvec::const_iterator i(data.singletons.begin());
+             i != data.singletons.end(); ++i)
+        {
+            rtl::OUString name(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
+                i->first);
+            //TODO: Removal should be atomic:
+            try {
+                cont->removeByName(name);
+            } catch (const container::NoSuchElementException &) {}
+            try {
+                cont->removeByName(
+                    name +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/service")));
+            } catch (const container::NoSuchElementException &) {}
+            try {
+                cont->removeByName(
+                    name +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/arguments")));
+            } catch (const container::NoSuchElementException &) {}
+        }
+    }
 }
 
 // Package
@@ -1608,7 +1575,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         std::vector< css::uno::Reference< css::uno::XInterface > > factories;
         getComponentInfo(&data, startup ? 0 : &factories, context);
         if (!startup) {
-            that->componentLiveInsertion(data, factories);
+            componentLiveInsertion(data, factories);
         }
         m_registered = REG_REGISTERED;
         that->addDataToDb(url, data);
@@ -1622,7 +1589,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             context = that->getComponentContext();
         }
         if (!startup) {
-            that->componentLiveRemoval(data);
+            componentLiveRemoval(data);
         }
         css::uno::Reference< css::registry::XImplementationRegistration >(
             context->getServiceManager()->createInstanceWithContext(
@@ -1913,13 +1880,9 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
     BackendImpl * that = getMyBackend();
     rtl::OUString url(getURL());
     if (doRegisterPackage) {
-        ComponentBackendDb::Data data;
-        data.javaTypeLibrary = false;
-                css::uno::Reference< css::uno::XComponentContext > context;
-        if (startup) {
-            context = that->getComponentContext();
-        } else {
-            context.set(that->getObject(url), css::uno::UNO_QUERY);
+        if (!startup) {
+            css::uno::Reference< css::uno::XComponentContext > context(
+                that->getObject(url), css::uno::UNO_QUERY);
             if (!context.is()) {
                 context.set(
                     that->insertObject(
@@ -1928,39 +1891,35 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
                             that->getComponentContext(), abortChannel)),
                     css::uno::UNO_QUERY_THROW);
             }
+            // This relies on the root component context's service manager
+            // supporting the extended XSet semantics:
+            css::uno::Sequence< css::beans::NamedValue > args(2);
+            args[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uri"));
+            args[0].Value <<= expandUnoRcUrl(url);
+            args[1].Name = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("component-context"));
+            args[1].Value <<= context;
+            css::uno::Reference< css::container::XSet > smgr(
+                that->getRootContext()->getServiceManager(),
+                css::uno::UNO_QUERY_THROW);
+            smgr->insert(css::uno::makeAny(args));
         }
-
-        std::vector< css::uno::Reference< css::uno::XInterface > > factories;
-
-        css::uno::Reference< css::registry::XSimpleRegistry > registry(
-            css::uno::Reference< css::lang::XMultiComponentFactory >(
-                that->getComponentContext()->getServiceManager(),
-                css::uno::UNO_SET_THROW)->createInstanceWithContext(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.registry.SimpleRegistry")),
-                    that->getComponentContext()),
-            css::uno::UNO_QUERY_THROW);
-        registry->open(expandUnoRcUrl(url), true, false);
-        getMyBackend()->extractComponentData(
-            context,
-            that->openRegistryKey(
-                registry->getRootKey(),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IMPLEMENTATIONS"))),
-            &data, startup ? 0 : &factories, 0, 0);
-        registry->close();
-        if (!startup) {
-            that->componentLiveInsertion(data, factories);
-        }
-        that->addDataToDb(url, data);
         that->addToUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
     } else { // revoke
         that->removeFromUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
         if (!startup) {
-            that->componentLiveRemoval(that->readDataFromDb(url));
+            // This relies on the root component context's service manager
+            // supporting the extended XSet semantics:
+            css::uno::Sequence< css::beans::NamedValue > args(1);
+            args[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uri"));
+            args[0].Value <<= expandUnoRcUrl(url);
+            css::uno::Reference< css::container::XSet > smgr(
+                that->getRootContext()->getServiceManager(),
+                css::uno::UNO_QUERY_THROW);
+            smgr->remove(css::uno::makeAny(args));
         }
         that->releaseObject(url);
-        that->revokeEntryFromDb(url);
+        that->revokeEntryFromDb(url); // in case it got added with old code
     }
 }
 

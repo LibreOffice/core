@@ -44,8 +44,10 @@ $(eval $(call gb_Library_add_defs,cppuhelper,\
 
 $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	cppu \
+	reg \
 	sal \
 	salhelper \
+	xmlreader \
 	$(gb_STDLIBS) \
 ))
 
@@ -58,6 +60,7 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/bootstrap \
 	cppuhelper/source/component_context \
 	cppuhelper/source/component \
+	cppuhelper/source/defaultbootstrap \
 	cppuhelper/source/exc_thrower \
 	cppuhelper/source/factory \
 	cppuhelper/source/implbase \
@@ -65,6 +68,7 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/implementationentry \
 	cppuhelper/source/interfacecontainer \
 	cppuhelper/source/macro_expander \
+	cppuhelper/source/paths \
 	cppuhelper/source/propertysetmixin \
 	cppuhelper/source/propshlp \
 	cppuhelper/source/servicefactory \

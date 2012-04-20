@@ -1236,15 +1236,6 @@ css::uno::Sequence< rtl::OUString > Key::getChildren() {
 TextualServices::TextualServices(rtl::OUString const & uri):
     uri_(uri), data_(new Data)
 {
-    merge(uri);
-}
-
-TextualServices::~TextualServices() {}
-
-// load and merge registry contents from uri
-void TextualServices::merge(const rtl::OUString &uri)
-        throw (com::sun::star::registry::InvalidRegistryException)
-{
     try {
         Parser(uri, data_);
     } catch (css::container::NoSuchElementException &) {
@@ -1255,6 +1246,8 @@ void TextualServices::merge(const rtl::OUString &uri)
             css::uno::Reference< css::uno::XInterface >());
     }
 }
+
+TextualServices::~TextualServices() {}
 
 css::uno::Reference< css::registry::XRegistryKey > TextualServices::getRootKey()
 {

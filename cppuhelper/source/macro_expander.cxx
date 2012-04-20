@@ -40,6 +40,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 #include "macro_expander.hxx"
+#include "paths.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME_A "com.sun.star.lang.MacroExpander"
@@ -54,8 +55,29 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
-//---- private forward -----------------------------------------------------------------------------
-Bootstrap const & get_unorc() SAL_THROW(());
+
+Bootstrap const & get_unorc() SAL_THROW(())
+{
+    static rtlBootstrapHandle s_bstrap = 0;
+    if (! s_bstrap)
+    {
+        OUString iniName(getUnoIniUri());
+        rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
+
+        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
+        if (s_bstrap)
+        {
+            guard.clear();
+            rtl_bootstrap_args_close( bstrap );
+        }
+        else
+        {
+            s_bstrap = bstrap;
+        }
+    }
+    return *(Bootstrap const *)&s_bstrap;
+}
+
 }
 
 namespace cppuhelper { namespace detail {

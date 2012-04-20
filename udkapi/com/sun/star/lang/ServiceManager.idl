@@ -75,6 +75,21 @@ module com {  module sun {  module star {  module lang {
     on the factory when going down (i.e. it is commonly disposed by the component context).</dd>
     </dl>
 
+    <p>Since LibreOffice 3.6, in addition to instances of
+    <type>XServiceInfo</type> et al, the
+    <type scope="com::sun::star::container">XSet</type> of at least the default
+    C++ service manager implementation now also supports sequences of
+    <type scope="com::sun::star::beans">NamedValue</type> in <code>insert</code>
+    and <code>remove</code>.  The sequence elements must each have a
+    <code>Name</code> of <code>uri</code> and a string <code>Value</code> that
+    is the URI of a service rdb.  It is legal for there to be no such
+    <code>uri</code> elements.  For <code>insert</code>, there can additionally
+    be an optional element with a <code>Name</code> of
+    <code>component-context</code> and a value that is a non-null reference of
+    type <type scope="com::sun::star::uno">XComponentContext</type> that shall
+    be used instead of this service manager's default component context when
+    loading the corresponding implementations.
+
     @see com::sun::star::uno::XComponentContext
 */
 published service ServiceManager
