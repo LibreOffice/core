@@ -26,8 +26,12 @@
 
 $(eval $(call gb_Module_Module,rdbmaker))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,rdbmaker,\
 	Executable_rdbmaker \
 ))
+
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

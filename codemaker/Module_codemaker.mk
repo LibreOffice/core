@@ -26,6 +26,8 @@
 
 $(eval $(call gb_Module_Module,codemaker))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,codemaker,\
     Package_inc \
     StaticLibrary_codemaker \
@@ -34,5 +36,7 @@ $(eval $(call gb_Module_add_targets,codemaker,\
     Executable_javamaker \
     Executable_cppumaker \
 ))
+
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
