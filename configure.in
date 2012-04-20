@@ -966,7 +966,7 @@ AC_ARG_WITH(vba-package-format,
          means the api component and associated type library are  part of the
          installation set. Specifying "extn" creates an uno extension that is
          part of the installation set (located in the program directory) that
-         MUST be optionly registered using either the unopkg executeable or the
+         MUST be optionally registered using either the unopkg executeable or the
          extension manager gui.])
     [
                           Note: "builtin" is the default, "extn" can cause
