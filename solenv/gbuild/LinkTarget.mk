@@ -35,14 +35,48 @@
 # OBJCXXFLAGS
 # LDFLAGS
 
-# debug flags, if ENABLE_SYMBOLS is set or the LinkTarget is named
-# in the list of libraries of ENABLE_SYMBOLS_ONLY
-ifeq ($(gb_ENABLE_SYMBOLS),$(true))
-gb_LinkTarget__get_symbolscflags=$(gb_DEBUG_CFLAGS)
-gb_LinkTarget__get_symbolscxxflags=$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS)
+
+# convert ENABLE_SYMBOLS_FOR from "all -sc/" syntax to a list of target names
+
+# all targets
+gb_Symbols_get_all=$(foreach item,$(wildcard $(SRCDIR)/*/*.mk),$(basename $(notdir $(item))))
+
+# all targets in a dir
+gb_Symbols_expand_dir=$(foreach item,$(wildcard $(SRCDIR)/$(1)/*.mk),$(basename $(notdir $(item))))
+
+# expand one item: all->all targets, foo/ -> all targets in foo/, otherwise the item itself
+define gb_Symbols_expand_item
+$(if $(filter all,$(1)),$(call gb_Symbols_get_all),
+    $(if $(findstring /,$(1)),$(call gb_Symbols_expand_dir,$(1)),
+        $(if $(findstring _,$(1)),$(1),
+            $(error no _ or / in --enable-debug item, prepend target type such as Library_ or append / for directory))))
+endef
+
+# list of items to enable debug for
+define gb_Symbols_expand_debug
+$(foreach item,$(1),$(if $(findstring -,$(item)),,$(call gb_Symbols_expand_item,$(item))))
+endef
+
+# list of items to not enable debug for
+define gb_Symbols_expand_nodebug
+$(foreach item,$(1),$(if $(findstring -,$(item)),$(call gb_Symbols_expand_item,$(patsubst -%,%,$(item))),))
+endef
+
+# add items to enable debug for, remove items to not enable debug for
+# note that there is not ordering and removing takes precedence
+gb_Symbols_create_debugfor=$(filter-out $(call gb_Symbols_expand_nodebug,$(1)),$(call gb_Symbols_expand_debug,$(1)))
+
+# convert the value
+gb_ENABLE_SYMBOLS_FOR:=$(call gb_Symbols_create_debugfor,$(ENABLE_SYMBOLS_FOR))
+
+# debug flags, if ENABLE_SYMBOLS is set and the LinkTarget is named
+# in the list of libraries of ENABLE_SYMBOLS_FOR
+ifeq ($(gb_SYMBOL),$(true))
+gb_LinkTarget__get_symbolscflags=$(if $(filter $(1),$(gb_ENABLE_SYMBOLS_FOR)),$(gb_DEBUG_CFLAGS))
+gb_LinkTarget__get_symbolscxxflags=$(if $(filter $(1),$(gb_ENABLE_SYMBOLS_FOR)),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS))
 else
-gb_LinkTarget__get_symbolscflags=$(if $(filter $(1),$(foreach lib,$(ENABLE_SYMBOLS_ONLY),$(call gb_Library_get_linktargetname,$(lib)))),$(gb_DEBUG_CFLAGS))
-gb_LinkTarget__get_symbolscxxflags=$(if $(filter $(1),$(foreach lib,$(ENABLE_SYMBOLS_ONLY),$(call gb_Library_get_linktargetname,$(lib)))),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS))
+gb_LinkTarget__get_symbolscflags=
+gb_LinkTarget__get_symbolscxxflags=
 endif
 
 # generic cflags/cxxflags to use (optimization flags, symbols (i.e. debug) flags, flags from environment)
@@ -700,7 +734,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CObject_get_target,$(2))
 $(call gb_CObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_CObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(1)) $(3)
+$(call gb_CObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_CObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
@@ -826,7 +860,7 @@ endef
 # gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
 $(call gb_YaccTarget_YaccTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2),$(3))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccTarget_get_clean_target,$(2))
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_YaccTarget_get_header_target,$(2)))
 $(call gb_LinkTarget__add_include,$(1),$(dir $(call gb_YaccTarget_get_header_target,$(2))))
@@ -836,15 +870,15 @@ endef
 # Add bison grammars to the build.
 # gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])
 define gb_LinkTarget_add_grammars
-$(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar)))
+$(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar),$(4)))
 endef
 
 define gb_LinkTarget_add_noexception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1)))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
 endef
 
 define gb_LinkTarget_add_exception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1)))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
 endef
 
 define gb_LinkTarget_add_linktarget_objects
@@ -885,7 +919,7 @@ $(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach exe,$(2),$(call gb_E
 endef
 
 define gb_LinkTarget_add_cobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3),$(4)))
 endef
 
 define gb_LinkTarget_add_cxxobjects
@@ -905,16 +939,16 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_noexception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_noexception_object,$(1),$(obj)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_noexception_object,$(1),$(obj),$(4)))
 endef
 
 define gb_LinkTarget_add_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj),$(4)))
 endef
 
 #only useful for building x64 libraries on windows
 define gb_LinkTarget_add_x64_generated_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(4)))
 $(foreach obj,$(2),$(eval $(call gb_GenCxxObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
 endef
 
@@ -927,11 +961,11 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3
 endef
 
 define gb_LinkTarget_add_generated_exception_object
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1)))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
 endef
 
 define gb_LinkTarget_add_generated_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(4)))
 endef
 
 define gb_LinkTarget_set_targettype

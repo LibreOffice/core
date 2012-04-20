@@ -70,7 +70,7 @@ endef
 
 
 define gb_Executable_forward_to_Linktarget
-gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktargetname,$$(1)),$$(2),$$(3))
+gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktargetname,$$(1)),$$(2),$$(3),Executable_$$(1))
 
 endef
 

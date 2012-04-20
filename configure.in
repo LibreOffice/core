@@ -612,8 +612,10 @@ AC_ARG_ENABLE(symbols,
         [Include debugging symbols in output. WARNING - a complete build needs
          8 Gb of space and takes much longer (enables -g compiler flag).
          You can also use this switch as follows:
-         --enable-symbols="tl svx" to enable symbols only for the specified
-         gbuild-build libraries.])
+         --enable-symbols="all -sw/ -Library_sc" to enable symbols only for
+         the specified gbuild-build targets (all means everything, - prepended
+         means not to enable, / appended means everything in the directory,
+         there is no ordering and removal disabling takes precedence).])
     [
                           Enabling symbols disables the stripping of the solver
                           (--disable-strip-solver).
@@ -3468,21 +3470,21 @@ dnl whether to include symbols into final build.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include symbols])
 if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
+    ENABLE_SYMBOLS="TRUE"
     if test "$enable_symbols" = "y" || test "$enable_symbols" = "yes"; then
-        ENABLE_SYMBOLS="TRUE"
-        ENABLE_SYMBOLS_ONLY=
+        ENABLE_SYMBOLS_FOR=all
+        AC_MSG_RESULT([yes])
     else
-        ENABLE_SYMBOLS=""
-        ENABLE_SYMBOLS_ONLY="$enable_symbols"
+        ENABLE_SYMBOLS_FOR="$enable_symbols"
         AC_MSG_RESULT([for $enable_symbols])
     fi
 else
     ENABLE_SYMBOLS=
-    ENABLE_SYMBOLS_ONLY=
+    ENABLE_SYMBOLS_FOR=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SYMBOLS)
-AC_SUBST(ENABLE_SYMBOLS_ONLY)
+AC_SUBST(ENABLE_SYMBOLS_FOR)
 
 dnl Determine if the solver is to be stripped or not.
 dnl ===================================================================

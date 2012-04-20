@@ -139,7 +139,7 @@ gb_Library__COMPONENTPREFIXES := \
     OXT:./ \
 
 define gb_Library__forward_to_Linktarget
-gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktargetname,$$(1)),$$(2),$$(3))
+gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktargetname,$$(1)),$$(2),$$(3),Library_$$(1))
 
 endef
 
