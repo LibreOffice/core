@@ -294,7 +294,7 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
                 rString, m_pImpl->m_eCoreMeasureUnit);
 
         return ::sax::Converter::convertDouble(rValue, rString,
-            m_pImpl->m_eCoreMeasureUnit, eSrcUnit);
+            eSrcUnit, m_pImpl->m_eCoreMeasureUnit);
     }
     else
     {

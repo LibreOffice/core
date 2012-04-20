@@ -628,8 +628,9 @@ bool Converter::convertDouble(double& rValue,
     if(eStatus == rtl_math_ConversionStatus_Ok)
     {
         OUStringBuffer sUnit;
+        // fdo#48969: switch source and target because factor is used to divide!
         double const fFactor =
-            GetConversionFactor(sUnit, nSourceUnit, nTargetUnit);
+            GetConversionFactor(sUnit, nTargetUnit, nSourceUnit);
         if(fFactor != 1.0 && fFactor != 0.0)
             rValue /= fFactor;
     }
