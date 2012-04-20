@@ -163,9 +163,6 @@ public:
     void        SetArgSelection (const Selection& rSel );
     void        ReplaceSelOfArg (const String& rStr );
 
-    Selection   GetArgSelection();
-
-
     ArgEdit*    GetArgEdPtr() {return pEdArg;}
 
 

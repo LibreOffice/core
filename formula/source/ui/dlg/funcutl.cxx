@@ -343,25 +343,6 @@ void ArgInput::SetArgSelection  (const Selection& rSel )
     if(pEdArg !=NULL) pEdArg ->SetSelection(rSel );
 }
 
-/*************************************************************************
-#*  Member:     SetArgSelection                             Date:13.01.97
-#*------------------------------------------------------------------------
-#*
-#*  Class:      ArgInput
-#*
-#*  Function:   Returns the Selection for the EditBox.
-#*
-#*  Input:      String
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-Selection ArgInput::GetArgSelection ()
-{
-    Selection   aSel;
-    if(pEdArg !=NULL) aSel=pEdArg ->GetSelection();
-    return aSel;
-}
 
 /*************************************************************************
 #*  Member:     SetArgVal                                   Date:13.01.97
