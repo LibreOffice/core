@@ -133,7 +133,12 @@ private:
     bool HasAlphaChannel() const;
 public:
 
-    TIFFReader() : pAlphaMask(0), pMaskAcc(0) {}
+    TIFFReader()
+        : pAlphaMask(0)
+        , pMaskAcc(0)
+        , nByte1(0)
+    {
+    }
     ~TIFFReader()
     {
         delete pAlphaMask;
@@ -1102,17 +1107,17 @@ void TIFFReader::MakePalCol( void )
 
 void TIFFReader::ReadHeader()
 {
-    sal_uInt8 nbyte1, nbyte2;
-    sal_uInt16 nushort;
+    sal_uInt8 nbyte2(0);
+    sal_uInt16 nushort(0);
 
-    *pTIFF >> nbyte1;
-    if ( nbyte1 == 'I' )
+    *pTIFF >> nByte1;
+    if ( nByte1 == 'I' )
         pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     else
         pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     *pTIFF >> nbyte2 >> nushort;
-    if ( nbyte1 != nbyte2 || ( nbyte1 != 'I' && nbyte1 != 'M' ) || nushort != 0x002a )
+    if ( nByte1 != nbyte2 || ( nByte1 != 'I' && nByte1 != 'M' ) || nushort != 0x002a )
         bStatus = sal_False;
 }
 
