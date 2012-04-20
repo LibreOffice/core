@@ -272,7 +272,7 @@ Reference< XHyphenatedWord > SAL_CALL
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    sal_Bool bWordModified = sal_False;
+    bool bWordModified = false;
     if (!pEntry || (nMaxLeading < 0 || nMaxLeading > nWordLen))
     {
 #ifdef LINGU_EXCEPTIONS
@@ -413,7 +413,7 @@ Reference< XHyphenatedWord > SAL_CALL
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    sal_Bool bWordModified = sal_False;
+    bool bWordModified = false;
     if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
     {
 #ifdef LINGU_EXCEPTIONS
