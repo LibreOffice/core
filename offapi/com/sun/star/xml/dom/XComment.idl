@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef __com_sun_star_xml_dom_XComment_idl__
-#define __com_sun_star_xml_dom_XCComment_idl__
+#define __com_sun_star_xml_dom_XComment_idl__
 
 #include <com/sun/star/xml/dom/XCharacterData.idl>
 

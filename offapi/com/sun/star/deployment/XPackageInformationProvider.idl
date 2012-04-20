@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_deployment_XPackageInformationProvide_idl__
-#define __com_sun_star_deployment_XPackageInformationProvide_idl_
+#ifndef __com_sun_star_deployment_XPackageInformationProvider_idl__
+#define __com_sun_star_deployment_XPackageInformationProvider_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>

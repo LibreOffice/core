@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 #ifndef __com_sun_star_ucb_NumberedSortingInfo_idl__
-#define __com_sun_star_ucb_NumberedSortingInfo_idl_
+#define __com_sun_star_ucb_NumberedSortingInfo_idl__
 
 //=============================================================================
 

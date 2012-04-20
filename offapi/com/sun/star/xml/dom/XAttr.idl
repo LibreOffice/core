@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef __com_sun_star_xml_dom_XAttr_idl__
-#define __com_sun_star_xml_sax_XAttr_idl__
+#define __com_sun_star_xml_dom_XAttr_idl__
 
 #include <com/sun/star/xml/dom/XNode.idl>
 
