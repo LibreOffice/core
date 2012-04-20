@@ -430,6 +430,22 @@ Menu RID_POPUP_EDIT
          //------------------------------
         MenuItem
         {
+            Text [ en-US ] = "Insert Fields" ;
+            Identifier = RID_MN_INSERT_FIELDS ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_FIELD_TEST ;
+                        Text [ en-US ] = "Test Field";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
             ITEM_FORMAT_CHAR_DLG
         };
          //------------------------------

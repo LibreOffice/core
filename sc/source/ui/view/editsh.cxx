@@ -614,6 +614,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_INSERT_ZWNBSP:
             lclInsertCharacter( pTableView, pTopView, CHAR_ZWNBSP );
         break;
+        case SID_INSERT_FIELD_TEST:
+            fprintf(stdout, "ScEditShell::Execute:   SID_INSERT_FIELD_TEST\n");
+        break;
     }
 
     pHdl->DataChanged();
@@ -714,7 +717,9 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                         rSet.DisableItem( SID_THES );
                 }
                 break;
-
+            case SID_INSERT_FIELD_TEST:
+                fprintf(stdout, "ScEditShell::GetState:   SID_INSERT_FIELD_TEST\n");
+            break;
 
         }
         nWhich = aIter.NextWhich();
