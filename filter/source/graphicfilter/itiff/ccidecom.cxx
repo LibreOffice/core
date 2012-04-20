@@ -730,16 +730,16 @@ void CCIDecompressor::MakeLookUp(const CCIHuffmanTableEntry * pHufTab,
                                  sal_uInt16 nHuffmanTableSize,
                                  sal_uInt16 nMaxCodeBits)
 {
-    sal_uInt16 i,j,nMinCode,nMaxCode,nLookUpSize,nMask;
+    sal_uInt16 nLookUpSize = 1 << nMaxCodeBits;
+    memset(pLookUp, 0, nLookUpSize * sizeof(CCILookUpTableEntry));
 
-    if (bTableBad==sal_True) return;
+    if (bTableBad==sal_True)
+        return;
 
-    nLookUpSize=1<<nMaxCodeBits;
+    sal_uInt16 nMask = 0xffff >> (16-nMaxCodeBits);
 
-    nMask=0xffff>>(16-nMaxCodeBits);
-
-    for (i=0; i<nLookUpSize; i++) pLookUp[i].nCodeBits=0;
-    for (i=0; i<nHuffmanTableSize; i++) {
+    for (sal_uInt16 i = 0; i < nHuffmanTableSize; ++i)
+    {
         if ( pHufTab[i].nValue!=pHufTabSave[i].nValue ||
              pHufTab[i].nCode!=pHufTabSave[i].nCode ||
              pHufTab[i].nCodeBits!=pHufTabSave[i].nCodeBits ||
@@ -749,10 +749,12 @@ void CCIDecompressor::MakeLookUp(const CCIHuffmanTableEntry * pHufTab,
             bTableBad=sal_True;
             return;
         }
-        nMinCode = nMask & (pHufTab[i].nCode << (nMaxCodeBits-pHufTab[i].nCodeBits));
-        nMaxCode = nMinCode | (nMask >> pHufTab[i].nCodeBits);
-        for (j=nMinCode; j<=nMaxCode; j++) {
-            if (pLookUp[j].nCodeBits!=0) {
+        sal_uInt16 nMinCode = nMask & (pHufTab[i].nCode << (nMaxCodeBits-pHufTab[i].nCodeBits));
+        sal_uInt16 nMaxCode = nMinCode | (nMask >> pHufTab[i].nCodeBits);
+        for (sal_uInt16 j=nMinCode; j<=nMaxCode; ++j)
+        {
+            if (pLookUp[j].nCodeBits!=0)
+            {
                 bTableBad=sal_True;
                 return;
             }
