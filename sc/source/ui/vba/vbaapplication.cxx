@@ -895,6 +895,27 @@ ScVbaApplication::setDisplayFullScreen( sal_Bool bSet )  throw (uno::RuntimeExce
 }
 
 sal_Bool SAL_CALL
+ScVbaApplication::getDisplayScrollBars()  throw (uno::RuntimeException)
+{
+    ScTabViewShell* pShell  = excel::getCurrentBestViewShell( mxContext );
+    if ( pShell )
+    {
+        return ( pShell->GetViewData()->IsHScrollMode() && pShell->GetViewData()->IsVScrollMode() );
+    }
+    return true;
+}
+
+void SAL_CALL
+ScVbaApplication::setDisplayScrollBars( sal_Bool bSet )  throw (uno::RuntimeException)
+{
+    // use uno here as it does all he repainting etc. magic
+    uno::Reference< sheet::XSpreadsheetView > xView( getCurrentDocument()->getCurrentController(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xProps( xView, uno::UNO_QUERY );
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HasVerticalScrollBar") ), uno::makeAny( bSet ) );
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HasHorizontalScrollBar") ), uno::makeAny( bSet ) );
+}
+
+sal_Bool SAL_CALL
 ScVbaApplication::getVisible() throw (uno::RuntimeException)
 {
     sal_Bool bVisible = sal_True;
