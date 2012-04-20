@@ -91,15 +91,15 @@ void XDatabaseRange::testGetSortDescriptor()
 
         if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSortColumns")))
         {
-            sal_Bool bIsSortColumns = true;
+            sal_Bool bIsSortColumns = sal_True;
             xProp.Value >>= bIsSortColumns;
-            CPPUNIT_ASSERT(bIsSortColumns == true);
+            CPPUNIT_ASSERT(bIsSortColumns == sal_True);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainsHeader")))
         {
-            sal_Bool bContainsHeader = true;
+            sal_Bool bContainsHeader = sal_True;
             xProp.Value >>= bContainsHeader;
-            CPPUNIT_ASSERT(bContainsHeader == true);
+            CPPUNIT_ASSERT(bContainsHeader == sal_True);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxFieldCount")))
         {
@@ -114,15 +114,15 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BindFormatsToContent")))
         {
-            sal_Bool bBindFormatsToContent = false;
+            sal_Bool bBindFormatsToContent = sal_False;
             xProp.Value >>= bBindFormatsToContent;
-            CPPUNIT_ASSERT(bBindFormatsToContent == true);
+            CPPUNIT_ASSERT(bBindFormatsToContent == sal_False);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyOutputData")))
         {
-            sal_Bool bCopyOutputData = true;
+            sal_Bool bCopyOutputData = sal_True;
             xProp.Value >>= bCopyOutputData;
-            CPPUNIT_ASSERT(bCopyOutputData == false);
+            CPPUNIT_ASSERT(bCopyOutputData == sal_False);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputPosition")))
         {
@@ -130,9 +130,9 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUserListEnabled")))
         {
-            sal_Bool bIsUserListEnabled  = true;
+            sal_Bool bIsUserListEnabled  = sal_True;
             xProp.Value >>= bIsUserListEnabled;
-            CPPUNIT_ASSERT(bIsUserListEnabled == false);
+            CPPUNIT_ASSERT(bIsUserListEnabled == sal_False);
 
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserListIndex")))
@@ -180,7 +180,7 @@ void XDatabaseRange::testRefresh()
         uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
         Any aAny = xPropRow->getPropertyValue( aHidden );
 
-        CPPUNIT_ASSERT( aAny.get<sal_Bool>() == true);
+        CPPUNIT_ASSERT(aAny.get<sal_Bool>() == sal_True);
     }
 
     xDBRange->refresh();
@@ -194,7 +194,7 @@ void XDatabaseRange::testRefresh()
         uno::Reference< beans::XPropertySet > xPropRow(xRow, UNO_QUERY_THROW);
         Any aAny = xPropRow->getPropertyValue( aHidden );
 
-        CPPUNIT_ASSERT( aAny.get<sal_Bool>() == false);
+        CPPUNIT_ASSERT(aAny.get<sal_Bool>() == sal_False);
     }
 
 
