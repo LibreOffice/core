@@ -1077,15 +1077,17 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     if( ((StarBASIC*)p) != pBasic )
         ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
-sal_Bool SbModule::IsVBACompat() const
+
+bool SbModule::IsVBACompat() const
 {
     return mbVBACompat;
 }
 
-void SbModule::SetVBACompat( sal_Bool bCompat )
+void SbModule::SetVBACompat( bool bCompat )
 {
     mbVBACompat = bCompat;
 }
+
 // Run a Basic-subprogram
 sal_uInt16 SbModule::Run( SbMethod* pMeth )
 {

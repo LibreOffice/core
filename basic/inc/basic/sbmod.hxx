@@ -73,7 +73,7 @@ protected:
     SbiImage*           pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
-    sal_Bool mbVBACompat;
+    bool mbVBACompat;
     sal_Int32 mnType;
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
@@ -139,8 +139,8 @@ public:
     sal_Bool ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
     bool HasExeCode();
-    sal_Bool IsVBACompat() const;
-    void SetVBACompat( sal_Bool bCompat );
+    bool IsVBACompat() const;
+    void SetVBACompat( bool bCompat );
     sal_Int32 GetModuleType() { return mnType; }
     void SetModuleType( sal_Int32 nType ) { mnType = nType; }
     bool isProxyModule() { return bIsProxyModule; }
