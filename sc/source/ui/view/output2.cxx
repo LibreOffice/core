@@ -2001,7 +2001,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
 {
-    ScFieldEditEngine* pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
+    ScFieldEditEngine* pEngine = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool());
     pEngine->SetUpdateMode( false );
     // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
     pEngine->SetRefDevice( pFmtDevice );

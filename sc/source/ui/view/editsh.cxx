@@ -615,7 +615,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
             lclInsertCharacter( pTableView, pTopView, CHAR_ZWNBSP );
         break;
         case SID_INSERT_FIELD_TEST:
-            fprintf(stdout, "ScEditShell::Execute:   SID_INSERT_FIELD_TEST\n");
+        {
+            SvxExtTimeField aField;
+            SvxFieldItem aItem(aField, EE_FEATURE_FIELD);
+            pTableView->InsertField(aItem);
+        }
         break;
     }
 
@@ -718,7 +722,6 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 }
                 break;
             case SID_INSERT_FIELD_TEST:
-                fprintf(stdout, "ScEditShell::GetState:   SID_INSERT_FIELD_TEST\n");
             break;
 
         }

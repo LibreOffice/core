@@ -1166,7 +1166,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
             {
                 SfxItemPool* pEnginePool = EditEngine::CreatePool();
                 pEnginePool->FreezeIdRanges();
-                mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
+                mpEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
                 mbEditEngineCreated = sal_True;
                 mpEditEngine->EnableUndo( false );
                 mpEditEngine->SetRefMapMode( MAP_100TH_MM );
@@ -1386,7 +1386,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
+            pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
         }
         pEditEngine->EnableUndo( false );
         if (pDocShell)
@@ -1619,7 +1619,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
+            mpEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
         }
         mpEditEngine->EnableUndo( false );
         if (mpDocSh)

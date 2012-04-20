@@ -885,7 +885,7 @@ ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
     pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
     pEnginePool->FreezeIdRanges();
 
-    pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );     // TRUE: become owner of pool
+    pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);     // TRUE: become owner of pool
     pForwarder = new SvxEditEngineForwarder( *pEditEngine );
     pOriginalSource = new ScSimpleEditSource( pForwarder );
 }
@@ -985,7 +985,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
+            pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
         }
         //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600

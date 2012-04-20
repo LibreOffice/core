@@ -620,11 +620,11 @@ void ScInputHandler::ImplCreateEditEngine()
     {
         if ( pActiveViewSh )
         {
-            const ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
-            pEngine = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
+            ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
+            pEngine = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
         }
         else
-            pEngine = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, true );
+            pEngine = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
         pEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
         UpdateRefDevice();      // also sets MapMode
         pEngine->SetPaperSize( Size( 1000000, 1000000 ) );

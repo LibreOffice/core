@@ -1331,11 +1331,11 @@ void ScMultiTextWnd::InitEditEngine()
     if ( pViewSh )
     {
         pDocSh = pViewSh->GetViewData()->GetDocShell();
-        const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-        pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
+        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = new ScFieldEditEngine( EditEngine::CreatePool(),	NULL, sal_True );
+        pNew = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
     pNew->SetExecuteURL( false );
     pEditEngine = pNew;
 
@@ -1716,11 +1716,11 @@ void ScTextWnd::StartEditEngine()
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if ( pViewSh )
         {
-            const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-            pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
+            ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+            pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
         }
         else
-            pNew = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, sal_True );
+            pNew = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
         pNew->SetExecuteURL( false );
         pEditEngine = pNew;
 
@@ -1947,11 +1947,11 @@ void ScTextWnd::MakeDialogEditView()
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
     {
-        const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-        pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
+        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
-        pNew = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, sal_True );
+        pNew = new ScFieldEditEngine(NULL, EditEngine::CreatePool(), NULL, true);
     pNew->SetExecuteURL( false );
     pEditEngine = pNew;
 

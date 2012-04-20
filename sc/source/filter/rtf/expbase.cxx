@@ -98,7 +98,7 @@ sal_Bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
 ScFieldEditEngine& ScExportBase::GetEditEngine() const
 {
     if ( !pEditEngine )
-        ((ScExportBase*)this)->pEditEngine = new ScFieldEditEngine( pDoc->GetEditPool() );
+        ((ScExportBase*)this)->pEditEngine = new ScFieldEditEngine(pDoc, pDoc->GetEditPool());
     return *pEditEngine;
 }
 

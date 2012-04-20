@@ -515,7 +515,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
 {
     if ( !pEditEngine )
     {
-        pEditEngine = new ScFieldEditEngine( GetEnginePool(), GetEditPool() );
+        pEditEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
         pEditEngine->SetUpdateMode( false );
         pEditEngine->EnableUndo( false );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
@@ -1092,8 +1092,8 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
     ScFieldEditEngine* pNewEditEngine = NULL;
     if (!pCacheFieldEditEngine)
     {
-        pNewEditEngine = new ScFieldEditEngine( GetEnginePool(),
-            GetEditPool(), false );
+        pNewEditEngine = new ScFieldEditEngine(
+            this, GetEnginePool(), GetEditPool(), false);
     }
     else
     {

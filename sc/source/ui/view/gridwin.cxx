@@ -5085,7 +5085,7 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
 
         //  EditEngine
 
-    ScFieldEditEngine aEngine( pDoc->GetEditPool() );
+    ScFieldEditEngine aEngine(pDoc, pDoc->GetEditPool());
     ScSizeDeviceProvider aProv(pDocSh);
     aEngine.SetRefDevice( aProv.GetDevice() );
     aEngine.SetRefMapMode( MAP_100TH_MM );

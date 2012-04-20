@@ -696,11 +696,11 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 //
 //------------------------------------------------------------------------
 
-ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePoolP,
-            SfxItemPool* pTextObjectPool, sal_Bool bDeleteEnginePoolP )
-        :
+ScFieldEditEngine::ScFieldEditEngine(
+    ScDocument* pDoc, SfxItemPool* pEnginePoolP,
+    SfxItemPool* pTextObjectPool, bool bDeleteEnginePoolP) :
         ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
-        bExecuteURL( sal_True )
+        mpDoc(pDoc), bExecuteURL(true)
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
@@ -713,41 +713,51 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
-    String aRet;
+    rtl::OUString aRet;
     const SvxFieldData* pFieldData = rField.GetField();
 
-    if ( pFieldData )
+    if (!pFieldData)
+        return rtl::OUString(" ");
+
+    sal_uInt16 nClsId = pFieldData->GetClassId();
+    switch (nClsId)
     {
-        TypeId aType = pFieldData->Type();
-
-        if (aType == TYPE(SvxURLField))
+        case SVX_URLFIELD:
         {
-            String aURL = ((const SvxURLField*)pFieldData)->GetURL();
+            const SvxURLField* pField = static_cast<const SvxURLField*>(pFieldData);
+            rtl::OUString aURL = pField->GetURL();
 
-            switch ( ((const SvxURLField*)pFieldData)->GetFormat() )
+            switch (pField->GetFormat())
             {
                 case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
                 case SVXURLFORMAT_REPR:
-                    aRet = ((const SvxURLField*)pFieldData)->GetRepresentation();
-                    break;
-
+                    aRet = pField->GetRepresentation();
+                break;
                 case SVXURLFORMAT_URL:
                     aRet = aURL;
-                    break;
+                break;
+                default:
+                    ;
             }
 
             svtools::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
+                INetURLHistory::GetOrCreate()->QueryUrl(String(aURL)) ? svtools::LINKSVISITED : svtools::LINKS;
             rTxtColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
         }
-        else
+        break;
+        case SVX_EXT_TIMEFIELD:
         {
-            aRet = '?';
+            const SvxExtTimeField* pField = static_cast<const SvxExtTimeField*>(pFieldData);
+            if (mpDoc)
+                aRet = pField->GetFormatted(*mpDoc->GetFormatTable(), ScGlobal::eLnge);
         }
+        break;
+        default:
+            aRet = "?";
     }
 
-    if (!aRet.Len())        // leer ist baeh
-        aRet = ' ';         // Space ist Default der Editengine
+    if (aRet.isEmpty())        // leer ist baeh
+        aRet = " ";         // Space ist Default der Editengine
 
     return aRet;
 }

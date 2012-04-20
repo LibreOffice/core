@@ -823,7 +823,7 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                         bHasMemo, eCharSet );
     // also needed for exception catch
     SCROW nDocRow = 0;
-    ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
+    ScFieldEditEngine aEditEngine(&aDocument, aDocument.GetEditPool());
     rtl::OUString aString;
     String aTabName;
 

@@ -204,14 +204,15 @@ struct ScHeaderFieldData
 class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
 {
 private:
-    sal_Bool    bExecuteURL;
+    ScDocument* mpDoc;
+    bool bExecuteURL;
 
 public:
-    ScFieldEditEngine( SfxItemPool* pEnginePool,
-                        SfxItemPool* pTextObjectPool = NULL,
-                        sal_Bool bDeleteEnginePool = false );
+    ScFieldEditEngine(
+        ScDocument* pDoc, SfxItemPool* pEnginePool, SfxItemPool* pTextObjectPool = NULL,
+        bool bDeleteEnginePool = false);
 
-    void    SetExecuteURL(sal_Bool bSet)    { bExecuteURL = bSet; }
+    void SetExecuteURL(bool bSet)    { bExecuteURL = bSet; }
 
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16, sal_uInt16 );
     virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );

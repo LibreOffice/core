@@ -962,8 +962,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
             //  auf Attribute testen
             if ( !pEngine )
             {
-                //pEngine = new ScTabEditEngine(pDocument);
-                pEngine = new ScFieldEditEngine( pDocument->GetEditPool() );
+                pEngine = new ScFieldEditEngine(pDocument, pDocument->GetEditPool());
                 //  EE_CNTRL_ONLINESPELLING falls schon Fehler drin sind
                 pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING );
                 pDocument->ApplyAsianEditSettings( *pEngine );
