@@ -154,14 +154,19 @@ struct ScVbaAppSettings
     sal_Int32 mnCalculation;
     sal_Bool mbDisplayAlerts;
     sal_Bool mbEnableEvents;
-
+    sal_Bool mbExcel4Menus;
+    sal_Bool mbDisplayNoteIndicator;
+    sal_Bool mbShowWindowsInTaskbar;
     explicit ScVbaAppSettings();
 };
 
 ScVbaAppSettings::ScVbaAppSettings() :
     mnCalculation( excel::XlCalculation::xlCalculationAutomatic ),
     mbDisplayAlerts( sal_True ),
-    mbEnableEvents( sal_True )
+    mbEnableEvents( sal_True ),
+    mbExcel4Menus( sal_False ),
+    mbDisplayNoteIndicator( sal_True ),
+    mbShowWindowsInTaskbar( sal_True )
 {
 }
 
@@ -913,6 +918,42 @@ ScVbaApplication::setDisplayScrollBars( sal_Bool bSet )  throw (uno::RuntimeExce
     uno::Reference< beans::XPropertySet > xProps( xView, uno::UNO_QUERY );
     xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HasVerticalScrollBar") ), uno::makeAny( bSet ) );
     xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HasHorizontalScrollBar") ), uno::makeAny( bSet ) );
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getDisplayExcel4Menus() throw (css::uno::RuntimeException)
+{
+    return mrAppSettings.mbExcel4Menus;
+}
+
+void SAL_CALL
+ScVbaApplication::setDisplayExcel4Menus( sal_Bool bSet ) throw (css::uno::RuntimeException)
+{
+    mrAppSettings.mbExcel4Menus = bSet;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getDisplayNoteIndicator() throw (css::uno::RuntimeException)
+{
+    return mrAppSettings.mbDisplayNoteIndicator;
+}
+
+void SAL_CALL
+ScVbaApplication::setDisplayNoteIndicator( sal_Bool bSet ) throw (css::uno::RuntimeException)
+{
+    mrAppSettings.mbDisplayNoteIndicator = bSet;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getShowWindowsInTaskbar() throw (css::uno::RuntimeException)
+{
+    return mrAppSettings.mbShowWindowsInTaskbar;
+}
+
+void SAL_CALL
+ScVbaApplication::setShowWindowsInTaskbar( sal_Bool bSet ) throw (css::uno::RuntimeException)
+{
+    mrAppSettings.mbShowWindowsInTaskbar = bSet;
 }
 
 sal_Bool SAL_CALL

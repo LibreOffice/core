@@ -76,6 +76,9 @@ interface XApplication
     [attribute] long EnableCancelKey;
     [attribute] boolean DisplayFullScreen;
     [attribute] boolean DisplayScrollBars;
+    [attribute] boolean DisplayExcel4Menus;
+    [attribute] boolean DisplayNoteIndicator;
+    [attribute] boolean ShowWindowsInTaskbar;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 

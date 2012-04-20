@@ -126,6 +126,13 @@ public:
     virtual void SAL_CALL setDisplayFullScreen( sal_Bool bSet ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getDisplayScrollBars() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDisplayScrollBars( sal_Bool bSet ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getDisplayExcel4Menus() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDisplayExcel4Menus( sal_Bool bSet ) throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL getDisplayNoteIndicator() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDisplayNoteIndicator( sal_Bool bSet ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getShowWindowsInTaskbar() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setShowWindowsInTaskbar( sal_Bool bSet ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL wait( double time ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
