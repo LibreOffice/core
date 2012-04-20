@@ -47,7 +47,7 @@ published struct ClipboardEvent: com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
     /** The current content of the clipboard.
     */
-    XTransferable Contents;
+    com::sun::star::datatransfer::XTransferable Contents;
 };
 
 //=============================================================================

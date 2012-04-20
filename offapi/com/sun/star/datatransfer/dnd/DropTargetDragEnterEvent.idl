@@ -55,7 +55,7 @@ published struct DropTargetDragEnterEvent: DropTargetDragEvent
 
      */
 
-    sequence< DataFlavor > SupportedDataFlavors;
+    sequence< com::sun::star::datatransfer::DataFlavor > SupportedDataFlavors;
 };
 
 //=============================================================================

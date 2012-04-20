@@ -54,7 +54,7 @@ published interface XClipboard: com::sun::star::uno::XInterface
 
         @see com::sun::star::datatransfer::XTransferable
     */
-    XTransferable getContents();
+    com::sun::star::datatransfer::XTransferable getContents();
 
     //-------------------------------------------------------------------------
     /** Sets the current contents of the clipboard to the specified
@@ -76,7 +76,7 @@ published interface XClipboard: com::sun::star::uno::XInterface
         @see com::sun::star::datatransfer::XTransferable
         @see com::sun::star::datatransfer::clipboard::XClipboardOwner
     */
-    [oneway] void setContents( [in] XTransferable xTrans, [in] XClipboardOwner xClipboardOwner );
+    [oneway] void setContents( [in] com::sun::star::datatransfer::XTransferable xTrans, [in] XClipboardOwner xClipboardOwner );
 
     //-------------------------------------------------------------------------
     /** To get the name of the clipboard instance.
