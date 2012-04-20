@@ -93,7 +93,7 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 
 ifeq ($(gb_PRODUCT),$(true))
 # Clang doesn't have this option
-ifneq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(HAVE_GCC_FNO_ENFORCE_EH_SPECS),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs
 endif
@@ -111,6 +111,29 @@ else
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 gb_COMPILERNOOPTFLAGS := -O0
+
+# Clang does not know -ggdb2 or some other options
+ifeq ($(HAVE_GCC_GGDB2),TRUE)
+GGDB2=-ggdb2
+else
+GGDB2=-g2
+endif
+
+ifeq ($(HAVE_GCC_FINLINE_LIMIT),TRUE)
+FINLINE_LIMIT0=-finline-limit=0
+endif
+
+ifeq ($(HAVE_GCC_FNO_INLINE),TRUE)
+FNO_INLINE=-fno-inline
+endif
+
+ifeq ($(HAVE_GCC_FNO_DEFAULT_INLINE),TRUE)
+FNO_DEFAULT_INLINE=-fno-default-inline
+endif
+
+gb_DEBUG_CFLAGS := $(GGDB2) $(FINLINE_LIMIT0) $(FNO_INLINE)
+gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
+
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))

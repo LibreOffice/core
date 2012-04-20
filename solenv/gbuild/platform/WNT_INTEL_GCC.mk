@@ -106,16 +106,6 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
-# clang does not know -ggdb2
-ifneq ($(COM_GCC_IS_CLANG),TRUE)
-GGDB2=-ggdb2
-else
-GGDB2=-g2
-endif
-
-gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline
-gb_DEBUG_CXXFLAGS := -fno-default-inline
-
 gb_STDLIBS := \
 	mingwthrd \
 	mingw32 \

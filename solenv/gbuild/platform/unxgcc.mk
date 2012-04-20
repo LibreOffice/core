@@ -181,16 +181,6 @@ gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
-# clang does not know -ggdb2
-ifneq ($(COM_GCC_IS_CLANG),TRUE)
-GGDB2=-ggdb2
-else
-GGDB2=-g2
-endif
-
-gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline
-gb_DEBUG_CXXFLAGS := -fno-default-inline
-
 gb_COMPILERNOOPTFLAGS := -O0
 
 # LinkTarget class
