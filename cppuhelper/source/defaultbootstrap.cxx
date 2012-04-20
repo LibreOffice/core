@@ -1268,7 +1268,7 @@ void ServiceManager::readRdbFile(rtl::OUString const & uri, bool optional) {
     try {
         Parser(
             uri, css::uno::Reference< css::uno::XComponentContext >(), &data_);
-    } catch (css::container::NoSuchElementException &SB) {
+    } catch (css::container::NoSuchElementException &) {
         if (!optional) {
             throw css::uno::DeploymentException(
                 uri + ": no such file",
@@ -1279,7 +1279,7 @@ void ServiceManager::readRdbFile(rtl::OUString const & uri, bool optional) {
         throw css::uno::DeploymentException(
             "InvalidRegistryException: " + e.Message,
             static_cast< cppu::OWeakObject * >(this));
-    } catch (css::uno::RuntimeException &SB) {
+    } catch (css::uno::RuntimeException &) {
         if (!readLegacyRdbFile(uri)) {
             throw;
         }
@@ -1593,7 +1593,7 @@ bool ServiceManager::removeLegacyFactory(
     css::uno::Reference< css::lang::XComponent > comp;
     {
         osl::MutexGuard g(rBHelper.rMutex);
-        DynamicImplementations::const_iterator i(
+        DynamicImplementations::iterator i(
             data_.dynamicImplementations.find(factoryInfo));
         if (i == data_.dynamicImplementations.end()) {
             return isDisposed();

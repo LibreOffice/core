@@ -374,7 +374,7 @@ void addFactories(
 
 } // namespace
 
-SAL_DLLPUBLIC_EXPORT Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
+Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) )
 {

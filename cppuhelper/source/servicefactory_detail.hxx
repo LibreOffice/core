@@ -53,6 +53,7 @@ void add_access_control_entries(
     rtl::Bootstrap const & bootstrap)
     SAL_THROW((com::sun::star::uno::Exception));
 
+SAL_DLLPUBLIC_EXPORT
 com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory >
 bootstrapInitialSF(rtl::OUString const & rBootstrapPath)
     SAL_THROW((com::sun::star::uno::Exception));
