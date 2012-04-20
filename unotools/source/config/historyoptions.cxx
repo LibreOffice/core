@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <cassert>
 #include <deque>
 #include <algorithm>
 
@@ -440,20 +441,37 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
 
             const sal_Int32 nLength = xOrderList->getElementNames().getLength();
             Sequence< Sequence< PropertyValue > > aRet(nLength);
+            sal_Int32 nCount = 0;
 
             for(sal_Int32 nItem=0; nItem<nLength; ++nItem)
             {
-                ::rtl::OUString sUrl;
-                xOrderList->getByName(::rtl::OUString::valueOf(nItem)) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= sUrl;
+                try
+                {
+                    ::rtl::OUString sUrl;
+                    xOrderList->getByName(::rtl::OUString::valueOf(nItem)) >>= xSet;
+                    xSet->getPropertyValue(s_sHistoryItemRef) >>= sUrl;
 
-                xItemList->getByName(sUrl) >>= xSet;
-                seqProperties[s_nOffsetURL  ].Value <<= sUrl;
-                xSet->getPropertyValue(s_sFilter)   >>= seqProperties[s_nOffsetFilter   ].Value;
-                xSet->getPropertyValue(s_sTitle)    >>= seqProperties[s_nOffsetTitle    ].Value;
-                xSet->getPropertyValue(s_sPassword) >>= seqProperties[s_nOffsetPassword ].Value;
-                aRet[nItem] = seqProperties;
+                    xItemList->getByName(sUrl) >>= xSet;
+                    seqProperties[s_nOffsetURL  ].Value <<= sUrl;
+                    xSet->getPropertyValue(s_sFilter)   >>= seqProperties[s_nOffsetFilter   ].Value;
+                    xSet->getPropertyValue(s_sTitle)    >>= seqProperties[s_nOffsetTitle    ].Value;
+                    xSet->getPropertyValue(s_sPassword) >>= seqProperties[s_nOffsetPassword ].Value;
+                    aRet[nCount++] = seqProperties;
+                }
+                catch(const css::uno::Exception& ex)
+                {
+                    // <https://bugs.freedesktop.org/show_bug.cgi?id=46074>
+                    // "FILEOPEN: No Recent Documents..." discusses a problem
+                    // with corrupted /org.openoffice.Office/Histories/Histories
+                    // configuration items; to work around that problem, simply
+                    // ignore such corrupted individual items here, so that at
+                    // least newly added items are successfully reported back
+                    // from this function:
+                    LogHelper::logIt(ex);
+                }
             }
+            assert(nCount <= nLength);
+            aRet.realloc(nCount);
             seqReturn = aRet;
         }
     }
