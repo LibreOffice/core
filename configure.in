@@ -610,7 +610,10 @@ AC_ARG_ENABLE(atl,
 AC_ARG_ENABLE(symbols,
     AS_HELP_STRING([--enable-symbols],
         [Include debugging symbols in output. WARNING - a complete build needs
-         8 Gb of space and takes much longer (enables -g compiler flag).])
+         8 Gb of space and takes much longer (enables -g compiler flag).
+         You can also use this switch as follows:
+         --enable-symbols="tl svx" to enable symbols only for the specified
+         gbuild-build libraries.])
     [
                           Enabling symbols disables the stripping of the solver
                           (--disable-strip-solver).
@@ -637,9 +640,7 @@ AC_ARG_ENABLE(debug,
         [Include debugging symbols from --enable-symbols plus extra debugging
          code. Extra large build! (enables -g compiler flag and dmake debug=true)
          If you need even more verbose output, build a module with
-         "build -- debug=true dbglevel=2". You can also use this switch as follows:
-         --enable-debug="tl svx" to enable debug only for the specified
-         gbuild-build libraries.]))
+         "build -- debug=true dbglevel=2".]))
 
 AC_ARG_ENABLE(dbgutil,
     AS_HELP_STRING([--enable-dbgutil],
@@ -3426,25 +3427,17 @@ else
 fi
 AC_SUBST(EXTERNAL_WARNINGS_NOT_ERRORS)
 
-dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
+dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "no"; then
-    if test "$enable_debug" = "y" || test "$enable_debug" = "yes"; then
-        ENABLE_DEBUG="TRUE"
-        ENABLE_DEBUG_ONLY=
-    else
-        ENABLE_DEBUG=""
-        ENABLE_DEBUG_ONLY="$enable_debug"
-        AC_MSG_RESULT([for $enable_debug])
-    fi
+    ENABLE_DEBUG="TRUE"
+    AC_MSG_RESULT([yes])
 else
     ENABLE_DEBUG=""
-    ENABLE_DEBUG_ONLY=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
-AC_SUBST(ENABLE_DEBUG_ONLY)
 
 
 dnl Determine whether to use linkoo for the smoketest installation
@@ -3475,13 +3468,21 @@ dnl whether to include symbols into final build.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include symbols])
 if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
-    ENABLE_SYMBOLS="TRUE"
-    AC_MSG_RESULT([yes])
+    if test "$enable_symbols" = "y" || test "$enable_symbols" = "yes"; then
+        ENABLE_SYMBOLS="TRUE"
+        ENABLE_SYMBOLS_ONLY=
+    else
+        ENABLE_SYMBOLS=""
+        ENABLE_SYMBOLS_ONLY="$enable_symbols"
+        AC_MSG_RESULT([for $enable_symbols])
+    fi
 else
     ENABLE_SYMBOLS=
+    ENABLE_SYMBOLS_ONLY=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SYMBOLS)
+AC_SUBST(ENABLE_SYMBOLS_ONLY)
 
 dnl Determine if the solver is to be stripped or not.
 dnl ===================================================================
