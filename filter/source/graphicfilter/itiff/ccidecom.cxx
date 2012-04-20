@@ -847,20 +847,19 @@ sal_uInt8 CCIDecompressor::ReadBlackOrWhite()
 sal_uInt16 CCIDecompressor::ReadCodeAndDecode(const CCILookUpTableEntry * pLookUp,
                                           sal_uInt16 nMaxCodeBits)
 {
-    sal_uInt16 nCode,nCodeBits;
-    sal_uInt8 nByte;
-
     // Einen Huffman-Code einlesen und dekodieren:
-    while (nInputBitsBufSize<nMaxCodeBits) {
+    while (nInputBitsBufSize<nMaxCodeBits)
+    {
+        sal_uInt8 nByte(0);
         *pIStream >> nByte;
         if ( nOptions  & CCI_OPTION_INVERSEBITORDER )
             nByte = pByteSwap[ nByte ];
         nInputBitsBuf=(nInputBitsBuf<<8) | (sal_uLong)nByte;
         nInputBitsBufSize+=8;
     }
-    nCode=(sal_uInt16)((nInputBitsBuf>>(nInputBitsBufSize-nMaxCodeBits))
+    sal_uInt16 nCode = (sal_uInt16)((nInputBitsBuf>>(nInputBitsBufSize-nMaxCodeBits))
                    &(0xffff>>(16-nMaxCodeBits)));
-    nCodeBits=pLookUp[nCode].nCodeBits;
+    sal_uInt16 nCodeBits = pLookUp[nCode].nCodeBits;
     if (nCodeBits==0) bStatus=sal_False;
     nInputBitsBufSize = nInputBitsBufSize - nCodeBits;
     return pLookUp[nCode].nValue;
