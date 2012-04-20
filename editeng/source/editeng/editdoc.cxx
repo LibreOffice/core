@@ -2682,10 +2682,10 @@ void CharAttribList::ResortAttribs()
 
 void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
 {
-    for (size_t i = 0, n = aAttribs.size(); i < n; ++i)
+    for (size_t i = 0; i < aAttribs.size(); ++i)
     {
         EditCharAttrib& rAttr = aAttribs[i];
-        for (size_t nNext = i+1; nNext < n; ++nNext)
+        for (size_t nNext = i+1; nNext < aAttribs.size(); ++nNext)
         {
             EditCharAttrib& rNext = aAttribs[nNext];
             if (!rAttr.IsFeature() && rNext.GetStart() == rAttr.GetEnd() && rNext.Which() == rAttr.Which())
