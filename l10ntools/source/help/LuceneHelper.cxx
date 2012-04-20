@@ -27,7 +27,7 @@
  * instead of those above.
  */
 
-#include "LuceneHelper.hxx"
+#include <l10ntools/LuceneHelper.hxx>
 
 std::vector<TCHAR> OUStringToTCHARVec(rtl::OUString const &rStr)
 {

@@ -28,8 +28,6 @@
  */
 
 #include <l10ntools/HelpIndexer.hxx>
-#include "LuceneHelper.hxx"
-#include <CLucene/analysis/LanguageBasedAnalyzer.h>
 
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>

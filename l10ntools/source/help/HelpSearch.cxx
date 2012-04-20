@@ -30,7 +30,6 @@
 #include <l10ntools/HelpSearch.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
-#include "LuceneHelper.hxx"
 
 #include <iostream>
 

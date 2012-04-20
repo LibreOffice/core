@@ -31,9 +31,7 @@
 #define HELPINDEXER_HXX
 
 #include <l10ntools/dllapi.h>
-
-#include <CLucene/StdHeader.h>
-#include <CLucene.h>
+#include <l10ntools/LuceneHelper.hxx>
 
 #include <rtl/ustring.hxx>
 #include <set>
