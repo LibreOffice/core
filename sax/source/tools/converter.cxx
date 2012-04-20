@@ -1788,9 +1788,16 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                 switch(nTargetUnit)
                 {
                     case MeasureUnit::MM_100TH:
+                    {
+                        // 0.01mm = 0.57twip (exactly)
+                        fRetval = ((25400.0 / 1440.0) / 10.0);
+                        break;
+                    }
                     case MeasureUnit::MM_10TH:
                     {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for twip values");
+                        // 0.01mm = 0.57twip (exactly)
+                        fRetval = ((25400.0 / 1440.0) / 100.0);
+                        break;
                     }
                     case MeasureUnit::MM:
                     {
@@ -1829,31 +1836,49 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
             {
                 switch(nTargetUnit)
                 {
+                    case MeasureUnit::MM_100TH:
+                    {
+                        // 1mm = 72 / 25.4 pt (exactly)
+                        fRetval = ( 2540.0 / 72.0 );
+                        break;
+                    }
+                    case MeasureUnit::MM_10TH:
+                    {
+                        // 1mm = 72 / 25.4 pt (exactly)
+                        fRetval = ( 254.0 / 72.0 );
+                        break;
+                    }
                     case MeasureUnit::MM:
+                    {
                         // 1mm = 72 / 25.4 pt (exactly)
                         fRetval = ( 25.4 / 72.0 );
                         psUnit = gpsMM;
                         break;
 
+                    }
                     case MeasureUnit::CM:
+                    {
                         // 1cm = 72 / 2.54 pt (exactly)
                         fRetval = ( 2.54 / 72.0 );
                         psUnit = gpsCM;
                         break;
-
+                    }
                     case MeasureUnit::TWIP:
+                    {
                         // 1twip = 72 / 1440 pt (exactly)
                         fRetval = 20.0;     // 1440.0 / 72.0
                         psUnit = gpsPC;
                         break;
-
+                    }
                     case MeasureUnit::INCH:
                     default:
+                    {
                         OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for pt values");
                         // 1in = 72 pt (exactly)
                         fRetval = ( 1.0 / 72.0 );
                         psUnit = gpsINCH;
                         break;
+                    }
                 }
                 break;
             }
@@ -1862,9 +1887,9 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                 switch(nTargetUnit)
                 {
                     case MeasureUnit::MM_100TH:
-                    case MeasureUnit::MM_10TH:
                     {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/100mm values");
+                        fRetval = 10.0;
+                        break;
                     }
                     case MeasureUnit::MM:
                     {
@@ -1875,7 +1900,6 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                     }
                     case MeasureUnit::CM:
                     {
-                        // 0.001mm = 1 mm/100 (exactly)
                         fRetval = ((10.0 / 1.0) / 1000.0);
                         psUnit = gpsCM;
                         break;
@@ -1887,10 +1911,16 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                         psUnit = gpsPT;
                         break;
                     }
+                    case MeasureUnit::TWIP:
+                    {
+                        fRetval = ((20.0 * 72000.0 / 2540.0) / 100.0);
+                        psUnit = gpsPC;
+                        break;
+                    }
                     case MeasureUnit::INCH:
                     default:
                     {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/100mm values");
+                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/10mm values");
                         // 0.0001in = 0.254 mm/100 (exactly)
                         fRetval = ((100000.0 / 2540.0) / 10000.0);
                         psUnit = gpsINCH;
@@ -1903,10 +1933,10 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
             {
                 switch(nTargetUnit)
                 {
-                    case MeasureUnit::MM_100TH:
                     case MeasureUnit::MM_10TH:
                     {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/100mm values");
+                        fRetval = ((10.0 / 1.0) / 100.0);
+                        break;
                     }
                     case MeasureUnit::MM:
                     {
@@ -1917,7 +1947,6 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                     }
                     case MeasureUnit::CM:
                     {
-                        // 0.001mm = 1 mm/100 (exactly)
                         fRetval = ((10.0 / 1.0) / 10000.0);
                         psUnit = gpsCM;
                         break;
@@ -1929,12 +1958,61 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                         psUnit = gpsPT;
                         break;
                     }
+                    case MeasureUnit::TWIP:
+                    {
+                        fRetval = ((20.0 * 72000.0 / 2540.0) / 1000.0);
+                        psUnit = gpsPC;
+                        break;
+                    }
                     case MeasureUnit::INCH:
                     default:
                     {
                         OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/100mm values");
                         // 0.0001in = 0.254 mm/100 (exactly)
                         fRetval = ((100000.0 / 2540.0) / 100000.0);
+                        psUnit = gpsINCH;
+                        break;
+                    }
+                }
+                break;
+            }
+            case MeasureUnit::MM:
+            {
+                switch(nTargetUnit)
+                {
+                    case MeasureUnit::MM_100TH:
+                    {
+                        fRetval = 100.0;
+                        break;
+                    }
+                    case MeasureUnit::MM_10TH:
+                    {
+                        fRetval = 10.0;
+                        break;
+                    }
+                    case MeasureUnit::CM:
+                    {
+                        fRetval = 0.1;
+                        psUnit = gpsCM;
+                        break;
+                    }
+                    case MeasureUnit::POINT:
+                    {
+                        fRetval = 72.0 / (2.54 * 10);
+                        psUnit = gpsPT;
+                        break;
+                    }
+                    case MeasureUnit::TWIP:
+                    {
+                        fRetval = (20.0 * 72.0) / (2.54 * 10);
+                        psUnit = gpsPC;
+                        break;
+                    }
+                    case MeasureUnit::INCH:
+                    default:
+                    {
+                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for cm values");
+                        fRetval = 1 / (2.54 * 10);
                         psUnit = gpsINCH;
                         break;
                     }
@@ -1971,11 +2049,65 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                         psUnit = gpsPT;
                         break;
                     }
+                    case MeasureUnit::TWIP:
+                    {
+                        fRetval = (20.0 * 72.0) / 2.54;
+                        psUnit = gpsPC;
+                        break;
+                    }
                     case MeasureUnit::INCH:
                     default:
                     {
                         OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for cm values");
                         fRetval = 1 / 2.54;
+                        psUnit = gpsINCH;
+                        break;
+                    }
+                }
+                break;
+            }
+            case MeasureUnit::INCH:
+            {
+                switch (nTargetUnit)
+                {
+                    case MeasureUnit::MM_100TH:
+                    {
+                        fRetval = 2540;
+                        break;
+                    }
+                    case MeasureUnit::MM_10TH:
+                    {
+                        fRetval = 254;
+                        break;
+                    }
+                    case MeasureUnit::MM:
+                    {
+                        fRetval = 25.4;
+                        psUnit = gpsMM;
+                        break;
+                    }
+                    case MeasureUnit::CM:
+                    {
+                        fRetval = 2.54;
+                        psUnit = gpsCM;
+                        break;
+                    }
+                    case MeasureUnit::POINT:
+                    {
+                        fRetval = 72.0;
+                        psUnit = gpsPT;
+                        break;
+                    }
+                    case MeasureUnit::TWIP:
+                    {
+                        fRetval = 72.0 * 20.0;
+                        psUnit = gpsPC;
+                        break;
+                    }
+                    default:
+                    {
+                        OSL_FAIL("output unit not supported for in values");
+                        fRetval = 1;
                         psUnit = gpsINCH;
                         break;
                     }
