@@ -27,7 +27,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -647,8 +647,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         beans::PropertyValues aMediaProperties(1);
         aMediaProperties[0].Name = "URL";
         aMediaProperties[0].Value <<= aGraphicUrl;
-        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.graphic.GraphicProvider", m_xContext),
-                uno::UNO_QUERY_THROW);
+        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(graphic::GraphicProvider::create(m_xContext));
         uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
         xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
 
