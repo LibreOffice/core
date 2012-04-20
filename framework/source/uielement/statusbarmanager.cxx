@@ -69,9 +69,7 @@
 #include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star;
-#ifndef css
-#define css ::com::sun::star
-#endif
+namespace css = ::com::sun::star;
 
 static const char HELPID_PREFIX[] = "helpid:";
 

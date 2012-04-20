@@ -37,10 +37,10 @@
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 
+namespace css = ::com::sun::star;
+
 namespace scripting_runtimemgr
 {
-// for simplification
-#define css ::com::sun::star
 
 class StorageBridgeFactory
 {

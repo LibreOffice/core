@@ -57,13 +57,9 @@
 //_______________________________________________
 // namespace
 
-namespace framework{
+namespace css = ::com::sun::star;
 
-#ifdef css
-    #error "Ambigious namespace definition of css."
-#else
-    #define css ::com::sun::star
-#endif
+namespace framework{
 
 //_______________________________________________
 // definitions
@@ -219,8 +215,6 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         /** contains all title change listener */
         ::cppu::OMultiTypeInterfaceContainerHelper m_aListener;
 };
-
-#undef css
 
 } // namespace framework
 

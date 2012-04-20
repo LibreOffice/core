@@ -45,11 +45,7 @@
 
 #include <svl/smplhint.hxx>
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
+namespace css = ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 // OSqlEdit

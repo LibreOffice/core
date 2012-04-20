@@ -44,10 +44,11 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/broadcasthelper.hxx>
+
+namespace css = ::com::sun::star;
+
 namespace func_provider
 {
-// for simplification
-#define css ::com::sun::star
 
 //Typedefs
 //=============================================================================

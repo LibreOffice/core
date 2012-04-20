@@ -51,14 +51,10 @@
 //===============================================
 // namespace
 
+namespace css = ::com::sun::star;
+
 namespace framework
 {
-
-#ifdef css
-    #error "Who defines css? I will use it as namespace alias inside header."
-#else
-    #define css ::com::sun::star
-#endif
 
 //===============================================
 // definitions
@@ -250,8 +246,6 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
              */
             static OUStringList impl_st_parsePath(const ::rtl::OUString& sPath);
 };
-
-#undef css // dont let it out!
 
 } // namespace framework
 

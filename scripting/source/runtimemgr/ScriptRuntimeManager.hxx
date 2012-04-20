@@ -44,10 +44,10 @@
 #include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
 #include <drafts/com/sun/star/script/framework/runtime/XScriptNameResolver.hpp>
 
+namespace css = ::com::sun::star;
+
 namespace scripting_runtimemgr
 {
-// for simplification
-#define css ::com::sun::star
 
 /**
  * Class responsible for managing the various ScriptRuntime implementations.

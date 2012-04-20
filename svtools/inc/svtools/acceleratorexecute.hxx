@@ -58,11 +58,7 @@
 //===============================================
 // namespace
 
-#ifdef css
-    #error "Conflict on using css as namespace alias!"
-#else
-    #define css ::com::sun::star
-#endif
+namespace css = ::com::sun::star;
 
 namespace svt
 {
@@ -270,8 +266,6 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 };
 
 } // namespace svt
-
-#undef css
 
 #endif // INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
 

@@ -39,11 +39,7 @@
 //-----------------------------------------------
 // namespaces
 
-#ifdef css
-#error "Cant use css as namespace alias."
-#else
-#define css ::com::sun::star
-#endif
+namespace css = ::com::sun::star;
 
 namespace svtools {
 //-----------------------------------------------
@@ -84,10 +80,6 @@ class ItemHolder2 : private ItemHolderMutexBase
 };
 
 } // namespace svtools
-//-----------------------------------------------
-// namespaces
-
-#undef css
 
 #endif // INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 

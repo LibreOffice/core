@@ -33,8 +33,7 @@
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
-// ugly but so is this namespacing evil.
-#define css ::com::sun::star
+namespace css = ::com::sun::star;
 
 // Helper to share code between activators with a fallback MSF.
 // Potentially this may also needs to find the library the component

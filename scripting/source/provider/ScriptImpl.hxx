@@ -41,11 +41,10 @@
 #include <drafts/com/sun/star/script/framework/provider/XScript.hpp>
 #include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
 
+namespace css = ::com::sun::star;
+
 namespace func_provider
 {
-// for simplification
-#define css ::com::sun::star
-
 
 class ScriptImpl :
             public ::cppu::WeakImplHelper1 < ::drafts::com::sun::star::script::framework::provider::XScript >

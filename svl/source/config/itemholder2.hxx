@@ -39,11 +39,7 @@
 //-----------------------------------------------
 // namespaces
 
-#ifdef css
-#error "Cant use css as namespace alias."
-#else
-#define css ::com::sun::star
-#endif
+namespace css = ::com::sun::star;
 
 //-----------------------------------------------
 // definitions
@@ -81,11 +77,6 @@ class ItemHolder2 : private ItemHolderMutexBase
         void impl_newItem(TItemInfo& rItem);
         void impl_deleteItem(TItemInfo& rItem);
 };
-
-//-----------------------------------------------
-// namespaces
-
-#undef css
 
 #endif // INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 

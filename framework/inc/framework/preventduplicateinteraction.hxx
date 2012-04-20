@@ -52,13 +52,9 @@
 //  namespace
 //_________________________________________________________________________________________________________________
 
-namespace framework{
+namespace css = ::com::sun::star;
 
-#ifdef css
-    #error "Conflict during define of namespace alias ..."
-#else
-    #define css ::com::sun::star
-#endif
+namespace framework{
 
 //_________________________________________________________________________________________________________________
 //  exported const
@@ -265,8 +261,6 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         virtual sal_Bool getInteractionInfo(const css::uno::Type&                               aInteraction,
                                                   PreventDuplicateInteraction::InteractionInfo* pReturn     ) const;
 };
-
-#undef css
 
 } // namespace framework
 

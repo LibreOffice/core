@@ -187,11 +187,8 @@
 //________________________________________________________________________________________________________
 //  namespace
 //________________________________________________________________________________________________________
-#ifdef css
-    #error "class is using css as namespace define .-)"
-#else
-    #define css ::com::sun::star
-#endif
+
+namespace css = ::com::sun::star;
 
 //________________________________________________________________________________________________________
 //  forwards
@@ -1639,8 +1636,6 @@ public:
 private:
     SolarMutexResettableGuard  m_aGuard;
 };
-
-#undef css
 
 #endif // _SFX_SFXBASEMODEL_HXX_
 

@@ -40,10 +40,10 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase3.hxx>
 
+namespace css = ::com::sun::star;
+
 namespace func_provider
 {
-
-#define css ::com::sun::star
 
 class ScriptingFrameworkURIHelper :
     public ::cppu::WeakImplHelper3<

@@ -41,10 +41,10 @@
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 
+namespace css = ::com::sun::star;
+
 namespace scripting_runtimemgr
 {
-// for simplification
-#define css ::com::sun::star
 
 class ScriptNameResolverImpl : public
     ::cppu::WeakImplHelper1 < ::drafts::com::sun::star::script::framework::runtime::XScriptNameResolver >

@@ -51,7 +51,7 @@ class SfxMacroInfoItem;
 struct SfxStyleInfo_Impl;
 struct SfxStylesInfo_Impl;
 
-#define css ::com::sun::star
+namespace css = ::com::sun::star;
 
 struct SfxStyleInfo_Impl
 {
@@ -202,8 +202,6 @@ public:
     String              GetGroup();
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
-
-#undef css
 
 #endif
 

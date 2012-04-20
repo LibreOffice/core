@@ -99,14 +99,10 @@
 //===============================================
 // namespace
 
+namespace css = ::com::sun::star;
+
 namespace svx{
     namespace DocRecovery{
-
-#ifdef css
-#   error "Who uses css? I need it as temp. namespace alias!"
-#else
-#   define css ::com::sun::star
-#endif
 
 //===============================================
 enum EDocStates
@@ -952,8 +948,6 @@ class BrokenRecoveryDialog : public ModalDialog
         };
     }   // namespace DocRecovery
 }   // namespace svx
-
-#undef css
 
 #endif
 

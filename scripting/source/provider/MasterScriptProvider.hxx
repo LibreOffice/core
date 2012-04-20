@@ -45,10 +45,10 @@
 
 #include "ProviderCache.hxx"
 
+namespace css = ::com::sun::star;
+
 namespace func_provider
 {
-// for simplification
-#define css ::com::sun::star
 
  typedef ::cppu::WeakImplHelper5<
      css::script::provider::XScriptProvider,

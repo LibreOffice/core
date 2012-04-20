@@ -56,7 +56,7 @@
 #include <sfx2/minarray.hxx>
 #include "cfgutil.hxx"
 
-#define css ::com::sun::star
+namespace css = ::com::sun::star;
 
 class SfxMacroInfoItem;
 class SfxConfigGroupListBox_Impl;
@@ -218,10 +218,6 @@ public:
         const SfxItemSet& rSet );
     virtual ~SvxShortcutAssignDlg();
 };
-
-
-
-#undef css
 
 #endif
 

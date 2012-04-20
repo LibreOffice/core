@@ -39,10 +39,10 @@
 
 #include "ActiveMSPList.hxx"
 
+namespace css = ::com::sun::star;
+
 namespace func_provider
 {
-// for simplification
-#define css ::com::sun::star
 
 class MasterScriptProviderFactory :
     public ::cppu::WeakImplHelper2 <

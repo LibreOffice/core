@@ -48,10 +48,10 @@
 
 #include "util.hxx"
 
+namespace css = ::com::sun::star;
+
 namespace sf_misc
 {
-// for simplification
-#define css ::com::sun::star
 
 class MiscUtils
 {

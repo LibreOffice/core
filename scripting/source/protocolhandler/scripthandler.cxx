@@ -509,8 +509,7 @@ const Reference< XMultiServiceFactory >& xServiceManager )
 extern "C"
 {
 
-#undef css
-#define css ::com::sun::star
+    namespace css = ::com::sun::star;
 
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
                                          void * pServiceManager ,

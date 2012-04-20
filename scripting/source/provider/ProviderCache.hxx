@@ -44,10 +44,10 @@
 
 #include "ScriptingContext.hxx"
 
+namespace css = ::com::sun::star;
+
 namespace func_provider
 {
-// for simplification
-#define css ::com::sun::star
 
 //Typedefs
 //=============================================================================
