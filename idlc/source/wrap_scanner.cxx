@@ -26,7 +26,13 @@
  *
  ************************************************************************/
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wsign-compare"
+#endif
 
 #include "scanner.cxx"
+
+void (*avoid_unused_yyunput_in_scanner_cxx)(int, char*) = yyunput;
+int (*avoid_unused_yyinput_in_scanner_cxx)() = yyinput;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
