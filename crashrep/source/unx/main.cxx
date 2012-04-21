@@ -1032,38 +1032,17 @@ static bool setup_version()
     return 0 != g_strReportServer.length();
 }
 
-#if 0
-// Use gconftool-2 to determine if gnome accessiblity is enabled
-// unused
-static bool get_accessibility_state()
-{
-    bool bAccessible = false;
-    FILE *fin = popen( "gconftool-2 -g /desktop/gnome/interface/accessibility", "r");
-
-    if ( fin )
-    {
-        char buffer[sizeof("true")];
-
-        bAccessible = fgets( buffer, sizeof(buffer), fin ) && 0 == strcmp( buffer, "true" );
-
-        pclose( fin );
-    }
-
-    return bAccessible;
-}
-#endif
-
 int main( int argc, char** argv )
 {
     FILE *fin = freopen( "/dev/null", "w", stderr );
-    if (!fin) 
+    if (!fin)
     {
         return -1;
     }
 
     setup_program_dir( argv[0] );
 
-    // Don't start if accessiblity is enabled or report server is not given
+    // Don't start if report server is not given
 
     if ( setup_version() )
     {
