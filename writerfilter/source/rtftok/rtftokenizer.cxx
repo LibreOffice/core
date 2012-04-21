@@ -45,8 +45,10 @@ namespace rtftok {
 RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
     m_pInStream(pInStream),
-    m_xStatusIndicator(xStatusIndicator)
+    m_xStatusIndicator(xStatusIndicator),
+    m_aRTFControlWords(std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords))
 {
+    std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
 }
 
 RTFTokenizer::~RTFTokenizer()
@@ -266,13 +268,10 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         return 0;
     /*SAL_INFO("writefilter", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
                "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");*/
-    int i, ret;
-    for (i = 0; i < nRTFControlWords; i++)
-    {
-        if (!strcmp(rKeyword.getStr(), aRTFControlWords[i].sKeyword))
-            break;
-    }
-    if (i == nRTFControlWords)
+    RTFSymbol aSymbol(rKeyword.getStr());
+    std::vector<RTFSymbol>::iterator low = std::lower_bound(m_aRTFControlWords.begin(), m_aRTFControlWords.end(), aSymbol);
+    int i = low - m_aRTFControlWords.begin();
+    if (low == m_aRTFControlWords.end() || aSymbol < *low)
     {
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
         RTFSkipDestination aSkip(m_rImport);
@@ -280,35 +279,36 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         return 0;
     }
 
-    switch (aRTFControlWords[i].nControlType)
+    int ret;
+    switch (m_aRTFControlWords[i].nControlType)
     {
         case CONTROL_FLAG:
             // flags ignore any parameter by definition
-            ret = m_rImport.dispatchFlag(aRTFControlWords[i].nIndex);
+            ret = m_rImport.dispatchFlag(m_aRTFControlWords[i].nIndex);
             if (ret)
                 return ret;
             break;
         case CONTROL_DESTINATION:
             // same for destinations
-            ret = m_rImport.dispatchDestination(aRTFControlWords[i].nIndex);
+            ret = m_rImport.dispatchDestination(m_aRTFControlWords[i].nIndex);
             if (ret)
                 return ret;
             break;
         case CONTROL_SYMBOL:
             // and symbols
-            ret = m_rImport.dispatchSymbol(aRTFControlWords[i].nIndex);
+            ret = m_rImport.dispatchSymbol(m_aRTFControlWords[i].nIndex);
             if (ret)
                 return ret;
             break;
         case CONTROL_TOGGLE:
-            ret = m_rImport.dispatchToggle(aRTFControlWords[i].nIndex, bParam, nParam);
+            ret = m_rImport.dispatchToggle(m_aRTFControlWords[i].nIndex, bParam, nParam);
             if (ret)
                 return ret;
             break;
         case CONTROL_VALUE:
             // values require a parameter by definition
             if (bParam) {
-                ret = m_rImport.dispatchValue(aRTFControlWords[i].nIndex, nParam);
+                ret = m_rImport.dispatchValue(m_aRTFControlWords[i].nIndex, nParam);
                 if (ret)
                     return ret;
             }

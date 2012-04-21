@@ -51,6 +51,8 @@ namespace writerfilter {
                 RTFDocumentImpl& m_rImport;
                 SvStream* m_pInStream;
                 uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
+                // This is the same as m_aRTFControlWords, but sorted
+                std::vector<RTFSymbol> m_aRTFControlWords;
         };
     } // namespace rtftok
 } // namespace writerfilter

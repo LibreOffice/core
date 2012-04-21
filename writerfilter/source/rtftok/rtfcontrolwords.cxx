@@ -27,6 +27,7 @@
 
 #include <rtfcontrolwords.hxx>
 #include <sal/macros.h>
+#include <string.h>
 
 namespace writerfilter {
 namespace rtftok {
@@ -1855,6 +1856,23 @@ RTFSymbol aRTFControlWords[] = {
     {"flyanchor", CONTROL_VALUE, RTF_FLYANCHOR},
 };
 int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
+
+bool RTFSymbol::operator<(const RTFSymbol& rOther) const
+{
+    return strcmp(sKeyword, rOther.sKeyword) < 0;
+}
+
+RTFSymbol::RTFSymbol(const char* pKeyword)
+    : sKeyword(pKeyword)
+{
+}
+
+RTFSymbol::RTFSymbol(const char *pKeyword, int pControlType, RTFKeyword pIndex)
+    : sKeyword(pKeyword),
+    nControlType(pControlType),
+    nIndex(pIndex)
+{
+}
 
 } // namespace rtftok
 } // namespace writerfilter

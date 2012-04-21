@@ -1866,6 +1866,10 @@ struct RTFSymbol
     const char *sKeyword;
     int nControlType;
     RTFKeyword nIndex;
+
+    bool operator<(const RTFSymbol& rOther) const;
+    RTFSymbol(const char* pKeyword);
+    RTFSymbol(const char *pKeyword, int pControlType, RTFKeyword pIndex);
 };
 
 extern RTFSymbol aRTFControlWords[];
