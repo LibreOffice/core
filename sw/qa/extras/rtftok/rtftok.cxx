@@ -87,6 +87,7 @@ public:
     void testFdo48023();
     void testFdo48876();
     void testFdo48193();
+    void testFdo44211();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -113,7 +114,7 @@ public:
     CPPUNIT_TEST(testFdo48356);
     CPPUNIT_TEST(testFdo48023);
     CPPUNIT_TEST(testFdo48876);
-    CPPUNIT_TEST(testFdo48193);
+    CPPUNIT_TEST(testFdo44211);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -622,6 +623,28 @@ void RtfModelTest::testFdo48193()
 {
     load("fdo48193.rtf");
     CPPUNIT_ASSERT_EQUAL(7, getLength());
+}
+
+void RtfModelTest::testFdo44211()
+{
+    lang::Locale aLocale;
+    aLocale.Language = "lt";
+    AllSettings aSettings(Application::GetSettings());
+    AllSettings aSavedSettings(aSettings);
+    aSettings.SetLocale(aLocale);
+    Application::SetSettings(aSettings);
+    load("fdo44211.rtf");
+    Application::SetSettings(aSavedSettings);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xTextRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+
+    OUString aExpected("ąčę", 6, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
