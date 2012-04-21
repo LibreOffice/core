@@ -167,8 +167,6 @@ static void lcl_OpenURL( ::rtl::OUString sURL )
     }
 }
 
-static const sal_uInt16 nNameLen = 8;
-
 static sal_uInt16 pRanges[] =
 {
     SID_ATTR_SPELL,

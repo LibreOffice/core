@@ -104,7 +104,6 @@ SV_IMPL_PTRARR(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr);
 
 static sal_Bool bLastRelative =         sal_False;
 static const sal_Char cNumberingType[] = "NumberingType";
-static const sal_Char cValue[] = "Value";
 static const sal_Char cParentNumbering[] = "ParentNumbering";
 static const sal_Char cPrefix[] = "Prefix";
 static const sal_Char cSuffix[] = "Suffix";

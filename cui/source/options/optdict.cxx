@@ -55,7 +55,6 @@ using namespace ::com::sun::star::linguistic2;
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 nNameLen    = 8;
 static const short  NOACTDICT   = -1;
 
 static long nStaticTabs[]=

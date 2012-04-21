@@ -1228,10 +1228,6 @@ static const OUString sInstalledLocalesPath(RTL_CONSTASCII_USTRINGPARAM("org.ope
 static OUString sUserLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
 //static const OUString sUserLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office/Linguistic"));
 static const OUString sUserLocaleKey(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
-static const OUString sSystemLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.System/L10N"));
-static const OUString sSystemLocaleKey(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
-static const OUString sOfficeLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office/L10N"));
-static const OUString sOfficeLocaleKey(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 static Sequence< OUString > seqInstalledLanguages;
 
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
