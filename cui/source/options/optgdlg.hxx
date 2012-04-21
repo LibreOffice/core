@@ -34,7 +34,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <readonlyimage.hxx>
-#define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
 
 // predeclarations
 class CanvasSettings;

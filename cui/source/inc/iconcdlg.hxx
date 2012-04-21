@@ -40,7 +40,6 @@
 #include <vector>
 
 #define CTRLS_OFFSET        3
-#define BUTTON_DISTANCE     8
 #define RET_USER        100
 #define RET_USER_CANCEL 101
 

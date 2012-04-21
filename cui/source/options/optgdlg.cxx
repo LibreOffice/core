@@ -98,8 +98,6 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
-#define CONFIG_LANGUAGES "OfficeLanguages"
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -110,8 +108,6 @@ using ::rtl::OString;
 using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-
-#define MAX_PROGRAM_ENTRIES     3
 
 // class OfaMiscTabPage --------------------------------------------------
 

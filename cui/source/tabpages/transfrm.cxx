@@ -50,9 +50,6 @@
 #include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
 
-// tolerance for WorkingArea
-#define DIFF 1000
-
 // static ----------------------------------------------------------------
 
 static sal_uInt16 pPosSizeRanges[] =

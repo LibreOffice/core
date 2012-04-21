@@ -81,7 +81,6 @@ using namespace svx;
 #define POSTFIX_INTERNAL    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_internal" ) )
 #define POSTFIX_USER        String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_user" ) )
 #define POSTFIX_WRITABLE    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_writable" ) )
-#define POSTFIX_READONLY    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_readonly" ) )
 #define VAR_ONE             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "%1" ) )
 #define IODLG_CONFIGNAME    String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 

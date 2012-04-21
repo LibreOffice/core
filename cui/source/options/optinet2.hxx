@@ -47,12 +47,6 @@ class HeaderBar;
 
 class SfxFilter;
 
-#ifndef SV_NODIALOG
-#define PROXY_CONTROLS  23
-#define CACHE_CONTROLS  20
-
-#define TYPE_CONTROLS  18
-
 namespace svx {
     class SecurityOptionsDialog;
 }
@@ -227,13 +221,6 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
 };
-
-#endif
-
-#ifdef WNT
-#else
-#define HELPER_PAGE_COMPLETE
-#endif
 
 struct SvxEMailTabPage_Impl;
 class SvxEMailTabPage : public SfxTabPage

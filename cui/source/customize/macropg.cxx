@@ -104,7 +104,6 @@ static long nTabs[] =
 #define    ITMEID_ASSMACRO        2
 
 
-#define LB_EVENTS_ITEMPOS    1
 #define LB_MACROS_ITEMPOS    2
 
 

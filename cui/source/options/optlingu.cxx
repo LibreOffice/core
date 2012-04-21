@@ -90,7 +90,6 @@ using namespace ::com::sun::star::beans;
 namespace css = com::sun::star;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-#define SVX_MAX_USERDICTS 20
 #define CBCOL_FIRST     0
 #define CBCOL_SECOND    1
 #define CBCOL_BOTH      2
@@ -1067,10 +1066,6 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, sal_Bool bEna
 
 
 // class SvxLinguTabPage -------------------------------------------------
-
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
-#define CBCOL_BOTH      2
 
 SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
                                   const SfxItemSet& rSet ):

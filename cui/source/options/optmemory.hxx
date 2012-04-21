@@ -34,7 +34,6 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
-#define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
 
 // class OfaMiscTabPage --------------------------------------------------
 

@@ -117,14 +117,11 @@ static long nTabs[] =
         0, 90
     };
 
-#define TAB_WIDTH_MIN       10
-
 // IDs for items in HeaderBar of EventLB
 #define ITEMID_EVENT        1
 #define ITMEID_ASSMACRO     2
 
 
-#define LB_EVENTS_ITEMPOS   1
 #define LB_MACROS_ITEMPOS   2
 
 String ConvertToUIName_Impl( SvxMacro *pMacro )

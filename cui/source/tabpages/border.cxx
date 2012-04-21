@@ -38,8 +38,6 @@
 #include "border.hrc"
 #include "helpid.hrc"
 
-#define LINESTYLE_HTML_MAX 5
-
 #include <svx/xtable.hxx>               // XColorList
 #include <svx/drawitem.hxx>
 #include <editeng/boxitem.hxx>

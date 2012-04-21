@@ -43,9 +43,6 @@ enum MSFltrPg2_CheckBoxEntries {
     InvalidCBEntry
 };
 
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
-
 // -----------------------------------------------------------------------
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)

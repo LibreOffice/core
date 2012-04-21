@@ -46,10 +46,6 @@
 /*                                                                   */
 /*********************************************************************/
 
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
-#define CBCOL_BOTH      2
-
 SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES(RID_SVX_FONT_SUBSTITUTION), rSet),
