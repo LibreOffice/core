@@ -1234,7 +1234,7 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
         cannot convert from 'class String *' to 'class String (*)[54]'
         The effective result here is class String (*)[54*1] */
     mxFormatter( new SvNumberFormatter( rRoot.GetDoc().GetServiceManager(), LANGUAGE_ENGLISH_US ) ),
-    mpKeywordTable( new NfKeywordTable[ 1 ] ),
+    mpKeywordTable( new NfKeywordTable ),
     mnStdFmt( GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
 {
     switch( GetBiff() )
@@ -1256,7 +1256,6 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
 
 XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
 {
-    delete[] mpKeywordTable;
 }
 
 sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uLong nScNumFmt )
@@ -1367,7 +1366,7 @@ String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberF
 
 String XclExpNumFmtBuffer::GetFormatCode( sal_uInt16 nScNumFmt )
 {
-    return GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable );
+    return GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() );
 }
 
 // XF, STYLE record - Cell formatting =========================================
@@ -2840,7 +2839,7 @@ void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
 XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot ),
     mxFormatter( new SvNumberFormatter( rRoot.GetDoc().GetServiceManager(), LANGUAGE_ENGLISH_US ) ),
-    mpKeywordTable( new NfKeywordTable[ 1 ] )
+    mpKeywordTable( new NfKeywordTable )
 {
     mxFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );
     // remap codes unknown to Excel

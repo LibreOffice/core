@@ -322,7 +322,7 @@ private:
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
-    NfKeywordTable*     mpKeywordTable; /// Replacement table.
+    boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
     sal_uLong           mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };
@@ -751,6 +751,7 @@ class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpDxfs( const XclExpRoot& rRoot );
+    virtual ~XclExpDxfs() {}
 
     sal_Int32 GetDxfId(const rtl::OUString& rName);
 
