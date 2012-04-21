@@ -2379,9 +2379,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_SL:
-            if (nParam > 0)
             {
-                // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
+                // This is similar to RTF_ABSH, negative value means 'exact', positive means 'at least'.
+                RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_atLeast));
+                if (nParam < 0)
+                {
+                    pValue.reset(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_exact));
+                    pIntValue.reset(new RTFValue(-nParam));
+                }
+                m_aStates.top().aParagraphAttributes->push_back(make_pair(NS_ooxml::LN_CT_Spacing_lineRule, pValue));
                 m_aStates.top().aParagraphAttributes->push_back(make_pair(NS_ooxml::LN_CT_Spacing_line, pIntValue));
             }
             break;

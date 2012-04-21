@@ -29,6 +29,8 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
@@ -83,6 +85,7 @@ public:
     void testFdo39053();
     void testFdo48356();
     void testFdo48023();
+    void testFdo48876();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -108,6 +111,7 @@ public:
     CPPUNIT_TEST(testFdo39053);
     CPPUNIT_TEST(testFdo48356);
     CPPUNIT_TEST(testFdo48023);
+    CPPUNIT_TEST(testFdo48876);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -597,6 +601,19 @@ void RtfModelTest::testFdo48023()
     // Implicit encoding detection based on locale was missing
     OUString aExpected("Программист", 22, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+void RtfModelTest::testFdo48876()
+{
+    load("fdo48876.rtf");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    style::LineSpacing aSpacing;
+    xPropertySet->getPropertyValue("ParaLineSpacing") >>= aSpacing;
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::MINIMUM, aSpacing.Mode);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
