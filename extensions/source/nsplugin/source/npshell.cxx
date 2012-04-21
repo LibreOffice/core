@@ -772,7 +772,11 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
 
                     break;
             }
-            write(fdDst, buffer, ret);
+            ssize_t written_bytes = write(fdDst, buffer, ret);
+            if (written_bytes == -1)
+            {
+                return;
+            }
         }
         close(fdSrc);
         close(fdDst);

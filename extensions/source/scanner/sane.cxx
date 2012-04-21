@@ -524,11 +524,24 @@ static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
         // e.g. UMAX Astra 1200S delivers 16 bit but in BIGENDIAN
         // against SANE documentation (xscanimage gets the same result
         // as we do
-        fread( &nWord, 1, 2, fp );
+        size_t items_read = fread( &nWord, 1, 2, fp );
+
+        // fread() does not distinguish between end-of-file and error, and callers
+        //   must use feof(3) and ferror(3) to determine which occurred.
+        if (items_read == 0)
+        {
+             // nothing todo?
+             // WaE is happy!
+        }
         return (sal_uInt8)( nWord / 256 );
     }
     sal_uInt8 nByte;
-    fread( &nByte, 1, 1, fp );
+    size_t items_read = fread( &nByte, 1, 1, fp );
+    if (items_read == 0)
+    {
+         // nothing todo?
+         // WaE is happy!
+    }
     return nByte;
 }
 
@@ -814,7 +827,15 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                     ( eType == FrameStyle_Gray && aParams.depth == 8 )
                     )
                 {
-                    fread( pBuffer, 1, aParams.bytes_per_line, pFrame );
+                    size_t items_read = fread( pBuffer, 1, aParams.bytes_per_line, pFrame );
+                    
+                    // fread() does not distinguish between end-of-file and error, and callers
+                    //   must use feof(3) and ferror(3) to determine which occurred.
+                    if (items_read == 0)
+                    {
+                        // nothing todo?
+                        // WaE is happy!
+                    }
                     aConverter.Write( pBuffer, aParams.bytes_per_line );
                 }
                 else if( eType == FrameStyle_Gray )
