@@ -592,7 +592,11 @@ static void setup_program_dir( const char* progname )
 
         g_strProgramDir = aDir.substr( 0, pos + 1 );
         aDir.erase( pos );
-        chdir( aDir.c_str() );
+        int ret = chdir( aDir.c_str() );
+        if (!ret)
+        {
+            return;
+        }
     }
 }
 
@@ -1051,7 +1055,11 @@ static bool get_accessibility_state()
 
 int main( int argc, char** argv )
 {
-    freopen( "/dev/null", "w", stderr );
+    FILE *fin = freopen( "/dev/null", "w", stderr );
+    if (!fin) 
+    {
+        return -1;
+    }
 
     setup_program_dir( argv[0] );
 
