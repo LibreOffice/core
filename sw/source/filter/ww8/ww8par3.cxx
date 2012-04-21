@@ -1411,9 +1411,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 WW8ListManager::~WW8ListManager()
 {
     /*
-    named lists remain in doc!!!
-    unnamed lists are deleted when unused
-    pLFOInfos are in any case destructed
+     named lists remain in document
+     unused automatic lists are removed from document (DelNumRule)
     */
     for(std::vector<WW8LSTInfo *>::iterator aIter = maLSTInfos.begin();
         aIter != maLSTInfos.end(); ++aIter)
@@ -1426,18 +1425,18 @@ WW8ListManager::~WW8ListManager()
         delete *aIter;
     }
     boost::ptr_vector<WW8LFOInfo >::reverse_iterator aIter;
-        for (aIter = pLFOInfos.rbegin() ;
-            aIter < pLFOInfos.rend();
-            ++aIter )
+    for (aIter = pLFOInfos.rbegin() ;
+        aIter < pLFOInfos.rend();
+        ++aIter )
+    {
+        if (aIter->bOverride
+            && aIter->pNumRule
+            && !aIter->bUsedInDoc
+            && aIter->pNumRule->IsAutoRule())
         {
-            if (aIter->bOverride
-                && aIter->pNumRule
-                && !aIter->bUsedInDoc
-                && aIter->pNumRule->IsAutoRule())
-            {
-                rDoc.DelNumRule( aIter->pNumRule->GetName() );
-            }
+            rDoc.DelNumRule( aIter->pNumRule->GetName() );
         }
+    }
 }
 
 bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
