@@ -82,6 +82,7 @@ public:
     void testFdo44176();
     void testFdo39053();
     void testFdo48356();
+    void testFdo48023();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testFdo44176);
     CPPUNIT_TEST(testFdo39053);
     CPPUNIT_TEST(testFdo48356);
+    CPPUNIT_TEST(testFdo48023);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -572,6 +574,29 @@ void RtfModelTest::testFdo48356()
     }
     // The document used to be imported as two paragraphs.
     CPPUNIT_ASSERT_EQUAL(1, i);
+}
+
+void RtfModelTest::testFdo48023()
+{
+    lang::Locale aLocale;
+    aLocale.Language = "ru";
+    AllSettings aSettings(Application::GetSettings());
+    AllSettings aSavedSettings(aSettings);
+    aSettings.SetLocale(aLocale);
+    Application::SetSettings(aSettings);
+    load("fdo48023.rtf");
+    Application::SetSettings(aSavedSettings);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xTextRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+
+    // Implicit encoding detection based on locale was missing
+    OUString aExpected("Программист", 22, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

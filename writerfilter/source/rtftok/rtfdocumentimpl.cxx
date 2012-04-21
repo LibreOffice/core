@@ -513,13 +513,26 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
     return 0;
 }
 
+rtl_TextEncoding lcl_getDefaultTextEncoding()
+{
+
+    const OUString& rLanguage = Application::GetSettings().GetLocale().Language;
+
+    if (rLanguage == "ru" || rLanguage == "uk")
+        return RTL_TEXTENCODING_MS_1251;
+    if (rLanguage == "tr")
+        return RTL_TEXTENCODING_MS_1254;
+    else
+        return RTL_TEXTENCODING_MS_1252;
+}
+
 rtl_TextEncoding RTFDocumentImpl::getEncoding(sal_uInt32 nFontIndex)
 {
     if (!m_pSuperstream)
     {
         if (nFontIndex < m_aFontEncodings.size())
             return m_aFontEncodings[nFontIndex];
-        return 0;
+        return lcl_getDefaultTextEncoding();
     }
     else
         return m_pSuperstream->getEncoding(nFontIndex);
