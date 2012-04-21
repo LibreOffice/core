@@ -54,6 +54,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
+    bSaveFormulas = false;
     xub_StrLen nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount >= 3 )
     {
@@ -80,6 +81,8 @@ ScImportOptions::ScImportOptions( const String& rStr )
                 bQuoteAllText = rStr.GetToken(6, ',').EqualsAscii("true");
             if ( nTokenCount >= 9 )
                 bSaveAsShown = rStr.GetToken(8, ',').EqualsAscii("true");
+            if ( nTokenCount >= 10 )
+                bSaveFormulas = rStr.GetToken(9, ',').EqualsAscii("true");
         }
     }
 }
@@ -103,6 +106,8 @@ String ScImportOptions::BuildString() const
     aResult.AppendAscii(bQuoteAllText ? "true" : "false");  // same as "quoted field as text" in ScAsciiOptions
     aResult.AppendAscii( ",true," );                        // "detect special numbers"
     aResult.AppendAscii(bSaveAsShown ? "true" : "false");   // "save as shown": not in ScAsciiOptions
+    aResult.AppendAscii( "," );
+    aResult.AppendAscii(bSaveFormulas ? "true" : "false");  // "save formulas": not in ScAsciiOptions
 
     return aResult;
 }

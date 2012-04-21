@@ -315,6 +315,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         bDetectSpecialNumber = sal_True;    // default of versions that didn't add the parameter
 
     // 9th token is used for "Save as shown" in export options
+    // 10th token is used for "Save cell formulas" in export options
 }
 
 
@@ -403,6 +404,7 @@ String ScAsciiOptions::WriteToString() const
     aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
 
     // 9th token is used for "Save as shown" in export options
+    // 10th token is used for "Save cell formulas" in export options
 
     return aOutStr;
 }

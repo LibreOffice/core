@@ -62,6 +62,7 @@ private:
     CheckBox            aCbQuoteAll;
     CheckBox            aCbShown;
     CheckBox            aCbFixed;
+    CheckBox            aCbFormulas;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
@@ -73,6 +74,7 @@ private:
     sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
 
     DECL_LINK( FixedWidthHdl, CheckBox* );
+    DECL_LINK( SaveFormulasHdl, CheckBox* );
     DECL_LINK( DoubleClickHdl, ListBox* );
 };
 

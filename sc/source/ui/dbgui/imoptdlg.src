@@ -116,6 +116,13 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Hide = TRUE;
         Text [ en-US ] = "~Quote all text cells";
     };
+    CheckBox CB_FORMULAS
+    {
+        Pos = MAP_APPFONT( 12, 105 );
+        Size = MAP_APPFONT( 172, 10 );
+        Hide = TRUE;
+        Text [ en-US ] = "Save cell fo~rmulas";
+    };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 202 , 6 ) ;

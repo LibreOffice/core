@@ -136,6 +136,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
         aCbShown    ( this, ScResId( CB_SAVESHOWN ) ),
         aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
+        aCbFormulas ( this, ScResId( CB_FORMULAS ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) )
@@ -207,7 +208,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     if( bAscii )
     {
         Size aWinSize( GetSizePixel() );
-        aWinSize.Height() = aCbFixed.GetPosPixel().Y() + aCbFixed.GetSizePixel().Height();
+        aWinSize.Height() = aCbFormulas.GetPosPixel().Y() + aCbFormulas.GetSizePixel().Height();
         Size aDiffSize( LogicToPixel( Size( 0, 6 ), MapMode( MAP_APPFONT ) ) );
         aWinSize.Height() += aDiffSize.Height();
         SetSizePixel( aWinSize );
@@ -218,6 +219,9 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aCbShown.Check( sal_True );
         aCbQuoteAll.Show();
         aCbQuoteAll.Check( false );
+        aCbFormulas.Show();
+        aCbFormulas.SetClickHdl( LINK( this, ScImportOptionsDlg, SaveFormulasHdl ) );
+        aCbFormulas.Check( false );
     }
     else
     {
@@ -230,6 +234,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aCbFixed.Hide();
         aCbShown.Hide();
         aCbQuoteAll.Hide();
+        aCbFormulas.Hide();
         aLbFont.GrabFocus();
         aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
@@ -265,6 +270,7 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
         rOptions.bFixedWidth = aCbFixed.IsChecked();
         rOptions.bSaveAsShown = aCbShown.IsChecked();
         rOptions.bQuoteAllText = aCbQuoteAll.IsChecked();
+        rOptions.bSaveFormulas = aCbFormulas.IsChecked();
     }
 }
 
@@ -309,6 +315,16 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
         aEdTextSep.Enable( bEnable );
         aCbShown.Enable( bEnable );
         aCbQuoteAll.Enable( bEnable );
+    }
+    return 0;
+}
+
+IMPL_LINK( ScImportOptionsDlg, SaveFormulasHdl, CheckBox*, pCheckBox )
+{
+    if( pCheckBox == &aCbFormulas )
+    {
+        sal_Bool bEnable = !aCbFormulas.IsChecked();
+        aCbShown.Enable( bEnable );
     }
     return 0;
 }

@@ -40,4 +40,5 @@
 #define CB_FIXEDWIDTH   12
 #define CB_SAVESHOWN    13
 #define CB_QUOTEALL     14
+#define CB_FORMULAS     15
 

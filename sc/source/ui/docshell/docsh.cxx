@@ -1706,6 +1706,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     CharSet eCharSet      = rAsciiOpt.eCharSet;
     bool bFixedWidth      = rAsciiOpt.bFixedWidth;
     bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
+    bool bShowFormulas    = rAsciiOpt.bSaveFormulas;
 
     CharSet eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
@@ -1752,11 +1753,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
     rtl::OUString aString;
 
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-    const ScViewOptions& rOpt = (pViewSh)
-                                ? pViewSh->GetViewData()->GetOptions()
-                                : aDocument.GetViewOptions();
-    bool bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
     bool bTabProtect = aDocument.IsTabProtected( nTab );
 
     SCCOL nCol;

@@ -46,18 +46,18 @@ public:
         ScImportOptions()
             : nFieldSepCode(0), nTextSepCode(0),
             eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(false),
-            bSaveAsShown(false), bQuoteAllText(false)
+            bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
         {}
         ScImportOptions( const String& rStr );
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const String& rStr )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep), aStrFont(rStr),
-            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
-            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
         { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
@@ -67,7 +67,8 @@ public:
               eCharSet          (rCpy.eCharSet),
               bFixedWidth       (rCpy.bFixedWidth),
               bSaveAsShown      (rCpy.bSaveAsShown),
-              bQuoteAllText     (rCpy.bQuoteAllText)
+              bQuoteAllText     (rCpy.bQuoteAllText),
+              bSaveFormulas     (rCpy.bSaveFormulas)
         {}
 
     ScImportOptions& operator=( const ScImportOptions& rCpy )
@@ -79,6 +80,7 @@ public:
                             bFixedWidth     = rCpy.bFixedWidth;
                             bSaveAsShown    = rCpy.bSaveAsShown;
                             bQuoteAllText   = rCpy.bQuoteAllText;
+                            bSaveFormulas   = rCpy.bSaveFormulas;
                             return *this;
                         }
 
@@ -91,7 +93,8 @@ public:
                                 && aStrFont         == rCmp.aStrFont
                                 && bFixedWidth      == rCmp.bFixedWidth
                                 && bSaveAsShown     == rCmp.bSaveAsShown
-                                && bQuoteAllText    == rCmp.bQuoteAllText;
+                                && bQuoteAllText    == rCmp.bQuoteAllText
+                                && bSaveFormulas    == rCmp.bSaveFormulas;
                         }
     String  BuildString() const;
 
@@ -104,6 +107,7 @@ public:
     sal_Bool    bFixedWidth;
     sal_Bool    bSaveAsShown;
     sal_Bool    bQuoteAllText;
+    sal_Bool    bSaveFormulas;
 };
 
 
