@@ -526,21 +526,20 @@ static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
         // as we do
         size_t items_read = fread( &nWord, 1, 2, fp );
 
-        // fread() does not distinguish between end-of-file and error, and callers
-        //   must use feof(3) and ferror(3) to determine which occurred.
-        if (items_read == 0)
+        if (items_read != 2)
         {
-             // nothing todo?
-             // WaE is happy!
+             SAL_WARN( "extensions.scanner", "short read, abandoning" );
+             return 0;
         }
+
         return (sal_uInt8)( nWord / 256 );
     }
     sal_uInt8 nByte;
     size_t items_read = fread( &nByte, 1, 1, fp );
-    if (items_read == 0)
+    if (items_read != 1)
     {
-         // nothing todo?
-         // WaE is happy!
+        SAL_WARN( "extensions.scanner", "short read, abandoning" );
+        return 0;
     }
     return nByte;
 }
@@ -819,22 +818,18 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 1084 );
             }
 
-            for( nLine = nHeight-1;
-                 nLine >= 0; nLine-- )
+            for (nLine = nHeight-1; nLine >= 0; --nLine)
             {
                 fseek( pFrame, nLine * aParams.bytes_per_line, SEEK_SET );
                 if( eType == FrameStyle_BW ||
                     ( eType == FrameStyle_Gray && aParams.depth == 8 )
                     )
                 {
-                    size_t items_read = fread( pBuffer, 1, aParams.bytes_per_line, pFrame );
-                    
-                    // fread() does not distinguish between end-of-file and error, and callers
-                    //   must use feof(3) and ferror(3) to determine which occurred.
-                    if (items_read == 0)
+                    SANE_Int items_read = fread( pBuffer, 1, aParams.bytes_per_line, pFrame );
+                    if (items_read != aParams.bytes_per_line)
                     {
-                        // nothing todo?
-                        // WaE is happy!
+                        SAL_WARN( "extensions.scanner", "short read, padding with zeros" );
+                        memset(pBuffer + items_read, 0, aParams.bytes_per_line - items_read);
                     }
                     aConverter.Write( pBuffer, aParams.bytes_per_line );
                 }

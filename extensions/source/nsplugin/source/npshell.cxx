@@ -761,7 +761,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
             return;
         }
         char buffer[NPP_BUFFER_SIZE] = {0};
-        int ret;
+        ssize_t ret;
         while(0 <= (ret = read(fdSrc, buffer, NPP_BUFFER_SIZE)))
         {
             if (0 == ret)
@@ -773,8 +773,10 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
                     break;
             }
             ssize_t written_bytes = write(fdDst, buffer, ret);
-            if (written_bytes == -1)
+            if (written_bytes != ret)
             {
+                debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile:short write to %s. error: %s \n",
+                    localPathNew, strerror(errno));
                 return;
             }
         }
