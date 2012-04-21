@@ -1862,18 +1862,6 @@ bool RTFSymbol::operator<(const RTFSymbol& rOther) const
     return strcmp(sKeyword, rOther.sKeyword) < 0;
 }
 
-RTFSymbol::RTFSymbol(const char* pKeyword)
-    : sKeyword(pKeyword)
-{
-}
-
-RTFSymbol::RTFSymbol(const char *pKeyword, int pControlType, RTFKeyword pIndex)
-    : sKeyword(pKeyword),
-    nControlType(pControlType),
-    nIndex(pIndex)
-{
-}
-
 } // namespace rtftok
 } // namespace writerfilter
 
