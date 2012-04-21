@@ -522,6 +522,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     nResMaxNumberOfSuggestions  = GetDefaultNumberOfSuggestions();
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
+    bResIsSpellUpperCase        = bIsSpellUpperCase;
 
     sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
