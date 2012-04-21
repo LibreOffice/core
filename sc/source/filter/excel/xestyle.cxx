@@ -1217,12 +1217,12 @@ struct XclExpNumFmtPred
 
 // ----------------------------------------------------------------------------
 
-void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm, const String& rFormatCode )
+void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->singleElement( XML_numFmt,
             XML_numFmtId,   OString::valueOf( static_cast<sal_Int32>(mnXclNumFmt) ).getStr(),
-            XML_formatCode, XclXmlUtils::ToOString( rFormatCode ).getStr(),
+            XML_formatCode, rtl::OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 }
 
@@ -1270,7 +1270,7 @@ sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uLong nScNumFmt )
     if( nSize < static_cast< size_t >( 0xFFFF - mnXclOffset ) )
     {
         sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( nSize + mnXclOffset );
-        maFormatMap.push_back( XclExpNumFmt( nScNumFmt, nXclNumFmt ) );
+        maFormatMap.push_back( XclExpNumFmt( nScNumFmt, nXclNumFmt, GetFormatCode( nScNumFmt ) ) );
         return nXclNumFmt;
     }
 
@@ -1294,7 +1294,7 @@ void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
     for( XclExpNumFmtVec::iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
     {
-        aIt->SaveXml( rStrm, GetFormatCode( *aIt ) );
+        aIt->SaveXml( rStrm );
     }
     rStyleSheet->endElement( XML_numFmts );
 }
@@ -1314,14 +1314,16 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXcl
 
 void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat )
 {
-    WriteFormatRecord( rStrm, rFormat.mnXclNumFmt, GetFormatCode( rFormat ) );
+    WriteFormatRecord( rStrm, rFormat.mnXclNumFmt, GetFormatCode( rFormat.mnScNumFmt ) );
 }
 
-String XclExpNumFmtBuffer::GetFormatCode( const XclExpNumFmt& rFormat )
+namespace {
+
+String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* xFormatter, NfKeywordTable* pKeywordTable)
 {
     String aFormatStr;
 
-    if( const SvNumberformat* pEntry = GetFormatter().GetEntry( rFormat.mnScNumFmt ) )
+    if( const SvNumberformat* pEntry = rRoot.GetFormatter().GetEntry( nScNumFmt ) )
     {
         if( pEntry->GetType() == NUMBERFORMAT_LOGICAL )
         {
@@ -1342,12 +1344,12 @@ String XclExpNumFmtBuffer::GetFormatCode( const XclExpNumFmt& rFormat )
                 short nType = NUMBERFORMAT_DEFINED;
                 sal_uInt32 nKey;
                 String aTemp( pEntry->GetFormatstring() );
-                mxFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
+                xFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
                 OSL_ENSURE( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
-                pEntry = mxFormatter->GetEntry( nKey );
+                pEntry = xFormatter->GetEntry( nKey );
             }
 
-            aFormatStr = pEntry->GetMappedFormatstring( *mpKeywordTable, *mxFormatter->GetLocaleData() );
+            aFormatStr = pEntry->GetMappedFormatstring( *pKeywordTable, *xFormatter->GetLocaleData() );
             if( aFormatStr.EqualsAscii( "Standard" ) )
                 aFormatStr.AssignAscii( "General" );
         }
@@ -1359,6 +1361,13 @@ String XclExpNumFmtBuffer::GetFormatCode( const XclExpNumFmt& rFormat )
     }
 
     return aFormatStr;
+}
+
+}
+
+String XclExpNumFmtBuffer::GetFormatCode( sal_uInt16 nScNumFmt )
+{
+    return GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable );
 }
 
 // XF, STYLE record - Cell formatting =========================================
@@ -2829,8 +2838,20 @@ void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
 
 
 XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
-    : XclExpRoot( rRoot )
+    : XclExpRoot( rRoot ),
+    mxFormatter( new SvNumberFormatter( rRoot.GetDoc().GetServiceManager(), LANGUAGE_ENGLISH_US ) ),
+    mpKeywordTable( new NfKeywordTable[ 1 ] )
 {
+    mxFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );
+    // remap codes unknown to Excel
+    (*mpKeywordTable)[ NF_KEY_NN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
+    (*mpKeywordTable)[ NF_KEY_NNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
+    (*mpKeywordTable)[ NF_KEY_NNNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    // Export the Thai T NatNum modifier.
+    (*mpKeywordTable)[ NF_KEY_THAI_T ] = String( RTL_CONSTASCII_USTRINGPARAM( "T" ) );
+    sal_Int32 nNumFmtIndex = 0;
+
     ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList();
     if (pList)
     {
@@ -2889,7 +2910,17 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
                     }
 
-                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, NULL, pCellProt, pCellArea ));
+                    XclExpNumFmt* pNumFormat = NULL;
+                    const SfxPoolItem *pPoolItem = NULL;
+                    if( rSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+                    {
+                        sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
+                        sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( EXC_FORMAT_OFFSET8 + nIndex );
+                        pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable ));
+                        ++nNumFmtIndex;
+                    }
+
+                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pCellArea ));
                     ++nIndex;
                 }
 
@@ -2958,7 +2989,7 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
     if (mpFont)
         mpFont->SaveXml(rStrm);
     if (mpNumberFmt)
-        mpNumberFmt->SaveXml(rStrm, String());
+        mpNumberFmt->SaveXml(rStrm);
     if (mpProt)
         mpProt->SaveXml(rStrm);
     if (mpCellArea)

@@ -274,18 +274,20 @@ private:
 /** Stores a core number format index with corresponding Excel format index. */
 struct XclExpNumFmt
 {
-    sal_uLong               mnScNumFmt;     /// Core index of the number format.
+    sal_uLong           mnScNumFmt;     /// Core index of the number format.
     sal_uInt16          mnXclNumFmt;    /// Resulting Excel format index.
+    rtl::OUString       maNumFmtString; /// format string
 
-    inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt ) :
-                            mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ) {}
+    inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt, const rtl::OUString& rFrmt ) :
+                            mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
 
-    void SaveXml( XclExpXmlStream& rStrm, const String& rFormatCode );
+    void SaveXml( XclExpXmlStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------
 
 class SvNumberFormatter;
+typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
 
 /** Stores all number formats used in the document. */
 class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
@@ -295,7 +297,7 @@ public:
     virtual             ~XclExpNumFmtBuffer();
 
     /** Returns the core index of the current standard number format. */
-    inline sal_uLong        GetStandardFormat() const { return mnStdFmt; }
+    inline sal_uLong    GetStandardFormat() const { return mnStdFmt; }
 
     /** Inserts a number format into the format buffer.
         @param nScNumFmt  The core index of the number format.
@@ -312,16 +314,15 @@ private:
     /** Writes the FORMAT record represented by rFormat. */
     void                WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
 
-    String              GetFormatCode ( const XclExpNumFmt& rFormat );
+    String              GetFormatCode ( sal_uInt16 nScNumFmt );
 
 private:
-    typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
     NfKeywordTable*     mpKeywordTable; /// Replacement table.
-    sal_uLong               mnStdFmt;       /// Key for standard number format.
+    sal_uLong           mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };
 
@@ -757,6 +758,8 @@ private:
     typedef boost::ptr_vector<XclExpDxf> DxfContainer;
     std::map<rtl::OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
+    SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
+    NfKeywordTable*     mpKeywordTable; /// Replacement table.
 };
 
 // ============================================================================
