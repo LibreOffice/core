@@ -54,7 +54,7 @@ RtfFilter::~RtfFilter()
 sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
    throw (uno::RuntimeException)
 {
-    SAL_INFO("writerfilter", OSL_THIS_FUNC);
+    sal_uInt32 nStartTime = osl_getGlobalTimer();
     if( m_xSrcDoc.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
@@ -102,6 +102,8 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
 #endif
         if (xStatusIndicator.is())
             xStatusIndicator->end();
+        sal_uInt32 nEndTime = osl_getGlobalTimer();
+        SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
         return sal_True;
     }
     catch (const uno::Exception& e)
