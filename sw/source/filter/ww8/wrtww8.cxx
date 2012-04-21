@@ -228,10 +228,6 @@ public:
 
 SV_IMPL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr )
 
-typedef WW8_WrPc* WW8_WrPcPtr;
-SV_DECL_PTRARR_DEL( WW8_WrPcPtrs, WW8_WrPcPtr, 4 )
-SV_IMPL_PTRARR( WW8_WrPcPtrs, WW8_WrPcPtr )
-
 static void WriteDop( WW8Export& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
@@ -1153,14 +1149,13 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 //--------------------------------------------------------------------------
 
 WW8_WrPct::WW8_WrPct(WW8_FC nfcMin, bool bSaveUniCode)
-    : pPcts(new WW8_WrPcPtrs), nOldFc(nfcMin), bIsUni(bSaveUniCode)
+    : nOldFc(nfcMin), bIsUni(bSaveUniCode)
 {
     AppendPc( nOldFc, bIsUni );
 }
 
 WW8_WrPct::~WW8_WrPct()
 {
-    delete pPcts;
 }
 
 // Piece fuellen und neues Piece erzeugen
@@ -1169,10 +1164,10 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
     WW8_CP nStartCp = nStartFc - nOldFc;    // Textbeginn abziehen
     if ( !nStartCp )
     {
-        if ( 0 != pPcts->Count() )
+        if ( !aPcts.empty() )
         {
-            OSL_ENSURE( 1 == pPcts->Count(), "Leeres Piece !!");
-            pPcts->DeleteAndDestroy( pPcts->Count() - 1 , 1);
+            OSL_ENSURE( 1 == aPcts.size(), "Leeres Piece !!");
+            aPcts.pop_back( );
         }
     }
 
@@ -1188,11 +1183,11 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
         nStartFc |= 0x40000000;         // Vorletztes Bit setzen fuer !Unicode
     }
 
-    if( pPcts->Count() )
-        nStartCp += pPcts->GetObject( pPcts->Count()- 1 )->GetStartCp();
+    if( !aPcts.empty() )
+        nStartCp += aPcts.back().GetStartCp();
 
-    WW8_WrPcPtr pPc = new WW8_WrPc( nStartFc, nStartCp );
-    pPcts->Insert( pPc, pPcts->Count() );
+    WW8_WrPc* pPc = new WW8_WrPc( nStartFc, nStartCp );
+    aPcts.push_back( pPc );
 
     bIsUni = bIsUnicode;
 }
@@ -1202,31 +1197,30 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
 {
     sal_uLong nPctStart;
     sal_uLong nOldPos, nEndPos;
-    sal_uInt16 i;
+    boost::ptr_vector<WW8_WrPc>::iterator aIter;
 
     nPctStart = rWrt.pTableStrm->Tell();                    // Beginn Piece-Table
     *rWrt.pTableStrm << ( char )0x02;                       // Statusbyte PCT
     nOldPos = nPctStart + 1;                                // Position merken
     SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );          // Laenge folgt
-    for( i = 0; i < pPcts->Count(); ++i )                   // Bereiche
+
+    for( aIter = aPcts.begin(); aIter != aPcts.end(); ++aIter )     // Bereiche
         SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                pPcts->GetObject( i )->GetStartCp() );
+                                aIter->GetStartCp() );
 
 
     // die letzte Pos noch errechnen
     sal_uLong nStartCp = rWrt.pFib->fcMac - nOldFc;
     if( bIsUni )
         nStartCp >>= 1;             // Bei Unicode Anzahl der Zeichen / 2
-    nStartCp += pPcts->GetObject( i-1 )->GetStartCp();
+    nStartCp += aPcts.back().GetStartCp();
     SwWW8Writer::WriteLong( *rWrt.pTableStrm, nStartCp );
 
     // Pieceverweise
-    for ( i = 0; i < pPcts->Count(); ++i )
+    for ( aIter = aPcts.begin(); aIter != aPcts.end(); ++aIter )
     {
-        WW8_WrPcPtr pPc = pPcts->GetObject( i );
-
-        SwWW8Writer::WriteShort( *rWrt.pTableStrm, pPc->GetStatus());
-        SwWW8Writer::WriteLong( *rWrt.pTableStrm, pPc->GetStartFc());
+        SwWW8Writer::WriteShort( *rWrt.pTableStrm, aIter->GetStatus());
+        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aIter->GetStartFc());
         SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0);          // PRM=0
     }
 
@@ -1243,19 +1237,19 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
 
 void WW8_WrPct::SetParaBreak()
 {
-    OSL_ENSURE( pPcts->Count(),"SetParaBreak : aPcts.Count = 0" );
-    pPcts->GetObject( pPcts->Count() - 1)->SetStatus();
+    OSL_ENSURE( !aPcts.empty(),"SetParaBreak : aPcts.empty()" );
+    aPcts.back().SetStatus();
 }
 
 WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
 {
     OSL_ENSURE( nFc >= (sal_uLong)nOldFc, "FilePos liegt vorm letzten Piece" );
-    OSL_ENSURE( pPcts->Count(), "Fc2Cp noch kein Piece vorhanden" );
+    OSL_ENSURE( ! aPcts.empty(), "Fc2Cp noch kein Piece vorhanden" );
 
     nFc -= nOldFc;
     if( bIsUni )
         nFc /= 2;
-    return nFc + pPcts->GetObject( pPcts->Count() - 1 )->GetStartCp();
+    return nFc + aPcts.back().GetStartCp();
 }
 
 //--------------------------------------------------------------------------

@@ -112,11 +112,12 @@ class WW8_WrPlcAnnotations;
 class MSWordSections;
 class WW8_WrPlcTxtBoxes;
 class WW8_WrPct;            // Verwaltung
-class WW8_WrPcPtrs;
 class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
 class SvxMSExportOLEObjects;
 class SwMSConvertControls;
+class WW8_WrPc;
+
 namespace com { namespace sun { namespace star { namespace embed {
 class XEmbeddedObject;
 } } } }
@@ -264,7 +265,7 @@ public:
 //--------------------------------------------------------------------------
 class WW8_WrPct
 {
-    WW8_WrPcPtrs* pPcts;
+    boost::ptr_vector<WW8_WrPc > aPcts;
     WW8_FC nOldFc;
     bool bIsUni;
 public:
