@@ -86,7 +86,6 @@ ScRTFColTwips_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(un
 ScRangeData::ReplaceRangeNamesInUse(std::__debug::map<unsigned short, unsigned short, std::less<unsigned short>, std::allocator<std::pair<unsigned short const, unsigned short> > > const&)
 ScRangeData::ScRangeData(unsigned short)
 ScSimpleRangeList::Range::contains(ScSimpleRangeList::Range const&) const
-ScStringCell::ScStringCell()
 ScTable::ReplaceRangeNamesInUse(short, int, short, int, std::__debug::map<unsigned short, unsigned short, std::less<unsigned short>, std::allocator<std::pair<unsigned short const, unsigned short> > > const&)
 ScTypedStrData::GetValue() const
 ScValidationEntries_Impl::Insert(ScValidationData* const&, unsigned short&)

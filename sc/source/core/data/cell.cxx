@@ -657,11 +657,6 @@ ScValueCell::~ScValueCell()
 
 // ============================================================================
 
-ScStringCell::ScStringCell() :
-    ScBaseCell( CELLTYPE_STRING )
-{
-}
-
 ScStringCell::ScStringCell( const rtl::OUString& rString ) :
     ScBaseCell( CELLTYPE_STRING ),
     maString( rString.intern() )

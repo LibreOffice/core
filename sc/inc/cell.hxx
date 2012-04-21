@@ -207,7 +207,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScStringCell )
 #endif
 
-                    ScStringCell();
     explicit        ScStringCell(const rtl::OUString& rString);
 
 #if OSL_DEBUG_LEVEL > 0
