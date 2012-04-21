@@ -2916,7 +2916,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                     {
                         sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
                         sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( EXC_FORMAT_OFFSET8 + nIndex );
-                        pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable ));
+                        pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
                         ++nNumFmtIndex;
                     }
 
@@ -2939,6 +2939,9 @@ sal_Int32 XclExpDxfs::GetDxfId( const rtl::OUString& rStyleName )
 
 void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 {
+    if(maDxf.empty())
+        return;
+
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_dxfs,
             XML_count, rtl::OString::valueOf( static_cast<sal_Int32>(maDxf.size())).getStr(),
@@ -3000,16 +3003,8 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
 // ============================================================================
 
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
-    : XclExpRoot( rRoot ),
-    mbDxfs(false)
+    : XclExpRoot( rRoot )
 {
-    if ( ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList() )
-    {
-        if ( pList->Count() )
-        {
-            mbDxfs = true;
-        }
-    }
 }
 
 void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
@@ -3030,10 +3025,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_XFLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
-    if(mbDxfs)
-    {
-        CreateRecord( EXC_ID_DXFS )->SaveXml( rStrm );
-    }
+    CreateRecord( EXC_ID_DXFS )->SaveXml( rStrm );
 
     aStyleSheet->endElement( XML_styleSheet );
 

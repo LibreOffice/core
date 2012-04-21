@@ -40,6 +40,7 @@
 #include "xeroot.hxx"
 #include "conditio.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 /* ============================================================================
@@ -759,7 +760,7 @@ private:
     std::map<rtl::OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
-    NfKeywordTable*     mpKeywordTable; /// Replacement table.
+    boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };
 
 // ============================================================================
@@ -770,8 +771,6 @@ public:
     explicit            XclExpXmlStyleSheet( const XclExpRoot& rRoot );
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
-private:
-    bool mbDxfs;
 };
 
 // ============================================================================
