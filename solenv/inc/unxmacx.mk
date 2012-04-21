@@ -178,8 +178,12 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
+
+.IF "$(MAC_OS_X_VERSION_MIN_REQUIRED)" <= "1050"
 # assure backwards-compatibility
 EXTRA_LINKFLAGS*:=-Wl,-syslibroot,$(MACOSX_SDK_PATH)
+.ENDIF
+
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
 LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
