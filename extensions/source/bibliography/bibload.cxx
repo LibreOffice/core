@@ -248,9 +248,16 @@ namespace
     // lp#527938, debian#602953, fdo#33266, i#105408
     static bool lcl_isBaseAvailable()
     {
-        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< XAggregation > xAggregate = Reference< XAggregation >( xMgr->createInstance(C2U("com.sun.star.sdbc.RowSet")), UNO_QUERY);
-        return xAggregate.is();
+        try
+        {
+            Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+            Reference< XAggregation > xAggregate = Reference< XAggregation >( xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
+            return xAggregate.is();
+        }
+        catch(...)
+        {
+            return false;
+        }
     }
 }
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUString& rURL,
