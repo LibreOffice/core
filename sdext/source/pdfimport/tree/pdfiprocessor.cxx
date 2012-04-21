@@ -399,7 +399,7 @@ void PDFIProcessor::processGlyphLine()
 
     }
 
-    if(!m_GlyphsList.empty())
+    if(m_GlyphsList.size()>1)
      processGlyph( 0,
                   m_GlyphsList[m_GlyphsList.size()-1],
                   pPara,
