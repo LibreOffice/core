@@ -818,9 +818,9 @@ int RTFDocumentImpl::resolveChars(char ch)
             m_aStates.top().aLevelNumbers.push_back(sal_Int32(ch));
         return 0;
     }
-    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": collected '" << aStr.getStr() << "'");
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
+    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": collected '" << aOUStr << "'");
 
     if (m_aStates.top().nDestinationState == DESTINATION_COLORTABLE)
     {
