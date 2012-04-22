@@ -730,9 +730,6 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
-sdr::animation::Scheduler::Reset(unsigned int)
-sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
-sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
 sfx2::TaskPaneWrapper::GetChildWindowId()
 slideshow::internal::DrawShapeSubsetting::reset(slideshow::internal::DocTreeNode const&, boost::shared_ptr<GDIMetaFile> const&)
 std::__cxx1998::multimap<_xmlNode*, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener>, std::less<_xmlNode*>, std::allocator<std::pair<_xmlNode* const, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener> > > >::~multimap()

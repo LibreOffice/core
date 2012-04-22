@@ -274,13 +274,6 @@ namespace sdr
             }
         }
 
-        void Scheduler::Reset(sal_uInt32 nTime)
-        {
-            mnTime = nTime;
-            mnDeltaTime = 0L;
-            maList.Clear();
-        }
-
         void Scheduler::InsertEvent(Event* pNew)
         {
             if(pNew)

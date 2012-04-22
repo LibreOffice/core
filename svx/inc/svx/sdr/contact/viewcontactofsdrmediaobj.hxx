@@ -62,7 +62,6 @@ namespace sdr
                 return (SdrMediaObj&)GetSdrObject();
             }
 
-            bool    hasPreferredSize() const;
             Size    getPreferredSize() const;
 
             void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;

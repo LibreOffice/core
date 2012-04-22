@@ -133,9 +133,6 @@ namespace sdr
             // #i38135#
             void SetTime(sal_uInt32 nTime);
 
-            // reset
-            void Reset(sal_uInt32 nTime);
-
             // execute all ripe events, removes executed ones from the scheduler
             void triggerEvents();
 

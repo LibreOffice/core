@@ -58,28 +58,6 @@ ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectConta
 
 // ------------------------------------------------------------------------------
 
-bool ViewContactOfSdrMediaObj::hasPreferredSize() const
-{
-    // #i71805# Since we may have a whole bunch of VOCs here, make a loop
-    // return true if all have their preferred size
-    const sal_uInt32 nCount(getViewObjectContactCount());
-    bool bRetval(true);
-
-    for(sal_uInt32 a(0); bRetval && a < nCount; a++)
-    {
-        ViewObjectContact* pCandidate = getViewObjectContact(a);
-
-        if(pCandidate && !static_cast< ViewObjectContactOfSdrMediaObj* >(pCandidate)->hasPreferredSize())
-        {
-            bRetval = false;
-        }
-    }
-
-    return bRetval;
-}
-
-// ------------------------------------------------------------------------------
-
 Size ViewContactOfSdrMediaObj::getPreferredSize() const
 {
     // #i71805# Since we may have a whole bunch of VOCs here, make a loop

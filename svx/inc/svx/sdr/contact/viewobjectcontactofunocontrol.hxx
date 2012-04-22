@@ -64,8 +64,6 @@ namespace sdr { namespace contact {
 
     public:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-        /// determines whether an XControl already exists, and is currently visible
-        bool    isControlVisible() const;
 
         /// returns the ->XControl instance belonging to the instance, creates it if necessary
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >

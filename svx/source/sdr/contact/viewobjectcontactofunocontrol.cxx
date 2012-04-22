@@ -829,11 +829,6 @@ namespace sdr { namespace contact {
         */
         bool    impl_isDisposed_nofail() const { return m_pAntiImpl == NULL; }
 
-        /** determines whether our control is currently visible
-            @nofail
-        */
-        bool    impl_isControlVisible_nofail() const { return m_bControlIsVisible; }
-
         /** determines whether we are currently a listener at the control for desgin-mode relevant facets
             @nofail
         */
