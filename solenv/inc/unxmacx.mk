@@ -88,7 +88,7 @@ CC*=gcc
 objc*=$(CC)
 objcpp*=$(CXX)
 
-CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(EXTRA_CFLAGS)
+CFLAGS=-fsigned-char -fmessage-length=0 -c $(EXTRA_CFLAGS)
 
 .IF "$(DISABLE_DEPRECATION_WARNING)" == "TRUE"
 CFLAGS+=-Wno-deprecated-declarations
@@ -97,7 +97,10 @@ CFLAGS+=-Wno-deprecated-declarations
 #  Compilation flags
 # ---------------------------------
 # Normal C compilation flags
-CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
+CFLAGSCC=-pipe -fsigned-char $(ARCH_FLAGS)
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+CFLAGSCC+=-malign-natural
+.ENDIF
 
 # Normal Objective C compilation flags
 #OBJCFLAGS=-no-precomp
@@ -117,7 +120,10 @@ CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # Normal C++ compilation flags
-CFLAGSCXX=-pipe -malign-natural -fsigned-char $(ARCH_FLAGS) -Wno-ctor-dtor-privacy
+CFLAGSCXX=-pipe -fsigned-char $(ARCH_FLAGS) -Wno-ctor-dtor-privacy
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+CFLAGSCXX+=-malign-natural
+.ENDIF
 .IF "$(HAVE_GCC_NO_LONG-DOUBLE)" == "TRUE"
 CFLAGSCXX+= -Wno-long-double
 .ENDIF
