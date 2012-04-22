@@ -637,6 +637,17 @@ SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
 {
 }
 
+SwFmtPageDesc &SwFmtPageDesc::operator=(const SwFmtPageDesc &rCpy)
+{
+    if (rCpy.GetPageDesc())
+        RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
+    nNumOffset = rCpy.nNumOffset;
+    nDescNameIdx = rCpy.nDescNameIdx;
+    pDefinedIn = 0;
+
+    return *this;
+}
+
  SwFmtPageDesc::~SwFmtPageDesc() {}
 
 bool SwFmtPageDesc::KnowsPageDesc() const
@@ -1226,6 +1237,22 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bRet = false;
     }
     return bRet;
+}
+
+SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
+{
+    rStream << nYPos << eOrient << eRelation;
+    return rStream;
+}
+
+SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion*/) const
+{
+    SwTwips yPos;
+    sal_Int16 orient;
+    sal_Int16 relation;
+    rStream >> yPos >> orient >> relation;
+
+    return new SwFmtVertOrient(yPos, orient, relation);
 }
 
 //  class SwFmtVertOrient

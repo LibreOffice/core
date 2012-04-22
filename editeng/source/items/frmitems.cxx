@@ -124,6 +124,54 @@ inline void SetValueProp( XubString& rStr, const short nValue,
 
 // -----------------------------------------------------------------------
 
+/*
+SvxBorderLine is not an SfxPoolItem, and has no Store/Create serialization/deserialization methods.
+Since border line information needs to be serialized by the table autoformat code, these file-local
+methods are defined to encapsulate the necessary serialization logic.
+*/
+namespace
+{
+    /// Item version for saved border lines. The old version saves the line without style information.
+    const int BORDER_LINE_OLD_VERSION = 0;
+    /// Item version for saved border lies. The new version includes line style.
+    const int BORDER_LINE_WITH_STYLE_VERSION = 1;
+
+    /// Store a border line to a stream.
+    SvStream& StoreBorderLine(SvStream &stream, const SvxBorderLine &l, sal_uInt16 version)
+    {
+        stream << l.GetColor()
+               << l.GetOutWidth()
+               << l.GetInWidth()
+               << l.GetDistance();
+
+        if (version >= BORDER_LINE_WITH_STYLE_VERSION)
+               stream << static_cast<sal_uInt16>(l.GetStyle());
+
+        return stream;
+    }
+
+    /// Creates a border line from a stream.
+    SvxBorderLine CreateBorderLine(SvStream &stream, sal_uInt16 version)
+    {
+        sal_uInt16 nOutline, nInline, nDistance, nStyle = NO_STYLE;
+        Color aColor;
+        stream >> aColor >> nOutline >> nInline >> nDistance;
+
+        if (version >= BORDER_LINE_WITH_STYLE_VERSION)
+            stream >> nStyle;
+
+        SvxBorderLine border(&aColor);
+        border.GuessLinesWidths(static_cast<SvxBorderStyle>(nStyle), nOutline, nInline, nDistance);
+        return border;
+    }
+
+    /// Retrieves a BORDER_LINE_* version from a BOX_BORDER_* version.
+    sal_uInt16 BorderLineVersionFromBoxVersion(sal_uInt16 boxVersion)
+    {
+        return (boxVersion >= BOX_BORDER_STYLE_VERSION)? BORDER_LINE_WITH_STYLE_VERSION : BORDER_LINE_OLD_VERSION;
+    }
+}
+
 TYPEINIT1_FACTORY(SvxPaperBinItem, SfxByteItem, new SvxPaperBinItem(0));
 TYPEINIT1_FACTORY(SvxSizeItem, SfxPoolItem, new SvxSizeItem(0));
 TYPEINIT1_FACTORY(SvxLRSpaceItem, SfxPoolItem, new SvxLRSpaceItem(0));
@@ -2205,11 +2253,8 @@ SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
         const SvxBorderLine* l = pLine[ i ];
         if( l )
         {
-            rStrm << (sal_Int8) i
-                  << l->GetColor()
-                  << (sal_uInt16) l->GetOutWidth()
-                  << (sal_uInt16) l->GetInWidth()
-                  << (sal_uInt16) l->GetDistance();
+            rStrm << static_cast<sal_Int8>(i);
+            StoreBorderLine(rStrm, *l, BorderLineVersionFromBoxVersion(nItemVersion));
         }
     }
     sal_Int8 cLine = 4;
@@ -2243,7 +2288,7 @@ sal_uInt16 SvxBoxItem::GetVersion( sal_uInt16 nFFVer ) const
             SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxBoxItem: Gibt es ein neues Fileformat?" );
     return SOFFICE_FILEFORMAT_31==nFFVer ||
-           SOFFICE_FILEFORMAT_40==nFFVer ? 0 : BOX_4DISTS_VERSION;
+           SOFFICE_FILEFORMAT_40==nFFVer ? 0 : BOX_BORDER_STYLE_VERSION;
 }
 
 // -----------------------------------------------------------------------
@@ -2286,12 +2331,8 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
 
         if( cLine > 3 )
             break;
-        sal_uInt16 nOutline, nInline, _nDistance;
-        Color aColor;
-        rStrm >> aColor >> nOutline >> nInline >> _nDistance;
-        SvxBorderLine aBorder( &aColor );
-        aBorder.GuessLinesWidths( NO_STYLE, nOutline, nInline, _nDistance );
 
+        SvxBorderLine aBorder = CreateBorderLine(rStrm, BorderLineVersionFromBoxVersion(nIVersion));
         pAttr->SetLine( &aBorder, aLineMap[cLine] );
     }
 

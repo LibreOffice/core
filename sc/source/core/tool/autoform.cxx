@@ -85,9 +85,13 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_680DR25 = 10022;
 const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
 const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
-// aktuelle Version
-const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_300OVRLN;
-const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
+// --- Bug fix to fdo#31005: Table Autoformats does not save/apply all properties (Writer and Calc)
+const sal_uInt16 AUTOFORMAT_ID_31005      = 10041;
+const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
+
+// current version
+const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
+const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 
 
 #ifdef READ_OLDVERS
@@ -96,42 +100,41 @@ const sal_uInt16 AUTOFORMAT_OLD_DATA_ID = 4202;
 const sal_uInt16 AUTOFORMAT_OLD_ID_NEW  = 4203;
 #endif
 
-
-//  Struct mit Versionsnummern der Items
-
-struct ScAfVersions
+namespace
 {
-public:
-    sal_uInt16 nFontVersion;
-    sal_uInt16 nFontHeightVersion;
-    sal_uInt16 nWeightVersion;
-    sal_uInt16 nPostureVersion;
-    sal_uInt16 nUnderlineVersion;
-    sal_uInt16 nOverlineVersion;
-    sal_uInt16 nCrossedOutVersion;
-    sal_uInt16 nContourVersion;
-    sal_uInt16 nShadowedVersion;
-    sal_uInt16 nColorVersion;
-    sal_uInt16 nBoxVersion;
-    sal_uInt16 nLineVersion;
-    sal_uInt16 nBrushVersion;
+    /// Read an AutoFormatSwBlob from stream.
+    SvStream& operator>>(SvStream &stream, AutoFormatSwBlob &blob)
+    {
+        blob.Reset();
 
-    sal_uInt16 nAdjustVersion;
+        sal_uInt64 endOfBlob = 0;
+        stream >> endOfBlob;
 
-    sal_uInt16 nHorJustifyVersion;
-    sal_uInt16 nVerJustifyVersion;
-    sal_uInt16 nOrientationVersion;
-    sal_uInt16 nMarginVersion;
-    sal_uInt16 nBoolVersion;
-    sal_uInt16 nInt32Version;
-    sal_uInt16 nRotateModeVersion;
+        const sal_uInt64 currentPosition = stream.Tell();
+        const sal_uInt64 blobSize = endOfBlob - currentPosition;
+        // A zero-size indicates an empty blob. This happens when Calc creates a new autoformat,
+        // since it (naturally) doesn't have any writer-specific data to write.
+        if (blobSize)
+        {
+            blob.pData = new sal_uInt8[blobSize];
+            blob.size = static_cast<sal_Size>(blobSize);
+            stream.Read(blob.pData, blob.size);
+        }
 
-    sal_uInt16 nNumFmtVersion;
+        return stream;
+    }
 
-    ScAfVersions();
-    void Load( SvStream& rStream, sal_uInt16 nVer );
-    static void Write(SvStream& rStream);
-};
+    /// Write an AutoFormatSwBlob to stream.
+    SvStream& operator<<(SvStream &stream, AutoFormatSwBlob &blob)
+    {
+        const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
+        stream << endOfBlob;
+        if (blob.size)
+            stream.Write(blob.pData, blob.size);
+
+        return stream;
+    }
+}
 
 ScAfVersions::ScAfVersions() :
     nFontVersion(0),
@@ -177,6 +180,8 @@ void ScAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
         rStream >> nLineVersion;
     rStream >> nBrushVersion;
     rStream >> nAdjustVersion;
+    if (nVer >= AUTOFORMAT_ID_31005)
+        rStream >> swVersions;
     rStream >> nHorJustifyVersion;
     rStream >> nVerJustifyVersion;
     rStream >> nOrientationVersion;
@@ -190,31 +195,33 @@ void ScAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
     rStream >> nNumFmtVersion;
 }
 
-void ScAfVersions::Write(SvStream& rStream)
+void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 {
-    rStream << SvxFontItem(ATTR_FONT).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxColorItem(ATTR_FONT_COLOR).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxBoxItem(ATTR_BORDER).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxBrushItem(ATTR_BACKGROUND).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxFontItem(ATTR_FONT).GetVersion(fileVersion);
+    rStream << SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(fileVersion);
+    rStream << SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(fileVersion);
+    rStream << SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(fileVersion);
+    rStream << SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(fileVersion);
+    rStream << SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(fileVersion);
+    rStream << SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(fileVersion);
+    rStream << SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(fileVersion);
+    rStream << SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(fileVersion);
+    rStream << SvxColorItem(ATTR_FONT_COLOR).GetVersion(fileVersion);
+    rStream << SvxBoxItem(ATTR_BORDER).GetVersion(fileVersion);
+    rStream << SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(fileVersion);
+    rStream << SvxBrushItem(ATTR_BACKGROUND).GetVersion(fileVersion);
 
-    rStream << SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(fileVersion);
+    if (fileVersion >= SOFFICE_FILEFORMAT_50)
+        rStream << swVersions;
 
-    rStream << SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxMarginItem(ATTR_MARGIN).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SfxBoolItem(ATTR_LINEBREAK).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY).GetVersion(fileVersion);
+    rStream << SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(fileVersion);
+    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion(fileVersion);
+    rStream << SvxMarginItem(ATTR_MARGIN).GetVersion(fileVersion);
+    rStream << SfxBoolItem(ATTR_LINEBREAK).GetVersion(fileVersion);
+    rStream << SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(fileVersion);
+    rStream << SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(fileVersion);
 
     rStream << (sal_uInt16)0;       // Num-Format
 }
@@ -353,6 +360,9 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
     SetAdjust( *(SvxAdjustItem*)pNew );
     delete pNew;
 
+    if (nVer >= AUTOFORMAT_DATA_ID_31005)
+        rStream >> m_swFields;
+
     READ( aHorJustify,   SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
     READ( aVerJustify,   SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
     READ( aOrientation,  SvxOrientationItem, rVersions.nOrientationVersion)
@@ -425,49 +435,51 @@ sal_Bool ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& 
 }
 #endif
 
-sal_Bool ScAutoFormatDataField::Save( SvStream& rStream )
+sal_Bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
 {
     SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
 
-    aFont.Store         ( rStream, aFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aHeight.Store       ( rStream, aHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aWeight.Store       ( rStream, aWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aPosture.Store      ( rStream, aPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aFont.Store         ( rStream, aFont.GetVersion( fileVersion ) );
+    aHeight.Store       ( rStream, aHeight.GetVersion( fileVersion ) );
+    aWeight.Store       ( rStream, aWeight.GetVersion( fileVersion ) );
+    aPosture.Store      ( rStream, aPosture.GetVersion( fileVersion ) );
     // --- from 641 on: CJK and CTL font settings
-    aCJKFont.Store      ( rStream, aCJKFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCJKHeight.Store    ( rStream, aCJKHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCJKWeight.Store    ( rStream, aCJKWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCJKPosture.Store   ( rStream, aCJKPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCTLFont.Store      ( rStream, aCTLFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCTLHeight.Store    ( rStream, aCTLHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCTLWeight.Store    ( rStream, aCTLWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCTLPosture.Store   ( rStream, aCTLPosture.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aCJKFont.Store      ( rStream, aCJKFont.GetVersion( fileVersion ) );
+    aCJKHeight.Store    ( rStream, aCJKHeight.GetVersion( fileVersion ) );
+    aCJKWeight.Store    ( rStream, aCJKWeight.GetVersion( fileVersion ) );
+    aCJKPosture.Store   ( rStream, aCJKPosture.GetVersion( fileVersion ) );
+    aCTLFont.Store      ( rStream, aCTLFont.GetVersion( fileVersion ) );
+    aCTLHeight.Store    ( rStream, aCTLHeight.GetVersion( fileVersion ) );
+    aCTLWeight.Store    ( rStream, aCTLWeight.GetVersion( fileVersion ) );
+    aCTLPosture.Store   ( rStream, aCTLPosture.GetVersion( fileVersion ) );
 
-    aUnderline.Store    ( rStream, aUnderline.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aUnderline.Store    ( rStream, aUnderline.GetVersion( fileVersion ) );
     // --- from DEV300/overline2 on: overline support
-    aOverline.Store     ( rStream, aOverline.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aCrossedOut.Store   ( rStream, aCrossedOut.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aContour.Store      ( rStream, aContour.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aShadowed.Store     ( rStream, aShadowed.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aColor.Store        ( rStream, aColor.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aBox.Store          ( rStream, aBox.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aOverline.Store     ( rStream, aOverline.GetVersion( fileVersion ) );
+    aCrossedOut.Store   ( rStream, aCrossedOut.GetVersion( fileVersion ) );
+    aContour.Store      ( rStream, aContour.GetVersion( fileVersion ) );
+    aShadowed.Store     ( rStream, aShadowed.GetVersion( fileVersion ) );
+    aColor.Store        ( rStream, aColor.GetVersion( fileVersion ) );
+    aBox.Store          ( rStream, aBox.GetVersion( fileVersion ) );
 
     // --- from 680/dr14 on: diagonal frame lines
-    aTLBR.Store         ( rStream, aTLBR.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aBLTR.Store         ( rStream, aBLTR.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aTLBR.Store         ( rStream, aTLBR.GetVersion( fileVersion ) );
+    aBLTR.Store         ( rStream, aBLTR.GetVersion( fileVersion ) );
 
-    aBackground.Store   ( rStream, aBackground.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aBackground.Store   ( rStream, aBackground.GetVersion( fileVersion ) );
 
-    aAdjust.Store       ( rStream, aAdjust.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aAdjust.Store       ( rStream, aAdjust.GetVersion( fileVersion ) );
+    if (fileVersion >= SOFFICE_FILEFORMAT_50)
+        rStream << m_swFields;
 
-    aHorJustify.Store   ( rStream, aHorJustify.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aVerJustify.Store   ( rStream, aVerJustify.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aOrientation.Store  ( rStream, aOrientation.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aMargin.Store       ( rStream, aMargin.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aLinebreak.Store    ( rStream, aLinebreak.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aHorJustify.Store   ( rStream, aHorJustify.GetVersion( fileVersion ) );
+    aVerJustify.Store   ( rStream, aVerJustify.GetVersion( fileVersion ) );
+    aOrientation.Store  ( rStream, aOrientation.GetVersion( fileVersion ) );
+    aMargin.Store       ( rStream, aMargin.GetVersion( fileVersion ) );
+    aLinebreak.Store    ( rStream, aLinebreak.GetVersion( fileVersion ) );
     // Rotation ab SO5
-    aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 ) );
-    aRotateMode.Store   ( rStream, aRotateMode.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( fileVersion ) );
+    aRotateMode.Store   ( rStream, aRotateMode.GetVersion( fileVersion ) );
 
     // --- from 680/dr25 on: store strings as UTF-8
     aNumFormat.Save( rStream, RTL_TEXTENCODING_UTF8 );
@@ -825,6 +837,9 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         rStream >> b; bIncludeValueFormat = b;
         rStream >> b; bIncludeWidthHeight = b;
 
+        if (nVer >= AUTOFORMAT_DATA_ID_31005)
+            rStream >> m_swFields;
+
         bRet = 0 == rStream.GetError();
         for( sal_uInt16 i = 0; bRet && i < 16; ++i )
             bRet = GetField( i ).Load( rStream, rVersions, nVer );
@@ -862,7 +877,7 @@ sal_Bool ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVers
 }
 #endif
 
-bool ScAutoFormatData::Save(SvStream& rStream)
+bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     sal_Bool b;
@@ -878,9 +893,12 @@ bool ScAutoFormatData::Save(SvStream& rStream)
     rStream << ( b = bIncludeValueFormat );
     rStream << ( b = bIncludeWidthHeight );
 
+    if (fileVersion >= SOFFICE_FILEFORMAT_50)
+        rStream << m_swFields;
+
     sal_Bool bRet = 0 == rStream.GetError();
     for (sal_uInt16 i = 0; bRet && (i < 16); i++)
-        bRet = GetField( i ).Save( rStream );
+        bRet = GetField( i ).Save( rStream, fileVersion );
 
     return bRet;
 }
@@ -1099,8 +1117,6 @@ bool ScAutoFormat::Load()
         rStream >> nVal;
         bRet = 0 == rStream.GetError();
 
-        ScAfVersions aVersions;
-
         if (bRet)
         {
             if( nVal == AUTOFORMAT_ID_358 ||
@@ -1122,7 +1138,7 @@ bool ScAutoFormat::Load()
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                aVersions.Load( rStream, nVal );        // Item-Versionen
+                m_aVersions.Load( rStream, nVal );        // Item-Versionen
 
                 ScAutoFormatData* pData;
                 sal_uInt16 nAnz = 0;
@@ -1131,7 +1147,7 @@ bool ScAutoFormat::Load()
                 for (sal_uInt16 i=0; bRet && (i < nAnz); i++)
                 {
                     pData = new ScAutoFormatData();
-                    bRet = pData->Load(rStream, aVersions);
+                    bRet = pData->Load(rStream, m_aVersions);
                     insert(pData);
                 }
             }
@@ -1141,22 +1157,22 @@ bool ScAutoFormat::Load()
                 if( AUTOFORMAT_OLD_ID_NEW == nVal )
                 {
                     // alte Version der Versions laden
-                    rStream >> aVersions.nFontVersion;
-                    rStream >> aVersions.nFontHeightVersion;
-                    rStream >> aVersions.nWeightVersion;
-                    rStream >> aVersions.nPostureVersion;
-                    rStream >> aVersions.nUnderlineVersion;
-                    rStream >> aVersions.nCrossedOutVersion;
-                    rStream >> aVersions.nContourVersion;
-                    rStream >> aVersions.nShadowedVersion;
-                    rStream >> aVersions.nColorVersion;
-                    rStream >> aVersions.nHorJustifyVersion;
-                    rStream >> aVersions.nVerJustifyVersion;
-                    rStream >> aVersions.nOrientationVersion;
-                    rStream >> aVersions.nBoolVersion;
-                    rStream >> aVersions.nMarginVersion;
-                    rStream >> aVersions.nBoxVersion;
-                    rStream >> aVersions.nBrushVersion;
+                    rStream >> m_aVersions.nFontVersion;
+                    rStream >> m_aVersions.nFontHeightVersion;
+                    rStream >> m_aVersions.nWeightVersion;
+                    rStream >> m_aVersions.nPostureVersion;
+                    rStream >> m_aVersions.nUnderlineVersion;
+                    rStream >> m_aVersions.nCrossedOutVersion;
+                    rStream >> m_aVersions.nContourVersion;
+                    rStream >> m_aVersions.nShadowedVersion;
+                    rStream >> m_aVersions.nColorVersion;
+                    rStream >> m_aVersions.nHorJustifyVersion;
+                    rStream >> m_aVersions.nVerJustifyVersion;
+                    rStream >> m_aVersions.nOrientationVersion;
+                    rStream >> m_aVersions.nBoolVersion;
+                    rStream >> m_aVersions.nMarginVersion;
+                    rStream >> m_aVersions.nBoxVersion;
+                    rStream >> m_aVersions.nBrushVersion;
                 }
                 if( AUTOFORMAT_OLD_ID_OLD == nVal ||
                     AUTOFORMAT_OLD_ID_NEW == nVal )
@@ -1168,7 +1184,7 @@ bool ScAutoFormat::Load()
                     for( sal_uInt16 i=0; bRet && (i < nAnz); ++i )
                     {
                         pData = new ScAutoFormatData();
-                        bRet = pData->LoadOld( rStream, aVersions );
+                        bRet = pData->LoadOld( rStream, m_aVersions );
                         insert(pData);
                     }
                 }
@@ -1197,8 +1213,9 @@ bool ScAutoFormat::Save()
     bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
     {
+        const sal_uInt16 fileVersion = SOFFICE_FILEFORMAT_50;
         SvStream& rStream = *pStream;
-        rStream.SetVersion( SOFFICE_FILEFORMAT_40 );
+        rStream.SetVersion( fileVersion );
 
         // Achtung hier muss ein allgemeiner Header gespeichert werden
         sal_uInt16 nVal = AUTOFORMAT_ID;
@@ -1206,7 +1223,7 @@ bool ScAutoFormat::Save()
                 << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
                 << (sal_uInt8)::GetSOStoreTextEncoding(
                     osl_getThreadTextEncoding() );
-        ScAfVersions::Write(rStream);           // Item-Versionen
+        m_aVersions.Write(rStream, fileVersion);
 
         bRet = (rStream.GetError() == 0);
         //-----------------------------------------------------------
@@ -1214,7 +1231,7 @@ bool ScAutoFormat::Save()
         bRet = (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();
         for (++it; bRet && it != itEnd; ++it) // Skip the first item.
-            bRet = it->second->Save(rStream);
+            bRet = it->second->Save(rStream, fileVersion);
 
         rStream.Flush();
 

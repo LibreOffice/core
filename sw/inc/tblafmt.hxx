@@ -53,9 +53,17 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/shaditem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/bolnitem.hxx>
+#include <fmtpdsc.hxx>
+#include <fmtlsplt.hxx>
+#include <fmtrowsplt.hxx>
+#include <fmtornt.hxx>
 #include "swdllapi.h"
 
 struct SwAfVersions;
@@ -94,6 +102,8 @@ class SwBoxAutoFmt
 
     // Writer specific
     SvxAdjustItem       aAdjust;
+    SvxFrameDirectionItem m_aTextOrientation;
+    SwFmtVertOrient m_aVerticalAlignment;
 
     // Calc specific
     SvxHorJustifyItem   aHorJustify;
@@ -136,6 +146,8 @@ public:
     const SvxShadowedItem   &GetShadowed() const    { return aShadowed; }
     const SvxColorItem      &GetColor() const       { return aColor; }
     const SvxAdjustItem     &GetAdjust() const      { return aAdjust; }
+    const SvxFrameDirectionItem& GetTextOrientation() const { return m_aTextOrientation; }
+    const SwFmtVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
     const SvxBoxItem        &GetBox() const         { return aBox; }
     const SvxLineItem       &GetTLBR() const        { return aTLBR; }
     const SvxLineItem       &GetBLTR() const        { return aBLTR; }
@@ -168,14 +180,16 @@ public:
             aAdjust.SetOneWord( rNew.GetOneWord() );
             aAdjust.SetLastBlock( rNew.GetLastBlock() );
         }
+    void SetTextOrientation(const SvxFrameDirectionItem& rNew) { m_aTextOrientation = rNew; }
+    void SetVerticalAlignment(const SwFmtVertOrient& rNew) { m_aVerticalAlignment = rNew; }
     void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
     void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    sal_Bool Save( SvStream& rStream ) const;
-    sal_Bool SaveVerionNo( SvStream& rStream ) const;
+    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    sal_Bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
 #ifdef READ_OLDVERS
     // load old version.
@@ -183,6 +197,50 @@ public:
 #endif
 };
 
+/*
+@remarks
+A table has a number of lines. These lines seem to correspond with rows, except in the case of
+rows spanning more than one line. Each line contains a number of boxes/cells.
+
+AutoFormat properties are retrieved and stored in a grid of 16 table boxes. A sampling approach
+is used to read the data. 4 lines are picked, and 4 boxes are picked from each.
+
+The line picking and box picking algorithms are similar. We start at the first line/box, and pick
+lines/boxes one by one for a maximum of 3. The 4th line/box is the last line/box in the current
+table/line. If we hit the end of lines/boxes, the last line/box encountered is picked several times.
+
+For example, in a 2x3 table, the 4 lines will be [0, 1, 1, 1]. In each line, the boxes will be
+[0, 1, 2, 2]. In a 6x5 table, the 4 lines will be [0, 1, 2, 4] and the boxes per line will be
+[0, 1, 2, 5].
+
+As you can see, property extraction/application is lossless for tables that are 4x4 or smaller
+(and in fact has a bit of redundnacy). For larger tables, we lose any individual cell formatting
+for the range [(3,rows - 1) -> (3, cols - 1)]. That formatting is replaced by formatting from
+the saved cells:
+
+            0            1            2           3           4           5
+        +-----------------------------------------------------------------------+
+     0  |   Saved   |  Saved    |  Saved    |           |           |  Saved    |
+        +-----------------------------------------------------------------------+
+     1  |   Saved   |  Saved    |  Saved    |           |           |  Saved    |
+        +-----------------------------------------------------------------------+
+     2  |   Saved   |  Saved    |  Saved    |           |           |  Saved    |
+        +-----------------------------------------------------------------------+
+     3  |           |           |           |           |           |           |
+        +-----------------------------------------------------------------------+
+     4  |           |           |           |           |           |           |
+        +-----------------------------------------------------------------------+
+     5  |   Saved   |  Saved    |  Saved    |           |           |  Saved    |
+        +-----------+-----------+-----------+-----------+-----------+-----------+
+
+The properties saved are divided into three categories:
+    1. Character properties: Font, font size, weight, etc.
+    2. Box properties: Box, cell background
+    3. Table properties: Properties that are set in the Table->Table Properties dialog.
+
+Character and box properties are stored per cell (and are lossy for tables larger than 4x4). Table
+properties are stored per-table, and are lossless.
+*/
 class SW_DLLPUBLIC SwTableAutoFmt
 {
     friend void _FinitCore();       // To destroy dflt. pointer.
@@ -203,6 +261,16 @@ class SW_DLLPUBLIC SwTableAutoFmt
 
     SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
 
+    // Writer-specific options
+    SvxFmtBreakItem m_aBreak;
+    SwFmtPageDesc m_aPageDesc;
+    SvxFmtKeepItem m_aKeepWithNextPara;
+    sal_uInt16 m_aRepeatHeading;
+    sal_Bool m_bLayoutSplit;
+    sal_Bool m_bRowSplit;
+    sal_Bool m_bCollapsingBorders;
+    SvxShadowItem m_aShadow;
+
 public:
     SwTableAutoFmt( const String& rName );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
@@ -217,10 +285,13 @@ public:
     const String& GetName() const { return aName; }
 
     enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
-    SwBoxAutoFmt& UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
+    void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 UpdateFlags eFlags, SvNumberFormatter* );
     void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, UpdateFlags eFlags,
                         SvNumberFormatter* ) const ;
+
+    void RestoreTableProperties(SwTable &table) const;
+    void StoreTableProperties(const SwTable &table);
 
     sal_Bool IsFont() const         { return bInclFont; }
     sal_Bool IsJustify() const      { return bInclJustify; }
@@ -236,7 +307,7 @@ public:
     void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& );
-    sal_Bool Save( SvStream& rStream ) const;
+    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
 #ifdef READ_OLDVERS
     // Load old versions.

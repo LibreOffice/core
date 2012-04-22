@@ -70,8 +70,72 @@
 
 #include <boost/ptr_container/ptr_map.hpp>
 
-struct ScAfVersions;
+/**
+A binary blob of writer-specific data. This data typically consists of types that are
+unavailable to Calc (e.g. SwFmtVertOrient), or that Calc doesn't care about.
 
+@remarks Note that in autoformat versions prior to AUTOFORMAT_DATA_ID_31005, Calc
+logic handled and stored several writer-specific items (such as ScAutoFormatDataField::aAdjust).
+That logic was preserved. From _31005 onward, writer-specific data should be handled by
+blobs to avoid needlessly complicating the Calc logic.
+*/
+struct AutoFormatSwBlob : ::boost::noncopyable
+{
+    sal_uInt8 *pData;
+    sal_Size size;
+
+    AutoFormatSwBlob() : pData(0), size(0)
+    {
+    }
+
+    ~AutoFormatSwBlob()
+    {
+        Reset();
+    }
+
+    void Reset()
+    {
+        delete[] pData;
+        pData = 0;
+        size = 0;
+    }
+};
+
+/// Struct with version numbers of the Items
+struct ScAfVersions
+{
+public:
+    sal_uInt16 nFontVersion;
+    sal_uInt16 nFontHeightVersion;
+    sal_uInt16 nWeightVersion;
+    sal_uInt16 nPostureVersion;
+    sal_uInt16 nUnderlineVersion;
+    sal_uInt16 nOverlineVersion;
+    sal_uInt16 nCrossedOutVersion;
+    sal_uInt16 nContourVersion;
+    sal_uInt16 nShadowedVersion;
+    sal_uInt16 nColorVersion;
+    sal_uInt16 nBoxVersion;
+    sal_uInt16 nLineVersion;
+    sal_uInt16 nBrushVersion;
+
+    sal_uInt16 nAdjustVersion;
+    AutoFormatSwBlob swVersions;
+
+    sal_uInt16 nHorJustifyVersion;
+    sal_uInt16 nVerJustifyVersion;
+    sal_uInt16 nOrientationVersion;
+    sal_uInt16 nMarginVersion;
+    sal_uInt16 nBoolVersion;
+    sal_uInt16 nInt32Version;
+    sal_uInt16 nRotateModeVersion;
+
+    sal_uInt16 nNumFmtVersion;
+
+    ScAfVersions();
+    void Load( SvStream& rStream, sal_uInt16 nVer );
+    void Write(SvStream& rStream, sal_uInt16 fileVersion);
+};
 
 /// Contains all items for one cell of a table autoformat.
 class ScAutoFormatDataField
@@ -105,6 +169,7 @@ private:
 
     // Writer specific
     SvxAdjustItem               aAdjust;
+    AutoFormatSwBlob            m_swFields;
 
     // Calc specific
     SvxHorJustifyItem           aHorJustify;
@@ -189,7 +254,7 @@ public:
     void    SetRotateMode( const SvxRotateModeItem& rRotateMode )   { aRotateMode.SetValue( rRotateMode.GetValue() ); }
 
     sal_Bool                        Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
-    sal_Bool                        Save( SvStream& rStream );
+    sal_Bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
 
 #ifdef READ_OLDVERS
     sal_Bool                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
@@ -211,6 +276,9 @@ private:
     // Calc specific flags
     bool                        bIncludeValueFormat : 1;
     bool                        bIncludeWidthHeight : 1;
+
+    // Writer-specific data
+    AutoFormatSwBlob m_swFields;
 
     ScAutoFormatDataField**     ppDataField;
 
@@ -251,7 +319,7 @@ public:
     void                        GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat );
 
     bool                        Load( SvStream& rStream, const ScAfVersions& rVersions );
-    bool                        Save( SvStream& rStream );
+    bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
 
 #ifdef READ_OLDVERS
     sal_Bool                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
@@ -263,6 +331,7 @@ class SC_DLLPUBLIC ScAutoFormat
     typedef boost::ptr_map<rtl::OUString, ScAutoFormatData> MapType;
     MapType maData;
     bool mbSaveLater;
+    ScAfVersions m_aVersions;
 
 public:
     typedef MapType::const_iterator const_iterator;

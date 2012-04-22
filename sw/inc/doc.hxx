@@ -1900,6 +1900,16 @@ public:
                           const editeng::SvxBorderLine* pBorderLine );
     void GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const;
     void SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew );
+    /**
+    Retrieves a box attribute from the given cursor.
+
+    @return Whether the property is set over the current box selection.
+
+    @remarks A property is 'set' if it's set to the same value over all boxes in the current selection.
+    The property value is retrieved from the first box in the current selection. It is then compared to
+    the values of the same property over any other boxes in the selection; if any value is different from
+    that of the first box, the property is unset (and sal_False is returned).
+    */
     sal_Bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
     sal_uInt16 GetBoxAlign( const SwCursor& rCursor ) const;

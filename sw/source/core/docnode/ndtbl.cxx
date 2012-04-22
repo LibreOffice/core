@@ -3724,7 +3724,8 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
     if( aFndBox.GetLines().empty() )
         return sal_False;
 
-    pTblNd->GetTable().SetHTMLTableLayout( 0 );
+    SwTable &table = pTblNd->GetTable();
+    table.SetHTMLTableLayout( 0 );
 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
@@ -3746,6 +3747,8 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         GetIDocumentUndoRedo().DoUndo(false);
     }
+
+    rNew.RestoreTableProperties(table);
 
     _SetAFmtTabPara aPara( rNew );
     _FndLines& rFLns = pFndBox->GetLines();
@@ -3807,6 +3810,10 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
     }
     if( aFndBox.GetLines().empty() )
         return sal_False;
+
+    // Store table properties
+    SwTable &table = pTblNd->GetTable();
+    rGet.StoreTableProperties(table);
 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&

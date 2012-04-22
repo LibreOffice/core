@@ -64,6 +64,9 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
+    SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const;
+    SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const;
+
     sal_Int16 GetVertOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
     void   SetVertOrient( sal_Int16 eNew ) { eOrient = eNew; }
