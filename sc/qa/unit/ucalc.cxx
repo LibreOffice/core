@@ -211,7 +211,6 @@ public:
     void testAutoFill();
 
     CPPUNIT_TEST_SUITE(Test);
-#if 0
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
@@ -249,7 +248,6 @@ public:
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
-#endif
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST_SUITE_END();
 
