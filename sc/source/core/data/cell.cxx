@@ -175,7 +175,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
         if (rNewDoc.GetPool() != const_cast<ScDocument*>(pOldDoc)->GetPool())
         {
             pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
-            pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, true);
+            pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, false, true);
         }
 
         bool bInserted;
@@ -811,12 +811,13 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
             }
         }
 
-        if (pDocument->GetPool() != rCell.pDocument->GetPool())
+        bool bCopyBetweenDocs = pDocument->GetPool() != rCell.pDocument->GetPool();
+        if (bCopyBetweenDocs)
         {
             pCode->ReadjustAbsolute3DReferences( rCell.pDocument, &rDoc, rCell.aPos);
         }
 
-        pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos );
+        pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos, false, bCopyBetweenDocs );
     }
 
     if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )

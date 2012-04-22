@@ -1832,7 +1832,7 @@ bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
     return rClipParam.maRanges.In(rRange);
 }
 
-bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOldDoc, bool bRangeName)
+bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOldDoc, bool bRangeName, bool bCheckCopyArea)
 {
     ScRange aRange;
 
@@ -1862,7 +1862,7 @@ bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOl
         }
     }
 
-    if (IsInCopyRange(aRange, pOldDoc))
+    if (bCheckCopyArea && IsInCopyRange(aRange, pOldDoc))
         return true;
 
     return false;
@@ -1894,7 +1894,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
         {
             case svDoubleRef :
             {
-                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName, true))
                     continue;
 
                 ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
@@ -1915,7 +1915,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
             break;
             case svSingleRef :
             {
-                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName, true))
                     continue;
 
                 ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
@@ -1941,7 +1941,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
     }
 }
 
-void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName)
+void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName, bool bCheckCopyRange)
 {
     for ( sal_uInt16 j=0; j<nLen; ++j )
     {
@@ -1949,7 +1949,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
         {
             case svDoubleRef :
             {
-                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false))
+                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false, bCheckCopyRange))
                     continue;
 
                 ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
@@ -1966,7 +1966,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
             break;
             case svSingleRef :
             {
-                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false))
+                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false, bCheckCopyRange))
                     continue;
 
                 ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
