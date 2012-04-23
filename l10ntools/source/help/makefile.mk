@@ -52,6 +52,10 @@ CFLAGS+= $(SYSTEM_DB_CFLAGS)
 CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
 
+.IF "$(SYSTEM_CLUCENE)" == "YES"
+CFLAGS+= $(CLUCENE_CFLAGS)
+.ENDIF
+
 OBJFILES=\
         $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj \
