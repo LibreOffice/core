@@ -2275,6 +2275,12 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 if (xWarnings.is())
                 {
                     SQLExceptionInfo aWarnings(xWarnings->getWarnings());
+#if 0
+// Obviously this if test is always false. So to avoid a Clang warning
+// "use of logical '&&' with constant operand" I put this in #if
+// 0. Yeah, I know it is fairly likely nobody will ever read this
+// comment and make a decision what to do here, so I could as well
+// have just binned this...
                     if (aWarnings.isValid() && sal_False)
                     {
                         SQLContext aContext;
@@ -2284,6 +2290,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                         aWarnings = aContext;
                         showError(aWarnings);
                     }
+#endif
                     // TODO: we need a better concept for these warnings:
                     // something like "don't show any warnings for this datasource, again" would be nice
                     // But this requires an extension of the InteractionHandler and an additional property on the data source
