@@ -116,7 +116,7 @@ void XDatabaseRange::testGetSortDescriptor()
         {
             sal_Bool bBindFormatsToContent = sal_False;
             xProp.Value >>= bBindFormatsToContent;
-            CPPUNIT_ASSERT(bBindFormatsToContent == sal_False);
+            CPPUNIT_ASSERT(bBindFormatsToContent == sal_True);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyOutputData")))
         {
