@@ -34,7 +34,6 @@ using namespace ooo::vba;
 
 const static rtl::OUString LARGECHANGE( RTL_CONSTASCII_USTRINGPARAM("BlockIncrement") );
 const static rtl::OUString SMALLCHANGE( RTL_CONSTASCII_USTRINGPARAM("LineIncrement") );
-const static rtl::OUString ORIENTATION( RTL_CONSTASCII_USTRINGPARAM("Orientation") );
 const static rtl::OUString SCROLLVALUE( RTL_CONSTASCII_USTRINGPARAM("ScrollValue") );
 const static rtl::OUString SCROLLMAX( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMax") );
 const static rtl::OUString SCROLLMIN( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMin") );

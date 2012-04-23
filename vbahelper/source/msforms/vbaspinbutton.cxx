@@ -32,7 +32,6 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString ORIENTATION( RTL_CONSTASCII_USTRINGPARAM("Orientation") );
 const static rtl::OUString SPINVALUE( RTL_CONSTASCII_USTRINGPARAM("SpinValue") );
 const static rtl::OUString SPINMAX( RTL_CONSTASCII_USTRINGPARAM("SpinValueMax") );
 const static rtl::OUString SPINMIN( RTL_CONSTASCII_USTRINGPARAM("SpinValueMin") );

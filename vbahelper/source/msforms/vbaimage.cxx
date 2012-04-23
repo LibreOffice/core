@@ -32,7 +32,6 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
 ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ImageImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }

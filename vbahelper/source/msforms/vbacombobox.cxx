@@ -47,7 +47,6 @@ using namespace ooo::vba;
 //StringItemList list of items
 
 const static rtl::OUString TEXT( RTL_CONSTASCII_USTRINGPARAM("Text") );
-const static rtl::OUString SELECTEDITEMS( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") );
 const static rtl::OUString ITEMS( RTL_CONSTASCII_USTRINGPARAM("StringItemList") );
 const static rtl::OUString CONTROLSOURCEPROP( RTL_CONSTASCII_USTRINGPARAM("DataFieldProperty") );
 
