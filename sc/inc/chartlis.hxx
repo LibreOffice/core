@@ -88,8 +88,6 @@ private:
 
 public:
     ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
-                     const ScRange& rRange );
-    ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
                      const ScRangeListRef& rRangeListRef );
     ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
                      ::std::vector<ScTokenRef>* pTokens );

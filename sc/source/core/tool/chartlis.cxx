@@ -120,21 +120,6 @@ boost::unordered_set<sal_uInt16>& ScChartListener::ExternalRefListener::getAllFi
 // ----------------------------------------------------------------------------
 
 ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
-        const ScRange& rRange ) :
-    SvtListener(),
-    mpExtRefListener(NULL),
-    mpTokens(new vector<ScTokenRef>),
-    maName(rName),
-    pUnoData( NULL ),
-    pDoc( pDocP ),
-    bUsed( false ),
-    bDirty( false ),
-    bSeriesRangesScheduled( false )
-{
-    SetRangeList( rRange );
-}
-
-ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     SvtListener(),
     mpExtRefListener(NULL),

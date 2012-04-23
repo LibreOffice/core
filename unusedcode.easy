@@ -35,7 +35,6 @@ ScAddInDocs::Insert(ScAddInDocs const*, unsigned short, unsigned short)
 ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
-ScChartListener::ScChartListener(rtl::OUString const&, ScDocument*, ScRange const&)
 ScChartListener::SetName(rtl::OUString const&)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
