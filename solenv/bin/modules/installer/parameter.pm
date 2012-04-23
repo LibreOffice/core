@@ -152,7 +152,10 @@ sub getparameter
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
-            $installer::globals::destdir = Cwd::realpath( shift @ARGV );
+
+	    my $path = shift(@ARGV);
+	    mkdir $path;
+            $installer::globals::destdir = Cwd::realpath($path);
         }
         elsif ($param eq "-simple")     # new parameter for simple installer
         {
