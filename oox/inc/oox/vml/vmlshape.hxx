@@ -80,6 +80,7 @@ struct ShapeTypeModel
     ::rtl::OUString     maMarginLeft;           ///< X position of the shape bounding box to shape anchor (number with unit).
     ::rtl::OUString     maMarginTop;            ///< Y position of the shape bounding box to shape anchor (number with unit).
     ::rtl::OUString     maPositionVerticalRelative; ///< The Y position is relative to this.
+    ::rtl::OUString     maPositionHorizontal;   ///< The X position orientation (default: absolute).
     ::rtl::OUString     maRotation;             ///< Rotation of the shape, in degrees.
     ::rtl::OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)

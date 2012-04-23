@@ -219,6 +219,7 @@ HelpText
 HideInactiveSelection
 HoriJustify
 HoriJustifyMethod
+HoriOrient
 HoriOrientPosition
 HorizontalSplitMode
 HorizontalSplitPositionTwips

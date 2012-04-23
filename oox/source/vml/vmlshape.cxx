@@ -389,6 +389,8 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
+        if (maTypeModel.maPositionHorizontal == "center")
+            PropertySet(xShape).setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
     }
 
     // Import Legacy Fragments (if any)
