@@ -4229,17 +4229,33 @@ void Test::testCopyPasteFormulas()
     m_pDoc->InsertTab(1, "Sheet2");
 
     m_pDoc->SetString(0,0,0, "=COLUMN($A$1)");
+    m_pDoc->SetString(0,1,0, "=$A$1+B2" );
+    m_pDoc->SetString(0,2,0, "=$Sheet2.A1");
+    m_pDoc->SetString(0,3,0, "=$Sheet2.$A$1");
+    m_pDoc->SetString(0,4,0, "=$Sheet2.A$1");
+
+    // to prevent ScEditableTester in ScDocFunc::MoveBlock
     m_pDoc->SetInTest();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0, 1e-08);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,1,0), 1.0, 1e-08);
     ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
-    bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0), ScAddress( 10, 10, 0), false, false, false, true);
+    bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0,0,4,0), ScAddress( 10, 10, 0), false, false, false, true);
 
     // check that moving was succesful, mainly for editable tester
     CPPUNIT_ASSERT(bMoveDone);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0, 1e-8);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0, 1e-8);
     rtl::OUString aFormula;
     m_pDoc->GetFormula(10,10,0, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($A$1)"));
+    m_pDoc->GetFormula(10,11,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$A$1+L12"));
+    m_pDoc->GetFormula(10,12,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.K11"));
+    m_pDoc->GetFormula(10,13,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.$A$1"));
+    m_pDoc->GetFormula(10,14,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.K$1"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
