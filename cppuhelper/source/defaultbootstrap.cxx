@@ -1318,7 +1318,12 @@ bool ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
             static_cast< cppu::OWeakObject * >(this));
     }
     RegistryKeyArray impls;
-    if (rootKey.openSubKeys("IMPLEMENTATIONS", impls) != REG_NO_ERROR) {
+    switch (rootKey.openSubKeys("IMPLEMENTATIONS", impls)) {
+    case REG_NO_ERROR:
+        break;
+    case REG_KEY_NOT_EXISTS:
+        return true;
+    default:
         throw css::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,
             static_cast< cppu::OWeakObject * >(this));
