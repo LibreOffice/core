@@ -233,7 +233,6 @@ OUString PackageRegistryBackend::createFolder(
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
 
-    const OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
     const String baseDir(sDataFolder);
     const ::utl::TempFile aTemp(&baseDir, sal_True);
     const OUString url = aTemp.GetURL();
