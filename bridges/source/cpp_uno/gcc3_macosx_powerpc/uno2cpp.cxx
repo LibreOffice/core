@@ -67,7 +67,6 @@ static void callVirtualMethod(
   // of floating point registers f1 to f13
 
      unsigned long * mfunc;        // actual function to be invoked
-     void (*ptr)();
      int gpr[8];                   // storage for gpregisters, map to r3-r10
      int off;                      // offset used to find function
      double fpr[13];               // storage for fpregisters, map to f1-f13
@@ -208,7 +207,8 @@ static void callVirtualMethod(
      mfunc = *((unsigned long **)pAdjustedThisPtr);    // get the address of the vtable
      mfunc = (unsigned long *)((char *)mfunc + off); // get the address from the vtable entry at offset
      mfunc = *((unsigned long **)mfunc);                 // the function is stored at the address
-     ptr = (void (*)())mfunc;
+     typedef void (*FunctionCall)(sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32);
+     FunctionCall ptr = (FunctionCall)mfunc;
 
     /* Set up the machine registers and invoke the function */
 
@@ -240,7 +240,17 @@ static void callVirtualMethod(
             "f10", "f11", "f12", "f13"
     );
 
-    (*ptr)();
+    // tell gcc that r3 to r10 are not available to it for doing the TOC and exception munge on the func call
+    register sal_uInt32 r3 __asm__("r3");
+    register sal_uInt32 r4 __asm__("r4");
+    register sal_uInt32 r5 __asm__("r5");
+    register sal_uInt32 r6 __asm__("r6");
+    register sal_uInt32 r7 __asm__("r7");
+    register sal_uInt32 r8 __asm__("r8");
+    register sal_uInt32 r9 __asm__("r9");
+    register sal_uInt32 r10 __asm__("r10");
+
+    (*ptr)(r3, r4, r5, r6, r7, r8, r9, r10);
 
 
     __asm__ __volatile__ (
