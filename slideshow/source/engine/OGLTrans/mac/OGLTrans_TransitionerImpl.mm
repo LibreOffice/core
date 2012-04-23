@@ -425,7 +425,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     Point aScreen( pPWindow->OutputToScreenPixel( Point() ) );
     GLWin.aInitFrame = (NSRect){ { aScreen.X(), aFrameSize.Height() - GLWin.Height - aScreen.Y() }, { GLWin.Width, GLWin.Height } };
 
-    GLWin.pAquaOpenGLView = [[NSOpenGLView alloc]initWithFrame: GLWin.aInitFrame pixelFormat: fmt];
+    GLWin.pAquaOpenGLView = (AquaOpenGLView *)[[NSOpenGLView alloc]initWithFrame: GLWin.aInitFrame pixelFormat: fmt];
     OSL_ENSURE(GLWin.pAquaOpenGLView, "Could not create NSOPenGLView");
     if( !GLWin.pAquaOpenGLView )
         return false;
