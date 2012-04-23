@@ -504,13 +504,6 @@ static typelib_TypeClass cpp_mediate(
 
 extern "C" void privateSnippetExecutor( ... )
 {
-    volatile long nOffsetAndIndex;
-
-    //mr %r3, %r11            # move into arg1 the 64bit value passed from OOo
-    __asm__ __volatile__ (
-                "mr     %0,    11\n\t"
-                : "=r" (nOffsetAndIndex) : );
-
     sal_uInt64 gpreg[ppc64::MAX_GPR_REGS];
     double fpreg[ppc64::MAX_SSE_REGS];
 
@@ -537,10 +530,17 @@ extern "C" void privateSnippetExecutor( ... )
         "stfd 12, 88(%1)\t\n"
         "stfd 13, 96(%1)\t\n"
     : : "r" (gpreg), "r" (fpreg)
-        : "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10",
+        : "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11",
           "fr1", "fr2", "fr3", "fr4", "fr5", "fr6", "fr7", "fr8", "fr9",
           "fr10", "fr11", "fr12", "fr13"
     );
+
+    volatile long nOffsetAndIndex;
+
+    //mr %r3, %r11            # move into arg1 the 64bit value passed from OOo
+    __asm__ __volatile__ (
+                "mr     %0,    11\n\t"
+                : "=r" (nOffsetAndIndex) : );
 
     volatile long sp;
 
