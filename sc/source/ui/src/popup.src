@@ -151,6 +151,12 @@ Menu RID_POPUP_CELLS
                     };
                     MenuItem
                     {
+                        Identifier = SID_PASTE_ONLY_VALUE ;
+                        HelpId = CMD_SID_PASTE_ONLY_VALUE ;
+                        Text [ en-US ] = "~Number" ;
+                    };
+                    MenuItem
+                    {
                         Identifier = SID_PASTE_ONLY_FORMULA ;
                         HelpId = CMD_SID_PASTE_ONLY_FORMULA ;
                         Text [ en-US ] = "~Formula" ;

@@ -202,6 +202,7 @@
 #define CMD_SID_CLIPBOARD_FORMAT_ITEMS              ".uno:ClipboardFormatItems"
 #define CMD_SID_PASTE_SPECIAL                       ".uno:PasteSpecial"
 #define CMD_SID_PASTE_ONLY                          ".uno:PasteOnly"
+#define CMD_SID_PASTE_ONLY_VALUE                    ".uno:PasteOnlyValue"
 #define CMD_SID_PASTE_ONLY_TEXT                     ".uno:PasteOnlyText"
 #define CMD_SID_PASTE_ONLY_FORMULA                  ".uno:PasteOnlyFormula"
 #define CMD_SID_DOCPATH                             ".uno:DocPath"

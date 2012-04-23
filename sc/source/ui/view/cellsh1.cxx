@@ -1369,6 +1369,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
             break;
+        case SID_PASTE_ONLY_VALUE:
         case SID_PASTE_ONLY_TEXT:
         case SID_PASTE_ONLY_FORMULA:
         {
@@ -1377,8 +1378,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 rReq.SetSlot( FID_INS_CELL_CONTENTS );
                 rtl::OUString aFlags;
-                if ( nSlot == SID_PASTE_ONLY_TEXT )
-                    aFlags = "VDS";
+                if ( nSlot == SID_PASTE_ONLY_VALUE )
+                    aFlags = "V";
+                else if ( nSlot == SID_PASTE_ONLY_TEXT )
+                    aFlags = "S";
                 else
                     aFlags = "F";
                 rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
