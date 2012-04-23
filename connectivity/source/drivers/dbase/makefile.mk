@@ -33,9 +33,6 @@ TARGET=dbase
 VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/
-.ENDIF
 
 .INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk

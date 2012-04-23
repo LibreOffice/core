@@ -41,10 +41,6 @@ EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
 
 # --- Settings ----------------------------------
 
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/
-.ENDIF
-
 .INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 

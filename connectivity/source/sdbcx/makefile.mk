@@ -33,9 +33,6 @@ TARGET=sdbcx
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/
-.ENDIF
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/dbtools.pmk

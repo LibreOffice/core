@@ -33,10 +33,6 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/
-.ENDIF
-
 .INCLUDE :  $(PRJ)$/version.mk
 .INCLUDE : $(PRJ)$/makefile.pmk
 
