@@ -829,6 +829,11 @@ namespace sdr { namespace contact {
         */
         bool    impl_isDisposed_nofail() const { return m_pAntiImpl == NULL; }
 
+        /** determines whether our control is currently visible
+            @nofail
+        */
+        bool    impl_isControlVisible_nofail() const { return m_bControlIsVisible; }
+
         /** determines whether we are currently a listener at the control for desgin-mode relevant facets
             @nofail
         */
@@ -1711,14 +1716,6 @@ namespace sdr { namespace contact {
         m_pImpl = NULL;
 
         DBG_DTOR( ViewObjectContactOfUnoControl, NULL );
-    }
-
-    //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl::isControlVisible() const
-    {
-        SolarMutexGuard aSolarGuard;
-        const ControlHolder& rControl( m_pImpl->getExistentControl() );
-        return rControl.is() && rControl.isVisible();
     }
 
     //--------------------------------------------------------------------
