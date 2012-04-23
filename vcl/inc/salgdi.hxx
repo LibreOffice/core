@@ -405,10 +405,6 @@ public:
                                         const OutputDevice *pOutDev );
     void                    DrawBitmap( const SalTwoRect* pPosAry,
                                         const SalBitmap& rSalBitmap,
-                                        SalColor nTransparentColor,
-                                        const OutputDevice *pOutDev );
-    void                    DrawBitmap( const SalTwoRect* pPosAry,
-                                        const SalBitmap& rSalBitmap,
                                         const SalBitmap& rTransparentBitmap,
                                         const OutputDevice *pOutDev );
 

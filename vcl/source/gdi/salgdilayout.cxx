@@ -91,14 +91,6 @@ SalGraphics::~SalGraphics()
 
 // ----------------------------------------------------------------------------
 
-bool SalGraphics::drawAlphaBitmap( const SalTwoRect&,
-    const SalBitmap&, const SalBitmap& )
-{
-    return false;
-}
-
-// ----------------------------------------------------------------------------
-
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
@@ -411,14 +403,6 @@ void    SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, cons
         mirror( nX, nWidth, pOutDev );
     drawRect( nX, nY, nWidth, nHeight );
 }
-bool SalGraphics::drawPolyLine(
-    const basegfx::B2DPolygon& /*rPolyPolygon*/,
-    double /*fTransparency*/,
-    const basegfx::B2DVector& /*rLineWidths*/,
-    basegfx::B2DLineJoin /*eLineJoin*/)
-{
-    return false;
-}
 
 void SalGraphics::DrawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
@@ -481,11 +465,6 @@ bool SalGraphics::DrawPolyPolygon( const ::basegfx::B2DPolyPolygon& i_rPolyPolyg
     else
         bRet = drawPolyPolygon( i_rPolyPolygon, i_fTransparency );
     return bRet;
-}
-
-bool SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/)
-{
-    return false;
 }
 
 sal_Bool SalGraphics::DrawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry, const OutputDevice* pOutDev )
@@ -599,19 +578,6 @@ void    SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
     }
     else
         drawBitmap( pPosAry, rSalBitmap );
-}
-void    SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    SalColor nTransparentColor, const OutputDevice *pOutDev )
-{
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        SalTwoRect pPosAry2 = *pPosAry;
-        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
-        drawBitmap( &pPosAry2, rSalBitmap, nTransparentColor );
-    }
-    else
-        drawBitmap( pPosAry, rSalBitmap, nTransparentColor );
 }
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
                               const SalBitmap& rSalBitmap,
