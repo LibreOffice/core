@@ -256,7 +256,7 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
 
 CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry)
 {
-    CGPoint *CGpoints = new (CGPoint[nPoints]);
+    CGPoint *CGpoints = new CGPoint[nPoints];
     if ( CGpoints )
       {
         for(sal_uLong i=0;i<nPoints;i++)
