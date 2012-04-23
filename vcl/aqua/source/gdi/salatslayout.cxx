@@ -71,7 +71,7 @@ public:
 
     const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
 
-    virtual void    InitFont();
+    virtual void    InitFont() const;
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
     virtual void    Simplify( bool bIsBase );
@@ -1105,7 +1105,7 @@ void ATSLayout::InvalidateMeasurements()
 // glyph fallback is supported directly by Aqua
 // so methods used only by MultiSalLayout can be dummy implementated
 bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const { return false; }
-void ATSLayout::InitFont() {}
+void ATSLayout::InitFont() const {}
 void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void ATSLayout::DropGlyph( int /*nStart*/ ) {}
 void ATSLayout::Simplify( bool /*bIsBase*/ ) {}
