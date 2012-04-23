@@ -852,11 +852,6 @@ bool ScDBCollection::AnonDBs::empty() const
     return maDBs.empty();
 }
 
-size_t ScDBCollection::AnonDBs::size() const
-{
-    return maDBs.size();
-}
-
 bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const
 {
     return maDBs == r.maDBs;

@@ -218,7 +218,6 @@ public:
         void insert(ScDBData* p);
         void erase(iterator itr);
         bool empty() const;
-        size_t size() const;
         bool operator== (const AnonDBs& r) const;
     };
 

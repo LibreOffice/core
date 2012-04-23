@@ -62,7 +62,6 @@ ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::findByTable(short) const
-ScDBCollection::AnonDBs::size() const
 ScDPItemData::ScDPItemData(rtl::OUString const*)
 ScDPItemData::SetErrorString(rtl::OUString const&)
 ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
