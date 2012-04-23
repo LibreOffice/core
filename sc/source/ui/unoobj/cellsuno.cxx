@@ -6422,7 +6422,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && xContent.is() )
     {
-        ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
+        ScEditFieldObj* pCellField = ScEditFieldObj::getImplementation(xContent);
         SvxUnoTextRangeBase* pTextRange = ScCellTextCursor::getImplementation( xRange );
 
         if ( pCellField && !pCellField->IsInserted() && pTextRange )
@@ -6469,7 +6469,7 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
     SolarMutexGuard aGuard;
     if ( xContent.is() )
     {
-        ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
+        ScEditFieldObj* pCellField = ScEditFieldObj::getImplementation(xContent);
         if ( pCellField && pCellField->IsInserted() )
         {
             //! Testen, ob das Feld in dieser Zelle ist
