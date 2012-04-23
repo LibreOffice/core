@@ -1370,54 +1370,54 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     switch(_nDataType)
     {
         case DataType::TINYINT:
-            if( pTypeInfo = queryTypeInfoByType(DataType::SMALLINT,_rTypeInfo))
+            if( (pTypeInfo = queryTypeInfoByType(DataType::SMALLINT,_rTypeInfo) ) )
                 break;
             // run through
         case DataType::SMALLINT:
-            if( pTypeInfo = queryTypeInfoByType(DataType::INTEGER,_rTypeInfo))
+            if( (pTypeInfo = queryTypeInfoByType(DataType::INTEGER,_rTypeInfo) ) )
                 break;
             // run through
         case DataType::INTEGER:
-            if( pTypeInfo = queryTypeInfoByType(DataType::FLOAT,_rTypeInfo))
+            if( (pTypeInfo = queryTypeInfoByType(DataType::FLOAT,_rTypeInfo) ) )
                 break;
             // run through
         case DataType::FLOAT:
-            if( pTypeInfo = queryTypeInfoByType(DataType::REAL,_rTypeInfo))
+            if( (pTypeInfo = queryTypeInfoByType(DataType::REAL,_rTypeInfo) ) )
                 break;
             // run through
         case DataType::DATE:
         case DataType::TIME:
             if( DataType::DATE == _nDataType || DataType::TIME == _nDataType )
             {
-                if( pTypeInfo = queryTypeInfoByType(DataType::TIMESTAMP,_rTypeInfo))
+                if( (pTypeInfo = queryTypeInfoByType(DataType::TIMESTAMP,_rTypeInfo) ) )
                     break;
             }
             // run through
         case DataType::TIMESTAMP:
         case DataType::REAL:
         case DataType::BIGINT:
-            if (  pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo) )
+            if (  (pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo) ) )
                 break;
             // run through
         case DataType::DOUBLE:
-            if (  pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo) )
+            if (  (pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo) ) )
                 break;
             // run through
         case DataType::NUMERIC:
              pTypeInfo = queryTypeInfoByType(DataType::DECIMAL,_rTypeInfo);
             break;
         case DataType::DECIMAL:
-            if (  pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo) )
+            if (  (pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo) ) )
                 break;
-            if (  pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo) )
+            if (  (pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo) ) )
                 break;
             break;
         case DataType::VARCHAR:
-            if (  pTypeInfo = queryTypeInfoByType(DataType::LONGVARCHAR,_rTypeInfo) )
+            if (  (pTypeInfo = queryTypeInfoByType(DataType::LONGVARCHAR,_rTypeInfo) ) )
                 break;
             break;
         case DataType::LONGVARCHAR:
-            if (  pTypeInfo = queryTypeInfoByType(DataType::CLOB,_rTypeInfo) )
+            if (  (pTypeInfo = queryTypeInfoByType(DataType::CLOB,_rTypeInfo) ) )
                 break;
             break;
         default:
