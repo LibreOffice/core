@@ -473,7 +473,18 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
 
  void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell* pViewShell )
 {
-    dispatchExecute( pViewShell, SID_VIEWSHELL1 );
+    SfxViewFrame* pViewFrame = NULL;
+    if ( pViewShell )
+        pViewFrame = pViewShell->GetViewFrame();
+    if ( pViewFrame )
+    {
+        if ( !pViewFrame->GetFrame().IsInPlace() )
+        {
+            dispatchExecute( pViewShell, SID_VIEWSHELL1 );
+            while ( isInPrintPreview( pViewFrame ) )
+                Application::Yield();
+        }
+    }
 }
 
 bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)

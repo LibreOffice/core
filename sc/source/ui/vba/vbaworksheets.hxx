@@ -73,6 +73,7 @@ public:
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     virtual void SAL_CALL Select( const css::uno::Any& Replace ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Copy ( const css::uno::Any& Before, const css::uno::Any& After) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) throw (css::uno::RuntimeException);
     // ScVbaWorksheets_BASE
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) throw
 (css::uno::RuntimeException);

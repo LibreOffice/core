@@ -537,4 +537,11 @@ bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& 
     return false;
 }
 
+void ScVbaWorksheets::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::uno::RuntimeException)
+{
+    // need test, print preview current active sheet
+    // !! TODO !! get view shell from controller
+    PrintPreviewHelper( EnableChanges, excel::getBestViewShell( mxModel ) );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
