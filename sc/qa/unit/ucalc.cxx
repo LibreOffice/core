@@ -209,6 +209,7 @@ public:
     void testRenameTable();
 
     void testAutoFill();
+    void testCopyPasteFormulas();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -249,6 +250,7 @@ public:
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
     CPPUNIT_TEST(testAutoFill);
+    CPPUNIT_TEST(testCopyPasteFormulas);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4219,6 +4221,25 @@ void Test::testAutoFill()
         CPPUNIT_ASSERT_EQUAL( aTestValue, rtl::OUString("January") );
     }
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testCopyPasteFormulas()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    m_pDoc->SetString(0,0,0, "=COLUMN($A$1)");
+    m_pDoc->SetInTest();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0,0,0), 1.0, 1e-08);
+    ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
+    bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0), ScAddress( 10, 10, 0), false, false, false, true);
+
+    // check that moving was succesful, mainly for editable tester
+    CPPUNIT_ASSERT(bMoveDone);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0, 1e-8);
+    rtl::OUString aFormula;
+    m_pDoc->GetFormula(10,10,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($A$1)"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
