@@ -1276,9 +1276,11 @@ void ServiceManager::readRdbFile(rtl::OUString const & uri, bool optional) {
         }
         SAL_INFO("cppuhelper", "Ignored optional " << uri);
     } catch (css::registry::InvalidRegistryException & e) {
-        throw css::uno::DeploymentException(
-            "InvalidRegistryException: " + e.Message,
-            static_cast< cppu::OWeakObject * >(this));
+        if (!readLegacyRdbFile(uri)) {
+            throw css::uno::DeploymentException(
+                "InvalidRegistryException: " + e.Message,
+                static_cast< cppu::OWeakObject * >(this));
+        }
     } catch (css::uno::RuntimeException &) {
         if (!readLegacyRdbFile(uri)) {
             throw;
