@@ -157,7 +157,7 @@ static AquaSalFrame* getMouseContainerFrame()
     pFrame->VCLToCocoa( aRect );
     NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
     [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
-    return pNSWindow;
+    return (SalFrameWindow *) pNSWindow;
 }
 
 -(AquaSalFrame*)getSalFrame
