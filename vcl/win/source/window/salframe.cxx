@@ -2751,8 +2751,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-    // TODO: once those options vanish: just set bCompBorder to TRUE
-    // to have the system colors read
+
     aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
