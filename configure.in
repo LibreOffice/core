@@ -9472,13 +9472,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given, use all available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="default crystal hicontrast oxygen tango"
+    with_theme="crystal hicontrast human oxygen tango"
 fi
 
 WITH_THEMES=""
 for theme in $with_theme; do
     case $theme in
-        default|crystal|hicontrast|oxygen|tango|human) : ;;
+        classic|crystal|galaxy|hicontrast|human|industrial|oxygen|tango) : ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
     esac
     WITH_THEMES="$WITH_THEMES $theme"
