@@ -45,6 +45,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 
+#include <rtl/logfile.hxx>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
@@ -594,6 +595,8 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
 
 bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, sal_Bool bVectorType )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "UnoGraphicExporter::GetGraphic (thb)" );
+
     if( !mpDoc || !mpUnoPage )
         return false;
 
@@ -976,6 +979,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "UnoGraphicExporter::export (thb)" );
+
     ::SolarMutexGuard aGuard;
 
     if( NULL == mpUnoPage )

@@ -51,6 +51,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
+#include <rtl/logfile.hxx>
 #include <math.h>
 
 #include <unotools/saveopt.hxx>
@@ -170,7 +171,10 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
 
     aDevice.SetDigitLanguage( eLang );
 
-    ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+    {
+        RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::CreatePreviewMetaFile_Impl" );
+        ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+    }
     pFile->Stop();
 
     return pFile;

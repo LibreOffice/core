@@ -68,6 +68,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/logfile.hxx>
 #include <vector>
 
 #include "SvFilterOptionsDialog.hxx"
@@ -1714,6 +1715,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
     sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
     sal_Bool        bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
@@ -1736,6 +1738,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
     ResetLastError();
