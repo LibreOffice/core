@@ -253,7 +253,7 @@ public:
                          The lifetime must be longer than the lifetime
                          of this object.
      */
-    OMultiTypeInterfaceContainerHelperInt32( ::osl::Mutex & ) SAL_THROW(());
+    OMultiTypeInterfaceContainerHelperInt32( ::osl::Mutex & rMutex ) SAL_THROW(());
     /**
       Delete all containers.
      */

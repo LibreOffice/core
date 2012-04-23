@@ -331,7 +331,7 @@ public:
                          The lifetime must be longer than the lifetime
                          of this object.
      */
-    inline OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & ) SAL_THROW(());
+    inline OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & rMutex ) SAL_THROW(());
     /**
       Deletes all containers.
      */
@@ -450,7 +450,7 @@ struct OBroadcastHelperVar
 
     /**
       Initialize the structur. bDispose and bInDispose are set to false.
-      @param rMutex the mutex reference.
+      @param rMutex_ the mutex reference.
      */
     OBroadcastHelperVar( ::osl::Mutex & rMutex_ ) SAL_THROW(())
         : rMutex( rMutex_ )
@@ -536,7 +536,7 @@ public:
                          The lifetime must be longer than the lifetime
                          of this object.
      */
-    OMultiTypeInterfaceContainerHelper( ::osl::Mutex & ) SAL_THROW(());
+    OMultiTypeInterfaceContainerHelper( ::osl::Mutex & rMutex ) SAL_THROW(());
     /**
       Delete all containers.
      */

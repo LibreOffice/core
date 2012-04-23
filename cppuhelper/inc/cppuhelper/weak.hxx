@@ -117,11 +117,13 @@ public:
 
         @param rObj dummy param
     */
-    inline OWeakObject( const OWeakObject & ) SAL_THROW(())
+    inline OWeakObject( const OWeakObject & rObj ) SAL_THROW(())
         : com::sun::star::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
-        {}
+        {
+        (void) rObj;
+        }
     /** Dummy assignment operator. Does not affect reference count.
 
         @return this OWeakObject

@@ -110,7 +110,7 @@ public:
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other
         constructors
     */
-    inline Sequence( uno_Sequence * pSequence, __sal_NoAcquire )
+    inline Sequence( uno_Sequence * pSequence, __sal_NoAcquire dummy )
         SAL_THROW(());
 
     /** Constructor: Creates a copy of given elements.

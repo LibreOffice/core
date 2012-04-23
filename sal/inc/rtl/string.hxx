@@ -140,8 +140,10 @@ public:
 
     /** New string from OString data without acquiring it.  Takeover of ownership.
 
+        The SAL_NO_ACQUIRE dummy parameter is only there to distinguish this
+        from other constructors.
+
       @param    str         a OString data.
-      @param    __sal_NoAcquire    SAL_NO_ACQUIRE to distinguish from other ctors
     */
     inline OString( rtl_String * str, __sal_NoAcquire ) SAL_THROW(())
     {

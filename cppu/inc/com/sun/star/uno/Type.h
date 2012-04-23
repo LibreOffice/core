@@ -112,14 +112,14 @@ public:
         @param pType C type description reference
         @param dummy UNO_TYPE_NO_ACQUIRE to force obvious distinction to other constructors
     */
-    inline Type( typelib_TypeDescriptionReference * pType, UnoType_NoAcquire ) SAL_THROW(());
+    inline Type( typelib_TypeDescriptionReference * pType, UnoType_NoAcquire dummy ) SAL_THROW(());
     /** Constructor: Type is (copy) constructed by given C type description reference
         without acquiring it.
 
         @param pType C type description reference
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
-    inline Type( typelib_TypeDescriptionReference * pType, __sal_NoAcquire ) SAL_THROW(());
+    inline Type( typelib_TypeDescriptionReference * pType, __sal_NoAcquire dummy ) SAL_THROW(());
 
     /** Copy constructor: Type is copy constructed by given type.
 
