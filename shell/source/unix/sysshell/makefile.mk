@@ -67,7 +67,7 @@ SHL1OBJS=$(SLOFILES)
 .ELSE
 
 dummy:
-    @echo "Nothing to build for $(OS)"
+# nothing
 
 .ENDIF
 # --- Targets ------------------------------------------------------

@@ -36,8 +36,10 @@ LIBTARGET=NO
 UWINAPILIB =
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
+
 systempython:
-	@echo "Not building python-core because system python is being used"
+# nothing
+
 .ELSE
 
 .INCLUDE : pyversion.mk
