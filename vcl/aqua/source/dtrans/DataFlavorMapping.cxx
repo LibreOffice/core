@@ -72,23 +72,6 @@ namespace // private
 
   typedef vector<sal_Unicode> UnicodeBuffer;
 
-  OUString NSStringToOUString(NSString* cfString)
-  {
-    BOOST_ASSERT(cfString && "Invalid parameter");
-
-    const char* utf8Str = [cfString UTF8String];
-    unsigned int len = rtl_str_getLength(utf8Str);
-
-    return OUString(utf8Str, len, RTL_TEXTENCODING_UTF8);
-  }
-
-  NSString* OUStringToNSString(const OUString& ustring)
-  {
-    OString utf8Str = OUStringToOString(ustring, RTL_TEXTENCODING_UTF8);
-    return [NSString stringWithCString: utf8Str.getStr() encoding: NSUTF8StringEncoding];
-  }
-
-
   NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
   NSString* PBTYPE_SESX = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
   NSString* PBTYPE_SLSDX = @"application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
@@ -168,11 +151,6 @@ namespace // private
   inline bool isByteSequenceType(const Type& theType)
   {
     return (theType == CPPUTYPE_SEQINT8);
-  }
-
-  inline bool isOUStringType(const Type& theType)
-  {
-    return (theType == CPPUTYPE_OUSTRING);
   }
 
 } // namespace private

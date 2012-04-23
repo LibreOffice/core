@@ -85,11 +85,6 @@ namespace /* private */
   {
     rPoint.y = bounds.size.height - rPoint.y;
   }
-
-  inline void CocoaToVCL(NSRect& rRect, const NSRect& bounds)
-  {
-    rRect.origin.y = bounds.size.height - (rRect.origin.y + rRect.size.height);
-  }
 }
 
 
