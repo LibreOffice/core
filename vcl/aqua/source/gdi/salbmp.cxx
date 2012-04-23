@@ -298,6 +298,7 @@ public:
     virtual void SkipPixel( sal_uInt32 nPixel ) = 0;
     virtual ColorData ReadPixel() = 0;
     virtual void WritePixel( ColorData nColor ) = 0;
+    virtual ~ImplPixelFormat() { }
 };
 
 class ImplPixelFormat32 : public ImplPixelFormat
