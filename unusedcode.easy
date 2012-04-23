@@ -707,7 +707,6 @@ drawinglayer::attribute::SdrTextAttribute::isWrongSpell() const
 drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(basegfx::B2DPolyPolygon const&, drawinglayer::attribute::LineAttribute const&)
 formula::EditBox::EditBox(Window*, long)
 formula::FormulaListBox::FormulaListBox(Window*, long)
-formula::FormulaTokenArray::AddBad(unsigned short const*)
 formula::FormulaTokenIterator::First()
 jfw_plugin::VendorBase::createInstance()
 jfw_plugin::VendorBase::getJavaExePaths(int*)

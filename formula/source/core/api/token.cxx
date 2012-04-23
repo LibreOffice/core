@@ -770,11 +770,6 @@ FormulaToken* FormulaTokenArray::AddExternal( const String& rStr,
     return Add( new FormulaExternalToken( eOp, rStr ) );
 }
 
-FormulaToken* FormulaTokenArray::AddBad( const sal_Unicode* pStr )
-{
-    return AddBad( String( pStr ) );
-}
-
 FormulaToken* FormulaTokenArray::AddBad( const String& rStr )
 {
     return Add( new FormulaStringOpToken( ocBad, rStr ) );

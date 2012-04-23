@@ -210,7 +210,6 @@ public:
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */
     FormulaToken* AddExternal( const String& rStr, OpCode eOp = ocExternal );
-    FormulaToken* AddBad( const sal_Unicode* pStr );     /// ocBad with String
     FormulaToken* AddBad( const String& rStr );          /// ocBad with String
     FormulaToken* AddStringXML( const String& rStr );    /// ocStringXML with String, temporary during import
 
