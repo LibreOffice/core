@@ -100,7 +100,7 @@ int main( int argc, char *argv[] )
         struct stat stat;
         int ret;
 
-        char unoinfoSuffix[] = "/unoinfo";
+        static char const unoinfoSuffix[] = "/unoinfo";
         char * unoinfo = malloc(
             pathlen + RTL_CONSTASCII_LENGTH(unoinfoSuffix) + 1);
             /*TODO: overflow */
