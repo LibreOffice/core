@@ -483,7 +483,7 @@ void DlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
 {
     sal_Bool bRet = pFunc->MouseButtonUp( rMEvt );
 
-    if( (eMode == DLGED_INSERT) )
+    if( eMode == DLGED_INSERT )
         bCreateOK = bRet;
 }
 
