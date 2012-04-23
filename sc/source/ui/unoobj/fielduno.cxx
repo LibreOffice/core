@@ -300,7 +300,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
         xub_StrLen nPos = aTempEngine.GetFieldPos();
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
         uno::Reference<text::XTextField> xRet(
-            new ScEditFieldObj(pDocShell, aCellPos, aSelection));
+            new ScEditFieldObj(ScEditFieldObj::URL, pDocShell, aCellPos, aSelection));
         return xRet;
     }
     return uno::Reference<text::XTextField>();
@@ -1492,15 +1492,29 @@ uno::Sequence<rtl::OUString> SAL_CALL ScHeaderFieldObj::getSupportedServiceNames
     return aRet;
 }
 
-//------------------------------------------------------------------------
+SvxFieldData* ScEditFieldObj::getData()
+{
+    if (!mpData)
+    {
+        switch (meType)
+        {
+            case URL:
+                mpData.reset(
+                    new SvxURLField(rtl::OUString(), rtl::OUString(), SVXURLFORMAT_APPDEFAULT));
+            break;
+        }
+    }
+    return mpData.get();
+}
 
 ScEditFieldObj::ScEditFieldObj(
-    ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel) :
-    OComponentHelper( getMutex() ),
-    pPropSet( lcl_GetURLPropertySet() ),
-    pDocShell( pDocSh ),
-    aCellPos( rPos ),
-    aSelection( rSel )
+    FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel) :
+    OComponentHelper(getMutex()),
+    pPropSet(lcl_GetURLPropertySet()),
+    pDocShell(pDocSh),
+    aCellPos(rPos),
+    aSelection(rSel),
+    meType(eType), mpData(NULL)
 {
     //  pDocShell ist Null, wenn per ServiceProvider erzeugt
 
@@ -1513,11 +1527,14 @@ ScEditFieldObj::ScEditFieldObj(
         pEditSource = NULL;
 }
 
-void ScEditFieldObj::InitDoc( ScDocShell* pDocSh, const ScAddress& rPos,
-                                        const ESelection& rSel )
+void ScEditFieldObj::InitDoc(
+    FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel)
 {
     if ( pDocSh && !pEditSource )
     {
+        meType = eType;
+        mpData.reset();
+
         aCellPos = rPos;
         aSelection = rSel;
         pDocShell = pDocSh;
@@ -1557,13 +1574,7 @@ void ScEditFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {
     OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
-
-    SvxURLField aField;
-    aField.SetFormat(SVXURLFORMAT_APPDEFAULT);
-    aField.SetURL( aUrl );
-    aField.SetRepresentation( aRepresentation );
-    aField.SetTargetFrame( aTarget );
-    return SvxFieldItem( aField, EE_FEATURE_FIELD );
+    return SvxFieldItem(*mpData, EE_FEATURE_FIELD);
 }
 
 void ScEditFieldObj::DeleteField()
@@ -1679,64 +1690,90 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
     rtl::OUString aStrVal;
     if (pEditSource)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
+        // Edit engine instance already exists for this field item.  Use it.
         ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
-        if (pField)
+        if (!pField)
+            return;
+
+        bool bOk = true;
+        switch (meType)
         {
-            SvxURLField* pURL = (SvxURLField*)pField;   // ist eine Kopie in der ScUnoEditEngine
+            case URL:
+            {
+                if (pField->GetClassId() != SVX_URLFIELD)
+                {
+                    // Make sure this is indeed a URL field.
+                    bOk = false;
+                    break;
+                }
+                SvxURLField* pURL = static_cast<SvxURLField*>(pField);
 
-            sal_Bool bOk = sal_True;
-            if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
-            {
-                if (aValue >>= aStrVal)
-                    pURL->SetURL( aStrVal );
+                if (aPropertyName == SC_UNONAME_URL)
+                {
+                    if (aValue >>= aStrVal)
+                        pURL->SetURL(aStrVal);
+                }
+                else if (aPropertyName == SC_UNONAME_REPR)
+                {
+                    if (aValue >>= aStrVal)
+                        pURL->SetRepresentation(aStrVal);
+                }
+                else if (aPropertyName == SC_UNONAME_TARGET)
+                {
+                    if (aValue >>= aStrVal)
+                        pURL->SetTargetFrame(aStrVal);
+                }
+                else
+                    bOk = false;
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_REPR ) )
-            {
-                if (aValue >>= aStrVal)
-                    pURL->SetRepresentation( aStrVal );
-            }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_TARGET ) )
-            {
-                if (aValue >>= aStrVal)
-                    pURL->SetTargetFrame( aStrVal );
-            }
-            else
-                bOk = false;
-
-            if (bOk)
-            {
-                pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
-                pEditSource->UpdateData();
-            }
+            break;
         }
+
+        if (bOk)
+        {
+            pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
+            pEditSource->UpdateData();
+        }
+        return;
     }
-    else        // noch nicht eingefuegt
+
+    // Edit engine instance not yet present.  Store the item data for later use.
+    SvxFieldData* pData = getData();
+    if (!pData)
+        throw uno::RuntimeException();
+
+    switch (meType)
     {
-        if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
+        case URL:
         {
-            if (aValue >>= aStrVal)
-                aUrl = String( aStrVal );
+            SvxURLField* p = static_cast<SvxURLField*>(pData);
+            if (aPropertyName == SC_UNONAME_URL)
+            {
+                if (aValue >>= aStrVal)
+                    p->SetURL(aStrVal);
+            }
+            else if (aPropertyName == SC_UNONAME_REPR)
+            {
+                if (aValue >>= aStrVal)
+                    p->SetRepresentation(aStrVal);
+            }
+            else if (aPropertyName == SC_UNONAME_TARGET)
+            {
+                if (aValue >>= aStrVal)
+                    p->SetTargetFrame(aStrVal);
+            }
         }
-        else if ( aNameString.EqualsAscii( SC_UNONAME_REPR ) )
-        {
-            if (aValue >>= aStrVal)
-                aRepresentation = String( aStrVal );
-        }
-        else if ( aNameString.EqualsAscii( SC_UNONAME_TARGET ) )
-        {
-            if (aValue >>= aStrVal)
-                aTarget = String( aStrVal );
-        }
+        break;
+        default:
+            throw beans::UnknownPropertyException();
     }
 }
 
@@ -1783,12 +1820,26 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
     }
     else        // noch nicht eingefuegt
     {
-        if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
-            aRet <<= rtl::OUString( aUrl );
-        else if ( aNameString.EqualsAscii( SC_UNONAME_REPR ) )
-            aRet <<= rtl::OUString( aRepresentation );
-        else if ( aNameString.EqualsAscii( SC_UNONAME_TARGET ) )
-            aRet <<= rtl::OUString( aTarget );
+        SvxFieldData* pData = getData();
+        if (!pData)
+            return aRet;
+
+        switch (meType)
+        {
+            case URL:
+            {
+                SvxURLField* p = static_cast<SvxURLField*>(pData);
+                if (aPropertyName == SC_UNONAME_URL)
+                    aRet <<= p->GetURL();
+                else if (aPropertyName == SC_UNONAME_REPR)
+                    aRet <<= p->GetRepresentation();
+                else if (aPropertyName == SC_UNONAME_TARGET)
+                    aRet <<= p->GetTargetFrame();
+            }
+            break;
+            default:
+                ;
+        }
     }
     return aRet;
 }

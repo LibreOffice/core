@@ -6448,7 +6448,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             aSelection.Adjust();
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
-            pCellField->InitDoc( pDocSh, aCellPos, aSelection );
+            pCellField->InitDoc(ScEditFieldObj::URL, pDocSh, aCellPos, aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)

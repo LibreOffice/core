@@ -49,9 +49,11 @@
 #include <osl/mutex.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class SvxEditSource;
 class SvxFieldItem;
+class SvxFieldData;
 class ScEditFieldObj;
 class ScHeaderFieldObj;
 class ScHeaderFooterContentObj;
@@ -467,6 +469,9 @@ class ScEditFieldObj : public cppu::WeakImplHelper4<
                         public SfxListener,
                         private boost::noncopyable
 {
+public:
+    enum FieldType { URL = 0 };
+
 private:
     const SfxItemPropertySet* pPropSet;
     ScDocShell* pDocShell;
@@ -474,17 +479,20 @@ private:
     SvxEditSource* pEditSource;
     ESelection aSelection;
 
-    String aUrl;               // content, only iff not already inserted
-    String aRepresentation;
-    String aTarget;
+    FieldType meType;
+    boost::scoped_ptr<SvxFieldData> mpData;
 
+private:
     ScEditFieldObj(); // disabled
+
+    SvxFieldData* getData();
+
 public:
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScEditFieldObj* getImplementation(const com::sun::star::uno::Reference<com::sun::star::text::XTextContent>& xObj);
 
-    ScEditFieldObj(ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
+    ScEditFieldObj(FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
     virtual ~ScEditFieldObj();
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
@@ -492,7 +500,7 @@ public:
     void DeleteField();
     bool IsInserted() const;
     SvxFieldItem CreateFieldItem();
-    void InitDoc(ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
+    void InitDoc(FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )

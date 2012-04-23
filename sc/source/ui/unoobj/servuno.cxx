@@ -429,7 +429,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set((sheet::XSpreadsheet*)new ScTableSheetObj(NULL,0));
             break;
         case SC_SERVICE_URLFIELD:
-            xRet.set(static_cast<text::XTextField*>(new ScEditFieldObj(NULL, ScAddress(), ESelection())));
+            xRet.set(static_cast<text::XTextField*>(
+                new ScEditFieldObj(ScEditFieldObj::URL, NULL, ScAddress(), ESelection())));
         break;
         case SC_SERVICE_PAGEFIELD:
         case SC_SERVICE_PAGESFIELD:
