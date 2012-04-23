@@ -28,11 +28,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <test/bootstrapfixture.hxx>
@@ -53,6 +56,7 @@ public:
     void testN751117();
     void testN751017();
     void testN750935();
+    void testN757890();
 
     CPPUNIT_TEST_SUITE(OoxmlModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -60,6 +64,7 @@ public:
     CPPUNIT_TEST(testN751117);
     CPPUNIT_TEST(testN751017);
     CPPUNIT_TEST(testN750935);
+    CPPUNIT_TEST(testN757890);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -183,6 +188,28 @@ void OoxmlModelTest::testN750935()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5), xCursor->getPage());
+}
+
+void OoxmlModelTest::testN757890()
+{
+    load("n757890.docx");
+
+    // The w:pStyle token affected the text outside the textbox.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    OUString aValue;
+    xPara->getPropertyValue("ParaStyleName") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aValue);
+
+    // This wan't centered
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xFrame->getPropertyValue("HoriOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OoxmlModelTest);
