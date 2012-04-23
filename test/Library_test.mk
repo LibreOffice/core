@@ -56,7 +56,6 @@ ifeq ($(GUIBASE),unx)
 $(call gb_Library_get_target,test) : \
     $(call gb_Library_get_target,desktop_detector) \
     $(call gb_Library_get_target,vclplug_svp) \
-    $(call gb_Library_get_target,ucpchelp1) \
 
 endif
 
