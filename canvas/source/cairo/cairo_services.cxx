@@ -46,6 +46,10 @@
 
 using namespace ::com::sun::star;
 
+#if defined(WNT) || defined (MACOSX)
+#  error "The cairo canvas should not be enabled on Windows or Mac cf fdo#46901"
+#endif
+
 namespace cairocanvas
 {
     static uno::Reference<uno::XInterface> initCanvas( Canvas* pCanvas )
