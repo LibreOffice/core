@@ -364,7 +364,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 {
     uno::Reference< ::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
-    NSSize                                      nsSize( NSMakeSize(aSize.Width, aSize.Height) );
 
     OSL_TRACE( "Player::createPlayerWindow %d %d length: %d", aSize.Width, aSize.Height, aArguments.getLength() );
 
