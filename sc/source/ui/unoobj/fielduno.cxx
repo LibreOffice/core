@@ -299,8 +299,9 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
         sal_uInt16 nPar = aTempEngine.GetFieldPar();
         xub_StrLen nPos = aTempEngine.GetFieldPos();
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
+        uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
         uno::Reference<text::XTextField> xRet(
-            new ScEditFieldObj(ScEditFieldObj::URL, pDocShell, aCellPos, aSelection));
+            new ScEditFieldObj(xContent, ScEditFieldObj::URL, pDocShell, aCellPos, aSelection));
         return xRet;
     }
     return uno::Reference<text::XTextField>();
@@ -1508,13 +1509,14 @@ SvxFieldData* ScEditFieldObj::getData()
 }
 
 ScEditFieldObj::ScEditFieldObj(
+    const uno::Reference<text::XTextRange>& rContent,
     FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel) :
     OComponentHelper(getMutex()),
     pPropSet(lcl_GetURLPropertySet()),
     pDocShell(pDocSh),
     aCellPos(rPos),
     aSelection(rSel),
-    meType(eType), mpData(NULL)
+    meType(eType), mpData(NULL), mpContent(rContent)
 {
     //  pDocShell ist Null, wenn per ServiceProvider erzeugt
 
@@ -1528,10 +1530,12 @@ ScEditFieldObj::ScEditFieldObj(
 }
 
 void ScEditFieldObj::InitDoc(
+    const uno::Reference<text::XTextRange>& rContent,
     FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel)
 {
     if ( pDocSh && !pEditSource )
     {
+        mpContent = rContent;
         meType = eType;
         mpData.reset();
 
@@ -1654,9 +1658,7 @@ void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xT
 uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (pDocShell)
-        return new ScCellObj( pDocShell, aCellPos );
-    return NULL;
+    return mpContent;
 }
 
 // XComponent

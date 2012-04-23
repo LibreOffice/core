@@ -481,6 +481,7 @@ private:
 
     FieldType meType;
     boost::scoped_ptr<SvxFieldData> mpData;
+    com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
 private:
     ScEditFieldObj(); // disabled
@@ -488,11 +489,12 @@ private:
     SvxFieldData* getData();
 
 public:
-
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScEditFieldObj* getImplementation(const com::sun::star::uno::Reference<com::sun::star::text::XTextContent>& xObj);
 
-    ScEditFieldObj(FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
+    ScEditFieldObj(
+        const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
+        FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
     virtual ~ScEditFieldObj();
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
@@ -500,7 +502,9 @@ public:
     void DeleteField();
     bool IsInserted() const;
     SvxFieldItem CreateFieldItem();
-    void InitDoc(FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
+    void InitDoc(
+        const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
+        FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )
