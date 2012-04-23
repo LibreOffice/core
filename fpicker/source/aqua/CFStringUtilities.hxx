@@ -127,7 +127,7 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
     OSL_TRACE(">>> %s::%s%s%s = %d%s%s =", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
 #if OSL_DEBUG_LEVEL > 1
     NSLog(value2);
-#endif}
+#endif
 }
 
 
