@@ -71,7 +71,6 @@
 
 -(void)drawRect: (NSRect)rect
 {
-    NSPoint aPoint = [self locationOfPrintRect: rect];
     mpInfoPrinter->setStartPageOffset( static_cast<int>(rect.origin.x), static_cast<int>(rect.origin.y) );
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
