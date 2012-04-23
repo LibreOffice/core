@@ -1604,28 +1604,35 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aRet;
 
-    if (pEditSource)
+    if (!pEditSource)
+        return rtl::OUString();
+
+    //! Feld-Funktionen muessen an den Forwarder !!!
+    ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+    ScUnoEditEngine aTempEngine(pEditEngine);
+
+    //  Typ egal (in Zellen gibts nur URLs)
+    const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+    OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
+    if (!pField)
+        return rtl::OUString();
+
+    switch (meType)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
-        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
-        ScUnoEditEngine aTempEngine(pEditEngine);
-
-        //  Typ egal (in Zellen gibts nur URLs)
-        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
-        if (pField)
+        case URL:
         {
-            SvxURLField* pURL = (SvxURLField*)pField;
-            if (bShowCommand)
-                aRet = pURL->GetURL();
-            else
-                aRet = pURL->GetRepresentation();
-        }
-    }
+            if (pField->GetClassId() != SVX_URLFIELD)
+                return rtl::OUString();
 
-    return aRet;
+            const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
+            return bShowCommand ? pURL->GetURL() : pURL->GetRepresentation();
+        }
+        break;
+        default:
+            ;
+    }
+    return rtl::OUString();
 }
 
 // XTextContent
@@ -1783,19 +1790,18 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    String aNameString(aPropertyName);
 
     // anchor type is always "as character", text wrap always "none"
 
-    if ( aNameString.EqualsAscii( SC_UNONAME_ANCTYPE ) )
+    if (aPropertyName == SC_UNONAME_ANCTYPE)
         aRet <<= text::TextContentAnchorType_AS_CHARACTER;
-    else if ( aNameString.EqualsAscii( SC_UNONAME_ANCTYPES ) )
+    else if (aPropertyName == SC_UNONAME_ANCTYPES)
     {
         uno::Sequence<text::TextContentAnchorType> aSeq(1);
         aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
         aRet <<= aSeq;
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_TEXTWRAP ) )
+    else if (aPropertyName == SC_UNONAME_TEXTWRAP)
         aRet <<= text::WrapTextMode_NONE;
     else if (pEditSource)
     {
@@ -1804,37 +1810,47 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
-        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
         OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
-        if (pField)
-        {
-            SvxURLField* pURL = (SvxURLField*)pField;
+        if (!pField)
+            throw uno::RuntimeException();
 
-            if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
-                aRet <<= rtl::OUString( pURL->GetURL() );
-            else if ( aNameString.EqualsAscii( SC_UNONAME_REPR ) )
-                aRet <<= rtl::OUString( pURL->GetRepresentation() );
-            else if ( aNameString.EqualsAscii( SC_UNONAME_TARGET ) )
-                aRet <<= rtl::OUString( pURL->GetTargetFrame() );
+        switch (meType)
+        {
+            case URL:
+            {
+                if (pField->GetClassId() != SVX_URLFIELD)
+                    throw uno::RuntimeException();
+
+                const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
+
+                if (aPropertyName == SC_UNONAME_URL)
+                    aRet <<= pURL->GetURL();
+                else if (aPropertyName == SC_UNONAME_REPR)
+                    aRet <<= pURL->GetRepresentation();
+                else if (aPropertyName == SC_UNONAME_TARGET)
+                    aRet <<= pURL->GetTargetFrame();
+            }
+            break;
         }
     }
     else        // noch nicht eingefuegt
     {
-        SvxFieldData* pData = getData();
-        if (!pData)
+        const SvxFieldData* pField = getData();
+        if (!pField)
             return aRet;
 
         switch (meType)
         {
             case URL:
             {
-                SvxURLField* p = static_cast<SvxURLField*>(pData);
+                const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
                 if (aPropertyName == SC_UNONAME_URL)
-                    aRet <<= p->GetURL();
+                    aRet <<= pURL->GetURL();
                 else if (aPropertyName == SC_UNONAME_REPR)
-                    aRet <<= p->GetRepresentation();
+                    aRet <<= pURL->GetRepresentation();
                 else if (aPropertyName == SC_UNONAME_TARGET)
-                    aRet <<= p->GetTargetFrame();
+                    aRet <<= pURL->GetTargetFrame();
             }
             break;
             default:
