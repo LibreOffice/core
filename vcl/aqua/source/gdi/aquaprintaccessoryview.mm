@@ -485,7 +485,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     return self;
 }
--(void)triggered:(id)pSender;
+-(void)triggered:(id)pSender
 {
     if( [pSender isMemberOfClass: [NSPopUpButton class]] )
     {
@@ -526,7 +526,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     mpController->updateEnableState();
 }
--(void)triggeredNumeric:(id)pSender;
+-(void)triggeredNumeric:(id)pSender
 {
     if( [pSender isMemberOfClass: [NSTextField class]] )
     {
@@ -1118,7 +1118,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
 #endif
 
 @implementation AquaPrintAccessoryView
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState
 {
     const Sequence< PropertyValue >& rOptions( pController->getUIOptions() );
     if( rOptions.getLength() == 0 )
