@@ -168,7 +168,6 @@ protected:
         return (rBHelper.bDisposed || rBHelper.bInDispose);
     }
 
-//   bool createWindow( Window* pPWindow );
     void createTexture(GLuint* texID,
             bool useMipmap,
             uno::Sequence<sal_Int8>& data,
@@ -348,47 +347,6 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
 
     return cbGLXPresent;
 }
-
-/*bool OGLTransitionerImpl::createWindow( Window* pPWindow )
-{
-    const SystemEnvData* sysData(pPWindow->GetSystemData());
-
-    GLWin.apView = sysData->pView;
-
-    NSOpenGLPixelFormat* fmt = [AquaOpenGLView defaultPixelFormat];
-    Window *pFrameWindow = pPWindow->GetWindow(WINDOW_FRAME);
-    Size aFrameSize( pFrameWindow->GetSizePixel() );
-    Point aScreen( pPWindow->OutputToScreenPixel( Point() ) );
-    GLWin.aInitFrame = (NSRect){ { aScreen.X(), aFrameSize.Height() - GLWin.Height - aScreen.Y() }, { GLWin.Width, GLWin.Height } };
-
-    GLWin.pAquaOpenGLView = [[NSOpenGLView alloc]initWithFrame: GLWin.aInitFrame pixelFormat: fmt];
-    OSL_ENSURE(GLWin.pAquaOpenGLView, "Could not create NSOPenGLView");
-    if( !GLWin.pAquaOpenGLView )
-        return false;
-//
-    GLWin.pOpenGLContext = [GLWin.pAquaOpenGLView openGLContext];
-    [GLWin.pOpenGLContext retain];
-    [GLWin.pAquaOpenGLView setOpenGLContext:GLWin.pOpenGLContext];
-    [sysData->pView addSubview:GLWin.pAquaOpenGLView];
-//
-    if( pWindow )
-    {
-        pWindow->SetMouseTransparent( sal_True );
-        pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( sal_False );
-        pWindow->SetControlForeground();
-        pWindow->SetControlBackground();
-        pWindow->EnablePaint(sal_False);
-        pWindow->SetPosSizePixel(pPWindow->GetPosPixel(),pPWindow->GetSizePixel());
- //       GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
-//        GLWin.win = pChildSysData->aWindow;
-
-    return true;
-    }
-
-    return false;
-}
-*/
 
 bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presentation::XSlideShowView >& xView )
 {
