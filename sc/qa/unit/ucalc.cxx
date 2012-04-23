@@ -210,6 +210,7 @@ public:
 
     void testAutoFill();
     void testCopyPasteFormulas();
+    void testCopyPasteFormulasExternalDoc();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testRenameTable);
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST(testCopyPasteFormulas);
+    CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4256,6 +4258,31 @@ void Test::testCopyPasteFormulas()
     CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.$A$1"));
     m_pDoc->GetFormula(10,14,0, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$Sheet2.K$1"));
+}
+
+void Test::testCopyPasteFormulasExternalDoc()
+{
+    ScDocShellRef xExtDocSh = new ScDocShell;
+    OUString aExtDocName(RTL_CONSTASCII_USTRINGPARAM("file:///extdata.fake"));
+    OUString aExtSh1Name(RTL_CONSTASCII_USTRINGPARAM("ExtSheet1"));
+    OUString aExtSh2Name(RTL_CONSTASCII_USTRINGPARAM("ExtSheet2"));
+    OUString aExtSh3Name(RTL_CONSTASCII_USTRINGPARAM("ExtSheet3"));
+    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    xExtDocSh->DoInitNew(pMed);
+    CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
+                           findLoadedDocShellByName(aExtDocName) != NULL);
+
+    ScDocument* pExtDoc = xExtDocSh->GetDocument();
+
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    m_pDoc->SetString(0,0,0, "=COLUMN($A$1)");
+    m_pDoc->SetString(0,1,0, "=$A$1+B2" );
+    m_pDoc->SetString(0,2,0, "=$Sheet2.A1");
+    m_pDoc->SetString(0,3,0, "=$Sheet2.$A$1");
+    m_pDoc->SetString(0,4,0, "=$Sheet2.A$1");
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
