@@ -62,6 +62,10 @@ INTERACTIVE VARIABLES:
                        3... = symbols + no optimizations + extra debug output (usually
                               extremely verbose). Levels > 2 are not used very much.
 
+       TIMELOG / timelog
+                       If not empty enable the RTL_LOGFILE_* time logging facility.
+                       export RTL_LOGFILE=rtl_logfile.nopid when running office, to
+                       get timestamps written out.
        YACCFLAGS       Add as flags for YACC parser generator invocation.
        CPPFLAGS        Add as preprocessor flags for C/C++/ObjC/ObjC++ compilation.
        CFLAGS          Add as compiler flags for plain C compilation.

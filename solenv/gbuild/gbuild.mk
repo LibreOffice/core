@@ -91,6 +91,11 @@ else
 gb_STRIP := $(false)
 endif
 
+gb_TIMELOG := 0
+ifneq ($(strip $(TIMELOG)$(timelog)),)
+gb_TIMELOG := 1
+endif
+
 gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 1
@@ -199,6 +204,12 @@ endif
 
 ifneq ($(strip $(SOLAR_JAVA)),)
 gb_GLOBALDEFS += -DSOLAR_JAVA
+endif
+
+ifeq ($(gb_TIMELOG),1)
+gb_GLOBALDEFS += \
+	-DTIMELOG \
+
 endif
 
 ifeq ($(gb_DEBUGLEVEL),0)
