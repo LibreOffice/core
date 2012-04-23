@@ -3239,10 +3239,12 @@ void DomainMapper::markLastParagraphInSection( )
 void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 {
     m_pImpl->PushShapeContext( xShape );
+    lcl_startParagraphGroup();
 }
 
 void DomainMapper::lcl_endShape( )
 {
+    lcl_endParagraphGroup();
     m_pImpl->PopShapeContext( );
 }
 
