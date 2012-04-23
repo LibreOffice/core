@@ -2711,11 +2711,6 @@ size_t CharAttribList::Count() const
     return aAttribs.size();
 }
 
-void CharAttribList::Clear()
-{
-    aAttribs.clear();
-}
-
 const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const
 {
     // Backwards, if one ends where the next starts.

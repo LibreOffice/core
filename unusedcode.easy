@@ -1,5 +1,4 @@
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
-CharAttribList::Clear()
 Dialog::Dialog(Window*, ResId const&)
 EditEngine::GetNextVisPortion(ParaPortion const*) const
 FmFieldWinMgr::GetChildWindowId()

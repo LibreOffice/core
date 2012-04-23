@@ -236,7 +236,6 @@ public:
     void            OptimizeRanges( SfxItemPool& rItemPool );
 
     size_t Count() const;
-    void Clear();
 
     void            InsertAttrib( EditCharAttrib* pAttrib );
 
