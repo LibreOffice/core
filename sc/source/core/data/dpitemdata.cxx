@@ -121,9 +121,6 @@ void ScDPItemData::DisposeString()
 ScDPItemData::ScDPItemData(const rtl::OUString& rStr) :
     mpString(new rtl::OUString(rStr)), meType(String), mbStringInterned(false) {}
 
-ScDPItemData::ScDPItemData(const rtl::OUString* pStr) :
-    mpString(pStr), meType(String), mbStringInterned(true) {}
-
 ScDPItemData::ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue) :
     meType(GroupValue), mbStringInterned(false)
 {
@@ -182,12 +179,6 @@ void ScDPItemData::SetRangeLast()
     DisposeString();
     rtl::math::setInf(&mfValue, false);
     meType = RangeStart;
-}
-
-void ScDPItemData::SetErrorString(const rtl::OUString& rS)
-{
-    SetString(rS);
-    meType = Error;
 }
 
 void ScDPItemData::SetErrorString(const rtl::OUString* pS)
