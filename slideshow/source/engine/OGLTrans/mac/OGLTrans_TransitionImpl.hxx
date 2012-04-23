@@ -183,6 +183,8 @@ public:
 
     void pushPrimitive (const Primitive &p);
 
+    virtual ~SceneObject() {}
+
 protected:
     /** All the surrounding scene primitives
     */
