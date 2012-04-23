@@ -5973,7 +5973,7 @@ if test "$with_system_clucene" = "yes"; then
     dnl http://sourceforge.net/tracker/index.php?func=detail&aid=3392466&group_id=80013&atid=558446
     dnl https://bugzilla.redhat.com/show_bug.cgi?id=794795
     AC_CHECK_HEADER([CLucene/analysis/cjk/CJKAnalyzer.h], [],
-                 [AC_MSG_ERROR([Your version of libclucene has contribs-lib missing.])], [])
+                 [AC_MSG_ERROR([Your version of libclucene has contribs-lib missing.])], [#include <CLucene.h>])
     CXXFLAGS=$save_CXXFLAGS
     CPPFLAGS=$save_CPPFLAGS
     AC_LANG_POP([C++])
