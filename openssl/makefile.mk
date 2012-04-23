@@ -46,10 +46,10 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8o
+OPENSSL_NAME=openssl-0.9.8v
 
 TARFILE_NAME=$(OPENSSL_NAME)
-TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
+TARFILE_MD5=51a40a81b3b7abe8a5c33670bd3da0ce
 PATCH_FILES=openssl-asm-fix.patch
 
 CONFIGURE_DIR=.
@@ -86,8 +86,8 @@ UNAME=$(shell uname)
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "ANDROID"
     PATCH_FILES+=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8o.map \
-        libssl_OOo_0_9_8o.map
+        libcrypto_OOo_0_9_8v.map \
+        libssl_OOo_0_9_8v.map
     .IF "$(CPU)" == "I"
         .IF "$(UNAME)" == "GNU/kFreeBSD"
             CONFIGURE_ACTION=Configure debian-kfreebsd-i386
@@ -104,15 +104,15 @@ UNAME=$(shell uname)
         CONFIGURE_ACTION=Configure linux-generic32
     .ENDIF
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
-    #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
+    #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8v.map'
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES+=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8o.map \
-        libssl_OOo_0_9_8o.map
-    #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
+        libcrypto_OOo_0_9_8v.map \
+        libssl_OOo_0_9_8v.map
+    #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8v.map'
 
     # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
 
