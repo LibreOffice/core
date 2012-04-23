@@ -622,7 +622,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     {
         if ( !pSpinVal )
         {
-            std::fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
+            fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
             return;
         }
         areaRect = pSpinVal->maUpperRect;
@@ -1335,10 +1335,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     }
     aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
 
-    std::fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
+    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
-    std::fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
+    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
                   aInfo.m_nID != 0 ? "succeeded" : "failed",
                   rtl::OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 
@@ -1447,7 +1447,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gchar* pThemeName = NULL;
     g_object_get( pSettings, "gtk-theme-name", &pThemeName, (char *)NULL );
     #if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
+    fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
     #endif
 
 
