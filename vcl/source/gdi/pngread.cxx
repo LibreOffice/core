@@ -472,7 +472,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     maOrigSize.Width()  = ImplReadsal_uInt32();
     maOrigSize.Height() = ImplReadsal_uInt32();
 
-    if ( !maOrigSize.Width() || !maOrigSize.Height() )
+    if (maOrigSize.Width() <= 0 || maOrigSize.Height() <= 0)
         return sal_False;
 
     mnPngDepth = *(maDataIter++);
