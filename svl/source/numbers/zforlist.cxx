@@ -1303,7 +1303,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
     if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {   // look for a defined standard
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
-        sal_uInt32 nKey;
+        sal_uInt32 nKey = 0; // avoid bogus warning (GCC 4.4.6)
         SvNumberFormatTable::iterator it2 = aFTable.find( CLOffset );
         while ( it2 != aFTable.end() && (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
         {
@@ -3326,7 +3326,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
     {
         // look for a defined standard
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
-        sal_uInt32 nKey;
+        sal_uInt32 nKey = 0; // avoid bogus warning (GCC 4.4.6)
         SvNumberFormatTable::iterator it2 = aFTable.lower_bound( CLOffset );
         while ( it2 != aFTable.end() && (nKey = it2->first) >= CLOffset && nKey < nStopKey )
         {
