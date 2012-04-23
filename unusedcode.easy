@@ -25,8 +25,6 @@ MSDffImportRecords::Remove(unsigned short, unsigned short)
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
-OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
-OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
 PopupMenu::SetSelectedEntry(unsigned short)
 PropBrwMgr::GetChildWindowId()
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)

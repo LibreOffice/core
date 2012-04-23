@@ -1303,27 +1303,6 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
 
 // -----------------------------------------------------------------------
 
-PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
-                                        const MapMode& rMapMode ) const
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicPolyPoly, PolyPolygon, NULL );
-
-    if ( rMapMode.IsDefault() )
-        return rLogicPolyPoly;
-
-    PolyPolygon aPolyPoly( rLogicPolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
-    {
-        Polygon& rPoly = aPolyPoly[i];
-        rPoly = LogicToPixel( rPoly, rMapMode );
-    }
-    return aPolyPoly;
-}
-
-// -----------------------------------------------------------------------
-
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                                     const MapMode& rMapMode ) const
 {
@@ -1599,27 +1578,6 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
     }
 
     return aPoly;
-}
-
-// -----------------------------------------------------------------------
-
-PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
-                                        const MapMode& rMapMode ) const
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDevicePolyPoly, PolyPolygon, NULL );
-
-    if ( rMapMode.IsDefault() )
-        return rDevicePolyPoly;
-
-    PolyPolygon aPolyPoly( rDevicePolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
-    {
-        Polygon& rPoly = aPolyPoly[i];
-        rPoly = PixelToLogic( rPoly, rMapMode );
-    }
-    return aPolyPoly;
 }
 
 // -----------------------------------------------------------------------

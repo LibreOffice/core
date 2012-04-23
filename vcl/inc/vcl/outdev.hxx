@@ -995,8 +995,6 @@ public:
                                       const MapMode& rMapMode ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly,
                                       const MapMode& rMapMode ) const;
-    PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly,
-                                      const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                           const MapMode& rMapMode ) const;
     Point               PixelToLogic( const Point& rDevicePt ) const;
@@ -1014,8 +1012,6 @@ public:
     Polygon             PixelToLogic( const Polygon& rDevicePoly,
                                       const MapMode& rMapMode ) const;
     basegfx::B2DPolygon PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
-                                      const MapMode& rMapMode ) const;
-    PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly,
                                       const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                           const MapMode& rMapMode ) const;
