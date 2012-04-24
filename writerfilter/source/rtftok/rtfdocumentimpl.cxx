@@ -554,9 +554,9 @@ rtl_TextEncoding lcl_getDefaultTextEncoding()
 
     const OUString& rLanguage = Application::GetSettings().GetLocale().Language;
 
-    if (rLanguage == "ru" || rLanguage == "uk")
+    if (rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ru")) || rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("uk")))
         return RTL_TEXTENCODING_MS_1251;
-    if (rLanguage == "tr")
+    if (rLanguage.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("tr")))
         return RTL_TEXTENCODING_MS_1254;
     else
         return RTL_TEXTENCODING_MS_1252;
