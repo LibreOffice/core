@@ -40,7 +40,7 @@ $(eval $(call gb_Jar_use_jars,reportbuilderwizard,\
 
 $(eval $(call gb_Jar_set_packageroot,reportbuilderwizard,com))
 
-$(eval $(call gb_Jar_set_manifest,reportbuilderwizard,$(SRCDIR)/wizards/com/sun/star/wizards/reportbuilder/Manifest.mf))
+$(eval $(call gb_Jar_set_manifest,reportbuilderwizard,$(SRCDIR)/wizards/com/sun/star/wizards/reportbuilder/MANIFEST.MF))
 
 $(eval $(call gb_Jar_set_jarclasspath,reportbuilderwizard,\
 	commonwizards.jar \
