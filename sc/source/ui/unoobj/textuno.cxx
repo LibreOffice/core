@@ -485,7 +485,35 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.Adjust();
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
-            pHeaderField->InitDoc( &aTextData.GetContentObj(), aTextData.GetPart(), aSelection );
+
+            uno::Reference<text::XTextRange> xTextRange;
+            switch (aTextData.GetPart())
+            {
+                case SC_HDFT_LEFT:
+                {
+                    uno::Reference<text::XTextRange> xTemp(
+                        aTextData.GetContentObj().getLeftText(), uno::UNO_QUERY);
+                    xTextRange = xTemp;
+                }
+                break;
+                case SC_HDFT_CENTER:
+                {
+                    uno::Reference<text::XTextRange> xTemp(
+                        aTextData.GetContentObj().getCenterText(), uno::UNO_QUERY);
+                    xTextRange = xTemp;
+                }
+                break;
+                case SC_HDFT_RIGHT:
+                {
+                    uno::Reference<text::XTextRange> xTemp(
+                        aTextData.GetContentObj().getRightText(), uno::UNO_QUERY);
+                    xTextRange = xTemp;
+                }
+                break;
+            }
+
+            pHeaderField->InitDoc(
+                xTextRange, &aTextData.GetContentObj(), aTextData.GetPart(), aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)

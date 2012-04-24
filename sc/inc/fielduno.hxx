@@ -340,6 +340,7 @@ class ScHeaderFieldObj : public ScMutexHelper,
 {
 private:
     const SfxItemPropertySet*   pPropSet;
+    com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
     ScHeaderFooterContentObj*   pContentObj;
     sal_uInt16                      nPart;
     sal_uInt16                      nType;
@@ -349,16 +350,18 @@ private:
 
     ScHeaderFieldObj(); // disabled
 public:
-                            ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
-                                            sal_uInt16 nT, const ESelection& rSel);
-    virtual                 ~ScHeaderFieldObj();
+    ScHeaderFieldObj(
+        const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
+        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, sal_uInt16 nT, const ESelection& rSel);
+    virtual ~ScHeaderFieldObj();
 
                             // called by getImplementation:
     void                    DeleteField();
     sal_Bool                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();
-    void                    InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
-                                        const ESelection& rSel );
+    void InitDoc(
+        const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
+        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const ESelection& rSel);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
                                 const ::com::sun::star::uno::Type & rType )

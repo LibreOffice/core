@@ -442,8 +442,12 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_TITLEFIELD:
         case SC_SERVICE_FILEFIELD:
         case SC_SERVICE_SHEETFIELD:
-            xRet.set((text::XTextField*)new ScHeaderFieldObj( NULL, 0, nType, ESelection() ));
-            break;
+        {
+            uno::Reference<text::XTextRange> xNullContent;
+            xRet.set(static_cast<text::XTextField*>(
+                new ScHeaderFieldObj(xNullContent, NULL, 0, nType, ESelection())));
+        }
+        break;
         case SC_SERVICE_CELLSTYLE:
             xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, String() ));
             break;

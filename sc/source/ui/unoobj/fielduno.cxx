@@ -926,7 +926,21 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) cons
         }
 
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
-        return new ScHeaderFieldObj( pContentObj, nPart, nFieldType, aSelection );
+        uno::Reference<text::XTextRange> xTextRange;
+        if (pContentObj)
+        {
+            uno::Reference<text::XText> xText;
+            if ( nPart == SC_HDFT_LEFT )
+                xText = pContentObj->getLeftText();
+            else if (nPart == SC_HDFT_CENTER)
+                xText = pContentObj->getCenterText();
+            else
+                xText = pContentObj->getRightText();
+
+            uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
+            xTextRange = xTemp;
+        }
+        return new ScHeaderFieldObj(xTextRange, pContentObj, nPart, nFieldType, aSelection);
     }
     return NULL;
 }
@@ -1086,10 +1100,13 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
     }
 }
 
-ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
-                                            sal_uInt16 nT, const ESelection& rSel) :
+ScHeaderFieldObj::ScHeaderFieldObj(
+    const uno::Reference<text::XTextRange>& rContent,
+    ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
+    sal_uInt16 nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
     pPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertySet() : lcl_GetHeaderFieldPropertySet() ),
+    mpContent(rContent),
     pContentObj( pContent ),
     nPart( nP ),
     nType( nT ),
@@ -1168,8 +1185,9 @@ void SAL_CALL ScHeaderFieldObj::release() throw()
     OComponentHelper::release();
 }
 
-void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
-                                        const ESelection& rSel )
+void ScHeaderFieldObj::InitDoc(
+    const uno::Reference<text::XTextRange>& rContent,
+    ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const ESelection& rSel)
 {
     if ( pContent && !pEditSource )
     {
@@ -1178,6 +1196,7 @@ void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 n
         aSelection = rSel;
         nPart = nP;
         pContentObj = pContent;
+        mpContent = rContent;
 
         pContentObj->acquire();     // darf nicht wegkommen
         pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
@@ -1295,18 +1314,7 @@ void SAL_CALL ScHeaderFieldObj::attach( const uno::Reference<text::XTextRange>& 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFieldObj::getAnchor() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (pContentObj)
-    {
-        uno::Reference<text::XText> xText;
-        if ( nPart == SC_HDFT_LEFT )
-            xText = pContentObj->getLeftText();
-        else if (nPart == SC_HDFT_CENTER)
-            xText = pContentObj->getCenterText();
-        else
-            xText = pContentObj->getRightText();
-        return uno::Reference<text::XTextRange>( xText, uno::UNO_QUERY );
-    }
-    return NULL;
+    return mpContent;
 }
 
 // XComponent
