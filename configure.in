@@ -4270,7 +4270,7 @@ if test "$GXX" = "yes"; then
         fi
         if echo $with_gxx_include_path | $GREP -q linux; then
             # workaround for Mandriva - issue 100049
-            with_gxx_include_path=`cd $with_gxx_include_path && pwd`
+            with_gxx_include_path=`cd -P $with_gxx_include_path && pwd`
         fi
     fi
     dnl This is the original code...
