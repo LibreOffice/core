@@ -400,8 +400,53 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ;;
 
     *)
-        echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
-        exit 2
+        if [ -x /usr/bin/gnome-open ] ; then
+            MAILER = /usr/bin/gnome-open
+        elif [ -x /usr/bin/xdg-open ] ; then
+            MAILER = /usr/bin/xdg-open
+        else
+            echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
+            exit 2
+        fi
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                --to)
+                    if [ "${TO}" != "" ]; then
+                        MAILTO="${MAILTO:-}${MAILTO:+&}to=$2"
+                    else
+                        TO="$2"
+                    fi
+                    shift
+                    ;;
+                --cc)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --bcc)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --subject)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --body)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --attach)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                *)
+                    ;;
+            esac
+            shift;
+        done
+
+        MAILTO="mailto:${TO}?${MAILTO}"
+        ${MAILER} "${MAILTO}" &
         ;;
 esac
 
