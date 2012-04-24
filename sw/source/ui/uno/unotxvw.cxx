@@ -606,9 +606,7 @@ void SwXTextView::addSelectionChangeListener(
                                     throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< view::XSelectionChangeListener > * pInsert = new uno::Reference< view::XSelectionChangeListener > ;
-    *pInsert = rxListener;
-    aSelChangedListeners.push_back(pInsert);
+    aSelChangedListeners.push_back(rxListener);
 }
 
 void SwXTextView::removeSelectionChangeListener(
@@ -625,7 +623,6 @@ void SwXTextView::removeSelectionChangeListener(
         if(pLeft == pRight)
         {
             aSelChangedListeners.erase(it);
-            delete pElem;
             break;
         }
     }
