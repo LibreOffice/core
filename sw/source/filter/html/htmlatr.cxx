@@ -259,54 +259,6 @@ SwHTMLTxtCollOutputInfo::~SwHTMLTxtCollOutputInfo()
     delete pItemSet;
 }
 
-struct SwHTMLFmtInfo
-{
-    const SwFmt *pFmt;      // das Format selbst
-    const SwFmt *pRefFmt;   // das Vergleichs-Format
-
-    rtl::OString aToken;          // das auszugebende Token
-    String aClass;          // die auszugebende Klasse
-
-    SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
-
-    sal_Int32 nLeftMargin;      // ein par default-Werte fuer
-    sal_Int32 nRightMargin; // Absatz-Vorlagen
-    short nFirstLineIndent;
-
-    sal_uInt16 nTopMargin;
-    sal_uInt16 nBottomMargin;
-
-    sal_Bool bScriptDependent;
-
-    // Konstruktor fuer einen Dummy zum Suchen
-    SwHTMLFmtInfo( const SwFmt *pF ) :
-        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0)
-    {}
-
-
-    // Konstruktor zum Erstellen der Format-Info
-    SwHTMLFmtInfo( const SwFmt *pFmt, SwDoc *pDoc, SwDoc *pTemlate,
-                   sal_Bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
-                   sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
-                   sal_Bool bHardDrop=sal_False );
-    ~SwHTMLFmtInfo();
-
-    friend sal_Bool operator==( const SwHTMLFmtInfo& rInfo1,
-                            const SwHTMLFmtInfo& rInfo2 )
-    {
-        return (long)rInfo1.pFmt == (long)rInfo2.pFmt;
-    }
-
-    friend sal_Bool operator<( const SwHTMLFmtInfo& rInfo1,
-                            const SwHTMLFmtInfo& rInfo2 )
-    {
-        return (long)rInfo1.pFmt < (long)rInfo2.pFmt;
-    }
-
-};
-
-SV_IMPL_OP_PTRARR_SORT( SwHTMLFmtInfos, SwHTMLFmtInfo* )
-
 SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               sal_Bool bOutStyles,
                               LanguageType eDfltLang,
@@ -597,11 +549,11 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // Jetzt holen wir das Token und ggf. die Klasse
     SwHTMLFmtInfo aFmtInfo( &rFmt );
-    sal_uInt16 nArrayPos;
-    const SwHTMLFmtInfo *pFmtInfo;
-    if( rHWrt.aTxtCollInfos.Seek_Entry( &aFmtInfo, &nArrayPos ) )
+    SwHTMLFmtInfo *pFmtInfo;
+    SwHTMLFmtInfos::iterator it = rHWrt.aTxtCollInfos.find( aFmtInfo );
+    if( it != rHWrt.aTxtCollInfos.end() )
     {
-        pFmtInfo = rHWrt.aTxtCollInfos[nArrayPos];
+        pFmtInfo = &*it;
     }
     else
     {
@@ -609,7 +561,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                                       rHWrt.bCfgOutStyles, rHWrt.eLang,
                                       rHWrt.nCSS1Script,
                                       false );
-        rHWrt.aTxtCollInfos.C40_PTR_INSERT( SwHTMLFmtInfo, pFmtInfo );
+        rHWrt.aTxtCollInfos.insert( pFmtInfo );
         String aName( rFmt.GetName() );
         if( 0 != rHWrt.aScriptParaStyles.count( aName ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = sal_True;
@@ -1698,18 +1650,18 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
 const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
                                                 SwHTMLFmtInfos& rFmtInfos )
 {
-    const SwHTMLFmtInfo *pFmtInfo;
-    SwHTMLFmtInfo aFmtInfo( &rFmt );
-    sal_uInt16 nPos;
-    if( rFmtInfos.Seek_Entry( &aFmtInfo, &nPos ) )
+    SwHTMLFmtInfo *pFmtInfo;
+    const SwHTMLFmtInfo aFmtInfo( &rFmt );
+    SwHTMLFmtInfos::iterator it = rFmtInfos.find( aFmtInfo );
+    if( it != rFmtInfos.end() )
     {
-        pFmtInfo = rFmtInfos[nPos];
+        pFmtInfo = &*it;
     }
     else
     {
         pFmtInfo = new SwHTMLFmtInfo( &rFmt, pDoc, pTemplate,
                                       bOutStyles );
-        rFmtInfos.C40_PTR_INSERT( SwHTMLFmtInfo, pFmtInfo );
+        rFmtInfos.insert( pFmtInfo );
         String aName( rFmt.GetName() );
         if( 0 != rScriptTxtStyles.count( aName ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = sal_True;
@@ -3004,10 +2956,10 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         const SwCharFmt* pFmt = rWrt.pDoc->GetCharFmtFromPool(
                  RES_POOLCHR_INET_NORMAL );
         SwHTMLFmtInfo aFmtInfo( pFmt );
-        sal_uInt16 nPos;
-        if( rHTMLWrt.aChrFmtInfos.Seek_Entry( &aFmtInfo, &nPos ) )
+        SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
+        if( it != rHTMLWrt.aChrFmtInfos.end() )
         {
-            bScriptDependent = rHTMLWrt.aChrFmtInfos[nPos]->bScriptDependent;
+            bScriptDependent = it->bScriptDependent;
         }
     }
     if( !bScriptDependent )
@@ -3015,10 +2967,10 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         const SwCharFmt* pFmt = rWrt.pDoc->GetCharFmtFromPool(
                  RES_POOLCHR_INET_VISIT );
         SwHTMLFmtInfo aFmtInfo( pFmt );
-        sal_uInt16 nPos;
-        if( rHTMLWrt.aChrFmtInfos.Seek_Entry( &aFmtInfo, &nPos ) )
+        SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
+        if( it != rHTMLWrt.aChrFmtInfos.end() )
         {
-            bScriptDependent = rHTMLWrt.aChrFmtInfos[nPos]->bScriptDependent;
+            bScriptDependent = it->bScriptDependent;
         }
     }
 
@@ -3162,11 +3114,11 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     SwHTMLFmtInfo aFmtInfo( pFmt );
-    sal_uInt16 nPos;
-    if( !rHTMLWrt.aChrFmtInfos.Seek_Entry( &aFmtInfo, &nPos ) )
+    SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
+    if( it == rHTMLWrt.aChrFmtInfos.end())
         return rWrt;
 
-    const SwHTMLFmtInfo *pFmtInfo = rHTMLWrt.aChrFmtInfos[nPos];
+    const SwHTMLFmtInfo *pFmtInfo = &*it;
     OSL_ENSURE( pFmtInfo, "Wieso gint es keine Infos ueber die Zeichenvorlage?" );
 
     if( rHTMLWrt.bTagOn )

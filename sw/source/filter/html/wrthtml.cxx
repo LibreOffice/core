@@ -386,11 +386,11 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( aHTMLControls.Count() )
         aHTMLControls.DeleteAndDestroy( sal_uInt16(0), aHTMLControls.Count() );
 
-    if( aChrFmtInfos.Count() )
-        aChrFmtInfos.DeleteAndDestroy( sal_uInt16(0), aChrFmtInfos.Count() );
+    if( !aChrFmtInfos.empty() )
+        aChrFmtInfos.clear();
 
-    if( aTxtCollInfos.Count() )
-        aTxtCollInfos.DeleteAndDestroy( sal_uInt16(0), aTxtCollInfos.Count() );
+    if( !aTxtCollInfos.empty() )
+        aTxtCollInfos.clear();
 
     if(!aImgMapNames.empty())
         aImgMapNames.clear();

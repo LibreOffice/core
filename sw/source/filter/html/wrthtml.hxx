@@ -29,6 +29,7 @@
 #define _WRTHTML_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
 #include <vector>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -192,8 +193,53 @@ struct HTMLControl;
 SV_DECL_PTRARR_SORT_DEL( HTMLControls, HTMLControl*, 1 )
 typedef std::vector<SwFmtINetFmt*> INetFmts;
 
-struct SwHTMLFmtInfo;
-SV_DECL_PTRARR_SORT_DEL( SwHTMLFmtInfos, SwHTMLFmtInfo*, 1 )
+struct SwHTMLFmtInfo
+{
+    const SwFmt *pFmt;      // das Format selbst
+    const SwFmt *pRefFmt;   // das Vergleichs-Format
+
+    rtl::OString aToken;          // das auszugebende Token
+    String aClass;          // die auszugebende Klasse
+
+    SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
+
+    sal_Int32 nLeftMargin;      // ein par default-Werte fuer
+    sal_Int32 nRightMargin; // Absatz-Vorlagen
+    short nFirstLineIndent;
+
+    sal_uInt16 nTopMargin;
+    sal_uInt16 nBottomMargin;
+
+    sal_Bool bScriptDependent;
+
+    // Konstruktor fuer einen Dummy zum Suchen
+    SwHTMLFmtInfo( const SwFmt *pF ) :
+        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0)
+    {}
+
+
+    // Konstruktor zum Erstellen der Format-Info
+    SwHTMLFmtInfo( const SwFmt *pFmt, SwDoc *pDoc, SwDoc *pTemlate,
+                   sal_Bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
+                   sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
+                   sal_Bool bHardDrop=sal_False );
+    ~SwHTMLFmtInfo();
+
+    friend sal_Bool operator==( const SwHTMLFmtInfo& rInfo1,
+                            const SwHTMLFmtInfo& rInfo2 )
+    {
+        return (long)rInfo1.pFmt == (long)rInfo2.pFmt;
+    }
+
+    friend sal_Bool operator<( const SwHTMLFmtInfo& rInfo1,
+                            const SwHTMLFmtInfo& rInfo2 )
+    {
+        return (long)rInfo1.pFmt < (long)rInfo2.pFmt;
+    }
+
+};
+
+typedef boost::ptr_set<SwHTMLFmtInfo> SwHTMLFmtInfos;
 
 class IDocumentStylePoolAccess;
 
