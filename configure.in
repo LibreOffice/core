@@ -8673,7 +8673,7 @@ AC_SUBST(SPLIT_OPT_FEATURES)
 
 if test $_os = Darwin -o $_os = WINNT; then
     if test "$enable_cairo_canvas" = yes; then
-        AC_MSG_WARN([Overriding with -disable-cairo-canvas for this platform])
+        AC_MSG_ERROR([The cairo canvas should not be used for this platform])
     fi
     enable_cairo_canvas=no
 elif test -z "$enable_cairo_canvas"; then
