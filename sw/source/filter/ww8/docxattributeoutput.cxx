@@ -1535,7 +1535,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     // Horizontal spans
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
 
     sal_uInt16 nColSpan = pCell->GetColSpan();
     if ( nColSpan > 1 )
@@ -1905,7 +1905,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     switch( pCell->GetVertOri())
     {
         case text::VertOrientation::TOP:

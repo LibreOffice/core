@@ -622,10 +622,10 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
     // Not using m_nTableDepth, which is not yet incremented here.
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
-    m_aCells[nCurrentDepth] = pRow->GetCells().Count();
+    m_aCells[nCurrentDepth] = pRow->GetCells().size();
     for( sal_uInt16 i = 0; i < m_aCells[nCurrentDepth]; i++ )
     {
-        SwWriteTableCell *pCell = pRow->GetCells( )[ i ];
+        const SwWriteTableCell *pCell = &pRow->GetCells( )[ i ];
         const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
 
         pTableTextNodeInfoInner->setCell( i );
@@ -658,7 +658,7 @@ void RtfAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
     const SvxBoxItem& rDefault = pFmt->GetBox( );
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
     if (pCellFmt->GetAttrSet().HasItem(RES_BOX, &pItem))
@@ -704,7 +704,7 @@ void RtfAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
     if (pCellFmt->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
@@ -779,7 +779,7 @@ void RtfAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
 

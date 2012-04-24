@@ -31,6 +31,7 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <svl/svarray.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <swdllapi.h>
 
@@ -105,8 +106,7 @@ public:
     sal_Bool HasPrcWidthOpt() const { return bPrcWidthOpt; }
 };
 
-typedef SwWriteTableCell *SwWriteTableCellPtr;
-SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5 )
+typedef boost::ptr_vector<SwWriteTableCell> SwWriteTableCells;
 
 
 //-----------------------------------------------------------------------

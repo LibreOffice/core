@@ -41,7 +41,6 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-SV_IMPL_PTRARR( SwWriteTableCells, SwWriteTableCellPtr )
 SV_IMPL_OP_PTRARR_SORT( SwWriteTableRows, SwWriteTableRowPtr )
 SV_IMPL_OP_PTRARR_SORT( SwWriteTableCols, SwWriteTableColPtr )
 
@@ -84,7 +83,7 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
     SwWriteTableCell *pCell =
         new SwWriteTableCell( pBox, nRow, nCol, nRowSpan, nColSpan,
                                 nHeight, pBackgroundBrush );
-    aCells.Insert( pCell, aCells.Count() );
+    aCells.push_back( pCell );
 
     return pCell;
 }

@@ -523,11 +523,11 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     // die gleiche Ausrichtung besitzen, das VALIGN an der Zeile statt der
     // Zelle ausgeben
     sal_Int16 eRowVertOri = text::VertOrientation::NONE;
-    if( rCells.Count() > 1 )
+    if( rCells.size() > 1 )
     {
-        for( sal_uInt16 nCell = 0; nCell<rCells.Count(); nCell++ )
+        for( sal_uInt16 nCell = 0; nCell<rCells.size(); nCell++ )
         {
-            sal_Int16 eCellVertOri = rCells[nCell]->GetVertOri();
+            sal_Int16 eCellVertOri = rCells[nCell].GetVertOri();
             if( 0==nCell )
             {
                 eRowVertOri = eCellVertOri;
@@ -565,8 +565,8 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     rWrt.IncIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
-    for( sal_uInt16 nCell = 0; nCell<rCells.Count(); nCell++ )
-        OutTableCell( rWrt, rCells[nCell], text::VertOrientation::NONE==eRowVertOri );
+    for( sal_uInt16 nCell = 0; nCell<rCells.size(); nCell++ )
+        OutTableCell( rWrt, &rCells[nCell], text::VertOrientation::NONE==eRowVertOri );
 
     rWrt.DecIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
