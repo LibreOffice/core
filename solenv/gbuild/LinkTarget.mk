@@ -154,7 +154,7 @@ $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_target,%)
+$(call gb_CObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_CObject_get_target,$*)))
 
@@ -171,7 +171,7 @@ $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_target,%)
+$(call gb_CxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
 
@@ -189,7 +189,7 @@ $(call gb_GenCObject_get_target,%) : $(call gb_GenCObject_get_source,%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_GenCObject_get_dep_target,%) : $(call gb_GenCObject_get_target,%)
+$(call gb_GenCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_GenCObject_get_target,$*)))
 
@@ -207,7 +207,7 @@ $(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_target,%)
+$(call gb_GenCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_GenCxxObject_get_target,$*)))
 
@@ -289,7 +289,7 @@ $(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SRCDIR),%)
 	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_AsmObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_AsmObject_get_dep_target,%) : $(call gb_AsmObject_get_target,%)
+$(call gb_AsmObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
 
