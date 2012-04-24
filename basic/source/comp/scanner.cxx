@@ -419,7 +419,7 @@ bool SbiScanner::NextSym()
                 // treated as an operator
                 --pLine; --nCol; nCol1 = nCol-1;
                 aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
-                return SYMBOL;
+                return true;
         }
         bNumber = true;
         long l = 0;
