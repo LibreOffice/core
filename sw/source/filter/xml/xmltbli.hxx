@@ -33,6 +33,7 @@
 
 // STL include
 #include <boost/unordered_map.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 #include <svl/svstdarr.hxx>
 
@@ -44,7 +45,8 @@ class SwStartNode;
 class SwTableBoxFmt;
 class SwTableLineFmt;
 class SwXMLTableCell_Impl;
-class SwXMLTableRows_Impl;
+class SwXMLTableRow_Impl;
+typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
 class SwXMLDDETableContext_Impl;
 class TableBoxIndexHasher;
 class TableBoxIndex;

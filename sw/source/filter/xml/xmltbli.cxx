@@ -1270,14 +1270,12 @@ public:
 
 
 
-typedef SwXMLTableRow_Impl* SwXMLTableRowPtr;
-SV_DECL_PTRARR_DEL(SwXMLTableRows_Impl,SwXMLTableRowPtr,5)
-SV_IMPL_PTRARR(SwXMLTableRows_Impl,SwXMLTableRowPtr)
+typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
 
 SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
                                                  sal_uInt32 nCol ) const
 {
-    return (*pRows)[(sal_uInt16)nRow]->GetCell( (sal_uInt16)nCol );
+    return (*pRows)[(sal_uInt16)nRow].GetCell( (sal_uInt16)nCol );
 }
 
 TYPEINIT1( SwXMLTableContext, XMLTextTableContext );
@@ -1612,7 +1610,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     // into the current row.
     if( nCurRow > 0UL && nColSpan > 1UL )
     {
-        SwXMLTableRow_Impl *pCurRow = (*pRows)[(sal_uInt16)nCurRow];
+        SwXMLTableRow_Impl *pCurRow = &(*pRows)[(sal_uInt16)nCurRow];
         sal_uInt32 nLastCol = GetColumnCount() < nColsReq ? GetColumnCount()
                                                      : nColsReq;
         for( i=nCurCol+1UL; i<nLastCol; i++ )
@@ -1643,23 +1641,22 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
             aColumnWidths.push_back( ColumnWidthInfo(MINLAY, sal_True) );
         }
         // adjust columns in *all* rows, if columns must be inserted
-        for( i=0; i<pRows->Count(); i++ )
-            (*pRows)[(sal_uInt16)i]->Expand( nColsReq, i<nCurRow );
+        for( i=0; i<pRows->size(); i++ )
+            (*pRows)[(sal_uInt16)i].Expand( nColsReq, i<nCurRow );
     }
 
     // Add rows
-    if( pRows->Count() < nRowsReq )
+    if( pRows->size() < nRowsReq )
     {
         OUString aStyleName2;
-        for( i = pRows->Count(); i < nRowsReq; ++i )
-            pRows->Insert( new SwXMLTableRow_Impl(aStyleName2, GetColumnCount()),
-                           pRows->Count() );
+        for( i = pRows->size(); i < nRowsReq; ++i )
+            pRows->push_back( new SwXMLTableRow_Impl(aStyleName2, GetColumnCount()) );
     }
 
     OUString sStyleName( rStyleName );
     if( sStyleName.isEmpty() )
     {
-        sStyleName = ((*pRows)[(sal_uInt16)nCurRow])->GetDefaultCellStyleName();
+        sStyleName = (*pRows)[(sal_uInt16)nCurRow].GetDefaultCellStyleName();
         if( sStyleName.isEmpty() && HasColumnDefaultCellStyleNames() )
         {
             sStyleName = GetColumnDefaultCellStyleName( nCurCol );
@@ -1701,19 +1698,18 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     if( 0==nCurRow && 0UL == GetColumnCount()  )
         InsertColumn( USHRT_MAX, sal_True );
 
-    if( nCurRow < pRows->Count() )
+    if( nCurRow < pRows->size() )
     {
         // The current row has already been inserted because of a row span
         // of a previous row.
-        (*pRows)[(sal_uInt16)nCurRow]->Set(
+        (*pRows)[(sal_uInt16)nCurRow].Set(
             rStyleName, rDfltCellStyleName, i_rXmlId );
     }
     else
     {
         // add a new row
-        pRows->Insert( new SwXMLTableRow_Impl( rStyleName, GetColumnCount(),
-                                               &rDfltCellStyleName, i_rXmlId ),
-                       pRows->Count() );
+        pRows->push_back( new SwXMLTableRow_Impl( rStyleName, GetColumnCount(),
+                                               &rDfltCellStyleName, i_rXmlId ) );
     }
 
     // We start at the first column ...
@@ -1729,7 +1725,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
 
 void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
 {
-    const SwXMLTableRow_Impl *pSrcRow = (*pRows)[(sal_uInt16)nCurRow-1];
+    const SwXMLTableRow_Impl *pSrcRow = &(*pRows)[(sal_uInt16)nCurRow-1];
     while( nCount > 1 && IsInsertRowPossible() )
     {
         InsertRow( pSrcRow->GetStyleName(), pSrcRow->GetDefaultCellStyleName(),
@@ -1776,7 +1772,7 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     if( GetColumnCount() == nCol )
     {
         // The last cell is the right one here.
-        pPrevCell = GetCell( pRows->Count()-1U, GetColumnCount()-1UL );
+        pPrevCell = GetCell( pRows->size()-1U, GetColumnCount()-1UL );
     }
     else if( 0UL == nRow )
     {
@@ -1789,7 +1785,7 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     {
         // If there is a previous cell in the current row that is not spanned
         // from the previous row, its the right one.
-        const SwXMLTableRow_Impl *pPrevRow = (*pRows)[(sal_uInt16)nRow-1U];
+        const SwXMLTableRow_Impl *pPrevRow = &(*pRows)[(sal_uInt16)nRow-1U];
         sal_uInt32 i = nCol;
         while( !pPrevCell &&  i > 0UL )
         {
@@ -1848,7 +1844,7 @@ void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, 
 
     for( sal_uInt32 i=nRow; i<nLastRow; i++ )
     {
-        SwXMLTableRow_Impl *pRow = (*pRows)[(sal_uInt16)i];
+        SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
         for( sal_uInt32 j=nCol; j<nLastCol; j++ )
             pRow->GetCell( j )->SetStartNode( pSttNd );
     }
@@ -1967,7 +1963,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
         {
             // Could the table be splitted behind the current row?
             sal_Bool bSplit = sal_True;
-            SwXMLTableRow_Impl *pRow = (*pRows)[(sal_uInt16)i];
+            SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
             for( sal_uInt32 j=nLeftCol; j<nRightCol; j++ )
             {
                 bSplit = ( 1UL == pRow->GetCell(j)->GetRowSpan() );
@@ -1995,7 +1991,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
             while( nStartRow < nBottomRow )
             {
                 sal_uInt32 nMaxRowSpan = 0UL;
-                SwXMLTableRow_Impl *pStartRow = (*pRows)[(sal_uInt16)nStartRow];
+                SwXMLTableRow_Impl *pStartRow = &(*pRows)[(sal_uInt16)nStartRow];
                 SwXMLTableCell_Impl *pCell;
                 for( i=nLeftCol; i<nRightCol; i++ )
                     if( ( pCell=pStartRow->GetCell(i),
@@ -2006,7 +2002,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                 if( nStartRow<nBottomRow )
                 {
                     SwXMLTableRow_Impl *pPrevRow =
-                                        (*pRows)[(sal_uInt16)nStartRow-1U];
+                                        &(*pRows)[(sal_uInt16)nStartRow-1U];
                     i = nLeftCol;
                     while( i < nRightCol )
                     {
@@ -2218,7 +2214,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
-    const OUString& rStyleName = (*pRows)[(sal_uInt16)nTopRow]->GetStyleName();
+    const OUString& rStyleName = (*pRows)[(sal_uInt16)nTopRow].GetStyleName();
     if( 1UL == (nBottomRow - nTopRow) &&
         !rStyleName.isEmpty() &&
         GetSwImport().FindAutomaticStyle(
@@ -2234,7 +2230,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     while( nStartCol < nRightCol )
     {
         for( sal_uInt32 nRow=nTopRow; nRow<nBottomRow; nRow++ )
-            (*pRows)[(sal_uInt16)nRow]->SetSplitable( sal_True );
+            (*pRows)[(sal_uInt16)nRow].SetSplitable( sal_True );
 
         sal_uInt32 nCol = nStartCol;
         sal_uInt32 nSplitCol = nRightCol;
@@ -2259,10 +2255,10 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     SwXMLTableCell_Impl *pCell = GetCell(nRow,nCol);
                     // Could the table fragment be splitted horizontally behind
                     // the current line?
-                    sal_Bool bHoriSplit = (*pRows)[(sal_uInt16)nRow]->IsSplitable() &&
+                    sal_Bool bHoriSplit = (*pRows)[(sal_uInt16)nRow].IsSplitable() &&
                                       nRow+1UL < nBottomRow &&
                                       1UL == pCell->GetRowSpan();
-                    (*pRows)[(sal_uInt16)nRow]->SetSplitable( bHoriSplit );
+                    (*pRows)[(sal_uInt16)nRow].SetSplitable( bHoriSplit );
 
                     // Could the table fragment be splitted vertically behind the
                     // current column (uptp the current line?
@@ -2404,9 +2400,9 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     // If there are empty rows (because of some row span of previous rows)
     // the have to be deleted. The previous rows have to be truncated.
 
-    if( pRows->Count() > nCurRow )
+    if( pRows->size() > nCurRow )
     {
-        SwXMLTableRow_Impl *pPrevRow = (*pRows)[(sal_uInt16)nCurRow-1U];
+        SwXMLTableRow_Impl *pPrevRow = &(*pRows)[(sal_uInt16)nCurRow-1U];
         SwXMLTableCell_Impl *pCell;
         for( sal_uLong i = 0; i < aColumnWidths.size(); ++i )
         {
@@ -2415,11 +2411,11 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
                 FixRowSpan( nCurRow-1UL, i, 1UL );
             }
         }
-        for( sal_uLong i = pRows->Count()-1UL; i>=nCurRow; --i )
-            pRows->DeleteAndDestroy( (sal_uInt16)i );
+        for( sal_uLong i = pRows->size()-1UL; i>=nCurRow; --i )
+            pRows->pop_back();
     }
 
-    if( 0UL == pRows->Count() )
+    if( pRows->empty() )
     {
         OUString aStyleName2;
         InsertCell( aStyleName2, 1U, nCols, InsertTableSection() );
@@ -2626,14 +2622,14 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
              : pTableNode->GetTable().GetTabLines();
 
     sal_uInt32 nStartRow = 0UL;
-    sal_uInt32 nRows = pRows->Count();
+    sal_uInt32 nRows = pRows->size();
     for(sal_uInt32 i=0UL; i<nRows; ++i )
     {
         // Could we split the table behind the current line?
         sal_Bool bSplit = sal_True;
         if ( bHasSubTables )
         {
-            SwXMLTableRow_Impl *pRow = (*pRows)[(sal_uInt16)i];
+            SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
             for( sal_uInt32 j=0UL; j<nCols; j++ )
             {
                 bSplit = ( 1UL == pRow->GetCell(j)->GetRowSpan() );
@@ -2661,7 +2657,7 @@ void SwXMLTableContext::MakeTable()
     SolarMutexGuard aGuard;
 
     // #i97274# handle invalid tables
-    if (!pRows || !pRows->Count() || !GetColumnCount())
+    if (!pRows || pRows->empty() || !GetColumnCount())
     {
         OSL_FAIL("invalid table: no cells; deleting...");
         pTableNode->GetDoc()->DeleteSection( pTableNode );
@@ -2804,8 +2800,8 @@ void SwXMLTableContext::MakeTable()
     pFrmFmt->UnlockModify();
 
 
-    for( sal_uInt16 i=0; i<pRows->Count(); i++ )
-        (*pRows)[i]->Dispose();
+    for( sal_uInt16 i=0; i<pRows->size(); i++ )
+        (*pRows)[i].Dispose();
 
     // now that table is complete, change into DDE table (if appropriate)
     if (NULL != pDDESource)
