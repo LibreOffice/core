@@ -302,6 +302,7 @@ $(eval $(call dmake_modules_rules,$(dmake_modules)))
 clean: clean-host clean-build
 
 clean-host:
+	rm -fr $(DEVINSTALLDIR)
 	rm -fr $(SRCDIR)/*/$(INPATH)
 	rm -fr install
 
@@ -431,15 +432,15 @@ install:
 	echo "$(INSTALLDIR)/program/soffice"
 
 dev-install: build
-	@rm -rf $(OUTDIR)/installation
-	@mkdir $(OUTDIR)/installation
+	@rm -rf $(DEVINSTALLDIR)
+	@mkdir $(DEVINSTALLDIR)
 ifeq ($(DISABLE_LINKOO),TRUE)
-	@ooinstall $(OUTDIR)/installation/opt
+	@ooinstall $(DEVINSTALLDIR)/opt
 	@install-gdb-printers -L
 else
-	@ooinstall -l $(OUTDIR)/installation/opt
+	@ooinstall -l $(DEVINSTALLDIR)/opt
 endif
-	@rm -f $(SRCDIR)/install && ln -s $(OUTDIR)/installation/opt/ $(SRCDIR)/install
+	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up

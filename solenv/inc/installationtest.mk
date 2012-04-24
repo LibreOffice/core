@@ -61,7 +61,7 @@ installationtest_instset = \
 .IF "$(OS)" == "WNT" && "$(CROSS_COMPILING)" != "YES"
 installationtest_instpath = `cat $(MISC)/$(TARGET)/installation.flag`
 .ELSE
-installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation
+installationtest_instpath = $(DEVINSTALLDIR)
 .END
 
 .IF "$(OS)" == "MACOSX"

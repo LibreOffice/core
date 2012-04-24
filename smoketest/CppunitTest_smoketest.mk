@@ -39,9 +39,9 @@ $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 ))
 
 ifeq ($(OS),MACOSX)
-my_soffice:=path:$(OUTDIR)/installation/opt/LibreOffice.app/Contents/MacOS/soffice
+my_soffice:=path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice
 else
-my_soffice:=path:$(OUTDIR)/installation/opt/program/soffice
+my_soffice:=path:$(DEVINSTALLDIR)/opt/program/soffice
 endif
 
 $(eval $(call gb_CppunitTest_use_ure,smoketest))

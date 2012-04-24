@@ -171,7 +171,7 @@ debugrun :
 
 dev-install :
 	@rm -f $(SRCDIR)/install && \
-	ln -s $(OUTDIR)/installation/opt/ $(SRCDIR)/install
+	ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 	$(info $(gb_Module_DEVINSTALLHINT))
 
 define gb_Module_Module

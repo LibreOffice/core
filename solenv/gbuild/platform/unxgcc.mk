@@ -372,7 +372,7 @@ else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
 else
-gb_JunitTest_SOFFICEARG:=path:$(OUTDIR)/installation/opt/program/soffice
+gb_JunitTest_SOFFICEARG:=path:$(DEVINSTALLDIR)/opt/program/soffice
 endif
 endif
 
@@ -390,9 +390,9 @@ endef
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
-printf 'if [ -e $(OUTDIR)/installation/opt/program/ooenv ]; then . $(OUTDIR)/installation/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
-printf "gdb --tui $(OUTDIR)/installation/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
-printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(OUTDIR)/installation/\"" >> $${OFFICESCRIPT} && \
+printf 'if [ -e $(DEVINSTALLDIR)/opt/program/ooenv ]; then . $(DEVINSTALLDIR)/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
+printf "gdb --tui $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(DEVINSTALLDIR)/\"" >> $${OFFICESCRIPT} && \
 printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}

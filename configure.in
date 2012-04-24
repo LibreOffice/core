@@ -11135,6 +11135,11 @@ INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
 AC_MSG_RESULT([$INSTALLDIR])
 AC_SUBST(INSTALLDIR)
 
+AC_MSG_CHECKING([for dev-install dir])
+DEVINSTALLDIR="$OUTDIR/installation"
+AC_MSG_RESULT([$DEVINSTALLDIR])
+AC_SUBST(DEVINSTALLDIR)
+
 # ===================================================================
 # De- or increase default verbosity of build process
 # ===================================================================

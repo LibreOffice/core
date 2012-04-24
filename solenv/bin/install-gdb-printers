@@ -27,7 +27,7 @@
 
 GDBDIR="${SOLARENV}/gdb"
 SOLVERLIBDIR="${SOLARVER}/${INPATH}/lib"
-INSTALLDIR="${SOLARVER}/${INPATH}/installation/opt"
+INSTALLDIR="${DEVINSTALLDIR}/opt"
 DYLIB=so
 if [ "$(uname)" = Darwin ]; then
     INSTALLDIR=$INSTALLDIR/LibreOffice.app/Contents
