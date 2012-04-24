@@ -280,8 +280,7 @@ public:
 
 
 // Row of a HTML table
-typedef HTMLTableCell* HTMLTableCellPtr;
-SV_DECL_PTRARR_DEL(HTMLTableCells,HTMLTableCellPtr,5)
+typedef boost::ptr_vector<HTMLTableCell> HTMLTableCells;
 
 class HTMLTableRow
 {
@@ -661,8 +660,6 @@ public:
     sal_Bool IsOverflowing() const { return nBoxes > 64000; }
 };
 
-SV_IMPL_PTRARR(HTMLTableCells,HTMLTableCellPtr)
-
 
 
 void HTMLTableCnts::InitCtor()
@@ -831,7 +828,7 @@ HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
 {
     for( sal_uInt16 i=0; i<nCells; i++ )
     {
-        pCells->Insert( new HTMLTableCell, pCells->Count() );
+        pCells->push_back( new HTMLTableCell );
     }
 
     OSL_ENSURE( nCells==pCells->Count(),
@@ -852,9 +849,9 @@ inline void HTMLTableRow::SetHeight( sal_uInt16 nHght )
 
 inline HTMLTableCell *HTMLTableRow::GetCell( sal_uInt16 nCell ) const
 {
-    OSL_ENSURE( nCell<pCells->Count(),
+    OSL_ENSURE( nCell<pCells->size(),
         "ungueltiger Zellen-Index in HTML-Tabellenzeile" );
-    return (*pCells)[nCell];
+    return &(*pCells)[nCell];
 }
 
 void HTMLTableRow::Expand( sal_uInt16 nCells, sal_Bool bOneCell )
@@ -863,14 +860,14 @@ void HTMLTableRow::Expand( sal_uInt16 nCells, sal_Bool bOneCell )
     // bOneCell gesetzt ist. Das geht, nur fuer Zeilen, in die keine
     // Zellen mehr eingefuegt werden!
 
-    sal_uInt16 nColSpan = nCells-pCells->Count();
-    for( sal_uInt16 i=pCells->Count(); i<nCells; i++ )
+    sal_uInt16 nColSpan = nCells-pCells->size();
+    for( sal_uInt16 i=pCells->size(); i<nCells; i++ )
     {
         HTMLTableCell *pCell = new HTMLTableCell;
         if( bOneCell )
             pCell->SetColSpan( nColSpan );
 
-        pCells->Insert( pCell, pCells->Count() );
+        pCells->push_back( pCell );
         nColSpan--;
     }
 
@@ -890,7 +887,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     sal_uInt16 i=nCells;
     while( i )
     {
-        HTMLTableCell *pCell = (*pCells)[--i];
+        HTMLTableCell *pCell = &(*pCells)[--i];
         if( !pCell->GetContents() )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -914,7 +911,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     }
 #endif
 
-    pCells->DeleteAndDestroy( nCells, pCells->Count()-nCells );
+    pCells->erase( pCells->begin() + nCells, pCells->end() );
 }
 
 
