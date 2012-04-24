@@ -509,7 +509,7 @@ struct OBroadcastHelperVar
 struct hashType_Impl
 {
     size_t operator()(const ::com::sun::star::uno::Type & s) const SAL_THROW(())
-        { return s.getTypeName().hashCode(); }
+    { return (size_t) s.getTypeName().hashCode(); }
 };
 
 
