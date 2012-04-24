@@ -392,7 +392,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
     // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
     // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
     {
         switch( aContexts[--nPos]->GetToken() )
@@ -400,7 +400,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
         case HTML_CENTER_ON:
         case HTML_DIVISION_ON:
             pCntxt = aContexts[nPos];
-            aContexts.Remove( nPos, 1 );
+            aContexts.erase( aContexts.begin() + nPos );
             break;
         }
     }
@@ -527,7 +527,7 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
 sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
 {
     sal_Bool bSectionClosed = sal_False;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( nPos>nContextStMin )
     {
         _HTMLAttrContext *pCntxt = aContexts[--nPos];
@@ -591,7 +591,7 @@ void SwHTMLParser::NewMultiCol()
     //.is the multicol elememt contained in a container? That may be the
     // case for 5.0 documents.
     sal_Bool bInCntnr = sal_False;
-    sal_uInt16 i = aContexts.Count();
+    sal_uInt16 i = aContexts.size();
     while( !bInCntnr && i > nContextStMin )
         bInCntnr = 0 != aContexts[--i]->GetFrmItemSet();
 

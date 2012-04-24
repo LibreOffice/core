@@ -331,8 +331,7 @@ public:
     SwHTMLAppendMode GetAppendMode() const { return eAppend; }
 };
 
-typedef _HTMLAttrContext *_HTMLAttrContextPtr;
-SV_DECL_PTRARR( _HTMLAttrContexts, _HTMLAttrContextPtr, 5 )
+typedef std::vector<_HTMLAttrContext *> _HTMLAttrContexts;
 
 class HTMLTable;
 class SwCSS1Parser;
@@ -1000,13 +999,13 @@ inline sal_Bool SwHTMLParser::HasStyleOptions( const String &rStyle,
 
 inline const _HTMLAttrContext *SwHTMLParser::GetTopContext() const
 {
-    return aContexts.Count() > nContextStMin
-            ? aContexts[aContexts.Count()-1] : 0;
+    return aContexts.size() > nContextStMin
+            ? aContexts.back() : 0;
 }
 
 inline void SwHTMLParser::PushContext( _HTMLAttrContext *pCntxt )
 {
-    aContexts.Insert( pCntxt, aContexts.Count() );
+    aContexts.push_back( pCntxt );
 }
 
 

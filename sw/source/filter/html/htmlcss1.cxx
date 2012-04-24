@@ -2185,7 +2185,7 @@ void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
 _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit,
                                             sal_Bool bRemove )
 {
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     if( nPos <= nContextStMin )
         return 0;
 
@@ -2217,7 +2217,7 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit
     {
         pCntxt = aContexts[nPos];
         if( bRemove )
-            aContexts.Remove( nPos, 1 );
+            aContexts.erase( aContexts.begin() + nPos );
     }
 
     return pCntxt;
@@ -2228,7 +2228,7 @@ sal_Bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
                                           short& nIndent,
                                           sal_Bool bIgnoreTopContext ) const
 {
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     if( bIgnoreTopContext )
     {
         if( !nPos )
@@ -2274,7 +2274,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     sal_uInt16 nDfltColl = 0;
     String aDfltClass;
 
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( nPos > nContextStAttrMin )
     {
         const _HTMLAttrContext *pCntxt = aContexts[--nPos];

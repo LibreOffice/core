@@ -677,7 +677,7 @@ void SwHTMLParser::Continue( int nToken )
 
             OSL_ENSURE( !nContextStMin, "Es gibt geschuetzte Kontexte" );
             nContextStMin = 0;
-            while( aContexts.Count() )
+            while( aContexts.size() )
             {
                 _HTMLAttrContext *pCntxt = PopContext();
                 if( pCntxt )
@@ -4013,7 +4013,7 @@ void SwHTMLParser::EndHeading()
 
     // Kontext zu dem Token suchen und vom Stack holen
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
     {
         switch( aContexts[--nPos]->GetToken() )
@@ -4025,7 +4025,7 @@ void SwHTMLParser::EndHeading()
         case HTML_HEAD5_ON:
         case HTML_HEAD6_ON:
             pCntxt = aContexts[nPos];
-            aContexts.Remove( nPos, 1 );
+            aContexts.erase( aContexts.begin() + nPos );
             break;
         }
     }
@@ -4213,7 +4213,7 @@ void SwHTMLParser::NewDefList()
 
 
     sal_Bool bInDD = sal_False, bNotInDD = sal_False;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( !bInDD && !bNotInDD && nPos>nContextStMin )
     {
         sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -4308,7 +4308,7 @@ void SwHTMLParser::NewDefListItem( int nToken )
 {
     // festellen, ob das DD/DT in einer DL vorkommt
     sal_Bool bInDefList = sal_False, bNotInDefList = sal_False;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( !bInDefList && !bNotInDefList && nPos>nContextStMin )
     {
         sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -4349,7 +4349,7 @@ void SwHTMLParser::EndDefListItem( int nToken, sal_Bool bSetColl,
     // Kontext zu dem Token suchen und vom Stack holen
     nToken &= ~1;
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     while( !pCntxt && nPos>nContextStMin )
     {
         sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
@@ -4360,7 +4360,7 @@ void SwHTMLParser::EndDefListItem( int nToken, sal_Bool bSetColl,
             if( !nToken || nToken == nCntxtToken  )
             {
                 pCntxt = aContexts[nPos];
-                aContexts.Remove( nPos, 1 );
+                aContexts.erase( aContexts.begin() + nPos );
             }
             break;
         case HTML_DEFLIST_ON:
@@ -4483,7 +4483,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     short nFirstLineIndent = 0;                 // Abstaende
     sal_uInt16 i;
 
-    for( i = nContextStAttrMin; i < aContexts.Count(); i++ )
+    for( i = nContextStAttrMin; i < aContexts.size(); i++ )
     {
         const _HTMLAttrContext *pCntxt = aContexts[i];
 

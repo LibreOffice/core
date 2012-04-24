@@ -604,7 +604,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
 
     // Kontext zu dem Token suchen und vom Stack holen
     _HTMLAttrContext *pCntxt = 0;
-    sal_uInt16 nPos = aContexts.Count();
+    sal_uInt16 nPos = aContexts.size();
     nToken &= ~1;
     while( !pCntxt && nPos>nContextStMin )
     {
@@ -616,7 +616,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
             if( !nToken || nToken == nCntxtToken  )
             {
                 pCntxt = aContexts[nPos];
-                aContexts.Remove( nPos, 1 );
+                aContexts.erase( aContexts.begin() + nPos );
             }
             break;
         case HTML_ORDERLIST_ON:

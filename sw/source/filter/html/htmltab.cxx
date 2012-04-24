@@ -3085,7 +3085,7 @@ _SectionSaveStruct::_SectionSaveStruct( SwHTMLParser& rParser ) :
     // Kontext-Stack einfrieren
     nContextStMinSave = rParser.nContextStMin;
     nContextStAttrMinSave = rParser.nContextStAttrMin;
-    rParser.nContextStMin = rParser.aContexts.Count();
+    rParser.nContextStMin = rParser.aContexts.size();
     rParser.nContextStAttrMin = rParser.nContextStMin;
 
     // und noch ein par Zaehler retten
@@ -3900,7 +3900,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             // irgendwo ausserhalb von Zellen Attribute gesetzt werden.
             // Darf nicht frueher passieren, weil eventuell noch im
             // Stack gesucht wird!!!
-            nContextStMin = aContexts.Count();
+            nContextStMin = aContexts.size();
             nContextStAttrMin = nContextStMin;
         }
 
@@ -4177,7 +4177,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
         // Alle noch offenen Kontexte beenden. Wir nehmen hier
         // AttrMin, weil nContxtStMin evtl. veraendert wurde.
         // Da es durch EndContext wieder restauriert wird, geht das.
-        while( aContexts.Count() > nContextStAttrMin+1 )
+        while( aContexts.size() > nContextStAttrMin+1 )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             EndContext( pCntxt );
@@ -4197,7 +4197,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
     else
     {
         // Alle noch offenen Kontexte beenden
-        while( aContexts.Count() > nContextStAttrMin )
+        while( aContexts.size() > nContextStAttrMin )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             ClearContext( pCntxt );
@@ -4994,7 +4994,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     }
 
     // Alle noch offenen Kontexte beenden
-    while( aContexts.Count() > nContextStAttrMin+1 )
+    while( aContexts.size() > nContextStAttrMin+1 )
     {
         _HTMLAttrContext *pCntxt = PopContext();
         EndContext( pCntxt );
@@ -5389,7 +5389,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         // ausserhalb von Zellen begonnene Kontexte beenden
         // muss vor(!) dem Umsetzten der Attribut Tabelle existieren,
         // weil die aktuelle danach nicht mehr existiert
-        while( aContexts.Count() > nContextStAttrMin )
+        while( aContexts.size() > nContextStAttrMin )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             ClearContext( pCntxt );

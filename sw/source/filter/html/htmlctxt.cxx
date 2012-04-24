@@ -283,12 +283,12 @@ void SwHTMLParser::SaveDocContext( _HTMLAttrContext *pCntxt,
     if( (HTML_CNTXT_PROTECT_STACK & nFlags) != 0  )
     {
         pSave->SetContextStMin( nContextStMin );
-        nContextStMin = aContexts.Count();
+        nContextStMin = aContexts.size();
 
         if( (HTML_CNTXT_KEEP_ATTRS & nFlags) == 0 )
         {
             pSave->SetContextStAttrMin( nContextStAttrMin );
-            nContextStAttrMin = aContexts.Count();
+            nContextStAttrMin = aContexts.size();
         }
     }
 }
@@ -349,7 +349,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
     {
         // Alle noch offenen Kontexte beenden. Der eigene
         // Kontext muss bereits geloscht sein!
-        while( aContexts.Count() > nContextStMin )
+        while( aContexts.size() > nContextStMin )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             OSL_ENSURE( pCntxt != pContext,
@@ -561,8 +561,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // obersten Kontext, denn den veraendern wir ja gerade) ...
                 sal_uInt16 nOldLeft = 0, nOldRight = 0;
                 short nOldIndent = 0;
-                sal_Bool bIgnoreTop = aContexts.Count() > nContextStMin &&
-                                  aContexts[aContexts.Count()-1] == pContext;
+                sal_Bool bIgnoreTop = aContexts.size() > nContextStMin &&
+                                  aContexts.back() == pContext;
                 GetMarginsFromContext( nOldLeft, nOldRight, nOldIndent,
                                        bIgnoreTop  );
 
