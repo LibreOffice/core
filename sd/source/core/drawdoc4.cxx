@@ -1137,7 +1137,7 @@ String SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             aPageNumValue += sal_Unicode(' ');
             break;
         default:
-            aPageNumValue += String::CreateFromInt32( (sal_Int32)nNum );
+            aPageNumValue += rtl::OUString::valueOf(static_cast<sal_Int32>(nNum));
     }
 
     return(aPageNumValue);

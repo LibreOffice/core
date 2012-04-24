@@ -534,15 +534,15 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
     {
         SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
-        sal_uInt16 nLayer = nLayerCnt - 2 + 1;
+        sal_Int32 nLayer = nLayerCnt - 2 + 1;
         String aLayerName;
 
         // Ueberpruefung auf schon vorhandene Namen
         while( aLayerName.Len()==0 || rLayerAdmin.GetLayer( aLayerName, sal_False) )
         {
             aLayerName = String(SdResId(STR_LAYER));
-            aLayerName += String::CreateFromInt32( (sal_Int32)nLayer );
-            nLayer++;
+            aLayerName += rtl::OUString::valueOf(nLayer);
+            ++nLayer;
         }
 
         SdrLayerAdmin& rLA=mpModel->mpDoc->GetLayerAdmin();

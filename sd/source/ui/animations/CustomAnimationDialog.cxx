@@ -574,9 +574,9 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpMetric->SetMax( 100 );
 
     mpMenu = new PopupMenu();
-    for( sal_uInt16 i = 25; i < 101; i += 25 )
+    for( sal_Int32 i = 25; i < 101; i += 25 )
     {
-        String aStr( String::CreateFromInt32( i ) );
+        String aStr(rtl::OUString::valueOf(i));
         aStr += sal_Unicode('%');
         mpMenu->InsertItem( i, aStr );
     }

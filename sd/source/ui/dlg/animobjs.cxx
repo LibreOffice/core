@@ -611,7 +611,7 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
     aCtlDisplay.Invalidate();
     aCtlDisplay.Update();
 
-    aFiCount.SetText( UniString::CreateFromInt32( aBmpExList.Count() ) );
+    aFiCount.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(aBmpExList.Count())));
 
     if( pBitmapEx && !bMovie )
     {
