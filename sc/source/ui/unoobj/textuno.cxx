@@ -205,8 +205,6 @@ ScHeaderFooterTextData::ScHeaderFooterTextData(
     bDataValid( false ),
     bInUpdate( false )
 {
-    if (!mpTextObj)
-        fprintf(stdout, "ScHeaderFooterTextData::ScHeaderFooterTextData:   mpTextObj = %p\n", mpTextObj);
     rContentObj.acquire();              // must not go away
 }
 
@@ -264,7 +262,6 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
 
 void ScHeaderFooterTextData::UpdateData()
 {
-    fprintf(stdout, "ScHeaderFooterTextData::UpdateData:   1\n");
     if (pEditEngine)
     {
         delete mpTextObj;
@@ -275,7 +272,6 @@ void ScHeaderFooterTextData::UpdateData()
 
 void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 {
-    fprintf(stdout, "ScHeaderFooterTextData::UpdateData:   2\n");
     delete mpTextObj;
     mpTextObj = rEditEngine.CreateTextObject();
     bDataValid = false;
@@ -302,7 +298,7 @@ void ScHeaderFooterTextObj::CreateUnoText_Impl()
     if ( !pUnoText )
     {
         //  can't be aggregated because getString/setString is handled here
-        ScHeaderFooterEditSource aEditSource(aTextData);
+        ScHeaderFooterEditSource aEditSource(&aTextData);
         pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>() );
         pUnoText->acquire();
     }
@@ -483,8 +479,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                 break;
             }
 
-            pHeaderField->InitDoc(
-                xTextRange, &aTextData.GetContentObj(), aTextData.GetPart(), aTextData.GetTextObject(), aSelection);
+            pHeaderField->InitDoc(xTextRange, aTextData, aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
@@ -553,8 +548,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::ge
 {
     SolarMutexGuard aGuard;
     // all fields
-    return new ScHeaderFieldsObj(
-        &aTextData.GetContentObj(), aTextData.GetPart(), aTextData.GetTextObject(), SC_SERVICE_INVALID);
+    return new ScHeaderFieldsObj(aTextData);
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFieldMasters()

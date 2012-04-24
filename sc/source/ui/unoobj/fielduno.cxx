@@ -848,30 +848,17 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
 
 //------------------------------------------------------------------------
 
-ScHeaderFieldsObj::ScHeaderFieldsObj(
-    ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, sal_uInt16 nT) :
-    pContentObj( pContent ),
-    nPart( nP ),
-    nType( nT ),
+ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
+    mrData(rData),
+    nType(SC_SERVICE_INVALID),
     mpRefreshListeners( NULL )
 {
-    OSL_ENSURE( pContentObj, "ScHeaderFieldsObj ohne Objekt?" );
-
-    if (pContentObj)
-    {
-        pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart, pTextObj);
-    }
-    else
-        pEditSource = NULL;
+    pEditSource = new ScHeaderFooterEditSource(&rData);
 }
 
 ScHeaderFieldsObj::~ScHeaderFieldsObj()
 {
     delete pEditSource;
-
-    if (pContentObj)
-        pContentObj->release();
 
     // increment refcount to prevent double call off dtor
     osl_incrementInterlockedCount( &m_refCount );
@@ -928,20 +915,19 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) cons
 
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
         uno::Reference<text::XTextRange> xTextRange;
-        if (pContentObj)
-        {
-            uno::Reference<text::XText> xText;
-            if ( nPart == SC_HDFT_LEFT )
-                xText = pContentObj->getLeftText();
-            else if (nPart == SC_HDFT_CENTER)
-                xText = pContentObj->getCenterText();
-            else
-                xText = pContentObj->getRightText();
+        ScHeaderFooterContentObj& rContentObj = mrData.GetContentObj();
+        uno::Reference<text::XText> xText;
+        sal_uInt16 nPart = mrData.GetPart();
+        if ( nPart == SC_HDFT_LEFT )
+            xText = rContentObj.getLeftText();
+        else if (nPart == SC_HDFT_CENTER)
+            xText = rContentObj.getCenterText();
+        else
+            xText = rContentObj.getRightText();
 
-            uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
-            xTextRange = xTemp;
-        }
-        return new ScHeaderFieldObj(xTextRange, pContentObj, nPart, nFieldType, aSelection);
+        uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
+        xTextRange = xTemp;
+        return new ScHeaderFieldObj(xTextRange, &mrData, nFieldType, aSelection);
     }
     return NULL;
 }
@@ -1103,26 +1089,19 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 
 ScHeaderFieldObj::ScHeaderFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
+    ScHeaderFooterTextData* pData,
     sal_uInt16 nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
     pPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertySet() : lcl_GetHeaderFieldPropertySet() ),
     mpContent(rContent),
-    pContentObj( pContent ),
-    nPart( nP ),
     nType( nT ),
+    pEditSource(NULL),
     aSelection( rSel ),
     nFileFormat( SVXFILEFORMAT_NAME_EXT )
 {
     //  pContent ist Null, wenn per ServiceProvider erzeugt
-
-    if (pContentObj)
-    {
-        pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart, NULL);
-    }
-    else
-        pEditSource = NULL;
+    if (pData)
+        pEditSource = new ScHeaderFooterEditSource(pData);
 }
 
 uno::Any SAL_CALL ScHeaderFieldObj::queryAggregation( const uno::Type& rType )
@@ -1187,29 +1166,20 @@ void SAL_CALL ScHeaderFieldObj::release() throw()
 }
 
 void ScHeaderFieldObj::InitDoc(
-    const uno::Reference<text::XTextRange>& rContent,
-    ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, const ESelection& rSel)
+    const uno::Reference<text::XTextRange>& rContent, ScHeaderFooterTextData& rData, const ESelection& rSel)
 {
-    if ( pContent && !pEditSource )
+    if (!pEditSource)
     {
-        OSL_ENSURE( !pContentObj, "ContentObj, aber kein EditSource?" );
-
         aSelection = rSel;
-        nPart = nP;
-        pContentObj = pContent;
         mpContent = rContent;
 
-        pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart, pTextObj);
+        pEditSource = new ScHeaderFooterEditSource(&rData);
     }
 }
 
 ScHeaderFieldObj::~ScHeaderFieldObj()
 {
     delete pEditSource;
-
-    if (pContentObj)
-        pContentObj->release();
 }
 
 // per getImplementation gerufen:

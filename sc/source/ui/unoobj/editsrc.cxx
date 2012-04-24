@@ -67,37 +67,35 @@ ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
 
 //  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
 
-ScHeaderFooterEditSource::ScHeaderFooterEditSource(const ScHeaderFooterTextData& rData) :
-    pTextData(new ScHeaderFooterTextData(rData.GetContentObj(), rData.GetPart(), rData.GetTextObject())) {}
+ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData* pData) :
+    mpTextData(pData) {}
 
-ScHeaderFooterEditSource::ScHeaderFooterEditSource(
-    ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
-    pTextData(new ScHeaderFooterTextData(rContent, nP, pTextObj)) {}
-
-ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
-{
-    delete pTextData;   // not accessed in ScSharedHeaderFooterEditSource dtor
-}
+ScHeaderFooterEditSource::~ScHeaderFooterEditSource() {}
 
 ScEditEngineDefaulter* ScHeaderFooterEditSource::GetEditEngine()
 {
-    return pTextData->GetEditEngine();
+    return mpTextData ? mpTextData->GetEditEngine() : NULL;
+}
+
+void ScHeaderFooterEditSource::SetTextData(ScHeaderFooterTextData* pData)
+{
+    mpTextData = pData;
 }
 
 SvxEditSource* ScHeaderFooterEditSource::Clone() const
 {
-    return new ScHeaderFooterEditSource(
-        pTextData->GetContentObj(), pTextData->GetPart(), pTextData->GetTextObject());
+    return new ScHeaderFooterEditSource(mpTextData);
 }
 
 SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
 {
-    return pTextData->GetTextForwarder();
+    return mpTextData ? mpTextData->GetTextForwarder() : NULL;
 }
 
 void ScHeaderFooterEditSource::UpdateData()
 {
-    pTextData->UpdateData();
+    if (mpTextData)
+        mpTextData->UpdateData();
 }
 
 //------------------------------------------------------------------------

@@ -66,15 +66,15 @@ public:
 class ScHeaderFooterEditSource : public SvxEditSource
 {
 private:
-    ScHeaderFooterTextData*     pTextData;
+    ScHeaderFooterTextData* mpTextData;
 
 public:
-    ScHeaderFooterEditSource(const ScHeaderFooterTextData& rData);
-    ScHeaderFooterEditSource(ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+    ScHeaderFooterEditSource(ScHeaderFooterTextData* pData);
     virtual ~ScHeaderFooterEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     ScEditEngineDefaulter*      GetEditEngine();
+    void SetTextData(ScHeaderFooterTextData* pData);
 
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();

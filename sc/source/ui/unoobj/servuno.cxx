@@ -445,7 +445,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         {
             uno::Reference<text::XTextRange> xNullContent;
             xRet.set(static_cast<text::XTextField*>(
-                new ScHeaderFieldObj(xNullContent, NULL, 0, nType, ESelection())));
+                new ScHeaderFieldObj(xNullContent, NULL, nType, ESelection())));
         }
         break;
         case SC_SERVICE_CELLSTYLE:

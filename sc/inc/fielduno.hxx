@@ -59,6 +59,7 @@ class ScHeaderFieldObj;
 class ScHeaderFooterContentObj;
 class ScDocShell;
 class EditTextObject;
+class ScHeaderFooterTextData;
 
 
 class ScCellFieldsObj : public cppu::WeakImplHelper5<
@@ -271,8 +272,7 @@ class ScHeaderFieldsObj : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScHeaderFooterContentObj*   pContentObj;
-    sal_uInt16                      nPart;
+    ScHeaderFooterTextData& mrData;
     sal_uInt16                      nType;
     SvxEditSource*              pEditSource;
 
@@ -284,8 +284,7 @@ private:
     ScHeaderFieldObj*       GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
-    ScHeaderFieldsObj(
-        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, sal_uInt16 nT);
+    ScHeaderFieldsObj(ScHeaderFooterTextData& rData);
     virtual                 ~ScHeaderFieldsObj();
 
                             // XIndexAccess
@@ -342,8 +341,6 @@ class ScHeaderFieldObj : public ScMutexHelper,
 private:
     const SfxItemPropertySet*   pPropSet;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
-    ScHeaderFooterContentObj*   pContentObj;
-    sal_uInt16                      nPart;
     sal_uInt16                      nType;
     SvxEditSource*              pEditSource;
     ESelection                  aSelection;
@@ -353,7 +350,7 @@ private:
 public:
     ScHeaderFieldObj(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, sal_uInt16 nT, const ESelection& rSel);
+        ScHeaderFooterTextData* pData, sal_uInt16 nT, const ESelection& rSel);
     virtual ~ScHeaderFieldObj();
 
                             // called by getImplementation:
@@ -362,7 +359,7 @@ public:
     SvxFieldItem            CreateFieldItem();
     void InitDoc(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, const ESelection& rSel);
+        ScHeaderFooterTextData& rData, const ESelection& rSel);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
                                 const ::com::sun::star::uno::Type & rType )
