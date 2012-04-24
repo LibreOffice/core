@@ -1062,7 +1062,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 // Look for the field type
                 sal_Int32 nPos = Strm().Tell();
                 OStringBuffer aBuf;
-                char ch;
+                char ch = 0;
                 bool bFoundCode = false;
                 bool bInKeyword = false;
                 while (!bFoundCode && ch != '}')
