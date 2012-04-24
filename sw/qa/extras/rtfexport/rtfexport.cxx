@@ -26,6 +26,7 @@
  */
 
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <test/bootstrapfixture.hxx>
@@ -44,15 +45,19 @@ public:
     virtual void setUp();
     virtual void tearDown();
     void testZoom();
+    void testFdo38176();
 
     CPPUNIT_TEST_SUITE(RtfExportTest);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
+    CPPUNIT_TEST(testFdo38176);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
     void roundtrip(const OUString& rURL);
+    /// Get the length of the whole document.
+    int getLength();
     uno::Reference<lang::XComponent> mxComponent;
 };
 
@@ -67,6 +72,25 @@ void RtfExportTest::roundtrip(const OUString& rFilename)
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent = loadFromDesktop(aTempFile.GetURL());
+}
+
+int RtfExportTest::getLength()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    OUStringBuffer aBuf;
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+        while (xRangeEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+            aBuf.append(xRange->getString());
+        }
+    }
+    return aBuf.getLength();
 }
 
 void RtfExportTest::setUp()
@@ -95,6 +119,12 @@ void RtfExportTest::testZoom()
     sal_Int16 nValue = 0;
     xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+}
+
+void RtfExportTest::testFdo38176()
+{
+    roundtrip("fdo38176.rtf");
+    CPPUNIT_ASSERT_EQUAL(7, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfExportTest);

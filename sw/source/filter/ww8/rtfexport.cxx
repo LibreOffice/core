@@ -924,7 +924,8 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
     }
     if (pStr) {
         aBuf.append(pStr);
-        aBuf.append(' ');
+        if (c != 0xa0)
+            aBuf.append(' ');
     }
     return aBuf.makeStringAndClear();
 }
