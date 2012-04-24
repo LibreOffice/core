@@ -573,7 +573,7 @@ private:
     EditPaM             SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );
     EditPaM             ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward );
 
-    void                ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow );
+    void                ShowParagraph( sal_uInt16 nParagraph, bool bShow );
 
     EditPaM             PageUp( const EditPaM& rPaM, EditView* pView);
     EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
@@ -689,8 +689,8 @@ public:
 
     inline EditUndoManager& GetUndoManager();
 
-    void                    SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
-    bool                GetUpdateMode() const   { return bUpdate; }
+    void                    SetUpdateMode( bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
+    bool                    GetUpdateMode() const   { return bUpdate; }
 
     ViewsType& GetEditViews() { return aEditViews; }
     const ViewsType& GetEditViews() const { return aEditViews; }

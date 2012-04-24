@@ -72,8 +72,8 @@ public:
     virtual sal_uLong       GetObjectSettings() const;
     virtual void        SetObjectSettings( sal_uLong n );
 
-    virtual sal_Bool        IsVertical() const;
-    virtual void        SetVertical( sal_Bool bVertical );
+    virtual bool        IsVertical() const;
+    virtual void        SetVertical( bool bVertical );
 
     virtual sal_uInt16      GetScriptType() const;
 

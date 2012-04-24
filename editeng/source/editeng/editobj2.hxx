@@ -65,7 +65,11 @@ public:
 
     sal_uInt16              GetLen() const              { return nEnd-nStart; }
 
-    inline sal_Bool         IsFeature();
+    bool                    IsFeature()
+    {
+        sal_uInt16 nWhich = pItem->Which();
+        return  ((nWhich >= EE_FEATURE_START) && (nWhich <=  EE_FEATURE_END));
+    }
 
     inline bool         operator==( const XEditAttribute& rCompare );
 };
@@ -77,13 +81,6 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare )
             ( (pItem == rCompare.pItem) ||
             ( pItem->Which() != rCompare.pItem->Which()) ||
             (*pItem == *rCompare.pItem));
-}
-
-inline sal_Bool XEditAttribute::IsFeature()
-{
-    sal_uInt16 nWhich = pItem->Which();
-    return  ( ( nWhich >= EE_FEATURE_START ) &&
-              ( nWhich <=  EE_FEATURE_END ) );
 }
 
 typedef XEditAttribute* XEditAttributePtr;
@@ -216,8 +213,8 @@ public:
     sal_uLong                   GetObjectSettings() const;
     void                    SetObjectSettings( sal_uLong n );
 
-    sal_Bool                    IsVertical() const;
-    void                    SetVertical( sal_Bool b );
+    bool                    IsVertical() const;
+    void                    SetVertical( bool b );
 
     sal_uInt16                  GetScriptType() const;
     void                    SetScriptType( sal_uInt16 nType );

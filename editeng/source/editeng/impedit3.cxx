@@ -3759,9 +3759,9 @@ EditPaM ImpEditEngine::ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward
     return ImpConnectParagraphs( pLeftNode, pRightNode, bBackward );
 }
 
-void ImpEditEngine::SetUpdateMode( sal_Bool bUp, EditView* pCurView, sal_Bool bForceUpdate )
+void ImpEditEngine::SetUpdateMode( bool bUp, EditView* pCurView, sal_Bool bForceUpdate )
 {
-    sal_Bool bChanged = ( GetUpdateMode() != bUp );
+    bool bChanged = ( GetUpdateMode() != bUp );
 
     // When switching from sal_True to sal_False, all selections were visible,
     // => paint over
@@ -3774,7 +3774,7 @@ void ImpEditEngine::SetUpdateMode( sal_Bool bUp, EditView* pCurView, sal_Bool bF
         FormatAndUpdate( pCurView );
 }
 
-void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
+void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, bool bShow )
 {
     ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "ShowParagraph: Paragraph does not exist! ");

@@ -482,13 +482,13 @@ const Size& EditEngine::GetPaperSize() const
     return pImpEditEngine->GetPaperSize();
 }
 
-void EditEngine::SetVertical( sal_Bool bVertical )
+void EditEngine::SetVertical( bool bVertical )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetVertical( bVertical );
 }
 
-sal_Bool EditEngine::IsVertical() const
+bool EditEngine::IsVertical() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->IsVertical();

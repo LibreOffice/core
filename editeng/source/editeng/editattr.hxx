@@ -107,10 +107,10 @@ public:
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }
     sal_Bool    IsInside( sal_uInt16 nIndex ) const
                 { return ( ( nStart < nIndex ) && ( nEnd > nIndex ) ); }
-    sal_Bool    IsEmpty() const
+    bool        IsEmpty() const
                 { return nStart == nEnd; }
 
-    sal_Bool    IsFeature() const   { return bFeature; }
+    bool    IsFeature() const   { return bFeature; }
     void    SetFeature( sal_Bool b) { bFeature = b; }
 
     sal_Bool    IsEdge() const      { return bEdge; }

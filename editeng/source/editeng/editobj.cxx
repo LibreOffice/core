@@ -343,13 +343,13 @@ void EditTextObject::SetObjectSettings( sal_uLong )
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
-sal_Bool EditTextObject::IsVertical() const
+bool EditTextObject::IsVertical() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return false;
 }
 
-void EditTextObject::SetVertical( sal_Bool bVertical )
+void EditTextObject::SetVertical( bool bVertical )
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     ((BinTextObject*)this)->SetVertical( bVertical );
@@ -616,12 +616,12 @@ void BinTextObject::SetObjectSettings( sal_uLong n )
     nObjSettings = n;
 }
 
-sal_Bool BinTextObject::IsVertical() const
+bool BinTextObject::IsVertical() const
 {
     return bVertical;
 }
 
-void BinTextObject::SetVertical( sal_Bool b )
+void BinTextObject::SetVertical( bool b )
 {
     if ( b != bVertical )
     {
