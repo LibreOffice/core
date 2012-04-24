@@ -30,12 +30,16 @@ TARGET=prj
 
 .INCLUDE : settings.mk
 
+.IF "$(GBUILDTARGET)" == ""
+GBUILDTARGET=all slowcheck
+.END
+
 .IF "$(depend)" != ""
 all:
 .ELIF "$(VERBOSE)"!=""
 all:
-	cd $(PRJ) && $(GNUMAKE) -r -j$(GMAKE_MODULE_PARALLELISM) all slowcheck
+	cd $(PRJ) && $(GNUMAKE) -r -j$(GMAKE_MODULE_PARALLELISM) $(GBUILDTARGET)
 .ELSE
 all:
-	@cd $(PRJ) && $(GNUMAKE) -rs -j$(GMAKE_MODULE_PARALLELISM) all slowcheck
+	@cd $(PRJ) && $(GNUMAKE) -rs -j$(GMAKE_MODULE_PARALLELISM) $(GBUILDTARGET)
 .END

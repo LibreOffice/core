@@ -241,15 +241,23 @@ xpdf\
 xsltml\
 zlib\
 
+gb_TAILBUILDMODULES := $(shell make -f $(SRCDIR)/tail_build/Makefile showmodules)
+
 define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).clean $(1).deliver
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
 
+ifeq ($(filter $(1),$(gb_TAILBUILDMODULES)),)
 $(1).all: bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+else 
+$(1).all: bootstrap fetch
+	cd tail_build && unset MAKEFLAGS && export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1)" && \
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+endif
 
 $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T

@@ -1,2 +1,5 @@
 GMAKE_MODULE_PARALLELISM := $(GMAKE_PARALLELISM) # tail_build is special!
+.IF "$(gb_TAILBUILDTARGET)" != ""
+GBUILDTARGET=$(gb_TAILBUILDTARGET)
+.END
 .INCLUDE : gbuildbridge.mk
