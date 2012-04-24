@@ -34,7 +34,17 @@
 #include <com/sun/star/script/XInvocation.hpp>
 
 #include <l10ntools/HelpSearch.hxx>
+
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4068 4263 4264 4266)
+#endif
+
 #include <CLucene.h>
+
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <rtl/oustringostreaminserter.hxx>
 
