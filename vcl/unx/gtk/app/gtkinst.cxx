@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <stack>
 #include <string.h>
 #include <osl/module.h>
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
@@ -264,12 +265,11 @@ extern "C" {
         return GDK_FILTER_CONTINUE;
     }
 
-    // And then again as they pop out of gdk and into gtk+
-
-    static void _sal_gtk_event_handler_fn (GdkEvent *pEvent, gpointer data)
+    static sal_uInt16 categorizeEvent(const GdkEvent *pEvent)
     {
         sal_uInt16 nType = 0;
-        switch( pEvent->type ) {
+        switch( pEvent->type )
+        {
         case GDK_MOTION_NOTIFY:
         case GDK_BUTTON_PRESS:
         case GDK_2BUTTON_PRESS:
@@ -291,8 +291,16 @@ extern "C" {
             nType = VCL_INPUT_OTHER;
             break;
         }
-        ((GtkInstance *)data)->subtractEvent( nType );
+        return nType;
+    }
 
+
+    // And then again as they pop out of gdk and into gtk+
+
+    static void _sal_gtk_event_handler_fn (GdkEvent *pEvent, gpointer data)
+    {
+        sal_uInt16 nType = categorizeEvent(pEvent);
+        ((GtkInstance *)data)->subtractEvent( nType );
         gtk_main_do_event( pEvent );
     }
 }
@@ -623,16 +631,38 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
 {
     if( (nType & VCL_INPUT_TIMER) && IsTimerExpired() )
         return true;
-    else
+#if !GTK_CHECK_VERSION(3,0,0)
+    bool bRet = X11SalInstance::AnyInput(nType);
+#else
+    if (!gdk_events_pending())
+        return false;
+
+    if (nType == VCL_INPUT_ANY)
+        return true;
+
+    bool bRet = false;
+    std::stack<GdkEvent*> aEvents;
+    GdkEvent *pEvent = NULL;
+    while ((pEvent = gdk_event_get()))
     {
-        bool bRet = false;
-        sal_uInt16 nShift = 1;
-        for (int i = 0; i < 16; i++) {
-            bRet |= (nType & nShift) && m_nAnyInput[i] > 0;
-            nShift <<= 1;
+        aEvents.push(pEvent);
+        sal_uInt16 nEventType = categorizeEvent(pEvent);
+        if ( (nEventType & nType) || ( ! nEventType && (nType & VCL_INPUT_OTHER) ) )
+        {
+            bRet = true;
+            break;
         }
-        return bRet;
     }
+
+    while (!aEvents.empty())
+    {
+        pEvent = aEvents.top();
+        gdk_event_put(pEvent);
+        gdk_event_free(pEvent);
+        aEvents.pop();
+    }
+#endif
+    return bRet;
 }
 
 GenPspGraphics *GtkInstance::CreatePrintGraphics()

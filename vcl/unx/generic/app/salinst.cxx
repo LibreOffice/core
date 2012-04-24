@@ -147,9 +147,8 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
     Display *pDisplay  = pData->GetSalDisplay()->GetDisplay();
     sal_Bool bRet = sal_False;
 
-    if( (nType & VCL_INPUT_TIMER) && mpXLib->CheckTimeout( false ) )
+    if( (nType & VCL_INPUT_TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
         bRet = sal_True;
-
     else if (XPending(pDisplay) )
     {
         PredicateReturn aInput;
