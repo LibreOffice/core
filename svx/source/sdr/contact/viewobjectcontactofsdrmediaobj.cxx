@@ -106,13 +106,6 @@ Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 
 // ------------------------------------------------------------------------------
 
-bool ViewObjectContactOfSdrMediaObj::hasPreferredSize() const
-{
-    return( mpMediaWindow != NULL && mpMediaWindow->hasPreferredSize() );
-}
-
-// ------------------------------------------------------------------------------
-
 Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 {
     Size aRet;

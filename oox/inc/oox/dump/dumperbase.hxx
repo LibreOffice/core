@@ -1780,12 +1780,6 @@ protected:
                             const BinaryInputStreamRef& rxRecStrm,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
-    void                construct(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxBaseStrm,
-                            const BinaryInputStreamRef& rxRecStrm,
-                            const String& rRecNames,
-                            const String& rSimpleRecs = EMPTY_STRING );
 
     inline sal_Int64    getRecPos() const { return mnRecPos; }
     inline sal_Int64    getRecId() const { return mnRecId; }

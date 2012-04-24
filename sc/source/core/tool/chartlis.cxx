@@ -273,13 +273,6 @@ void ScChartListener::SetRangeList( const ScRangeListRef& rNew )
     mpTokens->swap(aTokens);
 }
 
-void ScChartListener::SetRangeList( const ScRange& rRange )
-{
-    ScTokenRef pToken;
-    ScRefTokenHelper::getTokenFromRange(pToken, rRange);
-    mpTokens->push_back(pToken);
-}
-
 namespace {
 
 class StartEndListening : public unary_function<ScTokenRef, void>

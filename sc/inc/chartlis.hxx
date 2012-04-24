@@ -112,7 +112,6 @@ public:
     void            Update();
     ScRangeListRef  GetRangeList() const;
     void            SetRangeList( const ScRangeListRef& rNew );
-    void            SetRangeList( const ScRange& rNew );
     bool            IsUsed() const { return bUsed; }
     void            SetUsed( bool bFlg ) { bUsed = bFlg; }
     bool            IsDirty() const { return bDirty; }

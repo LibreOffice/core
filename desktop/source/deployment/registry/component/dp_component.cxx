@@ -341,10 +341,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                           Reference<XCommandEnvironment> const & xCmdEnv );
     bool hasInUnoRc( RcItem kind, OUString const & url );
 
-    css::uno::Reference< css::registry::XRegistryKey > openRegistryKey(
-        css::uno::Reference< css::registry::XRegistryKey > const & base,
-        rtl::OUString const & path);
-
     css::uno::Reference< css::uno::XComponentContext > getRootContext() const;
 
 public:
@@ -1145,23 +1141,6 @@ bool BackendImpl::hasInUnoRc(
     const ::osl::MutexGuard guard( getMutex() );
     t_stringlist const & rSet = getRcItemList(kind);
     return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
-}
-
-css::uno::Reference< css::registry::XRegistryKey > BackendImpl::openRegistryKey(
-    css::uno::Reference< css::registry::XRegistryKey > const & base,
-    rtl::OUString const & path)
-{
-    OSL_ASSERT(base.is());
-    css::uno::Reference< css::registry::XRegistryKey > key(base->openKey(path));
-    if (!key.is()) {
-        throw css::deployment::DeploymentException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("missing registry entry ")) +
-             path + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" under ")) +
-             base->getKeyName()),
-            static_cast< OWeakObject * >(this), Any());
-    }
-    return key;
 }
 
 css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()

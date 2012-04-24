@@ -2553,13 +2553,6 @@ void RecordObjectBase::construct( const ObjectBase& rParent,
     constructRecObjBase( rxBaseStrm, rRecNames, rSimpleRecs );
 }
 
-void RecordObjectBase::construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxBaseStrm,
-        const BinaryInputStreamRef& rxRecStrm, const String& rRecNames, const String& rSimpleRecs )
-{
-    InputObjectBase::construct( rParent, rxRecStrm );
-    constructRecObjBase( rxBaseStrm, rRecNames, rSimpleRecs );
-}
-
 bool RecordObjectBase::implIsValid() const
 {
     return mxBaseStrm.get() && InputObjectBase::implIsValid();

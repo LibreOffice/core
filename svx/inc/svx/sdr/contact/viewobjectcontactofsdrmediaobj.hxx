@@ -54,7 +54,6 @@ namespace sdr
 
             Window* getWindow() const;
 
-            bool    hasPreferredSize() const;
             Size    getPreferredSize() const;
 
             void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
