@@ -226,8 +226,6 @@ public:
 #define sMainStream CREATE_CONST_ASC("WordDocument")
 #define sCompObj CREATE_CONST_ASC("\1CompObj")
 
-SV_IMPL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr )
-
 static void WriteDop( WW8Export& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
@@ -773,24 +771,23 @@ sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
 WW8_WrPlcPn::WW8_WrPlcPn( WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc )
     : rWrt(rWr), nFkpStartPage(0), ePlc(ePl), nMark(0)
 {
-    WW8_FkpPtr pF = new WW8_WrFkp( ePlc, nStartFc, rWrt.bWrtWW8 );
-    aFkps.Insert( pF, aFkps.Count() );
+    WW8_WrFkp* pF = new WW8_WrFkp( ePlc, nStartFc, rWrt.bWrtWW8 );
+    aFkps.push_back( pF );
 }
 
 WW8_WrPlcPn::~WW8_WrPlcPn()
 {
-    aFkps.DeleteAndDestroy( 0, aFkps.Count() );
 }
 
 sal_uInt8 *WW8_WrPlcPn::CopyLastSprms(sal_uInt8 &rLen)
 {
-    WW8_FkpPtr pF = aFkps.GetObject(aFkps.Count() - 1);
-    return pF->CopyLastSprms(rLen, rWrt.bWrtWW8);
+    WW8_WrFkp& rF = aFkps.back();
+    return rF.CopyLastSprms(rLen, rWrt.bWrtWW8);
 }
 
 void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pSprms)
 {
-    WW8_FkpPtr pF = aFkps.GetObject( aFkps.Count() - 1 );
+    WW8_WrFkp* pF = &aFkps.back();
 
     // big sprm? build the sprmPHugePapx
     sal_uInt8* pNewSprms = (sal_uInt8*)pSprms;
@@ -829,7 +826,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         pF->Combine();
         pF = new WW8_WrFkp( ePlc, pF->GetEndFc(), rWrt.bWrtWW8 );// Anfang neuer Fkp
                                                     // == Ende alter Fkp
-        aFkps.Insert( pF, aFkps.Count() );
+        aFkps.push_back( pF );
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
         {
             OSL_ENSURE( !this, "Sprm liess sich nicht einfuegen" );
@@ -843,18 +840,18 @@ void WW8_WrPlcPn::WriteFkps()
 {
     nFkpStartPage = (sal_uInt16) ( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
 
-    for( sal_uInt16 i = 0; i < aFkps.Count(); i++ )
-        aFkps.GetObject( i )->Write( rWrt.Strm(), *rWrt.pGrf );
+    for( sal_uInt16 i = 0; i < aFkps.size(); i++ )
+        aFkps[ i ].Write( rWrt.Strm(), *rWrt.pGrf );
 
     if( CHP == ePlc )
     {
         rWrt.pFib->pnChpFirst = nFkpStartPage;
-        rWrt.pFib->cpnBteChp = aFkps.Count();
+        rWrt.pFib->cpnBteChp = aFkps.size();
     }
     else
     {
         rWrt.pFib->pnPapFirst = nFkpStartPage;
-        rWrt.pFib->cpnBtePap = aFkps.Count();
+        rWrt.pFib->cpnBtePap = aFkps.size();
     }
 }
 
@@ -863,19 +860,19 @@ void WW8_WrPlcPn::WritePlc()
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
     sal_uInt16 i;
 
-    for( i = 0; i < aFkps.Count(); i++ )
+    for( i = 0; i < aFkps.size(); i++ )
         SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                aFkps.GetObject( i )->GetStartFc() );
+                                aFkps[ i ].GetStartFc() );
 
     SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                aFkps.GetObject( i - 1 )->GetEndFc() );
+                                aFkps[ i - 1 ].GetEndFc() );
 
     // fuer jedes FKP die Page ausgeben
     if( rWrt.bWrtWW8)                   // fuer WW97 Long-Ausgabe
-        for ( i = 0; i < aFkps.Count(); i++)
+        for ( i = 0; i < aFkps.size(); i++)
             SwWW8Writer::WriteLong( *rWrt.pTableStrm, i + nFkpStartPage );
     else                            // fuer WW95 Short-Ausgabe
-        for ( i = 0; i < aFkps.Count(); i++)
+        for ( i = 0; i < aFkps.size(); i++)
             SwWW8Writer::WriteShort( *rWrt.pTableStrm, i + nFkpStartPage );
 
     if( CHP == ePlc )

@@ -1218,8 +1218,8 @@ public:
     sal_uInt16 GetPos( const VoidPtr& p ) const { return aCntnt.GetPos( p ); }
 };
 
-typedef WW8_WrFkp* WW8_FkpPtr;  // Plc fuer Chpx und Papx ( incl PN-Plc )
-SV_DECL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr, 4 )
+// Plc fuer Chpx und Papx ( incl PN-Plc )
+typedef boost::ptr_vector<WW8_WrFkp> WW8_WrFkpPtrs;
 
 class WW8_WrPlcPn                   // Plc fuer Page Numbers
 {
