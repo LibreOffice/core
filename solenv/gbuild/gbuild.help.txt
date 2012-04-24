@@ -35,6 +35,7 @@ AVAILABLE TARGETS
        check            run unit tests and if in toplevel subsequentcheck
        clean            remove all generated files
        showdeliverables show the targets delivered to OUTDIR and their source
+       showmodules      show the modules that would be loaded
        debugrun         starts the dev-install instance and allows tests to be run
                         against it
        <module>         build the named module
