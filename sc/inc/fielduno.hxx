@@ -58,6 +58,7 @@ class ScEditFieldObj;
 class ScHeaderFieldObj;
 class ScHeaderFooterContentObj;
 class ScDocShell;
+class EditTextObject;
 
 
 class ScCellFieldsObj : public cppu::WeakImplHelper5<
@@ -283,8 +284,8 @@ private:
     ScHeaderFieldObj*       GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
-                            ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent,
-                                                sal_uInt16 nP, sal_uInt16 nT);
+    ScHeaderFieldsObj(
+        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, sal_uInt16 nT);
     virtual                 ~ScHeaderFieldsObj();
 
                             // XIndexAccess
@@ -361,7 +362,7 @@ public:
     SvxFieldItem            CreateFieldItem();
     void InitDoc(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const ESelection& rSel);
+        ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, const ESelection& rSel);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
                                 const ::com::sun::star::uno::Type & rType )

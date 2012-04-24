@@ -44,6 +44,7 @@ class ScCellTextData;
 class ScHeaderFooterTextData;
 class ScAccessibleTextData;
 class SdrObject;
+class EditTextObject;
 
 
 class ScHeaderFooterChangedHint : public SfxHint
@@ -69,7 +70,7 @@ private:
 
 public:
     ScHeaderFooterEditSource(const ScHeaderFooterTextData& rData);
-    ScHeaderFooterEditSource(ScHeaderFooterContentObj& rContent, sal_uInt16 nP);
+    ScHeaderFooterEditSource(ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
     virtual ~ScHeaderFooterEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions

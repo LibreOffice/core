@@ -109,55 +109,27 @@ SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv
 ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                     const EditTextObject* pCenter,
                                                     const EditTextObject* pRight ) :
-    pLeftText   ( NULL ),
-    pCenterText ( NULL ),
-    pRightText  ( NULL )
+    mxLeftText(new ScHeaderFooterTextObj(*this, SC_HDFT_LEFT, pLeft)),
+    mxCenterText(new ScHeaderFooterTextObj(*this, SC_HDFT_CENTER, pCenter)),
+    mxRightText(new ScHeaderFooterTextObj(*this, SC_HDFT_RIGHT, pRight))
 {
-    if ( pLeft )
-        pLeftText   = pLeft->Clone();
-    if ( pCenter )
-        pCenterText = pCenter->Clone();
-    if ( pRight )
-        pRightText  = pRight->Clone();
 }
 
-ScHeaderFooterContentObj::~ScHeaderFooterContentObj()
+ScHeaderFooterContentObj::~ScHeaderFooterContentObj() {}
+
+const EditTextObject* ScHeaderFooterContentObj::GetLeftEditObject() const
 {
-    delete pLeftText;
-    delete pCenterText;
-    delete pRightText;
+    return mxLeftText->GetTextObject();
 }
 
-void ScHeaderFooterContentObj::AddListener( SfxListener& rListener )
+const EditTextObject* ScHeaderFooterContentObj::GetCenterEditObject() const
 {
-    rListener.StartListening( aBC );
+    return mxCenterText->GetTextObject();
 }
 
-void ScHeaderFooterContentObj::RemoveListener( SfxListener& rListener )
+const EditTextObject* ScHeaderFooterContentObj::GetRightEditObject() const
 {
-    rListener.EndListening( aBC );
-}
-
-void ScHeaderFooterContentObj::UpdateText( sal_uInt16 nPart, EditEngine& rSource )
-{
-    EditTextObject* pNew = rSource.CreateTextObject();
-    switch (nPart)
-    {
-        case SC_HDFT_LEFT:
-            delete pLeftText;
-            pLeftText = pNew;
-            break;
-        case SC_HDFT_CENTER:
-            delete pCenterText;
-            pCenterText = pNew;
-            break;
-        default:                // SC_HDFT_RIGHT
-            delete pRightText;
-            pRightText = pNew;
-            break;
-    }
-
-    aBC.Broadcast( ScHeaderFooterChangedHint( nPart ) );
+    return mxRightText->GetTextObject();
 }
 
 // XHeaderFooterContent
@@ -166,21 +138,24 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getLeftText()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScHeaderFooterTextObj( *this, SC_HDFT_LEFT );
+    uno::Reference<text::XText> xInt(*mxLeftText, uno::UNO_QUERY);
+    return xInt;
 }
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getCenterText()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScHeaderFooterTextObj( *this, SC_HDFT_CENTER );
+    uno::Reference<text::XText> xInt(*mxCenterText, uno::UNO_QUERY);
+    return xInt;
 }
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getRightText()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScHeaderFooterTextObj( *this, SC_HDFT_RIGHT );
+    uno::Reference<text::XText> xInt(*mxRightText, uno::UNO_QUERY);
+    return xInt;
 }
 
 // XUnoTunnel
@@ -220,8 +195,9 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
 
 //------------------------------------------------------------------------
 
-ScHeaderFooterTextData::ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
-                                                    sal_uInt16 nP ) :
+ScHeaderFooterTextData::ScHeaderFooterTextData(
+    ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    mpTextObj(pTextObj ? pTextObj->Clone() : NULL),
     rContentObj( rContent ),
     nPart( nP ),
     pEditEngine( NULL ),
@@ -229,32 +205,19 @@ ScHeaderFooterTextData::ScHeaderFooterTextData( ScHeaderFooterContentObj& rConte
     bDataValid( false ),
     bInUpdate( false )
 {
+    if (!mpTextObj)
+        fprintf(stdout, "ScHeaderFooterTextData::ScHeaderFooterTextData:   mpTextObj = %p\n", mpTextObj);
     rContentObj.acquire();              // must not go away
-    rContentObj.AddListener( *this );
 }
 
 ScHeaderFooterTextData::~ScHeaderFooterTextData()
 {
     SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
-    rContentObj.RemoveListener( *this );
-
     delete pForwarder;
     delete pEditEngine;
 
     rContentObj.release();
-}
-
-void ScHeaderFooterTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    if ( rHint.ISA( ScHeaderFooterChangedHint ) )
-    {
-        if ( ((const ScHeaderFooterChangedHint&)rHint).GetPart() == nPart )
-        {
-            if (!bInUpdate)             // not for own updates
-                bDataValid = false;     // text has to be fetched again
-        }
-    }
 }
 
 SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
@@ -292,38 +255,42 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     if (bDataValid)
         return pForwarder;
 
-    const EditTextObject* pData;
-    if (nPart == SC_HDFT_LEFT)
-        pData = rContentObj.GetLeftEditObject();
-    else if (nPart == SC_HDFT_CENTER)
-        pData = rContentObj.GetCenterEditObject();
-    else
-        pData = rContentObj.GetRightEditObject();
+    if (mpTextObj)
+        pEditEngine->SetText(*mpTextObj);
 
-    if (pData)
-        pEditEngine->SetText(*pData);
-
-    bDataValid = sal_True;
+    bDataValid = true;
     return pForwarder;
 }
 
 void ScHeaderFooterTextData::UpdateData()
 {
-    if ( pEditEngine )
+    fprintf(stdout, "ScHeaderFooterTextData::UpdateData:   1\n");
+    if (pEditEngine)
     {
-        bInUpdate = sal_True;   // don't reset bDataValid during UpdateText
-
-        rContentObj.UpdateText( nPart, *pEditEngine );
-
-        bInUpdate = false;
+        delete mpTextObj;
+        mpTextObj = pEditEngine->CreateTextObject();
+        bDataValid = false;
     }
+}
+
+void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
+{
+    fprintf(stdout, "ScHeaderFooterTextData::UpdateData:   2\n");
+    delete mpTextObj;
+    mpTextObj = rEditEngine.CreateTextObject();
+    bDataValid = false;
+}
+
+const EditTextObject* ScHeaderFooterTextData::GetTextObject() const
+{
+    return mpTextObj;
 }
 
 //------------------------------------------------------------------------
 
-ScHeaderFooterTextObj::ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
-                                                sal_uInt16 nP ) :
-    aTextData( rContent, nP ),
+ScHeaderFooterTextObj::ScHeaderFooterTextObj(
+    ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    aTextData(rContent, nP, pTextObj),
     pUnoText( NULL )
 {
     //  ScHeaderFooterTextData acquires rContent
@@ -345,6 +312,11 @@ ScHeaderFooterTextObj::~ScHeaderFooterTextObj()
 {
     if (pUnoText)
         pUnoText->release();
+}
+
+const EditTextObject* ScHeaderFooterTextObj::GetTextObject() const
+{
+    return aTextData.GetTextObject();
 }
 
 const SvxUnoText& ScHeaderFooterTextObj::GetUnoText()
@@ -421,10 +393,9 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const rtl::OUString& aText ) thr
     String aString(aText);
 
     // for pure text, no font info is needed in pool defaults
-    ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), sal_True );
+    ScHeaderEditEngine aEditEngine(EditEngine::CreatePool(), true);
     aEditEngine.SetText( aString );
-
-    aTextData.GetContentObj().UpdateText( aTextData.GetPart(), aEditEngine );
+    aTextData.UpdateData(aEditEngine);
 }
 
 void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XTextRange>& xRange,
@@ -513,7 +484,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             }
 
             pHeaderField->InitDoc(
-                xTextRange, &aTextData.GetContentObj(), aTextData.GetPart(), aSelection);
+                xTextRange, &aTextData.GetContentObj(), aTextData.GetPart(), aTextData.GetTextObject(), aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
@@ -582,7 +553,8 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::ge
 {
     SolarMutexGuard aGuard;
     // all fields
-    return new ScHeaderFieldsObj( &aTextData.GetContentObj(), aTextData.GetPart(), SC_SERVICE_INVALID );
+    return new ScHeaderFieldsObj(
+        &aTextData.GetContentObj(), aTextData.GetPart(), aTextData.GetTextObject(), SC_SERVICE_INVALID);
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFieldMasters()

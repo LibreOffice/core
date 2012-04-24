@@ -40,6 +40,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
+
+#include "rtl/ref.hxx"
 #include "scdllapi.h"
 
 class EditEngine;
@@ -52,6 +54,7 @@ class ScSimpleEditSource;
 class ScCellEditSource;
 class ScEditEngineDefaulter;
 class ScFieldEditEngine;
+class ScHeaderFooterTextObj;
 
 struct ScHeaderFieldData;
 
@@ -70,28 +73,22 @@ class ScHeaderFooterContentObj : public cppu::WeakImplHelper3<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    EditTextObject* pLeftText;
-    EditTextObject* pCenterText;
-    EditTextObject* pRightText;
-    SfxBroadcaster  aBC;
+    rtl::Reference<ScHeaderFooterTextObj> mxLeftText;
+    rtl::Reference<ScHeaderFooterTextObj> mxCenterText;
+    rtl::Reference<ScHeaderFooterTextObj> mxRightText;
 
     ScHeaderFooterContentObj(); // disabled
 
 public:
-                            ScHeaderFooterContentObj( const EditTextObject* pLeft,
-                                                      const EditTextObject* pCenter,
-                                                      const EditTextObject* pRight );
+    ScHeaderFooterContentObj( const EditTextObject* pLeft,
+                              const EditTextObject* pCenter,
+                              const EditTextObject* pRight );
     virtual                 ~ScHeaderFooterContentObj();
 
                             // for ScPageHFItem (using getImplementation)
-    const EditTextObject*   GetLeftEditObject() const   { return pLeftText; }
-    const EditTextObject*   GetCenterEditObject() const { return pCenterText; }
-    const EditTextObject*   GetRightEditObject() const  { return pRightText; }
-
-    void                    AddListener( SfxListener& rListener );
-    void                    RemoveListener( SfxListener& rListener );
-
-    void                    UpdateText( sal_uInt16 nPart, EditEngine& rSource );
+    const EditTextObject* GetLeftEditObject() const;
+    const EditTextObject* GetCenterEditObject() const;
+    const EditTextObject* GetRightEditObject() const;
 
                             // XHeaderFooterContent
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
@@ -122,9 +119,10 @@ public:
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
 
-class ScHeaderFooterTextData : public SfxListener
+class ScHeaderFooterTextData
 {
 private:
+    EditTextObject* mpTextObj;
     ScHeaderFooterContentObj&   rContentObj;
     sal_uInt16                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
@@ -133,23 +131,28 @@ private:
     sal_Bool                        bInUpdate;
 
 public:
-                            ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
-                                                    sal_uInt16 nP );
-                            ~ScHeaderFooterTextData();
-
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    ScHeaderFooterTextData(
+        ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+    ~ScHeaderFooterTextData();
 
                             // helper functions
     SvxTextForwarder*       GetTextForwarder();
-    void                    UpdateData();
+    void UpdateData();
+    void UpdateData(EditEngine& rEditEngine);
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
     sal_uInt16                  GetPart() const         { return nPart; }
     ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
+
+    const EditTextObject* GetTextObject() const;
 };
 
-//  ScHeaderFooterTextObj changes the text in a ScHeaderFooterContentObj
-
+/**
+ * Each of these instances represent, the left, center or right part of the
+ * header of footer of a page.
+ *
+ * ScHeaderFooterTextObj changes the text in a ScHeaderFooterContentObj.
+ */
 class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
                             com::sun::star::text::XText,
                             com::sun::star::text::XTextRangeMover,
@@ -164,10 +167,11 @@ private:
     void                    CreateUnoText_Impl();
 
 public:
-                            ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
-                                                    sal_uInt16 nP );
-    virtual                 ~ScHeaderFooterTextObj();
+    ScHeaderFooterTextObj(
+        ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+    virtual ~ScHeaderFooterTextObj();
 
+    const EditTextObject* GetTextObject() const;
     const SvxUnoText&       GetUnoText();
 
     static void             FillDummyFieldData( ScHeaderFieldData& rData );

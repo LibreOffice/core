@@ -848,7 +848,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
 
 //------------------------------------------------------------------------
 
-ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP, sal_uInt16 nT) :
+ScHeaderFieldsObj::ScHeaderFieldsObj(
+    ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, sal_uInt16 nT) :
     pContentObj( pContent ),
     nPart( nP ),
     nType( nT ),
@@ -859,7 +860,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, sal_uIn
     if (pContentObj)
     {
         pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart);
+        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart, pTextObj);
     }
     else
         pEditSource = NULL;
@@ -1118,7 +1119,7 @@ ScHeaderFieldObj::ScHeaderFieldObj(
     if (pContentObj)
     {
         pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart);
+        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart, NULL);
     }
     else
         pEditSource = NULL;
@@ -1187,7 +1188,7 @@ void SAL_CALL ScHeaderFieldObj::release() throw()
 
 void ScHeaderFieldObj::InitDoc(
     const uno::Reference<text::XTextRange>& rContent,
-    ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const ESelection& rSel)
+    ScHeaderFooterContentObj* pContent, sal_uInt16 nP, const EditTextObject* pTextObj, const ESelection& rSel)
 {
     if ( pContent && !pEditSource )
     {
@@ -1199,7 +1200,7 @@ void ScHeaderFieldObj::InitDoc(
         mpContent = rContent;
 
         pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart);
+        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart, pTextObj);
     }
 }
 

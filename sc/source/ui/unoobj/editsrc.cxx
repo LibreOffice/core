@@ -68,11 +68,11 @@ ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
 //  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
 
 ScHeaderFooterEditSource::ScHeaderFooterEditSource(const ScHeaderFooterTextData& rData) :
-    pTextData(new ScHeaderFooterTextData(rData.GetContentObj(), rData.GetPart())) {}
+    pTextData(new ScHeaderFooterTextData(rData.GetContentObj(), rData.GetPart(), rData.GetTextObject())) {}
 
 ScHeaderFooterEditSource::ScHeaderFooterEditSource(
-    ScHeaderFooterContentObj& rContent, sal_uInt16 nP) :
-    pTextData(new ScHeaderFooterTextData(rContent, nP)) {}
+    ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    pTextData(new ScHeaderFooterTextData(rContent, nP, pTextObj)) {}
 
 ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
 {
@@ -87,7 +87,7 @@ ScEditEngineDefaulter* ScHeaderFooterEditSource::GetEditEngine()
 SvxEditSource* ScHeaderFooterEditSource::Clone() const
 {
     return new ScHeaderFooterEditSource(
-        pTextData->GetContentObj(), pTextData->GetPart());
+        pTextData->GetContentObj(), pTextData->GetPart(), pTextData->GetTextObject());
 }
 
 SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
