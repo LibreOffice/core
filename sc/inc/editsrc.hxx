@@ -39,25 +39,10 @@ class ScEditEngineDefaulter;
 class SvxEditEngineForwarder;
 
 class ScDocShell;
-class ScHeaderFooterContentObj;
 class ScCellTextData;
 class ScHeaderFooterTextData;
 class ScAccessibleTextData;
 class SdrObject;
-class EditTextObject;
-
-
-class ScHeaderFooterChangedHint : public SfxHint
-{
-    sal_uInt16 nPart;
-
-public:
-                    TYPEINFO();
-                    ScHeaderFooterChangedHint(sal_uInt16 nP);
-                    ~ScHeaderFooterChangedHint();
-
-    sal_uInt16          GetPart() const         { return nPart; }
-};
 
 /**
  * ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is

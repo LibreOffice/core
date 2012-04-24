@@ -1418,7 +1418,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         pEditEngine->SetText( maText );
     }
 
-    bDataValid = sal_True;
+    bDataValid = true;
 
     if (pEditEngine)
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );

@@ -127,8 +127,7 @@ private:
     sal_uInt16                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
-    sal_Bool                        bDataValid;
-    sal_Bool                        bInUpdate;
+    bool                        bDataValid;
 
 public:
     ScHeaderFooterTextData(

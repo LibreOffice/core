@@ -202,8 +202,7 @@ ScHeaderFooterTextData::ScHeaderFooterTextData(
     nPart( nP ),
     pEditEngine( NULL ),
     pForwarder( NULL ),
-    bDataValid( false ),
-    bInUpdate( false )
+    bDataValid(false)
 {
     rContentObj.acquire();              // must not go away
 }

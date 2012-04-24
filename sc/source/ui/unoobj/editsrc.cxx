@@ -50,23 +50,6 @@
 #include "postit.hxx"
 #include "AccessibleText.hxx"
 
-//------------------------------------------------------------------------
-
-TYPEINIT1( ScHeaderFooterChangedHint, SfxHint );
-
-ScHeaderFooterChangedHint::ScHeaderFooterChangedHint(sal_uInt16 nP) :
-    nPart( nP )
-{
-}
-
-ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
-{
-}
-
-//------------------------------------------------------------------------
-
-//  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
-
 ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData* pData) :
     mpTextData(pData) {}
 
