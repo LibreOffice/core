@@ -4272,8 +4272,6 @@ void Test::testCopyPasteFormulasExternalDoc()
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != NULL);
 
-    ScDocument* pExtDoc = xExtDocSh->GetDocument();
-
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
 
