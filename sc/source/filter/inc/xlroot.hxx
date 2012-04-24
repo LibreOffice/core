@@ -50,7 +50,7 @@ class XclTokenArray;
 
 // Global data ================================================================
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 /** Counts the number of created root objects. */
 struct XclDebugObjCounter
 {
@@ -75,7 +75,7 @@ struct RootData;//!
 
 /** Stores global buffers and data needed elsewhere in the Excel filters. */
 struct XclRootData
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     : public XclDebugObjCounter
 #endif
 {

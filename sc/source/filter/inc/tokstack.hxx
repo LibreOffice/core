@@ -177,8 +177,8 @@ class TokenPool
         sal_uInt16                      nElementAkt;
 
         static const sal_uInt16         nScTokenOff;// Offset fuer SC-Token
-#if OSL_DEBUG_LEVEL > 0
-        sal_uInt16                      nRek;       // Rekursionszaehler
+#ifdef DBG_UTIL
+        sal_uInt16                      m_nRek; // recursion counter
 #endif
         ScTokenArray*               pScToken;   // Tokenbastler
 
@@ -385,8 +385,8 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 
     if( nId )
     {//...nur wenn nId > 0!
-#if OSL_DEBUG_LEVEL > 0
-        nRek = 0;
+#ifdef DBG_UTIL
+        m_nRek = 0;
 #endif
         GetElement( ( sal_uInt16 ) nId - 1 );
     }

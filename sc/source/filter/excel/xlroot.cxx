@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 
 // Global data ================================================================
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 XclDebugObjCounter::~XclDebugObjCounter()
 {
     OSL_ENSURE( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );

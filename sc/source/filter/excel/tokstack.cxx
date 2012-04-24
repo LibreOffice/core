@@ -421,9 +421,9 @@ void TokenPool::GetElement( const sal_uInt16 nId )
 
 void TokenPool::GetElementRek( const sal_uInt16 nId )
 {
-#if OSL_DEBUG_LEVEL > 0
-    nRek++;
-    OSL_ENSURE( nRek <= nP_Id, "*TokenPool::GetElement(): Rekursion loopt!?" );
+#ifdef DBG_UTIL
+    m_nRek++;
+    OSL_ENSURE(m_nRek <= nP_Id, "*TokenPool::GetElement(): recursion loop!?");
 #endif
 
     OSL_ENSURE( nId < nElementAkt, "*TokenPool::GetElementRek(): Id zu gross!?" );
@@ -537,8 +537,8 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
     }
 
 
-#if OSL_DEBUG_LEVEL > 0
-    nRek--;
+#ifdef DBG_UTIL
+    m_nRek--;
 #endif
 }
 
