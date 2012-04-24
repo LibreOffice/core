@@ -106,12 +106,6 @@ extern "C"
         return g_moduleCount.canUnload( &g_moduleCount , pTime );
     }
 
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        void * pServiceManager, void * pRegistryKey )
-    {
-        return component_writeInfoHelper(pServiceManager, pRegistryKey, gServiceEntries);
-    }
-
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
