@@ -58,41 +58,27 @@ public:
     sal_uInt16          GetPart() const         { return nPart; }
 };
 
-
-//  all ScSharedHeaderFooterEditSource objects for a single text share the same data
-
-class ScSharedHeaderFooterEditSource : public SvxEditSource
+/**
+ * ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is
+ * used by field objects.
+ */
+class ScHeaderFooterEditSource : public SvxEditSource
 {
 private:
     ScHeaderFooterTextData*     pTextData;
 
-protected:
-    ScHeaderFooterTextData*     GetTextData() const { return pTextData; }   // for ScHeaderFooterEditSource
-
 public:
-                                ScSharedHeaderFooterEditSource( ScHeaderFooterTextData* pData );
-    virtual                     ~ScSharedHeaderFooterEditSource();
+    ScHeaderFooterEditSource(ScHeaderFooterTextData* pData);
+    ScHeaderFooterEditSource(ScHeaderFooterContentObj* pContent, sal_uInt16 nP);
+    ScHeaderFooterEditSource(ScHeaderFooterContentObj& rContent, sal_uInt16 nP);
+    virtual ~ScHeaderFooterEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     ScEditEngineDefaulter*      GetEditEngine();
 
-    virtual SvxEditSource*      Clone() const ;
-    virtual SvxTextForwarder*   GetTextForwarder();
-
-    virtual void                UpdateData();
-
-};
-
-//  ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is used by field objects
-
-class ScHeaderFooterEditSource : public ScSharedHeaderFooterEditSource
-{
-public:
-                                ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent, sal_uInt16 nP );
-                                ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent, sal_uInt16 nP );
-    virtual                     ~ScHeaderFooterEditSource();
-
     virtual SvxEditSource*      Clone() const;
+    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual void                UpdateData();
 };
 
 

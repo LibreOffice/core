@@ -65,63 +65,43 @@ ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
 
 //------------------------------------------------------------------------
 
-ScSharedHeaderFooterEditSource::ScSharedHeaderFooterEditSource( ScHeaderFooterTextData* pData ) :
-    pTextData( pData )
+//  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
+
+ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData* pData) :
+    pTextData(pData) {}
+
+ScHeaderFooterEditSource::ScHeaderFooterEditSource(
+    ScHeaderFooterContentObj* pContent, sal_uInt16 nP) :
+    pTextData(new ScHeaderFooterTextData(*pContent, nP)) {}
+
+ScHeaderFooterEditSource::ScHeaderFooterEditSource(
+    ScHeaderFooterContentObj& rContent, sal_uInt16 nP) :
+    pTextData(new ScHeaderFooterTextData(rContent, nP)) {}
+
+ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
 {
-    //  pTextData is held by the ScHeaderFooterTextObj.
-    //  Text range and cursor keep a reference to their parent text, so the text object is
-    //  always alive and the TextData is valid as long as there are children.
+    delete pTextData;   // not accessed in ScSharedHeaderFooterEditSource dtor
 }
 
-ScSharedHeaderFooterEditSource::~ScSharedHeaderFooterEditSource()
-{
-}
-
-SvxEditSource* ScSharedHeaderFooterEditSource::Clone() const
-{
-    return new ScSharedHeaderFooterEditSource( pTextData );
-}
-
-SvxTextForwarder* ScSharedHeaderFooterEditSource::GetTextForwarder()
-{
-    return pTextData->GetTextForwarder();
-}
-
-void ScSharedHeaderFooterEditSource::UpdateData()
-{
-    pTextData->UpdateData();
-}
-
-ScEditEngineDefaulter* ScSharedHeaderFooterEditSource::GetEditEngine()
+ScEditEngineDefaulter* ScHeaderFooterEditSource::GetEditEngine()
 {
     return pTextData->GetEditEngine();
 }
 
-//------------------------------------------------------------------------
-
-//  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
-
-ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
-                                                    sal_uInt16 nP ) :
-    ScSharedHeaderFooterEditSource( new ScHeaderFooterTextData( *pContent, nP ) )
-{
-}
-
-ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent,
-                                                    sal_uInt16 nP ) :
-    ScSharedHeaderFooterEditSource( new ScHeaderFooterTextData( rContent, nP ) )
-{
-}
-
-ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
-{
-    delete GetTextData();   // not accessed in ScSharedHeaderFooterEditSource dtor
-}
-
 SvxEditSource* ScHeaderFooterEditSource::Clone() const
 {
-    const ScHeaderFooterTextData* pData = GetTextData();
-    return new ScHeaderFooterEditSource( pData->GetContentObj(), pData->GetPart() );
+    return new ScHeaderFooterEditSource(
+        pTextData->GetContentObj(), pTextData->GetPart());
+}
+
+SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
+{
+    return pTextData->GetTextForwarder();
+}
+
+void ScHeaderFooterEditSource::UpdateData()
+{
+    pTextData->UpdateData();
 }
 
 //------------------------------------------------------------------------
