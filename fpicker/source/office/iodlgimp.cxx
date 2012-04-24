@@ -340,7 +340,7 @@ void SvtExpFileDlg_Impl::SetStandardDir( const String& _rDir )
 }
 
 //*****************************************************************************
-#if OSL_DEBUG_LEVEL > 0
+#if defined DBG_UTIL
 //-----------------------------------------------------------------------------
 namespace {
     String lcl_DecoratedFilter( const String& _rOriginalFilter )
