@@ -1370,7 +1370,7 @@ rtl::OUString ServiceManager::readLegacyRdbString(
 {
     RegistryKey subkey;
     RegValueType t;
-    sal_uInt32 s;
+    sal_uInt32 s(0);
     if (key.openKey(path, subkey) != REG_NO_ERROR
         || subkey.getValueInfo(rtl::OUString(), &t, &s) != REG_NO_ERROR
         || t != RG_VALUETYPE_STRING
