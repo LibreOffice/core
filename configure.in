@@ -2512,7 +2512,7 @@ dnl ===================================================================
 dnl  Test the gcc version
 dnl ===================================================================
 if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([the GNU C compiler version])
+    AC_MSG_CHECKING([the GCC version])
     _gcc_version=`$CC -dumpversion`
     _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
     GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
@@ -2537,13 +2537,10 @@ if test "$GCC" = "yes"; then
 fi
 
 dnl ===================================================================
-dnl  Is it actually Clang?
+dnl  Is GCC actually Clang?
 dnl ===================================================================
 
 COM_GCC_IS_CLANG=
-HAVE_GCC_GGDB2=
-HAVE_GCC_FINLINE_LIMIT=
-HAVE_GCC_FNO_INLINE=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether GCC is actually Clang])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
@@ -2556,15 +2553,37 @@ if test "$GCC" = "yes"; then
          COM_GCC_IS_CLANG=TRUE],
         [AC_MSG_RESULT([no])])
 
-    # check various GCC options that Clang does not support now but maybe
-    # will somewhen in the future, check them even for GCC, so that the flags
-    # are set
+    if test "$COM_GCC_IS_CLANG" = TRUE; then
+        AC_MSG_CHECKING([the Clang version])
+        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P -`
+        CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P -`
+        CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+        AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
+    fi
+fi
+AC_SUBST(COM_GCC_IS_CLANG)
 
+# ===================================================================
+# check various GCC options that Clang does not support now but maybe
+# will somewhen in the future, check them even for GCC, so that the
+# flags are set
+# ===================================================================
+
+HAVE_GCC_GGDB2=
+HAVE_GCC_FINLINE_LIMIT=
+HAVE_GCC_FNO_INLINE=
+if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -ggdb2])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -ggdb2"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
-    CFLAGS=$save_CFLAGS
+    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+        # Option just ignored and silly warning that isn't a real
+        # warning printed
+        :
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -ggdb2"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+    fi
     if test "$HAVE_GCC_GGDB2" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -2572,10 +2591,15 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -finline-limit=0])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -finline-limit=0"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
-    CFLAGS=$save_CFLAGS
+    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+        # As above
+        :
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -finline-limit=0"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+    fi
     if test "$HAVE_GCC_FINLINE_LIMIT" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -2583,17 +2607,21 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -fno-inline])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -fno-inline"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
-    CFLAGS=$save_CFLAGS
+    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+        # Ditto
+        :
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -fno-inline"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+    fi
     if test "$HAVE_GCC_FNO_INLINE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
     fi
 fi
-AC_SUBST(COM_GCC_IS_CLANG)
 AC_SUBST(HAVE_GCC_GGDB2)
 AC_SUBST(HAVE_GCC_FINLINE_LIMIT)
 AC_SUBST(HAVE_GCC_FNO_INLINE)
@@ -4747,12 +4775,18 @@ HAVE_GCC_FNO_DEFAULT_INLINE=
 HAVE_GCC_FNO_ENFORCE_EH_SPECS=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CXX supports -fno-default-inline])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CFLAGS -Werror -fno-default-inline"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_DEFAULT_INLINE=TRUE ],[])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
+    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+        # Option just ignored and silly warning that isn't a real
+        # warning printed
+        :
+    else
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CFLAGS -Werror -fno-default-inline"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_DEFAULT_INLINE=TRUE ],[])
+        CXXFLAGS=$save_CXXFLAGS
+        AC_LANG_POP([C++])
+    fi
     if test "$HAVE_GCC_FNO_DEFAULT_INLINE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
@@ -4760,12 +4794,17 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CXX supports -fno-enforce-eh-specs])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CFLAGS -Werror -fno-enforce-eh-specs"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_ENFORCE_EH_SPECS=TRUE ],[])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
+    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+        # As above
+        :
+    else
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CFLAGS -Werror -fno-enforce-eh-specs"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_ENFORCE_EH_SPECS=TRUE ],[])
+        CXXFLAGS=$save_CXXFLAGS
+        AC_LANG_POP([C++])
+    fi
     if test "$HAVE_GCC_FNO_ENFORCE_EH_SPECS" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
