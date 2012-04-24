@@ -2121,22 +2121,22 @@ void SwTable::CheckConsistency() const
     {
         SwTwips nWidth = 0;
         SwTableLine* pLine = GetTabLines()[nCurrLine];
-        OSL_ENSURE( pLine, "Missing Table Line" );
+        SAL_WARN_IF( !pLine, "sw", "Missing Table Line" );
         sal_uInt16 nColCount = pLine->GetTabBoxes().Count();
-        OSL_ENSURE( nColCount, "Empty Table Line" );
+        SAL_WARN_IF( !nColCount, "sw", "Empty Table Line" );
         for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-            OSL_ENSURE( pBox, "Missing Table Box" );
+            SAL_WARN_IF( !pBox, "sw", "Missing Table Box" );
             SwTwips nNewWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth() + nWidth;
             long nRowSp = pBox->getRowSpan();
             if( nRowSp < 0 )
             {
-                OSL_ENSURE( aIter != aRowSpanCells.end(), "Missing master box" );
-                OSL_ENSURE( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,
-                    "Wrong position/size of overlapped table box" );
+                SAL_WARN_IF( aIter == aRowSpanCells.end(), "sw", "Missing master box" );
+                SAL_WARN_IF( aIter->nLeft != nWidth || aIter->nRight != nNewWidth,
+                    "sw", "Wrong position/size of overlapped table box" );
                 --(aIter->nRowSpan);
-                OSL_ENSURE( aIter->nRowSpan == -nRowSp, "Wrong row span value" );
+                SAL_WARN_IF( aIter->nRowSpan != -nRowSp, "sw", "Wrong row span value" );
                 if( nRowSp == -1 )
                 {
                     std::list< RowSpanCheck >::iterator aEraseIter = aIter;
@@ -2148,7 +2148,7 @@ void SwTable::CheckConsistency() const
             }
             else if( nRowSp != 1 )
             {
-                OSL_ENSURE( nRowSp, "Zero row span?!" );
+                SAL_WARN_IF( !nRowSp, "sw", "Zero row span?!" );
                 RowSpanCheck aEntry;
                 aEntry.nLeft = nWidth;
                 aEntry.nRight = nNewWidth;
@@ -2159,14 +2159,14 @@ void SwTable::CheckConsistency() const
         }
         if( !nCurrLine )
             nLineWidth = nWidth;
-        OSL_ENSURE( nWidth == nLineWidth, "Different Line Widths" );
-        OSL_ENSURE( nWidth == nTabSize, "Boxen der Line zu klein/gross" );
-        OSL_ENSURE( nWidth >= 0 && nWidth <= USHRT_MAX, "Width out of range" );
-        OSL_ENSURE( aIter == aRowSpanCells.end(), "Missing overlapped box" );
+        SAL_WARN_IF( nWidth != nLineWidth, "sw", "Different Line Widths" );
+        SAL_WARN_IF( nWidth != nTabSize, "sw", "Boxen der Line zu klein/gross" );
+        SAL_WARN_IF( nWidth < 0 || nWidth > USHRT_MAX, "sw", "Width out of range" );
+        SAL_WARN_IF( aIter != aRowSpanCells.end(), "sw", "Missing overlapped box" );
         aIter = aRowSpanCells.begin();
     }
     bool bEmpty = aRowSpanCells.empty();
-    OSL_ENSURE( bEmpty, "Open row span detected" );
+    SAL_WARN_IF( !bEmpty, "sw", "Open row span detected" );
 }
 
 #endif

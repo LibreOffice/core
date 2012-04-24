@@ -1254,12 +1254,7 @@ static void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
         SwNodeIndex aTmp( *pSectNd );
         const SwNode* pFrmNd =
         rIdx.GetNodes().FindPrvNxtFrmNode( aTmp, pSectNd->EndOfSectionNode() );
-
-#ifndef DBG_UTIL
-        (void) pFrmNd;
-#else
-        OSL_ENSURE( pFrmNd, "found no Node with Frames" );
-#endif
+        SAL_WARN_IF( !pFrmNd, "sw", "found no Node with Frames" );
         rIdx = aTmp;
     }
 }

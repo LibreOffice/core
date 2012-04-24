@@ -49,8 +49,8 @@ void SwCache::Check()
         return;
 
     //Konsistenspruefung.
-    OSL_ENSURE( !pLast->GetNext(), "Last but not last." );
-    OSL_ENSURE( !pRealFirst->GetPrev(), "First but not first." );
+    SAL_WARN_IF( pLast->GetNext(), "sw", "Last but not last." );
+    SAL_WARN_IF( pRealFirst->GetPrev(), "sw", "First but not first." );
     sal_uInt16 nCnt = 0;
     sal_Bool bFirstFound = sal_False;
     SwCacheObj *pObj = pRealFirst;
@@ -61,20 +61,20 @@ void SwCache::Check()
         SwCacheObj *pTmp = pLast;
         while ( pTmp && pTmp != pObj )
             pTmp = pTmp->GetPrev();
-        OSL_ENSURE( pTmp, "Objekt not found." );
+        SAL_WARN_IF( !pTmp, "sw", "Objekt not found." );
 
         ++nCnt;
         if ( pObj == pFirst )
             bFirstFound = sal_True;
         if ( !pObj->GetNext() )
-            OSL_ENSURE( pObj == pLast, "Last not Found." );
+            SAL_WARN_IF( pObj != pLast, "sw", "Last not Found." );
         pObj = pObj->GetNext();
-        OSL_ENSURE( pObj != pRekursive, "Recursion in SwCache." );
+        SAL_WARN_IF( pObj == pRekursive, "sw", "Recursion in SwCache." );
     }
-    OSL_ENSURE( bFirstFound, "First not Found." );
-    OSL_ENSURE( (nCnt + aFreePositions.size()) == Count(), "Lost Chain." );
-    OSL_ENSURE(
-        Count() != nCurMax || nCurMax == aFreePositions.size() + nCnt,
+    SAL_WARN_IF( !bFirstFound, "sw", "First not Found." );
+    SAL_WARN_IF( nCnt + aFreePositions.size() != Count(), "sw", "Lost Chain." );
+    SAL_WARN_IF(
+        Count() == nCurMax && nCurMax != aFreePositions.size() + nCnt, "sw",
         "Lost FreePositions." );
 }
 #endif

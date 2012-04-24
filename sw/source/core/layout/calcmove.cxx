@@ -1147,14 +1147,14 @@ void SwCntntFrm::MakeAll()
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
-        static sal_Bool bWarn = sal_False;
+        static sal_Bool bWarned = sal_False;
         if( pDoc->InXMLExport() )
         {
-            OSL_ENSURE( bWarn, "Formatting during XML-export!" );
-            bWarn = sal_True;
+            SAL_WARN_IF( !bWarned, "sw", "Formatting during XML-export!" );
+            bWarned = sal_True;
         }
         else
-            bWarn = sal_False;
+            bWarned = sal_False;
     }
 #endif
 

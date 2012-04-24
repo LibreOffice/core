@@ -131,7 +131,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         bUseLayoutHeights = bLayoutAvailable; /*sal_False;*/
 
 #ifdef DBG_UTIL
-        OSL_ENSURE( bLayoutAvailable || !bOldGetLineHeightCalled, "Layout ungueltig?" );
+        SAL_WARN_IF( !bLayoutAvailable && bOldGetLineHeightCalled, "sw", "Layout ungueltig?" );
 #endif
     }
 

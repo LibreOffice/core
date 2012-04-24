@@ -3134,18 +3134,18 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
 const SwCntntFrm* SwFtnFrm::GetRef() const
 {
     const SwCntntFrm* pRefAttr = GetRefFromAttr();
-    OSL_ENSURE( pRef == pRefAttr || pRef->IsAnFollow( pRefAttr )
-            || pRefAttr->IsAnFollow( pRef ),
-            "access to deleted Frame? pRef != pAttr->GetRef()" );
+    SAL_WARN_IF( pRef != pRefAttr && !pRef->IsAnFollow( pRefAttr )
+            && !pRefAttr->IsAnFollow( pRef ),
+            "sw", "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
 
 SwCntntFrm* SwFtnFrm::GetRef()
 {
     const SwCntntFrm* pRefAttr = GetRefFromAttr();
-    OSL_ENSURE( pRef == pRefAttr || pRef->IsAnFollow( pRefAttr )
-            || pRefAttr->IsAnFollow( pRef ),
-            "access to deleted Frame? pRef != pAttr->GetRef()" );
+    SAL_WARN_IF( pRef != pRefAttr && !pRef->IsAnFollow( pRefAttr )
+            && !pRefAttr->IsAnFollow( pRef ),
+            "sw", "access to deleted Frame? pRef != pAttr->GetRef()" );
     return pRef;
 }
 

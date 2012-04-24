@@ -78,9 +78,7 @@ sal_Bool IsDbg( const SwTxtFrm *pFrm )
 
 static void Error()
 {
-    // wegen PM und BCC
-    sal_Bool bFalse = sal_False;
-    OSL_ENSURE( bFalse, "txtio: No debug version" );
+    SAL_WARN( "sw", "txtio: No debug version" );
 }
 
 #define IMPL_OUTOP(class) \

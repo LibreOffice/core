@@ -119,12 +119,12 @@ TYPEINIT1(SwRedlineHint, SfxHint);
             const SwRedline* pCurrent = rTbl[ n ];
 
             // check redline sorting
-            OSL_ENSURE( *pPrev->Start() <= *pCurrent->Start(),
-                        _ERROR_PREFIX "not sorted correctly" );
+            SAL_WARN_IF( *pPrev->Start() > *pCurrent->Start(), "sw",
+                         _ERROR_PREFIX "not sorted correctly" );
 
             // check for overlapping redlines
-            OSL_ENSURE( *pPrev->End() <= *pCurrent->Start(),
-                        _ERROR_PREFIX "overlapping redlines" );
+            SAL_WARN_IF( *pPrev->End() > *pCurrent->Start(), "sw",
+                         _ERROR_PREFIX "overlapping redlines" );
         }
     }
 
