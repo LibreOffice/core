@@ -30,5 +30,6 @@ $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/mstoolbar.hxx,f
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msvbahelper.hxx,filter/msfilter/msvbahelper.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/svdfppt.hxx,filter/msfilter/svdfppt.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/svxmsbas.hxx,filter/msfilter/svxmsbas.hxx))
+$(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/util.hxx,filter/msfilter/util.hxx))
 
 # vim: set noet sw=4 ts=4:

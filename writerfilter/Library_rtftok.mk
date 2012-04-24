@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_defs,rtftok,\
 $(eval $(call gb_Library_use_libraries,rtftok,\
 	cppu \
 	cppuhelper \
+	msfilter \
 	oox \
 	sal \
 	svt \

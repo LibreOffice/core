@@ -61,6 +61,7 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
+#include <filter/msfilter/util.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
@@ -2375,31 +2376,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
              correctly set in the character runs involved, so its hard to reproduce
              documents that require this to be sure of the process involved.
             */
-            const SvxLanguageItem *pLang =
-                (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
-            if (pLang)
-            {
-                switch (pLang->GetLanguage())
-                {
-                    case LANGUAGE_CZECH:
-                    case LANGUAGE_HUNGARIAN:
-                    case LANGUAGE_POLISH:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1250;
-                        break;
-                    case LANGUAGE_RUSSIAN:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1251;
-                        break;
-                    case LANGUAGE_GREEK:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1253;
-                        break;
-                    case LANGUAGE_TURKISH:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1254;
-                        break;
-                    default:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1252;
-                        break;
-                }
-            }
+            eSrcCharSet = msfilter::util::GetDefaultTextEncoding();
         }
     }
     return eSrcCharSet;
