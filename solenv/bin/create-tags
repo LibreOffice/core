@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$INPATH" ] ; then
-   INPATH=$(grep "INPATH=" ./config_host.mk | sed -e "s/INPATH=//")
+   INPATH=$(grep "INPATH=" ./config_host.mk | sed -e "s/export INPATH=//")
 fi
 if [ -z "$INPATH" ] ; then
     echo "could not determine INPATH" >&2
