@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAABX////0\u003d",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-04-24T18:42:12Z",
+      "side": 1,
+      "message": "trailing spaces !",
+      "revId": "c185836018101a9b33055f789bee8aee839c1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABX////w\u003d",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-04-24T18:42:12Z",
+      "side": 1,
+      "message": "don\u0027t we want to keep -s at least ?",
+      "revId": "c185836018101a9b33055f789bee8aee839c1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
