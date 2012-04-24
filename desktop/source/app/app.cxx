@@ -1608,10 +1608,14 @@ int Desktop::Main()
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
-        SynchronizeExtensionRepositories();
-        bool bAbort = CheckExtensionDependencies();
-        if ( bAbort )
-            return EXIT_FAILURE;
+        bool newInst = newInstallation();
+        SynchronizeExtensionRepositories(newInst);
+        if ( newInst )
+        {
+            bool bAbort = CheckExtensionDependencies();
+            if ( bAbort )
+                return EXIT_FAILURE;
+        }
 
         {
             ::comphelper::ComponentContext aContext( xSMgr );

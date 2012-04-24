@@ -344,33 +344,12 @@ static void impl_setNeedsCompatCheck()
 }
 
 //------------------------------------------------------------------------------
-static bool impl_check()
-{
-    uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
-
-    bool bDependenciesValid = impl_checkDependencies( xContext );
-
-    short nRet = 0;
-
-    if ( !bDependenciesValid )
-        nRet = impl_showExtensionDialog( xContext );
-
-    if ( nRet == -1 )
-    {
-        impl_setNeedsCompatCheck();
-        return true;
-    }
-    else
-        return false;
-}
-
-//------------------------------------------------------------------------------
 // to check if we need checking the dependencies of the extensions again, we compare
 // the build id of the office with the one of the last check
 //------------------------------------------------------------------------------
-static bool impl_needsCompatCheck()
+bool Desktop::newInstallation()
 {
-    bool bNeedsCheck = false;
+    bool bNewInst = false;
     rtl::OUString aLastCheckBuildID;
     rtl::OUString aCurrentBuildID( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
     rtl::Bootstrap::expandMacros( aCurrentBuildID );
@@ -392,18 +371,18 @@ static bool impl_needsCompatCheck()
         result >>= aLastCheckBuildID;
         if ( aLastCheckBuildID != aCurrentBuildID )
         {
-            bNeedsCheck = true;
+            bNewInst = true;
             result <<= aCurrentBuildID;
             pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
 #ifdef DEBUG
-        bNeedsCheck = true;
+        bNewInst = true;
 #endif
     }
-    catch (const Exception&) {}
+    catch (const com::sun::star::uno::Exception&) {}
 
-    return bNeedsCheck;
+    return bNewInst;
 }
 
 //------------------------------------------------------------------------------
@@ -411,18 +390,28 @@ static bool impl_needsCompatCheck()
 // When there are unresolved issues, we can't continue with startup
 sal_Bool Desktop::CheckExtensionDependencies()
 {
-    sal_Bool bAbort = false;
+    uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
 
-    if ( impl_needsCompatCheck() )
-        bAbort = impl_check();
+    bool bDependenciesValid = impl_checkDependencies( xContext );
 
-    return bAbort;
+    short nRet = 0;
+
+    if ( !bDependenciesValid )
+        nRet = impl_showExtensionDialog( xContext );
+
+    if ( nRet == -1 )
+    {
+        impl_setNeedsCompatCheck();
+        return true;
+    }
+    else
+        return false;
 }
 
-void Desktop::SynchronizeExtensionRepositories()
+void Desktop::SynchronizeExtensionRepositories(bool force)
 {
     RTL_LOGFILE_CONTEXT(aLog,"desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
-    dp_misc::syncRepositories( new SilentCommandEnv( this ) );
+    dp_misc::syncRepositories( force, new SilentCommandEnv( this ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

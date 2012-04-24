@@ -1223,7 +1223,7 @@ void ExtensionManager::reinstallDeployedExtensions(
         xPackageManager->reinstallDeployedPackages(xAbortChannel, xCmdEnv);
         //We must sync here, otherwise we will get exceptions when extensions
         //are removed.
-        dp_misc::syncRepositories(xCmdEnv);
+        dp_misc::syncRepositories(false, xCmdEnv);
         const uno::Sequence< Reference<deploy::XPackage> > extensions(
             xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
 

@@ -130,12 +130,14 @@ class Desktop : public Application
         static sal_Bool         isCrashReporterEnabled();
 
         // first-start (ever) related methods
+        static bool             newInstallation();
+
         static sal_Bool         CheckExtensionDependencies();
 
         static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
         static void             SetRestartState();
 
-        void                    SynchronizeExtensionRepositories();
+        void                    SynchronizeExtensionRepositories(bool force);
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
