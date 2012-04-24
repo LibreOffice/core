@@ -124,7 +124,7 @@ void RtfExportTest::testZoom()
 void RtfExportTest::testFdo38176()
 {
     roundtrip("fdo38176.rtf");
-    CPPUNIT_ASSERT_EQUAL(7, getLength());
+    CPPUNIT_ASSERT_EQUAL(9, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfExportTest);
