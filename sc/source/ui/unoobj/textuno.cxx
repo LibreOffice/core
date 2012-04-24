@@ -478,7 +478,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                 break;
             }
 
-            pHeaderField->InitDoc(xTextRange, aTextData, aSelection);
+            pHeaderField->InitDoc(xTextRange, new ScHeaderFooterEditSource(&aTextData), aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)

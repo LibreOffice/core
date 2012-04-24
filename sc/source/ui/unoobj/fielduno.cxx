@@ -927,7 +927,7 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) cons
 
         uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
         xTextRange = xTemp;
-        return new ScHeaderFieldObj(xTextRange, &mrData, nFieldType, aSelection);
+        return new ScHeaderFieldObj(xTextRange, new ScHeaderFooterEditSource(&mrData), nFieldType, aSelection);
     }
     return NULL;
 }
@@ -1089,19 +1089,15 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 
 ScHeaderFieldObj::ScHeaderFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    ScHeaderFooterTextData* pData,
-    sal_uInt16 nT, const ESelection& rSel) :
+    SvxEditSource* pEditSrc, sal_uInt16 nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
     pPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertySet() : lcl_GetHeaderFieldPropertySet() ),
     mpContent(rContent),
     nType( nT ),
-    pEditSource(NULL),
+    mpEditSource(pEditSrc),
     aSelection( rSel ),
     nFileFormat( SVXFILEFORMAT_NAME_EXT )
 {
-    //  pContent ist Null, wenn per ServiceProvider erzeugt
-    if (pData)
-        pEditSource = new ScHeaderFooterEditSource(pData);
 }
 
 uno::Any SAL_CALL ScHeaderFieldObj::queryAggregation( const uno::Type& rType )
@@ -1166,27 +1162,26 @@ void SAL_CALL ScHeaderFieldObj::release() throw()
 }
 
 void ScHeaderFieldObj::InitDoc(
-    const uno::Reference<text::XTextRange>& rContent, ScHeaderFooterTextData& rData, const ESelection& rSel)
+    const uno::Reference<text::XTextRange>& rContent, SvxEditSource* pEditSrc, const ESelection& rSel)
 {
-    if (!pEditSource)
+    if (!mpEditSource)
     {
+        mpEditSource = pEditSrc;
         aSelection = rSel;
         mpContent = rContent;
-
-        pEditSource = new ScHeaderFooterEditSource(&rData);
     }
 }
 
 ScHeaderFieldObj::~ScHeaderFieldObj()
 {
-    delete pEditSource;
+    delete mpEditSource;
 }
 
 // per getImplementation gerufen:
 
 SvxFieldItem ScHeaderFieldObj::CreateFieldItem()
 {
-    OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !mpEditSource, "CreateFieldItem mit eingefuegtem Feld" );
 
     switch (nType)
     {
@@ -1233,11 +1228,11 @@ SvxFieldItem ScHeaderFieldObj::CreateFieldItem()
 
 void ScHeaderFieldObj::DeleteField()
 {
-    if (pEditSource)
+    if (mpEditSource)
     {
-        SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
+        SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
         pForwarder->QuickInsertText( String(), aSelection );
-        pEditSource->UpdateData();
+        mpEditSource->UpdateData();
 
         aSelection.nEndPara = aSelection.nStartPara;
         aSelection.nEndPos  = aSelection.nStartPos;
@@ -1255,11 +1250,11 @@ rtl::OUString SAL_CALL ScHeaderFieldObj::getPresentation( sal_Bool /* bShowComma
     SolarMutexGuard aGuard;
     String aRet;
 
-    if (pEditSource)
+    if (mpEditSource)
     {
         // Feld von der EditEngine formatieren lassen, bShowCommand gibt's nicht
 
-        SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
+        SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
         aRet = pForwarder->GetText( aSelection );
     }
 
@@ -1342,9 +1337,9 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
         if ( aValue >>= nIntVal )
         {
             SvxFileFormat eFormat = lcl_UnoToSvxFileFormat( nIntVal );
-            if (pEditSource)
+            if (mpEditSource)
             {
-                ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+                ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)mpEditSource)->GetEditEngine();
                 ScUnoEditEngine aTempEngine(pEditEngine);
                 SvxFieldData* pField = aTempEngine.FindByPos(
                         aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
@@ -1354,7 +1349,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                     SvxExtFileField* pExtFile = (SvxExtFileField*)pField;   // local to the ScUnoEditEngine
                     pExtFile->SetFormat( eFormat );
                     pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
-                    pEditSource->UpdateData();
+                    mpEditSource->UpdateData();
                 }
             }
             else
@@ -1388,9 +1383,9 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
     else if ( nType == SC_SERVICE_FILEFIELD && aNameString.EqualsAscii( SC_UNONAME_FILEFORM ) )
     {
         SvxFileFormat eFormat = SVXFILEFORMAT_NAME_EXT;
-        if (pEditSource)
+        if (mpEditSource)
         {
-            ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+            ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)mpEditSource)->GetEditEngine();
             ScUnoEditEngine aTempEngine(pEditEngine);
             SvxFieldData* pField = aTempEngine.FindByPos(
                     aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
