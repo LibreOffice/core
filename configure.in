@@ -4257,39 +4257,6 @@ fi
 AC_SUBST([VALGRIND_CFLAGS])
 
 dnl ===================================================================
-dnl Set the gcc/gxx include directories
-dnl ===================================================================
-# Removed the special FreeBSD treatment. The problem was that with_gxx_include_path
-# often contains an i386 which is expanded as a macro.
-if test "$GXX" = "yes"; then
-    AC_MSG_CHECKING([for g++ include path])
-    if test -z "$with_gxx_include_path"; then
-        with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - 2>/dev/null | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-        if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
-            with_gxx_include_path="/usr/include"
-        fi
-        if echo $with_gxx_include_path | $GREP -q linux; then
-            # workaround for Mandriva - issue 100049
-            with_gxx_include_path=`cd -P $with_gxx_include_path && pwd`
-        fi
-    fi
-    dnl This is the original code...
-    dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
-    if test -z "$with_gxx_include_path"; then
-        with_gxx_include_path="NO_GXX_INCLUDE"
-        AC_MSG_RESULT([none])
-    else
-        PathFormat "$with_gxx_include_path"
-        with_gxx_include_path="$formatted_path"
-        AC_MSG_RESULT([$with_gxx_include_path])
-    fi
-else
-    with_gxx_include_path="NO_GXX_INCLUDE"
-fi
-GXX_INCLUDE_PATH="$with_gxx_include_path"
-AC_SUBST(GXX_INCLUDE_PATH)
-
-dnl ===================================================================
 dnl Set the MinGW include directories
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
@@ -4445,6 +4412,39 @@ else
 fi
 
 AC_SUBST(WITH_STLPORT)
+
+dnl ===================================================================
+dnl gxx include directories needed by STLPort
+dnl ===================================================================
+# Removed the special FreeBSD treatment. The problem was that with_gxx_include_path
+# often contains an i386 which is expanded as a macro.
+if test "$GXX" = "yes"; then
+    AC_MSG_CHECKING([for g++ include path])
+    if test -z "$with_gxx_include_path"; then
+        with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - 2>/dev/null | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+        if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
+            with_gxx_include_path="/usr/include"
+        fi
+        if echo $with_gxx_include_path | $GREP -q linux; then
+            # workaround for Mandriva - issue 100049
+            with_gxx_include_path=`cd -P $with_gxx_include_path && pwd`
+        fi
+    fi
+    dnl This is the original code...
+    dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
+    if test -z "$with_gxx_include_path"; then
+        with_gxx_include_path="NO_GXX_INCLUDE"
+        AC_MSG_RESULT([none])
+    else
+        PathFormat "$with_gxx_include_path"
+        with_gxx_include_path="$formatted_path"
+        AC_MSG_RESULT([$with_gxx_include_path])
+    fi
+else
+    with_gxx_include_path="NO_GXX_INCLUDE"
+fi
+GXX_INCLUDE_PATH="$with_gxx_include_path"
+AC_SUBST(GXX_INCLUDE_PATH)
 
 dnl ===================================================================
 dnl thread-safe statics
