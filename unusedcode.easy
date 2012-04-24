@@ -22,7 +22,6 @@ MSDffImportRecords::Insert(SvxMSDffImportRec* const&, unsigned short&)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const*, unsigned short)
 MSDffImportRecords::Remove(SvxMSDffImportRec* const&, unsigned short)
 MSDffImportRecords::Remove(unsigned short, unsigned short)
-MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 PopupMenu::SetSelectedEntry(unsigned short)

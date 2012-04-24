@@ -136,11 +136,6 @@ public:
     */
     void addListener(::rtl::Reference<IMailDispatcherListener> listener);
 
-    /**
-        Unregister a listener for mail dispatcher events
-    */
-    void removeListener(::rtl::Reference<IMailDispatcherListener> listener);
-
 protected:
     virtual void SAL_CALL run();
     virtual void SAL_CALL onTerminated();

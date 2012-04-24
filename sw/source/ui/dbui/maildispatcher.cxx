@@ -208,14 +208,6 @@ void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> liste
     listeners_.push_back(listener);
 }
 
-void MailDispatcher::removeListener(::rtl::Reference<IMailDispatcherListener> listener)
-{
-    OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
-
-    ::osl::MutexGuard guard(listener_container_mutex_);
-    listeners_.remove(listener);
-}
-
 std::list< ::rtl::Reference<IMailDispatcherListener> > MailDispatcher::cloneListener()
 {
     ::osl::MutexGuard guard(listener_container_mutex_);
