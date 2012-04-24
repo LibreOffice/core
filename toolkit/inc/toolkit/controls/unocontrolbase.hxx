@@ -40,8 +40,10 @@
 class TOOLKIT_DLLPUBLIC UnoControlBase : public UnoControl
 {
 protected:
-    UnoControlBase();
-
+    UnoControlBase() //do not use! needed by MSVC at compile time to satisfy AggImplInheritanceHelper5
+    {
+        assert(false);
+    }
 protected:
     UnoControlBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
         :UnoControl( i_factory )
