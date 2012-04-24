@@ -272,8 +272,7 @@ TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
 
 // ---------------------------------------------------------------------
 
-typedef SwXMLConditionContext_Impl *SwXMLConditionContextPtr;
-SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5 )
+typedef std::vector<SwXMLConditionContext_Impl*> SwXMLConditions_Impl;
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
@@ -344,10 +343,10 @@ SwXMLTextStyleContext_Impl::~SwXMLTextStyleContext_Impl()
 {
     if( pConditions )
     {
-        while( pConditions->Count() )
+        while( !pConditions->empty() )
         {
-            SwXMLConditionContext_Impl *pCond = pConditions->GetObject(0);
-            pConditions->Remove( 0UL );
+            SwXMLConditionContext_Impl *pCond = &*pConditions->back();
+            pConditions->pop_back();
             pCond->ReleaseRef();
         }
         delete pConditions;
@@ -370,7 +369,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
         {
             if( !pConditions )
                pConditions = new SwXMLConditions_Impl;
-            pConditions->Insert( pCond, pConditions->Count() );
+            pConditions->push_back( pCond );
             pCond->AddRef();
         }
         pContext = pCond;
@@ -411,7 +410,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
 
-    sal_uInt16 nCount = pConditions->Count();
+    sal_uInt16 nCount = pConditions->size();
     String aString;
     OUString sName;
     for( sal_uInt16 i = 0; i < nCount; i++ )
