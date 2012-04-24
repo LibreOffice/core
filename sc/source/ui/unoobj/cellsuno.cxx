@@ -994,7 +994,7 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 
 namespace {
 template<typename BorderLineType>
-const ::editeng::SvxBorderLine* lcl_getBorderLine( 
+const ::editeng::SvxBorderLine* lcl_getBorderLine(
         ::editeng::SvxBorderLine& rLine, const BorderLineType& rStruct )
 {
     // Convert from 1/100mm to Twips.
@@ -1008,13 +1008,13 @@ const ::editeng::SvxBorderLine* lcl_getBorderLine(
 }
 }
 
-const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine( 
+const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine(
         ::editeng::SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
     return lcl_getBorderLine( rLine, rStruct);
 }
 
-const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine( 
+const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine(
         ::editeng::SvxBorderLine& rLine, const table::BorderLine2& rStruct )
 {
     return lcl_getBorderLine( rLine, rStruct);
@@ -6124,8 +6124,8 @@ SvxUnoText& ScCellObj::GetUnoText()
         pUnoText->acquire();
         if (nActionLockCount)
         {
-            ScSharedCellEditSource* pEditSource =
-                static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+            ScCellEditSource* pEditSource =
+                static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
             if (pEditSource)
                 pEditSource->SetDoUpdateData(false);
         }
@@ -6832,8 +6832,8 @@ void SAL_CALL ScCellObj::addActionLock() throw(uno::RuntimeException)
     {
         if (pUnoText)
         {
-            ScSharedCellEditSource* pEditSource =
-                static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+            ScCellEditSource* pEditSource =
+                static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
             if (pEditSource)
                 pEditSource->SetDoUpdateData(false);
         }
@@ -6851,8 +6851,8 @@ void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException)
         {
             if (pUnoText)
             {
-                ScSharedCellEditSource* pEditSource =
-                    static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+                ScCellEditSource* pEditSource =
+                    static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
                 if (pEditSource)
                 {
                     pEditSource->SetDoUpdateData(sal_True);
@@ -6869,8 +6869,8 @@ void SAL_CALL ScCellObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeExc
     SolarMutexGuard aGuard;
     if (pUnoText)
     {
-        ScSharedCellEditSource* pEditSource =
-            static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+        ScCellEditSource* pEditSource =
+            static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
         if (pEditSource)
         {
             pEditSource->SetDoUpdateData(nLock == 0);
@@ -6887,8 +6887,8 @@ sal_Int16 SAL_CALL ScCellObj::resetActionLocks() throw(uno::RuntimeException)
     sal_uInt16 nRet(nActionLockCount);
     if (pUnoText)
     {
-        ScSharedCellEditSource* pEditSource =
-            static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+        ScCellEditSource* pEditSource =
+            static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
         if (pEditSource)
         {
             pEditSource->SetDoUpdateData(sal_True);

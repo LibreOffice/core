@@ -102,66 +102,42 @@ void ScHeaderFooterEditSource::UpdateData()
 
 //------------------------------------------------------------------------
 
-ScSharedCellEditSource::ScSharedCellEditSource( ScCellTextData* pData ) :
-    pCellTextData( pData )
-{
-    //  pCellTextData is part of the ScCellTextObj.
-    //  Text range and cursor keep a reference to their parent text, so the text object is
-    //  always alive and the CellTextData is valid as long as there are children.
-}
-
-ScSharedCellEditSource::~ScSharedCellEditSource()
-{
-}
-
-SvxEditSource* ScSharedCellEditSource::Clone() const
-{
-    return new ScSharedCellEditSource( pCellTextData );
-}
-
-SvxTextForwarder* ScSharedCellEditSource::GetTextForwarder()
-{
-    return pCellTextData->GetTextForwarder();
-}
-
-void ScSharedCellEditSource::UpdateData()
-{
-    pCellTextData->UpdateData();
-}
-
-void ScSharedCellEditSource::SetDoUpdateData(sal_Bool bValue)
-{
-    pCellTextData->SetDoUpdate(bValue);
-}
-
-sal_Bool ScSharedCellEditSource::IsDirty() const
-{
-    return pCellTextData->IsDirty();
-}
-
-ScEditEngineDefaulter* ScSharedCellEditSource::GetEditEngine()
-{
-    return pCellTextData->GetEditEngine();
-}
-
-//------------------------------------------------------------------------
-
-//  each ScCellEditSource object has its own ScCellTextData
-
-ScCellEditSource::ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP ) :
-    ScSharedCellEditSource( new ScCellTextData( pDocSh, rP ) )
-{
-}
+ScCellEditSource::ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
+    pCellTextData(new ScCellTextData(pDocSh, rP)) {}
 
 ScCellEditSource::~ScCellEditSource()
 {
-    delete GetCellTextData();   // not accessed in ScSharedCellEditSource dtor
+    delete pCellTextData;
 }
 
 SvxEditSource* ScCellEditSource::Clone() const
 {
-    const ScCellTextData* pData = GetCellTextData();
-    return new ScCellEditSource( pData->GetDocShell(), pData->GetCellPos() );
+    return new ScCellEditSource(pCellTextData->GetDocShell(), pCellTextData->GetCellPos());
+}
+
+SvxTextForwarder* ScCellEditSource::GetTextForwarder()
+{
+    return pCellTextData->GetTextForwarder();
+}
+
+void ScCellEditSource::UpdateData()
+{
+    pCellTextData->UpdateData();
+}
+
+void ScCellEditSource::SetDoUpdateData(bool bValue)
+{
+    pCellTextData->SetDoUpdate(bValue);
+}
+
+bool ScCellEditSource::IsDirty() const
+{
+    return pCellTextData->IsDirty();
+}
+
+ScEditEngineDefaulter* ScCellEditSource::GetEditEngine()
+{
+    return pCellTextData->GetEditEngine();
 }
 
 //------------------------------------------------------------------------

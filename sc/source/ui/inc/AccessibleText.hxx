@@ -72,7 +72,7 @@ private:
     mutable SfxBroadcaster maBroadcaster;
 
     // prevent the using of this method of the base class
-    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+    ScCellEditSource* GetOriginalSource() { return NULL; }
 };
 
 
@@ -125,7 +125,7 @@ private:
     ScAccessibleCell* mpAccessibleCell;
 
     // prevent the using of this method of the base class
-    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+    ScCellEditSource* GetOriginalSource() { return NULL; }
 
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
@@ -209,7 +209,7 @@ private:
     ScPreviewShell* mpViewShell;
 
     // prevent the using of this method of the base class
-    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+    ScCellEditSource* GetOriginalSource() { return NULL; }
 
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
@@ -241,7 +241,7 @@ private:
     sal_Bool        mbRowHeader;
 
     // prevent the using of this method of the base class
-    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+    ScCellEditSource* GetOriginalSource() { return NULL; }
 
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);

@@ -49,7 +49,7 @@ class ScDocShell;
 class ScAddress;
 class ScCellObj;
 class ScSimpleEditSource;
-class ScSharedCellEditSource;
+class ScCellEditSource;
 class ScEditEngineDefaulter;
 class ScFieldEditEngine;
 
@@ -376,7 +376,7 @@ protected:
     ScAddress               aCellPos;
     ScFieldEditEngine*      pEditEngine;
     SvxEditEngineForwarder* pForwarder;
-    ScSharedCellEditSource* pOriginalSource;
+    ScCellEditSource* pOriginalSource;
     sal_Bool                    bDataValid;
     sal_Bool                    bInUpdate;
     sal_Bool                    bDirty;
@@ -396,7 +396,7 @@ public:
     void                    UpdateData();
     ScFieldEditEngine*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
-    ScSharedCellEditSource* GetOriginalSource();        // used as argument for SvxUnoText ctor
+    ScCellEditSource* GetOriginalSource();        // used as argument for SvxUnoText ctor
 
                             // used for ScCellEditSource:
     ScDocShell*             GetDocShell() const     { return pDocShell; }

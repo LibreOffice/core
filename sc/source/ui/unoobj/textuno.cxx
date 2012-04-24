@@ -1001,10 +1001,10 @@ ScCellTextData::~ScCellTextData()
     delete pOriginalSource;
 }
 
-ScSharedCellEditSource* ScCellTextData::GetOriginalSource()
+ScCellEditSource* ScCellTextData::GetOriginalSource()
 {
     if (!pOriginalSource)
-        pOriginalSource = new ScSharedCellEditSource( this );
+        pOriginalSource = new ScCellEditSource(pDocShell, aCellPos);
     return pOriginalSource;
 }
 

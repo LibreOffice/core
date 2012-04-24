@@ -80,44 +80,33 @@ public:
     virtual void                UpdateData();
 };
 
-
-//  Data (incl. EditEngine) for cell EditSource is now shared in ScCellTextData
-
-class ScSharedCellEditSource : public SvxEditSource
+/**
+ * Data (incl. EditEngine) for cell EditSource is now shared in
+ * ScCellTextData.
+ *
+ * ScCellEditSource with local copy of ScCellTextData is used by
+ * ScCellFieldsObj, ScCellFieldObj.
+ */
+class ScCellEditSource : public SvxEditSource
 {
 private:
-    ScCellTextData*         pCellTextData;
-
-protected:
-    ScCellTextData*         GetCellTextData() const { return pCellTextData; }   // for ScCellEditSource
+    ScCellTextData* pCellTextData;
 
 public:
-                                ScSharedCellEditSource( ScCellTextData* pData );
-    virtual                     ~ScSharedCellEditSource();
+    ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP);
+    virtual ~ScCellEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
-    ScEditEngineDefaulter*      GetEditEngine();
+    ScEditEngineDefaulter* GetEditEngine();
 
-    virtual SvxEditSource*      Clone() const;
-    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual SvxEditSource* Clone() const;
+    virtual SvxTextForwarder* GetTextForwarder();
 
-    virtual void                UpdateData();
+    virtual void UpdateData();
 
-    void                        SetDoUpdateData(sal_Bool bValue);
-    sal_Bool                    IsDirty() const;
+    void SetDoUpdateData(bool bValue);
+    bool IsDirty() const;
 };
-
-//  ScCellEditSource with local copy of ScCellTextData is used by ScCellFieldsObj, ScCellFieldObj
-
-class ScCellEditSource : public ScSharedCellEditSource
-{
-public:
-                                ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP );
-    virtual                     ~ScCellEditSource();
-
-    virtual SvxEditSource*      Clone() const;
-};
-
 
 class ScAnnotationEditSource : public SvxEditSource, public SfxListener
 {
