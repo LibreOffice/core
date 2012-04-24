@@ -23,9 +23,11 @@
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
- <updated>2008-08-27</updated>
+ <updated>2011-01-07</updated>
 
  <vendorInfos>
+  <vendor name="Oracle Corporation">
+    <minVersion>1.7.0</minVersion>
   <vendor name="Sun Microsystems Inc.">
     <minVersion>1.5.0</minVersion>
   </vendor>
@@ -38,6 +40,7 @@
  </vendorInfos>
 
  <plugins>
+  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
   <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
   <library vendor="The FreeBSD Foundation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
   <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
