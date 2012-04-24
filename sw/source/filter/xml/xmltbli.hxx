@@ -194,7 +194,8 @@ public:
                     const ::rtl::OUString & i_rXmlId = ::rtl::OUString() );
     void FinishRow();
     void InsertRepRows( sal_uInt32 nCount );
-    SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;
+    const SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;
+    SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol );
     const SwStartNode *InsertTableSection( const SwStartNode *pPrevSttNd=0 );
 
     virtual void EndElement();

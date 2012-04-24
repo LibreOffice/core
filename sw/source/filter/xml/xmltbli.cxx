@@ -286,9 +286,7 @@ inline void SwXMLTableCell_Impl::Dispose()
 
 // ---------------------------------------------------------------------
 
-typedef SwXMLTableCell_Impl* SwXMLTableCellPtr;
-SV_DECL_PTRARR_DEL(SwXMLTableCells_Impl,SwXMLTableCellPtr,5)
-SV_IMPL_PTRARR(SwXMLTableCells_Impl,SwXMLTableCellPtr)
+typedef boost::ptr_vector<SwXMLTableCell_Impl> SwXMLTableCells_Impl;
 
 class SwXMLTableRow_Impl
 {
@@ -307,7 +305,8 @@ public:
                         const OUString& i_rXmlId = OUString() );
     ~SwXMLTableRow_Impl() {}
 
-    inline SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol ) const;
+    inline const SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol ) const;
+    inline SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol );
 
     inline void Set( const OUString& rStyleName,
                      const OUString& rDfltCellStyleName,
@@ -342,18 +341,28 @@ SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
 
     for( sal_uInt16 i=0U; i<nCells; i++ )
     {
-        aCells.Insert( new SwXMLTableCell_Impl, aCells.Count() );
+        aCells.push_back( new SwXMLTableCell_Impl );
     }
 }
 
-inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol ) const
+inline const SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol ) const
 {
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
     // #i95726# - some fault tolerance
     OSL_ENSURE( nCol < aCells.Count(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
-    return nCol < aCells.Count() ? aCells[(sal_uInt16)nCol] : 0;
+    return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
+}
+
+inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
+{
+    OSL_ENSURE( nCol < USHRT_MAX,
+            "SwXMLTableRow_Impl::GetCell: column number is to big" );
+    // #i95726# - some fault tolerance
+    OSL_ENSURE( nCol < aCells.Count(),
+            "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
+    return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
 }
 
 void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
@@ -363,12 +372,11 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
     if( nCells > USHRT_MAX )
         nCells = USHRT_MAX;
 
-    sal_uInt32 nColSpan = nCells - aCells.Count();
-    for( sal_uInt16 i=aCells.Count(); i<nCells; i++ )
+    sal_uInt32 nColSpan = nCells - aCells.size();
+    for( sal_uInt16 i=aCells.size(); i<nCells; i++ )
     {
-        aCells.Insert( new SwXMLTableCell_Impl( 1UL,
-                                                bOneCell ? nColSpan : 1UL ),
-                       aCells.Count() );
+        aCells.push_back( new SwXMLTableCell_Impl( 1UL,
+                                                bOneCell ? nColSpan : 1UL ) );
         nColSpan--;
     }
 
@@ -387,8 +395,8 @@ inline void SwXMLTableRow_Impl::Set( const OUString& rStyleName,
 
 void SwXMLTableRow_Impl::Dispose()
 {
-    for( sal_uInt16 i=0; i < aCells.Count(); i++ )
-        aCells[i]->Dispose();
+    for( sal_uInt16 i=0; i < aCells.size(); i++ )
+        aCells[i].Dispose();
 }
 
 // ---------------------------------------------------------------------
@@ -1272,8 +1280,14 @@ public:
 
 typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
 
-SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
+const SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
                                                  sal_uInt32 nCol ) const
+{
+    return (*pRows)[(sal_uInt16)nRow].GetCell( (sal_uInt16)nCol );
+}
+
+SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
+                                                 sal_uInt32 nCol )
 {
     return (*pRows)[(sal_uInt16)nRow].GetCell( (sal_uInt16)nCol );
 }
@@ -1992,7 +2006,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
             {
                 sal_uInt32 nMaxRowSpan = 0UL;
                 SwXMLTableRow_Impl *pStartRow = &(*pRows)[(sal_uInt16)nStartRow];
-                SwXMLTableCell_Impl *pCell;
+                const SwXMLTableCell_Impl *pCell;
                 for( i=nLeftCol; i<nRightCol; i++ )
                     if( ( pCell=pStartRow->GetCell(i),
                           pCell->GetRowSpan() > nMaxRowSpan ) )
@@ -2403,7 +2417,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     if( pRows->size() > nCurRow )
     {
         SwXMLTableRow_Impl *pPrevRow = &(*pRows)[(sal_uInt16)nCurRow-1U];
-        SwXMLTableCell_Impl *pCell;
+        const SwXMLTableCell_Impl *pCell;
         for( sal_uLong i = 0; i < aColumnWidths.size(); ++i )
         {
             if( ( pCell=pPrevRow->GetCell(i), pCell->GetRowSpan() > 1UL ) )
