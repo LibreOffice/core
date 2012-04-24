@@ -274,17 +274,9 @@ sub msvc_copy_msms($$)
 {
     # $postfix is empty for x86, and '_x64' for x64
     my ($dest, $postfix) = @_;
-    my $common_files_path = $ENV{"CommonProgramFiles(x86)"};
-    if (!defined $common_files_path) {
-        $common_files_path = $ENV{CommonProgramFiles};
-        if (!defined $common_files_path) {
-            $common_files_path = "C:\\Program Files\\Common Files";
-        }
-    }
 
-    defined $common_files_path || die "Windows CommonProgramFiles not found";
-
-    my $msm_path = (cygpath $common_files_path . "\\Merge Modules", 'w', $output_format);
+    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format);
+    defined $msm_path || die "MSMDir not found";
     foreach $fname ("Microsoft_VC90_CRT_x86$postfix.msm", "policy_9_0_Microsoft_VC90_CRT_x86$postfix.msm") {
         print STDERR "Copying $msm_path/$fname to $dest\n";
         copy ("$msm_path/$fname", $dest) || die "copy failed: $!";
