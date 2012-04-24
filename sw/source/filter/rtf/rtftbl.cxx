@@ -49,8 +49,7 @@
 
 using namespace ::com::sun::star;
 
-typedef SwTableBoxFmt* SwTableBoxFmtPtr;
-SV_DECL_PTRARR( SwBoxFrmFmts, SwTableBoxFmtPtr, 25 )
+typedef std::vector<SwTableBoxFmt*> SwBoxFrmFmts;
 
 class SwShareBoxFmts;
 extern void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* = 0,
@@ -297,7 +296,7 @@ void SwRTFParser::ReadTable( int nToken )
                 {
                     // neue Zellen lesen und noch keine Formate vorhanden,
                     // dann benutze das der vorhergebende
-                    if( bReadNewCell && !aBoxFmts.Count() )
+                    if( bReadNewCell && aBoxFmts.empty() )
                     {
                         SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
                         SwTableLine* pLine = rLns[ rLns.Count()-1 ];
@@ -309,7 +308,7 @@ void SwRTFParser::ReadTable( int nToken )
                             pLine->GetTabBoxes()[ m_nCurrentBox ]->GetFrmFmt());
                     }
                     else
-                        pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
+                        pFmt = aBoxFmts.back();
 
                     // #i73790# - method renamed
                     pBoxFmt->ResetAllFmtAttr();
@@ -324,7 +323,7 @@ void SwRTFParser::ReadTable( int nToken )
                     aRow.mbUseRightRowPad=sal_True;
                   }
                     SetRowBorder((SfxItemSet&)pBoxFmt->GetAttrSet(), aRow);
-                    aBoxFmts.Insert( pBoxFmt, aBoxFmts.Count() );
+                    aBoxFmts.push_back( pBoxFmt );
                     pBoxFmt = pDoc->MakeTableBoxFmt();
                 }
 
@@ -549,7 +548,7 @@ void SwRTFParser::ReadTable( int nToken )
         pNewLine = (*pLns)[ pLns->Count() - 1 ];
 
         // jetzt die Boxen abgleichen
-        sal_uInt16 nBoxes = Min( pNewLine->GetTabBoxes().Count(), aBoxFmts.Count() );
+        sal_uInt16 nBoxes = Min( pNewLine->GetTabBoxes().Count(), (sal_uInt16)aBoxFmts.size() );
         sal_uInt16 n;
 
         for( n = 0; n < nBoxes; ++n )
@@ -558,9 +557,9 @@ void SwRTFParser::ReadTable( int nToken )
             *pBox->GetFrmFmt() = *aBoxFmts[ n ];
             delete aBoxFmts[ n ];
         }
-        aBoxFmts.Remove( 0, n );
+        aBoxFmts.erase( aBoxFmts.begin(), aBoxFmts.begin() + n );
 
-        if( aBoxFmts.Count() )      // es muessen noch neue zugefuegt werden
+        if( !aBoxFmts.empty() )     // es muessen noch neue zugefuegt werden
         {
             m_nCurrentBox = n;
         }
@@ -630,7 +629,7 @@ void SwRTFParser::ReadTable( int nToken )
             {
                 pNewLine = new SwTableLine(
                         (SwTableLineFmt*)rLns[ rLns.Count()-1 ]->GetFrmFmt(),
-                        aBoxFmts.Count(), 0 );
+                        aBoxFmts.size(), 0 );
                 pNewLine->ClaimFrmFmt();
                 pNewLine->GetFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
                 rLns.C40_INSERT( SwTableLine, pNewLine, rLns.Count() );
@@ -696,7 +695,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     pNewLine->ClaimFrmFmt()->SetFmtAttr(SwFmtRowSplit(!bCantSplit));
 
-    if( aBoxFmts.Count() )
+    if( !aBoxFmts.empty() )
     {
         // setze das default Style
         SwTxtFmtColl* pColl = NULL;
@@ -723,7 +722,7 @@ void SwRTFParser::ReadTable( int nToken )
             nRowsToRepeat=0;
         }
 
-        for( ; nStt < aBoxFmts.Count(); ++nStt )
+        for( ; nStt < aBoxFmts.size(); ++nStt )
         {
             pDoc->GetNodes().InsBoxen( pTableNode, pNewLine,
                     aBoxFmts[ nStt ],
