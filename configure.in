@@ -8680,7 +8680,7 @@ elif test -z "$enable_cairo_canvas"; then
     enable_cairo_canvas=yes
 fi
 
-ENABLE_CAIRO_CANVAS="FALSE"
+ENABLE_CAIRO_CANVAS=""
 if test "$enable_cairo_canvas" = "yes"; then
     ENABLE_CAIRO_CANVAS="TRUE"
 fi
