@@ -51,15 +51,14 @@ class SdrObject;
 class ScHeaderFooterEditSource : public SvxEditSource
 {
 private:
-    ScHeaderFooterTextData* mpTextData;
+    ScHeaderFooterTextData& mrTextData;
 
 public:
-    ScHeaderFooterEditSource(ScHeaderFooterTextData* pData);
+    ScHeaderFooterEditSource(ScHeaderFooterTextData& rData);
     virtual ~ScHeaderFooterEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     ScEditEngineDefaulter*      GetEditEngine();
-    void SetTextData(ScHeaderFooterTextData* pData);
 
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();

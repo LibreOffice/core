@@ -853,7 +853,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
     nType(SC_SERVICE_INVALID),
     mpRefreshListeners( NULL )
 {
-    pEditSource = new ScHeaderFooterEditSource(&rData);
+    pEditSource = new ScHeaderFooterEditSource(rData);
 }
 
 ScHeaderFieldsObj::~ScHeaderFieldsObj()
@@ -927,7 +927,7 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) cons
 
         uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
         xTextRange = xTemp;
-        return new ScHeaderFieldObj(xTextRange, new ScHeaderFooterEditSource(&mrData), nFieldType, aSelection);
+        return new ScHeaderFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), nFieldType, aSelection);
     }
     return NULL;
 }

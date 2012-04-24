@@ -297,8 +297,8 @@ void ScHeaderFooterTextObj::CreateUnoText_Impl()
     if ( !pUnoText )
     {
         //  can't be aggregated because getString/setString is handled here
-        ScHeaderFooterEditSource aEditSource(&aTextData);
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>() );
+        pUnoText = new SvxUnoText(
+            new ScHeaderFooterEditSource(aTextData), lcl_GetHdFtPropertySet(), uno::Reference<text::XText>());
         pUnoText->acquire();
     }
 }
@@ -478,7 +478,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                 break;
             }
 
-            pHeaderField->InitDoc(xTextRange, new ScHeaderFooterEditSource(&aTextData), aSelection);
+            pHeaderField->InitDoc(xTextRange, new ScHeaderFooterEditSource(aTextData), aSelection);
 
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)

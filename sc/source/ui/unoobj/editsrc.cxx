@@ -50,35 +50,29 @@
 #include "postit.hxx"
 #include "AccessibleText.hxx"
 
-ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData* pData) :
-    mpTextData(pData) {}
+ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData& rData) :
+    mrTextData(rData) {}
 
 ScHeaderFooterEditSource::~ScHeaderFooterEditSource() {}
 
 ScEditEngineDefaulter* ScHeaderFooterEditSource::GetEditEngine()
 {
-    return mpTextData ? mpTextData->GetEditEngine() : NULL;
-}
-
-void ScHeaderFooterEditSource::SetTextData(ScHeaderFooterTextData* pData)
-{
-    mpTextData = pData;
+    return mrTextData.GetEditEngine();
 }
 
 SvxEditSource* ScHeaderFooterEditSource::Clone() const
 {
-    return new ScHeaderFooterEditSource(mpTextData);
+    return new ScHeaderFooterEditSource(mrTextData);
 }
 
 SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
 {
-    return mpTextData ? mpTextData->GetTextForwarder() : NULL;
+    return mrTextData.GetTextForwarder();
 }
 
 void ScHeaderFooterEditSource::UpdateData()
 {
-    if (mpTextData)
-        mpTextData->UpdateData();
+    mrTextData.UpdateData();
 }
 
 //------------------------------------------------------------------------
