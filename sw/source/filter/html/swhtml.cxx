@@ -149,8 +149,6 @@ static HTMLOptionEnum aHTMLSpacerTypeTable[] =
     { 0,                    0                       }
 };
 
-SV_IMPL_PTRARR( _HTMLAttrs, _HTMLAttrPtr )
-
 HTMLReader::HTMLReader()
 {
     bTmplBrowseMode = sal_True;
@@ -456,10 +454,13 @@ SwHTMLParser::~SwHTMLParser()
 
     delete pSttNdIdx;
 
-    if( aSetAttrTab.Count() )
+    if( !aSetAttrTab.empty() )
     {
-        OSL_ENSURE( !aSetAttrTab.Count(),"Es stehen noch Attribute auf dem Stack" );
-        aSetAttrTab.DeleteAndDestroy( 0, aSetAttrTab.Count() );
+        OSL_ENSURE( aSetAttrTab.empty(),"Es stehen noch Attribute auf dem Stack" );
+        for ( _HTMLAttrs::const_iterator it = aSetAttrTab.begin();
+              it != aSetAttrTab.end(); ++it )
+            delete *it;
+        aSetAttrTab.clear();
     }
 
     delete pPam;
@@ -687,8 +688,8 @@ void SwHTMLParser::Continue( int nToken )
                 }
             }
 
-            if( aParaAttrs.Count() )
-                aParaAttrs.Remove( 0, aParaAttrs.Count() );
+            if( !aParaAttrs.empty() )
+                aParaAttrs.clear();
 
             SetAttr( sal_False );
 
@@ -1235,8 +1236,8 @@ void SwHTMLParser::NextToken( int nToken )
                 // if there are temporary paragraph attributes and the
                 // paragraph isn't empty then the paragraph attributes
                 // are final.
-                if( aParaAttrs.Count() )
-                    aParaAttrs.Remove( 0, aParaAttrs.Count() );
+                if( !aParaAttrs.empty() )
+                    aParaAttrs.clear();
 
                 SetAttr();
             }
@@ -1489,8 +1490,8 @@ void SwHTMLParser::NextToken( int nToken )
             // if there are temporary paragraph attributes and the
             // paragraph isn't empty then the paragraph attributes
             // are final.
-            if( aParaAttrs.Count() )
-                aParaAttrs.Remove( 0, aParaAttrs.Count() );
+            if( !aParaAttrs.empty() )
+                aParaAttrs.clear();
 
             SetAttr();
         }
@@ -2052,8 +2053,8 @@ void SwHTMLParser::NextToken( int nToken )
 
     // if there are temporary paragraph attributes and the
     // paragraph isn't empty then the paragraph attributes are final.
-    if( aParaAttrs.Count() && pPam->GetPoint()->nContent.GetIndex() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() && pPam->GetPoint()->nContent.GetIndex() )
+        aParaAttrs.clear();
 }
 
 
@@ -2109,8 +2110,8 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
         eMode = AM_SPACE;
 
     // die harten Attribute an diesem Absatz werden nie mehr ungueltig
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     if( AM_SPACE==eMode || AM_NOSPACE==eMode )
     {
@@ -2207,9 +2208,10 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                                     pSetAttr->ClearPrev();
                                     if( !pNext || bWholePara )
                                     {
-                                        sal_uInt16 nTmp = pSetAttr->bInsAtStart ? 0
-                                                        : aSetAttrTab.Count();
-                                        aSetAttrTab.Insert( pSetAttr, nTmp );
+                                        if (pSetAttr->bInsAtStart)
+                                            aSetAttrTab.push_front( pSetAttr );
+                                        else
+                                            aSetAttrTab.push_back( pSetAttr );
                                     }
                                     else
                                         pNext->InsertPrev( pSetAttr );
@@ -2237,9 +2239,10 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                         // wenn Felder ins Rennen kommen
                         if( !pNext || bWholePara )
                         {
-                            sal_uInt16 nTmp = pSetAttr->bInsAtStart ? 0
-                                                             : aSetAttrTab.Count();
-                            aSetAttrTab.Insert( pSetAttr, nTmp );
+                            if (pSetAttr->bInsAtStart)
+                                aSetAttrTab.push_front( pSetAttr );
+                            else
+                                aSetAttrTab.push_back( pSetAttr );
                         }
                         else
                             pNext->InsertPrev( pSetAttr );
@@ -2252,8 +2255,10 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                             // Die Previous-Attribute muessen trotzdem gesetzt werden.
                             if( !pNext || bWholePara )
                             {
-                                sal_uInt16 nTmp = pPrev->bInsAtStart ? 0 : aSetAttrTab.Count();
-                                aSetAttrTab.Insert( pPrev, nTmp );
+                                if (pPrev->bInsAtStart)
+                                    aSetAttrTab.push_front( pPrev );
+                                else
+                                    aSetAttrTab.push_back( pPrev );
                             }
                             else
                                 pNext->InsertPrev( pPrev );
@@ -2591,7 +2596,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
 
     _HTMLAttrs aFields( 5 );
 
-    for( n = aSetAttrTab.Count(); n; )
+    for( n = aSetAttrTab.size(); n; )
     {
         pAttr = aSetAttrTab[ --n ];
         sal_uInt16 nWhich = pAttr->pItem->Which();
@@ -2633,17 +2638,16 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
         {
             // Das Attribute darf nicht in der liste der vorlaeufigen
             // Absatz-Attribute stehen, weil es sonst geloescht wurde.
-            sal_uInt16 ii = aParaAttrs.Count();
-            while( ii-- )
+            while( !aParaAttrs.empty() )
             {
-                OSL_ENSURE( pAttr != aParaAttrs[ii],
+                OSL_ENSURE( pAttr != aParaAttrs.back(),
                         "SetAttr: Attribut duerfte noch nicht gesetzt werden" );
-                aParaAttrs.Remove( ii );
+                aParaAttrs.pop_back();
             }
 
 
             // dann also setzen
-            aSetAttrTab.Remove( n, 1 );
+            aSetAttrTab.erase( aSetAttrTab.begin() + n );
 
             while( pAttr )
             {
@@ -2786,11 +2790,11 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         if( pPostIts && (RES_POSTITFLD == nFldWhich ||
                                          RES_SCRIPTFLD == nFldWhich) )
                         {
-                            pPostIts->Insert( pAttr, 0 );
+                            pPostIts->push_front( pAttr );
                         }
                         else
                         {
-                            aFields.Insert( pAttr, aFields.Count() );
+                            aFields.push_back( pAttr);
                         }
                     }
                     pAttrPam->DeleteMark();
@@ -2885,7 +2889,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
             aMoveFlyCnts.erase( aMoveFlyCnts.begin() + n );
         }
     }
-    while( aFields.Count() )
+    while( !aFields.empty() )
     {
         pAttr = aFields[0];
 
@@ -2905,7 +2909,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
 
         pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, 0 );
 
-        aFields.Remove( 0, 1 );
+        aFields.pop_front();
         delete pAttr;
     }
 
@@ -3016,9 +3020,10 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                     pNext->InsertPrev( pSetAttr );
                 else
                 {
-                    sal_uInt16 nTmp = pSetAttr->bInsAtStart ? 0
-                                                        : aSetAttrTab.Count();
-                    aSetAttrTab.Insert( pSetAttr, nTmp );
+                    if (pSetAttr->bInsAtStart)
+                        aSetAttrTab.push_front( pSetAttr );
+                    else
+                        aSetAttrTab.push_back( pSetAttr );
                 }
             }
             pAttr->nSttCntnt = nScriptEnd;
@@ -3046,8 +3051,10 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                 (*ppDepAttr)->InsertPrev( pAttr );
             else
             {
-                sal_uInt16 nTmp = pAttr->bInsAtStart ? 0 : aSetAttrTab.Count();
-                aSetAttrTab.Insert( pAttr, nTmp );
+                if (pAttr->bInsAtStart)
+                    aSetAttrTab.push_front( pAttr );
+                else
+                    aSetAttrTab.push_back( pAttr );
             }
         }
         else
@@ -3075,8 +3082,10 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                 pNext->InsertPrev( pPrev );
             else
             {
-                sal_uInt16 nTmp = pPrev->bInsAtStart ? 0 : aSetAttrTab.Count();
-                aSetAttrTab.Insert( pPrev, nTmp );
+                if (pPrev->bInsAtStart)
+                    aSetAttrTab.push_front( pPrev );
+                else
+                    aSetAttrTab.push_back( pPrev );
             }
         }
 
@@ -3099,8 +3108,8 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
     OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     // Der Listenkopf ist im Attribut gespeichert
     _HTMLAttr **ppHead = pAttr->ppHead;
@@ -3136,8 +3145,10 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
             pNext->InsertPrev( pPrev );
         else
         {
-            sal_uInt16 nTmp = pPrev->bInsAtStart ? 0 : aSetAttrTab.Count();
-            aSetAttrTab.Insert( pPrev, nTmp );
+            if (pPrev->bInsAtStart)
+                aSetAttrTab.push_front( pPrev );
+            else
+                aSetAttrTab.push_back( pPrev );
         }
     }
 
@@ -3155,8 +3166,8 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
     OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
     _HTMLAttr** pSaveTbl = (_HTMLAttr**)&rNewAttrTab;
@@ -3184,8 +3195,8 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
     OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     const SwNodeIndex& nSttIdx = pPam->GetPoint()->nNode;
     SwNodeIndex nEndIdx( nSttIdx );
@@ -3241,9 +3252,10 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
                     pNext->InsertPrev( pSetAttr );
                 else
                 {
-                    sal_uInt16 nTmp = pSetAttr->bInsAtStart ? 0
-                                                        : aSetAttrTab.Count();
-                    aSetAttrTab.Insert( pSetAttr, nTmp );
+                    if (pSetAttr->bInsAtStart)
+                        aSetAttrTab.push_front( pSetAttr );
+                    else
+                        aSetAttrTab.push_back( pSetAttr );
                 }
             }
             else if( pPrev )
@@ -3255,8 +3267,10 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
                     pNext->InsertPrev( pPrev );
                 else
                 {
-                    sal_uInt16 nTmp = pPrev->bInsAtStart ? 0 : aSetAttrTab.Count();
-                    aSetAttrTab.Insert( pPrev, nTmp );
+                    if (pPrev->bInsAtStart)
+                        aSetAttrTab.push_front( pPrev );
+                    else
+                        aSetAttrTab.push_back( pPrev );
                 }
             }
 
@@ -3288,8 +3302,8 @@ void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
     OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
     _HTMLAttr** pSaveTbl = (_HTMLAttr**)&rNewAttrTab;
@@ -3332,17 +3346,19 @@ void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, sal_Bool bLikePara,
                                      rItem );
     if( bLikePara )
         pTmp->SetLikePara();
-    sal_uInt16 nTmp = bInsAtStart ? 0 : aSetAttrTab.Count();
-    aSetAttrTab.Insert( pTmp, nTmp );
+    if (bInsAtStart)
+        aSetAttrTab.push_front( pTmp );
+    else
+        aSetAttrTab.push_back( pTmp );
 }
 
 void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
 {
-    while( rAttrs.Count() )
+    while( !rAttrs.empty() )
     {
-        _HTMLAttr *pAttr = rAttrs[0];
+        _HTMLAttr *pAttr = rAttrs.front();
         InsertAttr( pAttr->GetItem() );
-        rAttrs.Remove( 0, 1 );
+        rAttrs.pop_front();
         delete pAttr;
     }
 }
@@ -4648,12 +4664,12 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     }
 
     // bisherige harte Attributierung des Absatzes entfernen
-    if( aParaAttrs.Count() )
+    if( !aParaAttrs.empty() )
     {
-        for( i=0; i<aParaAttrs.Count(); i++ )
+        for( i=0; i<aParaAttrs.size(); i++ )
             aParaAttrs[i]->Invalidate();
 
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+        aParaAttrs.clear();
     }
 
     // Die Vorlage setzen
@@ -4679,7 +4695,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
         {
             NewAttr( &aAttrTab.pLRSpace, aLRItem );
             aAttrTab.pLRSpace->SetLikePara();
-            aParaAttrs.Insert( aAttrTab.pLRSpace, aParaAttrs.Count() );
+            aParaAttrs.push_back( aAttrTab.pLRSpace );
             EndAttr( aAttrTab.pLRSpace, 0, sal_False );
         }
     }
@@ -5213,8 +5229,8 @@ void SwHTMLParser::InsertHorzRule()
     SetTxtCollAttrs( pCntxt );
 
     // die harten Attribute an diesem Absatz werden nie mehr ungueltig
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     if( nSize>0 || bColor || bNoShade )
     {
@@ -5245,7 +5261,7 @@ void SwHTMLParser::InsertHorzRule()
         SvxBoxItem aBoxItem(RES_BOX);
         aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
         _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(), aBoxItem );
-        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+        aSetAttrTab.push_back( pTmp );
     }
     if( nWidth )
     {
@@ -5286,7 +5302,7 @@ void SwHTMLParser::InsertHorzRule()
                 }
 
                 _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(), aLRItem );
-                aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+                aSetAttrTab.push_back( pTmp );
             }
         }
     }

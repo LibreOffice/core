@@ -3127,8 +3127,8 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
     rParser.bNoParSpace = sal_False;
     rParser.nOpenParaToken = 0;
 
-    if( rParser.aParaAttrs.Count() )
-        rParser.aParaAttrs.Remove( 0, rParser.aParaAttrs.Count() );
+    if( !rParser.aParaAttrs.empty() )
+        rParser.aParaAttrs.clear();
 }
 
 
@@ -3642,26 +3642,26 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
 
                         _HTMLAttr* pTmp =
                             new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
-                        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+                        aSetAttrTab.push_back( pTmp );
 
                         aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
                         pTmp = new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
-                        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+                        aSetAttrTab.push_back( pTmp );
 
                         aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
                         pTmp = new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
-                        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+                        aSetAttrTab.push_back( pTmp );
 
                         pTmp = new _HTMLAttr( *pPam->GetPoint(),
                                             SvxULSpaceItem( 0, 0, RES_UL_SPACE ) );
-                        aSetAttrTab.Insert( pTmp, 0 ); // ja, 0, weil schon
+                        aSetAttrTab.push_front( pTmp ); // ja, 0, weil schon
                                                         // vom Tabellenende vorher
                                                         // was gesetzt sein kann.
                     }
                     AppendTxtNode( AM_NOSPACE );
                     bAppended = sal_True;
                 }
-                else if( aParaAttrs.Count() )
+                else if( !aParaAttrs.empty() )
                 {
                     if( !bForceFrame )
                     {
@@ -3669,11 +3669,11 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                         // verschoben. Deshalb entfernen wir alle harten
                         // Attribute des Absatzes
 
-                        for( sal_uInt16 i=0; i<aParaAttrs.Count(); i++ )
+                        for( sal_uInt16 i=0; i<aParaAttrs.size(); i++ )
                             aParaAttrs[i]->Invalidate();
                     }
 
-                    aParaAttrs.Remove( 0, aParaAttrs.Count() );
+                    aParaAttrs.clear();
                 }
 
                 pSavePos = new SwPosition( *pPam->GetPoint() );
@@ -3687,8 +3687,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 nFontStHeadStart = nFontStMin;
 
                 // die harten Attribute an diesem Absatz werden nie mehr ungueltig
-                if( aParaAttrs.Count() )
-                    aParaAttrs.Remove( 0, aParaAttrs.Count() );
+                if( !aParaAttrs.empty() )
+                    aParaAttrs.clear();
             }
 
             // einen Tabellen Kontext anlegen
@@ -4177,7 +4177,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
         // Alle noch offenen Kontexte beenden. Wir nehmen hier
         // AttrMin, weil nContxtStMin evtl. veraendert wurde.
         // Da es durch EndContext wieder restauriert wird, geht das.
-        while( aContexts.size() > nContextStAttrMin+1 )
+        while( (sal_uInt16)aContexts.size() > nContextStAttrMin+1 )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             EndContext( pCntxt );
@@ -4909,7 +4909,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         NewAttr( &aAttrTab.pAdjust, SvxAdjustItem(SVX_ADJUST_CENTER, RES_PARATR_ADJUST) );
 
         _HTMLAttrs &rAttrs = pCntxt->GetAttrs();
-        rAttrs.Insert( aAttrTab.pAdjust, rAttrs.Count() );
+        rAttrs.push_back( aAttrTab.pAdjust );
 
         PushContext( pCntxt );
 
@@ -4994,7 +4994,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     }
 
     // Alle noch offenen Kontexte beenden
-    while( aContexts.size() > nContextStAttrMin+1 )
+    while( (sal_uInt16)aContexts.size() > nContextStAttrMin+1 )
     {
         _HTMLAttrContext *pCntxt = PopContext();
         EndContext( pCntxt );

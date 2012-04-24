@@ -147,8 +147,8 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
     OSL_ENSURE( !aParaAttrs.Count(),
         "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
-    if( aParaAttrs.Count() )
-        aParaAttrs.Remove( 0, aParaAttrs.Count() );
+    if( !aParaAttrs.empty() )
+        aParaAttrs.clear();
 
     const SwNodeIndex* pOldEndPara = &pPam->GetPoint()->nNode;
     xub_StrLen nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
@@ -204,9 +204,10 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                     pNext->InsertPrev( pSetAttr );
                 else
                 {
-                    sal_uInt16 nTmp =
-                        pSetAttr->bInsAtStart ? 0 : aSetAttrTab.Count();
-                    aSetAttrTab.Insert( pSetAttr, nTmp );
+                    if (pSetAttr->bInsAtStart)
+                        aSetAttrTab.push_front( pSetAttr );
+                    else
+                        aSetAttrTab.push_back( pSetAttr );
                 }
             }
             else if( pPrev )
@@ -218,8 +219,10 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                     pNext->InsertPrev( pPrev );
                 else
                 {
-                    sal_uInt16 nTmp = pPrev->bInsAtStart ? 0 : aSetAttrTab.Count();
-                    aSetAttrTab.Insert( pPrev, nTmp );
+                    if (pPrev->bInsAtStart)
+                        aSetAttrTab.push_front( pPrev );
+                    else
+                        aSetAttrTab.push_back( pPrev );
                 }
             }
 
@@ -398,7 +401,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
 void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
-    for( sal_uInt16 i=0; i<rAttrs.Count(); i++ )
+    for( sal_uInt16 i=0; i<rAttrs.size(); i++ )
     {
         // einfaches Loeschen reicht hier nicht, weil das
         // Attribut auch aus seiner Liste ausgetragen werden
@@ -524,7 +527,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             NewAttr( &aAttrTab.pDropCap, aDrop );
 
             _HTMLAttrs &rAttrs = pContext->GetAttrs();
-            rAttrs.Insert( aAttrTab.pDropCap, rAttrs.Count() );
+            rAttrs.push_back( aAttrTab.pDropCap );
 
             return;
         }
@@ -631,7 +634,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
                 // ... und noch die Kontext-Information speichern
                 _HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.Insert( aAttrTab.pULSpace, rAttrs.Count() );
+                rAttrs.push_back( aAttrTab.pULSpace );
 
                 pContext->SetULSpace( aULSpace.GetUpper(), aULSpace.GetLower() );
             }
@@ -668,7 +671,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
                 // ... und noch die Kontext-Information speichern
                 _HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.Insert( aAttrTab.pCharBrush, rAttrs.Count() );
+                rAttrs.push_back( aAttrTab.pCharBrush );
             }
             else if( pContext->GetToken() != HTML_TABLEHEADER_ON &&
                      pContext->GetToken() != HTML_TABLEDATA_ON )
@@ -690,7 +693,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
             // ... und noch die Kontext-Information speichern
             _HTMLAttrs &rAttrs = pContext->GetAttrs();
-            rAttrs.Insert( *ppAttr, rAttrs.Count() );
+            rAttrs.push_back( *ppAttr );
         }
 
         // auf zum naechsten Item
@@ -716,7 +719,7 @@ void SwHTMLParser::InsertAttr( _HTMLAttr **ppAttr, const SfxPoolItem & rItem,
 
     // und im Kontext merken
     _HTMLAttrs &rAttrs = pCntxt->GetAttrs();
-    rAttrs.Insert( *ppAttr, rAttrs.Count() );
+    rAttrs.push_back( *ppAttr );
 }
 
 void SwHTMLParser::SplitPREListingXMP( _HTMLAttrContext *pCntxt )

@@ -2304,7 +2304,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
 void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, sal_Bool bRemove )
 {
     _HTMLAttrs &rAttrs = pContext->GetAttrs();
-    for( sal_uInt16 i=0; i<rAttrs.Count(); i++ )
+    for( sal_uInt16 i=0; i<rAttrs.size(); i++ )
     {
         _HTMLAttr *pAttr = rAttrs[i];
 
@@ -2324,8 +2324,8 @@ void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, sal_Bool bRemove
         EndAttr( pAttr );
     }
 
-    if( bRemove && rAttrs.Count() )
-        rAttrs.Remove( 0, rAttrs.Count() );
+    if( bRemove && !rAttrs.empty() )
+        rAttrs.clear();
 }
 
 void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
@@ -2344,7 +2344,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
             NewAttr( ppAttr, *pItem );
             if( RES_PARATR_BEGIN > nWhich )
                 (*ppAttr)->SetLikePara();
-            aParaAttrs.Insert( *ppAttr, aParaAttrs.Count() );
+            aParaAttrs.push_back( *ppAttr );
             EndAttr( *ppAttr, 0, sal_False );
         }
 

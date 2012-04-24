@@ -250,7 +250,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             if( nUpper )
             {
                 NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, nLower, RES_UL_SPACE ) );
-                aParaAttrs.Insert( aAttrTab.pULSpace, aParaAttrs.Count() );
+                aParaAttrs.push_back( aAttrTab.pULSpace );
                 EndAttr( aAttrTab.pULSpace, 0, sal_False );
             }
         }
@@ -1250,7 +1250,7 @@ void SwHTMLParser::InsertBookmark( const String& rName )
 {
     _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(),
             SfxStringItem( RES_FLTR_BOOKMARK, rName ));
-    aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+    aSetAttrTab.push_back( pTmp );
 }
 
 sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
@@ -1264,7 +1264,7 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
     if( !bIgnoreStack )
     {
         _HTMLAttr* pAttr;
-        for( sal_uInt16 i = aSetAttrTab.Count(); i; )
+        for( sal_uInt16 i = aSetAttrTab.size(); i; )
         {
             pAttr = aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )

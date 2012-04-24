@@ -71,8 +71,7 @@ extern HTMLOptionEnum aHTMLImgVAlignTable[];
 // der Attribut Stack:
 
 class _HTMLAttr;
-typedef _HTMLAttr *_HTMLAttrPtr;
-SV_DECL_PTRARR( _HTMLAttrs, _HTMLAttrPtr, 5 )
+typedef std::deque<_HTMLAttr *> _HTMLAttrs;
 
 class _HTMLAttr
 {
@@ -299,7 +298,7 @@ public:
     inline sal_Bool IsULSpaceChanged() const { return bULSpaceChanged; }
     inline void GetULSpace( sal_uInt16& rUpper, sal_uInt16& rLower ) const;
 
-    sal_Bool HasAttrs() const { return aAttrs.Count() != 0; }
+    sal_Bool HasAttrs() const { return aAttrs.size() != 0; }
     const _HTMLAttrs& GetAttrs() const { return aAttrs; }
     _HTMLAttrs& GetAttrs() { return aAttrs; }
 
@@ -500,7 +499,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     inline void SetAttr( sal_Bool bChkEnd = sal_True, sal_Bool bBeforeTable = sal_False,
                          _HTMLAttrs *pPostIts = 0 )
     {
-        if( aSetAttrTab.Count() || !aMoveFlyFrms.empty() )
+        if( !aSetAttrTab.empty() || !aMoveFlyFrms.empty() )
             _SetAttr( bChkEnd, bBeforeTable, pPostIts );
     }
 
