@@ -109,6 +109,7 @@ SwPaM* lcl_createPamCopy(const SwPaM& rPam)
  ******************************************************************/
 SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),
+    m_SelChangedListeners(m_aMutex),
     m_pView(pSwView),
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_VIEW ) ),
     pxViewSettings(0),
@@ -139,23 +140,11 @@ void SwXTextView::Invalidate()
 
     m_refCount++; //prevent second d'tor call
 
-    sal_uInt16 nCount = aSelChangedListeners.size();
-    if(nCount)
     {
-        uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
+        uno::Reference<uno::XInterface> const xInt(static_cast<
+                cppu::OWeakObject*>(static_cast<SfxBaseController*>(this)));
         lang::EventObject aEvent(xInt);
-        for ( sal_uInt16 i = nCount; i--; )
-        {
-            uno::Reference< view::XSelectionChangeListener >  *pObj = &aSelChangedListeners[i];
-            (*pObj)->disposing(aEvent);
-        }
-    }
-
-    // #i85580: now clean up any possibly remaining entries in the array...
-    // (i.e. listeners that did not call removeSelectionChangeListener in their disposing.)
-    while ((nCount = aSelChangedListeners.size()) != 0)
-    {
-        removeSelectionChangeListener( aSelChangedListeners[0] );
+        m_SelChangedListeners.disposeAndClear(aEvent);
     }
 
     m_refCount--;
@@ -606,7 +595,7 @@ void SwXTextView::addSelectionChangeListener(
                                     throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    aSelChangedListeners.push_back(rxListener);
+    m_SelChangedListeners.addInterface(rxListener);
 }
 
 void SwXTextView::removeSelectionChangeListener(
@@ -614,18 +603,7 @@ void SwXTextView::removeSelectionChangeListener(
                                         throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    view::XSelectionChangeListener* pLeft = rxListener.get();
-    for(SelectionChangeListenerArr::iterator it = aSelChangedListeners.begin();
-        it != aSelChangedListeners.end(); ++it)
-    {
-        uno::Reference< view::XSelectionChangeListener > * pElem = &*it;
-        view::XSelectionChangeListener* pRight = pElem->get();
-        if(pLeft == pRight)
-        {
-            aSelChangedListeners.erase(it);
-            break;
-        }
-    }
+    m_SelChangedListeners.removeInterface(rxListener);
 }
 
 SdrObject* SwXTextView::GetControl(
@@ -877,16 +855,27 @@ void SwXTextView::NotifySelChanged()
 {
     OSL_ENSURE( m_pView, "view is missing" );
 
-    uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
+    uno::Reference<uno::XInterface> const xInt(
+        static_cast<cppu::OWeakObject*>(static_cast<SfxBaseController*>(this)));
 
-     lang::EventObject aEvent(xInt);
+    lang::EventObject const aEvent(xInt);
+    m_SelChangedListeners.notifyEach(
+            &view::XSelectionChangeListener::selectionChanged, aEvent);
+}
 
-    sal_uInt16 nCount = aSelChangedListeners.size();
-    for ( sal_uInt16 i = nCount; i--; )
+namespace {
+    struct DispatchListener
     {
-        uno::Reference< view::XSelectionChangeListener >  *pObj = &aSelChangedListeners[i];
-        (*pObj)->selectionChanged(aEvent);
-    }
+        URL const & m_rURL;
+        Sequence<PropertyValue> const& m_rSeq;
+        explicit DispatchListener(URL const& rURL,
+                Sequence<PropertyValue> const& rSeq)
+            : m_rURL(rURL), m_rSeq(rSeq) { }
+        void operator()(uno::Reference<XDispatch> const & xListener) const
+        {
+            xListener->dispatch(m_rURL, m_rSeq);
+        }
+    };
 }
 
 void SwXTextView::NotifyDBChanged()
@@ -894,14 +883,8 @@ void SwXTextView::NotifyDBChanged()
     URL aURL;
     aURL.Complete = rtl::OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
 
-    sal_uInt16 nCount = aSelChangedListeners.size();
-    for ( sal_uInt16 i = nCount; i--; )
-    {
-        uno::Reference< view::XSelectionChangeListener >  *pObj = &aSelChangedListeners[i];
-        uno::Reference<XDispatch> xDispatch((*pObj), UNO_QUERY);
-        if(xDispatch.is())
-            xDispatch->dispatch(aURL, Sequence<PropertyValue>(0));
-    }
+    m_SelChangedListeners.forEach<XDispatch>(
+            DispatchListener(aURL, Sequence<PropertyValue>(0)));
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetInfo(  )

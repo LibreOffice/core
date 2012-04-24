@@ -25,9 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNOTXVW_HXX
-#define _UNOTXVW_HXX
+#ifndef SW_UNOTXVW_HXX
+#define SW_UNOTXVW_HXX
 #include <sfx2/sfxbasecontroller.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -55,9 +56,6 @@
 class SdrObject;
 class SwView;
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > XSelectionChangeListenerRef;
-typedef std::vector<XSelectionChangeListenerRef> SelectionChangeListenerArr;
-
 class SwXTextView :
     public ::com::sun::star::view::XSelectionSupplier,
     public ::com::sun::star::lang::XServiceInfo,
@@ -69,7 +67,7 @@ class SwXTextView :
     public ::com::sun::star::datatransfer::XTransferableSupplier,
     public SfxBaseController
 {
-    SelectionChangeListenerArr aSelChangedListeners;
+    ::cppu::OInterfaceContainerHelper m_SelChangedListeners;
 
     SwView*                     m_pView;
     const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
