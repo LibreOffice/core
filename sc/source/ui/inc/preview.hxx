@@ -130,13 +130,13 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    DataChanged(bool bNewTime = false);             // statt Invalidate rufen
+    SC_DLLPUBLIC void    DataChanged(bool bNewTime = false);             // statt Invalidate rufen
     void    DoInvalidate();
 
     void    SetXOffset( long nX );
     void    SetYOffset( long nY );
     void    SetZoom(sal_uInt16 nNewZoom);
-    void    SetPageNo( long nPage );
+    SC_DLLPUBLIC void    SetPageNo( long nPage );
 
     bool    GetPageMargins() const { return bPageMargin; }
     void    SetPageMargins( bool bVal )  { bPageMargin = bVal; }
@@ -158,7 +158,7 @@ public:
     bool    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
 
     sal_uInt16  GetOptimalZoom(bool bWidthOnly);
-    long    GetFirstPage(SCTAB nTab);
+    SC_DLLPUBLIC long    GetFirstPage(SCTAB nTab);
 
     void    CalcAll()           { CalcPages(); }
     void    SetInGetState(bool bSet) { bInGetState = bSet; }
@@ -168,8 +168,8 @@ public:
 
     FmFormView* GetDrawView() { return pDrawView; }
 
-    void SetSelectedTabs(const ScMarkData& rMark);
-    const ScMarkData::MarkedTabsType& GetSelectedTabs() const;
+    SC_DLLPUBLIC void SetSelectedTabs(const ScMarkData& rMark);
+    SC_DLLPUBLIC const ScMarkData::MarkedTabsType& GetSelectedTabs() const;
 };
 
 

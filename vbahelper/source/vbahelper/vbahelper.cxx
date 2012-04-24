@@ -450,8 +450,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
                     // #TODO is this necessary ( calc specific )
 //                  SC_MOD()->InputEnterHandler();
                     pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );
-                    while ( isInPrintPreview( pViewFrame ) )
-                        Application::Yield();
+                    WaitUntilPreviewIsClosed( pViewFrame );
                 }
             }
             else
@@ -481,10 +480,15 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
         if ( !pViewFrame->GetFrame().IsInPlace() )
         {
             dispatchExecute( pViewShell, SID_VIEWSHELL1 );
-            while ( isInPrintPreview( pViewFrame ) )
-                Application::Yield();
+            WaitUntilPreviewIsClosed( pViewFrame );
         }
     }
+}
+
+void WaitUntilPreviewIsClosed( SfxViewFrame* pViewFrame )
+{
+    while ( pViewFrame && isInPrintPreview( pViewFrame ) )
+        Application::Yield();
 }
 
 bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)

@@ -98,6 +98,7 @@ namespace ooo
         VBAHELPER_DLLPUBLIC const css::uno::Any& aNULL();
         VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell* pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, sal_Bool bSelection  );
         VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const css::uno::Any& EnableChanges,  SfxViewShell* );
+        VBAHELPER_DLLPUBLIC void WaitUntilPreviewIsClosed( SfxViewFrame* );
 
         /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
             Throws, if the Any is empty or contains an incompatible type. */

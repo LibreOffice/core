@@ -57,7 +57,8 @@
 #include "markdata.hxx"
 
 #include <vector>
-
+#include "prevwsh.hxx"
+#include "preview.hxx"
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -537,11 +538,52 @@ bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& 
     return false;
 }
 
-void ScVbaWorksheets::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::uno::RuntimeException)
+void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) throw (css::uno::RuntimeException)
 {
     // need test, print preview current active sheet
     // !! TODO !! get view shell from controller
-    PrintPreviewHelper( EnableChanges, excel::getBestViewShell( mxModel ) );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
+    SfxViewFrame* pViewFrame = NULL;
+    if ( pViewShell )
+        pViewFrame = pViewShell->GetViewFrame();
+    if ( pViewFrame )
+    {
+        if ( !pViewFrame->GetFrame().IsInPlace() )
+        {
+            dispatchExecute( pViewShell, SID_VIEWSHELL1 );
+            SfxViewShell*  pShell = SfxViewShell::Get( pViewFrame->GetFrame().GetFrameInterface()->getController() );
+
+            if (  pShell->ISA( ScPreviewShell ) )
+            {
+                ScPreviewShell* pPrvShell = static_cast<  ScPreviewShell* >( pShell );
+                ScPreview* pPrvView = pPrvShell->GetPreview();
+                ScMarkData aMarkData;
+                sal_Int32 nElems = getCount();
+                for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
+                {
+                    uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+                    ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+                    if ( pSheet )
+                        aMarkData.SelectTable(static_cast< SCTAB >( pSheet->getSheetID() ), true );
+                }
+                // save old selection, setting the selectedtabs in the preview
+                // can affect the current selection when preview has been
+                // closed
+                ScMarkData::MarkedTabsType aOldTabs = pPrvView->GetSelectedTabs();
+                pPrvView->SetSelectedTabs( aMarkData );
+                // force update
+                pPrvView->DataChanged();
+                // set sensible first page
+                long nPage = pPrvView->GetFirstPage( 1 );
+                pPrvView->SetPageNo( nPage );
+                WaitUntilPreviewIsClosed( pViewFrame );
+                // restore old tab selection
+                pViewShell = excel::getBestViewShell( mxModel );
+                pViewShell->GetViewData()->GetMarkData().SetSelectedTabs(aOldTabs);
+            }
+        }
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
