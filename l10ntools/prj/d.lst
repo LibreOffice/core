@@ -47,7 +47,6 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\inc\l10ntools\dllapi.h %_DEST%\inc\l10ntools\dllapi.h
 ..\inc\l10ntools\directory.hxx %_DEST%\inc\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc\l10ntools\file.hxx
-..\inc\l10ntools\LuceneHelper.hxx %_DEST%\inc\l10ntools\LuceneHelper.hxx
 ..\inc\l10ntools\HelpIndexer.hxx %_DEST%\inc\l10ntools\HelpIndexer.hxx
 ..\inc\l10ntools\HelpSearch.hxx %_DEST%\inc\l10ntools\HelpSearch.hxx
 ..\source\filter\merge\FCFGMerge.cfg  %_DEST%\inc\l10ntools\FCFGMerge.cfg

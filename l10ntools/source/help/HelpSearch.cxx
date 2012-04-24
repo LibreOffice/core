@@ -33,6 +33,8 @@
 
 #include <iostream>
 
+#include "LuceneHelper.hxx"
+
 HelpSearch::HelpSearch(rtl::OUString const &lang, rtl::OUString const &indexDir)
     : d_lang(lang)
 {

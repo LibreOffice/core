@@ -31,7 +31,6 @@
 #define HELPSEARCH_HXX
 
 #include <l10ntools/dllapi.h>
-#include <l10ntools/LuceneHelper.hxx>
 
 #include <rtl/ustring.hxx>
 #include <vector>

@@ -37,6 +37,8 @@
 
 #include <algorithm>
 
+#include "LuceneHelper.hxx"
+
 using namespace lucene::document;
 
 HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,

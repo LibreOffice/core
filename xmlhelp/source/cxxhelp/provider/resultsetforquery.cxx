@@ -34,6 +34,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 
 #include <l10ntools/HelpSearch.hxx>
+#include <CLucene.h>
 
 #include <rtl/oustringostreaminserter.hxx>
 

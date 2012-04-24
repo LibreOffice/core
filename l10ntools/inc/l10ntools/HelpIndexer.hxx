@@ -31,12 +31,23 @@
 #define HELPINDEXER_HXX
 
 #include <l10ntools/dllapi.h>
-#include <l10ntools/LuceneHelper.hxx>
 
 #include <rtl/ustring.hxx>
 #include <set>
 
 // I assume that TCHAR is defined as wchar_t throughout
+
+namespace lucene
+{
+namespace document
+{
+class Document;
+}
+namespace util
+{
+class Reader;
+}
+}
 
 class L10N_DLLPUBLIC HelpIndexer {
 	private:

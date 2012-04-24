@@ -34,6 +34,8 @@
 #include <string>
 #include <iostream>
 
+#include "LuceneHelper.hxx"
+
 int main(int argc, char **argv) {
     const std::string pLang("-lang");
     const std::string pModule("-mod");
