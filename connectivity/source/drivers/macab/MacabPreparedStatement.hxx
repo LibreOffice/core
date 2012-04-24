@@ -36,6 +36,10 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <cppuhelper/implbase4.hxx>
 
+#ifdef __clang__
+#pragma clang diagnostic warning "-Woverloaded-virtual"
+#endif
+
 namespace connectivity
 {
     namespace macab
