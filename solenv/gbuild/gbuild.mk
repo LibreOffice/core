@@ -99,6 +99,8 @@ endif
 gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 1
+else ifeq ($(gb_PRODUCT),$(false))
+gb_DEBUGLEVEL := 1
 endif
 
 ifneq ($(strip $(DBGLEVEL)$(dbglevel)),)
