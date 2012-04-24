@@ -101,8 +101,6 @@ HTMLOptionEnum aHTMLImgVAlignTable[] =
     { 0,                    0                   }
 };
 
-SV_IMPL_PTRARR( ImageMaps, ImageMapPtr )
-
 ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 {
     ImageMap *pMap = 0;
@@ -111,9 +109,9 @@ ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 
     if( pImageMaps )
     {
-        for( sal_uInt16 i=0; i<pImageMaps->Count(); i++ )
+        for( sal_uInt16 i=0; i<pImageMaps->size(); i++ )
         {
-            ImageMap *pIMap = (*pImageMaps)[i];
+            ImageMap *pIMap = &(*pImageMaps)[i];
             if( rName.EqualsIgnoreCaseAscii( pIMap->GetName() ) )
             {
                 pMap = pIMap;

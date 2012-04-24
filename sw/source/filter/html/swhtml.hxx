@@ -338,8 +338,7 @@ class HTMLTable;
 class SwCSS1Parser;
 class SwHTMLNumRuleInfo;
 
-typedef ImageMap *ImageMapPtr;
-SV_DECL_PTRARR_DEL( ImageMaps, ImageMapPtr, 1 )
+typedef boost::ptr_vector<ImageMap> ImageMaps;
 typedef std::vector<SwFrmFmt *> SwHTMLFrmFmts;
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001

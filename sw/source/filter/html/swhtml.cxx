@@ -1984,7 +1984,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             if( !pImageMaps )
                 pImageMaps = new ImageMaps;
-            pImageMaps->Insert( pImageMap, pImageMaps->Count() );
+            pImageMaps->push_back( pImageMap );
         }
         else
         {
