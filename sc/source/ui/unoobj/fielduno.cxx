@@ -859,7 +859,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, sal_uIn
     if (pContentObj)
     {
         pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
+        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart);
     }
     else
         pEditSource = NULL;
@@ -1118,7 +1118,7 @@ ScHeaderFieldObj::ScHeaderFieldObj(
     if (pContentObj)
     {
         pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
+        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart);
     }
     else
         pEditSource = NULL;
@@ -1199,7 +1199,7 @@ void ScHeaderFieldObj::InitDoc(
         mpContent = rContent;
 
         pContentObj->acquire();     // darf nicht wegkommen
-        pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
+        pEditSource = new ScHeaderFooterEditSource(*pContentObj, nPart);
     }
 }
 

@@ -67,12 +67,8 @@ ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
 
 //  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
 
-ScHeaderFooterEditSource::ScHeaderFooterEditSource(ScHeaderFooterTextData* pData) :
-    pTextData(pData) {}
-
-ScHeaderFooterEditSource::ScHeaderFooterEditSource(
-    ScHeaderFooterContentObj* pContent, sal_uInt16 nP) :
-    pTextData(new ScHeaderFooterTextData(*pContent, nP)) {}
+ScHeaderFooterEditSource::ScHeaderFooterEditSource(const ScHeaderFooterTextData& rData) :
+    pTextData(new ScHeaderFooterTextData(rData.GetContentObj(), rData.GetPart())) {}
 
 ScHeaderFooterEditSource::ScHeaderFooterEditSource(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP) :

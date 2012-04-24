@@ -68,8 +68,7 @@ private:
     ScHeaderFooterTextData*     pTextData;
 
 public:
-    ScHeaderFooterEditSource(ScHeaderFooterTextData* pData);
-    ScHeaderFooterEditSource(ScHeaderFooterContentObj* pContent, sal_uInt16 nP);
+    ScHeaderFooterEditSource(const ScHeaderFooterTextData& rData);
     ScHeaderFooterEditSource(ScHeaderFooterContentObj& rContent, sal_uInt16 nP);
     virtual ~ScHeaderFooterEditSource();
 
