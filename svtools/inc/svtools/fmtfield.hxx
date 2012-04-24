@@ -33,17 +33,7 @@
 #include <vcl/spinfld.hxx>
 #include <svl/zforlist.hxx>
 
-//#define REGEXP_SUPPORT
-
-#ifdef REGEXP_SUPPORT
-    #ifndef _UNOTOOLS_TEXTSEARCH_HXX
-    #include <unotools/textsearch.hxx>
-    #endif
-#else
-    // use a hand-made regular expression parsing for the small expression we're interested in
-    // as soon as OOo does have regular expression support, we can switch on the REGEXP_SUPPORT define
-    namespace validation { class NumberValidator; }
-#endif
+namespace validation { class NumberValidator; }
 
 typedef sal_uInt16 FORMAT_CHANGE_TYPE;
 #define FCT_KEYONLY         0x00        // only a new key was set
@@ -282,31 +272,19 @@ protected:
 class SVT_DLLPUBLIC DoubleNumericField : public FormattedField
 {
 protected:
-#ifdef REGEXP_SUPPORT
-    ::utl::TextSearch*              m_pConformanceTester;
-#else
     validation::NumberValidator*    m_pNumberValidator;
-#endif
 
 public:
     DoubleNumericField(Window* pParent, WinBits nStyle = 0)
         :FormattedField(pParent, nStyle)
-#ifdef REGEXP_SUPPORT
-        ,m_pConformanceTester( NULL )
-#else
         ,m_pNumberValidator( NULL )
-#endif
     {
         ResetConformanceTester();
     }
 
     DoubleNumericField(Window* pParent, const ResId& rResId)
         :FormattedField(pParent, rResId)
-#ifdef REGEXP_SUPPORT
-        ,m_pConformanceTester( NULL )
-#else
         ,m_pNumberValidator( NULL )
-#endif
     {
         ResetConformanceTester();
     }

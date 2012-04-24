@@ -42,29 +42,11 @@
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <unotools/syslocale.hxx>
-
-#ifndef REGEXP_SUPPORT
 #include <map>
-#endif
-
-#if !defined INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
-
-#ifdef REGEXP_SUPPORT
-
-//==============================================================================
-// regular expression to validate complete numbers, plus every fragment which can occur during the input
-// of a complete number
-// [+/-][{digit}*.]*{digit}*[,{digit}*][e[+/-]{digit}*]
-const char szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
-    // (the two _ are for normalizing it: With this, we can ensure that a to-be-checked text is always
-    // matched as a _whole_)
-#else
 
 // hmm. No support for regular expression. Well, I always (not really :) wanted to write a finite automat
 // so here comes a finite automat ...
@@ -299,8 +281,6 @@ namespace validation
         return implValidateNormalized( sNormalized );
     }
 }
-
-#endif
 
 //==============================================================================
 SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = NULL;
@@ -1135,11 +1115,7 @@ bool FormattedField::IsUsingInputStringForFormatting() const
 //------------------------------------------------------------------------------
 DoubleNumericField::~DoubleNumericField()
 {
-#ifdef REGEXP_SUPPORT
-    delete m_pConformanceTester;
-#else
     delete m_pNumberValidator;
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1155,25 +1131,7 @@ sal_Bool DoubleNumericField::CheckText(const XubString& sText) const
     // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
     // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
     // Thus, the roundabout way via a regular expression
-
-#ifdef REGEXP_SUPPORT
-    if (!sText.Len())
-        return sal_True;
-
-    String sForceComplete = '_';
-    sForceComplete += sText;
-    sForceComplete += '_';
-
-    sal_uInt16 nStart = 0, nEnd = sForceComplete.Len();
-    sal_Bool bFound = m_pConformanceTester->SearchFrwrd(sForceComplete, &nStart, &nEnd);
-
-    if (bFound && (nStart == 0) && (nEnd == sForceComplete.Len()))
-        return sal_True;
-
-    return sal_False;
-#else
     return m_pNumberValidator->isValidNumericFragment( sText );
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1199,35 +1157,8 @@ void DoubleNumericField::ResetConformanceTester()
             cSeparatorDecimal = sSeparator.GetBuffer()[0];
     }
 
-#ifdef REGEXP_SUPPORT
-    String sDescription = String::CreateFromAscii(szNumericInput);
-
-    String sReplaceWith((sal_Unicode)'\\');
-    sReplaceWith += cSeparatorThousand;
-    sDescription.SearchAndReplaceAscii("\\,", sReplaceWith);
-
-    sReplaceWith = (sal_Unicode)'\\';
-    sReplaceWith += cSeparatorDecimal;
-    sDescription.SearchAndReplaceAscii("\\.", sReplaceWith);
-
-    delete m_pConformanceTester;
-
-    SearchOptions aParam;
-    aParam.algorithmType = SearchAlgorithms_REGEXP;
-    aParam.searchFlag = SearchFlags::ALL_IGNORE_CASE;
-    aParam.searchString = sDescription;
-    aParam.transliterateFlags = 0;
-
-    String sLanguage, sCountry;
-    ConvertLanguageToIsoNames( pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_ENGLISH_US, sLanguage, sCountry );
-    aParam.Locale.Language = sLanguage;
-    aParam.Locale.Country = sCountry;
-
-    m_pConformanceTester = new ::utl::TextSearch(aParam);
-#else
     delete m_pNumberValidator;
     m_pNumberValidator = new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal );
-#endif
 }
 
 
