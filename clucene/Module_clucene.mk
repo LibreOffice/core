@@ -27,10 +27,14 @@
 
 $(eval $(call gb_Module_Module,clucene))
 
+ifeq ($(SYSTEM_CLUCENE),NO)
+
 $(eval $(call gb_Module_add_targets,clucene,\
     CustomTarget_source \
     Library_clucene \
     Package_source \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
