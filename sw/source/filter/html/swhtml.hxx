@@ -340,8 +340,7 @@ class SwHTMLNumRuleInfo;
 
 typedef ImageMap *ImageMapPtr;
 SV_DECL_PTRARR_DEL( ImageMaps, ImageMapPtr, 1 )
-typedef SwFrmFmt *SwFrmFmtPtr;
-SV_DECL_PTRARR( SwHTMLFrmFmts, SwFrmFmtPtr, 2 )
+typedef std::vector<SwFrmFmt *> SwHTMLFrmFmts;
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001
 #define HTML_CNTXT_STRIP_PARA       0x0002
@@ -503,7 +502,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     inline void SetAttr( sal_Bool bChkEnd = sal_True, sal_Bool bBeforeTable = sal_False,
                          _HTMLAttrs *pPostIts = 0 )
     {
-        if( aSetAttrTab.Count() || aMoveFlyFrms.Count() )
+        if( aSetAttrTab.Count() || !aMoveFlyFrms.empty() )
             _SetAttr( bChkEnd, bBeforeTable, pPostIts );
     }
 

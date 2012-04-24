@@ -298,7 +298,7 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
         (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()) &&
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
     {
-        aMoveFlyFrms.Insert( pFlyFmt, aMoveFlyFrms.Count() );
+        aMoveFlyFrms.push_back( pFlyFmt );
         aMoveFlyCnts.push_back( pPam->GetPoint()->nContent.GetIndex() );
     }
 }

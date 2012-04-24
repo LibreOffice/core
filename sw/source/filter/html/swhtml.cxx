@@ -2831,7 +2831,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
         }
     }
 
-    for( n = aMoveFlyFrms.Count(); n; )
+    for( n = aMoveFlyFrms.size(); n; )
     {
         SwFrmFmt *pFrmFmt = aMoveFlyFrms[ --n ];
 
@@ -2881,7 +2881,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
             }
 
             pFrmFmt->MakeFrms();
-            aMoveFlyFrms.Remove( n, 1 );
+            aMoveFlyFrms.erase( aMoveFlyFrms.begin() + n );
             aMoveFlyCnts.erase( aMoveFlyCnts.begin() + n );
         }
     }
