@@ -29,6 +29,7 @@ PRJ=..
 
 PRJNAME=store
 TARGET=store
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ---
 
