@@ -386,7 +386,7 @@ SV_DECL_PTRARR_DEL(HTMLTableRows,HTMLTableRowPtr,5)
 typedef HTMLTableColumn* HTMLTableColumnPtr;
 SV_DECL_PTRARR_DEL(HTMLTableColumns,HTMLTableColumnPtr,5)
 
-SV_DECL_PTRARR(SdrObjects,SdrObject *,1)
+typedef std::vector<SdrObject *> SdrObjects;
 
 class HTMLTable
 {
@@ -2760,7 +2760,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         if( pResizeDrawObjs )
         {
-            sal_uInt16 nCount = pResizeDrawObjs->Count();
+            sal_uInt16 nCount = pResizeDrawObjs->size();
             for( sal_uInt16 i=0; i<nCount; i++ )
             {
                 SdrObject *pObj = (*pResizeDrawObjs)[i];
@@ -2802,7 +2802,7 @@ void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth )
 {
     if( !pResizeDrawObjs )
         pResizeDrawObjs = new SdrObjects;
-    pResizeDrawObjs->C40_INSERT( SdrObject, pObj, pResizeDrawObjs->Count() );
+    pResizeDrawObjs->push_back( pObj );
 
     if( !pDrawObjPrcWidths )
         pDrawObjPrcWidths = new std::vector<sal_uInt16>;
