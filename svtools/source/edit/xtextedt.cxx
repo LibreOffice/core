@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 // -------------------------------------------------------------------------
 // class ExtTextEngine
 // -------------------------------------------------------------------------
-ExtTextEngine::ExtTextEngine() : maGroupChars( String::CreateFromAscii( "(){}[]", 6 ) )
+ExtTextEngine::ExtTextEngine() : maGroupChars(rtl::OUString("(){}[]"))
 {
 }
 
