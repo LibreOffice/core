@@ -38,8 +38,6 @@
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog
 #include <vector>
 
-typedef ::std::vector< Accelerator* > AccelList;
-
 // class AboutDialog -----------------------------------------------------
 
 class AboutDialog : public SfxModalDialog
