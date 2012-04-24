@@ -89,7 +89,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build all clean unitcheck slowcheck subsequentcheck dev-install
+.PHONY : build all clean unitcheck slowcheck subsequentcheck dev-install showmodules
 .DEFAULT_GOAL := all
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
@@ -174,6 +174,10 @@ dev-install :
 	ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 	$(info $(gb_Module_DEVINSTALLHINT))
 
+showmodules :
+	$(info $(strip $(gb_Module_ALLMODULES)))
+	@true 
+
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -206,6 +210,7 @@ endif
 
 endef
 
+ifneq (showmodules,$(MAKECMDGOALS))
 define gb_Module_add_target
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
@@ -237,6 +242,7 @@ $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
+endif
 
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
