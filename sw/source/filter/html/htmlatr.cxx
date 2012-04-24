@@ -3107,10 +3107,10 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bTagOn )
     {
         // ggf. ein noch offenes Attribut voruebergehend beenden
-        if( rHTMLWrt.aINetFmts.Count() )
+        if( rHTMLWrt.aINetFmts.size() )
         {
             SwFmtINetFmt *pINetFmt =
-                rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
+                rHTMLWrt.aINetFmts.back();
             OutHTML_INetFmt( rWrt, *pINetFmt, sal_False );
         }
 
@@ -3118,32 +3118,28 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         OutHTML_INetFmt( rWrt, rINetFmt, sal_True );
 
         // und merken
-        const SwFmtINetFmt *pINetFmt = new SwFmtINetFmt( rINetFmt );
-        rHTMLWrt.aINetFmts.C40_INSERT( SwFmtINetFmt, pINetFmt,
-                                       rHTMLWrt.aINetFmts.Count() );
+        SwFmtINetFmt *pINetFmt = new SwFmtINetFmt( rINetFmt );
+        rHTMLWrt.aINetFmts.push_back( pINetFmt );
     }
     else
     {
         // das
         OutHTML_INetFmt( rWrt, rINetFmt, sal_False );
 
-        OSL_ENSURE( rHTMLWrt.aINetFmts.Count(), "da fehlt doch ein URL-Attribut" );
-        if( rHTMLWrt.aINetFmts.Count() )
+        OSL_ENSURE( rHTMLWrt.aINetFmts.size(), "da fehlt doch ein URL-Attribut" );
+        if( rHTMLWrt.aINetFmts.size() )
         {
             // das eigene Attribut vom Stack holen
-            SwFmtINetFmt *pINetFmt =
-                rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
-
-            rHTMLWrt.aINetFmts.Remove( rHTMLWrt.aINetFmts.Count()-1, 1 );
+            SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
+            rHTMLWrt.aINetFmts.pop_back();
             delete pINetFmt;
         }
 
-        if( rHTMLWrt.aINetFmts.Count() )
+        if( !rHTMLWrt.aINetFmts.empty() )
         {
             // es ist noch ein Attribut auf dem Stack, das wieder geoeffnet
             // werden muss
-            SwFmtINetFmt *pINetFmt =
-                rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
+            SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
             OutHTML_INetFmt( rWrt, *pINetFmt, sal_True );
         }
     }

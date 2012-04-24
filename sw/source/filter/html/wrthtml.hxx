@@ -190,7 +190,7 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 // der HTML-Writer
 struct HTMLControl;
 SV_DECL_PTRARR_SORT_DEL( HTMLControls, HTMLControl*, 1 )
-SV_DECL_PTRARR( INetFmts, SwFmtINetFmt*, 1 )
+typedef std::vector<SwFmtINetFmt*> INetFmts;
 
 struct SwHTMLFmtInfo;
 SV_DECL_PTRARR_SORT_DEL( SwHTMLFmtInfos, SwHTMLFmtInfo*, 1 )

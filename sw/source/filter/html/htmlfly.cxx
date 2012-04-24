@@ -836,10 +836,9 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     // ggf. ein noch offenes Attribut voruebergehend beenden
-    if( rHTMLWrt.aINetFmts.Count() )
+    if( !rHTMLWrt.aINetFmts.empty() )
     {
-        SwFmtINetFmt *pINetFmt =
-            rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
+        SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
         OutHTML_INetFmt( rWrt, *pINetFmt, sal_False );
     }
 
@@ -1198,12 +1197,11 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     if( !aEndTags.isEmpty() )
         rWrt.Strm() << aEndTags.getStr();
 
-    if( rHTMLWrt.aINetFmts.Count() )
+    if( !rHTMLWrt.aINetFmts.empty() )
     {
         // es ist noch ein Attribut auf dem Stack, das wieder geoeffnet
         // werden muss
-        SwFmtINetFmt *pINetFmt =
-            rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
+        SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
         OutHTML_INetFmt( rWrt, *pINetFmt, sal_True );
     }
 
