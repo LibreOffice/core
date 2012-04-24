@@ -28,6 +28,7 @@
  <vendorInfos>
   <vendor name="Oracle Corporation">
     <minVersion>1.7.0</minVersion>
+  </vendor>
   <vendor name="Sun Microsystems Inc.">
     <minVersion>1.5.0</minVersion>
   </vendor>
