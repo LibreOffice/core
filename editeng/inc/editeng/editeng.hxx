@@ -149,7 +149,6 @@ private:
     EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode* pNode);
     EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
-    EDITENG_DLLPRIVATE const ParaPortion* GetNextVisPortion(const ParaPortion* pCurPortion) const;
 
     EDITENG_DLLPRIVATE com::sun::star::uno::Reference<
         com::sun::star::datatransfer::XTransferable>

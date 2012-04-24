@@ -742,11 +742,6 @@ const ParaPortion* EditEngine::GetPrevVisPortion(const ParaPortion* pCurPortion)
     return pImpEditEngine->GetPrevVisPortion(pCurPortion);
 }
 
-const ParaPortion* EditEngine::GetNextVisPortion(const ParaPortion* pCurPortion) const
-{
-    return pImpEditEngine->GetNextVisPortion(pCurPortion);
-}
-
 sal_uInt16 EditEngine::GetScriptType(const EditSelection& rSel) const
 {
     return pImpEditEngine->GetScriptType(rSel);
