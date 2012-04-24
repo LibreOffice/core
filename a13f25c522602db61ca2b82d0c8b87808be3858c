@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAABX////8\u003d",
+        "filename": "solenv/gbuild/Module.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-04-24T18:28:33Z",
+      "side": 1,
+      "message": "trailling spaces !",
+      "revId": "a13f25c522602db61ca2b82d0c8b87808be3858c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
