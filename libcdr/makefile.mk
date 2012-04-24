@@ -63,7 +63,8 @@ TARFILE_NAME=libcdr-0.0.7
 TARFILE_MD5=c216ded0275129ccfef44fbc236ac16a
 
 PATCH_FILES=\
-    $(TARFILE_NAME).patch
+    $(TARFILE_NAME).patch \
+	$(TARFILE_NAME)-clang.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib

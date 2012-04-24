@@ -1,0 +1,112 @@
+--- misc/libcdr-0.0.7/src/lib/CDRCollector.cpp	2012-04-24 13:25:22.000000000 +0200
++++ misc/build/libcdr-0.0.7/src/lib/CDRCollector.cpp	2012-04-24 16:54:16.083829620 +0200
+@@ -30,6 +30,7 @@
+ #include <math.h>
+ #include <string.h>
+ #include "CDRCollector.h"
++#include "libcdr_utils.h"
+ 
+ libcdr::CDRParserState::CDRParserState()
+   : m_fillStyles(), m_lineStyles(), m_bmps(), m_patterns(), m_vects(), m_pages(),
+--- misc/libcdr-0.0.7/src/lib/CDRCollector.h	2012-04-24 13:12:28.000000000 +0200
++++ misc/build/libcdr-0.0.7/src/lib/CDRCollector.h	2012-04-24 16:54:16.084829635 +0200
+@@ -42,32 +42,7 @@
+ 
+ namespace
+ {
+-int cdr_round(double d)
+-{
+-  return (d>0) ? int(d+0.5) : int(d-0.5);
+-}
+-
+-void writeU16(WPXBinaryData &buffer, const int value)
+-{
+-  buffer.append((unsigned char)(value & 0xFF));
+-  buffer.append((unsigned char)((value >> 8) & 0xFF));
+-}
+-
+-void writeU32(WPXBinaryData &buffer, const int value)
+-{
+-  buffer.append((unsigned char)(value & 0xFF));
+-  buffer.append((unsigned char)((value >> 8) & 0xFF));
+-  buffer.append((unsigned char)((value >> 16) & 0xFF));
+-  buffer.append((unsigned char)((value >> 24) & 0xFF));
+-}
+-
+-void writeU8(WPXBinaryData &buffer, const int value)
+-{
+-  buffer.append((unsigned char)(value & 0xFF));
+-}
+-
+ #include "CDRColorProfiles.h"
+-
+ }
+ 
+ namespace libcdr
+--- misc/libcdr-0.0.7/src/lib/CDRParser.cpp	2012-04-24 15:40:42.000000000 +0200
++++ misc/build/libcdr-0.0.7/src/lib/CDRParser.cpp	2012-04-24 16:54:16.084829635 +0200
+@@ -466,7 +466,7 @@
+         m_collector->collectObject(level);
+       else if (listType == FOURCC_grp)
+         m_collector->collectGroup(level);
+-      else if ((listType & 0xffffff) == FOURCC_CDR || (listType && 0xffffff) == FOURCC_cdr)
++      else if ((listType & 0xffffff) == FOURCC_CDR || (listType & 0xffffff) == FOURCC_cdr)
+         m_version = getCDRVersion((listType & 0xff000000) >> 24);
+       else if (listType == FOURCC_vect)
+         m_collector->collectVect(level);
+--- misc/libcdr-0.0.7/src/lib/libcdr_utils.cpp	2012-04-24 13:11:13.000000000 +0200
++++ misc/build/libcdr-0.0.7/src/lib/libcdr_utils.cpp	2012-04-24 16:54:16.085829649 +0200
+@@ -139,6 +139,30 @@
+   return ((double)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart);
+ }
+ 
++int libcdr::cdr_round(double d)
++{
++  return (d>0) ? int(d+0.5) : int(d-0.5);
++}
++
++void libcdr::writeU16(WPXBinaryData &buffer, const int value)
++{
++  buffer.append((unsigned char)(value & 0xFF));
++  buffer.append((unsigned char)((value >> 8) & 0xFF));
++}
++
++void libcdr::writeU32(WPXBinaryData &buffer, const int value)
++{
++  buffer.append((unsigned char)(value & 0xFF));
++  buffer.append((unsigned char)((value >> 8) & 0xFF));
++  buffer.append((unsigned char)((value >> 16) & 0xFF));
++  buffer.append((unsigned char)((value >> 24) & 0xFF));
++}
++
++void libcdr::writeU8(WPXBinaryData &buffer, const int value)
++{
++  buffer.append((unsigned char)(value & 0xFF));
++}
++
+ #ifdef DEBUG
+ const char *libcdr::toFourCC(unsigned value, bool bigEndian)
+ {
+--- misc/libcdr-0.0.7/src/lib/libcdr_utils.h	2012-04-24 16:54:56.803806935 +0200
++++ misc/build/libcdr-0.0.7/src/lib/libcdr_utils.h	2012-04-24 16:54:16.085829649 +0200
+@@ -35,6 +35,7 @@
+ #include <string>
+ #include <math.h>
+ #include <libwpd-stream/libwpd-stream.h>
++#include <libwpd/libwpd.h>
+ 
+ #ifndef M_PI
+ #define M_PI 3.14159265358979323846
+@@ -90,6 +91,12 @@
+ 
+ double readFixedPoint(WPXInputStream *input, bool bigEndian=false);
+ 
++int cdr_round(double d);
++
++void writeU8(WPXBinaryData &buffer, const int value);
++void writeU16(WPXBinaryData &buffer, const int value);
++void writeU32(WPXBinaryData &buffer, const int value);
++
+ #ifdef DEBUG
+ const char *toFourCC(unsigned value, bool bigEndian=false);
+ #endif
