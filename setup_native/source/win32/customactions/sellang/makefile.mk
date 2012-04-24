@@ -49,7 +49,8 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 UWINAPILIB=
 
 SLOFILES = \
-    $(SLO)$/sellang.obj
+    $(SLO)/sellang.obj \
+    $(SLO)/sorttree.obj
 
 SHL1STDLIBS= \
     $(KERNEL32LIB)\
