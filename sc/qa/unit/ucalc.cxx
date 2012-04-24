@@ -4262,15 +4262,23 @@ void Test::testCopyPasteFormulas()
 
 void Test::testCopyPasteFormulasExternalDoc()
 {
+    rtl::OUString aDocName("file:///source.fake");
+    SfxMedium* pMedium = new SfxMedium(aDocName, STREAM_STD_READWRITE);
+    m_xDocShRef->DoInitNew(pMedium);
+    m_pDoc = m_xDocShRef->GetDocument();
+
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString aExtDocName(RTL_CONSTASCII_USTRINGPARAM("file:///extdata.fake"));
-    OUString aExtSh1Name(RTL_CONSTASCII_USTRINGPARAM("ExtSheet1"));
-    OUString aExtSh2Name(RTL_CONSTASCII_USTRINGPARAM("ExtSheet2"));
-    OUString aExtSh3Name(RTL_CONSTASCII_USTRINGPARAM("ExtSheet3"));
+    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtSh1Name("ExtSheet1");
+    OUString aExtSh2Name("ExtSheet2");
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != NULL);
+
+    ScDocument* pExtDoc = xExtDocSh->GetDocument();
+    pExtDoc->InsertTab(0, aExtSh1Name);
+    pExtDoc->InsertTab(1, aExtSh2Name);
 
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4280,7 +4288,37 @@ void Test::testCopyPasteFormulasExternalDoc()
     m_pDoc->SetString(0,2,0, "=$Sheet2.A1");
     m_pDoc->SetString(0,3,0, "=$Sheet2.$A$1");
     m_pDoc->SetString(0,4,0, "=$Sheet2.A$1");
+    m_pDoc->SetString(0,5,0, "=$Sheet1.$A$1");
 
+    ScRange aRange(0,0,0,0,5,0);
+    ScClipParam aClipParam(aRange, false);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    ScDocument* pClipDoc = new ScDocument(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+
+    sal_uInt16 nFlags = IDF_ALL;
+    aRange = ScRange(1,1,1,1,6,1);
+    ScMarkData aMarkData2;
+    aMarkData2.SetMarkArea(aRange);
+    pExtDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
+
+    rtl::OUString aFormula;
+    pExtDoc->GetFormula(1,1,1, aFormula);
+    //adjust absolute refs pointing to the copy area
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=COLUMN($B$2)"));
+    pExtDoc->GetFormula(1,2,1, aFormula);
+    //adjust absolute refs and keep relative refs
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$B$2+C3"));
+    pExtDoc->GetFormula(1,3,1, aFormula);
+    // make absolute sheet refs external refs
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("='file:///source.fake'#$Sheet2.B2"));
+    pExtDoc->GetFormula(1,4,1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("='file:///source.fake'#$Sheet2.$A$1"));
+    pExtDoc->GetFormula(1,5,1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("='file:///source.fake'#$Sheet2.B$1"));
+    pExtDoc->GetFormula(1,6,1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(aFormula, rtl::OUString("=$ExtSheet2.$B$2"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
