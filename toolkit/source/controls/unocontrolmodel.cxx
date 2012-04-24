@@ -122,18 +122,6 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 //  ----------------------------------------------------
 //  class UnoControlModel
 //  ----------------------------------------------------
-UnoControlModel::UnoControlModel()
-    :UnoControlModel_Base()
-    ,MutexAndBroadcastHelper()
-    ,OPropertySetHelper( BrdcstHelper )
-    ,maDisposeListeners( *this )
-    ,maContext( ::comphelper::getProcessServiceFactory() )
-{
-    OSL_ENSURE( false, "UnoControlModel::UnoControlModel: not implemented. Well, not really." );
-    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
-    // version taking a service factory
-}
-
 UnoControlModel::UnoControlModel( const Reference< XMultiServiceFactory >& i_factory )
     :UnoControlModel_Base()
     ,MutexAndBroadcastHelper()

@@ -109,7 +109,16 @@ protected:
             ) const;
 
 protected:
-                UnoControlModel();
+    UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
+        : UnoControlModel_Base()
+        , MutexAndBroadcastHelper()
+        , OPropertySetHelper( BrdcstHelper )
+        , maDisposeListeners( *this )
+        , maContext( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+    {
+        assert(false);
+    }
+
 public:
                 UnoControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                 UnoControlModel( const UnoControlModel& rModel );
