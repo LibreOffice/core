@@ -1123,8 +1123,7 @@ HTMLSttEndPos::~HTMLSttEndPos()
     delete pItem;
 }
 
-typedef HTMLSttEndPos *HTMLSttEndPosPtr;
-SV_DECL_PTRARR( _HTMLEndLst, HTMLSttEndPosPtr, 5 )
+typedef std::vector<HTMLSttEndPos *> _HTMLEndLst;
 
 enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
                       HTML_REAL_VALUE,      // Attribut mit Wert
@@ -1222,7 +1221,7 @@ public:
     void OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
                       HTMLOutContext *pContext = 0 );
 
-    sal_uInt16 Count() const { return aEndLst.Count(); }
+    sal_uInt16 Count() const { return aEndLst.size(); }
 
     sal_Bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
@@ -1231,24 +1230,24 @@ public:
 sal_uInt16 HTMLEndPosLst::_FindStartPos( const HTMLSttEndPos *pPos ) const
 {
     sal_uInt16 i;
-    for( i = 0; i < aStartLst.Count() && aStartLst[i] != pPos;  i++ )
+    for( i = 0; i < aStartLst.size() && aStartLst[i] != pPos;  i++ )
         ;
 
     OSL_ENSURE( i != aStartLst.Count(), "Item nicht in Start-Liste gefunden!" );
 
-    return i==aStartLst.Count() ? USHRT_MAX : i;
+    return i==aStartLst.size() ? USHRT_MAX : i;
 }
 
 sal_uInt16 HTMLEndPosLst::_FindEndPos( const HTMLSttEndPos *pPos ) const
 {
     sal_uInt16 i;
 
-    for( i = 0; i < aEndLst.Count() && aEndLst[i] != pPos;  i++ )
+    for( i = 0; i < aEndLst.size() && aEndLst[i] != pPos;  i++ )
         ;
 
-    OSL_ENSURE( i != aEndLst.Count(), "Item nicht in Ende-Liste gefunden" );
+    OSL_ENSURE( i != aEndLst.size(), "Item nicht in Ende-Liste gefunden" );
 
-    return i==aEndLst.Count() ? USHRT_MAX : i;
+    return i==aEndLst.size() ? USHRT_MAX : i;
 }
 
 
@@ -1259,13 +1258,13 @@ void HTMLEndPosLst::_InsertItem( HTMLSttEndPos *pPos, sal_uInt16 nEndPos )
     xub_StrLen nStart = pPos->GetStart();
     sal_uInt16 i;
 
-    for( i = 0; i < aStartLst.Count() &&
+    for( i = 0; i < aStartLst.size() &&
                      aStartLst[i]->GetStart() <= nStart; i++ )
         ;
-    aStartLst.Insert( pPos, i );
+    aStartLst.insert( aStartLst.begin() + i, pPos );
 
     // die Position in der Ende-Liste wurde uebergeben
-    aEndLst.Insert( pPos, nEndPos );
+    aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
 }
 
 void HTMLEndPosLst::_RemoveItem( sal_uInt16 nEndPos )
@@ -1275,9 +1274,9 @@ void HTMLEndPosLst::_RemoveItem( sal_uInt16 nEndPos )
     // jetzt Suchen wir es in der Start-Liste
     sal_uInt16 nStartPos = _FindStartPos( pPos );
     if( nStartPos != USHRT_MAX )
-        aStartLst.Remove( nStartPos, 1 );
+        aStartLst.erase( aStartLst.begin() + nStartPos );
 
-    aEndLst.Remove( nEndPos, 1 );
+    aEndLst.erase( aEndLst.begin() + nEndPos );
 
     delete pPos;
 }
@@ -1429,7 +1428,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
 sal_Bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, xub_StrLen nPos )
 {
-    for( sal_uInt16 i=0; i<aStartLst.Count(); i++ )
+    for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
 
@@ -1465,7 +1464,7 @@ sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, xub_StrLen nStartPo
         return sal_False;
     }
 
-    for( sal_uInt16 i=0; i<aStartLst.Count(); i++ )
+    for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
 
@@ -1505,17 +1504,17 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, xub_StrLen nNewEnd,
     // das Item aus der End-Liste entfernen
     sal_uInt16 nEndPos = _FindEndPos( pPos );
     if( nEndPos != USHRT_MAX )
-        aEndLst.Remove( nEndPos, 1 );
+        aEndLst.erase( aEndLst.begin() + nEndPos );
 
     // es wird von nun an als letztes an der entsprechenden Position
     // beendet
-    for( nEndPos=0; nEndPos < aEndLst.Count() &&
+    for( nEndPos=0; nEndPos < aEndLst.size() &&
                     aEndLst[nEndPos]->GetEnd() <= nNewEnd; nEndPos++ )
         ;
-    aEndLst.Insert( pPos, nEndPos );
+    aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
 
     // jetzt noch die spaeter gestarteten Attribute anpassen
-    for( sal_uInt16 i=nStartPos+1; i<aStartLst.Count(); i++ )
+    for( sal_uInt16 i=nStartPos+1; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
         xub_StrLen nTestEnd = pTest->GetEnd();
@@ -1536,11 +1535,11 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, xub_StrLen nNewEnd,
             // das Attribut aus der End-Liste entfernen
             sal_uInt16 nEPos = _FindEndPos( pTest );
             if( nEPos != USHRT_MAX )
-                aEndLst.Remove( nEPos, 1 );
+                aEndLst.erase( aEndLst.begin() + nEPos );
 
             // es endet jetzt als erstes Attribut an der entsprechenden
             // Position. Diese Position in der Ende-Liste kennen wir schon.
-            aEndLst.Insert(pTest, nEndPos );
+            aEndLst.insert( aEndLst.begin() + nEndPos, pTest );
 
             // den "Rest" des Attributs neu einfuegen
             InsertItem( *pTest->GetItem(), nNewEnd, nTestEnd );
@@ -1553,7 +1552,7 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, xub_StrLen nStart,
                                                           xub_StrLen nEnd )
 {
     sal_uInt16 i;
-    for( i = 0; i < aEndLst.Count(); i++ )
+    for( i = 0; i < aEndLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aEndLst[i];
         xub_StrLen nTestEnd = pTest->GetEnd();
@@ -1591,7 +1590,7 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
     // erstmal muessen wir die alten Items anhand der Startliste suchen
     // und die neuen Item-Bereiche festlegen
 
-    for( sal_uInt16 i=0; i<aStartLst.Count(); i++ )
+    for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
         xub_StrLen nTestStart = pTest->GetStart();
@@ -1626,12 +1625,12 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, xub_StrLen nStart,
                     // das Test-Item beginnt erst hinter dem neuen
                     // Ende des Attribts und kann deshalb komplett
                     // geloescht werden
-                    aStartLst.Remove( i, 1 );
+                    aStartLst.erase( aStartLst.begin() + i );
                     i--;
 
                     sal_uInt16 nEndPos = _FindEndPos( pTest );
                     if( nEndPos != USHRT_MAX )
-                        aEndLst.Remove( nEndPos, 1 );
+                        aEndLst.erase( aEndLst.begin() + nEndPos );
                 }
 
                 // ggf den zweiten Teil des gesplitteten Attribts einfuegen
@@ -1991,7 +1990,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
     rHWrt.bTagOn = sal_True;
 
     // die Attribute in der Start-Liste sind aufsteigend sortiert
-    for( sal_uInt16 i=0; i< aStartLst.Count(); i++ )
+    for( sal_uInt16 i=0; i< aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pPos = aStartLst[i];
         xub_StrLen nStart = pPos->GetStart();
@@ -2029,7 +2028,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
 
     // die Attribute in der End-Liste sind aufsteigend sortiert
     sal_uInt16 i=0;
-    while( i < aEndLst.Count() )
+    while( i < aEndLst.size() )
     {
         HTMLSttEndPos *pPos = aEndLst[i];
         xub_StrLen nEnd = pPos->GetEnd();
