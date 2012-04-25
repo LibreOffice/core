@@ -109,8 +109,7 @@ struct _UndoTblCpyTbl_Entry
     _UndoTblCpyTbl_Entry( const SwTableBox& rBox );
     ~_UndoTblCpyTbl_Entry();
 };
-typedef _UndoTblCpyTbl_Entry* _UndoTblCpyTbl_EntryPtr;
-SV_DECL_PTRARR_DEL( _UndoTblCpyTbl_Entries, _UndoTblCpyTbl_EntryPtr, 0 )
+class _UndoTblCpyTbl_Entries : public boost::ptr_vector<_UndoTblCpyTbl_Entry> {};
 
 class _SaveBox;
 class _SaveLine;
@@ -223,7 +222,6 @@ SV_IMPL_PTRARR( SfxItemSets, SfxItemSetPtr )
 SV_IMPL_PTRARR( SwUndoSaveSections, SwUndoSaveSectionPtr )
 SV_IMPL_PTRARR( SwUndoMoves, SwUndoMovePtr )
 SV_IMPL_PTRARR( SwTblToTxtSaves, SwTblToTxtSavePtr )
-SV_IMPL_PTRARR( _UndoTblCpyTbl_Entries, _UndoTblCpyTbl_EntryPtr )
 
 sal_uInt16 aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
@@ -2497,9 +2495,9 @@ void SwUndoTblCpyTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     _DEBUG_REDLINE( &rDoc )
 
     SwTableNode* pTblNd = 0;
-    for( sal_uInt16 n = pArr->Count(); n; )
+    for( sal_uInt16 n = pArr->size(); n; )
     {
-        _UndoTblCpyTbl_Entry* pEntry = (*pArr)[ --n ];
+        _UndoTblCpyTbl_Entry* pEntry = &(*pArr)[ --n ];
         sal_uLong nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
         SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->StartOfSectionNode();
         if( !pTblNd )
@@ -2648,9 +2646,9 @@ void SwUndoTblCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwTableNode* pTblNd = 0;
-    for( sal_uInt16 n = 0; n < pArr->Count(); ++n )
+    for( sal_uInt16 n = 0; n < pArr->size(); ++n )
     {
-        _UndoTblCpyTbl_Entry* pEntry = (*pArr)[ n ];
+        _UndoTblCpyTbl_Entry* pEntry = &(*pArr)[ n ];
         sal_uLong nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
         SwStartNode* pSNd = rDoc.GetNodes()[ nSttPos ]->StartOfSectionNode();
         if( !pTblNd )
@@ -2725,11 +2723,11 @@ void SwUndoTblCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, sal_Bool bDelCntnt )
 {
-    if( pArr->Count() && !bDelCntnt )
+    if( !pArr->empty() && !bDelCntnt )
         return;
 
     _UndoTblCpyTbl_Entry* pEntry = new _UndoTblCpyTbl_Entry( rBox );
-    pArr->Insert( pEntry, pArr->Count() );
+    pArr->push_back( pEntry );
 
     SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
     _DEBUG_REDLINE( pDoc )
@@ -2754,7 +2752,7 @@ void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, sal_Bool bDelCntnt )
 
 void SwUndoTblCpyTbl::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, sal_Bool bDelCntnt )
 {
-    _UndoTblCpyTbl_Entry* pEntry = (*pArr)[ pArr->Count() - 1 ];
+    _UndoTblCpyTbl_Entry* pEntry = &(*pArr).back();
 
     // wurde der Inhalt geloescht, so loesche jetzt auch noch den temp.
     // erzeugten Node
@@ -2876,7 +2874,7 @@ sal_Bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
 
 sal_Bool SwUndoTblCpyTbl::IsEmpty() const
 {
-    return !pInsRowUndo && !pArr->Count();
+    return !pInsRowUndo && pArr->empty();
 }
 
 
