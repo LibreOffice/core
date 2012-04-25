@@ -71,7 +71,6 @@
 SFX_IMPL_MODELESSDIALOG( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
 SV_IMPL_OP_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr)
-SV_IMPL_PTRARR(SwRedlineDataChildArr, SwRedlineDataChildPtr)
 SV_IMPL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr)
 
 static sal_uInt16 nSortMode = 0xffff;
@@ -269,7 +268,7 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
     else
     {
         pTable->Clear();
-        aRedlineChildren.DeleteAndDestroy(0, aRedlineChildren.Count());
+        aRedlineChildren.clear();
         aRedlineParents.erase(aRedlineParents.begin() + nStart, aRedlineParents.end());
     }
 
@@ -514,16 +513,22 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     if (bChild)     // should actually never happen, but just in case...
     {
         // throw away all entry's children and initialise newly
-        SwRedlineDataChildPtr pBackupData = (SwRedlineDataChildPtr)pParent->pNext;
-        SwRedlineDataChildPtr pNext;
+        SwRedlineDataChild* pBackupData = (SwRedlineDataChild*)pParent->pNext;
+        SwRedlineDataChild* pNext;
 
         while (pBackupData)
         {
-            pNext = (SwRedlineDataChildPtr)pBackupData->pNext;
+            pNext = (SwRedlineDataChild*)pBackupData->pNext;
             if (pBackupData->pTLBChild)
                 pTable->RemoveEntry(pBackupData->pTLBChild);
 
-            aRedlineChildren.DeleteAndDestroy(aRedlineChildren.GetPos(pBackupData), 1);
+            for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
+                 it != aRedlineChildren.end(); ++it)
+                if (&*it == pBackupData)
+                {
+                    aRedlineChildren.erase(it);
+                    break;
+                }
             pBackupData = pNext;
         }
         pParent->pNext = 0;
@@ -603,7 +608,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
 
         SwRedlineDataChildPtr pRedlineChild = new SwRedlineDataChild;
         pRedlineChild->pChild = pRedlineData;
-        aRedlineChildren.Insert(pRedlineChild, aRedlineChildren.Count());
+        aRedlineChildren.push_back(pRedlineChild);
 
         if ( pLastRedlineChild )
             pLastRedlineChild->pNext = pRedlineChild;
@@ -681,21 +686,21 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         if (!bChildrenRemoved && aRedlineParents[i].pNext)
         {
             SwRedlineDataChildPtr pChildPtr = (SwRedlineDataChildPtr)aRedlineParents[i].pNext;
-            sal_uInt16 nChildPos = aRedlineChildren.GetPos(pChildPtr);
-
-            if (nChildPos != USHRT_MAX)
-            {
-                sal_uInt16 nChildren = 0;
-
-                while (pChildPtr)
+            for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
+                 it != aRedlineChildren.end(); ++it)
+                if (&*it == pChildPtr)
                 {
-                    pChildPtr = (SwRedlineDataChildPtr)pChildPtr->pNext;
-                    nChildren++;
-                }
+                    sal_uInt16 nChildren = 0;
+                    while (pChildPtr)
+                    {
+                        pChildPtr = (SwRedlineDataChildPtr)pChildPtr->pNext;
+                        nChildren++;
+                    }
 
-                aRedlineChildren.DeleteAndDestroy(nChildPos, nChildren);
-                bChildrenRemoved = sal_True;
-            }
+                    aRedlineChildren.erase(it, it + nChildren);
+                    bChildrenRemoved = sal_True;
+                    break;
+                }
         }
         SvLBoxEntry *pEntry = aRedlineParents[i].pTLBParent;
         if (pEntry)

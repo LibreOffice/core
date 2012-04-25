@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwChildWinWrapper;
 
@@ -69,7 +70,7 @@ SV_DECL_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr, 10)
 
 
 typedef SwRedlineDataChild* SwRedlineDataChildPtr;
-SV_DECL_PTRARR_DEL(SwRedlineDataChildArr, SwRedlineDataChildPtr, 4)
+typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
 
 
 typedef SvLBoxEntry* SvLBoxEntryPtr;
