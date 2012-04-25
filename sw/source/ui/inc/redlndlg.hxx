@@ -74,7 +74,7 @@ typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
 
 
 typedef SvLBoxEntry* SvLBoxEntryPtr;
-SV_DECL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr, 100)
+typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {

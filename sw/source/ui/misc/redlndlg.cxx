@@ -71,7 +71,6 @@
 SFX_IMPL_MODELESSDIALOG( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
 SV_IMPL_OP_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr)
-SV_IMPL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr)
 
 static sal_uInt16 nSortMode = 0xffff;
 static sal_Bool   bSortDir = sal_True;
@@ -705,17 +704,17 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         SvLBoxEntry *pEntry = aRedlineParents[i].pTLBParent;
         if (pEntry)
         {
-            long nIdx = aLBoxArr.Count() - 1L;
+            long nIdx = aLBoxArr.size() - 1L;
             sal_uLong nAbsPos = pModel->GetAbsPos(pEntry);
             while (nIdx >= 0 &&
                     pModel->GetAbsPos(aLBoxArr[ static_cast< sal_uInt16 >(nIdx) ]) > nAbsPos)
                 nIdx--;
-            aLBoxArr.Insert( pEntry, static_cast< sal_uInt16 >(++nIdx) );
+            aLBoxArr.insert( aLBoxArr.begin() + static_cast< sal_uInt16 >(++nIdx) , pEntry);
         }
     }
 
     // clear TLB from behind
-    long nIdx = (long)aLBoxArr.Count() - 1L;
+    long nIdx = (long)aLBoxArr.size() - 1L;
     while (nIdx >= 0)
         pTable->RemoveEntry(aLBoxArr[ static_cast< sal_uInt16 >(nIdx--) ]);
 
