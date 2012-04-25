@@ -334,8 +334,7 @@ public:
     sal_Bool        Init (const JobData& rData);
     void            Clear();
 
-    // query depth and size
-    void            GetResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const;
+    // query depth
     sal_uInt16      GetBitCount ();
 
     // clip region
@@ -379,11 +378,6 @@ public:
     // image drawing
     void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
                                 const PrinterBmp& rBitmap);
-    void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
-                                const PrinterBmp& rBitmap,
-                                const PrinterBmp& rTransBitmap);
-    void            DrawMask   (const Rectangle& rDest, const Rectangle& rSrc,
-                                const PrinterBmp &rBitmap, PrinterColor& rMaskColor);
 
     // font and text handling
     sal_uInt16      SetFont (
@@ -417,11 +411,6 @@ public:
     sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,
                                   long *pWidthArray);
     const ::std::list< KernPair >& getKernPairs( bool bVertical = false ) const;
-    // advanced font handling
-    sal_Bool        GetGlyphBoundRect (sal_Unicode c, Rectangle& rOutRect);
-    sal_uInt32      GetGlyphOutline (sal_Unicode c,
-                                     sal_uInt16 **ppPolySizes, Point **ppPoints,
-                                     sal_uInt8 **ppFlags);
 
     // for CTL
     void            DrawGlyphs( const Point& rPoint,

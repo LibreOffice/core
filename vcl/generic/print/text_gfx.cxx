@@ -697,23 +697,6 @@ const ::std::list< KernPair >& PrinterGfx::getKernPairs( bool bVertical ) const
 }
 
 /*
- * advanced glyph handling
- */
-
-sal_Bool
-PrinterGfx::GetGlyphBoundRect (sal_Unicode /*c*/, Rectangle& /*rOutRect*/)
-{
-    return 0;
-}
-
-sal_uInt32
-PrinterGfx::GetGlyphOutline (sal_Unicode /*c*/,
-                             sal_uInt16 **/*ppPolySizes*/, Point **/*ppPoints*/, sal_uInt8 **/*ppFlags*/)
-{
-    return 0;
-}
-
-/*
  * spool the converted truetype fonts to the page header after the page body is
  * complete
  * for Type1 fonts spool additional reencoding vectors that are necessary to access the

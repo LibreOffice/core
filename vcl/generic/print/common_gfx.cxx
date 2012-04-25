@@ -104,13 +104,6 @@ PrinterGfx::Init (const JobData& rData)
     return sal_True;
 }
 
-void
-PrinterGfx::GetResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const
-{
-    rDpiX = mnDpi;
-    rDpiY = mnDpi;
-}
-
 sal_uInt16
 PrinterGfx::GetBitCount ()
 {
