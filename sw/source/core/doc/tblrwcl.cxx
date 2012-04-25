@@ -326,7 +326,9 @@ struct _CpyPara
     void SetBoxWidth( SwTableBox* pBox );
 };
 
-sal_Bool lcl_CopyCol( _FndBox & rFndBox, _CpyPara* pCpyPara )
+static void lcl_CopyRow(_FndLine & rFndLine, _CpyPara *const pCpyPara);
+
+static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
 {
     // Look up the Frame Format in the Frame Format Array
     SwTableBox* pBox = rFndBox.GetBox();
@@ -452,10 +454,9 @@ sal_Bool lcl_CopyCol( _FndBox & rFndBox, _CpyPara* pCpyPara )
             }
         }
     }
-    return sal_True;
 }
 
-sal_Bool lcl_CopyRow( _FndLine& rFndLine, _CpyPara* pCpyPara )
+static void lcl_CopyRow(_FndLine& rFndLine, _CpyPara *const pCpyPara)
 {
     SwTableLine* pNewLine = new SwTableLine(
                             (SwTableLineFmt*)rFndLine.GetLine()->GetFrmFmt(),
@@ -478,7 +479,6 @@ sal_Bool lcl_CopyRow( _FndLine& rFndLine, _CpyPara* pCpyPara )
     }
 
     pCpyPara->nDelBorderFlag &= 0xf8;
-    return sal_True;
 }
 
 void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
@@ -1484,7 +1484,9 @@ struct _InsULPara
         { bUL_LR = sal_True;    bUL = sal_False; if( pLine ) pInsLine = pLine; }
 };
 
-sal_Bool lcl_Merge_MoveBox( _FndBox & rFndBox, _InsULPara* pULPara )
+static void lcl_Merge_MoveLine(_FndLine & rFndLine, _InsULPara *const pULPara);
+
+static void lcl_Merge_MoveBox(_FndBox & rFndBox, _InsULPara *const pULPara)
 {
     SwTableBoxes* pBoxes;
 
@@ -1543,10 +1545,9 @@ sal_Bool lcl_Merge_MoveBox( _FndBox & rFndBox, _InsULPara* pULPara )
         else
             delete pBox;
     }
-    return sal_True;
 }
 
-sal_Bool lcl_Merge_MoveLine( _FndLine& rFndLine, _InsULPara* pULPara )
+static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
 {
     SwTableLines* pLines;
 
@@ -1722,8 +1723,6 @@ sal_Bool lcl_Merge_MoveLine( _FndLine& rFndLine, _InsULPara* pULPara )
     }
     else
         delete pNewLine;
-
-    return sal_True;
 }
 
 sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
@@ -1981,7 +1980,10 @@ void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
     }
 }
 
-sal_Bool lcl_CopyBoxToDoc( _FndBox const& rFndBox, _CpyPara *const pCpyPara )
+static void
+lcl_CopyLineToDoc(_FndLine const& rpFndLn, _CpyPara *const pCpyPara);
+
+static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
 {
     // Calculation of new size
     sal_uLong nRealSize;
@@ -2103,10 +2105,10 @@ sal_Bool lcl_CopyBoxToDoc( _FndBox const& rFndBox, _CpyPara *const pCpyPara )
         }
     }
     while( nSize );
-    return sal_True;
 }
 
-sal_Bool lcl_CopyLineToDoc( const _FndLine& rFndLine, _CpyPara* pCpyPara )
+static void
+lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
 {
     // Find the Frame Format in the list of all Frame Formats
     _CpyTabFrm aFindFrm( (SwTableBoxFmt*)rFndLine.GetLine()->GetFrmFmt() );
@@ -2165,7 +2167,6 @@ sal_Bool lcl_CopyLineToDoc( const _FndLine& rFndLine, _CpyPara* pCpyPara )
         lcl_CopyBoxToDoc(*it, &aPara);
     if( pCpyPara->pTblNd->GetTable().IsNewModel() )
         ++pCpyPara->nLnIdx;
-    return sal_True;
 }
 
 sal_Bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )

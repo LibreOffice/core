@@ -50,17 +50,6 @@ class SwFmtFrmSize;
 class _CpyPara;
 class _InsULPara;
 
-sal_Bool lcl_CopyRow(_FndLine& rFndLine, _CpyPara* pCpyPara);
-
-sal_Bool lcl_MergeGCBox( const SwTableBox*& rpBox, void* pPara );
-sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara );
-
-sal_Bool lcl_Merge_MoveBox(_FndBox & rFndBox, _InsULPara* pULPara);
-sal_Bool lcl_Merge_MoveLine(_FndLine & rFndLine, _InsULPara* pULPara);
-
-sal_Bool lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara );
-sal_Bool lcl_CopyLineToDoc( const _FndLine& rpFndLn, _CpyPara* pPara );
-
 sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
 

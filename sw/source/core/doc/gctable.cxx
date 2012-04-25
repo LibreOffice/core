@@ -336,7 +336,9 @@ struct _GCLinePara
     {}
 };
 
-sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
+static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void*const pPara);
+
+static bool lcl_MergeGCBox(const SwTableBox*& rpTblBox, void*const pPara)
 {
     SwTableBox*& rpBox = (SwTableBox*&)rpTblBox;
     sal_uInt16 n, nLen = rpBox->GetTabLines().Count();
@@ -364,13 +366,13 @@ sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
             // Delete the old Box with the Line
             pInsLine->GetTabBoxes().DeleteAndDestroy( nInsPos );
 
-            return sal_False; // set up anew
+            return false; // set up anew
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
+static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void *const pPara)
 {
     SwTableLine* pLn = (SwTableLine*)rpLine;
     sal_uInt16 nLen = pLn->GetTabBoxes().Count();
@@ -431,7 +433,7 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
             if( !lcl_MergeGCBox( *(pLn->GetTabBoxes().GetData() + nLen ), pPara ))
                 --nLen;
     }
-    return sal_True;
+    return true;
 }
 
 // Clean structure a bit
