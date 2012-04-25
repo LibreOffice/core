@@ -90,15 +90,19 @@ void SwComboBox::RemoveEntry(sal_uInt16 nPos)
 
     // Remove old element
     SwBoxEntry* pEntry = &aEntryLst[nPos];
-    aEntryLst.erase(aEntryLst.begin() + nPos);
     ComboBox::RemoveEntry(nPos);
 
     // Don't add new entries to the list
     if(pEntry->bNew)
-        return;
-
-    // add to DelEntryLst
-    aDelEntryLst.push_back(pEntry);
+    {
+        aEntryLst.erase(aEntryLst.begin() + nPos);
+    }
+    else
+    {
+        // add to DelEntryLst
+        aDelEntryLst.transfer(aDelEntryLst.end(),
+                aEntryLst.begin() + nPos, aEntryLst);
+    }
 }
 
 sal_uInt16 SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
