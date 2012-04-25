@@ -131,7 +131,7 @@ sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // Check if selection is balanced.
 SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16)
-SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25 )
+class SwChartLines : public boost::ptr_vector<SwChartBoxes> {};
 
 sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     SwChartLines* pGetCLines = 0 );

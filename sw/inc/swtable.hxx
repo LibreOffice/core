@@ -53,6 +53,7 @@ class SwTabCols;
 class SwDoc;
 class SwSelBoxes;
 class SwTblCalcPara;
+class SwChartBoxes;
 class SwChartLines;
 struct SwPosition;
 class SwNodeIndex;

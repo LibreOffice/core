@@ -116,7 +116,6 @@ struct _Sort_CellFrm
 typedef std::deque< _Sort_CellFrm > _Sort_CellFrms;
 
 SV_IMPL_PTRARR( SwChartBoxes, SwTableBoxPtr );
-SV_IMPL_PTRARR( SwChartLines, SwChartBoxes* );
 
 const SwLayoutFrm *lcl_FindCellFrm( const SwLayoutFrm *pLay )
 {
@@ -660,7 +659,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     {
                         pBoxes = new SwChartBoxes( 255 < nRowCells
                                                     ? 255 : (sal_uInt8)nRowCells);
-                        pGetCLines->C40_INSERT( SwChartBoxes, pBoxes, pGetCLines->Count() );
+                        pGetCLines->push_back( pBoxes );
                         nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
                     }
                     SwTableBoxPtr pBox = (SwTableBox*)rCF.pFrm->GetTabBox();
@@ -686,13 +685,13 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
         }
         --nLoopMax;
         if( pGetCLines )
-            pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
+            pGetCLines->clear();
     } while( sal_True );
 
     OSL_ENSURE( nLoopMax, "table layout is still invalid!" );
 
     if( !bValidChartSel && pGetCLines )
-        pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
+        pGetCLines->clear();
 
     return bValidChartSel;
 }
