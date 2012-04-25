@@ -246,7 +246,7 @@ ScCellFieldsObj::ScCellFieldsObj(ScDocShell* pDocSh, const ScAddress& rPos) :
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 
-    pEditSource = new ScCellEditSource( pDocShell, aCellPos );
+    mpEditSource = new ScCellEditSource( pDocShell, aCellPos );
 }
 
 ScCellFieldsObj::~ScCellFieldsObj()
@@ -254,7 +254,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 
-    delete pEditSource;
+    delete mpEditSource;
 
     // increment refcount to prevent double call off dtor
     osl_incrementInterlockedCount( &m_refCount );
@@ -291,7 +291,7 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
-    ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+    ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     if ( aTempEngine.FindByIndex( (sal_uInt16)Index, NULL ) )   // in der Zelle ist der Typ egal
@@ -312,7 +312,7 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
 
     //! Feld-Funktionen muessen an den Forwarder !!!
-    ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+    ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     return aTempEngine.CountFields(NULL);       // Felder zaehlen, in Zelle ist der Typ egal
@@ -430,12 +430,12 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
     nType(SC_SERVICE_INVALID),
     mpRefreshListeners( NULL )
 {
-    pEditSource = new ScHeaderFooterEditSource(rData);
+    mpEditSource = new ScHeaderFooterEditSource(rData);
 }
 
 ScHeaderFieldsObj::~ScHeaderFieldsObj()
 {
-    delete pEditSource;
+    delete mpEditSource;
 
     // increment refcount to prevent double call off dtor
     osl_incrementInterlockedCount( &m_refCount );
@@ -485,7 +485,7 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
 ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
-    ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+    ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     TypeId aTypeId = NULL;
@@ -543,7 +543,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
 
     //! Feld-Funktionen muessen an den Forwarder !!!
-    ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+    ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     TypeId aTypeId = NULL;
@@ -695,7 +695,7 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 
 ScHeaderFieldObj::ScHeaderFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    SvxEditSource* pEditSrc, sal_uInt16 nT, const ESelection& rSel) :
+    ScEditSource* pEditSrc, sal_uInt16 nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
     pPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertySet() : lcl_GetHeaderFieldPropertySet() ),
     mpContent(rContent),
@@ -768,7 +768,7 @@ void SAL_CALL ScHeaderFieldObj::release() throw()
 }
 
 void ScHeaderFieldObj::InitDoc(
-    const uno::Reference<text::XTextRange>& rContent, SvxEditSource* pEditSrc, const ESelection& rSel)
+    const uno::Reference<text::XTextRange>& rContent, ScEditSource* pEditSrc, const ESelection& rSel)
 {
     if (!mpEditSource)
     {
@@ -1115,10 +1115,10 @@ SvxFieldData* ScEditFieldObj::getData()
 void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal)
 {
     rtl::OUString aStrVal;
-    if (pEditSource)
+    if (mpEditSource)
     {
         // Edit engine instance already exists for this field item.  Use it.
-        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
@@ -1152,7 +1152,7 @@ void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::
             throw beans::UnknownPropertyException();
 
         pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
-        pEditSource->UpdateData();
+        mpEditSource->UpdateData();
         return;
     }
 
@@ -1197,10 +1197,10 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
     }
     else if (rName == SC_UNONAME_TEXTWRAP)
         aRet <<= text::WrapTextMode_NONE;
-    else if (pEditSource)
+    else if (mpEditSource)
     {
         //! Feld-Funktionen muessen an den Forwarder !!!
-        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
@@ -1250,9 +1250,9 @@ void ScEditFieldObj::setPropertyValueFile(const rtl::OUString& rName, const uno:
         if (rVal >>= nIntVal)
         {
             SvxFileFormat eFormat = lcl_UnoToSvxFileFormat(nIntVal);
-            if (pEditSource)
+            if (mpEditSource)
             {
-                ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+                ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
                 ScUnoEditEngine aTempEngine(pEditEngine);
                 SvxFieldData* pField = aTempEngine.FindByPos(
                         aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField));
@@ -1262,7 +1262,7 @@ void ScEditFieldObj::setPropertyValueFile(const rtl::OUString& rName, const uno:
                     SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
                     pExtFile->SetFormat(eFormat);
                     pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
-                    pEditSource->UpdateData();
+                    mpEditSource->UpdateData();
                 }
             }
             else
@@ -1284,9 +1284,9 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
     {
         SvxFileFormat eFormat = SVXFILEFORMAT_NAME_EXT;
         const SvxFieldData* pField = NULL;
-        if (pEditSource)
+        if (mpEditSource)
         {
-            ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+            ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
             ScUnoEditEngine aTempEngine(pEditEngine);
             pField = aTempEngine.FindByPos(
                 aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField));
@@ -1311,10 +1311,10 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
 
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
+    ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
     OComponentHelper(getMutex()),
     pPropSet(NULL),
-    pEditSource(pEditSrc),
+    mpEditSource(pEditSrc),
     aSelection(rSel),
     meType(eType), mpData(NULL), mpContent(rContent)
 {
@@ -1332,36 +1332,36 @@ ScEditFieldObj::ScEditFieldObj(
 }
 
 void ScEditFieldObj::InitDoc(
-    const uno::Reference<text::XTextRange>& rContent, SvxEditSource* pEditSrc, const ESelection& rSel)
+    const uno::Reference<text::XTextRange>& rContent, ScEditSource* pEditSrc, const ESelection& rSel)
 {
-    if (!pEditSource)
+    if (!mpEditSource)
     {
         mpContent = rContent;
         mpData.reset();
 
         aSelection = rSel;
-        pEditSource = pEditSrc;
+        mpEditSource = pEditSrc;
     }
 }
 
 ScEditFieldObj::~ScEditFieldObj()
 {
-    delete pEditSource;
+    delete mpEditSource;
 }
 
 SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {
-    OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !mpEditSource, "CreateFieldItem mit eingefuegtem Feld" );
     return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
 }
 
 void ScEditFieldObj::DeleteField()
 {
-    if (pEditSource)
+    if (mpEditSource)
     {
-        SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
+        SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
         pForwarder->QuickInsertText( String(), aSelection );
-        pEditSource->UpdateData();
+        mpEditSource->UpdateData();
 
         aSelection.nEndPara = aSelection.nStartPara;
         aSelection.nEndPos  = aSelection.nStartPos;
@@ -1373,7 +1373,7 @@ void ScEditFieldObj::DeleteField()
 
 bool ScEditFieldObj::IsInserted() const
 {
-    return pEditSource != NULL;
+    return mpEditSource != NULL;
 }
 
 // XTextField
@@ -1383,11 +1383,11 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
 {
     SolarMutexGuard aGuard;
 
-    if (!pEditSource)
+    if (!mpEditSource)
         return rtl::OUString("no edit source!!!");
 
     //! Feld-Funktionen muessen an den Forwarder !!!
-    ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+    ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     //  Typ egal (in Zellen gibts nur URLs)

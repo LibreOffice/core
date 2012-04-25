@@ -44,11 +44,19 @@ class ScHeaderFooterTextData;
 class ScAccessibleTextData;
 class SdrObject;
 
+class ScEditSource : public SvxEditSource
+{
+public:
+    virtual ScEditEngineDefaulter* GetEditEngine() = 0;
+};
+
 /**
- * ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is
- * used by field objects.
+ * ScHeaderFooterTextObj keeps the authoritative copy of
+ * ScHeaderFooterTextData that this class holds reference to.  It's a
+ * reference instead of a copy to avoid broadcasting changes to the
+ * authoritative copy.
  */
-class ScHeaderFooterEditSource : public SvxEditSource
+class ScHeaderFooterEditSource : public ScEditSource
 {
 private:
     ScHeaderFooterTextData& mrTextData;
@@ -58,7 +66,7 @@ public:
     virtual ~ScHeaderFooterEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
-    ScEditEngineDefaulter*      GetEditEngine();
+    virtual ScEditEngineDefaulter* GetEditEngine();
 
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
@@ -72,7 +80,7 @@ public:
  * ScCellEditSource with local copy of ScCellTextData is used by
  * ScCellFieldsObj, ScCellFieldObj.
  */
-class ScCellEditSource : public SvxEditSource
+class ScCellEditSource : public ScEditSource
 {
 private:
     ScCellTextData* pCellTextData;
@@ -82,7 +90,7 @@ public:
     virtual ~ScCellEditSource();
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
-    ScEditEngineDefaulter* GetEditEngine();
+    virtual ScEditEngineDefaulter* GetEditEngine();
 
     virtual SvxEditSource* Clone() const;
     virtual SvxTextForwarder* GetTextForwarder();

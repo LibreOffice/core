@@ -51,7 +51,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-class SvxEditSource;
+class ScEditSource;
 class SvxFieldItem;
 class SvxFieldData;
 class ScEditFieldObj;
@@ -71,7 +71,7 @@ class ScCellFieldsObj : public cppu::WeakImplHelper5<
 private:
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
-    SvxEditSource*          pEditSource;
+    ScEditSource* mpEditSource;
     /// List of refresh listeners.
     cppu::OInterfaceContainerHelper* mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
@@ -140,7 +140,7 @@ class ScHeaderFieldsObj : public cppu::WeakImplHelper5<
 private:
     ScHeaderFooterTextData& mrData;
     sal_uInt16                      nType;
-    SvxEditSource*              pEditSource;
+    ScEditSource* mpEditSource;
 
     /// List of refresh listeners.
     cppu::OInterfaceContainerHelper* mpRefreshListeners;
@@ -208,7 +208,7 @@ private:
     const SfxItemPropertySet*   pPropSet;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
     sal_uInt16                      nType;
-    SvxEditSource*              mpEditSource;
+    ScEditSource*              mpEditSource;
     ESelection                  aSelection;
     sal_Int16                   nFileFormat;        // enum SvxFileFormat, valid if not inserted
 
@@ -216,7 +216,7 @@ private:
 public:
     ScHeaderFieldObj(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        SvxEditSource* pEditSrc, sal_uInt16 nT, const ESelection& rSel);
+        ScEditSource* pEditSrc, sal_uInt16 nT, const ESelection& rSel);
     virtual ~ScHeaderFieldObj();
 
                             // called by getImplementation:
@@ -225,7 +225,7 @@ public:
     SvxFieldItem            CreateFieldItem();
     void InitDoc(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        SvxEditSource* pEditSrc, const ESelection& rSel);
+        ScEditSource* pEditSrc, const ESelection& rSel);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
                                 const ::com::sun::star::uno::Type & rType )
@@ -340,7 +340,7 @@ public:
 
 private:
     const SfxItemPropertySet* pPropSet;
-    SvxEditSource* pEditSource;
+    ScEditSource* mpEditSource;
     ESelection aSelection;
 
     FieldType meType;
@@ -364,7 +364,7 @@ public:
 
     ScEditFieldObj(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
+        ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
     virtual ~ScEditFieldObj();
 
     void DeleteField();
@@ -372,7 +372,7 @@ public:
     SvxFieldItem CreateFieldItem();
     void InitDoc(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        SvxEditSource* pEditSrc, const ESelection& rSel);
+        ScEditSource* pEditSrc, const ESelection& rSel);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )
