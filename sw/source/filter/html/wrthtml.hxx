@@ -61,7 +61,9 @@ class SvxBrushItem;
 class SvxFontItem;
 class SwHTMLNumRuleInfo;
 class SwHTMLPosFlyFrms;
-class SwHTMLTxtFtns;
+class SwTxtFtn;
+
+typedef std::vector<SwTxtFtn *> SwHTMLTxtFtns;
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 

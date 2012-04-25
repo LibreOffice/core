@@ -40,9 +40,6 @@
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 
-typedef SwTxtFtn *SwTxtFtnPtr;
-SV_DECL_PTRARR( SwHTMLTxtFtns, SwTxtFtnPtr, 1 )
-
 struct SwHTMLFootEndNote_Impl
 {
     SwHTMLTxtFtns aTxtFtns;
@@ -226,9 +223,7 @@ void SwHTMLParser::FinishFootEndNote()
     // In Kopf- und Fusszeilen duerfen keine Fussnoten eingefuegt werden.
     if( pTxtFtn )
     {
-        pFootEndNoteImpl->aTxtFtns.Insert( pTxtFtn,
-                                           pFootEndNoteImpl->aTxtFtns.Count() );
-
+        pFootEndNoteImpl->aTxtFtns.push_back( pTxtFtn );
         pFootEndNoteImpl->aNames.push_back(pFootEndNoteImpl->sName);
     }
     pFootEndNoteImpl->sName = aEmptyStr;
@@ -264,7 +259,7 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
             {
                 pStartNodeIdx = pFootEndNoteImpl->aTxtFtns[i]->GetStartNode();
                 pFootEndNoteImpl->aNames.erase(pFootEndNoteImpl->aNames.begin() + i);
-                pFootEndNoteImpl->aTxtFtns.Remove( i, 1 );
+                pFootEndNoteImpl->aTxtFtns.erase( pFootEndNoteImpl->aTxtFtns.begin() + i );
                 if(pFootEndNoteImpl->aNames.empty())
                 {
                     delete pFootEndNoteImpl;
@@ -292,7 +287,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nPos;
     if( rFmtFtn.IsEndNote() )
     {
-        nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->Count() : 0;
+        nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->size() : 0;
         OSL_ENSURE( nPos == rHTMLWrt.nFootNote + rHTMLWrt.nEndNote,
                 "OutHTML_SwFmtFtn: Position falsch" );
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc );
@@ -309,7 +304,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( !rHTMLWrt.pFootEndNotes )
         rHTMLWrt.pFootEndNotes = new SwHTMLTxtFtns;
-    rHTMLWrt.pFootEndNotes->Insert( pTxtFtn, nPos );
+    rHTMLWrt.pFootEndNotes->insert( rHTMLWrt.pFootEndNotes->begin() + nPos, pTxtFtn );
 
     rtl::OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
@@ -350,7 +345,7 @@ void SwHTMLWriter::OutFootEndNotes()
 #endif
     nFootNote = 0, nEndNote = 0;
 
-    for( sal_uInt16 i=0; i<pFootEndNotes->Count(); i++ )
+    for( sal_uInt16 i=0; i<pFootEndNotes->size(); i++ )
     {
         SwTxtFtn *pTxtFtn = (*pFootEndNotes)[i];
         pFmtFtn = &pTxtFtn->GetFtn();
