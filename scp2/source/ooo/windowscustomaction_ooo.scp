@@ -471,7 +471,8 @@ WindowsCustomAction gid_Customaction_SelectLanguage
     Source = "sellangmsi.dll";
     Target = "SelectLanguage";
     Inbinarytable = 1;
-    Assignment1 = ("ControlEvent", "SetupType", "Next", "DoAction", "SelectLanguage", "1", "1");
+    Assignment1 = ("InstallExecuteSequence", "NOT Installed", "MigrateFeatureStates");
+    Assignment2 = ("InstallUISequence", "NOT Installed", "MigrateFeatureStates");
 End
 
 WindowsCustomAction gid_Customaction_SortTree
