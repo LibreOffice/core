@@ -55,7 +55,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+namespace {
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
@@ -100,6 +100,40 @@ const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
     };
     static SfxItemPropertySet aFileFieldPropertySet_Impl( aFileFieldPropertyMap_Impl );
     return &aFileFieldPropertySet_Impl;
+}
+
+ScEditFieldObj::FieldType getFieldType(sal_uInt16 nSvxType)
+{
+    switch (nSvxType)
+    {
+        case SVX_DATEFIELD:
+            return ScEditFieldObj::Date;
+        case SVX_URLFIELD:
+            return ScEditFieldObj::URL;
+        case SVX_PAGEFIELD:
+            return ScEditFieldObj::Page;
+        case SVX_PAGESFIELD:
+            return ScEditFieldObj::Pages;
+        case SVX_TIMEFIELD:
+            return ScEditFieldObj::Time;
+        case SVX_FILEFIELD:
+            return ScEditFieldObj::Title;
+        case SVX_TABLEFIELD:
+            return ScEditFieldObj::Sheet;
+        case SVX_EXT_FILEFIELD:
+            return ScEditFieldObj::File;
+        case SVX_EXT_TIMEFIELD:
+        case SVX_AUTHORFIELD:
+        case SVX_HEADERFIELD:
+        case SVX_FOOTERFIELD:
+        case SVX_DATEFIMEFIELD:
+            // These are not supported yet.
+        default:
+            ;
+    }
+    return ScEditFieldObj::URL; // Default to URL for no good reason.
+}
+
 }
 
 //------------------------------------------------------------------------
@@ -297,12 +331,16 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     if (!pData)
         return uno::Reference<text::XTextField>();
 
+    // Get the parent text range instance.
+    uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
+
     sal_uInt16 nPar = aTempEngine.GetFieldPar();
     xub_StrLen nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
-    uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
+
+    ScEditFieldObj::FieldType eType = getFieldType(pData->GetClassId());
     uno::Reference<text::XTextField> xRet(
-        new ScEditFieldObj(xContent, new ScCellEditSource(pDocShell, aCellPos), ScEditFieldObj::URL, aSelection));
+        new ScEditFieldObj(xContent, new ScCellEditSource(pDocShell, aCellPos), eType, aSelection));
     return xRet;
 }
 
@@ -452,42 +490,6 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 
 // XIndexAccess (via XTextFields)
 
-namespace {
-
-ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
-{
-    switch (nOldType)
-    {
-        case SVX_DATEFIELD:
-            return ScEditFieldObj::Date;
-        case SVX_URLFIELD:
-            return ScEditFieldObj::URL;
-        case SVX_PAGEFIELD:
-            return ScEditFieldObj::Page;
-        case SVX_PAGESFIELD:
-            return ScEditFieldObj::Pages;
-        case SVX_TIMEFIELD:
-            return ScEditFieldObj::Time;
-        case SVX_FILEFIELD:
-            return ScEditFieldObj::Title;
-        case SVX_TABLEFIELD:
-            return ScEditFieldObj::Sheet;
-        case SVX_EXT_FILEFIELD:
-            return ScEditFieldObj::File;
-        case SVX_EXT_TIMEFIELD:
-        case SVX_AUTHORFIELD:
-        case SVX_HEADERFIELD:
-        case SVX_FOOTERFIELD:
-        case SVX_DATEFIMEFIELD:
-            // These are not supported yet.
-        default:
-            ;
-    }
-    return ScEditFieldObj::URL; // Default to URL for no good reason.
-}
-
-}
-
 uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
@@ -498,15 +500,12 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     if (!pData)
         return NULL;
 
-    sal_uInt16 nPar = aTempEngine.GetFieldPar();
-    xub_StrLen nPos = aTempEngine.GetFieldPos();
-
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+    // Get the parent text range instance.
     uno::Reference<text::XTextRange> xTextRange;
     ScHeaderFooterContentObj& rContentObj = mrData.GetContentObj();
     uno::Reference<text::XText> xText;
     sal_uInt16 nPart = mrData.GetPart();
-    if ( nPart == SC_HDFT_LEFT )
+    if (nPart == SC_HDFT_LEFT)
         xText = rContentObj.getLeftText();
     else if (nPart == SC_HDFT_CENTER)
         xText = rContentObj.getCenterText();
@@ -515,8 +514,12 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
     xTextRange = xTemp;
-    ScEditFieldObj::FieldType eRealType = getFieldType(pData->GetClassId());
 
+    sal_uInt16 nPar = aTempEngine.GetFieldPar();
+    xub_StrLen nPos = aTempEngine.GetFieldPos();
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+
+    ScEditFieldObj::FieldType eRealType = getFieldType(pData->GetClassId());
     uno::Reference<text::XTextField> xRet(
         new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection));
     return xRet;
