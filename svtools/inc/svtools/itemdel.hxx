@@ -34,8 +34,6 @@ class SfxPoolItem;
 
 SVT_DLLPUBLIC SfxPoolItem* DeleteItemOnIdle( SfxPoolItem* pItem );
 
-void DeleteOnIdleItems();
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

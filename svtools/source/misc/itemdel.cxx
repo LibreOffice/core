@@ -116,20 +116,4 @@ SfxPoolItem* DeleteItemOnIdle( SfxPoolItem* pItem )
     return pItem;
 }
 
-// ------------------------------------------------------------------------
-void DeleteOnIdleItems()
-{
-    SfxItemDesruptorList_Impl* &rpList
-     = ImpSvtData::GetSvtData().pItemDesruptList;
-    if ( rpList )
-    {
-        sal_uInt16 n;
-        while ( 0 != ( n = rpList->Count() ) )
-            // Remove ist implizit im Dtor
-            delete rpList->GetObject( n-1 );
-        DELETEZ(rpList);
-    }
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
