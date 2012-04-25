@@ -31,6 +31,7 @@
 #include <svl/svarray.hxx>
 #include <numrule.hxx>
 #include "swdllapi.h"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SfxPoolItem;
 class SwWrtShell;
@@ -38,8 +39,7 @@ class SvStream;
 
 #define MAX_NUM_RULES 9
 
-typedef SfxPoolItem* SfxPoolItemPtr;
-SV_DECL_PTRARR_DEL( _SwNumFmtsAttrs, SfxPoolItemPtr, 5 )
+typedef boost::ptr_vector<SfxPoolItem> _SwNumFmtsAttrs;
 
 class SW_DLLPUBLIC SwNumRulesWithName
 {

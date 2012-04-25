@@ -59,8 +59,6 @@ using namespace ::com::sun::star;
 #define NUMRULE_FILENAME "numrule.cfg"
 #define CHAPTER_FILENAME "chapter.cfg"
 
-SV_IMPL_PTRARR( _SwNumFmtsAttrs, SfxPoolItem* )
-
 
 // SwNumRulesWithName ----------------------------------------------------
 // PUBLIC METHODES -------------------------------------------------------
@@ -305,7 +303,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
             const SfxPoolItem *pCurr = aIter.GetCurItem();
             while( sal_True )
             {
-                aItems.Insert( pCurr->Clone(), aItems.Count() );
+                aItems.push_back( pCurr->Clone() );
                 if( aIter.IsAtEnd() )
                     break;
                 pCurr = aIter.NextItem();
@@ -322,8 +320,8 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFm
     sCharFmtName( rFmt.sCharFmtName ),
     nCharPoolId( rFmt.nCharPoolId )
 {
-    for( sal_uInt16 n = rFmt.aItems.Count(); n; )
-        aItems.Insert( rFmt.aItems[ --n ]->Clone(), aItems.Count() );
+    for( sal_uInt16 n = rFmt.aItems.size(); n; )
+        aItems.push_back( rFmt.aItems[ --n ].Clone() );
 }
 
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
@@ -418,8 +416,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         {
             sal_uInt16 nWhich, nVers;
             rStream >> nWhich >> nVers;
-            aItems.Insert( GetDfltAttr( nWhich )->Create( rStream, nVers ),
-                            aItems.Count() );
+            aItems.push_back( GetDfltAttr( nWhich )->Create( rStream, nVers ) );
         }
     }
 
@@ -504,11 +501,11 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     }
     rStream << nCharPoolId;
     rStream.WriteUniOrByteString( sCharFmtName, eEncoding );
-    rStream << aItems.Count();
+    rStream << aItems.size();
 
-    for( sal_uInt16 n = aItems.Count(); n; )
+    for( sal_uInt16 n = aItems.size(); n; )
     {
-        SfxPoolItem* pItem = aItems[ --n ];
+        SfxPoolItem* pItem = &aItems[ --n ];
         sal_uInt16 nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
         OSL_ENSURE( nIVers != USHRT_MAX,
                 "Was'n das: Item-Version USHRT_MAX in der aktuellen Version" );
@@ -570,8 +567,8 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
             if( !pFmt->GetDepends() )       // set attributes
-                for( sal_uInt16 n = aItems.Count(); n; )
-                    pFmt->SetFmtAttr( *aItems[ --n ] );
+                for( sal_uInt16 n = aItems.size(); n; )
+                    pFmt->SetFmtAttr( aItems[ --n ] );
         }
     }
     ((SwNumFmt&)aFmt).SetCharFmt( pFmt );
