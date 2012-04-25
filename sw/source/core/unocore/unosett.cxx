@@ -1687,6 +1687,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         }
         PropValData* pData = new PropValData(rProp.Value, rProp.Name );
         aPropertyValues.Insert(pData, aPropertyValues.Count());
+        if( bExcept )
+            SAL_WARN( "sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing" );
     }
 
     SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
