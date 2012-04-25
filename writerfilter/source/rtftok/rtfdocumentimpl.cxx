@@ -2164,6 +2164,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aCharacterSprms->push_back(make_pair(nSprm, pIntValue));
+        // Language is a character property, but we should store it at a paragraph level as well for fields.
+        if (nKeyword == RTF_LANG && m_bNeedPap)
+            m_aStates.top().aParagraphSprms->push_back(make_pair(nSprm, pIntValue));
         return 0;
     }
     // Trivial paragraph sprms.

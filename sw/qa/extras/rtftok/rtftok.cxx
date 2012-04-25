@@ -41,9 +41,11 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -88,6 +90,7 @@ public:
     void testFdo48876();
     void testFdo48193();
     void testFdo44211();
+    void testFdo48037();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -115,6 +118,7 @@ public:
     CPPUNIT_TEST(testFdo48023);
     CPPUNIT_TEST(testFdo48876);
     CPPUNIT_TEST(testFdo44211);
+    CPPUNIT_TEST(testFdo48037);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -645,6 +649,26 @@ void RtfModelTest::testFdo44211()
 
     OUString aExpected("ąčę", 6, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+void RtfModelTest::testFdo48037()
+{
+    load("fdo48037.rtf");
+
+    uno::Reference<util::XNumberFormatsSupplier> xNumberSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    lang::Locale aUSLocale, aFRLocale;
+    aUSLocale.Language = "en";
+    aFRLocale.Language = "fr";
+    sal_Int32 nExpected = xNumberSupplier->getNumberFormats()->addNewConverted("d MMMM yyyy", aUSLocale, aFRLocale);
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nActual = 0;
+    xPropertySet->getPropertyValue("NumberFormat") >>= nActual;
+
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
