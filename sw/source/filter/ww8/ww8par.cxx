@@ -31,6 +31,8 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
+#include <i18npool/mslangid.hxx>
+
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/solar.h>
 #include <rtl/tencinfo.h>
@@ -2365,7 +2367,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl) && nAktColl < vColl.size())
             eSrcCharSet = vColl[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-        { // patch from cmc for #i52786#
+        {
             /*
              #i22206#/#i52786#
              The (default) character set used for a run of text is the default
@@ -2376,7 +2378,10 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
              correctly set in the character runs involved, so its hard to reproduce
              documents that require this to be sure of the process involved.
             */
-            eSrcCharSet = msfilter::util::GetDefaultTextEncoding();
+            const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+            LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
+            ::com::sun::star::lang::Locale aLocale(MsLangId::convertLanguageToLocale(eLang));
+            eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
         }
     }
     return eSrcCharSet;

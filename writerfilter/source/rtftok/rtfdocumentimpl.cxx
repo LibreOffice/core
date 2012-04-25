@@ -520,7 +520,7 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(sal_uInt32 nFontIndex)
     {
         if (nFontIndex < m_aFontEncodings.size())
             return m_aFontEncodings[nFontIndex];
-        return msfilter::util::GetDefaultTextEncoding();
+        return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLocale());
     }
     else
         return m_pSuperstream->getEncoding(nFontIndex);

@@ -33,10 +33,11 @@
 namespace msfilter {
 namespace util {
 
-rtl_TextEncoding GetDefaultTextEncoding()
+rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale)
 {
-    const rtl::OUString& rLanguage = Application::GetSettings().GetLocale().Language;
-
+    //Obviously not comprehensive, feel free to expand these, they're for ultimate fallbacks
+    //in last-ditch broken-file-format cases to guess the right 8bit encodings
+    const rtl::OUString &rLanguage = rLocale.Language;
     if (rLanguage == "cs" || rLanguage == "hu" || rLanguage == "pl")
         return RTL_TEXTENCODING_MS_1250;
     if (rLanguage == "ru" || rLanguage == "uk")
@@ -45,8 +46,7 @@ rtl_TextEncoding GetDefaultTextEncoding()
         return RTL_TEXTENCODING_MS_1253;
     if (rLanguage == "tr")
         return RTL_TEXTENCODING_MS_1254;
-    else
-        return RTL_TEXTENCODING_MS_1252;
+    return RTL_TEXTENCODING_MS_1252;
 }
 
 }

@@ -30,13 +30,16 @@
 #define INCLUDED_MSFILTER_UTIL_HXX
 
 #include <rtl/textenc.h>
+#include <com/sun/star/lang/Locale.hpp>
 #include "filter/msfilter/msfilterdllapi.h"
 
 namespace msfilter {
 namespace util {
 
-/// Returns the default encoding, based on the application's locale.
-MSFILTER_DLLPUBLIC rtl_TextEncoding GetDefaultTextEncoding();
+/// Returns the best-fit default 8bit encoding for a given locale
+/// i.e. useful when dealing with legacy formats which use legacy text encodings without recording
+/// what the encoding is, but you know or can guess the language
+MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale);
 
 }
 }
