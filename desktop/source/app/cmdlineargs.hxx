@@ -32,6 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include "boost/optional.hpp"
+#include <vector>
 
 namespace desktop
 {
