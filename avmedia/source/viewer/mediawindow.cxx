@@ -148,13 +148,6 @@ void MediaWindow::StartDrag( sal_Int8 /* nAction */, const Point& /* rPosPixel *
 
 // -------------------------------------------------------------------------
 
-bool MediaWindow::hasPreferredSize() const
-{
-    return( mpImpl != NULL && mpImpl->hasPreferredSize() );
-}
-
-// -------------------------------------------------------------------------
-
 Size MediaWindow::getPreferredSize() const
 {
     return mpImpl->getPreferredSize();

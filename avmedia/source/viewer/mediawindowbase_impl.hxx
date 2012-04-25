@@ -72,7 +72,6 @@ namespace avmedia
 
             bool    isValid() const;
 
-            bool    hasPreferredSize() const;
             Size    getPreferredSize() const;
 
             bool    setZoom( ::com::sun::star::media::ZoomLevel eLevel );

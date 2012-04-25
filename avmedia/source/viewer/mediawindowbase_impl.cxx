@@ -217,13 +217,6 @@ void MediaWindowBaseImpl::cleanUp()
 
 // ---------------------------------------------------------------------
 
-bool MediaWindowBaseImpl::hasPreferredSize() const
-{
-    return( mxPlayerWindow.is() );
-}
-
-// ---------------------------------------------------------------------
-
 Size MediaWindowBaseImpl::getPreferredSize() const
 {
     Size aRet;
