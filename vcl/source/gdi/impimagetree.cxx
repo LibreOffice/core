@@ -170,15 +170,10 @@ bool ImplImageTree::loadImage(
     if (found || !loadMissing)
         return found;
 
-    try {
-        OSL_TRACE(
-            "ImplImageTree::loadImage exception couldn't load \"%s\", fetching missing_icon.png",
-            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-        found = loadDefaultImage(style, bitmap);
-    } catch (css::uno::RuntimeException &) {
-        throw;
-    }
-    return found;
+    OSL_TRACE(
+        "ImplImageTree::loadImage exception couldn't load \"%s\", fetching default image",
+        rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
+    return loadDefaultImage(style, bitmap);
 }
 
 bool ImplImageTree::loadDefaultImage(
