@@ -84,24 +84,24 @@ void lcl_FillSvxColumn(const SwFmtCol& rCol,
     const SwColumns& rCols = rCol.GetColumns();
     sal_uInt16 nWidth = 0;
 
-    sal_Bool bOrtho = rCol.IsOrtho() && rCols.Count();
+    sal_Bool bOrtho = rCol.IsOrtho() && rCols.size();
     long nInnerWidth = 0;
     if( bOrtho )
     {
         nInnerWidth = nTotalWidth;
-        for ( sal_uInt16 i = 0; i < rCols.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rCols.size(); ++i )
         {
-            SwColumn* pCol = rCols[i];
+            const SwColumn* pCol = &rCols[i];
             nInnerWidth -= pCol->GetLeft() + pCol->GetRight();
         }
         if( nInnerWidth < 0 )
             nInnerWidth = 0;
         else
-            nInnerWidth /= rCols.Count();
+            nInnerWidth /= rCols.size();
     }
-    for ( sal_uInt16 i = 0; i < rCols.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rCols.size(); ++i )
     {
-        SwColumn* pCol = rCols[i];
+        const SwColumn* pCol = &rCols[i];
         const sal_uInt16 nStart = sal_uInt16(pCol->GetLeft() + nWidth + nDistance);
         if( bOrtho )
             nWidth = static_cast< sal_uInt16 >(nWidth + nInnerWidth + pCol->GetLeft() + pCol->GetRight());
@@ -146,7 +146,7 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
         sal_uInt16 nWidth = static_cast< sal_uInt16 >(rColItem[i].nEnd - rColItem[i].nStart);
         nWidth += nLeft + nRight;
 
-        SwColumn* pCol = rArr[i];
+        SwColumn* pCol = &rArr[i];
         pCol->SetWishWidth( sal_uInt16(long(rCols.GetWishWidth()) * long(nWidth) /
                                                             long(nTotalWidth) ));
         pCol->SetLeft( nLeft );
@@ -155,11 +155,11 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 
         nLeft = nRight;
     }
-    rArr[rColItem.Count()-1]->SetLeft( nLeft );
+    rArr[rColItem.Count()-1].SetLeft( nLeft );
 
     //Die Differenz aus der Gesamtwunschbreite und der Summe der bisher berechneten
     // Spalten und Raender sollte die Breite der letzten Spalte ergeben.
-    rArr[rColItem.Count()-1]->SetWishWidth( rCols.GetWishWidth() - (sal_uInt16)nSumAll );
+    rArr[rColItem.Count()-1].SetWishWidth( rCols.GetWishWidth() - (sal_uInt16)nSumAll );
 
     rCols.SetOrtho(sal_False, 0, 0 );
 }
@@ -222,9 +222,9 @@ void ResizeFrameCols(SwFmtCol& rCol,
     {
         // wenn die Wunschbreite zu gross wird, dann muessen alle Werte passend skaliert werden
         long nScale = (0xffffl << 8)/ nNewWishWidth;
-        for(sal_uInt16 i = 0; i < rArr.Count(); i++)
+        for(sal_uInt16 i = 0; i < rArr.size(); i++)
         {
-            SwColumn* pCol = rArr.GetObject(i);
+            SwColumn* pCol = &rArr[i];
             long nVal = pCol->GetWishWidth();
             lcl_Scale(nVal, nScale);
             pCol->SetWishWidth((sal_uInt16) nVal);
@@ -241,9 +241,9 @@ void ResizeFrameCols(SwFmtCol& rCol,
     rCol.SetWishWidth( (sal_uInt16) (nNewWishWidth) );
 
     if( nLeftDelta >= 2 || nLeftDelta <= -2)
-        rArr[0]->SetWishWidth(rArr[0]->GetWishWidth() + (sal_uInt16)nWishDiff);
+        rArr.front().SetWishWidth(rArr.front().GetWishWidth() + (sal_uInt16)nWishDiff);
     else
-        rArr[rArr.Count()-1]->SetWishWidth(rArr[rArr.Count()-1]->GetWishWidth() + (sal_uInt16)nWishDiff);
+        rArr.back().SetWishWidth(rArr.back().GetWishWidth() + (sal_uInt16)nWishDiff);
     //reset auto width
     rCol.SetOrtho(sal_False, 0, 0 );
 }
@@ -1348,7 +1348,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SwSectionFmt *pFmt = pSect->GetFmt();
                         const SwFmtCol& rCol = pFmt->GetCol();
                         if(rSh.IsInRightToLeftText())
-                            nNum = rCol.GetColumns().Count() - nNum;
+                            nNum = rCol.GetColumns().size() - nNum;
                         else
                             --nNum;
                         SvxColumnItem aColItem(nNum);
@@ -1387,7 +1387,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                         const SwFmtCol& rCol = pFmt->GetCol();
                         if(rSh.IsInRightToLeftText())
-                            nNum = rCol.GetColumns().Count() - nNum;
+                            nNum = rCol.GetColumns().size() - nNum;
                         else
                             nNum--;
                         SvxColumnItem aColItem(nNum);
@@ -1425,7 +1425,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const SwFrmFmt& rMaster = rDesc.GetMaster();
                     SwFmtCol aCol(rMaster.GetCol());
                     if(rFrameDir.GetValue() == FRMDIR_HORI_RIGHT_TOP)
-                        nNum = aCol.GetColumns().Count() - nNum;
+                        nNum = aCol.GetColumns().size() - nNum;
                     else
                         nNum--;
 
@@ -1589,7 +1589,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                    &rDesc.GetMaster().GetCol();
                     const SwColumns& rCols = pCols->GetColumns();
                     sal_uInt16 nNum = rSh.GetCurOutColNum();
-                    sal_uInt16 nCount = Min(sal_uInt16(nNum + 1), rCols.Count());
+                    sal_uInt16 nCount = Min(sal_uInt16(nNum + 1), sal_uInt16(rCols.size()));
                     const SwRect aRect( rSh.GetAnyCurRect( pFmt
                                                     ? RECT_FLY_PRT_EMBEDDED
                                                     : RECT_PAGE_PRT, pPt ));
@@ -1607,7 +1607,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aRectangle.Left() = 0;
                     for ( sal_uInt16 i = 0; i < nCount; ++i )
                     {
-                        SwColumn* pCol = rCols[i];
+                        const SwColumn* pCol = &rCols[i];
                         nStart = pCol->GetLeft() + nWidth;
                         if(i == nNum - 2)
                             aRectangle.Left() = nStart;
@@ -1633,7 +1633,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRectangle.Right() -= (nOuterWidth - nTotalWidth) / 2;
                     }
 
-                    if(nNum < rCols.Count())
+                    if(nNum < rCols.size())
                     {
                         aRectangle.Right() += MINLAY;
                     }
@@ -1727,15 +1727,15 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nStart = 0,
                         nEnd = nTotalWidth;
 
-                    if( nNum > rCols.Count() )
+                    if( nNum > rCols.size() )
                     {
                         OSL_ENSURE( !this, "wrong FmtCol is being edited!" );
-                        nNum = rCols.Count();
+                        nNum = rCols.size();
                     }
 
                     for( sal_uInt16 i = 0; i < nNum; ++i )
                     {
-                        SwColumn* pCol = rCols[i];
+                        const SwColumn* pCol = &rCols[i];
                         nStart = pCol->GetLeft() + nWidth;
                         nWidth += pCols->CalcColWidth( i, nTotalWidth );
                         nEnd = nWidth - pCol->GetRight();

@@ -283,9 +283,9 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
             bAdjustAttributes = sal_True;
         else
         {
-            sal_uInt16 nCount = Min( rNew.GetColumns().Count(), rOld.GetColumns().Count() );
+            sal_uInt16 nCount = Min( rNew.GetColumns().size(), rOld.GetColumns().size() );
             for ( sal_uInt16 i = 0; i < nCount; ++i )
-                if ( !(*rOld.GetColumns()[i] == *rNew.GetColumns()[i]) )
+                if ( !(rOld.GetColumns()[i] == rNew.GetColumns()[i]) )
                 {
                     bAdjustAttributes = sal_True;
                     break;
@@ -384,7 +384,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
 
         if ( bOrtho || bAdjustAttributes )
         {
-            const SwColumn *pC = pAttr->GetColumns()[i];
+            const SwColumn *pC = &pAttr->GetColumns()[i];
             const SwAttrSet* pSet = pCol->GetAttrSet();
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
 

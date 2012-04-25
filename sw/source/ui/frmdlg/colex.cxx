@@ -385,7 +385,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     }
     const SwColumns& rCols = m_aCols.GetColumns();
-    sal_uInt16 nColCount = rCols.Count();
+    sal_uInt16 nColCount = rCols.size();
     if( nColCount )
     {
         DrawRect(aRect);
@@ -394,7 +394,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
         long nSum = aTL.X();
         for(sal_uInt16 i = 0; i < nColCount; i++)
         {
-            SwColumn* pCol = rCols[i];
+            const SwColumn* pCol = &rCols[i];
             aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
             nSum              += pCol->GetWishWidth();
             aFrmRect.Right()   = nSum - pCol->GetRight();
@@ -405,7 +405,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
             nSum = aTL.X();
             for(sal_uInt16 i = 0; i < nColCount - 1; i++)
             {
-                nSum += rCols[i]->GetWishWidth();
+                nSum += rCols[i].GetWishWidth();
                 aUp.X() = nSum;
                 aDown.X() = nSum;
                 DrawLine(aUp, aDown);
@@ -420,11 +420,11 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
     sal_uInt16 nWishSum = m_aCols.GetWishWidth();
     long nFrmWidth = m_aFrmSize.Width();
     SwColumns& rCols = m_aCols.GetColumns();
-    sal_uInt16 nColCount = rCols.Count();
+    sal_uInt16 nColCount = rCols.size();
 
     for(sal_uInt16 i = 0; i < nColCount; i++)
     {
-        SwColumn* pCol = rCols[i];
+        SwColumn* pCol = &rCols[i];
         long nWish = pCol->GetWishWidth();
         nWish *= nFrmWidth;
         nWish /= nWishSum;
@@ -445,14 +445,14 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         sal_uInt16 i;
         for(i = 0; i < nColCount; ++i)
         {
-            SwColumn* pCol = rCols[i];
+            SwColumn* pCol = &rCols[i];
             nColumnWidthSum += pCol->GetWishWidth();
             nColumnWidthSum -= (pCol->GetRight() + pCol->GetLeft());
         }
         nColumnWidthSum /= nColCount;
         for(i = 0; i < nColCount; ++i)
         {
-            SwColumn* pCol = rCols[i];
+            SwColumn* pCol = &rCols[i];
             pCol->SetWishWidth( static_cast< sal_uInt16 >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
         }
     }

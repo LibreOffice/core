@@ -2380,7 +2380,7 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     const SwColumns& rCols = rFmtCol.GetColumns();
     for(sal_uInt16 i = 0; i < aTextColumns.getLength(); i++)
     {
-        SwColumn* pCol = rCols[i];
+        const SwColumn* pCol = &rCols[i];
 
         pColumns[i].Width = pCol->GetWishWidth();
         nReference += pColumns[i].Width;

@@ -113,8 +113,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-SV_IMPL_PTRARR(SwColumns,SwColumn*)
-
 TYPEINIT1(SwFmtVertOrient, SfxPoolItem);
 TYPEINIT1(SwFmtHoriOrient, SfxPoolItem);
 TYPEINIT2(SwFmtHeader,  SfxPoolItem, SwClient );
@@ -796,7 +794,7 @@ SwColumn::SwColumn() :
 {
 }
 
-sal_Bool SwColumn::operator==( const SwColumn &rCmp )
+sal_Bool SwColumn::operator==( const SwColumn &rCmp ) const
 {
     return (nWish    == rCmp.GetWishWidth() &&
             GetLeft()  == rCmp.GetLeft() &&
@@ -818,8 +816,8 @@ SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
 {
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
-        SwColumn *pCol = new SwColumn( *rCpy.GetColumns()[i] );
-        aColumns.Insert( pCol, aColumns.Count() );
+        SwColumn *pCol = new SwColumn( rCpy.GetColumns()[i] );
+        aColumns.push_back( pCol );
     }
 }
 
@@ -835,12 +833,12 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
     nWidth      = rCpy.GetWishWidth();
     bOrtho      = rCpy.IsOrtho();
 
-    if ( aColumns.Count() )
-        aColumns.DeleteAndDestroy( 0, aColumns.Count() );
+    if ( !aColumns.empty() )
+        aColumns.clear();
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
-        SwColumn *pCol = new SwColumn( *rCpy.GetColumns()[i] );
-        aColumns.Insert( pCol, aColumns.Count() );
+        SwColumn *pCol = new SwColumn( rCpy.GetColumns()[i] );
+        aColumns.push_back( pCol );
     }
     return *this;
 }
@@ -867,11 +865,11 @@ int SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
           eAdj               == rCmp.GetLineAdj() &&
           nWidth             == rCmp.GetWishWidth() &&
           bOrtho             == rCmp.IsOrtho() &&
-          aColumns.Count() == rCmp.GetNumCols()) )
+          aColumns.size() == rCmp.GetNumCols()) )
         return 0;
 
-    for ( sal_uInt16 i = 0; i < aColumns.Count(); ++i )
-        if ( !(*aColumns[i] == *rCmp.GetColumns()[i]) )
+    for ( sal_uInt16 i = 0; i < aColumns.size(); ++i )
+        if ( !(aColumns[i] == rCmp.GetColumns()[i]) )
             return 0;
 
     return 1;
@@ -885,14 +883,14 @@ SfxPoolItem*  SwFmtCol::Clone( SfxItemPool* ) const
 sal_uInt16 SwFmtCol::GetGutterWidth( sal_Bool bMin ) const
 {
     sal_uInt16 nRet = 0;
-    if ( aColumns.Count() == 2 )
-        nRet = aColumns[0]->GetRight() + aColumns[1]->GetLeft();
-    else if ( aColumns.Count() > 2 )
+    if ( aColumns.size() == 2 )
+        nRet = aColumns[0].GetRight() + aColumns[1].GetLeft();
+    else if ( aColumns.size() > 2 )
     {
         sal_Bool bSet = sal_False;
-        for ( sal_uInt16 i = 1; i < aColumns.Count()-1; ++i )
+        for ( sal_uInt16 i = 1; i < aColumns.size()-1; ++i )
         {
-            const sal_uInt16 nTmp = aColumns[i]->GetRight() + aColumns[i+1]->GetLeft();
+            const sal_uInt16 nTmp = aColumns[i].GetRight() + aColumns[i+1].GetLeft();
             if ( bSet )
             {
                 if ( nTmp != nRet )
@@ -919,13 +917,13 @@ void SwFmtCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
     else
     {
         sal_uInt16 nHalf = nNew / 2;
-        for ( sal_uInt16 i = 0; i < aColumns.Count(); ++i )
-        {   SwColumn *pCol = aColumns[i];
+        for ( sal_uInt16 i = 0; i < aColumns.size(); ++i )
+        {   SwColumn *pCol = &aColumns[i];
             pCol->SetLeft ( nHalf );
             pCol->SetRight( nHalf );
             if ( i == 0 )
                 pCol->SetLeft( 0 );
-            else if ( i == (aColumns.Count() - 1) )
+            else if ( i == (aColumns.size() - 1) )
                 pCol->SetRight( 0 );
         }
     }
@@ -935,11 +933,11 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
 {
     // Deleting seems to be a bit radical on the first sight; but otherwise we
     // have to initialize all values of the remaining SwCloumns.
-    if ( aColumns.Count() )
-        aColumns.DeleteAndDestroy( 0, aColumns.Count() );
+    if ( !aColumns.empty() )
+        aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
     {   SwColumn *pCol = new SwColumn;
-        aColumns.Insert( pCol, i );
+        aColumns.push_back( pCol );
     }
     bOrtho = sal_True;
     nWidth = USHRT_MAX;
@@ -950,29 +948,29 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
 void SwFmtCol::SetOrtho( sal_Bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 {
     bOrtho = bNew;
-    if ( bNew && aColumns.Count() )
+    if ( bNew && !aColumns.empty() )
         Calc( nGutterWidth, nAct );
 }
 
 sal_uInt16 SwFmtCol::CalcColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
 {
-    OSL_ENSURE( nCol < aColumns.Count(), ":-( ColumnsArr over indexed." );
+    assert(nCol < aColumns.size());
     if ( nWidth != nAct )
     {
-        long nW = aColumns[nCol]->GetWishWidth();
+        long nW = aColumns[nCol].GetWishWidth();
         nW *= nAct;
         nW /= nWidth;
         return sal_uInt16(nW);
     }
     else
-        return aColumns[nCol]->GetWishWidth();
+        return aColumns[nCol].GetWishWidth();
 }
 
 sal_uInt16 SwFmtCol::CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
 {
-    OSL_ENSURE( nCol < aColumns.Count(), ":-( ColumnsArr over indexed." );
+    assert(nCol < aColumns.size());
     sal_uInt16 nRet = CalcColWidth( nCol, nAct );
-    SwColumn *pCol = aColumns[nCol];
+    const SwColumn *pCol = &aColumns[nCol];
     nRet = nRet - pCol->GetLeft();
     nRet = nRet - pCol->GetRight();
     return nRet;
@@ -994,7 +992,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     //The fist column is PrtWidth + (gap width / 2)
     const sal_uInt16 nLeftWidth = nPrtWidth + nGutterHalf;
-    SwColumn *pCol = aColumns[0];
+    SwColumn *pCol = &aColumns.front();
     pCol->SetWishWidth( nLeftWidth );
     pCol->SetRight( nGutterHalf );
     pCol->SetLeft ( 0 );
@@ -1006,7 +1004,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     for ( i = 1; i < GetNumCols()-1; ++i )
     {
-        pCol = aColumns[i];
+        pCol = &aColumns[i];
         pCol->SetWishWidth( nMidWidth );
         pCol->SetLeft ( nGutterHalf );
         pCol->SetRight( nGutterHalf );
@@ -1015,15 +1013,15 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     //The last column is equivalent to the first one - to compensate rounding
     //errors we add the remaining space of the other columns to the last one.
-    pCol = aColumns[aColumns.Count()-1];
+    pCol = &aColumns.back();
     pCol->SetWishWidth( nAvail );
     pCol->SetLeft ( nGutterHalf );
     pCol->SetRight( 0 );
 
     //Convert the current width to the requested width.
-    for ( i = 0; i < aColumns.Count(); ++i )
+    for ( i = 0; i < aColumns.size(); ++i )
     {
-        pCol = aColumns[i];
+        pCol = &aColumns[i];
         long nTmp = pCol->GetWishWidth();
         nTmp *= GetWishWidth();
         nTmp /= nAct;
@@ -1064,7 +1062,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             uno::Sequence<text::TextColumn> aSetColumns = xCols->getColumns();
             const text::TextColumn* pArray = aSetColumns.getConstArray();
-            aColumns.DeleteAndDestroy(0, aColumns.Count());
+            aColumns.clear();
             //max count is 64k here - this is something the array can't do
             sal_uInt16 nCount = Min( (sal_uInt16)aSetColumns.getLength(),
                                      (sal_uInt16) 0x3fff );
@@ -1079,7 +1077,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
                     pCol->SetLeft ( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
                     pCol->SetRight( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].RightMargin)) );
-                    aColumns.Insert(pCol, i);
+                    aColumns.insert(aColumns.begin() + i, pCol);
                 }
             bRet = true;
             nWidth = nWidthSum;

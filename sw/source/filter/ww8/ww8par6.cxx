@@ -365,7 +365,7 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
         const sal_uInt16 maxIdx = SAL_N_ELEMENTS(rSep.rgdxaColumnWidthSpacing);
         for (sal_uInt16 i = 0, nIdx = 1; i < nCols && nIdx < maxIdx; i++, nIdx+=2 )
         {
-            SwColumn* pCol = aCol.GetColumns()[i];
+            SwColumn* pCol = &aCol.GetColumns()[i];
             const sal_Int32 nLeft = rSep.rgdxaColumnWidthSpacing[nIdx-1]/2;
             const sal_Int32 nRight = rSep.rgdxaColumnWidthSpacing[nIdx+1]/2;
             const sal_Int32 nWishWidth = rSep.rgdxaColumnWidthSpacing[nIdx]

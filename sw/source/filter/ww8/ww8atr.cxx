@@ -4379,8 +4379,8 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol & 
                 else
                     m_rWW8Export.pO->push_back( 137 );
                 m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
-                m_rWW8Export.InsUInt16( rColumns[n]->GetRight(  ) +
-                                        rColumns[n + 1]->GetLeft(  ) );
+                m_rWW8Export.InsUInt16( rColumns[n].GetRight(  ) +
+                                        rColumns[n + 1].GetLeft(  ) );
             }
         }
     }
@@ -4390,7 +4390,7 @@ void AttributeOutputBase::FormatColumns( const SwFmtCol& rCol )
 {
     const SwColumns& rColumns = rCol.GetColumns();
 
-    sal_uInt16 nCols = rColumns.Count();
+    sal_uInt16 nCols = rColumns.size();
     if ( 1 < nCols && !GetExport( ).bOutFlyFrmAttrs )
     {
         // dann besorge mal die Seitenbreite ohne Raender !!

@@ -1027,7 +1027,7 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
 
     const SwFmtCol& rCol = (const SwFmtCol&)aSet.Get( RES_COL );
     const SwColumns& rColumns = rCol.GetColumns();
-    return rColumns.Count();
+    return rColumns.size();
 }
 
 const WW8_SepInfo* MSWordSections::CurrentSectionInfo()

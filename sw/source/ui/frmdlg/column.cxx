@@ -76,9 +76,6 @@
 
 #define FRAME_FORMAT_WIDTH 1000
 
-// sw/inc/fmtclds.hxx
-SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
-
 /*--------------------------------------------------------------------
     Description:  static data
  --------------------------------------------------------------------*/

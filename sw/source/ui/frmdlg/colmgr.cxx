@@ -43,11 +43,11 @@
 ------------------------------------------------------------------------*/
 void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 {
-    const sal_uInt16 nCount = rCol.GetColumns().Count();
+    const sal_uInt16 nCount = rCol.GetColumns().size();
     for(sal_uInt16 i = 0; i < nCount; ++i)
     {
         const sal_uInt16 nTmp = rCol.CalcColWidth(i, nWidth);
-        rCol.GetColumns()[i]->SetWishWidth(nTmp);
+        rCol.GetColumns()[i].SetWishWidth(nTmp);
     }
     rCol.SetWishWidth(nWidth);
 }
@@ -72,7 +72,7 @@ sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
     {
         OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         const SwColumns& rCols = aFmtCol.GetColumns();
-        nRet = rCols.GetObject(nPos)->GetRight() + rCols.GetObject(nPos + 1)->GetLeft();
+        nRet = rCols[nPos].GetRight() + rCols[nPos + 1].GetLeft();
     }
     return nRet;
 }
@@ -86,8 +86,8 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
         OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
         sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
-        rCols.GetObject(nPos)->SetRight(nGutterWidth2);
-        rCols.GetObject(nPos + 1)->SetLeft(nGutterWidth2);
+        rCols[nPos].SetRight(nGutterWidth2);
+        rCols[nPos + 1].SetLeft(nGutterWidth2);
     }
 }
 
@@ -117,7 +117,7 @@ sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
-    aFmtCol.GetColumns()[nIdx]->SetWishWidth(nWd);
+    aFmtCol.GetColumns()[nIdx].SetWishWidth(nWd);
 
 }
 

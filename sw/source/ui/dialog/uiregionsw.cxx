@@ -1584,7 +1584,7 @@ short   SwInsertSectionTabDialog::Ok()
         if(SFX_ITEM_SET == pOutputItemSet->GetItemState(RES_COL, sal_False, &pCol))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
-                ((const SwFmtCol*)pCol)->GetColumns().Count()));
+                ((const SwFmtCol*)pCol)->GetColumns().size()));
         }
         aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME,
                     m_pSectionData->GetSectionName()));

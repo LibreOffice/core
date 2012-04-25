@@ -34,6 +34,7 @@
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <format.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 // ColumnDescriptor
 class SwColumn
@@ -49,7 +50,7 @@ class SwColumn
 public:
     SwColumn();
 
-    sal_Bool operator==( const SwColumn & );
+    sal_Bool operator==( const SwColumn & ) const;
 
 
     void SetWishWidth( sal_uInt16 nNew ) { nWish  = nNew; }
@@ -65,8 +66,7 @@ public:
     sal_uInt16 GetRight() const { return nRight; }
 };
 
-typedef SwColumn* SwColumnPtr;
-SV_DECL_PTRARR_DEL( SwColumns, SwColumnPtr, 0 )
+typedef boost::ptr_vector<SwColumn> SwColumns;
 
 enum SwColLineAdj
 {
@@ -119,7 +119,7 @@ public:
 
     const SwColumns &GetColumns() const { return aColumns; }
           SwColumns &GetColumns()       { return aColumns; }
-    sal_uInt16           GetNumCols() const { return aColumns.Count(); }
+    sal_uInt16           GetNumCols() const { return aColumns.size(); }
 
     editeng::SvxBorderStyle     GetLineStyle() const  { return eLineStyle;}
     sal_uLong           GetLineWidth() const  { return nLineWidth;}

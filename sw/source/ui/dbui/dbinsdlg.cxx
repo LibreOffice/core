@@ -721,7 +721,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
                 nEnd1 = nWidth;
             for( sal_uInt16 i = 0; i < nNum; ++i )
             {
-                SwColumn* pCol = rCols[i];
+                const SwColumn* pCol = &rCols[i];
                 nStart1 = pCol->GetLeft() + nWidth1;
                 nWidth1 += (long)rCol.CalcColWidth( i, (sal_uInt16)nWidth );
                 nEnd1 = nWidth1 - pCol->GetRight();

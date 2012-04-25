@@ -2919,8 +2919,8 @@ void RtfAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& r
             if( ++n != nCols )
             {
                 m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_COLSR;
-                m_rExport.OutLong( rColumns[ n-1 ]->GetRight() +
-                        rColumns[ n ]->GetLeft() );
+                m_rExport.OutLong( rColumns[ n-1 ].GetRight() +
+                        rColumns[ n ].GetLeft() );
             }
         }
     }

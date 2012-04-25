@@ -1750,12 +1750,12 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
             SFX_ITEM_DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
     {
         const SwFmtCol& rCol = (const SwFmtCol&)GetTabDialog()->GetExampleSet()->Get(RES_COL);
-        if ( rCol.GetColumns().Count() > 1 )
+        if ( rCol.GetColumns().size() > 1 )
         {
-            for ( sal_uInt16 i = 0; i < rCol.GetColumns().Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rCol.GetColumns().size(); ++i )
             {
-                aVal.nMinWidth += rCol.GetColumns()[i]->GetLeft() +
-                                  rCol.GetColumns()[i]->GetRight() +
+                aVal.nMinWidth += rCol.GetColumns()[i].GetLeft() +
+                                  rCol.GetColumns()[i].GetRight() +
                                   MINFLY;
             }
             aVal.nMinWidth -= MINFLY;//one was already in there!

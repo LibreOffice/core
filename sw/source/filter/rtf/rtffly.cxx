@@ -963,7 +963,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         {
             for( sal_uInt16 n = 0, i = 0; n < aColumns.size(); n += 2, ++i )
             {
-                SwColumn* pCol = aCol.GetColumns()[ i ];
+                SwColumn* pCol = &aCol.GetColumns()[ i ];
                 sal_uLong nTmp = aColumns[ n ];
                 nTmp *= USHRT_MAX;
                 nTmp /= nWidth;

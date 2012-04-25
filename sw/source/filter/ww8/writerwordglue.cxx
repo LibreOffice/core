@@ -360,7 +360,7 @@ namespace sw
             const SvxLRSpaceItem &rOneLR = rTitleFmt.GetLRSpace();
             const SvxLRSpaceItem &rTwoLR= rFollowFmt.GetLRSpace();
 
-            if (rFirstColumns.Count() != rFollowColumns.Count())
+            if (rFirstColumns.size() != rFollowColumns.size())
             {
                 //e.g. #i4320#
                 bPlausableTitlePage = false;

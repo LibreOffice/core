@@ -121,7 +121,7 @@ inline void SwColMgr::SetAutoWidth(sal_Bool bOn, sal_uInt16 nGutterWidth)
 
 inline void SwColMgr::NoCols()
 {
-    aFmtCol.GetColumns().DeleteAndDestroy(0, aFmtCol.GetColumns().Count());
+    aFmtCol.GetColumns().clear();
 }
 inline sal_Bool SwColMgr::HasLine() const
 {

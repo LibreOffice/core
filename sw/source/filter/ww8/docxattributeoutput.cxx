@@ -4243,7 +4243,7 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& 
 
             if ( n + 1 != nCols )
             {
-                sal_uInt16 nSpacing = rColumns[n]->GetRight( ) + rColumns[n + 1]->GetLeft( );
+                sal_uInt16 nSpacing = rColumns[n].GetRight( ) + rColumns[n + 1].GetLeft( );
                 pColAttrList->add( FSNS( XML_w, XML_space ),
                     OString::valueOf( sal_Int32( nSpacing ) ).getStr( ) );
             }
