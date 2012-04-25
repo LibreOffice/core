@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAABn////4\u003d",
+        "filename": "vcl/unx/generic/app/saldisp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-04-25T23:43:21Z",
+      "side": 1,
+      "message": "what is the point of testing aRet.Empty()\nif we get here aRet is \u0027initialized\u0027, that is has not been touched since line 939 above",
+      "revId": "60901a7baff347ae4a04a62199a6129d29a28a56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABn////0\u003d",
+        "filename": "vcl/unx/gtk/app/gtkdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-04-25T23:43:21Z",
+      "side": 1,
+      "message": "This warning will get invoked always. #warning is not a runtime warning.\nThe previous version had that warning conditioned on a preprocessor test.",
+      "revId": "60901a7baff347ae4a04a62199a6129d29a28a56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
