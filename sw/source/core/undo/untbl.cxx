@@ -94,8 +94,10 @@ typedef SwUndoMove* SwUndoMovePtr;
 SV_DECL_PTRARR_DEL( SwUndoMoves, SwUndoMovePtr, 0 )
 
 struct SwTblToTxtSave;
-typedef SwTblToTxtSave* SwTblToTxtSavePtr;
-SV_DECL_PTRARR_DEL( SwTblToTxtSaves, SwTblToTxtSavePtr, 0 )
+class SwTblToTxtSaves : public boost::ptr_vector<SwTblToTxtSave> {
+public:
+    SwTblToTxtSaves(size_type n) : boost::ptr_vector<SwTblToTxtSave>(n) {}
+};
 
 struct _UndoTblCpyTbl_Entry
 {
@@ -221,7 +223,6 @@ struct SwTblToTxtSave
 SV_IMPL_PTRARR( SfxItemSets, SfxItemSetPtr )
 SV_IMPL_PTRARR( SwUndoSaveSections, SwUndoSaveSectionPtr )
 SV_IMPL_PTRARR( SwUndoMoves, SwUndoMovePtr )
-SV_IMPL_PTRARR( SwTblToTxtSaves, SwTblToTxtSavePtr )
 
 sal_uInt16 aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
@@ -424,7 +425,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     cTrenner( cCh ), nHdlnRpt( rTbl.GetRowsToRepeat() )
 {
     pTblSave = new _SaveTable( rTbl );
-    pBoxSaves = new SwTblToTxtSaves( (sal_uInt8)rTbl.GetTabSortBoxes().Count() );
+    pBoxSaves = new SwTblToTxtSaves( (SwTblToTxtSaves::size_type)rTbl.GetTabSortBoxes().Count() );
 
     if( rTbl.IsA( TYPE( SwDDETable ) ) )
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)rTbl).GetDDEFldType()->Copy();
@@ -561,13 +562,13 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     // SaveStruct
     SwTableBoxFmt* pBoxFmt = GetDoc()->MakeTableBoxFmt();
     SwTableLineFmt* pLineFmt = GetDoc()->MakeTableLineFmt();
-    SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.Count(), 0 );
+    SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.size(), 0 );
     pTblNd->GetTable().GetTabLines().C40_INSERT( SwTableLine, pLine, 0 );
 
     std::vector<sal_uLong> aBkmkArr;
-    for( sal_uInt16 n = rSavedData.Count(); n; )
+    for( sal_uInt16 n = rSavedData.size(); n; )
     {
-        SwTblToTxtSave* pSave = rSavedData[ --n ];
+        const SwTblToTxtSave* pSave = &rSavedData[ --n ];
         // if the start node was merged with last from prev. cell,
         // subtract 1 from index to get the merged paragraph, and split that
         aSttIdx = pSave->m_nSttNd - ( ( USHRT_MAX != pSave->m_nCntnt ) ? 1 : 0);
@@ -707,7 +708,7 @@ void SwUndoTblToTxt::SetRange( const SwNodeRange& rRg )
 void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, xub_StrLen nCntntIdx )
 {
     SwTblToTxtSave* pNew = new SwTblToTxtSave( rDoc, nNdIdx, nEndIdx, nCntntIdx );
-    pBoxSaves->Insert( pNew, pBoxSaves->Count() );
+    pBoxSaves->push_back( pNew );
 }
 
 // -----------------------------------------------------
