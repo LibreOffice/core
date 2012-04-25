@@ -34,11 +34,12 @@
 
 #include <vcl/combobox.hxx>
 #include "swdllapi.h"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwBoxEntry;
 class Window;
 
-SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10)
+typedef boost::ptr_vector<SwBoxEntry> SwEntryLst;
 
 /*--------------------------------------------------------------------
      Description: SwBoxEntry

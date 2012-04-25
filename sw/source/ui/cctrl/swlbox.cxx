@@ -36,8 +36,6 @@
 using namespace nsSwComboBoxStyle;
 
 
-SV_IMPL_PTRARR(SwEntryLst, SwBoxEntry*)
-
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
     bModified(sal_False),
@@ -70,8 +68,8 @@ SwComboBox::SwComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits 
     sal_uInt16 nSize = GetEntryCount();
     for( sal_uInt16 i=0; i < nSize; ++i )
     {
-        const SwBoxEntry* pTmp = new SwBoxEntry(ComboBox::GetEntry(i), i);
-        aEntryLst.Insert(pTmp, aEntryLst.Count() );
+        SwBoxEntry* pTmp = new SwBoxEntry(ComboBox::GetEntry(i), i);
+        aEntryLst.push_back(pTmp);
     }
 }
 
@@ -87,12 +85,12 @@ void SwComboBox::InsertEntry(const SwBoxEntry& rEntry)
 
 void SwComboBox::RemoveEntry(sal_uInt16 nPos)
 {
-    if(nPos >= aEntryLst.Count())
+    if(nPos >= aEntryLst.size())
         return;
 
     // Remove old element
-    SwBoxEntry* pEntry = aEntryLst[nPos];
-    aEntryLst.Remove(nPos, 1);
+    SwBoxEntry* pEntry = &aEntryLst[nPos];
+    aEntryLst.erase(aEntryLst.begin() + nPos);
     ComboBox::RemoveEntry(nPos);
 
     // Don't add new entries to the list
@@ -100,7 +98,7 @@ void SwComboBox::RemoveEntry(sal_uInt16 nPos)
         return;
 
     // add to DelEntryLst
-    aDelEntryLst.C40_INSERT(SwBoxEntry, pEntry, aDelEntryLst.Count());
+    aDelEntryLst.push_back(pEntry);
 }
 
 sal_uInt16 SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
@@ -110,21 +108,21 @@ sal_uInt16 SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
 
 const SwBoxEntry& SwComboBox::GetEntry(sal_uInt16 nPos) const
 {
-    if(nPos < aEntryLst.Count())
-        return *aEntryLst[nPos];
+    if(nPos < aEntryLst.size())
+        return aEntryLst[nPos];
 
     return aDefault;
 }
 
 sal_uInt16 SwComboBox::GetRemovedCount() const
 {
-    return aDelEntryLst.Count();
+    return aDelEntryLst.size();
 }
 
 const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_uInt16 nPos) const
 {
-    if(nPos < aDelEntryLst.Count())
-        return *aDelEntryLst[nPos];
+    if(nPos < aDelEntryLst.size())
+        return aDelEntryLst[nPos];
 
     return aDefault;
 }
@@ -133,7 +131,7 @@ void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
 {
     ComboBox::InsertEntry(pEntry->aName);
     sal_uInt16 nPos = ComboBox::GetEntryPos(pEntry->aName);
-    aEntryLst.C40_INSERT(SwBoxEntry, pEntry, nPos);
+    aEntryLst.insert( aEntryLst.begin() + nPos, pEntry );
 }
 
 void SwComboBox::KeyInput( const KeyEvent& rKEvt )
