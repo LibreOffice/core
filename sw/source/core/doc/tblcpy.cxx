@@ -944,7 +944,8 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             {
                 // We insert a new row into the FndBox
                 if( pLine->GetTabBoxes().Count() < nSttBox ||
-                    ( pLine->GetTabBoxes().Count() - nSttBox ) <
+                    sal::static_int_cast< sal_uInt16 >(
+                        pLine->GetTabBoxes().Count() - nSttBox ) <
                     pFLine->GetBoxes().size() )
                     return sal_False;
 
