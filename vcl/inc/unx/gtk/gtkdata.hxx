@@ -151,6 +151,8 @@ public:
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
     bool        IsX11Display() const { return m_bX11Display; }
 
+    GtkSalSystem* getSystem() const { return m_pSys; }
+
     virtual void deregisterFrame( SalFrame* pFrame );
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );

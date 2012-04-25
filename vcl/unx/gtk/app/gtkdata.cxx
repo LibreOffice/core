@@ -197,12 +197,14 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
 void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
 {
+    m_pSys->countScreenMonitors();
     if (pScreen)
         emitDisplayChanged();
 }
 
 void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
 {
+    m_pSys->countScreenMonitors();
     if (pScreen)
         emitDisplayChanged();
 }

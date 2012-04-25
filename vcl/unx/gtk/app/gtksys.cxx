@@ -49,6 +49,7 @@ SalSystem *GtkInstance::CreateSalSystem()
 GtkSalSystem::GtkSalSystem() : SalGenericSystem()
 {
     mpDisplay = gdk_display_get_default();
+    countScreenMonitors();
 }
 
 GtkSalSystem::~GtkSalSystem()
@@ -59,6 +60,52 @@ int
 GtkSalSystem::GetDisplayXScreenCount()
 {
     return gdk_display_get_n_screens (mpDisplay);
+}
+
+namespace
+{
+
+struct GdkRectangleEqual
+{
+    bool operator()(GdkRectangle const& rLeft, GdkRectangle const& rRight)
+    {
+        return
+            rLeft.x == rRight.x
+            && rLeft.y == rRight.y
+            && rLeft.width == rRight.width
+            && rLeft.height == rRight.height
+            ;
+    }
+};
+
+}
+
+void
+GtkSalSystem::countScreenMonitors()
+{
+    maScreenMonitors.clear();
+    for (gint i = 0; i < gdk_display_get_n_screens(mpDisplay); i++)
+    {
+        GdkScreen* const pScreen(gdk_display_get_screen(mpDisplay, i));
+        gint nMonitors(pScreen ? gdk_screen_get_n_monitors(pScreen) : 0);
+        if (nMonitors > 1)
+        {
+            std::vector<GdkRectangle> aGeometries;
+            aGeometries.reserve(nMonitors);
+            for (gint j(0); j != nMonitors; ++j)
+            {
+                GdkRectangle aGeometry;
+                gdk_screen_get_monitor_geometry(pScreen, j, &aGeometry);
+                aGeometries.push_back(aGeometry);
+            }
+            GdkRectangleEqual aCmp;
+            std::sort(aGeometries.begin(), aGeometries.end(), aCmp);
+            const std::vector<GdkRectangle>::iterator aUniqueEnd(
+                    std::unique(aGeometries.begin(), aGeometries.end(), aCmp));
+            nMonitors = std::distance(aGeometries.begin(), aUniqueEnd);
+        }
+        maScreenMonitors.push_back(std::make_pair(pScreen, nMonitors));
+    }
 }
 
 // Including gdkx.h kills us with the Window / XWindow conflict
@@ -73,7 +120,7 @@ GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
     gint nMonitor;
     GdkScreen *pScreen = NULL;
 
-    pScreen = getScreenMonitorFromIdx (mpDisplay, nScreen, nMonitor);
+    pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return SalX11Screen (0);
 #if GTK_CHECK_VERSION(3,0,0)
@@ -84,16 +131,16 @@ GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
 }
 
 GdkScreen *
-GtkSalSystem::getScreenMonitorFromIdx (GdkDisplay *pDisplay, int nIdx, gint &nMonitor)
+GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
     GdkScreen *pScreen = NULL;
-    for (gint i = 0; i < gdk_display_get_n_screens (pDisplay); i++)
+    for (ScreenMonitors_t::const_iterator aIt(maScreenMonitors.begin()), aEnd(maScreenMonitors.end()); aIt != aEnd; ++aIt)
     {
-        pScreen = gdk_display_get_screen (pDisplay, i);
+        pScreen = aIt->first;
         if (!pScreen)
             break;
-        if (nIdx >= gdk_screen_get_n_monitors (pScreen))
-            nIdx -= gdk_screen_get_n_monitors (pScreen);
+        if (nIdx >= aIt->second)
+            nIdx -= aIt->second;
         else
             break;
     }
@@ -102,32 +149,34 @@ GtkSalSystem::getScreenMonitorFromIdx (GdkDisplay *pDisplay, int nIdx, gint &nMo
 }
 
 int
-GtkSalSystem::getScreenIdxFromPtr (GdkDisplay *pDisplay, GdkScreen *pScreen)
+GtkSalSystem::getScreenIdxFromPtr (GdkScreen *pScreen)
 {
     int nIdx = 0;
-    for (gint i = 0; i < gdk_display_get_n_screens (pDisplay); i++)
+    for (ScreenMonitors_t::const_iterator aIt(maScreenMonitors.begin()), aEnd(maScreenMonitors.end()); aIt != aEnd; ++aIt)
     {
-        GdkScreen *pCmp = gdk_display_get_screen (pDisplay, i);
-        if (pCmp == pScreen)
+        if (aIt->first == pScreen)
             return nIdx;
-        nIdx += gdk_screen_get_n_monitors (pCmp);
+        nIdx += aIt->second;
     }
     g_warning ("failed to find screen %p", pScreen);
     return 0;
 }
 
-int GtkSalSystem::getScreenMonitorIdx (GdkDisplay *pDisplay,
-                                       GdkScreen *pScreen,
+int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
                                        int nX, int nY)
 {
-    return getScreenIdxFromPtr (pDisplay, pScreen) +
+    // TODO: this will fail horribly for exotic combinations like two
+    // monitors in mirror mode and one extra. Hopefully such
+    // abominations are not used (or, even better, not possible) in
+    // practice .-)
+    return getScreenIdxFromPtr (pScreen) +
         gdk_screen_get_monitor_at_point (pScreen, nX, nY);
 }
 
 unsigned int GtkSalSystem::GetDisplayScreenCount()
 {
     gint nMonitor;
-    (void)getScreenMonitorFromIdx (mpDisplay, G_MAXINT, nMonitor);
+    (void)getScreenMonitorFromIdx (G_MAXINT, nMonitor);
     return G_MAXINT - nMonitor;
 }
 
@@ -183,7 +232,7 @@ static int _get_primary_monitor (GdkScreen *pScreen)
 unsigned int GtkSalSystem::GetDisplayDefaultScreen()
 {
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
-    int idx = getScreenIdxFromPtr (mpDisplay, pDefault);
+    int idx = getScreenIdxFromPtr (pDefault);
     return idx + _get_primary_monitor (pDefault);
 }
 
@@ -192,7 +241,7 @@ Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
     gint nMonitor;
     GdkScreen *pScreen;
     GdkRectangle aRect;
-    pScreen = getScreenMonitorFromIdx (mpDisplay, nScreen, nMonitor);
+    pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return Rectangle();
     gdk_screen_get_monitor_geometry (pScreen, nMonitor, &aRect);
@@ -212,7 +261,7 @@ rtl::OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
     gchar *pStr;
     gint nMonitor;
     GdkScreen *pScreen;
-    pScreen = getScreenMonitorFromIdx (mpDisplay, nScreen, nMonitor);
+    pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return rtl::OUString();
 
