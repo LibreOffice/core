@@ -53,8 +53,6 @@ class SwTabCols;
 class SwDoc;
 class SwSelBoxes;
 class SwTblCalcPara;
-class SwChartBoxes;
-class SwChartLines;
 struct SwPosition;
 class SwNodeIndex;
 class SwNode;
@@ -285,8 +283,7 @@ public:
     sal_Bool IsTblComplex() const;
 
     // Returns sal_True if table or selection is balanced.
-    sal_Bool IsTblComplexForChart( const String& rSel,
-                                SwChartLines* pGetCLines = 0  ) const;
+    sal_Bool IsTblComplexForChart( const String& rSel ) const;
 
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.

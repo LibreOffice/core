@@ -437,8 +437,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
 
 
-sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
-                    SwChartLines* pGetCLines )
+sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 {
     const SwTableNode* pTNd = rSttNd.FindTableNode();
     if( !pTNd )
@@ -645,25 +644,6 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                 else if( nRowCells != nCellCnt )
                     bValidChartSel = sal_False;
             }
-
-            if( bValidChartSel && pGetCLines )
-            {
-                nYPos = LONG_MAX;
-                SwChartBoxes* pBoxes = 0;
-                for( n = 0; n < aCellFrms.size(); ++n )
-                {
-                    const _Sort_CellFrm& rCF = aCellFrms[ n ];
-                    if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
-                    {
-                        pBoxes = new SwChartBoxes();
-                        pBoxes->reserve( 255 < nRowCells ? 255 : (sal_uInt8)nRowCells);
-                        pGetCLines->push_back( pBoxes );
-                        nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
-                    }
-                    SwTableBoxPtr pBox = (SwTableBox*)rCF.pFrm->GetTabBox();
-                    pBoxes->push_back( pBox );
-                }
-            }
         }
 
         if( bTblIsValid )
@@ -682,14 +662,9 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                 break;
         }
         --nLoopMax;
-        if( pGetCLines )
-            pGetCLines->clear();
     } while( sal_True );
 
     OSL_ENSURE( nLoopMax, "table layout is still invalid!" );
-
-    if( !bValidChartSel && pGetCLines )
-        pGetCLines->clear();
 
     return bValidChartSel;
 }

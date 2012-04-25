@@ -130,11 +130,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // Check if selection is balanced.
-class SwChartBoxes : public std::vector<SwTableBoxPtr> {};
-class SwChartLines : public boost::ptr_vector<SwChartBoxes> {};
-
-sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
-                    SwChartLines* pGetCLines = 0 );
+sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd);
 
 // Check if cell is part of SSelection.
 // (Became a function, in order to make sure that GetTblSel() and MakeTblCrsr()

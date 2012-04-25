@@ -64,8 +64,7 @@ void SwTable::UpdateCharts() const
     GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
 }
 
-sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
-                                    SwChartLines* pGetCLines ) const
+sal_Bool SwTable::IsTblComplexForChart( const String& rSelection ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
     if( 2 < rSelection.Len() )
@@ -101,7 +100,7 @@ sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
     }
 
     return !pSttBox || !pEndBox || !::ChkChartSel( *pSttBox->GetSttNd(),
-                                        *pEndBox->GetSttNd(), pGetCLines );
+                                        *pEndBox->GetSttNd() );
 }
 
 void SwDoc::DoUpdateAllCharts()
