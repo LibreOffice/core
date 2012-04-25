@@ -1402,7 +1402,7 @@ AddressMultiLineEdit::~AddressMultiLineEdit()
     EndListening(*GetTextEngine());
 }
 
-void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+void    AddressMultiLineEdit::NotifyOfHint( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(rHint.ISA(TextHint) &&
             static_cast<const TextHint&>(rHint).GetId() == TEXT_HINT_VIEWSELECTIONCHANGED &&
