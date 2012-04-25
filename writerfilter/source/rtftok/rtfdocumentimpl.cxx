@@ -1097,7 +1097,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_STYLESHEET;
             break;
         case RTF_FIELD:
-            // A field consists of an fldinst and an fldrslt group.
+            m_aStates.top().nDestinationState = DESTINATION_FIELD;
             break;
         case RTF_FLDINST:
             {
@@ -3526,6 +3526,30 @@ int RTFDocumentImpl::popState()
     }
     else if (bLevelNumbersEnd)
         m_aStates.top().aTableSprms = aSprms;
+    else if (aState.nDestinationState == DESTINATION_FIELDINSTRUCTION)
+        m_aStates.top().nFieldStatus = FIELD_INSTRUCTION;
+    else if (aState.nDestinationState == DESTINATION_FIELDRESULT)
+        m_aStates.top().nFieldStatus = FIELD_RESULT;
+    else if (aState.nDestinationState == DESTINATION_FIELD)
+    {
+        if (aState.nFieldStatus == FIELD_INSTRUCTION)
+        {
+            sal_uInt8 sFieldEnd[] = { 0x15 };
+            if (!m_pCurrentBuffer)
+            {
+                Mapper().startCharacterGroup();
+                Mapper().text(sFieldEnd, 1);
+                Mapper().endCharacterGroup();
+            }
+            else
+            {
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
+                RTFValue::Pointer_t pValue(new RTFValue(*sFieldEnd));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
+            }
+        }
+    }
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
