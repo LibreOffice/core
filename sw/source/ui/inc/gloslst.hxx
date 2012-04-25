@@ -51,8 +51,7 @@ struct AutoTextGroup
 };
 
 
-typedef AutoTextGroup* AutoTextGroupPtr;
-SV_DECL_PTRARR(AutoTextGroups, AutoTextGroupPtr, 4)
+typedef std::vector<AutoTextGroup*> AutoTextGroups;
 
 class SwGlossaryList : public AutoTimer
 {
