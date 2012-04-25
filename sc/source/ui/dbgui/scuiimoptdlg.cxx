@@ -32,6 +32,7 @@
 
 
 #include "scuiimoptdlg.hxx"
+#include "tabvwsh.hxx"
 #include "scresid.hxx"
 #include "imoptdlg.hrc"
 #include <comphelper/string.hxx>
@@ -133,10 +134,10 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
-        aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
         aCbShown    ( this, ScResId( CB_SAVESHOWN ) ),
-        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
         aCbFormulas ( this, ScResId( CB_FORMULAS ) ),
+        aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
+        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) )
@@ -208,7 +209,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     if( bAscii )
     {
         Size aWinSize( GetSizePixel() );
-        aWinSize.Height() = aCbFormulas.GetPosPixel().Y() + aCbFormulas.GetSizePixel().Height();
+        aWinSize.Height() = aCbFixed.GetPosPixel().Y() + aCbFixed.GetSizePixel().Height();
         Size aDiffSize( LogicToPixel( Size( 0, 6 ), MapMode( MAP_APPFONT ) ) );
         aWinSize.Height() += aDiffSize.Height();
         SetSizePixel( aWinSize );
@@ -220,8 +221,11 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aCbQuoteAll.Show();
         aCbQuoteAll.Check( false );
         aCbFormulas.Show();
-        aCbFormulas.SetClickHdl( LINK( this, ScImportOptionsDlg, SaveFormulasHdl ) );
-        aCbFormulas.Check( false );
+        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current());
+        bool bFormulas = (pViewSh ?
+                pViewSh->GetViewData()->GetOptions().GetOption( VOPT_FORMULAS) :
+                false);
+        aCbFormulas.Check( bFormulas );
     }
     else
     {
@@ -319,17 +323,7 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
     return 0;
 }
 
-IMPL_LINK( ScImportOptionsDlg, SaveFormulasHdl, CheckBox*, pCheckBox )
-{
-    if( pCheckBox == &aCbFormulas )
-    {
-        sal_Bool bEnable = !aCbFormulas.IsChecked();
-        aCbShown.Enable( bEnable );
-    }
-    return 0;
-}
-
- IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
+IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
 {
     if ( pLb == &aLbFont )
     {

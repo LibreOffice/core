@@ -92,36 +92,37 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Size = MAP_APPFONT ( 188 , 8 ) ;
         Text [ en-US ] = "Field options" ;
     };
-    CheckBox CB_FIXEDWIDTH
-    {
-        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_FIXEDWIDTH";
-        Pos = MAP_APPFONT( 12, 92 );
-        Size = MAP_APPFONT( 172, 10 );
-        Hide = TRUE;
-        Text [ en-US ] = "Fixed column ~width";
-    };
     CheckBox CB_SAVESHOWN
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_SAVESHOWN";
         Pos = MAP_APPFONT( 12, 66 );
         Size = MAP_APPFONT( 172, 10 );
-        TabStop = TRUE;
         Hide = TRUE;
         Text [ en-US ] = "Save cell content as ~shown";
+    };
+    CheckBox CB_FORMULAS
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_FORMULAS";
+        Pos = MAP_APPFONT( 12, 79 );
+        Size = MAP_APPFONT( 172, 10 );
+        Hide = TRUE;
+        Text [ en-US ] = "Save cell fo~rmulas instead of calculated values";
     };
     CheckBox CB_QUOTEALL
     {
         HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_QUOTEALL";
-        Pos = MAP_APPFONT( 12, 79 );
-        Size = MAP_APPFONT( 164, 10 );
+        Pos = MAP_APPFONT( 12, 92 );
+        Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
         Text [ en-US ] = "~Quote all text cells";
     };
-    CheckBox CB_FORMULAS
+    CheckBox CB_FIXEDWIDTH
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_FIXEDWIDTH";
         Pos = MAP_APPFONT( 12, 105 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
-        Text [ en-US ] = "Save cell fo~rmulas";
+        Text [ en-US ] = "Fixed column ~width";
     };
     OKButton BTN_OK
     {

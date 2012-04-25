@@ -59,10 +59,10 @@ private:
     ComboBox            aEdFieldSep;
     FixedText           aFtTextSep;
     ComboBox            aEdTextSep;
-    CheckBox            aCbQuoteAll;
     CheckBox            aCbShown;
-    CheckBox            aCbFixed;
     CheckBox            aCbFormulas;
+    CheckBox            aCbQuoteAll;
+    CheckBox            aCbFixed;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
@@ -74,7 +74,6 @@ private:
     sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
 
     DECL_LINK( FixedWidthHdl, CheckBox* );
-    DECL_LINK( SaveFormulasHdl, CheckBox* );
     DECL_LINK( DoubleClickHdl, ListBox* );
 };
 
