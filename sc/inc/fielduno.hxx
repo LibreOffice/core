@@ -198,8 +198,8 @@ public:
 };
 
 /**
- * Generic UNO wrapper for edit engine's field item.  This will eventually
- * replace ScCellFieldObj and ScHeaderFieldObj.
+ * Generic UNO wrapper for edit engine's field item in cells, headers, and
+ * footers.
  */
 class ScEditFieldObj : public cppu::WeakImplHelper4<
                             com::sun::star::text::XTextField,
