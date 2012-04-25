@@ -783,11 +783,12 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     sal_Int32 nHeaderHeight = 0, nFooterHeight = 0;
     if (bFirstPage)
     {
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         // make sure the height of the header/footer is added to the top/bottom margin if necessary
         if (m_aFollowPageStyle.is() && !HasHeader(true) && HasHeader(false))
-            m_aFollowPageStyle->getPropertyValue("HeaderHeight") >>= nHeaderHeight;
+            m_aFollowPageStyle->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_HEIGHT)) >>= nHeaderHeight;
         if (m_aFollowPageStyle.is() && !HasFooter(true) && HasFooter(false))
-            m_aFollowPageStyle->getPropertyValue("FooterHeight") >>= nFooterHeight;
+            m_aFollowPageStyle->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_HEIGHT)) >>= nFooterHeight;
     }
     operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( m_nTopMargin + nHeaderHeight );
     operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin + nFooterHeight );
