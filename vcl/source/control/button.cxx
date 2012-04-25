@@ -2812,6 +2812,15 @@ void RadioButton::SetState( sal_Bool bCheck )
     }
 }
 
+bool RadioButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
+        SetState(toBool(rValue));
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
+}
+
 // -----------------------------------------------------------------------
 
 void RadioButton::Check( sal_Bool bCheck )
@@ -3754,6 +3763,15 @@ void CheckBox::SetState( TriState eState )
         StateChanged( STATE_CHANGE_STATE );
         Toggle();
     }
+}
+
+bool CheckBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
+        SetState(toBool(rValue) ? STATE_CHECK : STATE_NOCHECK);
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
 }
 
 // -----------------------------------------------------------------------

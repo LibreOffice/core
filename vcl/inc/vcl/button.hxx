@@ -398,6 +398,8 @@ public:
     defines whether <code>this</code> is contained in the returned list
     */
     void            GetRadioButtonGroup( std::vector<RadioButton*>& io_rGroup, bool bIncludeThis ) const;
+
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 // ------------
@@ -491,6 +493,8 @@ public:
     const Link&     GetToggleHdl() const { return maToggleHdl; }
     bool            IsLegacyNoTextAlign() { return mbLegacyNoTextAlign; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
+
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 inline void CheckBox::Check( sal_Bool bCheck )
