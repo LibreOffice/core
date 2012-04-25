@@ -63,7 +63,6 @@ use File::Spec;
 @copy_filter_patterns = (
                         );
 
-$strip              = '';
 $is_debug           = 0;
 
 $error              = 0;
@@ -134,16 +133,6 @@ use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 #### main ####
 
 parse_options();
-
-if ( ! $opt_delete ) {
-    if ( $ENV{GUI} eq 'WNT' ) {
-        if ($ENV{COM} eq 'GCC') {
-            initialize_strip() ;
-        };
-    } else {
-        initialize_strip();
-    }
-}
 
 init_globals();
 push_default_actions();
@@ -649,39 +638,6 @@ sub glob_and_copy
     }
 }
 
-sub is_unstripped {
-    my $file_name = shift;
-    my $nm_output;
-
-    if (-f $file_name.$maybedot) {
-        my $file_type = `file $file_name`;
-        # OS X file command doesn't know if a file is stripped or not
-        if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O/o) ||
-            (($file_type =~ /PE/o) && ($ENV{GUI} eq 'WNT') &&
-             ($nm_output = `nm $file_name 2>&1`) && $nm_output &&
-             !($nm_output =~ /no symbols/i) && !($nm_output =~ /not recognized/i))) {
-            return '1' if ($file_name =~ /\.bin$/o);
-            return '1' if ($file_name =~ /\.so\.*/o);
-            return '1' if ($file_name =~ /\.dylib\.*/o);
-            return '1' if ($file_name =~ /\.com\.*/o);
-            return '1' if ($file_name =~ /\.dll\.*/o);
-            return '1' if ($file_name =~ /\.exe\.*/o);
-            return '1' if (basename($file_name) !~ /\./o);
-        }
-    };
-    return '';
-}
-
-sub initialize_strip {
-    if (((!defined $ENV{CROSS_COMPILING}) || ($ENV{CROSS_COMPILING} ne 'YES')) &&
-        ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq ""))) {
-        $strip .= 'guw ' if ($^O eq 'cygwin');
-        $strip .= 'strip';
-        $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
-        $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
-    };
-};
-
 sub is_jar {
     my $file_name = shift;
 
@@ -697,15 +653,6 @@ sub execute_system {
         print_error("Failed to execute $command");
         exit($?);
     };
-};
-
-sub strip_target {
-    my $file = shift;
-    my $temp_file = shift;
-    $temp_file =~ s/\/{2,}/\//g;
-    my $rc = copy($file, $temp_file);
-    execute_system("$strip $temp_file");
-    return $rc;
 };
 
 sub copy_if_newer
@@ -752,11 +699,7 @@ sub copy_if_newer
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
     $rc = '';
-    if (($strip ne '') && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
-        $rc = strip_target($from, $temp_file);
-    } else {
-        $rc = copy($from, $temp_file);
-    };
+    $rc = copy($from, $temp_file);
     if ( $rc) {
         if ( is_newer($temp_file, $from, 0) ) {
             $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);

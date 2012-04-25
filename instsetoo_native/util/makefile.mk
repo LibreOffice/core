@@ -245,7 +245,7 @@ $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!=""
 openoffice_%{$(PKGFORMAT:^".") .archive} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -strip -format $(@:e:s/.//) $(VERBOSESWITCH)
     $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/`date +%Y%m%d_%H%M`_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
@@ -271,19 +271,19 @@ ooodevhelppack_%{$(PKGFORMAT:^".")} :
 
 $(foreach,i,$(alllangiso) sdkoo_$i) : $$@{$(PKGFORMAT:^".")}
 sdkoo_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $$@{$(PKGFORMAT:^".")}
 sdkoodev_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) lotest_$i) : $$@{$(PKGFORMAT:^".")}
 lotest_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) lodevtest_$i) : $$@{$(PKGFORMAT:^".")}
 lodevtest_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev_Test -u $(OUT) -buildid $(BUILD) -msitemplate $(MSITESTTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 
 $(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}

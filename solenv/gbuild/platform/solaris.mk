@@ -167,12 +167,6 @@ gb_LinkTarget_LDFLAGS += \
 
 endif
 
-ifneq ($(gb_SYMBOL),$(true))
-ifeq ($(gb_STRIP),$(true))
-gb_LinkTarget_LDFLAGS += -Wl,--strip-all
-endif
-endif
-
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_COMPILEROPTFLAGS := -O0
 gb_LINKEROPTFLAGS :=

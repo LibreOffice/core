@@ -615,20 +615,7 @@ AC_ARG_ENABLE(symbols,
          --enable-symbols="all -sw/ -Library_sc" to enable symbols only for
          the specified gbuild-build targets (all means everything, - prepended
          means not to enable, / appended means everything in the directory,
-         there is no ordering and removal disabling takes precedence).])
-    [
-                          Enabling symbols disables the stripping of the solver
-                          (--disable-strip-solver).
-    ],
-,)
-
-AC_ARG_ENABLE(strip-solver,
-    AS_HELP_STRING([--disable-strip-solver],
-        [Disable the stripping of the solver. By default the solver is stripped
-         unless a build with debugging symbols (--enable-symbols) is requested.])
-    [
-                          This switch allows to override this setting.
-    ],
+         there is no ordering and removal disabling takes precedence).]),
 ,)
 
 AC_ARG_ENABLE(werror,
@@ -3557,23 +3544,6 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS)
 AC_SUBST(ENABLE_SYMBOLS_FOR)
-
-dnl Determine if the solver is to be stripped or not.
-dnl ===================================================================
-AC_MSG_CHECKING([whether to strip the solver or not.])
-if test "$enable_strip_solver" = "no"; then
-    DISABLE_STRIP="TRUE"
-    AC_MSG_RESULT([no])
-else
-    if test -n "$ENABLE_SYMBOLS"; then
-        DISABLE_STRIP="TRUE"
-        AC_MSG_RESULT([no])
-    else
-        DISABLE_STRIP=
-        AC_MSG_RESULT([yes])
-    fi
-fi
-AC_SUBST(DISABLE_STRIP)
 
 if test "$enable_headless" = "yes"; then
     # be sure to do not mess with uneeded stuff

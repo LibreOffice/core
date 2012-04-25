@@ -235,7 +235,7 @@ BEGIN
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 
-    $strip = 1;
+    $strip = 0;
 
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();

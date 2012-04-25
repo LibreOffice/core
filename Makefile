@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs fetch findunusedcode id install subsequentcheck tags
+.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs fetch findunusedcode id install install-strip subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -435,6 +435,13 @@ cross-toolset: bootstrap fetch
 install:
 	echo "Installing in $(INSTALLDIR)..." && \
 	ooinstall "$(INSTALLDIR)" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "$(INSTALLDIR)/program/soffice"
+
+install-strip:
+	echo "Installing and stripping binaries in $(INSTALLDIR)..." && \
+	ooinstall --strip "$(INSTALLDIR)" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"

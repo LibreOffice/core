@@ -70,7 +70,7 @@ The following parameter are needed:
 -helppack : do create a helppack, no product pack (optional)
 -patch : do create a patch (optional)
 -patchinc: Source for the patch include files (Solaris only)
--dontstrip: No file stripping (Unix only)
+-strip: Stripping files (Unix only)
 -log : Logging all available information (optional)
 
 Examples for Windows:
@@ -148,7 +148,7 @@ sub getparameter
         elsif ($param eq "-helppack") { $installer::globals::helppack = 1;}
         elsif ($param eq "-patch") { $installer::globals::patch = 1; }
         elsif ($param eq "-debian") { $installer::globals::debian = 1; }
-        elsif ($param eq "-dontstrip") { $installer::globals::strip = 0; }
+        elsif ($param eq "-strip") { $installer::globals::strip = 1; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
@@ -162,7 +162,6 @@ sub getparameter
             $installer::globals::simple = 1;
             $installer::globals::call_epm = 0;
             $installer::globals::makedownload = 0;
-            $installer::globals::strip = 0;
             my $path = shift(@ARGV);
             $path =~ s/^\Q$installer::globals::destdir\E//;
             $installer::globals::rootpath = $path;
