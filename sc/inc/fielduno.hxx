@@ -356,6 +356,9 @@ private:
     void setPropertyValueURL(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
     com::sun::star::uno::Any getPropertyValueURL(const rtl::OUString& rName);
 
+    void setPropertyValueFile(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
+    com::sun::star::uno::Any getPropertyValueFile(const rtl::OUString& rName);
+
 public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScEditFieldObj* getImplementation(const com::sun::star::uno::Reference<com::sun::star::text::XTextContent>& xObj);

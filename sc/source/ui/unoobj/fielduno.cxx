@@ -1242,16 +1242,93 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
     return aRet;
 }
 
+void ScEditFieldObj::setPropertyValueFile(const rtl::OUString& rName, const uno::Any& rVal)
+{
+    if (rName == SC_UNONAME_FILEFORM)
+    {
+        sal_Int16 nIntVal = 0;
+        if (rVal >>= nIntVal)
+        {
+            SvxFileFormat eFormat = lcl_UnoToSvxFileFormat(nIntVal);
+            if (pEditSource)
+            {
+                ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+                ScUnoEditEngine aTempEngine(pEditEngine);
+                SvxFieldData* pField = aTempEngine.FindByPos(
+                        aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField));
+                OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
+                if (pField)
+                {
+                    SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
+                    pExtFile->SetFormat(eFormat);
+                    pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
+                    pEditSource->UpdateData();
+                }
+            }
+            else
+            {
+                SvxFieldData* pField = getData();
+                SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);
+                pExtFile->SetFormat(eFormat);
+            }
+        }
+    }
+    else
+        throw beans::UnknownPropertyException();
+}
+
+uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
+{
+    uno::Any aRet;
+    if (rName == SC_UNONAME_FILEFORM)
+    {
+        SvxFileFormat eFormat = SVXFILEFORMAT_NAME_EXT;
+        const SvxFieldData* pField = NULL;
+        if (pEditSource)
+        {
+            ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+            ScUnoEditEngine aTempEngine(pEditEngine);
+            pField = aTempEngine.FindByPos(
+                aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField));
+        }
+        else
+            pField = getData();
+
+        OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
+        if (!pField)
+            throw uno::RuntimeException();
+
+        const SvxExtFileField* pExtFile = static_cast<const SvxExtFileField*>(pField);
+        eFormat = pExtFile->GetFormat();
+        sal_Int16 nIntVal = lcl_SvxToUnoFileFormat(eFormat);
+        aRet <<= nIntVal;
+    }
+    else
+        throw beans::UnknownPropertyException();
+
+    return aRet;
+}
+
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
     OComponentHelper(getMutex()),
-    pPropSet(lcl_GetURLPropertySet()),
+    pPropSet(NULL),
     pEditSource(pEditSrc),
     aSelection(rSel),
     meType(eType), mpData(NULL), mpContent(rContent)
 {
-    //  pDocShell ist Null, wenn per ServiceProvider erzeugt
+    switch (meType)
+    {
+        case File:
+            pPropSet = lcl_GetFileFieldPropertySet();
+        break;
+        case URL:
+            pPropSet = lcl_GetURLPropertySet();
+        break;
+        default:
+            pPropSet = lcl_GetHeaderFieldPropertySet();
+    }
 }
 
 void ScEditFieldObj::InitDoc(
@@ -1307,7 +1384,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     SolarMutexGuard aGuard;
 
     if (!pEditSource)
-        return rtl::OUString();
+        return rtl::OUString("no edit source!!!");
 
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
@@ -1317,14 +1394,14 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
     OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
     if (!pField)
-        return rtl::OUString();
+        return rtl::OUString("not inserted yet");
 
     switch (meType)
     {
         case URL:
         {
             if (pField->GetClassId() != SVX_URLFIELD)
-                return rtl::OUString();
+                return rtl::OUString("not url field but url expected");
 
             const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
             return bShowCommand ? pURL->GetURL() : pURL->GetRepresentation();
@@ -1333,7 +1410,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         default:
             ;
     }
-    return rtl::OUString("fail");
+    return rtl::OUString("total fail");
 }
 
 // XTextContent
@@ -1401,6 +1478,9 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         case URL:
             setPropertyValueURL(aPropertyName, aValue);
         break;
+        case File:
+            setPropertyValueFile(aPropertyName, aValue);
+        break;
         default:
             throw beans::UnknownPropertyException();
     }
@@ -1415,7 +1495,8 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
     {
         case URL:
             return getPropertyValueURL(aPropertyName);
-        break;
+        case File:
+            return getPropertyValueFile(aPropertyName);
         default:
             throw beans::UnknownPropertyException();
     }
