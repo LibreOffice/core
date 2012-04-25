@@ -1650,6 +1650,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),       //12
         SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),               //13
         "NumberingType",                        //14
+        // these are not in chapter numbering
         "BulletId",                             //15
         SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //16
         "BulletFontName",                       //17
@@ -1658,10 +1659,18 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP), //20
         SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),   //21
         SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //22
-        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME) //23
+        // these are only in chapter numbering
+        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), //23
+        // these two are accepted but ignored for some reason
+        "BulletRelSize",                         // 24
+        "BulletColor"                            // 25
     };
-    const sal_uInt16 nPropNameCount = 24;
-    const sal_uInt16 nNotInChapter = 15;
+    const sal_uInt16 NotInChapterFirst = 15;
+    const sal_uInt16 NotInChapterLast = 22;
+    const sal_uInt16 InChapterFirst = 23;
+    const sal_uInt16 InChapterLast = 23;
+    const sal_uInt16 IgnoredFirst = 24;
+    const sal_uInt16 IgnoredLast = 25;
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     PropValDataArr aPropertyValues;
@@ -1670,25 +1679,23 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     {
         const beans::PropertyValue& rProp = pPropArray[i];
         bExcept = sal_True;
-        for(sal_uInt16 j = 0; j < (pDocShell ? nPropNameCount : nPropNameCount - 1); j++)
+        for(sal_uInt16 j = 0; j < SAL_N_ELEMENTS( aNumPropertyNames ); j++)
         {
-            //some values not in chapter numbering
-            if(pDocShell && j == nNotInChapter)
-                j = nPropNameCount - 1;
+            if( j >= IgnoredFirst && j <= IgnoredLast )
+                continue;
+            if( pDocShell && j >= NotInChapterFirst && j <= NotInChapterLast )
+                continue;
+            if( !pDocShell && j >= InChapterFirst && j <= InChapterLast )
+                continue;
             if(COMPARE_EQUAL == rProp.Name.compareToAscii(aNumPropertyNames[j]))
             {
                 bExcept = sal_False;
                 break;
             }
         }
-        if(bExcept && (rProp.Name == "BulletRelSize" || rProp.Name == "BulletColor" ) )
-        {
-            bExcept = sal_False;
-        }
+        SAL_WARN_IF( bExcept, "sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing" );
         PropValData* pData = new PropValData(rProp.Value, rProp.Name );
         aPropertyValues.Insert(pData, aPropertyValues.Count());
-        if( bExcept )
-            SAL_WARN( "sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing" );
     }
 
     SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
@@ -1700,7 +1707,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SwFmtVertOrient* pSetVOrient = 0;
         sal_Bool bCharStyleNameSet = sal_False;
 
-        for(sal_uInt16 i = 0; i < nPropNameCount && !bExcept && !bWrongArg; i++)
+        for(sal_uInt16 i = 0; i < SAL_N_ELEMENTS( aNumPropertyNames ) && !bExcept && !bWrongArg; i++)
         {
             PropValData* pData = lcl_FindProperty(aNumPropertyNames[i], aPropertyValues);
             if(!pData)
@@ -1911,6 +1918,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 15: //"BulletId",
                 {
+                    assert( !pDocShell );
                     sal_Int16 nSet = 0;
                     if( pData->aVal >>= nSet )
                         aFmt.SetBulletChar(nSet);
@@ -1920,7 +1928,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 16: //UNO_NAME_BULLET_FONT,
                 {
-                     awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
+                    assert( !pDocShell );
+                    awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
                     if(pDesc)
                     {
                         // #i93725#
@@ -1938,6 +1947,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 17: //"BulletFontName",
                 {
+                    assert( !pDocShell );
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sBulletFontName(uTmp);
@@ -1959,6 +1969,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 18: //"BulletChar",
                 {
+                    assert( !pDocShell );
                     OUString aChar;
                     pData->aVal >>= aChar;
                     if(aChar.getLength() == 1)
@@ -1971,6 +1982,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 19: //UNO_NAME_GRAPHIC_URL,
                 {
+                    assert( !pDocShell );
                     OUString sBrushURL;
                     pData->aVal >>= sBrushURL;
                     if(!pSetBrush)
@@ -1988,6 +2000,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 20: //UNO_NAME_GRAPHIC_BITMAP,
                 {
+                    assert( !pDocShell );
                     uno::Reference< awt::XBitmap >* pBitmap = (uno::Reference< awt::XBitmap > *)pData->aVal.getValue();
                     if(pBitmap)
                     {
@@ -2012,6 +2025,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 21: //UNO_NAME_GRAPHIC_SIZE,
                 {
+                    assert( !pDocShell );
                     if(!pSetSize)
                         pSetSize = new Size;
                     if(pData->aVal.getValueType() == ::getCppuType((awt::Size*)0))
@@ -2028,6 +2042,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 22: //VertOrient
                 {
+                    assert( !pDocShell );
                     if(!pSetVOrient)
                     {
                         if(aFmt.GetGraphicOrientation())
@@ -2040,6 +2055,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 23: //"HeadingStyleName"
                 {
+                    assert( pDocShell );
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sStyleName;
@@ -2065,6 +2081,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 }
                 break;
                 case 24: // BulletRelSize - unsupported - only available in Impress
+                break;
+                case 25: // ignored too
                 break;
             }
         }
