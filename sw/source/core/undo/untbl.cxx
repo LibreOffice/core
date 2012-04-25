@@ -84,8 +84,7 @@
 
 extern void ClearFEShellTabCols();
 
-typedef SfxItemSet* SfxItemSetPtr;
-SV_DECL_PTRARR_DEL( SfxItemSets, SfxItemSetPtr, 10 )
+typedef boost::ptr_vector<SfxItemSet> SfxItemSets;
 
 class SwUndoSaveSections : public boost::ptr_vector<SwUndoSaveSection> {
 public:
@@ -220,8 +219,6 @@ struct SwTblToTxtSave
     SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, xub_StrLen nCntnt );
     ~SwTblToTxtSave() { delete m_pHstry; }
 };
-
-SV_IMPL_PTRARR( SfxItemSets, SfxItemSetPtr )
 
 sal_uInt16 aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
@@ -952,7 +949,8 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
                 ((SwTblBoxFormula*)pItem)->ChgDefinedIn( 0 );
             }
         }
-        aSets.Insert( pSet, (nRet = aSets.Count() ) );
+        nRet = aSets.size();
+        aSets.push_back( pSet );
         aFrmFmts.Insert( pFmt, nRet );
     }
     return nRet;
@@ -988,7 +986,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
 
     // FrmFmts mit Defaults (0) fuellen
     pFmt = 0;
-    for( n = aSets.Count(); n; --n )
+    for( n = aSets.size(); n; --n )
         aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
 
     sal_uInt16 nLnCnt = nLineCount;
@@ -1045,7 +1043,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
 
     // FrmFmts mit Defaults (0) fuellen
     pFmt = 0;
-    for( n = aSets.Count(); n; --n )
+    for( n = aSets.size(); n; --n )
         aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
 
     pLine->CreateNew( rTbl, aParent, *this );
@@ -1127,7 +1125,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
             pFmt = pDoc->MakeTableLineFmt();
         else
             pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetFmtAttr( *aSets[ nFmtPos ] );
+        pFmt->SetFmtAttr( aSets[ nFmtPos ] );
         aFrmFmts.Replace( pFmt, nFmtPos );
     }
 
@@ -1223,7 +1221,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableLineFmt();
-        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
+        pFmt->SetFmtAttr( rSTbl.aSets[ nItemSet ] );
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
@@ -1318,7 +1316,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
                 SwCntntNode* pCNd = rNds[ n ]->GetCntntNode();
                 if( pCNd )
                 {
-                    SfxItemSet* pSet = (*Ptrs.pCntntAttrs)[ nSet++ ];
+                    SfxItemSet* pSet = &(*Ptrs.pCntntAttrs)[ nSet++ ];
                     if( pSet )
                     {
                         sal_uInt16 *pRstAttr = aSave_BoxCntntSet;
@@ -1366,7 +1364,7 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
                     pSet->Put( *pCNd->GetpSwAttrSet() );
                 }
 
-                Ptrs.pCntntAttrs->Insert( pSet, Ptrs.pCntntAttrs->Count() );
+                Ptrs.pCntntAttrs->push_back( pSet );
             }
         }
     }
@@ -1382,7 +1380,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
+        pFmt->SetFmtAttr( rSTbl.aSets[ nItemSet ] );
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
 
