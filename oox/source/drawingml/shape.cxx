@@ -561,7 +561,7 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setTextRotateAngle( -nTextRotateAngle / 60000 );
             }
 
-            SAL_INFO("oox", "==cscode== shape name: " << msName);
+            SAL_INFO("oox", "==cscode== shape name: '" << msName << "'");
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
         else if( getTextBody() )
@@ -615,7 +615,7 @@ void Shape::moveAllToPosition( const Point &rPoint )
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
-    SAL_INFO("oox", "set master text list style to shape id: %s" << msId);
+    SAL_INFO("oox", "set master text list style to shape id: " << msId);
 
     mpMasterTextListStyle = pMasterTextListStyle;
 }
