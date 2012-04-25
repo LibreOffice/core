@@ -585,7 +585,7 @@ void GtkSalFrame::updateScreenNumber()
     int nScreen = 0;
     GdkScreen *pScreen = gtk_widget_get_screen( m_pWindow );
     if( pScreen )
-        nScreen = GtkSalSystem::getScreenMonitorIdx( getGdkDisplay(), pScreen, maGeometry.nX, maGeometry.nY );
+        nScreen = getDisplay()->getSystem()->getScreenMonitorIdx( pScreen, maGeometry.nX, maGeometry.nY );
     maGeometry.nDisplayScreenNumber = nScreen;
 }
 
@@ -1852,7 +1852,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     gint nMonitor;
     GdkScreen *pScreen = NULL;
-    pScreen = GtkSalSystem::getScreenMonitorFromIdx( getGdkDisplay(), nNewScreen, nMonitor );
+    pScreen = getDisplay()->getSystem()->getScreenMonitorFromIdx( nNewScreen, nMonitor );
 
     // Heavy lifting, need to move screen ...
     if( pScreen != gtk_widget_get_screen( m_pWindow ))
