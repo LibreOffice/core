@@ -488,38 +488,37 @@ ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     SvxFieldData* pData = aTempEngine.FindByIndex((sal_uInt16)Index, 0);
-    if ( pData )
-    {
-        sal_uInt16 nPar = aTempEngine.GetFieldPar();
-        xub_StrLen nPos = aTempEngine.GetFieldPos();
+    if (!pData)
+        return NULL;
 
-        sal_uInt16 nFieldType = 0;
-        if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
-        else if ( pData->ISA( SvxPagesField ) )   nFieldType = SC_SERVICE_PAGESFIELD;
-        else if ( pData->ISA( SvxDateField ) )    nFieldType = SC_SERVICE_DATEFIELD;
-        else if ( pData->ISA( SvxTimeField ) )    nFieldType = SC_SERVICE_TIMEFIELD;
-        else if ( pData->ISA( SvxFileField ) )    nFieldType = SC_SERVICE_TITLEFIELD;
-        else if ( pData->ISA( SvxExtFileField ) ) nFieldType = SC_SERVICE_FILEFIELD;
-        else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
+    sal_uInt16 nPar = aTempEngine.GetFieldPar();
+    xub_StrLen nPos = aTempEngine.GetFieldPos();
 
-        ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
-        uno::Reference<text::XTextRange> xTextRange;
-        ScHeaderFooterContentObj& rContentObj = mrData.GetContentObj();
-        uno::Reference<text::XText> xText;
-        sal_uInt16 nPart = mrData.GetPart();
-        if ( nPart == SC_HDFT_LEFT )
-            xText = rContentObj.getLeftText();
-        else if (nPart == SC_HDFT_CENTER)
-            xText = rContentObj.getCenterText();
-        else
-            xText = rContentObj.getRightText();
+    sal_uInt16 nFieldType = 0;
+    if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
+    else if ( pData->ISA( SvxPagesField ) )   nFieldType = SC_SERVICE_PAGESFIELD;
+    else if ( pData->ISA( SvxDateField ) )    nFieldType = SC_SERVICE_DATEFIELD;
+    else if ( pData->ISA( SvxTimeField ) )    nFieldType = SC_SERVICE_TIMEFIELD;
+    else if ( pData->ISA( SvxFileField ) )    nFieldType = SC_SERVICE_TITLEFIELD;
+    else if ( pData->ISA( SvxExtFileField ) ) nFieldType = SC_SERVICE_FILEFIELD;
+    else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
 
-        uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
-        xTextRange = xTemp;
-        ScEditFieldObj::FieldType eRealType = getFieldType(nFieldType);
-        return new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection);
-    }
-    return NULL;
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+    uno::Reference<text::XTextRange> xTextRange;
+    ScHeaderFooterContentObj& rContentObj = mrData.GetContentObj();
+    uno::Reference<text::XText> xText;
+    sal_uInt16 nPart = mrData.GetPart();
+    if ( nPart == SC_HDFT_LEFT )
+        xText = rContentObj.getLeftText();
+    else if (nPart == SC_HDFT_CENTER)
+        xText = rContentObj.getCenterText();
+    else
+        xText = rContentObj.getRightText();
+
+    uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
+    xTextRange = xTemp;
+    ScEditFieldObj::FieldType eRealType = getFieldType(nFieldType);
+    return new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection);
 }
 
 sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
