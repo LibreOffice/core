@@ -233,34 +233,6 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
     }
 }
 
-void FrameStatusListener::removeStatusListener( const rtl::OUString& aCommandURL )
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
-    if ( pIter != m_aListenerMap.end() )
-    {
-        Reference< XDispatch > xDispatch( pIter->second );
-        Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        m_aListenerMap.erase( pIter );
-
-        try
-        {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-            com::sun::star::util::URL aTargetURL;
-            aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
-
-            if ( xDispatch.is() && xStatusListener.is() )
-                xDispatch->removeStatusListener( xStatusListener, aTargetURL );
-        }
-        catch (const Exception&)
-        {
-        }
-    }
-}
 
 void FrameStatusListener::bindListener()
 {

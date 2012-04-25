@@ -62,13 +62,6 @@ sal_Bool SAL_CALL CertificateExtension_XmlSecImpl :: isCritical() throw( ::com::
     return m_xExtnValue ;
 }
 
-//Helper method
-void CertificateExtension_XmlSecImpl :: setCertExtn( ::com::sun::star::uno::Sequence< sal_Int8 > extnId, ::com::sun::star::uno::Sequence< sal_Int8 > extnValue, sal_Bool critical ) {
-    m_critical = critical ;
-    m_xExtnId = extnId ;
-    m_xExtnValue = extnValue ;
-}
-
 void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) {
     unsigned int i ;
     if( value != NULL && vlen != 0 ) {
@@ -93,5 +86,6 @@ void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsig
 
     m_critical = critical ;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

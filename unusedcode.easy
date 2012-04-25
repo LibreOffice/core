@@ -1,4 +1,3 @@
-CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 EditEngine::GetNextVisPortion(ParaPortion const*) const
 FmFieldWinMgr::GetChildWindowId()
 FmPropBrwMgr::GetChildWindowId()
@@ -719,7 +718,6 @@ std::__cxx1998::multimap<_xmlNode*, com::sun::star::uno::Reference<com::sun::sta
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
 std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
-svt::FrameStatusListener::removeStatusListener(rtl::OUString const&)
 svxform::DataNavigatorManager::GetChildWindowId()
 svxform::FmFilterNavigatorWinMgr::GetChildWindowId()
 svxform::NavigatorFrameManager::GetChildWindowId()
