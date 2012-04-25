@@ -729,9 +729,7 @@ SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
         return (SwFieldType*)GetRegisteredIn();
 }
 
-typedef SwFmtFld* SwFmtFldPtr;
-SV_DECL_PTRARR(SwDependentFields, SwFmtFldPtr, 5)
-SV_IMPL_PTRARR(SwDependentFields, SwFmtFldPtr)
+typedef std::vector<SwFmtFld*> SwDependentFields;
 
 uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
@@ -757,19 +755,19 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             //fill all text fields into a sequence
             SwDependentFields aFldArr;
             SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-            SwFmtFldPtr pFld = aIter.First();
+            SwFmtFld* pFld = aIter.First();
             while(pFld)
             {
                 if(pFld->IsFldInDoc())
-                    aFldArr.Insert(pFld, aFldArr.Count());
+                    aFldArr.push_back(pFld);
                 pFld = aIter.Next();
             }
 
-            uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFldArr.Count());
+            uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFldArr.size());
             uno::Reference<text::XDependentTextField>* pRetSeq = aRetSeq.getArray();
-            for(sal_uInt16 i = 0; i < aFldArr.Count(); i++)
+            for(sal_uInt16 i = 0; i < aFldArr.size(); i++)
             {
-                pFld = aFldArr.GetObject(i);
+                pFld = aFldArr[i];
                 SwXTextField * pInsert = SwXTextField::CreateSwXTextField(*GetDoc(), *pFld);
 
                 pRetSeq[i] = uno::Reference<text::XDependentTextField>(pInsert);
