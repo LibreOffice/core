@@ -9660,6 +9660,14 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
         Show(toBool(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("resizable")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_SIZEMOVE);
+        if (toBool(rValue))
+            nBits |= WB_SIZEMOVE;
+        SetStyle(nBits);
+    }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
     {
         WinBits nBits = GetStyle();
