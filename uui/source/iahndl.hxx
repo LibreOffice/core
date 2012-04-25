@@ -238,12 +238,6 @@ private:
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     bool
-    handleCookiesRequest(
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionRequest > const & rRequest)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-
-    bool
     handleNoSuchFilterRequest(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)

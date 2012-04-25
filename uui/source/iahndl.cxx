@@ -895,9 +895,6 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handlePasswordRequest( rRequest ) )
                 return true;
 
-            if ( handleCookiesRequest( rRequest ) )
-                return true;
-
             if ( handleNoSuchFilterRequest( rRequest ) )
                 return true;
 

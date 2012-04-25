@@ -35,6 +35,8 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** A policy how to handle cookie requests.
+
+@deprecated
 */
 published enum CookiePolicy
 {

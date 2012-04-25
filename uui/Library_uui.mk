@@ -51,12 +51,10 @@ $(eval $(call gb_Library_use_libraries,uui,\
 
 $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/alreadyopen \
-	uui/source/cookiedg \
 	uui/source/filechanged \
 	uui/source/fltdlg \
 	uui/source/iahndl \
 	uui/source/iahndl-authentication \
-	uui/source/iahndl-cookies \
 	uui/source/iahndl-errorhandler \
 	uui/source/iahndl-filter \
 	uui/source/iahndl-ioexceptions \
