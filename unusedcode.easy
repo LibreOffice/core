@@ -52,7 +52,6 @@ ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_itera
 ScDBCollection::AnonDBs::findByTable(short) const
 ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
 ScDPObject::HasGroups() const
-ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)
 ScHTMLColOffset::Insert(unsigned long const*, unsigned short)
