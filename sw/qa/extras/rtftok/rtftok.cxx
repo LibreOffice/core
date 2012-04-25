@@ -86,6 +86,7 @@ public:
     void testFdo48356();
     void testFdo48023();
     void testFdo48876();
+    void testFdo48193();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testFdo48356);
     CPPUNIT_TEST(testFdo48023);
     CPPUNIT_TEST(testFdo48876);
+    CPPUNIT_TEST(testFdo48193);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -614,6 +616,12 @@ void RtfModelTest::testFdo48876()
     style::LineSpacing aSpacing;
     xPropertySet->getPropertyValue("ParaLineSpacing") >>= aSpacing;
     CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::MINIMUM, aSpacing.Mode);
+}
+
+void RtfModelTest::testFdo48193()
+{
+    load("fdo48193.rtf");
+    CPPUNIT_ASSERT_EQUAL(7, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

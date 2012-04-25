@@ -65,6 +65,7 @@ namespace writerfilter {
             DESTINATION_STYLESHEET,
             DESTINATION_STYLEENTRY,
             DESTINATION_EQINSTRUCTION,
+            DESTINATION_FIELD,
             DESTINATION_FIELDINSTRUCTION,
             DESTINATION_FIELDRESULT,
             DESTINATION_LISTTABLE,
@@ -161,6 +162,13 @@ namespace writerfilter {
             BMPSTYLE_PNG
         };
 
+        enum RTFFieldStatus
+        {
+            FIELD_NONE,
+            FIELD_INSTRUCTION,
+            FIELD_RESULT
+        };
+
         /// A buffer storing dmapper calls.
         typedef std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > RTFBuffer_t;
 
@@ -244,6 +252,7 @@ namespace writerfilter {
                 RTFDocumentImpl* m_pDocumentImpl;
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
+                RTFFieldStatus nFieldStatus;
                 RTFBorderState nBorderState;
                 // font table, stylesheet table
                 RTFSprms aTableSprms;
