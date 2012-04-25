@@ -479,17 +479,17 @@ void    SwContentType::Invalidate()
     Beschreibung: Liste der Inhalte fuellen
 ***************************************************************************/
 
-void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
+void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
 {
     SwContentArr*   pOldMember = 0;
     int nOldMemberCount = -1;
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, 0 );
-    if(pMember && pbLevelOrVisibiblityChanged)
+    if(pMember && pbLevelOrVisibilityChanged)
     {
         pOldMember = pMember;
         nOldMemberCount = pOldMember->Count();
         pMember = new SwContentArr;
-        *pbLevelOrVisibiblityChanged = sal_False;
+        *pbLevelOrVisibilityChanged = sal_False;
     }
     else if(!pMember)
         pMember = new SwContentArr;
@@ -521,7 +521,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                     // cast fuer Win16
                     if(nOldMemberCount > (int)nPos &&
                         ((SwOutlineContent*)pOldMember->GetObject(nPos))->GetOutlineLevel() != nLevel)
-                        *pbLevelOrVisibiblityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = sal_True;
 
                     nPos++;
                 }
@@ -551,7 +551,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
 
                 if(nOldMemberCount > (int)i &&
                     (pOldMember->GetObject(i))->IsInvisible() != pCnt->IsInvisible())
-                        *pbLevelOrVisibiblityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = sal_True;
             }
         }
         break;
@@ -595,7 +595,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 pMember->Insert(pCnt);
                 if(nOldMemberCount > (int)i &&
                     (pOldMember->GetObject(i))->IsInvisible() != pCnt->IsInvisible())
-                        *pbLevelOrVisibiblityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = sal_True;
             }
         }
         break;
@@ -650,7 +650,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                     if(nOldMemberCount > nPos &&
                         (pOldMember->GetObject(nPos))->IsInvisible()
                                 != pCnt->IsInvisible())
-                            *pbLevelOrVisibiblityChanged = sal_True;
+                            *pbLevelOrVisibilityChanged = sal_True;
                 }
             }
             nMemberCount = pMember->Count();
@@ -711,7 +711,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 if(nOldMemberCount > nPos &&
                     (pOldMember->GetObject(nPos))->IsInvisible()
                             != pCnt->IsInvisible())
-                        *pbLevelOrVisibiblityChanged = sal_True;
+                        *pbLevelOrVisibilityChanged = sal_True;
             }
         }
         break;
@@ -783,7 +783,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                         nMemberCount++;
                         if(nOldMemberCount > (int)i &&
                             (pOldMember->GetObject((sal_uInt16)i))->IsInvisible() != pCnt->IsInvisible())
-                                *pbLevelOrVisibiblityChanged = sal_True;
+                                *pbLevelOrVisibilityChanged = sal_True;
                     }
                 }
             }
