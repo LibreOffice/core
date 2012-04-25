@@ -78,7 +78,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aWebsiteButton       ( this,     ResId( ABOUT_BTN_WEBSITE, *rId.GetResMgr() ) ),
     aLicenseButton       ( this,     ResId( ABOUT_BTN_LICENSE, *rId.GetResMgr() ) ),
     aCancelButton        ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
-    aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
+    aVersionTextStr(ResId::toString(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())).trim()),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
     m_aCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT, *rId.GetResMgr())),
     m_aBasedTextStr(ResId(ABOUT_STR_BASED, *rId.GetResMgr())),
@@ -372,9 +372,14 @@ rtl::OUString AboutDialog::GetVersionString()
 
     rtl::OUString sBuildId = GetBuildId();
 
-    if (!(sBuildId.trim()).isEmpty())
+    if (!sBuildId.trim().isEmpty())
     {
         sVersion += " ";
+        if (m_sBuildStr.indexOf("$BUILDID") == -1)
+        {
+            SAL_WARN( "cui.dialogs", "translated Build Id string in translations doesn't contain $BUILDID placeholder" );
+            m_sBuildStr += " $BUILDID";
+        }
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
