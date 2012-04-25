@@ -2574,7 +2574,7 @@ HAVE_GCC_FINLINE_LIMIT=
 HAVE_GCC_FNO_INLINE=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -ggdb2])
-    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
         # Option just ignored and silly warning that isn't a real
         # warning printed
         :
@@ -2591,7 +2591,7 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -finline-limit=0])
-    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
         # As above
         :
     else
@@ -2607,7 +2607,7 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -fno-inline])
-    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
         # Ditto
         :
     else
@@ -4784,7 +4784,7 @@ HAVE_GCC_FNO_DEFAULT_INLINE=
 HAVE_GCC_FNO_ENFORCE_EH_SPECS=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CXX supports -fno-default-inline])
-    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
         # Option just ignored and silly warning that isn't a real
         # warning printed
         :
@@ -4803,7 +4803,7 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CXX supports -fno-enforce-eh-specs])
-    if test -n "$CLANGVER" -a "$CLANGVER" -le 30100; then
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
         # As above
         :
     else
