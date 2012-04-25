@@ -36,10 +36,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <cppuhelper/implbase4.hxx>
 
-#ifdef __clang__
-#pragma clang diagnostic warning "-Woverloaded-virtual"
-#endif
-
 namespace connectivity
 {
     namespace macab
@@ -82,6 +78,10 @@ namespace connectivity
             virtual void SAL_CALL disposing();
 
             // XPreparedStatement
+            using MacabCommonStatement::executeQuery;
+            using MacabCommonStatement::executeUpdate;
+            using MacabCommonStatement::execute;
+
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL executeUpdate(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
