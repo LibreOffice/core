@@ -90,8 +90,7 @@ SV_DECL_PTRARR_DEL( SfxItemSets, SfxItemSetPtr, 10 )
 typedef SwUndoSaveSection* SwUndoSaveSectionPtr;
 SV_DECL_PTRARR_DEL( SwUndoSaveSections, SwUndoSaveSectionPtr, 0 )
 
-typedef SwUndoMove* SwUndoMovePtr;
-SV_DECL_PTRARR_DEL( SwUndoMoves, SwUndoMovePtr, 0 )
+class SwUndoMoves : public boost::ptr_vector<SwUndoMove> {};
 
 struct SwTblToTxtSave;
 class SwTblToTxtSaves : public boost::ptr_vector<SwTblToTxtSave> {
@@ -222,7 +221,6 @@ struct SwTblToTxtSave
 
 SV_IMPL_PTRARR( SfxItemSets, SfxItemSetPtr )
 SV_IMPL_PTRARR( SwUndoSaveSections, SwUndoSaveSectionPtr )
-SV_IMPL_PTRARR( SwUndoMoves, SwUndoMovePtr )
 
 sal_uInt16 aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
@@ -2058,11 +2056,11 @@ CHECKTABLE(pTblNd->GetTable())
                     *pBox->GetSttNd()->EndOfSectionNode() ), pColl );
 
             // das war der Trenner, -> die verschobenen herstellen
-            for( sal_uInt16 i = pMoves->Count(); i; )
+            for( sal_uInt16 i = pMoves->size(); i; )
             {
                 SwTxtNode* pTxtNd = 0;
                 sal_uInt16 nDelPos = 0;
-                SwUndoMove* pUndo = (*pMoves)[ --i ];
+                SwUndoMove* pUndo = &(*pMoves)[ --i ];
                 if( !pUndo->IsMoveRange() )
                 {
                     pTxtNd = rDoc.GetNodes()[ pUndo->GetDestSttNode() ]->GetTxtNode();
@@ -2166,7 +2164,7 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
     aTmp2++;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
 
-    pMoves->Insert( pUndo, pMoves->Count() );
+    pMoves->push_back( pUndo );
 }
 
 void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
