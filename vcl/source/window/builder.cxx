@@ -35,16 +35,19 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 
-VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri)
+VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
+    : m_sID(sID)
+    , m_pParent(pParent)
 {
+    fprintf(stderr, "now trying %s\n", rtl::OUStringToOString(sUri, RTL_TEXTENCODING_UTF8).getStr());
     xmlreader::XmlReader reader(sUri);
 
     handleChild(pParent, reader);
 
-    for (std::vector<Window*>::iterator aI = m_aChildren.begin(),
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
-        Window *pWindow = *aI;
+        Window *pWindow = aI->m_pWindow;
         if (pWindow)
         {
             pWindow->Show();
@@ -54,10 +57,10 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri)
 
 VclBuilder::~VclBuilder()
 {
-    for (std::vector<Window*>::reverse_iterator aI = m_aChildren.rbegin(),
+    for (std::vector<WinAndId>::reverse_iterator aI = m_aChildren.rbegin(),
          aEnd = m_aChildren.rend(); aI != aEnd; ++aI)
     {
-        Window *pWindow = *aI;
+        Window *pWindow = aI->m_pWindow;
         delete pWindow;
     }
 }
@@ -161,16 +164,32 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, string
     return pWindow;
 }
 
-Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, stringmap &rMap)
+Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rMap)
 {
-    Window *pCurrentChild = makeObject(pParent, rClass, rMap);
-    if (!pCurrentChild)
-        fprintf(stderr, "missing object!\n");
+    Window *pCurrentChild = NULL;
+
+    if (!m_sID.isEmpty() && rID.equals(m_sID))
+    {
+        pCurrentChild = m_pParent;
+        fprintf(stderr, "inserting into parent dialog\n");
+        //toplevels default to resizable
+        if (pCurrentChild->IsDialog())
+        {
+            fprintf(stderr, "forcing resizable\n");
+            pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE);
+        }
+    }
+    else
+    {
+        pCurrentChild = makeObject(pParent, rClass, rMap);
+        if (!pCurrentChild)
+            fprintf(stderr, "missing object!\n");
+        else
+            m_aChildren.push_back(WinAndId(rID, pCurrentChild));
+    }
 
     if (pCurrentChild)
     {
-        m_aChildren.push_back(pCurrentChild);
-
         for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
         {
             const rtl::OString &rKey = aI->first;
@@ -184,7 +203,7 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, st
     if (!pCurrentChild)
     {
         fprintf(stderr, "missing object!\n");
-        pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back();
+        pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
     }
     return pCurrentChild;
 }
@@ -249,6 +268,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 {
     rtl::OString sClass;
+    rtl::OString sID;
 
     xmlreader::Span name;
     int nsId;
@@ -260,6 +280,12 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             name = reader.getAttributeValue(false);
             sClass = rtl::OString(name.begin, name.length);
         }
+        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+        {
+            name = reader.getAttributeValue(false);
+            sID = rtl::OString(name.begin, name.length);
+        }
+
     }
 
     int nLevel = 1;
@@ -280,7 +306,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
             {
                 if (!pCurrentChild)
-                    pCurrentChild = insertObject(pParent, sClass, aProperties);
+                    pCurrentChild = insertObject(pParent, sClass, sID, aProperties);
                 handleChild(pCurrentChild, reader);
             }
             else
@@ -301,7 +327,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     if (!pCurrentChild)
-        pCurrentChild = insertObject(pParent, sClass, aProperties);
+        pCurrentChild = insertObject(pParent, sClass, sID, aProperties);
 
     return pCurrentChild;
 }
@@ -408,10 +434,21 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
     }
 }
 
-
 Window *VclBuilder::get_widget_root()
 {
-    return m_aChildren.empty() ? NULL : m_aChildren[0];
+    return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
+}
+
+Window *VclBuilder::get_by_name(rtl::OString sID)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+            return aI->m_pWindow;
+    }
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

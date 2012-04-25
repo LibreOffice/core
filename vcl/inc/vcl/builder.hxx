@@ -37,14 +37,29 @@
 class VCL_DLLPUBLIC VclBuilder
 {
 private:
-    std::vector<Window*> m_aChildren;
+    //todo merge into Windows UniqueID/HelpID ?
+    struct WinAndId
+    {
+        rtl::OString m_sID;
+        Window *m_pWindow;
+        WinAndId(const rtl::OString &rId, Window *pWindow)
+            : m_sID(rId)
+            , m_pWindow(pWindow)
+        {
+        }
+    };
+    std::vector<WinAndId> m_aChildren;
+    rtl::OString m_sID;
+    Window *m_pParent;
 public:
-    VclBuilder(Window *pParent, rtl::OUString sUIFile);
+    VclBuilder(Window *pParent, rtl::OUString sUIFile, rtl::OString sID = rtl::OString());
     ~VclBuilder();
     Window *get_widget_root();
+    Window *get_by_name(rtl::OString sID);
+
     typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
-    Window *insertObject(Window *pParent, const rtl::OString &rClass, stringmap &rVec);
+    Window *insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
     Window *makeObject(Window *pParent, const rtl::OString &rClass, stringmap &rVec);
 
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
