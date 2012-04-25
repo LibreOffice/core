@@ -47,8 +47,8 @@ class SwCntntNode;
 class SfxPoolItem;
 class SwShareBoxFmts;
 class SwFmtFrmSize;
-class _CpyPara;
-class _InsULPara;
+struct _CpyPara;
+struct _InsULPara;
 
 sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
