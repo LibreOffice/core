@@ -176,9 +176,6 @@ struct _DB_Column
 };
 
 typedef _DB_Column* _DB_ColumnPtr;
-SV_DECL_PTRARR_DEL( _DB_Columns, _DB_ColumnPtr, 32 )
-SV_IMPL_PTRARR( _DB_Columns, _DB_ColumnPtr )
-
 SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
 
 
@@ -885,16 +882,16 @@ static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
         if( 1 < nFndPos )
         {
             pNew = new _DB_Column( rTxt.Copy( nSttPos, nFndPos -1 ) );
-            rColArr.Insert( pNew, rColArr.Count() );
+            rColArr.push_back( pNew );
         }
         pNew = new _DB_Column;
-        rColArr.Insert( pNew, rColArr.Count() );
+        rColArr.push_back( pNew );
         nSttPos = nFndPos + 1;
     }
     if( nSttPos < rTxt.Len() )
     {
         pNew = new _DB_Column( rTxt.Copy( nSttPos ) );
-        rColArr.Insert( pNew, rColArr.Count() );
+        rColArr.push_back( pNew );
     }
 }
 
@@ -961,7 +958,7 @@ sal_Bool SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                 else
                     pNew = new _DB_Column( rFndCol, nFormat );
 
-                rColArr.Insert( pNew, rColArr.Count() );
+                rColArr.push_back( pNew );
             }
         }
     }
@@ -970,7 +967,7 @@ sal_Bool SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
     if( sTxt.Len() )
         ::lcl_InsTextInArr( sTxt, rColArr );
 
-    return 0 != rColArr.Count();
+    return !rColArr.empty();
 }
 
 void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
@@ -1275,7 +1272,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
 
             sal_Bool bSetCrsr = sal_True;
-            sal_uInt16 n = 0, nCols = aColArr.Count();
+            sal_uInt16 n = 0, nCols = aColArr.size();
             ::sw::mark::IMark* pMark = NULL;
             for( sal_Int32 i = 0 ; ; ++i )
             {
@@ -1302,7 +1299,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                 for( n = 0; n < nCols; ++n )
                 {
-                    _DB_Column* pDBCol = aColArr[ n ];
+                    _DB_Column* pDBCol = &aColArr[ n ];
                     String sIns;
                     switch( pDBCol->eColType )
                     {

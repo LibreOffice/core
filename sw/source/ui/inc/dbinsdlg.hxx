@@ -43,6 +43,7 @@
 #include <swdbdata.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include <boost/ptr_container/ptr_vector.hpp>
 namespace com{namespace sun{namespace star{
     namespace sdbcx{
     class XColumnsSupplier;
@@ -58,7 +59,8 @@ class SwTableAutoFmt;
 class SwView;
 class SfxItemSet;
 class SwTableRep;
-class _DB_Columns;
+struct _DB_Column;
+typedef boost::ptr_vector<_DB_Column> _DB_Columns;
 
 struct SwInsDBColumn
 {
