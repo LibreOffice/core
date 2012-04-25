@@ -168,6 +168,8 @@ class AddressMultiLineEdit : public MultiLineEdit, public SfxListener
     Link                            m_aSelectionLink;
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
 
+    using Window::Notify;
+
     using MultiLineEdit::SetText;
 
 protected:
@@ -176,7 +178,7 @@ public:
     AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId);
     ~AddressMultiLineEdit();
 
-    virtual void    NotifyOfHint( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
