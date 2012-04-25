@@ -118,14 +118,14 @@ CommandLineArgs::Supplier::~Supplier() {}
 // intialize class with command line parameters from process environment
 CommandLineArgs::CommandLineArgs()
 {
-    ResetParamValues();
+    InitParamValues();
     ExtCommandLineSupplier s;
     ParseCommandLine_Impl( s );
 }
 
 CommandLineArgs::CommandLineArgs( Supplier& supplier )
 {
-    ResetParamValues();
+    InitParamValues();
     ParseCommandLine_Impl( supplier );
 }
 
@@ -465,7 +465,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "server" )) == sal_True )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_SERVER, sal_True );
+        m_server = true;
     }
     else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "headless" )) == sal_True )
     {
@@ -563,11 +563,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("accept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, oArg.copy(RTL_CONSTASCII_LENGTH("accept=")) );
+        m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
     }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("unaccept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")) );
+        m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
     }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("portal,")))
     {
@@ -676,7 +676,7 @@ sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nE
     return sal_False;
 }
 
-void CommandLineArgs::ResetParamValues()
+void CommandLineArgs::InitParamValues()
 {
     int i;
     for ( i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
@@ -685,321 +685,268 @@ void CommandLineArgs::ResetParamValues()
         m_aStrSetParams[i] = sal_False;
     m_eArgumentCount = NONE;
     m_bDocumentArgs  = false;
+    m_server = false;
 }
 
-void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
+void CommandLineArgs::ClearServer()
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
-
-    OSL_ASSERT( ( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT ) );
-    m_aBoolParams[eParam] = bNewValue;
-}
-
-const rtl::OUString& CommandLineArgs::GetStringParam( StringParam eParam ) const
-{
-       osl::MutexGuard  aMutexGuard( m_aMutex );
-
-       OSL_ASSERT( ( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT ) );
-       return m_aStrParams[eParam];
+    m_server = false;
 }
 
 sal_Bool CommandLineArgs::IsMinimized() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_MINIMIZED ];
 }
 
 sal_Bool CommandLineArgs::IsInvisible() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_INVISIBLE ];
 }
 
 sal_Bool CommandLineArgs::IsNoRestore() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NORESTORE ];
 }
 
 sal_Bool CommandLineArgs::IsNoDefault() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NODEFAULT ];
 }
 
 sal_Bool CommandLineArgs::IsServer() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_aBoolParams[ CMD_BOOLPARAM_SERVER ];
+    return m_server;
 }
 
 sal_Bool CommandLineArgs::IsHeadless() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HEADLESS ];
 }
 
 sal_Bool CommandLineArgs::IsQuickstart() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_QUICKSTART ];
 }
 
 sal_Bool CommandLineArgs::IsNoQuickstart() const
 {
-    osl::MutexGuard aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NOQUICKSTART ];
 }
 
 sal_Bool CommandLineArgs::IsTerminateAfterInit() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_TERMINATEAFTERINIT ];
 }
 
 sal_Bool CommandLineArgs::IsNoLogo() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NOLOGO ];
 }
 
 sal_Bool CommandLineArgs::IsNoLockcheck() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NOLOCKCHECK ];
 }
 
 sal_Bool CommandLineArgs::IsHelp() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELP ];
 }
 sal_Bool CommandLineArgs::IsHelpWriter() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPWRITER ];
 }
 
 sal_Bool CommandLineArgs::IsHelpCalc() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPCALC ];
 }
 
 sal_Bool CommandLineArgs::IsHelpDraw() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPDRAW ];
 }
 
 sal_Bool CommandLineArgs::IsHelpImpress() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPIMPRESS ];
 }
 
 sal_Bool CommandLineArgs::IsHelpBase() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPBASE ];
 }
 sal_Bool CommandLineArgs::IsHelpMath() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPMATH ];
 }
 sal_Bool CommandLineArgs::IsHelpBasic() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELPBASIC ];
 }
 
 sal_Bool CommandLineArgs::IsWriter() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_WRITER ];
 }
 
 sal_Bool CommandLineArgs::IsCalc() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_CALC ];
 }
 
 sal_Bool CommandLineArgs::IsDraw() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_DRAW ];
 }
 
 sal_Bool CommandLineArgs::IsImpress() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_IMPRESS ];
 }
 
 sal_Bool CommandLineArgs::IsBase() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_BASE ];
 }
 
 sal_Bool CommandLineArgs::IsGlobal() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_GLOBAL ];
 }
 
 sal_Bool CommandLineArgs::IsMath() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_MATH ];
 }
 
 sal_Bool CommandLineArgs::IsWeb() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_WEB ];
 }
 
 sal_Bool CommandLineArgs::IsVersion() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_VERSION ];
 }
 
 sal_Bool CommandLineArgs::HasUnknown() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_UNKNOWN ];
 }
 
 sal_Bool CommandLineArgs::HasModuleParam() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_COUNT );
 }
 
 sal_Bool CommandLineArgs::GetPortalConnectString( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PORTAL ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PORTAL ];
 }
 
-sal_Bool CommandLineArgs::GetAcceptString( ::rtl::OUString& rPara ) const
+rtl::OUString CommandLineArgs::GetSplashPipe() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_ACCEPT ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_ACCEPT ];
+    return m_aStrParams[CMD_STRINGPARAM_SPLASHPIPE];
 }
 
-sal_Bool CommandLineArgs::GetUnAcceptString( ::rtl::OUString& rPara ) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetAccept() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_UNACCEPT ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_UNACCEPT ];
+    return m_accept;
+}
+
+std::vector< rtl::OUString > const & CommandLineArgs::GetUnaccept() const
+{
+    return m_unaccept;
 }
 
 sal_Bool CommandLineArgs::GetOpenList( ::rtl::OUString& rPara) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_OPENLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_OPENLIST ];
 }
 
 sal_Bool CommandLineArgs::GetViewList( ::rtl::OUString& rPara) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_VIEWLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_VIEWLIST ];
 }
 
 sal_Bool CommandLineArgs::GetStartList( ::rtl::OUString& rPara) const
 {
-      osl::MutexGuard  aMutexGuard( m_aMutex );
       rPara = m_aStrParams[ CMD_STRINGPARAM_STARTLIST ];
       return m_aStrSetParams[ CMD_STRINGPARAM_STARTLIST ];
 }
 
 sal_Bool CommandLineArgs::GetForceOpenList( ::rtl::OUString& rPara) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
 }
 
 sal_Bool CommandLineArgs::GetForceNewList( ::rtl::OUString& rPara) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_FORCENEWLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_FORCENEWLIST ];
 }
 
 sal_Bool CommandLineArgs::GetPrintList( ::rtl::OUString& rPara) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTLIST ];
 }
 
 sal_Bool CommandLineArgs::GetPrintToList( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTTOLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTTOLIST ];
 }
 
 sal_Bool CommandLineArgs::GetPrinterName( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTERNAME ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTERNAME ];
 }
 
 sal_Bool CommandLineArgs::GetLanguage( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_LANGUAGE ];
     return m_aStrSetParams[ CMD_STRINGPARAM_LANGUAGE ];
 }
 
 sal_Bool CommandLineArgs::GetInFilter( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_INFILTER ];
     return m_aStrSetParams[ CMD_STRINGPARAM_INFILTER ];
 }
 
 sal_Bool CommandLineArgs::GetConversionList( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
 }
 
 sal_Bool CommandLineArgs::GetConversionParams( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
     return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
 }
 sal_Bool CommandLineArgs::GetConversionOut( ::rtl::OUString& rPara ) const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
     return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
 }
 
 sal_Bool CommandLineArgs::IsEmpty() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_eArgumentCount == NONE;
 }
 
 sal_Bool CommandLineArgs::WantsToLoadDocument() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_bDocumentArgs;
 }
 

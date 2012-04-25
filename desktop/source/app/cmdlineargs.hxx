@@ -44,7 +44,6 @@ class CommandLineArgs
             CMD_BOOLPARAM_MINIMIZED = 0,
             CMD_BOOLPARAM_INVISIBLE,
             CMD_BOOLPARAM_NORESTORE,
-            CMD_BOOLPARAM_SERVER,
             CMD_BOOLPARAM_HEADLESS,
             CMD_BOOLPARAM_QUICKSTART,
             CMD_BOOLPARAM_NOQUICKSTART,
@@ -79,8 +78,6 @@ class CommandLineArgs
         {
             CMD_STRINGPARAM_PORTAL = 0,
             CMD_STRINGPARAM_SPLASHPIPE,
-            CMD_STRINGPARAM_ACCEPT,
-            CMD_STRINGPARAM_UNACCEPT,
             CMD_STRINGPARAM_USERDIR,
             CMD_STRINGPARAM_CLIENTDISPLAY,
             CMD_STRINGPARAM_OPENLIST,
@@ -128,10 +125,7 @@ class CommandLineArgs
 
         boost::optional< rtl::OUString > getCwdUrl() const { return m_cwdUrl; }
 
-        // generic methods to access parameter
-        void     SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
-
-        const rtl::OUString&    GetStringParam( StringParam eParam ) const;
+        void ClearServer();
 
         // Access to bool parameters
         sal_Bool                IsMinimized() const;
@@ -168,8 +162,9 @@ class CommandLineArgs
 
         // Access to string parameters
         sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
-        sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
-        sal_Bool                GetUnAcceptString( ::rtl::OUString& rPara) const;
+        rtl::OUString           GetSplashPipe() const;
+        std::vector< rtl::OUString > const & GetAccept() const;
+        std::vector< rtl::OUString > const & GetUnaccept() const;
         sal_Bool                GetOpenList( ::rtl::OUString& rPara) const;
         sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetStartList( ::rtl::OUString& rPara) const;
@@ -203,7 +198,7 @@ class CommandLineArgs
 
         sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString&, ::rtl::OUString& );
         void                    ParseCommandLine_Impl( Supplier& supplier );
-        void                    ResetParamValues();
+        void                    InitParamValues();
         sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
         void     AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
@@ -215,7 +210,11 @@ class CommandLineArgs
         sal_Bool                         m_aStrSetParams[ CMD_STRINGPARAM_COUNT ]; // Stores if string parameters are provided on cmdline
         Count                            m_eArgumentCount;                         // Number of Args
         bool                             m_bDocumentArgs;                          // A document creation/open/load arg is used
+        std::vector< rtl::OUString > m_accept;
+        std::vector< rtl::OUString > m_unaccept;
+
         mutable ::osl::Mutex             m_aMutex;
+        bool m_server;
 
         // static definition for groups where only one member can be true
         static GroupDefinition  m_pGroupDefinitions[ CMD_GRPID_COUNT ];

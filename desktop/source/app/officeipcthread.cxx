@@ -725,17 +725,24 @@ void OfficeIPCThread::execute()
             }
 
             // handle request for acceptor
-            OUString aAcceptString;
-            if ( aCmdLineArgs->GetAcceptString(aAcceptString) ) {
+            std::vector< rtl::OUString > const & accept = aCmdLineArgs->
+                GetAccept();
+            for (std::vector< rtl::OUString >::const_iterator i(accept.begin());
+                 i != accept.end(); ++i)
+            {
                 ApplicationEvent* pAppEvent = new ApplicationEvent(
-                    ApplicationEvent::TYPE_ACCEPT, aAcceptString);
+                    ApplicationEvent::TYPE_ACCEPT, *i);
                 ImplPostForeignAppEvent( pAppEvent );
             }
             // handle acceptor removal
-            OUString aUnAcceptString;
-            if ( aCmdLineArgs->GetUnAcceptString(aUnAcceptString) ) {
+            std::vector< rtl::OUString > const & unaccept = aCmdLineArgs->
+                GetUnaccept();
+            for (std::vector< rtl::OUString >::const_iterator i(
+                     unaccept.begin());
+                 i != unaccept.end(); ++i)
+            {
                 ApplicationEvent* pAppEvent = new ApplicationEvent(
-                    ApplicationEvent::TYPE_UNACCEPT, aUnAcceptString);
+                    ApplicationEvent::TYPE_UNACCEPT, *i);
                 ImplPostForeignAppEvent( pAppEvent );
             }
 

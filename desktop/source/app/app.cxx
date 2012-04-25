@@ -2970,7 +2970,7 @@ void Desktop::OpenSplashScreen()
 
         // Which splash to use
         OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
-        if ( !rCmdLine.GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).isEmpty() )
+        if ( !rCmdLine.GetSplashPipe().isEmpty() )
             aSplashService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.PipeSplashScreen"));
 
         bVisible = sal_True;

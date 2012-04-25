@@ -217,30 +217,28 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
 
         // read command line parameters
-        ::rtl::OUString conDcp;
         ::rtl::OUString aClientDisplay;
-        ::rtl::OUString aTmpString;
         sal_Bool        bHeadlessMode = sal_False;
 
         // interpret command line arguments
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
-
-        // read accept string from configuration
-        conDcp = SvtStartOptions().GetConnectionURL();
-
-        if ( rCmdLine.GetAcceptString( aTmpString ))
-            conDcp = aTmpString;
 
         // Headless mode for FAT Office
         bHeadlessMode   = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode(false);
 
-        if ( !conDcp.isEmpty() )
+        // read accept string from configuration
+        rtl::OUString conDcpCfg(SvtStartOptions().GetConnectionURL());
+        if (!conDcpCfg.isEmpty()) {
+            createAcceptor(conDcpCfg);
+        }
+
+        std::vector< ::rtl::OUString > const & conDcp = rCmdLine.GetAccept();
+        for (std::vector< ::rtl::OUString >::const_iterator i(conDcp.begin());
+             i != conDcp.end(); ++i)
         {
-            // accept incoming connections (scripting and one rvp)
-            RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) desktop::Desktop::createAcceptor()" );
-            createAcceptor(conDcp);
+            createAcceptor(*i);
         }
 
         // improves parallel processing on Sun ONE Webtop
@@ -257,7 +255,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
                 if ( !rEnum.is() )
                 {
                     // Reset server parameter so it is ignored in the furthermore startup process
-                    rCmdLine.SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
+                    rCmdLine.ClearServer();
                 }
             }
         }
