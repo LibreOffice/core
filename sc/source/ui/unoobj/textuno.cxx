@@ -297,8 +297,8 @@ void ScHeaderFooterTextObj::CreateUnoText_Impl()
     if ( !pUnoText )
     {
         //  can't be aggregated because getString/setString is handled here
-        pUnoText = new SvxUnoText(
-            new ScHeaderFooterEditSource(aTextData), lcl_GetHdFtPropertySet(), uno::Reference<text::XText>());
+        ScHeaderFooterEditSource aEditSrc(aTextData);
+        pUnoText = new SvxUnoText(&aEditSrc, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>());
         pUnoText->acquire();
     }
 }
