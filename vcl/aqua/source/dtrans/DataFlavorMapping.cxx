@@ -153,6 +153,11 @@ namespace // private
     return (theType == CPPUTYPE_SEQINT8);
   }
 
+  inline bool isOUStringType(const Type& theType)
+  {
+    return (theType == CPPUTYPE_OUSTRING);
+  }
+
 } // namespace private
 
 
@@ -599,7 +604,9 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
         }
       else // Must be OUString type
         {
-          BOOST_ASSERT(isOUStringType(data.getValueType()));
+          SAL_WARN_IF(
+              !isOUStringType(data.getValueType()), "vcl",
+              "must be OUString type");
           dp = DataProviderPtr_t(new UniDataProvider(data));
         }
     }
