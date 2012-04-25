@@ -39,7 +39,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sal/macros.h>
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 
 // =======================================================================

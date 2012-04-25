@@ -32,7 +32,6 @@
 #include <tools/errcode.hxx>
 #include <limits.h>
 
-#include <svtools/svtdata.hxx>
 #include <svl/svarray.hxx>
 #include <svl/itempool.hxx>
 
@@ -58,6 +57,8 @@ public:
 
 SV_DECL_PTRARR( SfxItemDesruptorList_Impl, SfxItemDesruptor_Impl*, 4 )
 
+static SfxItemDesruptorList_Impl *pItemDesruptList = NULL;
+
 // ------------------------------------------------------------------------
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
@@ -72,7 +73,7 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     GetpApp()->InsertIdleHdl( aLink, 1 );
 
     // und in Liste eintragen (damit geflusht werden kann)
-    SfxItemDesruptorList_Impl* &rpList = ImpSvtData::GetSvtData().pItemDesruptList;
+    SfxItemDesruptorList_Impl* &rpList = pItemDesruptList;
     if ( !rpList )
         rpList = new SfxItemDesruptorList_Impl;
     const SfxItemDesruptor_Impl *pThis = this;
@@ -88,7 +89,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
     GetpApp()->RemoveIdleHdl( aLink );
 
     // und aus Liste austragen
-    SfxItemDesruptorList_Impl* &rpList = ImpSvtData::GetSvtData().pItemDesruptList;
+    SfxItemDesruptorList_Impl* &rpList = pItemDesruptList;
     DBG_ASSERT( rpList, "no DesruptorList" );
     const SfxItemDesruptor_Impl *pThis = this;
     if ( rpList ) HACK(warum?)

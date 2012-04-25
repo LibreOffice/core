@@ -49,7 +49,7 @@
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>

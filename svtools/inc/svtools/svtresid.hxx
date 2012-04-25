@@ -26,45 +26,20 @@
  *
  ************************************************************************/
 
-#ifndef _SVTOOLS_SVTDATA_HXX
-#define _SVTOOLS_SVTDATA_HXX
+#ifndef _SVTOOLS_SVTRESID_HXX
+#define _SVTOOLS_SVTRESID_HXX
 
 #include "svtools/svtdllapi.h"
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-class ResMgr;
-class SfxItemDesruptorList_Impl;
-
-//============================================================================
-class ImpSvtData
-{
-public:
-    SfxItemDesruptorList_Impl * pItemDesruptList;
-    ResMgr *        pResMgr;
-
-private:
-    ImpSvtData():
-        pItemDesruptList(0), pResMgr(0)
-    {}
-
-    ~ImpSvtData();
-
-public:
-    ResMgr * GetResMgr(const ::com::sun::star::lang::Locale aLocale);
-    ResMgr * GetResMgr(); // VCL dependant, only available in SVT, not in SVL!
-
-    static ImpSvtData & GetSvtData();
-};
-
-//============================================================================
 class SVT_DLLPUBLIC SvtResId: public ResId
 {
 public:
     SvtResId(sal_uInt16 nId);
-     // VCL dependant, only available in SVT, not in SVL!
+    static void DeleteResMgr();
 };
 
-#endif //  _SVTOOLS_SVTDATA_HXX
+#endif //  _SVTOOLS_SVTRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

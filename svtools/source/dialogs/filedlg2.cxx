@@ -31,7 +31,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <filedlg2.hxx>
 #include <svtools/filedlg.hxx>
 #include <svtools/filedlg2.hrc>

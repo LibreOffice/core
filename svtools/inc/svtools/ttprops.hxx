@@ -32,7 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/rtti.hxx>
 #include <vcl/apptypes.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 
 class SfxPoolItem;
 class Bitmap;

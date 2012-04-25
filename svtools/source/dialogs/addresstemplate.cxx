@@ -32,7 +32,7 @@
 #include "addresstemplate.hrc"
 #include <svtools/svtools.hrc>
 #include <svtools/helpid.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>

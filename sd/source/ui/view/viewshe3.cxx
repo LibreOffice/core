@@ -35,7 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <utility>
 #include <vector>
 

@@ -139,7 +139,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svmedit.hxx,svtools/sv
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svmedit2.hxx,svtools/svmedit2.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svparser.hxx,svtools/svparser.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtabbx.hxx,svtools/svtabbx.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtdata.hxx,svtools/svtdata.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtresid.hxx,svtools/svtresid.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtdllapi.h,svtools/svtdllapi.h))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtools.hrc,svtools/svtools.hrc))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtreebx.hxx,svtools/svtreebx.hxx))

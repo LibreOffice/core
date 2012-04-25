@@ -91,7 +91,7 @@
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
 
 #include <boost/optional.hpp>

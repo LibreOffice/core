@@ -33,7 +33,7 @@
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>

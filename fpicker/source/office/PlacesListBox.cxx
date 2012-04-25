@@ -32,7 +32,7 @@
 
 #include <vcl/msgbox.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 
 #define COLUMN_NAME     1
 

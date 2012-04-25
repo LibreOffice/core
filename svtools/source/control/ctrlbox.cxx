@@ -37,7 +37,7 @@
 #include <unotools/charclass.hxx>
 
 #include <svtools/sampletext.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>

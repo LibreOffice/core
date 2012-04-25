@@ -28,7 +28,7 @@
 
 #include "svtools/toolpanel/paneltabbar.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/svtdata.hxx"
+#include "svtools/svtresid.hxx"
 #include "svtools/svtools.hrc"
 
 #include "tabitemdescriptor.hxx"

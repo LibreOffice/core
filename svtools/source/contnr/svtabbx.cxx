@@ -28,7 +28,7 @@
 
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

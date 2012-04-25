@@ -39,7 +39,7 @@
 #include <vcl/image.hxx>
 #include "svtaccessiblefactory.hxx"
 #include <filectrl.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <limits>
 

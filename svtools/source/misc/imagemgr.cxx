@@ -50,7 +50,7 @@
 #include <unotools/configmgr.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/imagemgr.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 

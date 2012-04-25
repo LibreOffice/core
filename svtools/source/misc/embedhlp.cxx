@@ -30,7 +30,7 @@
 #include <svtools/embedhlp.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/seqstream.hxx>

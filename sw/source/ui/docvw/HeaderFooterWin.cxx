@@ -59,7 +59,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <editeng/boxitem.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svx/hdft.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <vcl/decoview.hxx>

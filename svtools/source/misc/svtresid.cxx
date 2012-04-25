@@ -26,49 +26,35 @@
  *
  ************************************************************************/
 
-
-#include <map>
 #include <tools/resmgr.hxx>
-#include <tools/shl.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <vcl/svapp.hxx>
 
-//============================================================================
-//
-//  ImpSvtData
-//
-//============================================================================
+static ResMgr* pMgr=NULL;
 
-ImpSvtData::~ImpSvtData()
+namespace
 {
-    delete pResMgr;
-}
-
-//============================================================================
-ResMgr * ImpSvtData::GetResMgr(const ::com::sun::star::lang::Locale aLocale)
-{
-    if (!pResMgr)
+    ResMgr* getResMgr(const ::com::sun::star::lang::Locale aLocale)
     {
-        pResMgr = ResMgr::CreateResMgr("svt", aLocale );
+        if (!pMgr)
+            pMgr = ResMgr::CreateResMgr("svt", aLocale );
+        return pMgr;
     }
-    return pResMgr;
+
+    ResMgr* getResMgr()
+    {
+        return getResMgr(Application::GetSettings().GetUILocale());
+    }
 }
 
-ResMgr * ImpSvtData::GetResMgr()
+SvtResId::SvtResId(sal_uInt16 nId) :
+    ResId(nId, *getResMgr())
 {
-    return GetResMgr(Application::GetSettings().GetUILocale());
 }
 
-//============================================================================
-// static
-ImpSvtData & ImpSvtData::GetSvtData()
+void SvtResId::DeleteResMgr()
 {
-    void ** pAppData = GetAppData(SHL_SVT);
-    if (!*pAppData)
-        *pAppData= new ImpSvtData;
-    return *static_cast<ImpSvtData *>(*pAppData);
+    DELETEZ( pMgr );
 }
-
-SvtResId::SvtResId(sal_uInt16 nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,7 +40,7 @@
 
 // for ressource strings STR_UNDO and STR_REDO
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 
 using namespace ::com::sun::star;
 

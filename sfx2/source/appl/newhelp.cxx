@@ -93,7 +93,7 @@
 #include <svtools/menuoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamhelper.hxx>
 #include <svtools/imagemgr.hxx>

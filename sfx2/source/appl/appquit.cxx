@@ -62,6 +62,7 @@
 #include <sfx2/docfac.hxx>
 #include "appbaslib.hxx"
 #include <basic/basicmanagerrepository.hxx>
+#include <svtools/svtresid.hxx>
 
 using ::basic::BasicManagerRepository;
 
@@ -138,6 +139,7 @@ void SfxApplication::Deinitialize()
     // free administration managers
     DELETEZ(pAppData_Impl->pAppDispat);
     SfxResId::DeleteResMgr();
+    SvtResId::DeleteResMgr();
     DELETEZ(pAppData_Impl->pOfaResMgr);
 
     // from here no SvObjects have to exists

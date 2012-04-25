@@ -37,7 +37,7 @@
 #include <vcl/edit.hxx>
 #include <tools/resid.hxx>
 #include <vcl/spinfld.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 
 #include <svtools/svtools.hrc>
 

@@ -28,7 +28,7 @@
 
 #include <vcl/print.hxx>
 
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include "prnsetup.hrc"
 #include <svtools/prnsetup.hxx>
 

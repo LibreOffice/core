@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/collatorres.hxx>
 

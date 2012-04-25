@@ -28,7 +28,7 @@
 
 #include "templwin.hxx"
 #include <svtools/templdlg.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/langhelp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>

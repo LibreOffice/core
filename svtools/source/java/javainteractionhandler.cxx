@@ -46,7 +46,7 @@
 #include <tools/rcid.h>
 #include <jvmfwk/framework.h>
 
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <svtools/javacontext.hxx>
 

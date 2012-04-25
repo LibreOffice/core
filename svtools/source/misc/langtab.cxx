@@ -35,7 +35,7 @@
 #include <i18npool/mslangid.hxx>
 
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>
 

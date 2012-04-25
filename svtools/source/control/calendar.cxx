@@ -44,7 +44,7 @@
 
 #define _SV_CALENDAR_CXX
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/calendar.hxx>
 
 // =======================================================================

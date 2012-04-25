@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 
 //.........................................................................

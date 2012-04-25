@@ -33,7 +33,7 @@
 
 #include <svtools/insdlg.hxx>
 #include <svtools/sores.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <sot/clsids.hxx>

@@ -29,7 +29,7 @@
 #include "sal/config.h"
 
 #include <svtools/fileview.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>

@@ -38,7 +38,7 @@
 #include <svtools/svlbox.hxx>
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svtresid.hxx>
 #include <tools/wintypes.hxx>
 #include <svtools/svtools.hrc>
 #include <comphelper/processfactory.hxx>

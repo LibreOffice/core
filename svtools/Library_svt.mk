@@ -209,7 +209,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/sampletext \
     svtools/source/misc/stringtransfer \
     svtools/source/misc/svtaccessiblefactory \
-    svtools/source/misc/svtdata \
+    svtools/source/misc/svtresid \
     svtools/source/misc/templatefoldercache \
     svtools/source/misc/transfer \
     svtools/source/misc/transfer2 \
