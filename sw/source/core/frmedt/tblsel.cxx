@@ -115,8 +115,6 @@ struct _Sort_CellFrm
 
 typedef std::deque< _Sort_CellFrm > _Sort_CellFrms;
 
-SV_IMPL_PTRARR( SwChartBoxes, SwTableBoxPtr );
-
 const SwLayoutFrm *lcl_FindCellFrm( const SwLayoutFrm *pLay )
 {
     while ( pLay && !pLay->IsCellFrm() )
@@ -657,13 +655,13 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     const _Sort_CellFrm& rCF = aCellFrms[ n ];
                     if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
                     {
-                        pBoxes = new SwChartBoxes( 255 < nRowCells
-                                                    ? 255 : (sal_uInt8)nRowCells);
+                        pBoxes = new SwChartBoxes();
+                        pBoxes->reserve( 255 < nRowCells ? 255 : (sal_uInt8)nRowCells);
                         pGetCLines->push_back( pBoxes );
                         nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
                     }
                     SwTableBoxPtr pBox = (SwTableBox*)rCF.pFrm->GetTabBox();
-                    pBoxes->Insert( pBox, pBoxes->Count() );
+                    pBoxes->push_back( pBox );
                 }
             }
         }

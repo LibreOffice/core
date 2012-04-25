@@ -130,7 +130,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // Check if selection is balanced.
-SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16)
+class SwChartBoxes : public std::vector<SwTableBoxPtr> {};
 class SwChartLines : public boost::ptr_vector<SwChartBoxes> {};
 
 sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
