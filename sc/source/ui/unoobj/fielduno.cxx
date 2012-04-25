@@ -293,18 +293,17 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
+    SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index), 0);
+    if (!pData)
+        return uno::Reference<text::XTextField>();
 
-    if ( aTempEngine.FindByIndex( (sal_uInt16)Index, NULL ) )   // in der Zelle ist der Typ egal
-    {
-        sal_uInt16 nPar = aTempEngine.GetFieldPar();
-        xub_StrLen nPos = aTempEngine.GetFieldPos();
-        ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
-        uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
-        uno::Reference<text::XTextField> xRet(
-            new ScEditFieldObj(xContent, new ScCellEditSource(pDocShell, aCellPos), ScEditFieldObj::URL, aSelection));
-        return xRet;
-    }
-    return uno::Reference<text::XTextField>();
+    sal_uInt16 nPar = aTempEngine.GetFieldPar();
+    xub_StrLen nPos = aTempEngine.GetFieldPos();
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
+    uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
+    uno::Reference<text::XTextField> xRet(
+        new ScEditFieldObj(xContent, new ScCellEditSource(pDocShell, aCellPos), ScEditFieldObj::URL, aSelection));
+    return xRet;
 }
 
 sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
@@ -489,7 +488,7 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
 
 }
 
-ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
+uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
@@ -517,7 +516,10 @@ ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
     uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
     xTextRange = xTemp;
     ScEditFieldObj::FieldType eRealType = getFieldType(pData->GetClassId());
-    return new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection);
+
+    uno::Reference<text::XTextField> xRet(
+        new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection));
+    return xRet;
 }
 
 sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)

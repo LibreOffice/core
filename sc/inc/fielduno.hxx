@@ -146,7 +146,9 @@ private:
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex                  aMutex;
 
-    ScEditFieldObj* GetObjectByIndex_Impl(sal_Int32 Index) const;
+    com::sun::star::uno::Reference<
+        com::sun::star::text::XTextField>
+            GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
     ScHeaderFieldsObj(ScHeaderFooterTextData& rData);
