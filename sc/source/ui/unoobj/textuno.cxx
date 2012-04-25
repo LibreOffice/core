@@ -503,7 +503,7 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
     SolarMutexGuard aGuard;
     if ( xContent.is() )
     {
-        ScHeaderFieldObj* pHeaderField = ScHeaderFieldObj::getImplementation( xContent );
+        ScEditFieldObj* pHeaderField = ScEditFieldObj::getImplementation(xContent);
         if ( pHeaderField && pHeaderField->IsInserted() )
         {
             //! Testen, ob das Feld in dieser Zelle ist
