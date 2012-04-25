@@ -301,7 +301,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
         uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
         uno::Reference<text::XTextField> xRet(
-            new ScEditFieldObj(xContent, ScEditFieldObj::URL, pDocShell, aCellPos, aSelection));
+            new ScEditFieldObj(xContent, new ScCellEditSource(pDocShell, aCellPos), ScEditFieldObj::URL, aSelection));
         return xRet;
     }
     return uno::Reference<text::XTextField>();
@@ -1484,70 +1484,35 @@ SvxFieldData* ScEditFieldObj::getData()
 
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel) :
+    SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
     OComponentHelper(getMutex()),
     pPropSet(lcl_GetURLPropertySet()),
-    pDocShell(pDocSh),
-    aCellPos(rPos),
+    pEditSource(pEditSrc),
     aSelection(rSel),
     meType(eType), mpData(NULL), mpContent(rContent)
 {
     //  pDocShell ist Null, wenn per ServiceProvider erzeugt
-
-    if (pDocShell)
-    {
-        pDocShell->GetDocument()->AddUnoObject(*this);
-        pEditSource = new ScCellEditSource( pDocShell, aCellPos );
-    }
-    else
-        pEditSource = NULL;
 }
 
 void ScEditFieldObj::InitDoc(
     const uno::Reference<text::XTextRange>& rContent,
-    FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel)
+    SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel)
 {
-    if ( pDocSh && !pEditSource )
+    if (!pEditSource)
     {
         mpContent = rContent;
         meType = eType;
         mpData.reset();
 
-        aCellPos = rPos;
         aSelection = rSel;
-        pDocShell = pDocSh;
-
-        pDocShell->GetDocument()->AddUnoObject(*this);
-        pEditSource = new ScCellEditSource( pDocShell, aCellPos );
+        pEditSource = pEditSrc;
     }
 }
 
 ScEditFieldObj::~ScEditFieldObj()
 {
-    if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
-
     delete pEditSource;
 }
-
-void ScEditFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    //! Updates fuer aSelection (muessen erst noch erzeugt werden) !!!!!!
-
-    if ( rHint.ISA( ScUpdateRefHint ) )
-    {
-        //! Ref-Update
-    }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-    {
-        pDocShell = NULL;       // ungueltig geworden
-    }
-
-    //  EditSource hat sich selber als Listener angemeldet
-}
-
-// per getImplementation gerufen:
 
 SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {

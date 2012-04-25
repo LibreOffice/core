@@ -432,7 +432,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         {
             uno::Reference<text::XTextRange> xNullContent;
             xRet.set(static_cast<text::XTextField*>(
-                new ScEditFieldObj(xNullContent, ScEditFieldObj::URL, NULL, ScAddress(), ESelection())));
+                new ScEditFieldObj(xNullContent, NULL, ScEditFieldObj::URL, ESelection())));
         }
         break;
         case SC_SERVICE_PAGEFIELD:

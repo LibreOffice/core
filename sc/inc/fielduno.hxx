@@ -466,7 +466,6 @@ class ScEditFieldObj : public cppu::WeakImplHelper4<
                             com::sun::star::lang::XServiceInfo>,
                         public ScMutexHelper,
                         public ::cppu::OComponentHelper,
-                        public SfxListener,
                         private boost::noncopyable
 {
 public:
@@ -475,7 +474,6 @@ public:
 private:
     const SfxItemPropertySet* pPropSet;
     ScDocShell* pDocShell;
-    ScAddress aCellPos;
     SvxEditSource* pEditSource;
     ESelection aSelection;
 
@@ -494,17 +492,15 @@ public:
 
     ScEditFieldObj(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
+        SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
     virtual ~ScEditFieldObj();
-
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     void DeleteField();
     bool IsInserted() const;
     SvxFieldItem CreateFieldItem();
     void InitDoc(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        FieldType eType, ScDocShell* pDocSh, const ScAddress& rPos, const ESelection& rSel);
+        SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )
