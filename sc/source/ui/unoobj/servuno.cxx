@@ -424,6 +424,8 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
 {
     switch (nOldType)
     {
+        case SC_SERVICE_URLFIELD:
+            return ScEditFieldObj::URL;
         case SC_SERVICE_PAGEFIELD:
             return ScEditFieldObj::Page;
         case SC_SERVICE_PAGESFIELD:
@@ -441,7 +443,8 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
         default:
             ;
     }
-    return ScEditFieldObj::URL;
+
+    return ScEditFieldObj::URL; // default to URL for no reason whatsoever.
 }
 
 }
@@ -457,12 +460,6 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set((sheet::XSpreadsheet*)new ScTableSheetObj(NULL,0));
             break;
         case SC_SERVICE_URLFIELD:
-        {
-            uno::Reference<text::XTextRange> xNullContent;
-            xRet.set(static_cast<text::XTextField*>(
-                new ScEditFieldObj(xNullContent, NULL, ScEditFieldObj::URL, ESelection())));
-        }
-        break;
         case SC_SERVICE_PAGEFIELD:
         case SC_SERVICE_PAGESFIELD:
         case SC_SERVICE_DATEFIELD:
