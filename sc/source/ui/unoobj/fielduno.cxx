@@ -459,24 +459,32 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
 {
     switch (nOldType)
     {
-        case SC_SERVICE_PAGEFIELD:
-            return ScEditFieldObj::Page;
-        case SC_SERVICE_PAGESFIELD:
-            return ScEditFieldObj::Pages;
-        case SC_SERVICE_DATEFIELD:
+        case SVX_DATEFIELD:
             return ScEditFieldObj::Date;
-        case SC_SERVICE_TIMEFIELD:
+        case SVX_URLFIELD:
+            return ScEditFieldObj::URL;
+        case SVX_PAGEFIELD:
+            return ScEditFieldObj::Page;
+        case SVX_PAGESFIELD:
+            return ScEditFieldObj::Pages;
+        case SVX_TIMEFIELD:
             return ScEditFieldObj::Time;
-        case SC_SERVICE_TITLEFIELD:
+        case SVX_FILEFIELD:
             return ScEditFieldObj::Title;
-        case SC_SERVICE_FILEFIELD:
-            return ScEditFieldObj::File;
-        case SC_SERVICE_SHEETFIELD:
+        case SVX_TABLEFIELD:
             return ScEditFieldObj::Sheet;
+        case SVX_EXT_FILEFIELD:
+            return ScEditFieldObj::File;
+        case SVX_EXT_TIMEFIELD:
+        case SVX_AUTHORFIELD:
+        case SVX_HEADERFIELD:
+        case SVX_FOOTERFIELD:
+        case SVX_DATEFIMEFIELD:
+            // These are not supported yet.
         default:
             ;
     }
-    return ScEditFieldObj::URL;
+    return ScEditFieldObj::URL; // Default to URL for no good reason.
 }
 
 }
@@ -494,15 +502,6 @@ ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
     sal_uInt16 nPar = aTempEngine.GetFieldPar();
     xub_StrLen nPos = aTempEngine.GetFieldPos();
 
-    sal_uInt16 nFieldType = 0;
-    if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
-    else if ( pData->ISA( SvxPagesField ) )   nFieldType = SC_SERVICE_PAGESFIELD;
-    else if ( pData->ISA( SvxDateField ) )    nFieldType = SC_SERVICE_DATEFIELD;
-    else if ( pData->ISA( SvxTimeField ) )    nFieldType = SC_SERVICE_TIMEFIELD;
-    else if ( pData->ISA( SvxFileField ) )    nFieldType = SC_SERVICE_TITLEFIELD;
-    else if ( pData->ISA( SvxExtFileField ) ) nFieldType = SC_SERVICE_FILEFIELD;
-    else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
-
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
     uno::Reference<text::XTextRange> xTextRange;
     ScHeaderFooterContentObj& rContentObj = mrData.GetContentObj();
@@ -517,7 +516,7 @@ ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 
     uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
     xTextRange = xTemp;
-    ScEditFieldObj::FieldType eRealType = getFieldType(nFieldType);
+    ScEditFieldObj::FieldType eRealType = getFieldType(pData->GetClassId());
     return new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection);
 }
 
