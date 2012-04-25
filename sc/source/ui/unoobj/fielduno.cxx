@@ -1050,13 +1050,106 @@ SvxFieldData* ScEditFieldObj::getData()
     {
         switch (meType)
         {
+            case Date:
+                mpData.reset(new SvxDateField);
+            break;
+            case File:
+                mpData.reset(
+                    new SvxExtFileField(rtl::OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT));
+            break;
+            case Page:
+                mpData.reset(new SvxPageField);
+            break;
+            case Pages:
+                mpData.reset(new SvxPagesField);
+            break;
+            case Sheet:
+                mpData.reset(new SvxTableField);
+            break;
+            case Time:
+                mpData.reset(new SvxTimeField);
+            break;
+            case Title:
+                mpData.reset(new SvxFileField);
+            break;
             case URL:
                 mpData.reset(
                     new SvxURLField(rtl::OUString(), rtl::OUString(), SVXURLFORMAT_APPDEFAULT));
             break;
+            default:
+                mpData.reset(new SvxFieldData);
         }
     }
     return mpData.get();
+}
+
+void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal)
+{
+    rtl::OUString aStrVal;
+    if (pEditSource)
+    {
+        // Edit engine instance already exists for this field item.  Use it.
+        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+
+        //  Typ egal (in Zellen gibts nur URLs)
+        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
+        if (!pField)
+            return;
+
+        if (pField->GetClassId() != SVX_URLFIELD)
+            // Make sure this is indeed a URL field.
+            return;
+
+        SvxURLField* pURL = static_cast<SvxURLField*>(pField);
+
+        if (rName == SC_UNONAME_URL)
+        {
+            if (rVal >>= aStrVal)
+                pURL->SetURL(aStrVal);
+        }
+        else if (rName == SC_UNONAME_REPR)
+        {
+            if (rVal >>= aStrVal)
+                pURL->SetRepresentation(aStrVal);
+        }
+        else if (rName == SC_UNONAME_TARGET)
+        {
+            if (rVal >>= aStrVal)
+                pURL->SetTargetFrame(aStrVal);
+        }
+        else
+            throw beans::UnknownPropertyException();
+
+        pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
+        pEditSource->UpdateData();
+        return;
+    }
+
+    // Edit engine instance not yet present.  Store the item data for later use.
+    SvxFieldData* pData = getData();
+    if (!pData)
+        throw uno::RuntimeException();
+
+    SvxURLField* p = static_cast<SvxURLField*>(pData);
+    if (rName == SC_UNONAME_URL)
+    {
+        if (rVal >>= aStrVal)
+            p->SetURL(aStrVal);
+    }
+    else if (rName == SC_UNONAME_REPR)
+    {
+        if (rVal >>= aStrVal)
+            p->SetRepresentation(aStrVal);
+    }
+    else if (rName == SC_UNONAME_TARGET)
+    {
+        if (rVal >>= aStrVal)
+            p->SetTargetFrame(aStrVal);
+    }
+    else
+        throw beans::UnknownPropertyException();
 }
 
 ScEditFieldObj::ScEditFieldObj(
@@ -1215,87 +1308,10 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    rtl::OUString aStrVal;
-    if (pEditSource)
-    {
-        // Edit engine instance already exists for this field item.  Use it.
-        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
-        ScUnoEditEngine aTempEngine(pEditEngine);
-
-        //  Typ egal (in Zellen gibts nur URLs)
-        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
-        if (!pField)
-            return;
-
-        bool bOk = true;
-        switch (meType)
-        {
-            case URL:
-            {
-                if (pField->GetClassId() != SVX_URLFIELD)
-                {
-                    // Make sure this is indeed a URL field.
-                    bOk = false;
-                    break;
-                }
-                SvxURLField* pURL = static_cast<SvxURLField*>(pField);
-
-                if (aPropertyName == SC_UNONAME_URL)
-                {
-                    if (aValue >>= aStrVal)
-                        pURL->SetURL(aStrVal);
-                }
-                else if (aPropertyName == SC_UNONAME_REPR)
-                {
-                    if (aValue >>= aStrVal)
-                        pURL->SetRepresentation(aStrVal);
-                }
-                else if (aPropertyName == SC_UNONAME_TARGET)
-                {
-                    if (aValue >>= aStrVal)
-                        pURL->SetTargetFrame(aStrVal);
-                }
-                else
-                    bOk = false;
-            }
-            break;
-        }
-
-        if (bOk)
-        {
-            pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
-            pEditSource->UpdateData();
-        }
-        return;
-    }
-
-    // Edit engine instance not yet present.  Store the item data for later use.
-    SvxFieldData* pData = getData();
-    if (!pData)
-        throw uno::RuntimeException();
-
     switch (meType)
     {
         case URL:
-        {
-            SvxURLField* p = static_cast<SvxURLField*>(pData);
-            if (aPropertyName == SC_UNONAME_URL)
-            {
-                if (aValue >>= aStrVal)
-                    p->SetURL(aStrVal);
-            }
-            else if (aPropertyName == SC_UNONAME_REPR)
-            {
-                if (aValue >>= aStrVal)
-                    p->SetRepresentation(aStrVal);
-            }
-            else if (aPropertyName == SC_UNONAME_TARGET)
-            {
-                if (aValue >>= aStrVal)
-                    p->SetTargetFrame(aStrVal);
-            }
-        }
+            setPropertyValueURL(aPropertyName, aValue);
         break;
         default:
             throw beans::UnknownPropertyException();
