@@ -1922,9 +1922,9 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
         const sal_Bool bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
 
-        for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
 
             // Skip any repeated headlines in the follow:

@@ -293,9 +293,9 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         const SwCellFrm* pCurrentBottomRightFrm  = 0;
 
         // Now find boxes for each entry and emit
-        for( i = 0; i < aUnions.Count() && bTblIsValid; ++i )
+        for( i = 0; i < aUnions.size() && bTblIsValid; ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
             if( !pTable->IsValid() && nLoopMax )
             {
@@ -408,7 +408,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         SwDeletionChecker aDelCheck( pStart );
 
         // otherwise quickly "calculate" the table layout and start over
-        SwTabFrm *pTable = aUnions[0]->GetTable();
+        SwTabFrm *pTable = aUnions.front().GetTable();
         while( pTable )
         {
             if( pTable->IsValid() )
@@ -492,10 +492,10 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
         ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_NO_UNION_CORRECT );
 
         // find boxes for each entry and emit
-        for( i = 0; i < aUnions.Count() && bTblIsValid &&
+        for( i = 0; i < aUnions.size() && bTblIsValid &&
                                     bValidChartSel; ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
 
             SWRECTFN( pTable )
@@ -650,8 +650,8 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             break;
 
         // otherwise quickly "calculate" table layout and start over
-        SwTabFrm *pTable = aUnions[0]->GetTable();
-        for( i = 0; i < aUnions.Count(); ++i )
+        SwTabFrm *pTable = aUnions.front().GetTable();
+        for( i = 0; i < aUnions.size(); ++i )
         {
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
@@ -718,9 +718,9 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     sal_uInt16 i;
 
     // 1. check if box above contains value/formula
-    for( i = 0; i < aUnions.Count(); ++i )
+    for( i = 0; i < aUnions.size(); ++i )
     {
-        SwSelUnion *pUnion = aUnions[i];
+        SwSelUnion *pUnion = &aUnions[i];
         const SwTabFrm *pTable = pUnion->GetTable();
 
         // Skip any repeated headlines in the follow:
@@ -771,7 +771,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
             }
             if( bFound )
             {
-                i = aUnions.Count();
+                i = aUnions.size();
                 break;
             }
             pRow = (const SwLayoutFrm*)pRow->GetNext();
@@ -785,12 +785,12 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
         bFound = sal_False;
 
         rBoxes.clear();
-        aUnions.DeleteAndDestroy( 0, aUnions.Count() );
+        aUnions.clear();
         ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_ROW );
 
-        for( i = 0; i < aUnions.Count(); ++i )
+        for( i = 0; i < aUnions.size(); ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
 
             // Skip any repeated headlines in the follow:
@@ -839,7 +839,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                 }
                 if( !bTstRow )
                 {
-                    i = aUnions.Count();
+                    i = aUnions.size();
                     break;
                 }
 
@@ -947,10 +947,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // First, compute tables and rectangles
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
-    if( !aUnions.Count() )
+    if( aUnions.empty() )
         return;
 
-    const SwTable *pTable = aUnions[0]->GetTable()->GetTable();
+    const SwTable *pTable = aUnions.front().GetTable()->GetTable();
     SwDoc* pDoc = (SwDoc*)pStart->GetFmt()->GetDoc();
     SwTableNode* pTblNd = (SwTableNode*)pTable->GetTabSortBoxes()[ 0 ]->
                                         GetSttNd()->FindTableNode();
@@ -961,11 +961,11 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
     SWRECTFN( pStart->GetUpper() )
 
-    for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
     {
-        const SwTabFrm *pTabFrm = aUnions[i]->GetTable();
+        const SwTabFrm *pTabFrm = aUnions[i].GetTable();
 
-        SwRect &rUnion = aUnions[i]->GetUnion();
+        SwRect &rUnion = aUnions[i].GetUnion();
 
         // Skip any repeated headlines in the follow:
         const SwLayoutFrm* pRow = pTabFrm->IsFollow() ?
@@ -1511,10 +1511,6 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
     return eRet;
 }
 
-// Determines tables affected by a table selection and union rectangles
-// of the selection (also for split tables)
-SV_IMPL_PTRARR( SwSelUnions, SwSelUnion* );
-
 SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
                                                 const long nAct )
 {
@@ -1955,7 +1951,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         if( (aUnion.*fnRect->fnGetWidth)() )
         {
             SwSelUnion *pTmp = new SwSelUnion( aUnion, (SwTabFrm*)pTable );
-            rUnions.C40_INSERT( SwSelUnion, pTmp, rUnions.Count() );
+            rUnions.push_back( pTmp );
         }
 
         pTable = pTable->GetFollow();
@@ -2005,9 +2001,9 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
     ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
     // now search boxes for each entry and emit
-    for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
     {
-        SwSelUnion *pUnion = aUnions[i];
+        SwSelUnion *pUnion = &aUnions[i];
         const SwTabFrm *pTable = pUnion->GetTable();
 
         // Skip any repeated headlines in the follow:

@@ -172,7 +172,9 @@ public:
           SwTabFrm *GetTable()       { return pTable; }
 };
 
-SV_DECL_PTRARR_DEL( SwSelUnions, SwSelUnion*, 10 )
+// Determines tables affected by a table selection and union rectangles
+// of the selection (also for split tables)
+typedef boost::ptr_vector<SwSelUnion> SwSelUnions;
 
 // Gets the tables involved in a table selection and the union-rectangles of the selections
 // - also for split tables.

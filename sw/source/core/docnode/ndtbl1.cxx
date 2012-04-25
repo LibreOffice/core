@@ -595,7 +595,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
 
-    if( aUnions.Count() )
+    if( !aUnions.empty() )
     {
         SwTable& rTable = pTblNd->GetTable();
         if (GetIDocumentUndoRedo().DoesUndo())
@@ -651,12 +651,12 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         }
 
         sal_Bool bFirst = sal_True;
-        for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             SwTabFrm *pTab = pUnion->GetTable();
             const SwRect &rUnion = pUnion->GetUnion();
-            const sal_Bool bLast  = i == aUnions.Count() - 1 ? sal_True : sal_False;
+            const sal_Bool bLast  = i == aUnions.size() - 1 ? sal_True : sal_False;
 
             SvPtrarr aCellArr( 255 );
             ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
@@ -842,7 +842,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
 
-    if( aUnions.Count() )
+    if( !aUnions.empty() )
     {
         SwTable& rTable = pTblNd->GetTable();
         if (GetIDocumentUndoRedo().DoesUndo())
@@ -850,9 +850,9 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
         }
 
-        for( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
+        for( sal_uInt16 i = 0; i < aUnions.size(); ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             SwTabFrm *pTab = pUnion->GetTable();
             SvPtrarr aCellArr( 255 );
             ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
@@ -917,7 +917,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd );
 
-    if( aUnions.Count() )
+    if( !aUnions.empty() )
     {
         SvxBoxItem     aSetBox    ((const SvxBoxItem    &) rSet.Get(RES_BOX    ));
         SvxBoxInfoItem aSetBoxInfo((const SvxBoxInfoItem&) rSet.Get(SID_ATTR_BORDER_INNER));
@@ -932,13 +932,13 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 
         aSetBoxInfo.ResetFlags();
 
-        for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
         {
-            SwSelUnion *pUnion = aUnions[i];
+            SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTab = pUnion->GetTable();
             const SwRect &rUnion = pUnion->GetUnion();
             const sal_Bool bFirst = i == 0 ? sal_True : sal_False;
-            const sal_Bool bLast  = i == aUnions.Count() - 1 ? sal_True : sal_False;
+            const sal_Bool bLast  = i == aUnions.size() - 1 ? sal_True : sal_False;
 
             SvPtrarr aCellArr( 255 );
             ::lcl_CollectCells( aCellArr, rUnion, (SwTabFrm*)pTab );
@@ -1375,9 +1375,9 @@ void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols
     ::MakeSelUnions( aUnions, pStart, pEnd,
                     bWishValues ? nsSwTblSearchType::TBLSEARCH_NONE : nsSwTblSearchType::TBLSEARCH_COL );
 
-    for ( sal_uInt16 i2 = 0; i2 < aUnions.Count(); ++i2 )
+    for ( sal_uInt16 i2 = 0; i2 < aUnions.size(); ++i2 )
     {
-        SwSelUnion *pSelUnion = aUnions[i2];
+        SwSelUnion *pSelUnion = &aUnions[i2];
         const SwTabFrm *pTab = pSelUnion->GetTable();
         const SwRect &rUnion = pSelUnion->GetUnion();
 
