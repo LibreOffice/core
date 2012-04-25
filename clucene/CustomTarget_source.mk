@@ -55,6 +55,8 @@ _CLUCENE_CONFIG_H := $(SRCDIR)/clucene/configs/_clucene-config-generic.h
 endif
 endif
 
+# clucene-multimap-put.patch was proposed upstream, see
+# <http://sourceforge.net/mailarchive/message.php?msg_id=29143260>:
 $(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
 		$(_CLUCENE_CONFIG_H) $(CLUCENE_CONFIG_H)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TAR,1)
@@ -67,8 +69,6 @@ $(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-debug.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-narrowing-conversions.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-multimap-put.patch && \
-	#clucene-multimap-put.patch was proposed upstream
-	#see http://sourceforge.net/mailarchive/message.php?msg_id=29143260
 	for i in `find $(CLSO)/ -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done)
 	#FIXME ?, our rules expect .cxx
 ifneq ($(OS),WNT)
