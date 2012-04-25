@@ -139,7 +139,6 @@ class ScHeaderFieldsObj : public cppu::WeakImplHelper5<
 {
 private:
     ScHeaderFooterTextData& mrData;
-    sal_uInt16                      nType;
     ScEditSource* mpEditSource;
 
     /// List of refresh listeners.

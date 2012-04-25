@@ -427,7 +427,6 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 
 ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
     mrData(rData),
-    nType(SC_SERVICE_INVALID),
     mpRefreshListeners( NULL )
 {
     mpEditSource = new ScHeaderFooterEditSource(rData);
@@ -488,35 +487,20 @@ ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    TypeId aTypeId = NULL;
-    switch (nType)
-    {
-        case SC_SERVICE_PAGEFIELD:  aTypeId = TYPE(SvxPageField);    break;
-        case SC_SERVICE_PAGESFIELD: aTypeId = TYPE(SvxPagesField);   break;
-        case SC_SERVICE_DATEFIELD:  aTypeId = TYPE(SvxDateField);    break;
-        case SC_SERVICE_TIMEFIELD:  aTypeId = TYPE(SvxTimeField);    break;
-        case SC_SERVICE_TITLEFIELD: aTypeId = TYPE(SvxFileField);    break;
-        case SC_SERVICE_FILEFIELD:  aTypeId = TYPE(SvxExtFileField); break;
-        case SC_SERVICE_SHEETFIELD: aTypeId = TYPE(SvxTableField);   break;
-        // bei SC_SERVICE_INVALID bleibt TypeId Null
-    }
-    SvxFieldData* pData = aTempEngine.FindByIndex( (sal_uInt16)Index, aTypeId );
+    SvxFieldData* pData = aTempEngine.FindByIndex((sal_uInt16)Index, 0);
     if ( pData )
     {
         sal_uInt16 nPar = aTempEngine.GetFieldPar();
         xub_StrLen nPos = aTempEngine.GetFieldPos();
 
-        sal_uInt16 nFieldType = nType;
-        if ( nFieldType == SC_SERVICE_INVALID )
-        {
-            if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
-            else if ( pData->ISA( SvxPagesField ) )   nFieldType = SC_SERVICE_PAGESFIELD;
-            else if ( pData->ISA( SvxDateField ) )    nFieldType = SC_SERVICE_DATEFIELD;
-            else if ( pData->ISA( SvxTimeField ) )    nFieldType = SC_SERVICE_TIMEFIELD;
-            else if ( pData->ISA( SvxFileField ) )    nFieldType = SC_SERVICE_TITLEFIELD;
-            else if ( pData->ISA( SvxExtFileField ) ) nFieldType = SC_SERVICE_FILEFIELD;
-            else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
-        }
+        sal_uInt16 nFieldType = 0;
+        if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
+        else if ( pData->ISA( SvxPagesField ) )   nFieldType = SC_SERVICE_PAGESFIELD;
+        else if ( pData->ISA( SvxDateField ) )    nFieldType = SC_SERVICE_DATEFIELD;
+        else if ( pData->ISA( SvxTimeField ) )    nFieldType = SC_SERVICE_TIMEFIELD;
+        else if ( pData->ISA( SvxFileField ) )    nFieldType = SC_SERVICE_TITLEFIELD;
+        else if ( pData->ISA( SvxExtFileField ) ) nFieldType = SC_SERVICE_FILEFIELD;
+        else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
 
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
         uno::Reference<text::XTextRange> xTextRange;
@@ -545,19 +529,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
-
-    TypeId aTypeId = NULL;
-    switch (nType)
-    {
-        case SC_SERVICE_PAGEFIELD:  aTypeId = TYPE(SvxPageField);    break;
-        case SC_SERVICE_PAGESFIELD: aTypeId = TYPE(SvxPagesField);   break;
-        case SC_SERVICE_DATEFIELD:  aTypeId = TYPE(SvxDateField);    break;
-        case SC_SERVICE_TIMEFIELD:  aTypeId = TYPE(SvxTimeField);    break;
-        case SC_SERVICE_TITLEFIELD: aTypeId = TYPE(SvxFileField);    break;
-        case SC_SERVICE_FILEFIELD:  aTypeId = TYPE(SvxExtFileField); break;
-        case SC_SERVICE_SHEETFIELD: aTypeId = TYPE(SvxTableField);   break;
-    }
-    return aTempEngine.CountFields(aTypeId);        // Felder zaehlen
+    return aTempEngine.CountFields(0);
 }
 
 uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
