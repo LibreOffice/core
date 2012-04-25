@@ -87,5 +87,4 @@ void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsig
     m_critical = critical ;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
