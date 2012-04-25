@@ -63,8 +63,7 @@ struct SwRedlineDataParent
 };
 
 typedef SwRedlineDataParent* SwRedlineDataParentPtr;
-SV_DECL_PTRARR_DEL(SwRedlineDataParentArr, SwRedlineDataParentPtr, 10)
-
+typedef boost::ptr_vector<SwRedlineDataParent> SwRedlineDataParentArr;
 
 SV_DECL_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr, 10)
 

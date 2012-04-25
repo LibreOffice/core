@@ -70,7 +70,6 @@
 
 SFX_IMPL_MODELESSDIALOG( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
-SV_IMPL_PTRARR(SwRedlineDataParentArr, SwRedlineDataParentPtr)
 SV_IMPL_OP_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr)
 SV_IMPL_PTRARR(SwRedlineDataChildArr, SwRedlineDataChildPtr)
 SV_IMPL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr)
@@ -266,12 +265,12 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
     aUsedSeqNo.Remove((sal_uInt16)0, aUsedSeqNo.Count());
 
     if (nStart)
-        RemoveParents(nStart, aRedlineParents.Count() - 1);
+        RemoveParents(nStart, aRedlineParents.size() - 1);
     else
     {
         pTable->Clear();
         aRedlineChildren.DeleteAndDestroy(0, aRedlineChildren.Count());
-        aRedlineParents.DeleteAndDestroy(nStart, aRedlineParents.Count() - nStart);
+        aRedlineParents.erase(aRedlineParents.begin() + nStart, aRedlineParents.end());
     }
 
     // insert parents
@@ -424,14 +423,14 @@ void SwRedlineAcceptDlg::Activate()
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
 
-        if (i >= aRedlineParents.Count())
+        if (i >= aRedlineParents.size())
         {
             // new entries have been appended
             Init(i);
             return;
         }
 
-        pParent = aRedlineParents[i];
+        pParent = &aRedlineParents[i];
         if (&rRedln.GetRedlineData() != pParent->pData)
         {
             // Redline-Parents were inserted, changed or deleted
@@ -468,7 +467,7 @@ void SwRedlineAcceptDlg::Activate()
         }
     }
 
-    if (nCount != aRedlineParents.Count())
+    if (nCount != aRedlineParents.size())
     {
         // Redlines were deleted at the end
         Init(nCount);
@@ -479,7 +478,7 @@ void SwRedlineAcceptDlg::Activate()
     for (i = 0; i < nCount; i++)
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
-        pParent = aRedlineParents[i];
+        pParent = &aRedlineParents[i];
 
         if(!rRedln.GetComment().Equals(pParent->sComment))
         {
@@ -509,7 +508,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
-    SwRedlineDataParent *pParent = aRedlineParents[nStart];
+    SwRedlineDataParent *pParent = &aRedlineParents[nStart];
     const SwRedline& rRedln = pSh->GetRedline(nStart);
 
     if (bChild)     // should actually never happen, but just in case...
@@ -539,9 +538,9 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     // have entries been deleted?
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
     sal_uInt16 i;
-    for ( i = nStart + 1; i < aRedlineParents.Count(); i++)
+    for ( i = nStart + 1; i < aRedlineParents.size(); i++)
     {
-        if (aRedlineParents[i]->pData == pRedlineData)
+        if (aRedlineParents[i].pData == pRedlineData)
         {
             // remove entries from nStart to i-1
             RemoveParents(nStart, i - 1);
@@ -552,7 +551,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
 
     // entries been inserted?
     sal_uInt16 nCount = pSh->GetRedlineCount();
-    pRedlineData = aRedlineParents[nStart]->pData;
+    pRedlineData = aRedlineParents[nStart].pData;
 
     for (i = nStart + 1; i < nCount; i++)
     {
@@ -664,12 +663,12 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
-    sal_uInt16 nPos = Min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.Count());
+    sal_uInt16 nPos = Min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.size());
     SvLBoxEntry *pCurEntry = NULL;
     while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
     {
         --nPos;
-        pCurEntry = aRedlineParents[nPos]->pTLBParent;
+        pCurEntry = aRedlineParents[nPos].pTLBParent;
     }
 
     if (pCurEntry)
@@ -679,9 +678,9 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     for (sal_uInt16 i = nStart; i <= nEnd; i++)
     {
-        if (!bChildrenRemoved && aRedlineParents[i]->pNext)
+        if (!bChildrenRemoved && aRedlineParents[i].pNext)
         {
-            SwRedlineDataChildPtr pChildPtr = (SwRedlineDataChildPtr)aRedlineParents[i]->pNext;
+            SwRedlineDataChildPtr pChildPtr = (SwRedlineDataChildPtr)aRedlineParents[i].pNext;
             sal_uInt16 nChildPos = aRedlineChildren.GetPos(pChildPtr);
 
             if (nChildPos != USHRT_MAX)
@@ -698,7 +697,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                 bChildrenRemoved = sal_True;
             }
         }
-        SvLBoxEntry *pEntry = aRedlineParents[i]->pTLBParent;
+        SvLBoxEntry *pEntry = aRedlineParents[i].pTLBParent;
         if (pEntry)
         {
             long nIdx = aLBoxArr.Count() - 1L;
@@ -720,7 +719,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     // unfortunately by Remove it was selected from the TLB always again ...
     pTable->SelectAll(sal_False);
 
-    aRedlineParents.DeleteAndDestroy( nStart, nEnd - nStart + 1);
+    aRedlineParents.erase( aRedlineParents.begin() + nStart, aRedlineParents.begin() + nEnd);
 }
 
 void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
@@ -765,7 +764,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         String sComment(rRedln.GetComment());
         sComment.SearchAndReplaceAll((sal_Unicode)_LF,(sal_Unicode)' ');
         pRedlineParent->sComment = sComment;
-        aRedlineParents.Insert(pRedlineParent, i);
+        aRedlineParents.insert(aRedlineParents.begin() + i, pRedlineParent);
 
         pData = new RedlinData;
         pData->pData = pRedlineParent;
