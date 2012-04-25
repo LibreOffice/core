@@ -423,7 +423,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
     SolarMutexGuard aGuard;
     if ( xContent.is() && xRange.is() )
     {
-        ScHeaderFieldObj* pHeaderField = ScHeaderFieldObj::getImplementation( xContent );
+        ScEditFieldObj* pHeaderField = ScEditFieldObj::getImplementation( xContent );
 
         SvxUnoTextRangeBase* pTextRange =
             ScHeaderFooterTextCursor::getImplementation( xRange );

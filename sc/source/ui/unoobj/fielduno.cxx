@@ -454,7 +454,35 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 
 // XIndexAccess (via XTextFields)
 
-ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
+namespace {
+
+ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
+{
+    switch (nOldType)
+    {
+        case SC_SERVICE_PAGEFIELD:
+            return ScEditFieldObj::Page;
+        case SC_SERVICE_PAGESFIELD:
+            return ScEditFieldObj::Pages;
+        case SC_SERVICE_DATEFIELD:
+            return ScEditFieldObj::Date;
+        case SC_SERVICE_TIMEFIELD:
+            return ScEditFieldObj::Time;
+        case SC_SERVICE_TITLEFIELD:
+            return ScEditFieldObj::Title;
+        case SC_SERVICE_FILEFIELD:
+            return ScEditFieldObj::File;
+        case SC_SERVICE_SHEETFIELD:
+            return ScEditFieldObj::Sheet;
+        default:
+            ;
+    }
+    return ScEditFieldObj::URL;
+}
+
+}
+
+ScEditFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
@@ -504,7 +532,8 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) cons
 
         uno::Reference<text::XTextRange> xTemp(xText, uno::UNO_QUERY);
         xTextRange = xTemp;
-        return new ScHeaderFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), nFieldType, aSelection);
+        ScEditFieldObj::FieldType eRealType = getFieldType(nFieldType);
+        return new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection);
     }
     return NULL;
 }
@@ -1152,6 +1181,67 @@ void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::
         throw beans::UnknownPropertyException();
 }
 
+uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
+{
+    uno::Any aRet;
+
+    // anchor type is always "as character", text wrap always "none"
+
+    if (rName == SC_UNONAME_ANCTYPE)
+        aRet <<= text::TextContentAnchorType_AS_CHARACTER;
+    else if (rName == SC_UNONAME_ANCTYPES)
+    {
+        uno::Sequence<text::TextContentAnchorType> aSeq(1);
+        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
+        aRet <<= aSeq;
+    }
+    else if (rName == SC_UNONAME_TEXTWRAP)
+        aRet <<= text::WrapTextMode_NONE;
+    else if (pEditSource)
+    {
+        //! Feld-Funktionen muessen an den Forwarder !!!
+        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+
+        //  Typ egal (in Zellen gibts nur URLs)
+        const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
+        if (!pField)
+            throw uno::RuntimeException();
+
+        if (pField->GetClassId() != SVX_URLFIELD)
+            throw uno::RuntimeException();
+
+        const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
+
+        if (rName == SC_UNONAME_URL)
+            aRet <<= pURL->GetURL();
+        else if (rName == SC_UNONAME_REPR)
+            aRet <<= pURL->GetRepresentation();
+        else if (rName == SC_UNONAME_TARGET)
+            aRet <<= pURL->GetTargetFrame();
+        else
+            throw beans::UnknownPropertyException();
+    }
+    else        // noch nicht eingefuegt
+    {
+        const SvxFieldData* pField = getData();
+        if (!pField)
+            return aRet;
+
+        const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
+        if (rName == SC_UNONAME_URL)
+            aRet <<= pURL->GetURL();
+        else if (rName == SC_UNONAME_REPR)
+            aRet <<= pURL->GetRepresentation();
+        else if (rName == SC_UNONAME_TARGET)
+            aRet <<= pURL->GetTargetFrame();
+        else
+            throw beans::UnknownPropertyException();
+    }
+    return aRet;
+}
+
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
@@ -1165,13 +1255,11 @@ ScEditFieldObj::ScEditFieldObj(
 }
 
 void ScEditFieldObj::InitDoc(
-    const uno::Reference<text::XTextRange>& rContent,
-    SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel)
+    const uno::Reference<text::XTextRange>& rContent, SvxEditSource* pEditSrc, const ESelection& rSel)
 {
     if (!pEditSource)
     {
         mpContent = rContent;
-        meType = eType;
         mpData.reset();
 
         aSelection = rSel;
@@ -1187,7 +1275,7 @@ ScEditFieldObj::~ScEditFieldObj()
 SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {
     OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
-    return SvxFieldItem(*mpData, EE_FEATURE_FIELD);
+    return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
 }
 
 void ScEditFieldObj::DeleteField()
@@ -1245,7 +1333,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         default:
             ;
     }
-    return rtl::OUString();
+    return rtl::OUString("fail");
 }
 
 // XTextContent
@@ -1323,75 +1411,14 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
-
-    // anchor type is always "as character", text wrap always "none"
-
-    if (aPropertyName == SC_UNONAME_ANCTYPE)
-        aRet <<= text::TextContentAnchorType_AS_CHARACTER;
-    else if (aPropertyName == SC_UNONAME_ANCTYPES)
+    switch (meType)
     {
-        uno::Sequence<text::TextContentAnchorType> aSeq(1);
-        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
-        aRet <<= aSeq;
+        case URL:
+            return getPropertyValueURL(aPropertyName);
+        break;
+        default:
+            throw beans::UnknownPropertyException();
     }
-    else if (aPropertyName == SC_UNONAME_TEXTWRAP)
-        aRet <<= text::WrapTextMode_NONE;
-    else if (pEditSource)
-    {
-        //! Feld-Funktionen muessen an den Forwarder !!!
-        ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
-        ScUnoEditEngine aTempEngine(pEditEngine);
-
-        //  Typ egal (in Zellen gibts nur URLs)
-        const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
-        if (!pField)
-            throw uno::RuntimeException();
-
-        switch (meType)
-        {
-            case URL:
-            {
-                if (pField->GetClassId() != SVX_URLFIELD)
-                    throw uno::RuntimeException();
-
-                const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
-
-                if (aPropertyName == SC_UNONAME_URL)
-                    aRet <<= pURL->GetURL();
-                else if (aPropertyName == SC_UNONAME_REPR)
-                    aRet <<= pURL->GetRepresentation();
-                else if (aPropertyName == SC_UNONAME_TARGET)
-                    aRet <<= pURL->GetTargetFrame();
-            }
-            break;
-        }
-    }
-    else        // noch nicht eingefuegt
-    {
-        const SvxFieldData* pField = getData();
-        if (!pField)
-            return aRet;
-
-        switch (meType)
-        {
-            case URL:
-            {
-                const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
-                if (aPropertyName == SC_UNONAME_URL)
-                    aRet <<= pURL->GetURL();
-                else if (aPropertyName == SC_UNONAME_REPR)
-                    aRet <<= pURL->GetRepresentation();
-                else if (aPropertyName == SC_UNONAME_TARGET)
-                    aRet <<= pURL->GetTargetFrame();
-            }
-            break;
-            default:
-                ;
-        }
-    }
-    return aRet;
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )

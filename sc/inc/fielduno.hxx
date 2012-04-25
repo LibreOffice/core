@@ -55,7 +55,6 @@ class SvxEditSource;
 class SvxFieldItem;
 class SvxFieldData;
 class ScEditFieldObj;
-class ScHeaderFieldObj;
 class ScHeaderFooterContentObj;
 class ScDocShell;
 class EditTextObject;
@@ -148,7 +147,7 @@ private:
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex                  aMutex;
 
-    ScHeaderFieldObj*       GetObjectByIndex_Impl(sal_Int32 Index) const;
+    ScEditFieldObj* GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
     ScHeaderFieldsObj(ScHeaderFooterTextData& rData);
@@ -355,6 +354,7 @@ private:
     SvxFieldData* getData();
 
     void setPropertyValueURL(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
+    com::sun::star::uno::Any getPropertyValueURL(const rtl::OUString& rName);
 
 public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
@@ -370,7 +370,7 @@ public:
     SvxFieldItem CreateFieldItem();
     void InitDoc(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        SvxEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
+        SvxEditSource* pEditSrc, const ESelection& rSel);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )

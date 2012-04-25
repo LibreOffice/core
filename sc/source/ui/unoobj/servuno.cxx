@@ -418,6 +418,34 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
     return SC_SERVICE_INVALID;
 }
 
+namespace {
+
+ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
+{
+    switch (nOldType)
+    {
+        case SC_SERVICE_PAGEFIELD:
+            return ScEditFieldObj::Page;
+        case SC_SERVICE_PAGESFIELD:
+            return ScEditFieldObj::Pages;
+        case SC_SERVICE_DATEFIELD:
+            return ScEditFieldObj::Date;
+        case SC_SERVICE_TIMEFIELD:
+            return ScEditFieldObj::Time;
+        case SC_SERVICE_TITLEFIELD:
+            return ScEditFieldObj::Title;
+        case SC_SERVICE_FILEFIELD:
+            return ScEditFieldObj::File;
+        case SC_SERVICE_SHEETFIELD:
+            return ScEditFieldObj::Sheet;
+        default:
+            ;
+    }
+    return ScEditFieldObj::URL;
+}
+
+}
+
 uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                                     sal_uInt16 nType, ScDocShell* pDocShell )
 {
@@ -445,7 +473,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         {
             uno::Reference<text::XTextRange> xNullContent;
             xRet.set(static_cast<text::XTextField*>(
-                new ScHeaderFieldObj(xNullContent, NULL, nType, ESelection())));
+                new ScEditFieldObj(xNullContent, NULL, getFieldType(nType), ESelection())));
         }
         break;
         case SC_SERVICE_CELLSTYLE:
