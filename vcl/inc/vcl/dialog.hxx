@@ -78,7 +78,6 @@ protected:
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                    Dialog( Window* pParent, const ResId& rResId );
     virtual         ~Dialog();
 
     virtual long    Notify( NotifyEvent& rNEvt );

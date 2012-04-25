@@ -409,17 +409,6 @@ Dialog::Dialog( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-Dialog::Dialog( Window* pParent, const ResId& rResId ) :
-    SystemWindow( WINDOW_DIALOG )
-{
-    ImplInitDialogData();
-    rResId.SetRT( RSC_DIALOG );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
-}
-
-// -----------------------------------------------------------------------
-
 Dialog::~Dialog()
 {
     delete mpDialogImpl;
