@@ -168,7 +168,7 @@ class AddressMultiLineEdit : public MultiLineEdit, public SfxListener
     Link                            m_aSelectionLink;
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
 
-    using Window::Notify;
+    using MultiLineEdit::Notify;
 
     using MultiLineEdit::SetText;
 
