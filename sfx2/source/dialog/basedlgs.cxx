@@ -18,6 +18,7 @@
  */
 
 #include <stdlib.h>
+#include <comphelper/processfactory.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
@@ -162,8 +163,47 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 :   ModalDialog(pParent, rResId),
     nUniqId(rResId.GetId()),
     pInputSet(0),
+    pOutputSet(0),
+    m_pUIBuilder(0)
+{
+    init();
+}
+
+#define BASEPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIConfig"))
+#define RELPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice.cfg"))
+#define SERVICENAME_PATHSETTINGS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings"))
+
+SfxModalDialog::SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
+:   ModalDialog(pParent, 0), //todo
+    nUniqId(0), //todo
+    pInputSet(0),
     pOutputSet(0)
 {
+    namespace css = ::com::sun::star;
+
+    /*to-do, check if user config has an override before using shared one, etc*/
+    css::uno::Reference< css::beans::XPropertySet > xPathSettings(
+        ::comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_PATHSETTINGS),
+                css::uno::UNO_QUERY_THROW);
+
+    ::rtl::OUString sShareLayer;
+    xPathSettings->getPropertyValue(BASEPATH_SHARE_LAYER) >>= sShareLayer;
+
+    // "UIConfig" is a "multi path" ... use first part only here!
+    sal_Int32 nPos = sShareLayer.indexOf(';');
+    if (nPos > 0)
+        sShareLayer = sShareLayer.copy(0, nPos);
+
+    // Note: May be an user uses URLs without a final slash! Check it ...
+    nPos = sShareLayer.lastIndexOf('/');
+    if (nPos != sShareLayer.getLength()-1)
+        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+
+    sShareLayer += RELPATH_SHARE_LAYER; // folder
+    sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
+
+    m_pUIBuilder = new VclBuilder(this, sShareLayer + rUIXMLDescription, rID);
     init();
 }
 
@@ -182,7 +222,8 @@ SfxModalDialog::SfxModalDialog(Window* pParent,
     ModalDialog(pParent, nWinStyle),
     nUniqId(nUniqueId),
     pInputSet(0),
-    pOutputSet(0)
+    pOutputSet(0),
+    m_pUIBuilder(0)
 {
     init();
 }
@@ -199,6 +240,7 @@ SfxModalDialog::~SfxModalDialog()
 {
     SetDialogData_Impl();
     delete pOutputSet;
+    delete m_pUIBuilder;
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )

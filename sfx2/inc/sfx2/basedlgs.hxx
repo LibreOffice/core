@@ -22,9 +22,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
+#include <vcl/builder.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/dialog.hxx>
 
 class TabPage;
 class SfxTabPage;
@@ -69,7 +70,10 @@ private:
     SAL_DLLPRIVATE void init();
 
 protected:
+    VclBuilder              *m_pUIBuilder;
+
     SfxModalDialog(Window *pParent, const ResId& );
+    SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
     SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
     String&             GetExtraData()      { return aExtraData; }
