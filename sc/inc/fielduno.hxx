@@ -340,7 +340,6 @@ public:
 
 private:
     const SfxItemPropertySet* pPropSet;
-    ScDocShell* pDocShell;
     SvxEditSource* pEditSource;
     ESelection aSelection;
 
