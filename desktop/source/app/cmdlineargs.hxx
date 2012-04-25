@@ -29,6 +29,10 @@
 #ifndef _DESKTOP_COMMANDLINEARGS_HXX_
 #define _DESKTOP_COMMANDLINEARGS_HXX_
 
+#include "sal/config.h"
+
+#include <vector>
+
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include "boost/optional.hpp"
