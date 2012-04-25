@@ -20,7 +20,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #
 #
-# check_xml.pl - check xml,xcs,xcu files size, NULL character
+# check_xml.pl - check ui,xml,xcs,xcu files size, NULL character
 #
 
 my
@@ -73,7 +73,7 @@ sub check       #04.02.2005 13:40
     my $path = shift;
     my $file = shift;
     print "$path$file\n" if ((-e "$path$file") && $is_debug);
-    return if ( $file !~ /.+\.(xcu|xml|xcs)/ ); #check xml and xcu files only
+    return if ( $file !~ /.+\.(ui|xcu|xml|xcs)/ ); #check ui, xml and xcu files only
     if ( -z "$path$file" ) {
         print "Error: $path$file 0 Bytes!\n";
         $err++;
