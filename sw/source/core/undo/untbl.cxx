@@ -87,8 +87,10 @@ extern void ClearFEShellTabCols();
 typedef SfxItemSet* SfxItemSetPtr;
 SV_DECL_PTRARR_DEL( SfxItemSets, SfxItemSetPtr, 10 )
 
-typedef SwUndoSaveSection* SwUndoSaveSectionPtr;
-SV_DECL_PTRARR_DEL( SwUndoSaveSections, SwUndoSaveSectionPtr, 0 )
+class SwUndoSaveSections : public boost::ptr_vector<SwUndoSaveSection> {
+public:
+    SwUndoSaveSections(size_type n) : boost::ptr_vector<SwUndoSaveSection>(n) {}
+};
 
 class SwUndoMoves : public boost::ptr_vector<SwUndoMove> {};
 
@@ -220,7 +222,6 @@ struct SwTblToTxtSave
 };
 
 SV_IMPL_PTRARR( SfxItemSets, SfxItemSetPtr )
-SV_IMPL_PTRARR( SwUndoSaveSections, SwUndoSaveSectionPtr )
 
 sal_uInt16 aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
@@ -1736,7 +1737,7 @@ void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
     SwUndoSaveSection* pSave = new SwUndoSaveSection;
     pSave->SaveSection( pSttNd->GetDoc(), SwNodeIndex( *pSttNd ));
 
-    pDelSects->Insert( pSave, pDelSects->Count() );
+    pDelSects->push_back( pSave );
     nSttNode = pTblNd->GetIndex();
 }
 
@@ -1768,9 +1769,9 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
         // die Sections wieder herstellen
-        for( sal_uInt16 n = pDelSects->Count(); n; )
+        for( sal_uInt16 n = pDelSects->size(); n; )
         {
-            SwUndoSaveSection* pSave = (*pDelSects)[ --n ];
+            SwUndoSaveSection* pSave = &(*pDelSects)[ --n ];
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
             if( pSave->GetHistory() )
                 pSave->GetHistory()->Rollback( &rDoc );
@@ -1778,7 +1779,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                                                 pCpyBox->GetUpper() );
             rLnBoxes.C40_INSERT( SwTableBox, pBox, rLnBoxes.Count() );
         }
-        pDelSects->DeleteAndDestroy( 0, pDelSects->Count() );
+        pDelSects->clear();
     }
     else if( !pNewSttNds->empty() )
     {
@@ -1955,9 +1956,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             if( pUndo )
             {
-                pDelSects->Insert( pUndo->pDelSects.get(), 0 );
-                pUndo->pDelSects->Remove( 0, pUndo->pDelSects->Count() );
-
+                pDelSects->transfer( pDelSects->begin(), *pUndo->pDelSects.get() );
                 delete pUndo;
             }
             rDoc.GetIDocumentUndoRedo().DoUndo( false );
