@@ -397,6 +397,8 @@ namespace writerfilter {
                 void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
 
                 void text(rtl::OUString& rString);
+                // Sends a single character to dmapper, taking care of buffering.
+                void singleChar(sal_uInt8 nValue);
                 void parBreak();
                 void tableBreak();
                 void checkNeedPap();

@@ -833,6 +833,24 @@ bool RTFFrame::inFrame()
         || nY > 0;
 }
 
+void RTFDocumentImpl::singleChar(sal_uInt8 nValue)
+{
+    sal_uInt8 sValue[] = { nValue };
+    if (!m_pCurrentBuffer)
+    {
+        Mapper().startCharacterGroup();
+        Mapper().text(sValue, 1);
+        Mapper().endCharacterGroup();
+    }
+    else
+    {
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
+        RTFValue::Pointer_t pValue(new RTFValue(*sValue));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
+    }
+}
+
 void RTFDocumentImpl::text(OUString& rString)
 {
     bool bRet = true;
@@ -1075,22 +1093,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (aBuf.toString().equals("EQ"))
                     m_bEq = true;
                 else
-                {
-                    sal_uInt8 sFieldStart[] = { 0x13 };
-                    if (!m_pCurrentBuffer)
-                    {
-                        Mapper().startCharacterGroup();
-                        Mapper().text(sFieldStart, 1);
-                        Mapper().endCharacterGroup();
-                    }
-                    else
-                    {
-                        m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
-                        RTFValue::Pointer_t pValue(new RTFValue(*sFieldStart));
-                        m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
-                        m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
-                    }
-                }
+                    singleChar(0x13);
                 m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
             }
             break;
@@ -3025,42 +3028,12 @@ int RTFDocumentImpl::popState()
             m_aFormfieldSprms->clear();
         }
         if (!m_bEq)
-        {
-            sal_uInt8 sFieldSep[] = { 0x14 };
-            if (!m_pCurrentBuffer)
-            {
-                Mapper().startCharacterGroup();
-                Mapper().text(sFieldSep, 1);
-                Mapper().endCharacterGroup();
-            }
-            else
-            {
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
-                RTFValue::Pointer_t pValue(new RTFValue(*sFieldSep));
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
-            }
-        }
+            singleChar(0x14);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
         if (!m_bEq)
-        {
-            sal_uInt8 sFieldEnd[] = { 0x15 };
-            if (!m_pCurrentBuffer)
-            {
-                Mapper().startCharacterGroup();
-                Mapper().text(sFieldEnd, 1);
-                Mapper().endCharacterGroup();
-            }
-            else
-            {
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
-                RTFValue::Pointer_t pValue(new RTFValue(*sFieldEnd));
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
-            }
-        }
+            singleChar(0x15);
         else
             m_bEq = false;
     }
@@ -3465,22 +3438,7 @@ int RTFDocumentImpl::popState()
     else if (aState.nDestinationState == DESTINATION_FIELD)
     {
         if (aState.nFieldStatus == FIELD_INSTRUCTION)
-        {
-            sal_uInt8 sFieldEnd[] = { 0x15 };
-            if (!m_pCurrentBuffer)
-            {
-                Mapper().startCharacterGroup();
-                Mapper().text(sFieldEnd, 1);
-                Mapper().endCharacterGroup();
-            }
-            else
-            {
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
-                RTFValue::Pointer_t pValue(new RTFValue(*sFieldEnd));
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
-                m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
-            }
-        }
+            singleChar(0x15);
     }
     else if (bPopShapeProperties)
     {
