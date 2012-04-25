@@ -156,9 +156,7 @@ struct AutoMarkEntry
         bCase(sal_False),
         bWord(sal_False){}
 };
-typedef AutoMarkEntry* AutoMarkEntryPtr;
-SV_DECL_PTRARR_DEL(AutoMarkEntryArr, AutoMarkEntryPtr, 0)
-SV_IMPL_PTRARR(AutoMarkEntryArr, AutoMarkEntryPtr);
+typedef boost::ptr_vector<AutoMarkEntry> AutoMarkEntryArr;
 
 typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
@@ -3981,9 +3979,9 @@ sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
 String SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     const String* pRet = &aEmptyStr;
-    if(aEntryArr.Count() > nRow)
+    if(static_cast<sal_uInt16>( aEntryArr.size() ) > nRow)
     {
-        AutoMarkEntry* pEntry = aEntryArr[ static_cast< sal_uInt16 >(nRow) ];
+        const AutoMarkEntry* pEntry = &aEntryArr[ nRow ];
         switch(nColumn)
         {
             case  ITEM_SEARCH       :pRet = &pEntry->sSearch; break;
@@ -4030,8 +4028,8 @@ sal_Bool SwEntryBrowseBox::SaveModified()
         pController = xCheckController;
         bVal = ((::svt::CheckBoxCellController*)pController)->GetCheckBox().IsChecked();
     }
-    AutoMarkEntry* pEntry = nRow >= aEntryArr.Count() ? new AutoMarkEntry
-                                                      : aEntryArr[nRow];
+    AutoMarkEntry* pEntry = nRow >= aEntryArr.size() ? new AutoMarkEntry
+                                                      : &aEntryArr[nRow];
     switch(nCol)
     {
         case  ITEM_SEARCH       : pEntry->sSearch = sNew; break;
@@ -4042,9 +4040,9 @@ sal_Bool SwEntryBrowseBox::SaveModified()
         case  ITEM_CASE         : pEntry->bCase = bVal; break;
         case  ITEM_WORDONLY     : pEntry->bWord = bVal; break;
     }
-    if(nRow >= aEntryArr.Count())
+    if(nRow >= aEntryArr.size())
     {
-        aEntryArr.Insert( pEntry, aEntryArr.Count() );
+        aEntryArr.push_back( pEntry );
         RowInserted(nRow, 1, sal_True, sal_True);
         if(nCol < ITEM_WORDONLY)
         {
@@ -4109,13 +4107,13 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 sStr = sLine.GetToken(0, ';', nSttPos );
                 pToInsert->bWord = sStr.Len() && sStr != sZero;
 
-                aEntryArr.Insert( pToInsert, aEntryArr.Count() );
+                aEntryArr.push_back( pToInsert );
                 pToInsert = 0;
             }
             else
             {
                 if(pToInsert)
-                    aEntryArr.Insert(pToInsert, aEntryArr.Count());
+                    aEntryArr.push_back(pToInsert);
                 pToInsert = new AutoMarkEntry;
                 pToInsert->sComment = sLine;
                 pToInsert->sComment.Erase(0, 1);
@@ -4123,8 +4121,8 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
         }
     }
     if( pToInsert )
-        aEntryArr.Insert(pToInsert, aEntryArr.Count());
-    RowInserted(0, aEntryArr.Count() + 1, sal_True);
+        aEntryArr.push_back(pToInsert);
+    RowInserted(0, aEntryArr.size() + 1, sal_True);
 }
 
 void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
@@ -4140,9 +4138,9 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         GoToColumnId(nCol < ITEM_CASE ? ++nCol : --nCol );
 
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
-    for(sal_uInt16 i = 0; i < aEntryArr.Count();i++)
+    for(sal_uInt16 i = 0; i < aEntryArr.size(); i++)
     {
-        AutoMarkEntry* pEntry = aEntryArr[i];
+        AutoMarkEntry* pEntry = &aEntryArr[i];
         if(pEntry->sComment.Len())
         {
             String sWrite('#');
