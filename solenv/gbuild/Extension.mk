@@ -189,7 +189,7 @@ $(call gb_Extension_get_rootdir,$(1))/$(2) : $(gb_Extension_HELPEXTARGET)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@) && \
-	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(SDF)
+	$(gb_Extension_HELPEXCOMMAND) -i $$(call gb_Helper_native_path,$$<) -o $$(call gb_Helper_native_path,$$@) -l $(4) -m $$(call gb_Helper_native_path,$$(SDF))
 
 endef
 
