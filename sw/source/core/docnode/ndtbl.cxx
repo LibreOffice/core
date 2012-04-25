@@ -1834,7 +1834,7 @@ sal_Bool SwDoc::DeleteRow( const SwCursor& rCursor )
         while( 1 == pFndBox->GetLines().size() &&
                 1 == pFndBox->GetLines().front().GetBoxes().size() )
         {
-            _FndBox* pTmp = pFndBox->GetLines().front().GetBoxes()[0];
+            _FndBox *const pTmp = & pFndBox->GetLines().front().GetBoxes()[0];
             if( pTmp->GetBox()->GetSttNd() )
                 break;      // das ist sonst zu weit
             pFndBox = pTmp;
@@ -3639,20 +3639,22 @@ struct _SetAFmtTabPara
 
 // forward deklarieren damit sich die Lines und Boxen rekursiv aufrufen
 // koennen.
-sal_Bool lcl_SetAFmtBox( _FndBox* pBox, _SetAFmtTabPara *pSetPara );
-sal_Bool lcl_SetAFmtLine( const _FndLine&, _SetAFmtTabPara *pPara );
+sal_Bool lcl_SetAFmtBox(_FndBox &, _SetAFmtTabPara *pSetPara);
+sal_Bool lcl_SetAFmtLine(_FndLine &, _SetAFmtTabPara *pPara);
 
-sal_Bool lcl_SetAFmtLine( const _FndLine& rLine, _SetAFmtTabPara *pPara )
+sal_Bool lcl_SetAFmtLine(_FndLine & rLine, _SetAFmtTabPara *pPara)
 {
-    for (_FndBoxes::const_iterator it = rLine.GetBoxes().begin();
+    for (_FndBoxes::iterator it = rLine.GetBoxes().begin();
          it != rLine.GetBoxes().end(); ++it)
+    {
         lcl_SetAFmtBox(*it, pPara);
+    }
     return sal_True;
 }
 
-sal_Bool lcl_SetAFmtBox( _FndBox* pBox, _SetAFmtTabPara *pSetPara )
+sal_Bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
 {
-    if( !pBox->GetUpper()->GetUpper() )    // Box auf 1. Ebene ?
+    if (!rBox.GetUpper()->GetUpper())     // Box on first level?
     {
         if( !pSetPara->nCurBox )
             pSetPara->nAFmtBox = 0;
@@ -3662,9 +3664,9 @@ sal_Bool lcl_SetAFmtBox( _FndBox* pBox, _SetAFmtTabPara *pSetPara )
             pSetPara->nAFmtBox = (sal_uInt8)(1 + ((pSetPara->nCurBox-1) & 1));
     }
 
-    if( pBox->GetBox()->GetSttNd() )
+    if (rBox.GetBox()->GetSttNd())
     {
-        SwTableBox* pSetBox = (SwTableBox*)pBox->GetBox();
+        SwTableBox* pSetBox = static_cast<SwTableBox*>(rBox.GetBox());
         SwDoc* pDoc = pSetBox->GetFrmFmt()->GetDoc();
         SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
         SfxItemSet aBoxSet( pDoc->GetAttrPool(), aTableBoxSetRange );
@@ -3696,10 +3698,10 @@ sal_Bool lcl_SetAFmtBox( _FndBox* pBox, _SetAFmtTabPara *pSetPara )
         }
     }
     else
-        BOOST_FOREACH( _FndLine& rFndLine, pBox->GetLines() )
+        BOOST_FOREACH( _FndLine& rFndLine, rBox.GetLines() )
             lcl_SetAFmtLine( rFndLine, pSetPara );
 
-    if( !pBox->GetUpper()->GetUpper() )        // eine BaseLine
+    if (!rBox.GetUpper()->GetUpper())     // a BaseLine
         ++pSetPara->nCurBox;
     return sal_True;
 }
@@ -3727,7 +3729,9 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
             1 == pFndBox->GetLines().front().GetBoxes().size() )
-        pFndBox = pFndBox->GetLines().front().GetBoxes()[0];
+    {
+        pFndBox = &pFndBox->GetLines().front().GetBoxes()[0];
+    }
 
     if( pFndBox->GetLines().empty() )      // eine zu weit? (nur 1 sel.Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
@@ -3757,7 +3761,7 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
 
         if( !n )
             aPara.nAFmtLine = 0;
-        else if( n+1 == rFLns.size() )
+        else if (static_cast<size_t>(n+1) == rFLns.size())
             aPara.nAFmtLine = 3;
         else
             aPara.nAFmtLine = (sal_uInt8)(1 + ((n-1) & 1 ));
@@ -3766,9 +3770,11 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
         aPara.nCurBox = 0;
         aPara.nEndBox = pLine->GetBoxes().size()-1;
         aPara.pUndo = pUndo;
-        for (_FndBoxes::const_iterator it = pLine->GetBoxes().begin();
+        for (_FndBoxes::iterator it = pLine->GetBoxes().begin();
              it != pLine->GetBoxes().end(); ++it)
+        {
             lcl_SetAFmtBox(*it, &aPara);
+        }
 
         pLine->SetUpper( pSaveBox );
     }
@@ -3805,7 +3811,9 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
             1 == pFndBox->GetLines().front().GetBoxes().size() )
-        pFndBox = pFndBox->GetLines().front().GetBoxes()[0];
+    {
+        pFndBox = &pFndBox->GetLines().front().GetBoxes()[0];
+    }
 
     if( pFndBox->GetLines().empty() )      // eine zu weit? (nur 1 sel.Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
@@ -3830,7 +3838,7 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
 
         for( sal_uInt8 nBox = 0; nBox < 4; ++nBox )
         {
-            SwTableBox* pFBox = rLine.GetBoxes()[ aBoxArr[ nBox ] ]->GetBox();
+            SwTableBox* pFBox = rLine.GetBoxes()[ aBoxArr[ nBox ] ].GetBox();
             // immer auf die 1. runterfallen
             while( !pFBox->GetSttNd() )
                 pFBox = pFBox->GetTabLines()[0]->GetTabBoxes()[0];

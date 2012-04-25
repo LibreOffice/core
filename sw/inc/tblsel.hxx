@@ -194,7 +194,7 @@ void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
 class _FndBox;
 class _FndLine;
 
-typedef std::vector<_FndBox*> _FndBoxes;
+typedef boost::ptr_vector<_FndBox> _FndBoxes;
 typedef boost::ptr_vector<_FndLine> _FndLines;
 
 class _FndBox

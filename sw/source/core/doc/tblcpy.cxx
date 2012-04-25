@@ -882,7 +882,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // See if the Box count is high enough for the Lines
                 SwTableLine* pLastLn = GetTabLines()[ GetTabLines().Count()-1 ];
 
-                pSttBox = pFLine->GetBoxes()[0]->GetBox();
+                pSttBox = pFLine->GetBoxes()[0].GetBox();
                 nSttBox = pFLine->GetLine()->GetTabBoxes().C40_GETPOS( SwTableBox, pSttBox );
                 for( sal_uInt16 n = rCpyTbl.GetTabLines().Count() - nNewLns;
                         n < rCpyTbl.GetTabLines().Count(); ++n )
@@ -927,7 +927,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             // We have enough rows, so check the Boxes per row
             pFLine = &aFndBox.GetLines()[ nLn % nFndCnt ];
             SwTableLine* pLine = pFLine->GetLine();
-            pSttBox = pFLine->GetBoxes()[0]->GetBox();
+            pSttBox = pFLine->GetBoxes()[0].GetBox();
             nSttBox = pLine->GetTabBoxes().C40_GETPOS( SwTableBox, pSttBox );
             if( nLn >= nFndCnt )
             {
@@ -991,7 +991,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
                 // Test for nesting
                 for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
-                    if( !pFLine->GetBoxes()[ nBx ]->GetBox()->GetSttNd() )
+                    if (!pFLine->GetBoxes()[nBx].GetBox()->GetSttNd())
                         return sal_False;
             }
         }
@@ -1029,7 +1029,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // Copy the pCpyBox into pMyBox
                 lcl_CpyBox( rCpyTbl, pCpyLn->GetTabBoxes()[
                             nBx % pCpyLn->GetTabBoxes().Count() ],
-                    *this, pFLine->GetBoxes()[ nBx ]->GetBox(), sal_True, pUndo );
+                    *this, pFLine->GetBoxes()[nBx].GetBox(), sal_True, pUndo );
             }
         }
 

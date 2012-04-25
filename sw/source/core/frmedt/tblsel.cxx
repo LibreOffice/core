@@ -1448,29 +1448,33 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 }
 
 
-static sal_Bool lcl_CheckCol( _FndBox* pFndBox, sal_Bool* pPara );
+static sal_Bool lcl_CheckCol(_FndBox const&, sal_Bool* pPara);
 
 static sal_Bool lcl_CheckRow( const _FndLine& rFndLine, sal_Bool* pPara )
 {
     for (_FndBoxes::const_iterator it = rFndLine.GetBoxes().begin();
          it != rFndLine.GetBoxes().end(); ++it)
+    {
         lcl_CheckCol(*it, pPara);
+    }
     return *pPara;
 }
 
-static sal_Bool lcl_CheckCol( _FndBox* pFndBox, sal_Bool* pPara )
+static sal_Bool lcl_CheckCol( _FndBox const& rFndBox, sal_Bool* pPara )
 {
-    if( !pFndBox->GetBox()->GetSttNd() )
+    if (!rFndBox.GetBox()->GetSttNd())
     {
-        if( pFndBox->GetLines().size() !=
-            pFndBox->GetBox()->GetTabLines().Count() )
+        if (rFndBox.GetLines().size() !=
+            rFndBox.GetBox()->GetTabLines().Count())
+        {
             *pPara = sal_False;
+        }
         else
-            BOOST_FOREACH( _FndLine& rFndLine, pFndBox->GetLines() )
+            BOOST_FOREACH( _FndLine const& rFndLine, rFndBox.GetLines() )
                 lcl_CheckRow( rFndLine, pPara );
     }
     // is box protected ??
-    else if( pFndBox->GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected() )
+    else if (rFndBox.GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected())
         *pPara = sal_False;
     return *pPara;
 }
@@ -1515,7 +1519,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
             {
                 pFndLine = &pFndBox->GetLines().front();
                 if( 1 == pFndLine->GetBoxes().size() )
-                    pFndBox = pFndLine->GetBoxes().front();
+                    pFndBox = &pFndLine->GetBoxes().front();
                 else
                     pFndBox = 0;
             }

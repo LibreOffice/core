@@ -392,7 +392,7 @@ sal_Bool SwFEShell::DeleteRow()
             while( 1 == pFndBox->GetLines().size() &&
                     1 == pFndBox->GetLines().front().GetBoxes().size() )
             {
-                _FndBox* pTmp = pFndBox->GetLines().front().GetBoxes()[0];
+                _FndBox* pTmp = &pFndBox->GetLines().front().GetBoxes()[0];
                 if( pTmp->GetBox()->GetSttNd() )
                     break;      // otherwise too far
                 pFndBox = pTmp;

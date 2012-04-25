@@ -201,21 +201,21 @@ struct LinesAndTable
 };
 
 
-sal_Bool _FindLine( const _FndLine& rLine, LinesAndTable* pPara );
+sal_Bool _FindLine( _FndLine & rLine, LinesAndTable* pPara );
 
-sal_Bool _FindBox( _FndBox* pBox, LinesAndTable* pPara )
+sal_Bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
 {
-    if ( !pBox->GetLines().empty() )
+    if (!rBox.GetLines().empty())
     {
         pPara->bInsertLines = sal_True;
-        BOOST_FOREACH( _FndLine& rFndLine, pBox->GetLines() )
+        BOOST_FOREACH( _FndLine & rFndLine, rBox.GetLines() )
             _FindLine( rFndLine, pPara );
         if ( pPara->bInsertLines )
         {
-            const SwTableLines &rLines = pBox->GetBox()
-                                    ? pBox->GetBox()->GetTabLines()
+            const SwTableLines &rLines = (rBox.GetBox())
+                                    ? rBox.GetBox()->GetTabLines()
                                     : pPara->rTable.GetTabLines();
-            if ( pBox->GetLines().size() == rLines.Count() )
+            if (rBox.GetLines().size() == rLines.Count())
             {
                 for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
                     ::InsertLine( pPara->rLines,
@@ -225,17 +225,21 @@ sal_Bool _FindBox( _FndBox* pBox, LinesAndTable* pPara )
                 pPara->bInsertLines = sal_False;
         }
     }
-    else if ( pBox->GetBox() )
+    else if (rBox.GetBox())
+    {
         ::InsertLine( pPara->rLines,
-                      (SwTableLine*)pBox->GetBox()->GetUpper() );
+                      static_cast<SwTableLine*>(rBox.GetBox()->GetUpper()));
+    }
     return sal_True;
 }
 
-sal_Bool _FindLine( const _FndLine& rLine, LinesAndTable* pPara )
+sal_Bool _FindLine( _FndLine& rLine, LinesAndTable* pPara )
 {
-    for (_FndBoxes::const_iterator it = rLine.GetBoxes().begin();
+    for (_FndBoxes::iterator it = rLine.GetBoxes().begin();
          it != rLine.GetBoxes().end(); ++it)
+    {
         _FindBox(*it, pPara);
+    }
     return sal_True;
 }
 
@@ -256,7 +260,7 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLine
     }
 
     //Diejenigen Lines einsammeln, die nur selektierte Boxen enthalten.
-    ::_FindBox( &aFndBox, &aPara );
+    ::_FindBox(aFndBox, &aPara);
 
     // Remove lines, that have a common superordinate row.
     // (Not for row split)
