@@ -81,9 +81,7 @@ struct TextBlockInfo_Impl
     String sLongName;
     String sGroupName;
 };
-typedef TextBlockInfo_Impl* TextBlockInfo_ImplPtr;
-SV_DECL_PTRARR_DEL( TextBlockInfoArr, TextBlockInfo_ImplPtr, 0 )
-SV_IMPL_PTRARR( TextBlockInfoArr, TextBlockInfo_ImplPtr )
+typedef boost::ptr_vector<TextBlockInfo_Impl> TextBlockInfoArr;
 SV_IMPL_REF( SwDocShell )
 
 /*------------------------------------------------------------------------
@@ -466,17 +464,17 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
                         pData->sTitle = sTitle;
                         pData->sLongName = sLongName;
                         pData->sGroupName = sGroupName;
-                        aFoundArr.Insert(pData, aFoundArr.Count());
+                        aFoundArr.push_back(pData);
                     }
                 }
             }
         }
-        if( aFoundArr.Count() )  // one was found
+        if( !aFoundArr.empty() )  // one was found
         {
             pGlossaries->PutGroupDoc(pGlossary);
-            if(1 == aFoundArr.Count())
+            if(1 == aFoundArr.size())
             {
-                TextBlockInfo_Impl* pData = aFoundArr.GetObject(0);
+                TextBlockInfo_Impl* pData = &aFoundArr.front();
                 pGlossary = (SwTextBlocks *)pGlossaries->GetGroupDoc(pData->sGroupName);
                 nFound = pGlossary->GetIndex( aShortName );
             }
@@ -487,9 +485,9 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
 
                 AbstractSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
-                for(sal_uInt16 i = 0; i < aFoundArr.Count(); ++i)
+                for(sal_uInt16 i = 0; i < aFoundArr.size(); ++i)
                 {
-                    TextBlockInfo_Impl* pData = aFoundArr.GetObject(i);
+                    TextBlockInfo_Impl* pData = &aFoundArr[i];
                     pDlg->InsertGlos(pData->sTitle, pData->sLongName);
                 }
                 pDlg->SelectEntryPos(0);
@@ -499,7 +497,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
                 delete pDlg;
                 if(LISTBOX_ENTRY_NOTFOUND != nRet)
                 {
-                    TextBlockInfo_Impl* pData = aFoundArr.GetObject(nRet);
+                    TextBlockInfo_Impl* pData = &aFoundArr[nRet];
                     pGlossary = (SwTextBlocks *)pGlossaries->GetGroupDoc(pData->sGroupName);
                     nFound = pGlossary->GetIndex( aShortName );
                 }
