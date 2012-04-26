@@ -1328,9 +1328,9 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 bModified |= true;
             }
         }
-        catch( const uno::Exception & )
+        catch( const uno::Exception & e )
         {
-            OSL_ASSERT(0);
+            SAL_WARN("desktop.deployment", e.Message);
         }
     }
     return bModified;
