@@ -33,42 +33,6 @@
 
 static const sal_Int32 MIN_INT32 = std::numeric_limits<sal_Int32>::min();
 
-/*
-static const SvxMSDffVertPair Vert[] =
-{
-    { 0, 0, }
-};
-static const sal_uInt16 Segm[] =
-{
-    0x4000,
-    0x8000
-};
-static const SvxMSDffCalculationData Calc[] =
-{
-    { 0x0000, 0, 0, 0 }
-};
-static const sal_Int32 Default[] =
-{
-    0
-};
-static const SvxMSDffTextRect TextRect[] =
-{
-    { { 0, 0 }, { 0, 0 } }
-};
-static const mso_CustomShape mso =
-{
-    (SvxMSDffVertPair*)mso_sptVert, SAL_N_ELEMENTS( mso_sptVert ),
-    (sal_uInt16*)mso_sptSegm, sizeof( mso_sptSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCalc, SAL_N_ELEMENTS( mso_sptCalc ),
-    (sal_Int32*)mso_sptDefault,
-    (SvxMSDffTextRectangles*)mso_sptTextRect, SAL_N_ELEMENTS( mso_sptTextRect ),
-    21600, 21600,
-    MIN_INT32, MIN_INT32,
-    (SvxMSDffVertPair*)mso_sptVert, SAL_N_ELEMENTS( mso_sptVert ),
-    (SvxMSDffHandles*)mso_sptHandles, SAL_N_ELEMENTS( mso_sptHandles )
-};
-*/
-
 static const sal_Int32 mso_sptDefault0[] =
 {
     1, 0

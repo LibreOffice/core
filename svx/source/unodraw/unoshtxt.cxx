@@ -576,11 +576,6 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             }
 
             mpOutliner->SetTextObjNoInit( pTextObj );
-/*
-            mpOutliner = SdrMakeOutliner( nOutlMode, pModel );
-            Outliner& aDrawOutliner = pModel->GetDrawOutliner();
-            mpOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
-*/
             if( mbIsLocked )
             {
                 ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
@@ -588,7 +583,6 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( sal_False );
             }
 
-// -
             if ( !m_xLinguServiceManager.is() )
             {
                 css::uno::Reference< css::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -602,7 +596,6 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 if( xHyphenator.is() )
                     mpOutliner->SetHyphenator( xHyphenator );
             }
-// -
         }
 
 

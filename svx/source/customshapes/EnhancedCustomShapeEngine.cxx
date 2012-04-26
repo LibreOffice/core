@@ -240,21 +240,6 @@ void SetTemporary( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::
         SvxShape* pShape = SvxShape::getImplementation( xShape );
         if ( pShape )
             pShape->TakeSdrObjectOwnership();
-/*
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes > xShapes( xShape, ::com::sun::star::uno::UNO_QUERY );
-        if ( xShapes.is() )
-        {
-            sal_Int32 i;
-            for ( i = 0; i < xShapes->getCount(); i++ )
-            {
-                ::com::sun::star::uno::Any aAny( xShapes->getByIndex( i ) );
-                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
-                if ( aAny >>= xShape )
-                    SetTemporary( xShape );
-            }
-        }
-*/
     }
 }
 

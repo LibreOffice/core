@@ -508,20 +508,6 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
                 if ( rPropVal.Value >>= rDestinationHandle.aPolar )
                     rDestinationHandle.nFlags |= HANDLE_FLAGS_POLAR;
             }
-/* seems not to be used.
-            else if ( rPropVal.Name.equals( sMap ) )
-            {
-                com::sun::star::drawing::EnhancedCustomShapeParameterPair aMap;
-                if ( rPropVal.Value >>= aMap )
-                {
-                    if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aMap.First ) )
-                        rDestinationHandle.Flags |= 0x800;
-                    if ( GetValueForEnhancedCustomShapeHandleParameter( nYMap, aMap.Second ) )
-                        rDestinationHandle.Flags |= 0x1000;
-                    rDestinationHandle.Flags |= 0x10;
-                }
-            }
-*/
             else if ( rPropVal.Name.equals( sRefX ) )
             {
                 if ( rPropVal.Value >>= rDestinationHandle.nRefX )

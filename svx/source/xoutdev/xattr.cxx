@@ -3669,22 +3669,6 @@ SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
 
 //------------------------------------------------------------------------
 
-//SfxPoolItem* XFillFloatTransparenceItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
-//{
-//  return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
-//}
-
-//------------------------------------------------------------------------
-
-//SvStream& XFillFloatTransparenceItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
-//{
-//  XFillGradientItem::Store( rOut, nItemVersion );
-//  rOut << bEnabled;
-//  return rOut;
-//}
-
-//------------------------------------------------------------------------
-
 sal_uInt16 XFillFloatTransparenceItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
 {
     // !!! if version number of this object must be increased, please   !!!
