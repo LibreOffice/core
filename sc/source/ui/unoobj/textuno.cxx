@@ -265,7 +265,6 @@ void ScHeaderFooterTextData::UpdateData()
     {
         delete mpTextObj;
         mpTextObj = pEditEngine->CreateTextObject();
-        bDataValid = false;
     }
 }
 
