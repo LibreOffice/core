@@ -30,6 +30,7 @@
 #define SW_UNDO_SORT_HXX
 
 #include <undobj.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 struct SwSortOptions;
@@ -67,7 +68,7 @@ struct SwSortUndoElement
     ~SwSortUndoElement();
 };
 
-SV_DECL_PTRARR_DEL(SwSortList, SwSortUndoElement*, 10)
+typedef boost::ptr_vector<SwSortUndoElement> SwSortList;
 typedef std::vector<SwNodeIndex*> SwUndoSortList;
 
 class SwUndoSort : public SwUndo, private SwUndRng

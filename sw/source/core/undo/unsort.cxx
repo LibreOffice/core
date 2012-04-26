@@ -47,8 +47,6 @@
  --------------------------------------------------------------------*/
 
 
-SV_IMPL_PTRARR(SwSortList, SwSortUndoElement*)
-
 
 SwSortUndoElement::~SwSortUndoElement()
 {
@@ -111,12 +109,12 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for( sal_uInt16 i=0; i < aSortList.Count(); i++)
+        for( sal_uInt16 i=0; i < aSortList.size(); i++)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
-                    *aSortList[i]->SORT_TXT_TBL.TBL.pSource );
+                    *aSortList[i].SORT_TXT_TBL.TBL.pSource );
             const SwTableBox* pTarget = rTbl.GetTblBox(
-                    *aSortList[i]->SORT_TXT_TBL.TBL.pTarget );
+                    *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
             // zurueckverschieben
             MoveCell(&rDoc, pTarget, pSource,
@@ -141,20 +139,20 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         // fuer die sorted Positions einen Index anlegen.
         // JP 25.11.97: Die IndexList muss aber nach SourcePosition
         //              aufsteigend sortiert aufgebaut werden
-        SwUndoSortList aIdxList( (sal_uInt8)aSortList.Count() );
+        SwUndoSortList aIdxList( (sal_uInt8)aSortList.size() );
         sal_uInt16 i;
 
-        for( i = 0; i < aSortList.Count(); ++i)
-            for( sal_uInt16 ii=0; ii < aSortList.Count(); ++ii )
-                if( aSortList[ii]->SORT_TXT_TBL.TXT.nSource == nSttNode + i )
+        for( i = 0; i < aSortList.size(); ++i)
+            for( sal_uInt16 ii=0; ii < aSortList.size(); ++ii )
+                if( aSortList[ii].SORT_TXT_TBL.TXT.nSource == nSttNode + i )
                 {
                     SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
-                        aSortList[ii]->SORT_TXT_TBL.TXT.nTarget );
+                        aSortList[ii].SORT_TXT_TBL.TXT.nTarget );
                     aIdxList.insert( aIdxList.begin() + i, pIdx );
                     break;
                 }
 
-        for(i=0; i < aSortList.Count(); ++i)
+        for(i=0; i < aSortList.size(); ++i)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
@@ -188,12 +186,12 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for(sal_uInt16 i=0; i < aSortList.Count(); ++i)
+        for(sal_uInt16 i=0; i < aSortList.size(); ++i)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
-                    (const String&) *aSortList[i]->SORT_TXT_TBL.TBL.pSource );
+                    (const String&) *aSortList[i].SORT_TXT_TBL.TBL.pSource );
             const SwTableBox* pTarget = rTbl.GetTblBox(
-                    (const String&) *aSortList[i]->SORT_TXT_TBL.TBL.pTarget );
+                    (const String&) *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
             // zurueckverschieben
             MoveCell(&rDoc, pSource, pTarget,
@@ -220,17 +218,17 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         SetPaM(rPam);
         RemoveIdxFromRange(rPam, true);
 
-        SwUndoSortList aIdxList( (sal_uInt8)aSortList.Count() );
+        SwUndoSortList aIdxList( (sal_uInt8)aSortList.size() );
         sal_uInt16 i;
 
-        for( i = 0; i < aSortList.Count(); ++i)
+        for( i = 0; i < aSortList.size(); ++i)
         {   // aktuelle Pos ist die Ausgangslage
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
-                    aSortList[i]->SORT_TXT_TBL.TXT.nSource);
+                    aSortList[i].SORT_TXT_TBL.TXT.nSource);
             aIdxList.insert( aIdxList.begin() + i, pIdx );
         }
 
-        for(i=0; i < aSortList.Count(); ++i)
+        for(i=0; i < aSortList.size(); ++i)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
@@ -266,13 +264,13 @@ void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoSort::Insert( const String& rOrgPos, const String& rNewPos)
 {
     SwSortUndoElement* pEle = new SwSortUndoElement(rOrgPos, rNewPos);
-    aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
+    aSortList.push_back( pEle );
 }
 
 void SwUndoSort::Insert( sal_uLong nOrgPos, sal_uLong nNewPos)
 {
     SwSortUndoElement* pEle = new SwSortUndoElement(nOrgPos, nNewPos);
-    aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
+    aSortList.push_back( pEle );
 }
 
 
