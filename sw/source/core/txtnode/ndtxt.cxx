@@ -94,11 +94,9 @@
 using namespace ::com::sun::star;
 
 
-SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0 )
+typedef std::vector<SwTxtAttr*> SwpHts;
 
 TYPEINIT1( SwTxtNode, SwCntntNode )
-
-SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1)
 
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
@@ -847,7 +845,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
 {
     SetAutoCompleteWordDirty( sal_True );
 
-    ::std::auto_ptr<TmpHints> pCollector;
+    ::std::auto_ptr<SwpHts> pCollector;
     const xub_StrLen nChangePos = rPos.GetIndex();
 
     if ( HasHints() )
@@ -955,15 +953,14 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         {
                              if ( !pCollector.get() )
                              {
-                                pCollector.reset( new TmpHints );
+                                pCollector.reset( new SwpHts );
                              }
-                             sal_uInt16 nCollCnt = pCollector->Count();
-                             for( sal_uInt16 i = 0; i < nCollCnt; ++i )
+                             for(SwpHts::iterator it =  pCollector->begin(); it != pCollector->end(); ++it)
                              {
-                                SwTxtAttr *pTmp = (*pCollector)[ i ];
+                                SwTxtAttr *pTmp = *it;
                                 if( nWhich == pTmp->Which() )
                                 {
-                                    pCollector->Remove( i );
+                                    pCollector->erase( it );
                                     SwTxtAttr::Destroy( pTmp,
                                         GetDoc()->GetAttrPool() );
                                     break;
@@ -972,7 +969,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                              SwTxtAttr * const pTmp = MakeTxtAttr( *GetDoc(),
                                  pHint->GetAttr(),
                                  nChangePos, nChangePos + nChangeLen);
-                             pCollector->C40_INSERT( SwTxtAttr, pTmp, pCollector->Count() );
+                             pCollector->push_back( pTmp );
                         }
                         else
                         {
@@ -1057,7 +1054,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
 
     if ( pCollector.get() )
     {
-        const sal_uInt16 nCount = pCollector->Count();
+        const sal_uInt16 nCount = pCollector->size();
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             m_pSwpHints->TryInsertHint( (*pCollector)[ i ], *this );
@@ -1660,7 +1657,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                     nAttrStt, nAttrEnd, COPY, pDest );
 
             lcl_CopyHint(nWhich, pHt, pNewHt, 0, pDest);
-            aArr.C40_INSERT( SwTxtAttr, pNewHt, aArr.Count() );
+            aArr.push_back( pNewHt );
         }
         else
         {
@@ -1683,20 +1680,20 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 
         if( RES_TXTATR_REFMARK == nWhich && !pEndIdx && !bCopyRefMark )
         {
-            aRefMrkArr.C40_INSERT( SwTxtAttr, pNewHt, aRefMrkArr.Count() );
+            aRefMrkArr.push_back( pNewHt );
         }
     }
 
     // nur falls im Array Attribute stehen (kann nur beim Kopieren
     // sich selbst passieren!!)
-    for ( sal_uInt16 i = 0; i < aArr.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aArr.size(); ++i )
     {
         InsertHint( aArr[ i ], nsSetAttrMode::SETATTR_NOTXTATRCHR );
     }
 
     if( pDest->GetpSwpHints() )
     {
-        for ( sal_uInt16 i = 0; i < aRefMrkArr.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aRefMrkArr.size(); ++i )
         {
             SwTxtAttr * const pNewHt = aRefMrkArr[i];
             if( pNewHt->GetEnd() )
@@ -1923,7 +1920,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     *pHt->GetStart() = nAttrStartIdx - nTxtStartIdx;
                     if( pEndIdx )
                         *pHt->GetEnd() = *pEndIdx - nTxtStartIdx;
-                    aArr.C40_INSERT( SwTxtAttr, pHt, aArr.Count() );
+                    aArr.push_back( pHt );
                     continue;           // while-Schleife weiter, ohne ++ !
                 }
                     // das Ende liegt dahinter
@@ -1941,7 +1938,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             {
                 // die Daten kopieren
                 lcl_CopyHint( nWhich, pHt, pNewHt, 0, this );
-                aArr.C40_INSERT( SwTxtAttr, pNewHt, aArr.Count() );
+                aArr.push_back( pNewHt );
             }
             ++nAttrCnt;
         }
@@ -1968,7 +1965,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             nDestStart = nDestStart - nLen;
         }
 
-        for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
+        for ( sal_uInt16 n = 0; n < aArr.size(); ++n )
         {
             SwTxtAttr *const pNewHt = aArr[n];
             *pNewHt->GetStart() = nDestStart + *pNewHt->GetStart();
@@ -2131,7 +2128,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                 const xub_StrLen * const pEndIdx = pHt->GetEnd();
                 if ( pEndIdx && *pEndIdx == nEnd )
                 {
-                    aArr.C40_INSERT( SwTxtAttr, pHt, aArr.Count() );
+                    aArr.push_back( pHt );
                     m_pSwpHints->Delete( pHt );
                 }
                 else
@@ -2141,7 +2138,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             }
             Update( rStart, nLen, sal_True, sal_True );
 
-            for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
+            for ( sal_uInt16 n = 0; n < aArr.size(); ++n )
             {
                 SwTxtAttr * const pHt = aArr[ n ];
                 *pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
