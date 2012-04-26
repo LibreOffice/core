@@ -778,17 +778,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
 
     // anchor type is always "as character", text wrap always "none"
 
-    if (rName == SC_UNONAME_ANCTYPE)
-        aRet <<= text::TextContentAnchorType_AS_CHARACTER;
-    else if (rName == SC_UNONAME_ANCTYPES)
-    {
-        uno::Sequence<text::TextContentAnchorType> aSeq(1);
-        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
-        aRet <<= aSeq;
-    }
-    else if (rName == SC_UNONAME_TEXTWRAP)
-        aRet <<= text::WrapTextMode_NONE;
-    else if (mpEditSource)
+    if (mpEditSource)
     {
         //! Feld-Funktionen muessen an den Forwarder !!!
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
@@ -1082,6 +1072,27 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
+    if (aPropertyName == SC_UNONAME_ANCTYPE)
+    {
+        uno::Any aRet;
+        aRet <<= text::TextContentAnchorType_AS_CHARACTER;
+        return aRet;
+    }
+    else if (aPropertyName == SC_UNONAME_ANCTYPES)
+    {
+        uno::Any aRet;
+        uno::Sequence<text::TextContentAnchorType> aSeq(1);
+        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
+        aRet <<= aSeq;
+        return aRet;
+    }
+    else if (aPropertyName == SC_UNONAME_TEXTWRAP)
+    {
+        uno::Any aRet;
+        aRet <<= text::WrapTextMode_NONE;
+        return aRet;
+    }
+
     switch (meType)
     {
         case URL:
