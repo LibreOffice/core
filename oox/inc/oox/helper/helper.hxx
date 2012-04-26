@@ -219,6 +219,10 @@ public:
     inline Type&        use() { mbHasValue = true; return maValue; }
 
     inline OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
+    inline bool         operator==( const OptValue& rValue ) const {
+                                    return ( ( mbHasValue == false && rValue.mbHasValue == false ) ||
+                                        ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
+                        }
     inline void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
 
 private:

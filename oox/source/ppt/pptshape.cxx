@@ -262,10 +262,10 @@ void PPTShape::addShape(
             OSL_TRACE("shape service: %s", rtl::OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
 
             // use placeholder index if possible
-            if( mnSubType && getSubTypeIndex() && getSubTypeIndex() != -1 && rSlidePersist.getMasterPersist().get() ) {
-                oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
+            if( mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist().get() ) {
+                oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
                 if( pPlaceholder.get()) {
-                    OSL_TRACE("found placeholder with index: %d and type: %s", getSubTypeIndex(), lclDebugSubType( mnSubType ));
+                    OSL_TRACE("found placeholder with index: %d and type: %s", getSubTypeIndex().get(), lclDebugSubType( mnSubType ));
                 }
                 if( pPlaceholder.get() ) {
                     PPTShape* pPPTPlaceholder = dynamic_cast< PPTShape* >( pPlaceholder.get() );
@@ -290,7 +290,7 @@ void PPTShape::addShape(
                         OSL_TRACE("placeholder has parent placeholder: %s type: %s index: %d",
                                   rtl::OUStringToOString( pPPTPlaceholder->mpPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr(),
                                   lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ),
-                                  pPPTPlaceholder->mpPlaceholder->getSubTypeIndex() );
+                                  pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
                         OSL_TRACE("has textbody %d", pPPTPlaceholder->mpPlaceholder->getTextBody() != NULL );
                         TextListStylePtr pPlaceholderStyle = getSubTypeTextListStyle( rSlidePersist, pPPTPlaceholder->mpPlaceholder->getSubType() );
                         if( pPPTPlaceholder->mpPlaceholder->getTextBody() )
@@ -403,13 +403,10 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
 {
     oox::drawingml::ShapePtr aShapePtr;
 
-    if( nIdx == -1)
-        return aShapePtr;
-
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
-        if ( (*aRevIter)->getSubTypeIndex() == nIdx )
+        if ( (*aRevIter)->getSubTypeIndex().has() && (*aRevIter)->getSubTypeIndex().get() == nIdx )
         {
             aShapePtr = *aRevIter;
             break;

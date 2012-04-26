@@ -63,51 +63,11 @@ PPTGraphicShapeContext::PPTGraphicShapeContext( ContextHandler& rParent, const S
 {
 }
 
-static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
-{
-    oox::drawingml::ShapePtr aShapePtr;
-    std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
-    while( aRevIter != rShapes.rend() )
-    {
-        if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
-        {
-            aShapePtr = *aRevIter;
-            break;
-        }
-        std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
-        if ( aShapePtr.get() )
-            break;
-        ++aRevIter;
-    }
-    return aShapePtr;
-}
-
-static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes )
-{
-    oox::drawingml::ShapePtr aShapePtr;
-    std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
-    while( aRevIter != rShapes.rend() )
-    {
-        if ( (*aRevIter)->getSubTypeIndex() == nIdx )
-        {
-            aShapePtr = *aRevIter;
-            break;
-        }
-        std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholderByIndex( nIdx, rChildren );
-        if ( aShapePtr.get() )
-            break;
-        ++aRevIter;
-    }
-    return aShapePtr;
-}
-
 // if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
 static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
-    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, rShapes );
-    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, rShapes );
+    oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, rShapes );
+    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : PPTShape::findPlaceholder( nSecondPlaceholder, rShapes );
 }
 
 Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
@@ -145,8 +105,8 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
                 {
                     // TODO: use id to shape map
                     SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                    if ( pMasterPersist.get() )
-                    pPlaceholder = findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
+                    if ( pMasterPersist.get() && xAttribs->hasAttribute( XML_idx ) )
+                        pPlaceholder = PPTShape::findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
                 }
                 if ( !pPlaceholder.get() && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
                 {

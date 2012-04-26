@@ -62,35 +62,40 @@ PPTShapeContext::PPTShapeContext( ContextHandler& rParent, const SlidePersistPtr
 {
 }
 
-oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, sal_Int32 nSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
+oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
     oox::drawingml::ShapePtr aShapePtr;
+    oox::drawingml::ShapePtr aTmpShapePtr;
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
         if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
         {
-            if ( ( nSubTypeIndex == -1 ) || ( nSubTypeIndex == (*aRevIter)->getSubTypeIndex() ) )
+            if( !oSubTypeIndex.has() && aTmpShapePtr == NULL )
+                aTmpShapePtr = *aRevIter;
+            if( (*aRevIter)->getSubTypeIndex() == oSubTypeIndex )
             {
                 aShapePtr = *aRevIter;
                 break;
             }
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholder( nMasterPlaceholder, nSubTypeIndex, rChildren );
+        aShapePtr = findPlaceholder( nMasterPlaceholder, oSubTypeIndex, rChildren );
         if ( aShapePtr.get() )
             break;
         ++aRevIter;
     }
+    if( aShapePtr == NULL )
+        return aTmpShapePtr;
     return aShapePtr;
 }
 
 // if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
 oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder,
-    sal_Int32 nSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
+    const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
-    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, nSubTypeIndex, rShapes );
-    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, nSubTypeIndex, rShapes );
+    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, oSubTypeIndex, rShapes );
+    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, oSubTypeIndex, rShapes );
 }
 
 Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
@@ -168,7 +173,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                               oox::drawingml::ShapePtr pPlaceholder;
                               if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
                               {
-                                  pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex(), mpSlidePersistPtr->getShapes()->getChildren() );
+                                  if( pPPTShapePtr->getSubTypeIndex().has() )
+                                      pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex().get(), mpSlidePersistPtr->getShapes()->getChildren() );
                                   if ( !pPlaceholder.get() )
                                       pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pPPTShapePtr->getSubTypeIndex(),
                                                                       mpSlidePersistPtr->getShapes()->getChildren() );
@@ -177,7 +183,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                               {
                                   SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                                   if ( pMasterPersist.get() ) {
-                                      pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                      if( pPPTShapePtr->getSubTypeIndex().has() )
+                                          pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex().get(), pMasterPersist->getShapes()->getChildren() );
                                       if ( !pPlaceholder.get() )
                                           pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
                                                                           pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );

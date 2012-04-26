@@ -130,8 +130,8 @@ public:
     void                            setHiddenMasterShape( sal_Bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
-    void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
-    sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
+    void                            setSubTypeIndex( sal_Int32 nSubTypeIndex ) { moSubTypeIndex = nSubTypeIndex; }
+    const OptValue< sal_Int32 >&    getSubTypeIndex() const { return moSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
@@ -232,7 +232,7 @@ protected:
     rtl::OUString       msName;
     rtl::OUString       msId;
     sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_Int32           mnSubTypeIndex;
+    OptValue< sal_Int32 >   moSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 
