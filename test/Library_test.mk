@@ -38,6 +38,10 @@ $(eval $(call gb_Library_use_api,test,\
     udkapi \
 ))
 
+$(eval $(call gb_Library_use_externals,test,\
+	libxml2 \
+))
+
 $(eval $(call gb_Library_use_libraries,test,\
     comphelper \
     cppu \
@@ -63,6 +67,7 @@ $(eval $(call gb_Library_use_external,test,cppunit))
 
 $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/bootstrapfixture \
+    test/source/diff/diff \
 ))
 
 # vim: set noet sw=4 ts=4:

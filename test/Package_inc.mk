@@ -26,6 +26,7 @@
 # instead of those above.
 
 $(eval $(call gb_Package_Package,test_inc,$(SRCDIR)/test/inc))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/xmldiff.hxx,test/xmldiff.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/bootstrapfixture.hxx,test/bootstrapfixture.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/testdllapi.hxx,test/testdllapi.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/unoapi_test.hxx,test/unoapi_test.hxx))
