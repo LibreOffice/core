@@ -339,7 +339,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
                 SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,
                                                             *pFmtFld, aIntl );
 
-                for(short i = 0; i < aSortArr.Count(); ++i)
+                for(short i = 0; i < (short)aSortArr.size(); ++i)
                 {
                     SwTOXSortTabBase* pOld = aSortArr[i];
                     if(*pOld == *pNew)
@@ -349,7 +349,11 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
                         if(*pOld < *pNew)
                             DELETEZ(pNew);
                         else // remove the old content
-                            aSortArr.DeleteAndDestroy( i, 1 );
+                        {
+                            for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
+                                delete *it;
+                            aSortArr.clear();
+                        }
                         break;
                     }
                 }
@@ -358,25 +362,27 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
                 {
                     short j;
 
-                    for( j = 0; j < aSortArr.Count(); ++j)
+                    for( j = 0; j < (short)aSortArr.size(); ++j)
                     {
                         SwTOXSortTabBase* pOld = aSortArr[j];
                         if(*pNew < *pOld)
                             break;
                     }
-                    aSortArr.Insert(pNew, j );
+                    aSortArr.insert(aSortArr.begin() + j, pNew);
                 }
             }
         }
 
-        for(sal_uInt16 i = 0; i < aSortArr.Count(); i++)
+        for(sal_uInt16 i = 0; i < aSortArr.size(); i++)
         {
             const SwTOXSortTabBase& rBase = *aSortArr[i];
             SwFmtFld& rFmtFld = ((SwTOXAuthority&)rBase).GetFldFmt();
             SwAuthorityField* pAFld = (SwAuthorityField*)rFmtFld.GetFld();
             m_SequArr.push_back(pAFld->GetHandle());
         }
-        aSortArr.DeleteAndDestroy(0, aSortArr.Count());
+        for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
+            delete *it;
+        aSortArr.clear();
     }
     //find nHandle
     sal_uInt16 nRet = 0;

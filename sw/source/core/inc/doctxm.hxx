@@ -41,9 +41,7 @@ class  SwTxtFmtColl;
 struct SwPosition;
 struct SwTOXSortTabBase;
 
-typedef SwTOXSortTabBase* SwTOXSortTabBasePtr;
-
-SV_DECL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr, 0)
+typedef std::vector<SwTOXSortTabBase*> SwTOXSortTabBases;
 
 /*--------------------------------------------------------------------
      Beschreibung: Ring der speziellen Verzeichnisse

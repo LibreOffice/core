@@ -80,8 +80,6 @@ const sal_Unicode cNumRepl      = '@';
 const sal_Unicode cEndPageNum   = '~';
 const sal_Char sPageDeli[] = ", ";
 
-SV_IMPL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr)
-
 TYPEINIT2( SwTOXBaseSection, SwTOXBase, SwSection );    // for RTTI
 
 struct LinkStruct
@@ -845,7 +843,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                GetOptions() : 0,
                                GetSortAlgorithm() );
 
-    aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );
+    for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
+        delete *it;
+    aSortArr.clear();
 
     // find the first layout node for this TOX, if it only find the content
     // in his own chapter
@@ -964,7 +964,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     }
 
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
-    for( nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
+    for( nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -995,7 +995,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             const String sPrimKey = rMark.GetPrimaryKey();
             const String sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = 0;
-            while(aSortArr.Count() > (nCnt + nRange)&&
+            while(aSortArr.size() > (nCnt + nRange)&&
                     aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&
                     0 != (pNextMark = &(aSortArr[nCnt + nRange]->pTxtMark->GetTOXMark())) &&
                     pNextMark->GetPrimaryKey() == sPrimKey &&
@@ -1055,7 +1055,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     String sDeli, sLastDeli;
     sal_uInt16  i = 0;
-    while( i < aSortArr.Count() )
+    while( i < aSortArr.size() )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1079,7 +1079,8 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
             {
                 SwTOXCustom* pCst = new SwTOXCustom( sDeli, aEmptyStr, FORM_ALPHA_DELIMITTER,
                                                      rIntl, aSortArr[i]->GetLocale() );
-                aSortArr.Insert( pCst, i++ );
+                aSortArr.insert( aSortArr.begin() + i, pCst);
+                i++;
             }
             sLastDeli = sDeli;
         }
@@ -1087,7 +1088,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
         // Skip until we get to the same or a lower Level
         do {
             i++;
-        } while (i < aSortArr.Count() && aSortArr[i]->GetLevel() > nLevel);
+        } while (i < aSortArr.size() && aSortArr[i]->GetLevel() > nLevel);
     }
 }
 
@@ -1864,7 +1865,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
  --------------------------------------------------------------------*/
 void SwTOXBaseSection::UpdatePageNum()
 {
-    if( !aSortArr.Count() )
+    if( aSortArr.empty() )
         return ;
 
     // Insert the current PageNumber into the TOC
@@ -1877,7 +1878,7 @@ void SwTOXBaseSection::UpdatePageNum()
                               GetOptions() : 0,
                               GetSortAlgorithm() );
 
-    for( sal_uInt16 nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
+    for( sal_uInt16 nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         // Loop over all SourceNodes
         std::vector<sal_uInt16> aNums; // the PageNumber
@@ -1893,7 +1894,7 @@ void SwTOXBaseSection::UpdatePageNum()
             const String sPrimKey = rMark.GetPrimaryKey();
             const String sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = 0;
-            while(aSortArr.Count() > (nCnt + nRange)&&
+            while(aSortArr.size() > (nCnt + nRange)&&
                     aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&
                     0 != (pNextMark = &(aSortArr[nCnt + nRange]->pTxtMark->GetTOXMark())) &&
                     pNextMark->GetPrimaryKey() == sPrimKey &&
@@ -1969,7 +1970,9 @@ void SwTOXBaseSection::UpdatePageNum()
         }
     }
     // Delete the mapping array after setting the right PageNumber
-    aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );
+    for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
+        delete *it;
+    aSortArr.clear();
 }
 
 /*--------------------------------------------------------------------
@@ -2156,7 +2159,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
  --------------------------------------------------------------------*/
 void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 {
-    Range aRange(0, aSortArr.Count());
+    Range aRange(0, aSortArr.size());
     if( TOX_INDEX == SwTOXBase::GetType() && pNew->pTxtMark )
     {
         const SwTOXMark& rMark = pNew->pTxtMark->GetTOXMark();
@@ -2191,7 +2194,8 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
                 else
                 {
                     // remove the old content
-                    aSortArr.DeleteAndDestroy( i, 1 );
+                    delete aSortArr[i];
+                    aSortArr.erase( aSortArr.begin() + i );
                     aRange.Max()--;
                     break;
                 }
@@ -2216,7 +2220,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 
                 if(!(pNew->GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
                 {   // Own entry
-                    aSortArr.Insert(pNew, i );
+                    aSortArr.insert(aSortArr.begin() + i, pNew);
                     return;
                 }
                 // If the own entry is already present, add it to the references list
@@ -2239,7 +2243,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
         i++;
 
     // Insert at position i
-    aSortArr.Insert(pNew, i );
+    aSortArr.insert(aSortArr.begin()+i, pNew);
 }
 
 /*--------------------------------------------------------------------
@@ -2287,13 +2291,13 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
             if(nLevel == aSortArr[i]->GetLevel() &&  *pKey < *(aSortArr[i]))
                 break;
         }
-        aSortArr.Insert(pKey, i );
+        aSortArr.insert(aSortArr.begin() + i, pKey);
     }
     sal_uInt16 nStart = i+1;
-    sal_uInt16 nEnd   = aSortArr.Count();
+    sal_uInt16 nEnd   = aSortArr.size();
 
     // Find end of range
-    for(i = nStart; i < aSortArr.Count(); ++i)
+    for(i = nStart; i < aSortArr.size(); ++i)
     {
         if(aSortArr[i]->GetLevel() <= nLevel)
         {   nEnd = i;
