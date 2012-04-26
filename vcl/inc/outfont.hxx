@@ -161,8 +161,6 @@ class FontSelectPattern : public ImplFontAttributes
 public:
                         FontSelectPattern( const Font&, const String& rSearchName,
                             const Size&, float fExactHeight );
-                        FontSelectPattern( const ImplFontData&, const Size&,
-                            float fExactHeight, int nOrientation, bool bVertical );
 
 public: // TODO: change to private
     String              maTargetName;       // name of the font name token that is chosen

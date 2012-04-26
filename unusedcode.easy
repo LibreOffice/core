@@ -1,7 +1,6 @@
 EditEngine::GetNextVisPortion(ParaPortion const*) const
 FmFieldWinMgr::GetChildWindowId()
 FmPropBrwMgr::GetChildWindowId()
-FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, int, bool)
 FontStyleBox::FontStyleBox(Window*, long)
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
 HTMLControls::Insert(HTMLControl const**, unsigned short)
