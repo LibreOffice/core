@@ -116,7 +116,7 @@ public class ScriptProviderForBeanShell
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 ScriptProviderForBeanShell._ScriptProviderForBeanShell.class,
-                "com.sun.star.script.ScriptProviderForBeanShell",
+                "com.sun.star.script.provider.ScriptProviderForBeanShell",
                 multiFactory,
                 regKey );
         }
