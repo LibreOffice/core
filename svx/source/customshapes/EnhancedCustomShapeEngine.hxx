@@ -46,13 +46,9 @@
 
 // -----------------------------------------------------------------------------
 
-#define NMSP_IO         com::sun::star::io
 #define NMSP_UNO        com::sun::star::uno
 #define NMSP_BEANS      com::sun::star::beans
 #define NMSP_LANG       com::sun::star::lang
-#define NMSP_UTIL       com::sun::star::util
-#define NMSP_SAX        com::sun::star::xml::sax
-#define NMSP_LOGGING    NMSP_UTIL::logging
 
 
 #define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >

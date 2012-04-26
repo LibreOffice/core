@@ -59,9 +59,7 @@ static long nStaticTabs[]=
 };
 
 #define MIN_DISTANCE    6
-#define WRITER_AUTHOR   1
 #define WRITER_DATE     2
-#define CALC_AUTHOR     2
 #define CALC_DATE       3
 
 RedlinData::RedlinData()

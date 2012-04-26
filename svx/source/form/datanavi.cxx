@@ -94,22 +94,18 @@ namespace svxform
     #define PN_INSTANCE_MODEL       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Instance" ) )
     #define PN_INSTANCE_ID          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
     #define PN_INSTANCE_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
-    #define PN_INSTANCE_URLONCE     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URLOnce" ) )
 
     // properties of binding
     #define PN_BINDING_ID           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingID" ) )
     #define PN_BINDING_EXPR         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingExpression" ) )
     #define PN_BINDING_MODEL        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
     #define PN_BINDING_NAMESPACES   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelNamespaces" ) )
-    #define PN_BINDING_MODELID      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelID" ) )
     #define PN_READONLY_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadonlyExpression" ) )
     #define PN_RELEVANT_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelevantExpression" ) )
     #define PN_REQUIRED_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RequiredExpression" ) )
     #define PN_CONSTRAINT_EXPR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConstraintExpression" ) )
     #define PN_CALCULATE_EXPR       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CalculateExpression" ) )
     #define PN_BINDING_TYPE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
-    #define PN_BINDING_READONLY     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )
-    #define PN_BINDING_ENABLED      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) )
 
     // properties of submission
     #define PN_SUBMISSION_ID        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
@@ -117,20 +113,12 @@ namespace svxform
     #define PN_SUBMISSION_REF       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Ref" ) )
     #define PN_SUBMISSION_ACTION    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
     #define PN_SUBMISSION_METHOD    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Method" ) )
-    #define PN_SUBMISSION_MODEL     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
     #define PN_SUBMISSION_REPLACE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Replace" ) )
-
-    // submission methods
-    #define SUBMITMETHOD_POST       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) )
-    #define SUBMITMETHOD_GET        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "get" ) )
-    #define SUBMITMETHOD_PUT        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "put" ) )
 
     // other const strings
     #define TRUE_VALUE              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true()" ) )
-    #define FALSE_VALUE             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false()" ) )
     #define NEW_ELEMENT             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newElement" ) )
     #define NEW_ATTRIBUTE           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newAttribute" ) )
-    #define EVENTTYPE_SUBTREE       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMSubtreeModified" ) )
     #define EVENTTYPE_CHARDATA      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMCharacterDataModified" ) )
     #define EVENTTYPE_ATTR          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMAttrModified" ) )
 

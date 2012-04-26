@@ -45,7 +45,6 @@
 //-------------------------------------------------------------------------
 
 #define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
-#define TRANSP_STRING   "Transparent"
 #define TRANSP_COL      (Color( 252, 252, 252 ))
 #define OWN_CALLMODE    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD
 

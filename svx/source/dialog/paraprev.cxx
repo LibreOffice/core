@@ -31,10 +31,6 @@
 
 #include <svx/paraprev.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-#define FOUR_POINTS 80
-
 // class SvxParaPrevWindow -----------------------------------------------
 
 SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :

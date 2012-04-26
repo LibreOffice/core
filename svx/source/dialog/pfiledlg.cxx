@@ -195,19 +195,6 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 {
 }
 
-/*************************************************************************
-|*
-|* Plugins available for the the MIME-Typ in nKind
-|* (with nKind = SID_INSERT_SOUND for MIME-Type audio
-|*                SID_INSERT_VIDEO for MIME-Type video
-|*
-\************************************************************************/
-
-#define PFDLG_CHECKED_SOUND     0x0001
-#define PFDLG_CHECKED_VIDEO     0x0002
-#define PFDLG_FOUND_SOUND       0x0004
-#define PFDLG_FOUND_VIDEO       0x0008
-
 void SvxPluginFileDlg::SetContext( sfx2::FileDialogHelper::Context _eNewContext )
 {
     maFileDlg.SetContext( _eNewContext );
