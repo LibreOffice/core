@@ -928,8 +928,7 @@ public:
     String GetName() { return aName; }
 };
 
-SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5 )
-SV_IMPL_PTRARR( _RefIdsMaps, _RefIdsMap* )
+typedef boost::ptr_vector<_RefIdsMap> _RefIdsMaps;
 
 /// Get a sorted list of the field IDs from a document.
 /// @param[in]     rDoc The document to search.
@@ -1091,18 +1090,18 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
             case REF_SEQUENCEFLD:
                 {
                     _RefIdsMap* pMap = 0;
-                    for( sal_uInt16 n = aFldMap.Count(); n; )
+                    for( sal_uInt16 n = aFldMap.size(); n; )
                     {
-                        if( aFldMap[ --n ]->GetName().Equals(rRefFld.GetSetRefName()) )
+                        if( aFldMap[ --n ].GetName().Equals(rRefFld.GetSetRefName()) )
                         {
-                            pMap = aFldMap[ n ];
+                            pMap = &aFldMap[ n ];
                             break;
                         }
                     }
                     if( !pMap )
                     {
                         pMap = new _RefIdsMap( rRefFld.GetSetRefName() );
-                        aFldMap.C40_INSERT( _RefIdsMap, pMap, aFldMap.Count() );
+                        aFldMap.push_back( pMap );
                     }
 
                     pMap->Check( *pDoc, rDestDoc, rRefFld, sal_True );
