@@ -1,4 +1,3 @@
-EditEngine::GetNextVisPortion(ParaPortion const*) const
 FmFieldWinMgr::GetChildWindowId()
 FmPropBrwMgr::GetChildWindowId()
 FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, int, bool)
@@ -253,7 +252,6 @@ SystemChildWindow::SystemChildWindow(Window*, ResId const&)
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const
 TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
-TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
 VCLUnoHelper::CreatePointer()
 VCLXPrinterServer::getImplementationId()
 VCLXPrinterServer::getTypes()
