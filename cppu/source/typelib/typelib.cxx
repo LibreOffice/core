@@ -729,7 +729,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
             osl_incrementInterlockedCount(
-                &Init::get()->nInterfaceMethodTypeDescriptionCount );
+                &Init::get().nInterfaceMethodTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pReturnTypeRef = 0;
