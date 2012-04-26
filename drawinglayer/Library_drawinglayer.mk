@@ -81,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/attribute/sdrshadowattribute \
     drawinglayer/source/attribute/strokeattribute \
     drawinglayer/source/geometry/viewinformation2d \
+    drawinglayer/source/geometry/viewinformation3d \
     drawinglayer/source/primitive2d/animatedprimitive2d \
     drawinglayer/source/primitive2d/backgroundcolorprimitive2d \
     drawinglayer/source/primitive2d/baseprimitive2d \
@@ -173,10 +174,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor3d/zbufferprocessor3d \
     drawinglayer/source/texture/texture3d \
     drawinglayer/source/texture/texture \
-))
-
-$(eval $(call gb_Library_add_noexception_objects,drawinglayer,\
-    drawinglayer/source/geometry/viewinformation3d \
 ))
 
 # vim: set noet sw=4 ts=4:
