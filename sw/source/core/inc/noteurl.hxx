@@ -33,6 +33,7 @@
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include "swrect.hxx"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ImageMap;
 class MapMode;
@@ -53,19 +54,18 @@ public:
     { return aRect == rSwURLNote.aRect; }
 };
 
-typedef SwURLNote* SwURLNotePtr;
-SV_DECL_PTRARR_DEL(SwURLNoteList, SwURLNotePtr, 0)
+typedef boost::ptr_vector<SwURLNote> SwURLNoteList;
 
 class SwNoteURL
 {
     SwURLNoteList aList;
 public:
     SwNoteURL() {}
-    sal_uInt16 Count() const { return aList.Count(); }
+    sal_uInt16 Count() const { return aList.size(); }
     void InsertURLNote( const String& rURL, const String& rTarget,
                  const SwRect& rRect );
     const SwURLNote& GetURLNote( sal_uInt16 nPos ) const
-        { return *aList.GetObject( nPos ); }
+        { return aList[ nPos ]; }
     void FillImageMap( ImageMap* pMap, const Point& rPos, const MapMode& rMap );
 };
 

@@ -40,21 +40,19 @@
 // Global variable
 SwNoteURL *pNoteURL = NULL;
 
-SV_IMPL_PTRARR( SwURLNoteList, SwURLNotePtr )
-
 
 void SwNoteURL::InsertURLNote( const XubString& rURL, const XubString& rTarget,
     const SwRect& rRect )
 {
     MSHORT i;
-    MSHORT nCount = aList.Count();
+    MSHORT nCount = aList.size();
     for( i = 0; i < nCount; i++ )
-        if( rRect == aList.GetObject(i)->GetRect() )
+        if( rRect == aList[i].GetRect() )
             break;
     if( i == nCount )
     {
         SwURLNote *pNew = new SwURLNote( rURL, rTarget, rRect );
-        aList.Insert( pNew, nCount );
+        aList.push_back( pNew );
     }
 }
 
