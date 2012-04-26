@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/sheet/xprintareas \
     test/source/sheet/xspreadsheetdocument \
     test/source/sheet/xspreadsheets2 \
+    test/source/text/xtextfield \
     test/source/util/xreplaceable \
     test/source/util/xsearchable \
 ))
