@@ -2175,6 +2175,26 @@ FontSelectPattern::FontSelectPattern( const Font& rFont,
         mnWidth = -mnWidth;
 }
 
+// -----------------------------------------------------------------------
+
+FontSelectPattern::FontSelectPattern( const ImplFontData& rFontData,
+    const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
+:   ImplFontAttributes( rFontData ),
+    mnWidth( rSize.Width() ),
+    mnHeight( rSize.Height() ),
+    mfExactHeight( fExactHeight ),
+    mnOrientation( nOrientation ),
+    meLanguage( 0 ),
+    mbVertical( bVertical ),
+    mbNonAntialiased( false ),
+    mbEmbolden( false ),
+    mpFontData( &rFontData ),
+    mpFontEntry( NULL )
+{
+    maTargetName = maSearchName = maName;
+    // NOTE: no normalization for width/height/orientation
+}
+
 // =======================================================================
 
 size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
