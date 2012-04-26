@@ -51,7 +51,6 @@ ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::findByTable(short) const
 ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
-ScDPObject::HasGroups() const
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)
 ScHTMLColOffset::Insert(unsigned long const*, unsigned short)

@@ -138,7 +138,6 @@ public:
     void                InvalidateData();
     void ClearTableData();
     void ReloadGroupTableData();
-    bool HasGroups() const;
 
     void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( bool& rOverflow );
