@@ -33,6 +33,7 @@
 #include "rangelst.hxx"         // ScRangeList
 
 #include "formula/grammar.hxx"
+#include "rtl/ref.hxx"
 #include <tools/link.hxx>
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
@@ -833,7 +834,7 @@ class SC_DLLPUBLIC ScCellObj : public ScCellRangeObj,
                     public com::sun::star::document::XActionLockable
 {
 private:
-    SvxUnoText*             pUnoText;
+    rtl::Reference<SvxUnoText> mxUnoText;
     const SfxItemPropertySet*   pCellPropSet;
     ScAddress               aCellPos;
     sal_Int16               nActionLockCount;

@@ -6107,7 +6107,6 @@ const SfxItemPropertyMap& ScCellObj::GetCellPropertyMap()
 
 ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :
     ScCellRangeObj( pDocSh, ScRange(rP,rP) ),
-    pUnoText( NULL ),
     pCellPropSet( lcl_GetCellPropertySet() ),
     aCellPos( rP ),
     nActionLockCount( 0 )
@@ -6118,25 +6117,22 @@ ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :
 
 SvxUnoText& ScCellObj::GetUnoText()
 {
-    if (!pUnoText)
+    if (!mxUnoText.is())
     {
-        pUnoText = new ScCellTextObj( GetDocShell(), aCellPos );
-        pUnoText->acquire();
+        mxUnoText.set(new ScCellTextObj(GetDocShell(), aCellPos));
         if (nActionLockCount)
         {
             ScCellEditSource* pEditSource =
-                static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
+                static_cast<ScCellEditSource*> (mxUnoText->GetEditSource());
             if (pEditSource)
                 pEditSource->SetDoUpdateData(false);
         }
     }
-    return *pUnoText;
+    return *mxUnoText;
 }
 
 ScCellObj::~ScCellObj()
 {
-    if (pUnoText)
-        pUnoText->release();
 }
 
 void ScCellObj::RefChanged()
@@ -6390,8 +6386,8 @@ void SAL_CALL ScCellObj::setString( const rtl::OUString& aText ) throw(uno::Runt
     SetString_Impl(aString, false, false);  // immer Text
 
     // don't create pUnoText here if not there
-    if (pUnoText)
-        pUnoText->SetSelection(ESelection( 0,0, 0,aString.Len() ));
+    if (mxUnoText.is())
+        mxUnoText->SetSelection(ESelection( 0,0, 0,aString.Len() ));
 }
 
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
@@ -6831,10 +6827,10 @@ void SAL_CALL ScCellObj::addActionLock() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
     if (!nActionLockCount)
     {
-        if (pUnoText)
+        if (mxUnoText.is())
         {
             ScCellEditSource* pEditSource =
-                static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
+                static_cast<ScCellEditSource*> (mxUnoText->GetEditSource());
             if (pEditSource)
                 pEditSource->SetDoUpdateData(false);
         }
@@ -6850,10 +6846,10 @@ void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException)
         nActionLockCount--;
         if (!nActionLockCount)
         {
-            if (pUnoText)
+            if (mxUnoText.is())
             {
                 ScCellEditSource* pEditSource =
-                    static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
+                    static_cast<ScCellEditSource*> (mxUnoText->GetEditSource());
                 if (pEditSource)
                 {
                     pEditSource->SetDoUpdateData(sal_True);
@@ -6868,10 +6864,10 @@ void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException)
 void SAL_CALL ScCellObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (pUnoText)
+    if (mxUnoText.is())
     {
         ScCellEditSource* pEditSource =
-            static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
+            static_cast<ScCellEditSource*> (mxUnoText->GetEditSource());
         if (pEditSource)
         {
             pEditSource->SetDoUpdateData(nLock == 0);
@@ -6886,10 +6882,10 @@ sal_Int16 SAL_CALL ScCellObj::resetActionLocks() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nRet(nActionLockCount);
-    if (pUnoText)
+    if (mxUnoText.is())
     {
         ScCellEditSource* pEditSource =
-            static_cast<ScCellEditSource*> (pUnoText->GetEditSource());
+            static_cast<ScCellEditSource*> (mxUnoText->GetEditSource());
         if (pEditSource)
         {
             pEditSource->SetDoUpdateData(sal_True);
