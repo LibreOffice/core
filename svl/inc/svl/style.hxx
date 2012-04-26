@@ -221,7 +221,7 @@ protected:
     virtual SfxStyleSheetBase*  Create( const UniString&, SfxStyleFamily, sal_uInt16 );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
-                                ~SfxStyleSheetBasePool();
+    virtual                     ~SfxStyleSheetBasePool();
 
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
