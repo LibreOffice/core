@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************ -->
-<oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <node oor:name="Installed">
+<oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <node oor:name="Installed" install:module="hsqldb">
     <node oor:name="sdbc:embedded:hsqldb" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.sdbcx.comp.hsqldb.Driver</value>
