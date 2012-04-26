@@ -136,6 +136,8 @@ bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
         buf.append( rData.m_pName );
         buf.append( RTL_CONSTASCII_STRINGPARAM(": ") );
         buf.append( static_cast<sal_Int64>(nSize) );
+        buf.append("; Expected: ");
+        buf.append( static_cast<sal_Int64>(nExpected) );
         DEBUGBASE_ENSURE( false, buf.makeStringAndClear().getStr() );
     }
     return bRet;
