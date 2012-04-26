@@ -284,8 +284,7 @@ const EditTextObject* ScHeaderFooterTextData::GetTextObject() const
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
-    aTextData(rContent, nP, pTextObj),
-    pUnoText( NULL )
+    aTextData(rContent, nP, pTextObj)
 {
     //  ScHeaderFooterTextData acquires rContent
     //  pUnoText is created on demand (getString/setString work without it)
@@ -293,20 +292,15 @@ ScHeaderFooterTextObj::ScHeaderFooterTextObj(
 
 void ScHeaderFooterTextObj::CreateUnoText_Impl()
 {
-    if ( !pUnoText )
+    if (!mxUnoText.is())
     {
         //  can't be aggregated because getString/setString is handled here
         ScHeaderFooterEditSource aEditSrc(aTextData);
-        pUnoText = new SvxUnoText(&aEditSrc, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>());
-        pUnoText->acquire();
+        mxUnoText.set(new SvxUnoText(&aEditSrc, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>()));
     }
 }
 
-ScHeaderFooterTextObj::~ScHeaderFooterTextObj()
-{
-    if (pUnoText)
-        pUnoText->release();
-}
+ScHeaderFooterTextObj::~ScHeaderFooterTextObj() {}
 
 const EditTextObject* ScHeaderFooterTextObj::GetTextObject() const
 {
@@ -315,9 +309,9 @@ const EditTextObject* ScHeaderFooterTextObj::GetTextObject() const
 
 const SvxUnoText& ScHeaderFooterTextObj::GetUnoText()
 {
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return *pUnoText;
+    return *mxUnoText;
 }
 
 // XText
@@ -334,9 +328,9 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->createTextCursorByRange(aTextPosition);
+    return mxUnoText->createTextCursorByRange(aTextPosition);
     //! wie ScCellObj::createTextCursorByRange, wenn SvxUnoTextRange_getReflection verfuegbar
 }
 
@@ -397,9 +391,9 @@ void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XT
                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    pUnoText->insertString( xRange, aString, bAbsorb );
+    mxUnoText->insertString( xRange, aString, bAbsorb );
 }
 
 void SAL_CALL ScHeaderFooterTextObj::insertControlCharacter(
@@ -408,9 +402,9 @@ void SAL_CALL ScHeaderFooterTextObj::insertControlCharacter(
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    pUnoText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
+    mxUnoText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
 void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
@@ -490,9 +484,9 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
         }
     }
 
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    pUnoText->insertTextContent( xRange, xContent, bAbsorb );
+    mxUnoText->insertTextContent( xRange, xContent, bAbsorb );
 }
 
 void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
@@ -510,33 +504,33 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
             return;
         }
     }
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    pUnoText->removeTextContent( xContent );
+    mxUnoText->removeTextContent( xContent );
 }
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextObj::getText() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->getText();
+    return mxUnoText->getText();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getStart() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->getStart();
+    return mxUnoText->getStart();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getEnd() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->getEnd();
+    return mxUnoText->getEnd();
 }
 
 // XTextFieldsSupplier
@@ -564,9 +558,9 @@ void SAL_CALL ScHeaderFooterTextObj::moveTextRange(
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    pUnoText->moveTextRange( xRange, nParagraphs );
+    mxUnoText->moveTextRange( xRange, nParagraphs );
 }
 
 // XEnumerationAccess
@@ -575,9 +569,9 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->createEnumeration();
+    return mxUnoText->createEnumeration();
 }
 
 // XElementAccess
@@ -585,17 +579,17 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
 uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->getElementType();
+    return mxUnoText->getElementType();
 }
 
 sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!pUnoText)
+    if (!mxUnoText.is())
         CreateUnoText_Impl();
-    return pUnoText->hasElements();
+    return mxUnoText->hasElements();
 }
 
 //------------------------------------------------------------------------

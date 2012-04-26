@@ -161,7 +161,7 @@ class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
 {
 private:
     ScHeaderFooterTextData      aTextData;
-    SvxUnoText*                 pUnoText;
+    rtl::Reference<SvxUnoText> mxUnoText;
 
     void                    CreateUnoText_Impl();
 
