@@ -10,7 +10,7 @@
     <OpenOffice.org-minimal-version value="3.0" dep:name="OpenOffice.org 3.0"/>
   </dependencies>
 
-  <version value="3.3.0"/>
+  <version value="3.3.1"/>
 
   <publisher>
     <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
