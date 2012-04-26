@@ -164,7 +164,7 @@ throw( com::sun::star::uno::RuntimeException )
     WPXSvInputStream input( xInputStream );
 
     if (libcdr::CMXDocument::isSupported(&input))
-        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_CorelDraw_Document" ) );
+        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_Corel_Presentation_Exchange" ) );
 
     if (sTypeName.getLength())
     {
