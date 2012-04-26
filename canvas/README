@@ -1,4 +1,10 @@
-New canvas implementation to improve rendering, various backends implement the new XCanvas API eg. Cairo / DirectX.
+New canvas implementation to improve rendering, various backends
+implement the new XCanvas API eg. Cairo / DirectX.
+
+In what sense "new"? For how long has it been "new", what is the "old"
+one then? How much of the below is relevant *today*? It was committed
+in 2005. Please if you read this and have knowledge and time, do
+improve this file...
 
 == The new OOo Canvas Framework ==
 
