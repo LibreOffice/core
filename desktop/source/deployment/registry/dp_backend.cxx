@@ -726,13 +726,14 @@ void Package::registerPackage(
 
 //______________________________________________________________________________
 void Package::revokePackage(
+    sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException,
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
-    processPackage_impl( false /* revoke */, false, xAbortChannel, xCmdEnv );
+    processPackage_impl( false /* revoke */, startup, xAbortChannel, xCmdEnv );
 
 }
 

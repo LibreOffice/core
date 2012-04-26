@@ -398,7 +398,7 @@ void BackendImpl::PackageImpl::processPackage_(
     bool bDialog = !m_dialogURL.isEmpty();
     Reference<css::script::XLibraryContainer3> xDialogLibs;
 
-    bool bRunning = office_is_running();
+    bool bRunning = !startup && office_is_running();
     if( bRunning )
     {
         if( bScript )
@@ -457,7 +457,7 @@ void BackendImpl::PackageImpl::processPackage_(
         bDialogSuccess = lcl_maybeAddScript(bDialog, m_dialogName, m_dialogURL, xDialogLibs);
     }
     bool bSuccess = bScript || bDialog;     // Something must have happened
-    if( bRunning && !startup)
+    if( bRunning )
         if( (bScript && !bScriptSuccess) || (bDialog && !bDialogSuccess) )
             bSuccess = false;
 

@@ -909,7 +909,7 @@ void BackendImpl::PackageImpl::processPackage_(
                     {
                         try {
                             bundle[ pos ]->revokePackage(
-                                xSubAbortChannel, xCmdEnv );
+                                startup, xSubAbortChannel, xCmdEnv );
                         }
                         catch (const Exception &)
                         {
@@ -950,7 +950,8 @@ void BackendImpl::PackageImpl::processPackage_(
                 xPackage->createAbortChannel() );
             AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
             try {
-                bundle[ pos ]->revokePackage( xSubAbortChannel, xCmdEnv );
+                bundle[ pos ]->revokePackage(
+                    startup, xSubAbortChannel, xCmdEnv );
             }
             catch (const RuntimeException &) {
                 throw;

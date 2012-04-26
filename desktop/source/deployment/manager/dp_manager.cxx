@@ -1322,7 +1322,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
                     url, i->second.mediaType, true, i->first, xCmdEnv );
                 OSL_ASSERT(xPackage.is()); //Even if the files are removed, we must get the object.
-                xPackage->revokePackage(xAbortChannel, xCmdEnv);
+                xPackage->revokePackage(true, xAbortChannel, xCmdEnv);
                 removePackage(xPackage->getIdentifier().Value, xPackage->getName(),
                               xAbortChannel, xCmdEnv);
                 bModified |= true;

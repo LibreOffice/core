@@ -464,7 +464,7 @@ void ExtensionManager::activateExtension(
             //Check if this is a disabled user extension,
             if (i == 0 && bUserDisabled)
             {
-                   aExt->revokePackage(xAbortChannel, xCmdEnv);
+                   aExt->revokePackage(bStartup, xAbortChannel, xCmdEnv);
                    continue;
             }
 
@@ -473,7 +473,7 @@ void ExtensionManager::activateExtension(
             //repositories with a lower priority
             if (bActive)
             {
-                aExt->revokePackage(xAbortChannel, xCmdEnv);
+                aExt->revokePackage(bStartup, xAbortChannel, xCmdEnv);
             }
             else
             {
@@ -694,7 +694,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     try
                     {
                         xOldExtension->revokePackage(
-                            xAbortChannel, Reference<ucb::XCommandEnvironment>());
+                            false, xAbortChannel, Reference<ucb::XCommandEnvironment>());
                         //save the old user extension in case the user aborts
                         //store the extension in the tmp repository, this will overwrite
                         //xTmpPackage (same identifier). Do not let the user abort or
@@ -873,7 +873,7 @@ void ExtensionManager::removeExtension(
         Reference<deploy::XPackage> xOldExtension =
             xPackageManager->getDeployedPackage(
                 identifier, fileName, xCmdEnv);
-        xOldExtension->revokePackage(xAbortChannel, xCmdEnv);
+        xOldExtension->revokePackage(false, xAbortChannel, xCmdEnv);
 
         xPackageManager->removePackage(
             identifier, fileName, xAbortChannel, xCmdEnv);
@@ -1024,7 +1024,7 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
         if (ret)
         {
             //There are some unfulfilled prerequisites, try to revoke
-            extension->revokePackage(xAbortChannel, xCmdEnv);
+            extension->revokePackage(false, xAbortChannel, xCmdEnv);
         }
         const OUString id(dp_misc::getIdentifier(extension));
         activateExtension(id, extension->getName(),
