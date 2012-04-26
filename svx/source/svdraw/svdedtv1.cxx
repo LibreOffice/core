@@ -744,10 +744,10 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bO
     long nAllSnapWdt=aAllSnapRect.GetWidth()-1;
     long nAllSnapHgt=aAllSnapRect.GetHeight()-1;
     // TODO: could go into CheckPossibilities
-    sal_Bool bMovProtect=sal_False,bMovProtectDC=sal_False;
-    sal_Bool bSizProtect=sal_False,bSizProtectDC=sal_False;
-    sal_Bool bPrintable =sal_True ,bPrintableDC=sal_False;
-    sal_Bool bVisible = sal_True, bVisibleDC=sal_False;
+    bool bMovProtect = false, bMovProtectDC = false;
+    bool bSizProtect = false, bSizProtectDC = false;
+    bool bPrintable = true, bPrintableDC = false;
+    bool bVisible = true, bVisibleDC = false;
     SdrLayerID nLayerId=0; sal_Bool bLayerDC=sal_False;
     rtl::OUString aObjName;
     sal_Bool bObjNameDC=sal_False,bObjNameSet=sal_False;
@@ -784,11 +784,11 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bO
             nRotAngle=pObj->GetRotateAngle();
             nShrAngle=pObj->GetShearAngle();
         } else {
-            if (!bLayerDC      && nLayerId   !=pObj->GetLayer())        bLayerDC=sal_True;
-            if (!bMovProtectDC && bMovProtect!=pObj->IsMoveProtect())   bMovProtectDC=sal_True;
-            if (!bSizProtectDC && bSizProtect!=pObj->IsResizeProtect()) bSizProtectDC=sal_True;
-            if (!bPrintableDC  && bPrintable !=pObj->IsPrintable())     bPrintableDC=sal_True;
-            if (!bVisibleDC    && bVisible !=pObj->IsVisible())         bVisibleDC=sal_True;
+            if (!bLayerDC      && nLayerId   !=pObj->GetLayer())        bLayerDC = true;
+            if (!bMovProtectDC && bMovProtect!=pObj->IsMoveProtect())   bMovProtectDC = true;
+            if (!bSizProtectDC && bSizProtect!=pObj->IsResizeProtect()) bSizProtectDC = true;
+            if (!bPrintableDC  && bPrintable !=pObj->IsPrintable())     bPrintableDC = true;
+            if (!bVisibleDC    && bVisible !=pObj->IsVisible())         bVisibleDC=true;
             if (!bRotAngleDC   && nRotAngle  !=pObj->GetRotateAngle())  bRotAngleDC=sal_True;
             if (!bShrAngleDC   && nShrAngle  !=pObj->GetShearAngle())   bShrAngleDC=sal_True;
             if (!bSnapWdtDC || !bSnapHgtDC || !bSnapPosXDC || !bSnapPosYDC || !bLogicWdtDiff || !bLogicHgtDiff) {
@@ -1248,14 +1248,14 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         const SdrMarkList& rMarkList=GetMarkedObjectList();
         sal_uIntPtr nMarkCount=rMarkList.GetMarkCount();
         SdrObject* pObj=rMarkList.GetMark(0)->GetMarkedSdrObj();
-        sal_Bool bPosProt=pObj->IsMoveProtect();
-        sal_Bool bSizProt=pObj->IsResizeProtect();
-        sal_Bool bPosProtDontCare=sal_False;
-        sal_Bool bSizProtDontCare=sal_False;
+        bool bPosProt=pObj->IsMoveProtect();
+        bool bSizProt=pObj->IsResizeProtect();
+        bool bPosProtDontCare=false;
+        bool bSizProtDontCare=false;
         for (sal_uIntPtr i=1; i<nMarkCount && (!bPosProtDontCare || !bSizProtDontCare); i++) {
             pObj=rMarkList.GetMark(i)->GetMarkedSdrObj();
-            if (bPosProt!=pObj->IsMoveProtect()) bPosProtDontCare=sal_True;
-            if (bSizProt!=pObj->IsResizeProtect()) bSizProtDontCare=sal_True;
+            if (bPosProt!=pObj->IsMoveProtect()) bPosProtDontCare=true;
+            if (bSizProt!=pObj->IsResizeProtect()) bSizProtDontCare=true;
         }
 
         // InvalidateItem sets item to DONT_CARE
@@ -1528,7 +1528,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     // protect position
     if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, sal_True, &pPoolItem))
     {
-        const sal_Bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
+        const bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
         bool bChanged(false);
 
         for(sal_uInt32 i(0); i < nMarkCount; i++)
@@ -1569,7 +1569,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         // protect size
         if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_True, &pPoolItem))
         {
-            const sal_Bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
+            const bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
             bool bChanged(false);
 
             for(sal_uInt32 i(0); i < nMarkCount; i++)
