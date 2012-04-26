@@ -56,8 +56,7 @@ class SvStream;
  *************************************************************************/
 
 class SwFlyCache;
-typedef SwFlyCache* SwFlyCachePtr;
-SV_DECL_PTRARR_DEL( SwPageFlyCache, SwFlyCachePtr, 0 )
+typedef boost::ptr_vector<SwFlyCache> SwPageFlyCache;
 
 class SwLayCacheImpl : public std::vector<sal_uLong>
 {
@@ -75,8 +74,8 @@ public:
     xub_StrLen GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
 
-    sal_uInt16 GetFlyCount() const { return aFlyCache.Count(); }
-    SwFlyCache *GetFlyCache( sal_uInt16 nIdx ) const { return aFlyCache[ nIdx ]; }
+    sal_uInt16 GetFlyCount() const { return aFlyCache.size(); }
+    SwFlyCache *GetFlyCache( sal_uInt16 nIdx ) { return &aFlyCache[ nIdx ]; }
 
     sal_Bool IsUseFlyCache() const { return bUseFlyCache; }
 };

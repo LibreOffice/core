@@ -70,8 +70,6 @@
 
 using namespace ::com::sun::star;
 
-SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
-
 /*
  *  Reading and writing of the layout cache.
  *  The layout cache is not necessary, but it improves
@@ -158,7 +156,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.GetStream() >> nPgNum >> nIndex
                     >> nX >> nY >> nW >> nH;
             SwFlyCache* pFly = new SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH );
-            aFlyCache.Insert( pFly, aFlyCache.Count() );
+            aFlyCache.push_back( pFly );
             aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
             break;
         }
