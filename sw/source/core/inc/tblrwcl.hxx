@@ -186,7 +186,7 @@ public:
 };
 
 
-SV_DECL_PTRARR_DEL( _SwShareBoxFmts, SwShareBoxFmt*, 8 )
+typedef boost::ptr_vector<SwShareBoxFmt> _SwShareBoxFmts;
 
 class SwShareBoxFmts
 {

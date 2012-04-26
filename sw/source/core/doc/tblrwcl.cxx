@@ -82,8 +82,6 @@ typedef SwTableLine* SwTableLinePtr;
 SV_DECL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr, 16 )
 SV_IMPL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr );
 
-SV_IMPL_PTRARR( _SwShareBoxFmts, SwShareBoxFmt* )
-
 // In order to set the Frame Formats for the Boxes, it's enough to look
 // up the current one in the array. If it's already there return the new one.
 struct _CpyTabFrm
@@ -4573,7 +4571,7 @@ SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt, long nWidth ) const
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFmt, &nPos )
-                    ? aShareArr[ nPos ]->GetFormat( nWidth )
+                    ? aShareArr[ nPos ].GetFormat( nWidth )
                     : 0;
 }
 SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt,
@@ -4581,7 +4579,7 @@ SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt,
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFmt, &nPos )
-                    ? aShareArr[ nPos ]->GetFormat( rItem )
+                    ? aShareArr[ nPos ].GetFormat( rItem )
                     : 0;
 }
 
@@ -4593,10 +4591,10 @@ void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew )
         if( !Seek_Entry( rOld, &nPos ))
         {
             pEntry = new SwShareBoxFmt( rOld );
-            aShareArr.C40_INSERT( SwShareBoxFmt, pEntry, nPos );
+            aShareArr.insert( aShareArr.begin() + nPos, pEntry );
         }
         else
-            pEntry = aShareArr[ nPos ];
+            pEntry = &aShareArr[ nPos ];
 
         pEntry->AddFormat( rNew );
     }
@@ -4670,22 +4668,22 @@ void SwShareBoxFmts::SetAttr( SwTableLine& rLine, const SfxPoolItem& rItem )
 
 void SwShareBoxFmts::RemoveFormat( const SwFrmFmt& rFmt )
 {
-    for( sal_uInt16 i = aShareArr.Count(); i; )
-        if( aShareArr[ --i ]->RemoveFormat( rFmt ))
-            aShareArr.DeleteAndDestroy( i );
+    for( sal_uInt16 i = aShareArr.size(); i; )
+        if( aShareArr[ --i ].RemoveFormat( rFmt ))
+            aShareArr.erase( aShareArr.begin() + i );
 }
 
 sal_Bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const
 {
     sal_uLong nIdx = (sal_uLong)&rFmt;
-    sal_uInt16 nO = aShareArr.Count(), nM, nU = 0;
+    sal_uInt16 nO = aShareArr.size(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            sal_uLong nFmt = (sal_uLong)&aShareArr[ nM ]->GetOldFormat();
+            sal_uLong nFmt = (sal_uLong)&aShareArr[ nM ].GetOldFormat();
             if( nFmt == nIdx )
             {
                 if( pPos )
