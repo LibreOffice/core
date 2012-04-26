@@ -116,9 +116,9 @@
 #define ROW_4a                      (ROW_4+RSC_CD_CHECKBOX_HEIGHT+1)
 #define ROW_5                       (ROW_4a+4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
 #define ROW_6                       (ROW_5+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_7                       (ROW_6+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_7                       (ROW_6+3*RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_7a                      (ROW_7-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
 #define ROW_8                       (ROW_7+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define ROW_9                       (ROW_8+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_CTRL_DESC_Y)
 
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 

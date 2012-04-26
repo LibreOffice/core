@@ -367,7 +367,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     PushButton PB_SEC_MACROSEC
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_INET_SECURITY:PB_SEC_MACROSEC";
-        Pos = MAP_APPFONT( COL_3, ROW_6-2 );
+        Pos = MAP_APPFONT( COL_3, ROW_7a );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Macro Security...";
     };
