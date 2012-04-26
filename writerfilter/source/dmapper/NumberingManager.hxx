@@ -85,8 +85,7 @@ private:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetLevelProperties(  );
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-        GetParaProperties(  );
+    void AddParaProperties( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* props );
 };
 
 class AbstractListDef

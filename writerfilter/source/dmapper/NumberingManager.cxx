@@ -189,11 +189,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetProperties( )
 {
     uno::Sequence< beans::PropertyValue > aLevelProps = GetLevelProperties( );
     if ( m_pParaStyle.get( ) )
-    {
-        // Merge with the paragraph properties
-        uno::Sequence< beans::PropertyValue > aParaProps = GetParaProperties( );
-        lcl_mergeProperties( aParaProps, aLevelProps );
-    }
+        AddParaProperties( &aLevelProps );
     return aLevelProps;
 }
 
@@ -330,35 +326,43 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     return aRet;
 }
 
-uno::Sequence< beans::PropertyValue > ListLevel::GetParaProperties( )
+// Add the properties only if they do not already exist in the sequence.
+void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props )
 {
+    uno::Sequence< beans::PropertyValue >& aProps = *props;
     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
+    OUString sFirstLineIndent = aPropNameSupplier.GetName(
+            PROP_FIRST_LINE_INDENT );
+    OUString sIndentAt = aPropNameSupplier.GetName(
+            PROP_INDENT_AT );
+
+    bool hasFirstLineIndent = lcl_findProperty( aProps, sFirstLineIndent );
+    bool hasIndentAt = lcl_findProperty( aProps, sIndentAt );
+
+    if( hasFirstLineIndent && hasIndentAt )
+        return; // has them all, nothing to add
+
     uno::Sequence< beans::PropertyValue > aParaProps = m_pParaStyle->pProperties->GetPropertyValues( );
-    uno::Sequence< beans::PropertyValue > aProps;
 
     // ParaFirstLineIndent -> FirstLineIndent
     // ParaLeftMargin -> IndentAt
 
     OUString sParaIndent = aPropNameSupplier.GetName(
             PROP_PARA_FIRST_LINE_INDENT );
-    OUString sFirstLineIndent = aPropNameSupplier.GetName(
-            PROP_FIRST_LINE_INDENT );
     OUString sParaLeftMargin = aPropNameSupplier.GetName(
             PROP_PARA_LEFT_MARGIN );
-    OUString sIndentAt = aPropNameSupplier.GetName(
-            PROP_INDENT_AT );
 
     sal_Int32 nLen = aParaProps.getLength( );
     for ( sal_Int32 i = 0; i < nLen; i++ )
     {
-        if ( aParaProps[i].Name.equals( sParaIndent ) )
+        if ( !hasFirstLineIndent && aParaProps[i].Name.equals( sParaIndent ) )
         {
             aProps.realloc( aProps.getLength() + 1 );
             aProps[aProps.getLength( ) - 1] = aParaProps[i];
             aProps[aProps.getLength( ) - 1].Name = sFirstLineIndent;
         }
-        else if ( aParaProps[i].Name.equals( sParaLeftMargin ) )
+        else if ( !hasIndentAt && aParaProps[i].Name.equals( sParaLeftMargin ) )
         {
             aProps.realloc( aProps.getLength() + 1 );
             aProps[aProps.getLength( ) - 1] = aParaProps[i];
@@ -366,8 +370,6 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetParaProperties( )
         }
 
     }
-
-    return aProps;
 }
 
 //--------------------------------------- AbstractListDef implementation
