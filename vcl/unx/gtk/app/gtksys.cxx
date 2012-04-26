@@ -89,7 +89,7 @@ GtkSalSystem::getScreenMonitorFromIdx (GdkDisplay *pDisplay, int nIdx, gint &nMo
     GdkScreen *pScreen = NULL;
     for (gint i = 0; i < gdk_display_get_n_screens (pDisplay); i++)
     {
-        pScreen = gdk_display_get_screen (pDisplay, i++);
+        pScreen = gdk_display_get_screen (pDisplay, i);
         if (!pScreen)
             break;
         if (nIdx > gdk_screen_get_n_monitors (pScreen))
