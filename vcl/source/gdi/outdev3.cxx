@@ -2176,7 +2176,7 @@ FontSelectPattern::FontSelectPattern( const Font& rFont,
 }
 
 // -----------------------------------------------------------------------
-
+// NOTE: this ctor is still used on Windows. Do not remove.
 FontSelectPattern::FontSelectPattern( const ImplFontData& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
 :   ImplFontAttributes( rFontData ),
