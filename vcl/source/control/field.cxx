@@ -1042,8 +1042,7 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
     for ( short i = rStr.Len()-1; i >= 0; i-- )
     {
         xub_Unicode c = rStr.GetChar( i );
-        if ( unicode::isAlpha( c ) ||
-             (c == '\'') || (c == '\"') || (c == '%' ) )
+        if ( (c == '\'') || (c == '\"') || (c == '%' ) || unicode::isAlpha(c) || unicode::isControl(c) )
             aStr.Insert( c, 0 );
         else
         {
