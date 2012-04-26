@@ -69,6 +69,7 @@ class ScCellFieldsObj : public cppu::WeakImplHelper5<
                         public SfxListener
 {
 private:
+    com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mxContent;
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
     ScEditSource* mpEditSource;
@@ -82,8 +83,10 @@ private:
             GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
-                            ScCellFieldsObj(ScDocShell* pDocSh, const ScAddress& rPos);
-    virtual                 ~ScCellFieldsObj();
+    ScCellFieldsObj(
+        const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& xContent,
+        ScDocShell* pDocSh, const ScAddress& rPos);
+    virtual ~ScCellFieldsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

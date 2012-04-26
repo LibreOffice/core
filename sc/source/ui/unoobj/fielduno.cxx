@@ -295,7 +295,10 @@ SvxFieldData* ScUnoEditEngine::FindByPos(sal_uInt16 nPar, xub_StrLen nPos, TypeI
 
 //------------------------------------------------------------------------
 
-ScCellFieldsObj::ScCellFieldsObj(ScDocShell* pDocSh, const ScAddress& rPos) :
+ScCellFieldsObj::ScCellFieldsObj(
+    const uno::Reference<text::XTextRange>& xContent,
+    ScDocShell* pDocSh, const ScAddress& rPos) :
+    mxContent(xContent),
     pDocShell( pDocSh ),
     aCellPos( rPos ),
     mpRefreshListeners( NULL )
@@ -353,16 +356,13 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     if (!pData)
         return uno::Reference<text::XTextField>();
 
-    // Get the parent text range instance.
-    uno::Reference<text::XTextRange> xContent(new ScCellObj(pDocShell, aCellPos));
-
     sal_uInt16 nPar = aTempEngine.GetFieldPar();
     xub_StrLen nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
 
     ScEditFieldObj::FieldType eType = getFieldType(pData->GetClassId());
     uno::Reference<text::XTextField> xRet(
-        new ScEditFieldObj(xContent, new ScCellEditSource(pDocShell, aCellPos), eType, aSelection));
+        new ScEditFieldObj(mxContent, new ScCellEditSource(pDocShell, aCellPos), eType, aSelection));
     return xRet;
 }
 

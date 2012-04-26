@@ -6704,7 +6704,10 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellObj::getTextFields(
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        return new ScCellFieldsObj( pDocSh, aCellPos );
+    {
+        uno::Reference<text::XTextRange> xContent(this);
+        return new ScCellFieldsObj(xContent, pDocSh, aCellPos);
+    }
 
     return NULL;
 }
