@@ -76,6 +76,13 @@ void SvxSimpleTableContainer::SetSizePixel(const Size& rNewSize )
         m_pTable->UpdateViewSize();
 }
 
+void SvxSimpleTableContainer::GetFocus()
+{
+    Control::GetFocus();
+    if (m_pTable)
+        m_pTable->GrabFocus();
+}
+
 // SvxSimpleTable ------------------------------------------------------------
 
 SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):

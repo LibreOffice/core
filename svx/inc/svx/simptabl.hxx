@@ -54,6 +54,7 @@ public:
     void SetTable(SvxSimpleTable* pTable);
 
     virtual void SetSizePixel(const Size& rNewSize);
+    virtual void GetFocus();
 };
 
 class SVX_DLLPUBLIC SvxSimpleTable : public SvHeaderTabListBox
