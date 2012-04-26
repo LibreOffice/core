@@ -68,6 +68,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/help.hxx>
+#include <rtl/logfile.hxx>
 
 #define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
 
@@ -233,15 +234,27 @@ void SvxAutocorrWordList::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 }
 
 
+// Keep the list sorted ...
 sal_Bool SvxAutocorrWordList::Seek_Entry( const SvxAutocorrWordPtr aE, sal_uInt16* pP ) const
 {
     register sal_uInt16 nO  = SvxAutocorrWordList_SAR::Count(),
             nM,
             nU = 0;
+
     if( nO > 0 )
     {
         CollatorWrapper& rCmp = ::GetCollatorWrapper();
         nO--;
+
+        // quick check of the end of the list
+        if (rCmp.compareString( aE->GetShort(),
+                                (*((SvxAutocorrWordPtr*)pData + nO))->GetShort() ) > 0)
+        {
+            if( pP ) *pP = nO + 1;
+            return sal_False;
+        }
+
+        // Incredibly crude sort algorithm, should use some partitioning search.
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
@@ -2169,6 +2182,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         OSL_ENSURE( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( xXMLParser.is() )
         {
+            RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "AutoCorrect Import" );
             uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
 
             // connect parser and filter
