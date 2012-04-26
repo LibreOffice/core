@@ -48,7 +48,6 @@
 
 
 SV_IMPL_PTRARR(SwSortList, SwSortUndoElement*)
-SV_IMPL_PTRARR(SwUndoSortList, SwNodeIndex*)
 
 
 SwSortUndoElement::~SwSortUndoElement()
@@ -151,7 +150,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
                 {
                     SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                         aSortList[ii]->SORT_TXT_TBL.TXT.nTarget );
-                    aIdxList.C40_INSERT(SwNodeIndex, pIdx, i );
+                    aIdxList.insert( aIdxList.begin() + i, pIdx );
                     break;
                 }
 
@@ -163,7 +162,9 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
                 IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
         // Indixes loeschen
-        aIdxList.DeleteAndDestroy(0, aIdxList.Count());
+        for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
+            delete *it;
+        aIdxList.clear();
         SetPaM(rPam, true);
     }
 }
@@ -226,7 +227,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         {   // aktuelle Pos ist die Ausgangslage
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i]->SORT_TXT_TBL.TXT.nSource);
-            aIdxList.C40_INSERT( SwNodeIndex, pIdx, i );
+            aIdxList.insert( aIdxList.begin() + i, pIdx );
         }
 
         for(i=0; i < aSortList.Count(); ++i)
@@ -237,7 +238,9 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
                 IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
         // Indixes loeschen
-        aIdxList.DeleteAndDestroy(0, aIdxList.Count());
+        for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
+            delete *it;
+        aIdxList.clear();
         SetPaM(rPam, true);
         SwTxtNode const*const pTNd = rPam.GetNode()->GetTxtNode();
         if( pTNd )

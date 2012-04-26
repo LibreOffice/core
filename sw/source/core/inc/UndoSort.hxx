@@ -68,7 +68,7 @@ struct SwSortUndoElement
 };
 
 SV_DECL_PTRARR_DEL(SwSortList, SwSortUndoElement*, 10)
-SV_DECL_PTRARR(SwUndoSortList, SwNodeIndex*, 10)
+typedef std::vector<SwNodeIndex*> SwUndoSortList;
 
 class SwUndoSort : public SwUndo, private SwUndRng
 {
