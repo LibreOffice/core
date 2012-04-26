@@ -1035,22 +1035,22 @@ static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static XubString ImplMetricGetUnitText( const XubString& rStr )
+static rtl::OUString ImplMetricGetUnitText(const rtl::OUString& rStr)
 {
     // Einheitentext holen
-    XubString aStr;
-    for ( short i = rStr.Len()-1; i >= 0; i-- )
+    rtl::OUStringBuffer aStr;
+    for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
-        xub_Unicode c = rStr.GetChar( i );
+        xub_Unicode c = rStr[i];
         if ( (c == '\'') || (c == '\"') || (c == '%' ) || unicode::isAlpha(c) || unicode::isControl(c) )
-            aStr.Insert( c, 0 );
+            aStr.insert(0, c);
         else
         {
-            if ( aStr.Len() )
+            if (aStr.getLength())
                 break;
         }
     }
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
@@ -1073,14 +1073,13 @@ static const String& ImplMetricToString( FieldUnit rUnit )
     return String::EmptyString();
 }
 
-static FieldUnit ImplStringToMetric( const String &rMetricString )
+static FieldUnit ImplStringToMetric(const rtl::OUString &rMetricString)
 {
     FieldUnitStringList* pList = ImplGetCleanedFieldUnits();
     if( pList )
     {
         // return FieldUnit
-        rtl::OUString aStr( rMetricString );
-        aStr = aStr.toAsciiLowerCase();
+        rtl::OUString aStr(rMetricString.toAsciiLowerCase());
         aStr = comphelper::string::remove(aStr, ' ');
         for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
         {
@@ -1094,9 +1093,9 @@ static FieldUnit ImplStringToMetric( const String &rMetricString )
 
 // -----------------------------------------------------------------------
 
-static FieldUnit ImplMetricGetUnit( const XubString& rStr )
+static FieldUnit ImplMetricGetUnit(const rtl::OUString& rStr)
 {
-    XubString aStr = ImplMetricGetUnitText( rStr );
+    rtl::OUString aStr = ImplMetricGetUnitText( rStr );
     return ImplStringToMetric( aStr );
 }
 
