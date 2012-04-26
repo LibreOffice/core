@@ -177,7 +177,7 @@ XclRootData::~XclRootData()
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )
 {
-#if OSL_DEBUG_LEVEL > 0
+#if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 
@@ -189,14 +189,14 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 XclRoot::XclRoot( const XclRoot& rRoot ) :
     mrData( rRoot.mrData )
 {
-#if OSL_DEBUG_LEVEL > 0
+#if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 }
 
 XclRoot::~XclRoot()
 {
-#if OSL_DEBUG_LEVEL > 0
+#if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 0
     --mrData.mnObjCnt;
 #endif
 }
