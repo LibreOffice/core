@@ -28,7 +28,7 @@
 
 <component loader="com.sun.star.loader.Java2"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.script.framework.provider.beanshell.ScriptProviderForBeanShell$_ScriptProviderForBeanShell">
+  <implementation name="com.sun.star.script.framework.provider.beanshell.ScriptProviderForBeanShell$ScriptProviderForBeanShell_2">
     <service name="com.sun.star.script.browse.BrowseNode"/>
     <service name="com.sun.star.script.provider.LanguageScriptProvider"/>
     <service name="com.sun.star.script.provider.ScriptProvider"/>

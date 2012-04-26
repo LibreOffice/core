@@ -58,9 +58,9 @@ import com.sun.star.script.framework.container.ScriptMetaData;
 
 public class ScriptProviderForBeanShell
 {
-    public static class _ScriptProviderForBeanShell extends ScriptProvider
+    public static class ScriptProviderForBeanShell_2 extends ScriptProvider
     {
-        public _ScriptProviderForBeanShell(XComponentContext ctx)
+        public ScriptProviderForBeanShell_2(XComponentContext ctx)
         {
             super (ctx, "BeanShell");
         }
@@ -112,10 +112,10 @@ public class ScriptProviderForBeanShell
     {
         XSingleServiceFactory xSingleServiceFactory = null;
 
-        if ( implName.equals( ScriptProviderForBeanShell._ScriptProviderForBeanShell.class.getName() ) )
+        if ( implName.equals( ScriptProviderForBeanShell.ScriptProviderForBeanShell_2.class.getName() ) )
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                ScriptProviderForBeanShell._ScriptProviderForBeanShell.class,
+                ScriptProviderForBeanShell.ScriptProviderForBeanShell_2.class,
                 "com.sun.star.script.provider.ScriptProviderForBeanShell",
                 multiFactory,
                 regKey );

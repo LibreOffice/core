@@ -59,9 +59,9 @@ import org.mozilla.javascript.JavaScriptException;
 
 public class ScriptProviderForJavaScript
 {
-    public static class _ScriptProviderForJavaScript extends ScriptProvider
+    public static class ScriptProviderForJavaScript_2 extends ScriptProvider
     {
-        public _ScriptProviderForJavaScript(XComponentContext ctx)
+        public ScriptProviderForJavaScript_2(XComponentContext ctx)
         {
             super(ctx, "JavaScript");
         }
@@ -113,10 +113,10 @@ public class ScriptProviderForJavaScript
     {
         XSingleServiceFactory xSingleServiceFactory = null;
 
-        if ( implName.equals( ScriptProviderForJavaScript._ScriptProviderForJavaScript.class.getName() ) )
+        if ( implName.equals( ScriptProviderForJavaScript.ScriptProviderForJavaScript_2.class.getName() ) )
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                ScriptProviderForJavaScript._ScriptProviderForJavaScript.class,
+                ScriptProviderForJavaScript.ScriptProviderForJavaScript_2.class,
                 "com.sun.star.script.provider.ScriptProviderForJavaScript",
                 multiFactory,
                 regKey );
