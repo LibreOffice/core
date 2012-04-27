@@ -336,7 +336,10 @@ def mkAllImages(dirs, suffix, resolution, reference):
 
 def identify(imagefile):
     argv = ["identify", "-format", "%k", imagefile]
-    result = subprocess.check_output(argv)
+    process = subprocess.Popen(argv, stdout=subprocess.PIPE)
+    result, _ = process.communicate()
+    if process.wait() != 0:
+        raise Exception("identify failed")
     if result.partition("\n")[0] != "1":
         print("identify result: " + result)
         print("DIFFERENCE in " + imagefile)
