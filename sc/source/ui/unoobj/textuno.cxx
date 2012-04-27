@@ -204,7 +204,6 @@ ScHeaderFooterTextData::ScHeaderFooterTextData(
     pForwarder( NULL ),
     bDataValid(false)
 {
-    rContentObj.acquire();              // must not go away
 }
 
 ScHeaderFooterTextData::~ScHeaderFooterTextData()
@@ -213,8 +212,6 @@ ScHeaderFooterTextData::~ScHeaderFooterTextData()
 
     delete pForwarder;
     delete pEditEngine;
-
-    rContentObj.release();
 }
 
 SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
