@@ -65,14 +65,15 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-bool checkDumpAgainstFile( const rtl::OUString& rDump, const rtl::OUString aFilePath )
+bool checkDumpAgainstFile( const rtl::OUString& rDump, const rtl::OUString aFilePath, const rtl::OUString& rToleranceFile)
 {
     rtl::OString aOFile = rtl::OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
+    rtl::OString aToleranceFile = rtl::OUStringToOString(rToleranceFile, RTL_TEXTENCODING_UTF8);
 
     CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
 
     rtl::OString aDump = rtl::OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    XMLDiff aDiff(aOFile.getStr(), aDump.getStr(),static_cast<int>(rDump.getLength()));
+    XMLDiff aDiff(aOFile.getStr(), aDump.getStr(),static_cast<int>(rDump.getLength()), aToleranceFile.getStr());
 
     return aDiff.compare();
 }
@@ -148,7 +149,7 @@ void ScChartRegressionTest::test()
 
     rtl::OUString aDump = xDumper->dump();
     std::cout << aDump;
-    bool bCompare = checkDumpAgainstFile( aDump, getPathFromSrc("/chart2/qa/unit/data/reference/testChart.xml") );
+    bool bCompare = checkDumpAgainstFile( aDump, getPathFromSrc("/chart2/qa/unit/data/reference/testChart.xml"), getPathFromSrc("/chart2/qa/unit/data/tolerance.xml") );
     CPPUNIT_ASSERT(bCompare);
 }
 

@@ -56,10 +56,14 @@ XMLDiff::XMLDiff(const std::string& file1, const std::string& file2)
     xmlFile2 = xmlParseFile(file2.c_str());
 }
 
-XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size)
+XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
 {
     xmlFile1 = xmlParseFile(pFileName);
     xmlFile2 = xmlParseMemory(pContent, size);
+
+    xmlDocPtr xmlToleranceFile = xmlParseFile(pToleranceFile);
+    loadToleranceFile(xmlToleranceFile);
+    xmlFreeDoc(xmlToleranceFile);
 }
 
 XMLDiff::~XMLDiff()
@@ -84,7 +88,9 @@ void readAttributesForTolerance(xmlNodePtr node, tolerance& tol)
     tol.value = val;
 
     xmlChar* relative = xmlGetProp(node, BAD_CAST("relative"));
-    bool rel = xmlXPathCastStringToBoolean(relative);
+    bool rel = false;
+    if(xmlStrEqual(relative, BAD_CAST("true")))
+        rel = true;
     xmlFree(relative);
     tol.relative = rel;
 }
