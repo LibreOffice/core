@@ -147,9 +147,6 @@ public:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();
 
-    // count of in-flight un-dispatched gdk events of a given input type
-    sal_uInt32                  m_nAnyInput[16];
-    void                        resetEvents();
     mutable boost::shared_ptr<vcl::unx::GtkPrintWrapper> m_pPrintWrapper;
 };
 

@@ -203,107 +203,36 @@ extern "C"
     }
 }
 
-// Handling the event queue
-
-void GtkInstance::resetEvents()
+#if GTK_CHECK_VERSION(3,0,0)
+static sal_uInt16 categorizeEvent(const GdkEvent *pEvent)
 {
-    memset( m_nAnyInput, 0, sizeof( m_nAnyInput ) );
-}
-
-void GtkInstance::addEvent( sal_uInt16 nMask )
-{
-    sal_uInt16 nShift = 1;
-    for (int i = 0; i < 16; i++) {
-        if( nMask & nShift )
-            m_nAnyInput[i]++;
-        nShift <<= 1;
-    }
-}
-
-void GtkInstance::subtractEvent( sal_uInt16 nMask )
-{
-    sal_uInt16 nShift = 1;
-    for (int i = 0; i < 16; i++) {
-        if( nMask & nShift && m_nAnyInput[i] > 0 )
-            m_nAnyInput[i]--;
-        nShift <<= 1;
-    }
-}
-
-extern "C" {
-    // We catch events as they pop out of X and into gdk
-    static GdkFilterReturn _sal_gtk_instance_filter_fn (GdkXEvent *_xevent,
-                                                        GdkEvent *event,
-                                                        gpointer  data)
+    sal_uInt16 nType = 0;
+    switch( pEvent->type )
     {
-        (void)event;
-        // FIXME: in theory this could be for non-X events but in reality it never is.
-        XEvent *pXEvent = (XEvent *)_xevent;
-        sal_uInt16 nType;
-        switch( pXEvent->type ) {
-        case ButtonPress:
-        case ButtonRelease:
-        case MotionNotify:
-        case EnterNotify:
-        case LeaveNotify:
-            nType = VCL_INPUT_MOUSE;
-            break;
-        case XLIB_KeyPress:
-            nType = VCL_INPUT_KEYBOARD;
-            break;
-        case Expose:
-        case GraphicsExpose:
-        case NoExpose:
-            nType = VCL_INPUT_PAINT;
-            break;
-        default:
-            nType = VCL_INPUT_OTHER;
-            break;
-        }
-        ((GtkInstance *)data)->addEvent( nType );
-
-        return GDK_FILTER_CONTINUE;
+    case GDK_MOTION_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_SCROLL:
+        nType = VCL_INPUT_MOUSE;
+        break;
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+        nType = VCL_INPUT_KEYBOARD;
+        break;
+    case GDK_EXPOSE:
+        nType = VCL_INPUT_PAINT;
+        break;
+    default:
+        nType = VCL_INPUT_OTHER;
+        break;
     }
-
-    static sal_uInt16 categorizeEvent(const GdkEvent *pEvent)
-    {
-        sal_uInt16 nType = 0;
-        switch( pEvent->type )
-        {
-        case GDK_MOTION_NOTIFY:
-        case GDK_BUTTON_PRESS:
-        case GDK_2BUTTON_PRESS:
-        case GDK_3BUTTON_PRESS:
-        case GDK_BUTTON_RELEASE:
-        case GDK_ENTER_NOTIFY:
-        case GDK_LEAVE_NOTIFY:
-        case GDK_SCROLL:
-            nType = VCL_INPUT_MOUSE;
-            break;
-        case GDK_KEY_PRESS:
-        case GDK_KEY_RELEASE:
-            nType = VCL_INPUT_KEYBOARD;
-            break;
-        case GDK_EXPOSE:
-            nType = VCL_INPUT_PAINT;
-            break;
-        default:
-            nType = VCL_INPUT_OTHER;
-            break;
-        }
-        return nType;
-    }
-
-
-    // And then again as they pop out of gdk and into gtk+
-
-    static void _sal_gtk_event_handler_fn (GdkEvent *pEvent, gpointer data)
-    {
-        sal_uInt16 nType = categorizeEvent(pEvent);
-        ((GtkInstance *)data)->subtractEvent( nType );
-        gtk_main_do_event( pEvent );
-    }
+    return nType;
 }
+#endif
 
 GtkInstance::GtkInstance( SalYieldMutex* pMutex )
 #if GTK_CHECK_VERSION(3,0,0)
@@ -312,21 +241,16 @@ GtkInstance::GtkInstance( SalYieldMutex* pMutex )
     : X11SalInstance( pMutex )
 #endif
 {
-    resetEvents();
 }
 
 // This has to happen after gtk_init has been called by saldata.cxx's
 // Init or our handlers just get clobbered.
 void GtkInstance::Init()
 {
-    gdk_window_add_filter( NULL, _sal_gtk_instance_filter_fn, this );
-    gdk_event_handler_set( _sal_gtk_event_handler_fn, this, NULL );
 }
 
 GtkInstance::~GtkInstance()
 {
-    gdk_event_handler_set( (GdkEventFunc)gtk_main_do_event, NULL, NULL );
-    gdk_window_remove_filter( NULL, _sal_gtk_instance_filter_fn, this );
     while( !m_aTimers.empty() )
         delete *m_aTimers.begin();
     DeInitAtkBridge();
@@ -612,9 +536,6 @@ void GtkInstance::RemoveTimer (SalTimer *pTimer)
 void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
-
-    if( !gdk_events_pending() )
-        resetEvents();
 }
 
 bool GtkInstance::IsTimerExpired()
