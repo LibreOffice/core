@@ -643,7 +643,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
     SvPtrarr   aCheck( 64 );
 
-    for (size_t i = 0; i < this->size(); )
+    for (size_t i = 0; i < this->size(); ++i)
     {
         SwLineRect &rL1 = (*this)[i];
         if ( !rL1.GetTab() || rL1.IsPainted() || rL1.IsLocked() )
@@ -793,10 +793,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         if ( bRemove )
         {
             this->erase(this->begin() + i);
-        }
-        else
-        {
-            ++i;
+            --i;
         }
     }
 }
