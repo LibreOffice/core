@@ -40,7 +40,7 @@ namespace css = com::sun::star;
 using rtl::OUString;
 
 PlacesListBox_Impl::PlacesListBox_Impl( Window* pParent, const rtl::OUString& rTitle ) :
-    SvHeaderTabListBox( pParent, WB_TABSTOP ),
+    SvHeaderTabListBox( pParent, WB_TABSTOP | WB_NOINITIALSELECTION ),
     mpHeaderBar( NULL )
 {
     Size aBoxSize = pParent->GetSizePixel( );
