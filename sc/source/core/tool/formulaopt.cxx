@@ -238,7 +238,6 @@ ScFormulaCfg::ScFormulaCfg() :
         sal_Int32 nIntVal = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
