@@ -60,7 +60,7 @@ using rtl::OUString;
 using rtl::OUStringBuffer;
 using namespace com::sun::star;
 
-class RtfModelTest : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     virtual void setUp();
@@ -92,7 +92,7 @@ public:
     void testFdo44211();
     void testFdo48037();
 
-    CPPUNIT_TEST_SUITE(RtfModelTest);
+    CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testFdo45553);
     CPPUNIT_TEST(testN192129);
@@ -132,12 +132,12 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-void RtfModelTest::load(const OUString& rFilename)
+void Test::load(const OUString& rFilename)
 {
     mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtftok/data/") + rFilename);
 }
 
-int RtfModelTest::getLength()
+int Test::getLength()
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -156,7 +156,7 @@ int RtfModelTest::getLength()
     return aBuf.getLength();
 }
 
-int RtfModelTest::getPages()
+int Test::getPages()
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -165,7 +165,7 @@ int RtfModelTest::getPages()
     return xCursor->getPage();
 }
 
-void RtfModelTest::setUp()
+void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -173,7 +173,7 @@ void RtfModelTest::setUp()
     CPPUNIT_ASSERT(mxDesktop.is());
 }
 
-void RtfModelTest::tearDown()
+void Test::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -181,7 +181,7 @@ void RtfModelTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void RtfModelTest::testFdo45553()
+void Test::testFdo45553()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45553.rtf")));
 
@@ -216,7 +216,7 @@ void RtfModelTest::testFdo45553()
     }
 }
 
-void RtfModelTest::testN192129()
+void Test::testN192129()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("n192129.rtf")));
 
@@ -234,13 +234,13 @@ void RtfModelTest::testN192129()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
 }
 
-void RtfModelTest::testFdo45543()
+void Test::testFdo45543()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45543.rtf")));
     CPPUNIT_ASSERT_EQUAL(5, getLength());
 }
 
-void RtfModelTest::testN695479()
+void Test::testN695479()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("n695479.rtf")));
 
@@ -301,13 +301,13 @@ void RtfModelTest::testN695479()
     CPPUNIT_ASSERT(bDrawFound);
 }
 
-void RtfModelTest::testFdo42465()
+void Test::testFdo42465()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo42465.rtf")));
     CPPUNIT_ASSERT_EQUAL(3, getLength());
 }
 
-void RtfModelTest::testFdo45187()
+void Test::testFdo45187()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45187.rtf")));
 
@@ -327,7 +327,7 @@ void RtfModelTest::testFdo45187()
     CPPUNIT_ASSERT(aFirstPoint.Y != aSecondPoint.Y);
 }
 
-void RtfModelTest::testFdo46662()
+void Test::testFdo46662()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo46662.rtf")));
 
@@ -359,7 +359,7 @@ void RtfModelTest::testFdo46662()
     }
 }
 
-void RtfModelTest::testN750757()
+void Test::testN750757()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("n750757.rtf")));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -378,7 +378,7 @@ void RtfModelTest::testN750757()
     CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
 }
 
-void RtfModelTest::testFdo45563()
+void Test::testFdo45563()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45563.rtf")));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -393,7 +393,7 @@ void RtfModelTest::testFdo45563()
     CPPUNIT_ASSERT_EQUAL(4, i);
 }
 
-void RtfModelTest::testFdo43965()
+void Test::testFdo43965()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo43965.rtf")));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -420,7 +420,7 @@ void RtfModelTest::testFdo43965()
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-void RtfModelTest::testN751020()
+void Test::testN751020()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("n751020.rtf")));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -433,14 +433,14 @@ void RtfModelTest::testN751020()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), nValue);
 }
 
-void RtfModelTest::testFdo47326()
+void Test::testFdo47326()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47326.rtf")));
     // This was 15 only, as \super buffered text, then the contents of it got lost.
     CPPUNIT_ASSERT_EQUAL(19, getLength());
 }
 
-void RtfModelTest::testFdo47036()
+void Test::testFdo47036()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47036.rtf")));
 
@@ -464,7 +464,7 @@ void RtfModelTest::testFdo47036()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
-void RtfModelTest::testFdo46955()
+void Test::testFdo46955()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo46955.rtf")));
 
@@ -485,7 +485,7 @@ void RtfModelTest::testFdo46955()
     }
 }
 
-void RtfModelTest::testFdo45394()
+void Test::testFdo45394()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45394.rtf")));
 
@@ -504,13 +504,13 @@ void RtfModelTest::testFdo45394()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
-void RtfModelTest::testFdo48104()
+void Test::testFdo48104()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo48104.rtf")));
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-void RtfModelTest::testFdo47107()
+void Test::testFdo47107()
 {
     load("fdo47107.rtf");
 
@@ -522,7 +522,7 @@ void RtfModelTest::testFdo47107()
     xNumberingStyles->getByName("WWNum2");
 }
 
-void RtfModelTest::testFdo45182()
+void Test::testFdo45182()
 {
     load("fdo45182.rtf");
 
@@ -534,7 +534,7 @@ void RtfModelTest::testFdo45182()
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
-void RtfModelTest::testFdo44176()
+void Test::testFdo44176()
 {
     load("fdo44176.rtf");
 
@@ -550,7 +550,7 @@ void RtfModelTest::testFdo44176()
     CPPUNIT_ASSERT_EQUAL(nFirstTop, nDefaultTop + nDefaultHeader);
 }
 
-void RtfModelTest::testFdo39053()
+void Test::testFdo39053()
 {
     load("fdo39053.rtf");
 
@@ -569,7 +569,7 @@ void RtfModelTest::testFdo39053()
     CPPUNIT_ASSERT_EQUAL(1, nAsCharacter);
 }
 
-void RtfModelTest::testFdo48356()
+void Test::testFdo48356()
 {
     load("fdo48356.rtf");
 
@@ -587,7 +587,7 @@ void RtfModelTest::testFdo48356()
     CPPUNIT_ASSERT_EQUAL(1, i);
 }
 
-void RtfModelTest::testFdo48023()
+void Test::testFdo48023()
 {
     lang::Locale aLocale;
     aLocale.Language = "ru";
@@ -610,7 +610,7 @@ void RtfModelTest::testFdo48023()
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
-void RtfModelTest::testFdo48876()
+void Test::testFdo48876()
 {
     load("fdo48876.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -623,13 +623,13 @@ void RtfModelTest::testFdo48876()
     CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::MINIMUM, aSpacing.Mode);
 }
 
-void RtfModelTest::testFdo48193()
+void Test::testFdo48193()
 {
     load("fdo48193.rtf");
     CPPUNIT_ASSERT_EQUAL(7, getLength());
 }
 
-void RtfModelTest::testFdo44211()
+void Test::testFdo44211()
 {
     lang::Locale aLocale;
     aLocale.Language = "lt";
@@ -651,7 +651,7 @@ void RtfModelTest::testFdo44211()
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
-void RtfModelTest::testFdo48037()
+void Test::testFdo48037()
 {
     load("fdo48037.rtf");
 
@@ -671,7 +671,7 @@ void RtfModelTest::testFdo48037()
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

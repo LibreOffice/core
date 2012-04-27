@@ -47,7 +47,7 @@ using rtl::OUString;
 using rtl::OUStringBuffer;
 using namespace com::sun::star;
 
-class OoxmlModelTest : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     virtual void setUp();
@@ -58,7 +58,7 @@ public:
     void testN750935();
     void testN757890();
 
-    CPPUNIT_TEST_SUITE(OoxmlModelTest);
+    CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN751054);
     CPPUNIT_TEST(testN751117);
@@ -74,12 +74,12 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-void OoxmlModelTest::load(const OUString& rFilename)
+void Test::load(const OUString& rFilename)
 {
     mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmltok/data/") + rFilename);
 }
 
-void OoxmlModelTest::setUp()
+void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -87,7 +87,7 @@ void OoxmlModelTest::setUp()
     CPPUNIT_ASSERT(mxDesktop.is());
 }
 
-void OoxmlModelTest::tearDown()
+void Test::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -95,7 +95,7 @@ void OoxmlModelTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void OoxmlModelTest::testN751054()
+void Test::testN751054()
 {
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("n751054.docx")));
 
@@ -107,7 +107,7 @@ void OoxmlModelTest::testN751054()
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
 }
 
-void OoxmlModelTest::testN751117()
+void Test::testN751117()
 {
     load("n751117.docx");
 
@@ -133,7 +133,7 @@ void OoxmlModelTest::testN751117()
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.LineShape"));
 }
 
-void OoxmlModelTest::testN751017()
+void Test::testN751017()
 {
     load("n751017.docx");
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -180,7 +180,7 @@ void OoxmlModelTest::testN751017()
     CPPUNIT_ASSERT(bFoundGet);
 }
 
-void OoxmlModelTest::testN750935()
+void Test::testN750935()
 {
     load("n750935.docx");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -190,7 +190,7 @@ void OoxmlModelTest::testN750935()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5), xCursor->getPage());
 }
 
-void OoxmlModelTest::testN757890()
+void Test::testN757890()
 {
     load("n757890.docx");
 
@@ -212,7 +212,7 @@ void OoxmlModelTest::testN757890()
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(OoxmlModelTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

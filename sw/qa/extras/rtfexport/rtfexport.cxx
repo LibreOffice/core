@@ -39,7 +39,7 @@ using rtl::OUString;
 using rtl::OUStringBuffer;
 using namespace com::sun::star;
 
-class RtfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     virtual void setUp();
@@ -47,7 +47,7 @@ public:
     void testZoom();
     void testFdo38176();
 
-    CPPUNIT_TEST_SUITE(RtfExportTest);
+    CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
     CPPUNIT_TEST(testFdo38176);
@@ -61,7 +61,7 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-void RtfExportTest::roundtrip(const OUString& rFilename)
+void Test::roundtrip(const OUString& rFilename)
 {
     uno::Reference<lang::XComponent> xImported = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtfexport/data/") + rFilename);
     uno::Reference<frame::XStorable> xStorable(xImported, uno::UNO_QUERY);
@@ -74,7 +74,7 @@ void RtfExportTest::roundtrip(const OUString& rFilename)
     mxComponent = loadFromDesktop(aTempFile.GetURL());
 }
 
-int RtfExportTest::getLength()
+int Test::getLength()
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -93,7 +93,7 @@ int RtfExportTest::getLength()
     return aBuf.getLength();
 }
 
-void RtfExportTest::setUp()
+void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -101,7 +101,7 @@ void RtfExportTest::setUp()
     CPPUNIT_ASSERT(mxDesktop.is());
 }
 
-void RtfExportTest::tearDown()
+void Test::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -109,7 +109,7 @@ void RtfExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void RtfExportTest::testZoom()
+void Test::testZoom()
 {
     roundtrip("zoom.rtf");
 
@@ -121,13 +121,13 @@ void RtfExportTest::testZoom()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
-void RtfExportTest::testFdo38176()
+void Test::testFdo38176()
 {
     roundtrip("fdo38176.rtf");
     CPPUNIT_ASSERT_EQUAL(9, getLength());
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(RtfExportTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
