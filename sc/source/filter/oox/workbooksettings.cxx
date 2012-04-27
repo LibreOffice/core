@@ -36,6 +36,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/token/properties.hxx"
 #include "biffinputstream.hxx"
 #include "unitconverter.hxx"
 

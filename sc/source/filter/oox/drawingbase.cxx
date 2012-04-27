@@ -33,6 +33,7 @@
 #include "oox/helper/binaryinputstream.hxx"
 #include "unitconverter.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/token/properties.hxx"
 
 namespace oox {
 namespace xls {

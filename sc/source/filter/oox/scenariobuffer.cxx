@@ -37,6 +37,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/token/properties.hxx"
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 

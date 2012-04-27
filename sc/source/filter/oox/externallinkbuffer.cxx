@@ -42,6 +42,7 @@
 #include <rtl/strbuf.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/token/properties.hxx"
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "excelhandlers.hxx"

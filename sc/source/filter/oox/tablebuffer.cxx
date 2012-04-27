@@ -32,6 +32,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/token/properties.hxx"
 #include "addressconverter.hxx"
 
 namespace oox {

@@ -42,6 +42,7 @@
 #include <svtools/wmf.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/token/properties.hxx"
 #include "oox/token/tokens.hxx"
 
 namespace oox {

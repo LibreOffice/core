@@ -48,6 +48,7 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
+#include "oox/token/properties.hxx"
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
