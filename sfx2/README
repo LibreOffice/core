@@ -1,4 +1,4 @@
-This is core gui code, contining base-classes for documents
+This is core gui code, containing base-classes for documents
 
 Document load/save code is maintained in [git:sfx2/source/doc/docfile.cxx]
 SfxMedium class, which handles all the twisty load and save corner cases.
