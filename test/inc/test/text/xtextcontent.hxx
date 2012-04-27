@@ -30,11 +30,13 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
+#include "test/testdllapi.hxx"
+
 using namespace com::sun::star;
 
 namespace apitest {
 
-class XTextContent
+class OOO_DLLPUBLIC_TEST XTextContent
 {
 public:
     virtual ~XTextContent() {}

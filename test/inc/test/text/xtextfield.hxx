@@ -28,12 +28,14 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include "test/testdllapi.hxx"
+
 using namespace com::sun::star;
 
 namespace apitest
 {
 
-class XTextField
+class OOO_DLLPUBLIC_TEST XTextField
 {
 public:
     virtual ~XTextField() {}
