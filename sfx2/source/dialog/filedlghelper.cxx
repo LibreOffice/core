@@ -63,6 +63,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
@@ -1641,24 +1642,56 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
 void FileDialogHelper_Impl::verifyPath()
 {
 #ifdef UNX
-    static char const s_FileScheme[] = "file://";
-    if (0 != rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-                maPath.getStr(), maPath.getLength(),
-                s_FileScheme, RTL_CONSTASCII_LENGTH(s_FileScheme)))
-    {
-        return;
-    }
-    const OString sFullPath = OUStringToOString(
-            maPath.copy(RTL_CONSTASCII_LENGTH(s_FileScheme)) + maFileName,
-            osl_getThreadTextEncoding() );
-    struct stat aFileStat;
-    stat( sFullPath.getStr(), &aFileStat );
     // lp#905355, fdo#43895
     // Check that the file has read only permission and is in /tmp -- this is
     //  the case if we have opened the file from the web with firefox only.
-    if ( maPath.reverseCompareToAsciiL("file:///tmp",11) == 0 &&
-            ( aFileStat.st_mode & (S_IRWXO + S_IRWXG + S_IRWXU) ) == S_IRUSR )
+    if (maFileName.isEmpty()) {
+        return;
+    }
+    INetURLObject url(maPath);
+    if (url.GetProtocol() != INET_PROT_FILE
+        || url.getName(0, true, INetURLObject::DECODE_WITH_CHARSET) != "tmp")
     {
+        return;
+    }
+    if (maFileName.indexOf('/') != -1) {
+        SAL_WARN("sfx2", maFileName << " contains /");
+        return;
+    }
+    url.insertName(
+        maFileName, false, INetURLObject::LAST_SEGMENT, true,
+        INetURLObject::ENCODE_ALL);
+    rtl::OUString sysPathU;
+    osl::FileBase::RC e = osl::FileBase::getSystemPathFromFileURL(
+        url.GetMainURL(INetURLObject::NO_DECODE), sysPathU);
+    if (e != osl::FileBase::E_None) {
+        SAL_WARN(
+            "sfx2",
+            "getSystemPathFromFileURL("
+                << url.GetMainURL(INetURLObject::NO_DECODE) << ") failed with "
+                << +e);
+        return;
+    }
+    rtl::OString sysPathC;
+    if (!sysPathU.convertToString(
+            &sysPathC, osl_getThreadTextEncoding(),
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+    {
+        SAL_WARN(
+            "sfx2",
+            "convertToString(" << sysPathU << ") failed for encoding "
+                << +osl_getThreadTextEncoding());
+        return;
+    }
+    struct stat aFileStat;
+    if (stat(sysPathC.getStr(), &aFileStat) == -1) {
+        SAL_WARN(
+            "sfx2",
+            "stat(" << sysPathC.getStr() << ") failed with errno " << errno);
+        return;
+    }
+    if ((aFileStat.st_mode & (S_IRWXO | S_IRWXG | S_IRWXU)) == S_IRUSR) {
         maPath = SvtPathOptions().GetWorkPath();
         mxFileDlg->setDisplayDirectory( maPath );
     }
