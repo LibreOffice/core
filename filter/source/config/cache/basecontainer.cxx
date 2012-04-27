@@ -342,7 +342,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
         aItem = pCache->getItem(m_eType, sItem);
         pCache->addStatePropsToItem(m_eType, sItem, aItem); // add implicit props "Finalized"/"Mandatory"
     }
-    catch(const css::container::NoSuchElementException& exNotExist)
+    catch(const css::container::NoSuchElementException&)
     {
         throw;
     }

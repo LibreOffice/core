@@ -414,7 +414,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             // It match the query ...
             lResult.push_back(sName);
         }
-        catch(const css::uno::RuntimeException& exRun)
+        catch(const css::uno::RuntimeException&)
             { throw; }
         catch(const css::uno::Exception&)
             { continue; }
@@ -539,7 +539,7 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
         OUStringList lModules(xModuleConfig->getElementNames());
         return lModules;
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         {}
@@ -633,7 +633,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
             return lSortedFilters;
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         {}
