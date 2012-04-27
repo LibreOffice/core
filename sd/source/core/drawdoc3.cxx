@@ -1667,7 +1667,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 SdPresentationLayoutUndoAction * pPLUndoAction =
                     new SdPresentationLayoutUndoAction
                         (this,
-                        pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
+                        ( pPage && pPage->IsMasterPage() ) ? aLayoutName : aOldLayoutName,
                         aLayoutName,
                          eAutoLayout, eAutoLayout, sal_False, *pIter);
                 pUndoMgr->AddUndoAction(pPLUndoAction);
