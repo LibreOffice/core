@@ -977,7 +977,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
                     uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
                 // handle page breaks with odd/even page numbering
-                style::PageStyleLayout nPageStyleLayout;
+                style::PageStyleLayout nPageStyleLayout(style::PageStyleLayout_ALL);
                 if (m_nBreakType == 3)
                     nPageStyleLayout = style::PageStyleLayout_LEFT;
                 else if (m_nBreakType == 4)
@@ -992,10 +992,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 }
             }
         }
-        catch( const uno::Exception& rEx)
+        catch (const uno::Exception&)
         {
             OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup");
-            (void)rEx;
         }
     }
 }
