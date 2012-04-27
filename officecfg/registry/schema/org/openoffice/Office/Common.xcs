@@ -2960,6 +2960,11 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="CertDir" oor:type="xs:string">
+          <info>
+            <desc>Contains the path to the users NSS certificate directory.</desc>
+          </info>
+        </prop>
         <prop
             oor:name="WarnPrintDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>

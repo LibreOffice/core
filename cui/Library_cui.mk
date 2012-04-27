@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/factory/cuiresmgr \
     cui/source/factory/dlgfact \
     cui/source/factory/init \
+    cui/source/options/certpath \
     cui/source/options/cfgchart \
     cui/source/options/connpoolconfig \
     cui/source/options/connpooloptions \

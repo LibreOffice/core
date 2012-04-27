@@ -134,12 +134,12 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     sHeader += sHeader4;
     aCheckLB.InsertHeaderEntry(sHeader);
 
-    HeaderBar* pBar = aCheckLB.GetTheHeaderBar();
+    HeaderBar &rBar = aCheckLB.GetTheHeaderBar();
 
-    HeaderBarItemBits nBits = pBar->GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
+    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
     nBits &= ~HIB_CLICKABLE;
-    pBar->SetItemBits(1, nBits);
-    pBar->SetItemBits(2, nBits);
+    rBar.SetItemBits(1, nBits);
+    rBar.SetItemBits(2, nBits);
 
     sal_uInt16 nHeight;
     for(nHeight = 6; nHeight <= 16; nHeight++)

@@ -371,6 +371,25 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Macro Security...";
     };
+    FixedLine FL_SEC_CERTPATH
+    {
+        Pos = MAP_APPFONT( COL_0, ROW_7 );
+        Size = MAP_APPFONT( COL_4-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Certificate Path";
+    };
+    FixedText FI_SEC_CERTPATH
+    {
+        Pos = MAP_APPFONT( COL_1, ROW_8 );
+        Size = MAP_APPFONT( COL_2-COL_1, 3*RSC_CD_FIXEDLINE_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Select the Network Security Services certificate directory to use for digital signatures.";
+    };
+    PushButton PB_SEC_CERTPATH
+    {
+        Pos = MAP_APPFONT( COL_3, ROW_9a );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Certificate...";
+    };
     String STR_SEC_NOPASSWDSAVE
     {
         Text [ en-US ] = "Disabling the function to persistently store passwords deletes the list of passwords stored and resets the master password.\n\nDo you want to delete password list and reset master password?";
@@ -478,4 +497,3 @@ TabPage RID_SVXPAGE_INET_MAIL
 };
 
  // ******************************************************************* EOF
-

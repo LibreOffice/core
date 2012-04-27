@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
+                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_OPTIONS_RESTART ) );
                 aWarnBox.Execute();
             }
         }
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
+                WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_OPTIONS_RESTART ) );
                 aWarnBox.Execute();
             }
         }

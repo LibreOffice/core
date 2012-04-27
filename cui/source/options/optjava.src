@@ -290,7 +290,7 @@ WarningBox RID_SVX_MSGBOX_JAVA_RESTART
     Message [ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted.\nPlease restart %PRODUCTNAME now." ;
 };
 
-WarningBox RID_SVX_MSGBOX_JAVA_RESTART2
+WarningBox RID_SVX_MSGBOX_OPTIONS_RESTART
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;

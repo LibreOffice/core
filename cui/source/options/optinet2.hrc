@@ -93,6 +93,9 @@
 #define FL_SEC_MACROSEC             19
 #define FI_SEC_MACROSEC             20
 #define PB_SEC_MACROSEC             21
+#define FL_SEC_CERTPATH             22
+#define FI_SEC_CERTPATH             23
+#define PB_SEC_CERTPATH             24
 
 #define STR_SEC_NOPASSWDSAVE        12
 
@@ -119,6 +122,8 @@
 #define ROW_7                       (ROW_6+3*RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
 #define ROW_7a                      (ROW_7-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
 #define ROW_8                       (ROW_7+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_9                       (ROW_8+3*RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_9a                      (ROW_9-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
 
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 

@@ -53,6 +53,8 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <sal/types.h>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
@@ -177,50 +179,57 @@ void deleteRootsModule()
 
 ::rtl::OString getMozillaCurrentProfile( const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF )
 {
-    ::rtl::OString sResult;
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
-    char* pEnv = getenv( "MOZILLA_CERTIFICATE_FOLDER" );
-    if ( pEnv )
+    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    if (pEnv)
+        return rtl::OString(pEnv);
+
+    // second, try to get saved user-preference
+    try
     {
-        sResult = ::rtl::OString( pEnv );
-        RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using env MOZILLA_CERTIFICATE_FOLDER: %s", sResult.getStr() );
+        rtl::OUString sUserSetCertPath =
+            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(rtl::OUString());
+
+        if (!sUserSetCertPath.isEmpty())
+            return rtl::OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
     }
-    else
+    catch (const uno::Exception &e)
     {
-        mozilla::MozillaProductType productTypes[4] = {
-            mozilla::MozillaProductType_Thunderbird,
-            mozilla::MozillaProductType_Mozilla,
-            mozilla::MozillaProductType_Firefox,
-            mozilla::MozillaProductType_Default };
-        int nProduct = 4;
+        SAL_WARN("xmlsecurity", "getMozillaCurrentProfile: caught exception" << e.Message);
+    }
 
-        uno::Reference<uno::XInterface> xInstance = rxMSF->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
-        OSL_ENSURE( xInstance.is(), "failed to create instance" );
+    // third, dig around to see if there's one available
+    mozilla::MozillaProductType productTypes[3] = {
+        mozilla::MozillaProductType_Thunderbird,
+        mozilla::MozillaProductType_Firefox,
+        mozilla::MozillaProductType_Mozilla };
+    int nProduct = SAL_N_ELEMENTS(productTypes);
 
-        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap
-            =  uno::Reference<mozilla::XMozillaBootstrap>(xInstance,uno::UNO_QUERY);
-        OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+    uno::Reference<uno::XInterface> xInstance = rxMSF->createInstance(
+        "com.sun.star.mozilla.MozillaBootstrap");
+    OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
-        if (xMozillaBootstrap.is())
+    uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap
+        =  uno::Reference<mozilla::XMozillaBootstrap>(xInstance,uno::UNO_QUERY);
+    OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+
+    if (xMozillaBootstrap.is())
+    {
+        for (int i=0; i<nProduct; ++i)
         {
-            for (int i=0; i<nProduct; i++)
-            {
-                ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+            rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
-                if (profile != NULL && !profile.isEmpty())
-                {
-                    ::rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
-                    sResult = ::rtl::OUStringToOString( sProfilePath, osl_getThreadTextEncoding() );
-                    RTL_LOGFILE_PRODUCT_TRACE1( "XMLSEC: Using Mozilla Profile: %s", sResult.getStr() );
-                }
+            if (!profile.isEmpty())
+            {
+                rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
+                return rtl::OUStringToOString(sProfilePath, osl_getThreadTextEncoding());
             }
         }
-
-        RTL_LOGFILE_PRODUCT_TRACE( "XMLSEC: No Mozilla Profile found!" );
     }
 
-    return sResult;
+    RTL_LOGFILE_PRODUCT_TRACE( "XMLSEC: No Mozilla Profile found!" );
+
+    return rtl::OString();
 }
 
 //Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
@@ -251,10 +260,10 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
     // this method must be called only once, no need for additional lock
     rtl::OString sCertDir;
 
-    (void) xMSF;
 #ifdef XMLSEC_CRYPTO_NSS
-    if ( xMSF.is() )
-        sCertDir = getMozillaCurrentProfile( xMSF );
+    sCertDir = getMozillaCurrentProfile(xMSF);
+#else
+    (void) xMSF;
 #endif
     xmlsec_trace( "Using profile: %s", sCertDir.getStr() );
 

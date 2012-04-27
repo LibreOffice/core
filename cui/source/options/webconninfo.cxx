@@ -55,7 +55,7 @@ PasswordTable::PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits)
 
 void PasswordTable::InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits )
 {
-    GetTheHeaderBar()->InsertItem( nColumn, rText, 0, nBits );
+    GetTheHeaderBar().InsertItem( nColumn, rText, 0, nBits );
 }
 
 void PasswordTable::ResetTabs()
@@ -68,7 +68,7 @@ void PasswordTable::Resort( bool bForced )
     sal_uInt16 nColumn = GetSelectedCol();
     if ( 0 == nColumn || bForced ) // only the first column is sorted
     {
-        HeaderBarItemBits nBits = GetTheHeaderBar()->GetItemBits(1);
+        HeaderBarItemBits nBits = GetTheHeaderBar().GetItemBits(1);
         sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
         SvSortMode eMode = SortAscending;
 
@@ -83,7 +83,7 @@ void PasswordTable::Resort( bool bForced )
             nBits &= ~HIB_DOWNARROW;
             nBits |= HIB_UPARROW;
         }
-        GetTheHeaderBar()->SetItemBits( 1, nBits );
+        GetTheHeaderBar().SetItemBits( 1, nBits );
         SvTreeList* pListModel = GetModel();
         pListModel->SetSortMode( eMode );
         pListModel->Resort();

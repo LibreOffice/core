@@ -83,6 +83,7 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/tbxform.src \
     cui/source/dialogs/thesdlg.src \
     cui/source/dialogs/zoom.src \
+    cui/source/options/certpath.src \
     cui/source/options/connpooloptions.src \
     cui/source/options/dbregister.src \
     cui/source/options/doclinkdialog.src \

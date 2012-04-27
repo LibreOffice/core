@@ -152,6 +152,8 @@ protected:
 
 class SvtSecurityOptions;
 
+class CertPathDialog;
+
 class SvxSecurityTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -173,17 +175,24 @@ private:
     FixedInfo           maMacroSecFI;
     PushButton          maMacroSecPB;
 
+    FixedLine           m_aCertPathFL;
+    FixedInfo           m_aCertPathFI;
+    PushButton          m_aCertPathPB;
+
     SvtSecurityOptions*         mpSecOptions;
     svx::SecurityOptionsDialog* mpSecOptDlg;
+
+    CertPathDialog* mpCertPathDlg;
 
     String              msPasswordStoringDeactivateStr;
 
     DECL_LINK(SecurityOptionsHdl, void *);
-    DECL_LINK(          SavePasswordHdl, void* );
+    DECL_LINK(SavePasswordHdl, void* );
     DECL_LINK(MasterPasswordHdl, void *);
-    DECL_LINK(          MasterPasswordCBHdl, void* );
+    DECL_LINK(MasterPasswordCBHdl, void* );
     DECL_LINK(ShowPasswordsHdl, void *);
-    DECL_LINK(          MacroSecPBHdl, void* );
+    DECL_LINK(MacroSecPBHdl, void* );
+    DECL_LINK(CertPathPBHdl, void* );
 
     void                InitControls();
 

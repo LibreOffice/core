@@ -97,8 +97,6 @@ protected:
     virtual void            Command( const CommandEvent& rCEvt );
 
     virtual StringCompare   ColCompare(SvLBoxEntry*,SvLBoxEntry*);
-    HeaderBar*              GetTheHeaderBar(){return &aHeaderBar;}
-
 public:
 
     SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
@@ -156,6 +154,8 @@ public:
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
     void            SetHeaderBarHelpId(const rtl::OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
+
+    HeaderBar&      GetTheHeaderBar() {return aHeaderBar;}
 };
 
 

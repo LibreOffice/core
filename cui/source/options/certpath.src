@@ -1,0 +1,110 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2012 Red Hat, Inc., Caolán McNamara <caolanm@redhat.com>
+ *  (initial developer)
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include <svtools/controldims.hrc>
+#include "certpath.hrc"
+#include <cuires.hrc>
+#include "helpid.hrc"
+
+ModalDialog RID_SVXDLG_CERTPATH
+{
+    HelpID = HID_DLG_CERTPATH ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( DLG_WIDTH , ROW_10 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ en-US ] = "Certificate Path" ;
+    FixedLine FL_CERTPATH
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_0 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "Certificate Path" ;
+    };
+    FixedText FT_CERTPATH
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_1 ) ;
+        Size = MAP_APPFONT ( COL_C - COL_1 - RSC_SP_FLGR_SPACE_X , ROW_2 - ROW_1 ) ;
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Select or add the correct Network Security Services Certificate directory to use for digital signatures:" ;
+    };
+    Control LB_CERTPATH
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_2 ) ;
+        Size = MAP_APPFONT ( COL_C - COL_1 - RSC_SP_FLGR_SPACE_X, ROW_8 - ROW_2 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_ADD
+    {
+        Pos = MAP_APPFONT ( COL_C , ROW_2 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "~Add..." ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT( 0, ROW_8 );
+        Size = MAP_APPFONT( DLG_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( COL_A , ROW_9 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( COL_B , ROW_9 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( COL_C , ROW_9 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    String STR_ADDDLGTEXT
+    {
+        Text [ en-US ] = "Select a Certificate directory" ;
+    };
+    String STR_MANUAL
+    {
+        Text [ en-US ] = "manual" ;
+    };
+    String STR_PROFILE
+    {
+        Text [ en-US ] = "Profile" ;
+    };
+    String STR_DIRECTORY
+    {
+        Text [ en-US ] = "Directory" ;
+    };
+};

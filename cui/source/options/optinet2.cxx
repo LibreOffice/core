@@ -99,6 +99,7 @@
 #include "com/sun/star/task/XPasswordContainer.hpp"
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
+#include "certpath.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -665,8 +666,13 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maMacroSecFI       ( this, CUI_RES( FI_SEC_MACROSEC ) )
     ,maMacroSecPB       ( this, CUI_RES( PB_SEC_MACROSEC ) )
 
+    ,m_aCertPathFL      ( this, CUI_RES( FL_SEC_CERTPATH ) )
+    ,m_aCertPathFI      ( this, CUI_RES( FI_SEC_CERTPATH ) )
+    ,m_aCertPathPB      ( this, CUI_RES( PB_SEC_CERTPATH ) )
+
     ,mpSecOptions       ( new SvtSecurityOptions )
     ,mpSecOptDlg        ( NULL )
+    ,mpCertPathDlg      ( NULL )
 
     ,msPasswordStoringDeactivateStr(    CUI_RES( STR_SEC_NOPASSWDSAVE ) )
 
@@ -681,12 +687,15 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     maMasterPasswordCB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
     maShowConnectionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
+    m_aCertPathPB.SetClickHdl( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
 
     ActivatePage( rSet );
 }
 
 SvxSecurityTabPage::~SvxSecurityTabPage()
 {
+    delete mpCertPathDlg;
+
     delete mpSecOptions;
     delete mpSecOptDlg;
 }
@@ -840,6 +849,23 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
     return 0;
 }
 
+IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
+{
+    if (!mpCertPathDlg)
+        mpCertPathDlg = new CertPathDialog(this);
+
+    rtl::OUString sOrig = mpCertPathDlg->getDirectory();
+    short nRet = mpCertPathDlg->Execute();
+
+    if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
+    {
+        WarningBox aWarnBox(this, CUI_RES(RID_SVX_MSGBOX_OPTIONS_RESTART));
+        aWarnBox.Execute();
+    }
+
+    return 0;
+}
+
 IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
 {
     try
@@ -870,19 +896,24 @@ void SvxSecurityTabPage::InitControls()
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
               && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
     {
+        //Move these up
+        m_aCertPathFL.SetPosPixel(maMacroSecFL.GetPosPixel());
+        m_aCertPathFI.SetPosPixel(maMacroSecFI.GetPosPixel());
+        m_aCertPathPB.SetPosPixel(maMacroSecPB.GetPosPixel());
+
+        //Hide these
         maMacroSecFL.Hide();
         maMacroSecFI.Hide();
         maMacroSecPB.Hide();
     }
 
     // one button too small for its text?
-    sal_Int32 i = 0;
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
-                           &maShowConnectionsPB, &maMacroSecPB };
+                           &maShowConnectionsPB, &maMacroSecPB, &m_aCertPathPB };
     Window** pButton = pButtons;
     const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
-    for ( ; i < nBCount; ++i, ++pButton )
+    for (sal_Int32 i = 0; i < nBCount; ++i, ++pButton )
     {
         long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
         if ( nTemp > nBtnTextWidth )
@@ -909,7 +940,7 @@ void SvxSecurityTabPage::InitControls()
             nExtra = ( nExtra < nMaxExtra ) ? nExtra : nMaxExtra;
         }
 
-        for ( i = 0; i < nBCount; ++i, ++pButton )
+        for (sal_Int32 i = 0; i < nBCount; ++i, ++pButton )
         {
             Point aNewPos = (*pButton)->GetPosPixel();
             aNewPos.X() -= nDelta;
@@ -919,10 +950,10 @@ void SvxSecurityTabPage::InitControls()
         }
 
         Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
-                                &maMasterPasswordFI, &maMacroSecFI };
+                                &maMasterPasswordFI, &maMacroSecFI, &m_aCertPathFI };
         Window** pControl = pControls;
         const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
-        for ( i = 0; i < nCCount; ++i, ++pControl )
+        for (sal_Int32 i = 0; i < nCCount; ++i, ++pControl )
         {
             Size aNewSize = (*pControl)->GetSizePixel();
             aNewSize.Width() -= nDelta;
@@ -966,6 +997,11 @@ void SvxSecurityTabPage::InitControls()
         maSavePasswordsCB.Enable( sal_False );
     }
 
+#ifndef UNX
+    m_aCertPathFL.Hide();
+    m_aCertPathFI.Hide();
+    m_aCertPathPB.Hide();
+#endif
 
 }
 
@@ -1026,10 +1062,6 @@ sal_Bool SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 
 void SvxSecurityTabPage::Reset( const SfxItemSet& )
 {
-    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-    if( pCurDocShell )
-    {
-    }
 }
 
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
