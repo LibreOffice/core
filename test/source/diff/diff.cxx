@@ -128,7 +128,7 @@ bool XMLDiff::compare()
     CPPUNIT_ASSERT(root2);
     std::stringstream stringStream("Expected: ");
     stringStream << (char*)root1->name << "\nFound: " << (char*) root2->name;
-    CPPUNIT_ASSERT(stringStream.str(), xmlStrEqual(root1->name, root2->name));
+    CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(root1->name, root2->name));
 #else
     if (!root1 || !root2)
         return false;
