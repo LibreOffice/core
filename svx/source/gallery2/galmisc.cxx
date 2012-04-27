@@ -439,8 +439,6 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
 GalleryProgress::~GalleryProgress()
 {
-//  if( mpFilter )
-//      mpFilter->SetUpdatePercentHdl( Link() );
 }
 
 // ------------------------------------------------------------------------

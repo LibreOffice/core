@@ -78,13 +78,6 @@ SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
 {
-/*   sal_uInt16 nValue;
-    sal_uInt16 nValSet;
-    sal_Int8 nType;
-    rStrm >> nValue >> nValSet >> nType;
-    SvxZoomItem* pNew = new SvxZoomItem( (SvxZoomType)nType, nValue, Which() );
-    pNew->SetValueSet( nValSet );
-    return pNew;*/
     return 0;
 }
 
@@ -92,9 +85,6 @@ SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersi
 
 SvStream& SvxViewLayoutItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-/*   rStrm << (sal_uInt16)GetValue()
-          << nValueSet
-          << (sal_Int8)eType;*/
     return rStrm;
 }
 
@@ -138,7 +128,6 @@ bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
 
 bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {

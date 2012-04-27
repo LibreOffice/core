@@ -150,7 +150,6 @@ static void createTheme( rtl::OUString aThemeName,
         Graphic aGraphic;
         String aFormat;
 
-#if 1
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
                      rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr() );
@@ -159,34 +158,6 @@ static void createTheme( rtl::OUString aThemeName,
                      rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr(),
                      sal::static_int_cast< unsigned long >(
                          pGalTheme->GetObjectCount() ) );
-
-#else // only loads BMPs
-        SvStream *pStream = ::utl::UcbStreamHelper::CreateStream( *aIter, STREAM_READ );
-        if (!pStream) {
-            fprintf( stderr, "Can't find image to import\n" );
-            disposeGallery( pGallery );
-            exit (1);
-        }
-        *pStream >> aGraphic;
-        delete pStream;
-        if( aGraphic.GetType() == GRAPHIC_NONE )
-        {
-            fprintf( stderr, "Failed to load '%s'\n",
-                     rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ).getStr() );
-            continue;
-        }
-
-        SgaObjectBmp aObject( aGraphic, *aIter, aFormat );
-        if ( ! aObject.IsValid() ) {
-            fprintf( stderr, "Failed to create thumbnail for image\n" );
-            continue;
-        }
-
-        if ( ! pGalTheme->InsertObject( aObject ) ) {
-            fprintf( stderr, "Failed to insert file or URL\n" );
-            continue;
-        }
-#endif
     }
 
     pGallery->ReleaseTheme( pGalTheme, aListener );

@@ -108,20 +108,6 @@ namespace sdr
             // Overload where an ItemSet is implemented.
         }
 
-        //void BaseProperties::SetItemAndBroadcast(const SfxPoolItem& rItem)
-        //{
-        //  ItemChangeBroadcaster aC(GetSdrObject());
-        //  SetObjectItem(rItem);
-        //  BroadcastItemChange(aC);
-        //}
-
-        //void BaseProperties::ClearItemAndBroadcast(const sal_uInt16 nWhich)
-        //{
-        //  ItemChangeBroadcaster aC(GetSdrObject());
-        //  ClearObjectItem(nWhich);
-        //  BroadcastItemChange(aC);
-        //}
-
         void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
         {
             ItemChangeBroadcaster aC(GetSdrObject());

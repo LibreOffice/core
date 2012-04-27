@@ -2941,60 +2941,6 @@ void DbGridControl::DeleteSelectedRows()
 
     if (!m_pSeekCursor)
         return;
-
-/*  Application::EnterWait();
-    Reference< XPropertySet >  xSet = (XPropertySet*)xSeekCursor->queryInterface(XPropertySet::getSmartUik());
-
-    // wenn mehr als 25 Datensaetze geloescht werden, wird der Cache abgeschaltet
-    // da das loeschen ansonsten zu langsam wird
-    sal_uInt16 nCacheSize = 0;
-    if (GetSelectRowCount() > 25)
-    {
-        // CacheSize merken und Cache zuruecksetzen
-        nCacheSize = xSet->getPropertyValue(L"CacheSize").getUINT16();
-        if (nCacheSize)
-            xSet->setPropertyValue(L"CacheSize", Any(sal_uInt16(0)));
-    } */
-
-
-    /*
-    // mu� der Cache wiederhergestellt werden?
-    if (nCacheSize)
-    {
-        // Cache wieder einschalten
-        xSet->setPropertyValue(L"CacheSize", Any(sal_uInt16(nCacheSize)));
-
-        // Browser neu einstellen
-        RecalcRows(GetTopRow(), GetVisibleRows(), sal_True);
-
-        // aktuelle Zeile aktualisieren
-        SeekCursor(GetCurRow());
-        if (IsAppendRow(m_nSeekPos))
-            xDataCursor->addRecord();
-        else
-        {
-            Any aBookmark = xSeekCursor->getBookmark();
-            xDataCursor->moveToBookmark(aBookmark);
-        }
-        m_xCurrentRow = new DbGridRow(xDataCursor);
-        m_nCurrentPos = m_nSeekPos;
-
-        // complett invalidieren
-        Invalidate();
-    }
-    else
-        // Browser neu einstellen
-        RecalcRows(GetTopRow(), GetVisibleRows(), sal_True);
-
-    // gibt es keine Selection mehr?
-    if (!GetSelectRowCount())
-        ActivateCell();
-
-    m_aBar.InvalidateAll();
-    Application::LeaveWait();
-
-    m_bUpdating = sal_False;
-*/
 }
 
 //------------------------------------------------------------------------------
