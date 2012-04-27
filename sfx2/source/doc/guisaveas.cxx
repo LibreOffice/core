@@ -957,7 +957,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     ::rtl::OUString aReccomendedDir = GetReccomendedDir( aSuggestedDir );
     if ( !aReccomendedDir.isEmpty() )
-        pFileDlg->SetDisplayDirectory( aReccomendedDir );
+        pFileDlg->SetDisplayFolder( aReccomendedDir );
     ::rtl::OUString aReccomendedName = GetReccomendedName( aSuggestedName, aAdjustToType );
     if ( !aReccomendedName.isEmpty() )
         pFileDlg->SetFileName( aReccomendedName );
