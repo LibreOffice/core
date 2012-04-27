@@ -1,6 +1,6 @@
---- misc/libpng-1.5.1/makefile.mk	2011-03-24 21:49:50.911397154 +0100
-+++ misc/build/libpng-1.5.1/makefile.mk	2011-03-24 21:47:23.379397048 +0100
-@@ -1 +1,49 @@
+--- misc/libpng-1.5.10/makefile.mk	2011-03-24 21:49:50.911397154 +0100
++++ misc/build/libpng-1.5.10/makefile.mk	2011-03-24 21:47:23.379397048 +0100
+@@ -1 +1,48 @@
 -dummy
 +#*************************************************************************
 +#
@@ -39,7 +39,6 @@
 +                $(SLO)$/pngset.obj	\
 +                $(SLO)$/pngtest.obj	\
 +                $(SLO)$/pngtrans.obj	\
-+                $(SLO)$/pngvalid.obj	\
 +                $(SLO)$/pngwio.obj	\
 +                $(SLO)$/pngwrite.obj	\
 +                $(SLO)$/pngwtran.obj	\
@@ -51,9 +50,9 @@
 +
 +.INCLUDE :  target.mk
 +
---- misc/libpng-1.5.1/pnglibconf.h	2011-03-24 21:49:50.913397154 +0100
-+++ misc/build/libpng-1.5.1/pnglibconf.h	2011-03-24 21:47:23.380397048 +0100
-@@ -1 +1,176 @@
+--- misc/libpng-1.5.10/pnglibconf.h	2011-03-24 21:49:50.913397154 +0100
++++ misc/build/libpng-1.5.10/pnglibconf.h	2011-03-24 21:47:23.380397048 +0100
+@@ -1 +1,177 @@
 -dummy
 +
 +/* libpng STANDARD API DEFINITION */
@@ -229,10 +228,11 @@
 +#define PNG_tEXt_SUPPORTED
 +#define PNG_zTXt_SUPPORTED
 +#define PNG_iTXt_SUPPORTED
++#define PNG_WRITE_COMPRESSED_TEXT_SUPPORTED
 +/* end of options */
 +#endif /* PNGLCONF_H */
---- misc/libpng-1.5.1/pngstruct.h	2011-02-03 05:58:17.000000000 +0100
-+++ misc/build/libpng-1.5.1/pngstruct.h	2011-03-24 21:47:23.380397048 +0100
+--- misc/libpng-1.5.10/pngstruct.h	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.10/pngstruct.h	2011-03-24 21:47:23.380397048 +0100
 @@ -24,7 +24,15 @@
   * in this structure and is required for decompressing the LZ compressed
   * data in PNG files.
@@ -241,7 +241,7 @@
 + * internal zlib, not on OS... But yeah, so maybe MacOSX, iOS and Android are the only OSes for which
 + * we use a system zlib but internal libpng, at least by default.
 + */
-+#if defined MACOSX || defined IOS || defined ANDROID
++#if defined MACOSX || defined IOS || defined ANDROID || defined LINUX
  #include "zlib.h"
 +#else
 +#include <external/zlib/zlib.h>
@@ -249,13 +249,13 @@
  
  struct png_struct_def
  {
---- misc/libpng-1.5.1/pngtest.c	2011-02-03 05:58:17.000000000 +0100
-+++ misc/build/libpng-1.5.1/pngtest.c	2011-03-24 21:47:23.380397048 +0100
-@@ -31,7 +31,12 @@
-  * of files at once by typing "pngtest -m file1.png file2.png ..."
-  */
-
-+#if defined MACOSX || defined IOS || defined ANDROID
+--- misc/libpng-1.5.10/pngtest.c	2011-02-03 05:58:17.000000000 +0100
++++ misc/build/libpng-1.5.10/pngtest.c	2011-03-24 21:47:23.380397048 +0100
+@@ -33,7 +33,12 @@
+ 
+ #define _POSIX_SOURCE 1
+ 
++#if defined MACOSX || defined IOS || defined ANDROID || defined LINUX
  #include "zlib.h"
 +#else
 +#include <external/zlib/zlib.h>
@@ -264,18 +264,3 @@
  #include "png.h"
  /* Copied from pngpriv.h but only used in error messages below. */
  #ifndef PNG_ZBUF_SIZE
---- misc/libpng-1.5.1/pngvalid.c	2011-02-03 05:58:17.000000000 +0100
-+++ misc/build/libpng-1.5.1/pngvalid.c	2011-03-24 21:47:23.381397048 +0100
-@@ -51,7 +51,11 @@
- #define PNG_READ_16BIT_SUPPORTED
- #endif
-
--#include "zlib.h"   /* For crc32 */
-+#if defined MACOSX || defined IOS || defined ANDROID
-+#include "zlib.h"
-+#else
-+#include <external/zlib/zlib.h>
-+#endif
-
- #include <float.h>  /* For floating point constants */
- #include <stdlib.h> /* For malloc */
