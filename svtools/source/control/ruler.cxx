@@ -279,7 +279,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Border-Breiten berechnen
     if ( nWinBits & WB_BORDER )
-        mnBorderWidth = 2;
+        mnBorderWidth = 1;
     else
         mnBorderWidth = 0;
 
@@ -543,7 +543,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         nTickCount = nTick3;
     }
     else
-        maVirDev.SetLineColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
+        maVirDev.SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
 
     if ( !bNoTicks )
     {
@@ -680,7 +680,7 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
                 ImplVDrawLine( n1, nVirTop, n1, nVirBottom );
                 ImplVDrawLine( n1, nVirBottom, n2, nVirBottom );
                 ImplVDrawLine( n2-1, nVirTop, n2-1, nVirBottom );
-                maVirDev.SetLineColor( rStyleSettings.GetWindowTextColor() );
+                maVirDev.SetLineColor( rStyleSettings.GetDarkShadowColor() );
                 ImplVDrawLine( n2, nVirTop, n2, nVirBottom );
 
                 if ( mpData->pBorders[i].nStyle & RULER_BORDER_VARIABLE )
@@ -752,84 +752,13 @@ void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle )
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     Point   aPos1;
     Point   aPos2;
-    sal_uInt16  nIndentStyle = nStyle & RULER_INDENT_STYLE;
 
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;
 
-    if ( nStyle & RULER_STYLE_DONTKNOW )
-    {
-        maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-        maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
-    }
-    else
-    {
-        maVirDev.SetLineColor( rStyleSettings.GetDarkShadowColor() );
-        maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
-    }
-
+    maVirDev.SetLineColor( rStyleSettings.GetDarkShadowColor() );
+    maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
     maVirDev.DrawPolygon( rPoly );
-
-    if ( !(nStyle & RULER_STYLE_DONTKNOW) )
-    {
-        if ( nIndentStyle == RULER_INDENT_BOTTOM )
-        {
-            maVirDev.SetLineColor( rStyleSettings.GetLightColor() );
-            aPos1 = rPoly.GetPoint( 2 );
-            aPos1.X()++;
-            aPos2 = rPoly.GetPoint( 1 );
-            aPos2.X()++;
-            maVirDev.DrawLine( aPos2, aPos1 );
-            aPos2.X()--;
-            aPos2.Y()++;
-            aPos1 = rPoly.GetPoint( 0 );
-            aPos1.Y()++;
-            maVirDev.DrawLine( aPos2, aPos1 );
-            maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-            aPos2 = rPoly.GetPoint( 4 );
-            aPos2.Y()++;
-            maVirDev.DrawLine( aPos1, aPos2 );
-            aPos2.X()--;
-            aPos1 = rPoly.GetPoint( 3 );
-            aPos1.X()--;
-            maVirDev.DrawLine( aPos2, aPos1 );
-            aPos1.Y()--;
-            aPos2 = rPoly.GetPoint( 2 );
-            aPos2.X()++;
-            aPos2.Y()--;
-            maVirDev.DrawLine( aPos2, aPos1 );
-        }
-        else
-        {
-            maVirDev.SetLineColor( rStyleSettings.GetLightColor() );
-            aPos1 = rPoly.GetPoint( 2 );
-            aPos1.X()++;
-            aPos1.Y()++;
-            aPos2 = rPoly.GetPoint( 3 );
-            aPos2.Y()++;
-            maVirDev.DrawLine( aPos1, aPos2 );
-            aPos2 = rPoly.GetPoint( 1 );
-            aPos2.X()++;
-            maVirDev.DrawLine( aPos1, aPos2 );
-            aPos2.X()--;
-            aPos2.Y()--;
-            aPos1 = rPoly.GetPoint( 0 );
-            aPos1.Y()--;
-            maVirDev.DrawLine( aPos2, aPos1 );
-            maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-            aPos2 = rPoly.GetPoint( 4 );
-            aPos2.Y()--;
-            maVirDev.DrawLine( aPos1, aPos2 );
-            aPos2.X()--;
-            aPos1 = rPoly.GetPoint( 3 );
-            aPos1.X()--;
-            maVirDev.DrawLine( aPos2, aPos1 );
-        }
-
-        maVirDev.SetLineColor( rStyleSettings.GetDarkShadowColor() );
-        maVirDev.SetFillColor();
-        maVirDev.DrawPolygon( rPoly );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -858,7 +787,7 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
                 maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-                ImplVDrawLine( n, nVirTop, n, nVirBottom );
+                ImplVDrawLine( n, nVirTop, n, nVirBottom-1 );
             }
             else if ( nIndentStyle == RULER_INDENT_BOTTOM )
             {
@@ -1014,7 +943,7 @@ void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nS
     if ( nStyle & RULER_STYLE_DONTKNOW )
         pDevice->SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );
     else
-        pDevice->SetFillColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
+        pDevice->SetFillColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
 
     if(mpData->bTextRTL)
         nStyle |= RULER_TAB_RTL;
@@ -1061,7 +990,7 @@ void Ruler::ImplInitSettings( sal_Bool bFont,
         if ( IsControlForeground() )
             aColor = GetControlForeground();
         else
-            aColor = rStyleSettings.GetWindowTextColor();
+            aColor = rStyleSettings.GetDarkShadowColor();
         SetTextColor( aColor );
         SetTextFillColor();
     }
@@ -1072,7 +1001,7 @@ void Ruler::ImplInitSettings( sal_Bool bFont,
         if ( IsControlBackground() )
             aColor = GetControlBackground();
         else
-            aColor = rStyleSettings.GetFaceColor();
+            aColor = rStyleSettings.GetWorkspaceColor();
         SetBackground( aColor );
     }
 
@@ -1237,7 +1166,7 @@ void Ruler::ImplFormat()
 
     // Margin1, Margin2 und Zwischenraum ausgeben
     maVirDev.SetLineColor();
-    maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
+    maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
     if ( nM1 > nVirLeft )
         ImplVDrawRect( nP1, nVirTop, nM1-1, nVirBottom ); //left gray rectangle
     if ( nM2 < nP2 )
@@ -1389,7 +1318,7 @@ void Ruler::ImplDrawExtra( sal_Bool bPaint )
 
     if ( !bPaint && !(mnExtraStyle & RULER_STYLE_HIGHLIGHT) )
     {
-        SetFillColor( rStyleSettings.GetFaceColor() );
+        SetFillColor( rStyleSettings.GetWorkspaceColor() );
         bEraseRect = sal_True;
     }
     else
@@ -2156,67 +2085,9 @@ void Ruler::Paint( const Rectangle& )
 {
     ImplDraw();
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
     // Extra-Field beruecksichtigen
     if ( mnWinStyle & WB_EXTRAFIELD )
-    {
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        DrawLine( Point( maExtraRect.Left(), maExtraRect.Top() ),
-                  Point( maExtraRect.Right()-1, maExtraRect.Top() ) );
-        DrawLine( Point( maExtraRect.Left(), maExtraRect.Top() ),
-                  Point( maExtraRect.Left(), maExtraRect.Bottom()-1 ) );
-        DrawLine( Point( maExtraRect.Left(), maExtraRect.Bottom()-1 ),
-                  Point( maExtraRect.Right()-1, maExtraRect.Bottom()-1 ) );
-        DrawLine( Point( maExtraRect.Right()-1, maExtraRect.Top() ),
-                  Point( maExtraRect.Right()-1, maExtraRect.Bottom()-1 ) );
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawLine( Point( maExtraRect.Left()+1, maExtraRect.Top()+1 ),
-                  Point( maExtraRect.Right()-2, maExtraRect.Top()+1 ) );
-        DrawLine( Point( maExtraRect.Left()+1, maExtraRect.Top()+1 ),
-                  Point( maExtraRect.Left()+1, maExtraRect.Bottom()-2 ) );
-        DrawLine( Point( maExtraRect.Left(), maExtraRect.Bottom() ),
-                  Point( maExtraRect.Right(), maExtraRect.Bottom() ) );
-        DrawLine( Point( maExtraRect.Right(), maExtraRect.Top() ),
-                  Point( maExtraRect.Right(), maExtraRect.Bottom() ) );
-
-        // Imhalt vom Extrafeld ausgeben
         ImplDrawExtra( sal_True );
-    }
-
-    if ( mnWinStyle & WB_BORDER )
-    {
-        if ( mnWinStyle & WB_HORZ )
-        {
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( Point( mnBorderOff, mnHeight-2 ),
-                      Point( mnWidth, mnHeight-2 ) );
-            if ( mnBorderOff )
-            {
-                DrawLine( Point( mnBorderOff-1, mnHeight-2 ),
-                          Point( mnBorderOff-1, mnHeight-1 ) );
-            }
-
-            SetLineColor( rStyleSettings.GetWindowTextColor() );
-            DrawLine( Point( mnBorderOff, mnHeight-1 ),
-                      Point( mnWidth, mnHeight-1 ) );
-        }
-        else
-        {
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( Point( mnWidth-2, mnBorderOff ),
-                      Point( mnWidth-2, mnHeight ) );
-            if ( mnBorderOff )
-            {
-                DrawLine( Point( mnWidth-2, mnBorderOff-1 ),
-                          Point( mnWidth-1, mnBorderOff-1 ) );
-            }
-
-            SetLineColor( rStyleSettings.GetWindowTextColor() );
-            DrawLine( Point( mnWidth-1, mnBorderOff ),
-                      Point( mnWidth-1, mnHeight ) );
-        }
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -2932,7 +2803,7 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle
 
     pDevice->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
     pDevice->SetLineColor();
-    pDevice->SetFillColor( pDevice->GetSettings().GetStyleSettings().GetWindowTextColor() );
+    pDevice->SetFillColor( pDevice->GetSettings().GetStyleSettings().GetShadowColor() );
     ImplCenterTabPos( aPos, nTabStyle );
     ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();
