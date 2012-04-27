@@ -87,6 +87,7 @@ $(eval $(call gb_Library_set_componentfile,dbu,dbaccess/util/dbu))
 
 $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/shared/dbu_reghelper \
+    dbaccess/source/shared/dbustrings \
     dbaccess/source/ui/app/AppController \
     dbaccess/source/ui/app/AppControllerDnD \
     dbaccess/source/ui/app/AppControllerGen \
@@ -156,6 +157,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/indexdialog \
     dbaccess/source/ui/dlg/indexfieldscontrol \
     dbaccess/source/ui/dlg/odbcconfig \
+    dbaccess/source/ui/dlg/optionalboolitem \
     dbaccess/source/ui/dlg/paramdialog \
     dbaccess/source/ui/dlg/queryfilter \
     dbaccess/source/ui/dlg/queryorder \
@@ -266,9 +268,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
 ))
 
 $(eval $(call gb_Library_add_noexception_objects,dbu,\
-    dbaccess/source/shared/dbustrings \
     dbaccess/source/ui/control/ScrollHelper \
-    dbaccess/source/ui/dlg/optionalboolitem \
     dbaccess/source/ui/querydesign/TableFieldInfo \
 ))
 

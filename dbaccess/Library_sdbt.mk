@@ -63,9 +63,6 @@ $(eval $(call gb_Library_add_exception_objects,sdbt,\
     dbaccess/source/sdbtools/connection/tablename \
     dbaccess/source/sdbtools/misc/module_sdbt \
     dbaccess/source/sdbtools/misc/sdbt_services \
-))
-
-$(eval $(call gb_Library_add_noexception_objects,sdbt,\
     dbaccess/source/shared/sdbtstrings \
 ))
 

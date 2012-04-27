@@ -98,6 +98,7 @@ $(eval $(call gb_Library_use_libraries,dbui,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,dbui,\
+	dbaccess/source/shared/dbustrings \
 	dbaccess/source/ui/app/AppDetailView \
 	dbaccess/source/ui/app/AppController \
 	dbaccess/source/ui/app/AppControllerDnD \
@@ -143,6 +144,7 @@ $(eval $(call gb_Library_add_exception_objects,dbui,\
 	dbaccess/source/ui/dlg/dlgsave \
 	dbaccess/source/ui/dlg/admincontrols \
 	dbaccess/source/ui/dlg/adminpages \
+	dbaccess/source/ui/dlg/optionalboolitem \
 	dbaccess/source/ui/dlg/queryorder \
 	dbaccess/source/ui/dlg/queryfilter \
 	dbaccess/source/ui/dlg/paramdialog \
@@ -274,14 +276,12 @@ $(eval $(call gb_Library_add_noexception_objects,dbui, \
 	dbaccess/source/ui/browser/AsyncronousLink \
 	dbaccess/source/ui/dlg/dlgsize \
 	dbaccess/source/ui/dlg/dlgattr \
-	dbaccess/source/ui/dlg/optionalboolitem \
 	dbaccess/source/ui/querydesign/TableFieldInfo \
 	dbaccess/source/ui/querydesign/QTableConnectionData \
 	dbaccess/source/ui/querydesign/QTableWindowData \
 	dbaccess/source/ui/querydesign/ConnectionLine \
 	dbaccess/source/ui/querydesign/ConnectionLineData \
 	dbaccess/source/shared/dbu_reghelper \
-	dbaccess/source/shared/dbustrings \
 ))
 
 # the following source file can't be compiled with optimization by some compilers (crash or endless loop):

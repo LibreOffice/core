@@ -86,9 +86,6 @@ $(eval $(call gb_Library_add_exception_objects,dbaxml,\
     dbaccess/source/filter/xml/xmlTableFilterList \
     dbaccess/source/filter/xml/xmlTableFilterPattern \
     dbaccess/source/shared/flt_reghelper \
-))
-
-$(eval $(call gb_Library_add_noexception_objects,dbaxml,\
     dbaccess/source/shared/xmlstrings \
 ))
 
