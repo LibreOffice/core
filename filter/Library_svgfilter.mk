@@ -25,6 +25,7 @@ $(eval $(call gb_Library_set_componentfile,svgfilter,filter/source/svg/svgfilter
 
 $(eval $(call gb_Library_add_defs,svgfilter,\
 	-DUSE_MODERN_SPIRIT \
+	-DFILTER_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_set_include,svgfilter,\
