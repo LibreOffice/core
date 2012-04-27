@@ -52,7 +52,7 @@
 +
 --- misc/libpng-1.5.10/pnglibconf.h	2011-03-24 21:49:50.913397154 +0100
 +++ misc/build/libpng-1.5.10/pnglibconf.h	2011-03-24 21:47:23.380397048 +0100
-@@ -1 +1,178 @@
+@@ -1 +1,179 @@
 -dummy
 +
 +/* libpng STANDARD API DEFINITION */
@@ -230,6 +230,7 @@
 +#define PNG_iTXt_SUPPORTED
 +#define PNG_WRITE_COMPRESSED_TEXT_SUPPORTED
 +#define PNG_READ_COMPRESSED_TEXT_SUPPORTED
++#define PNG_READ_STRIP_16_TO_8_SUPPORTED
 +/* end of options */
 +#endif /* PNGLCONF_H */
 --- misc/libpng-1.5.10/pngstruct.h	2011-02-03 05:58:17.000000000 +0100
