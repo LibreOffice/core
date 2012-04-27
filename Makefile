@@ -289,6 +289,7 @@ $(1).deliver: $(1)
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
 
 $(1).clean:
+	cd $(1) && $(SOLARENV)/bin/deliver.pl -delete
 	rm -fr $(1)/$(INPATH)
 
 endef
