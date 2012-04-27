@@ -389,7 +389,7 @@ void ImplStyleData::SetStandardStyles()
     maWindowTextColor           = Color( COL_BLACK );
     maDialogColor               = Color( COL_LIGHTGRAY );
     maDialogTextColor           = Color( COL_BLACK );
-    maWorkspaceColor            = Color( COL_GRAY );
+    maWorkspaceColor            = Color( 0xF0, 0xF0, 0xF0 );
     maMonoColor                 = Color( COL_BLACK );
     maFieldColor                = Color( COL_WHITE );
     maFieldTextColor            = Color( COL_BLACK );

@@ -495,15 +495,6 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bS
     {
         if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
             aRet.nColor = ColorConfig::GetDefaultColor(eEntry).GetColor();
-        //#103495# don't allow grey between 40% and 60% as application background
-        const sal_uInt8 nRed = COLORDATA_RED( aRet.nColor);
-        if(eEntry == APPBACKGROUND &&
-                (nRed == COLORDATA_GREEN( aRet.nColor)) &&
-                    (nRed == COLORDATA_BLUE( aRet.nColor)) &&
-                nRed > 102 && nRed < 153 )
-        {
-            aRet.nColor = RGB_COLORDATA(153, 153, 153);
-        }
     }
 
     return aRet;
