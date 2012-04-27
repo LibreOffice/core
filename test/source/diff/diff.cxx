@@ -31,6 +31,7 @@
 #include <libxml/xpath.h>
 #include <rtl/math.hxx>
 #include <cstring>
+#include <sstream>
 #include <cmath>
 #include <cassert>
 
@@ -94,7 +95,7 @@ void XMLDiff::loadToleranceFile(xmlDocPtr xmlToleranceFile)
 {
     xmlNodePtr root = xmlDocGetRootElement(xmlToleranceFile);
 #if USE_CPPUNIT
-    CPPUNIT_ASSERT_MESSAGE("did not find tolerance file", xmlStrEqual( root->name, BAD_CAST("tolerances") ));
+    CPPUNIT_ASSERT_MESSAGE("did not find correct tolerance file", xmlStrEqual( root->name, BAD_CAST("tolerances") ));
 #else
     if(!xmlStrEqual( root->name, BAD_CAST("tolerances") ))
     {
@@ -125,7 +126,9 @@ bool XMLDiff::compare()
 #if USE_CPPUNIT
     CPPUNIT_ASSERT(root1);
     CPPUNIT_ASSERT(root2);
-    CPPUNIT_ASSERT(xmlStrEqual(root1->name, root2->name));
+    std::stringstream stringStream("Expected: ");
+    stringStream << (char*)root1->name << "\nFound: " << (char*) root2->name;
+    CPPUNIT_ASSERT(stringStream.str(), xmlStrEqual(root1->name, root2->name));
 #else
     if (!root1 || !root2)
         return false;
@@ -155,7 +158,9 @@ bool checkForEmptyChildren(xmlNodePtr node)
 bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
 {
 #if USE_CPPUNIT
-    CPPUNIT_ASSERT(xmlStrEqual( node1->name, node2->name ));
+    std::stringstream stringStream("Expected: ");
+    stringStream << (xmlChar*) node1->name << "\nFound: " << node2->name;
+    CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual( node1->name, node2->name ));
 #else
     if (!xmlStrEqual( node1->name, node2->name ))
         return false;
@@ -248,7 +253,10 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
             {
                 bool valInTolerance = compareValuesWithTolerance(dVal1, dVal2, itr->value, itr->relative);
 #if USE_CPPUNIT
-                CPPUNIT_ASSERT(valInTolerance);
+                std::stringstream stringStream("Expected Value: ");
+                stringStream << dVal1 << "; Found Value: " << dVal2 << "; Tolerance: " << itr->value;
+                stringStream << "; Relative: " << itr->relative;
+                CPPUNIT_ASSERT_MESSAGE(stringStream.str(), valInTolerance);
 #else
                 if (!valInTolerance)
                     return false;
@@ -268,10 +276,12 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
         {
 
 #if USE_CPPUNIT
-        CPPUNIT_ASSERT(xmlStrEqual(val1, val2));
+            std::stringstream stringStream("Expected: ");
+            stringStream << (char*)val1 << "\nFound: " << (char*)val2;
+            CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(val1, val2));
 #else
-        if(!xmlStrEqual( val1, val2 ))
-            return false;
+            if(!xmlStrEqual( val1, val2 ))
+                return false;
 #endif
         }
 
