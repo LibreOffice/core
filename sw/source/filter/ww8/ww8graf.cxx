@@ -1568,7 +1568,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );
 
-        aLine.SetWidth( long ( nLineThick / 65 ) ); // Convert EMUs to Twips
+        aLine.SetWidth( nLineThick ); // No conversion here, nLineThick is already in twips
         aLine.SetStyle( nIdx );
 
         for(sal_uInt16 nLine = 0; nLine < 4; ++nLine)
@@ -1625,7 +1625,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // Rahmen-GROESSE benoetigt!
     SvxBoxItem aBox(sw::util::ItemGet<SvxBoxItem>(rFlySet, RES_BOX));
     // dashed oder solid wird zu solid
-    sal_Int32 nLineThick = 0, nOutside=0;
+    // WW-default: 0.75 pt = 15 twips
+    sal_Int32 nLineThick = 15, nOutside=0;
 
     // check if LineStyle is *really* set!
     const SfxPoolItem* pItem;
@@ -1640,7 +1641,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         nLineThick = WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH, XLineWidthItem);
 
         if( !nLineThick )
-            nLineThick = 15; // WW-default: 0.75 pt
+            nLineThick = 1; // for Writer, zero is "no border", so set a minimal value
 
         nOutside = MatchSdrBoxIntoFlyBoxItem(aLineColor, eLineStyle,
             eDashing, eShapeType, nLineThick, aBox);
