@@ -553,31 +553,21 @@ sub get_fileversion
 
     my $fileversion = "";
 
-    if ( $allvariables->{'USE_FILEVERSION'} )
+    if ( $onefile->{'Name'} =~ /\.bin$|\.com$|\.dll$|\.exe$|\.pyd$/ )
     {
-        if ( ! $allvariables->{'LIBRARYVERSION'} ) { installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion"); }
-        my $libraryversion = $allvariables->{'LIBRARYVERSION'};
-        if ( $libraryversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+        open (EXE, "<$onefile->{'sourcepath'}");
+        binmode EXE;
+        {local $/ = undef; $exedata = <EXE>;}
+        close EXE;
+
+        my $binaryfileversion = "(V\x00S\x00_\x00V\x00E\x00R\x00S\x00I\x00O\x00N\x00_\x00I\x00N\x00F\x00O\x00\x00\x00\x00\x00\xbd\x04\xef\xfe\x00\x00\x01\x00)(........)";
+
+        if ($exedata =~ /$binaryfileversion/ms)
         {
-            my $major = $1;
-            my $minor = $2;
-            my $micro = $3;
-            my $concat = 100 * $minor + $micro;
-            $libraryversion = $major . "\." . $concat;
+            my ($header, $subversion, $version, $vervariant, $microversion) = ($1,unpack( "vvvv", $2));
+            $fileversion = $version . "." . $subversion . "." . $microversion . "." . $vervariant;
         }
-        my $vendornumber = 0;
-        if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
-        $fileversion = $libraryversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
-        if ( $onefile->{'FileVersion'} ) { $fileversion = $onefile->{'FileVersion'}; } # overriding FileVersion in scp
-
-        # if ( $styles =~ /\bFONT\b/ )
-        # {
-        #   my $newfileversion = installer::windows::font::get_font_version($onefile->{'sourcepath'});
-        #   if ( $newfileversion != 0 ) { $fileversion = $newfileversion; }
-        # }
     }
-
-    if ( $installer::globals::prepare_winpatch ) { $fileversion = ""; } # Windows patches do not allow this version # -> who says so?
 
     return $fileversion;
 }
