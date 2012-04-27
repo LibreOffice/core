@@ -32,7 +32,9 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <oox/ole/axcontrol.hxx>
 #include <oox/ole/oleobjecthelper.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
 #include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
@@ -46,14 +48,12 @@ namespace com { namespace sun { namespace star {
 namespace oox {
     namespace core { class XmlFilterBase; }
     namespace ole { class EmbeddedControl; }
-    namespace ole { class EmbeddedForm; }
 }
 
 namespace oox {
 namespace vml {
 
 class ShapeBase;
-class ShapeContainer;
 struct ClientData;
 
 // ============================================================================
