@@ -965,7 +965,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     SolarMutexGuard aGuard;
 
     if (!mpEditSource)
-        return rtl::OUString("no edit source!!!");
+        return rtl::OUString();
 
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
@@ -975,14 +975,15 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
     OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
     if (!pField)
-        return rtl::OUString("not inserted yet");
+        return rtl::OUString();
 
     switch (meType)
     {
         case URL:
         {
             if (pField->GetClassId() != SVX_URLFIELD)
-                return rtl::OUString("not url field but url expected");
+                // Not an URL field, but URL is expected.
+                throw uno::RuntimeException();
 
             const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
             return bShowCommand ? pURL->GetURL() : pURL->GetRepresentation();
@@ -991,7 +992,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         default:
             ;
     }
-    return rtl::OUString("total fail");
+    return rtl::OUString();
 }
 
 // XTextContent
