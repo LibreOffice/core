@@ -102,7 +102,9 @@
 #include <sfxlocal.hrc>
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
+
 #ifdef UNX
+#include <errno.h>
 #include <sys/stat.h>
 #endif
 
