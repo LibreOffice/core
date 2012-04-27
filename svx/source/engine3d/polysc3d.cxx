@@ -43,8 +43,6 @@
 #include <svx/xtable.hxx>
 #include <svx/xlnwtit.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1(E3dPolyScene, E3dScene);

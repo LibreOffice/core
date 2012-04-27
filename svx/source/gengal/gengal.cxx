@@ -191,9 +191,6 @@ static rtl::OUString Smartify( const rtl::OUString &rPath )
     return aURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-#define OUSTRING_CSTR( str ) \
-    rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
-
 void GalApp::Init()
 {
     if( getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {

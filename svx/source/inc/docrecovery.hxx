@@ -50,17 +50,13 @@
 
 #define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:"))
 
-#define RECOVERY_CMDPART_DO_PREPARE_EMERGENCY_SAVE  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doPrepareEmergencySave"  ))
 #define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEmergencySave"         ))
 #define RECOVERY_CMDPART_DO_RECOVERY                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doAutoRecovery"          ))
 #define RECOVERY_CMDPART_DO_CRASHREPORT             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doCrashReport"           ))
-#define RECOVERY_CMDPART_DO_ENTRY_BACKUP            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEntryBackup"           ))
-#define RECOVERY_CMDPART_DO_ENTRY_CLEANUP           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEntryCleanUp"          ))
 
 #define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doPrepareEmergencySave"))
 #define RECOVERY_CMD_DO_EMERGENCY_SAVE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEmergencySave"       ))
 #define RECOVERY_CMD_DO_RECOVERY                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doAutoRecovery"        ))
-#define RECOVERY_CMD_DO_CRASHREPORT                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doCrashReport"         ))
 #define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryBackup"         ))
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 

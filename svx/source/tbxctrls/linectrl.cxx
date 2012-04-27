@@ -57,23 +57,6 @@ using namespace ::com::sun::star::lang;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define RESIZE_VALUE_POPUP(value_set)   \
-{                                                       \
-    Size aSize = GetOutputSizePixel();                  \
-    aSize.Width()  -= 4;                                \
-    aSize.Height() -= 4;                                \
-    (value_set).SetPosSizePixel( Point(2,2), aSize );   \
-}
-
-#define CALCSIZE_VALUE_POPUP(value_set,item_size) \
-{                                                                   \
-    Size aSize = (value_set).CalcWindowSizePixel( (item_size) );    \
-    aSize.Width()  += 4;                                            \
-    aSize.Height() += 4;                                            \
-    SetOutputSizePixel( aSize );                                    \
-}
-
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineStyleToolBoxControl, XLineStyleItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineColorToolBoxControl, XLineColorItem );

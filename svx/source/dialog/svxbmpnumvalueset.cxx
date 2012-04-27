@@ -81,14 +81,6 @@ using rtl::OUString;
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
-#define PAGETYPE_USER_START         10
-
-#define SHOW_NUMBERING              0
-#define SHOW_BULLET                 1
-#define SHOW_BITMAP                 2
-
-#define MAX_BMP_WIDTH               16
-#define MAX_BMP_HEIGHT              16
 
 static const sal_Char cNumberingType[] = "NumberingType";
 static const sal_Char cValue[] = "Value";

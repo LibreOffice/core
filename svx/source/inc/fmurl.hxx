@@ -29,7 +29,6 @@
 #ifndef _SVX_FMURL_HXX
 #define _SVX_FMURL_HXX
 
-#define FMURL_FORMSLOTS_PREFIX             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormController/" ) )
 #define FMURL_FORM_POSITION                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormController/positionForm" ) )
 #define FMURL_FORM_RECORDCOUNT             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormController/RecordCount" ) )
 #define FMURL_RECORD_MOVEFIRST             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormController/moveToFirst" ) )

@@ -85,8 +85,6 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;

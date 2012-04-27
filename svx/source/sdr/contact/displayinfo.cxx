@@ -34,8 +34,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 
-#define ALL_GHOSTED_DRAWMODES (DRAWMODE_GHOSTEDLINE|DRAWMODE_GHOSTEDFILL|DRAWMODE_GHOSTEDTEXT|DRAWMODE_GHOSTEDBITMAP|DRAWMODE_GHOSTEDGRADIENT)
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr

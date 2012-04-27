@@ -55,8 +55,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-
 //////////////////////////////////////////////////////////////////////////////
 
 class ImpRemap3DDepth

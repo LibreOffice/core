@@ -34,8 +34,6 @@
 #include <vcl/bmpacc.hxx>
 #include <tools/debug.hxx>
 
-#define IMAGE_COL_TRANSPARENT       COL_LIGHTMAGENTA
-
 //........................................................................
 namespace svx
 {
