@@ -147,6 +147,7 @@ void ScChartRegressionTest::test()
     CPPUNIT_ASSERT(xDumper.is());
 
     rtl::OUString aDump = xDumper->dump();
+    std::cout << aDump;
     bool bCompare = checkDumpAgainstFile( aDump, getPathFromSrc("/chart2/qa/unit/data/reference/testChart.xml") );
     CPPUNIT_ASSERT(bCompare);
 }
