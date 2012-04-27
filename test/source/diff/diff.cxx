@@ -55,6 +55,12 @@ XMLDiff::XMLDiff(const std::string& file1, const std::string& file2)
     xmlFile2 = xmlParseFile(file2.c_str());
 }
 
+XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size)
+{
+    xmlFile1 = xmlParseFile(pFileName);
+    xmlFile2 = xmlParseMemory(pContent, size);
+}
+
 XMLDiff::~XMLDiff()
 {
     xmlFreeDoc(xmlFile1);

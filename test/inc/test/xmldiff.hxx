@@ -31,6 +31,9 @@
 #include <libxml/xmlmemory.h>
 #include <string>
 #include <set>
+#include <test/testdllapi.hxx>
+
+#define USE_CPPUNIT 1
 
 struct tolerance
 {
@@ -70,11 +73,12 @@ struct tolerance
     }
 };
 
-class XMLDiff
+class OOO_DLLPUBLIC_TEST XMLDiff
 {
 public:
     XMLDiff(const std::string& file1, const std::string& file2, const std::string& toleranceFile);
     XMLDiff(const std::string& file1, const std::string& file2);
+    XMLDiff(const char* pFileName, const char* pContent, int size);
     ~XMLDiff();
 
     bool compare();
