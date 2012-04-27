@@ -180,8 +180,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
         return;
 
-    // only add r/w document into picklist
-    if ( pDocSh->IsReadOnly() || !pMed->IsUpdatePickList() )
+    if ( !pMed->IsUpdatePickList() )
         return;
 
     // add no document that forbids this (for example Message-Body)
