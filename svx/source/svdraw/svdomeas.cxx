@@ -67,6 +67,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include "svdconv.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1370,9 +1371,6 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
 // same as line geometry in SdrPathObj. Thus needs to be overloaded and
 // implemented since currently it is derived from SdrTextObj which uses
 // a functionality based on SnapRect which is not useful here
-
-inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
-inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 
 sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {

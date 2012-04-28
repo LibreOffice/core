@@ -57,10 +57,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdrhittesthelper.hxx>
-
-// #i32599#
-inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
-inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
+#include "svdconv.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

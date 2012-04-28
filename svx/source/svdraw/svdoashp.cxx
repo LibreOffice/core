@@ -89,9 +89,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/unotools.hxx>
-
-inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
-inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
+#include "svdconv.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

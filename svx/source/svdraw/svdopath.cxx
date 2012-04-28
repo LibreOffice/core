@@ -57,14 +57,7 @@
 #include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-// replace macros above with type-safe methods
-inline sal_Int32 ImplTwipsToMM(sal_Int32 nVal) { return ((nVal * 127 + 36) / 72); }
-inline sal_Int32 ImplMMToTwips(sal_Int32 nVal) { return ((nVal * 72 + 63) / 127); }
-inline sal_Int64 ImplTwipsToMM(sal_Int64 nVal) { return ((nVal * 127 + 36) / 72); }
-inline sal_Int64 ImplMMToTwips(sal_Int64 nVal) { return ((nVal * 72 + 63) / 127); }
-inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
-inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
+#include "svdconv.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
