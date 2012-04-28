@@ -54,7 +54,6 @@ $(eval $(call gb_Library_use_libraries,chartview,\
     svl \
     svt \
     svxcore \
-    test \
     tl \
     utl \
     vcl \
