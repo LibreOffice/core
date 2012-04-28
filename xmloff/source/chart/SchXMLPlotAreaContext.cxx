@@ -50,10 +50,14 @@
 #include <com/sun/star/awt/Size.hpp>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart/ChartErrorCategory.hpp>
+#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 
+#include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -385,13 +389,6 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     {
         mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(::rtl::OUString("SymbolType"));
         mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(::rtl::OUString("DataCaption"));
-
-        mrSeriesDefaultsAndStyles.maErrorIndicatorDefault = xProp->getPropertyValue(::rtl::OUString("ErrorIndicator"));
-        mrSeriesDefaultsAndStyles.maErrorCategoryDefault = xProp->getPropertyValue(::rtl::OUString("ErrorCategory"));
-        mrSeriesDefaultsAndStyles.maConstantErrorLowDefault = xProp->getPropertyValue(::rtl::OUString("ConstantErrorLow"));
-        mrSeriesDefaultsAndStyles.maConstantErrorHighDefault = xProp->getPropertyValue(::rtl::OUString("ConstantErrorHigh"));
-        mrSeriesDefaultsAndStyles.maPercentageErrorDefault = xProp->getPropertyValue(::rtl::OUString("PercentageError"));
-        mrSeriesDefaultsAndStyles.maErrorMarginDefault = xProp->getPropertyValue(::rtl::OUString("ErrorMargin"));
 
         mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(::rtl::OUString("MeanValue"));
         mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(::rtl::OUString("RegressionCurves"));
@@ -971,12 +968,70 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
 // ========================================
 
+void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
+                               const uno::Reference< beans::XPropertySet > &xBarProp,
+                               const rtl::OUString &aRange,
+                               bool bPositiveValue, bool bYError )
+{
+    uno::Reference< com::sun::star::chart2::data::XDataProvider > xDataProvider(xDoc->getDataProvider());
+    uno::Reference< com::sun::star::chart2::data::XDataSource > xDataSource( xBarProp, uno::UNO_QUERY );
+    uno::Reference< com::sun::star::chart2::data::XDataSink > xDataSink( xDataSource, uno::UNO_QUERY );
+
+    assert( xDataSink.is() && xDataSource.is() && xDataProvider.is() );
+
+    rtl::OUString aXMLRange(lcl_ConvertRange(aRange,xDoc));
+
+    uno::Reference< chart2::data::XDataSequence > xNewSequence(
+        xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
+
+    if( xNewSequence.is())
+    {
+        SchXMLTools::setXMLRangePropertyAtDataSequence(xNewSequence,aXMLRange);
+
+        rtl::OUStringBuffer aRoleBuffer("error-bars-");
+        if( bYError )
+            aRoleBuffer.append( sal_Unicode( 'y' ));
+        else
+            aRoleBuffer.append( sal_Unicode( 'x' ));
+
+        rtl::OUString aPlainRole = aRoleBuffer.makeStringAndClear();
+        aRoleBuffer.append( aPlainRole );
+        aRoleBuffer.append( sal_Unicode( '-' ));
+
+        if( bPositiveValue )
+            aRoleBuffer = aRoleBuffer.appendAscii( "positive" );
+        else
+            aRoleBuffer = aRoleBuffer.appendAscii( "negative" );
+
+        rtl::OUString aRole = aRoleBuffer.makeStringAndClear();
+
+        Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
+
+        xSeqProp->setPropertyValue("Role", uno::makeAny( aRole ));
+
+        Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+
+        Reference< chart2::data::XLabeledDataSequence > xLabelSeq(
+            xFact->createInstance("com.sun.star.chart2.data.LabeledDataSequence"), uno::UNO_QUERY );
+
+        xLabelSeq->setValues( xNewSequence );
+
+        uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
+            xDataSource->getDataSequences());
+
+        aSequences.realloc( aSequences.getLength() + 1 );
+        aSequences[ aSequences.getLength() - 1 ] = xLabelSeq;
+        xDataSink->setData( aSequences );
+    }
+}
+
 SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
 
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
+    const rtl::OUString &rSeriesStyleName,
     ::std::list< DataRowPointStyle >& rStyleList,
     const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
@@ -988,7 +1043,8 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
         mrStyleList( rStyleList ),
         m_xSeries( xSeries ),
         meContextType( eContextType ),
-        maChartSize( rChartSize )
+        maChartSize( rChartSize ),
+        maSeriesStyleName( rSeriesStyleName)
 {}
 
 SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
@@ -1000,6 +1056,9 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     ::rtl::OUString aValue;
     ::rtl::OUString sAutoStyleName;
+    rtl::OUString aPosRange;
+    rtl::OUString aNegRange;
+    bool bYError = true;    /// Default errorbar, to be backward compatible with older files!
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -1011,6 +1070,12 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
         {
             if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 sAutoStyleName = xAttrList->getValueByIndex( i );
+            else if( IsXMLToken( aLocalName, XML_DIMENSION ) )
+                bYError = xAttrList->getValueByIndex(i) == "y";
+            else if( IsXMLToken( aLocalName, XML_ERROR_UPPER_RANGE) )
+                aPosRange = xAttrList->getValueByIndex(i);
+            else if( IsXMLToken( aLocalName, XML_ERROR_LOWER_RANGE) )
+                aNegRange = xAttrList->getValueByIndex(i);
         }
     }
 
@@ -1018,21 +1083,109 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     // auto-style set, because they can contain an equation
     if( !sAutoStyleName.isEmpty() || meContextType == CONTEXT_TYPE_REGRESSION_CURVE )
     {
-        DataRowPointStyle::StyleType eType = DataRowPointStyle::MEAN_VALUE;
+        DataRowPointStyle aStyle( DataRowPointStyle::MEAN_VALUE, m_xSeries, -1, 1, sAutoStyleName );
+
         switch( meContextType )
         {
             case CONTEXT_TYPE_MEAN_VALUE_LINE:
-                eType = DataRowPointStyle::MEAN_VALUE;
+                aStyle.meType = DataRowPointStyle::MEAN_VALUE;
                 break;
             case CONTEXT_TYPE_REGRESSION_CURVE:
-                eType = DataRowPointStyle::REGRESSION;
+                aStyle.meType = DataRowPointStyle::REGRESSION;
                 break;
             case CONTEXT_TYPE_ERROR_INDICATOR:
-                eType = DataRowPointStyle::ERROR_INDICATOR;
+                {
+                    aStyle.meType = DataRowPointStyle::ERROR_INDICATOR;
+
+                    ;
+                    uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(),
+                                                                        uno::UNO_QUERY );
+
+                    uno::Reference< beans::XPropertySet > xBarProp( xFact->createInstance("com.sun.star.chart2.ErrorBar" ),
+                                                                    uno::UNO_QUERY );
+
+                    xBarProp->setPropertyValue("ErrorBarStyle",uno::makeAny(com::sun::star::chart::ErrorBarStyle::NONE));
+                    xBarProp->setPropertyValue("PositiveError",uno::makeAny(static_cast<double>(0.0)));
+                    xBarProp->setPropertyValue("NegativeError",uno::makeAny(static_cast<double>(0.0)));
+                    xBarProp->setPropertyValue("Weight",uno::makeAny(static_cast<double>(1.0)));
+                    xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(sal_True));
+                    xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(sal_True));
+
+                    const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+
+                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    // note: SvXMLStyleContext::FillPropertySet is not const
+                    XMLPropStyleContext * pErrorStyleContext =
+                        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+
+                    pErrorStyleContext->FillPropertySet( xBarProp );
+
+                    uno::Reference< chart2::XChartDocument > xDoc(GetImport().GetModel(),uno::UNO_QUERY);
+
+                    if (!aPosRange.isEmpty())
+                        lcl_setErrorBarSequence(xDoc,xBarProp,aPosRange,true,bYError);
+
+                    if (!aNegRange.isEmpty())
+                        lcl_setErrorBarSequence(xDoc,xBarProp,aNegRange,false,bYError);
+
+                    if ( !bYError )
+                    {
+                        aStyle.m_xErrorXProperties.set( xBarProp );
+                    }
+                    else
+                    {
+                        /// Keep 0DF12 and below support
+                        pStyle = pStylesCtxt->FindStyleChildContext(mrImportHelper.GetChartFamilyID(),
+                                                                    maSeriesStyleName);
+
+                        XMLPropStyleContext * pSeriesStyleContext =
+                            const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+
+                        uno::Any aAny = SchXMLTools::getPropertyFromContext("ErrorBarStyle",
+                                                                            pSeriesStyleContext,pStylesCtxt);
+
+                        if ( aAny.hasValue() )
+                        {
+                            sal_Int32 aBarStyle = com::sun::star::chart::ErrorBarStyle::NONE;
+                            aAny >>= aBarStyle;
+
+                            aAny = SchXMLTools::getPropertyFromContext("ShowPositiveError",
+                                                                       pSeriesStyleContext,pStylesCtxt);
+
+                            xBarProp->setPropertyValue("ShowPositiveError",aAny);
+
+                            aAny = SchXMLTools::getPropertyFromContext("ShowNegativeError",
+                                                                       pSeriesStyleContext,pStylesCtxt);
+
+                            xBarProp->setPropertyValue("ShowNegativeError",aAny);
+
+                            switch(aBarStyle)
+                            {
+                            case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                                {
+                                    aAny = SchXMLTools::getPropertyFromContext("NegativeError",
+                                                                               pSeriesStyleContext,pStylesCtxt);
+
+                                    xBarProp->setPropertyValue("NegativeError",aAny);
+
+                                    aAny = SchXMLTools::getPropertyFromContext("PositiveError",
+                                                                               pSeriesStyleContext,pStylesCtxt);
+
+                                    xBarProp->setPropertyValue("PositiveError",aAny);
+                                }
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+
+                        aStyle.m_xErrorYProperties.set( xBarProp );
+                    }
+                }
                 break;
         }
-        DataRowPointStyle aStyle(
-            eType, m_xSeries, -1, 1, sAutoStyleName );
+
         mrStyleList.push_back( aStyle );
     }
 }

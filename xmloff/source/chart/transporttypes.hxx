@@ -176,6 +176,10 @@ struct DataRowPointStyle
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > m_xOldAPISeries;
+    com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet > m_xErrorXProperties;
+    com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet > m_xErrorYProperties;
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > m_xEquationProperties;
     sal_Int32 m_nPointIndex;

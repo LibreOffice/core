@@ -658,7 +658,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
         case XML_TOK_SERIES_MEAN_VALUE_LINE:
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName,
+                nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE,
                 maChartSize );
@@ -666,7 +666,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
         case XML_TOK_SERIES_REGRESSION_CURVE:
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName,
+                nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE,
                 maChartSize );
@@ -674,7 +674,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
         case XML_TOK_SERIES_ERROR_INDICATOR:
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName,
+                nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR,
                 maChartSize );
@@ -878,6 +878,17 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
             iStyle->meType == DataRowPointStyle::ERROR_INDICATOR ||
             iStyle->meType == DataRowPointStyle::MEAN_VALUE )
         {
+            if ( iStyle->meType == DataRowPointStyle::ERROR_INDICATOR )
+            {
+                uno::Reference< beans::XPropertySet > xNewSeriesProp(iStyle->m_xSeries,uno::UNO_QUERY);
+
+                if (iStyle->m_xErrorXProperties.is())
+                    xNewSeriesProp->setPropertyValue("ErrorBarX",uno::makeAny(iStyle->m_xErrorXProperties));
+
+                if (iStyle->m_xErrorYProperties.is())
+                    xNewSeriesProp->setPropertyValue("ErrorBarY",uno::makeAny(iStyle->m_xErrorYProperties));
+            }
+
             try
             {
                 uno::Reference< beans::XPropertySet > xSeriesProp( iStyle->m_xOldAPISeries );

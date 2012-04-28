@@ -182,6 +182,10 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_FULL( "MarkPosition",   CHART, XML_TICK_MARK_POSITION, XML_SCH_TYPE_TICK_MARK_POSITION,                                                              0, SvtSaveOptions::ODFVER_012 ),
 
     // statistical properties
+
+    MAP_ENTRY_ODF_EXT( "ShowPositiveError", CHART, XML_ERROR_UPPER_INDICATOR, XML_TYPE_BOOL),
+    MAP_ENTRY_ODF_EXT( "ShowNegativeError", CHART, XML_ERROR_LOWER_INDICATOR, XML_TYPE_BOOL),
+
     MAP_ENTRY( "MeanValue", CHART, XML_MEAN_VALUE, XML_TYPE_BOOL ),
     MAP_ENTRY( "ErrorMargin", CHART, XML_ERROR_MARGIN, XML_TYPE_DOUBLE ),
     MAP_ENTRY( "ConstantErrorLow", CHART, XML_ERROR_LOWER_LIMIT, XML_TYPE_DOUBLE ),
@@ -198,8 +202,6 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY_ODF_EXT( "PositiveError", CHART, XML_ERROR_LOWER_LIMIT, XML_TYPE_DOUBLE),
     MAP_ENTRY_ODF_EXT( "NegativeError", CHART, XML_ERROR_UPPER_LIMIT, XML_TYPE_DOUBLE),
     MAP_ENTRY_ODF_EXT( "Weigth", CHART, XML_ERROR_STANDARD_WEIGTH, XML_TYPE_DOUBLE),
-    MAP_ENTRY_ODF_EXT( "ShowPositiveError", CHART, XML_ERROR_UPPER_INDICATOR, XML_TYPE_BOOL),
-    MAP_ENTRY_ODF_EXT( "ShowNegativeError", CHART, XML_ERROR_LOWER_INDICATOR, XML_TYPE_BOOL),
 
     // series/data-point properties
     MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_NUMBER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER ),   // convert one constant

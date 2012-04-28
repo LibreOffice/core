@@ -276,6 +276,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
+        const rtl::OUString &rSeriesStyleName,
         ::std::list< DataRowPointStyle >& rStyleList,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
@@ -297,6 +298,7 @@ private:
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     ContextType                                    meContextType;
     ::com::sun::star::awt::Size                    maChartSize;
+    rtl::OUString maSeriesStyleName;
 };
 
 // ----------------------------------------
