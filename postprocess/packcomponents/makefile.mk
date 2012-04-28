@@ -147,10 +147,10 @@ my_components += \
     component/connectivity/source/cpool/dbpool2 \
     component/connectivity/source/dbtools/dbtools \
     component/connectivity/source/drivers/flat/flat \
-    localebe1 \
     component/connectivity/source/drivers/mysql/mysql \
     component/connectivity/source/drivers/odbc/odbc \
     component/connectivity/source/manager/sdbc2 \
+    component/shell/source/backends/localebe/localebe1 \
 
 .ENDIF
 
@@ -171,9 +171,14 @@ my_components += \
     component/extensions/source/resource/res \
     component/extensions/source/scanner/scn \
     component/extensions/source/update/feed/updatefeed \
-    syssh \
     component/xmlhelp/source/treeview/tvhlp1 \
     component/xmlhelp/util/ucpchelp1 \
+
+.IF "$(GUI)" == "UNX"
+my_components += \
+    component/shell/source/unix/exec/syssh \
+
+.ENDIF
 
 .ENDIF
 
@@ -235,7 +240,7 @@ my_components += component/canvas/source/cairo/cairocanvas
 .END
 
 .IF "$(ENABLE_GCONF)" != ""
-my_components += gconfbe1
+my_components += component/shell/source/backends/gconfbe/gconfbe1
 .END
 
 .IF "$(ENABLE_GIO)" != ""
@@ -251,7 +256,7 @@ my_components += component/connectivity/source/drivers/kab/tdeab1
 .END
 
 .IF "$(ENABLE_TDE)" != ""
-my_components += tdebe1
+my_components += component/shell/source/backends/kdebe/tdebe1
 .END
 
 .IF "$(ENABLE_KAB)" != ""
@@ -259,11 +264,11 @@ my_components += component/connectivity/source/drivers/kab/kab1
 .END
 
 .IF "$(ENABLE_KDE)" != ""
-my_components += kdebe1
+my_components += component/shell/source/backends/kdebe/kdebe1
 .END
 
 .IF "$(ENABLE_KDE4)" != ""
-my_components += kde4be1
+my_components += component/shell/source/backends/kde4be/kde4be1
 .END
 
 .IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
@@ -324,8 +329,8 @@ my_components += component/xmlsecurity/util/xsec_xmlsec
 .IF "$(OS)" == "MACOSX"
 my_components += \
     component/connectivity/source/drivers/macab/macab1 \
-    macbe1 \
     component/fpicker/source/aqua/fps_aqua \
+    component/shell/source/backends/macbe/macbe1 \
     component/vcl/vcl.macosx
 .END
 
@@ -337,14 +342,14 @@ my_components += \
 
 .IF "$(OS)" == "WNT"
 my_components += \
-    component/connectivity/source/drivers/ado/ado \
-    smplmail \
-    wininetbe1 \
     component/dtrans/source/generic/dtrans \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
     component/fpicker/source/win32/fps \
+    component/shell/source/backends/wininetbe/wininetbe1 \
+    component/shell/source/win32/simplemail/smplmail \
+    component/shell/source/win32/syssh \
     component/vcl/vcl.windows
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
@@ -359,7 +364,7 @@ my_components += \
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
 my_components += \
-    desktopbe1 \
+    component/shell/source/backends/desktopbe/desktopbe1 \
     component/vcl/vcl.unx
 .END
 
@@ -386,7 +391,7 @@ my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootst
 .ENDIF
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"
-my_components += cmdmail
+my_components += component/shell/source/cmdmail/cmdmail
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_EVOAB2)" != ""

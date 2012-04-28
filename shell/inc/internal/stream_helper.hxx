@@ -31,6 +31,8 @@
 
 #include "internal/types.hxx"
 
+class IStream;
+
 class BufferStream : public StreamInterface
 {
 public:

@@ -41,6 +41,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gsicheck \
     helpex \
     idxdict \
+    lngconvex \
     localize \
     mkunroll \
     osl_process_child \
@@ -48,6 +49,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     pdfunzip \
     rdbmaker \
     regsingleton \
+    regsvrex \
     rsc \
     rscdep \
     saxparser \
@@ -80,12 +82,14 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 endif
 
 $(eval $(call gb_Helper_register_executables,OOO, \
+    gnome-open-url.bin \
     HelpLinker \
     HelpIndexer \
     spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
 		tdefilepicker \
 	) \
+    uri-encode \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
 		kdefilepicker \
 	) \
@@ -105,6 +109,7 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	sbase \
 	scalc \
 	sdraw \
+    senddoc \
 	simpress \
 	soffice \
 	soffice_bin \
@@ -435,6 +440,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     mozbootstrap \
     officebean \
     package2 \
+    recentfile \
     scriptframe \
     sdbc2 \
     smoketest \
@@ -477,6 +483,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     fps \
     ftransl \
     inprocserv \
+    ooofilt \
+    ooofilt_x64 \
+    propertyhdl \
+    propertyhdl_x64 \
+    shlxthdl \
+    shlxthdl_x64 \
     so_activex \
     so_activex_x64 \
     sysdtrans \
@@ -507,7 +519,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     basprov \
     cairocanvas \
     canvasfactory \
+    cmdmail \
     configmgr \
+    desktopbe1 \
     directx5canvas \
     directx9canvas \
     dlgprov \
@@ -516,11 +530,16 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fpicker \
     fps_office \
     fsstorage \
+    gconfbe1 \
     gdipluscanvas \
     hatchwindowfactory \
     i18npool \
     i18nsearch \
+    kdebe1 \
+    kde4be1 \
+    localebe1 \
     lomenubar \
+    macbe1 \
     migrationoo2 \
     migrationoo3 \
     msforms \
@@ -533,6 +552,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     simplecanvas \
     slideshow \
     stringresource \
+    syssh \
     ucpcmis1 \
     ucpexpand1 \
     ucpext \
@@ -558,6 +578,8 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     oleautobridge \
     oleautobridge2 \
+    smplmail \
+    wininetbe1 \
 ))
 endif
 
@@ -616,6 +638,11 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ssleay32 \
     ooopathutils \
     sample \
+    simplemapi \
+    shell_xmlparser \
+    shell_xmlparser_x64 \
+    shlxthandler_common \
+    shlxthandler_common_x64 \
     salcpprt \
     transex \
     ulingu \

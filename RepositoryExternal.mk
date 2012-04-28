@@ -1111,43 +1111,6 @@ endef
 
 endif # SYSTEM_CURL
 
-define gb_LinkTarget__use_kde
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(KDE_LIBS) \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(KDE_CFLAGS) \
-)
-endef
-
-ifeq ($(ENABLE_TDE),YES)
-
-define gb_LinkTarget__use_tde
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(TDE_LIBS) \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(TDE_CFLAGS) \
-)
-endef
-
-endif # ENABLE_TDE
-
-define gb_LinkTarget__use_gobject
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(GOBJECT_LIBS) \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(GOBJECT_CFLAGS) \
-)
-endef
-
 ifneq ($(VALGRIND_CFLAGS),)
 
 define gb_LinkTarget__use_valgrind
@@ -1474,6 +1437,121 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 
 endif # SYSTEM_MOZILLA
 
+ifeq ($(ENABLE_KDE),TRUE)
+
+define gb_LinkTarget__use_kde
+$(call gb_LinkTarget_set_include,$(1),\
+	$(filter -I%,$(KDE_CFLAGS)) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I%,$(KDE_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(KDE_LIBS) \
+)
+
+ifeq ($(COM),GCC)
+$(call gb_LinkTarget_add_cxxflags,$(1),\
+	-Wno-shadow \
+)
+endif
+
+endef
+
+else # !ENABLE_KDE
+
+define gb_LinkTarget__use_kde
+
+endef
+
+endif # ENABLE_KDE
+
+
+ifeq ($(ENABLE_KDE4),TRUE)
+
+define gb_LinkTarget__use_kde4
+$(call gb_LinkTarget_set_include,$(1),\
+	$(filter -I%,$(KDE4_CFLAGS)) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I%,$(KDE4_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(KDE4_LIBS) \
+)
+
+ifeq ($(COM),GCC)
+$(call gb_LinkTarget_add_cxxflags,$(1),\
+	-Wno-shadow \
+)
+endif
+
+endef
+
+else # !ENABLE_KDE4
+
+define gb_LinkTarget__use_kde4
+
+endef
+
+endif # ENABLE_KDE4
+
+
+ifeq ($(ENABLE_TDE),YES)
+
+define gb_LinkTarget__use_tde
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(TDE_LIBS) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(TDE_CFLAGS) \
+)
+endef
+
+else # ! ENABLE_TDE
+
+define gb_LinkTarget__use_tde
+
+endef
+
+endif # ENABLE_TDE
+
+
+ifeq ($(ENABLE_GCONF),TRUE)
+
+define gb_LinkTarget__use_gconf
+$(call gb_LinkTarget_set_include,$(1),\
+	$(filter -I%,$(GCONF_CFLAGS)) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I%,$(GCONF_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(GCONF_LIBS) \
+)
+
+endef
+
+else # !ENABLE_GCONF
+
+define gb_LinkTarget__use_gconf
+
+endef
+
+endif # ENABLE_GCONF
+
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 
@@ -1528,6 +1606,13 @@ $(call gb_Library_add_libs,$(1), \
 
 endef
 
+define gb_LinkTarget__use_coreservices
+$(call gb_Library_add_libs,$(1), \
+	-framework CoreServices \
+)
+
+endef
+
 define gb_LinkTarget__use_coretext
 $(call gb_Library_add_libs,$(1), \
 	-framework CoreText \
@@ -1538,6 +1623,13 @@ endef
 define gb_LinkTarget__use_foundation
 $(call gb_LinkTarget_add_libs,$(1), \
 	-framework Foundation \
+)
+
+endef
+
+define gb_LinkTarget__use_systemconfiguration
+$(call gb_LinkTarget_add_libs,$(1), \
+	-framework SystemConfiguration \
 )
 
 endef

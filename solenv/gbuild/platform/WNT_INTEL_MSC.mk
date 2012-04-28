@@ -384,6 +384,7 @@ gb_Library_win32_OLDNAMES := oldnames
 
 gb_Library_PLAINLIBS_NONE += \
 	advapi32 \
+	comctl32 \
 	comdlg32 \
 	crypt32 \
 	d3d9 \
@@ -405,6 +406,7 @@ gb_Library_PLAINLIBS_NONE += \
 	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
+	propsys \
 	shell32 \
 	shlwapi \
 	urlmon \

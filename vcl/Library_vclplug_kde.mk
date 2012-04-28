@@ -28,6 +28,10 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde))
 
+$(eval $(call gb_Library_use_packages,vclplug_kde,\
+	shell_inc \
+))
+
 $(eval $(call gb_Library_set_include,vclplug_kde,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \

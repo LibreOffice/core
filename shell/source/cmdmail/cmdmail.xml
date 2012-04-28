@@ -25,6 +25,7 @@
         <type>  com.sun.star.lang.XTypeProvider             </type>
         <type>  com.sun.star.lang.IllegalArgumentException  </type>
         <type>  com.sun.star.lang.XComponent                </type>
+        <type>  com.sun.star.uno.DeploymentException        </type>
         <type>  com.sun.star.uno.RuntimeException           </type>
         <type>  com.sun.star.uno.TypeClass                  </type>
         <type>  com.sun.star.uno.XWeak                      </type>

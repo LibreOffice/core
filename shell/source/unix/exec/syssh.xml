@@ -15,13 +15,20 @@
         <type>com.sun.star.system.SystemShellExecuteException</type>
         <type>com.sun.star.system.SystemShellExecuteFlags</type>
         <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.XMultiServiceFactory</type>
         <type>com.sun.star.lang.XServiceInfo</type>
         <type>com.sun.star.lang.XSingleComponentFactory</type>
+        <type>com.sun.star.lang.XSingleServiceFactory</type>
         <type>com.sun.star.lang.XTypeProvider</type>
+        <type>com.sun.star.uno.DeploymentException</type>
         <type>com.sun.star.uno.TypeClass</type>
         <type>com.sun.star.uno.XAggregation</type>
         <type>com.sun.star.uno.XComponentContext</type>
+        <type>com.sun.star.uno.XCurrentContext</type>
         <type>com.sun.star.uno.XWeak</type>
+        <type>com.sun.star.uri.ExternalUriReferenceTranslator</type>
+        <type>com.sun.star.uri.UriReferenceFactory</type>
+        <type>com.sun.star.util.XMacroExpander</type>
         <type>com.sun.star.registry.XRegistryKey</type>
     </component-description>
     <project-build-dependency>cppuhelper</project-build-dependency>
