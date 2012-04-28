@@ -52,11 +52,14 @@ $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ww8tok))
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8tok,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    dbaccess/util/dba \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
+    forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
     package/util/package2 \
+    sw/util/msword \
     sw/util/sw \
     sw/util/swd \
     sfx2/util/sfx \
