@@ -157,8 +157,24 @@ struct AnnotatingVisitor
         maParentStates.push_back(rInitialState);
     }
 
-    void operator()( const uno::Reference<xml::dom::XElement>& )
-    {}
+    void operator()( const uno::Reference<xml::dom::XElement>& xElem)
+    {
+        const sal_Int32 nTagId(getTokenId(xElem->getTagName()));
+        if (nTagId != XML_TEXT)
+            return;
+
+        maCurrState = maParentStates.back();
+        maCurrState.maTransform.identity();
+        maCurrState.maViewBox.reset();
+        // set default font size here to ensure writing styles for text
+        if( !mbSeenText && XML_TEXT == nTagId )
+        {
+            maCurrState.mnFontSize = 12.0;
+            mbSeenText = true;
+        }
+        // if necessary, serialize to automatic-style section
+        writeStyle(xElem,nTagId);
+    }
 
     void operator()( const uno::Reference<xml::dom::XElement>&      xElem,
                      const uno::Reference<xml::dom::XNamedNodeMap>& xAttributes )
