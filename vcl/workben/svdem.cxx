@@ -49,7 +49,7 @@ void Main();
 
 // -----------------------------------------------------------------------
 
-SAL_IMPLEMENT_MAIN_WITH_GUI()
+SAL_IMPLEMENT_MAIN()
 {
     tools::extendApplicationEnvironment();
 

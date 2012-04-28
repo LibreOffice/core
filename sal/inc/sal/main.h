@@ -63,8 +63,6 @@ __attribute__ ((visibility("default"))) void lo_main(int argc, char **argv) \
     sal_detail_deinitialize(); \
 }
 
-#define SAL_MAIN_WITH_GUI_IMPL SAL_MAIN_IMPL
-
 #else
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
@@ -86,8 +84,6 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_deinitialize(); \
     return ret; \
 }
-
-#define SAL_MAIN_WITH_GUI_IMPL SAL_MAIN_IMPL
 
 #endif
 
@@ -146,19 +142,6 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 #define SAL_IMPLEMENT_MAIN() \
     static int  SAL_CALL sal_main(void); \
     SAL_MAIN_IMPL \
-    SAL_WIN_WinMain \
-    static int SAL_CALL sal_main(void)
-
-/* Use SAL_IMPLEMENT_MAIN_WITH_GUI in programs that actually have a
- * VCL GUI. The difference is meaningful only for iOS support, which
- * of course is a highly experimental work in progress. So actually,
- * don't bother, just let developers who care for iOS take care of it
- * when/if necessary.
- */
-
-#define SAL_IMPLEMENT_MAIN_WITH_GUI() \
-    static int  SAL_CALL sal_main(void); \
-    SAL_MAIN_WITH_GUI_IMPL \
     SAL_WIN_WinMain \
     static int SAL_CALL sal_main(void)
 
