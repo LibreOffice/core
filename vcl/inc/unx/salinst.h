@@ -45,7 +45,7 @@ class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 protected:
     SalXLib *mpXLib;
 public:
-    X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ) {}
+    X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ), mpXLib(NULL) {}
     virtual ~X11SalInstance();
 
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
