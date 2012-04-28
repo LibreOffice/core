@@ -78,7 +78,7 @@ private:
         std::pair<
             rtl::OUString,
             com::sun::star::uno::Reference<
-                com::sun::star::container::XNameAccess > > > Zips;
+                com::sun::star::container::XNameAccess > > > Paths;
 
     typedef boost::unordered_map<
         rtl::OUString, bool, rtl::OUStringHash > CheckStyleCache;
@@ -86,13 +86,14 @@ private:
         rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > IconCache;
 
     rtl::OUString m_style;
-    Zips m_zips;
+    Paths m_paths;
     CheckStyleCache m_checkStyleCache;
     IconCache m_iconCache;
+    bool m_cacheIcons;
 
     void setStyle(rtl::OUString const & style );
 
-    void resetZips();
+    void resetPaths();
 
     bool checkStyleCacheLookup( rtl::OUString const & style, bool &exists );
     bool iconCacheLookup( rtl::OUString const & name, bool localized, BitmapEx & bitmap );

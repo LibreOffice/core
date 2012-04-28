@@ -82,6 +82,41 @@ rtl::OUString createPath(
     return b.makeStringAndClear();
 }
 
+boost::shared_ptr< SvStream > wrapFile(osl::File & file)
+{
+    // This could use SvInputStream instead if that did not have a broken
+    // SeekPos implementation for an XInputStream that is not also XSeekable
+    // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
+    // l. 593):
+    boost::shared_ptr< SvStream > s(new SvMemoryStream);
+    for (;;) {
+        void *data[2048];
+        sal_uInt64 n;
+        file.read(data, 2048, n);
+        s->Write(data, n);
+        if (n < 2048) {
+            break;
+        }
+    }
+    s->Seek(0);
+    return s;
+}
+
+void loadFromFile(
+    osl::File & file,
+    rtl::OUString const & path, BitmapEx & bitmap)
+{
+    boost::shared_ptr< SvStream > s(wrapFile(file));
+    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png")))
+    {
+        vcl::PNGReader aPNGReader( *s );
+        aPNGReader.SetIgnoreGammaChunk( sal_True );
+        bitmap = aPNGReader.Read();
+    } else {
+        *s >> bitmap;
+    }
+}
+
 boost::shared_ptr< SvStream > wrapStream(
     css::uno::Reference< css::io::XInputStream > const & stream)
 {
@@ -121,7 +156,7 @@ void loadFromStream(
 
 }
 
-ImplImageTree::ImplImageTree() {}
+ImplImageTree::ImplImageTree() { m_cacheIcons = true; }
 
 ImplImageTree::~ImplImageTree() {}
 
@@ -130,7 +165,7 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
     bool exists;
 
     // using cache because setStyle is an expensive operation
-    // setStyle calls resetZips => closes any opened zip files with icons, cleans the icon cache, ...
+    // setStyle calls resetPaths => closes any opened zip files with icons, cleans the icon cache, ...
     if (checkStyleCacheLookup(style, exists)) {
         return exists;
     }
@@ -138,19 +173,27 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
     setStyle(style);
 
     exists = false;
-    const rtl::OUString sBrandURLSuffix(RTL_CONSTASCII_USTRINGPARAM("_brand.zip"));
-    for (Zips::iterator i(m_zips.begin()); i != m_zips.end() && !exists;) {
-        ::rtl::OUString aZipURL = i->first;
-        sal_Int32 nFromIndex = aZipURL.getLength() - sBrandURLSuffix.getLength();
+    const rtl::OUString sBrandURLSuffix(RTL_CONSTASCII_USTRINGPARAM("_brand"));
+    for (Paths::iterator i(m_paths.begin()); i != m_paths.end() && !exists; ++i) {
+        ::rtl::OUString aURL = i->first;
+        sal_Int32 nFromIndex = aURL.getLength() - sBrandURLSuffix.getLength();
         // skip brand-specific icon themes; they are incomplete and thus not useful for this check
-        if (nFromIndex < 0 || !aZipURL.match(sBrandURLSuffix, nFromIndex)) {
-            osl::File aZip(aZipURL);
+        if (nFromIndex < 0 || !aURL.match(sBrandURLSuffix, nFromIndex)) {
+            osl::File aZip(aURL + ".zip");
             if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
                 aZip.close();
                 exists = true;
             }
+
+            osl::Directory aLookaside(aURL);
+            if (aLookaside.open() == ::osl::FileBase::E_None) {
+                aLookaside.close();
+                exists = true;
+                m_cacheIcons = false;
+            } else {
+                m_cacheIcons = true;
+            }
         }
-        ++i;
     }
     m_checkStyleCache[style] = exists;
     return exists;
@@ -191,7 +234,7 @@ bool ImplImageTree::doLoadImage(
     bool localized)
 {
     setStyle(style);
-    if (iconCacheLookup(name, localized, bitmap)) {
+    if (m_cacheIcons && iconCacheLookup(name, localized, bitmap)) {
         return true;
     }
     if (!bitmap.IsEmpty()) {
@@ -231,7 +274,7 @@ bool ImplImageTree::doLoadImage(
             "ImplImageTree::loadImage exception \"%s\"",
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
-    if (found) {
+    if (m_cacheIcons && found) {
         m_iconCache[name.intern()] = std::make_pair(localized, bitmap);
     }
     return found;
@@ -240,7 +283,7 @@ bool ImplImageTree::doLoadImage(
 void ImplImageTree::shutDown() {
     m_style = rtl::OUString();
         // for safety; empty m_style means "not initialized"
-    m_zips.clear();
+    m_paths.clear();
     m_iconCache.clear();
     m_checkStyleCache.clear();
 }
@@ -249,20 +292,20 @@ void ImplImageTree::setStyle(rtl::OUString const & style) {
     OSL_ASSERT(!style.isEmpty()); // empty m_style means "not initialized"
     if (style != m_style) {
         m_style = style;
-        resetZips();
+        resetPaths();
         m_iconCache.clear();
     }
 }
 
-void ImplImageTree::resetZips() {
-    m_zips.clear();
+void ImplImageTree::resetPaths() {
+    m_paths.clear();
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition/images.zip"));
+            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition/images"));
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
-        m_zips.push_back(
+        m_paths.push_back(
             std::make_pair(
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
@@ -276,10 +319,10 @@ void ImplImageTree::resetZips() {
         rtl::OUStringBuffer b;
         b.appendAscii(RTL_CONSTASCII_STRINGPARAM("images_"));
         b.append(m_style);
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("_brand.zip"));
+        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("_brand"));
         bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;
-        m_zips.push_back(
+        m_paths.push_back(
             std::make_pair(
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
@@ -287,9 +330,9 @@ void ImplImageTree::resetZips() {
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(
-                "$BRAND_BASE_DIR/share/config/images_brand.zip"));
+                "$BRAND_BASE_DIR/share/config/images_brand"));
         rtl::Bootstrap::expandMacros(url);
-        m_zips.push_back(
+        m_paths.push_back(
             std::make_pair(
                 url, css::uno::Reference< css::container::XNameAccess >()));
     }
@@ -302,10 +345,9 @@ void ImplImageTree::resetZips() {
         rtl::OUStringBuffer b;
         b.appendAscii(RTL_CONSTASCII_STRINGPARAM("images_"));
         b.append(m_style);
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM(".zip"));
         bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;
-        m_zips.push_back(
+        m_paths.push_back(
             std::make_pair(
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
@@ -314,9 +356,9 @@ void ImplImageTree::resetZips() {
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(
-                "$BRAND_BASE_DIR/share/config/images.zip"));
+                "$BRAND_BASE_DIR/share/config/images"));
         rtl::Bootstrap::expandMacros(url);
-        m_zips.push_back(
+        m_paths.push_back(
             std::make_pair(
                 url, css::uno::Reference< css::container::XNameAccess >()));
     }
@@ -349,10 +391,24 @@ bool ImplImageTree::iconCacheLookup(
 bool ImplImageTree::find(
     std::vector< rtl::OUString > const & paths, BitmapEx & bitmap)
 {
-    for (Zips::iterator i(m_zips.begin()); i != m_zips.end();) {
+    for (Paths::iterator i(m_paths.begin()); i != m_paths.end(); ++i) {
+        for (std::vector< rtl::OUString >::const_reverse_iterator j(
+            paths.rbegin());
+        j != paths.rend(); ++j)
+        {
+            osl::File file(i->first + "/" + *j);
+            if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
+                loadFromFile(file, *j, bitmap);
+                file.close();
+                return true;
+            }
+        }
+    }
+
+    for (Paths::iterator i(m_paths.begin()); i != m_paths.end();) {
         if (!i->second.is()) {
             css::uno::Sequence< css::uno::Any > args(1);
-            args[0] <<= i->first;
+            args[0] <<= i->first + ".zip";
             try {
                 i->second.set(
                     comphelper::createProcessComponentWithArguments(
@@ -368,7 +424,7 @@ bool ImplImageTree::find(
                     "ImplImageTree::find exception \"%s\"",
                     rtl::OUStringToOString(
                         e.Message, RTL_TEXTENCODING_UTF8).getStr());
-                i = m_zips.erase(i);
+                i = m_paths.erase(i);
                 continue;
             }
         }
