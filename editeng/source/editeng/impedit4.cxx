@@ -2160,7 +2160,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
         }
         else
         {
-            DBG_ASSERT( pSpellInfo->aLastSpellContentSelections.size() > 0, "aLastSpellContentSelections should not be empty here" );
+            DBG_ASSERT( !pSpellInfo->aLastSpellContentSelections.empty(), "aLastSpellContentSelections should not be empty here" );
 
             //select the complete sentence
             SpellContentSelections::const_iterator aCurrentEndPosition = pSpellInfo->aLastSpellContentSelections.end();
@@ -2217,7 +2217,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
 
 void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 {
-    if( pSpellInfo && pSpellInfo->aLastSpellContentSelections.size() )
+    if( pSpellInfo && !pSpellInfo->aLastSpellContentSelections.empty() )
     {
         rEditView.pImpEditView->SetEditSelection( pSpellInfo->aLastSpellContentSelections.begin()->Min() );
     }
