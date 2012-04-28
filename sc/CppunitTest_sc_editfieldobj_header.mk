@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_editfieldobj))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_editfieldobj_header))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_editfieldobj, \
-    sc/qa/extras/sceditfieldobj-cell \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_editfieldobj_header, \
+    sc/qa/extras/sceditfieldobj-header \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_editfieldobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_editfieldobj_header, \
     avmedia \
     basegfx \
     comphelper \
@@ -72,20 +72,20 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_editfieldobj, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_editfieldobj,\
+$(eval $(call gb_CppunitTest_set_include,sc_editfieldobj_header,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_editfieldobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_editfieldobj_header,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_editfieldobj))
+$(eval $(call gb_CppunitTest_use_ure,sc_editfieldobj_header))
 
-$(eval $(call gb_CppunitTest_use_components,sc_editfieldobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_editfieldobj_header,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -118,17 +118,17 @@ $(eval $(call gb_CppunitTest_use_components,sc_editfieldobj,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_editfieldobj))
+$(eval $(call gb_CppunitTest_use_configuration,sc_editfieldobj_header))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sc_editfieldobj))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sc_editfieldobj_header))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sc_editfieldobj,\
+$(eval $(call gb_CppunitTest_use_extra_configuration,sc_editfieldobj_header,\
     $(OUTDIR)/unittest/registry \
 ))
 
 # we need to
 # - explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_editfieldobj) : \
+$(call gb_CppunitTest_get_target,sc_editfieldobj_header) : \
     $(WORKDIR)/AllLangRes/sc \
 
 # vim: set noet sw=4 ts=4:

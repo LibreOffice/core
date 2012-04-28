@@ -64,7 +64,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_namedrangesobj \
     CppunitTest_sc_tablesheetobj \
     CppunitTest_sc_tablesheetsobj \
-    CppunitTest_sc_editfieldobj \
+    CppunitTest_sc_editfieldobj_cell \
+    CppunitTest_sc_editfieldobj_header \
 ))
 
 # vim: set noet sw=4 ts=4:
