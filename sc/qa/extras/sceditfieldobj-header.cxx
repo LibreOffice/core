@@ -86,7 +86,12 @@ void ScEditFieldObj_Header::setUp()
 void ScEditFieldObj_Header::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
+        // Clear these before the component is destroyed.  This is important!
+        mxField.clear();
+        mxRightText.clear();
         closeDocument(mxComponent);
+    }
 
     UnoApiTest::tearDown();
 }

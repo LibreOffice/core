@@ -83,7 +83,10 @@ void ScEditFieldObj_Cell::setUp()
 void ScEditFieldObj_Cell::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
+        mxField.clear();
         closeDocument(mxComponent);
+    }
 
     UnoApiTest::tearDown();
 }
