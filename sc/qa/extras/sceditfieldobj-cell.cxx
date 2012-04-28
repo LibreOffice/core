@@ -42,10 +42,10 @@
 
 namespace sc_apitest {
 
-class ScEditFieldObj : public UnoApiTest, apitest::XTextField, apitest::XTextContent
+class ScEditFieldObj_Cell : public UnoApiTest, apitest::XTextField, apitest::XTextContent
 {
 public:
-    ScEditFieldObj();
+    ScEditFieldObj_Cell();
 
     virtual void setUp();
     virtual void tearDown();
@@ -54,7 +54,7 @@ public:
     virtual uno::Reference<text::XTextRange> getTextRange();
     virtual bool isAttachSupported() { return true; }
 
-    CPPUNIT_TEST_SUITE(ScEditFieldObj);
+    CPPUNIT_TEST_SUITE(ScEditFieldObj_Cell);
     // XTextField
     CPPUNIT_TEST(testGetPresentation);
     // XTextContent
@@ -68,19 +68,19 @@ private:
     static uno::Reference<text::XTextField> mxField;
 };
 
-sal_Int32 ScEditFieldObj::nTest = 0;
-uno::Reference<lang::XComponent> ScEditFieldObj::mxComponent;
-uno::Reference<text::XTextField> ScEditFieldObj::mxField;
+sal_Int32 ScEditFieldObj_Cell::nTest = 0;
+uno::Reference<lang::XComponent> ScEditFieldObj_Cell::mxComponent;
+uno::Reference<text::XTextField> ScEditFieldObj_Cell::mxField;
 
-ScEditFieldObj::ScEditFieldObj() {}
+ScEditFieldObj_Cell::ScEditFieldObj_Cell() {}
 
-void ScEditFieldObj::setUp()
+void ScEditFieldObj_Cell::setUp()
 {
     ++nTest;
     UnoApiTest::setUp();
 }
 
-void ScEditFieldObj::tearDown()
+void ScEditFieldObj_Cell::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
@@ -102,7 +102,7 @@ uno::Reference<text::XTextField> getNewField(const uno::Reference<lang::XMultiSe
 
 }
 
-uno::Reference<uno::XInterface> ScEditFieldObj::init()
+uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
 {
     // Return a field that's already in the cell.
     if (!mxField.is())
@@ -132,14 +132,14 @@ uno::Reference<uno::XInterface> ScEditFieldObj::init()
     return mxField;
 }
 
-uno::Reference<text::XTextContent> ScEditFieldObj::getTextContent()
+uno::Reference<text::XTextContent> ScEditFieldObj_Cell::getTextContent()
 {
     // Return a field object that's not yet inserted.
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
     return uno::Reference<text::XTextContent>(getNewField(xSM), UNO_QUERY_THROW);
 }
 
-uno::Reference<text::XTextRange> ScEditFieldObj::getTextRange()
+uno::Reference<text::XTextRange> ScEditFieldObj_Cell::getTextRange()
 {
     // Use cell A2 for this.
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
@@ -153,7 +153,7 @@ uno::Reference<text::XTextRange> ScEditFieldObj::getTextRange()
     return xRange;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScEditFieldObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScEditFieldObj_Cell);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

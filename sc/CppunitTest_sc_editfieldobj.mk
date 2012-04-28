@@ -31,7 +31,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_editfieldobj))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_editfieldobj, \
-    sc/qa/extras/sceditfieldobj \
+    sc/qa/extras/sceditfieldobj-cell \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_editfieldobj, \
