@@ -106,12 +106,15 @@ endif
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
+gb_SYMBOL := $(true)
+endif
+
 # if symbols are triggered by something else than --enable-symbols,
 # make sure they are actually enabled
-ifneq ($(gb_SYMBOL),$(true))
+ifeq ($(gb_SYMBOL),$(true))
+ifeq ($(ENABLE_SYMBOLS_FOR),)
 ENABLE_SYMBOLS_FOR = all
 endif
-gb_SYMBOL := $(true)
 endif
 
 ifneq ($(nodep),)
