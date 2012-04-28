@@ -32,17 +32,20 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 
-#define NUMBER_OF_TESTS 3
+#define NUMBER_OF_TESTS 2
 
 namespace sc_apitest {
 
-class ScEditFieldObj_Header : public UnoApiTest, apitest::XTextField, apitest::XTextContent
+class ScEditFieldObj_Header : public UnoApiTest, apitest::XTextContent
 {
 public:
     ScEditFieldObj_Header();
@@ -52,11 +55,9 @@ public:
     virtual uno::Reference<uno::XInterface> init();
     virtual uno::Reference<text::XTextContent> getTextContent();
     virtual uno::Reference<text::XTextRange> getTextRange();
-    virtual bool isAttachSupported() { return true; }
+    virtual bool isAttachSupported() { return false; }
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Header);
-    // XTextField
-    CPPUNIT_TEST(testGetPresentation);
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
@@ -66,11 +67,13 @@ private:
     static sal_Int32 nTest;
     static uno::Reference<lang::XComponent> mxComponent;
     static uno::Reference<text::XTextField> mxField;
+    static uno::Reference<text::XText> mxRightText;
 };
 
 sal_Int32 ScEditFieldObj_Header::nTest = 0;
 uno::Reference<lang::XComponent> ScEditFieldObj_Header::mxComponent;
 uno::Reference<text::XTextField> ScEditFieldObj_Header::mxField;
+uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
 ScEditFieldObj_Header::ScEditFieldObj_Header() {}
 
@@ -88,23 +91,9 @@ void ScEditFieldObj_Header::tearDown()
     UnoApiTest::tearDown();
 }
 
-namespace {
-
-uno::Reference<text::XTextField> getNewField(const uno::Reference<lang::XMultiServiceFactory>& xSM)
-{
-    uno::Reference<text::XTextField> xField(
-        xSM->createInstance("com.sun.star.text.TextField.URL"), UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xPropSet(xField, UNO_QUERY_THROW);
-    xPropSet->setPropertyValue("Representation", uno::makeAny(rtl::OUString("LibreOffice")));
-    xPropSet->setPropertyValue("URL", uno::makeAny(rtl::OUString("http://www.libreoffice.org/")));
-    return xField;
-}
-
-}
-
 uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
 {
-    // Return a field that's already in the cell.
+    // Return a field that's already in the header.
     if (!mxField.is())
     {
         if (!mxComponent.is())
@@ -114,21 +103,28 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
         // Create a new URL field object, and populate it with name and URL.
-        mxField = getNewField(xSM);
+        mxField.set(xSM->createInstance("com.sun.star.text.TextField.Time"), UNO_QUERY_THROW);
 
-        // Insert this field into a cell.
-        uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
-        uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
-        // Use cell A1 for this.
-        uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
-        uno::Reference<text::XText> xText(xCell, UNO_QUERY_THROW);
+        uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xStyleFamilies(xSFS->getStyleFamilies(), UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"), UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet(xPageStyles->getByName("Default"), UNO_QUERY_THROW);
 
+        uno::Reference<sheet::XHeaderFooterContent> xHeaderContent(
+            xPropSet->getPropertyValue("RightPageHeaderContent"), UNO_QUERY_THROW);
+
+        // Use the left header text.
+        uno::Reference<text::XText> xText = xHeaderContent->getLeftText();
         uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
         uno::Reference<text::XTextRange> xRange(xCursor, UNO_QUERY_THROW);
         uno::Reference<text::XTextContent> xContent(mxField, UNO_QUERY_THROW);
         xText->insertTextContent(xRange, xContent, sal_False);
+
+        xPropSet->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHeaderContent));
+
+        mxRightText = xHeaderContent->getRightText();
     }
+
     return mxField;
 }
 
@@ -136,20 +132,15 @@ uno::Reference<text::XTextContent> ScEditFieldObj_Header::getTextContent()
 {
     // Return a field object that's not yet inserted.
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
-    return uno::Reference<text::XTextContent>(getNewField(xSM), UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xField(
+        xSM->createInstance("com.sun.star.text.TextField.Date"), UNO_QUERY_THROW);
+    return xField;
 }
 
 uno::Reference<text::XTextRange> ScEditFieldObj_Header::getTextRange()
 {
-    // Use cell A2 for this.
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
-    uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 1);
-    uno::Reference<text::XText> xText(xCell, UNO_QUERY_THROW);
-
-    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<text::XTextRange> xRange(xCursor, UNO_QUERY_THROW);
+    // Use the right header text for this.
+    uno::Reference<text::XTextRange> xRange(mxRightText, UNO_QUERY_THROW);
     return xRange;
 }
 
