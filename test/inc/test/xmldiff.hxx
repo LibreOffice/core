@@ -43,7 +43,11 @@ struct tolerance
         xmlFree(attribName);
     }
 
-    tolerance() {}
+    tolerance()
+    {
+        elementName = NULL;
+        attribName = NULL;
+    }
 
     tolerance(const tolerance& tol)
     {
