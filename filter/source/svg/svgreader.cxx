@@ -1351,7 +1351,7 @@ struct ShapeWritingVisitor
                 basegfx::B2DPolygon aPoly;
                 aPoly = basegfx::tools::createPolygonFromRect(
                     basegfx::B2DRange(x,y,x+width,y+height),
-                    rx/width, ry/height );
+                    rx/(0.5*width), ry/(0.5*height) );
 
                 writePathShape(xAttrs,
                                xUnoAttrs,
@@ -2195,7 +2195,7 @@ struct ShapeRenderingVisitor
                 basegfx::B2DPolygon aPoly;
                 aPoly = basegfx::tools::createPolygonFromRect(
                     basegfx::B2DRange(x,y,x+width,y+height),
-                    rx, ry );
+                    rx/(0.5*width), ry/(0.5*height) );
 
                 renderPathShape(basegfx::B2DPolyPolygon(aPoly));
                 break;
