@@ -1018,11 +1018,6 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
             mrView.GetWrtShell().LockView( bLockView );
             mrMgr.MakeVisible( this );
         }
-        else if ( pWinEvent->GetWindow() == mpSidebarTxtControl )
-        {
-            int i = 5;
-            ++i;
-        }
     }
     return sal_True;
 }
