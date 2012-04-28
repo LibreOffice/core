@@ -86,23 +86,38 @@ SwAnnotationWin::~SwAnnotationWin()
 
 void SwAnnotationWin::SetPostItText()
 {
+    //If the cursor was visible, then make it visible again after
+    //changing text, e.g. fdo#33599
+    Cursor *pCursor = GetOutlinerView()->GetEditView().GetCursor();
+    bool bCursorVisible = pCursor ? pCursor->IsVisible() : false;
+
+    //If the new text is the same as the old text, keep the same insertion
+    //point .e.g. fdo#33599
+    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
+    rtl::OUString sNewText = mpFld->GetPar2();
+    bool bTextUnchanged = sNewText.equals(Engine()->GetEditEngine().GetText());
+    ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
+
     // get text from SwPostItField and insert into our textview
     Engine()->SetModifyHdl( Link() );
     Engine()->EnableUndo( sal_False );
-    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
     if( mpFld->GetTextObject() )
         Engine()->SetText( *mpFld->GetTextObject() );
     else
     {
         Engine()->Clear();
         GetOutlinerView()->SetAttribs(DefaultItem());
-        GetOutlinerView()->InsertText(mpFld->GetPar2(),false);
+        GetOutlinerView()->InsertText(sNewText,false);
     }
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
     Engine()->EnableUndo( sal_True );
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
+    if (bTextUnchanged)
+        GetOutlinerView()->GetEditView().SetSelection(aOrigSelection);
+    if (bCursorVisible)
+        GetOutlinerView()->ShowCursor();
     Invalidate();
 }
 
