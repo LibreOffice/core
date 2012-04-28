@@ -1828,7 +1828,25 @@ sub run_job {
 
     if ( $source_config->is_gbuild($jobs_hash{$registered_name}->{MODULE}) )
     {
-        mkpath("$workdir/Logs");
+        if ( $job eq 'deliver' )
+        {
+            return 0;
+        }
+        else
+        {
+            return 1 if (! $path =~ /prj$/ );
+            mkpath("$workdir/Logs");
+            my $gbuild_flags = '-j' . $ENV{GMAKE_MODULE_PARALLELISM};
+            my $gbuild_target = 'all slowcheck';
+            if ($registered_name =~ /tail_build\/prj$/ )
+            {
+                $gbuild_flags = '-j' . $ENV{GMAKE_PARALLELISM};
+                #gbuild_target = $ENV{gb_TAILBUILDTARGET};
+            }
+            $gbuild_flags .= ' ' . $ENV{GMAKE_OPTIONS};
+            $job_to_do = "make -f ../Makefile $gbuild_flags $gbuild_target";
+            print "gbuild module $registered_name: $job_to_do\n";
+        }
     }
     else
     {
@@ -1837,7 +1855,6 @@ sub run_job {
             system("$perl $mkout");
         };
     }
-
     open (MAKE, "$job_to_do 2>&1 |") or return 8;
     open (LOGFILE, "> $log_file") or return 8;
     while (<MAKE>) { print LOGFILE $_; print $_ }
