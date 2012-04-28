@@ -75,6 +75,56 @@ namespace svgi
 namespace
 {
 
+void lcl_RectAttrs2Polygon( const uno::Reference<xml::dom::XNamedNodeMap>& xAttributes, const State& rCurrState, basegfx::B2DPolygon& rPoly )
+{
+    // collect attributes
+    const sal_Int32 nNumAttrs( xAttributes->getLength() );
+    rtl::OUString sAttributeValue;
+    bool bRxSeen=false, bRySeen=false;
+    double x=0.0,y=0.0,width=0.0,height=0.0,rx=0.0,ry=0.0;
+    for( sal_Int32 i=0; i<nNumAttrs; ++i )
+    {
+        sAttributeValue = xAttributes->item(i)->getNodeValue();
+        const sal_Int32 nAttribId(
+                                  getTokenId(xAttributes->item(i)->getNodeName()));
+        switch(nAttribId)
+        {
+        case XML_X:
+            x = convLength(sAttributeValue,rCurrState,'h');
+            break;
+        case XML_Y:
+            y = convLength(sAttributeValue,rCurrState,'v');
+            break;
+        case XML_WIDTH:
+            width = convLength(sAttributeValue,rCurrState,'h');
+            break;
+        case XML_HEIGHT:
+            height = convLength(sAttributeValue,rCurrState,'v');
+            break;
+        case XML_RX:
+            rx = convLength(sAttributeValue,rCurrState,'h');
+            bRxSeen=true;
+            break;
+        case XML_RY:
+            ry = convLength(sAttributeValue,rCurrState,'v');
+            bRySeen=true;
+            break;
+        default:
+            // skip
+            break;
+        }
+    }
+
+    if( bRxSeen && !bRySeen )
+        ry = rx;
+    else if( bRySeen && !bRxSeen )
+        rx = ry;
+
+    rPoly = basegfx::tools::createPolygonFromRect(
+                    basegfx::B2DRange(x,y,x+width,y+height),
+                    rx/(0.5*width), ry/(0.5*height) );
+}
+
 /** visits all children of the specified type with the given functor
  */
 template<typename Func> void visitChildren(const Func& rFunc,
@@ -1305,54 +1355,9 @@ struct ShapeWritingVisitor
             }
             case XML_RECT:
             {
-                // collect attributes
-                const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
-                bool bRxSeen=false, bRySeen=false;
-                double x=0.0,y=0.0,width=0.0,height=0.0,rx=0.0,ry=0.0;
-                for( sal_Int32 i=0; i<nNumAttrs; ++i )
-                {
-                    sAttributeValue = xAttributes->item(i)->getNodeValue();
-                    const sal_Int32 nAttribId(
-                        getTokenId(xAttributes->item(i)->getNodeName()));
-                    switch(nAttribId)
-                    {
-                        case XML_X:
-                            x = convLength(sAttributeValue,maCurrState,'h');
-                            break;
-                        case XML_Y:
-                            y = convLength(sAttributeValue,maCurrState,'v');
-                            break;
-                        case XML_WIDTH:
-                            width = convLength(sAttributeValue,maCurrState,'h');
-                            break;
-                        case XML_HEIGHT:
-                            height = convLength(sAttributeValue,maCurrState,'v');
-                            break;
-                        case XML_RX:
-                            rx = convLength(sAttributeValue,maCurrState,'h');
-                            bRxSeen=true;
-                            break;
-                        case XML_RY:
-                            ry = convLength(sAttributeValue,maCurrState,'v');
-                            bRySeen=true;
-                            break;
-                        default:
-                            // skip
-                            break;
-                    }
-                }
-
-                if( bRxSeen && !bRySeen )
-                    ry = rx;
-                else if( bRySeen && !bRxSeen )
-                    rx = ry;
-
                 basegfx::B2DPolygon aPoly;
-                aPoly = basegfx::tools::createPolygonFromRect(
-                    basegfx::B2DRange(x,y,x+width,y+height),
-                    rx/(0.5*width), ry/(0.5*height) );
 
+                lcl_RectAttrs2Polygon( xAttributes, maCurrState, aPoly );
                 writePathShape(xAttrs,
                                xUnoAttrs,
                                xElem,
@@ -2149,54 +2154,9 @@ struct ShapeRenderingVisitor
             }
             case XML_RECT:
             {
-                // collect attributes
-                const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
-                bool bRxSeen=false, bRySeen=false;
-                double x=0.0,y=0.0,width=0.0,height=0.0,rx=0.0,ry=0.0;
-                for( sal_Int32 i=0; i<nNumAttrs; ++i )
-                {
-                    sAttributeValue = xAttributes->item(i)->getNodeValue();
-                    const sal_Int32 nAttribId(
-                        getTokenId(xAttributes->item(i)->getNodeName()));
-                    switch(nAttribId)
-                    {
-                        case XML_X:
-                            x = convLength(sAttributeValue,maCurrState,'h');
-                            break;
-                        case XML_Y:
-                            y = convLength(sAttributeValue,maCurrState,'v');
-                            break;
-                        case XML_WIDTH:
-                            width = convLength(sAttributeValue,maCurrState,'h');
-                            break;
-                        case XML_HEIGHT:
-                            height = convLength(sAttributeValue,maCurrState,'v');
-                            break;
-                        case XML_RX:
-                            rx = convLength(sAttributeValue,maCurrState,'h');
-                            bRxSeen=true;
-                            break;
-                        case XML_RY:
-                            ry = convLength(sAttributeValue,maCurrState,'v');
-                            bRySeen=true;
-                            break;
-                        default:
-                            // skip
-                            break;
-                    }
-                }
-
-                if( bRxSeen && !bRySeen )
-                    ry = rx;
-                else if( bRySeen && !bRxSeen )
-                    rx = ry;
-
                 basegfx::B2DPolygon aPoly;
-                aPoly = basegfx::tools::createPolygonFromRect(
-                    basegfx::B2DRange(x,y,x+width,y+height),
-                    rx/(0.5*width), ry/(0.5*height) );
 
+                lcl_RectAttrs2Polygon( xAttributes, maCurrState, aPoly );
                 renderPathShape(basegfx::B2DPolyPolygon(aPoly));
                 break;
             }
