@@ -147,7 +147,7 @@ sub get_module_build_list {
         {
             ${$self->{MODULE_BUILD_LIST_PATHS}}{$module} = $module_path . "/prj/build.lst";
 
-            if (-e $module_path . "/prj/makefile.mk" )
+            if (!-e $module_path . "/prj/dmake" )
             {
 #                print "module $module -> gbuild\n";
                 ${$self->{MODULE_GBUILDIFIED}}{$module} = 1;
