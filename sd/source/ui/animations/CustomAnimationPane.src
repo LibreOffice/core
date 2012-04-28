@@ -206,7 +206,7 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT ( 80 , 14 ) ;
         TabStop = TRUE;
 
-        Text [ en-US ] = "Slide Sho~w";
+        Text [ en-US ] = "S~lide Show";
     };
 
     FixedLine FL_SEPERATOR2
