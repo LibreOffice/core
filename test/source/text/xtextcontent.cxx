@@ -63,7 +63,6 @@ void XTextContent::testAttach()
         bool bAttachSupported = isAttachSupported();
         if (bAttachSupported)
             CPPUNIT_ASSERT(false);
-
     }
     catch (const RuntimeException& e)
     {
