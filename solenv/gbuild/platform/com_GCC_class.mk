@@ -55,9 +55,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MP -MF $(4) \
+		-MP -MF $(4)_ \
 		-I$(dir $(3)) \
-		$(INCLUDE))
+		$(INCLUDE) && \
+	mv $(4)_ $(4))
 endef
 
 # CxxObject class
@@ -75,9 +76,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MP -MF $(4) \
+		-MP -MF $(4)_ \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
+		$(INCLUDE_STL) $(INCLUDE) && \
+	mv $(4)_ $(4))
 endef
 
 define gb_SrsPartTarget__command_dep
