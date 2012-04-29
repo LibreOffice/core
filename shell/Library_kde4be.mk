@@ -43,11 +43,6 @@ $(eval $(call gb_Library_use_libraries,kde4be1,\
 	$(gb_STDLIBS) \
 ))
 
-# FIXME: add this to kde or create a new external
-$(eval $(call gb_Library_add_libs,kde4be1,\
-	-lkio \
-))
-
 $(eval $(call gb_Library_set_componentfile,kde4be1,shell/source/backends/kde4be/kde4be1))
 
 $(eval $(call gb_Library_add_exception_objects,kde4be1,\

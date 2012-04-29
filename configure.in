@@ -9869,7 +9869,7 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
     fi
 
     KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    KDE4_LIBS="-L$kde_libdir -L$qt_lib_dir -lkdeui -lkdecore -lQtCore -lQtGui"
+    KDE4_LIBS="-L$kde_libdir -L$qt_lib_dir -lkio -lkfile -lkdeui -lkdecore -lQtCore -lQtGui"
 
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS

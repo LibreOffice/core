@@ -44,10 +44,6 @@ $(eval $(call gb_Library_use_api,vclplug_kde4,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_libs,vclplug_kde4,\
-    -lkio -lkfile \
-))
-
 $(eval $(call gb_Library_use_libraries,vclplug_kde4,\
     vclplug_gen \
     vcl \
