@@ -688,7 +688,6 @@ dp_misc::writeConsoleError(rtl::OString const&)
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
 drawinglayer::attribute::SdrTextAttribute::getPropertiesVersion() const
 drawinglayer::attribute::SdrTextAttribute::isWrongSpell() const
-drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(basegfx::B2DPolyPolygon const&, drawinglayer::attribute::LineAttribute const&)
 formula::EditBox::EditBox(Window*, long)
 formula::FormulaListBox::FormulaListBox(Window*, long)
 formula::FormulaTokenIterator::First()

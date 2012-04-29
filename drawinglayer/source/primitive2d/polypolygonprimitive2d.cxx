@@ -210,16 +210,6 @@ namespace drawinglayer
         {
         }
 
-        PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
-            const basegfx::B2DPolyPolygon& rPolyPolygon,
-              const attribute::LineAttribute& rLineAttribute)
-        :   BufferedDecompositionPrimitive2D(),
-            maPolyPolygon(rPolyPolygon),
-            maLineAttribute(rLineAttribute),
-            maStrokeAttribute()
-        {
-        }
-
         bool PolyPolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
