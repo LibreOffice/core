@@ -52,12 +52,12 @@ class ScTokenArray;
 
 enum ScConditionMode
 {
-    SC_COND_EQUAL,
-    SC_COND_LESS,
+    SC_COND_EQUAL, //done
+    SC_COND_LESS, //done
     SC_COND_GREATER,
     SC_COND_EQLESS,
     SC_COND_EQGREATER,
-    SC_COND_NOTEQUAL,
+    SC_COND_NOTEQUAL, //done
     SC_COND_BETWEEN,
     SC_COND_NOTBETWEEN,
     SC_COND_DUPLICATE,
@@ -81,8 +81,8 @@ class SC_DLLPUBLIC ScConditionEntry
     String              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
-    sal_Bool                bIsStr1;        // for recognition of empty strings
-    sal_Bool                bIsStr2;
+    bool                bIsStr1;        // for recognition of empty strings
+    bool                bIsStr2;
     ScTokenArray*       pFormula1;      // entered formula
     ScTokenArray*       pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
@@ -91,20 +91,20 @@ class SC_DLLPUBLIC ScConditionEntry
     ScFormulaCell*      pFCell1;
     ScFormulaCell*      pFCell2;
     ScDocument*         pDoc;
-    sal_Bool                bRelRef1;
-    sal_Bool                bRelRef2;
-    sal_Bool                bFirstRun;
+    bool                bRelRef1;
+    bool                bRelRef2;
+    bool                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
     void    Compile( const String& rExpr1, const String& rExpr2,
                         const String& rExprNmsp1, const String& rExprNmsp2,
                         formula::FormulaGrammar::Grammar eGrammar1,
                         formula::FormulaGrammar::Grammar eGrammar2,
-                        sal_Bool bTextToReal );
+                        bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    sal_Bool    IsValid( double nArg, const ScAddress& rAddr ) const;
-    sal_Bool    IsValidStr( const String& rArg, const ScAddress& rAddr ) const;
+    bool    IsValid( double nArg, const ScAddress& rAddr ) const;
+    bool    IsValidStr( const String& rArg, const ScAddress& rAddr ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -125,11 +125,11 @@ public:
 
     void            SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
 
-    sal_Bool            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    bool            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
-    sal_Bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
-    void            SetIgnoreBlank(sal_Bool bSet);
+    bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
+    void            SetIgnoreBlank(bool bSet);
     ScAddress       GetSrcPos() const           { return aSrcPos; }
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
@@ -207,7 +207,7 @@ class SC_DLLPUBLIC ScConditionalFormat
     sal_uInt32          nKey;               // Index in attributes
     ScCondFormatEntry** ppEntries;
     sal_uInt16              nEntryCount;
-    sal_Bool                bIsUsed;            // temporary at Save
+    bool                bIsUsed;            // temporary at Save
     ScRangeListRef      pRanges;            // Ranges for conditional format
 
 public:
@@ -222,7 +222,7 @@ public:
     void            AddRangeInfo( const ScRangeListRef& rRanges );
     const ScRangeListRef&  GetRangeInfo() const  { return pRanges; }
 
-    sal_Bool            IsEmpty() const         { return (nEntryCount == 0); }
+    bool            IsEmpty() const         { return (nEntryCount == 0); }
     sal_uInt16          Count() const           { return nEntryCount; }
 
     void            CompileAll();
@@ -238,7 +238,7 @@ public:
 
     const String&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-    sal_Bool            EqualEntries( const ScConditionalFormat& r ) const;
+    bool            EqualEntries( const ScConditionalFormat& r ) const;
 
     void            DoRepaint( const ScRange* pModified );
     void            InvalidateArea();
@@ -246,15 +246,15 @@ public:
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
-    void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
-    sal_Bool            IsUsed() const          { return bIsUsed; }
+    void            SetUsed(bool bSet)      { bIsUsed = bSet; }
+    bool            IsUsed() const          { return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
 
     //  sorted (via PTRARR) by Index
     //  operator== only for sorting
-    sal_Bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
-    sal_Bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
+    bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
+    bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
 };
 
 //
@@ -288,7 +288,7 @@ public:
 
     void    SourceChanged( const ScAddress& rAddr );
 
-    sal_Bool    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
+    bool    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
 };
 
 #endif
