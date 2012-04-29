@@ -1008,7 +1008,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
     if (rNewMod.GetObjectShell())
         rNewMod.GetObjectShell()->SetModified(sal_True);
     if(static_STR_UNDO_PROPERTY.Len() == 0)
-        static_STR_UNDO_PROPERTY = SVX_RES(RID_STR_UNDO_PROPERTY);
+        static_STR_UNDO_PROPERTY = SVX_RESSTR(RID_STR_UNDO_PROPERTY);
 }
 
 

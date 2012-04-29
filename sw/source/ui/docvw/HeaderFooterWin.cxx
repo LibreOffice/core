@@ -201,9 +201,9 @@ const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )
 void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineEnd )
 {
     // Compute the text to show
-    m_sLabel = ResId::toString( SW_RES( STR_HEADER_TITLE ) );
+    m_sLabel = SW_RESSTR( STR_HEADER_TITLE );
     if ( !m_bIsHeader )
-        m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
+        m_sLabel = SW_RESSTR( STR_FOOTER_TITLE );
     sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
     m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
 

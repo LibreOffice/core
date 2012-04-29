@@ -85,9 +85,11 @@ rtl::OUString SalGtkPicker::getResString( sal_Int32 aId )
         // translate the control id to a resource id
         sal_Int16 aResId = CtrlIdToResId( aId );
         if ( aResId > -1 )
-            aResString = String( ResId( aResId, *ImplGetResMgr() ) );
+            aResString = ResId(aResId, *ImplGetResMgr()).toString();
     }
-    catch(...) { }
+    catch(...)
+    {
+    }
 
     return aResString.replace('~', '_');
 }

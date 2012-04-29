@@ -2931,7 +2931,7 @@ void OutputDevice::ImplInitFontList() const
         ResMgr* pMgr = ImplGetResMgr();
         if( pMgr )
         {
-            String aResStr( ResId( SV_ACCESSERROR_NO_FONTS, *pMgr ) );
+            String aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
             if( aResStr.Len() )
                 aError = aResStr;
         }

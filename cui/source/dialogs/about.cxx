@@ -78,7 +78,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aWebsiteButton       ( this,     ResId( ABOUT_BTN_WEBSITE, *rId.GetResMgr() ) ),
     aLicenseButton       ( this,     ResId( ABOUT_BTN_LICENSE, *rId.GetResMgr() ) ),
     aCancelButton        ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
-    aVersionTextStr(ResId::toString(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())).trim()),
+    m_aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr()).toString().trim()),
     m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
     m_aCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT, *rId.GetResMgr())),
     m_aBasedTextStr(ResId(ABOUT_STR_BASED, *rId.GetResMgr())),
@@ -86,7 +86,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     m_aWebsiteLinkStr(ResId( ABOUT_STR_LINK_WEBSITE, *rId.GetResMgr())),
     m_aCreditsLinkStr(ResId( ABOUT_STR_LINK_CREDITS, *rId.GetResMgr())),
     m_aLicenseLinkStr(ResId( ABOUT_STR_LINK_LICENSE, *rId.GetResMgr())),
-    m_sBuildStr(ResId::toString(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))),
+    m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr())),
     m_aDescriptionTextStr(ResId(ABOUT_STR_DESCRIPTION, *rId.GetResMgr()))
 {
     // Populate text items
@@ -368,7 +368,7 @@ rtl::OUString AboutDialog::GetBuildId()
 
 rtl::OUString AboutDialog::GetVersionString()
 {
-    rtl::OUString sVersion = aVersionTextStr;
+    rtl::OUString sVersion = m_aVersionTextStr;
 
     rtl::OUString sBuildId = GetBuildId();
 

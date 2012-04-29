@@ -1781,7 +1781,7 @@ String SwWrtShell::GetSelDescr() const
     switch (nSelType)
     {
     case nsSelectionType::SEL_GRF:
-        aResult = SW_RES(STR_GRAPHIC);
+        aResult = SW_RESSTR(STR_GRAPHIC);
 
         break;
     case nsSelectionType::SEL_FRM:
@@ -1794,7 +1794,7 @@ String SwWrtShell::GetSelDescr() const
         break;
     case nsSelectionType::SEL_DRW:
         {
-            aResult = SW_RES(STR_DRAWING_OBJECTS);
+            aResult = SW_RESSTR(STR_DRAWING_OBJECTS);
         }
         break;
     default:

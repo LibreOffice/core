@@ -98,9 +98,9 @@ ManageLanguageDialog::ManageLanguageDialog( Window* pParent, boost::shared_ptr<L
     m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
     m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
     m_pLocalizationMgr  ( _pLMgr ),
-    m_sDefLangStr       (ResId::toString(IDEResId(STR_DEF_LANG))),
-    m_sDeleteStr        (ResId::toString(IDEResId(STR_DELETE))),
-    m_sCreateLangStr    (ResId::toString(IDEResId(STR_CREATE_LANG)))
+    m_sDefLangStr       (IDE_RESSTR(STR_DEF_LANG)),
+    m_sDeleteStr        (IDE_RESSTR(STR_DELETE)),
+    m_sCreateLangStr    (IDE_RESSTR(STR_CREATE_LANG))
 {
     FreeResource();
 
@@ -306,9 +306,9 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, boost::shar
         // change to "Add Interface Language" mode
         SetHelpId( HID_BASICIDE_ADDNEW_LANGUAGE );
         m_pCheckLangLB = new SvxCheckListBox( this, IDEResId( LB_ADD_LANGUAGE ) );
-        SetText( ResId::toString( IDEResId( STR_ADDLANG_TITLE ) ) );
-        m_aLanguageFT.SetText( ResId::toString( IDEResId( STR_ADDLANG_LABEL ) ) );
-        m_aInfoFT.SetText( ResId::toString( IDEResId( STR_ADDLANG_INFO ) ) );
+        SetText( IDE_RESSTR(STR_ADDLANG_TITLE) );
+        m_aLanguageFT.SetText( IDE_RESSTR(STR_ADDLANG_LABEL) );
+        m_aInfoFT.SetText( IDE_RESSTR(STR_ADDLANG_INFO) );
     }
 
     FreeResource();

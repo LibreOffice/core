@@ -89,7 +89,7 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
     Graphic aGraphic;
     if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
     {
-        aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
+        aGraphic = BitmapEx( GAL_RES( RID_SVXBMP_GALLERY_MEDIA ) );
     }
     else
     {
@@ -480,8 +480,8 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
     SetMode( BROWSER_AUTO_VSCROLL | BROWSER_AUTOSIZE_LASTCOL );
     SetDataRowHeight( 28 );
-    InsertDataColumn( GALLERY_BRWBOX_TITLE, String( GAL_RESID( RID_SVXSTR_GALLERY_TITLE ) ), 256  );
-    InsertDataColumn( GALLERY_BRWBOX_PATH, String( GAL_RESID( RID_SVXSTR_GALLERY_PATH ) ), 256 );
+    InsertDataColumn( GALLERY_BRWBOX_TITLE, GAL_RESSTR(RID_SVXSTR_GALLERY_TITLE), 256  );
+    InsertDataColumn( GALLERY_BRWBOX_PATH, GAL_RESSTR(RID_SVXSTR_GALLERY_PATH), 256 );
 }
 
 // ------------------------------------------------------------------------
@@ -593,7 +593,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
                 GraphicObject   aGrfObj;
 
                 if( pObj->GetObjKind() == SGA_OBJ_SOUND )
-                    aGrfObj = Graphic( BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) ) );
+                    aGrfObj = Graphic( BitmapEx( GAL_RES( RID_SVXBMP_GALLERY_MEDIA ) ) );
                 else if( pObj->IsThumbBitmap() )
                     aGrfObj = Graphic( pObj->GetThumbBmp() );
                 else

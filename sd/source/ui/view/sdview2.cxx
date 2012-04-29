@@ -929,8 +929,8 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
         {
             if( mrDoc.GetObj( aNewName ) )
             {
-                rtl::OUString aTitle( ResId::toString(SdResId( STR_TITLE_NAMEGROUP ) ) ) ;
-                rtl::OUString aDesc( ResId::toString(SdResId( STR_DESC_NAMEGROUP ) ) );
+                rtl::OUString aTitle(SD_RESSTR(STR_TITLE_NAMEGROUP));
+                rtl::OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 AbstractSvxNameDialog* pDlg = 0;

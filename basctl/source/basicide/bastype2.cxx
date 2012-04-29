@@ -408,10 +408,10 @@ void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEnt
 {
 
     ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > > aEntries;
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, ResId::toString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS, ResId::toString( IDEResId( RID_STR_USERFORMS ) ) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, ResId::toString( IDEResId( RID_STR_NORMAL_MODULES ) ) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES, ResId::toString( IDEResId( RID_STR_CLASS_MODULES ) ) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS, IDE_RESSTR(RID_STR_USERFORMS) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDE_RESSTR(RID_STR_NORMAL_MODULES) ) );
+    aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES, IDE_RESSTR(RID_STR_CLASS_MODULES) ) );
 
     ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > >::iterator iter;
     for( iter = aEntries.begin(); iter != aEntries.end(); ++iter )

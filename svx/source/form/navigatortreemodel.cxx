@@ -301,9 +301,9 @@ namespace svxform
         {
             XubString aStr;
             if (pEntry->ISA(FmFormData))
-                aStr = SVX_RES(RID_STR_FORM);
+                aStr = SVX_RESSTR(RID_STR_FORM);
             else
-                aStr = SVX_RES(RID_STR_CONTROL);
+                aStr = SVX_RESSTR(RID_STR_CONTROL);
 
             Reference< XIndexContainer >  xContainer;
             if (pFolder)
@@ -408,13 +408,13 @@ namespace svxform
         {
             XubString        aStr;
             if (pEntry->ISA(FmFormData))
-                aStr = SVX_RES(RID_STR_FORM);
+                aStr = SVX_RESSTR(RID_STR_FORM);
             else
-                aStr = SVX_RES(RID_STR_CONTROL);
+                aStr = SVX_RESSTR(RID_STR_CONTROL);
 
             if( bUndo )
             {
-                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE));
+                XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE));
                 aUndoStr.SearchAndReplace('#', aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }

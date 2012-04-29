@@ -886,11 +886,11 @@ String SwOLEObj::GetDescription()
     {
         SvGlobalName aClassID( xEmbObj->getClassID() );
         if ( SotExchange::IsMath( aClassID ) )
-            aResult = SW_RES(STR_MATH_FORMULA);
+            aResult = SW_RESSTR(STR_MATH_FORMULA);
         else if ( SotExchange::IsChart( aClassID ) )
-            aResult = SW_RES(STR_CHART);
+            aResult = SW_RESSTR(STR_CHART);
         else
-            aResult = SW_RES(STR_OLE);
+            aResult = SW_RESSTR(STR_OLE);
     }
 
     return aResult;

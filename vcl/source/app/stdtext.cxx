@@ -36,13 +36,12 @@
 
 // =======================================================================
 
-XubString GetStandardText( sal_uInt16 nStdText )
+rtl::OUString GetStandardText( sal_uInt16 nStdText )
 {
     ResMgr* pResMgr = ImplGetResMgr();
-    XubString aText;
     if( pResMgr )
-        aText = XubString( ResId( nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, *pResMgr ) );
-    return aText;
+        return ResId(nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, *pResMgr);
+    return rtl::OUString();
 }
 
 // =======================================================================

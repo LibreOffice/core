@@ -699,7 +699,7 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, sal_uInt16 nCategoryIdx) :
 {
     if (IsAvailableRes(ResId(1,*rResId.GetResMgr()).SetRT(RSC_STRING)))
     {
-        Name = ResId::toString(ResId(1,*rResId.GetResMgr()));
+        Name = ResId(1,*rResId.GetResMgr()).toString();
 
         int i;
         for (i = 0; i < 4; i++)
@@ -708,7 +708,7 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, sal_uInt16 nCategoryIdx) :
 
             if (IsAvailableRes(ResId(nI2,*rResId.GetResMgr()).SetRT(RSC_STRING)))
             {
-                Strings  [i] = new rtl::OUString(ResId::toString(ResId(nI2,*rResId.GetResMgr())));
+                Strings  [i] = new rtl::OUString(ResId(nI2,*rResId.GetResMgr()).toString());
                 Graphics [i] = new Bitmap(ResId(10*nI2,*rResId.GetResMgr()));
             }
             else

@@ -585,23 +585,23 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     OUString aServiceName( xServiceName->getServiceName());
     if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {
-        aResult = ::chart::SchResId::getResString( STR_REGRESSION_MEAN );
+        aResult = SCH_RESSTR(STR_REGRESSION_MEAN);
     }
     else if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
-        aResult = ::chart::SchResId::getResString( STR_REGRESSION_LINEAR );
+        aResult = SCH_RESSTR(STR_REGRESSION_LINEAR);
     }
     else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
-        aResult = ::chart::SchResId::getResString( STR_REGRESSION_LOG );
+        aResult = SCH_RESSTR(STR_REGRESSION_LOG);
     }
     else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
     {
-        aResult = ::chart::SchResId::getResString( STR_REGRESSION_EXP );
+        aResult = SCH_RESSTR(STR_REGRESSION_EXP);
     }
     else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
-        aResult = ::chart::SchResId::getResString( STR_REGRESSION_POWER );
+        aResult = SCH_RESSTR(STR_REGRESSION_POWER);
     }
 
     return aResult;

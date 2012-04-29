@@ -1522,9 +1522,9 @@ namespace basctl
             {
                 switch ( _eType )
                 {
-                case LIBRARY_TYPE_MODULE:   aTitle = ResId::toString( IDEResId( RID_STR_USERMACROS ) ); break;
-                case LIBRARY_TYPE_DIALOG:   aTitle = ResId::toString( IDEResId( RID_STR_USERDIALOGS ) ); break;
-                case LIBRARY_TYPE_ALL:      aTitle = ResId::toString( IDEResId( RID_STR_USERMACROSDIALOGS ) ); break;
+                case LIBRARY_TYPE_MODULE:   aTitle = IDE_RESSTR(RID_STR_USERMACROS); break;
+                case LIBRARY_TYPE_DIALOG:   aTitle = IDE_RESSTR(RID_STR_USERDIALOGS); break;
+                case LIBRARY_TYPE_ALL:      aTitle = IDE_RESSTR(RID_STR_USERMACROSDIALOGS); break;
                 default:
                     break;
             }
@@ -1533,9 +1533,9 @@ namespace basctl
             {
                 switch ( _eType )
                 {
-                case LIBRARY_TYPE_MODULE:   aTitle = ResId::toString( IDEResId( RID_STR_SHAREMACROS ) ); break;
-                case LIBRARY_TYPE_DIALOG:   aTitle = ResId::toString( IDEResId( RID_STR_SHAREDIALOGS ) ); break;
-                case LIBRARY_TYPE_ALL:      aTitle = ResId::toString( IDEResId( RID_STR_SHAREMACROSDIALOGS ) ); break;
+                case LIBRARY_TYPE_MODULE:   aTitle = IDE_RESSTR(RID_STR_SHAREMACROS); break;
+                case LIBRARY_TYPE_DIALOG:   aTitle = IDE_RESSTR(RID_STR_SHAREDIALOGS); break;
+                case LIBRARY_TYPE_ALL:      aTitle = IDE_RESSTR(RID_STR_SHAREMACROSDIALOGS); break;
                 default:
                     break;
                 }

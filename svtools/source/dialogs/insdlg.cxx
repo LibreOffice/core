@@ -204,7 +204,7 @@ void SvObjectServerList::FillInsertObjects()
 
 #ifdef WNT
     SvGlobalName aOleFact( SO3_OUT_CLASSID );
-    String aOleObj( SvtResId( STR_FURTHER_OBJECT ) );
+    String aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
     aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
@@ -306,7 +306,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     }
 
     if( nResId )
-        aUIName = String( SvtResId( nResId ) );
+        aUIName = SVT_RESSTR( nResId );
     else
         aUIName = SotExchange::GetFormatName( nId );
 
@@ -363,8 +363,7 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
                 _rSource.Append( pSrcOfCopy );
             }
             else
-                _rSource =
-                    String( SvtResId( STR_UNKNOWN_SOURCE ) );
+                _rSource = SVT_RESSTR(STR_UNKNOWN_SOURCE);
         }
         bRet = sal_True;
     }

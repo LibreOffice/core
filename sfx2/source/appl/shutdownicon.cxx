@@ -390,8 +390,7 @@ OUString ShutdownIcon::GetResString( int id )
     if( !m_pResMgr || !m_pResMgr->IsAvailable( aResId ) )
         return OUString();
 
-    ResId aRes( id, *m_pResMgr );
-    return ResId::toString( aRes );
+    return ResId(id, *m_pResMgr).toString();
 }
 
 // ---------------------------------------------------------------------------
@@ -831,8 +830,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     if( pMgr )
     {
         ::SolarMutexGuard aGuard;
-        SfxResId aRes( STR_QUICKSTART_LNKNAME );
-        aShortcutName = ResId::toString( aRes );
+        aShortcutName = SFX2_RESSTR(STR_QUICKSTART_LNKNAME);
     }
 #ifdef WNT
     aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );

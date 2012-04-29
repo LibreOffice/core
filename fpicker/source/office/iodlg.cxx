@@ -3015,7 +3015,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbImageTemplates->SetHelpId( HID_FILEOPEN_IMAGE_TEMPLATE );
     }
 
-    _pImp->_pPlaces = new PlacesListBox( this, ResId::toString( SvtResId( STR_PLACES_TITLE ) ), SvtResId( LB_EXPLORERFILE_PLACES_LISTBOX ) );
+    _pImp->_pPlaces = new PlacesListBox( this, SVT_RESSTR(STR_PLACES_TITLE), SvtResId(LB_EXPLORERFILE_PLACES_LISTBOX) );
     initDefaultPlaces();
 }
 
@@ -3343,7 +3343,7 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
 
 void SvtFileDialog::initDefaultPlaces( )
 {
-    PlacePtr pRootPlace( new Place( ResId::toString( SvtResId( STR_DEFAULT_DIRECTORY ) ), GetStandardDir() ) );
+    PlacePtr pRootPlace( new Place( SVT_RESSTR(STR_DEFAULT_DIRECTORY), GetStandardDir() ) );
     _pImp->_pPlaces->AppendPlace( pRootPlace );
 
     // Load from user settings

@@ -153,7 +153,7 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     StartListening( *mpGallery );
 
     maNewTheme.SetHelpId( HID_GALLERY_NEWTHEME );
-    maNewTheme.SetText( String( GAL_RESID( RID_SVXSTR_GALLERY_CREATETHEME ) ) );
+    maNewTheme.SetText( GAL_RESSTR(RID_SVXSTR_GALLERY_CREATETHEME));
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     // disable creation of new themes if a writable directory is not available
@@ -162,7 +162,7 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
-    mpThemes->SetAccessibleName(String(SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) ) );
+    mpThemes->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERYPROPS_GALTHEME));
 
     for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
@@ -422,7 +422,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
         case( MN_DELETE  ):
         {
-            if( QueryBox( NULL, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETETHEME ) ) ).Execute() == RET_YES )
+            if( QueryBox( NULL, WB_YES_NO, GAL_RESSTR(RID_SVXSTR_GALLERY_DELETETHEME)).Execute() == RET_YES )
                 mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
         }
         break;
@@ -652,7 +652,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl)
 
     if( !aExecVector.empty() )
     {
-        PopupMenu aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
+        PopupMenu aMenu( GAL_RES( RID_SVXMN_GALLERY1 ) );
 
         aMenu.EnableItem( MN_ACTUALIZE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ACTUALIZE ) != aExecVector.end() );
         aMenu.EnableItem( MN_RENAME, ::std::find( aExecVector.begin(), aExecVector.end(), MN_RENAME ) != aExecVector.end() );
@@ -694,7 +694,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
 {
-    String  aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
+    String  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
     String  aName( aNewTheme );
     sal_uIntPtr nCount = 0;
 

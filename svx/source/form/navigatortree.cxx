@@ -1819,16 +1819,16 @@ namespace svxform
             String aUndoStr;
             if ( m_arrCurrentSelection.size() == 1 )
             {
-                aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE);
+                aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE);
                 if (m_nFormsSelected)
-                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RES( RID_STR_FORM ) );
+                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RESSTR( RID_STR_FORM ) );
                 else
                     // it must be a control (else the root would be selected, but it cannot be deleted)
-                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RES( RID_STR_CONTROL ) );
+                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RESSTR( RID_STR_CONTROL ) );
             }
             else
             {
-                aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
+                aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
                 aUndoStr.SearchAndReplaceAscii( "#", String::CreateFromInt32( m_arrCurrentSelection.size() ) );
             }
             pFormModel->BegUndo(aUndoStr);

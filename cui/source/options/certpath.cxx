@@ -55,8 +55,8 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
     , m_aOKBtn           ( this, CUI_RES( PB_OK ) )
     , m_aCancelBtn       ( this, CUI_RES( PB_CANCEL ) )
     , m_aHelpBtn         ( this, CUI_RES( PB_HELP ) )
-    , m_sAddDialogText(ResId::toString(CUI_RES(STR_ADDDLGTEXT)))
-    , m_sManual(ResId::toString(CUI_RES(STR_MANUAL)))
+    , m_sAddDialogText(CUI_RESSTR(STR_ADDDLGTEXT))
+    , m_sManual(CUI_RESSTR(STR_MANUAL))
 {
     static long aStaticTabs[]=
     {
@@ -65,8 +65,8 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 
     m_aCertPathList.SvxSimpleTable::SetTabs( aStaticTabs );
 
-    rtl::OUString sProfile(ResId::toString(CUI_RES(STR_PROFILE)));
-    rtl::OUString sDirectory(ResId::toString(CUI_RES(STR_DIRECTORY)));
+    rtl::OUString sProfile(CUI_RESSTR(STR_PROFILE));
+    rtl::OUString sDirectory(CUI_RESSTR(STR_DIRECTORY));
 
     rtl::OUStringBuffer sHeader;
     sHeader.append('\t').append(sProfile).append('\t').append(sDirectory);

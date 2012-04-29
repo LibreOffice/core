@@ -200,7 +200,7 @@ namespace svt
         SetEmptyViewMargin();
 
         m_pImpl->pRoadmap = new ORoadmap( this, WB_TABSTOP );
-        m_pImpl->pRoadmap->SetText( SvtResId( STR_WIZDLG_ROADMAP_TITLE ) );
+        m_pImpl->pRoadmap->SetText( SVT_RESSTR( STR_WIZDLG_ROADMAP_TITLE ) );
         m_pImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
 

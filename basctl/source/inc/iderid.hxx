@@ -37,6 +37,7 @@ public:
     IDEResId( sal_uInt16 nId );
 };
 
+#define IDE_RESSTR(x) IDEResId(x).toString()
 
 #endif //_IDERID_HXX
 

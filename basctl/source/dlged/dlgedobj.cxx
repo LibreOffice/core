@@ -797,7 +797,7 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
 
     if (nResId)
     {
-        aDefaultName = ResId::toString(IDEResId(nResId));
+        aDefaultName = IDE_RESSTR(nResId);
     }
 
     return aDefaultName;

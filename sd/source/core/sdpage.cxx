@@ -2391,22 +2391,22 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                 {
                     pOutl->SetStyleSheet( 0, GetStyleSheetForPresObj(eObjKind) );
                     aString += "\n\t\t";
-                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER2 ) );
+                    aString += SD_RESSTR(STR_PRESOBJ_MPOUTLLAYER2);
 
                     aString += "\n\t\t\t";
-                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER3 ) );
+                    aString += SD_RESSTR(STR_PRESOBJ_MPOUTLLAYER3);
 
                     aString += "\n\t\t\t\t";
-                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER4 ) );
+                    aString += SD_RESSTR(STR_PRESOBJ_MPOUTLLAYER4);
 
                     aString += "\n\t\t\t\t\t";
-                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER5 ) );
+                    aString += SD_RESSTR(STR_PRESOBJ_MPOUTLLAYER5);
 
                     aString += "\n\t\t\t\t\t\t";
-                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER6 ) );
+                    aString += SD_RESSTR(STR_PRESOBJ_MPOUTLLAYER6);
 
                     aString += "\n\t\t\t\t\t\t\t";
-                    aString += ResId::toString( SdResId( STR_PRESOBJ_MPOUTLLAYER7 ) );
+                    aString += SD_RESSTR(STR_PRESOBJ_MPOUTLLAYER7);
 
                 }
             }

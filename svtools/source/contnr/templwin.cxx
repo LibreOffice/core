@@ -192,11 +192,11 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     // "New Document"
     Image aImage( SvtResId( IMG_SVT_NEWDOC ) );
     nMaxTextLength = aImage.GetSizePixel().Width();
-    String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
+    String aEntryStr = SVT_RESSTR(STR_SVT_NEWDOC);
     SvxIconChoiceCtrlEntry* pEntry =
         aIconCtrl.InsertEntry( aEntryStr, aImage, ICON_POS_NEWDOC );
     pEntry->SetUserData( new String( aNewDocumentRootURL ) );
-    pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_NEWDOC_HELP ) ) );
+    pEntry->SetQuickHelpText( SVT_RESSTR(STR_SVT_NEWDOC_HELP) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     long nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)
@@ -205,11 +205,11 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     // "Templates"
     if( aTemplateRootURL.Len() > 0 )
     {
-        aEntryStr = String( SvtResId( STR_SVT_TEMPLATES ) );
+        aEntryStr = SVT_RESSTR(STR_SVT_TEMPLATES);
         pEntry = aIconCtrl.InsertEntry(
             aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
         pEntry->SetUserData( new String( aTemplateRootURL ) );
-        pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_TEMPLATES_HELP ) ) );
+        pEntry->SetQuickHelpText(SVT_RESSTR(STR_SVT_TEMPLATES_HELP));
         DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
         nTemp = pEntry->GetBoundRect().GetSize().Width();
         if (nTemp > nMaxTextLength)
@@ -217,22 +217,22 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     }
 
     // "My Documents"
-    aEntryStr = String( SvtResId( STR_SVT_MYDOCS ) );
+    aEntryStr = SVT_RESSTR(STR_SVT_MYDOCS);
     pEntry = aIconCtrl.InsertEntry(
         aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
     pEntry->SetUserData( new String( aMyDocumentsRootURL ) );
-    pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_MYDOCS_HELP ) ) );
+    pEntry->SetQuickHelpText( SVT_RESSTR(STR_SVT_MYDOCS_HELP) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
     if( nTemp > nMaxTextLength )
         nMaxTextLength = nTemp;
 
     // "Samples"
-    aEntryStr = String( SvtResId( STR_SVT_SAMPLES ) );
+    aEntryStr = SVT_RESSTR(STR_SVT_SAMPLES);
     pEntry = aIconCtrl.InsertEntry(
         aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
     pEntry->SetUserData( new String( aSamplesFolderRootURL ) );
-    pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_SAMPLES_HELP ) ) );
+    pEntry->SetQuickHelpText( SVT_RESSTR(STR_SVT_SAMPLES_HELP));
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
     if (nTemp > nMaxTextLength)

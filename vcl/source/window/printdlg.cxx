@@ -65,7 +65,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
     : Window( i_pParent, i_rId )
     , maOrigSize( 10, 10 )
     , maPageVDev( *this )
-    , maToolTipString( String( VclResId( SV_PRINT_PRINTPREVIEW_TXT ) ) )
+    , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
     , mbGreyscale( false )
     , maHorzDim( this, WB_HORZ | WB_CENTER  )
     , maVertDim( this, WB_VERT | WB_VCENTER )
@@ -732,11 +732,11 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , maCancelButton( this, VclResId( SV_PRINT_CANCEL ) )
     , maHelpButton( this, VclResId( SV_PRINT_HELP ) )
     , maPController( i_rController )
-    , maNoPageStr( String( VclResId( SV_PRINT_NOPAGES ) ) )
+    , maNoPageStr( VclResId( SV_PRINT_NOPAGES ).toString() )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
-    , maPrintToFileText( String( VclResId( SV_PRINT_TOFILE_TXT ) ) )
-    , maDefPrtText( String( VclResId( SV_PRINT_DEFPRT_TXT ) ) )
+    , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ).toString() )
+    , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ).toString() )
     , mbShowLayoutPage( sal_True )
 {
     FreeResource();

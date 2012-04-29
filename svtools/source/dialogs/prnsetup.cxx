@@ -144,9 +144,7 @@ static void ImplPrnDlgAddString( XubString& rStr, const XubString& rAddStr )
 
 static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
 {
-    SvtResId aResId( nResId );
-    XubString aAddStr( aResId );
-    ImplPrnDlgAddString( rStr, aAddStr );
+    ImplPrnDlgAddString( rStr, SVT_RESSTR(nResId) );
 }
 
 // -----------------------------------------------------------------------
@@ -217,7 +215,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
-        XubString aJobStr( SvtResId( STR_SVT_PRNDLG_JOBCOUNT ) );
+        XubString aJobStr( SVT_RESSTR( STR_SVT_PRNDLG_JOBCOUNT ) );
         XubString aJobs( XubString::CreateFromInt32( nJobs ) );
         aJobStr.SearchAndReplaceAscii( "%d", aJobs );
         ImplPrnDlgAddString( aStr, aJobStr );

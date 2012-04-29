@@ -34,14 +34,10 @@
 namespace chart
 {
 
-SchResId::SchResId( sal_Int16 nId )
+    SchResId::SchResId( sal_Int16 nId )
         : ResId( nId, RessourceManager::getRessourceManager() )
-{}
-
-::rtl::OUString SchResId::getResString( sal_Int16 nId )
-{
-    return String( SchResId( nId ));
-}
+    {
+    }
 
 } //  namespace chart
 

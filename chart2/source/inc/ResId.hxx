@@ -39,9 +39,9 @@ class OOO_DLLPUBLIC_CHARTTOOLS SchResId : public ResId
 {
 public:
     SchResId( sal_Int16 nId );
-
-    static ::rtl::OUString getResString( sal_Int16 nId );
 };
+
+#define SCH_RESSTR(x) SchResId(x).toString()
 
 } //  namespace chart
 

@@ -83,7 +83,7 @@ void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
 GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
-    pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
+    pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RES( RID_SVXDLG_GALLERYBROWSER ) );
     eChildAlignment = SFX_ALIGN_TOP;
     ( (GalleryBrowser*) pWindow )->Initialize( pInfo );
 };
@@ -107,9 +107,9 @@ GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
     SfxDockingWindow( _pBindings, pCW, pParent, rResId )
 {
     mpGallery = Gallery::GetGalleryInstance();
-    mpBrowser1 = new GalleryBrowser1( this, GAL_RESID( GALLERY_BROWSER1 ), mpGallery );
-    mpSplitter = new GallerySplitter( this, GAL_RESID( GALLERY_SPLITTER ) );
-    mpBrowser2 = new GalleryBrowser2( this, GAL_RESID( GALLERY_BROWSER2 ), mpGallery );
+    mpBrowser1 = new GalleryBrowser1( this, GAL_RES( GALLERY_BROWSER1 ), mpGallery );
+    mpSplitter = new GallerySplitter( this, GAL_RES( GALLERY_SPLITTER ) );
+    mpBrowser2 = new GalleryBrowser2( this, GAL_RES( GALLERY_BROWSER2 ), mpGallery );
 
     FreeResource();
     SetMinOutputSizePixel( maLastSize = GetOutputSizePixel() );

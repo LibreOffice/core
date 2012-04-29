@@ -170,7 +170,7 @@ namespace svt
             m_pPrevPage = new PushButton(this, WB_TABSTOP);
             m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-            m_pPrevPage->SetText(String(SvtResId(STR_WIZDLG_PREVIOUS)));
+            m_pPrevPage->SetText(SVT_RESSTR(STR_WIZDLG_PREVIOUS));
             m_pPrevPage->Show();
 
             if (_nButtonFlags & WZB_NEXT)
@@ -187,7 +187,7 @@ namespace svt
             m_pNextPage = new PushButton(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-            m_pNextPage->SetText(String(SvtResId(STR_WIZDLG_NEXT)));
+            m_pNextPage->SetText(String(SVT_RESSTR(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();
 
             AddButton( m_pNextPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
@@ -200,7 +200,7 @@ namespace svt
         {
             m_pFinish = new OKButton(this, WB_TABSTOP);
             m_pFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-            m_pFinish->SetText(String(SvtResId(STR_WIZDLG_FINISH)));
+            m_pFinish->SetText(SVT_RESSTR(STR_WIZDLG_FINISH));
             m_pFinish->Show();
 
             AddButton( m_pFinish, WIZARDDIALOG_BUTTON_STDOFFSET_X );

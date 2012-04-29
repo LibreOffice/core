@@ -1005,7 +1005,7 @@ void ScDPOutput::Output()
         if ( pPageFields[nField].aResult.getLength() == 1 )
             aPageValue = pPageFields[nField].aResult[0].Caption;
         else
-            aPageValue = ScResId::toString(ScResId(SCSTR_ALL));        //! separate string?
+            aPageValue = SC_RESSTR(SCSTR_ALL);        //! separate string?
 
         pDoc->SetString( nFldCol, nHdrRow, nTab, aPageValue );
 

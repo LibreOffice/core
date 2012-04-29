@@ -260,7 +260,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
                 xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
 #endif
                 // add arbitrary files
-                xFilterMgr->appendFilter( String( VclResId( SV_STDTEXT_ALLFILETYPES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
+                xFilterMgr->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");
             }
             catch (const lang::IllegalArgumentException&)
             {

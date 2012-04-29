@@ -289,7 +289,7 @@ String SdPageObjsTLB::GetObjectName(
         && aRet.Len() == 0
         && pObject!=NULL)
     {
-        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME);
+        aRet = SD_RESSTR(STR_NAVIGATOR_SHAPE_BASE_NAME);
         aRet.SearchAndReplaceAscii("%1", String::CreateFromInt32(pObject->GetOrdNum() + 1));
     }
 

@@ -40,7 +40,7 @@ class SC_DLLPUBLIC ScResId : public ResId
     ScResId( sal_uInt16 nId );      // in scdll.cxx
 };
 
-
+#define SC_RESSTR(x) ScResId(x).toString()
 
 #endif // SC_SCRESMGR_HXX
 

@@ -737,7 +737,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
             rTypeId.SetRT( RSC_STRING );
             if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
             {
-                aTypStr = ResId::toString(rTypeId);
+                aTypStr = rTypeId.toString();
                 // Versions Resource Klassenzeiger ans Ende setzen
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }

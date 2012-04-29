@@ -150,8 +150,7 @@ XubString Button::GetStandardText( StandardButtonType eButton )
     if( pResMgr )
     {
         sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
-        ResId aResId( nResId, *pResMgr );
-        aText = String( aResId );
+        aText = ResId(nResId, *pResMgr).toString();
 
         // Windows (apparently) has some magic auto-accelerator evil around
         // ok / cancel so add this only for Unix

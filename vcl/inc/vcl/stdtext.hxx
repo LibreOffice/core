@@ -43,7 +43,7 @@ class Window;
 #define STANDARD_TEXT_SERVICE_NOT_AVAILABLE     ((sal_uInt16)0)
 #define STANDARD_TEXT_LAST                      STANDARD_TEXT_SERVICE_NOT_AVAILABLE
 
-XubString VCL_DLLPUBLIC GetStandardText( sal_uInt16 nStdText );
+rtl::OUString VCL_DLLPUBLIC GetStandardText( sal_uInt16 nStdText );
 
 // -------------------------------------
 // - Hilfsmethoden fuer Standard-Texte -

@@ -1766,7 +1766,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu )
             {
                 if(0 == pFocusBox->GetModel()->GetDepth(pEntry))
                 {
-                    const rtl::OUString aNoName(ResId::toString(SfxResId(STR_NONAME)));
+                    const rtl::OUString aNoName(SFX2_RESSTR(STR_NONAME));
                     SvLBoxEntry* pParent = pFocusBox->GetParent(pEntry);
                     rtl::OUString aName(aNoName);
                     sal_Int32 n = 1;

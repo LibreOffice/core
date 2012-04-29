@@ -39,6 +39,8 @@ public:
     static void DeleteResMgr();
 };
 
+#define SFX2_RESSTR(x) SfxResId(x).toString()
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

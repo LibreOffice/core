@@ -355,14 +355,14 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
     mpSizeAry = NULL;
 
     // Stylenamen festlegen
-    maLight         = XubString( SvtResId( STR_SVT_STYLE_LIGHT ) );
-    maLightItalic   = XubString( SvtResId( STR_SVT_STYLE_LIGHT_ITALIC ) );
-    maNormal        = XubString( SvtResId( STR_SVT_STYLE_NORMAL ) );
-    maNormalItalic  = XubString( SvtResId( STR_SVT_STYLE_NORMAL_ITALIC ) );
-    maBold          = XubString( SvtResId( STR_SVT_STYLE_BOLD ) );
-    maBoldItalic    = XubString( SvtResId( STR_SVT_STYLE_BOLD_ITALIC ) );
-    maBlack         = XubString( SvtResId( STR_SVT_STYLE_BLACK ) );
-    maBlackItalic   = XubString( SvtResId( STR_SVT_STYLE_BLACK_ITALIC ) );
+    maLight         = SVT_RESSTR(STR_SVT_STYLE_LIGHT);
+    maLightItalic   = SVT_RESSTR(STR_SVT_STYLE_LIGHT_ITALIC);
+    maNormal        = SVT_RESSTR(STR_SVT_STYLE_NORMAL);
+    maNormalItalic  = SVT_RESSTR(STR_SVT_STYLE_NORMAL_ITALIC);
+    maBold          = SVT_RESSTR(STR_SVT_STYLE_BOLD);
+    maBoldItalic    = SVT_RESSTR(STR_SVT_STYLE_BOLD_ITALIC);
+    maBlack         = SVT_RESSTR(STR_SVT_STYLE_BLACK);
+    maBlackItalic   = SVT_RESSTR(STR_SVT_STYLE_BLACK_ITALIC);
 
     ImplInsertFonts( pDevice, bAll, sal_True );
 
@@ -521,7 +521,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
     if ( !pData )
     {
         if ( !maMapNotAvailable.Len() )
-            ((FontList*)this)->maMapNotAvailable = XubString( SvtResId( STR_SVT_FONTMAP_NOTAVAILABLE ) );
+            ((FontList*)this)->maMapNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_NOTAVAILABLE);
         return maMapNotAvailable;
     }
 
@@ -555,28 +555,16 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
         else if ( !bNotSynthetic )
         {
             if ( !maMapStyleNotAvailable.Len() )
-                ((FontList*)this)->maMapStyleNotAvailable = XubString( SvtResId( STR_SVT_FONTMAP_STYLENOTAVAILABLE ) );
+                ((FontList*)this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
             return maMapStyleNotAvailable;
         }
     }
-
-    /* Size not available not implemented yet
-    if ( !(nType & FONTLIST_FONTNAMETYPE_SCALABLE) )
-    {
-        ...
-        {
-            if ( !maMapSizeNotAvailable.Len() )
-                 ((FontList*)this)->maMapSizeNotAvailable = XubString( SvtResId( STR_SVT_FONTMAP_SIZENOTAVAILABLE ) );
-            return maMapSizeNotAvailable;
-        }
-    }
-    */
 
     // Only Printer-Font?
     if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
     {
         if ( !maMapPrinterOnly.Len() )
-            ((FontList*)this)->maMapPrinterOnly = XubString( SvtResId( STR_SVT_FONTMAP_PRINTERONLY ) );
+            ((FontList*)this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
         return maMapPrinterOnly;
     }
     // Only Screen-Font?
@@ -584,13 +572,13 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
             && rInfo.GetType() == TYPE_RASTER )
     {
         if ( !maMapScreenOnly.Len() )
-            ((FontList*)this)->maMapScreenOnly = XubString( SvtResId( STR_SVT_FONTMAP_SCREENONLY ) );
+            ((FontList*)this)->maMapScreenOnly = SVT_RESSTR(STR_SVT_FONTMAP_SCREENONLY);
         return maMapScreenOnly;
     }
     else
     {
         if ( !maMapBoth.Len() )
-            ((FontList*)this)->maMapBoth = XubString( SvtResId( STR_SVT_FONTMAP_BOTH ) );
+            ((FontList*)this)->maMapBoth = SVT_RESSTR(STR_SVT_FONTMAP_BOTH);
         return maMapBoth;
     }
 }

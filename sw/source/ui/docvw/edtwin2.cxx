@@ -279,7 +279,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             case SwContentAtPos::SW_REFMARK:
                 if(aCntntAtPos.aFnd.pAttr)
                 {
-                    sTxt = SW_RES(STR_CONTENT_TYPE_SINGLE_REFERENCE);
+                    sTxt = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
                     sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": "));
                     sTxt += ((const SwFmtRefMark*)aCntntAtPos.aFnd.pAttr)->GetRefName();
                 }

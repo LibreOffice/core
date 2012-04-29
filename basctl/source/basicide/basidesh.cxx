@@ -406,7 +406,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
         if( bUI )
         {
             Window *pParent = &GetViewFrame()->GetWindow();
-            InfoBox( pParent, ResId::toString(IDEResId(RID_STR_CANNOTCLOSE))).Execute();
+            InfoBox( pParent, IDE_RESSTR(RID_STR_CANNOTCLOSE)).Execute();
         }
         return sal_False;
     }

@@ -41,14 +41,14 @@ struct ImplGroupData;
 class TOOLS_DLLPUBLIC Config
 {
 private:
-    XubString           maFileName;
-    rtl::OString maGroupName;
+    rtl::OUString       maFileName;
+    rtl::OString        maGroupName;
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
-    sal_uIntPtr             mnDataUpdateId;
-    sal_uInt16              mnLockCount;
-    sal_Bool                mbPersistence;
-    sal_Bool                mbDummy1;
+    sal_uIntPtr         mnDataUpdateId;
+    sal_uInt16          mnLockCount;
+    sal_Bool            mbPersistence;
+    sal_Bool            mbDummy1;
 
 #ifdef _CONFIG_CXX
     TOOLS_DLLPRIVATE sal_Bool               ImplUpdateConfig() const;
@@ -59,7 +59,7 @@ public:
                         Config( const XubString& rFileName );
                         ~Config();
 
-    const XubString&    GetPathName() const { return maFileName; }
+    const rtl::OUString& GetPathName() const { return maFileName; }
 
     void SetGroup(const rtl::OString& rGroup);
     const rtl::OString& GetGroup() const { return maGroupName; }

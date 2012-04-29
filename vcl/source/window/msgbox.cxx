@@ -520,7 +520,7 @@ void WarningBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTWARNAGAIN, *pResMgr ) );
+        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
 }
 
 // -----------------------------------------------------------------------
@@ -611,7 +611,7 @@ void QueryBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTASKAGAIN, *pResMgr ) );
+        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
 }
 
 // -----------------------------------------------------------------------

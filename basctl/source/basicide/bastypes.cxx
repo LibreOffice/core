@@ -756,7 +756,7 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
 
 bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
 {
-    ::rtl::OUString aQuery( ResId::toString(rId) );
+    ::rtl::OUString aQuery(rId.toString());
     ::rtl::OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
@@ -804,7 +804,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         // set new title
         if ( bNewTitle )
         {
-            ::rtl::OUString aTitle(ResId::toString(IDEResId(RID_STR_ENTERPASSWORD)));
+            ::rtl::OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
             aTitle = aTitle.replaceAll("XX", rLibName);
             pDlg->SetText( aTitle );
         }
@@ -826,7 +826,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
                     if ( !bOK )
                     {
-                        ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, ResId::toString( IDEResId( RID_STR_WRONGPASSWORD ) ) );
+                        ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, IDE_RESSTR(RID_STR_WRONGPASSWORD) );
                         aErrorBox.Execute();
                     }
                 }

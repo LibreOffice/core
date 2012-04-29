@@ -731,10 +731,10 @@ sal_Bool DialogWindow::SaveDialog()
 
     xFP->setDefaultName( ::rtl::OUString( GetName() ) );
 
-    ::rtl::OUString aDialogStr(ResId::toString(IDEResId(RID_STR_STDDIALOGNAME)));
+    ::rtl::OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
     xFltMgr->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -876,7 +876,7 @@ sal_Bool DialogWindow::SaveDialog()
             }
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_COULDNTWRITE) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_COULDNTWRITE)).Execute();
     }
 
     return bDone;
@@ -936,9 +936,9 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
 
     maMessText = rMessage;
 
-    AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_RENAME ) ), RET_YES,
+    AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_RENAME), RET_YES,
         BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-    AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
+    AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_REPLACE), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
     SetImage( QueryBox::GetStandardImage() );
@@ -960,9 +960,9 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
         SetText( rTitle );
 
     maMessText = rMessage;
-    AddButton( String( IDEResId( RID_STR_DLGIMP_MISMATCH_ADD ) ), RET_YES,
+    AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_ADD), RET_YES,
         BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-    AddButton( String( IDEResId( RID_STR_DLGIMP_MISMATCH_OMIT ) ), RET_NO, 0 );
+    AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_OMIT), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
@@ -993,10 +993,10 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    ::rtl::OUString aDialogStr(ResId::toString(IDEResId(RID_STR_STDDIALOGNAME)));
+    ::rtl::OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
     xFltMgr->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -1060,8 +1060,8 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
             NameClashMode eNameClashMode = NO_CLASH;
             if( bDialogAlreadyExists )
             {
-                ::rtl::OUString aQueryBoxTitle(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TITLE)));
-                ::rtl::OUString aQueryBoxText(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TEXT)));
+                ::rtl::OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TITLE));
+                ::rtl::OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TEXT));
                 aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
@@ -1124,8 +1124,8 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
             bool bAddDialogLanguagesToLib = false;
             if( nOnlyInImportLanguageCount > 0 )
             {
-                ::rtl::OUString aQueryBoxTitle(ResId::toString(IDEResId(RID_STR_DLGIMP_MISMATCH_TITLE)));
-                ::rtl::OUString aQueryBoxText(ResId::toString(IDEResId(RID_STR_DLGIMP_MISMATCH_TEXT)));
+                ::rtl::OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TITLE));
+                ::rtl::OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
                 LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )

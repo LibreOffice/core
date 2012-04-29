@@ -684,7 +684,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
         if (pSttStr != NULL && pEndStr != NULL && pSttStr->Len() == 0 &&
             pEndStr->Len() == 0)
         {
-            aStr = SW_RES(STR_PARAGRAPH_UNDO);
+            aStr = SW_RESSTR(STR_PARAGRAPH_UNDO);
         }
         else
         {

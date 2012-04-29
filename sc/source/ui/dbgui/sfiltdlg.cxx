@@ -86,7 +86,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ),
         aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
-        aStrUndefined   ( ResId::toString(ScResId(SCSTR_UNDEFINED)) ),
+        aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),

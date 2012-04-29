@@ -124,7 +124,7 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 UniString::UniString( const ResId& rResId )
     : mpData(NULL)
 {
-    rtl::OUString sStr(ResId::toString(rResId));
+    rtl::OUString sStr(rResId.toString());
 
     DBG_CTOR( UniString, DbgCheckUniString );
 
@@ -144,19 +144,19 @@ UniString::UniString( const ResId& rResId )
 
 }
 
-rtl::OUString ResId::toString(const ResId& rResId)
+rtl::OUString ResId::toString() const
 {
-    rResId.SetRT( RSC_STRING );
-    ResMgr* pResMgr = rResId.GetResMgr();
+    SetRT( RSC_STRING );
+    ResMgr* pResMgr = GetResMgr();
 
-    if ( !pResMgr || !pResMgr->GetResource( rResId ) )
+    if ( !pResMgr || !pResMgr->GetResource( *this ) )
     {
         rtl::OUString sRet;
 
 #if OSL_DEBUG_LEVEL > 0
         sRet = rtl::OUStringBuffer().
             appendAscii(RTL_CONSTASCII_STRINGPARAM("<resource id ")).
-            append(static_cast<sal_Int32>(rResId.GetId())).
+            append(static_cast<sal_Int32>(GetId())).
             appendAscii(RTL_CONSTASCII_STRINGPARAM(" not found>")).
             makeStringAndClear();
 #endif

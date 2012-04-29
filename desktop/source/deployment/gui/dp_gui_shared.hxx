@@ -50,6 +50,8 @@ public:
     DpGuiResId( sal_uInt16 nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
 };
 
+#define DPGUI_RESSTR(i)   DpGuiResId(i).toString()
+
 } // namespace dp_gui
 
 #endif

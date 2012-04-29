@@ -998,7 +998,7 @@ String ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
     }
 
     if( nHelpId && ImplGetResMgr() )
-        aHelpStr = String( ResId( nHelpId, *ImplGetResMgr() ) );
+        aHelpStr = ResId(nHelpId, *ImplGetResMgr()).toString();
 
     return aHelpStr;
 }

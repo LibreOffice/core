@@ -1415,7 +1415,7 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
     {
         SolarMutexGuard aGuard;
 
-        sStr = SW_RES( nResId );
+        sStr = SW_RESSTR( nResId );
     }
 
     if( pArg1 )

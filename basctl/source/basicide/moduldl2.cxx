@@ -289,7 +289,7 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     ::rtl::OUString aLibName = GetEntryText( pEntry, 0 );
     if ( aLibName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
     {
-        ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_CANNOTCHANGENAMESTDLIB ) ) ).Execute();
+        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB) ).Execute();
         return sal_False;
     }
 
@@ -299,7 +299,7 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
-        ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_LIBISREADONLY ) ) ).Execute();
+        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_LIBISREADONLY) ).Execute();
         return sal_False;
     }
 
@@ -352,7 +352,7 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& r
         }
         catch (const container::ElementExistException& )
         {
-            ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED) ).Execute();
             return sal_False;
         }
         catch (const container::NoSuchElementException& )
@@ -365,9 +365,9 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& r
     if ( !bValid )
     {
         if ( rNewName.getLength() > 30 )
-            ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_LIBNAMETOLONG) ).Execute();
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) ).Execute();
     }
 
     return bValid;
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
     else
     {
         ErrorBox(this, WB_OK | WB_DEF_OK,
-                 ResId::toString(IDEResId(RID_STR_BADSBXNAME))).Execute();
+                 IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
         aEdit.GrabFocus();
     }
     return 0;
@@ -404,16 +404,16 @@ NewObjectDialog::NewObjectDialog(Window * pParent, NewObjectMode nMode,
     switch (nMode)
     {
     case NEWOBJECTMODE_LIB:
-        SetText( ResId::toString( IDEResId( RID_STR_NEWLIB ) ) );
+        SetText( IDE_RESSTR(RID_STR_NEWLIB) );
         break;
     case NEWOBJECTMODE_MOD:
-        SetText( ResId::toString( IDEResId( RID_STR_NEWMOD ) ) );
+        SetText( IDE_RESSTR(RID_STR_NEWMOD) );
         break;
     case NEWOBJECTMODE_METH:
-        SetText( ResId::toString( IDEResId( RID_STR_NEWMETH ) ) );
+        SetText( IDE_RESSTR(RID_STR_NEWMETH) );
         break;
     default:
-        SetText( ResId::toString( IDEResId( RID_STR_NEWDLG ) ) );
+        SetText( IDE_RESSTR(RID_STR_NEWDLG) );
         break;
     }
 
@@ -442,7 +442,7 @@ GotoLineDialog::GotoLineDialog(Window * pParent )
     FreeResource();
     aEdit.GrabFocus();
 
-    SetText( ResId::toString( IDEResId( RID_STR_GETLINE ) ) );
+    SetText( IDE_RESSTR(RID_STR_GETLINE) );
     aOKButton.SetClickHdl(LINK(this, GotoLineDialog, OkButtonHandler));
 
 }
@@ -828,7 +828,7 @@ void LibPage::InsertLib()
     if ( !aLastFilter.isEmpty() )
         xFltMgr->setCurrentFilter( aLastFilter );
     else
-        xFltMgr->setCurrentFilter( ResId::toString( IDEResId( RID_STR_BASIC ) ) );
+        xFltMgr->setCurrentFilter( IDE_RESSTR(RID_STR_BASIC) );
 
     if ( xFP->execute() == RET_OK )
     {
@@ -913,7 +913,7 @@ void LibPage::InsertLib()
             }
 
             if ( !pLibDlg )
-                InfoBox( this, ResId::toString( IDEResId( RID_STR_NOLIBINSTORAGE ) ) ).Execute();
+                InfoBox( this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE) ).Execute();
             else
             {
                 sal_Bool bChanges = sal_False;
@@ -950,7 +950,7 @@ void LibPage::InsertLib()
                                     // check, if the library is the Standard library
                                     if ( aLibName == "Standard" )
                                     {
-                                        ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_REPLACESTDLIB ) ) ).Execute();
+                                        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_REPLACESTDLIB) ).Execute();
                                         continue;
                                     }
 
@@ -958,10 +958,10 @@ void LibPage::InsertLib()
                                     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
                                          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
                                     {
-                                        ::rtl::OUString aErrStr( ResId::toString( IDEResId( RID_STR_REPLACELIB ) ) );
+                                        ::rtl::OUString aErrStr( IDE_RESSTR(RID_STR_REPLACELIB) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         aErrStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
-                                        aErrStr += ResId::toString( IDEResId( RID_STR_LIBISREADONLY ) );
+                                        aErrStr += IDE_RESSTR(RID_STR_LIBISREADONLY);
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                         continue;
                                     }
@@ -973,12 +973,12 @@ void LibPage::InsertLib()
                                 {
                                     ::rtl::OUString aErrStr;
                                     if ( bReference )
-                                        aErrStr = ResId::toString( IDEResId( RID_STR_REFNOTPOSSIBLE ) );
+                                        aErrStr = IDE_RESSTR(RID_STR_REFNOTPOSSIBLE);
                                     else
-                                        aErrStr = ResId::toString( IDEResId( RID_STR_IMPORTNOTPOSSIBLE ) );
+                                        aErrStr = IDE_RESSTR(RID_STR_IMPORTNOTPOSSIBLE);
                                     aErrStr = aErrStr.replaceAll("XX", aLibName);
                                     aErrStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
-                                    aErrStr += ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) );
+                                    aErrStr += IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
                                     ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                     continue;
                                 }
@@ -996,7 +996,7 @@ void LibPage::InsertLib()
 
                                     if ( !bOK )
                                     {
-                                        ::rtl::OUString aErrStr( ResId::toString( IDEResId( RID_STR_NOIMPORT ) ) );
+                                        ::rtl::OUString aErrStr( IDE_RESSTR(RID_STR_NOIMPORT) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                         continue;

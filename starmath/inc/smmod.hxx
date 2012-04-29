@@ -69,6 +69,8 @@ public:
     SmResId(sal_uInt16 nId);
 };
 
+#define SM_RESSTR(x) SmResId(x).toString()
+
 class SmNamesArray : public Resource
 {
     ResStringArray      aNamesAry;

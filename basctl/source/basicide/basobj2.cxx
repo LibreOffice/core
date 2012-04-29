@@ -179,7 +179,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
     if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2) );
         aError.Execute();
         return false;
     }
@@ -187,7 +187,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_BADSBXNAME ) ) );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) );
         aError.Execute();
         return false;
     }

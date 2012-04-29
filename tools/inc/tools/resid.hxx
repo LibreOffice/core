@@ -29,8 +29,9 @@
 #ifndef _TOOLS_RESID_HXX
 #define _TOOLS_RESID_HXX
 
-#include <tools/solar.h>
 #include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include "tools/toolsdllapi.h"
 
 struct RSHEADER_TYPE;
@@ -43,10 +44,6 @@ class ResMgr;
 //---------
 //- ResId -
 //---------
-
-namespace rtl {
-    class OUString;
-}
 
 class ResId
 {
@@ -164,7 +161,8 @@ class ResId
     sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
 
-    static TOOLS_DLLPUBLIC rtl::OUString toString(const ResId& rId);
+    TOOLS_DLLPUBLIC rtl::OUString toString() const;
+    TOOLS_DLLPUBLIC operator rtl::OUString() const { return toString(); }
 };
 
 #endif // _RESID_HXX

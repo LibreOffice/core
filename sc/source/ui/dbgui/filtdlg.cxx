@@ -113,12 +113,12 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ),
         aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
-        aStrUndefined   ( ResId::toString(ScResId(SCSTR_UNDEFINED)) ),
-        aStrNone        ( ResId::toString(ScResId(SCSTR_NONE)) ),
-        aStrEmpty       ( ResId::toString(ScResId(SCSTR_EMPTY)) ),
-        aStrNotEmpty    ( ResId::toString(ScResId(SCSTR_NOTEMPTY)) ),
-        aStrRow         ( ResId::toString(ScResId(SCSTR_ROW)) ),
-        aStrColumn      ( ResId::toString(ScResId(SCSTR_COLUMN)) ),
+        aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
+        aStrNone        ( SC_RESSTR(SCSTR_NONE) ),
+        aStrEmpty       ( SC_RESSTR(SCSTR_EMPTY) ),
+        aStrNotEmpty    ( SC_RESSTR(SCSTR_NOTEMPTY) ),
+        aStrRow         ( SC_RESSTR(SCSTR_ROW) ),
+        aStrColumn      ( SC_RESSTR(SCSTR_COLUMN) ),
         //
         pOptionsMgr     ( NULL ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
@@ -143,7 +143,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     OUStringBuffer aBuf;
 
-    OUString sAccName = ResId::toString(ScResId(RID_FILTER_OPERATOR));
+    OUString sAccName = SC_RESSTR(RID_FILTER_OPERATOR);
     aBuf.append(sAccName);
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
     aLbConnect1.SetAccessibleName(aBuf.makeStringAndClear());
@@ -151,7 +151,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
     aLbConnect2.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = ResId::toString(ScResId(RID_FILTER_FIELDNAME));
+    sAccName = SC_RESSTR(RID_FILTER_FIELDNAME);
     aBuf.append(sAccName);
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
     aLbField1.SetAccessibleName(aBuf.makeStringAndClear());
@@ -162,7 +162,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
     aLbField3.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = ResId::toString(ScResId(RID_FILTER_CONDITION));
+    sAccName = SC_RESSTR(RID_FILTER_CONDITION);
     aBuf.append(sAccName);
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
     aLbCond1.SetAccessibleName(aBuf.makeStringAndClear());
@@ -173,7 +173,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
     aLbCond3.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = ResId::toString(ScResId(RID_FILTER_VALUE));
+    sAccName = SC_RESSTR(RID_FILTER_VALUE);
     aBuf.append(sAccName);
     aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
     aEdVal1.SetAccessibleName(aBuf.makeStringAndClear());

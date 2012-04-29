@@ -76,8 +76,7 @@ CollatorRessource::CollatorRessource()
     mp_Data = new CollatorRessourceData[COLLATOR_RESSOURCE_COUNT];
 
     #define ASCSTR(str) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(str))
-    #define RESSTR(rid) ResId::toString(SvtResId(rid))
-
+    #define RESSTR(rid) SvtResId(rid).toString()
 
     mp_Data[0] = CollatorRessourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
     mp_Data[1] = CollatorRessourceData (ASCSTR("charset"), RESSTR(STR_SVT_COLLATE_CHARSET));

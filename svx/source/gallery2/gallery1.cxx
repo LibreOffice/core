@@ -77,7 +77,7 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
     SetModified( _bNewFile );
 
     if( nId && bThemeNameFromResource )
-        aName = String( GAL_RESID( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId ) );
+        aName = GAL_RESSTR( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId );
 
     if( aName.isEmpty() )
         aName = rName;

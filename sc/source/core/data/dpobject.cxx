@@ -1081,7 +1081,7 @@ void ScDPObject::FillPageList( std::vector<rtl::OUString>& rStrings, long nField
     }
 
     //  add "-all-" entry to the top (unsorted)
-    rStrings.insert(rStrings.begin(), ScResId::toString(ScResId(SCSTR_ALL)));
+    rStrings.insert(rStrings.begin(), SC_RESSTR(SCSTR_ALL));
 }
 
 void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHeaderData& rData)

@@ -65,9 +65,9 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const rtl::OUString& rDefault)
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
 
-        maStrTabNameUsed( ResId::toString(ScResId(STR_TABNAME_WARN_USED)) ),
-        maStrTabNameEmpty( ResId::toString(ScResId(STR_TABNAME_WARN_EMPTY)) ),
-        maStrTabNameInvalid( ResId::toString(ScResId(STR_TABNAME_WARN_INVALID)) ),
+        maStrTabNameUsed( SC_RESSTR(STR_TABNAME_WARN_USED) ),
+        maStrTabNameEmpty( SC_RESSTR(STR_TABNAME_WARN_EMPTY) ),
+        maStrTabNameInvalid( SC_RESSTR(STR_TABNAME_WARN_INVALID) ),
         //
         maDefaultName( rDefault ),
         mnCurrentDocPos( 0 ),

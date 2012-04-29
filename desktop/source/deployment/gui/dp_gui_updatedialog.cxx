@@ -530,18 +530,18 @@ UpdateDialog::UpdateDialog(
     m_help(this, DpGuiResId(RID_DLG_UPDATE_HELP)),
     m_ok(this, DpGuiResId(RID_DLG_UPDATE_OK)),
     m_close(this, DpGuiResId(RID_DLG_UPDATE_CLOSE)),
-    m_error(ResId::toString(DpGuiResId(RID_DLG_UPDATE_ERROR))),
-    m_none(ResId::toString(DpGuiResId(RID_DLG_UPDATE_NONE))),
-    m_noInstallable(ResId::toString(DpGuiResId(RID_DLG_UPDATE_NOINSTALLABLE))),
-    m_failure(ResId::toString(DpGuiResId(RID_DLG_UPDATE_FAILURE))),
-    m_unknownError(ResId::toString(DpGuiResId(RID_DLG_UPDATE_UNKNOWNERROR))),
-    m_noDescription(ResId::toString(DpGuiResId(RID_DLG_UPDATE_NODESCRIPTION))),
-    m_noInstall(ResId::toString(DpGuiResId(RID_DLG_UPDATE_NOINSTALL))),
-    m_noDependency(ResId::toString(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY))),
-    m_noDependencyCurVer(ResId::toString(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER))),
-    m_browserbased(ResId::toString(DpGuiResId(RID_DLG_UPDATE_BROWSERBASED))),
-    m_version(ResId::toString(DpGuiResId(RID_DLG_UPDATE_VERSION))),
-    m_ignoredUpdate(ResId::toString(DpGuiResId(RID_DLG_UPDATE_IGNORED_UPDATE))),
+    m_error(DPGUI_RESSTR(RID_DLG_UPDATE_ERROR)),
+    m_none(DPGUI_RESSTR(RID_DLG_UPDATE_NONE)),
+    m_noInstallable(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALLABLE)),
+    m_failure(DPGUI_RESSTR(RID_DLG_UPDATE_FAILURE)),
+    m_unknownError(DPGUI_RESSTR(RID_DLG_UPDATE_UNKNOWNERROR)),
+    m_noDescription(DPGUI_RESSTR(RID_DLG_UPDATE_NODESCRIPTION)),
+    m_noInstall(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALL)),
+    m_noDependency(DPGUI_RESSTR(RID_DLG_UPDATE_NODEPENDENCY)),
+    m_noDependencyCurVer(DPGUI_RESSTR(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER)),
+    m_browserbased(DPGUI_RESSTR(RID_DLG_UPDATE_BROWSERBASED)),
+    m_version(DPGUI_RESSTR(RID_DLG_UPDATE_VERSION)),
+    m_ignoredUpdate(DPGUI_RESSTR(RID_DLG_UPDATE_IGNORED_UPDATE)),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
@@ -619,9 +619,9 @@ short UpdateDialog::Execute() {
 UpdateDialog::CheckListBox::CheckListBox( UpdateDialog & dialog, ResId const & resource,
                                           Image const & normalStaticImage ):
     SvxCheckListBox( &dialog, resource, normalStaticImage ),
-    m_ignoreUpdate( ResId::toString( DpGuiResId( RID_DLG_UPDATE_IGNORE ) ) ),
-    m_ignoreAllUpdates( ResId::toString( DpGuiResId( RID_DLG_UPDATE_IGNORE_ALL ) ) ),
-    m_enableUpdate( ResId::toString( DpGuiResId( RID_DLG_UPDATE_ENABLE ) ) ),
+    m_ignoreUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
+    m_ignoreAllUpdates( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),
+    m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
     m_dialog(dialog)
 {}
 

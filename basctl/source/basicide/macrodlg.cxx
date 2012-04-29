@@ -381,7 +381,7 @@ SbMethod* MacroChooser::CreateMacro()
         if ( aModName.Len() )
         {
             // extract the module name from the string like "Sheet1 (Example1)"
-            if( aDesc.GetLibSubName() == ResId::toString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) )
+            if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
             {
                 sal_uInt16 nIndex = 0;
                 aModName = aModName.GetToken( 0, ' ', nIndex );
@@ -704,7 +704,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         String aLib( aDesc.GetLibName() );
         String aMod( aDesc.GetName() );
         // extract the module name from the string like "Sheet1 (Example1)"
-        if( aDesc.GetLibSubName() == ResId::toString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) )
+        if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
         {
             sal_uInt16 nIndex = 0;
             aMod = aMod.GetToken( 0, ' ', nIndex );

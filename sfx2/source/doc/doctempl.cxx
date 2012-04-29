@@ -599,8 +599,8 @@ OUString SfxDocumentTemplates::ConvertResourceString (
 {
     for( int i = 0; i < nCount; ++i )
     {
-        if( rString == ResId::toString( SfxResId( nSourceResIds + i) ) )
-            return ResId::toString( SfxResId( nDestResIds + i ) );
+        if( rString == SFX2_RESSTR(nSourceResIds + i))
+            return SFX2_RESSTR(nDestResIds + i);
     }
     return rString;
 }

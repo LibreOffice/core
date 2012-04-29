@@ -38,6 +38,8 @@ public:
     SdResId(sal_uInt16 nId);
 };
 
+#define SD_RESSTR(x) SdResId(x).toString()
+
 #endif /* _SD_SDRESID_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

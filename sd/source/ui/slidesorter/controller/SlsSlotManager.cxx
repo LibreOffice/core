@@ -832,7 +832,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     String aLayoutStr;
 
     if (nSelectedPages > 0)
-        aPageStr = rtl::OUString(ResId::toString(SdResId(STR_SD_PAGE)));
+        aPageStr = SD_RESSTR(STR_SD_PAGE);
 
     if (nSelectedPages == 1)
     {

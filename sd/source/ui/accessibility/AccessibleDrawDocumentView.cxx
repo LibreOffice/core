@@ -393,26 +393,26 @@ void SAL_CALL
             {
                 SolarMutexGuard aGuard;
 
-                sName = ResId::toString(SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
+                sName = SD_RESSTR(SID_SD_A11Y_I_DRAWVIEW_N);
             }
             else
             {
                 SolarMutexGuard aGuard;
 
-                sName = ResId::toString( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
+                sName = SD_RESSTR(SID_SD_A11Y_D_DRAWVIEW_N);
             }
         }
         else if ( sFirstService == "com.sun.star.presentation.NotesView" )
         {
             SolarMutexGuard aGuard;
 
-            sName = ResId::toString( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
+            sName = SD_RESSTR(SID_SD_A11Y_I_NOTESVIEW_N);
         }
         else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
         {
             SolarMutexGuard aGuard;
 
-            sName = ResId::toString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
+            sName = SD_RESSTR(SID_SD_A11Y_I_HANDOUTVIEW_N);
         }
         else
         {
@@ -449,26 +449,26 @@ void SAL_CALL
             {
                 SolarMutexGuard aGuard;
 
-                sDescription = ResId::toString( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
+                sDescription = SD_RESSTR(SID_SD_A11Y_I_DRAWVIEW_D);
             }
             else
             {
                 SolarMutexGuard aGuard;
 
-                sDescription = ResId::toString( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
+                sDescription = SD_RESSTR(SID_SD_A11Y_D_DRAWVIEW_D);
             }
         }
         else if ( sFirstService == "com.sun.star.presentation.NotesView" )
         {
             SolarMutexGuard aGuard;
 
-            sDescription = ResId::toString( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
+            sDescription = SD_RESSTR(SID_SD_A11Y_I_NOTESVIEW_D);
         }
         else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
         {
             SolarMutexGuard aGuard;
 
-            sDescription = ResId::toString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
+            sDescription = SD_RESSTR(SID_SD_A11Y_I_HANDOUTVIEW_D);
         }
         else
         {

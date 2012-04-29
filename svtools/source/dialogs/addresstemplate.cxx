@@ -181,7 +181,7 @@ public:
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOGICAL_FIELD_NAMES)));
+        rtl::OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
         sal_Int32 nIndex = 0;
         do
         {
@@ -565,7 +565,7 @@ void AssignmentPersistentData::Commit()
         ,m_aOK                      (this, SvtResId(PB_OK))\
         ,m_aCancel                  (this, SvtResId(PB_CANCEL))\
         ,m_aHelp                    (this, SvtResId(PB_HELP))\
-        ,m_sNoFieldSelection(SvtResId(STR_NO_FIELD_SELECTION))\
+        ,m_sNoFieldSelection(SVT_RESSTR(STR_NO_FIELD_SELECTION))\
         ,m_xORB(_rxORB)
 
     // -------------------------------------------------------------------
@@ -622,37 +622,37 @@ void AssignmentPersistentData::Commit()
         // should be adjustable with a rather small effort.)
 
         // initialize the strings for the field labels
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_FIRSTNAME )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_LASTNAME )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_COMPANY)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_DEPARTMENT )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_STREET )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_ZIPCODE )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_CITY )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_STATE)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_COUNTRY )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_HOMETEL )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_WORKTEL )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_OFFICETEL)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_MOBILE)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_TELOTHER)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_PAGER)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_FAX )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_EMAIL )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_URL )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_TITLE )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_POSITION )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_INITIALS )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_ADDRFORM )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_SALUTATION )) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_ID)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_CALENDAR)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_INVITE)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_NOTE)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER1)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER2)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER3)) );
-        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER4)) );
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_FIRSTNAME ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_LASTNAME ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_COMPANY));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_DEPARTMENT ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_STREET ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_ZIPCODE ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_CITY ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_STATE));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_COUNTRY ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_HOMETEL ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_WORKTEL ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_OFFICETEL));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_MOBILE));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_TELOTHER));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_PAGER));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_FAX ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_EMAIL ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_URL ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_TITLE ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_POSITION ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_INITIALS ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_ADDRFORM ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_SALUTATION ));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_ID));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_CALENDAR));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_INVITE));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_NOTE));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_USER1));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_USER2));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_USER3));
+        m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_USER4));
 
         // force a even number of known fields
         m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
@@ -691,7 +691,7 @@ void AssignmentPersistentData::Commit()
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
-        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOGICAL_FIELD_NAMES)));
+        rtl::OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");

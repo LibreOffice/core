@@ -38,7 +38,7 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
     maEdit( this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP ),
     maButton( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ),
-    maButtonText( SvtResId( STR_FILECTRL_BUTTONTEXT ) ),
+    maButtonText( SVT_RESSTR(STR_FILECTRL_BUTTONTEXT) ),
     mnFlags( nFlags ),
     mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT )
 {

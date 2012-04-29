@@ -3483,8 +3483,8 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 //-----------------------------------------------
 void AutoRecovery::impl_showFullDiscError()
 {
-    rtl::OUString sBtn(ResId::toString(FwkResId(STR_FULL_DISC_RETRY_BUTTON)));
-    rtl::OUString sMsg(ResId::toString(FwkResId(STR_FULL_DISC_MSG)));
+    rtl::OUString sBtn(FWK_RESSTR(STR_FULL_DISC_RETRY_BUTTON));
+    rtl::OUString sMsg(FWK_RESSTR(STR_FULL_DISC_MSG));
 
     rtl::OUString sBackupURL(SvtPathOptions().GetBackupPath());
     INetURLObject aConverter(sBackupURL);

@@ -185,7 +185,7 @@ sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr
 void ColorListBox::InsertAutomaticEntryColor(const Color &rColor)
 {
     // insert the "Automatic"-entry always on the first position
-    InsertEntry( rColor, SvtResId( STR_SVT_AUTOMATIC_COLOR ), 0 );
+    InsertEntry( rColor, SVT_RESSTR(STR_SVT_AUTOMATIC_COLOR), 0 );
 }
 
 // -----------------------------------------------------------------------

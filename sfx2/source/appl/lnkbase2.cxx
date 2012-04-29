@@ -494,7 +494,7 @@ bool SvBaseLink::ExecuteEdit( const String& _rNewName )
             pImpl->m_pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
             if( nObjType == OBJECT_CLIENT_DDE )
             {
-                sError = SfxResId( STR_DDE_ERROR );
+                sError = SFX2_RESSTR(STR_DDE_ERROR);
 
                 sal_uInt16 nFndPos = sError.Search( '%' );
                 if( STRING_NOTFOUND != nFndPos )

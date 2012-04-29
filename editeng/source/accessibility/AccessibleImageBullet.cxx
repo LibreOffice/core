@@ -169,7 +169,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         // Get the string from the resource for the specified id.
-        return ::rtl::OUString( String( EditResId (RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION) ) );
+        return EE_RESSTR(RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION);
     }
 
     ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
@@ -179,7 +179,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         // Get the string from the resource for the specified id.
-        return ::rtl::OUString( String ( EditResId (RID_SVXSTR_A11Y_IMAGEBULLET_NAME) ) );
+        return EE_RESSTR(RID_SVXSTR_A11Y_IMAGEBULLET_NAME);
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet() throw (uno::RuntimeException)

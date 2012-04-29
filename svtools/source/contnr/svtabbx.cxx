@@ -468,7 +468,7 @@ String SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
                     {
                         String sRet = static_cast<SvLBoxString*>( pStr )->GetText();
                         if ( sRet.Len() == 0 )
-                            sRet = String( SvtResId( STR_SVT_ACC_EMPTY_FIELD ) );
+                            sRet = SVT_RESSTR( STR_SVT_ACC_EMPTY_FIELD );
                         return sRet;
                     }
                     --nCol;
@@ -1121,7 +1121,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
             sal_Int32 nRow = _nPos / nColumnCount;
             sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
-            String aText( SvtResId( STR_SVT_ACC_DESC_TABLISTBOX ) );
+            String aText( SVT_RESSTR(STR_SVT_ACC_DESC_TABLISTBOX) );
             aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
             String sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
             if ( sColHeader.Len() == 0 )

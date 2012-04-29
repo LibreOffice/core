@@ -282,7 +282,7 @@ LoginDialog::LoginDialog
     UniString aRequest;
     if ((nFlags & LF_NO_ACCOUNT) != 0 && !rRealm.isEmpty())
     {
-        aRequest = ResId::toString(ResId(STR_LOGIN_REALM, *pResMgr));
+        aRequest = ResId(STR_LOGIN_REALM, *pResMgr).toString();
         aRequest.SearchAndReplaceAscii("%2", rRealm);
     }
     else

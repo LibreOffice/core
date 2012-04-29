@@ -254,9 +254,8 @@ namespace dbmm
         ::rtl::OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
         {
             ::rtl::OUString sObjectName(
-                ResId::toString(
                     MacroMigrationResId(
-                        _rDocument.eType == eForm ? STR_FORM : STR_REPORT)).
+                        _rDocument.eType == eForm ? STR_FORM : STR_REPORT).toString().
                 replaceFirst("$name$", _rDocument.sHierarchicalName));
             return sObjectName;
         }
@@ -1028,7 +1027,7 @@ namespace dbmm
         // initialize global progress
         sal_Int32 nOverallRange( m_aSubDocs.size() );
         rtl::OUString sProgressSkeleton(
-            ResId::toString(MacroMigrationResId( STR_OVERALL_PROGRESS)).
+            MacroMigrationResId( STR_OVERALL_PROGRESS).toString().
             replaceFirst("$overall$", rtl::OUString::valueOf(nOverallRange)));
 
         m_rProgress.start( nOverallRange );
@@ -1157,7 +1156,7 @@ namespace dbmm
 
         // -----------------
         // migrate the libraries
-        ProgressDelegator aDelegator(m_rProgress, sObjectName, ResId::toString(MacroMigrationResId(STR_MIGRATING_LIBS)));
+        ProgressDelegator aDelegator(m_rProgress, sObjectName, MacroMigrationResId(STR_MIGRATING_LIBS).toString());
         ProgressMixer aProgressMixer( aDelegator );
         aProgressMixer.registerPhase( PHASE_JAVASCRIPT, 1 );
         aProgressMixer.registerPhase( PHASE_BEANSHELL, 1 );
@@ -1930,7 +1929,7 @@ namespace dbmm
     {
         // a human-readable description of the affected library
         ::rtl::OUString sLibraryDescription(
-            ResId::toString(MacroMigrationResId(STR_LIBRARY_TYPE_AND_NAME)).
+            MacroMigrationResId(STR_LIBRARY_TYPE_AND_NAME).toString().
             replaceFirst("$type$",
                 getScriptTypeDisplayName(_eScriptType)).
             replaceFirst("$library$", _rLibraryName));

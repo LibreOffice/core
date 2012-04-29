@@ -214,7 +214,7 @@ const String SgaObject::GetTitle() const
                     aResId.SetRT( RSC_STRING );
                     if ( pResMgr->IsAvailable( aResId ) )
                     {
-                        aReturnValue = String( aResId );
+                        aReturnValue = aResId.toString();
                     }
                     delete pResMgr;
                 }
@@ -363,7 +363,7 @@ Bitmap SgaObjectSound::GetThumbBmp() const
         break;
     }
 
-    const BitmapEx  aBmpEx( GAL_RESID( nId ) );
+    const BitmapEx  aBmpEx( GAL_RES( nId ) );
     const Color     aTransColor( COL_WHITE );
 
     return aBmpEx.GetBitmap( &aTransColor );

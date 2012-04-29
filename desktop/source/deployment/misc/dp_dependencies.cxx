@@ -95,8 +95,7 @@ rtl::OUString produceErrorText(
 {
     return reason.replaceFirst("%VERSION",
         (version.isEmpty()
-         ? ResId::toString(
-             dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN))
+         ?  dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN).toString()
          : version));
 }
 
@@ -167,22 +166,19 @@ rtl::OUString getErrorText(
     if ( dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == minimalVersionOpenOfficeOrg )
     {
         return produceErrorText(
-            ResId::toString(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN)),
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN).toString(),
             dependency->getAttribute(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
     } else if (dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == maximalVersionOpenOfficeOrg )
     {
         return produceErrorText(
-            ResId::toString(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX)),
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX).toString(),
             dependency->getAttribute(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
     } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == minimalVersionLibreOffice )
     {
         return produceErrorText(
-            ResId::toString(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN)),
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN).toString(),
             dependency->getAttribute(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
     } else if (dependency->hasAttributeNS(
@@ -193,16 +189,14 @@ rtl::OUString getErrorText(
                            minimalVersionOpenOfficeOrg))))
     {
         return produceErrorText(
-            ResId::toString(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN)),
+                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN).toString(),
             dependency->getAttributeNS(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(namespaceOpenOfficeOrg)),
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(minimalVersionOpenOfficeOrg))));
     } else {
-        return ResId::toString(
-            dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN));
+        return dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN).toString();
     }
 }
 

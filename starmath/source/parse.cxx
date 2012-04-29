@@ -2518,7 +2518,7 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
         default:
             nRID = RID_ERR_UNKOWN;
     }
-    pErrDesc->Text += SmResId(nRID);
+    pErrDesc->Text += SM_RESSTR(nRID);
 
     m_aErrDescList.push_back( pErrDesc );
 

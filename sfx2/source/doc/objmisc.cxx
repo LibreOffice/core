@@ -869,7 +869,7 @@ String SfxObjectShell::GetTitle
             return X(pImp->aTitle);
 
         // must it be numbered?
-        rtl::OUString aNoName(ResId::toString(SfxResId(STR_NONAME)));
+        rtl::OUString aNoName(SFX2_RESSTR(STR_NONAME));
         if (pImp->bIsNamedVisible)
         {
             // Append number

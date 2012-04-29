@@ -57,7 +57,7 @@ EDITENG_DLLPUBLIC sal_uInt16 GetMetricId( SfxMapUnit eUnit );
 
 inline String GetBoolString( sal_Bool bVal )
 {
-    return String( EditResId( bVal ? RID_SVXITEMS_TRUE : RID_SVXITEMS_FALSE ) );
+    return EE_RESSTR(bVal ? RID_SVXITEMS_TRUE : RID_SVXITEMS_FALSE);
 }
 
 // -----------------------------------------------------------------------

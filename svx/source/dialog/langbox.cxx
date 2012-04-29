@@ -68,7 +68,7 @@ String GetDicInfoStr( const String& rName, const sal_uInt16 nLang, sal_Bool bNeg
     }
 
     if ( LANGUAGE_NONE == nLang )
-        aTmp += String( ResId( RID_SVXSTR_LANGUAGE_ALL, DIALOG_MGR() ) );
+        aTmp += SVX_RESSTR(RID_SVXSTR_LANGUAGE_ALL);
     else
     {
         aTmp += sal_Unicode( '[' );

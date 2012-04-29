@@ -57,7 +57,7 @@ private:
     CancelButton        aCancelButton;
 
     String aVersionData;
-    rtl::OUString aVersionTextStr;
+    rtl::OUString m_aVersionTextStr;
     String m_aVendorTextStr;
     String m_aCopyrightTextStr;
     String m_aBasedTextStr;

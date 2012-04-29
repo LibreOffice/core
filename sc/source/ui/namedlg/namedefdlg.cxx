@@ -76,7 +76,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
     maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
     maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
-    maStrInfoDefault ( ResId::toString(ScResId(STR_DEFAULT_INFO))),
+    maStrInfoDefault ( SC_RESSTR(STR_DEFAULT_INFO)),
     maRangeMap( aRangeMap )
 {
     // Initialize scope list.

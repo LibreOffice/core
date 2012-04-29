@@ -127,7 +127,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
         {
             ::rtl::OUStringBuffer aPageStr;
             aPageStr.appendAscii( RTL_CONSTASCII_STRINGPARAM( " [" ) );
-            aPageStr.append(ResId::toString( IDEResId( RID_STR_PAGE ) ));
+            aPageStr.append(IDE_RESSTR(RID_STR_PAGE));
             aPageStr.append(' ');
             aPageStr.append( nCurPage );
             aPageStr.append(']');
@@ -303,7 +303,7 @@ sal_Bool ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            WarningBox( this, WB_OK, ResId::toString( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
+            WarningBox( this, WB_OK, IDE_RESSTR(RID_STR_CANNOTRUNMACRO)).Execute();
             return sal_False;
         }
     }
@@ -440,7 +440,7 @@ sal_Bool ModulWindow::LoadBasic()
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( ResId::toString(IDEResId( RID_STR_FILTER_ALLFILES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
     xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
 
     if( xFP->execute() == RET_OK )
@@ -468,7 +468,7 @@ sal_Bool ModulWindow::LoadBasic()
                 bDone = sal_True;
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_COULDNTREAD ) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_COULDNTREAD) ).Execute();
     }
     return bDone;
 }
@@ -500,7 +500,7 @@ sal_Bool ModulWindow::SaveBasicSource()
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( ResId::toString(IDEResId( RID_STR_FILTER_ALLFILES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
     xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
 
     if( xFP->execute() == RET_OK )
@@ -677,10 +677,10 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
 
     ::rtl::OUStringBuffer aErrorTextPrefixBuf;
     if( pBasic->IsCompilerError() )
-        aErrorTextPrefixBuf.append(ResId::toString(IDEResId(RID_STR_COMPILEERROR)));
+        aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_COMPILEERROR));
     else
     {
-        aErrorTextPrefixBuf.append(ResId::toString(IDEResId(RID_STR_RUNTIMEERROR)));
+        aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_RUNTIMEERROR));
         aErrorTextPrefixBuf.append(StarBASIC::GetVBErrorCode(pBasic->GetErrorCode()));
         aErrorTextPrefixBuf.append(' ');
         pLayout->GetStackWindow().UpdateCalls();

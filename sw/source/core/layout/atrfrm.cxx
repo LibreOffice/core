@@ -3202,7 +3202,7 @@ String SwDrawFrmFmt::GetDescription() const
         aResult = sSdrObjCachedComment;
     }
     else
-        aResult = SW_RES(STR_GRAPHIC);
+        aResult = SW_RESSTR(STR_GRAPHIC);
 
     return aResult;
 }

@@ -55,6 +55,8 @@ namespace
     };
 }
 
+#define SVT_RESSTR(i)    SvtResId(i).toString()
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

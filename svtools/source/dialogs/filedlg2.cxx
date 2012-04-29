@@ -150,7 +150,7 @@ ImpPathDialog::~ImpPathDialog()
 void ImpPathDialog::InitControls()
 {
     PathDialog* pDlg = GetPathDialog();
-    pDlg->SetText( UniString( SvtResId( STR_FILEDLG_SELECT ) ) );
+    pDlg->SetText( SVT_RESSTR(STR_FILEDLG_SELECT) );
 
     Size a3Siz = pDlg->LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
     Size a6Siz = pDlg->LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
@@ -163,7 +163,7 @@ void ImpPathDialog::InitControls()
     UniString aEmptyStr;
 
     INITCONTROL( pDirTitel, FixedText, 0,
-                 aPnt, aFTSiz, UniString( SvtResId( STR_FILEDLG_DIR ) ), HID_FILEDLG_DIR );
+                 aPnt, aFTSiz, SVT_RESSTR( STR_FILEDLG_DIR ), HID_FILEDLG_DIR );
     aPnt.Y() += aFTSiz.Height() + a3Siz.Height();
 
     INITCONTROL( pEdit, Edit, WB_BORDER, aPnt, aEDSiz, aPath.GetFull(), HID_FILEDLG_EDIT );
@@ -175,7 +175,7 @@ void ImpPathDialog::InitControls()
         aPnt, Size( aEDSiz.Width(), nLbH1 ), aEmptyStr, HID_FILEDLG_DIRS );
     aPnt.Y() += nLbH1 + a6Siz.Height();
     INITCONTROL( pDriveTitle, FixedText, 0,
-                 aPnt, aFTSiz, UniString( SvtResId( STR_FILEDLG_DRIVES ) ), HID_FILEDLG_DRIVE );
+                 aPnt, aFTSiz, SVT_RESSTR( STR_FILEDLG_DRIVES ), HID_FILEDLG_DRIVE );
     aPnt.Y() += aFTSiz.Height() + a3Siz.Height();
     INITCONTROL( pDriveList, ListBox, WB_DROPDOWN,
                  aPnt, Size( aEDSiz.Width(), nLbH2 ), aEmptyStr, HID_FILEDLG_DRIVES );
@@ -201,12 +201,12 @@ void ImpPathDialog::InitControls()
     if( nTextWidth > aBtnSiz.Width() )
         aBtnSiz.Width() = nTextWidth;
 
-    String aNewDirStr( SvtResId( STR_FILEDLG_NEWDIR ) );
+    String aNewDirStr( SVT_RESSTR( STR_FILEDLG_NEWDIR ) );
     nTextWidth = pDlg->GetTextWidth( aNewDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
         aBtnSiz.Width() = nTextWidth;
 #if defined(UNX)
-    String aHomeDirStr( SvtResId( STR_FILEDLG_HOME ) );
+    String aHomeDirStr( SVT_RESSTR( STR_FILEDLG_HOME ) );
     nTextWidth = pDlg->GetTextWidth( aHomeDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
         aBtnSiz.Width() = nTextWidth;
@@ -405,7 +405,7 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
         {
             ErrorBox aBox( GetPathDialog(),
                            WB_OK_CANCEL | WB_DEF_OK,
-                           UniString( SvtResId( STR_FILEDLG_CANTCHDIR ) ) );
+                           SVT_RESSTR( STR_FILEDLG_CANTCHDIR ) );
             if( aBox.Execute() == RET_CANCEL )
                 GetPathDialog()->EndDialog( sal_False );
         }
@@ -508,7 +508,7 @@ sal_Bool ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
         // Datei vorhanden ?
         if( ! rDirEntry.Exists() )
         {
-            UniString aQueryTxt( SvtResId( STR_FILEDLG_ASKNEWDIR ) );
+            UniString aQueryTxt( SVT_RESSTR( STR_FILEDLG_ASKNEWDIR ) );
             aQueryTxt.SearchAndReplaceAscii( "%s", rDirEntry.GetFull() );
             QueryBox aQuery( GetPathDialog(),
                              WB_YES_NO | WB_DEF_YES,
@@ -520,7 +520,7 @@ sal_Bool ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
         }
         if( !FileStat( rDirEntry ).IsKind( FSYS_KIND_DIR ) )
         {
-            UniString aBoxText( SvtResId( STR_FILEDLG_CANTOPENDIR ) );
+            UniString aBoxText( SVT_RESSTR( STR_FILEDLG_CANTOPENDIR ) );
             aBoxText.AppendAscii( "\n[" );
             aBoxText += rDirEntry.GetFull();
             aBoxText.AppendAscii( "]" );

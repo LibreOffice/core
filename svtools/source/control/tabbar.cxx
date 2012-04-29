@@ -414,13 +414,13 @@ void TabBar::ImplInit( WinBits nWinStyle )
     ImplInitControls();
 
     if(mpFirstBtn)
-        mpFirstBtn->SetAccessibleName(String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVET0HOME)));
+        mpFirstBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
     if(mpPrevBtn)
-        mpPrevBtn->SetAccessibleName( String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVELEFT)));
+        mpPrevBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVELEFT));
     if(mpNextBtn)
-        mpNextBtn->SetAccessibleName(String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT)));
+        mpNextBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
     if(mpLastBtn)
-        mpLastBtn->SetAccessibleName( String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND)));
+        mpLastBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVETOEND));
 
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
     ImplInitSettings( sal_True, sal_True );

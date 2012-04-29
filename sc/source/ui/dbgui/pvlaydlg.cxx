@@ -129,8 +129,8 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aBtnOptions     ( this, ScResId( BTN_OPTIONS ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
 
-        aStrUndefined   (ScResId::toString(ScResId(SCSTR_UNDEFINED))),
-        aStrNewTable    (ScResId::toString(ScResId(SCSTR_NEWTABLE))),
+        aStrUndefined   (SC_RESSTR(SCSTR_UNDEFINED)),
+        aStrNewTable    (SC_RESSTR(SCSTR_NEWTABLE)),
 
         bIsDrag         ( false ),
 
@@ -177,7 +177,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
 
     aFuncNameArr.reserve( PIVOT_MAXFUNC );
     for ( sal_uInt16 i = 0; i < PIVOT_MAXFUNC; ++i )
-        aFuncNameArr.push_back(ScResId::toString(ScResId(i+1)));
+        aFuncNameArr.push_back(SC_RESSTR(i+1));
 
     aBtnMore.AddWindow( &aFlAreas );
     aBtnMore.AddWindow( &aFtInArea );

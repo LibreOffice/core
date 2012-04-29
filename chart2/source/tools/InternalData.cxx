@@ -105,8 +105,8 @@ void InternalData::createDefaultData()
     m_nColumnCount = nColumnCount;
     const sal_Int32 nSize = nColumnCount * nRowCount;
     // @todo: localize this!
-    const OUString aRowName( ::chart::SchResId::getResString( STR_ROW_LABEL ));
-    const OUString aColName( ::chart::SchResId::getResString( STR_COLUMN_LABEL ));
+    const OUString aRowName(SCH_RESSTR(STR_ROW_LABEL));
+    const OUString aColName(SCH_RESSTR(STR_COLUMN_LABEL));
 
     m_aData.resize( nSize );
     for( sal_Int32 i=0; i<nSize; ++i )

@@ -165,10 +165,10 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText += String::CreateFromInt32( nMinLead );
-            rText += String( EditResId( RID_SVXITEMS_HYPHEN_MINLEAD ) );
+            rText += EE_RESSTR( RID_SVXITEMS_HYPHEN_MINLEAD );
             rText += ',';
             rText += String::CreateFromInt32( nMinTrail );
-            rText += String( EditResId( RID_SVXITEMS_HYPHEN_MINTRAIL ) );
+            rText += EE_RESSTR( RID_SVXITEMS_HYPHEN_MINTRAIL );
             return ePres;
         }
         default:

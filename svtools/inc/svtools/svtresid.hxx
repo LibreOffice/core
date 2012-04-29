@@ -40,6 +40,8 @@ public:
     static void DeleteResMgr();
 };
 
+#define SVT_RESSTR(i)    SvtResId(i).toString()
+
 #endif //  _SVTOOLS_SVTRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

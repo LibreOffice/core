@@ -591,7 +591,7 @@ void DataBrowser::RenewTable()
     InsertHandleColumn( static_cast< sal_uInt16 >(
                             GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
 
-    OUString aDefaultSeriesName( ::chart::SchResId::getResString( STR_COLUMN_LABEL ));
+    OUString aDefaultSeriesName(SCH_RESSTR(STR_COLUMN_LABEL));
     replaceParamterInString( aDefaultSeriesName, C2U("%COLUMNNUMBER"), OUString::valueOf( sal_Int32(24) ) );
     sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
         + GetDataWindow().LogicToPixel( Point( 4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0 ), MAP_APPFONT ).X();

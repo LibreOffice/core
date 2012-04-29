@@ -93,7 +93,7 @@ SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePr
 
     case SFX_ITEM_PRESENTATION_NAMELESS:
     case SFX_ITEM_PRESENTATION_COMPLETE:
-        rText = String( EditResId( RID_SVXITEMS_FRMDIR_BEGIN + GetValue() ) );
+        rText = EE_RESSTR(RID_SVXITEMS_FRMDIR_BEGIN + GetValue());
         break;
 
     default:

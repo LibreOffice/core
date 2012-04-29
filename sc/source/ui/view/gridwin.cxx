@@ -705,13 +705,13 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the menu.
     mpAutoFilterPopup->addMenuItem(
-        ScResId::toString(ScResId(SCSTR_TOP10FILTER)), true, new AutoFilterAction(this, Top10));
+        SC_RESSTR(SCSTR_TOP10FILTER), true, new AutoFilterAction(this, Top10));
     mpAutoFilterPopup->addMenuItem(
-        ScResId::toString(ScResId(SCSTR_STDFILTER)), true, new AutoFilterAction(this, Custom));
+        SC_RESSTR(SCSTR_STDFILTER), true, new AutoFilterAction(this, Custom));
     mpAutoFilterPopup->addMenuItem(
-        ScResId::toString(ScResId(SCSTR_EMPTY)), true, new AutoFilterAction(this, Empty));
+        SC_RESSTR(SCSTR_EMPTY), true, new AutoFilterAction(this, Empty));
     mpAutoFilterPopup->addMenuItem(
-        ScResId::toString(ScResId(SCSTR_NOTEMPTY)), true, new AutoFilterAction(this, NonEmpty));
+        SC_RESSTR(SCSTR_NOTEMPTY), true, new AutoFilterAction(this, NonEmpty));
 
     ScCheckListMenuWindow::Config aConfig;
     aConfig.mbAllowEmptySet = false;

@@ -171,7 +171,7 @@ public:
 // ------------------------------------------------------------------------
 
 GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, sal_uIntPtr nObjectPos, sal_Bool bPreview ) :
-    PopupMenu           ( GAL_RESID( RID_SVXMN_GALLERY2 ) ),
+    PopupMenu           ( GAL_RES( RID_SVXMN_GALLERY2 ) ),
     SfxControllerItem   ( SID_GALLERY_ENABLE_ADDCOPY, SfxViewFrame::Current()->GetBindings() ),
     maBackgroundPopup   ( pTheme, nObjectPos ),
     mpTheme             ( pTheme ),
@@ -324,20 +324,20 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
-    maViewBox.SetQuickHelpText( TBX_ID_ICON, String( GAL_RESID( RID_SVXSTR_GALLERY_ICONVIEW ) ) );
+    maViewBox.SetQuickHelpText( TBX_ID_ICON, GAL_RESSTR(RID_SVXSTR_GALLERY_ICONVIEW) );
 
     maViewBox.InsertItem( TBX_ID_LIST, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_LIST, TIB_RADIOCHECK | TIB_AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
-    maViewBox.SetQuickHelpText( TBX_ID_LIST, String( GAL_RESID( RID_SVXSTR_GALLERY_LISTVIEW ) ) );
+    maViewBox.SetQuickHelpText( TBX_ID_LIST, GAL_RESSTR(RID_SVXSTR_GALLERY_LISTVIEW) );
 
     maViewBox.SetBorder( 0, 1 );
     MiscHdl( NULL );
     maViewBox.SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
     maViewBox.Show();
 
-    mpIconView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
-    mpListView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
+    mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
 
     maInfoBar.Show();
     maSeparator.Show();
@@ -648,9 +648,9 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
     mpListView = new GalleryListView( this, mpCurTheme );
     mpPreview = new GalleryPreview( this, mpCurTheme );
 
-    mpIconView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
-    mpListView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
-    mpPreview->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_PREVIEW ) ));
+    mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpPreview->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_PREVIEW));
 
     const Link aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
 
@@ -1013,7 +1013,7 @@ void GalleryBrowser2::ImplExecute( sal_uInt16 nId )
             case( MN_DELETE ):
             {
                 if( !mpCurTheme->IsReadOnly() &&
-                    QueryBox( NULL, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETEOBJ ) ) ).Execute() == RET_YES )
+                    QueryBox(NULL, WB_YES_NO, GAL_RESSTR(RID_SVXSTR_GALLERY_DELETEOBJ)).Execute() == RET_YES )
                 {
                     mpCurTheme->RemoveObject( mnCurActionPos );
                 }
@@ -1235,8 +1235,8 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
 {
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
-    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
-    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
+    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RES( RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
+    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RES( RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
 
     if( maMiscOptions.AreCurrentSymbolsLarge() )
     {

@@ -76,7 +76,7 @@ IndexEntryRessource::IndexEntryRessource()
         mp_Data = new IndexEntryRessourceData[INDEXENTRY_RESSOURCE_COUNT];
 
         #define ASCSTR(str) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(str))
-        #define RESSTR(rid) ResId::toString(SvtResId(rid))
+        #define RESSTR(rid) SvtResId(rid).toString()
 
         mp_Data[STR_SVT_INDEXENTRY_ALPHANUMERIC - STR_SVT_INDEXENTRY_START] =
         IndexEntryRessourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_INDEXENTRY_ALPHANUMERIC));

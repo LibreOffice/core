@@ -175,7 +175,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                         else
                             nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
 
-                        ::rtl::OUString aReplStr(ResId::toString(IDEResId(RID_STR_SEARCHREPLACES)));
+                        ::rtl::OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
                         aReplStr = aReplStr.replaceAll("XX", rtl::OUString::valueOf(nFound));
                         InfoBox( pCurWin, aReplStr ).Execute();
                     }
@@ -203,7 +203,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     SfxViewFrame* pViewFrame = GetViewFrame();
                                     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
                                     Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
-                                    QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, ResId::toString(IDEResId(RID_STR_SEARCHFROMSTART)));
+                                    QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
                                     if ( aQuery.Execute() == RET_YES )
                                     {
                                         it = aIDEWindowTable.begin();

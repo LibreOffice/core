@@ -3568,7 +3568,7 @@ void SwColumnFrm::PaintBreak( ) const
                     aSeq.realloc( aSeq.getLength( ) + 1 );
 
                     // Add the text above
-                    rtl::OUString aBreakText = ResId::toString( SW_RES( STR_COLUMN_BREAK ) );
+                    rtl::OUString aBreakText = SW_RESSTR(STR_COLUMN_BREAK);
 
                     basegfx::B2DVector aFontSize;
                     OutputDevice* pOut = pGlobalShell->GetOut();

@@ -679,7 +679,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                 }
 
                 // title for the next conditions
-                aTitle = SVX_RES( RID_STR_FILTER_FILTER_OR );
+                aTitle = SVX_RESSTR( RID_STR_FILTER_FILTER_OR );
             }
 
             // now add dependent controllers

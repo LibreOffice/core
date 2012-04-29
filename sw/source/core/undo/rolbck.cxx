@@ -130,13 +130,13 @@ String SwHistorySetFmt::GetDescription() const
         case SVX_BREAK_PAGE_BEFORE:
         case SVX_BREAK_PAGE_AFTER:
         case SVX_BREAK_PAGE_BOTH:
-            aResult = SW_RES(STR_UNDO_PAGEBREAKS);
+            aResult = SW_RESSTR(STR_UNDO_PAGEBREAKS);
 
             break;
         case SVX_BREAK_COLUMN_BEFORE:
         case SVX_BREAK_COLUMN_AFTER:
         case SVX_BREAK_COLUMN_BOTH:
-            aResult = SW_RES(STR_UNDO_COLBRKS);
+            aResult = SW_RESSTR(STR_UNDO_COLBRKS);
 
             break;
         default:

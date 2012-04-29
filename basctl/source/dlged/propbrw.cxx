@@ -324,8 +324,8 @@ void PropBrw::implSetNewObjectSequence
     {
         xObjectInspector->inspect( _rObjectSeq );
 
-        ::rtl::OUString aText = ResId::toString(IDEResId(RID_STR_BRWTITLE_PROPERTIES));
-        aText += ResId::toString(IDEResId(RID_STR_BRWTITLE_MULTISELECT));
+        ::rtl::OUString aText = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
+        aText += IDE_RESSTR(RID_STR_BRWTITLE_MULTISELECT);
         SetText( aText );
     }
 }
@@ -354,7 +354,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     if (xServiceInfo.is())    // single selection
     {
         sal_uInt16 nResId = 0;
-        aName = ResId::toString(IDEResId(RID_STR_BRWTITLE_PROPERTIES));
+        aName = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
 
         if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ) )
         {
@@ -447,12 +447,12 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 
         if (nResId)
         {
-            aName += ResId::toString(IDEResId(nResId));
+            aName += IDE_RESSTR(nResId);
         }
     }
     else if (!_rxObject.is())    // no properties
     {
-        aName = ResId::toString(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES));
+        aName = IDE_RESSTR(RID_STR_BRWTITLE_NO_PROPERTIES);
     }
 
     return aName;

@@ -4058,11 +4058,11 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     sal_Int32 nLength = aEvent.Rows;
     if ( nLength > 1 )
     {
-        sTitle = SVX_RES( RID_STR_DELETECONFIRM_RECORDS );
+        sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORDS );
         sTitle.SearchAndReplace( '#', String::CreateFromInt32( nLength ) );
     }
     else
-        sTitle = SVX_RES( RID_STR_DELETECONFIRM_RECORD );
+        sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORD );
 
     try
     {

@@ -88,7 +88,7 @@ ResMgr* GetGalleryResMgr()
 
 BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 {
-    BitmapEx aBmpEx( GAL_RESID( nId ) );
+    BitmapEx aBmpEx( GAL_RES( nId ) );
 
     if( !aBmpEx.IsTransparent() )
             aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
@@ -420,7 +420,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
                 if( mpFilter )
                 {
-                    aProgressText = String( GAL_RESID( RID_SVXSTR_GALLERY_FILTER ) );
+                    aProgressText = GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER);
 //                  mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
 //                                                                                              // so I am removing this. The gallery progress should
 //                                                                                              // be changed to use the XStatusIndicator instead of XProgressMonitor

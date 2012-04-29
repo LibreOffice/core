@@ -136,13 +136,13 @@ void BasicIDEShell::SetMDITitle()
         aTitleBuf.append(m_aCurLibName);
     }
     else
-        aTitleBuf.append(ResId::toString(IDEResId(RID_STR_ALL)));
+        aTitleBuf.append(IDE_RESSTR(RID_STR_ALL));
 
     ::basctl::DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
     {
         aTitleBuf.append(' ');
-        aTitleBuf.append(ResId::toString(IDEResId(RID_STR_SIGNED)));
+        aTitleBuf.append(IDE_RESSTR(RID_STR_SIGNED));
         aTitleBuf.append(' ');
     }
     ::rtl::OUString aTitle(aTitleBuf.makeStringAndClear());

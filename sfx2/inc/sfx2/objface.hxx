@@ -82,7 +82,7 @@ public:
     const char*             GetClassName() const { return pName; }
     bool                    HasName() const { return 0 != aNameResId.GetId(); }
     rtl::OUString           GetName() const
-                            { return HasName() ? ResId::toString(aNameResId) : rtl::OUString(); }
+                            { return HasName() ? aNameResId.toString() : rtl::OUString(); }
     ResMgr*                 GetResMgr() const
                             { return aNameResId.GetResMgr(); }
 

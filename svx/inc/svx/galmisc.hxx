@@ -84,7 +84,8 @@ enum SgaObjKind
 
 #define USERDATA_HDL()          (LINK(this,SgaUserDataFactory,MakeUserData))
 
-#define GAL_RESID( nId )        ResId( nId, *GetGalleryResMgr() )
+#define GAL_RES(nId)            ResId(nId, *GetGalleryResMgr())
+#define GAL_RESSTR(nId)         GAL_RES(nId).toString()
 #define STREAMBUF_SIZE          16384L
 
 #define SGA_IMPORT_NONE         0x0000
