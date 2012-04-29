@@ -40,6 +40,7 @@ $(eval $(call gb_SrsTarget_set_include,svt/res,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc \
     -I$(realpath $(SRCDIR)/svtools/source/inc) \
+    -I$(realpath $(SRCDIR)/svtools/inc) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/res,\
