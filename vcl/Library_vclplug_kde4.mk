@@ -35,11 +35,6 @@ $(eval $(call gb_Library_set_include,vclplug_kde4,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_Library_set_include,vclplug_kde4,\
-	$$(INCLUDE) \
-    $$(KDE4_CFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vclplug_kde4,\
     -DVCLPLUG_KDE4_IMPLEMENTATION \
 ))
@@ -50,7 +45,6 @@ $(eval $(call gb_Library_use_api,vclplug_kde4,\
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_kde4,\
-    $$(KDE4_LIBS) \
     -lkio -lkfile \
 ))
 
@@ -79,6 +73,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_kde4,\
 $(eval $(call gb_Library_use_externals,vclplug_kde4,\
 	icule \
 	icuuc \
+	kde4 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
@@ -91,11 +86,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDEXLib \
     vcl/unx/kde4/main \
     vcl/unx/kde4/VCLKDEApplication \
-))
-
-# KDE/Qt consider -Wshadow more trouble than benefit
-$(eval $(call gb_Library_add_cxxflags,vclplug_kde4,\
-    -Wno-shadow \
 ))
 
 ifeq ($(OS),LINUX)

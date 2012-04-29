@@ -46,10 +46,6 @@ $(eval $(call gb_Library_use_api,vclplug_kde,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_libs,vclplug_kde,\
-    $$(KDE_LIBS) \
-))
-
 $(eval $(call gb_Library_use_libraries,vclplug_kde,\
     vclplug_gen \
     vcl \
@@ -84,11 +80,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
 	vcl/unx/kde/UnxCommandThread \
 	vcl/unx/kde/UnxFilePicker \
 	vcl/unx/kde/UnxNotifyThread \
-))
-
-# KDE/Qt consider -Wshadow more trouble than benefit
-$(eval $(call gb_Library_add_cxxflags,vclplug_kde,\
-        -Wno-shadow \
 ))
 
 $(eval $(call gb_Library_set_warnings_not_errors,vclplug_kde))
