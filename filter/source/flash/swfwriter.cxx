@@ -364,10 +364,9 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
             nId = startSprite();
 
             sal_uInt16 iDepth = 1;
-            while( aIter != aEnd )
+            for(; aIter != aEnd; ++aIter)
             {
                 placeShape( *aIter, iDepth++, x, y );
-                aIter++;
             }
 
             endSprite();

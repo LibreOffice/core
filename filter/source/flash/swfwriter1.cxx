@@ -407,15 +407,13 @@ FlashFont& Writer::Impl_getFont( const Font& rFont )
     FontMap::iterator aIter( maFonts.begin() );
     const FontMap::iterator aEnd( maFonts.end() );
 
-    while( aIter != aEnd )
+    for(; aIter != aEnd; ++aIter)
     {
         const Font tempFont = (*aIter)->getFont();
         if( compare_fonts_for_me(tempFont, rFont) )
         {
             return **aIter;
         }
-
-        aIter++;
     }
 
     FlashFont* pFont = new FlashFont( rFont, createID() );
