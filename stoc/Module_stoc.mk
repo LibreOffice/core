@@ -46,7 +46,6 @@ $(eval $(call gb_Module_add_targets,stoc,\
     Library_proxyfac \
     Library_reflection \
     Library_stocservices \
-    Package_xml \
 ))
 
 ifeq ($(SOLAR_JAVA),TRUE)
