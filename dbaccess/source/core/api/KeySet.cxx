@@ -1229,7 +1229,7 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow )
             fillAllRows();
 
         for(;row < 0 && m_aKeyIter != m_aKeyMap.begin();++row)
-            m_aKeyIter--;
+            --m_aKeyIter;
     }
     else
     {
