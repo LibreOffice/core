@@ -46,6 +46,7 @@ $(eval $(call gb_SrsTarget_use_packages,svt/res,\
 $(eval $(call gb_SrsTarget_set_include,svt/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/svtools/source/inc \
+    -I$(SRCDIR)/svtools/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/res,\
