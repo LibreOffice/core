@@ -521,8 +521,12 @@ struct AnnotatingVisitor
         rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
         uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
+        if (XML_TEXT == nTagId)
+            rState.mbIsText = true;
         std::pair<StatePool::iterator,
                   bool> aRes = mrStates.insert(rState);
+        SAL_INFO ("svg", "size " << mrStates.size() << "   id " <<  const_cast<State&>(*aRes.first).mnStyleId);
+
         if( !aRes.second )
             return false; // not written
 
@@ -530,6 +534,8 @@ struct AnnotatingVisitor
 
         // mnStyleId does not take part in hashing/comparison
         const_cast<State&>(*aRes.first).mnStyleId = mnCurrStateId;
+        SAL_INFO ("svg", " --> " <<  const_cast<State&>(*aRes.first).mnStyleId);
+
         mrStateMap.insert(std::make_pair(
                               mnCurrStateId,
                               rState));
@@ -750,6 +756,7 @@ struct AnnotatingVisitor
 
     void writeStyle(const uno::Reference<xml::dom::XElement>& xElem, const sal_Int32 nTagId)
     {
+        SAL_INFO ("svg", "writeStyle xElem " << xElem->getTagName());
         sal_Int32 nEmulatedStyleId=0;
         if( maCurrState.maDashArray.size() &&
             maCurrState.meStrokeType != NONE )

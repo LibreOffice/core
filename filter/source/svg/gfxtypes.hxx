@@ -173,10 +173,11 @@ struct State
         maTransform(),
         maViewport(),
         maViewBox(),
+        mbIsText(false),
         maFontFamily(), // app-default
         mnFontSize(0),
-        maFontStyle(RTL_CONSTASCII_USTRINGPARAM("normal")),
-        maFontVariant(RTL_CONSTASCII_USTRINGPARAM("normal")),
+        maFontStyle("normal"),
+        maFontVariant("normal"),
         mnFontWeight(400.0),
         meTextAnchor(BEFORE),
         meTextDisplayAlign(BEFORE),
@@ -211,6 +212,7 @@ struct State
     basegfx::B2DRange           maViewport;
     basegfx::B2DRange           maViewBox;
 
+    bool                        mbIsText;
     rtl::OUString               maFontFamily;
     /** Absolute: xx-small=6.94 | x-small=8.33 | small=10 | medium=12 | large=14.4 | x-large=17.28 | xx-large=20.736
 
@@ -263,6 +265,7 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.maTransform==rRHS.maTransform &&
         rLHS.maViewport==rRHS.maViewport &&
         rLHS.maViewBox==rRHS.maViewBox &&
+        rLHS.mbIsText==rRHS.mbIsText &&
         rLHS.maFontFamily==rRHS.maFontFamily &&
         rLHS.mnFontSize==rRHS.mnFontSize &&
         rLHS.maFontStyle==rRHS.maFontStyle &&
@@ -309,6 +312,7 @@ struct StateHash
             ^  size_t(rState.maViewport.getHeight())
             ^  size_t(rState.maViewBox.getWidth())
             ^  size_t(rState.maViewBox.getHeight())
+            ^  size_t(rState.mbIsText)
             ^  size_t(rState.maFontFamily.hashCode())
             ^  size_t(rState.mnFontSize)
             ^  size_t(rState.maFontStyle.hashCode())
