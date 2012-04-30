@@ -312,19 +312,9 @@ namespace nullcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    uno::Reference< rendering::XBitmapPalette > CanvasHelper::getPalette()
-    {
-        // TODO(F1): Palette bitmaps NYI
-        return uno::Reference< rendering::XBitmapPalette >();
-    }
-
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
         return ::canvas::tools::getStdMemoryLayout(getSize());
-    }
-
-    void CanvasHelper::flush() const
-    {
     }
 
     bool CanvasHelper::hasAlpha() const

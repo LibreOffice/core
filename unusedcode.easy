@@ -652,8 +652,6 @@ binfilter::_ZSortFlys::Remove(binfilter::_ZSortFly const&, unsigned short)
 binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const&, unsigned short)
 binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const*, unsigned short, unsigned short)
 binfilter::_ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::_ZSortFly const&, void*), void*)
-cairocanvas::CanvasHelper::flush() const
-cairocanvas::CanvasHelper::getPalette()
 cairocanvas::SpriteDeviceHelper::getSurface()
 cairocanvas::TextLayout::draw(_cairo*)
 canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)

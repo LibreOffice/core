@@ -84,8 +84,6 @@ namespace nullcanvas
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
-        const ::com::sun::star::geometry::Matrix2D& getFontMatrix() const;
-
     private:
         ::com::sun::star::rendering::FontRequest    maFontRequest;
         ::com::sun::star::geometry::Matrix2D        maFontMatrix;

@@ -112,11 +112,6 @@ namespace nullcanvas
 
         return aRet;
     }
-
-    const ::com::sun::star::geometry::Matrix2D& CanvasFont::getFontMatrix() const
-    {
-        return maFontMatrix;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
