@@ -136,7 +136,7 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 SvNumberFormatter* SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter* pThis )
 {
     for (SvNumberFormatterList_impl::iterator it = aFormatters.begin();
-            it < aFormatters.end(); ++it)
+            it != aFormatters.end(); ++it)
     {
         if ( *it == pThis )
         {
