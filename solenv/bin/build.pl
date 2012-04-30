@@ -1844,7 +1844,7 @@ sub run_job {
                 #gbuild_target = $ENV{gb_TAILBUILDTARGET};
             }
             $gbuild_flags .= ' ' . $ENV{GMAKE_OPTIONS};
-            $job_to_do = "make -f Makefile $gbuild_flags $gbuild_target gb_PARTIALBUILD=T";
+            $job_to_do = "$ENV{GNUMAKE} -f Makefile $gbuild_flags $gbuild_target gb_PARTIALBUILD=T";
             my $make_path = $path;
             $make_path =~ s!/prj$!!;
             chdir $make_path;
