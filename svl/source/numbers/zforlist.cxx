@@ -135,12 +135,11 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 
 SvNumberFormatter* SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter* pThis )
 {
-    for(
-        SvNumberFormatterList_impl::iterator it = aFormatters.begin();
-        it < aFormatters.end();
-        ++it
-    ) {
-        if ( *it == pThis ) {
+    for (SvNumberFormatterList_impl::iterator it = aFormatters.begin();
+            it < aFormatters.end(); ++it)
+    {
+        if ( *it == pThis )
+        {
             aFormatters.erase( it );
             break;
         }
@@ -150,8 +149,8 @@ SvNumberFormatter* SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter* pT
 
 void SvNumberFormatterRegistry_Impl::ConfigurationChanged(
     utl::ConfigurationBroadcaster*,
-    sal_uInt32 nHint
-) {
+    sal_uInt32 nHint)
+{
         if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
