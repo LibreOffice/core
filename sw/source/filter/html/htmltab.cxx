@@ -217,6 +217,7 @@ class HTMLTableCell
     HTMLTableCnts *pContents;       // cell content
     SvxBrushItem *pBGBrush;         // cell background
     // !!!ATTENTION!!!!!
+    ::boost::shared_ptr<SvxBoxItem> m_pBoxItem;
 
     sal_uInt32 nNumFmt;
     sal_uInt16 nRowSpan;                // cell ROWSPAN
@@ -240,6 +241,7 @@ public:
     // Fill a not empty cell
     void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
               sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
+              ::boost::shared_ptr<SvxBoxItem> const pBoxItem,
               sal_Bool bHasNumFmt, sal_uInt32 nNumFmt,
               sal_Bool bHasValue, double nValue, sal_Bool bNoWrap, sal_Bool bCovered );
 
@@ -261,6 +263,7 @@ public:
     inline void SetWidth( sal_uInt16 nWidth, sal_Bool bRelWidth );
 
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
+    ::boost::shared_ptr<SvxBoxItem> GetBoxItem() const { return m_pBoxItem; }
 
     inline sal_Bool GetNumFmt( sal_uInt32& rNumFmt ) const;
     inline sal_Bool GetValue( double& rValue ) const;
@@ -589,6 +592,7 @@ public:
     void InsertCell( HTMLTableCnts *pCnts, sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                      sal_uInt16 nWidth, sal_Bool bRelWidth, sal_uInt16 nHeight,
                      sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
+                     boost::shared_ptr<SvxBoxItem> const pBoxItem,
                      sal_Bool bHasNumFmt, sal_uInt32 nNumFmt,
                      sal_Bool bHasValue, double nValue, sal_Bool bNoWrap );
 
@@ -753,6 +757,7 @@ HTMLTableCell::~HTMLTableCell()
 
 void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                          sal_Int16 eVert, SvxBrushItem *pBrush,
+                         ::boost::shared_ptr<SvxBoxItem> const pBoxItem,
                          sal_Bool bHasNF, sal_uInt32 nNF, sal_Bool bHasV, double nVal,
                          sal_Bool bNWrap, sal_Bool bCovered )
 {
@@ -762,6 +767,7 @@ void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCS
     bProtected = sal_False;
     eVertOri = eVert;
     pBGBrush = pBrush;
+    m_pBoxItem = pBoxItem;
 
     bHasNumFmt = bHasNF;
     bHasValue = bHasV;
@@ -1385,6 +1391,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
     SwFrmFmt *pFrmFmt = 0;      // frame::Frame-Format
     sal_Int16 eVOri = text::VertOrientation::NONE;
     const SvxBrushItem *pBGBrushItem = 0;   // Hintergrund
+    boost::shared_ptr<SvxBoxItem> pBoxItem;
     sal_Bool bTopLine = sal_False, bBottomLine = sal_False, bLastBottomLine = sal_False;
     sal_Bool bReUsable = sal_False;     // Format nochmals verwendbar?
     sal_uInt16 nEmptyRows = 0;
@@ -1399,6 +1406,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
     {
         // die Hintergrundfarbe/-grafik bestimmen
         const HTMLTableCell *pCell = GetCell( nRow, nCol );
+        pBoxItem = pCell->GetBoxItem();
         pBGBrushItem = pCell->GetBGBrush();
         if( !pBGBrushItem )
         {
@@ -1437,7 +1445,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
             bHasValue = pCell->GetValue( nValue );
 
         if( nColSpan==1 && !bTopLine && !bLastBottomLine && !nEmptyRows &&
-            !pBGBrushItem && !bHasNumFmt )
+            !pBGBrushItem && !bHasNumFmt && !pBoxItem)
         {
             pFrmFmt = pColumn->GetFrmFmt( bBottomLine, eVOri );
             bReUsable = !pFrmFmt;
@@ -1511,7 +1519,11 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                 bSet = sal_True;
             }
 
-            if( bSet )
+            if (pBoxItem)
+            {
+                pFrmFmt->SetFmtAttr( *pBoxItem );
+            }
+            else if (bSet)
             {
                 // BorderDist nicht mehr Bestandteil einer Zelle mit fixer Breite
                 sal_uInt16 nBDist = static_cast< sal_uInt16 >(
@@ -2113,6 +2125,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 nCellWidth, sal_Bool bRelWidth, sal_uInt16 nCellHeight,
                             sal_Int16 eVertOrient, SvxBrushItem *pBGBrushItem,
+                            boost::shared_ptr<SvxBoxItem> const pBoxItem,
                             sal_Bool bHasNumFmt, sal_uInt32 nNumFmt,
                             sal_Bool bHasValue, double nValue, sal_Bool bNoWrap )
 {
@@ -2191,7 +2204,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( pCnts, j, i, eVertOrient, pBGBrushItem,
+                ->Set( pCnts, j, i, eVertOrient, pBGBrushItem, pBoxItem,
                        bHasNumFmt, nNumFmt, bHasValue, nValue, bNoWrap, bCovered );
         }
     }
@@ -3124,6 +3137,7 @@ class _CellSaveStruct : public _SectionSaveStruct
     String aStyle, aId, aClass, aLang, aDir;
     String aBGImage;
     Color aBGColor;
+    boost::shared_ptr<SvxBoxItem> m_pBoxItem;
 
     HTMLTableCnts* pCnts;           // Liste aller Inhalte
     HTMLTableCnts* pCurrCnts;   // der aktuelle Inhalt oder 0
@@ -3309,7 +3323,15 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
 
         if( rParser.ParseStyleOptions( aStyle, aId, aClass, aItemSet,
                                        aPropInfo, &aLang, &aDir ) )
+        {
+            SfxPoolItem const* pItem;
+            if (SFX_ITEM_SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
+            {   // fdo#41796: steal box item to set it in FixFrameFmt later!
+                m_pBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
+                aItemSet.ClearItem(RES_BOX);
+            }
             rParser.InsertAttrs( aItemSet, aPropInfo, pCntxt );
+        }
     }
 
     rParser.SplitPREListingXMP( pCntxt );
@@ -3368,7 +3390,7 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
         rParser.CreateBrushItem( bBGColor ? &aBGColor : 0, aBGImage,
                                  aStyle, aId, aClass );
     pCurTable->InsertCell( pCnts, nRowSpan, nColSpan, nWidth,
-                           bPrcWidth, nHeight, eVertOri, pBrushItem,
+                           bPrcWidth, nHeight, eVertOri, pBrushItem, m_pBoxItem,
                            bHasNumFmt, nNumFmt, bHasValue, nValue,
                            bNoWrap );
     Restore( rParser );
