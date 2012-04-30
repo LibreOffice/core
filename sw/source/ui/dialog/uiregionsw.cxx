@@ -180,10 +180,10 @@ private:
 
 public:
     SectRepr(sal_uInt16 nPos, SwSection& rSect);
-    bool    operator==(SectRepr& rSectRef) const
+    bool    operator==(const SectRepr& rSectRef) const
             { return m_nArrPos == rSectRef.GetArrPos(); }
 
-    bool    operator< (SectRepr& rSectRef) const
+    bool    operator< (const SectRepr& rSectRef) const
             { return m_nArrPos <  rSectRef.GetArrPos(); }
 
     SwSectionData &     GetSectionData()        { return m_SectionData; }
