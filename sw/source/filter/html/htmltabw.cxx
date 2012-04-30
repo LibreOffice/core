@@ -722,12 +722,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
     }
 
-    // BORDER ausgeben, aber nur wenn wir die Umrandung selbst berechnet
-    // haben oder die Umrandung 0 ist oder es irgendwelche Umrandungen gibt.
-    // Anderenfalls enthaelt nBorder naemlich nur die Breite der Umrandung,
-    // die genutzt wird, wenn gar kein sheet::Border angegeben ist.
-    sal_Bool bHasAnyBorders = nFrameMask || bColsHaveBorder || bRowsHaveBorder;
-
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
         append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding)));
@@ -736,74 +730,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
         append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing)));
 
-    // FRAME/RULES ausgeben (nur sinnvoll, wenn border!=0)
-    if( nBorder!=0 && (bCollectBorderWidth || bHasAnyBorders) )
-    {
-        const sal_Char *pFrame = 0;
-        switch( nFrameMask )
-        {
-            case 0:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_void       ;break;
-            case 1:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_above  ;break;
-            case 2:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_below  ;break;
-            case 3:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_hsides ;break;
-            case 4:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_lhs        ;break;
-            case 8:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_rhs        ;break;
-            case 12: pFrame = OOO_STRING_SVTOOLS_HTML_TF_vsides ;break;
-        };
-        if( pFrame )
-        {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_frame).
-                append('=').append(pFrame);
-        }
-
-        const sal_Char *pRules = 0;
-        if( aCols.Count() > 1 && aRows.Count() > 1 )
-        {
-            if( !bColsHaveBorder )
-            {
-                if( !bRowsHaveBorder )
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_none;
-                else if( bRowsHaveBorderOnly )
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_rows;
-                else
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_groups;
-            }
-            else if( bColsHaveBorderOnly )
-            {
-                if( !bRowsHaveBorder || !bRowsHaveBorderOnly )
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_cols;
-            }
-            else
-            {
-                if( !bRowsHaveBorder )
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_groups;
-                else if( bRowsHaveBorderOnly )
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_rows;
-                else
-                    pRules = OOO_STRING_SVTOOLS_HTML_TR_groups;
-            }
-        }
-        else if( aRows.Count() > 1 )
-        {
-            if( !bRowsHaveBorder )
-                pRules = OOO_STRING_SVTOOLS_HTML_TR_none;
-            else if( !bRowsHaveBorderOnly )
-                pRules = OOO_STRING_SVTOOLS_HTML_TR_groups;
-        }
-        else if( aCols.Count() > 1 )
-        {
-            if( !bColsHaveBorder )
-                pRules = OOO_STRING_SVTOOLS_HTML_TR_none;
-            else if( !bColsHaveBorderOnly )
-                pRules = OOO_STRING_SVTOOLS_HTML_TR_groups;
-        }
-
-        if( pRules )
-        {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rules).
-                append('=').append(pRules);
-        }
-    }
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // Hintergrund ausgeben
