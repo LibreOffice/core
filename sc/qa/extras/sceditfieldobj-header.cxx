@@ -42,7 +42,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 
-#define NUMBER_OF_TESTS 4
+#define NUMBER_OF_TESTS 5
 
 namespace sc_apitest {
 
@@ -63,6 +63,7 @@ public:
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
     CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
 
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);

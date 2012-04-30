@@ -39,7 +39,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#define NUMBER_OF_TESTS 5
+#define NUMBER_OF_TESTS 6
 
 namespace sc_apitest {
 
@@ -60,6 +60,7 @@ public:
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
     CPPUNIT_TEST(testGetPropertyValue);
+    CPPUNIT_TEST(testSetPropertyValue);
 
     // XTextField
     CPPUNIT_TEST(testGetPresentation);
