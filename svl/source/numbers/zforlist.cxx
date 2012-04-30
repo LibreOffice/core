@@ -349,7 +349,7 @@ sal_uInt16 SvNumberFormatter::GetStandardPrec()
     return pFormatScanner->GetStandardPrec();
 }
 
-void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, bool bLoadingSO5 )
+void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, bool bNoAdditionalFormats )
 {
     if (eLnge == LANGUAGE_DONTKNOW)
         eLnge = UNKNOWN_SUBSTITUTE;
@@ -361,9 +361,9 @@ void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, bool bLoadingSO5 )
         for (SvNumberFormatTable::iterator it = aFTable.begin(); it != aFTable.end(); ++it)
             delete it->second;
         aFTable.clear();
-        ImpGenerateFormats( 0, bLoadingSO5 );   // new standard formats
+        ImpGenerateFormats( 0, bNoAdditionalFormats );   // new standard formats
     }
-    else if ( bLoadingSO5 )
+    else if ( bNoAdditionalFormats )
     {   // delete additional standard formats
         sal_uInt32 nKey;
         SvNumberFormatTable::iterator it = aFTable.find( SV_MAX_ANZ_STANDARD_FORMATE + 1 );
@@ -1028,7 +1028,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
     return GetEntryTable(eTypetmp, FIndex, rLnge);
 }
 
-sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bLoadingSO5 )
+sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditionalFormats )
 {
     ChangeIntl(eLnge);
     sal_uInt32 CLOffset = ImpGetCLOffset(ActLnge);
@@ -1090,7 +1090,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bLoadingSO
         }
 
         MaxCLOffset += SV_COUNTRY_LANGUAGE_OFFSET;
-        ImpGenerateFormats( MaxCLOffset, bLoadingSO5 );
+        ImpGenerateFormats( MaxCLOffset, bNoAdditionalFormats );
         CLOffset = MaxCLOffset;
     }
     return CLOffset;
@@ -1853,7 +1853,7 @@ sal_uInt32 SvNumberFormatter::TestNewString(const String& sFormatString,
 
 SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            sal_uInt32 nPos, bool bAfterLoadingSO5, sal_Int16 nOrgIndex )
+            sal_uInt32 nPos, bool bAfterChangingSystemCL, sal_Int16 nOrgIndex )
 {
     String aCodeStr( rCode.Code );
     if ( rCode.Index < NF_INDEX_TABLE_ENTRIES &&
@@ -1904,29 +1904,29 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         sal_uInt32 nKey = ImpIsEntry( aCodeStr, nCLOffset, ActLnge );
         if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
-            if (LocaleDataWrapper::areChecksEnabled())
+            // If bAfterChangingSystemCL there will definitely be some dups,
+            // don't cry then.
+            if (LocaleDataWrapper::areChecksEnabled() && !bAfterChangingSystemCL)
             {
+                // Test for duplicate indexes in locale data.
                 switch ( nOrgIndex )
                 {
-                    // These may be dupes of integer versions for locales where
+                    // These may be dups of integer versions for locales where
                     // currencies have no decimals like Italian Lira.
                     case NF_CURRENCY_1000DEC2 :         // NF_CURRENCY_1000INT
                     case NF_CURRENCY_1000DEC2_RED :     // NF_CURRENCY_1000INT_RED
                     case NF_CURRENCY_1000DEC2_DASHED :  // NF_CURRENCY_1000INT_RED
-                    break;
+                        break;
                     default:
-                        if ( !bAfterLoadingSO5 )
-                        {   // If bAfterLoadingSO5 there will definitely be some dupes,
-                            // don't cry. But we need this test for verification of locale
-                            // data if not loading old SO5 documents.
-                            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                                        "SvNumberFormatter::ImpInsertFormat: dup format code, index "));
-                            aMsg += String::CreateFromInt32( rCode.Index );
-                            aMsg += '\n';
-                            aMsg += String( rCode.Code );
-                            LocaleDataWrapper::outputCheckMessage(
-                                    xLocaleData->appendLocaleInfo( aMsg));
-                        }
+                    {
+                        String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                                    "SvNumberFormatter::ImpInsertFormat: dup format code, index "));
+                        aMsg += String::CreateFromInt32( rCode.Index );
+                        aMsg += '\n';
+                        aMsg += String( rCode.Code );
+                        LocaleDataWrapper::outputCheckMessage(
+                                xLocaleData->appendLocaleInfo( aMsg));
+                    }
                 }
             }
             delete pFormat;
@@ -1974,11 +1974,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 
 SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            sal_uInt32 nPos, sal_uInt16 nVersion, bool bAfterLoadingSO5,
+            sal_uInt32 nPos, sal_uInt16 nVersion, bool bAfterChangingSystemCL,
             sal_Int16 nOrgIndex )
 {
     SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos,
-        bAfterLoadingSO5, nOrgIndex );
+        bAfterChangingSystemCL, nOrgIndex );
     if (pNewFormat)
         pNewFormat->SetNewStandardDefined( nVersion );
         // so that it gets saved, displayed properly, and converted by old versions
@@ -2258,7 +2258,7 @@ const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
     return 0;
 }
 
-void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bLoadingSO5 )
+void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditionalFormats )
 {
     using namespace ::com::sun::star;
 
@@ -2685,8 +2685,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bLoadingSO
         "ImpGenerateFormats: overflow of nNewExtended standard formats" );
 
     // Now all additional format codes provided by I18N, but only if not
-    // loading from old SO5 file format, then they are appended last.
-    if ( !bLoadingSO5 )
+    // changing SystemCL, then they are appended last after user defined.
+    if ( !bNoAdditionalFormats )
         ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, false );
 
     sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
@@ -2707,7 +2707,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bLoadingSO
 
 
 void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-            NumberFormatCodeWrapper& rNumberFormatCode, bool bAfterLoadingSO5 )
+            NumberFormatCodeWrapper& rNumberFormatCode, bool bAfterChangingSystemCL )
 {
     using namespace ::com::sun::star;
 
@@ -2747,7 +2747,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             aFormatSeq[j].Default = false;
             if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
                     SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
-                    bAfterLoadingSO5, nOrgIndex ) )
+                    bAfterChangingSystemCL, nOrgIndex ) )
                 nPos++;
             pFormatArr[j].Index = nOrgIndex;
             aFormatSeq[j].Default = bDefault;
@@ -2774,7 +2774,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             if ( pFormatArr[j].Index >= NF_INDEX_TABLE_ENTRIES )
                 if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
                         SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
-                        bAfterLoadingSO5 ) )
+                        bAfterChangingSystemCL ) )
                     nPos++;
         }
     }

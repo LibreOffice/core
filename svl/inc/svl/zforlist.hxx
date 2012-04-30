@@ -851,29 +851,29 @@ private:
 
     // Changes initialized language/country, clears the entries and generates
     // new ones, may ONLY be called by the binary file format load
-    SVL_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, bool bLoadingSO5 );
+    SVL_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, bool bNoAdditionalFormats );
 
     // Generate builtin formats provided by i18n behind CLOffset,
-    // if bLoadingSO5==false also generate additional i18n formats.
-    SVL_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, bool bLoadingSO5 );
+    // if bNoAdditionalFormats==false also generate additional i18n formats.
+    SVL_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditionalFormats );
 
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
                 sal_uInt32 CLOffset,
                 NumberFormatCodeWrapper& rNumberFormatCode,
-                bool bAfterLoadingSO5 );
+                bool bAfterChangingSystemCL );
 
     SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat(
                 const ::com::sun::star::i18n::NumberFormatCode& rCode,
                 sal_uInt32 nPos,
-                bool bAfterLoadingSO5 = false,
+                bool bAfterChangingSystemCL = false,
                 sal_Int16 nOrgIndex = 0 );
     // ImpInsertNewStandardFormat for new (since version ...) builtin formats
     SVL_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat(
                 const ::com::sun::star::i18n::NumberFormatCode& rCode,
                 sal_uInt32 nPos,
                 sal_uInt16 nVersion,
-                bool bAfterLoadingSO5 = false,
+                bool bAfterChangingSystemCL = false,
                 sal_Int16 nOrgIndex = 0 );
 
     // Return CLOffset or (MaxCLOffset + SV_COUNTRY_LANGUAGE_OFFSET) if new language/country
@@ -886,7 +886,7 @@ private:
                         LanguageType eLnge );
 
     // Create builtin formats for language/country if necessary, return CLOffset
-    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, bool bLoadingSO5 = false );
+    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, bool bNoAdditionalFormats = false );
 
     // Build negative currency format, old compatibility style
     SVL_DLLPRIVATE void ImpGetNegCurrFormat( String& sNegStr, const String& rCurrSymbol );
