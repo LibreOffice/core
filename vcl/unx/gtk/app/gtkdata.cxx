@@ -770,7 +770,7 @@ extern "C" {
 
     static void sal_gtk_timeout_defer( SalGtkTimeoutSource *pTSource )
     {
-        g_source_get_current_time( (GSource *) pTSource, &pTSource->aFireTime );
+        g_get_current_time( &pTSource->aFireTime );
         g_time_val_add( &pTSource->aFireTime, pTSource->pInstance->m_nTimeoutMS * 1000 );
     }
 
@@ -806,7 +806,7 @@ extern "C" {
         SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
 
         GTimeVal aTimeNow;
-        g_source_get_current_time( pSource, &aTimeNow );
+        g_get_current_time( &aTimeNow );
 
         return sal_gtk_timeout_expired( pTSource, nTimeoutMS, &aTimeNow );
     }
@@ -816,7 +816,7 @@ extern "C" {
         SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
 
         GTimeVal aTimeNow;
-        g_source_get_current_time( pSource, &aTimeNow );
+        g_get_current_time( &aTimeNow );
 
         return ( pTSource->aFireTime.tv_sec < aTimeNow.tv_sec ||
                  ( pTSource->aFireTime.tv_sec == aTimeNow.tv_sec &&
