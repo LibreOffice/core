@@ -2316,25 +2316,24 @@ void RadioButton::group(RadioButton &rOther)
 
 // .-----------------------------------------------------------------------
 
-void RadioButton::GetRadioButtonGroup( std::vector< RadioButton* >& io_rGroup, bool bIncludeThis ) const
+std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) const
 {
-    // empty the list
-    io_rGroup.clear();
+    std::vector< RadioButton* > aGroup;
 
     if (m_xGroup)
     {
         for (std::set<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
         {
             RadioButton *pRadioButton = *aI;
-            if (pRadioButton == this)
+            if (!bIncludeThis && pRadioButton == this)
                 continue;
-            io_rGroup.push_back(pRadioButton);
+            aGroup.push_back(pRadioButton);
         }
-        return;
+        return aGroup;
     }
 
     //old-school
-    SAL_WARN("vcl", "No group set on radiobutton");
+    SAL_WARN("vcl", "No new-style group set on radiobutton, using old-style digging around");
 
     // go back to first in group;
     Window* pFirst = const_cast<RadioButton*>(this);
@@ -2352,10 +2351,12 @@ void RadioButton::GetRadioButtonGroup( std::vector< RadioButton* >& io_rGroup, b
         if( pFirst->GetType() == WINDOW_RADIOBUTTON )
         {
             if( pFirst != this || bIncludeThis )
-                io_rGroup.push_back( static_cast<RadioButton*>(pFirst) );
+                aGroup.push_back( static_cast<RadioButton*>(pFirst) );
         }
         pFirst = pFirst->GetWindow( WINDOW_NEXT );
     } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );
+
+    return aGroup;
 }
 
 // -----------------------------------------------------------------------
@@ -2364,8 +2365,7 @@ void RadioButton::ImplUncheckAllOther()
 {
     mpWindowImpl->mnStyle |= WB_TABSTOP;
 
-    std::vector<RadioButton*> aGroup;
-    GetRadioButtonGroup(aGroup, false);
+    std::vector<RadioButton*> aGroup(GetRadioButtonGroup(false));
     // iterate over radio button group and checked buttons
     for (std::vector<RadioButton*>::iterator aI = aGroup.begin(), aEnd = aGroup.end(); aI != aEnd; ++aI)
     {

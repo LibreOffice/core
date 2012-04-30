@@ -102,9 +102,8 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
     RadioButton* pRadioButton = dynamic_cast< RadioButton* >( GetWindow() );
     if ( pRadioButton )
     {
-        ::std::vector< RadioButton* > aGroup;
-        pRadioButton->GetRadioButtonGroup( aGroup, true );
-        if ( !aGroup.empty() )
+        ::std::vector< RadioButton* > aGroup(pRadioButton->GetRadioButtonGroup(true));
+        if (!aGroup.empty())
         {
             sal_Int32 i = 0;
             Sequence< Reference< XInterface > > aSequence( static_cast< sal_Int32 >( aGroup.size() ) );

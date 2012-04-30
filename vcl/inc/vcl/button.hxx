@@ -393,14 +393,14 @@ public:
     or giving up the SolarMutex may mean events get executed that lead to the pointers getting
     invalid.
 
-    @param io_rGroup
-    gets cleared on entering the function. on return contains the <code>RadioButton</code>s
-    in the same group as this <code>RadioButton</code>.
-
     @param bIncludeThis
     defines whether <code>this</code> is contained in the returned list
+
+    @return
+    on return contains the <code>RadioButton</code>s
+    in the same group as this <code>RadioButton</code>.
     */
-    void            GetRadioButtonGroup( std::vector<RadioButton*>& io_rGroup, bool bIncludeThis ) const;
+    std::vector<RadioButton*> GetRadioButtonGroup(bool bIncludeThis = true) const;
 
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
     void group(RadioButton &rOther);
