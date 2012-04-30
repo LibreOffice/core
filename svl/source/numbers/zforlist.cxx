@@ -678,12 +678,12 @@ bool SvNumberFormatter::Load( SvStream& rStream )
     rStream >> nVersion;
     SvNumberformat* pEntry;
     sal_uInt32 nPos;
-    LanguageType eSaveSysLang, eLoadSysLang;
     sal_uInt16 nSysOnStore, eLge, eDummy;       // Dummy for compatible format
     rStream >> nSysOnStore >> eLge;             // system language from document
 
-    eSaveSysLang = (nVersion < SV_NUMBERFORMATTER_VERSION_SYSTORE ?
-        LANGUAGE_SYSTEM : (LanguageType) nSysOnStore);
+    SAL_WARN_IF( nVersion < SV_NUMBERFORMATTER_VERSION_CALENDAR, "svl.numbers", "SvNumberFormatter::Load: where does this unsupported old data come from?!?");
+
+    LanguageType eSaveSysLang = (LanguageType) nSysOnStore;
     LanguageType eLnge = (LanguageType) eLge;
     ImpChangeSysCL( eLnge, true );
 
@@ -696,132 +696,20 @@ bool SvNumberFormatter::Load( SvStream& rStream )
 
         sal_uInt32 nOffset = nPos % SV_COUNTRY_LANGUAGE_OFFSET;     // relativIndex
         bool bUserDefined = (nOffset > SV_MAX_ANZ_STANDARD_FORMATE);
-        //! HACK! ER 29.07.97 15:15
-        // SaveLang wurde bei SYSTEM nicht gespeichert sondern war auch SYSTEM,
-        // erst ab 364i Unterscheidung moeglich
-        bool bConversionHack;
-        if ( eLnge == LANGUAGE_SYSTEM )
-        {
-            if ( nVersion < SV_NUMBERFORMATTER_VERSION_SYSTORE )
-            {
-                bConversionHack = bUserDefined;
-                eLoadSysLang = eSaveSysLang;
-            }
-            else
-            {
-                bConversionHack = false;
-                eLoadSysLang = eSysLang;
-            }
-        }
-        else
-        {
-            bConversionHack = false;
-            eLoadSysLang = eSaveSysLang;
-        }
 
         pEntry = new SvNumberformat(*pFormatScanner, eLnge);
-        if ( bConversionHack )
-        {   // SYSTEM
-            // nVersion < SV_NUMBERFORMATTER_VERSION_SYSTORE
-            // nVersion < SV_NUMBERFORMATTER_VERSION_KEYWORDS
-            if ( !pConverter )
-                pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
-            NfHackConversion eHackConversion = pEntry->Load(
-                rStream, aHdr, pConverter, *pStringScanner );
-            switch ( eHackConversion )
-            {
-                case NF_CONVERT_GERMAN_ENGLISH :
-                    pEntry->ConvertLanguage( *pConverter,
-                        LANGUAGE_ENGLISH_US, eSysLang, true );
-                break;
-                case NF_CONVERT_ENGLISH_GERMAN :
-                    switch ( eSysLang )
-                    {
-                        case LANGUAGE_GERMAN:
-                        case LANGUAGE_GERMAN_SWISS:
-                        case LANGUAGE_GERMAN_AUSTRIAN:
-                        case LANGUAGE_GERMAN_LUXEMBOURG:
-                        case LANGUAGE_GERMAN_LIECHTENSTEIN:
-                            // alles beim alten
-                        break;
-                        default:
-                            pEntry->ConvertLanguage( *pConverter,
-                                LANGUAGE_GERMAN, eSysLang, true );
-                    }
-                break;
-                case NF_CONVERT_NONE :
-                break;  // -Wall not handled.
-            }
-
-        }
-        else
+        pEntry->Load( rStream, aHdr, NULL, *pStringScanner );
+        if ( !bUserDefined )
+            bUserDefined = (pEntry->GetNewStandardDefined() > SV_NUMBERFORMATTER_VERSION);
+        if ( bUserDefined )
         {
-            pEntry->Load( rStream, aHdr, NULL, *pStringScanner );
-            if ( !bUserDefined )
-                bUserDefined = (pEntry->GetNewStandardDefined() > SV_NUMBERFORMATTER_VERSION);
-            if ( bUserDefined )
-            {
-                if ( eSaveSysLang != eLoadSysLang )
-                {   // different SYSTEM locale
-                    if ( !pConverter )
-                        pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
-                    if ( nVersion < SV_NUMBERFORMATTER_VERSION_KEYWORDS )
-                    {
-                        switch ( eSaveSysLang )
-                        {
-                            case LANGUAGE_GERMAN:
-                            case LANGUAGE_GERMAN_SWISS:
-                            case LANGUAGE_GERMAN_AUSTRIAN:
-                            case LANGUAGE_GERMAN_LUXEMBOURG:
-                            case LANGUAGE_GERMAN_LIECHTENSTEIN:
-                                // these stay the same
-                                pEntry->ConvertLanguage( *pConverter,
-                                    eSaveSysLang, eLoadSysLang, true );
-                            break;
-                            default:
-                                // old English to new other
-                                pEntry->ConvertLanguage( *pConverter,
-                                    LANGUAGE_ENGLISH_US, eLoadSysLang, true );
-                        }
-                    }
-                    else
-                        pEntry->ConvertLanguage( *pConverter,
-                            eSaveSysLang, eLoadSysLang, true );
-                }
-                else
-                {   // not SYSTEM or same SYSTEM
-                    if ( nVersion < SV_NUMBERFORMATTER_VERSION_KEYWORDS )
-                    {
-                        LanguageType eLoadLang;
-                        bool bSystem;
-                        if ( eLnge == LANGUAGE_SYSTEM )
-                        {
-                            eLoadLang = eSysLang;
-                            bSystem = true;
-                        }
-                        else
-                        {
-                            eLoadLang = eLnge;
-                            bSystem = false;
-                        }
-                        switch ( eLoadLang )
-                        {
-                            case LANGUAGE_GERMAN:
-                            case LANGUAGE_GERMAN_SWISS:
-                            case LANGUAGE_GERMAN_AUSTRIAN:
-                            case LANGUAGE_GERMAN_LUXEMBOURG:
-                            case LANGUAGE_GERMAN_LIECHTENSTEIN:
-                                // these stay the same
-                            break;
-                            default:
-                                // old English to new other
-                                if ( !pConverter )
-                                    pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
-                                pEntry->ConvertLanguage( *pConverter,
-                                    LANGUAGE_ENGLISH_US, eLoadLang, bSystem );
-                        }
-                    }
-                }
+            LanguageType eLoadSysLang = (eLnge == LANGUAGE_SYSTEM ? eSysLang : eSaveSysLang);
+            if ( eSaveSysLang != eLoadSysLang )
+            {   // different SYSTEM locale
+                if ( !pConverter )
+                    pConverter = new SvNumberFormatter( xServiceManager, eSysLang );
+                pEntry->ConvertLanguage( *pConverter,
+                        eSaveSysLang, eLoadSysLang, true );
             }
         }
         if ( nOffset == 0 )     // Standard/General format
