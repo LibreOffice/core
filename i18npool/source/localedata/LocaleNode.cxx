@@ -1178,13 +1178,16 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         if (((nDetected & 7) != 7) || aPattern.getLength() < 5)
         {
             incErrorStr( "failed to extract full date acceptance pattern", aPattern);
-            fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s'\n",
-                    OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat));
+            fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
+                    OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat),
+                    (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
         }
         else
         {
-            fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s'\n",
-                    OSTR( aPattern), OSTR( sTheDateEditFormat));
+            fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s' (formatindex=\"%d\" and defined DateSeparator '%s')\n",
+                    OSTR( aPattern), OSTR( sTheDateEditFormat),
+                    (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY,
+                    OSTR( OUString( cDateSep)));
             // Insert at front so full date pattern is first in checks.
             theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern);
         }
@@ -1194,13 +1197,15 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             if (aPattern2.getLength() < 5)
             {
                 incErrorStr( "failed to extract  2nd date acceptance pattern", aPattern2);
-                fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s'\n",
-                        OSTR( OUString( cDateSep2)), OSTR( sTheDateEditFormat));
+                fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
+                        OSTR( OUString( cDateSep2)), OSTR( sTheDateEditFormat),
+                        (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
             }
             else
             {
-                fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s'\n",
-                        OSTR( aPattern2), OSTR( sTheDateEditFormat));
+                fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s' (formatindex=\"%d\")\n",
+                        OSTR( aPattern2), OSTR( sTheDateEditFormat),
+                        (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
                 theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern2);
             }
         }
