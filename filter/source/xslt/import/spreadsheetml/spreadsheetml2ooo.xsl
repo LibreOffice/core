@@ -764,117 +764,122 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<xsl:key match="/ss:Workbook/ss:Worksheet/ss:Table" name="tableWithConditional" use="following-sibling::x:ConditionalFormatting"/>
-	<xsl:key match="ss:Table/ss:Row/ss:Cell/@ss:StyleID" name="tableStyleIDs" use="ancestor::ss:Table"/>
+	
+	<xsl:key name="definedStyleIds" match="/ss:Workbook/ss:Styles/ss:Style/@ss:ID" use="string(.)"/>
+	<xsl:variable name="defaultStyle" select="/ss:Workbook/ss:Styles/ss:Style[@ss:ID='Default']/@ss:ID"></xsl:variable>
 	<xsl:key name="styleId" match="@ss:StyleID" use="."/>
 	<xsl:template name="CondFormat_automatic_style">
 		<!-- For each conditionalFormatting We inject a new style, which is a child of the current found style -->
-		<xsl:for-each select="/ss:Workbook/ss:Worksheet/x:ConditionalFormatting">
-			<xsl:variable name="table-pos" select="count(../preceding-sibling::ss:Worksheet)+1"/>
-			<xsl:variable name="conditions" select="count(preceding-sibling::x:ConditionalFormatting)+1"/>
-			<xsl:variable name="conditionalFormatting" select="."/>
-			<!-- for all 'ssStyle/@ss:ID's, which are in tables connected within this conditional formatting  -->
-			<xsl:for-each select="key('tableStyleIDs', key('tableWithConditional', .)) [generate-id(.) = generate-id(key('styleId', .)[1])] ">
-				<!-- sort the style ID by their naming -->
-				<xsl:sort select="."/>
-				<xsl:element name="style:style">
-					<xsl:attribute name="style:name">
-						<xsl:call-template name="encode-as-nc-name">
-							<xsl:with-param name="string" select="concat(.,'-ce',$table-pos,'-',$conditions)"/>
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:attribute name="style:family">table-cell</xsl:attribute>
-					<xsl:variable name="style" select="key('Style', .)" />
-					<xsl:choose>
-						<xsl:when test="$style/@ss:Name">
-							<xsl:attribute name="style:parent-style-name">
-								<xsl:call-template name="encode-as-nc-name">
-									<xsl:with-param name="string" select="."/>
-								</xsl:call-template>
-							</xsl:attribute>
-						</xsl:when>
-						<!-- as we create an automatic style, the parent is not allowed to be an automatic style as well
-							 if the parent would be a automatic (unnamed) style, the style information have to be embedded to this style -->
-						<xsl:otherwise>
-							<xsl:attribute name="style:parent-style-name">
-								<xsl:call-template name="encode-as-nc-name">
-									<xsl:with-param name="string" select="$style/@ss:Parent"/>
-								</xsl:call-template>
-							</xsl:attribute>
-							<xsl:if test="$style/ss:NumberFormat/@ss:Format">
-								<xsl:attribute name="style:data-style-name">
-									<xsl:value-of select="concat($style/@ss:ID, 'F')"/>
+		<xsl:for-each select="/ss:Workbook/ss:Worksheet[x:ConditionalFormatting]">
+			<xsl:variable name="table-pos" select="count(preceding-sibling::ss:Worksheet)+1"/>
+			<xsl:variable name="styleIdsUsedByTable" select="$defaultStyle | key('definedStyleIds', ss:Table/ss:Row/ss:Cell/@ss:StyleID)"/>
+			<xsl:for-each select="x:ConditionalFormatting">
+				<xsl:variable name="conditions" select="position()"/>
+				<xsl:variable name="conditionalFormatting" select="."/>
+				<!-- we want to loop over the distinct styleId attribute values of all cells within the table related to the current conditional formatting. -->
+				<!-- We'd need to add the anonymous style id "Default" to the mix. -->
+				<!-- for all 'ssStyle/@ss:ID's, which are in tables connected within this conditional formatting  -->
+				<!-- <xsl:for-each select="key('tableStyleIDs', generate-id(preceding-sibling::ss:Table)) [generate-id(.) = generate-id(key('styleId', .)[1])] "> -->
+				<xsl:for-each select="$styleIdsUsedByTable">
+					<xsl:element name="style:style">
+						<xsl:attribute name="style:name">
+							<xsl:call-template name="encode-as-nc-name">
+								<xsl:with-param name="string" select="concat(.,'-ce',$table-pos,'-',$conditions)"/>
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:attribute name="style:family">table-cell</xsl:attribute>
+						<xsl:variable name="style" select="key('Style', .)" />
+						<xsl:choose>
+							<xsl:when test="$style/@ss:Name">
+								<xsl:attribute name="style:parent-style-name">
+									<xsl:call-template name="encode-as-nc-name">
+										<xsl:with-param name="string" select="."/>
+									</xsl:call-template>
 								</xsl:attribute>
-							</xsl:if>
-							<xsl:apply-templates select="$style" mode="style-style-content"/>
-						</xsl:otherwise>
-					</xsl:choose>
-					<xsl:for-each select="$conditionalFormatting/x:Condition">
-						<xsl:variable name="condition-number" select="count(preceding-sibling::x:Condition)+1"/>
-						<xsl:variable name="base-address">
-							<xsl:choose>
-								<xsl:when test="contains(../x:Range,',')">
-									<xsl:choose>
-										<xsl:when test="contains(substring-before(../x:Range,','),':')">
-											<xsl:value-of select="substring-before(substring-after(../x:Range,':'),',')"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="substring-before(../x:Range,',')"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="../x:Range"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="columnNumber">
-							<xsl:choose>
-								<xsl:when test="contains($base-address, ':')">
-									<xsl:value-of select="substring-after(substring-after($base-address, ':'),'C')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="substring-after($base-address,'C')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="rowNumber">
-							<xsl:choose>
-								<xsl:when test="contains($base-address, ':')">
-									<xsl:value-of select="substring-before(substring-after(substring-after($base-address, ':'),'R'),'C')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="substring-before(substring-after($base-address,'R'),'C')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="base-cell-address">
-							<xsl:call-template name="translate-unit">
-								<xsl:with-param name="column-number" select="$columnNumber"/>
-								<xsl:with-param name="row-number" select="$rowNumber"/>
-								<xsl:with-param name="column-pos-style" select="'relative'"/>
-								<xsl:with-param name="row-pos-style" select="'relative'"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:variable name="condition-value">
-							<xsl:call-template name="translate-condition">
-								<xsl:with-param name="cell-column-pos" select="$columnNumber"/>
-								<xsl:with-param name="cell-row-pos" select="$rowNumber"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:element name="style:map">
-							<xsl:attribute name="style:condition">
-								<xsl:value-of select="$condition-value"/>
-							</xsl:attribute>
-							<xsl:attribute name="style:apply-style-name">
-								<xsl:value-of select="concat('Excel_CondFormat_',$table-pos,'_',$conditions,'_',$condition-number)"/>
-							</xsl:attribute>
-							<xsl:attribute name="style:base-cell-address">
-								<xsl:value-of select="concat(../../@ss:Name,'.',$base-cell-address)"/>
-							</xsl:attribute>
-						</xsl:element>
-					</xsl:for-each>
-				</xsl:element>
+							</xsl:when>
+							<!-- as we create an automatic style, the parent is not allowed to be an automatic style as well
+								if the parent would be a automatic (unnamed) style, the style information have to be embedded to this style -->
+							<xsl:otherwise>
+								<xsl:attribute name="style:parent-style-name">
+									<xsl:call-template name="encode-as-nc-name">
+										<xsl:with-param name="string" select="$style/@ss:Parent"/>
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:if test="$style/ss:NumberFormat/@ss:Format">
+									<xsl:attribute name="style:data-style-name">
+										<xsl:value-of select="concat($style/@ss:ID, 'F')"/>
+									</xsl:attribute>
+								</xsl:if>
+								<xsl:apply-templates select="$style" mode="style-style-content"/>
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:for-each select="$conditionalFormatting/x:Condition">
+							<xsl:variable name="condition-number" select="count(preceding-sibling::x:Condition)+1"/>
+							<xsl:variable name="base-address">
+								<xsl:choose>
+									<xsl:when test="contains(../x:Range,',')">
+										<xsl:choose>
+											<xsl:when test="contains(substring-before(../x:Range,','),':')">
+												<xsl:value-of select="substring-before(substring-after(../x:Range,':'),',')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="substring-before(../x:Range,',')"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="../x:Range"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:variable name="columnNumber">
+								<xsl:choose>
+									<xsl:when test="contains($base-address, ':')">
+										<xsl:value-of select="substring-after(substring-after($base-address, ':'),'C')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="substring-after($base-address,'C')"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:variable name="rowNumber">
+								<xsl:choose>
+									<xsl:when test="contains($base-address, ':')">
+										<xsl:value-of select="substring-before(substring-after(substring-after($base-address, ':'),'R'),'C')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="substring-before(substring-after($base-address,'R'),'C')"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:variable name="base-cell-address">
+								<xsl:call-template name="translate-unit">
+									<xsl:with-param name="column-number" select="$columnNumber"/>
+									<xsl:with-param name="row-number" select="$rowNumber"/>
+									<xsl:with-param name="column-pos-style" select="'relative'"/>
+									<xsl:with-param name="row-pos-style" select="'relative'"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:variable name="condition-value">
+								<xsl:call-template name="translate-condition">
+									<xsl:with-param name="cell-column-pos" select="$columnNumber"/>
+									<xsl:with-param name="cell-row-pos" select="$rowNumber"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:element name="style:map">
+								<xsl:attribute name="style:condition">
+									<xsl:value-of select="$condition-value"/>
+								</xsl:attribute>
+								<xsl:attribute name="style:apply-style-name">
+									<xsl:value-of select="concat('Excel_CondFormat_',$table-pos,'_',$conditions,'_',$condition-number)"/>
+								</xsl:attribute>
+								<xsl:attribute name="style:base-cell-address">
+									<xsl:value-of select="concat(../../@ss:Name,'.',$base-cell-address)"/>
+								</xsl:attribute>
+							</xsl:element>
+						</xsl:for-each>
+					</xsl:element>
+				</xsl:for-each>				
 			</xsl:for-each>
 		</xsl:for-each>
 	</xsl:template>
@@ -895,31 +900,6 @@
 				<xsl:variable name="qualifier" select="x:Qualifier"/>
 				<xsl:variable name="first-value" select="x:Value1"/>
 				<xsl:choose>
-					<xsl:when test="$qualifier = 'Equal'">
-						<xsl:choose>
-							<xsl:when test="starts-with($first-value,'&quot;')">
-								<xsl:value-of select="concat('cell-content()=',$address-value)"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="concat('cell-content()=[',$address-value,']')"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'Less'">
-						<xsl:value-of select="concat('cell-content()&lt;[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'Greater'">
-						<xsl:value-of select="concat('cell-content()&gt;[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'LessOrEqual'">
-						<xsl:value-of select="concat('cell-content()&lt;=[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'GreaterOrEqual'">
-						<xsl:value-of select="concat('cell-content()&gt;=[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'NotEqual'">
-						<xsl:value-of select="concat('cell-content()!=[',$address-value,']')"/>
-					</xsl:when>
 					<xsl:when test="$qualifier = 'Between'">
 						<xsl:variable name="second-value">
 							<xsl:call-template name="translate-expression">
@@ -929,7 +909,7 @@
 								<xsl:with-param name="return-value" select="''"/>
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:value-of select="concat('cell-content-is-between([',$address-value,'],[',$second-value,'])')"/>
+						<xsl:value-of select="concat('cell-content-is-between(',$address-value,',',$second-value,')')"/>
 					</xsl:when>
 					<xsl:when test="$qualifier = 'NotBetween'">
 						<xsl:variable name="second-value">
@@ -940,8 +920,22 @@
 								<xsl:with-param name="return-value" select="''"/>
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:value-of select="concat('cell-content-is-not-between([',$address-value,'],[',$second-value,'])')"/>
+						<xsl:value-of select="concat('cell-content-is-not-between(',$address-value,',',$second-value,')')"/>
 					</xsl:when>
+					<xsl:otherwise>
+						<xsl:variable name="translatedQualifier">
+							<xsl:choose>
+								<xsl:when test="$qualifier = 'Equal'">=</xsl:when>
+								<xsl:when test="$qualifier = 'Less'">&lt;</xsl:when>
+								<xsl:when test="$qualifier = 'Greater'">&gt;</xsl:when>
+								<xsl:when test="$qualifier = 'LessOrEqual'">&lt;=</xsl:when>
+								<xsl:when test="$qualifier = 'GreaterOrEqual'">&gt;=</xsl:when>
+								<xsl:when test="$qualifier = 'NotEqual'">!=</xsl:when>
+							</xsl:choose>
+						</xsl:variable>
+						<xsl:value-of select="concat('cell-content()', $translatedQualifier, $address-value)"/>
+					</xsl:otherwise>
+					
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
