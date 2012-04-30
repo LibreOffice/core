@@ -2545,6 +2545,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // Fraction number (no default option)
     i18n::NumberFormatCode aSingleFormatCode;
+    aSingleFormatCode.Usage = i18n::KNumberFormatUsage::FRACTION_NUMBER;
 
      // # ?/?
     aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );
@@ -2557,13 +2558,26 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_2, ZF_STANDARD_FRACTION+1 ));
 
+    // # ?/4
+    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/4" ) );
+    ImpInsertNewStandardFormat( aSingleFormatCode,
+        CLOffset + SetIndexTable( NF_FRACTION_3, ZF_STANDARD_FRACTION+2 ),
+        SV_NUMBERFORMATTER_VERSION_FIXED_FRACTION );
+
+    // # ??/100
+    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/100" ) );
+    ImpInsertNewStandardFormat( aSingleFormatCode,
+        CLOffset + SetIndexTable( NF_FRACTION_4, ZF_STANDARD_FRACTION+3 ),
+        SV_NUMBERFORMATTER_VERSION_FIXED_FRACTION );
+
+
+
     // Week of year   must be appended here because of nNewExtended
     const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
     aSingleFormatCode.Code = rKeyword[NF_KEY_WW];
     ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NF_DATE_WW );
-
 
 
     bIndexTableInitialized = true;
@@ -2574,18 +2588,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     // changing SystemCL, then they are appended last after user defined.
     if ( !bNoAdditionalFormats )
         ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, false );
-
-    sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
-
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/4" ) );
-    ImpInsertNewStandardFormat( aSingleFormatCode, nPos+1, SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
-    nPos++;
-
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/100" ) );
-    ImpInsertNewStandardFormat( aSingleFormatCode, nPos+1, SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
-    nPos++;
-
-    pStdFormat->SetLastInsertKey( (sal_uInt16)(nPos - CLOffset) );
 
     if (bOldConvertMode)
         pFormatScanner->SetConvertMode(true);

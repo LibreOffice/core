@@ -101,6 +101,9 @@ namespace rtl {
     <li>DIN: all settings hard coded as DIN (Deutsche Industrie Norm) and EN (European Norm) require.
     <li>all other: hard coded
     </ul>
+
+    Do NOT insert any new values!
+    The values here correspond with those in offapi/com/sun/star/i18n/NumberFormatIndex.idl
  */
 enum NfIndexTableOffset
 {
@@ -182,6 +185,13 @@ enum NfIndexTableOffset
 
     NF_BOOLEAN,                             // BOOLEAN
     NF_TEXT,                                // @
+
+    // From here on are values of new built-in formats that are not in the
+    // original NumberFormatIndex.idl
+
+    NF_FRACTION_3,                          // # ?/4
+    NF_FRACTION_4,                          // # ?/100
+
     NF_INDEX_TABLE_ENTRIES
 };
 
