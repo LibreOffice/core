@@ -9145,4 +9145,25 @@
 		<xsl:param name="string"/>
 		<xsl:value-of select="translate($string, '.%()/\+[]', '')"/>
 	</xsl:template>
+	
+	<xsl:template name="set:distinct">
+		<xsl:param name="nodes" select="/.."/>
+		<xsl:param name="distinct" select="/.."/>
+		<xsl:choose>
+			<xsl:when test="$nodes">
+				<xsl:call-template name="set:distinct">
+					<xsl:with-param name="distinct" select="$distinct | $nodes[1][not(. = $distinct)]"/>
+					<xsl:with-param name="nodes" select="$nodes[position() > 1]"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="$distinct" mode="set:distinct"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="node()|@*" mode="set:distinct">
+		<xsl:copy-of select="." />
+	</xsl:template>
+	
 </xsl:stylesheet>
