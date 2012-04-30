@@ -400,6 +400,10 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ;;
 
     *)
+        # The user has tweaked the email settings, and configured something we
+        # do not recognize.  Try to be smart, and send the mail anyway, if we
+        # have the possibility to do so.
+
         if [ -x /usr/bin/gnome-open ] ; then
             MAILER = /usr/bin/gnome-open
         elif [ -x /usr/bin/xdg-open ] ; then
