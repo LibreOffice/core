@@ -509,6 +509,8 @@ bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         set_row_homogeneous(toBool(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-homogeneous")))
         set_column_homogeneous(toBool(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("n-rows")))
+        /*nothing to do*/;
     else
         return Window::set_property(rKey, rValue);
     return true;
