@@ -30,6 +30,10 @@
 
 $(eval $(call gb_WinResTarget_WinResTarget,activex_res))
 
+$(eval $(call gb_WinResTarget_use_custom_headers,activex_res,\
+    extensions/source/activex/idl \
+))
+
 ifneq ($(PRODUCT),)
 $(eval $(call gb_WinResTarget_add_defs,activex_res,\
 	-DPRODUCT \
@@ -42,7 +46,5 @@ $(eval $(call gb_WinResTarget_add_defs,activex_res,\
 	$$(DEFS) \
 	-DSO_ACTIVEX_TLB_DIR=$(subst /,\\,$(subst $(SRCDIR),../../..,$(WORKDIR)/CustomTarget/extensions/source/activex/idl)) \
 ))
-
-$(call gb_WinResTarget_get_target,activex_res) : $(WORKDIR)/CustomTarget/extensions/source/activex/idl/so_activex.tlb
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

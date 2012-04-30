@@ -29,12 +29,13 @@ $(eval $(call gb_WinResTarget_WinResTarget,shlxthdl))
 
 $(eval $(call gb_WinResTarget_set_include,shlxthdl,\
 	$$(INCLUDE) \
-	-I$(WORKDIR)/CustomTarget/shell/source/win32/shlxthandler/res \
 	-I$(SRCDIR)/shell/inc \
 ))
 
-$(eval $(call gb_WinResTarget_set_rcfile,shlxthdl,shell/source/win32/shlxthandler/res/shlxthdl))
+$(eval $(call gb_WinResTarget_use_custom_headers,shlxthdl,\
+	shell/source/win32/shlxthandler/res \
+))
 
-$(call gb_WinResTarget_get_target,shlxthdl) : $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc
+$(eval $(call gb_WinResTarget_set_rcfile,shlxthdl,shell/source/win32/shlxthandler/res/shlxthdl))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
