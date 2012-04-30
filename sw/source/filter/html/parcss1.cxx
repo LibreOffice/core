@@ -1181,6 +1181,12 @@ sal_Bool CSS1Parser::ParseStyleOption( const String& rIn )
 
     InitRead( rIn );
 
+    // fdo#41796: skip over spurious semicolons
+    while (CSS1_SEMICOLON == nToken)
+    {
+        nToken = GetNextToken();
+    }
+
     String aProperty;
     CSS1Expression *pExpr = ParseDeclaration( aProperty );
     if( !pExpr )
