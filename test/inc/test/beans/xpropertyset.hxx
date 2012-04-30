@@ -57,7 +57,7 @@ public:
     void testRemoveVetoableChangeListener();
 
 protected:
-    virtual bool isChangeable(const rtl::OUString& rName);
+    virtual bool isPropertyValueChangeable(const rtl::OUString& rName);
 
 private:
     void fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>& xPropInfo);

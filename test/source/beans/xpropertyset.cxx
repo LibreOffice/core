@@ -69,6 +69,7 @@ void XPropertySet::testAddVetoableChangeListener()
 void XPropertySet::testSetPropertyValue()
 {
     testGetPropertySetInfo();
+    uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
 
     // TODO: implement this.
 }
@@ -103,7 +104,7 @@ void XPropertySet::testRemoveVetoableChangeListener()
     // TODO: implement this.
 }
 
-bool XPropertySet::isChangeable(const rtl::OUString& rName)
+bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)
 {
     uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
     try
@@ -177,7 +178,7 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
 
         bool bBound       = (aProp.Attributes & beans::PropertyAttribute::BOUND) != 0;
         bool bConstrained = (aProp.Attributes & beans::PropertyAttribute::CONSTRAINED) != 0;
-        bool bCanChange = isChangeable(aProp.Name);
+        bool bCanChange = isPropertyValueChangeable(aProp.Name);
 
         if (bBound && bCanChange)
             maPropsToTest.bound.push_back(aProp.Name);
