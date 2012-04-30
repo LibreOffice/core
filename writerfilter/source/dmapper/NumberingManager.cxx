@@ -596,15 +596,26 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
                 if ( pParaStyle.get( ) )
                 {
-                    uno::Reference< text::XChapterNumberingSupplier > xOutlines (
-                        xFactory, uno::UNO_QUERY_THROW );
-                    uno::Reference< container::XIndexReplace > xOutlineRules =
-                        xOutlines->getChapterNumberingRules( );
+                    // AFAICT .docx spec does not identify which numberings or paragraph
+                    // styles are actually the ones to be used for outlines (chapter numbering),
+                    // it only kind of says somewhere that they should be named Heading1 to Heading9.
+                    const OUString styleId = pParaStyle->sStyleIdentifierD;
+                    if( styleId.getLength() == RTL_CONSTASCII_LENGTH( "Heading1" )
+                        && styleId.match( "Heading", 0 )
+                        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] >= '1'
+                        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] <= '9' )
+                    {
+                        uno::Reference< text::XChapterNumberingSupplier > xOutlines (
+                            xFactory, uno::UNO_QUERY_THROW );
+                        uno::Reference< container::XIndexReplace > xOutlineRules =
+                            xOutlines->getChapterNumberingRules( );
 
-                    aLvlProps.realloc( aLvlProps.getLength() + 1 );
-                    aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME, pParaStyle->sConvertedStyleName );
+                        aLvlProps.realloc( aLvlProps.getLength() + 1 );
+                        aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
+                            pParaStyle->sConvertedStyleName );
 
-                    xOutlineRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
+                        xOutlineRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
+                    }
                 }
 
                 nLevel++;
