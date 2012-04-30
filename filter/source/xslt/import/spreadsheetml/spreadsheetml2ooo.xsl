@@ -6981,23 +6981,29 @@
 				<xsl:with-param name="param-str" select="substring-before($condition-pos-str,$current-pos-str)"/>
 			</xsl:call-template>
 		</xsl:variable>
+		<xsl:variable name="base-style-name">
+			<xsl:choose>
+				<xsl:when test="@ss:StyleID">
+					<xsl:value-of select="@ss:StyleID"/>
+				</xsl:when>
+				<xsl:when test="../@ss:StyleID">
+					<xsl:value-of select="../@ss:StyleID"/>
+				</xsl:when>
+				<xsl:when test="../../@ss:StyleID">
+					<xsl:value-of select="../../@ss:StyleID"/>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="style-name">
 			<xsl:choose>
 				<xsl:when test="contains($condition-pos-str, $current-pos-str) and starts-with($temp-str, 'c')">
-					<xsl:value-of select="concat(@ss:StyleID, '-ce', substring-after($temp-str, 'c'))"/>
+					<xsl:choose>
+						<xsl:when test="string-length($base-style-name) &gt; 0"><xsl:value-of select="concat($base-style-name, '-ce', substring-after($temp-str, 'c'))"/></xsl:when>
+						<xsl:otherwise><xsl:value-of select="concat('Default-ce', substring-after($temp-str, 'c'))"/></xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:choose>
-						<xsl:when test="@ss:StyleID">
-							<xsl:value-of select="@ss:StyleID"/>
-						</xsl:when>
-						<xsl:when test="../@ss:StyleID">
-							<xsl:value-of select="../@ss:StyleID"/>
-						</xsl:when>
-						<xsl:when test="../../@ss:StyleID">
-							<xsl:value-of select="../../@ss:StyleID"/>
-						</xsl:when>
-					</xsl:choose>
+					<xsl:value-of select="$base-style-name"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
