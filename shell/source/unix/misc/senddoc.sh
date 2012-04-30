@@ -404,7 +404,9 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         # do not recognize.  Try to be smart, and send the mail anyway, if we
         # have the possibility to do so.
 
-        if [ -x /usr/bin/gnome-open ] ; then
+        if [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
+            MAILER=/usr/bin/kde-open
+        elif [ -x /usr/bin/gnome-open ] ; then
             MAILER = /usr/bin/gnome-open
         elif [ -x /usr/bin/xdg-open ] ; then
             MAILER = /usr/bin/xdg-open
