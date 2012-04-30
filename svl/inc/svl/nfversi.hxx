@@ -29,7 +29,7 @@
 #ifndef NF_NFVERSI_HXX
 #define NF_NFVERSI_HXX
 
-//      file ID's
+//      file IDs
 
 #define SV_NUMBERFORMATTER_VERSION_SYSTORE      0x0004
 #define SV_NUMBERFORMATTER_VERSION_KEYWORDS     0x0005
@@ -45,26 +45,25 @@
 
 #define SV_NUMBERFORMATTER_VERSION              0x000e
 
-// 1 bis 18.01.96
-// 2 ab  19.01.96, TT.MM.JJJJ dazu
-// 3 ab  13.02.96 (nicht emergency) #.##0,00 CCC dazu
-// 4 ab  30.07.97 364i speichern, was SYSTEM wirklich war (vorhandenes
-//                  Dummy-Feld wird benutzt, keine File-Format Aenderung)
-// 5 ab  07.08.97 nicht-deutsch ist nicht immer englisch
-//                  aeltere nicht-deutsche benutzerdefinierte Formate onLoad
-//                  konvertieren
-// 6 ab  17.10.97 neu: Keyword NNN fuer langen Wochentag ohne Separator,
-//                  wird in aelteren Versionen nicht ausgewertet!
-//                  Neue Standard Datumformate, DIN etc.
-// 7 ab  25.05.98 StandardFormat [HH]:MM:SS,00 (NF_TIME_HH_MMSS00) fuer
-//                  automatische Eingabe-Erkennung von 100stel Sekunden mit Stunden
-// 8 ab  19.06.98 StandardFormat WW (NF_DATE_WW) fuer Kalenderwoche
-// 9 ab  17.12.98 neue Waehrungsformate [$DM-xxx]
-// A ab  25.01.99 Year2000 speichern/laden
-// B ab  12.02.99 Year2000 ist allgemeines TwoDigitYearStart
-// C     ??.??.?? date/time format of system variables
-// D     23.11.00 new calendar
-// E     19.01.01 additional formats provided by i18n
+// 1 to 1996-01-18
+// 2    1996-01-19 added TT.MM.JJJJ
+// 3    1996-02-13 (not emergency) added #.##0,00 CCC
+// 4    1997-07-30 364i store what SYSTEM actually was (using existing
+//                  Dummy field, no change of file format)
+// 5    1997-08-07 non-German is not always English
+//                  convert older non-German user defined formats on load
+// 6    1997-10-17 new keyword NNN for long weekday without separator
+//                  not evaluated in older versions!
+//                  New standard date formats, DIN, EN etc.
+// 7    1998-05-25 Standard format [HH]:MM:SS,00 (NF_TIME_HH_MMSS00) for
+//                  automatic input recognition of 100th seconds with hours
+// 8    1998-06-10 Standard format WW (NF_DATE_WW) for calendar week
+// 9    1998-12-17 new currency formats [$DM-xxx]
+// A    1999-01-25 store/load Year2000
+// B    1999-02-12 Year2000 is general TwoDigitYearStart
+// C    ????-??-?? date/time format of system variables
+// D    2000-11-23 new calendar
+// E    2001-01-19 additional formats provided by i18n
 
 #endif
 
