@@ -98,8 +98,7 @@ void XLineEndList::impCreate()
 
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XLineEndList: no VirtualDevice created!" );
-        pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH * 2, BITMAP_HEIGHT)));
+        const Size aSize(BITMAP_WIDTH * 2, BITMAP_HEIGHT);
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
@@ -118,15 +117,15 @@ void XLineEndList::impCreate()
         pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
 
         const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
-        const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
+        const basegfx::B2DPoint aEnd(aSize.Width() - 1, aSize.Height() / 2);
         basegfx::B2DPolygon aPolygon;
         aPolygon.append(aStart);
         aPolygon.append(aEnd);
         SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
         OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
         pLineObject->SetModel(pSdrModel);
-        pLineObject->SetMergedItem(XLineStartWidthItem(aSize.Height()));
-        pLineObject->SetMergedItem(XLineEndWidthItem(aSize.Height()));
+        pLineObject->SetMergedItem(XLineStartWidthItem(aSize.Height() - 2)); // fdo#48536: prevent the lineend from
+        pLineObject->SetMergedItem(XLineEndWidthItem(aSize.Height() - 2));   // exceeding the background area
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
 
         mpData = new impXLineEndList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
