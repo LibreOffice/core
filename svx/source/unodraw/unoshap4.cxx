@@ -60,10 +60,7 @@
 #include "svx/svdview.hxx"
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
-
-///////////////////////////////////////////////////////////////////////
-
-extern sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem = NULL, sal_Bool bPlaceable = sal_True );
+#include <svtools/wmf.hxx>
 
 ///////////////////////////////////////////////////////////////////////
 

@@ -70,6 +70,7 @@
 #include <basegfx/tools/unotools.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <svtools/wmf.hxx>
 
 using ::rtl::OUString;
 using namespace ::osl;
@@ -85,8 +86,6 @@ using namespace ::com::sun::star::container;
 
 class GDIMetaFile;
 class SvStream;
-sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pFilterConfigItem = NULL, sal_Bool bPlaceable = sal_True );
 
 /***********************************************************************
 * class SvxShapeGroup                                                  *

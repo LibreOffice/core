@@ -102,6 +102,7 @@
 #include "svx/extrud3d.hxx"
 
 #include <boost/bind.hpp>
+#include <svtools/wmf.hxx>
 
 using ::rtl::OUString;
 using namespace ::osl;
@@ -115,8 +116,6 @@ using ::svx::IPropertyValueProvider;
 
 class GDIMetaFile;
 class SvStream;
-sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pFilterConfigItem = NULL, sal_Bool bPlaceable = sal_True );
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 
