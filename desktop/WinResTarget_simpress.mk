@@ -32,18 +32,17 @@ $(eval $(call gb_WinResTarget_set_include,simpress/src,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,simpress/src,\
-    $$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,simpress/src,\
     -DRES_APP_NAME=simpress \
     -DRES_APP_ICON=icons/impress_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,simpress/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,simpress/src,\
     sysui/desktop/icons/impress_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,simpress/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,simpress/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

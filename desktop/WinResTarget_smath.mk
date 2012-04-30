@@ -32,18 +32,17 @@ $(eval $(call gb_WinResTarget_set_include,smath/src,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,smath/src,\
-    $$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,smath/src,\
     -DRES_APP_NAME=smath \
     -DRES_APP_ICON=icons/math_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,smath/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,smath/src,\
     sysui/desktop/icons/math_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,smath/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,smath/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

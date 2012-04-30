@@ -33,10 +33,10 @@ $(eval $(call gb_WinResTarget_set_include,vcl/src,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,vcl/src,\
+$(eval $(call gb_WinResTarget_set_rcfile,vcl/src,\
     vcl/win/source/src/salsrc \
 ))
-$(eval $(call gb_WinResTarget_add_dependency,vcl/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,vcl/src,\
     vcl/win/source/src/dtext.cur \
     vcl/win/source/src/50.bmp \
     vcl/win/source/src/copydata.cur \

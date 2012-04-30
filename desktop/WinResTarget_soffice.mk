@@ -32,18 +32,17 @@ $(eval $(call gb_WinResTarget_set_include,soffice/src,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,soffice/src,\
-    $$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,soffice/src,\
     -DRES_APP_NAME=soffice \
     -DRES_APP_ICON=icons/main_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,soffice/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,soffice/src,\
     sysui/desktop/icons/main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,soffice/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,soffice/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

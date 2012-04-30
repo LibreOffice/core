@@ -27,10 +27,6 @@
 
 $(eval $(call gb_WinResTarget_WinResTarget,fps/src))
 
-$(eval $(call gb_WinResTarget_set_include,fps/src,\
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_WinResTarget_add_file,fps/src,fpicker/source/win32/filepicker/Fps))
+$(eval $(call gb_WinResTarget_set_rcfile,fps/src,fpicker/source/win32/filepicker/Fps))
 
 # vim: set ts=4 sw=4 et:

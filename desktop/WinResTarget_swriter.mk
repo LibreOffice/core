@@ -32,18 +32,17 @@ $(eval $(call gb_WinResTarget_set_include,swriter/src,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,swriter/src,\
-    $$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,swriter/src,\
     -DRES_APP_NAME=swriter \
     -DRES_APP_ICON=icons/writer_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,swriter/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,swriter/src,\
     sysui/desktop/icons/writer_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,swriter/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,swriter/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

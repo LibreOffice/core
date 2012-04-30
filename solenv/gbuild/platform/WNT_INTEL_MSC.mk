@@ -488,9 +488,8 @@ endef
 
 define gb_Library_add_default_nativeres
 $(call gb_WinResTarget_WinResTarget_init,$(2))
-$(call gb_WinResTarget_add_file,$(2),solenv/inc/shlinfo)
-$(call gb_WinResTarget_set_defs,$(2),\
-		$$(DEFS) \
+$(call gb_WinResTarget_set_rcfile,$(2),solenv/inc/shlinfo)
+$(call gb_WinResTarget_add_defs,$(2),\
 		-DVERVARIANT="$(BUILD)" \
 		-DRES_APP_VENDOR="$(OOO_VENDOR)" \
 		-DORG_NAME="$(call gb_Library_get_dllname,$(1))"\

@@ -43,8 +43,12 @@ $(call gb_WinResTarget_get_clean_target,%) :
 		rm -f $(call gb_WinResTarget_get_target,$*))
 
 define gb_WinResTarget_set_defs
-$(call gb_WinResTarget_get_target,$(1)) : DEFS := $(2)
-$(call gb_WinResTarget_get_dep_target,$(1)) : DEFS := $(2)
+$$(call gb_Output_error,gb_WinResTarget_set_defs: use gb_WinResTarget_add_defs instead.)
+endef
+
+define gb_WinResTarget_add_defs
+$(call gb_WinResTarget_get_target,$(1)) : DEFS += $(2)
+$(call gb_WinResTarget_get_dep_target,$(1)) : DEFS += $(2)
 
 endef
 
@@ -54,14 +58,23 @@ $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(2)
 endef
 
 define gb_WinResTarget_add_file
-$(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE=$(SRCDIR)/$(strip $(2)).rc
-$(call gb_WinResTarget_get_target,$(1)) : RCFILE=$(SRCDIR)/$(strip $(2)).rc
-$(call gb_WinResTarget_get_target,$(1)) : $(SRCDIR)/$(strip $(2)).rc
+$$(call gb_Output_error,gb_WinResTarget_add_file: use gb_WinResTarget_set_rcfile instead.)
+endef
+
+define gb_WinResTarget_set_rcfile
+$(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
+$(call gb_WinResTarget_get_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
+$(call gb_WinResTarget_get_target,$(1)) : $$(RCFILE)
 
 endef
 
 define gb_WinResTarget_add_dependency
-$(call gb_WinResTarget_get_target,$(1)) : $(foreach file,$(2),$(SRCDIR)/$(file))
+$(call gb_WinResTarget_get_target,$(1)) : $(SRCDIR)/$(strip $(2))
+
+endef
+
+define gb_WinResTarget_add_dependencies
+$(foreach dep,$(2),$(call gb_WinResTarget_add_dependency,$(1),$(dep)))
 
 endef
 

@@ -32,18 +32,17 @@ $(eval $(call gb_WinResTarget_set_include,scalc/src,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,scalc/src,\
-    $$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,scalc/src,\
     -DRES_APP_NAME=scalc \
     -DRES_APP_ICON=icons/calc_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,scalc/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,scalc/src,\
     sysui/desktop/icons/calc_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,scalc/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,scalc/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

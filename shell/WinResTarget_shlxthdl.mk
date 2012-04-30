@@ -33,7 +33,7 @@ $(eval $(call gb_WinResTarget_set_include,shlxthdl,\
 	-I$(SRCDIR)/shell/inc \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,shlxthdl,shell/source/win32/shlxthandler/res/shlxthdl))
+$(eval $(call gb_WinResTarget_set_rcfile,shlxthdl,shell/source/win32/shlxthandler/res/shlxthdl))
 
 $(call gb_WinResTarget_get_target,shlxthdl) : $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc
 

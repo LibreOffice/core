@@ -32,19 +32,18 @@ $(eval $(call gb_WinResTarget_set_include,sdraw/src,\
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,sdraw/src,\
-    $$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,sdraw/src,\
     -DRES_APP_NAME=sdraw \
     -DRES_APP_ICON=icons/draw_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,sdraw/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,sdraw/src,\
     sysui/desktop/icons/draw_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,sdraw/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,sdraw/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:
 

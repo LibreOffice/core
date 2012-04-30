@@ -31,15 +31,14 @@
 $(eval $(call gb_WinResTarget_WinResTarget,activex_res))
 
 ifneq ($(PRODUCT),)
-$(eval $(call gb_WinResTarget_set_defs,activex_res,\
-	$$(DEFS) \
+$(eval $(call gb_WinResTarget_add_defs,activex_res,\
 	-DPRODUCT \
 ))
 endif
 
-$(eval $(call gb_WinResTarget_add_file,activex_res,extensions/source/activex/so_activex))
+$(eval $(call gb_WinResTarget_set_rcfile,activex_res,extensions/source/activex/so_activex))
 
-$(eval $(call gb_WinResTarget_set_defs,activex_res,\
+$(eval $(call gb_WinResTarget_add_defs,activex_res,\
 	$$(DEFS) \
 	-DSO_ACTIVEX_TLB_DIR=$(subst /,\\,$(subst $(SRCDIR),../../..,$(WORKDIR)/CustomTarget/extensions/source/activex/idl)) \
 ))
