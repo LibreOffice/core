@@ -678,6 +678,8 @@ void ScFiltersTest::testSharedFormulaXLSX()
     {
         CPPUNIT_ASSERT(itr->second->GetType() & RT_SHARED);
     }
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCellValueXLSX()
