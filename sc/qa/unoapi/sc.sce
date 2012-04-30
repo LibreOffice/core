@@ -23,7 +23,7 @@
 -o sc.ScAutoFormatObj
 -o sc.ScAutoFormatsObj
 -o sc.ScCellCursorObj
-# TODO crash on exit. -o sc.ScCellFieldObj
+# ported to cppunit -o sc.ScCellFieldObj
 -o sc.ScCellFieldsObj
 -o sc.ScCellFormatsEnumeration
 -o sc.ScCellFormatsObj
@@ -55,7 +55,7 @@
 -o sc.ScDrawPagesObj
 -o sc.ScFilterDescriptorBase
 -o sc.ScFunctionListObj
-# TODO crash on exit -o sc.ScHeaderFieldObj
+# ported to cppunit -o sc.ScHeaderFieldObj
 -o sc.ScHeaderFieldsObj
 -o sc.ScHeaderFooterContentObj
 -o sc.ScHeaderFooterTextCursor
