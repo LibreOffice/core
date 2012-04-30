@@ -1844,8 +1844,12 @@ sub run_job {
                 #gbuild_target = $ENV{gb_TAILBUILDTARGET};
             }
             $gbuild_flags .= ' ' . $ENV{GMAKE_OPTIONS};
-            $job_to_do = "make -f ../Makefile $gbuild_flags $gbuild_target";
-            print "gbuild module $registered_name: $job_to_do\n";
+            $job_to_do = "make -f Makefile $gbuild_flags $gbuild_target";
+            my $make_path = $path;
+            $make_path =~ s!/prj$!!;
+            chdir $make_path;
+            getcwd();
+            print "gbuild module $make_path: $job_to_do\n";
         }
     }
     else
