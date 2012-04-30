@@ -391,16 +391,18 @@ bool ImplImageTree::iconCacheLookup(
 bool ImplImageTree::find(
     std::vector< rtl::OUString > const & paths, BitmapEx & bitmap)
 {
-    for (Paths::iterator i(m_paths.begin()); i != m_paths.end(); ++i) {
-        for (std::vector< rtl::OUString >::const_reverse_iterator j(
-            paths.rbegin());
-        j != paths.rend(); ++j)
-        {
-            osl::File file(i->first + "/" + *j);
-            if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-                loadFromFile(file, *j, bitmap);
-                file.close();
-                return true;
+    if (!m_cacheIcons) {
+        for (Paths::iterator i(m_paths.begin()); i != m_paths.end(); ++i) {
+            for (std::vector< rtl::OUString >::const_reverse_iterator j(
+                paths.rbegin());
+            j != paths.rend(); ++j)
+            {
+                osl::File file(i->first + "/" + *j);
+                if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
+                    loadFromFile(file, *j, bitmap);
+                    file.close();
+                    return true;
+                }
             }
         }
     }
