@@ -49,6 +49,19 @@ private:
         }
     };
     std::vector<WinAndId> m_aChildren;
+
+    struct RadioButtonGroupMap
+    {
+        rtl::OString m_sID;
+        rtl::OString m_sGroup;
+        RadioButtonGroupMap(const rtl::OString &rId, const rtl::OString &rGroup)
+            : m_sID(rId)
+            , m_sGroup(rGroup)
+        {
+        }
+    };
+    std::vector<RadioButtonGroupMap> m_aGroups;
+
     rtl::OString m_sID;
     Window *m_pParent;
 public:
@@ -60,7 +73,8 @@ public:
     typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
     Window *insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
-    Window *makeObject(Window *pParent, const rtl::OString &rClass, stringmap &rVec);
+    Window *makeObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
+    bool extractGroup(const rtl::OString &id, stringmap &rVec);
 
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
     Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);

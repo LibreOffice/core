@@ -37,6 +37,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
 
+#include <set>
 #include <vector>
 
 class UserDrawEvent;
@@ -287,10 +288,10 @@ private:
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
-    sal_Bool            mbChecked;
-    sal_Bool            mbSaveValue;
-    sal_Bool            mbRadioCheck;
-    sal_Bool            mbStateChanged;
+    sal_Bool        mbChecked;
+    sal_Bool        mbSaveValue;
+    sal_Bool        mbRadioCheck;
+    sal_Bool        mbStateChanged;
     Link            maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
@@ -316,6 +317,8 @@ private:
     SAL_DLLPRIVATE          RadioButton& operator= (const RadioButton &);
 
 protected:
+    boost::shared_ptr< std::set<RadioButton*> > m_xGroup;
+
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
@@ -400,6 +403,7 @@ public:
     void            GetRadioButtonGroup( std::vector<RadioButton*>& io_rGroup, bool bIncludeThis ) const;
 
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    void group(RadioButton &rOther);
 };
 
 // ------------

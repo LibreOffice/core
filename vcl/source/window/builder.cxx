@@ -39,11 +39,24 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
     : m_sID(sID)
     , m_pParent(pParent)
 {
-    fprintf(stderr, "now trying %s\n", rtl::OUStringToOString(sUri, RTL_TEXTENCODING_UTF8).getStr());
     xmlreader::XmlReader reader(sUri);
 
     handleChild(pParent, reader);
 
+    //Set radiobutton groups when everything has been imported
+    for (std::vector<RadioButtonGroupMap>::iterator aI = m_aGroups.begin(),
+         aEnd = m_aGroups.end(); aI != aEnd; ++aI)
+    {
+        RadioButton *pOne = static_cast<RadioButton*>(get_by_name(aI->m_sID));
+        RadioButton *pOther = static_cast<RadioButton*>(get_by_name(aI->m_sGroup));
+        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
+        if (pOne && pOther)
+            pOne->group(*pOther);
+    }
+    //drop maps now
+    std::vector<RadioButtonGroupMap>().swap(m_aGroups);
+
+    //auto-show (really necessary ?, maybe drop it when complete)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
@@ -119,7 +132,19 @@ namespace
     }
 }
 
-Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, stringmap &rMap)
+bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("group")));
+    if (aFind != rMap.end())
+    {
+        m_aGroups.push_back(RadioButtonGroupMap(id, aFind->second));
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
+Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const rtl::OString &id, stringmap &rMap)
 {
     Window *pWindow = NULL;
     if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
@@ -147,7 +172,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, string
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
         pWindow = extractStockAndBuildButton(pParent, rMap);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkRadioButton")))
+    {
+        extractGroup(id, rMap);
         pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
         pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
@@ -171,17 +199,13 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
     if (!m_sID.isEmpty() && rID.equals(m_sID))
     {
         pCurrentChild = m_pParent;
-        fprintf(stderr, "inserting into parent dialog\n");
         //toplevels default to resizable
         if (pCurrentChild->IsDialog())
-        {
-            fprintf(stderr, "forcing resizable\n");
             pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE);
-        }
     }
     else
     {
-        pCurrentChild = makeObject(pParent, rClass, rMap);
+        pCurrentChild = makeObject(pParent, rClass, rID, rMap);
         if (!pCurrentChild)
             fprintf(stderr, "missing object!\n");
         else
@@ -429,7 +453,13 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
             reader.nextItem(
                 xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
             rtl::OString sValue(name.begin, name.length);
-            rMap[sProperty] = sValue.replace('_', '-');
+            //replace '_' with '-' except for property values that
+            //refer to widget ids themselves. TO-DO, drop conversion
+            //and just use foo_bar properties throughout
+            if (sProperty.equalsL(RTL_CONSTASCII_STRINGPARAM("group")))
+                rMap[sProperty] = sValue;
+            else
+                rMap[sProperty] = sValue.replace('_', '-');
         }
     }
 }

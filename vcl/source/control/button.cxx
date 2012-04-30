@@ -2291,12 +2291,50 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
     }
 }
 
-// -----------------------------------------------------------------------
+void RadioButton::group(RadioButton &rOther)
+{
+    if (!m_xGroup)
+    {
+        m_xGroup.reset(new std::set<RadioButton*>);
+        m_xGroup->insert(this);
+    }
+
+    if (rOther.m_xGroup)
+    {
+        for (std::set<RadioButton*>::iterator aI = rOther.m_xGroup->begin(), aEnd = rOther.m_xGroup->end(); aI != aEnd; ++aI)
+            m_xGroup->insert(*aI);
+    }
+
+    m_xGroup->insert(&rOther);
+
+    rOther.m_xGroup = m_xGroup;
+
+    //if this one is checked, uncheck all the others
+    if (mbChecked)
+        ImplUncheckAllOther();
+}
+
+// .-----------------------------------------------------------------------
 
 void RadioButton::GetRadioButtonGroup( std::vector< RadioButton* >& io_rGroup, bool bIncludeThis ) const
 {
     // empty the list
     io_rGroup.clear();
+
+    if (m_xGroup)
+    {
+        for (std::set<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
+        {
+            RadioButton *pRadioButton = *aI;
+            if (pRadioButton == this)
+                continue;
+            io_rGroup.push_back(pRadioButton);
+        }
+        return;
+    }
+
+    //old-school
+    SAL_WARN("vcl", "No group set on radiobutton");
 
     // go back to first in group;
     Window* pFirst = const_cast<RadioButton*>(this);
@@ -2416,6 +2454,8 @@ void RadioButton::ImplLoadRes( const ResId& rResId )
 
 RadioButton::~RadioButton()
 {
+    if (m_xGroup)
+        m_xGroup->erase(this);
 }
 
 // -----------------------------------------------------------------------
