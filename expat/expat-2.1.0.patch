@@ -1,25 +1,5 @@
---- misc/expat-2.0.1/conftools/config.sub	2006-09-22 16:42:54.000000000 +0200
-+++ misc/build/expat-2.0.1/conftools/config.sub	2011-09-26 22:45:56.000000000 +0200
-@@ -120,7 +120,7 @@
- # Here we must recognize all the valid KERNEL-OS combinations.
- maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
- case $maybe_os in
--  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
-+  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
-   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
-   storm-chaos* | os2-emx* | rtmk-nova*)
-     os=-$maybe_os
-@@ -1211,7 +1211,7 @@
- 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
- 	      | -chorusos* | -chorusrdb* \
- 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
--	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
-+	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-newlib* | -linux-uclibc* \
- 	      | -uxpv* | -beos* | -mpeix* | -udk* \
- 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
- 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
---- misc/expat-2.0.1/lib/makefile.mk	Wed Aug 20 14:33:55 2008
-+++ misc/build/expat-2.0.1/lib/makefile.mk	Wed Aug 20 14:26:42 2008
+--- misc/expat-2.1.0/lib/makefile.mk	Wed Aug 20 14:33:55 2008
++++ misc/build/expat-2.1.0/lib/makefile.mk	Wed Aug 20 14:26:42 2008
 @@ -1 +1,90 @@
 -dummy
 +#*************************************************************************
@@ -48,7 +28,7 @@
 +# for a copy of the LGPLv3 License.
 +#
 +#*************************************************************************
-+PRJ=..$/..$/..$/..$/..
++PRJ=../../../../..
 +
 +PRJNAME=expat
 +TARGET=expat
@@ -72,40 +52,40 @@
 +CDEFS+=-DHAVE_MEMMOVE -DHAVE_BCOPY
 +.ENDIF # "$(OS)"=="MACOSX"
 +
-+SLOFILES=$(SLO)$/xmlparse.obj \
-+         $(SLO)$/xmlrole.obj \
-+         $(SLO)$/xmltok.obj
++SLOFILES=$(SLO)/xmlparse.obj \
++         $(SLO)/xmlrole.obj \
++         $(SLO)/xmltok.obj
 +
 +SECOND_BUILD=UNICODE
-+UNICODE_SLOFILES=$(SLO)$/xmlparse.obj
++UNICODE_SLOFILES=$(SLO)/xmlparse.obj
 +UNICODECDEFS+=-DXML_UNICODE
 +
-+LIB1ARCHIV=$(LB)$/libascii_$(TARGET)_xmlparse.a
-+LIB1TARGET=$(SLB)$/ascii_$(TARGET)_xmlparse.lib
-+LIB1OBJFILES=$(SLO)$/xmlparse.obj
++LIB1ARCHIV=$(LB)/libascii_$(TARGET)_xmlparse.a
++LIB1TARGET=$(SLB)/ascii_$(TARGET)_xmlparse.lib
++LIB1OBJFILES=$(SLO)/xmlparse.obj
 +
-+LIB2ARCHIV=$(LB)$/lib$(TARGET)_xmlparse.a
-+LIB2TARGET=$(SLB)$/$(TARGET)_xmlparse.lib
++LIB2ARCHIV=$(LB)/lib$(TARGET)_xmlparse.a
++LIB2TARGET=$(SLB)/$(TARGET)_xmlparse.lib
 +LIB2OBJFILES =$(REAL_UNICODE_SLOFILES)
 +
-+LIB3ARCHIV=$(LB)$/lib$(TARGET)_xmltok.a
-+LIB3TARGET=$(SLB)$/$(TARGET)_xmltok.lib
-+LIB3OBJFILES=$(SLO)$/xmlrole.obj $(SLO)$/xmltok.obj
++LIB3ARCHIV=$(LB)/lib$(TARGET)_xmltok.a
++LIB3TARGET=$(SLB)/$(TARGET)_xmltok.lib
++LIB3OBJFILES=$(SLO)/xmlrole.obj $(SLO)/xmltok.obj
 +
 +.IF "$(BUILD_X64)"!=""
 +# ---------------- X64 stuff special ---------------------
 +#  use UNICODE only because shell/shlxthandler
 +#  doesn't link against ascii_expat_xmlparse
 +#---------------------------------------------------------
-+SLOFILES_X64=$(SLO_X64)$/xmlparse.obj \
-+             $(SLO_X64)$/xmlrole.obj \
-+             $(SLO_X64)$/xmltok.obj
++SLOFILES_X64=$(SLO_X64)/xmlparse.obj \
++             $(SLO_X64)/xmlrole.obj \
++             $(SLO_X64)/xmltok.obj
 +CDEFS_X64+=-DXML_UNICODE -DCOMPILED_FROM_DSP
 +CFLAGS_X64+=-I..
-+LIB1TARGET_X64=$(SLB_X64)$/$(TARGET)_xmlparse.lib
-+LIB1OBJFILES_X64=$(SLO_X64)$/xmlparse.obj
-+LIB2TARGET_X64=$(SLB_X64)$/$(TARGET)_xmltok.lib
-+LIB2OBJFILES_X64=$(SLO_X64)$/xmlrole.obj $(SLO_X64)$/xmltok.obj
++LIB1TARGET_X64=$(SLB_X64)/$(TARGET)_xmlparse.lib
++LIB1OBJFILES_X64=$(SLO_X64)/xmlparse.obj
++LIB2TARGET_X64=$(SLB_X64)/$(TARGET)_xmltok.lib
++LIB2OBJFILES_X64=$(SLO_X64)/xmlrole.obj $(SLO_X64)/xmltok.obj
 +.ENDIF # "$(BUILD_X64)"!=""
 +
 +# --- Targets ------------------------------------------------------
