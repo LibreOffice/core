@@ -54,6 +54,15 @@ endif
 
 endef
 
+define gb_WinResTarget__add_include
+$(call gb_WinResTarget_get_target,$(1)) : INCLUDE += -I$(2)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE += -I$(2)
+endif
+
+endef
+
 define gb_WinResTarget_set_include
 $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(2)
 
@@ -85,6 +94,17 @@ endef
 
 define gb_WinResTarget_add_dependencies
 $(foreach dep,$(2),$(call gb_WinResTarget_add_dependency,$(1),$(dep)))
+
+endef
+
+define gb_WinResTarget__use_custom_headers
+$(call gb_WinResTarget_get_target,$(1)) : $(call gb_CustomTarget_get_target,$(2))
+$(call gb_WinResTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
+
+endef
+
+define gb_WinResTarget_use_custom_headers
+$(foreach customtarget,$(2),$(call gb_WinResTarget__use_custom_headers,$(1),$(customtarget)))
 
 endef
 
