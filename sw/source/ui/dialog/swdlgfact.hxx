@@ -588,11 +588,6 @@ public:
 
 };
 
-struct SwDialogsResMgr
-{
-    static ResMgr*      GetResMgr();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

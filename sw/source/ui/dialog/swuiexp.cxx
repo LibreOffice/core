@@ -31,6 +31,7 @@
 #endif
 
 #include "swdlgfact.hxx"
+#include "dialmgr.hxx"
 
 namespace swui
 {

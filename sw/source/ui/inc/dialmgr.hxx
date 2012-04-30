@@ -28,22 +28,12 @@
 #ifndef _SW_DIALMGR_HXX
 #define _SW_DIALMGR_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/resid.hxx>
-
-// forward ---------------------------------------------------------------
-
-class ResMgr;
 
 struct SwDialogsResMgr
 {
     static ResMgr*      GetResMgr();
 };
-
-#define SWDIALOG_MGR()  SwDialogsResMgr::GetResMgr()
-#define SW_RES(i)       ResId(i,SWDIALOG_MGR())
-#define SW_RESSTR(i)    ResId::toString(SW_RES(i))
 
 #endif
 
