@@ -101,50 +101,6 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
 {
     switch( pProperty->nWID )
     {
-/*
-    case OWN_ATTR_CLSID:
-    {
-        OUString aCLSID;
-        if( rValue >>= aCLSID )
-        {
-            // init an ole object with a global name
-            SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-            if( pOle2 )
-            {
-                uno::Reference < embed::XEmbeddedObject > xObj = pOle2->GetObjRef();
-                if ( !xObj.is() )
-                {
-                    SvGlobalName aClassName;
-                    if( aClassName.MakeId( aCLSID ) )
-                    {
-                        SfxObjectShell* pPersist = mpModel->GetPersist();
-                        ::rtl::OUString aPersistName;
-                        Any aAny( getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )) ) );
-                        aAny >>= aPersistName;
-
-                        //TODO/LATER: how to cope with creation failure?!
-                        xObj = pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
-                        if( xObj.is() )
-                        {
-                            aAny <<= aPersistName;
-                            setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )), aAny );
-                            pOle2->SetObjRef( xObj );
-
-                            Rectangle aRect = pOle2->GetLogicRect();
-                            awt::Size aSz;
-                            Size aSize( pOle2->GetLogicRect().GetSize() );
-                            aSz.Width = aSize.Width();
-                            aSz.Height = aSize.Height();
-                            xObj->setVisualAreaSize( pOle2->GetAspect(), aSz );
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-        break;
-    }
-*/
     case OWN_ATTR_OLE_VISAREA:
     {
         // TODO/LATER: seems to make no sence for iconified object

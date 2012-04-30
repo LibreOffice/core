@@ -223,7 +223,6 @@ public:
     TableStyleSettings maTableStyle;
     Reference< XIndexAccess > mxTableStyle;
     bool mbModifyPending;
-//  sal_Int32 mnSavedEditRowHeight;
 
     void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
@@ -243,8 +242,6 @@ public:
     sal_Int32 getRowCount() const;
 
     void DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset );
-
-//  void GetBorderLines( const CellPos& rPos, const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop, const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
     void operator=( const SdrTableObjImpl& rSource );
 
@@ -1308,7 +1305,6 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     {
         Rectangle aRect0( aRect );
         aRect = maLogicRect;
-//      mpImpl->mpLayouter->setRowHeight( mpImpl->maEditPos.mnRow, mpImpl->mnSavedEditRowHeight );
         mpImpl->LayoutTable( aRect, false, false );
         SetRectsDirty();
         ActionChanged();
@@ -1404,7 +1400,6 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
     TakeTextAnchorRect( rPos, aAnkRect );
 
     SdrTextVertAdjust eVAdj=xCell->GetTextVerticalAdjust();
-//  SdrTextHorzAdjust eHAdj=xCell->GetTextHorizontalAdjust();
 
     sal_uIntPtr nStat0=rOutliner.GetControlWord();
     Size aNullSize;
@@ -1459,16 +1454,6 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
 
     Point aTextPos(aAnkRect.TopLeft());
     Size aTextSiz(rOutliner.GetPaperSize());
-/*
-    if (eHAdj==SDRTEXTHORZADJUST_CENTER || eHAdj==SDRTEXTHORZADJUST_RIGHT)
-    {
-        long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
-        if (eHAdj==SDRTEXTHORZADJUST_CENTER)
-            aTextPos.X()+=nFreeWdt/2;
-        if (eHAdj==SDRTEXTHORZADJUST_RIGHT)
-            aTextPos.X()+=nFreeWdt;
-    }
-*/
     if (eVAdj==SDRTEXTVERTADJUST_CENTER || eVAdj==SDRTEXTVERTADJUST_BOTTOM)
     {
         long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
@@ -1602,33 +1587,14 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 
     CellRef xCell( mpImpl->getCell( rPos ) );
     SdrTextVertAdjust eVAdj = xCell.is() ? xCell->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_TOP;
-//  SdrTextHorzAdjust eHAdj = xCell.is() ? xCell->GetTextHorizontalAdjust() : SDRTEXTHORZADJUST_LEFT;
 
     aPaperMax=aMaxSiz;
 
-//  if((SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting()) || (SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting()))
         aPaperMin.Width() = aAnkSiz.Width();
 
     if (pViewMin!=NULL)
     {
         *pViewMin=aViewInit;
-/*
-        long nXFree=aAnkSiz.Width()-aPaperMin.Width();
-
-        if (eHAdj==SDRTEXTHORZADJUST_LEFT)
-        {
-            pViewMin->Right()-=nXFree;
-        }
-        else if (eHAdj==SDRTEXTHORZADJUST_RIGHT)
-        {
-            pViewMin->Left()+=nXFree;
-        }
-        else
-        {
-            pViewMin->Left()+=nXFree/2;
-            pViewMin->Right()=pViewMin->Left()+aPaperMin.Width();
-        }
-*/
         long nYFree=aAnkSiz.Height()-aPaperMin.Height();
 
         if (eVAdj==SDRTEXTVERTADJUST_TOP)
@@ -1666,9 +1632,7 @@ sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
     if( xCell.is() )
     {
         SdrTextVertAdjust eV=xCell->GetTextVerticalAdjust();
-//      SdrTextHorzAdjust eH=xCell->GetTextHorizontalAdjust();
 
-//      if (eH==SDRTEXTHORZADJUST_LEFT)
         {
             if (eV==SDRTEXTVERTADJUST_TOP)
             {
@@ -1683,38 +1647,6 @@ sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
                 eRet=ANCHOR_VCENTER_LEFT;
             }
         }
-/*
-        else if (eH==SDRTEXTHORZADJUST_RIGHT)
-        {
-            if (eV==SDRTEXTVERTADJUST_TOP)
-            {
-                eRet=ANCHOR_TOP_RIGHT;
-            }
-            else if (eV==SDRTEXTVERTADJUST_BOTTOM)
-            {
-                eRet=ANCHOR_BOTTOM_RIGHT;
-            }
-            else
-            {
-                eRet=ANCHOR_VCENTER_RIGHT;
-            }
-        }
-        else
-        {
-            if (eV==SDRTEXTVERTADJUST_TOP)
-            {
-                eRet=ANCHOR_TOP_HCENTER;
-            }
-            else if (eV==SDRTEXTVERTADJUST_BOTTOM)
-            {
-                eRet=ANCHOR_BOTTOM_HCENTER;
-            }
-            else
-            {
-                eRet=ANCHOR_VCENTER_HCENTER;
-            }
-        }
-*/
     }
     return (sal_uInt16)eRet;
 }
@@ -1867,14 +1799,11 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
     pEdtOutl=&rOutl;
 
-//  ForceOutlinerParaObject();
-
     mbInEditMode = sal_True;
 
     rOutl.Init( OUTLINERMODE_TEXTOBJECT );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
-// --
         bool bUpdMerk=rOutl.GetUpdateMode();
         if (bUpdMerk) rOutl.SetUpdateMode(sal_False);
         Size aPaperMin;
@@ -1887,10 +1816,8 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetPaperSize(aPaperMax);
 
         if (bUpdMerk) rOutl.SetUpdateMode(sal_True);
-//---
 
     sal_uIntPtr nStat=rOutl.GetControlWord();
-//  nStat   &= ~EE_CNTRL_AUTOPAGESIZE;
     nStat   |= EE_CNTRL_AUTOPAGESIZE;
     nStat   &=~EE_CNTRL_STRETCHING;
     rOutl.SetControlWord(nStat);
@@ -1901,8 +1828,6 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
-
-//  mpImpl->mnSavedEditRowHeight = mpImpl->mpLayouter->getRowHeight( mpImpl->maEditPos.mnRow );
 
     return sal_True;
 }
@@ -1985,8 +1910,6 @@ void SdrTableObj::NbcSetOutlinerParaObject( OutlinerParaObject* pTextObject)
 
         SetTextSizeDirty();
         NbcAdjustTextFrameWidthAndHeight();
-//      ImpSetTextStyleSheetListeners();
-//      ImpCheckMasterCachable();
     }
 }
 

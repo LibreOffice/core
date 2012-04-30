@@ -133,21 +133,6 @@ void FontWorkGalleryDialog::initfavorites(sal_uInt16 nThemeId, std::vector< Bitm
 
         if( GalleryExplorer::GetSdrObj( nThemeId, nModelPos, pModel, pThumb ) )
         {
-/*
-            VirtualDevice aVDev;
-            Size aRenderSize( aThumbSize.Width() * 4, aThumbSize.Height() * 4 );
-            aVDev.SetOutputSizePixel( aRenderSize );
-
-            if( GalleryExplorer::DrawCentered( &aVDev, *pModel ) )
-            {
-                aThumb = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
-
-                Size aMS( 4, 4 );
-                BmpFilterParam aParam( aMS );
-                aThumb.Filter( BMP_FILTER_MOSAIC, &aParam );
-                aThumb.Scale( aThumbSize );
-            }
-*/
         }
 
         rFavorites.push_back( pThumb );
@@ -218,15 +203,6 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                 {
                     Rectangle aObjRect( pNewObject->GetLogicRect() );
                     Rectangle aVisArea = pOutDev->PixelToLogic(Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
-/*
-                    sal_Int32 nObjHeight = aObjRect.GetHeight();
-                    VirtualDevice aVirDev( 1 ); // calculating the optimal textwidth
-                    Font aFont;
-                    aFont.SetHeight( nObjHeight );
-                    aVirDev.SetMapMode( MAP_100TH_MM );
-                    aVirDev.SetFont( aFont );
-                    aObjRect.SetSize( Size( aVirDev.GetTextWidth( maStrClickToAddText ), nObjHeight ) );
-*/
                     Point aPagePos = aVisArea.Center();
                     aPagePos.X() -= aObjRect.GetWidth() / 2;
                     aPagePos.Y() -= aObjRect.GetHeight() / 2;

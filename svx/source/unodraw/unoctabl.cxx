@@ -241,15 +241,6 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #include "uno/lbnames.h"
 #include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
 
-/*
-namespace svx
-{
-extern OUString SAL_CALL ExtrusionDepthController_getImplementationName();
-extern uno::Reference< uno::XInterface > SAL_CALL ExtrusionDepthController_createInstance(const uno::Reference< lang::XMultiServiceFactory > &)  throw( uno::RuntimeException );
-extern uno::Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( uno::RuntimeException );
-}
-*/
-
 extern "C"
 {
 
@@ -362,16 +353,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 ::svx::SvXMLGraphicExportHelper_createInstance,
                 ::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
         }
-/*
-        else if( ::svx::ExtrusionDepthController_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                ::svx::ExtrusionDepthController_getImplementationName(),
-                ::svx::ExtrusionDepthController_createInstance,
-                ::svx::ExtrusionDepthController_getSupportedServiceNames() );
-        }
-*/
         if( xFactory.is())
         {
             xFactory->acquire();

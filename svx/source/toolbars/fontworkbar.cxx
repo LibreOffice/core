@@ -583,12 +583,6 @@ void FontworkBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     sal_uInt32 nCheckStatus = 0;
 
-    /*
-    if ( rSet.GetItemState( SID_FONTWORK_SHAPE ) != SFX_ITEM_UNKNOWN )
-    {
-        sal_Bool bBreak = sal_True;
-    }
-    */
     if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT_FLOATER ) != SFX_ITEM_UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )

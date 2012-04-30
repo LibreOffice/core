@@ -1062,12 +1062,6 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
     {
         switch( pMap->nWID )
         {
-/*
-        case OWN_ATTR_HASLEVELS:
-        {
-            return Any( hasLevels() );
-        }
-*/
         case OWN_ATTR_STYLE:
         {
             return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
@@ -1280,12 +1274,6 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 eState = PropertyState_DEFAULT_VALUE;
             }
         }
-/*
-        case OWN_ATTR_HASLEVELS:
-        {
-            return PropertyState_DIRECT_VALUE;
-        }
-*/
         case OWN_ATTR_STYLE:
         {
             return PropertyState_DIRECT_VALUE;
@@ -1311,9 +1299,6 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
             case SFX_ITEM_DEFAULT:
                 eState = PropertyState_DEFAULT_VALUE;
                 break;
-    //      case SFX_ITEM_UNKNOWN:
-    //      case SFX_ITEM_DONTCARE:
-    //      case SFX_ITEM_DISABLED:
             default:
                 eState = PropertyState_AMBIGUOUS_VALUE;
                 break;
@@ -1412,7 +1397,6 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
             mpProperties->ClearObjectItem( XATTR_FILLBMP_TILE );
             break;
         }
-//      case OWN_ATTR_HASLEVELS:
         case OWN_ATTR_STYLE:
             break;
 
@@ -1452,10 +1436,6 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
         case OWN_ATTR_FILLBMP_MODE:
             return Any(  BitmapMode_NO_REPEAT );
 
-/*
-        case OWN_ATTR_HASLEVELS:
-            return Any( sal_False );
-*/
         case OWN_ATTR_STYLE:
         {
             Reference< XStyle > xStyle;
