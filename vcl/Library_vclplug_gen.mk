@@ -101,6 +101,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salframe \
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \
+    vcl/unx/x11/xlimits \
 ))
 
 # ultimately we want to split the x11 dependencies out

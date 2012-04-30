@@ -41,6 +41,9 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#if !GTK_CHECK_VERSION(3,0,0)
+#include <unx/x11/xlimits.hxx>
+#endif
 
 #include <tools/prex.h>
 #include <X11/Xatom.h>
@@ -2760,7 +2763,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
         if( aSize.Width() && aSize.Height() )
         {
             m_hBackgroundPixmap =
-                XCreatePixmap( getDisplay()->GetDisplay(),
+                limitXCreatePixmap( getDisplay()->GetDisplay(),
                                widget_get_xid(m_pWindow),
                                aSize.Width(),
                                aSize.Height(),

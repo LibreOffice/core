@@ -49,6 +49,7 @@
 #include "unx/salgdi.h"
 #include "unx/salframe.h"
 #include "unx/salvd.h"
+#include <unx/x11/xlimits.hxx>
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
@@ -469,11 +470,11 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     {
         if (hBrush_)
             XFreePixmap (GetXDisplay(), hBrush_);
-        hBrush_ = XCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
+        hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
     }
     else
     if( !hBrush_ )
-        hBrush_ = XCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
+        hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
 
     // put the ximage to the pixmap
     XPutImage( GetXDisplay(),
@@ -1141,7 +1142,7 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
     {
         Display* pXDisplay = GetXDisplay();
 
-        rEntry.m_aPixmap = ::XCreatePixmap( pXDisplay, hDrawable_, 1, 1, 32 );
+        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, hDrawable_, 1, 1, 32 );
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
 

@@ -51,6 +51,7 @@
 #include <unx/salgdi.h>
 #include <unx/salbmp.h>
 #include <unx/salinst.h>
+#include <unx/x11/xlimits.hxx>
 
 // -----------
 // - Defines -
@@ -892,7 +893,7 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
 
-    if( (maPixmap = XCreatePixmap( pXDisp, aDrawable, ImplGetWidth(), ImplGetHeight(), ImplGetDepth() )) )
+    if( (maPixmap = limitXCreatePixmap( pXDisp, aDrawable, ImplGetWidth(), ImplGetHeight(), ImplGetDepth() )) )
     {
         XGCValues   aValues;
         GC          aGC;
@@ -928,7 +929,7 @@ ImplSalDDB::ImplSalDDB(
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
 
-    if( (maPixmap = XCreatePixmap( pXDisp, aDrawable, nWidth, nHeight, nDrawableDepth )) )
+    if( (maPixmap = limitXCreatePixmap( pXDisp, aDrawable, nWidth, nHeight, nDrawableDepth )) )
     {
         XGCValues   aValues;
         GC          aGC;

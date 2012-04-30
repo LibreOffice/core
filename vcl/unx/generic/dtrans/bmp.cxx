@@ -34,6 +34,7 @@
 #include <bmp.hxx>
 
 #include <X11_selection.hxx>
+#include <unx/x11/xlimits.hxx>
 #include <sal/macros.h>
 
 using namespace x11;
@@ -670,7 +671,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
     if( m_aBitmap != None )
         XFreePixmap( m_pDisplay, m_aBitmap ), m_aBitmap = None;
 
-    m_aPixmap = XCreatePixmap( m_pDisplay,
+    m_aPixmap = limitXCreatePixmap( m_pDisplay,
                                RootWindow( m_pDisplay, m_aInfo.screen ),
                                nWidth, nHeight, m_aInfo.depth );
 
@@ -723,7 +724,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
         rtl_freeMemory( aImage.data );
 
         // prepare bitmap (mask)
-        m_aBitmap = XCreatePixmap( m_pDisplay,
+        m_aBitmap = limitXCreatePixmap( m_pDisplay,
                                    RootWindow( m_pDisplay, m_aInfo.screen ),
                                    nWidth, nHeight, 1 );
         XGCValues aVal;

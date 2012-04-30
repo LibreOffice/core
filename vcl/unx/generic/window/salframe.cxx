@@ -66,6 +66,7 @@
 #include "unx/i18n_ic.hxx"
 #include "unx/i18n_keysym.hxx"
 #include "unx/i18n_status.hxx"
+#include <unx/x11/xlimits.hxx>
 
 #include "generic/gensys.h"
 #include "sallayout.hxx"
@@ -873,7 +874,7 @@ void X11SalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
         if( aSize.Width() && aSize.Height() )
         {
             mhBackgroundPixmap =
-                XCreatePixmap( GetXDisplay(),
+                limitXCreatePixmap( GetXDisplay(),
                                GetWindow(),
                                aSize.Width(),
                                aSize.Height(),

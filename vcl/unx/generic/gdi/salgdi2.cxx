@@ -39,6 +39,7 @@
 #include "unx/salgdi.h"
 #include "unx/salframe.h"
 #include "unx/salvd.h"
+#include <unx/x11/xlimits.hxx>
 #include "xrender_peer.hxx"
 
 #include "generic/printergfx.hxx"
@@ -347,7 +348,7 @@ GC X11SalGraphics::SetMask( int           &nX,
     }
 
     // - - - - create alternate clip pixmap for region clipping - - - -
-    Pixmap hPixmap  = XCreatePixmap( pDisplay, hClipMask, nDX, nDY, 1 );
+    Pixmap hPixmap = limitXCreatePixmap( pDisplay, hClipMask, nDX, nDY, 1 );
 
     if( !hPixmap )
     {
@@ -503,7 +504,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
             && !pSrcGraphics->bVirDev_
             && (GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
         {
-            Pixmap hPixmap = XCreatePixmap( GetXDisplay(),
+            Pixmap hPixmap = limitXCreatePixmap( GetXDisplay(),
                                             pSrcGraphics->GetDrawable(),        // source
                                             pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                                             pSrcGraphics->GetBitCount() );
@@ -688,9 +689,9 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
     const sal_uInt16    nDepth( m_pVDev ?
                             m_pVDev->GetDepth() :
                             pSalDisp->GetVisual( m_nXScreen ).GetDepth() );
-    Pixmap          aFG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
+    Pixmap          aFG( limitXCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
                                         pPosAry->mnDestHeight, nDepth ) );
-    Pixmap          aBG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
+    Pixmap          aBG( limitXCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
                                         pPosAry->mnDestHeight, nDepth ) );
 
     if( aFG && aBG )
@@ -862,7 +863,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
         pAlphaFormat->depth, pAlphaBuffer->mnScanlineSize );
 
-    Pixmap aAlphaPM = XCreatePixmap( pXDisplay, hDrawable_,
+    Pixmap aAlphaPM = limitXCreatePixmap( pXDisplay, hDrawable_,
         rTR.mnDestWidth, rTR.mnDestHeight, 8 );
 
     XGCValues aAlphaGCV;
@@ -944,7 +945,7 @@ void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
     const SalDisplay*   pSalDisp = GetDisplay();
     Display*            pXDisp = pSalDisp->GetDisplay();
     Drawable            aDrawable( GetDrawable() );
-    Pixmap              aStipple( XCreatePixmap( pXDisp, aDrawable,
+    Pixmap              aStipple( limitXCreatePixmap( pXDisp, aDrawable,
                                                  pPosAry->mnDestWidth,
                                                  pPosAry->mnDestHeight, 1 ) );
 

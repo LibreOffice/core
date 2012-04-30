@@ -38,6 +38,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salvd.h>
+#include <unx/x11/xlimits.hxx>
 
 #include <salinst.hxx>
 
@@ -166,7 +167,7 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
     nDepth_                 = nBitCount;
 
     if( hDrawable == None )
-        hDrawable_          = XCreatePixmap( GetXDisplay(),
+        hDrawable_          = limitXCreatePixmap( GetXDisplay(),
                                              pDisplay_->GetDrawable( m_nXScreen ),
                                              nDX_, nDY_,
                                              GetDepth() );
@@ -225,20 +226,10 @@ sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     if( bExternPixmap_ )
         return sal_False;
 
-    // #144688#
-    // the X protocol request CreatePixmap puts an upper bound
-    // of 16 bit to the size. Beyond that there may be implementation
-    // limits of the Xserver; which we should catch by a failed XCreatePixmap
-    // call. However extra large values should be caught here since we'd run into
-    // 16 bit truncation here without noticing.
-    if( nDX < 0 || nDX > 65535 ||
-        nDY < 0 || nDY > 65535 )
-        return sal_False;
-
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;
 
-    Pixmap h = XCreatePixmap( GetXDisplay(),
+    Pixmap h = limitXCreatePixmap( GetXDisplay(),
                               pDisplay_->GetDrawable( m_nXScreen ),
                               nDX, nDY, nDepth_ );
 
@@ -246,7 +237,7 @@ sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     {
         if( !GetDrawable() )
         {
-            hDrawable_ = XCreatePixmap( GetXDisplay(),
+            hDrawable_ = limitXCreatePixmap( GetXDisplay(),
                                         pDisplay_->GetDrawable( m_nXScreen ),
                                         1, 1, nDepth_ );
             nDX_ = 1;
