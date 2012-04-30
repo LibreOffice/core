@@ -138,12 +138,12 @@ static sal_Bool checkFieldDependencies(TypeManager& typeMgr, TypeDependency& dep
     if (count == 0 || reader.getTypeClass() == RT_TYPE_ENUM)
         return sal_True;
 
-    OString fieldType;
     for (sal_uInt16 i=0; i < count; i++)
     {
-        fieldType = reader.getFieldType(i);
+        const OString fieldType = reader.getFieldType(i);
+        const bool bIsTypeParam(reader.getFieldAccess(i) & RT_ACCESS_PARAMETERIZED_TYPE);
 
-        if (!fieldType.isEmpty())
+        if (!fieldType.isEmpty() && !bIsTypeParam)
         {
             dependencies.insert(type, fieldType, TYPEUSE_MEMBER);
             checkTypeDependencies(typeMgr, dependencies, fieldType);
@@ -224,8 +224,11 @@ static sal_Bool checkReferenceDependencies(TypeManager& typeMgr, TypeDependency&
     {
         referenceName = reader.getReferenceName(i);
 
-        dependencies.insert(type, referenceName, TYPEUSE_NORMAL);
-        checkTypeDependencies(typeMgr, dependencies, referenceName);
+        if (reader.getReferenceType(i) != RT_REF_TYPE_PARAMETER)
+        {
+            dependencies.insert(type, referenceName, TYPEUSE_NORMAL);
+            checkTypeDependencies(typeMgr, dependencies, referenceName);
+        }
     }
 
     return sal_True;
