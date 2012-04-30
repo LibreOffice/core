@@ -442,11 +442,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
-    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
-        append(RTL_CONSTASCII_STRINGPARAM("=\""));
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
-    OutCSS1_SvxBox( rWrt, pBox->GetFrmFmt()->GetBox() );
-    sOut.append('"');
+    rWrt.OutCSS1_TableCellBorderHack(*pBox->GetFrmFmt());
 
     sal_uInt32 nNumFmt = 0;
     double nValue = 0.0;

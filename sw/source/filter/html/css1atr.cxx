@@ -2301,6 +2301,18 @@ void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
         Strm() << '\"';
 }
 
+void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrmFmt const& rFrmFmt)
+{
+    SwCSS1OutMode const aMode(*this,
+        CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX,
+        true, 0);
+    OutCSS1_SvxBox(*this, rFrmFmt.GetBox());
+    if (!bFirstCSS1Property)
+    {
+        this->Strm() << cCSS1_style_opt_end;
+    }
+}
+
 void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt )
 {
     SwCSS1OutMode aMode( *this, CSS1_OUTMODE_STYLE_OPT_ON |
