@@ -32,7 +32,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdfield.hxx>
 
-static sal_Bool bInit = sal_False;
+static bool bInit = false;
 
 // Do not remove this, it is still used in src536a!
 void SdrRegisterFieldClasses()
@@ -43,7 +43,7 @@ void SdrRegisterFieldClasses()
         SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxHeaderField);
         SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxFooterField);
         SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxDateTimeField);
-        bInit = sal_True;
+        bInit = true;
     }
 }
 
@@ -52,7 +52,7 @@ void SdrRegisterFieldClasses()
 bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/,
     bool /*bEdit*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, XubString& /*rRet*/) const
 {
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
