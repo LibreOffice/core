@@ -25,7 +25,7 @@
   for a copy of the LGPLv3 License.
 
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:SL="http://schemas.microsoft.com/schemaLibrary/2003/core" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="aml dt html o ss SL v w10 w wx x">
+<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:SL="http://schemas.microsoft.com/schemaLibrary/2003/core" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:exsl="http://exslt.org/common" xmlns:set="http://exslt.org/sets" extension-element-prefixes="set exsl" exclude-result-prefixes="aml dt html o ss SL v w10 w wx x set exsl">
 	<!--+++++ INCLUDED XSL MODULES +++++-->
 	<!-- helper collection, to convert measures (e.g. inch to pixel using DPI (dots per inch) parameter)-->
 	<xsl:import href="../../common/measure_conversion.xsl"/>
@@ -426,21 +426,27 @@
 			-->
 		</office:settings>
 	</xsl:template>
-	<!-- Key all attributes with the same name and same value -->
-	<xsl:key name="same-named-font" match="/ss:Workbook/ss:Styles/ss:Style/ss:Font" use="concat(@ss:FontName, @x:Family)"/>
-	<xsl:key name="same-named-face" match="/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell//html:Font[@html:Face]" use="concat(@html:Face, @x:Family)"/>
+
+	<xsl:variable name="allFontDefs"><xsl:for-each select="/ss:Workbook/ss:Styles/ss:Style/ss:Font[@ss:FontName or @x:Family]|/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell/descendant::html:Font[@html:Face or @x:Family]"><f><xsl:copy-of select="@ss:FontName |@html:Face | @x:Family"/><xsl:value-of select="concat(@ss:FontName, @html:Face, '&#9;', @x:Family)"/></f></xsl:for-each></xsl:variable>
+	
 	<xsl:template name="font-declaration">
+		<xsl:variable name="distinctFontDefs">
+			<xsl:choose>
+				<!-- saxon dropped support for exslt:sets#distinct() in version 8.2, but is capable of executing XPath 2.0 functions -->
+				<xsl:when test="function-available('set:distinct')"><xsl:copy-of select="set:distinct(exsl:node-set($allFontDefs)/*)"/></xsl:when>
+				<xsl:otherwise><xsl:call-template name="set:distinct"><xsl:with-param name="nodes" select="$allFontDefs"></xsl:with-param></xsl:call-template></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<office:font-face-decls>
-			<xsl:if test="/ss:Workbook/ss:Styles/ss:Style/ss:Font">
-				<xsl:for-each select="/ss:Workbook/ss:Styles/ss:Style/ss:Font[ generate-id(.) = generate-id(key('same-named-font', concat(@ss:FontName, @x:Family))[1])]">
-					<xsl:sort select="name()"/>
-					<xsl:element name="style:font-face">
-						<xsl:if test="@ss:FontName">
+			<xsl:if test="count(exsl:node-set($distinctFontDefs))">
+				<xsl:for-each select="exsl:node-set($distinctFontDefs)/*">
+					<style:font-face>
+						<xsl:if test="@ss:FontName or @html:Face">
 							<xsl:attribute name="style:name">
-								<xsl:value-of select="@ss:FontName"/>
+								<xsl:value-of select="@ss:FontName | @html:Face"/>
 							</xsl:attribute>
 							<xsl:attribute name="svg:font-family">
-								<xsl:value-of select="@ss:FontName"/>
+								<xsl:value-of select="@ss:FontName | @html:Face "/>
 							</xsl:attribute>
 						</xsl:if>
 						<xsl:if test="@x:Family">
@@ -450,25 +456,9 @@
 								</xsl:call-template>
 							</xsl:attribute>
 						</xsl:if>
-					</xsl:element>
+					</style:font-face>
 				</xsl:for-each>
 			</xsl:if>
-			<xsl:for-each select="/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell/descendant::html:Font[@html:Face][ generate-id(.) = generate-id(key('same-named-face', concat(@html:Face, @x:Family))[1])]">
-				<xsl:sort select="name()"/>
-				<xsl:element name="style:font-face">
-					<xsl:attribute name="style:name">
-						<xsl:value-of select="@html:Face"/>
-					</xsl:attribute>
-					<xsl:attribute name="svg:font-family">
-						<xsl:value-of select="@html:Face"/>
-					</xsl:attribute>
-					<xsl:attribute name="style:font-family-generic">
-						<xsl:call-template name="translate-font-family-generic">
-							<xsl:with-param name="family" select="@x:Family"/>
-						</xsl:call-template>
-					</xsl:attribute>
-				</xsl:element>
-			</xsl:for-each>
 		</office:font-face-decls>
 	</xsl:template>
 	<xsl:template name="translate-font-family-generic">
