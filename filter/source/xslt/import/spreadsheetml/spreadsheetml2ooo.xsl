@@ -7560,6 +7560,9 @@
 					<xsl:with-param name="current-pos" select="string-length($temp)+$current-pos+3"/>
 				</xsl:call-template>
 			</xsl:when>
+			<xsl:when test="starts-with($current-style-data, '&amp;')">
+				<xsl:value-of select="$current-pos + 1"/>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$current-pos"/>
 			</xsl:otherwise>
