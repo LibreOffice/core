@@ -407,9 +407,9 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         if [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
             MAILER=/usr/bin/kde-open
         elif [ -x /usr/bin/gnome-open ] ; then
-            MAILER = /usr/bin/gnome-open
+            MAILER=/usr/bin/gnome-open
         elif [ -x /usr/bin/xdg-open ] ; then
-            MAILER = /usr/bin/xdg-open
+            MAILER=/usr/bin/xdg-open
         else
             echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
             exit 2
