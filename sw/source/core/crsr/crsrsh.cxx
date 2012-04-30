@@ -618,7 +618,7 @@ SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
     return pFrm;
 }
 
-sal_Bool SwCrsrShell::IsInHeaderFooter( sal_Bool* pbInHeader ) const
+bool SwCrsrShell::IsInHeaderFooter( sal_Bool* pbInHeader ) const
 {
     Point aPt;
     SwFrm* pFrm = ::lcl_IsInHeaderFooter( pCurCrsr->GetPoint()->nNode, aPt );

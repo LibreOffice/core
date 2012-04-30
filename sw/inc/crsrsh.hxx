@@ -672,7 +672,7 @@ public:
                             sal_Bool bInHeader = sal_True );
     // is point of cursor in header/footer. pbInHeader return sal_True if it is
     // in a headerframe otherwise in a footerframe
-    sal_Bool IsInHeaderFooter( sal_Bool* pbInHeader = 0 ) const;
+    bool IsInHeaderFooter( sal_Bool* pbInHeader = 0 ) const;
 
     sal_Bool GotoNextTOXBase( const String* = 0 );
     sal_Bool GotoPrevTOXBase( const String* = 0 );
