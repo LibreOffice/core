@@ -398,7 +398,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
 		$(DEFS) $(FLAGS) \
-		-I$(dir $(3)) \
 		$(INCLUDE) \
 		-o $(1) \
 		$(RCFILE) )
@@ -410,18 +409,20 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
+$(call gb_Output_announce,RES:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) && \
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(INCLUDE) \
 		$(DEFS) \
-		$(2) \
+		$(RCFILE) \
 		-f - \
 	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(call gb_WinResTarget_get_target,$(1)) \
+		-v OBJECTFILE=$(3) \
 		-v OUTDIR=$(OUTDIR)/ \
 		-v WORKDIR=$(WORKDIR)/ \
 		-v SRCDIR=$(SRCDIR)/ \
-	> $(call gb_WinResTarget_get_dep_target,$(1)))
+	> $(1))
 endef
 else
 gb_WinResTarget__command_dep =
