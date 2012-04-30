@@ -182,8 +182,6 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-#define ShellClass FontworkBar
-
 SFX_SLOTMAP(FontworkBar)
 {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }

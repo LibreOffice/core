@@ -41,8 +41,6 @@
 #include "svx/insctrl.hxx"
 #include <svx/dialmgr.hxx>
 
-#define PAINT_OFFSET    5
-
 SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
 // class SvxInsertStatusBarControl ---------------------------------------

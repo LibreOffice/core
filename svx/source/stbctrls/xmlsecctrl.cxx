@@ -47,9 +47,6 @@
 #include "svx/xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
 
-#define PAINT_OFFSET    5
-
-
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl

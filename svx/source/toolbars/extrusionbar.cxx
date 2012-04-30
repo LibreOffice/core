@@ -65,8 +65,6 @@ using namespace ::com::sun::star::uno;
 |*
 \************************************************************************/
 
-#define ShellClass ExtrusionBar
-
 SFX_SLOTMAP(ExtrusionBar)
 {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }

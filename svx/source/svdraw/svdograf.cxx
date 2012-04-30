@@ -80,7 +80,6 @@ using namespace ::com::sun::star::io;
 // - Defines -
 // -----------
 
-#define GRAFSTREAMPOS_INVALID   0xffffffff
 #define SWAPGRAPHIC_TIMEOUT     5000
 
 

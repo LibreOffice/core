@@ -41,8 +41,6 @@
 
 #include <svx/dialogs.hrc>
 
-#define PAINT_OFFSET    5
-
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 // class SvxSelectionModeControl -----------------------------------------
