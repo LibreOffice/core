@@ -28,6 +28,7 @@
 
 #the following user-defined variables are supported:
 # YACCFLAGS
+# LEXFLAGS
 # CPPFLAGS
 # CFLAGS
 # CXXFLAGS
@@ -243,6 +244,34 @@ endef
 gb_YACC := bison
 
 
+# LexTarget class
+
+gb_LexTarget_get_source = $(1)/$(2).l
+
+.PHONY : $(call gb_LexTarget_get_clean_target,%)
+$(call gb_LexTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),LEX,3)
+	$(call gb_Helper_abbreviate_dirs,\
+	    rm -f $(call gb_LexTarget_get_scanner_target,$*) $(call gb_LexTarget_get_target,$*))
+
+$(call gb_LexTarget_get_target,%) : $(call gb_LexTarget_get_source,$(SRCDIR),%)
+	$(call gb_LexTarget__command,$<,$*,$@,$(call gb_LexTarget_get_scanner_target,$*))
+
+# gb_LexTarget_LexTarget(scanner-file)
+define gb_LexTarget_LexTarget
+$(call gb_LexTarget_get_scanner_target,$(1)) :| $(call gb_LexTarget_get_target,$(1))
+
+endef
+
+#  gb_LexTarget__command(scanner-file, stem-for-message, done-pseudo-target, source-target)
+define gb_LexTarget__command
+$(call gb_Output_announce,$(2),$(true),LEX,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(FLEX) $(T_LEXFLAGS) -o $(4) $(1) && touch $(3) )
+endef
+
+
 # ObjCxxObject class
 #
 
@@ -452,6 +481,10 @@ $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : YACCOBJECT :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : LEXOBJECT :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : T_LEXFLAGS := $$(gb_LinkTarget_LEXFLAGS) $(LEXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
@@ -871,6 +904,22 @@ endef
 # gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])
 define gb_LinkTarget_add_grammars
 $(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar),$(4)))
+endef
+
+# Add a flex scanner to the build.
+# gb_LinkTarget_add_scanner(<component>,<scanner file>)
+define gb_LinkTarget_add_scanner
+$(call gb_LexTarget_LexTarget,$(2))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
+
+endef
+
+# Add flex scanners to the build.
+# gb_LinkTarget_add_scanners(<component>,<scanner file> [<scanner file>*])
+define gb_LinkTarget_add_scanners
+$(foreach scanner,$(2),$(call gb_LinkTarget_add_scanner,$(1),$(scanner)))
+
 endef
 
 define gb_LinkTarget_add_noexception_object

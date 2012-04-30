@@ -27,7 +27,6 @@
 $(eval $(call gb_Module_Module,idlc))
 
 $(eval $(call gb_Module_add_targets,idlc,\
-    CustomTarget_scanner \
     Executable_idlc \
     Executable_idlcpp \
 ))

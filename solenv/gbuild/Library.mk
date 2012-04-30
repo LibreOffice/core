@@ -167,6 +167,8 @@ $(eval $(foreach method,\
 	use_library_objects \
 	add_grammar \
 	add_grammars \
+	add_scanner \
+	add_scanners \
 	add_cflags \
 	set_cflags \
 	add_cxxflags \

@@ -141,6 +141,10 @@ gb_Configuration_get_target = $(WORKDIR)/Configuration/$(1).done
 gb_YaccTarget_get_grammar_target = $(WORKDIR)/YaccTarget/$(1).cxx
 gb_YaccTarget_get_header_target = $(WORKDIR)/YaccTarget/$(1).hxx
 gb_YaccTarget_get_target = $(WORKDIR)/YaccTarget/$(1).done
+
+gb_LexTarget_get_scanner_target = $(WORKDIR)/LexTarget/$(1).cxx
+gb_LexTarget_get_target = $(WORKDIR)/LexTarget/$(1).done
+
 gb_XcsTarget_get_target = $(WORKDIR)/XcsTarget/$(1)
 gb_XcuDataTarget_get_target = $(WORKDIR)/XcuDataTarget/$(1)
 gb_XcuLangpackTarget_get_target = $(WORKDIR)/XcuLangpackTarget/$(1)
@@ -194,6 +198,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	UnoApiTarget \
 	WinResTarget \
 	YaccTarget \
+	LexTarget \
 	Zip \
 	XcsTarget \
 	XcuDataTarget \

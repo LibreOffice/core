@@ -42,10 +42,11 @@ $(eval $(call gb_Executable_add_grammars,idlc,\
     idlc/source/parser \
 ))
 
-$(eval $(call gb_Executable_use_custom_headers,idlc,idlc/scanner))
+$(eval $(call gb_Executable_add_scanners,idlc,\
+    idlc/source/scanner \
+))
 
 $(eval $(call gb_Executable_add_exception_objects,idlc,\
-    idlc/source/wrap_scanner \
     idlc/source/idlcmain \
     idlc/source/idlc \
     idlc/source/idlccompile \
