@@ -2326,63 +2326,24 @@ void RadioButton::ImplUncheckAllOther()
 {
     mpWindowImpl->mnStyle |= WB_TABSTOP;
 
+    std::vector<RadioButton*> aGroup;
+    GetRadioButtonGroup(aGroup, false);
     // iterate over radio button group and checked buttons
-    Window* pWindow;
-    WinBits nStyle;
-    if ( !(GetStyle() & WB_GROUP) )
+    for (std::vector<RadioButton*>::iterator aI = aGroup.begin(), aEnd = aGroup.end(); aI != aEnd; ++aI)
     {
-        pWindow = GetWindow( WINDOW_PREV );
-        while ( pWindow )
+        RadioButton *pWindow = *aI;
+        if ( pWindow->IsChecked() )
         {
-            nStyle = pWindow->GetStyle();
-
-            if ( pWindow->GetType() == WINDOW_RADIOBUTTON )
-            {
-                if ( ((RadioButton*)pWindow)->IsChecked() )
-                {
-                    ImplDelData aDelData;
-                    pWindow->ImplAddDel( &aDelData );
-                    ((RadioButton*)pWindow)->SetState( sal_False );
-                    if ( aDelData.IsDead() )
-                        return;
-                    pWindow->ImplRemoveDel( &aDelData );
-                }
-                // not inside if clause to always remove wrongly set WB_TABSTOPS
-                pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
-            }
-
-            if ( nStyle & WB_GROUP )
-                break;
-
-            pWindow = pWindow->GetWindow( WINDOW_PREV );
-        }
-    }
-
-    pWindow = GetWindow( WINDOW_NEXT );
-    while ( pWindow )
-    {
-        nStyle = pWindow->GetStyle();
-
-        if ( nStyle & WB_GROUP )
-            break;
-
-        if ( pWindow->GetType() == WINDOW_RADIOBUTTON )
-        {
-            if ( ((RadioButton*)pWindow)->IsChecked() )
-            {
-                ImplDelData aDelData;
-                pWindow->ImplAddDel( &aDelData );
-                ((RadioButton*)pWindow)->SetState( sal_False );
-                if ( aDelData.IsDead() )
-                    return;
-                pWindow->ImplRemoveDel( &aDelData );
-            }
-
-            // not inside if clause to always remove wrongly set WB_TABSTOPS
-            pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
+            ImplDelData aDelData;
+            pWindow->ImplAddDel( &aDelData );
+            pWindow->SetState( sal_False );
+            if ( aDelData.IsDead() )
+                return;
+            pWindow->ImplRemoveDel( &aDelData );
         }
 
-        pWindow = pWindow->GetWindow( WINDOW_NEXT );
+        // not inside if clause to always remove wrongly set WB_TABSTOPS
+        pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
     }
 }
 
