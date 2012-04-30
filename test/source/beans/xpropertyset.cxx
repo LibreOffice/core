@@ -69,9 +69,12 @@ void XPropertySet::testAddVetoableChangeListener()
 void XPropertySet::testSetPropertyValue()
 {
     testGetPropertySetInfo();
-    uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
 
-    // TODO: implement this.
+    for (size_t i = 0, n = maPropsToTest.normal.size(); i < n; ++i)
+    {
+        bool bSuccess = isPropertyValueChangeable(maPropsToTest.normal[i]);
+        CPPUNIT_ASSERT(bSuccess);
+    }
 }
 
 void XPropertySet::testGetPropertyValue()
@@ -116,10 +119,48 @@ bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)
             // boolean type
             sal_Bool bOld = any.get<sal_Bool>();
             xPropSet->setPropertyValue(rName, makeAny(!bOld));
-            any = xPropSet->getPropertyValue(rName);
-            sal_Bool bNew = any.get<sal_Bool>();
-
-            return bOld != bNew;
+        }
+        else if (type == getCppuType<sal_Int8>())
+        {
+            // 8-bit integer
+            sal_Int8 nOld = any.get<sal_Int8>();
+            sal_Int8 nNew = nOld + 1;
+            xPropSet->setPropertyValue(rName, makeAny(nNew));
+        }
+        else if (type == getCppuType<sal_Int16>())
+        {
+            // 16-bit integer
+            sal_Int16 nOld = any.get<sal_Int16>();
+            sal_Int16 nNew = nOld + 2;
+            xPropSet->setPropertyValue(rName, makeAny(nNew));
+        }
+        else if (type == getCppuType<sal_Int32>())
+        {
+            // 32-bit integer
+            sal_Int32 nOld = any.get<sal_Int32>();
+            sal_Int32 nNew = nOld + 3;
+            xPropSet->setPropertyValue(rName, makeAny(nNew));
+        }
+        else if (type == getCppuType<sal_Int64>())
+        {
+            // 64-bit integer
+            sal_Int64 nOld = any.get<sal_Int64>();
+            sal_Int64 nNew = nOld + 4;
+            xPropSet->setPropertyValue(rName, makeAny(nNew));
+        }
+        else if (type == getCppuType<float>())
+        {
+            // single precision
+            float fOld = any.get<float>();
+            float fNew = fOld + 1.2;
+            xPropSet->setPropertyValue(rName, makeAny(fNew));
+        }
+        else if (type == getCppuType<double>())
+        {
+            // double precision
+            double fOld = any.get<double>();
+            double fNew = fOld + 1.3;
+            xPropSet->setPropertyValue(rName, makeAny(fNew));
         }
         else if (type == getCppuType<rtl::OUString>())
         {
@@ -127,16 +168,14 @@ bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)
             rtl::OUString aOld = any.get<rtl::OUString>();
             rtl::OUString aNew = aOld + rtl::OUString("foo");
             xPropSet->setPropertyValue(rName, makeAny(aNew));
-            any = xPropSet->getPropertyValue(rName);
-            rtl::OUString aTest = any.get<rtl::OUString>();
-            return aOld != aTest;
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE("XPropertySet::isChangeable: unknown type in Any tested.", false);
         }
 
-        // TODO: add more primitive types to cover.  For specialized types,
-        // the client code should provide the test code to change their values
-        // by overwriting this method.
-
-        CPPUNIT_ASSERT_MESSAGE("XPropertySet::isChangeable: unknown type in Any tested.", false);
+        uno::Any anyTest = xPropSet->getPropertyValue(rName);
+        return any != anyTest;
     }
     catch (const uno::Exception&)
     {
