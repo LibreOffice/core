@@ -29,8 +29,6 @@ using ::rtl::OUStringToOString;
 #define MAKE_PROPVAL(NameId, Value) \
     beans::PropertyValue(aPropNameSupplier.GetName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
 
-#define OUSTR_TO_C( x )  OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr( )
-
 #define NUMBERING_MAX_LEVELS    10
 
 
