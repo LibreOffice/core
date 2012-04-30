@@ -27,6 +27,7 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/text/xtextfield.hxx>
 #include <test/text/xtextcontent.hxx>
 
@@ -38,11 +39,11 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#define NUMBER_OF_TESTS 3
+#define NUMBER_OF_TESTS 5
 
 namespace sc_apitest {
 
-class ScEditFieldObj_Cell : public UnoApiTest, apitest::XTextField, apitest::XTextContent
+class ScEditFieldObj_Cell : public UnoApiTest, apitest::XTextField, apitest::XTextContent, apitest::XPropertySet
 {
 public:
     ScEditFieldObj_Cell();
@@ -55,8 +56,14 @@ public:
     virtual bool isAttachSupported() { return true; }
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Cell);
+
+    // XPropertySet
+    CPPUNIT_TEST(testGetPropertySetInfo);
+    CPPUNIT_TEST(testGetPropertyValue);
+
     // XTextField
     CPPUNIT_TEST(testGetPresentation);
+
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
