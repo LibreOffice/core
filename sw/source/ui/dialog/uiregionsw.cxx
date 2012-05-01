@@ -215,8 +215,6 @@ public:
 };
 
 
-SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
-
 SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
     : m_SectionData( rSect )
     , m_Brush( RES_BACKGROUND )
@@ -585,7 +583,6 @@ SwEditRegionDlg::~SwEditRegionDlg( )
         pEntry = aTree.Next( pEntry );
     }
 
-    aSectReprArr.DeleteAndDestroy( 0, aSectReprArr.Count() );
     delete m_pDocInserter;
 }
 
@@ -870,9 +867,9 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
         pEntry = aTree.Next( pEntry );
     }
 
-    for(sal_uInt16 i = aSectReprArr.Count(); i; )
+    for (SectReprArr::reverse_iterator aI = aSectReprArr.rbegin(), aEnd = aSectReprArr.rend(); aI != aEnd; ++aI)
     {
-        SwSectionFmt* pFmt = aOrigArray[ aSectReprArr[ --i ]->GetArrPos() ];
+        SwSectionFmt* pFmt = aOrigArray[ aI->GetArrPos() ];
         sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
             rSh.DelSectionFmt( nNewPos );
@@ -992,7 +989,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         sal_Bool bRestart = sal_False;
         if(pSectRepr->IsSelected())
         {
-            aSectReprArr.Insert( pSectRepr );
+            aSectReprArr.insert( pSectRepr );
             while( (pChild = aTree.FirstChild(pEntry) )!= 0 )
             {
                 // because of the repositioning we have to start at the beginning again
@@ -1012,7 +1009,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
 
     if ( (pEntry=aTree.FirstSelected()) == 0 )
     {
-        aConditionFT.        Enable(sal_False);
+        aConditionFT.   Enable(sal_False);
         aConditionED.   Enable(sal_False);
         aDismiss.       Enable(sal_False);
         aCurName.       Enable(sal_False);

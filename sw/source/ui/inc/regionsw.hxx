@@ -52,6 +52,8 @@
 #include <svx/paraprev.hxx>
 #include <editeng/lrspitem.hxx>
 
+#include <boost/ptr_container/ptr_set.hpp>
+
 class SwWrtShell;
 class EditRegionDlg;
 
@@ -66,7 +68,7 @@ namespace sfx2
 *************************************************************************/
 class SectRepr;
 typedef SectRepr* SectReprPtr;
-SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0 )
+typedef boost::ptr_set<SectRepr> SectReprArr;
 
 class SwEditRegionDlg : public SfxModalDialog
 {
