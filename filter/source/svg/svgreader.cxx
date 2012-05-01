@@ -1496,7 +1496,7 @@ struct ShapeWritingVisitor
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 rtl::OUString sAttributeValue;
-                double x=0.0,y=0.0,width=0.0,height=0.0;
+                double x=0.0,y=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
                     sAttributeValue = xAttributes->item(i)->getNodeValue();
@@ -1509,12 +1509,6 @@ struct ShapeWritingVisitor
                             break;
                         case XML_Y:
                             y = convLength(sAttributeValue,maCurrState,'v');
-                            break;
-                        case XML_WIDTH:
-                            width = convLength(sAttributeValue,maCurrState,'h');
-                            break;
-                        case XML_HEIGHT:
-                            height = convLength(sAttributeValue,maCurrState,'v');
                             break;
                         default:
                             // skip
@@ -1532,31 +1526,14 @@ struct ShapeWritingVisitor
                 // extract basic transformations out of CTM
                 basegfx::B2DTuple aScale, aTranslate;
                 double fRotate, fShearX;
-                ::rtl::OUString sTransformValue;
                 if (maCurrState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
                 {
-                    rtl::OUString sTransform;
                     x += aTranslate.getX();
                     y += aTranslate.getY();
-
-                    sTransform +=
-                        USTR("scale(") +
-                        rtl::OUString::valueOf(aScale.getX()) +
-                        USTR(", ") +
-                        rtl::OUString::valueOf(aScale.getX()) +
-                        USTR(")");
-
-                    if( fRotate )
-                        sTransform += USTR(" rotate(") + rtl::OUString::valueOf(fRotate*180.0/M_PI) + USTR(")");
-
-                    if( fShearX )
-                        sTransform += USTR(" skewX(") + rtl::OUString::valueOf(fShearX*180.0/M_PI) + USTR(")");
                 }
 
                 xAttrs->AddAttribute( USTR( "svg:x" ), rtl::OUString::valueOf(pt2mm(x))+USTR("mm"));
                 xAttrs->AddAttribute( USTR( "svg:y" ), rtl::OUString::valueOf(pt2mm(y))+USTR("mm"));
-                (void)width;
-                (void)height;
                 xAttrs->AddAttribute( USTR( "draw:style-name" ), USTR("svggraphicstyle")+sStyleId );
 
                 mxDocumentHandler->startElement(USTR("draw:frame"),xUnoAttrs);
