@@ -1764,7 +1764,7 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     SwTableLine* pInsLine = new SwTableLine(
-                (SwTableLineFmt*)(&pFndBox->GetLines().front().GetLine()->GetFrmFmt()), 0,
+                (SwTableLineFmt*)pFndBox->GetLines().front().GetLine()->GetFrmFmt(), 0,
                 !pFndBox->GetUpper() ? 0 : pFndBox->GetBox() );
     pInsLine->ClaimFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
 
