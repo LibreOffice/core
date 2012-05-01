@@ -36,6 +36,6 @@ $(ACBI)/WindowsAccessBridgeAdapter.h :| $(ACBI)/.dir \
         $(call gb_Jar_get_target,java_uno_accessbridge)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVH,1)
 	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) && \
-    javah -classpath . -o $(call gb_Helper_native_path,$@) org.openoffice.accessibility.WindowsAccessBridgeAdapter
+    javah -classpath "$(call gb_Helper_native_path,$(OUTDIR)/bin/ridl.jar)$(gb_CLASSPATHSEP)$(call gb_Helper_native_path,$(OUTDIR)/bin/unoil.jar)$(gb_CLASSPATHSEP)." -o $(call gb_Helper_native_path,$@) org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
 # vim: set ts=4 sw=4 et:
