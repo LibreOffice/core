@@ -699,7 +699,7 @@ SvxFieldData* ScEditFieldObj::getData()
                 mpData.reset(new SvxPagesField);
             break;
             case Sheet:
-                mpData.reset(new SvxTableField(mnTab));
+                mpData.reset(new SvxTableField);
             break;
             case Time:
                 mpData.reset(new SvxTimeField);
@@ -923,10 +923,51 @@ void ScEditFieldObj::setPropertyValueExtTime(const rtl::OUString& rName, const u
 
 void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno::Any& rVal)
 {
+    if (mpEditSource)
+    {
+        // Edit engine instance already exists for this field item.  Use it.
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+
+        //  Typ egal (in Zellen gibts nur URLs)
+        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
+        if (!pField)
+            return;
+
+        if (pField->GetClassId() != SVX_TABLEFIELD)
+            // Make sure this is indeed a URL field.
+            return;
+
+        SvxTableField* p = static_cast<SvxTableField*>(pField);
+
+        if (rName == "SheetPosition")
+        {
+            sal_Int32 nTab = rVal.get<sal_Int32>();
+            p->SetTab(nTab);
+        }
+        else
+            throw beans::UnknownPropertyException();
+
+        pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
+        mpEditSource->UpdateData();
+        return;
+    }
+
+    // Edit engine instance not yet present.  Store the item data for later use.
+    SvxFieldData* pData = getData();
+    if (!pData)
+        throw uno::RuntimeException();
+
+    SvxTableField* p = static_cast<SvxTableField*>(pData);
     if (rName == "SheetPosition")
     {
-        mnTab = rVal.get<sal_Int32>();
+        sal_Int32 nTab = rVal.get<sal_Int32>();
+        p->SetTab(nTab);
     }
+    else
+        throw beans::UnknownPropertyException();
+
 }
 
 ScEditFieldObj::ScEditFieldObj(
@@ -936,7 +977,7 @@ ScEditFieldObj::ScEditFieldObj(
     pPropSet(NULL),
     mpEditSource(pEditSrc),
     aSelection(rSel),
-    meType(eType), mpData(NULL), mpContent(rContent), mnTab(0), mbIsDate(false)
+    meType(eType), mpData(NULL), mpContent(rContent), mbIsDate(false)
 {
     switch (meType)
     {

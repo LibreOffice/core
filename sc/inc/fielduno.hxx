@@ -225,7 +225,6 @@ private:
     boost::scoped_ptr<SvxFieldData> mpData;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
-    sal_Int32 mnTab;
     bool mbIsDate:1;
 
 private:
