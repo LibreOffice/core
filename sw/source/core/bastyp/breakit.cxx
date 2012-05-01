@@ -172,9 +172,16 @@ sal_Int32 SwBreakIt::getGraphemeCount(const rtl::OUString& rText, sal_Int32 nSta
     sal_Int32 nCurPos = nStart;
     while (nCurPos < nEnd)
     {
-        sal_Int32 nCount2 = 1;
-        nCurPos = xBreak->nextCharacters(rText, nCurPos, lang::Locale(),
-            i18n::CharacterIteratorMode::SKIPCELL, nCount2, nCount2);
+        //fdo#49208 cheat and assume that nothing can combine with a space
+        //to form a single grapheme
+        if (rText[nCurPos] == ' ')
+            ++nCurPos;
+        else
+        {
+            sal_Int32 nCount2 = 1;
+            nCurPos = xBreak->nextCharacters(rText, nCurPos, lang::Locale(),
+                i18n::CharacterIteratorMode::SKIPCELL, nCount2, nCount2);
+        }
         ++nGraphemeCount;
     }
 
