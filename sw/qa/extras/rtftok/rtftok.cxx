@@ -117,6 +117,7 @@ public:
     CPPUNIT_TEST(testFdo48356);
     CPPUNIT_TEST(testFdo48023);
     CPPUNIT_TEST(testFdo48876);
+    CPPUNIT_TEST(testFdo48193);
     CPPUNIT_TEST(testFdo44211);
     CPPUNIT_TEST(testFdo48037);
 #endif
