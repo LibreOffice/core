@@ -229,14 +229,6 @@ public:
     ScHeaderEditEngine( SfxItemPool* pEnginePool, sal_Bool bDeleteEnginePool = false );
     virtual String CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    void SetTitle(const String& rNew)               { aData.aTitle = rNew; }
-    void SetLongDocName(const String& rNew)         { aData.aLongDocName = rNew; }
-    void SetShortDocName(const String& rNew)        { aData.aShortDocName = rNew; }
-    void SetTabName(const String& rNew)             { aData.aTabName = rNew; }
-    void SetDate(const Date& rNew)                  { aData.aDate = rNew; }
-    void SetTime(const Time& rNew)                  { aData.aTime = rNew; }
-    void SetPageNo(long nNew)                       { aData.nPageNo = nNew; }
-    void SetTotalPages(long nNew)                   { aData.nTotalPages = nNew; }
     void SetNumType(SvxNumType eNew)                { aData.eNumType = eNew; }
     void SetData(const ScHeaderFieldData& rNew)     { aData = rNew; }
 };
