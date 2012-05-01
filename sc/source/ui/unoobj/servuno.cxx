@@ -272,6 +272,7 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.TextField.PageCount",          SC_SERVICE_PAGESFIELD },
     { "com.sun.star.text.TextField.Date",               SC_SERVICE_DATEFIELD },
     { "com.sun.star.text.TextField.Time",               SC_SERVICE_TIMEFIELD },
+    { "com.sun.star.text.TextField.DateTime",           SC_SERVICE_EXT_TIMEFIELD },
     { "com.sun.star.text.TextField.DocumentTitle",      SC_SERVICE_TITLEFIELD },
     { "com.sun.star.text.TextField.FileName",           SC_SERVICE_FILEFIELD },
     { "com.sun.star.text.TextField.SheetName",          SC_SERVICE_SHEETFIELD },
@@ -321,6 +322,7 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.textfield.PageCount",          SC_SERVICE_PAGESFIELD },
     { "com.sun.star.text.textfield.Date",               SC_SERVICE_DATEFIELD },
     { "com.sun.star.text.textfield.Time",               SC_SERVICE_TIMEFIELD },
+    { "com.sun.star.text.textfield.DateTime",           SC_SERVICE_EXT_TIMEFIELD },
     { "com.sun.star.text.textfield.DocumentTitle",      SC_SERVICE_TITLEFIELD },
     { "com.sun.star.text.textfield.FileName",           SC_SERVICE_FILEFIELD },
     { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD },
@@ -380,6 +382,7 @@ static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_VBAOBJECTPROVIDER
         "",                                         // SC_SERVICE_VBACODENAMEPROVIDER
         "",                                         // SC_SERVICE_VBAGLOBALS
+        "",                                         // SC_SERVICE_EXT_TIMEFIELD
     };
 
 
@@ -434,6 +437,8 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
             return ScEditFieldObj::Date;
         case SC_SERVICE_TIMEFIELD:
             return ScEditFieldObj::Time;
+        case SC_SERVICE_EXT_TIMEFIELD:
+            return ScEditFieldObj::ExtTime;
         case SC_SERVICE_TITLEFIELD:
             return ScEditFieldObj::Title;
         case SC_SERVICE_FILEFIELD:
@@ -464,6 +469,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_PAGESFIELD:
         case SC_SERVICE_DATEFIELD:
         case SC_SERVICE_TIMEFIELD:
+        case SC_SERVICE_EXT_TIMEFIELD:
         case SC_SERVICE_TITLEFIELD:
         case SC_SERVICE_FILEFIELD:
         case SC_SERVICE_SHEETFIELD:

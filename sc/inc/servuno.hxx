@@ -98,9 +98,11 @@ class ScDocShell;
 #define SC_SERVICE_VBACODENAMEPROVIDER   41
 #define SC_SERVICE_VBAGLOBALS   42
 
-#define SC_SERVICE_COUNT        43
+
+#define SC_SERVICE_COUNT        44
 #define SC_SERVICE_INVALID      USHRT_MAX
 
+#define SC_SERVICE_EXT_TIMEFIELD 43
 
 class ScServiceProvider
 {

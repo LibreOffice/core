@@ -140,13 +140,14 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nSvxType)
             return ScEditFieldObj::Pages;
         case SVX_TIMEFIELD:
             return ScEditFieldObj::Time;
+        case SVX_EXT_TIMEFIELD:
+            return ScEditFieldObj::ExtTime;
         case SVX_FILEFIELD:
             return ScEditFieldObj::Title;
         case SVX_TABLEFIELD:
             return ScEditFieldObj::Sheet;
         case SVX_EXT_FILEFIELD:
             return ScEditFieldObj::File;
-        case SVX_EXT_TIMEFIELD:
         case SVX_AUTHORFIELD:
         case SVX_HEADERFIELD:
         case SVX_FOOTERFIELD:
@@ -689,6 +690,9 @@ SvxFieldData* ScEditFieldObj::getData()
             case Time:
                 mpData.reset(new SvxTimeField);
             break;
+            case ExtTime:
+                mpData.reset(new SvxExtTimeField);
+            break;
             case Title:
                 mpData.reset(new SvxFileField);
             break;
@@ -890,6 +894,15 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
     return aRet;
 }
 
+void ScEditFieldObj::setPropertyValueExtTime(const rtl::OUString& rName, const uno::Any& rVal)
+{
+    if (rName == "IsDate")
+    {
+        // TODO: Find out what to do with this.
+        sal_Bool b = rVal.get<sal_Bool>();
+    }
+}
+
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
@@ -1062,6 +1075,9 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         break;
         case File:
             setPropertyValueFile(aPropertyName, aValue);
+        break;
+        case ExtTime:
+            setPropertyValueExtTime(aPropertyName, aValue);
         break;
         default:
             throw beans::UnknownPropertyException();

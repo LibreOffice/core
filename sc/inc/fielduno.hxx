@@ -214,7 +214,7 @@ class ScEditFieldObj : public cppu::WeakImplHelper4<
                         private boost::noncopyable
 {
 public:
-    enum FieldType { URL = 0, Page, Pages, Date, Time, Title, File, Sheet };
+    enum FieldType { URL = 0, Page, Pages, Date, Time, ExtTime, Title, File, Sheet };
 
 private:
     const SfxItemPropertySet* pPropSet;
@@ -235,6 +235,8 @@ private:
 
     void setPropertyValueFile(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
     com::sun::star::uno::Any getPropertyValueFile(const rtl::OUString& rName);
+
+    void setPropertyValueExtTime(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
 
 public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
