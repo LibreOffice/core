@@ -80,8 +80,6 @@ struct tolerance
 class OOO_DLLPUBLIC_TEST XMLDiff
 {
 public:
-    XMLDiff(const std::string& file1, const std::string& file2, const std::string& toleranceFile);
-    XMLDiff(const std::string& file1, const std::string& file2);
     XMLDiff(const char* pFileName, const char* pContent, int size, const char* pToleranceFileName);
     ~XMLDiff();
 

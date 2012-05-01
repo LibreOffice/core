@@ -106,10 +106,6 @@ namespace canvas
          */
         PropertySetHelper();
 
-        /** Create helper with given name/value map
-         */
-        explicit PropertySetHelper( const InputMap& rMap );
-
         /** Init helper with new name/value map
 
             @param rMap

@@ -477,11 +477,11 @@ docs:
 findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	    (echo "callcatcher not installed" && false)
-	@sed -e s,$$INPATH,callcatcher,g $(SRCDIR)/config_host.mk > $(SRCDIR)/config_host_callcatcher.mk
+	@sed -e s,$$INPATH,callcatcher,g $(SRCDIR)/config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/config_host_callcatcher.mk
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
 	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
 		$(SRCDIR)/solenv/callcatcher/bin/dmake
-	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile
+	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
 	@grep ::.*\( unusedcode.all \
               | grep -v ^Atom \
               | grep -v ^boost:: \

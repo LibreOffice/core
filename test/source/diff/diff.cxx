@@ -39,23 +39,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #endif
 
-XMLDiff::XMLDiff(const std::string& file1, const std::string& file2, const std::string& toleranceFile)
-{
-    xmlFile1 = xmlParseFile(file1.c_str());
-    xmlFile2 = xmlParseFile(file2.c_str());
-
-    xmlDocPtr xmlToleranceFile = xmlParseFile(toleranceFile.c_str());
-
-    loadToleranceFile(xmlToleranceFile);
-    xmlFreeDoc(xmlToleranceFile);
-}
-
-XMLDiff::XMLDiff(const std::string& file1, const std::string& file2)
-{
-    xmlFile1 = xmlParseFile(file1.c_str());
-    xmlFile2 = xmlParseFile(file2.c_str());
-}
-
 XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
 {
     xmlFile1 = xmlParseFile(pFileName);

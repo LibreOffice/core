@@ -71,13 +71,6 @@ namespace canvas
     {
     }
 
-    PropertySetHelper::PropertySetHelper( const InputMap& rMap ) :
-        mpMap(),
-        maMapEntries()
-    {
-        initProperties(rMap);
-    }
-
     void PropertySetHelper::initProperties( const InputMap& rMap )
     {
         mpMap.reset();

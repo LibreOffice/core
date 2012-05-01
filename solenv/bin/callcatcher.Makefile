@@ -20,12 +20,16 @@ export LIBMGR:=callarchive $(LIBMGR)
 endif
 export dbglevel:=2
 
+include $(SOLARENV)/gbuild/gbuild.mk
 
-all:
+findunusedcode:
 	cd instsetoo_native && \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
-	@callanalyse $(WORKDIR)/LinkTarget/*/* \
-	*/$(OUTPATH)/bin/* \
-	*/$(OUTPATH)/lib/* > unusedcode.all
+        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+	ooinstall -l $(DEVINSTALLDIR)/opt
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post subsequentcheck
+	callanalyse \
+        $(WORKDIR)/LinkTarget/*/* \
+	    */$(OUTPATH)/bin/* \
+	    */$(OUTPATH)/lib/* > unusedcode.all
 
 # vim: set noet sw=4 ts=4:
