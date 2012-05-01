@@ -31,8 +31,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
-		$(T_CFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-I$(dir $(3)) \
@@ -50,8 +50,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CC) \
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(T_CFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -71,8 +71,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(T_CXXFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
+		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \

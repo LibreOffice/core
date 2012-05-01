@@ -910,7 +910,7 @@ endef
 # gb_LinkTarget_add_scanner(<component>,<scanner file>)
 define gb_LinkTarget_add_scanner
 $(call gb_LexTarget_LexTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3),-Wno-error)
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
 
 endef
@@ -1010,7 +1010,7 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3
 endef
 
 define gb_LinkTarget_add_generated_exception_object
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)) $(4))
 endef
 
 define gb_LinkTarget_add_generated_exception_objects

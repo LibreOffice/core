@@ -117,8 +117,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
-		$(T_OBJCXXFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
+		$(T_OBJCXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
@@ -135,8 +135,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
-		$(T_OBJCFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(T_OBJCFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
