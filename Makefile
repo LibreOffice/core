@@ -496,6 +496,7 @@ findunusedcode:
               | grep -v ^libvisio:: \
               | grep -v ^libwpg:: \
               | grep -v ^lucene:: \
+              | grep -v ^Matrix3d:: \
               | grep -v ^salhelper:: \
               | grep -v ^WP1 \
               | grep -v ^WP3 \
