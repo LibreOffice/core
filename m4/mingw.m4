@@ -61,6 +61,10 @@ if test -n "$WITH_MINGW"; then
     if test "$_libo_mingw_dllname" = ""; then
         _libo_mingw_try_dll([$2][-?.?.dll])
     fi
+    dnl maybe the version contains a dash (e.g., libpixman)
+    if test "$_libo_mingw_dllname" = ""; then
+        _libo_mingw_try_dll([$2][-?-?.dll])
+    fi
     dnl maybe it is not versioned
     if test "$_libo_mingw_dllname" = ""; then
         _libo_mingw_try_dll([$2][.dll])
