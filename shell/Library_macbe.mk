@@ -27,6 +27,11 @@
 
 $(eval $(call gb_Library_Library,macbe1))
 
+$(eval $(call gb_Library_use_api,macbe1,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_use_internal_api,macbe1,\
 	macbe \
 ))
