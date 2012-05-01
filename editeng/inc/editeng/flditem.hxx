@@ -237,9 +237,14 @@ public:
 
 class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
 {
+    int mnTab;
 public:
     SV_DECL_PERSIST1( SvxTableField, SvxFieldData, SVX_TABLEFIELD )
     SvxTableField();
+    SvxTableField(int nTab);
+
+    void SetTab(int nTab);
+    int GetTab() const;
 
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;

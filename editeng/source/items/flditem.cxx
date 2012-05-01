@@ -535,16 +535,31 @@ void SvxFileField::Save( SvPersistStream & /*rStm*/ )
 
 SV_IMPL_PERSIST1( SvxTableField, SvxFieldData );
 
-SvxTableField::SvxTableField() {}
+SvxTableField::SvxTableField() : mnTab(0) {}
+
+SvxTableField::SvxTableField(int nTab) : mnTab(nTab) {}
+
+void SvxTableField::SetTab(int nTab)
+{
+    mnTab = nTab;
+}
+
+int SvxTableField::GetTab() const
+{
+    return mnTab;
+}
 
 SvxFieldData* SvxTableField::Clone() const
 {
-    return new SvxTableField;   // empty
+    return new SvxTableField(mnTab);
 }
 
 int SvxTableField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxTableField) );
+    if (rCmp.Type() != TYPE(SvxTableField))
+        return false;
+
+    return mnTab == static_cast<const SvxTableField&>(rCmp).mnTab;
 }
 
 void SvxTableField::Load( SvPersistStream & /*rStm*/ )
