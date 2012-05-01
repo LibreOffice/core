@@ -507,8 +507,16 @@ struct AnnotatingVisitor
         rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
         uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
-        if (XML_TEXT == nTagId)
+        if (XML_TEXT == nTagId) {
             rState.mbIsText = true;
+            basegfx::B2DTuple aScale, aTranslate;
+            double fRotate, fShearX;
+            if (rState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
+            {
+                rState.mnFontSize *= aScale.getX();
+            }
+        }
+
         std::pair<StatePool::iterator,
                   bool> aRes = mrStates.insert(rState);
         SAL_INFO ("svg", "size " << mrStates.size() << "   id " <<  const_cast<State&>(*aRes.first).mnStyleId);
@@ -1519,17 +1527,25 @@ struct ShapeWritingVisitor
                 // actually export text
                 xAttrs->Clear();
 
-                // some heuristic attempts to have text output
-                // baseline-relative
-                y -= 2.0*maCurrState.mnFontSize/3.0;
 
                 // extract basic transformations out of CTM
                 basegfx::B2DTuple aScale, aTranslate;
                 double fRotate, fShearX;
                 if (maCurrState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
                 {
+                    // some heuristic attempts to have text output
+                    // baseline-relative
+                    y -= 2.0*maCurrState.mnFontSize/aScale.getX()/3.0;
+                    // apply transform
+                    x *= aScale.getX();
+                    y *= aScale.getY();
                     x += aTranslate.getX();
                     y += aTranslate.getY();
+                }
+                else {
+                    // some heuristic attempts to have text output
+                    // baseline-relative
+                    y -= 2.0*maCurrState.mnFontSize/3.0;
                 }
 
                 xAttrs->AddAttribute( USTR( "svg:x" ), rtl::OUString::valueOf(pt2mm(x))+USTR("mm"));
