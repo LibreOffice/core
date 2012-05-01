@@ -329,6 +329,11 @@
 #define SC_UNONAME_TARGET           "TargetFrame"
 #define SC_UNONAME_URL              "URL"
 
+// date time field
+#define SC_UNONAME_ISDATE           "IsDate"
+#define SC_UNONAME_ISFIXED          "IsFixed"
+#define SC_UNONAME_DATETIME         "DateTime"
+
 //  conditional format
 #define SC_UNONAME_OPERATOR         "Operator"
 #define SC_UNONAME_FORMULA1         "Formula1"

@@ -59,6 +59,20 @@ namespace {
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
+const SfxItemPropertySet* getExtTimePropertySet()
+{
+    static SfxItemPropertyMapEntry aMapContent[] =
+    {
+        { MAP_CHAR_LEN(SC_UNONAME_DATETIME), 0, &getCppuType((const util::DateTime*)0), 0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_ISFIXED),  0, &getBooleanCppuType(),                  0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_ISDATE),   0, &getBooleanCppuType(),                  0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   0, &getCppuType((const sal_Int32*)0),      0, 0 },
+        {0,0,0,0,0,0}
+    };
+    static SfxItemPropertySet aMap(aMapContent);
+    return &aMap;
+}
+
 const SfxItemPropertySet* lcl_GetURLPropertySet()
 {
     static SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
@@ -691,7 +705,12 @@ SvxFieldData* ScEditFieldObj::getData()
                 mpData.reset(new SvxTimeField);
             break;
             case ExtTime:
-                mpData.reset(new SvxExtTimeField);
+            {
+                if (mbIsDate)
+                    mpData.reset(new SvxDateField);
+                else
+                    mpData.reset(new SvxExtTimeField);
+            }
             break;
             case Title:
                 mpData.reset(new SvxFileField);
@@ -898,8 +917,7 @@ void ScEditFieldObj::setPropertyValueExtTime(const rtl::OUString& rName, const u
 {
     if (rName == "IsDate")
     {
-        // TODO: Find out what to do with this.
-        sal_Bool b = rVal.get<sal_Bool>();
+        mbIsDate = rVal.get<sal_Bool>();
     }
 }
 
@@ -910,7 +928,7 @@ ScEditFieldObj::ScEditFieldObj(
     pPropSet(NULL),
     mpEditSource(pEditSrc),
     aSelection(rSel),
-    meType(eType), mpData(NULL), mpContent(rContent)
+    meType(eType), mpData(NULL), mpContent(rContent), mbIsDate(false)
 {
     switch (meType)
     {
@@ -919,6 +937,9 @@ ScEditFieldObj::ScEditFieldObj(
         break;
         case URL:
             pPropSet = lcl_GetURLPropertySet();
+        break;
+        case ExtTime:
+            pPropSet = getExtTimePropertySet();
         break;
         default:
             pPropSet = lcl_GetHeaderFieldPropertySet();

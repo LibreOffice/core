@@ -752,6 +752,12 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                 aRet = pField->GetFormatted(*mpDoc->GetFormatTable(), ScGlobal::eLnge);
         }
         break;
+        case SVX_DATEFIELD:
+        {
+            Date aDate(Date::SYSTEM);
+            aRet = ScGlobal::pLocaleData->getDate(aDate);
+        }
+        break;
         default:
             aRet = "?";
     }

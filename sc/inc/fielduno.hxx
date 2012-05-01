@@ -225,6 +225,8 @@ private:
     boost::scoped_ptr<SvxFieldData> mpData;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
+    bool mbIsDate:1;
+
 private:
     ScEditFieldObj(); // disabled
 
