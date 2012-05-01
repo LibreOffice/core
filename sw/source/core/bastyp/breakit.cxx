@@ -165,12 +165,12 @@ sal_uInt16 SwBreakIt::GetAllScriptsOfText( const rtl::OUString& rTxt ) const
     return nRet;
 }
 
-sal_Int32 SwBreakIt::getGraphemeCount(const rtl::OUString& rText) const
+sal_Int32 SwBreakIt::getGraphemeCount(const rtl::OUString& rText, sal_Int32 nStart, sal_Int32 nEnd) const
 {
     sal_Int32 nGraphemeCount = 0;
 
-    sal_Int32 nCurPos = 0;
-    while (nCurPos < rText.getLength())
+    sal_Int32 nCurPos = nStart;
+    while (nCurPos < nEnd)
     {
         sal_Int32 nCount2 = 1;
         nCurPos = xBreak->nextCharacters(rText, nCurPos, lang::Locale(),

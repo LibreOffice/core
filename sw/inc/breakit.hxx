@@ -96,7 +96,12 @@ public:
     sal_uInt16 GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 nPos ) const;
     sal_uInt16 GetAllScriptsOfText( const rtl::OUString& rTxt ) const;
 
-    sal_Int32 getGraphemeCount(const rtl::OUString& rStr) const;
+    sal_Int32 getGraphemeCount(const rtl::OUString& rStr,
+        sal_Int32 nStart, sal_Int32 nEnd) const;
+    sal_Int32 getGraphemeCount(const rtl::OUString& rStr) const
+    {
+        return getGraphemeCount(rStr, 0, rStr.getLength());
+    }
 };
 
 #define SW_BREAKITER()  SwBreakIt::Get()

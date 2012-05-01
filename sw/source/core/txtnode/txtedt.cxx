@@ -1913,7 +1913,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         }
     }
 
-    nTmpChars = pBreakIt->getGraphemeCount(aExpandText.copy(nExpandBegin, nExpandEnd - nExpandBegin));
+    nTmpChars = pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
     nTmpChars -= nNumOfMaskedChars;
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
