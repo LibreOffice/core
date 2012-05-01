@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_internal_api,localebe1,\
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_externals,localebe1,\
+	corefoundation \
 	coreservices \
 ))
 endif
