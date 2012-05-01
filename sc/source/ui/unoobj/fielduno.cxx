@@ -699,7 +699,7 @@ SvxFieldData* ScEditFieldObj::getData()
                 mpData.reset(new SvxPagesField);
             break;
             case Sheet:
-                mpData.reset(new SvxTableField);
+                mpData.reset(new SvxTableField(mnTab));
             break;
             case Time:
                 mpData.reset(new SvxTimeField);
@@ -921,6 +921,14 @@ void ScEditFieldObj::setPropertyValueExtTime(const rtl::OUString& rName, const u
     }
 }
 
+void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno::Any& rVal)
+{
+    if (rName == "SheetPosition")
+    {
+        mnTab = rVal.get<sal_Int32>();
+    }
+}
+
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
@@ -928,7 +936,7 @@ ScEditFieldObj::ScEditFieldObj(
     pPropSet(NULL),
     mpEditSource(pEditSrc),
     aSelection(rSel),
-    meType(eType), mpData(NULL), mpContent(rContent), mbIsDate(false)
+    meType(eType), mpData(NULL), mpContent(rContent), mnTab(0), mbIsDate(false)
 {
     switch (meType)
     {
@@ -968,6 +976,11 @@ SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {
     OSL_ENSURE( !mpEditSource, "CreateFieldItem mit eingefuegtem Feld" );
     return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
+}
+
+ScEditFieldObj::FieldType ScEditFieldObj::GetFieldType() const
+{
+    return meType;
 }
 
 void ScEditFieldObj::DeleteField()
@@ -1099,6 +1112,9 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         break;
         case ExtTime:
             setPropertyValueExtTime(aPropertyName, aValue);
+        break;
+        case Sheet:
+            setPropertyValueSheet(aPropertyName, aValue);
         break;
         default:
             throw beans::UnknownPropertyException();

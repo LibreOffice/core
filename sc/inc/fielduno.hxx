@@ -225,6 +225,7 @@ private:
     boost::scoped_ptr<SvxFieldData> mpData;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
+    sal_Int32 mnTab;
     bool mbIsDate:1;
 
 private:
@@ -239,6 +240,7 @@ private:
     com::sun::star::uno::Any getPropertyValueFile(const rtl::OUString& rName);
 
     void setPropertyValueExtTime(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
+    void setPropertyValueSheet(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
 
 public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
@@ -249,6 +251,7 @@ public:
         ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
     virtual ~ScEditFieldObj();
 
+    FieldType GetFieldType() const;
     void DeleteField();
     bool IsInserted() const;
     SvxFieldItem CreateFieldItem();

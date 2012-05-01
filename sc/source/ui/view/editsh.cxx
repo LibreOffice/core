@@ -616,7 +616,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
         case SID_INSERT_FIELD_TEST:
         {
-            SvxDateField aField;
+            SvxTableField aField(pViewData->GetTabNo());
             SvxFieldItem aItem(aField, EE_FEATURE_FIELD);
             pTableView->InsertField(aItem);
         }

@@ -758,6 +758,17 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = ScGlobal::pLocaleData->getDate(aDate);
         }
         break;
+        case SVX_TABLEFIELD:
+        {
+            const SvxTableField* pField = static_cast<const SvxTableField*>(pFieldData);
+            SCTAB nTab = pField->GetTab();
+            rtl::OUString aName;
+            if (mpDoc->GetName(nTab, aName))
+                aRet = aName;
+            else
+                aRet = "?";
+        }
+        break;
         default:
             aRet = "?";
     }

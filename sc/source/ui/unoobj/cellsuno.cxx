@@ -6434,8 +6434,10 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
                 aSelection.nStartPos  = aSelection.nEndPos;
             }
 
-            SvxFieldItem aItem(pCellField->CreateFieldItem());
+            if (pCellField->GetFieldType() == ScEditFieldObj::Sheet)
+                pCellField->setPropertyValue("SheetPosition", uno::makeAny<sal_Int32>(aCellPos.Tab()));
 
+            SvxFieldItem aItem = pCellField->CreateFieldItem();
             SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
             pForwarder->QuickInsertField( aItem, aSelection );
             pEditSource->UpdateData();
