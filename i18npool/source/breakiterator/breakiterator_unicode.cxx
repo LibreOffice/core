@@ -199,12 +199,14 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
     }
 
-    if (newBreak || icuBI->aICUText.compare(UnicodeString(reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength()))) {   // UChar != sal_Unicode in MinGW
-        icuBI->aICUText=UnicodeString(reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength());
+    // UChar != sal_Unicode in MinGW
+    const UChar *pText = reinterpret_cast<const UChar *>(rText.getStr());
+    if (newBreak || icuBI->aICUText.compare(pText, rText.getLength()))
+    {
+        icuBI->aICUText=UnicodeString(pText, rText.getLength());
         icuBI->aBreakIterator->setText(icuBI->aICUText);
     }
 }
-
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
         sal_Int32 nStartPos, const lang::Locale &rLocale,
