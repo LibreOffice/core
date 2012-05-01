@@ -175,7 +175,7 @@ struct State
         maViewBox(),
         mbIsText(false),
         maFontFamily(), // app-default
-        mnFontSize(0),
+        mnFontSize(12),
         maFontStyle("normal"),
         maFontVariant("normal"),
         mnFontWeight(400.0),
