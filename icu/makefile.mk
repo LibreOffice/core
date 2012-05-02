@@ -88,8 +88,8 @@ CC:=gcc $(EXTRA_CFLAGS)
 icu_CFLAGS+=-g $(ARCH_FLAGS)
 icu_CXXFLAGS+=-g $(ARCH_FLAGS)
 .ELIF "$(COM)"=="GCC"
-icu_CFLAGS+=-O2 -fnostrict-aliasing $(ARCH_FLAGS)
-icu_CXXFLAGS+=-O2 -fno-fstrict-aliasing $(ARCH_FLAGS)
+icu_CFLAGS+=-O2 -fno-strict-aliasing $(ARCH_FLAGS)
+icu_CXXFLAGS+=-O2 -fno-strict-aliasing $(ARCH_FLAGS)
 .ELSE
 icu_CFLAGS+=-O $(ARCH_FLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS)
