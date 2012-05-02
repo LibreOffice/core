@@ -1335,8 +1335,8 @@ readDateTimeComponent(const ::rtl::OUString & rString,
 
 static bool lcl_isLeapYear(const sal_uInt32 nYear)
 {
-    return ((nYear % 4) == 0)
-        && !(((nYear % 100) == 0) || ((nYear % 400) == 0));
+    return (((nYear % 4 == 0) && (nYear % 100 != 0)) ||
+    (nYear % 400 == 0));
 }
 
 static sal_uInt16
