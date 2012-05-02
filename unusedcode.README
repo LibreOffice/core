@@ -26,7 +26,7 @@ d) gcc will only emit code for inlines if those inlines are used, so
    compile time after an attempt at removal. i.e. generally the inline method
    can go as well because nothing calls it either, a double win.
 e) if a constructor is listed as unused, and it's the *only* ctor in the class,
-   then no object of that class can be construsted, so the whole thing is
+   then no object of that class can be constructed, so the whole thing is
    unused, which can lead to a whole cascade of tricky but logical fallout.
 f) if a destructor is listed as unused, and a constructor isn't, then there's
    a leak somewhere, and the destructor most likely *should* be called.
