@@ -291,13 +291,13 @@
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>fyrir Krist</DefaultAbbrvName>
-          <DefaultFullName>f.Kr.</DefaultFullName>
+          <DefaultAbbrvName>f.Kr.</DefaultAbbrvName>
+          <DefaultFullName>fyrir Krist</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>eftir Krist</DefaultAbbrvName>
-          <DefaultFullName>e.Kr.</DefaultFullName>
+          <DefaultAbbrvName>e.Kr.</DefaultAbbrvName>
+          <DefaultFullName>eftir Krist</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
