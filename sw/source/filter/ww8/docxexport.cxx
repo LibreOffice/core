@@ -60,6 +60,8 @@
 #include <docary.hxx>
 #include <numrule.hxx>
 #include <charfmt.hxx>
+#include <viewsh.hxx>
+#include <viewopt.hxx>
 
 #include "ww8par.hxx"
 #include "ww8scan.hxx"
@@ -665,7 +667,8 @@ void DocxExport::WriteProperties( )
 
 void DocxExport::WriteSettings()
 {
-    if( !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
+    ViewShell *pViewShell(pDoc->GetCurrentViewShell());
+    if( !pViewShell && !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -679,6 +682,10 @@ void DocxExport::WriteSettings()
     pFS->startElementNS( XML_w, XML_settings,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
             FSEND );
+
+    // Zoom
+    rtl::OString aZoom(rtl::OString::valueOf(pViewShell->GetViewOptions()->GetZoom()));
+    pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
 
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
