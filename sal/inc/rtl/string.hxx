@@ -712,7 +712,7 @@ public:
     }
 
     friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
-                        { return rStr1.getLength() == rStr2.getLength() && rStr1.compareTo( rStr2 ) == 0; }
+                        { return rStr1.equals(rStr2); }
     friend sal_Bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
                         { return !(operator == ( rStr1, rStr2 )); }
     friend sal_Bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
