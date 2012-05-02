@@ -4,7 +4,7 @@
  * lexer for parsing ressource source files (*.src)
  *
  */
-
+#define YY_NEVER_INTERACTIVE 1
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX
@@ -26,19 +26,23 @@
 #include "sal/main.h"
 
 #if defined __GNUC__
-#pragma GCC system_header
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wunused-label"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #elif defined __SINPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 
-/* external functions (C++ code, declared as extren "C" */
-extern int WorkOnTokenSet( int, char* );
-extern FILE * init(int, char **);
-extern int SetError();
-extern int GetError();
-extern void Close();
+/* external functions (C++ code, declared as extern "C" */
+extern "C" int WorkOnTokenSet( int, char* );
+extern "C" FILE * init(int, char **);
+extern "C" int SetError();
+extern "C" int GetError();
+extern "C" void Close();
 
 /* forwards */
 void YYWarning();
@@ -69,7 +73,7 @@ void YYWarning();
 	WorkOnTokenSet( IGNOREDTOKENS, yytext );
 }
 "/*"	{
-	char c1 = 0, c2 = input();
+	char c1 = 0,c2 = yyinput();
 	char pChar[2];
 	pChar[1] = 0x00;
 	pChar[0] = c2;
@@ -82,7 +86,7 @@ void YYWarning();
 		if ( c1 == '*' && c2 == '/' )
 			break;
 		c1 = c2;
-		c2 = input();
+		c2 = yyinput();
 		pChar[0] = c2;
 		WorkOnTokenSet( COMMEND, pChar );
 	}
@@ -216,7 +220,7 @@ int	yywrap(void)
 }
 
 /*****************************************************************************/
-void YYWarning( char *s )
+void YYWarning( const char *s )
 /*****************************************************************************/
 {
 	/* write warning to stderr */
@@ -224,7 +228,7 @@ void YYWarning( char *s )
 }
 
 /*****************************************************************************/
-void yyerror( char *s )
+void yyerror( const char *s )
 /*****************************************************************************/
 {
 	/* write error to stderr */

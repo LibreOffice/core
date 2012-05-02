@@ -26,11 +26,8 @@
  *
  ************************************************************************/
 
-#ifdef AIX
-#    undef _THREAD_SAFE
-#endif
-
 #include "HelpCompiler.hxx"
+#include "l10ntools/HelpLinker.hxx"
 
 #include <map>
 
@@ -38,7 +35,6 @@
 #include <limits.h>
 
 #include <libxslt/xslt.h>
-#include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <libxslt/functions.h>
 #include <libxslt/extensions.h>
@@ -50,26 +46,17 @@
 
 #include <expat.h>
 
-#define DBHELP_ONLY
-
-class IndexerPreProcessor
+namespace lucene
 {
-private:
-    std::string       m_aModuleName;
-    fs::path          m_fsIndexBaseDir;
-    fs::path          m_fsCaptionFilesDirName;
-    fs::path          m_fsContentFilesDirName;
-
-    xsltStylesheetPtr m_xsltStylesheetPtrCaption;
-    xsltStylesheetPtr m_xsltStylesheetPtrContent;
-
-public:
-    IndexerPreProcessor( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
-         const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet );
-    ~IndexerPreProcessor();
-
-    void processDocument( xmlDocPtr doc, const std::string& EncodedDocPath );
-};
+namespace document
+{
+class Document;
+}
+namespace util
+{
+class Reader;
+}
+}
 
 IndexerPreProcessor::IndexerPreProcessor
     ( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
@@ -96,7 +83,6 @@ IndexerPreProcessor::~IndexerPreProcessor()
     if( m_xsltStylesheetPtrContent )
         xsltFreeStylesheet( m_xsltStylesheetPtrContent );
 }
-
 
 std::string getEncodedPath( const std::string& Path )
 {
@@ -258,51 +244,6 @@ public:
 
         fclose( pFile );
     }
-};
-
-class HelpLinker
-{
-public:
-    void main(std::vector<std::string> &args,
-              std::string* pExtensionPath = NULL,
-              std::string* pDestination = NULL,
-              const rtl::OUString* pOfficeHelpPath = NULL )
-
-            throw( HelpProcessingException );
-
-    HelpLinker()
-        : init(true)
-        , m_pIndexerPreProcessor(NULL)
-    {}
-    ~HelpLinker()
-        { delete m_pIndexerPreProcessor; }
-
-private:
-    int locCount, totCount;
-    Stringtable additionalFiles;
-    HashSet helpFiles;
-    fs::path sourceRoot;
-    fs::path embeddStylesheet;
-    fs::path idxCaptionStylesheet;
-    fs::path idxContentStylesheet;
-    fs::path zipdir;
-    fs::path outputFile;
-    std::string extsource;
-    std::string extdestination;
-    std::string module;
-    std::string lang;
-    std::string extensionPath;
-    std::string extensionDestination;
-    bool bExtensionMode;
-    fs::path indexDirName;
-    fs::path indexDirParentName;
-    bool init;
-    IndexerPreProcessor* m_pIndexerPreProcessor;
-    void initIndexerPreProcessor();
-    void link() throw( HelpProcessingException );
-    void addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
-        const std::string& fileB, const std::string& anchorB,
-        const std::string& jarfileB, const std::string& titleB );
 };
 
 namespace URLEncoder
@@ -1022,24 +963,6 @@ void HelpLinker::main( std::vector<std::string> &args,
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
     link();
-}
-
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
-    std::vector<std::string> args;
-    for (int i = 1; i < argc; ++i)
-        args.push_back(std::string(argv[i]));
-    try
-    {
-        HelpLinker* pHelpLinker = new HelpLinker();
-        pHelpLinker->main( args );
-        delete pHelpLinker;
-    }
-    catch( const HelpProcessingException& e )
-    {
-        std::cerr << e.m_aErrorMsg;
-        exit(1);
-    }
-    return 0;
 }
 
 // Variable to set an exception in "C" StructuredXMLErrorFunction
