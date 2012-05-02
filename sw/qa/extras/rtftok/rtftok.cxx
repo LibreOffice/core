@@ -91,6 +91,7 @@ public:
     void testFdo48193();
     void testFdo44211();
     void testFdo48037();
+    void testFdo47764();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -120,6 +121,7 @@ public:
     CPPUNIT_TEST(testFdo48193);
     CPPUNIT_TEST(testFdo44211);
     CPPUNIT_TEST(testFdo48037);
+    CPPUNIT_TEST(testFdo47764);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -658,6 +660,20 @@ void Test::testFdo48037()
     xPropertySet->getPropertyValue("NumberFormat") >>= nActual;
 
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
+void Test::testFdo47764()
+{
+    load("fdo47764.rtf");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    // \cbpat with zero argument should mean the auto (-1) color, not a default color (black)
+    xPropertySet->getPropertyValue("ParaBackColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
