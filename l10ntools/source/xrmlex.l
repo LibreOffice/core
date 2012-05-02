@@ -3,7 +3,7 @@
  * lexer for parsing xml-property source files (*.xml)
  *
  */
-
+#define YY_NEVER_INTERACTIVE 1
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX
@@ -25,24 +25,26 @@
 #include "sal/main.h"
 
 #if defined __GNUC__
-#pragma GCC system_header
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wunused-label"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #elif defined __SINPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 
-/* external functions (C++ code, declared as extren "C" */
-extern int WorkOnTokenSet( int, char* );
-extern int Argument( char * );
-extern int InitXrmExport( char * , char * );
-extern int EndXrmExport();
-extern int GetError();
-extern int SetError();
-extern char *GetOutputFile( int argc, char* argv[]);
-extern FILE *GetXrmFile();
-extern int isQuiet();
-extern char* getFilename();
+/* external functions (C++ code, declared as extern "C" */
+extern "C" int WorkOnTokenSet( int, char* );
+extern "C" int Argument( char * );
+extern "C" int InitXrmExport( char * , char * );
+extern "C" int EndXrmExport();
+extern "C" int GetError();
+extern "C" int SetError();
+extern "C" char *GetOutputFile( int argc, char* argv[]);
+extern "C" FILE *GetXrmFile();
+extern "C" int isQuiet();
+extern "C" char* getFilename();
 
 /* forwards */
 void YYWarning();
@@ -131,7 +133,7 @@ int bText=0;
 
 
 "<!--"	{
-	char c1 = 0, c2 = 0, c3 = input();
+	char c1 = 0, c2 = 0, c3 = yyinput();
 	char pChar[2];
 	pChar[1] = 0x00;
 	pChar[0] = c3;
@@ -146,7 +148,7 @@ int bText=0;
 			break;
 		c1 = c2;
 		c2 = c3;
-		c3 = input();
+		c3 = yyinput();
 		pChar[0] = c3;
 		WorkOnTokenSet( COMMEND, pChar );                          
 	}
@@ -179,11 +181,7 @@ void YYWarning( const char *s )
 }
 
 /*****************************************************************************/
-#ifdef GCC
-void yyerror ( const char *s, ... )
-#else
 void yyerror ( const char *s )
-#endif
 /*****************************************************************************/
 {
 	/* write error to stderr */

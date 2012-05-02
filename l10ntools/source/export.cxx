@@ -41,8 +41,8 @@
 #include <iostream>
 #include <rtl/strbuf.hxx>
 
-extern "C" { int yyerror( const char * ); }
-extern "C" { int YYWarning( const char * ); }
+void yyerror( const char * );
+void YYWarning( const char * );
 
 namespace {
 
