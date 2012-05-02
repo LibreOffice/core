@@ -937,6 +937,11 @@ AC_ARG_WITH(external-tar,
     TARFILE_LOCATION=$withval ,
 )
 
+AC_ARG_WITH(solver-and-workdir-root,
+    AS_HELP_STRING([--with-solver-and-workdir-root=<PATH>],
+        [Specify path that contains SOLARVER and WORKDIR directories manually.])
+)
+
 AC_ARG_WITH(linked-git,
     AS_HELP_STRING([--with-linked-git=<OTHER_CLONE_DIR>],
         [Specify another checkout's clonedir to re-use. This makes use of
@@ -2135,6 +2140,15 @@ else
 fi
 AC_SUBST(DISABLE_DYNLOADING)
 
+if test -n "${with_solver_and_workdir_root}"; then
+    if ! test -d ${with_solver_and_workdir_root}; then
+      AC_MSG_ERROR([directory does not exist: ${with_solver_and_workdir_root}])
+    fi
+    SOLARVER=${with_solver_and_workdir_root}/solver
+else
+    SOLARVER=${SRC_ROOT}/solver
+fi
+
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
 dnl although MSVC is used to build other build-time tools and
@@ -2909,7 +2923,7 @@ aix*)
     OUTPATH=unxaigppc
     P_SEP=:
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
@@ -2939,7 +2953,7 @@ cygwin*)
     esac
     SCPDEFS="$SCPDEFS -D_MSC_VER"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 darwin*)
@@ -2972,7 +2986,7 @@ darwin*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 dragonfly*)
@@ -2997,7 +3011,7 @@ dragonfly*)
         ;;
     esac
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
@@ -3024,7 +3038,7 @@ freebsd*)
         ;;
     esac
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
@@ -3052,7 +3066,7 @@ kfreebsd*)
         ;;
     esac
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
@@ -3159,7 +3173,7 @@ linux-gnu*)
         ;;
     esac
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
@@ -3182,7 +3196,7 @@ linux-androideabi*)
         ;;
     esac
     SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/$OUTPATH"
-    SOLARLIB="-L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 mingw*)
@@ -3210,7 +3224,7 @@ mingw*)
     esac
     SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/win32 -I$SRC_ROOT/solenv/inc/$OUTPATH"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 *netbsd*)
@@ -3244,7 +3258,7 @@ mingw*)
         ;;
     esac
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     ;;
 
@@ -3271,7 +3285,7 @@ openbsd*)
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L/usr/local/lib"
 
@@ -3302,7 +3316,7 @@ solaris*)
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solver/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
     SOLARLIB="$SOLARLIB -L$COMPATH/lib"
     SOLARLIB="$SOLARLIB -L/usr/local/bin -L/usr/dt/lib -L/usr/openwin/lib"
@@ -3318,9 +3332,13 @@ if test "$enable_headless" = "yes"; then
 fi
 
 INPATH="${OUTPATH}${PROEXT}"
-OUTDIR="$SRC_ROOT/solver/$INPATH"
-SOLARINC="-I. -I$SRC_ROOT/solver/$INPATH/inc/external -I$SRC_ROOT/solver/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
-WORKDIR="$SRC_ROOT/workdir/$INPATH"
+if test -n "${with_solver_and_workdir_root}"; then
+    WORKDIR=${with_solver_and_workdir_root}/workdir/${INPATH}
+else
+    WORKDIR=${SRC_ROOT}/workdir/${INPATH}
+fi
+OUTDIR="${SOLARVER}/${INPATH}"
+SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
@@ -3332,6 +3350,7 @@ AC_SUBST(OS)
 AC_SUBST(OUTDIR)
 AC_SUBST(OUTPATH)
 AC_SUBST(P_SEP)
+AC_SUBST(SOLARVER)
 AC_SUBST(WORKDIR)
 
 dnl ===================================================================
@@ -3378,6 +3397,7 @@ if test "$cross_compiling" = "yes"; then
     test $with_java = no && sub_conf_opts="$sub_conf_opts --without-java"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
+    test -n "${with_solver_and_workdir_root}" && sub_conf_opts="$sub_conf_opts --with-solver-and-workdir-root=${with_solver_and_workdir_root}"
     test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost"
     test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
     test -n "$with_system_db_for_build" && sub_conf_opts="$sub_conf_opts --with-system-db"
@@ -11253,7 +11273,7 @@ AC_SUBST(BUILD_NCPUS)
 # Set up ILIB for MSVC build
 #
 if test "$build_os" = "cygwin"; then
-    ILIB=".;$SRC_ROOT/solver/$INPATH/lib"
+    ILIB=".;${SOLARVER}/$INPATH/lib"
     if test -n "$JAVA_HOME" -a "$JAVA_HOME" != "NO_JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
     fi

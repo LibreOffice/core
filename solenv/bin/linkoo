@@ -325,7 +325,7 @@ sub scan_and_link_files($$$)
     }
 
     # Now scan the solver
-    scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$target", 1);
+    scan_one_dir ($installed_files, \%build_files, "$ENV{'SOLARVER'}/$target", 1);
 
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};
@@ -389,7 +389,7 @@ sub link_gdb_py()
     my $dirh;
     my @basis;
     my @ure;
-    my $src = "$OOO_BUILD/solver/$TARGET/lib";
+    my $src = "$ENV{'SOLARVER'}/$TARGET/lib";
     opendir ($dirh, $src) || die "can't open solver: $src: $!";
     while (my $dent = readdir ($dirh)) {
 	$dent =~ /^\./ && next;
@@ -419,7 +419,7 @@ sub link_pagein_files()
     return if ($windows);
 
     print "pagein case:";
-    my $src  = "$OOO_BUILD/solver/$TARGET/bin";
+    my $src  = "$ENV{'SOLARVER'}/$TARGET/bin";
     my $dest = "$OOO_INSTALL/" . $brand_program_dir;
     for my $c ('calc', 'draw', 'impress', 'writer', 'common') {
 	do_link ($src, $dest, "pagein-$c", "pagein-$c");
