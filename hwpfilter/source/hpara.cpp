@@ -78,7 +78,7 @@ HWPPara::~HWPPara(void)
     if (hhstr)
     {
 // virtual destructor
-/* C++?? null?? ???????? ????????. */
+/* C++ should also work on a null. */
         for (ii = 0; ii < nch; ++ii)
             delete hhstr[ii];
 
@@ -103,12 +103,12 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read1b(&pstyno, 1);
 
 
-/* Paragraph ???? ???? */
+/* Paragraph representative character */
     cshape.Read(hwpf);
     if (nch > 0)
         hwpf.AddCharShape(&cshape);
 
-/* Paragraph ???? ???? */
+/* Paragraph paragraph shape */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);

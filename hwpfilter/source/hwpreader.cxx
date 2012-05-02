@@ -358,7 +358,7 @@ void HwpReader::makeMeta()
         }
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
-/* 2001?? 9?? 8?? ??????, 14?? 16?? */
+/* 2001년 9월 8일 토요일, 14시 16분 */
 // 2001-09-07T11:16:47
         rstartEl( ascii("meta:creation-date"), rList );
         rchars( ascii(buf));
@@ -367,7 +367,7 @@ void HwpReader::makeMeta()
 
     if (hwpinfo->summary.keyword[0][0] || hwpinfo->summary.etc[0][0])
     {
-/* ???????? dc?? ????????. */
+/* 스펙에는 dc로 되어있다. */
         rstartEl(ascii("meta:keywords"), rList);
         if (hwpinfo->summary.keyword[0][0])
         {
@@ -495,7 +495,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
             hdo->type == HWPDO_ADVANCED_ARC )
         {
-                                                  /* ???????? ???? */
+                                                  /* 화살표를 사용 */
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = sal_True;
@@ -548,7 +548,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( hdo->type != HWPDO_LINE )
         {
-            if( prop->flag >> 18  & 0x01 )        /* ?????? ???? ???? ???? */
+            if( prop->flag >> 18  & 0x01 )        /* 비트맵 파일 속성 존재 */
             {
                 padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
                 if( !prop->pictype )
@@ -556,7 +556,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     padd( ascii("xlink:href"), sXML_CDATA,
                         hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile, buf), sbuf), gstr));
                 }
-                else                              /* ???????? image???? ?????? ???????? ????. */
+                else                              /* 임베디드 image로서 파일로 저장해야 한다. */
                 {
                     EmPicture *emp = 0L;
                     if ( strlen( prop->szPatternFile ) > 3)
@@ -608,8 +608,8 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 pList->clear();
                 rendEl( ascii("draw:fill-image"));
             }
-/* ???????????? ????????, ???????????? ????????, ?????? ????????. */
-            else if( prop->flag >> 16  & 0x01 )   /* ?????????? ???????? */
+/* If there is a gradient, or bitmap file exists, it is the first step. */
+            else if( prop->flag >> 16  & 0x01 )   /* the presence of the gradient */
             {
                 padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "Grad%d", buf)));
                 switch( prop->gstyle )
@@ -691,7 +691,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 pList->clear();
                 rendEl( ascii("draw:gradient"));
             }
-                                                  /* ???? */
+                                                  /* Hatching */
             else if( prop->pattern_type >> 24 & 0x01 )
             {
                 int type = prop->pattern_type & 0xffffff;
@@ -855,8 +855,8 @@ void HwpReader::makeStyles()
 
 /**
  * parse automatic styles from hwpfile
- * ?????????? ?????? ???? ???????? ????????. ???????? ?????? ????????, ??????, ???? ?????? ???????? ???????? ????????, Body?????? ?????? ?????? ???????? ????????.
- * 1. paragraph, text, fbox, page???????? ???? ????????.
+ * Automatically define a style that is reflected. For example, each paragraph or, tables, headers, etc, are defined in the style of the place, Body uses the style defined here.
+ * 1. paragraph, text, fbox, page styles are supported for.
  */
 void HwpReader::makeAutoStyles()
 {
@@ -1087,7 +1087,7 @@ void HwpReader::makeMasterStyles()
         rstartEl(ascii("style:master-page"), rList);
         pList->clear();
 
-        if( pSet[i].bIsSet )                      /* ???? ?????? ?????????? */
+        if( pSet[i].bIsSet )                /* If the current setting is changed */
         {
               if( !pSet[i].pagenumber ){
                     if( pPrevSet && pPrevSet->pagenumber )
@@ -1129,11 +1129,11 @@ void HwpReader::makeMasterStyles()
             pPage = &pSet[i];
             pPrevSet = &pSet[i];
         }
-        else if( pPrevSet )                       /* ?????? ?????? ???? ??????. */
+        else if( pPrevSet )          /*  If there is anything previously set. */
         {
             pPage = pPrevSet;
         }
-        else                                      /* ???? ?????? ?????? ???????????? */
+        else                         /* If there is already set to default settings */
         {
             rstartEl(ascii("style:header"), rList);
             padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
@@ -1183,7 +1183,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl(ascii("style:header"));
         }
-                                                  /* ???????? ????. */
+                                                  /* Is based */
         else if( pPage->header_odd && !pPage->header_even )
         {
             rstartEl(ascii("style:header"), rList);
@@ -1218,7 +1218,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl(ascii("style:header-left"));
         }
-                                                  /* ???????? ????. */
+                                                  /* Is based. */
         else if( pPage->header_even && !pPage->header_odd )
         {
             rstartEl(ascii("style:header-left"), rList);
@@ -1284,7 +1284,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl(ascii("style:footer"));
         }
-                                                  /* ???????? ????. */
+                                                  /* Is based. */
         else if( pPage->footer_odd && !pPage->footer_even )
         {
             rstartEl(ascii("style:footer"), rList);
@@ -1319,7 +1319,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl(ascii("style:footer-left"));
         }
-                                                  /* ???????? ????. */
+                                                  /* Is based. */
         else if( pPage->footer_even && !pPage->footer_odd )
         {
             rstartEl(ascii("style:footer-left"), rList);
@@ -1362,11 +1362,11 @@ void HwpReader::makeMasterStyles()
 
 
 /**
- * ?????? ???????? ???? ???????????? ??????.
+ * Create a text style for the properties.
  * 1. fo:font-size, fo:font-family, fo:letter-spacing, fo:color,
  *    style:text-background-color, fo:font-style, fo:font-weight,
  *    style:text-underline,style:text-outline,fo:text-shadow,style:text-position
- *    ?? ????????.
+ *    are supported.
  */
 void HwpReader::parseCharShape(CharShape * cshape)
 {
@@ -1436,11 +1436,11 @@ void HwpReader::parseCharShape(CharShape * cshape)
 
 
 /**
- * ???? Paragraph?? ???????? properties???? ??????.
+ * Make paragraph + * corresponding to the physical properties.
  * 1. fo:margin-left,fo:margin-right,fo:margin-top, fo:margin-bottom,
  *    fo:text-indent, fo:line-height, fo:text-align, fo:border
- *    ?? ??????.
- * TODO : ?????? => ???????? ?????????? ?????????? ???????? ????.
+ *    are implemented.
+ * TODO : taepseoljeong => The default setting should be optional. Limited.
  */
 void HwpReader::parseParaShape(ParaShape * pshape)
 {
@@ -1508,7 +1508,7 @@ void HwpReader::parseParaShape(ParaShape * pshape)
 
 
 /**
- * Paragraph?? ???? ???????? ??????.
+ * Styles made for paragraph.
  */
 void HwpReader::makePStyle(ParaShape * pshape)
 {
@@ -1578,8 +1578,8 @@ void HwpReader::makePStyle(ParaShape * pshape)
 
 
 /**
- * ???????? ???????? ??????. ???????? header/footer, footnote???? ????????.
- * TODO : , fo:background-color(?????? ????)
+ * Create the style of the page. This header / footer, footnote, and so on.
+ * TODO : fo: background-color (no information)
  */
 void HwpReader::makePageStyle()
 {
@@ -1811,7 +1811,7 @@ void HwpReader::makePageStyle()
          rendEl(ascii("style:properties"));
          rendEl(ascii("style:footer-style"));
 
-    /* footnote style ???? dtd?????? ????????, ???????? ???????? ????. REALKING */
+    /* footnote style in this dtd missing, but the specification is defined. REALKING */
          rstartEl(ascii("style:footnote-layout"), rList);
 
          padd(ascii("style:distance-before-sep"), sXML_CDATA,
@@ -1850,17 +1850,17 @@ void HwpReader::makeColumns(ColumnDef *coldef)
   {
         switch( coldef->separator )
         {
-             case 1:                           /* ?????? */
+             case 1:                           /* yapeunseon */
                   padd(ascii("style:width"), sXML_CDATA, ascii("0.02mm"));
-             case 3:                           /* ???? */
+             case 3:                           /* dotted */
                   padd(ascii("style:style"), sXML_CDATA, ascii("dotted"));
                   padd(ascii("style:width"), sXML_CDATA, ascii("0.02mm"));
                   break;
-             case 2:                           /* ???????? */
-             case 4:                           /* 2???? */
+             case 2:                           /* dukkeounseon */
+             case 4:                           /* 2 jungseon */
                   padd(ascii("style:width"), sXML_CDATA, ascii("0.35mm"));
                   break;
-             case 0:                           /* ???? */
+             case 0:                           /* None */
              default:
                   padd(ascii("style:style"), sXML_CDATA, ascii("none"));
                   break;
@@ -1974,14 +1974,14 @@ void HwpReader::makeTableStyle(Table *tbl)
         {
             switch( cl->linetype[2] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line*/
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
@@ -1991,56 +1991,56 @@ void HwpReader::makeTableStyle(Table *tbl)
         {
             switch( cl->linetype[0] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-left"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cl->linetype[1] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-right"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cl->linetype[2] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-top"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cl->linetype[3] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-bottom"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
@@ -2385,14 +2385,14 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
                 case 0:
                     padd(ascii("fo:padding"), sXML_CDATA,ascii("0mm"));
                     break;
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
@@ -2402,56 +2402,56 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         {
             switch( cell->linetype[0] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-left"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cell->linetype[1] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-right"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cell->linetype[2] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-top"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cell->linetype[3] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-bottom"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
@@ -2470,11 +2470,11 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
 
 
 /**
- * Floating ?????? ???? ???????? ??????.
+ * Floating 객체에 대한 스타일을 만든다.
  */
 void HwpReader::makeFStyle(FBoxStyle * fstyle)
 {
-                                                  /* ???? exist */
+                                                  /* 캡션 exist */
     if( ( fstyle->boxtype == 'G' || fstyle->boxtype == 'X' ) && fstyle->cap_len > 0 )
     {
         makeCaptionStyle(fstyle);
@@ -2596,14 +2596,14 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
                 case 0:
                           padd(ascii("fo:border"), sXML_CDATA, ascii("none"));
                     break;
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
@@ -2613,56 +2613,56 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         {
             switch( cell->linetype[0] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-left"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cell->linetype[1] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-right"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cell->linetype[2] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-top"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
             }
             switch( cell->linetype[3] )
             {
-                case 1:                           /* ???????? */
-                case 3:                           /* ???? -> ?????????????? ?????? ????. */
+                case 1:                           /* thin solid line */
+                case 3:                           /* dotted line -> Star Office does not have a dotted line. */
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.002cm solid #000000"));
                     break;
-                case 2:                           /* ???????? */
+                case 2:                           /* thick solid line */
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.035cm solid #000000"));
                     break;
-                case 4:                           /* 2???? */
+                case 4:                           /* 2 jungseon */
                     padd(ascii("style:border-line-width-bottom"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
                     padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #000000"));
                     break;
@@ -2754,7 +2754,7 @@ void HwpReader::makeChars(hchar *str, int size)
 
 
 /**
- * ???????? ?????????? ???? ???? ?????? ?????? CharShape?? ???????? ????
+ * Special characters within a paragraph, but if you use characters other CharShape
  */
 void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
 {
@@ -2771,7 +2771,7 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
     }
     if( d->bFirstPara && d->bInBody )
     {
-        strcpy(buf,"[?????? ????]");
+        strcpy(buf,"[문서의 처음]");
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
@@ -2821,7 +2821,7 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
 
 
 /**
- * ???????? ?????????? ?????? ???????? ???? CharShape?? ???????? ????
+ *  Special characters within a paragraph, but if you use characters other CharShape.
  */
 void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
 {
@@ -2841,7 +2841,7 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
     if( d->bFirstPara && d->bInBody )
     {
 /* for HWP's Bookmark */
-        strcpy(buf,"[?????? ????]");
+        strcpy(buf,"[문서의 처음]");
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
@@ -2904,7 +2904,7 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
 
 
 /**
- * ???? ???? ?????????? ?????? ???????? ???? CharShape?? ???? ?????? ???? ????
+ * There are special characters in a paragraph of text handling for the case with other CharShape.
  */
 void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
 {
@@ -2920,7 +2920,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     {
         if( !pstart )
             STARTP;
-        strcpy(buf,"[?????? ????]");
+        strcpy(buf,"[문서의 처음]");
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
@@ -3043,9 +3043,9 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     }
                     makeTab((Tab *) para->hhstr[n]);
                     break;
-                case CH_TEXT_BOX:                 /* 10 - ??/??????????/????/????/???????????? ?? */
+                case CH_TEXT_BOX:                 /* 10 - Table / text box / formula / buttons / Hypertext net */
                 {
-/* ?????? ???? ????????, ?????? text:p???? ???????? ?????? ????. */
+/* Once the tables are processed, and the formula text: p that goes into processing. */
                     TxtBox *hbox = (TxtBox *) para->hhstr[n];
 
                     if( hbox->style.anchor_type == 0 )
@@ -3152,11 +3152,11 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     l = 0;
                     makeMailMerge((MailMerge *) para->hhstr[n]);
                     break;
-                case CH_COMPOSE:                  /* 23 - ???????? */
+                case CH_COMPOSE:                  /* 23 - text overlap */
                     break;
                 case CH_HYPHEN:                   // 24
                     break;
-                case CH_TOC_MARK:                 /* 25 ?????? 3???? ???????? ????. */
+                case CH_TOC_MARK:                 /* 25 Following 3 must work. */
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(gstr, l);
@@ -3189,7 +3189,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
 
 void HwpReader::makeFieldCode(FieldCode *hbox)
 {
-/* ?????? */
+/* Nureumteul*/
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
         padd(ascii("text:placeholder-type"), sXML_CDATA, ascii("text"));
@@ -3200,7 +3200,7 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
         rchars( OUString(gstr));
         rendEl( ascii("text:placeholder") );
     }
-/* ???????? */
+/* Text Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
         if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("title")))
@@ -3228,7 +3228,7 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
             rendEl( ascii("text:keywords") );
         }
     }
-/* ???????? */
+/* Personal information. */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
         if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("User")))
@@ -3293,7 +3293,7 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
         }
 
     }
-    else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* ???????? */
+    else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* Created */
      {
          if( hbox->m_pDate )
              padd(ascii("style:data-style-name"), sXML_CDATA,
@@ -3308,7 +3308,7 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 
 /**
  * Completed
- * ???????????????? ???????? Reference?? ???????? hwp???? ?? ?????? ????.
+ * Refer to Reference Star Office bookmarks do not have the feature in a hwp.
  */
 void HwpReader::makeBookmark(Bookmark * hbox)
 {
@@ -3319,7 +3319,7 @@ void HwpReader::makeBookmark(Bookmark * hbox)
         pList->clear();
         rendEl(ascii("text:bookmark"));
     }
-    else if (hbox->type == 1)                     /* ???? ???????? ???? ?????? ???? ???? */
+    else if (hbox->type == 1)                     /* If the block bukmakeuil has a beginning and an end */
     {
         padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id, gstr)));
         rstartEl(ascii("text:bookmark-start"), rList);
@@ -3580,10 +3580,10 @@ void HwpReader::makeTable(TxtBox * hbox)
 
 
 /**
- * ???????????? ???????? ????????.
+ * To parse the text boxes and tables.
  * 1. draw:style-name, draw:name, text:anchor-type, svg:width,
  *    fo:min-height, svg:x, svg:y
- * TODO : fo:background-color?? ???? ???? ????=>???????? ???????? ?? ???? ????????.
+ * TODO : fo:background-color of the cell color settings => I do not know yet whether to enter the style.
  */
 void HwpReader::makeTextBox(TxtBox * hbox)
 {
@@ -3627,7 +3627,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             Double2Str(WTMM(( hbox->box_ys + hbox->cap_ys) )) + ascii("mm"));
         rstartEl(ascii("draw:text-box"), rList);
         pList->clear();
-        if( hbox->cap_pos % 2 )                   /* ?????? ?????? ???????? */
+        if( hbox->cap_pos % 2 )             /* is located at the top of the caption */
         {
             parsePara(hbox->caption.first());
         }
@@ -3698,7 +3698,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
     {
         rstartEl(ascii("draw:text-box"), rList);
         pList->clear();
-/* ?????? ????????, ?????? ?????? */
+/* If caption exists, on top of */
         if( hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE )
         {
             parsePara(hbox->caption.first());
@@ -3711,7 +3711,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         {
             parsePara(hbox->plists[0].first());
         }
-/* ?????? ????????, ???????? ?????? */
+/* If caption exists, at the bottom */
         if( hbox->style.cap_len > 0 && !(hbox->cap_pos % 2) && hbox->type == TBL_TYPE)
         {
             parsePara(hbox->caption.first());
@@ -3739,7 +3739,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
 
 
 /**
- * MathML?? ???????? ????.
+ * MathML should be converted.
  *
  */
 void HwpReader::makeFormula(TxtBox * hbox)
@@ -3797,9 +3797,9 @@ void HwpReader::makeFormula(TxtBox * hbox)
 
 
 /**
- * platform?????? ?????????? href?? C:\?? D:\?? ?????? ???? ???????? ????????????
- * C:\ => ??????, D:\ => ????(/)?? ?????????? ?????? ????????. ??????
- * ?????? ???????????????? ???? ????????.
+ * Href platform reads the information in C: \ or D: \ if you start with Linux or Solaris,
+ * if C: \ => Home, D: \ => root (/) is needed to convert the operation. It
+ * writes Hancomm because of the DOS emulator.
  */
 void HwpReader::makeHyperText(TxtBox * hbox)
 {
@@ -3842,9 +3842,9 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 
 
 /**
- * platform?????? ?????????? href?? C:\?? D:\?? ?????? ???? ???????? ????????????
- * C:\ => ??????, D:\ => ????(/)?? ????????. ??????
- * ?????? ???????????????? ???? ????????.
+ * Href platform reads the information in C: \ or D: \ if you start with Linux or Solaris,
+ * if C: \ => Home, D: \ => root (/) has changed. It
+ * writes Hancomm because the DOS emulator.
  */
 void HwpReader::makePicture(Picture * hbox)
 {
@@ -3894,7 +3894,7 @@ void HwpReader::makePicture(Picture * hbox)
                     Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + ascii("mm"));
                 rstartEl(ascii("draw:text-box"), rList);
                 pList->clear();
-                if( hbox->cap_pos % 2 )           /* ?????? ?????? ???????? */
+                if( hbox->cap_pos % 2 )           /* is located at the top of the caption */
                 {
                     parsePara(hbox->caption.first());
                 }
@@ -4041,7 +4041,7 @@ void HwpReader::makePicture(Picture * hbox)
             if( hbox->style.cap_len > 0 )
             {
                 rendEl( ascii("text:p"));
-                if( !(hbox->cap_pos % 2))         /* ?????? ???????? ????????, */
+                if( !(hbox->cap_pos % 2))         /* is located at the bottom of the caption, */
                 {
                     parsePara(hbox->caption.first());
                 }
@@ -4119,13 +4119,13 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                      ZZPoint pt[3], r_pt[3];
                      for(i = 0 ; i < 3 ; i++ ){
                          pt[i].x = pal->pt[i].x - drawobj->property.rot_originx;
-                         /* ???????????? ???? */
+                         /* Convert to physical coordinates */
                          pt[i].y = -(pal->pt[i].y - drawobj->property.rot_originy);
                      }
 
                 double rotate, skewX ;
 
-                     /* 2 - ?????? ???? */
+                     /* 2 - Rotation calculation */
                      if( pt[1].x == pt[0].x ){
                          if( pt[1].y > pt[0].y )
                              rotate = PI/2;
@@ -4142,7 +4142,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                          r_pt[i].y = (int)(pt[i].y * cos(-(rotate)) + pt[i].x * sin(-(rotate)));
                      }
 
-                     /* 4 - ???? ???? */
+                     /* 4 - hwingak calculation */
                      if( r_pt[2].y == r_pt[1].y )
                          skewX = 0;
                      else
@@ -4180,7 +4180,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
             }
             switch (drawobj->type)
             {
-                case HWPDO_LINE:                  /* ?? - ????????, ??????. */
+                case HWPDO_LINE:                  /* line - starting coordinates, kkeutjwapyo. */
                     if( drawobj->u.line_arc.flip & 0x01 )
                     {
                         padd(ascii("svg:x1"), sXML_CDATA,
@@ -4214,7 +4214,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     pList->clear();
                     rendEl(ascii("draw:line"));
                     break;
-                case HWPDO_RECT:                  /* ?????? - ????????, ????/???? */
+                case HWPDO_RECT:                  /* rectangle - the starting position, the horizontal / vertical */
                     if( !bIsRotate )
                     {
                         padd(ascii("svg:x"), sXML_CDATA,
@@ -4256,8 +4256,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     }
                     rendEl(ascii("draw:rect"));
                     break;
-                case HWPDO_ELLIPSE:               /* ???? - ????????, ????/???? */
-                case HWPDO_ADVANCED_ELLIPSE:      /* ?????? ???? */
+                case HWPDO_ELLIPSE:               /* ellipse - the starting position, the horizontal / vertical */
+                case HWPDO_ADVANCED_ELLIPSE:      /* ellipse */
                 {
                     if( !bIsRotate )
                     {
@@ -4306,10 +4306,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     break;
 
                 }
-                case HWPDO_ARC:                   /* ?? */
+                case HWPDO_ARC:                   /* Call */
                 case HWPDO_ADVANCED_ARC:
                 {
-                    /* ??????????, ???????????? ???? ?????? ?????? ???????? ????. */
+                    /* If the foil, Star Office is a full size of the ellipse size. */
                          uint flip = drawobj->u.line_arc.flip;
                     if( !bIsRotate )
                     {
@@ -4416,7 +4416,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     break;
 
                 }
-                     case HWPDO_CURVE: /* ???? : ?????????? ????. */
+                     case HWPDO_CURVE: /* Curve converted to polygons. */
                 {
                          sal_Bool bIsNatural = sal_True;
                          // os unused
@@ -4534,7 +4534,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     break;
                 }
                 case HWPDO_CLOSED_FREEFORM:
-                case HWPDO_FREEFORM:              /* ?????? */
+                case HWPDO_FREEFORM:              /* Polygon */
                 {
                     bool bIsPolygon = false;
 
@@ -4677,8 +4677,8 @@ void HwpReader::makeLine(Line *   )
 
 
 /**
- * ????-????-???????? : ?????????? ???? ?????? ????????.
- * ?????? ?????? ?? ??????, ???? ???????? ???????? ????????.
+ * Input - comments - Hidden Description: The description shows the hidden to the user.
+ * Paragraph may include, but pulled out just a character string to parse.
  */
 void HwpReader::makeHidden(Hidden * hbox)
 {
@@ -4708,7 +4708,11 @@ void HwpReader::makeHidden(Hidden * hbox)
 
 
 /**
- * ?????? text:footnote, ?????? text:endnote?? ????
+ * 이미 master-page에서 작업이 되었기 때문에 따로 작업할 필요가 없다.
+ * TODO : 나중에 소스정리할때 제거.
+ */
+/**
+ * Footnote text: footnote, endnotes text: endnote to convert
  */
 void HwpReader::makeFootnote(Footnote * hbox)
 {
@@ -4816,7 +4820,7 @@ void HwpReader::makeShowPageNum()
         nPos = 2;
     else if( hbox->where == 3 || hbox->where == 6 )
         nPos = 3;
-    else                                          /* ?? ?????? ???????? ??????. */
+    else                                          /* In this case it should not exist. */
     {
         if( d->nPnPos == 1 )
             nPos = 1;
@@ -4912,7 +4916,7 @@ void HwpReader::parsePara(HWPPara * para, sal_Bool bParaStart)
             if( d->bFirstPara && d->bInBody )
             {
 /* for HWP's Bookmark */
-                strcpy(buf,"[?????? ????]");
+                strcpy(buf,"[문서의 처음]");
                 padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_EUC_KR));
                 rstartEl(ascii("text:bookmark"), rList);
                 pList->clear();
