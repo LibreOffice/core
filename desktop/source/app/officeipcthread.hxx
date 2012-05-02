@@ -29,6 +29,10 @@
 #ifndef _DESKTOP_OFFICEIPCTHREAD_HXX_
 #define _DESKTOP_OFFICEIPCTHREAD_HXX_
 
+#include "sal/config.h"
+
+#include <vector>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <osl/pipe.hxx>
@@ -55,18 +59,18 @@ struct ProcessDocumentsRequest
 
     boost::optional< ::rtl::OUString > aCwdUrl;
     ::rtl::OUString aModule;
-    ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
-    ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
-    ::rtl::OUString aStartList;     // Documents/Presentations that should be started
-    ::rtl::OUString aPrintList;     // Documents that should be printed on default printer
-    ::rtl::OUString aForceOpenList; // Documents that should be forced to open for editing (even templates)
-    ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
+    std::vector< rtl::OUString > aOpenList; // Documents that should be opened in the default way
+    std::vector< rtl::OUString > aViewList; // Documents that should be opened in viewmode
+    std::vector< rtl::OUString > aStartList; // Documents/Presentations that should be started
+    std::vector< rtl::OUString > aPrintList; // Documents that should be printed on default printer
+    std::vector< rtl::OUString > aForceOpenList; // Documents that should be forced to open for editing (even templates)
+    std::vector< rtl::OUString > aForceNewList; // Documents that should be forced to create a new document
     ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
-    ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
-    ::rtl::OUString aConversionList;
+    std::vector< rtl::OUString > aPrintToList; // Documents that should be printed on the given printer
+    std::vector< rtl::OUString > aConversionList;
     ::rtl::OUString aConversionParams;
     ::rtl::OUString aConversionOut;
-    ::rtl::OUString aInFilter;
+    std::vector< rtl::OUString > aInFilter;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
 };
 

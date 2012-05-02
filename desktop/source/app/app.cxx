@@ -1340,7 +1340,6 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     sal_Bool bAllowRecoveryAndSessionManagement = (
                                                     ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
                                                     ( !rArgs.IsHeadless()                     ) &&
-                                                    ( !rArgs.IsServer()                       ) &&
                                                     (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery cant work without UI ... but UI layer seams to be the reason for this crash
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
@@ -1498,7 +1497,7 @@ int Desktop::Main()
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     try
     {
-        RegisterServices( xSMgr );
+        RegisterServices();
 
         SetSplashScreenProgress(25);
 
@@ -2452,8 +2451,7 @@ void Desktop::OpenClients()
     // need some time, where the user wont see any results and wait for finishing the office startup ...
     sal_Bool bAllowRecoveryAndSessionManagement = (
                                                     ( !rArgs.IsNoRestore() ) &&
-                                                    ( !rArgs.IsHeadless()  ) &&
-                                                    ( !rArgs.IsServer()    )
+                                                    ( !rArgs.IsHeadless()  )
                                                   );
 
     if ( ! bAllowRecoveryAndSessionManagement )
@@ -2568,80 +2566,76 @@ void Desktop::OpenClients()
 
     OfficeIPCThread::EnableRequests();
 
-    sal_Bool bShutdown( sal_False );
-    if ( !rArgs.IsServer() )
+    ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
+    aRequest.pcProcessed = NULL;
+
+    aRequest.aOpenList = rArgs.GetOpenList();
+    aRequest.aViewList = rArgs.GetViewList();
+    aRequest.aStartList = rArgs.GetStartList();
+    aRequest.aPrintList = rArgs.GetPrintList();
+    aRequest.aPrintToList = rArgs.GetPrintToList();
+    aRequest.aPrinterName = rArgs.GetPrinterName();
+    aRequest.aForceOpenList = rArgs.GetForceOpenList();
+    aRequest.aForceNewList = rArgs.GetForceNewList();
+    aRequest.aConversionList = rArgs.GetConversionList();
+    aRequest.aConversionParams = rArgs.GetConversionParams();
+    aRequest.aConversionOut = rArgs.GetConversionOut();
+    aRequest.aInFilter = rArgs.GetInFilter();
+
+    if ( !aRequest.aOpenList.empty() ||
+         !aRequest.aViewList.empty() ||
+         !aRequest.aStartList.empty() ||
+         !aRequest.aPrintList.empty() ||
+         !aRequest.aForceOpenList.empty() ||
+         !aRequest.aForceNewList.empty() ||
+         ( !aRequest.aPrintToList.empty() && !aRequest.aPrinterName.isEmpty() ) ||
+         !aRequest.aConversionList.empty() )
     {
-        ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
-        aRequest.pcProcessed = NULL;
+        bLoaded = sal_True;
 
-        rArgs.GetOpenList( aRequest.aOpenList );
-        rArgs.GetViewList( aRequest.aViewList );
-        rArgs.GetStartList( aRequest.aStartList );
-        rArgs.GetPrintList( aRequest.aPrintList );
-        rArgs.GetPrintToList( aRequest.aPrintToList );
-        rArgs.GetPrinterName( aRequest.aPrinterName );
-        rArgs.GetForceOpenList( aRequest.aForceOpenList );
-        rArgs.GetForceNewList( aRequest.aForceNewList );
-        rArgs.GetConversionList( aRequest.aConversionList );
-        rArgs.GetConversionParams( aRequest.aConversionParams );
-        rArgs.GetConversionOut( aRequest.aConversionOut );
-        rArgs.GetInFilter( aRequest.aInFilter );
-
-        if ( !aRequest.aOpenList.isEmpty() ||
-             !aRequest.aViewList.isEmpty() ||
-             !aRequest.aStartList.isEmpty() ||
-             !aRequest.aPrintList.isEmpty() ||
-             !aRequest.aForceOpenList.isEmpty() ||
-             !aRequest.aForceNewList.isEmpty() ||
-             ( !aRequest.aPrintToList.isEmpty() && !aRequest.aPrinterName.isEmpty() ) ||
-             !aRequest.aConversionList.isEmpty() )
+        if ( rArgs.HasModuleParam() )
         {
-            bLoaded = sal_True;
+            SvtModuleOptions    aOpt;
 
-            if ( rArgs.HasModuleParam() )
+            // Support command line parameters to start a module (as preselection)
+            if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
+            else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
+            else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
+            else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+        }
+
+        // check for printing disabled
+        if( ( !(aRequest.aPrintList.empty() && aRequest.aPrintToList.empty()) )
+            && Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
+        {
+            aRequest.aPrintList.clear();
+            aRequest.aPrintToList.clear();
+            ResMgr* pDtResMgr = GetDesktopResManager();
+            if( pDtResMgr )
             {
-                SvtModuleOptions    aOpt;
-
-                // Support command line parameters to start a module (as preselection)
-                if ( rArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-                    aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
-                else if ( rArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-                    aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
-                else if ( rArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-                    aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
-                else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-                    aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+                ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, *pDtResMgr ) );
+                aBox.Execute();
             }
+        }
 
-            // check for printing disabled
-            if( ( !(aRequest.aPrintList.isEmpty() && aRequest.aPrintToList.isEmpty()) )
-                && Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
-            {
-                aRequest.aPrintList = rtl::OUString();
-                aRequest.aPrintToList = rtl::OUString();
-                ResMgr* pDtResMgr = GetDesktopResManager();
-                if( pDtResMgr )
-                {
-                    ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, *pDtResMgr ) );
-                    aBox.Execute();
-                }
-            }
-
-            // Process request
-            bShutdown = OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
+        // Process request
+        if ( OfficeIPCThread::ExecuteCmdLineRequests( aRequest ) )
+        {
+            // Don't do anything if we have successfully called terminate at desktop:
+            return;
         }
     }
-
-    // Don't do anything if we have successfully called terminate at desktop
-    if ( bShutdown )
-        return;
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
     Reference< XFramesSupplier > xTasksSupplier(
             ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY_THROW );
     Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
-    if ( xList->hasElements() || rArgs.IsServer() )
+    if ( xList->hasElements() )
         return;
 
     if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VCL_INPUT_APPEVENT ) )
@@ -2702,7 +2696,7 @@ void Desktop::OpenDefault()
 
     ProcessDocumentsRequest aRequest(rArgs.getCwdUrl());
     aRequest.pcProcessed = NULL;
-    aRequest.aOpenList   = aName;
+    aRequest.aOpenList.push_back(aName);
     OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
 }
 
@@ -2836,7 +2830,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             {
                 ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                     rCmdLine.getCwdUrl());
-                pDocsRequest->aOpenList = rAppEvent.GetData();
+                pDocsRequest->aOpenList.push_back(rAppEvent.GetData());
                 pDocsRequest->pcProcessed = NULL;
 
                 OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
@@ -2855,7 +2849,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             {
                 ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                     rCmdLine.getCwdUrl());
-                pDocsRequest->aPrintList = rAppEvent.GetData();
+                pDocsRequest->aPrintList.push_back(rAppEvent.GetData());
                 pDocsRequest->pcProcessed = NULL;
 
                 OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
@@ -2935,7 +2929,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::OpenSplashScreen()
 {
-    ::rtl::OUString     aTmpString;
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
@@ -2945,9 +2938,9 @@ void Desktop::OpenSplashScreen()
          !rCmdLine.IsMinimized() &&
          !rCmdLine.IsNoLogo() &&
          !rCmdLine.IsTerminateAfterInit() &&
-         !rCmdLine.GetPrintList( aTmpString ) &&
-         !rCmdLine.GetPrintToList( aTmpString ) &&
-         !rCmdLine.GetConversionList( aTmpString ))
+         rCmdLine.GetPrintList().empty() &&
+         rCmdLine.GetPrintToList().empty() &&
+         rCmdLine.GetConversionList().empty() )
     {
         // Determine application name from command line parameters
         OUString aAppName;
@@ -2970,7 +2963,7 @@ void Desktop::OpenSplashScreen()
 
         // Which splash to use
         OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
-        if ( !rCmdLine.GetSplashPipe().isEmpty() )
+        if ( rCmdLine.HasSplashPipe() )
             aSplashService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.PipeSplashScreen"));
 
         bVisible = sal_True;

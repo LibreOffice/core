@@ -148,7 +148,7 @@ class Desktop : public Application
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
             // returns a non-null reference or throws an exception
 
-        void                    RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
+        void                    RegisterServices();
         void                    DeregisterServices();
 
         void                    DestroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );

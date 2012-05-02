@@ -86,23 +86,6 @@ private:
 
 }
 
-static CommandLineArgs::BoolParam aModuleGroupDefinition[] =
-{
-    CommandLineArgs::CMD_BOOLPARAM_WRITER,
-    CommandLineArgs::CMD_BOOLPARAM_CALC,
-    CommandLineArgs::CMD_BOOLPARAM_DRAW,
-    CommandLineArgs::CMD_BOOLPARAM_IMPRESS,
-    CommandLineArgs::CMD_BOOLPARAM_GLOBAL,
-    CommandLineArgs::CMD_BOOLPARAM_MATH,
-    CommandLineArgs::CMD_BOOLPARAM_WEB,
-    CommandLineArgs::CMD_BOOLPARAM_BASE
-};
-
-CommandLineArgs::GroupDefinition CommandLineArgs::m_pGroupDefinitions[ CommandLineArgs::CMD_GRPID_COUNT ] =
-{
-    { 8, aModuleGroupDefinition }
-};
-
 CommandLineArgs::Supplier::Exception::Exception() {}
 
 CommandLineArgs::Supplier::Exception::Exception(Exception const &) {}
@@ -160,8 +143,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
     bool bBatchPrinterNameEvent(false);
     bool bConversionOutEvent(false);
 
-    m_eArgumentCount = NONE;
-
     for (;;)
     {
         ::rtl::OUString aArg;
@@ -180,7 +161,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
         if ( !aArg.isEmpty() )
         {
-            m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
+            m_bEmpty = false;
             ::rtl::OUString oArg;
             if ( !InterpretCommandLineParameter( aArg, oArg ))
             {
@@ -318,7 +299,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         fprintf(stderr, "Unknown option %s\n",
                             rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()).getStr());
                         fprintf(stderr, "Run 'soffice --help' to see a full list of available command line options.\n");
-                        SetBoolParam_Impl( CMD_BOOLPARAM_UNKNOWN, sal_True );
+                        m_unknown = true;
                     }
 #endif
                 }
@@ -327,24 +308,24 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if ( bPrinterName && bPrintToEvent )
                     {
                         // first argument after "-pt" this must be the printer name
-                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArg );
+                        m_printername = aArg;
                         bPrinterName = false;
                     }
                     else if ( bConversionParamsEvent && bConversionEvent )
                     {
                         // first argument must be the the params
-                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONPARAMS, aArg );
+                        m_conversionparams = aArg;
                         bConversionParamsEvent = false;
                     }
                     else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
                     {
                         // first argument is the printer name
-                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArg );
+                        m_printername = aArg;
                         bBatchPrinterNameEvent = false;
                     }
                     else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
                     {
-                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONOUT, aArg );
+                        m_conversionout = aArg;
                         bConversionOutEvent = false;
                     }
                     else
@@ -361,47 +342,46 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         // handle this argument as a filename
                         if ( bOpenEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArg );
+                            m_openlist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bViewEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArg );
+                            m_viewlist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bStartEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArg );
+                            m_startlist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bPrintEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArg );
+                            m_printlist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bPrintToEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTTOLIST, aArg );
+                            m_printtolist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bForceNewEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArg );
+                            m_forcenewlist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bForceOpenEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArg );
+                            m_forceopenlist.push_back(aArg);
                             bOpenDoc = true;
                         }
                         else if ( bDisplaySpec )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArg );
                             bDisplaySpec = false; // only one display, not a lsit
                             bOpenEvent = true;    // set back to standard
                         }
                         else if ( bConversionEvent || bBatchPrintEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONLIST, aArg );
+                            m_conversionlist.push_back(aArg);
                     }
                 }
             }
@@ -412,24 +392,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         m_bDocumentArgs = true;
 }
 
-void CommandLineArgs::AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam )
-{
-    OSL_ASSERT( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT );
-    ::rtl::OUStringBuffer aParamBuf(m_aStrParams[eParam]);
-    if ( aParamBuf.getLength() )
-        aParamBuf.append('\n');
-    aParamBuf.append(aParam);
-    m_aStrParams[eParam] = aParamBuf.makeStringAndClear();
-    m_aStrSetParams[eParam] = sal_True;
-}
-
-void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
-{
-    OSL_ASSERT( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT );
-    m_aBoolParams[eParam] = bValue;
-}
-
-sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
+bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
 {
     bool bDeprecated = false;
     if (aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("--")))
@@ -444,106 +407,102 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else
     {
-        return sal_False;
+        return false;
     }
 
-    if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "minimized" )) == sal_True )
+    if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "minimized" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_MINIMIZED, sal_True );
+        m_minimized = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "invisible" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "invisible" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
+        m_invisible = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "norestore" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "norestore" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_NORESTORE, sal_True );
+        m_norestore = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nodefault" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nodefault" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_NODEFAULT, sal_True );
+        m_nodefault = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "server" )) == sal_True )
-    {
-        m_server = true;
-    }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "headless" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "headless" )) )
     {
         // Headless means also invisibile, so set this parameter to true!
-        SetBoolParam_Impl( CMD_BOOLPARAM_HEADLESS, sal_True );
-        SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
+        m_headless = true;
+        m_invisible = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart" )) )
     {
 #if defined(ENABLE_QUICKSTART_APPLET)
-        SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
+        m_quickstart = true;
 #endif
-        SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );
+        m_noquickstart = false;
     }
     else if ( oArg == "quickstart=no" )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_True );
-        SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_False );
+        m_noquickstart = true;
+        m_quickstart = false;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "terminate_after_init" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "terminate_after_init" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_TERMINATEAFTERINIT, sal_True );
+        m_terminateafterinit = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nofirststartwizard" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nofirststartwizard" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_NOFIRSTSTARTWIZARD, sal_True );
+        m_nofirststartwizard = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nologo" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nologo" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_NOLOGO, sal_True );
+        m_nologo = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nolockcheck" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nolockcheck" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_NOLOCKCHECK, sal_True );
+        m_nolockcheck = true;
         // Workaround for automated testing
-        ::svt::DocumentLockFile::AllowInteraction( sal_False );
+        ::svt::DocumentLockFile::AllowInteraction( false );
     }
     else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "help" ))
         || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
         || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELP, sal_True );
+        m_help = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpwriter" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpwriter" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPWRITER, sal_True );
+        m_helpwriter = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpcalc" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpcalc" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPCALC, sal_True );
+        m_helpcalc = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpdraw" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpdraw" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPDRAW, sal_True );
+        m_helpdraw = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpimpress" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpimpress" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPIMPRESS, sal_True );
+        m_helpimpress = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbase" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbase" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASE, sal_True );
+        m_helpbase = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbasic" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbasic" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASIC, sal_True );
+        m_helpbasic = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpmath" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpmath" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
+        m_helpmath = true;
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "version" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "version" )) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_VERSION, sal_True );
+        m_version = true;
     }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("splash-pipe=")) )
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, oArg.copy(RTL_CONSTASCII_LENGTH("splash-pipe=")) );
+        m_splashpipe = true;
     }
 #ifdef MACOSX
     /* #i84053# ignore -psn on Mac
@@ -553,13 +512,13 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     */
     else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")) )
     {
-        SetBoolParam_Impl( CMD_BOOLPARAM_PSN, sal_True );
-        return sal_True;
+        m_psn = true;
+        return true;
     }
 #endif
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("infilter=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")) );
+        m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
     }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("accept=")))
     {
@@ -569,288 +528,244 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     {
         m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
     }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("portal,")))
-    {
-        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, oArg.copy(RTL_CONSTASCII_LENGTH("portal,")) );
-    }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("userid")))
-    {
-        if ( oArg.getLength() > RTL_CONSTASCII_LENGTH("userid")+1 )
-        {
-            AddStringListParam_Impl(
-                CMD_STRINGPARAM_USERDIR,
-                ::rtl::Uri::decode( oArg.copy(RTL_CONSTASCII_LENGTH("userid")+1),
-                                    rtl_UriDecodeWithCharset,
-                                    RTL_TEXTENCODING_UTF8 ) );
-        }
-    }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("clientdisplay=")))
-    {
-        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, oArg.copy(RTL_CONSTASCII_LENGTH("clientdisplay=")) );
-    }
-    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("version=")))
-    {
-        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, oArg.copy(RTL_CONSTASCII_LENGTH("version=")) );
-    }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, oArg.copy(RTL_CONSTASCII_LENGTH("language=")) );
+        m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
     }
     else if ( oArg == "writer" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WRITER );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
+        m_writer = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "calc" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_CALC );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
+        m_calc = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "draw" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_DRAW );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
+        m_draw = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "impress" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
+        m_impress = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "base" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_BASE );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
+        m_base = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "global" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_GLOBAL );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
+        m_global = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "math" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_MATH );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
+        m_math = true;
         m_bDocumentArgs = true;
     }
     else if ( oArg == "web" )
     {
-        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WEB );
-        if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_WEB, sal_True );
+        m_web = true;
         m_bDocumentArgs = true;
     }
     else
-        return sal_False;
+        return false;
 
     if (bDeprecated)
     {
         rtl::OString sArg(rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()));
         fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
     }
-    return sal_True;
-}
-
-sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nExcludeMember ) const
-{
-    // Check if at least one bool param out of a group is set. An exclude member can be provided.
-    for ( int i = 0; i < m_pGroupDefinitions[nGroupId].nCount; i++ )
-    {
-        BoolParam nParam = m_pGroupDefinitions[nGroupId].pGroupMembers[i];
-        if ( nParam != nExcludeMember && m_aBoolParams[nParam] )
-            return sal_True;
-    }
-
-    return sal_False;
+    return true;
 }
 
 void CommandLineArgs::InitParamValues()
 {
-    int i;
-    for ( i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
-        m_aBoolParams[i] = sal_False;
-    for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
-        m_aStrSetParams[i] = sal_False;
-    m_eArgumentCount = NONE;
+    m_minimized = false;
+    m_invisible = false;
+    m_norestore = false;
+    m_headless = false;
+    m_quickstart = false;
+    m_noquickstart = false;
+    m_terminateafterinit = false;
+    m_nofirststartwizard = false;
+    m_nologo = false;
+    m_nolockcheck = false;
+    m_nodefault = false;
+    m_help = false;
+    m_writer = false;
+    m_calc = false;
+    m_draw = false;
+    m_impress = false;
+    m_global = false;
+    m_math = false;
+    m_web = false;
+    m_base = false;
+    m_helpwriter = false;
+    m_helpcalc = false;
+    m_helpdraw = false;
+    m_helpbasic = false;
+    m_helpmath = false;
+    m_helpimpress = false;
+    m_helpbase = false;
+    m_psn = false;
+    m_version = false;
+    m_unknown = false;
+    m_splashpipe = false;
+    m_bEmpty = true;
     m_bDocumentArgs  = false;
-    m_server = false;
 }
 
-void CommandLineArgs::ClearServer()
+bool CommandLineArgs::IsMinimized() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    m_server = false;
+    return m_minimized;
 }
 
-sal_Bool CommandLineArgs::IsMinimized() const
+bool CommandLineArgs::IsInvisible() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_MINIMIZED ];
+    return m_invisible;
 }
 
-sal_Bool CommandLineArgs::IsInvisible() const
+bool CommandLineArgs::IsNoRestore() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_INVISIBLE ];
+    return m_norestore;
 }
 
-sal_Bool CommandLineArgs::IsNoRestore() const
+bool CommandLineArgs::IsNoDefault() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_NORESTORE ];
+    return m_nodefault;
 }
 
-sal_Bool CommandLineArgs::IsNoDefault() const
+bool CommandLineArgs::IsHeadless() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_NODEFAULT ];
+    return m_headless;
 }
 
-sal_Bool CommandLineArgs::IsServer() const
+bool CommandLineArgs::IsQuickstart() const
 {
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_server;
+    return m_quickstart;
 }
 
-sal_Bool CommandLineArgs::IsHeadless() const
+bool CommandLineArgs::IsNoQuickstart() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_HEADLESS ];
+    return m_noquickstart;
 }
 
-sal_Bool CommandLineArgs::IsQuickstart() const
+bool CommandLineArgs::IsTerminateAfterInit() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_QUICKSTART ];
+    return m_terminateafterinit;
 }
 
-sal_Bool CommandLineArgs::IsNoQuickstart() const
+bool CommandLineArgs::IsNoLogo() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_NOQUICKSTART ];
+    return m_nologo;
 }
 
-sal_Bool CommandLineArgs::IsTerminateAfterInit() const
+bool CommandLineArgs::IsNoLockcheck() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_TERMINATEAFTERINIT ];
+    return m_nolockcheck;
 }
 
-sal_Bool CommandLineArgs::IsNoLogo() const
+bool CommandLineArgs::IsHelp() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_NOLOGO ];
+    return m_help;
+}
+bool CommandLineArgs::IsHelpWriter() const
+{
+    return m_helpwriter;
 }
 
-sal_Bool CommandLineArgs::IsNoLockcheck() const
+bool CommandLineArgs::IsHelpCalc() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_NOLOCKCHECK ];
+    return m_helpcalc;
 }
 
-sal_Bool CommandLineArgs::IsHelp() const
+bool CommandLineArgs::IsHelpDraw() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_HELP ];
-}
-sal_Bool CommandLineArgs::IsHelpWriter() const
-{
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPWRITER ];
+    return m_helpdraw;
 }
 
-sal_Bool CommandLineArgs::IsHelpCalc() const
+bool CommandLineArgs::IsHelpImpress() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPCALC ];
+    return m_helpimpress;
 }
 
-sal_Bool CommandLineArgs::IsHelpDraw() const
+bool CommandLineArgs::IsHelpBase() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPDRAW ];
+    return m_helpbase;
+}
+bool CommandLineArgs::IsHelpMath() const
+{
+    return m_helpmath;
+}
+bool CommandLineArgs::IsHelpBasic() const
+{
+    return m_helpbasic;
 }
 
-sal_Bool CommandLineArgs::IsHelpImpress() const
+bool CommandLineArgs::IsWriter() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPIMPRESS ];
+    return m_writer;
 }
 
-sal_Bool CommandLineArgs::IsHelpBase() const
+bool CommandLineArgs::IsCalc() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPBASE ];
-}
-sal_Bool CommandLineArgs::IsHelpMath() const
-{
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPMATH ];
-}
-sal_Bool CommandLineArgs::IsHelpBasic() const
-{
-    return m_aBoolParams[ CMD_BOOLPARAM_HELPBASIC ];
+    return m_calc;
 }
 
-sal_Bool CommandLineArgs::IsWriter() const
+bool CommandLineArgs::IsDraw() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_WRITER ];
+    return m_draw;
 }
 
-sal_Bool CommandLineArgs::IsCalc() const
+bool CommandLineArgs::IsImpress() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_CALC ];
+    return m_impress;
 }
 
-sal_Bool CommandLineArgs::IsDraw() const
+bool CommandLineArgs::IsBase() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_DRAW ];
+    return m_base;
 }
 
-sal_Bool CommandLineArgs::IsImpress() const
+bool CommandLineArgs::IsGlobal() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_IMPRESS ];
+    return m_global;
 }
 
-sal_Bool CommandLineArgs::IsBase() const
+bool CommandLineArgs::IsMath() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_BASE ];
+    return m_math;
 }
 
-sal_Bool CommandLineArgs::IsGlobal() const
+bool CommandLineArgs::IsWeb() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_GLOBAL ];
+    return m_web;
 }
 
-sal_Bool CommandLineArgs::IsMath() const
+bool CommandLineArgs::IsVersion() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_MATH ];
+    return m_version;
 }
 
-sal_Bool CommandLineArgs::IsWeb() const
+bool CommandLineArgs::HasUnknown() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_WEB ];
+    return m_unknown;
 }
 
-sal_Bool CommandLineArgs::IsVersion() const
+bool CommandLineArgs::HasModuleParam() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_VERSION ];
+    return m_writer || m_calc || m_draw || m_impress || m_global || m_math
+        || m_web || m_base;
 }
 
-sal_Bool CommandLineArgs::HasUnknown() const
+bool CommandLineArgs::HasSplashPipe() const
 {
-    return m_aBoolParams[ CMD_BOOLPARAM_UNKNOWN ];
-}
-
-sal_Bool CommandLineArgs::HasModuleParam() const
-{
-    return CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_COUNT );
-}
-
-sal_Bool CommandLineArgs::GetPortalConnectString( ::rtl::OUString& rPara ) const
-{
-    rPara = m_aStrParams[ CMD_STRINGPARAM_PORTAL ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_PORTAL ];
-}
-
-rtl::OUString CommandLineArgs::GetSplashPipe() const
-{
-    return m_aStrParams[CMD_STRINGPARAM_SPLASHPIPE];
+    return m_splashpipe;
 }
 
 std::vector< rtl::OUString > const & CommandLineArgs::GetAccept() const
@@ -863,89 +778,76 @@ std::vector< rtl::OUString > const & CommandLineArgs::GetUnaccept() const
     return m_unaccept;
 }
 
-sal_Bool CommandLineArgs::GetOpenList( ::rtl::OUString& rPara) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetOpenList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_OPENLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_OPENLIST ];
+    return m_openlist;
 }
 
-sal_Bool CommandLineArgs::GetViewList( ::rtl::OUString& rPara) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetViewList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_VIEWLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_VIEWLIST ];
+    return m_viewlist;
 }
 
-sal_Bool CommandLineArgs::GetStartList( ::rtl::OUString& rPara) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetStartList() const
 {
-      rPara = m_aStrParams[ CMD_STRINGPARAM_STARTLIST ];
-      return m_aStrSetParams[ CMD_STRINGPARAM_STARTLIST ];
+    return m_startlist;
 }
 
-sal_Bool CommandLineArgs::GetForceOpenList( ::rtl::OUString& rPara) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetForceOpenList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
+    return m_forceopenlist;
 }
 
-sal_Bool CommandLineArgs::GetForceNewList( ::rtl::OUString& rPara) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetForceNewList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_FORCENEWLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_FORCENEWLIST ];
+    return m_forcenewlist;
 }
 
-sal_Bool CommandLineArgs::GetPrintList( ::rtl::OUString& rPara) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetPrintList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_PRINTLIST ];
+    return m_printlist;
 }
 
-sal_Bool CommandLineArgs::GetPrintToList( ::rtl::OUString& rPara ) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetPrintToList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTTOLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_PRINTTOLIST ];
+    return m_printtolist;
 }
 
-sal_Bool CommandLineArgs::GetPrinterName( ::rtl::OUString& rPara ) const
+rtl::OUString CommandLineArgs::GetPrinterName() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTERNAME ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_PRINTERNAME ];
+    return m_printername;
 }
 
-sal_Bool CommandLineArgs::GetLanguage( ::rtl::OUString& rPara ) const
+rtl::OUString CommandLineArgs::GetLanguage() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_LANGUAGE ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_LANGUAGE ];
+    return m_language;
 }
 
-sal_Bool CommandLineArgs::GetInFilter( ::rtl::OUString& rPara ) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetInFilter() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_INFILTER ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_INFILTER ];
+    return m_infilter;
 }
 
-sal_Bool CommandLineArgs::GetConversionList( ::rtl::OUString& rPara ) const
+std::vector< rtl::OUString > const & CommandLineArgs::GetConversionList() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
+    return m_conversionlist;
 }
 
-sal_Bool CommandLineArgs::GetConversionParams( ::rtl::OUString& rPara ) const
+rtl::OUString CommandLineArgs::GetConversionParams() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
+    return m_conversionparams;
 }
-sal_Bool CommandLineArgs::GetConversionOut( ::rtl::OUString& rPara ) const
+rtl::OUString CommandLineArgs::GetConversionOut() const
 {
-    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
+    return m_conversionout;
 }
 
-sal_Bool CommandLineArgs::IsEmpty() const
+bool CommandLineArgs::IsEmpty() const
 {
-    return m_eArgumentCount == NONE;
+    return m_bEmpty;
 }
 
-sal_Bool CommandLineArgs::WantsToLoadDocument() const
+bool CommandLineArgs::WantsToLoadDocument() const
 {
     return m_bDocumentArgs;
 }

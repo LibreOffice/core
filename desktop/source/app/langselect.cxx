@@ -172,7 +172,7 @@ bool LanguageSelection::prepareLanguage()
         OUString aEmpty;
 
         const CommandLineArgs& rCmdLineArgs = Desktop::GetCommandLineArgs();
-        rCmdLineArgs.GetLanguage(aLocaleString);
+        aLocaleString = rCmdLineArgs.GetLanguage();
         if (isInstalledLanguage(aLocaleString, sal_False))
         {
             bCmdLanguage   = true;

@@ -77,7 +77,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <srcharg.hxx>
-#include <osl/security.hxx>
 
 using ucbhelper::getLocalFileURL;
 using ucbhelper::getSystemPathFromFileURL;
@@ -430,13 +429,9 @@ sal_Bool Ucb::init()
     if (m_xFac.is())
         try
         {
-            rtl::OUString aPipe;
-            osl::Security().getUserIdent(aPipe);
-            uno::Sequence< uno::Any > aArgs(4);
+            uno::Sequence< uno::Any > aArgs(2);
             aArgs[0] <<= m_aConfigurationKey1;
             aArgs[1] <<= m_aConfigurationKey2;
-            aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
-            aArgs[3] <<= aPipe;
 
             ::ucbhelper::ContentBroker::initialize( m_xFac, aArgs );
             m_xProv

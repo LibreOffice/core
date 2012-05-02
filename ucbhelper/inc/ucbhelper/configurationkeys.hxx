@@ -34,12 +34,7 @@
     accessed in the configuration database.
  */
 #define UCB_CONFIGURATION_KEY1_LOCAL "Local"
-#define UCB_CONFIGURATION_KEY1_SERVER "Server"
-#define UCB_CONFIGURATION_KEY2_UNIVERSAL_CONTENT_BROKER \
-    "UniversalContentBroker"
 #define UCB_CONFIGURATION_KEY2_OFFICE "Office"
-#define UCB_CONFIGURATION_KEY2_WEB_SERVER "WebServer"
-#define UCB_CONFIGURATION_KEY2_CLIENT_ACCESS "ClientAccess"
 
 #endif // _UCBHELPER_CONFIGURATIONKEYS_HXX_
 

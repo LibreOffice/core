@@ -42,7 +42,6 @@
 
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
 #include <uno/current_context.hxx>
@@ -85,7 +84,7 @@ namespace desktop
 
 // -----------------------------------------------------------------------------
 
-static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
+static bool configureUcb()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (sb93797) ::configureUcb" );
     Reference< XMultiServiceFactory >
@@ -100,22 +99,12 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     osl::Security().getUserIdent(aPipe);
 
     rtl::OUStringBuffer aPortal;
-    if (!rPortalConnect.isEmpty())
-    {
-        aPortal.append(sal_Unicode(','));
-        aPortal.append(rPortalConnect);
-    }
 
-    Sequence< Any > aArgs(6);
+    Sequence< Any > aArgs(2);
     aArgs[0]
-        <<= bServer ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_SERVER)) :
-                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
     aArgs[1]
         <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
-    aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
-    aArgs[3] <<= aPipe;
-    aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
-    aArgs[5] <<= aPortal.makeStringAndClear();
 
     bool ret =
         ::ucbhelper::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
@@ -210,7 +199,7 @@ void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory 
     }
 }
 
-void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
+void Desktop::RegisterServices()
 {
     if( !m_bServicesRegistered )
     {
@@ -241,30 +230,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
             createAcceptor(*i);
         }
 
-        // improves parallel processing on Sun ONE Webtop
-        // servicemanager up -> copy user installation
-        if ( rCmdLine.IsServer() )
-        {
-            // Check some mandatory environment states if "-server" is possible. Otherwise ignore
-            // this parameter.
-            Reference< com::sun::star::container::XContentEnumerationAccess > rContent( xSMgr , UNO_QUERY );
-            if( rContent.is() )
-            {
-                OUString sPortalService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.portal.InstallUser" ) );
-                Reference < com::sun::star::container::XEnumeration > rEnum = rContent->createContentEnumeration( sPortalService );
-                if ( !rEnum.is() )
-                {
-                    // Reset server parameter so it is ignored in the furthermore startup process
-                    rCmdLine.ClearServer();
-                }
-            }
-        }
-
-        ::rtl::OUString aPortalConnect;
-        bool bServer = (bool)rCmdLine.IsServer();
-
-        rCmdLine.GetPortalConnectString( aPortalConnect );
-        if ( !configureUcb( bServer, aPortalConnect ) )
+        if ( !configureUcb() )
         {
             OSL_FAIL( "Can't configure UCB" );
             throw com::sun::star::uno::Exception(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegisterServices, configureUcb")), NULL);

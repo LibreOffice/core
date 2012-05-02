@@ -628,15 +628,6 @@ OfficeIPCThread::~OfficeIPCThread()
     pGlobalOfficeIPCThread.clear();
 }
 
-static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStringList )
-{
-    ::rtl::OUStringBuffer aStringListBuf(aStringList);
-    if ( aStringListBuf.getLength() )
-        aStringListBuf.append('\n');
-    aStringListBuf.append(aURL);
-    aStringList = aStringListBuf.makeStringAndClear();
-}
-
 void OfficeIPCThread::SetReady(
     rtl::Reference< OfficeIPCThread > const & pThread)
 {
@@ -764,19 +755,26 @@ void OfficeIPCThread::execute()
 
             // Print requests are not dependent on the --invisible cmdline argument as they are
             // loaded with the "hidden" flag! So they are always checked.
-            bDocRequestSent |= aCmdLineArgs->GetPrintList( pRequest->aPrintList );
-            bDocRequestSent |= ( aCmdLineArgs->GetPrintToList( pRequest->aPrintToList ) &&
-                                    aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )      );
+            pRequest->aPrintList = aCmdLineArgs->GetPrintList();
+            bDocRequestSent |= !pRequest->aPrintList.empty();
+            pRequest->aPrintToList = aCmdLineArgs->GetPrintToList();
+            pRequest->aPrinterName = aCmdLineArgs->GetPrinterName();
+            bDocRequestSent |= !( pRequest->aPrintToList.empty() || pRequest->aPrinterName.isEmpty() );
 
             if ( !rCurrentCmdLineArgs.IsInvisible() )
             {
                 // Read cmdline args that can open/create documents. As they would open a window
                 // they are only allowed if the "--invisible" is currently not used!
-                bDocRequestSent |= aCmdLineArgs->GetOpenList( pRequest->aOpenList );
-                bDocRequestSent |= aCmdLineArgs->GetViewList( pRequest->aViewList );
-                bDocRequestSent |= aCmdLineArgs->GetStartList( pRequest->aStartList );
-                bDocRequestSent |= aCmdLineArgs->GetForceOpenList( pRequest->aForceOpenList );
-                bDocRequestSent |= aCmdLineArgs->GetForceNewList( pRequest->aForceNewList );
+                pRequest->aOpenList = aCmdLineArgs->GetOpenList();
+                bDocRequestSent |= !pRequest->aOpenList.empty();
+                pRequest->aViewList = aCmdLineArgs->GetViewList();
+                bDocRequestSent |= !pRequest->aViewList.empty();
+                pRequest->aStartList = aCmdLineArgs->GetStartList();
+                bDocRequestSent |= !pRequest->aStartList.empty();
+                pRequest->aForceOpenList = aCmdLineArgs->GetForceOpenList();
+                bDocRequestSent |= !pRequest->aForceOpenList.empty();
+                pRequest->aForceNewList = aCmdLineArgs->GetForceNewList();
+                bDocRequestSent |= !pRequest->aForceNewList.empty();
 
                 // Special command line args to create an empty document for a given module
 
@@ -805,10 +803,10 @@ void OfficeIPCThread::execute()
                     else if ( aCmdLineArgs->IsWeb() )
                         eFactory = SvtModuleOptions::E_WRITERWEB;
 
-                    if ( !pRequest->aOpenList.isEmpty() )
+                    if ( !pRequest->aOpenList.empty() )
                         pRequest->aModule = aOpt.GetFactoryName( eFactory );
                     else
-                        AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
+                        pRequest->aOpenList.push_back( aOpt.GetFactoryEmptyDocumentURL( eFactory ) );
                     bDocRequestSent = sal_True;
                 }
             }
@@ -917,29 +915,23 @@ void OfficeIPCThread::execute()
 static void AddToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
     boost::optional< rtl::OUString > const & cwdUrl,
-    const OUString& aRequestList,
+    std::vector< rtl::OUString > const & aRequestList,
     DispatchWatcher::RequestType nType,
     const OUString& aParam,
     const OUString& aFactory )
 {
-    if ( !aRequestList.isEmpty() )
+    for (std::vector< rtl::OUString >::const_iterator i(aRequestList.begin());
+         i != aRequestList.end(); ++i)
     {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aToken = aRequestList.getToken( 0, '\n', nIndex );
-            if ( !aToken.isEmpty() )
-                rDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, aFactory ));
-        }
-        while ( nIndex >= 0 );
+        rDispatchList.push_back(
+            DispatchWatcher::DispatchRequest( nType, *i, cwdUrl, aParam, aFactory ));
     }
 }
 
 static void AddConversionsToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
     boost::optional< rtl::OUString > const & cwdUrl,
-    const OUString& rRequestList,
+    std::vector< rtl::OUString > const & rRequestList,
     const OUString& rParam,
     const OUString& rPrinterName,
     const OUString& rFactory,
@@ -977,17 +969,11 @@ static void AddConversionsToDispatchList(
         aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";" )) + aPWD;
     }
 
-    if ( !rRequestList.isEmpty() )
+    for (std::vector< rtl::OUString >::const_iterator i(rRequestList.begin());
+         i != rRequestList.end(); ++i)
     {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aToken = rRequestList.getToken( 0, '\n', nIndex );
-            if ( !aToken.isEmpty() )
-                rDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, rFactory ));
-        }
-        while ( nIndex >= 0 );
+        rDispatchList.push_back(
+            DispatchWatcher::DispatchRequest( nType, *i, cwdUrl, aParam, rFactory ));
     }
 }
 
