@@ -3,7 +3,7 @@
  * lexer for parsing cfg source files
  *
  */
-
+#define YY_NEVER_INTERACTIVE 1
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX
@@ -25,7 +25,11 @@
 #include "sal/main.h"
 
 #if defined __GNUC__
-#pragma GCC system_header
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wunused-label"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #elif defined __SINPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
@@ -35,9 +39,9 @@
 int yycolumn = 1;
 #define YY_USER_ACTION yycolumn += yyleng;
 
-/* external functions (C++ code, declared as extren "C" */
-extern void workOnTokenSet( int, char* );
-extern FILE * init(int, char **);
+/* external functions (C++ code, declared as extern "C" */
+extern "C" void workOnTokenSet( int, char* );
+extern "C" FILE * init(int, char **);
 
 int bText=0;
 %}
@@ -76,7 +80,7 @@ int bText=0;
 
 
 \<\!\-\-	{
-	char c1 = 0, c2 = 0, c3 = input();
+	char c1 = 0, c2 = 0, c3 = yyinput();
 	char pChar[2];
 	pChar[1] = 0x00;
 	pChar[0] = c3;
@@ -91,7 +95,8 @@ int bText=0;
 			break;
 		c1 = c2;
 		c2 = c3;
-		c3 = input();
+		c3 = yyinput();
+
 		pChar[0] = c3;
 		workOnTokenSet( COMMEND, pChar );
 	}
@@ -138,11 +143,7 @@ void YYWarning( const char *s )
 }
 
 /*****************************************************************************/
-#ifdef GCC
-void yyerror ( const char *s, ... )
-#else
 void yyerror ( const char *s )
-#endif
 /*****************************************************************************/
 {
 	/* write error to stderr */
