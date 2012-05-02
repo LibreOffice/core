@@ -127,7 +127,6 @@ gb_LinkTarget_INCLUDE +=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 
 define gb_LinkTarget__command_dynamiclinkexecutable
-$(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) $(strip \
