@@ -90,28 +90,23 @@ struct XParaPortion
     TextPortionList     aTextPortions;
 };
 
-typedef XParaPortion* XParaPortionPtr;
-SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0 )
-
-class XParaPortionList : public  XBaseParaPortionList
+class XParaPortionList
 {
-    sal_uIntPtr         nRefDevPtr;
+    typedef boost::ptr_vector<XParaPortion> ListType;
+    ListType maList;
+
+    sal_uIntPtr nRefDevPtr;
     OutDevType  eRefDevType;
     MapMode     aRefMapMode;
     sal_uInt16  nStretchX;
     sal_uInt16  nStretchY;
     sal_uLong   nPaperWidth;
 
-
 public:
-            XParaPortionList( OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY ) :
-                aRefMapMode( pRefDev->GetMapMode() ),
-                nStretchX(_nStretchX),
-                nStretchY(_nStretchY)
-                {
-                    nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
-                    eRefDevType = pRefDev->GetOutDevType();
-                }
+    XParaPortionList(OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY);
+
+    void push_back(XParaPortion* p);
+    const XParaPortion& operator[](size_t i) const;
 
     sal_uIntPtr         GetRefDevPtr() const        { return nRefDevPtr; }
     sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
@@ -119,6 +114,7 @@ public:
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
     sal_uInt16  GetStretchX() const         { return nStretchX; }
     sal_uInt16  GetStretchY() const         { return nStretchY; }
+
 };
 
 class ContentInfo

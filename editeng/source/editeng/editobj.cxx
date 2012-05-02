@@ -86,6 +86,25 @@ bool XEditAttribute::IsFeature() const
     return  ((nWhich >= EE_FEATURE_START) && (nWhich <=  EE_FEATURE_END));
 }
 
+
+XParaPortionList::XParaPortionList(
+    OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY) :
+    aRefMapMode(pRefDev->GetMapMode()), nStretchX(_nStretchX), nStretchY(_nStretchY)
+{
+    nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
+    eRefDevType = pRefDev->GetOutDevType();
+}
+
+void XParaPortionList::push_back(XParaPortion* p)
+{
+    maList.push_back(p);
+}
+
+const XParaPortion& XParaPortionList::operator [](size_t i) const
+{
+    return maList[i];
+}
+
 ContentInfo::ContentInfo( SfxItemPool& rPool ) : aParaAttribs( rPool, EE_PARA_START, EE_CHAR_END )
 {
     eFamily = SFX_STYLE_FAMILY_PARA;
@@ -740,8 +759,6 @@ void BinTextObject::ClearPortionInfo()
 {
     if ( pPortionInfo )
     {
-        for ( sal_uInt16 n = pPortionInfo->Count(); n; )
-            delete pPortionInfo->GetObject( --n );
         delete pPortionInfo;
         pPortionInfo = NULL;
     }

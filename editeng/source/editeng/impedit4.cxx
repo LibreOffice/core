@@ -1140,7 +1140,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
         {
             const ParaPortion* pParaPortion = GetParaPortions()[nNode];
             XParaPortion* pX = new XParaPortion;
-            pXList->Insert( pX, pXList->Count() );
+            pXList->push_back(pX);
 
             pX->nHeight = pParaPortion->GetHeight();
             pX->nFirstLineOffset = pParaPortion->GetFirstLineOffset();
@@ -1330,31 +1330,30 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
             }
             if ( bNewContent && bUsePortionInfo )
             {
-                XParaPortion* pXP = pPortionInfo->GetObject( n );
-                DBG_ASSERT( pXP, "InsertBinTextObject: PortionInfo?" );
+                const XParaPortion& rXP = (*pPortionInfo)[n];
                 ParaPortion* pParaPortion = GetParaPortions()[ nPara ];
                 DBG_ASSERT( pParaPortion, "InsertBinTextObject: ParaPortion?" );
-                pParaPortion->nHeight = pXP->nHeight;
-                pParaPortion->nFirstLineOffset = pXP->nFirstLineOffset;
+                pParaPortion->nHeight = rXP.nHeight;
+                pParaPortion->nFirstLineOffset = rXP.nFirstLineOffset;
                 pParaPortion->bForceRepaint = sal_True;
                 pParaPortion->SetValid();   // Do not format
 
                 // The Text Portions
                 pParaPortion->GetTextPortions().Reset();
-                sal_uInt16 nCount = pXP->aTextPortions.Count();
+                sal_uInt16 nCount = rXP.aTextPortions.Count();
                 for ( sal_uInt16 _n = 0; _n < nCount; _n++ )
                 {
-                    TextPortion* pTextPortion = pXP->aTextPortions[_n];
+                    const TextPortion* pTextPortion = rXP.aTextPortions[_n];
                     TextPortion* pNew = new TextPortion( *pTextPortion );
                     pParaPortion->GetTextPortions().Insert(_n, pNew);
                 }
 
                 // The lines
                 pParaPortion->GetLines().Reset();
-                nCount = pXP->aLines.Count();
+                nCount = rXP.aLines.Count();
                 for ( sal_uInt16 m = 0; m < nCount; m++ )
                 {
-                    EditLine* pLine = pXP->aLines[m];
+                    const EditLine* pLine = rXP.aLines[m];
                     EditLine* pNew = pLine->Clone();
                     pNew->SetInvalid(); // Paint again!
                     pParaPortion->GetLines().Insert(m, pNew);
