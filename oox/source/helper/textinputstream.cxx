@@ -146,7 +146,7 @@ bool TextInputStream::isEof() const
     {
         return mxTextStrm->isEOF();
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
     return true;
@@ -160,7 +160,7 @@ OUString TextInputStream::readLine()
             been buffered in the previous call of readToChar() (see below). */
         return createFinalString( mxTextStrm->readLine() );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         mxTextStrm.clear();
     }
@@ -188,7 +188,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
         }
         return aString;
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         mxTextStrm.clear();
     }
@@ -209,7 +209,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
         xTextStrm.set( xDataSink, UNO_QUERY_THROW );
         xTextStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
     return xTextStrm;
