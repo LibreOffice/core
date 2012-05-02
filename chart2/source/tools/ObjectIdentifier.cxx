@@ -717,6 +717,7 @@ OUString ObjectIdentifier::getDragParameterString( const OUString& rCID )
 
 bool ObjectIdentifier::isDragableObject( const OUString& rClassifiedIdentifier )
 {
+    bool bReturn = false;
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
     switch( eObjectType )
     {
@@ -725,14 +726,14 @@ bool ObjectIdentifier::isDragableObject( const OUString& rClassifiedIdentifier )
         case OBJECTTYPE_DIAGRAM:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
         //case OBJECTTYPE_DIAGRAM_WALL:
-            return true;
+            bReturn = true;
+            break;
         default:
             OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( rClassifiedIdentifier ) );
-            if( !aDragMethodServiceName.isEmpty() )
-                return true;
-            return false;
+            bReturn = !aDragMethodServiceName.isEmpty();
+            break;
     }
-    return false;
+    return bReturn;
 }
 
 bool ObjectIdentifier::isDragableObject()
@@ -751,16 +752,19 @@ bool ObjectIdentifier::isDragableObject()
 
 bool ObjectIdentifier::isRotateableObject( const OUString& rClassifiedIdentifier )
 {
+    bool bReturn = false;
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
     switch( eObjectType )
     {
         case OBJECTTYPE_DIAGRAM:
         //case OBJECTTYPE_DIAGRAM_WALL:
-            return true;
+            bReturn = true;
+            break;
         default:
-            return false;
+            bReturn = false;
+            break;
     }
-    return false;
+    return bReturn;
 }
 
 bool ObjectIdentifier::isMultiClickObject( const OUString& rClassifiedIdentifier )
