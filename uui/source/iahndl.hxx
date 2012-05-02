@@ -346,27 +346,9 @@ public:
 
     inline ~ErrorResource() SAL_THROW(()) { FreeResource(); }
 
-    bool getString(ErrCode nErrorCode, rtl::OUString * pString) const
+    bool getString(ErrCode nErrorCode, rtl::OUString &rString) const
         SAL_THROW(());
 };
-
-/*
-class InteractionRequest
-{
-public:
-    InteractionRequest(
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionRequest > const & rRequest)
-    : m_aRequest( rRequest ) {}
-
-    virtual bool toString( rtl::OUString & rString ) = 0;
-    virtual bool handle( rtl::OUString & rString ) = 0;
-
-private:
-    com::sun::star::uno::Reference<
-        com::sun::star::task::XInteractionRequest > m_aRequest;
-};
-*/
 
 #endif // UUI_IAHNDL_HXX
 

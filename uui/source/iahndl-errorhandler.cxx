@@ -185,7 +185,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         if (!xManager.get())
             return;
         ResId aResId(aId[eSource], *xManager.get());
-        if (!ErrorResource(aResId).getString(nErrorCode, &aMessage))
+        if (!ErrorResource(aResId).getString(nErrorCode, aMessage))
             return;
     }
 

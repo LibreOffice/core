@@ -172,7 +172,7 @@ executeUnknownAuthDialog(
         {
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());
             if (ErrorResource(aResId).getString(
-                    ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, &aMessage))
+                    ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, aMessage))
             {
                 aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                     aMessage, aArguments );
@@ -241,7 +241,7 @@ executeSSLWarnDialog(
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());
             if (ErrorResource(aResId).getString(
                     ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1,
-                    &aMessage_1))
+                    aMessage_1))
             {
                 aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
                     aMessage_1, aArguments_1 );
@@ -250,7 +250,7 @@ executeSSLWarnDialog(
 
             rtl::OUString aTitle;
             ErrorResource(aResId).getString(
-                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, &aTitle);
+                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle);
             xDialog->SetText( aTitle );
         }
 

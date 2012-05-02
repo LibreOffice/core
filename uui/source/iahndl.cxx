@@ -1488,7 +1488,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
             return;
 
         ResId aResId( RID_UUI_ERRHDL, *xManager.get() );
-        if ( !ErrorResource(aResId).getString(nErrorCode, &aMessage) )
+        if ( !ErrorResource(aResId).getString(nErrorCode, aMessage) )
             return;
     }
 
@@ -1545,17 +1545,16 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 //=========================================================================
 
 bool
-ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
+ErrorResource::getString(ErrCode nErrorCode, rtl::OUString &rString)
     const SAL_THROW(())
 {
-    OSL_ENSURE(pString, "specification violation");
     ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
                  *m_pResMgr);
     aResId.SetRT(RSC_STRING);
     if (!IsAvailableRes(aResId))
         return false;
     aResId.SetAutoRelease(false);
-    *pString = UniString(aResId);
+    rString = aResId.toString();
     m_pResMgr->PopContext();
     return true;
 }
