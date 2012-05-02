@@ -170,7 +170,7 @@ void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxDesktop.set(getMultiServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), uno::UNO_QUERY);
+    mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(mxDesktop.is());
 }
 
@@ -184,7 +184,7 @@ void Test::tearDown()
 
 void Test::testFdo45553()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45553.rtf")));
+    load("fdo45553.rtf");
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -201,16 +201,14 @@ void Test::testFdo45553()
             {
                 sal_Int32 nMargin = 0;
                 uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY);
-                uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaTopMargin")));
-                aValue >>= nMargin;
+                xPropertySet->getPropertyValue("ParaTopMargin") >>= nMargin;
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(120)), nMargin);
             }
             else if ( aStr == "space-after" )
             {
                 sal_Int32 nMargin = 0;
                 uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY);
-                uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBottomMargin")));
-                aValue >>= nMargin;
+                xPropertySet->getPropertyValue("ParaBottomMargin") >>= nMargin;
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(240)), nMargin);
             }
         }
@@ -219,7 +217,7 @@ void Test::testFdo45553()
 
 void Test::testN192129()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n192129.rtf")));
+    load("n192129.rtf");
 
     // We expect that the result will be 16x16px.
     Size aExpectedSize(16, 16);
@@ -237,13 +235,13 @@ void Test::testN192129()
 
 void Test::testFdo45543()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45543.rtf")));
+    load("fdo45543.rtf");
     CPPUNIT_ASSERT_EQUAL(5, getLength());
 }
 
 void Test::testN695479()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n695479.rtf")));
+    load("n695479.rtf");
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -251,12 +249,10 @@ void Test::testN695479()
 
     // Negative ABSH should mean fixed size.
     sal_Int16 nSizeType = 0;
-    uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")));
-    aValue >>= nSizeType;
+    xPropertySet->getPropertyValue("SizeType") >>= nSizeType;
     CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, nSizeType);
     sal_Int32 nHeight = 0;
-    aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")));
-    aValue >>= nHeight;
+    xPropertySet->getPropertyValue("Height") >>= nHeight;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(300)), nHeight);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -265,36 +261,33 @@ void Test::testN695479()
     for (int i = 0; i < xDraws->getCount(); ++i)
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(i), uno::UNO_QUERY);
-        if (xServiceInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))))
+        if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         {
             // Both frames should be anchored to the first paragraph.
             bFrameFound = true;
             uno::Reference<text::XTextContent> xTextContent(xServiceInfo, uno::UNO_QUERY);
             uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
             uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL(OUString(RTL_CONSTASCII_USTRINGPARAM("plain")), xText->getString());
+            CPPUNIT_ASSERT_EQUAL(OUString("plain"), xText->getString());
 
             if (i == 0)
             {
                 // Additonally, the frist frame should have double border at the bottom.
-                aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BottomBorder")));
                 table::BorderLine2 aBorder;
-                aValue >>= aBorder;
+                xPropertySet->getPropertyValue("BottomBorder") >>= aBorder;
                 CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::DOUBLE, aBorder.LineStyle);
             }
         }
-        else if (xServiceInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))))
+        else if (xServiceInfo->supportsService("com.sun.star.drawing.LineShape"))
         {
             // The older "drawing objects" syntax should be recognized.
             bDrawFound = true;
             xPropertySet.set(xServiceInfo, uno::UNO_QUERY);
             sal_Int16 nHori = 0;
-            aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")));
-            aValue >>= nHori;
+            xPropertySet->getPropertyValue("HoriOrientRelation") >>= nHori;
             CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, nHori);
             sal_Int16 nVert = 0;
-            aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")));
-            aValue >>= nVert;
+            xPropertySet->getPropertyValue("VertOrientRelation") >>= nVert;
             CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nVert);
         }
     }
@@ -304,13 +297,13 @@ void Test::testN695479()
 
 void Test::testFdo42465()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo42465.rtf")));
+    load("fdo42465.rtf");
     CPPUNIT_ASSERT_EQUAL(3, getLength());
 }
 
 void Test::testFdo45187()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45187.rtf")));
+    load("fdo45187.rtf");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
@@ -318,28 +311,25 @@ void Test::testFdo45187()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
     // They should be anchored to different paragraphs.
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
-    uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition")));
     awt::Point aFirstPoint;
-    aValue >>= aFirstPoint;
+    xPropertySet->getPropertyValue("AnchorPosition") >>= aFirstPoint;
     xPropertySet.set(xDraws->getByIndex(1), uno::UNO_QUERY);
-    aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition")));
     awt::Point aSecondPoint;
-    aValue >>= aSecondPoint;
+    xPropertySet->getPropertyValue("AnchorPosition") >>= aSecondPoint;
     CPPUNIT_ASSERT(aFirstPoint.Y != aSecondPoint.Y);
 }
 
 void Test::testFdo46662()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo46662.rtf")));
+    load("fdo46662.rtf");
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"))), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xNumberingStyles->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("WWNum3"))), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingRules"))), uno::UNO_QUERY);
-    uno::Any aValue = xLevels->getByIndex(1); // 2nd level
+    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName("NumberingStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xNumberingStyles->getByName("WWNum3"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
-    aValue >>= aProps;
+    xLevels->getByIndex(1) >>= aProps; // 2nd level
 
     for (int i = 0; i < aProps.getLength(); ++i)
     {
@@ -362,26 +352,24 @@ void Test::testFdo46662()
 
 void Test::testN750757()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n750757.rtf")));
+    load("n750757.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
     uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
     sal_Bool bValue;
-    uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")));
-    aValue >>= bValue;
+    xPropertySet->getPropertyValue("ParaContextMargin") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(sal_Bool(false), bValue);
 
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")));
-    aValue >>= bValue;
+    xPropertySet->getPropertyValue("ParaContextMargin") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
 }
 
 void Test::testFdo45563()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45563.rtf")));
+    load("fdo45563.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -396,7 +384,7 @@ void Test::testFdo45563()
 
 void Test::testFdo43965()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo43965.rtf")));
+    load("fdo43965.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -406,15 +394,15 @@ void Test::testFdo43965()
     uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
     sal_Int32 nValue;
-    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharEscapement"))) >>= nValue;
+    xPropertySet->getPropertyValue("CharEscapement") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), nValue);
-    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharEscapementHeight"))) >>= nValue;
+    xPropertySet->getPropertyValue("CharEscapementHeight") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
 
     // Second paragraph: Word vs Writer border default problem
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     table::BorderLine2 aBorder;
-    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopBorder"))) >>= aBorder;
+    xPropertySet->getPropertyValue("TopBorder") >>= aBorder;
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), aBorder.LineWidth);
 
     // Finally, make sure that we have two pages
@@ -423,27 +411,27 @@ void Test::testFdo43965()
 
 void Test::testN751020()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n751020.rtf")));
+    load("n751020.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
     uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
-    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBottomMargin"))) >>= nValue;
+    xPropertySet->getPropertyValue("ParaBottomMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), nValue);
 }
 
 void Test::testFdo47326()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47326.rtf")));
+    load("fdo47326.rtf");
     // This was 15 only, as \super buffered text, then the contents of it got lost.
     CPPUNIT_ASSERT_EQUAL(19, getLength());
 }
 
 void Test::testFdo47036()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47036.rtf")));
+    load("fdo47036.rtf");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
@@ -452,7 +440,7 @@ void Test::testFdo47036()
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(i), uno::UNO_QUERY);
         text::TextContentAnchorType eValue;
-        xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))) >>= eValue;
+        xPropertySet->getPropertyValue("AnchorType") >>= eValue;
         if (eValue == text::TextContentAnchorType_AT_CHARACTER)
             nAtCharacter++;
     }
@@ -467,7 +455,7 @@ void Test::testFdo47036()
 
 void Test::testFdo46955()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo46955.rtf")));
+    load("fdo46955.rtf");
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -480,7 +468,7 @@ void Test::testFdo46955()
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
             sal_Int16 nValue;
-            xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCaseMap"))) >>= nValue;
+            xPropertySet->getPropertyValue("CharCaseMap") >>= nValue;
             CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, nValue);
         }
     }
@@ -488,7 +476,7 @@ void Test::testFdo46955()
 
 void Test::testFdo45394()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45394.rtf")));
+    load("fdo45394.rtf");
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
@@ -507,7 +495,7 @@ void Test::testFdo45394()
 
 void Test::testFdo48104()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo48104.rtf")));
+    load("fdo48104.rtf");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
@@ -517,7 +505,7 @@ void Test::testFdo47107()
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"))), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName("NumberingStyles"), uno::UNO_QUERY);
     // Make sure numbered and bullet legacy syntax is recognized, this used to throw a NoSuchElementException
     xNumberingStyles->getByName("WWNum1");
     xNumberingStyles->getByName("WWNum2");

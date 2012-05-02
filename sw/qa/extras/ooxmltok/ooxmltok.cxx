@@ -83,7 +83,7 @@ void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxDesktop.set(getMultiServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), uno::UNO_QUERY);
+    mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(mxDesktop.is());
 }
 
@@ -97,13 +97,13 @@ void Test::tearDown()
 
 void Test::testN751054()
 {
-    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n751054.docx")));
+    load("n751054.docx");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     text::TextContentAnchorType eValue;
-    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))) >>= eValue;
+    xPropertySet->getPropertyValue("AnchorType") >>= eValue;
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
 }
 
