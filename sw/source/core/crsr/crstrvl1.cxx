@@ -83,10 +83,6 @@ sal_Bool SwCrsrShell::GoEndSentence()
     return CallCrsrFN( &SwCursor::GoEndSentence );
 }
 
-sal_Bool SwCrsrShell::GoPrevSentence()
-{
-    return CallCrsrFN( &SwCursor::GoPrevSentence );
-}
 sal_Bool SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );

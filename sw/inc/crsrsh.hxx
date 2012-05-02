@@ -719,7 +719,6 @@ public:
     sal_Bool GoNextWord();
     sal_Bool GoPrevWord();
     sal_Bool GoNextSentence();
-    sal_Bool GoPrevSentence();
     sal_Bool GoStartSentence();
     sal_Bool GoEndSentence();
     sal_Bool SelectWord( const Point* pPt = 0 );
