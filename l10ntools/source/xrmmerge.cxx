@@ -42,8 +42,8 @@
 
 using namespace std;
 
-extern "C" { int yyerror( char * ); }
-extern "C" { int YYWarning( char * ); }
+void yyerror( const char * );
+void YYWarning( const char * );
 
 // defines to parse command line
 #define STATE_NON       0x0001
