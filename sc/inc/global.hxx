@@ -34,6 +34,7 @@
 #include <tools/stream.hxx>
 #include <osl/endian.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/table/CellAddress.hpp>
 #include "scdllapi.h"
 
 #include <boost/unordered_map.hpp>
@@ -497,12 +498,27 @@ namespace com { namespace sun { namespace star {
     namespace i18n {
         class XOrdinalSuffix;
     }
+    namespace frame {
+        class XModel;
+    }
+    namespace drawing {
+        class XShape;
+    }
 }}}
 namespace utl {
     class TransliterationWrapper;
 }
 
 #ifndef _SCALC_EXE
+struct SC_DLLPUBLIC OrientationInfo
+{
+    OrientationInfo() : mnVert( 0 ), mnHori( 0 ) {}
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
+    ::com::sun::star::table::CellAddress maAddress;
+    sal_Int32 mnVert;
+    sal_Int32 mnHori;
+};
+
 class ScGlobal
 {
     static SvxSearchItem*   pSearchItem;
@@ -695,6 +711,8 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 
     /** Obtain the ordinal suffix for a number according to the system locale */
     static String           GetOrdinalSuffix( sal_Int32 nNumber);
+    SC_DLLPUBLIC static void CaptureShapeOrientationInfo( std::vector< OrientationInfo >& infos, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+    SC_DLLPUBLIC static void ApplyShapeOrientationInfo( std::vector< OrientationInfo >& infos, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, ScDocument& rDoc );
 };
 #endif
 

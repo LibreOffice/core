@@ -161,6 +161,7 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
 void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
 {
     meAnchorType = ANCHOR_VML;
+    meCellAnchorType = CELLANCHOR_PIXEL;
 
     ::std::vector< OUString > aTokens;
     sal_Int32 nIndex = 0;
@@ -278,16 +279,16 @@ ShapeAnchor::getFromCell() const
 void
 ShapeAnchor::applyToXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape )
 {
-    if ( ( meAnchorType == ANCHOR_TWOCELL || meAnchorType ==  ANCHOR_ONECELL ) && getFromCell().is() )
+    if ( ( meAnchorType == ANCHOR_VML || meAnchorType == ANCHOR_TWOCELL || meAnchorType ==  ANCHOR_ONECELL ) && getFromCell().is() )
     {
         PropertySet aShapeProp( rxShape );
-        aShapeProp.setProperty( PROP_Anchor, getFromCell() );
         CellAnchorModel offSets;
         offSets.mnColOffset = maFrom.mnColOffset;
         offSets.mnRowOffset = maFrom.mnRowOffset;
         EmuPoint aPos = calcCellAnchorEmu( offSets );
         aShapeProp.setProperty( PROP_HoriOrientPosition, lclEmuToHmm( aPos.X ) );
         aShapeProp.setProperty( PROP_VertOrientPosition, lclEmuToHmm( aPos.Y ) );
+        aShapeProp.setProperty( PROP_Anchor, getFromCell() );
     }
 }
 
