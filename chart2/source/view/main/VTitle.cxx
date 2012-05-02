@@ -248,10 +248,10 @@ void VTitle::createShapes(
         float fFontHeight = 0.0;
         if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( C2U( "CharHeight" ) ) >>= fFontHeight ) )
         {
-            fFontHeight *= ( 2540. / 72. );  // pt -> 1/100 mm
-            float fXFraction = 0.18;
+            fFontHeight *= ( 2540.0f / 72.0f );  // pt -> 1/100 mm
+            float fXFraction = 0.18f;
             sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fXFraction ) );
-            float fYFraction = 0.30;
+            float fYFraction = 0.30f;
             sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fYFraction ) );
             xShapeProp->setPropertyValue( C2U( "TextLeftDistance" ), uno::makeAny( nXDistance ) );
             xShapeProp->setPropertyValue( C2U( "TextRightDistance" ), uno::makeAny( nXDistance ) );

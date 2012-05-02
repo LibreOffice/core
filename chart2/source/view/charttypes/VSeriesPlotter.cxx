@@ -466,7 +466,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             if( xProps.is() )
                 xProps->getPropertyValue( C2U( "CharHeight" )) >>= fViewFontSize;
             // pt -> 1/100th mm
-            fViewFontSize *= (2540.0 / 72.0);
+            fViewFontSize *= (2540.0f / 72.0f);
         }
         Reference< drawing::XShape > xSymbol;
         if(pLabel->ShowLegendSymbol)
