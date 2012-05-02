@@ -41,7 +41,7 @@
 #include "cfgmerge.hxx"
 #include "tokens.h"
 
-extern "C" { int yyerror(char const *); }
+void yyerror(char const *);
 
 namespace {
 

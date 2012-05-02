@@ -73,6 +73,7 @@ javaunohelper\
 jurt\
 jvmaccess\
 jvmfwk\
+l10ntools\
 lingucomponent\
 linguistic\
 lotuswordpro\
@@ -181,7 +182,6 @@ icu\
 instsetoo_native\
 jfreereport\
 jpeg\
-l10ntools\
 languagetool\
 libcdr\
 libcmis\
