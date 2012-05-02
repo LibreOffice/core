@@ -134,6 +134,19 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
     }
 }
 
+void ListLevel::SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
+{
+    m_pParaStyle = pStyle;
+    // AFAICT .docx spec does not identify which numberings or paragraph
+    // styles are actually the ones to be used for outlines (chapter numbering),
+    // it only kind of says somewhere that they should be named Heading1 to Heading9.
+    const OUString styleId = pStyle->sStyleIdentifierD;
+    m_outline = ( styleId.getLength() == RTL_CONSTASCII_LENGTH( "Heading1" )
+        && styleId.match( "Heading", 0 )
+        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] >= '1'
+        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] <= '9' );
+}
+
 sal_Int16 ListLevel::GetParentNumbering( OUString sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix )
 {
@@ -253,7 +266,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(sizeof(aWWToUnoAdjust) / sizeof(sal_Int16)) )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
 
-    if( !m_pParaStyle.get())
+    if( !isOutlineNumbering())
     {
         // todo: this is not the bullet char
         if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && !m_sBulletChar.isEmpty() )
@@ -299,7 +312,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
                     beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
             break;
             case PROP_CHAR_FONT_NAME:
-                if( !m_pParaStyle.get())
+                if( !isOutlineNumbering())
                 {
                     aNumberingProperties.push_back(
                         beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
@@ -589,33 +602,31 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                 aLvlProps[ aLvlProps.getLength( ) - 1 ] = MAKE_PROPVAL( PROP_POSITION_AND_SPACE_MODE,
                             sal_Int16( text::PositionAndSpaceMode::LABEL_ALIGNMENT ) );
+
+                StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
+                if( pParaStyle.get())
+                {
+                    aLvlProps.realloc( aLvlProps.getLength() + 1 );
+                    aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_PARAGRAPH_STYLE_NAME,
+                        pParaStyle->sConvertedStyleName );
+                }
+
                 // Replace the numbering rules for the level
                 m_xNumRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
 
                 // Handle the outline level here
-                StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
-                if ( pParaStyle.get( ) )
+                if ( pAbsLevel->isOutlineNumbering())
                 {
-                    // AFAICT .docx spec does not identify which numberings or paragraph
-                    // styles are actually the ones to be used for outlines (chapter numbering),
-                    // it only kind of says somewhere that they should be named Heading1 to Heading9.
-                    const OUString styleId = pParaStyle->sStyleIdentifierD;
-                    if( styleId.getLength() == RTL_CONSTASCII_LENGTH( "Heading1" )
-                        && styleId.match( "Heading", 0 )
-                        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] >= '1'
-                        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] <= '9' )
-                    {
-                        uno::Reference< text::XChapterNumberingSupplier > xOutlines (
-                            xFactory, uno::UNO_QUERY_THROW );
-                        uno::Reference< container::XIndexReplace > xOutlineRules =
-                            xOutlines->getChapterNumberingRules( );
+                    uno::Reference< text::XChapterNumberingSupplier > xOutlines (
+                        xFactory, uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XIndexReplace > xOutlineRules =
+                        xOutlines->getChapterNumberingRules( );
 
-                        aLvlProps.realloc( aLvlProps.getLength() + 1 );
-                        aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
-                            pParaStyle->sConvertedStyleName );
+                    aLvlProps.realloc( aLvlProps.getLength() + 1 );
+                    aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
+                        pParaStyle->sConvertedStyleName );
 
-                        xOutlineRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
-                    }
+                    xOutlineRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
                 }
 
                 nLevel++;

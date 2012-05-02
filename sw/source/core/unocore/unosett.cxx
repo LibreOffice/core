@@ -74,6 +74,7 @@
 #include <com/sun/star/text/LabelFollow.hpp>
 #include <numrule.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <paratr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1171,8 +1172,8 @@ Sequence< OUString > SwXNumberingRules::getSupportedServiceNames(void) throw( Ru
     return aRet;
 }
 
-SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule) :
-    pDoc(0),
+SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
+    pDoc(doc),
     pDocShell(0),
     pNumRule(new SwNumRule(rRule)),
     m_pPropertySet(GetNumberingRulesSet()),
@@ -1650,27 +1651,28 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),       //12
         SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),               //13
         "NumberingType",                        //14
+        SW_PROP_NAME_STR(UNO_NAME_PARAGRAPH_STYLE_NAME), //15
         // these are not in chapter numbering
-        "BulletId",                             //15
-        SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //16
-        "BulletFontName",                       //17
-        "BulletChar",                           //18
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL),    //19
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP), //20
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),   //21
-        SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //22
+        "BulletId",                             //16
+        SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //17
+        "BulletFontName",                       //18
+        "BulletChar",                           //19
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL),    //20
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP), //21
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),   //22
+        SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //23
         // these are only in chapter numbering
-        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), //23
+        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), //24
         // these two are accepted but ignored for some reason
-        "BulletRelSize",                         // 24
-        "BulletColor"                            // 25
+        "BulletRelSize",                         // 25
+        "BulletColor"                            // 26
     };
-    const sal_uInt16 NotInChapterFirst = 15;
-    const sal_uInt16 NotInChapterLast = 22;
-    const sal_uInt16 InChapterFirst = 23;
-    const sal_uInt16 InChapterLast = 23;
-    const sal_uInt16 IgnoredFirst = 24;
-    const sal_uInt16 IgnoredLast = 25;
+    const sal_uInt16 NotInChapterFirst = 16;
+    const sal_uInt16 NotInChapterLast = 23;
+    const sal_uInt16 InChapterFirst = 24;
+    const sal_uInt16 InChapterLast = 24;
+    const sal_uInt16 IgnoredFirst = 25;
+    const sal_uInt16 IgnoredLast = 26;
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     PropValDataArr aPropertyValues;
@@ -1916,7 +1918,26 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 15: //"BulletId",
+                case 15: //"ParagraphStyleName"
+                {
+                    if( pDoc )
+                    {
+                        OUString uTmp;
+                        pData->aVal >>= uTmp;
+                        String sStyleName;
+                        SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                        const SwTxtFmtColls* pColls = pDoc->GetTxtFmtColls();
+                        const sal_uInt16 nCount = pColls->Count();
+                        for(sal_uInt16 k = 0; k < nCount; ++k)
+                        {
+                            SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
+                            if ( rTxtColl.GetName() == sStyleName )
+                                rTxtColl.SetFmtAttr( SwNumRuleItem( rNumRule.GetName()));
+                        }
+                    }
+                }
+                break;
+                case 16: //"BulletId",
                 {
                     assert( !pDocShell );
                     sal_Int16 nSet = 0;
@@ -1926,7 +1947,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 16: //UNO_NAME_BULLET_FONT,
+                case 17: //UNO_NAME_BULLET_FONT,
                 {
                     assert( !pDocShell );
                     awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
@@ -1945,7 +1966,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 17: //"BulletFontName",
+                case 18: //"BulletFontName",
                 {
                     assert( !pDocShell );
                     OUString uTmp;
@@ -1967,7 +1988,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         sNewBulletFontNames[(sal_uInt16)nIndex] = sBulletFontName;
                 }
                 break;
-                case 18: //"BulletChar",
+                case 19: //"BulletChar",
                 {
                     assert( !pDocShell );
                     OUString aChar;
@@ -1980,7 +2001,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 19: //UNO_NAME_GRAPHIC_URL,
+                case 20: //UNO_NAME_GRAPHIC_URL,
                 {
                     assert( !pDocShell );
                     OUString sBrushURL;
@@ -1998,7 +2019,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     pSetBrush->PutValue( pData->aVal, MID_GRAPHIC_URL );
                 }
                 break;
-                case 20: //UNO_NAME_GRAPHIC_BITMAP,
+                case 21: //UNO_NAME_GRAPHIC_BITMAP,
                 {
                     assert( !pDocShell );
                     uno::Reference< awt::XBitmap >* pBitmap = (uno::Reference< awt::XBitmap > *)pData->aVal.getValue();
@@ -2023,7 +2044,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 21: //UNO_NAME_GRAPHIC_SIZE,
+                case 22: //UNO_NAME_GRAPHIC_SIZE,
                 {
                     assert( !pDocShell );
                     if(!pSetSize)
@@ -2040,7 +2061,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 22: //VertOrient
+                case 23: //VertOrient
                 {
                     assert( !pDocShell );
                     if(!pSetVOrient)
@@ -2053,7 +2074,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     ((SfxPoolItem*)pSetVOrient)->PutValue(pData->aVal, MID_VERTORIENT_ORIENT);
                 }
                 break;
-                case 23: //"HeadingStyleName"
+                case 24: //"HeadingStyleName"
                 {
                     assert( pDocShell );
                     OUString uTmp;
@@ -2080,9 +2101,9 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     }
                 }
                 break;
-                case 24: // BulletRelSize - unsupported - only available in Impress
+                case 25: // BulletRelSize - unsupported - only available in Impress
                 break;
-                case 25: // ignored too
+                case 26: // ignored too
                 break;
             }
         }

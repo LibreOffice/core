@@ -292,6 +292,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_SERVICE_PARA_STYLE       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.ParagraphStyle")); break;
             case PROP_CHARACTER_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles")); break;
             case PROP_PARAGRAPH_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles")); break;
+            case PROP_PARAGRAPH_STYLE_NAME : sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyleName")); break;
             case PROP_TABLE_BORDER_DISTANCES:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableBorderDistances")); break;
             case META_PROP_CELL_MAR_TOP    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MetaPropCellMarTop")); break;
             case META_PROP_CELL_MAR_BOTTOM :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MetaPropCellMarBottom")); break;

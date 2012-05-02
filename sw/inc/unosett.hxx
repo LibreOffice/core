@@ -154,7 +154,7 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     String                      sNewCharStyleNames[MAXLEVEL];
     String                      sNewBulletFontNames[MAXLEVEL];
     String                      sCreatedNumRuleName; //connects to a numbering in SwDoc
-    SwDoc*                      pDoc; // Only needed for registration.
+    SwDoc*                      pDoc;
     SwDocShell*                 pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
@@ -167,7 +167,7 @@ protected:
 
 public:
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
-    SwXNumberingRules(const SwNumRule& rRule); // NumRule for paragraphs, numbering styles
+    SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc = NULL); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
 
 

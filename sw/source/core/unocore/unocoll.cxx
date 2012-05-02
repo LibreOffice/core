@@ -1753,7 +1753,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         uno::Reference< XIndexReplace >  xRef;
         if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
         {
-            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ] );
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ], GetDoc());
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
         }
 

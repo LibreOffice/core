@@ -2213,7 +2213,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 const SwNumRule* pRule = rBase.mxNewBase->GetNumRule();
                 OSL_ENSURE(pRule, "Wo ist die NumRule?");
-                uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule);
+                uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
                 aRet.setValue(&xRules, ::getCppuType((uno::Reference<container::XIndexReplace>*)0));
             }
             break;

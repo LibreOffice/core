@@ -36,6 +36,7 @@ class ListLevel : public PropertyMap
     ::rtl::OUString                               m_sBulletChar;
     sal_Int32                                     m_nTabstop;
     boost::shared_ptr< StyleSheetEntry >          m_pParaStyle;
+    bool                                          m_outline;
 
 public:
 
@@ -52,6 +53,7 @@ public:
         ,m_nFWord6(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
         ,m_nTabstop( 0 )
+        ,m_outline(false)
         {}
 
     ~ListLevel( ){ }
@@ -59,15 +61,13 @@ public:
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( rtl::OUString sValue ) { m_sBulletChar = sValue; };
-    void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
-    {
-        m_pParaStyle = pStyle;
-    };
+    void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
     void AddRGBXchNums( rtl::OUString sValue ) { m_sRGBXchNums += sValue; };
 
     // Getters
     rtl::OUString GetBulletChar( ) { return m_sBulletChar; };
     boost::shared_ptr< StyleSheetEntry > GetParaStyle( ) { return m_pParaStyle; };
+    bool isOutlineNumbering() const { return m_outline; }
 
     // UNO mapping functions
 

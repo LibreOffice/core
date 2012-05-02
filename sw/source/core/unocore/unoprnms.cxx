@@ -788,6 +788,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0748 UNO_NAME_LINE_WIDTH */	         {MAP_CHAR_LEN("LineWidth")},
 
 /* 0749 PARA_CONTEXT_MARGIN */           {MAP_CHAR_LEN("ParaContextMargin")},
+/* 0750 PARAGRAPH_STYLE_NAME */           {MAP_CHAR_LEN("ParagraphStyleName")},
 
 // new items in this array must match enum SwPropNameIds
 };

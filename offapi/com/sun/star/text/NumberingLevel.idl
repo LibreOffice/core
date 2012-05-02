@@ -176,6 +176,11 @@ published service NumberingLevel
      */
     [property] string HeadingStyleName;
 
+    /** contains the name of the paragraph style that should use this numbering.
+        This is ignored for chapter numbering rules, use HeadingStyleName.
+     */
+    [optional, property] string ParagraphStyleName;
+
     /** contains the color for the symbol. This is only valid if the
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
     */
