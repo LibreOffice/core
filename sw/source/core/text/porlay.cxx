@@ -1851,7 +1851,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
  * character has to be checked because a ctl portion only contains one
  * script, see NewTxtPortion
  *************************************************************************/
-sal_Bool SwScriptInfo::IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nLen )
+bool SwScriptInfo::IsArabicText( const rtl::OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen )
 {
     using namespace ::com::sun::star::i18n;
     static ScriptTypeList typeList[] = {
@@ -1862,7 +1862,7 @@ sal_Bool SwScriptInfo::IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub
     // go forward if current position does not hold a regular character:
     const CharClass& rCC = GetAppCharClass();
     sal_Int32 nIdx = nStt;
-    const xub_StrLen nEnd = nStt + nLen;
+    const sal_Int32 nEnd = nStt + nLen;
     while ( nIdx < nEnd && !rCC.isLetterNumeric( rTxt, (xub_StrLen)nIdx ) )
     {
         ++nIdx;
@@ -1880,11 +1880,11 @@ sal_Bool SwScriptInfo::IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub
 
     if( nIdx >= 0 )
     {
-        const xub_Unicode cCh = rTxt.GetChar( (xub_StrLen)nIdx );
+        const xub_Unicode cCh = rTxt[nIdx];
         const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, UnicodeScript_kScriptCount );
         return type == UnicodeScript_kArabic;
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -2075,22 +2075,22 @@ bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPo
  *                      SwScriptInfo::ThaiJustify()
  *************************************************************************/
 
-sal_uInt16 SwScriptInfo::ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
-                                  sal_Int32* pScrArray, xub_StrLen nStt,
-                                  xub_StrLen nLen, xub_StrLen nNumberOfBlanks,
+sal_Int32 SwScriptInfo::ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKernArray,
+                                  sal_Int32* pScrArray, sal_Int32 nStt,
+                                  sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
                                   long nSpaceAdd )
 {
-    OSL_ENSURE( nStt + nLen <= rTxt.Len(), "String in ThaiJustify too small" );
+    OSL_ENSURE( nStt + nLen <= rTxt.getLength(), "String in ThaiJustify too small" );
 
     SwTwips nNumOfTwipsToDistribute = nSpaceAdd * nNumberOfBlanks /
                                       SPACING_PRECISION_FACTOR;
 
     long nSpaceSum = 0;
-    sal_uInt16 nCnt = 0;
+    sal_Int32 nCnt = 0;
 
-    for ( sal_uInt16 nI = 0; nI < nLen; ++nI )
+    for (sal_Int32 nI = 0; nI < nLen; ++nI)
     {
-        const xub_Unicode cCh = rTxt.GetChar( nStt + nI );
+        const xub_Unicode cCh = rTxt[nStt + nI];
 
         // check if character is not above or below base
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&

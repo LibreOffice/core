@@ -291,7 +291,7 @@ public:
                  Start index of the text
      @return Returns if the language is an Arabic language
  */
-    static sal_Bool IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nLen );
+    static bool IsArabicText( const rtl::OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen );
 
 /** Performes a thai justification on the kerning array
 
@@ -311,9 +311,9 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static sal_uInt16 ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
-                               sal_Int32* pScrArray, xub_StrLen nIdx,
-                               xub_StrLen nLen, xub_StrLen nNumberOfBlanks = 0,
+    static sal_Int32 ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKernArray,
+                               sal_Int32* pScrArray, sal_Int32 nIdx,
+                               sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
                                long nSpaceAdd = 0 );
 
     static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
