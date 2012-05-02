@@ -43,8 +43,6 @@
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
 #include <com/sun/star/text/VertOrientation.hpp>
-
-#define READ_OLDVERS        // read the old version for a start
 #include <swtypes.hxx>
 #include <doc.hxx>
 #include <poolfmt.hxx>
@@ -94,14 +92,6 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
 const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
-
-
-#ifdef READ_OLDVERS
-const sal_uInt16 AUTOFORMAT_OLD_ID      = 8201;
-const sal_uInt16 AUTOFORMAT_OLD_ID1     = 8301;
-const sal_uInt16 AUTOFORMAT_OLD_DATA_ID = 8202;
-#endif
-
 
 SwBoxAutoFmt* SwTableAutoFmt::pDfltBoxAutoFmt = 0;
 
@@ -515,38 +505,6 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
 
     return 0 == rStream.GetError();
 }
-
-#ifdef READ_OLDVERS
-
-sal_Bool SwBoxAutoFmt::LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] )
-{
-    SfxPoolItem* pNew;
-    READ( aFont,        SvxFontItem         , 0)
-
-    if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
-        aFont.SetCharSet(::osl_getThreadTextEncoding());
-
-    READ( aHeight,      SvxFontHeightItem   , 1)
-    READ( aWeight,      SvxWeightItem       , 2)
-    READ( aPosture,     SvxPostureItem      , 3)
-    READ( aUnderline,   SvxUnderlineItem    , 4)
-    READ( aCrossedOut,  SvxCrossedOutItem   , 5)
-    READ( aContour,     SvxContourItem      , 6)
-    READ( aShadowed,    SvxShadowedItem     , 7)
-    READ( aColor,       SvxColorItem        , 8)
-
-    pNew = aAdjust.Create(rStream, aLoadVer[ 9 ] );
-    SetAdjust( *(SvxAdjustItem*)pNew );
-    delete pNew;
-
-    READ( aBox,         SvxBoxItem          , 10)
-    READ( aBackground,  SvxBrushItem        , 11)
-
-    return 0 == rStream.GetError();
-}
-
-#endif
-
 
 sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
@@ -1027,43 +985,6 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
     return bRet;
 }
 
-#ifdef READ_OLDVERS
-
-sal_Bool SwTableAutoFmt::LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] )
-{
-    sal_Bool    bRet = sal_True;
-    sal_uInt16  nVal = 0;
-    rStream >> nVal;
-    bRet = 0 == rStream.GetError();
-
-    if( bRet && ( AUTOFORMAT_OLD_DATA_ID == nVal ))
-    {
-        sal_Bool b;
-        aName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-        rStream >> b; bInclFont = b;
-        rStream >> b; bInclJustify = b;
-        rStream >> b; bInclFrame = b;
-        rStream >> b; bInclBackground = b;
-        bRet = (rStream.GetError() == 0);
-
-        for( int i = 0; i < 16; i++)
-        {
-            SwBoxAutoFmt* pFmt = new SwBoxAutoFmt;
-            bRet = pFmt->LoadOld( rStream, aLoadVer );
-            if( bRet )
-                aBoxAutoFmt[ i ] = pFmt;
-            else
-            {
-                delete pFmt;
-                break;
-            }
-        }
-    }
-    return bRet;
-}
-#endif
-
-
 sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
@@ -1252,37 +1173,10 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                     }
                 }
             }
-#ifdef READ_OLDVERS
-            else if( AUTOFORMAT_OLD_ID == nVal || AUTOFORMAT_OLD_ID1 == nVal )
+            else
             {
-                SwTableAutoFmt* pNew;
-                sal_uInt16 nAnz = 0;
-                rStream >> nAnz;
-
-                sal_uInt16 aArr[ 12 ];
-                memset( aArr, 0, 12 * sizeof( sal_uInt16 ) );
-                if( AUTOFORMAT_OLD_ID1 == nVal )
-                    for( sal_uInt16 n = 0; n < 12; ++n )
-                        rStream >> aArr[ n ];
-
-                bRet = 0 == rStream.GetError();
-
-                for( sal_uInt16 i = 0; i < nAnz; ++i )
-                {
-                    pNew = new SwTableAutoFmt( aEmptyStr );
-                    bRet = pNew->LoadOld( rStream, aArr );
-                    if( bRet )
-                    {
-                        Insert( pNew, Count() );
-                    }
-                    else
-                    {
-                        delete pNew;
-                        break;
-                    }
-                }
+                bRet = false;
             }
-#endif
         }
     }
     return bRet;

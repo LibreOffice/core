@@ -190,11 +190,6 @@ public:
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
     sal_Bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
-
-#ifdef READ_OLDVERS
-    // load old version.
-    sal_Bool LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] );
-#endif
 };
 
 /*
@@ -308,11 +303,6 @@ public:
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& );
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-
-#ifdef READ_OLDVERS
-    // Load old versions.
-    sal_Bool LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] );
-#endif
 };
 
 typedef SwTableAutoFmt* SwTableAutoFmtPtr ;

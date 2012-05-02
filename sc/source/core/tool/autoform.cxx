@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-#define READ_OLDVERS
-
 #include "autoform.hxx"
 
 #include <sfx2/app.hxx>
@@ -93,12 +88,6 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
 const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 
-
-#ifdef READ_OLDVERS
-const sal_uInt16 AUTOFORMAT_OLD_ID_OLD  = 4201;
-const sal_uInt16 AUTOFORMAT_OLD_DATA_ID = 4202;
-const sal_uInt16 AUTOFORMAT_OLD_ID_NEW  = 4203;
-#endif
 
 namespace
 {
@@ -400,40 +389,6 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
 
     return (rStream.GetError() == 0);
 }
-
-#ifdef READ_OLDVERS
-sal_Bool ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
-{
-    SfxPoolItem* pNew;
-    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
-
-    aNumFormat.Load(rStream, rStream.GetStreamCharSet());
-
-    READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
-    READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
-    READ( aWeight,      SvxWeightItem,      rVersions.nWeightVersion)
-    READ( aPosture,     SvxPostureItem,     rVersions.nPostureVersion)
-    READ( aUnderline,   SvxUnderlineItem,   rVersions.nUnderlineVersion)
-    READ( aCrossedOut,  SvxCrossedOutItem,  rVersions.nCrossedOutVersion)
-    READ( aContour,     SvxContourItem,     rVersions.nContourVersion)
-    READ( aShadowed,    SvxShadowedItem,    rVersions.nShadowedVersion)
-    READ( aColor,       SvxColorItem,       rVersions.nColorVersion)
-    READ( aHorJustify,  SvxHorJustifyItem,  rVersions.nHorJustifyVersion)
-    READ( aVerJustify,  SvxVerJustifyItem,  rVersions.nVerJustifyVersion)
-    READ( aOrientation, SvxOrientationItem, rVersions.nOrientationVersion)
-    pNew = aLinebreak.Create( rStream, rVersions.nBoolVersion );
-    SetLinebreak( *(SfxBoolItem*)pNew );
-    delete pNew;
-    READ( aMargin,      SvxMarginItem,      rVersions.nMarginVersion)
-    READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
-    READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
-
-    aStacked.SetValue( aOrientation.IsStacked() );
-    aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
-
-    return (rStream.GetError() == 0);
-}
-#endif
 
 sal_Bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
 {
@@ -849,34 +804,6 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
     return bRet;
 }
 
-#ifdef READ_OLDVERS
-sal_Bool ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
-{
-    sal_Bool    bRet = true;
-    sal_uInt16  nVal = 0;
-    rStream >> nVal;
-    bRet = (rStream.GetError() == 0);
-    if (bRet && (nVal == AUTOFORMAT_OLD_DATA_ID))
-    {
-        aName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-        sal_Bool b;
-        rStream >> b; bIncludeFont = b;
-        rStream >> b; bIncludeJustify = b;
-        rStream >> b; bIncludeFrame = b;
-        rStream >> b; bIncludeBackground = b;
-        rStream >> b; bIncludeValueFormat = b;
-        rStream >> b; bIncludeWidthHeight = b;
-
-        bRet = 0 == rStream.GetError();
-        for (sal_uInt16 i=0; bRet && i < 16; i++)
-            bRet = GetField( i ).LoadOld( rStream, rVersions );
-    }
-    else
-        bRet = false;
-    return bRet;
-}
-#endif
-
 bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
@@ -1151,47 +1078,8 @@ bool ScAutoFormat::Load()
                     insert(pData);
                 }
             }
-#ifdef READ_OLDVERS
             else
-            {
-                if( AUTOFORMAT_OLD_ID_NEW == nVal )
-                {
-                    // alte Version der Versions laden
-                    rStream >> m_aVersions.nFontVersion;
-                    rStream >> m_aVersions.nFontHeightVersion;
-                    rStream >> m_aVersions.nWeightVersion;
-                    rStream >> m_aVersions.nPostureVersion;
-                    rStream >> m_aVersions.nUnderlineVersion;
-                    rStream >> m_aVersions.nCrossedOutVersion;
-                    rStream >> m_aVersions.nContourVersion;
-                    rStream >> m_aVersions.nShadowedVersion;
-                    rStream >> m_aVersions.nColorVersion;
-                    rStream >> m_aVersions.nHorJustifyVersion;
-                    rStream >> m_aVersions.nVerJustifyVersion;
-                    rStream >> m_aVersions.nOrientationVersion;
-                    rStream >> m_aVersions.nBoolVersion;
-                    rStream >> m_aVersions.nMarginVersion;
-                    rStream >> m_aVersions.nBoxVersion;
-                    rStream >> m_aVersions.nBrushVersion;
-                }
-                if( AUTOFORMAT_OLD_ID_OLD == nVal ||
-                    AUTOFORMAT_OLD_ID_NEW == nVal )
-                {
-                    ScAutoFormatData* pData;
-                    sal_uInt16 nAnz = 0;
-                    rStream >> nAnz;
-                    bRet = 0 == rStream.GetError();
-                    for( sal_uInt16 i=0; bRet && (i < nAnz); ++i )
-                    {
-                        pData = new ScAutoFormatData();
-                        bRet = pData->LoadOld( rStream, m_aVersions );
-                        insert(pData);
-                    }
-                }
-                else
-                    bRet = false;
-            }
-#endif
+                bRet = false;
         }
     }
     mbSaveLater = false;

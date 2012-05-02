@@ -255,10 +255,6 @@ public:
 
     sal_Bool                        Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
     sal_Bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
-
-#ifdef READ_OLDVERS
-    sal_Bool                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
-#endif
 };
 
 
@@ -320,10 +316,6 @@ public:
 
     bool                        Load( SvStream& rStream, const ScAfVersions& rVersions );
     bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
-
-#ifdef READ_OLDVERS
-    sal_Bool                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
-#endif
 };
 
 class SC_DLLPUBLIC ScAutoFormat
