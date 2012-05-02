@@ -314,7 +314,6 @@ struct ImplSVNWFData
     bool                    mbTransparentMenubar:1;         //< keep the background of the menubar transparent; needed for the Aero theme
     bool                    mbOpenMenuOnF10:1;              // on gnome the first menu opens on F10
     bool                    mbNoFocusRects:1;               // on Aqua focus rects are not used
-    bool                    mbNoBoldTabFocus:1;             // on Aqua and Gnome the focused tab has not bold text
     bool                    mbCenteredTabs:1;               // on Aqua, tabs are centered
     bool                    mbNoActiveTabTextRaise:1;       // on Aqua the text for the selected tab
                                                             // should not "jump up" a pixel

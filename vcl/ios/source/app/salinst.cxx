@@ -314,7 +314,6 @@ SalInstance* CreateSalInstance()
     SalData::ensureThreadAutoreleasePool();
     // no focus rects on NWF ios
     ImplGetSVData()->maNWFData.mbNoFocusRects = true;
-    ImplGetSVData()->maNWFData.mbNoBoldTabFocus = true;
     ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise = true;
     ImplGetSVData()->maNWFData.mbCenteredTabs = true;
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;

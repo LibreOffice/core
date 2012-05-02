@@ -121,7 +121,6 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbRestoreHelpId             = sal_False;
     mbRestoreUnqId              = sal_False;
     mbSmallInvalidate           = sal_False;
-    mbExtraSpace                = sal_False;
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpListBox    = NULL;
 
@@ -326,12 +325,9 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
         return aContentRgn.GetSize();
     }
 
-    // For systems without synthetic bold support
-    if ( mbExtraSpace )
-        aSize.Width() += TAB_EXTRASPACE_X;
     // For languages with short names (e.g. Chinese), because the space is
     // normally only one pixel per char
-    else if ( pItem->maFormatText.Len() < TAB_EXTRASPACE_X )
+    if ( pItem->maFormatText.Len() < TAB_EXTRASPACE_X )
         aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.Len();
 
     // Evt. den Text kuerzen
@@ -407,22 +403,8 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
     if ( mbFormat || (mnLastWidth != nWidth) || (mnLastHeight != nHeight) )
     {
         Font aFont( GetFont() );
-        Font aLightFont = aFont;
         aFont.SetTransparent( sal_True );
-        aFont.SetWeight( (!ImplGetSVData()->maNWFData.mbNoBoldTabFocus) ? WEIGHT_BOLD : WEIGHT_LIGHT );
-        aLightFont.SetTransparent( sal_True );
-        aLightFont.SetWeight( WEIGHT_LIGHT );
-
-        // If Bold and none Bold strings have the same width, we
-        // add in the calcultion extra space, so that the tabs
-        // looks better. The could be the case on systems without
-        // an bold UI font and without synthetic bold support
-        XubString aTestStr( RTL_CONSTASCII_USTRINGPARAM( "Abc." ) );
-        SetFont( aLightFont );
-        long nTextWidth1 = GetTextWidth( aTestStr );
         SetFont( aFont );
-        long nTextWidth2 = GetTextWidth( aTestStr );
-        mbExtraSpace = (nTextWidth1 == nTextWidth2);
 
         Size            aSize;
         const long      nOffsetX = 2 + GetItemsOffset().X();
@@ -720,14 +702,6 @@ void TabControl::ImplShowFocus()
     if ( !GetPageCount() || mpTabCtrlData->mpListBox )
         return;
 
-    // make sure the focussed item rect is computed using a bold font
-    // the font may have changed meanwhile due to mouse over
-
-    Font aOldFont( GetFont() );
-    Font aFont( aOldFont );
-    aFont.SetWeight( (!ImplGetSVData()->maNWFData.mbNoBoldTabFocus) ? WEIGHT_BOLD : WEIGHT_LIGHT );
-    SetFont( aFont );
-
     sal_uInt16                   nCurPos     = GetPagePos( mnCurPageId );
     Rectangle                aRect       = ImplGetTabRect( nCurPos );
     const ImplTabItem&       rItem       = mpTabCtrlData->maItemList[ nCurPos ];
@@ -771,8 +745,6 @@ void TabControl::ImplShowFocus()
         aRect.Bottom() = aRect.Top() + aImageSize.Height() + 4;
     }
     ShowFocus( aRect );
-
-    SetFont( aOldFont );
 }
 
 // -----------------------------------------------------------------------
@@ -939,7 +911,6 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
     Font aFont( GetFont() );
     aFont.SetTransparent( sal_True );
-    aFont.SetWeight( ((bIsCurrentItem) && (!ImplGetSVData()->maNWFData.mbNoBoldTabFocus)) ? WEIGHT_BOLD : WEIGHT_LIGHT );
     SetFont( aFont );
 
     Size aTabSize = aRect.GetSize();

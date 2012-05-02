@@ -68,7 +68,6 @@ private:
     sal_Bool                mbRestoreHelpId;
     sal_Bool                mbRestoreUnqId;
     sal_Bool                mbSmallInvalidate;
-    sal_Bool                mbExtraSpace;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
