@@ -204,7 +204,7 @@ found:
     {
         pC->pTopic->_Disconnect( (long) hConv );
         for ( ConvList::iterator it = pService->pConv->begin();
-              it < pService->pConv->end();
+              it != pService->pConv->end();
               ++it
         ) {
             if ( *it == pC )
