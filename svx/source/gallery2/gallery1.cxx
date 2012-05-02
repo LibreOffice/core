@@ -702,7 +702,7 @@ sal_Bool Gallery::RemoveTheme( const String& rThemeName )
 
             if( pImportEntry )
             {
-                for ( GalleryImportThemeList::iterator it = aImportList.begin(); it < aImportList.end(); ++it )
+                for ( GalleryImportThemeList::iterator it = aImportList.begin(); it != aImportList.end(); ++it )
                 {
                     if ( *it == pImportEntry )
                     {
@@ -732,7 +732,7 @@ sal_Bool Gallery::RemoveTheme( const String& rThemeName )
             }
         }
 
-        for ( GalleryThemeList::iterator it = aThemeList.begin(); it < aThemeList.end(); ++it )
+        for ( GalleryThemeList::iterator it = aThemeList.begin(); it != aThemeList.end(); ++it )
         {
             if ( pThemeEntry == *it ) {
                 delete pThemeEntry;

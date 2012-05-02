@@ -91,7 +91,7 @@ public:
     void            remove( SvListEntry* pItem )
                     {
                         for ( SvTreeEntryList_impl::iterator it = maEntryList.begin();
-                              it < maEntryList.end();
+                              it != maEntryList.end();
                               ++it
                         ) {
                             if ( *it == pItem ) {

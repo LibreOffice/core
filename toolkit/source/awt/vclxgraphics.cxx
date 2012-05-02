@@ -74,7 +74,7 @@ VCLXGraphics::~VCLXGraphics()
     VCLXGraphicsList_impl* pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : NULL;
     if ( pLst )
     {
-        for( VCLXGraphicsList_impl::iterator it = pLst->begin(); it < pLst->end(); ++it )
+        for( VCLXGraphicsList_impl::iterator it = pLst->begin(); it != pLst->end(); ++it )
         {
             if( *it == this ) {
                 pLst->erase( it );

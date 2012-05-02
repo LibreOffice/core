@@ -162,7 +162,7 @@ public:
                         { mpBoxList->push_back( pBox ); }
     void            erase( ToolBox* pBox )
                     {
-                        for ( ImplTBList::iterator it = mpBoxList->begin(); it < mpBoxList->end(); ++it ) {
+                        for ( ImplTBList::iterator it = mpBoxList->begin(); it != mpBoxList->end(); ++it ) {
                             if ( *it == pBox ) {
                                 mpBoxList->erase( it );
                                 break;

@@ -6721,12 +6721,12 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 {
                                     // sorting fields ( hi >> lo )
                                     ::std::vector< PPTFieldEntry* >::iterator it = FieldList.begin();
-                                    for( ; it < FieldList.end(); ++it ) {
+                                    for( ; it != FieldList.end(); ++it ) {
                                         if ( (*it)->nPos < pEntry->nPos ) {
                                             break;
                                         }
                                     }
-                                    if ( it < FieldList.end() ) {
+                                    if ( it != FieldList.end() ) {
                                         FieldList.insert( it, pEntry );
                                     } else {
                                         FieldList.push_back( pEntry );

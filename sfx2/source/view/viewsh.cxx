@@ -433,7 +433,7 @@ SAL_DLLPRIVATE void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient
 {
     SfxInPlaceClientList* pClientList = GetIPClientList_Impl(sal_True);
 
-    for( SfxInPlaceClientList::iterator it = pClientList->begin(); it < pClientList->end(); ++it )
+    for( SfxInPlaceClientList::iterator it = pClientList->begin(); it != pClientList->end(); ++it )
     {
         if ( *it == pIPClient )
         {

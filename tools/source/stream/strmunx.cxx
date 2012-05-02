@@ -99,7 +99,7 @@ InternalStreamLock::InternalStreamLock(
 InternalStreamLock::~InternalStreamLock()
 {
     for ( InternalStreamLockList::iterator it = LockList::get().begin();
-          it < LockList::get().end();
+          it != LockList::get().end();
           ++it
     ) {
         if ( this == *it ) {

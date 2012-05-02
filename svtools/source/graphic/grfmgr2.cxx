@@ -236,7 +236,7 @@ void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubst
 void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
 {
     mpCache->ReleaseGraphicObject( rObj );
-    for( GraphicObjectList_impl::iterator it = maObjList.begin(); it < maObjList.end(); ++it )
+    for( GraphicObjectList_impl::iterator it = maObjList.begin(); it != maObjList.end(); ++it )
     {
         if ( *it == &rObj ) {
             maObjList.erase( it );

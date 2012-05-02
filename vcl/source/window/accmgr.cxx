@@ -90,7 +90,7 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
 
     // throw it away
     for ( ImplAccelList::iterator it = mpAccelList->begin();
-          it < mpAccelList->end();
+          it != mpAccelList->end();
           ++it
     ) {
         if ( *it == pAccel ) {

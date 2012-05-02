@@ -1043,7 +1043,7 @@ GraphicFilter::~GraphicFilter()
         ::osl::MutexGuard aGuard( getListMutex() );
         for(
             FilterList_impl::iterator it = pFilterHdlList->begin();
-            it < pFilterHdlList->end();
+            it != pFilterHdlList->end();
             ++it
         ) {
             if( *it == this )

@@ -357,7 +357,7 @@ Bundle* CGMElements::InsertBundle( BundleList& rList, Bundle& rBundle )
     Bundle* pBundle = GetBundle( rList, rBundle.GetIndex() );
     if ( pBundle )
     {
-        for ( BundleList::iterator it = rList.begin(); it < rList.end(); ++it ) {
+        for ( BundleList::iterator it = rList.begin(); it != rList.end(); ++it ) {
             if ( *it == pBundle ) {
                 rList.erase( it );
                 delete pBundle;

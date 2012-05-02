@@ -1352,7 +1352,7 @@ OutlinerView* Outliner::RemoveView( OutlinerView* pView )
 {
     DBG_CHKTHIS(Outliner,0);
 
-    for ( ViewList::iterator it = aViewList.begin(); it < aViewList.end(); ++it )
+    for ( ViewList::iterator it = aViewList.begin(); it != aViewList.end(); ++it )
     {
         if ( *it == pView )
         {

@@ -2398,7 +2398,7 @@ void SvxIconChoiceCtrl_Impl::ToTop( SvxIconChoiceCtrlEntry* pEntry )
     ) {
         for(
             SvxIconChoiceCtrlEntryList_impl::iterator it = pZOrderList->begin();
-            it < pZOrderList->end();
+            it != pZOrderList->end();
             ++it
         ) {
             if ( *it == pEntry )

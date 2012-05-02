@@ -105,7 +105,7 @@ sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 
 void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 {
-    for ( ImplIdleList::iterator it = mpIdleList->begin(); it < mpIdleList->end(); ++it ) {
+    for ( ImplIdleList::iterator it = mpIdleList->begin(); it != mpIdleList->end(); ++it ) {
         if ( (*it)->maIdleHdl == rLink ) {
             delete *it;
             mpIdleList->erase( it );

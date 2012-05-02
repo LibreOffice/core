@@ -58,7 +58,7 @@ void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener* pList
 {
     if ( mpList ) {
         for ( IMPL_ConfigurationListenerList::iterator it = mpList->begin();
-              it < mpList->end();
+              it != mpList->end();
               ++it
         ) {
             if ( *it == pListener ) {

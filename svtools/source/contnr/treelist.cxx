@@ -203,7 +203,7 @@ void SvTreeList::InsertView( SvListView* pView )
 
 void SvTreeList::RemoveView( SvListView* pView )
 {
-    for ( SvListView_impl::iterator it = aViewList.begin(); it < aViewList.end(); ++it ) {
+    for ( SvListView_impl::iterator it = aViewList.begin(); it != aViewList.end(); ++it ) {
         if ( *it == pView ) {
             aViewList.erase( it );
             nRefCount--;
