@@ -400,9 +400,9 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ;;
 
     *)
-        # The user has tweaked the email settings, and configured something we
-        # do not recognize.  Try to be smart, and send the mail anyway, if we
-        # have the possibility to do so.
+        # LO is configured something we do not recognize.
+        # Try to be smart, and send the mail anyway, if we have the
+        # possibility to do so.
 
         if [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
             MAILER=/usr/bin/kde-open
