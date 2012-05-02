@@ -600,7 +600,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     const SfxPoolItem* pOld = 0;
 
     //------------------
-    // outter border:
+    // outer border:
     //------------------
     typedef ::std::pair<svx::FrameBorderType,sal_uInt16> TBorderPair;
     TBorderPair eTypes1[] = {

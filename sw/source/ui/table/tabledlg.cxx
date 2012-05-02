@@ -1409,7 +1409,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
-    //Ueberschrift wiederholen
+    // Repeat Heading
     if(aHeadLineCB.IsChecked() != aHeadLineCB.GetSavedValue() ||
         String::CreateFromInt32( static_cast< sal_Int32 >(aRepeatHeaderNF.GetValue()) ) != aRepeatHeaderNF.GetSavedValue() )
     {
@@ -1432,7 +1432,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
     sal_Bool bState = aPageCollCB.IsChecked();
 
-    //Wenn Seitenvorlage, dann kein Break
+    // If we have a page style, then there's no break
     sal_Bool bPageItemPut = sal_False;
     if ( bState != aPageCollCB.GetSavedValue() ||
          ( bState &&

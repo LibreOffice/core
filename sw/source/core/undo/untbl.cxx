@@ -1473,6 +1473,7 @@ SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
     : SwUndo( UNDO_TABLE_AUTOFMT ),
     nSttNode( rTblNd.GetIndex() ),
     bSaveCntntAttr( sal_False )
+    , m_nRepeatHeading(rTblNd.GetTable().GetRowsToRepeat())
 {
     pSaveTbl = new _SaveTable( rTblNd.GetTable() );
 
@@ -1504,7 +1505,8 @@ SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
     SwTableNode* pTblNd = rDoc.GetNodes()[ nSttNode ]->GetTableNode();
     OSL_ENSURE( pTblNd, "kein TabellenNode" );
 
-    _SaveTable* pOrig = new _SaveTable( pTblNd->GetTable() );
+    SwTable& table = pTblNd->GetTable();
+    _SaveTable* pOrig = new _SaveTable( table );
         // dann auch noch ueber die ContentNodes der EndBoxen und
         // und alle Absatz-Attribute zusammen sammeln
     if( bSaveCntntAttr )
@@ -1516,6 +1518,8 @@ SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
         {
             m_Undos.at(n-1)->UndoImpl(rContext);
         }
+
+        table.SetRowsToRepeat(m_nRepeatHeading);
     }
 
     pSaveTbl->RestoreAttr( pTblNd->GetTable(), !bUndo );

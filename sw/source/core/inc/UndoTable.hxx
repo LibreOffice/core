@@ -162,6 +162,7 @@ class SwUndoTblAutoFmt : public SwUndo
     _SaveTable* pSaveTbl;
     ::std::vector< ::boost::shared_ptr<SwUndoTblNumFmt> > m_Undos;
     sal_Bool bSaveCntntAttr;
+    sal_uInt16 m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
 
