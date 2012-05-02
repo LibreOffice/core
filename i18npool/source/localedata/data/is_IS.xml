@@ -25,18 +25,19 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+      <QuotationStart>‚</QuotationStart>
+      <QuotationEnd>‘</QuotationEnd>
+      <DoubleQuotationStart>„</DoubleQuotationStart>
+      <DoubleQuotationEnd>“</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>AM</TimeAM>
-    <TimePM>PM</TimePM>
+    <TimeAM>f.h.</TimeAM>
+    <TimePM>e.h.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
-    <DateAcceptancePattern>D/M/</DateAcceptancePattern>
     <DateAcceptancePattern>D.M.</DateAcceptancePattern>
+    <DateAcceptancePattern>D. M.</DateAcceptancePattern>
+    <DateAcceptancePattern>D. M. Y</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>Standard</FormatCode>
     </FormatElement>
@@ -290,13 +291,13 @@
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>BCE</DefaultAbbrvName>
-          <DefaultFullName>BC</DefaultFullName>
+          <DefaultAbbrvName>fyrir Krist</DefaultAbbrvName>
+          <DefaultFullName>f.Kr.</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>CE</DefaultAbbrvName>
-          <DefaultFullName>AD</DefaultFullName>
+          <DefaultAbbrvName>eftir Krist</DefaultAbbrvName>
+          <DefaultFullName>e.Kr.</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -326,10 +327,10 @@
     <ReservedWords>
       <trueWord>Rétt</trueWord>
       <falseWord>Rangt</falseWord>
-      <quarter1Word>1st fjórðungur</quarter1Word>
-      <quarter2Word>2nd fjórðungur</quarter2Word>
-      <quarter3Word>3rd fjórðungur</quarter3Word>
-      <quarter4Word>4th fjórðungur</quarter4Word>
+      <quarter1Word>fyrsti fjórðungur</quarter1Word>
+      <quarter2Word>annar fjórðungur</quarter2Word>
+      <quarter3Word>þriðji fjórðungur</quarter3Word>
+      <quarter4Word>fjórði fjórðungur</quarter4Word>
       <aboveWord>yfir</aboveWord>
       <belowWord>undir</belowWord>
       <quarter1Abbreviation>F1</quarter1Abbreviation>
