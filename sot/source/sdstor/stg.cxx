@@ -234,6 +234,13 @@ sal_uLong StorageStream::Seek( sal_uLong n )
         return n;
 }
 
+sal_Size StorageStream::remainingSize()
+{
+    if( Validate() )
+        return pEntry->GetSize() - Tell();
+    return 0;
+}
+
 void StorageStream::Flush()
 {
     // Flushing means committing, since streams are never transacted

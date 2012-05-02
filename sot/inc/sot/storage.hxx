@@ -95,6 +95,7 @@ public:
     sal_Bool                GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         GetXInputStream() const;
+    virtual sal_Size remainingSize();
 };
 
 #ifndef SOT_DECL_SOTSTORAGESTREAM_DEFINED

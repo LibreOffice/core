@@ -94,6 +94,7 @@ public:
     virtual sal_Bool    Commit() = 0;
     virtual sal_Bool    Revert() = 0;
     virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const = 0;
+    virtual sal_Size    remainingSize() = 0;
 };
 
 class BaseStorage : public StorageBase
@@ -178,6 +179,7 @@ public:
     virtual sal_Bool    ValidateMode( StreamMode ) const;
     const SvStream* GetSvStream() const;
     virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const;
+    virtual sal_Size    remainingSize();
 };
 
 class UCBStorageStream;
@@ -270,6 +272,7 @@ public:
     virtual sal_Bool                Revert();
     virtual sal_Bool                Validate( sal_Bool=sal_False ) const;
     virtual sal_Bool                ValidateMode( StreamMode ) const;
+    virtual sal_Size                remainingSize();
     const SvStream*             GetSvStream() const;
     virtual sal_Bool                Equals( const BaseStorageStream& rStream ) const;
     sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );

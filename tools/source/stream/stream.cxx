@@ -1703,9 +1703,9 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
     return nBufFilePos + nBufActualPos;
 }
 
-//probably not as inefficient as it looks seeing as STREAM_SEEK_TO_END in the
-//Seek backends is nomally special cased feel free to make this virtual and add
-//good implementations for SvFileStream etc
+//STREAM_SEEK_TO_END in the some of the Seek backends is special cased to be
+//efficient, in others e.g. SotStorageStream it's really horribly slow, and in
+//those this should be overridden
 sal_Size SvStream::remainingSize()
 {
     sal_Size nCurr = Tell();
