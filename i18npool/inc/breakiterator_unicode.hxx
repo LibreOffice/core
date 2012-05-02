@@ -84,11 +84,22 @@ protected:
     const sal_Char *cBreakIterator, *wordRule, *lineRule;
     Boundary result; // for word break iterator
 
-    struct BI_Data {
-        UnicodeString aICUText;
+    struct BI_Data
+    {
+        rtl::OUString aICUText;
+        UText *ut;
         icu::BreakIterator *aBreakIterator;
 
-        BI_Data() : aICUText(), aBreakIterator(NULL) {}
+        BI_Data()
+            : ut(NULL)
+            , aBreakIterator(NULL)
+        {
+        }
+        ~BI_Data()
+        {
+            utext_close(ut);
+        }
+
     } character, word, sentence, line, *icuBI;
 
     com::sun::star::lang::Locale aLocale;

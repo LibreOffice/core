@@ -95,24 +95,6 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator {
 
 };
 
-namespace
-{
-    bool isEqual(const UnicodeString &rOne, const rtl::OUString &rOther)
-    {
-        sal_Int32 nLength = rOne.length();
-        if (nLength != rOther.getLength())
-            return false;
-
-        //fdo#49208 operator== is implemented by compareTo etc in icu which is
-        //horrifically slow when all you want to know is that they're the same
-        //or not
-        const UChar *pOne = rOne.getBuffer();
-        // UChar != sal_Unicode in MinGW
-        const UChar *pOther = reinterpret_cast<const UChar *>(rOther.getStr());
-        return memcmp(pOne, pOther, nLength * sizeof(UChar)) == 0;
-    }
-}
-
 // loading ICU breakiterator on demand.
 void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char *rule, const OUString& rText) throw(uno::RuntimeException)
@@ -218,12 +200,22 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
     }
 
-    if (newBreak || !isEqual(icuBI->aICUText, rText))
+    if (newBreak || !icuBI->aICUText.equals(rText))
     {
         // UChar != sal_Unicode in MinGW
         const UChar *pText = reinterpret_cast<const UChar *>(rText.getStr());
-        icuBI->aICUText=UnicodeString(pText, rText.getLength());
-        icuBI->aBreakIterator->setText(icuBI->aICUText);
+
+        icuBI->ut = utext_openUChars(icuBI->ut, pText, rText.getLength(), &status);
+
+        if (!U_SUCCESS(status))
+            throw ERROR;
+
+        icuBI->aBreakIterator->setText(icuBI->ut, status);
+
+        if (!U_SUCCESS(status))
+            throw ERROR;
+
+        icuBI->aICUText = rText;
     }
 }
 
