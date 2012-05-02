@@ -30,12 +30,18 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bestreversemap \
     bmp \
     bmpsum \
+    cfgex \
     cppunit/cppunittester \
     g2g \
     gencoll_rule \
     genconv_dict \
     gendict \
     genindex_data \
+    gsicheck \
+    helpex \
+    HelpLinker \
+    HelpIndexer \
+    localize \
     mkunroll \
     osl_process_child \
     pdf2xml \
@@ -49,8 +55,11 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     sp2bv \
     svg2odf \
     svidl \
+    transex3 \
     typesconfig \
+    ulfex \
     xml2cmp \
+    xrmex \
     xpdfimport \
 ))
 
@@ -567,6 +576,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     dtobj \
     headless \
     libeay32 \
+    l10ntools_helper \
     npsoenv \
     nputils \
     pdfimport_s \
@@ -575,6 +585,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ooopathutils \
     sample \
     salcpprt \
+    transex \
     ulingu \
     vclmain \
     writerperfect \
