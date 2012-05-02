@@ -49,7 +49,7 @@
 #include "com/sun/star/xml/dom/XNodeList.hpp"
 #include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
-#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
+#include "com/sun/star/ucb/InteractiveIOException.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
@@ -206,7 +206,7 @@ ExtensionDescription::ExtensionDescription(
         //throws an com::sun::star::uno::Exception if the file is not available
         Reference<css::io::XInputStream> xIn;
         try
-        {   //throws com.sun.star.ucb.InteractiveAugmentedIOException
+        {   //throws com.sun.star.ucb.InteractiveIOException
             xIn = descContent.openStream();
         }
         catch ( const css::uno::Exception& )
@@ -318,8 +318,10 @@ void  FileDoesNotExistFilter::handle(
 {
     css::uno::Any request( xRequest->getRequest() );
 
-    css::ucb::InteractiveAugmentedIOException ioexc;
-    if ((request>>= ioexc) && ioexc.Code == css::ucb::IOErrorCode_NOT_EXISTING )
+    css::ucb::InteractiveIOException ioexc;
+    if ((request>>= ioexc)
+        && (ioexc.Code == css::ucb::IOErrorCode_NOT_EXISTING
+            || ioexc.Code == css::ucb::IOErrorCode_NOT_EXISTING_PATH))
     {
         m_bExist = false;
         return;

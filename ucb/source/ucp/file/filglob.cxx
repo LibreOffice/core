@@ -323,6 +323,9 @@ namespace fileaccess {
                     // No such device
                     ioErrorCode = IOErrorCode_INVALID_DEVICE;
                     break;
+                case FileBase::E_NOTDIR:
+                    ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
+                    break;
                 case FileBase::E_NOENT:
                     // No such file or directory
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
