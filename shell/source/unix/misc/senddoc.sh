@@ -400,7 +400,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ;;
 
     *)
-        # LO is configured something we do not recognize.
+        # LO is configured to use something we do not recognize.
         # Try to be smart, and send the mail anyway, if we have the
         # possibility to do so.
 
