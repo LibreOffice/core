@@ -684,7 +684,7 @@ void DocxExport::WriteSettings()
             FSEND );
 
     // Zoom
-    rtl::OString aZoom(rtl::OString::valueOf(pViewShell->GetViewOptions()->GetZoom()));
+    rtl::OString aZoom(rtl::OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
 
     if( settings.evenAndOddHeaders )
