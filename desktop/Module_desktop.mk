@@ -43,7 +43,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_soffice.bin \
     Executable_unopkg.bin \
     Library_deploymentgui \
     Library_migrationoo2 \
@@ -56,6 +55,12 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Pagein_impress \
     Pagein_writer \
 ))
+
+ifneq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,desktop,\
+    Executable_soffice.bin \
+))
+endif
 
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
@@ -80,11 +85,13 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_simpress \
     Executable_smath \
     Executable_soffice \
+    Executable_soffice_bin \
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
     Executable_unopkg \
     Executable_unopkg.com \
+    Package_soffice_bin \
     WinResTarget_quickstart \
     WinResTarget_sbase \
     WinResTarget_scalc \

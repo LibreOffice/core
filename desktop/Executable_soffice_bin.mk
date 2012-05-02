@@ -25,31 +25,38 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,soffice.bin))
+$(eval $(call gb_Executable_Executable,soffice_bin))
 
-$(eval $(call gb_Executable_set_targettype_gui,soffice.bin,YES))
+$(eval $(call gb_Executable_set_targettype_gui,soffice_bin,YES))
 
-$(eval $(call gb_Executable_set_include,soffice.bin,\
+$(eval $(call gb_Executable_set_include,soffice_bin,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_use_libraries,soffice.bin,\
+$(eval $(call gb_Executable_use_libraries,soffice_bin,\
     sal \
     sofficeapp \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,soffice.bin,\
+$(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \
 ))
 
-ifeq ($(OS),MACOSX)
+$(eval $(call gb_Executable_use_static_libraries,soffice_bin,\
+    ooopathutils \
+    winextendloaderenv \
+))
 
-$(eval $(call gb_Executable_set_ldflags,\
-    $(filter-out -bind_at_load,$$(LDFLAGS)) \
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Executable_add_ldflags,soffice_bin,\
+    /STACK:10000000 \
 ))
 
 endif
+
+$(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/src))
 
 # vim: set ts=4 sw=4 et:

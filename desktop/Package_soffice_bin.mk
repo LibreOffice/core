@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,31 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,soffice.bin))
+$(eval $(call gb_Package_Package,desktop_soffice_bin,$(gb_Executable_BINDIR)))
 
-$(eval $(call gb_Executable_set_targettype_gui,soffice.bin,YES))
+$(eval $(call gb_Package_add_file,desktop_soffice_bin,bin/soffice.bin,soffice_bin$(gb_Executable_EXT)))
 
-$(eval $(call gb_Executable_set_include,soffice.bin,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/source/inc \
-))
-
-$(eval $(call gb_Executable_use_libraries,soffice.bin,\
-    sal \
-    sofficeapp \
-    $(gb_STDLIBS) \
-))
-
-$(eval $(call gb_Executable_add_cobjects,soffice.bin,\
-    desktop/source/app/main \
-))
-
-ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_Executable_set_ldflags,\
-    $(filter-out -bind_at_load,$$(LDFLAGS)) \
-))
-
+ifeq ($(COM),MSC)
+$(eval $(call gb_Package_add_file,desktop_soffice_bin,bin/soffice.bin.manifest,soffice_bin$(gb_Executable_EXT).manifest))
 endif
 
-# vim: set ts=4 sw=4 et:
+# vim: set shiftwidth=4 tabstop=4 noexpandtab:
