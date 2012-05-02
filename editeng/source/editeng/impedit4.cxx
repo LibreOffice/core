@@ -1118,7 +1118,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
                 if ( !pX->GetLen() && !bEmptyPara )
                     pTxtObj->DestroyAttrib( pX );
                 else
-                    pC->GetAttribs().Insert( pX, pC->GetAttribs().Count() );
+                    pC->GetAttribs().push_back(pX);
             }
             nAttr++;
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
@@ -1256,31 +1256,31 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
 
         // Character attributes ...
         sal_Bool bAllreadyHasAttribs = aPaM.GetNode()->GetCharAttribs().Count() ? sal_True : sal_False;
-        sal_uInt16 nNewAttribs = pC->GetAttribs().Count();
+        size_t nNewAttribs = pC->GetAttribs().size();
         if ( nNewAttribs )
         {
             sal_Bool bUpdateFields = sal_False;
-            for ( sal_uInt16 nAttr = 0; nAttr < nNewAttribs; nAttr++ )
+            for (size_t nAttr = 0; nAttr < nNewAttribs; ++nAttr)
             {
-                XEditAttribute* pX = pC->GetAttribs().GetObject( nAttr );
+                const XEditAttribute& rX = pC->GetAttribs()[nAttr];
                 // Can happen when paragraphs > 16K, it is simply wrapped.
-                if ( pX->GetEnd() <= aPaM.GetNode()->Len() )
+                if ( rX.GetEnd() <= aPaM.GetNode()->Len() )
                 {
-                    if ( !bAllreadyHasAttribs || pX->IsFeature() )
+                    if ( !bAllreadyHasAttribs || rX.IsFeature() )
                     {
                         // Normal attributes then go faster ...
                         // Features shall not be inserted through
                         // EditDoc:: InsertAttrib, using FastInsertText they are
                         // already in the flow
-                        DBG_ASSERT( pX->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute too large!" );
+                        DBG_ASSERT( rX.GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute too large!" );
                         EditCharAttrib* pAttr;
                         if ( !bConvertItems )
-                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(pX->GetItem()), pX->GetStart()+nStartPos, pX->GetEnd()+nStartPos );
+                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         else
                         {
-                            SfxPoolItem* pNew = pX->GetItem()->Clone();
+                            SfxPoolItem* pNew = rX.GetItem()->Clone();
                             ConvertItem( *pNew, eSourceUnit, eDestUnit );
-                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, pX->GetStart()+nStartPos, pX->GetEnd()+nStartPos );
+                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                             delete pNew;
                         }
                         DBG_ASSERT( pAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (1)" );
@@ -1290,9 +1290,9 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                     }
                     else
                     {
-                        DBG_ASSERT( pX->GetEnd()+nStartPos <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (2)" );
+                        DBG_ASSERT( rX.GetEnd()+nStartPos <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (2)" );
                         // Tabs and other Features can not be inserted through InsertAttrib:
-                        aEditDoc.InsertAttrib( aPaM.GetNode(), pX->GetStart()+nStartPos, pX->GetEnd()+nStartPos, *pX->GetItem() );
+                        aEditDoc.InsertAttrib( aPaM.GetNode(), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos, *rX.GetItem() );
                     }
                 }
             }

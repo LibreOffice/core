@@ -34,14 +34,12 @@
 
 #include <unotools/fontcvt.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SfxStyleSheetPool;
 
 class XEditAttribute
 {
-    friend class ContentInfo;   // for destructor
-    friend class BinTextObject; // for destructor
-
 private:
     const SfxPoolItem*  pItem;
     sal_uInt16              nStart;
@@ -50,10 +48,9 @@ private:
                         XEditAttribute();
                         XEditAttribute( const XEditAttribute& rCopyFrom );
 
-                        ~XEditAttribute();
-
 public:
-                        XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+    XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+    ~XEditAttribute();
 
     const SfxPoolItem*  GetItem() const             { return pItem; }
 
@@ -65,16 +62,17 @@ public:
 
     sal_uInt16              GetLen() const              { return nEnd-nStart; }
 
-    bool                    IsFeature()
-    {
-        sal_uInt16 nWhich = pItem->Which();
-        return  ((nWhich >= EE_FEATURE_START) && (nWhich <=  EE_FEATURE_END));
-    }
+    bool IsFeature() const;
 
-    inline bool         operator==( const XEditAttribute& rCompare );
+    inline bool operator==( const XEditAttribute& rCompare ) const;
+
+    bool operator!= (const XEditAttribute& r) const
+    {
+        return !operator==(r);
+    }
 };
 
-inline bool XEditAttribute::operator==( const XEditAttribute& rCompare )
+inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
 {
     return  (nStart == rCompare.nStart) &&
             (nEnd == rCompare.nEnd) &&
@@ -82,15 +80,6 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare )
             ( pItem->Which() != rCompare.pItem->Which()) ||
             (*pItem == *rCompare.pItem));
 }
-
-typedef XEditAttribute* XEditAttributePtr;
-SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0 )
-
-class XEditAttributeList : public XEditAttributeListImpl
-{
-public:
-    XEditAttribute* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nChar ) const;
-};
 
 struct XParaPortion
 {
@@ -135,11 +124,14 @@ public:
 class ContentInfo
 {
     friend class BinTextObject;
+public:
+    typedef boost::ptr_vector<XEditAttribute> XEditAttributesType;
 
 private:
     String              aText;
     String              aStyle;
-    XEditAttributeList  aAttribs;
+
+    XEditAttributesType aAttribs;
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
     WrongList*          pWrongs;
@@ -150,15 +142,16 @@ private:
 public:
                         ~ContentInfo();
 
+    const XEditAttributesType& GetAttribs() const { return aAttribs; }
+    XEditAttributesType& GetAttribs() { return aAttribs; }
+
     const String&       GetText()           const   { return aText; }
     const String&       GetStyle()          const   { return aStyle; }
-    const XEditAttributeList& GetAttribs()  const   { return aAttribs; }
     const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
     SfxStyleFamily      GetFamily()         const   { return eFamily; }
 
     String&             GetText()           { return aText; }
     String&             GetStyle()          { return aStyle; }
-    XEditAttributeList& GetAttribs()        { return aAttribs; }
     SfxItemSet&         GetParaAttribs()    { return aParaAttribs; }
     SfxStyleFamily&     GetFamily()         { return eFamily; }
 
