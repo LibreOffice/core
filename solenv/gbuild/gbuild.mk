@@ -389,7 +389,7 @@ else ifeq ($(DISABLE_PYTHON),TRUE)
 # Build-time python
 gb_PYTHON := python
 else
-gb_PYTHONTARGET := $(OUTDIR)/bin/python
+gb_PYTHONTARGET := $(call gb_Executable_get_target_for_build,python)
 gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
 endif
 
