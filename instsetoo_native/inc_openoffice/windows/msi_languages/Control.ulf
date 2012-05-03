@@ -89,7 +89,7 @@ en-US = "Please enter your information."
 en-US = "Install this application for:"
 
 [OOO_CONTROL_40]
-en-US = "{&MSSansBold8}Customer Information"
+en-US = "{&MSSansBold8}User Information"
 
 [OOO_CONTROL_41]
 en-US = "{\Tahoma8}{50}"
