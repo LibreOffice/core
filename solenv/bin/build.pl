@@ -1438,7 +1438,6 @@ sub get_module_and_buildlist_paths {
         my %active_modules_copy = %active_modules;
         foreach my $module ($source_config->get_all_modules()) {
             delete $active_modules_copy{$module} if defined($active_modules_copy{$module});
-            next if ($module eq $initial_module);
             $module_paths{$module} = $source_config->get_module_path($module);
             $build_list_paths{$module} = $source_config->get_module_build_list($module);
         }
