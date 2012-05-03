@@ -337,26 +337,6 @@ namespace canvas
             @return false, if the resulting blit is empty, i.e. fully
             clipped away.
          */
-        CANVASTOOLS_DLLPUBLIC bool clipBlit( ::basegfx::B2IRange&       io_rSourceArea,
-                       ::basegfx::B2IPoint&       io_rDestPoint,
-                       const ::basegfx::B2IRange& rSourceBounds,
-                       const ::basegfx::B2IRange& rDestBounds );
-
-        /** Return range of integer pixel, which will cover the sprite
-            given by the floating point range.
-
-            This method assumes that sprite sizes are always integer,
-            and that the sprite position (top, left edge of the
-            sprite) is rounded to the nearest integer before
-            rendering.
-
-            @param rRange
-            Input range. Values must be within the representable
-            bounds of sal_Int32
-
-            @return the integer range, which is covered by the sprite
-            given by rRange.
-         */
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
 
         /** Retrieve various internal properties of the actual canvas implementation.

@@ -794,18 +794,6 @@ namespace canvas
             return true;
         }
 
-        bool clipBlit( ::basegfx::B2IRange&       io_rSourceArea,
-                       ::basegfx::B2IPoint&       io_rDestPoint,
-                       const ::basegfx::B2IRange& rSourceBounds,
-                       const ::basegfx::B2IRange& rDestBounds )
-        {
-            return clipAreaImpl( NULL,
-                                 io_rSourceArea,
-                                 io_rDestPoint,
-                                 rSourceBounds,
-                                 rDestBounds );
-        }
-
         ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange )
         {
             if( rRange.isEmpty() )
