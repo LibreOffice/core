@@ -100,12 +100,14 @@ add_ChangeId() {
                 return
         fi
 
-        if grep -i '^Change-Id:' "$MSG" >/dev/null
-        then
-                return
-        fi
+        id=`grep -i '^Change-Id:' "$MSG" | sed -e "s/.*://"`
+        temp_msg=`grep -v -i '^Change-Id:' "$MSG"`
+        echo "$temp_msg" > "$MSG"
 
-        id=`_gen_ChangeId`
+        if  test -z "$id"
+        then
+            id=`_gen_ChangeId`
+        fi
         perl -e '
                 $MSG = shift;
                 $id = shift;
