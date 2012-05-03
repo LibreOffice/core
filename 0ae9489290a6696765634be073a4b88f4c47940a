@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACH///+U\u003d",
+        "filename": "l10ntools/source/help/makefile.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-05-03T13:16:03Z",
+      "side": 0,
+      "message": "this is most likely still a problem, because on MacOSX PPC the same 4.0.1 version is still used :(",
+      "revId": "0ae9489290a6696765634be073a4b88f4c47940a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACH///+Q\u003d",
+        "filename": "l10ntools/source/help/makefile.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-05-03T13:16:03Z",
+      "side": 0,
+      "message": "does this thing really need both expat and libxml, and then berkelydb on top of it? argh...",
+      "revId": "0ae9489290a6696765634be073a4b88f4c47940a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
