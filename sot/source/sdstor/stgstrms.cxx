@@ -26,9 +26,10 @@
  *
  ************************************************************************/
 
+#include <algorithm>
 
 #include <string.h>     // memcpy()
-
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
 
@@ -333,6 +334,35 @@ void StgStrm::SetEntry( StgDirEntry& r )
     r.SetDirty();
 }
 
+bool StgStrm::buildPageChainCache()
+{
+    if (nSize > 0)
+        m_aPagesCache.reserve(nSize/nPageSize);
+
+    sal_Int32 nBgn = nStart;
+    while (nBgn >= 0)
+    {
+        m_aPagesCache.push_back(nBgn);
+        sal_Int32 nOldBgn = nBgn;
+        nBgn = pFat->GetNextPage(nBgn);
+        if (nBgn == nOldBgn)
+            return false;
+    }
+
+    m_bSortedPageChain = std::is_sorted(m_aPagesCache.begin(), m_aPagesCache.end());
+
+    SAL_WARN_IF(!m_bSortedPageChain, "sot", "unsorted page chain, that's suspicious");
+
+    return true;
+}
+
+//See fdo#47644 for a .doc with a vast amount of pages where seeking around the
+//document takes a colossal amount of time
+//
+//There's a cost to building a page cache, so only build one if the number of
+//pages to seek through hits some sufficiently high value where it's worth it.
+#define ARBITRARY_LARGE_AMOUNT_OF_PAGES 256
+
 // Compute page number and offset for the given byte position.
 // If the position is behind the size, set the stream right
 // behind the EOF.
@@ -354,7 +384,7 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         return sal_True;
     if( nNew > nOld )
     {
-        // the new position is behind the current, so an incremental
+        // the new position is after the current, so an incremental
         // positioning is OK. Set the page relative position
         nRel = nNew - nOld;
         nBgn = nPage;
@@ -368,13 +398,59 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     }
     // now, traverse the FAT chain.
     nRel /= nPageSize;
+
     sal_Int32 nLast = STG_EOF;
-    while( nRel && nBgn >= 0 )
+    if (m_aPagesCache.empty() && nRel < ARBITRARY_LARGE_AMOUNT_OF_PAGES)
     {
-        nLast = nBgn;
-        nBgn = pFat->GetNextPage( nBgn );
-        nRel--;
+        while (nRel && nBgn >= 0)
+        {
+            nLast = nBgn;
+            nBgn = pFat->GetNextPage( nBgn );
+            nRel--;
+        }
     }
+    else if (nBgn >= 0)
+    {
+        //Seeking large distances is slow, so if we're starting seeking (some
+        //fairly arbitrary) large distances, build a cache and re-use it for
+        //subsequent seeks
+        if (m_aPagesCache.empty())
+        {
+            fprintf(stderr, "kicking off large seek helper\n");
+            buildPageChainCache();
+        }
+
+        std::vector<sal_Int32>::iterator aI;
+
+        if (m_bSortedPageChain)
+            aI = std::lower_bound(m_aPagesCache.begin(), m_aPagesCache.end(), nBgn);
+        else
+            aI = std::find(m_aPagesCache.begin(), m_aPagesCache.end(), nBgn);
+
+        if (aI == m_aPagesCache.end())
+        {
+            SAL_WARN("sot", "Unknown page position");
+            nBgn = STG_EOF;
+        }
+        else
+        {
+            size_t nBgnDistance = std::distance(m_aPagesCache.begin(), aI);
+
+            size_t nIndex = nBgnDistance + nRel;
+
+            if (nIndex > m_aPagesCache.size())
+            {
+                nRel = m_aPagesCache.size() - nBgnDistance;
+                nIndex = m_aPagesCache.size() - 1;
+            }
+            else
+                nRel = 0;
+
+            nLast = nIndex ? m_aPagesCache[nIndex - 1] : STG_EOF;
+            nBgn = m_aPagesCache[nIndex];
+        }
+    }
+
     // special case: seek to 1st byte of new, unallocated page
     // (in case the file size is a multiple of the page size)
     if( nBytePos == nSize && nBgn == STG_EOF && !nRel && !nOffset )
@@ -403,6 +479,8 @@ StgPage* StgStrm::GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce )
 
 sal_Bool StgStrm::Copy( sal_Int32 nFrom, sal_Int32 nBytes )
 {
+    m_aPagesCache.clear();
+
     sal_Int32 nTo = nStart;
     sal_Int32 nPgs = ( nBytes + nPageSize - 1 ) / nPageSize;
     while( nPgs-- )
@@ -429,6 +507,8 @@ sal_Bool StgStrm::Copy( sal_Int32 nFrom, sal_Int32 nBytes )
 
 sal_Bool StgStrm::SetSize( sal_Int32 nBytes )
 {
+    m_aPagesCache.clear();
+
     // round up to page size
     sal_Int32 nOld = ( ( nSize + nPageSize - 1 ) / nPageSize ) * nPageSize;
     sal_Int32 nNew = ( ( nBytes + nPageSize - 1 ) / nPageSize ) * nPageSize;
@@ -527,6 +607,8 @@ sal_Int32 StgFATStrm::GetPage( short nOff, sal_Bool bMake, sal_uInt16 *pnMasterA
         {
             if( bMake )
             {
+                m_aPagesCache.clear();
+
                 // create a new master page
                 nFAT = nMaxPage++;
                 pMaster = rIo.Copy( nFAT, STG_FREE );
@@ -581,6 +663,8 @@ sal_Int32 StgFATStrm::GetPage( short nOff, sal_Bool bMake, sal_uInt16 *pnMasterA
 
 sal_Bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
 {
+    m_aPagesCache.clear();
+
     sal_Bool bRes = sal_True;
     if( nOff < rIo.aHdr.GetFAT1Size() )
         rIo.aHdr.SetFATPage( nOff, nNewPage );
@@ -630,6 +714,8 @@ sal_Bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
 
 sal_Bool StgFATStrm::SetSize( sal_Int32 nBytes )
 {
+    m_aPagesCache.clear();
+
     // Set the number of entries to a multiple of the page size
     short nOld = (short) ( ( nSize + ( nPageSize - 1 ) ) / nPageSize );
     short nNew = (short) (
@@ -746,16 +832,10 @@ void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
     {
         // determine the actual size of the stream by scanning
         // the FAT chain and counting the # of pages allocated
-        nSize = 0;
-        sal_Int32 nOldBgn = -1;
-        while( nBgn >= 0 && nBgn != nOldBgn )
-        {
-            nOldBgn = nBgn;
-            nBgn = pFat->GetNextPage( nBgn );
-            if( nBgn == nOldBgn )
-                rIo.SetError( ERRCODE_IO_WRONGFORMAT );
-            nSize += nPageSize;
-        }
+        bool bOk = buildPageChainCache();
+        if (!bOk)
+            rIo.SetError( ERRCODE_IO_WRONGFORMAT );
+        nSize = m_aPagesCache.size() * nPageSize;
     }
 }
 
