@@ -17,10 +17,12 @@ endif
 
 include $(SRCDIR)/config_$(gb_Side).mk
 
+ifeq ($(GMAKE_OPTIONS),)
 ifeq ($(verbose),)
 export GMAKE_OPTIONS:=-rs
 else
 export GMAKE_OPTIONS:=-r
+endif
 endif
 
 gbuild_modules:= \
