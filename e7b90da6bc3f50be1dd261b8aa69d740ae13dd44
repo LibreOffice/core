@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAACH///+0\u003d",
+        "filename": "l10ntools/source/help/HelpLinker_main.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-05-03T12:56:35Z",
+      "side": 1,
+      "message": "this contains code from HelpLinker.cxx so presumably should carry the Oracle license header?",
+      "revId": "e7b90da6bc3f50be1dd261b8aa69d740ae13dd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACH///+8\u003d",
         "filename": "l10ntools/source/srclex.l",
         "patchSetId": 5
