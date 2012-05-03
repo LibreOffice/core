@@ -243,7 +243,7 @@ $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 
 # XcuMergeTarget class
 
-gb_XcuMergeTarget_CFGEXTARGET := $(call gb_Executable_get_target,cfgex)
+gb_XcuMergeTarget_CFGEXTARGET := $(call gb_Executable_get_target_for_build,cfgex)
 gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_CFGEXTARGET)
 
 # PRJNAME is computed from the stem (parameter $(2))
