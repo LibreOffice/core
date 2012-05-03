@@ -202,13 +202,13 @@ namespace connectivity
                 }
                 if (profileName.getLength() != 0 || profilePath.getLength() != 0)
                 {
-#ifndef MINIMAL_PROFILEDISCOVER
                     sal_Int32 isRelative = 0;
                     if (sIsRelative.getLength() != 0)
                     {
                         isRelative = sIsRelative.toInt32();
                     }
 
+#ifndef MINIMAL_PROFILEDISCOVER
                     nsCOMPtr<nsILocalFile> rootDir;
                     rv = NS_NewLocalFile(EmptyString(), PR_TRUE,
                                             getter_AddRefs(rootDir));
@@ -229,11 +229,21 @@ namespace connectivity
                         rv = rootDir->SetPersistentDescriptor(filePath);
                     }
                     if (NS_FAILED(rv)) continue;
+#else
+                    rtl::OUString fullProfilePath;
+                    if(isRelative)
+                    {
+                        fullProfilePath = regDir + profilePath;
+                    }
+                    else
+                    {
+                        fullProfilePath = profilePath;
+                    }
 #endif
 
                     ProfileStruct*  profileItem     = new ProfileStruct(product,profileName,
 #ifdef MINIMAL_PROFILEDISCOVER
-                            regDir + profilePath
+                            fullProfilePath
 #else
                             rootDir
 #endif
