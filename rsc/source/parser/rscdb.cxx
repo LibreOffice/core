@@ -36,6 +36,7 @@
 #include <tools/fsys.hxx>
 #include <tools/rc.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 
 // Programmabhaengige Includes.
@@ -528,7 +529,8 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 |*    RscEnumerateObj :: WriteRcFile
 |*
 *************************************************************************/
-void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
+void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
+{
     // Definition der Struktur, aus denen die Resource aufgebaut ist
     /*
     struct RSHEADER_TYPE{
@@ -568,8 +570,8 @@ void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
 
 
     //Position wurde vorher in Tabelle geschrieben
-    fwrite( rMem.GetBuffer(), rMem.Size(), 1, fOut );
-
+    bool bSuccess = (1 == fwrite( rMem.GetBuffer(), rMem.Size(), 1, fOut ));
+    SAL_WARN_IF(!bSuccess, "rsc", "short write");
 };
 
 class RscEnumerateRef
@@ -721,7 +723,9 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
     unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
-    fwrite( aUTF8BOM, sizeof(unsigned char), SAL_N_ELEMENTS(aUTF8BOM), fOutput );
+    size_t nItems = SAL_N_ELEMENTS(aUTF8BOM);
+    bool bSuccess = (nItems == fwrite(aUTF8BOM, 1, nItems, fOutput));
+    SAL_WARN_IF(!bSuccess, "rsc", "short write");
     if( bName )
     {
         WriteInc( fOutput, nFileKey );
