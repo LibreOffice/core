@@ -72,6 +72,7 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/eerdll.hxx,editeng/eer
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/emphitem.hxx,editeng/emphitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/escpitem.hxx,editeng/escpitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/fhgtitem.hxx,editeng/fhgtitem.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/fieldupdater.hxx,editeng/fieldupdater.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/flditem.hxx,editeng/flditem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/flstitem.hxx,editeng/flstitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/fontitem.hxx,editeng/fontitem.hxx))

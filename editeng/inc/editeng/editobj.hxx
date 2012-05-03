@@ -48,6 +48,12 @@ class SvxFieldItem;
 #define EDTOBJ_SETTINGS_ULITEMSUMMATION     0x00000001
 #define EDTOBJ_SETTINGS_ULITEMFIRSTPARA     0x00000002
 
+namespace editeng {
+
+class FieldUpdater;
+
+}
+
 class EDITENG_DLLPUBLIC EditTextObject
 {
 private:
@@ -118,6 +124,8 @@ public:
     virtual sal_Bool        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                             const XubString& rNewName, SfxStyleFamily eNewFamily );
     virtual void        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
+
+    virtual editeng::FieldUpdater GetFieldUpdater() = 0;
 
     bool                operator==( const EditTextObject& rCompare ) const;
 

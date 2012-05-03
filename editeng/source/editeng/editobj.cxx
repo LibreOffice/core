@@ -35,6 +35,7 @@
 
 #include <tools/stream.hxx>
 
+#include "editeng/fieldupdater.hxx"
 #include <editobj2.hxx>
 #include <editeng/editdata.hxx>
 #include <editattr.hxx>
@@ -86,6 +87,10 @@ bool XEditAttribute::IsFeature() const
     return  ((nWhich >= EE_FEATURE_START) && (nWhich <=  EE_FEATURE_END));
 }
 
+void XEditAttribute::SetItem(const SfxPoolItem& rNew)
+{
+    pItem = &rNew;
+}
 
 XParaPortionList::XParaPortionList(
     OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY) :
@@ -1021,6 +1026,11 @@ void BinTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
                 const XubString& rOldName, const XubString& rNewName )
 {
     ImpChangeStyleSheets( rOldName, eFamily, rNewName, eFamily );
+}
+
+editeng::FieldUpdater BinTextObject::GetFieldUpdater()
+{
+    return editeng::FieldUpdater(*this);
 }
 
 namespace {

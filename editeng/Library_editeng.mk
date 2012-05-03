@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/eeobj \
     editeng/source/editeng/eerdll \
     editeng/source/editeng/eertfpar \
+    editeng/source/editeng/fieldupdater \
     editeng/source/editeng/impedit \
     editeng/source/editeng/impedit2 \
     editeng/source/editeng/impedit3 \

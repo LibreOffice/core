@@ -63,6 +63,7 @@ public:
     sal_uInt16              GetLen() const              { return nEnd-nStart; }
 
     bool IsFeature() const;
+    void SetItem(const SfxPoolItem& rNew);
 
     inline bool operator==( const XEditAttribute& rCompare ) const;
 
@@ -253,6 +254,8 @@ public:
     virtual sal_Bool            ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                                 const String& rNewName, SfxStyleFamily eNewFamily );
     virtual void            ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
+
+    virtual editeng::FieldUpdater GetFieldUpdater();
 
     void                    CreateData300( SvStream& rIStream );
 

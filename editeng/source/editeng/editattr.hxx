@@ -30,6 +30,9 @@
 #define _EDITATTR_HXX
 
 #include <editeng/eeitem.hxx>
+#include <svl/poolitem.hxx>
+
+#include <boost/noncopyable.hpp>
 
 class SvxFont;
 class SvxFontItem;
@@ -52,10 +55,8 @@ class SvxFieldItem;
 class SvxLanguageItem;
 class SvxEmphasisMarkItem;
 class SvxCharReliefItem;
-#include <svl/poolitem.hxx>
-
-
 class SfxVoidItem;
+class OutputDevice;
 
 #define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      (sal_Unicode)   0x01
