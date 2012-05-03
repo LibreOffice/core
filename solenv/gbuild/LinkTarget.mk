@@ -1042,7 +1042,6 @@ $$(call gb_Output_error,\
 endef
 
 define gb_LinkTarget_add_auxtargets
-$(2) :| $(call gb_LinkTarget_get_target,$(1))
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
 
 endef

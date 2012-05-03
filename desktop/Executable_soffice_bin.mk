@@ -55,6 +55,21 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
     /STACK:10000000 \
 ))
 
+# HACK: Copy manifest to $(OUTDIR)/bin under the right name. The
+# executable is copied in Package_soffice_bin, but that does not work
+# for the manifest, for some reason...
+$(call gb_Module_get_target,desktop) : $(OUTDIR)/bin/soffice.bin.manifest
+
+$(OUTDIR)/bin/soffice.bin.manifest : $(call gb_Executable_get_target,soffice_bin)
+$(call gb_Executable_get_clean_target,soffice_bin) : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
+
+$(OUTDIR)/bin/soffice.bin.manifest : $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,soffice_bin))
+	$(call gb_Deliver_deliver,$<.manifest,$@)
+
+.PHONY : $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest
+$(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest :
+	rm -f $(OUTDIR)/bin/soffice.bin.manifest
+
 endif
 
 $(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/src))
