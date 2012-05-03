@@ -234,13 +234,6 @@ sal_uLong StorageStream::Seek( sal_uLong n )
         return n;
 }
 
-sal_Size StorageStream::remainingSize()
-{
-    if( Validate() )
-        return pEntry->GetSize() - Tell();
-    return 0;
-}
-
 void StorageStream::Flush()
 {
     // Flushing means committing, since streams are never transacted
@@ -257,6 +250,13 @@ sal_Bool StorageStream::SetSize( sal_uLong nNewSize )
     }
     else
         return sal_False;
+}
+
+sal_uLong StorageStream::GetSize() const
+{
+    if( Validate() )
+        return pEntry->GetSize();
+    return 0;
 }
 
 sal_Bool StorageStream::Commit()
