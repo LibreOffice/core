@@ -352,8 +352,6 @@ public:
 class SvStream;
 class Graphic;
 
-bool importSvg(SvStream & rStream, Graphic & rGraphic );
-
 #endif // SVGFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
