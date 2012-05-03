@@ -437,7 +437,7 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         //subsequent seeks
         if (m_aPagesCache.empty())
         {
-            fprintf(stderr, "kicking off large seek helper\n");
+            SAL_WARN("sot", "kicking off large seek helper\n");
             buildPageChainCache();
         }
 
