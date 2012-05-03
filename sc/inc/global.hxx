@@ -38,6 +38,7 @@
 #include "scdllapi.h"
 
 #include <boost/unordered_map.hpp>
+#include <vector>
 
 class ImageList;
 class Bitmap;
