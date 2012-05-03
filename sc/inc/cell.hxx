@@ -243,7 +243,7 @@ public:
 
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
-                    ScEditCell( const ScEditCell& rCell, ScDocument& rDoc );
+    ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos);
                     // for line breaks
                     ScEditCell( const rtl::OUString& rString, ScDocument* );
 

@@ -38,6 +38,7 @@
 #include <vcl/mapmod.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
+#include "editeng/fieldupdater.hxx"
 
 #include "cell.hxx"
 #include "compiler.hxx"
@@ -73,12 +74,13 @@ ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
     SetTextObject( pObject, pFromPool );
 }
 
-ScEditCell::ScEditCell( const ScEditCell& rCell, ScDocument& rDoc )  :
-        ScBaseCell( rCell ),
-        pString( NULL ),
-        pDoc( &rDoc )
+ScEditCell::ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddress& rDestPos) :
+    ScBaseCell(rCell), pString(NULL), pDoc(&rDoc)
 {
     SetTextObject( rCell.pData, rCell.pDoc->GetEditPool() );
+
+    editeng::FieldUpdater aUpdater = pData->GetFieldUpdater();
+    aUpdater.updateTableFields(rDestPos.Tab());
 }
 
 ScEditCell::ScEditCell( const rtl::OUString& rString, ScDocument* pDocP )  :

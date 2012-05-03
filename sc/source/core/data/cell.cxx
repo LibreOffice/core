@@ -112,7 +112,7 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
         case CELLTYPE_STRING:
             return new ScStringCell( static_cast< const ScStringCell& >( rSrcCell ) );
         case CELLTYPE_EDIT:
-            return new ScEditCell( static_cast< const ScEditCell& >( rSrcCell ), rDestDoc );
+            return new ScEditCell(static_cast<const ScEditCell&>(rSrcCell), rDestDoc, rDestPos);
         case CELLTYPE_FORMULA:
             return new ScFormulaCell( static_cast< const ScFormulaCell& >( rSrcCell ), rDestDoc, rDestPos, nCloneFlags );
         case CELLTYPE_NOTE:
