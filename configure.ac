@@ -1106,6 +1106,11 @@ AC_ARG_ENABLE(winegcc,
          needed for MinGW cross-compilation.]),
 )
 
+AC_ARG_ENABLE(mono,
+    AS_HELP_STRING([--enable-mono],
+        [Enables the compilation of the Mono bindings]),
+,)
+
 AC_ARG_ENABLE(liblangtag,
     AS_HELP_STRING([--disable-liblangtag],
         [Disable use of liblangtag, and insted use an own simple
@@ -4793,6 +4798,7 @@ if test "$build_os" = "cygwin"; then
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     MIDL_PATH=`cygpath -d "$MIDL_PATH"`
     MIDL_PATH=`cygpath -u "$MIDL_PATH"`
+    AL=al.exe
 
     dnl Check csc.exe
     AC_PATH_PROG(CSC_PATH, csc.exe)
@@ -4897,6 +4903,82 @@ if test "$build_os" = "cygwin"; then
     CSC_PATH="$formatted_path"
 
 fi
+
+dnl ===================================================================
+dnl Check whether to enable Mono bindings
+dnl ===================================================================
+if test "$_os" = "Linux"; then
+    AC_MSG_CHECKING([whether to enable Mono bindings])
+    CSC_PATH=
+    CSC=
+    ENABLE_MONO=NO
+    if test "$enable_mono" = "yes" ; then
+        AC_MSG_RESULT([yes])
+        if test "z$with_csc_path" != "z"; then
+                if test -x "$with_csc_path/mcs"; then
+                        CSC_PATH="$with_csc_path"
+                fi
+                if test -x "$with_csc_path/bin/mcs"; then
+                        CSC_PATH="$with_csc_path/bin"
+                fi
+        fi
+            if test "z$CSC_PATH" = "z"; then
+            AC_PATH_PROG(MCS, mcs)
+            test -z "$MCS" || CSC_PATH=`dirname $MCS`
+            fi
+                AL="$CSC_PATH/al"
+        if test -x "$MCS" -a -x "$AL"; then
+            MCS_VERSION=`$MCS --version | cut -d" " -f5`
+            if test "`echo $MCS_VERSION | cut -d"." -f1`" -gt "1" || \
+               test "`echo $MCS_VERSION | cut -d"." -f1`" = "1" -a \
+                    "`echo $MCS_VERSION | cut -d"." -f2`" -ge "2" || \
+               test "`echo $MCS_VERSION | cut -d"." -f1`" = "1" -a \
+                    "`echo $MCS_VERSION | cut -d"." -f2`" = "1" -a \
+                        "`echo $MCS_VERSION | cut -d"." -f3`" -ge "8"; then
+                ENABLE_MONO=YES
+                CSC=$MCS
+                AC_PATH_PROG(GMCS, gmcs, no)
+                AC_PATH_PROG(MKBUNDLE2, mkbundle2, no)
+                AC_PATH_PROG(MKBUNDLE, mkbundle, no)
+                if test "x$MKBUNDLE2" != "xno"; then
+                    MKBUNDLE=$MKBUNDLE2
+                fi
+                GMCS_VERSION=`$GMCS --version | cut -d" " -f5`
+                if test "`echo $GMCS_VERSION | cut -d"." -f1`" -gt "1" || \
+                   test "`echo $GMCS_VERSION | cut -d"." -f1`" = "1" -a \
+                        "`echo $GMCS_VERSION | cut -d"." -f2`" -ge "3" || \
+                   test "`echo $GMCS_VERSION | cut -d"." -f1`" = "1" -a \
+                    "`echo $GMCS_VERSION | cut -d"." -f2`" = "2" -a \
+                    "`echo $GMCS_VERSION | cut -d"." -f3`" -ge "3"; then
+                    # mkbundle2 does not work on ppc, http://bugzilla.ximian.com/show_bug.cgi?id=81525
+                    if test "`uname -m`" != "ppc" -a "`uname -m`" != "ppc64" ; then
+                    ENABLE_MONO_CLIMAKER=YES
+                    AC_MSG_NOTICE([mono is up-to-date enough - building mono climaker])
+                    fi
+                fi
+            else
+                if test -n "$enable_mono" ; then
+                    AC_MSG_ERROR([no, mcs >= 1.1.8 is needed.])
+                fi
+            fi
+        else
+            if test -n "$enable_mono"; then
+                AC_MSG_ERROR([mcs or al not found. Make sure they're in the path or use --with-csc-path])
+            fi
+        fi
+        PKG_CHECK_MODULES([MONO], [mono-2 glib-2.0],,[PKG_CHECK_MODULES([MONO], [mono >= 1.1.8 glib-2.0])])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(CSC_PATH)
+AC_SUBST(CSC)
+AC_SUBST(AL)
+AC_SUBST(ENABLE_MONO)
+AC_SUBST(MONO_CFLAGS)
+AC_SUBST(MONO_LIBS)
+AC_SUBST(ENABLE_MONO_CLIMAKER)
+AC_SUBST(MKBUNDLE)
 
 dnl ===================================================================
 dnl Check if stdc headers are available excluding MSVC.
