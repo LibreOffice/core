@@ -43,8 +43,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(if $(filter-out $(JARDEPS),$(4)), \
 		rm -rf $(call gb_JavaClassSet_get_classdir,$(2))/* && \
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-			$(call gb_Helper_native_path,\
-			$(filter-out $(JARDEPS),$(4)))) && \
+			$(filter-out $(JARDEPS),$(4))) && \
 		$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
 			$(gb_JavaClassSet_JAVACDEBUG) \
 			-cp "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \

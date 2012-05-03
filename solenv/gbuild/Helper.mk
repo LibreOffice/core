@@ -44,25 +44,15 @@ define gb_Helper_abbreviate_dirs
 S=$(SRCDIR) && \
 $(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
 $(subst $(SRCDIR)/,$$S/,W=$(WORKDIR)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,\
-$(call gb_Helper_unix_path,$(1)))))
+$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(1))))
 endef
 
 define gb_Helper_abbreviate_dirs_native
-$(call gb_Helper_native_path,$(call gb_Helper_abbreviate_dirs,$(1)))
+$(call gb_Helper_abbreviate_dirs,$(1))
 endef
 
-# Convert path to native notation
-# First convert to unix style to avoid problems when
-# $(SRCDIR) is substring of $(gb_Helper_SRCDIR_NATIVE)
-# and $(1) already contains $(gb_Helper_SRCDIR_NATIVE)
 define gb_Helper_native_path
-$(subst $(SRCDIR),$(gb_Helper_SRCDIR_NATIVE),$(call gb_Helper_unix_path,$(1)))
-endef
-
-# $(gb_Helper_SRCDIR_NATIVE) can't be substring of $(SRCDIR)
-define gb_Helper_unix_path
-$(subst $(gb_Helper_SRCDIR_NATIVE),$(SRCDIR),$(1))
+$$(call gb_Output_error,gb_Helper_native_path: Do not use. Should not be necessary.)
 endef
 
 define gb_Helper_make_clean_target

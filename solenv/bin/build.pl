@@ -76,18 +76,6 @@
 #                       #
 #########################
 
-    # This is to undo the EVIL in solenv/gbuild/BuildDirs.mk
-    if ($ENV{OS_FOR_BUILD} eq 'WNT') {
-        $ENV{WORKDIR} = `cygpath -m '$ENV{WORKDIR}'`;
-        $ENV{OUTDIR} = `cygpath -m '$ENV{OUTDIR}'`;
-        $ENV{OUTDIR_FOR_BUILD} = `cygpath -m '$ENV{OUTDIR_FOR_BUILD}'`;
-        $ENV{SRCDIR} = `cygpath -m '$ENV{SRCDIR}'`;
-        chomp($ENV{WORKDIR});
-        chomp($ENV{OUTDIR});
-        chomp($ENV{OUTDIR_FOR_BUILD});
-        chomp($ENV{SRCDIR});
-    }
-
     my $modules_number++;
     my $perl = 'perl';
     my $remove_command = 'rm -rf';

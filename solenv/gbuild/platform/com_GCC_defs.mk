@@ -160,6 +160,5 @@ endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib
-gb_Helper_SRCDIR_NATIVE := $(SRCDIR)
 
 gb_Helper_get_rcfile = $(1)rc

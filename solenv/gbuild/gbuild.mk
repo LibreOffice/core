@@ -69,9 +69,6 @@ endif
 
 include $(GBUILDDIR)/Output.mk
 
-# BuildDirs overrides *DIR variables for Windows
-include $(GBUILDDIR)/BuildDirs.mk
-
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)

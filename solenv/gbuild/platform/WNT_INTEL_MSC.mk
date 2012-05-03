@@ -239,9 +239,8 @@ endif
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
-gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR))
 
-gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_Helper_set_ld_path := PATH="$${PATH}:$(shell cygpath -u $(OUTDIR)/bin)"
 
 # Convert path to file URL.
 define gb_Helper_make_url
@@ -331,13 +330,13 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
-		$(call gb_Helper_native_path,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
-		$(NATIVERES))) && \
+		$(NATIVERES)) && \
 	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
@@ -567,9 +566,7 @@ endef
 gb_CppunitTest_DEFS := -D_DLL
 # cppunittester.exe is in the cppunit subdirectory of ${OUTDIR}/bin,
 # thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
-# PATH is the Cygwin one while ${OUTDIR} is a Win32 pathname, thus
-# cygpath -u.
-gb_CppunitTest_CPPTESTPRECOMMAND := PATH="`cygpath -u $(OUTDIR)`/bin:$${PATH}"
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
 
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
@@ -697,6 +694,6 @@ gb_WinResTarget__command_dep =
 endif
 
 # Python
-gb_PYTHON_PRECOMMAND := PATH="$${PATH}:$(shell cygpath -m $(OUTDIR_FOR_BUILD)/bin)" PYTHONHOME="$(shell cygpath -m $(OUTDIR_FOR_BUILD))/lib/python" PYTHONPATH="$(shell cygpath -m $(OUTDIR_FOR_BUILD))/lib/python;$(shell cygpath -m $(OUTDIR_FOR_BUILD))/lib/python/lib-dynload"
+gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"
 
 # vim: set noet sw=4:

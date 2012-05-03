@@ -3760,6 +3760,9 @@ if test "$_make_longver" -ge "038200"; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
 
 elif test "$_make_longver" -ge "038100"; then
+    if test "$build_os" = "cygwin"; then
+        AC_MSG_ERROR([failed ($GNUMAKE version >= 3.82 needed])
+    fi
     AC_MSG_RESULT([$GNUMAKE $_make_version])
 
     dnl ===================================================================

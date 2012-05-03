@@ -360,16 +360,10 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 # config_host.mk which is included in this
 # Makefile
 
-ifeq ($(OS_FOR_BUILD),WNT)
-CONFIG_HOST_MK=$(shell cygpath -u $(SRCDIR))/config_host.mk
-else
-CONFIG_HOST_MK=$(SRCDIR)/config_host.mk
-endif
-
-Makefile: $(CONFIG_HOST_MK)
+Makefile: $(SRCDIR)/config_host.mk
 	touch $@
 
-$(CONFIG_HOST_MK) : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
+$(SRCDIR)/config_host.mk: config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
 	./autogen.sh
 
 autogen.lastrun:
@@ -390,17 +384,11 @@ endif
 #
 # Bootstap
 #
-ifeq ($(OS_FOR_BUILD),WNT)
-WORKDIR_BOOTSTRAP=$(shell cygpath -u $(WORKDIR))/bootstrap
-else
-WORKDIR_BOOTSTRAP=$(WORKDIR)/bootstrap
-endif
+bootstrap: $(WORKDIR)/bootstrap
 
-$(WORKDIR_BOOTSTRAP):
+$(WORKDIR)/bootstrap:
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
-
-bootstrap: $(WORKDIR_BOOTSTRAP)
 
 #
 # Build
