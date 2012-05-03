@@ -64,4 +64,14 @@ oslModule SAL_CALL osl_loadModuleRelative(
     return ::osl_loadModule(abs.pData, mode);
 }
 
+oslModule SAL_CALL osl_loadAsciiModuleRelative(
+    oslGenericFunction const baseModule, const sal_Char* pRelativePathName,
+    sal_Int32 const nRtldMode)
+{
+    rtl_uString* pUniName = NULL;
+    rtl_uString_newFromAscii( &pUniName, pRelativePathName );
+    oslModule aModule = osl_loadModuleRelative( baseModule, pUniName, nRtldMode );
+    rtl_uString_release( pUniName );
+}
+
 }

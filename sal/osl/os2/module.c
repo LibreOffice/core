@@ -54,6 +54,15 @@ ULONG APIENTRY _DosLoadModule (PSZ pszObject, ULONG uObjectLen, PCSZ pszModule,
     return rc;
 }
 
+oslModule SAL_CALL osl_loadAsciiModule( const sal_Char* pModuleName, sal_Int32 nRtldMode )
+{
+    rtl_uString* pUniName = NULL;
+    rtl_uString_newFromAscii( &pUniName, pModuleName );
+    oslModule aModule = osl_loadModule( pUniName, nRtldMode );
+    rtl_uString_release( pUniName );
+    return aModule;
+}
+
 oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
     HMODULE hModule;

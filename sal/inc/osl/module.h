@@ -66,9 +66,16 @@ typedef void ( SAL_CALL *oslGenericFunction )( void );
 
 /** Load a shared library or module.
     @param strModuleName denotes the name of the module to be loaded.
+    @param nRtldMode mode defined by logically OR-ing of SAL_LOADMODULE_* flags.
     @return NULL if the module could not be loaded, otherwise a handle to the module.
 */
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
+/** Load a shared library or module.
+    @param pModuleName denotes the name of the module to be loaded.
+    @param nRtldMode mode defined by logically OR-ing of SAL_LOADMODULE_* flags.
+    @return NULL if the module could not be loaded, otherwise a handle to the module.
+*/
+oslModule SAL_CALL osl_loadAsciiModule( const sal_Char* pModuleName, sal_Int32 nRtldMode);
 
 /** Load a module located relative to some other module.
 
@@ -79,8 +86,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     @param relativePath
     a relative URL; must not be NULL.
 
-    @param mode
-    the SAL_LOADMODULE_xxx flags.
+    @param nRtldMode mode defined by logically OR-ing of SAL_LOADMODULE_* flags.
 
     @return
     a non-NULL handle to the loaded module, or NULL if an error occurred.
@@ -88,7 +94,23 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     @since UDK 3.2.8
 */
 oslModule SAL_CALL osl_loadModuleRelative(
-    oslGenericFunction baseModule, rtl_uString * relativePath, sal_Int32 mode);
+    oslGenericFunction baseModule, rtl_uString* relativePath, sal_Int32 nRtldMode);
+/** Load a module located relative to some other module.
+
+    @param baseModule
+    must point to a function that is part of the code of some loaded module;
+    must not be NULL.
+
+    @param relativePath
+    a relative URL; must not be NULL.
+
+    @param nRtldMode mode defined by logically OR-ing of SAL_LOADMODULE_* flags.
+
+    @return
+    a non-NULL handle to the loaded module, or NULL if an error occurred.
+*/
+oslModule SAL_CALL osl_loadAsciiModuleRelative(
+    oslGenericFunction baseModule, const sal_Char* relativePath, sal_Int32 nRtldMode);
 
 /** Retrieve the handle of an already loaded module.
 
@@ -153,7 +175,7 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     @param Module
     [in] a module handle as returned by osl_loadModule or osl_getModuleHandle
 
-    @param pFunctionSymbolName
+    @param pSymbolName
     [in] Name of the function that will be looked up.
 
     @return
@@ -167,7 +189,7 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     @see osl_getModuleHandle
     @see osl_getFunctionSymbol
 */
-oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol);
+oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbolName);
 
 
 /** Lookup URL of module which is mapped at the specified address.

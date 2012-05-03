@@ -37,8 +37,6 @@
 /* implemented in file.c */
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
-
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
@@ -59,7 +57,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
         char buffer[PATH_MAX];
 
         if (UnicodeToText(buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length))
-            pModule = osl_psz_loadModule(buffer, nRtldMode);
+            pModule = osl_loadAsciiModule(buffer, nRtldMode);
         rtl_uString_release(ustrTmp);
     }
 
@@ -67,10 +65,10 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 }
 
 /*****************************************************************************/
-/* osl_psz_loadModule */
+/* osl_loadAsciiModule */
 /*****************************************************************************/
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
+oslModule SAL_CALL osl_loadAsciiModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
 {
     OSL_ASSERT(
         (nRtldMode & SAL_LOADMODULE_LAZY) == 0 ||
