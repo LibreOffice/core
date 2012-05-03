@@ -334,6 +334,27 @@ void StgStrm::SetEntry( StgDirEntry& r )
     r.SetDirty();
 }
 
+namespace lcl
+{
+#if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
+    using std::is_sorted;
+#else
+    template <typename iter> bool is_sorted(iter aStart, iter aEnd)
+    {
+        if (aStart == aEnd)
+            return true;
+
+        for (iter aNext = aStart + 1; aNext != aEnd; aStart = aNext, ++aNext)
+        {
+            if (*aNext < *aStart)
+                return false;
+        }
+
+        return true;
+    }
+#endif
+}
+
 bool StgStrm::buildPageChainCache()
 {
     if (nSize > 0)
@@ -349,7 +370,7 @@ bool StgStrm::buildPageChainCache()
             return false;
     }
 
-    m_bSortedPageChain = std::is_sorted(m_aPagesCache.begin(), m_aPagesCache.end());
+    m_bSortedPageChain = lcl::is_sorted(m_aPagesCache.begin(), m_aPagesCache.end());
 
     SAL_WARN_IF(!m_bSortedPageChain, "sot", "unsorted page chain, that's suspicious");
 
