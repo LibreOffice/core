@@ -580,6 +580,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     nOLEOptions = rSource.nOLEOptions;
     eLanguage = rSource.eLanguage;
     sSortAlgorithm = rSource.sSortAlgorithm;
+    bLevelFromChapter = rSource.bLevelFromChapter;
 
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
         aStyleNames[i] = rSource.aStyleNames[i];
