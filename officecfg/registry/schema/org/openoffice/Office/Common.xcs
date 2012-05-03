@@ -1811,9 +1811,7 @@
           </info>
           <value>$(progpath)/addin</value>
         </prop>
-        <prop
-            oor:name="AutoCorrect" oor:type="oor:string-list"
-            oor:nillable="false">
+        <prop oor:name="AutoCorrect" oor:type="oor:string-list">
           <info>
             <author>OS</author>
             <desc>Specifies the settings of the AutoCorrect dialog.</desc>
@@ -1823,8 +1821,7 @@
             <it>$(userurl)/autocorr</it>
           </value>
         </prop>
-        <prop
-            oor:name="AutoText" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="AutoText" oor:type="oor:string-list">
           <info>
             <author>OS</author>
             <desc>Contains the directory which contains the AutoText
@@ -1835,7 +1832,7 @@
             <it>$(userurl)/autotext</it>
           </value>
         </prop>
-        <prop oor:name="Backup" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="Backup" oor:type="xs:string">
           <info>
             <author>MBA</author>
             <desc>Stores the automatic backup copies of documents.</desc>
@@ -1892,7 +1889,7 @@
           <value>$(progpath)/filter</value>
         </prop>
         <prop
-            oor:name="Gallery" oor:type="oor:string-list" oor:nillable="false">
+            oor:name="Gallery" oor:type="oor:string-list">
           <info>
             <author>AF</author>
             <desc>Specifies the directory which contains the Gallery database
@@ -1903,7 +1900,7 @@
             <it>$(userurl)/gallery</it>
           </value>
         </prop>
-        <prop oor:name="Graphic" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="Graphic" oor:type="xs:string">
           <info>
             <author>DL</author>
             <desc>Specifies the directory that is displayed when the dialog for
@@ -1958,7 +1955,7 @@
           </info>
           <value>$(userpath)/store</value>
         </prop>
-        <prop oor:name="Temp" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="Temp" oor:type="xs:string">
           <info>
             <deprecated>Replaced by
             org.openoffice.Office.Paths/Temp</deprecated>
@@ -2007,7 +2004,7 @@
           </info>
           <value>$(userurl)/wordbook</value>
         </prop>
-        <prop oor:name="Work" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="Work" oor:type="xs:string">
           <info>
             <author>MBA</author>
             <desc>Specifies the path of the work folder, which can be modified
