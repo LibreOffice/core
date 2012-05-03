@@ -44,6 +44,7 @@
 
 #include <plugin/impl.hxx>
 
+#include <sal/log.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <tools/fsys.hxx>
@@ -340,7 +341,11 @@ void FileSink::closeOutput() throw()
 void FileSink::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
 {
     if( fp )
-        fwrite( Buffer.getConstArray(), 1, Buffer.getLength(), fp );
+    {
+        size_t nItems = Buffer.getLength();
+        bool bSuccess = (fwrite(Buffer.getConstArray(), 1, nItems, fp) == nItems);
+        SAL_WARN_IF( !bSuccess, "extensions", "short write");
+    }
 }
 
 void FileSink::flush() throw()

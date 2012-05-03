@@ -748,12 +748,14 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 if( nLen && ( nStatus == SANE_STATUS_GOOD ||
                               nStatus == SANE_STATUS_EOF ) )
                 {
-                    fwrite( pBuffer, 1, nLen, pFrame );
+                    bSuccess = (static_cast<size_t>(nLen) == fwrite( pBuffer, 1, nLen, pFrame ));
+                    if (!bSuccess)
+                        break;
                 }
                 else
                     DUMP_STATE( nStatus, "sane_read" );
             } while( nStatus == SANE_STATUS_GOOD );
-            if( nStatus != SANE_STATUS_EOF )
+            if (nStatus != SANE_STATUS_EOF || !bSuccess)
             {
                 fclose( pFrame );
                 bSuccess = sal_False;

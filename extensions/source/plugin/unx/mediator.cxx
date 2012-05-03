@@ -30,6 +30,7 @@
 #include <unistd.h>
 
 #include <plugin/unx/mediator.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #define MEDIATOR_MAGIC 0xf7a8d2f4
@@ -59,7 +60,9 @@ Mediator::~Mediator()
             aHeader[0] = 0;
             aHeader[1] = 0;
             aHeader[2] = MEDIATOR_MAGIC;
-            write( m_nSocket, aHeader, sizeof( aHeader ) );
+            ssize_t nToWrite = sizeof(aHeader);
+            bool bSuccess = (nToWrite == write(m_nSocket, aHeader, nToWrite));
+            SAL_WARN_IF( !bSuccess, "extensions", "short write");
         }
         // kick the thread out of its run method; it deletes itself
         close( m_nSocket );
@@ -95,7 +98,9 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
     pBuffer[ 1 ] = nBytes;
     pBuffer[ 2 ] = MEDIATOR_MAGIC;
     memcpy( &pBuffer[3], pBytes, (size_t)nBytes );
-    write( m_nSocket, pBuffer, nBytes + 3*sizeof( sal_uLong ) );
+    ssize_t nToWrite = nBytes + 3*sizeof( sal_uLong );
+    bool bSuccess = (nToWrite == write( m_nSocket, pBuffer, nToWrite ));
+    SAL_WARN_IF( !bSuccess, "extensions", "short write");
     delete [] pBuffer;
 
     return nMessageID;
