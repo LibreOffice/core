@@ -33,6 +33,6 @@ ifeq ($(COM),MSC)
 $(eval $(call gb_Package_add_file,desktop_soffice_bin,bin/soffice.bin.manifest,soffice_bin$(gb_Executable_EXT).manifest))
 endif
 
-$(call gb_Package_get_target,desktop_soffice_bin) :| $(call gb_Executable_get_target,soffice_bin)
+$(call gb_Package_get_preparation_target,desktop_soffice_bin) :| $(call gb_Executable_get_target,soffice_bin)
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
