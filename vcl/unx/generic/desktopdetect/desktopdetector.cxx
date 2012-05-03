@@ -235,8 +235,7 @@ static bool is_cde_desktop( Display* pDisplay )
     void* pLibrary = NULL;
 
     Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
-    OUString aPathName( RTL_CONSTASCII_USTRINGPARAM( "file:///usr/dt/lib/libDtSvc.so" ) );
-    if( nDtAtom && ( pLibrary = osl_loadModule( aPathName.pData, SAL_LOADMODULE_DEFAULT ) ) )
+    if( nDtAtom && ( pLibrary = osl_loadAsciiModule( "file:///usr/dt/lib/libDtSvc.so", SAL_LOADMODULE_DEFAULT ) ) )
     {
         osl_unloadModule( (oslModule)pLibrary );
         return true;

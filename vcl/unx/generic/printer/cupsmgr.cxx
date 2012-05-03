@@ -155,13 +155,9 @@ CUPSWrapper::CUPSWrapper()
           m_bPPDThreadRunning( false )
 {
 #ifdef ENABLE_CUPS
-    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( CUPS_LIB_NAME ) );
-    m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
+    m_pLib = osl_loadAsciiModule( CUPS_LIB_NAME, SAL_LOADMODULE_LAZY );
     if( ! m_pLib )
-    {
-        aLib = OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "cups" ) ) );
-        m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
-    }
+        m_pLib = osl_loadAsciiModule( "cups", SAL_LOADMODULE_LAZY );
 #endif
 
     if( ! m_pLib )
@@ -1136,13 +1132,11 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
     const char* pRet = NULL;
 
 #ifdef ENABLE_CUPS
-    OUString aLib = OUString::createFromAscii( _XSALSET_LIBNAME );
-    oslModule pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
+    oslModule pLib = osl_loadAsciiModule( _XSALSET_LIBNAME, SAL_LOADMODULE_LAZY );
     if( pLib )
     {
-        OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_authenticateQuery" ) );
         bool (*getpw)( const OString& rServer, OString& rUser, OString& rPw) =
-            (bool(*)(const OString&,OString&,OString&))osl_getFunctionSymbol( pLib, aSym.pData );
+            (bool(*)(const OString&,OString&,OString&))osl_getAsciiFunctionSymbol( pLib, "Sal_authenticateQuery" );
         if( getpw )
         {
             osl::MutexGuard aGuard( m_aCUPSMutex );
@@ -1161,7 +1155,7 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
         osl_unloadModule( pLib );
     }
 #if OSL_DEBUG_LEVEL > 1
-    else fprintf( stderr, "loading of module %s failed\n", OUStringToOString( aLib, osl_getThreadTextEncoding() ).getStr() );
+    else fprintf( stderr, "loading of module %s failed\n", _XSALSET_LIBNAME );
 #endif
 #endif // ENABLE_CUPS
 

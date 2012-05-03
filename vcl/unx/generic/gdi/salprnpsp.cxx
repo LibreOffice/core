@@ -101,8 +101,7 @@ static void getPaLib()
 {
     if( ! driverLib )
     {
-        OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
-        driverLib   = osl_loadModuleRelative( (oslGenericFunction)getPaLib, aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        driverLib   = osl_loadAsciiModuleRelative( (oslGenericFunction)getPaLib, _XSALSET_LIBNAME, SAL_LOADMODULE_DEFAULT );
         if ( !driverLib )
         {
             return;

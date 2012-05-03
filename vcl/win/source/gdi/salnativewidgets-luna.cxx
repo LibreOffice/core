@@ -90,8 +90,7 @@ static VisualStylesAPI vsAPI;
 
 VisualStylesAPI::VisualStylesAPI()
 {
-    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "uxtheme.dll" ) );
-    mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+    mhModule = osl_loadAsciiModule( "uxtheme.dll", SAL_LOADMODULE_DEFAULT );
 
     if ( mhModule )
     {

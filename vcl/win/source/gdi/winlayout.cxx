@@ -1132,8 +1132,7 @@ static bool bManualCellAlign = true;
 
 static bool InitUSP()
 {
-    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "usp10" ) );
-    aUspModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+    aUspModule = osl_loadAsciiModule( "usp10", SAL_LOADMODULE_DEFAULT );
     if( !aUspModule )
         return (bUspEnabled = false);
 

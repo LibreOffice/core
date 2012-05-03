@@ -364,8 +364,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         // check for W2k and XP
         if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
         {
-            OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
-            oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+            oslModule pLib = osl_loadAsciiModule( "user32", SAL_LOADMODULE_DEFAULT );
             oslGenericFunction pFunc = NULL;
             if( pLib )
                 pFunc = osl_getAsciiFunctionSymbol( pLib, "SetLayeredWindowAttributes" );
@@ -2123,8 +2122,7 @@ void WinSalFrame::StartPresentation( sal_Bool bStart )
 
                 if ( !aOS.nErrCode )
                 {
-                    OUString aLibraryName( OUString::createFromAscii( aOS.szPathName ) );
-                    oslModule mhSageInst = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+                    oslModule mhSageInst = osl_loadAsciiModule( aOS.szPathName, SAL_LOADMODULE_DEFAULT );
                     pSalData->mpSageEnableProc = (SysAgt_Enable_PROC)osl_getAsciiFunctionSymbol( mhSageInst, "System_Agent_Enable" );
                 }
                 else
@@ -2859,8 +2857,7 @@ static BOOL ImplDwmIsCompositionEnabled()
     SalData* pSalData = GetSalData();
     if( ! pSalData->mpDwmIsCompositionEnabled )
     {
-        rtl::OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "Dwmapi.dll" ) );
-        pSalData->maDwmLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+        pSalData->maDwmLib = osl_loadAsciiModule( "Dwmapi.dll", SAL_LOADMODULE_DEFAULT );
         if( pSalData->maDwmLib )
             pSalData->mpDwmIsCompositionEnabled = (DwmIsCompositionEnabled_ptr)osl_getAsciiFunctionSymbol( pSalData->maDwmLib, "DwmIsCompositionEnabled" );
         if( ! pSalData->mpDwmIsCompositionEnabled ) // something failed

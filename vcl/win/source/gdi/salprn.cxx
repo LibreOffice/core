@@ -451,14 +451,10 @@ XubString WinSalInstance::GetDefaultPrinter()
         // check for W2k and XP
         if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
         {
-            OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "winspool.drv" ) );
-            oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+            oslModule pLib = osl_loadAsciiModule( "winspool.drv", SAL_LOADMODULE_DEFAULT );
             oslGenericFunction pFunc = NULL;
             if( pLib )
-            {
-                OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "GetDefaultPrinterW" ) );
-                pFunc = osl_getFunctionSymbol( pLib, queryFuncName.pData );
-            }
+                pFunc = osl_getAsciiFunctionSymbol( pLib, "GetDefaultPrinterW" );
 
             pGetDefaultPrinter = (sal_Bool(WINAPI*)(LPWSTR,LPDWORD)) pFunc;
         }

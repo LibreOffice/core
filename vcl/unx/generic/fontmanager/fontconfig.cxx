@@ -274,13 +274,9 @@ FontCfgWrapper::FontCfgWrapper()
           m_pOutlineSet( NULL ),
           m_nFcVersion( 0 )
 {
-    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
-    m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
+    m_pLib = osl_loadAsciiModule( "libfontconfig.so.1", SAL_LOADMODULE_LAZY );
     if( !m_pLib )
-    {
-        aLib = OUString( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so" ) );
-        m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
-    }
+        m_pLib = osl_loadAsciiModule( "libfontconfig.so", SAL_LOADMODULE_LAZY );
 
     if( ! m_pLib )
     {

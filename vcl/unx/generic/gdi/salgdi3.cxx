@@ -346,8 +346,7 @@ CairoWrapper::CairoWrapper()
     if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
-    mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+    mpCairoLib = osl_loadAsciiModule( "libcairo.so.2", SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
         return;
 

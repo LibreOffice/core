@@ -79,13 +79,12 @@ void XRenderPeer::InitRenderLib()
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
-    const OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
-    mpRenderLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+    static const char aLibName[] = "libXrender.so.1";
+    mpRenderLib = osl_loadAsciiModule( aLibName, SAL_LOADMODULE_DEFAULT );
     if( !mpRenderLib ) {
 #ifdef DEBUG
         fprintf( stderr, "Display can do XRender, but no %s installed.\n"
-            "Please install for improved display performance\n", OUStringToOString( aLibName.getStr(),
-                                                                                    osl_getThreadTextEncoding() ).getStr() );
+            "Please install for improved display performance\n", aLibName );
 #endif
         return;
     }
