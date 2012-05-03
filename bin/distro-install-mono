@@ -1,0 +1,96 @@
+#!/bin/sh
+
+if test -z "${SRC_ROOT}"; then
+    source ./config_host.mk.source
+fi
+if test -z "${SOLARENV}"; then
+    echo "distro-install-mono: No environment set!"
+    exit 1
+fi
+
+# continue only when mono has been built
+test -f $DESTDIR$INSTALLDIR/program/cli_oootypes.dll || exit 0;
+
+echo "Finishing the mono installation..."
+
+if ! test -w "$DESTDIR/" ; then
+    echo "Warning: You do not have rights to finish the mono installation"
+    echo "         => skipping it"
+    exit 0;
+fi
+
+# filelist for the GAC stuff
+MONOEXTRAFILELIST=mono_extra_list.txt
+rm -f $MONOEXTRAFILELIST
+
+# install the pkgconfig file
+# GAC is in /usr/lib even on 64-bit architectures, so the .pc file points to
+# the /usr/lib paths; the .pc file itself must be in the arch dependant path
+# to be found in PKG_CONFIG_PATH, though
+mkdir -p $DESTDIR$LIBDIR/pkgconfig/
+cat >$DESTDIR$LIBDIR/pkgconfig/mono-$INSTALLDIRNAME.pc <<EOT
+Name: LibreOffice Mono
+Description: LibreOffice bindings for Mono
+Version: 1.0
+Libs: -r:/usr/lib/mono/$INSTALLDIRNAME/cli_basetypes.dll -r:/usr/lib/mono/$INSTALLDIRNAME/cli_cppuhelper.dll -r:/usr/lib/mono/$INSTALLDIRNAME/cli_uretypes.dll -r:/usr/lib/mono/$INSTALLDIRNAME/cli_oootypes.dll -r:/usr/lib/mono/$INSTALLDIRNAME/cli_uno_bridge.dll -r:/usr/lib/mono/$INSTALLDIRNAME/cli_ure.dll
+EOT
+test -n "$DESTDIR" && echo $LIBDIR/pkgconfig/mono-$INSTALLDIRNAME.pc >>$MONOEXTRAFILELIST
+
+# extra dlls config files
+dll=cli_uno_bridge.dll
+cat >$DESTDIR$INSTALLDIR/ure/lib/cli_uno_bridge.dll.config <<EOT
+<configuration>
+  <dllmap dll="cli_uno" target="$INSTALLDIR/ure/lib/libcli_uno.so"/>
+  <dllmap dll="sal" target="$INSTALLDIR/ure/lib/libuno_sal.so.3"/>
+  <dllmap dll="uno_cppu" target="$INSTALLDIR/ure/lib/libuno_cppu.so.3"/>
+</configuration>
+EOT
+if test -n "$DESTDIR" ; then
+    file_list=`grep "^$INSTALLDIR/ure/lib/cli_uno_bridge.dll$" $DESTDIR/gid* | head -n 1 | cut -d: -f1`
+    echo "$INSTALLDIR/ure/lib/cli_uno_bridge.dll.config" >>$file_list
+fi
+perl -pi -e "s,</configuration>,  <dllmap dll=\"cli_uno_glue\" target=\"$INSTALLDIR/ure/lib/libcli_uno_glue.so\"/>\n</configuration>," \
+    $DESTDIR$INSTALLDIR/ure/lib/cli_cppuhelper.config
+
+# install versioned assemblies into the system Global Assembly Cache  (GAC)
+# to  become  part  of  the assemblies that are available for all applications
+# at runtime.
+if test -z "$DESTDIR" -o -n "$MONO_GAC_ROOT" ; then
+    test -n "$MONO_GAC_ROOT" && gacutil_root="-root $DESTDIR$MONO_GAC_ROOT" || gacutil_root=
+    for dll_name in ure/lib/cli_basetypes \
+               ure/lib/cli_cppuhelper \
+	       ure/lib/cli_uretypes \
+	       program/cli_oootypes \
+	       ure/lib/cli_uno_bridge \
+	       ure/lib/cli_ure ; do
+	# create .config files with correct names
+	test -f $DESTDIR$INSTALLDIR/$dll_name.config && mv $DESTDIR$INSTALLDIR/$dll_name.config $DESTDIR$INSTALLDIR/$dll_name.dll.config
+	gacutil $gacutil_root -i $DESTDIR$INSTALLDIR/$dll_name.dll -package $INSTALLDIRNAME || exit 0
+
+	# the original fixes are not longer needed
+	rm -f $DESTDIR$INSTALLDIR/$dll_name.dll
+	rm -f $DESTDIR$INSTALLDIR/$dll_name.dll.config
+	rm -f $DESTDIR$INSTALLDIR/$dll_name.config
+
+	# remove the deleted fixes from the filelist
+	if test -n "$DESTDIR" ; then
+	    file_list=`grep "^$INSTALLDIR/$dll_name.dll$" $DESTDIR/gid* | head -n 1 | cut -d: -f1`
+	    test -z "$file_list" && echo "Error: \"$INSTALLDIR/$dll_name.dll\" has not found in any filelist" && exit 1;
+	    sed -e "s|^$INSTALLDIR/$dll_name.dll$||" \
+		-e "s|^$INSTALLDIR/$dll_name.dll.config$||" \
+	        -e "s|^$INSTALLDIR/$dll_name.config$||" \
+		$file_list >$file_list.mono
+	    mv $file_list.mono $file_list
+	fi
+    done
+
+    # filelist for the GAC
+    if test -n "$DESTDIR" ; then
+        for dir in `find $DESTDIR$MONO_GAC_ROOT/mono -type d -regex ".*/cli_[_a-z]*" -o -regex ".*/$INSTALLDIRNAME"` ; do
+	    find $dir -type d | sed "s|^$DESTDIR\(.*\)|%dir \1|" >>$MONOEXTRAFILELIST
+	    find $dir -type f -o -type l | sed "s|^$DESTDIR\(.*\)|\1|" >>$MONOEXTRAFILELIST
+	done
+	sort $MONOEXTRAFILELIST >$MONOEXTRAFILELIST.mono
+	mv $MONOEXTRAFILELIST.mono $MONOEXTRAFILELIST
+    fi
+fi
