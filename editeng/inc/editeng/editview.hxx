@@ -49,6 +49,7 @@ class SvKeyValueIterator;
 class SfxStyleSheet;
 class Font;
 class FontList;
+class OutputDevice;
 
 #include <editeng/editdata.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -88,7 +89,7 @@ public:
     void            SetWindow( Window* pWin );
     Window*         GetWindow() const;
 
-    void            Paint( const Rectangle& rRect );
+    void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, sal_uInt8 nRangeCheck = RGCHK_NEG );
 

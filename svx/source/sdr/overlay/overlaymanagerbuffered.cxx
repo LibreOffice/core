@@ -382,9 +382,8 @@ namespace sdr
 
         OverlayManagerBuffered::OverlayManagerBuffered(
             OutputDevice& rOutputDevice,
-            OverlayManager* pOldOverlayManager,
             bool bRefreshWithPreRendering)
-        :   OverlayManager(rOutputDevice, pOldOverlayManager),
+        :   OverlayManager(rOutputDevice),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
@@ -394,11 +393,10 @@ namespace sdr
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
             OutputDevice& rOutputDevice,
-            OverlayManager* pOldOverlayManager,
             bool bRefreshWithPreRendering)
         {
             return rtl::Reference<OverlayManager>(new OverlayManagerBuffered(rOutputDevice,
-                pOldOverlayManager, bRefreshWithPreRendering));
+                bRefreshWithPreRendering));
         }
 
         OverlayManagerBuffered::~OverlayManagerBuffered()

@@ -34,8 +34,6 @@
 #include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
-
-#include <svx/svdotext.hxx> // for PaintOutlinerView
 #include <svx/svdoole2.hxx>
 
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
@@ -268,19 +266,6 @@ void SdrPageView::InvalidateAllWin()
         Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
         aRect.Union(GetPage()->GetAllObjBoundRect());
         GetView().InvalidateAllWin(aRect);
-    }
-}
-
-void SdrPageView::PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) const
-{
-    if (GetView().pTextEditOutliner==NULL) return;
-    sal_uIntPtr nViewAnz=GetView().pTextEditOutliner->GetViewCount();
-    for (sal_uIntPtr i=0; i<nViewAnz; i++) {
-        OutlinerView* pOLV=GetView().pTextEditOutliner->GetView(i);
-        if (pOLV->GetWindow()==pOut) {
-            GetView().ImpPaintOutlinerView(*pOLV, rRect);
-            return;
-        }
     }
 }
 

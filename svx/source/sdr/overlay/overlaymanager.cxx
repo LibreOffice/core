@@ -117,9 +117,7 @@ namespace sdr
             return mfDiscreteOne;
         }
 
-        OverlayManager::OverlayManager(
-            OutputDevice& rOutputDevice,
-            OverlayManager* pOldOverlayManager)
+        OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
         :   Scheduler(),
             mnRefCount(0),
             rmOutputDevice(rOutputDevice),
@@ -143,37 +141,11 @@ namespace sdr
                 xProperties[0].Value <<= true;
                 maViewInformation2D = drawinglayer::geometry::ViewInformation2D(xProperties);
             }
-
-            if(pOldOverlayManager)
-            {
-                // take over OverlayObjects from given OverlayManager. Copy
-                // the vector of pointers
-                maOverlayObjects = pOldOverlayManager->maOverlayObjects;
-                const sal_uInt32 nSize(maOverlayObjects.size());
-
-                if(nSize)
-                {
-                    for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); ++aIter)
-                    {
-                        OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
-                        OverlayObject& rCandidate = **aIter;
-
-                        // remove from old and add to new OverlayManager
-                        pOldOverlayManager->impApplyRemoveActions(rCandidate);
-                        impApplyAddActions(rCandidate);
-                    }
-
-                    pOldOverlayManager->maOverlayObjects.clear();
-                }
-            }
         }
 
-        rtl::Reference<OverlayManager> OverlayManager::create(
-            OutputDevice& rOutputDevice,
-            OverlayManager* pOldOverlayManager)
+        rtl::Reference<OverlayManager> OverlayManager::create(OutputDevice& rOutputDevice)
         {
-            return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice,
-                pOldOverlayManager));
+            return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice));
         }
 
         const drawinglayer::geometry::ViewInformation2D OverlayManager::getCurrentViewInformation2D() const

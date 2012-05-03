@@ -118,7 +118,7 @@ protected:
     // Eine neue OutlinerView auf dem Heap anlegen und alle erforderlichen Parameter setzen.
     // pTextEditObj, pTextEditPV und pTextEditOutliner muessen initiallisiert sein.
     OutlinerView* ImpMakeOutlinerView(Window* pWin, sal_Bool bNoPaint, OutlinerView* pGivenView) const;
-    void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect) const;
+    void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
     // Feststellen, ob der gesamte Text markiert ist. Liefert auch sal_True wenn
@@ -142,6 +142,11 @@ protected:
     virtual ~SdrObjEditView();
 
 public:
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // used to call the old ImpPaintOutlinerView. Will be replaced when the
+    // outliner will be displayed on the overlay in edit mode.
+    void TextEditDrawing(SdrPaintWindow& rPaintWindow) const;
+
     // Actionhandling fuer Macromodus
     virtual sal_Bool IsAction() const;
     virtual void MovAction(const Point& rPnt);

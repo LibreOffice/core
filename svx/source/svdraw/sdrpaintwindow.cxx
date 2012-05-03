@@ -98,20 +98,8 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
+void SdrPaintWindow::impCreateOverlayManager()
 {
-    // When the buffer usage has changed then we have to create a new
-    // overlay manager.  Save the current one so that later we can move its
-    // overlay objects to the new one.
-    rtl::Reference<sdr::overlay::OverlayManager> xOldOverlayManager;
-
-    if(mbUseBuffer != bUseBuffer)
-    {
-        mbUseBuffer = bUseBuffer;
-        xOldOverlayManager = mxOverlayManager;
-        mxOverlayManager.clear();
-    }
-
     // not yet one created?
     if(!mxOverlayManager.is())
     {
@@ -126,8 +114,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
                 // whether that refresh itself will use a 2nd vdev to avoid flickering.
                 // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
-                mxOverlayManager = ::sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice(),
-                    xOldOverlayManager.get(), true);
+                mxOverlayManager = ::sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice(), true);
             }
             else
             {
@@ -135,8 +122,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
                 // take place
                 // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
-                mxOverlayManager = ::sdr::overlay::OverlayManager::create(GetOutputDevice(),
-                    xOldOverlayManager.get());
+                mxOverlayManager = ::sdr::overlay::OverlayManager::create(GetOutputDevice());
             }
 
             OSL_ENSURE(mxOverlayManager.is(), "SdrPaintWindow::SdrPaintWindow: Could not allocate an overlayManager (!)");
@@ -185,7 +171,7 @@ rtl::Reference< ::sdr::overlay::OverlayManager > SdrPaintWindow::GetOverlayManag
     if(!mxOverlayManager.is())
     {
         // Create buffered overlay manager by default.
-        const_cast< SdrPaintWindow* >(this)->impCreateOverlayManager(true);
+        const_cast< SdrPaintWindow* >(this)->impCreateOverlayManager();
     }
 
     return mxOverlayManager;
@@ -247,15 +233,15 @@ void SdrPaintWindow::OutputPreRenderDevice(const Region& rExpandedRegion)
 }
 
 // #i73602# add flag if buffer shall be used
-void SdrPaintWindow::DrawOverlay(const Region& rRegion, bool bUseBuffer)
+void SdrPaintWindow::DrawOverlay(const Region& rRegion)
 {
     // ## force creation of OverlayManager since the first repaint needs to
     // save the background to get a controlled start into overlay mechanism
-    impCreateOverlayManager(bUseBuffer);
+    impCreateOverlayManager();
 
     if(mxOverlayManager.is() && !OutputToPrinter())
     {
-        if(mpPreRenderDevice && bUseBuffer)
+        if(mpPreRenderDevice)
         {
             mxOverlayManager->completeRedraw(rRegion, &mpPreRenderDevice->GetPreRenderDevice());
         }

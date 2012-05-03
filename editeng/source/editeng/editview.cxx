@@ -290,11 +290,11 @@ sal_uInt16 EditView::GetSelectedScriptType() const
     return PIMPE->GetScriptType( pImpEditView->GetEditSelection() );
 }
 
-void EditView::Paint( const Rectangle& rRect )
+void EditView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->Paint( pImpEditView, rRect );
+    PIMPEE->Paint( pImpEditView, rRect, pTargetDevice );
 }
 
 void EditView::SetEditEngine( EditEngine* pEditEng )

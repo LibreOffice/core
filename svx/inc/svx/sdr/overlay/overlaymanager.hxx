@@ -90,17 +90,11 @@ namespace sdr
             // ViewTransformation and evtl. correct mfDiscreteOne
             double getDiscreteOne() const;
 
-            // when handing over another OverlayManager at construction, the OverlayObjects
-            // will be taken over from it. The new one will have added all OverlayObjects
-            // while the handed over one will have none
-            OverlayManager(
-                OutputDevice& rOutputDevice,
-                OverlayManager* pOldOverlayManager);
+            OverlayManager(OutputDevice& rOutputDevice);
             virtual ~OverlayManager();
 
         public:
-            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,
-                OverlayManager* pOldOverlayManager = 0);
+            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice);
 
             // access to current ViewInformation2D; this call checks and evtl. updates ViewInformation2D
             const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;

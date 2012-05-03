@@ -289,72 +289,99 @@ void SdrObjEditView::ModelHasChanged()
 // TextEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect) const
+void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
-    Window* pWin = rOutlView.GetWindow();
-
-    if(pWin)
+    // draw old text edit stuff
+    if(IsTextEdit())
     {
-        const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
-        bool bTextFrame(pText && pText->IsTextFrame());
-        bool bFitToSize(pText && pText->IsFitToSize());
-        bool bModifyMerk(pTextEditOutliner->IsModified());
-        Rectangle aBlankRect(rOutlView.GetOutputArea());
-        aBlankRect.Union(aMinTextEditArea);
-        Rectangle aPixRect(pWin->LogicToPixel(aBlankRect));
-        aBlankRect.Intersection(rRect);
-        rOutlView.GetOutliner()->SetUpdateMode(sal_True);
-        rOutlView.Paint(aBlankRect);
+        const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
 
-        if(!bModifyMerk)
+        if(pActiveOutliner)
         {
-            pTextEditOutliner->ClearModifyFlag();
-        }
+            const sal_uInt32 nViewAnz(pActiveOutliner->GetViewCount());
 
-        if(bTextFrame && !bFitToSize)
-        {
-            aPixRect.Left()--;
-            aPixRect.Top()--;
-            aPixRect.Right()++;
-            aPixRect.Bottom()++;
-            sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
-
+            if(nViewAnz)
             {
-                // limit xPixRect because of driver problems when pixel coordinates are too far out
-                Size aMaxXY(pWin->GetOutputSizePixel());
-                long a(2 * nPixSiz);
-                long nMaxX(aMaxXY.Width() + a);
-                long nMaxY(aMaxXY.Height() + a);
+                const Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
+                const Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
-                if (aPixRect.Left  ()<-a) aPixRect.Left()=-a;
-                if (aPixRect.Top   ()<-a) aPixRect.Top ()=-a;
-                if (aPixRect.Right ()>nMaxX) aPixRect.Right ()=nMaxX;
-                if (aPixRect.Bottom()>nMaxY) aPixRect.Bottom()=nMaxY;
+                for(sal_uInt32 i(0); i < nViewAnz; i++)
+                {
+                    OutlinerView* pOLV = pActiveOutliner->GetView(i);
+
+                    if(pOLV->GetWindow() == &rPaintWindow.GetOutputDevice())
+                    {
+                        ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
+                        return;
+                    }
+                }
             }
+        }
+    }
+}
 
-            Rectangle aOuterPix(aPixRect);
-            aOuterPix.Left()-=nPixSiz;
-            aOuterPix.Top()-=nPixSiz;
-            aOuterPix.Right()+=nPixSiz;
-            aOuterPix.Bottom()+=nPixSiz;
+void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const
+{
+    const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
+    bool bTextFrame(pText && pText->IsTextFrame());
+    bool bFitToSize(0 != (pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING));
+    bool bModifyMerk(pTextEditOutliner->IsModified()); // #43095#
+    Rectangle aBlankRect(rOutlView.GetOutputArea());
+    aBlankRect.Union(aMinTextEditArea);
+    Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
+    aBlankRect.Intersection(rRect);
+    rOutlView.GetOutliner()->SetUpdateMode(sal_True); // Bugfix #22596#
+    rOutlView.Paint(aBlankRect, &rTargetDevice);
 
-            bool bMerk(pWin->IsMapModeEnabled());
-            pWin->EnableMapMode(sal_False);
-            PolyPolygon aPolyPoly( 2 );
+    if(!bModifyMerk)
+    {
+        // #43095#
+        pTextEditOutliner->ClearModifyFlag();
+    }
 
-            svtools::ColorConfig aColorConfig;
-            Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-            const Hatch aHatch( HATCH_SINGLE, aHatchCol, 3, 450 );
+    if(bTextFrame && !bFitToSize)
+    {
+        aPixRect.Left()--;
+        aPixRect.Top()--;
+        aPixRect.Right()++;
+        aPixRect.Bottom()++;
+        sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
 
-            aPolyPoly.Insert( aOuterPix );
-            aPolyPoly.Insert( aPixRect );
-            pWin->DrawHatch( aPolyPoly, aHatch );
+        {
+            // xPixRect Begrenzen, wegen Treiberproblem bei zu weit hinausragenden Pixelkoordinaten
+            Size aMaxXY(rTargetDevice.GetOutputSizePixel());
+            long a(2 * nPixSiz);
+            long nMaxX(aMaxXY.Width() + a);
+            long nMaxY(aMaxXY.Height() + a);
 
-            pWin->EnableMapMode(bMerk);
+            if (aPixRect.Left  ()<-a) aPixRect.Left()=-a;
+            if (aPixRect.Top   ()<-a) aPixRect.Top ()=-a;
+            if (aPixRect.Right ()>nMaxX) aPixRect.Right ()=nMaxX;
+            if (aPixRect.Bottom()>nMaxY) aPixRect.Bottom()=nMaxY;
         }
 
-        rOutlView.ShowCursor();
+        Rectangle aOuterPix(aPixRect);
+        aOuterPix.Left()-=nPixSiz;
+        aOuterPix.Top()-=nPixSiz;
+        aOuterPix.Right()+=nPixSiz;
+        aOuterPix.Bottom()+=nPixSiz;
+
+        bool bMerk(rTargetDevice.IsMapModeEnabled());
+        rTargetDevice.EnableMapMode(sal_False);
+        PolyPolygon aPolyPoly( 2 );
+
+        svtools::ColorConfig aColorConfig;
+        Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+        const Hatch aHatch( HATCH_SINGLE, aHatchCol, 3, 450 );
+
+        aPolyPoly.Insert( aOuterPix );
+        aPolyPoly.Insert( aPixRect );
+        rTargetDevice.DrawHatch( aPolyPoly, aHatch );
+
+        rTargetDevice.EnableMapMode(bMerk);
     }
+
+    rOutlView.ShowCursor();
 }
 
 void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const

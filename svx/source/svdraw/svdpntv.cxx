@@ -723,36 +723,16 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         // look for active TextEdit. As long as this cannot be painted to a VDev,
         // it cannot get part of buffering. In that case, output evtl. prerender
         // early and paint text edit to window.
-        const bool bTextEditActive(IsTextEdit() && GetTextEditPageView());
-
-        if(bTextEditActive)
+        if(IsTextEdit() && GetSdrPageView())
         {
-            // output PreRendering and destroy it so that it is not used for FormLayer
-            // or overlay
-            rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
-
-            // draw old text edit stuff before overlay to have it as part of the background
-            // ATM. This will be changed to have the text editing on the overlay, bit it
-            // is not an easy thing to do, see BegTextEdit and the OutlinerView stuff used...
-            if(bTextEditActive)
-            {
-                ImpTextEditDrawing(rPaintWindow);
-            }
-
-            // draw Overlay directly to window. This will save the contents of the window
-            // in the RedrawRegion to the overlay background buffer, too.
-            // This may lead to problems when reading from the screen is slow from the
-            // graphics driver/graphiccard combination.
-            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion(), false);
+            static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
         }
-        else
-        {
-            // draw Overlay, also to PreRender device if exists
-            rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion(), true);
 
-            // output PreRendering
-            rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
-        }
+        // draw Overlay, also to PreRender device if exists
+        rPaintWindow.DrawOverlay(rPaintWindow.GetRedrawRegion());
+
+        // output PreRendering
+        rPaintWindow.OutputPreRenderDevice(rPaintWindow.GetRedrawRegion());
     }
 }
 
@@ -860,23 +840,6 @@ Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrPaintView::ImpTextEditDrawing(SdrPaintWindow& rPaintWindow) const
-{
-    // draw old text edit stuff
-    if(IsTextEdit())
-    {
-        SdrPageView* pPageView = GetTextEditPageView();
-
-        if(pPageView)
-        {
-            // paint TextEdit directly to the destination OutDev
-            const Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
-            const Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
-            pPageView->PaintOutlinerView(&rPaintWindow.GetOutputDevice(), aCheckRect);
-        }
-    }
-}
 
 void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 {

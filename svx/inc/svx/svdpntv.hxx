@@ -383,11 +383,6 @@ public:
 
 protected:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // used to call the old PaintOutlinerView at the single PageViews. Will be replaced when the
-    // outliner will be displayed on the overlay in edit mode.
-    void ImpTextEditDrawing(SdrPaintWindow& rPaintWindow) const;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const;
 

@@ -126,7 +126,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 }
 
 
-void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
+void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputDevice* pTargetDevice )
 {
     if ( GetSelectionMode() == EE_SELMODE_HIDDEN )
         return;
@@ -142,8 +142,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     if ( pRegion )
         pPolyPoly = new PolyPolygon;
 
-    sal_Bool bClipRegion = pOutWin->IsClipRegion();
-    Region aOldRegion = pOutWin->GetClipRegion();
+    OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
+    sal_Bool bClipRegion = pTarget->IsClipRegion();
+    Region aOldRegion = pTarget->GetClipRegion();
 
     if ( !pRegion )
     {
@@ -160,7 +161,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
         Rectangle aTmpOutArea( aOutArea );
         if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
             aTmpOutArea.Right() = aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
-        pOutWin->IntersectClipRegion( aTmpOutArea );
+        pTarget->IntersectClipRegion( aTmpOutArea );
 
         if ( pOutWin->GetCursor() )
             pOutWin->GetCursor()->Hide();
@@ -238,7 +239,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
                 Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(pTmpPortion, pLine);
                 aTopLeft.X() = aLineXPosStartEnd.Min();
                 aBottomRight.X() = aLineXPosStartEnd.Max();
-                ImplDrawHighlightRect( pOutWin, aTopLeft, aBottomRight, pPolyPoly );
+                ImplDrawHighlightRect( pTarget, aTopLeft, aBottomRight, pPolyPoly );
             }
             else
             {
@@ -259,7 +260,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
                     Point aPt1( Min( nX1, nX2 ), aTopLeft.Y() );
                     Point aPt2( Max( nX1, nX2 ), aBottomRight.Y() );
 
-                    ImplDrawHighlightRect( pOutWin, aPt1, aPt2, pPolyPoly );
+                    ImplDrawHighlightRect( pTarget, aPt1, aPt2, pPolyPoly );
 
                     nTmpStartIndex = nTmpEndIndex;
                 }
@@ -279,30 +280,30 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             pOutWin->GetCursor()->Show();
 
         if ( bClipRegion )
-            pOutWin->SetClipRegion( aOldRegion );
+            pTarget->SetClipRegion( aOldRegion );
         else
-            pOutWin->SetClipRegion();
+            pTarget->SetClipRegion();
     }
 }
 
-void ImpEditView::ImplDrawHighlightRect( Window* _pOutWin, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly )
+void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly )
 {
     if ( rDocPosTopLeft.X() != rDocPosBottomRight.X() )
     {
-        sal_Bool bPixelMode = _pOutWin->GetMapMode() == MAP_PIXEL;
+        sal_Bool bPixelMode = _pTarget->GetMapMode() == MAP_PIXEL;
 
         Point aPnt1( GetWindowPos( rDocPosTopLeft ) );
         Point aPnt2( GetWindowPos( rDocPosBottomRight ) );
 
         if ( !IsVertical() )
         {
-            lcl_AllignToPixel( aPnt1, _pOutWin, +1, 0 );
-            lcl_AllignToPixel( aPnt2, _pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
+            lcl_AllignToPixel( aPnt1, _pTarget, +1, 0 );
+            lcl_AllignToPixel( aPnt2, _pTarget, 0, ( bPixelMode ? 0 : -1 ) );
         }
         else
         {
-            lcl_AllignToPixel( aPnt1, _pOutWin, 0, +1 );
-            lcl_AllignToPixel( aPnt2, _pOutWin, ( bPixelMode ? 0 : +1 ), 0 );
+            lcl_AllignToPixel( aPnt1, _pTarget, 0, +1 );
+            lcl_AllignToPixel( aPnt2, _pTarget, ( bPixelMode ? 0 : +1 ), 0 );
         }
 
         Rectangle aRect( aPnt1, aPnt2 );
@@ -317,7 +318,21 @@ void ImpEditView::ImplDrawHighlightRect( Window* _pOutWin, const Point& rDocPosT
         }
         else
         {
-            _pOutWin->Invert( aRect );
+            Window* pWindow = dynamic_cast< Window* >(_pTarget);
+
+            if(pWindow)
+            {
+                pWindow->Invert( aRect );
+            }
+            else
+            {
+                _pTarget->Push(PUSH_LINECOLOR|PUSH_FILLCOLOR|PUSH_RASTEROP);
+                _pTarget->SetLineColor();
+                _pTarget->SetFillColor(COL_BLACK);
+                _pTarget->SetRasterOp(ROP_INVERT);
+                _pTarget->DrawRect(aRect);
+                _pTarget->Pop();
+            }
         }
     }
 }
