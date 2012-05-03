@@ -96,6 +96,7 @@ fi
 dnl ===================================================================
 dnl When building for Android the --with-android-ndk is mandatory
 dnl ===================================================================
+
 ANDROID_NDK_HOME=
 if test -n "$with_android_ndk"; then
    ANDROID_NDK_HOME=$with_android_ndk
