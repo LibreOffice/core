@@ -82,20 +82,20 @@ protected:
 public:
     virtual ~StgStrm();
     StgIo&  GetIo()     { return rIo;    }
-    sal_Int32   GetPos()    { return nPos;   }
-    sal_Int32   GetStart()  { return nStart; }
-    sal_Int32   GetSize()   { return nSize;  }
-    sal_Int32   GetPage()   { return nPage;  }
-    short   GetPageSize() { return nPageSize; }
-    sal_Int32   GetPages();
-    short   GetOffset() { return nOffset;}
+    sal_Int32   GetPos() const   { return nPos;   }
+    sal_Int32   GetStart() const { return nStart; }
+    sal_Int32   GetSize() const  { return nSize;  }
+    sal_Int32   GetPage() const  { return nPage;  }
+    short   GetPageSize() const { return nPageSize; }
+    sal_Int32   GetPages() const;
+    short   GetOffset() const { return nOffset;}
     void    SetEntry( StgDirEntry& );
     virtual sal_Bool SetSize( sal_Int32 );
     virtual sal_Bool Pos2Page( sal_Int32 nBytePos );
     virtual sal_Int32 Read( void*, sal_Int32 )        { return 0; }
     virtual sal_Int32 Write( const void*, sal_Int32 ) { return 0; }
     virtual StgPage* GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
-    virtual sal_Bool IsSmallStrm() { return sal_False; }
+    virtual sal_Bool IsSmallStrm() const { return sal_False; }
 };
 
 // The FAT stream class provides physical access to the master FAT.
@@ -145,7 +145,7 @@ public:
     StgSmallStrm( StgIo&, StgDirEntry* );
     virtual sal_Int32 Read( void*, sal_Int32 );
     virtual sal_Int32 Write( const void*, sal_Int32 );
-    virtual sal_Bool IsSmallStrm() { return sal_True; }
+    virtual sal_Bool IsSmallStrm() const { return sal_True; }
 };
 
 class StgTmpStrm : public SvMemoryStream

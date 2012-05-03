@@ -465,7 +465,7 @@ sal_Bool StgStrm::SetSize( sal_Int32 nBytes )
 
 // Return the # of allocated pages
 
-sal_Int32 StgStrm::GetPages()
+sal_Int32 StgStrm::GetPages() const
 {
     return ( nSize + nPageSize - 1 ) / nPageSize;
 }
