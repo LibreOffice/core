@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAACH///98\u003d",
+        "filename": "l10ntools/source/help/makefile.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-05-03T19:05:22Z",
+      "side": 0,
+      "message": "try to add this another time:\nmost likely this is still necessary because MacOS X PPC is still using gcc 4.0.1",
+      "revId": "0ae9489290a6696765634be073a4b88f4c47940a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACH///+Q\u003d",
         "filename": "l10ntools/source/help/makefile.mk",
         "patchSetId": 5
