@@ -839,9 +839,9 @@ void SvxPathTabPage::SetPathList(
             pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
         }
     }
-    catch( const Exception& )
+    catch( const Exception& e )
     {
-        OSL_FAIL( "SvxPathTabPage::SetPathList(): caught an exception!" );
+        SAL_WARN("cui", "caught: " << e.Message);
     }
 }
 
