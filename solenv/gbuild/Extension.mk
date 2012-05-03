@@ -33,13 +33,13 @@ gb_Extension_LICENSEFILE := license.txt
 else
 gb_Extension_LICENSEFILE := LICENSE
 endif
-gb_Extension_XRMEXTARGET := $(call gb_Executable_get_target,xrmex)
+gb_Extension_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
 gb_Extension_XRMEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_Extension_XRMEXTARGET)
-gb_Extension_PROPMERGETARGET := $(OUTDIR)/bin/propmerge
+gb_Extension_PROPMERGETARGET := $(call gb_Executable_get_target_for_build,propmerge)
 gb_Extension_PROPMERGECOMMAND := \
 	$(PERL) $(gb_Extension_PROPMERGETARGET)
-gb_Extension_HELPEXTARGET := $(call gb_Executable_get_target,helpex)
+gb_Extension_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
 gb_Extension_HELPEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_Extension_HELPEXTARGET)
 # does not contain en-US because it is special cased in gb_Extension_Extension
