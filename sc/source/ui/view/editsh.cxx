@@ -614,9 +614,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_INSERT_ZWNBSP:
             lclInsertCharacter( pTableView, pTopView, CHAR_ZWNBSP );
         break;
-        case SID_INSERT_FIELD_TEST:
+        case SID_INSERT_FIELD_SHEET:
         {
             SvxTableField aField(pViewData->GetTabNo());
+            SvxFieldItem aItem(aField, EE_FEATURE_FIELD);
+            pTableView->InsertField(aItem);
+        }
+        break;
+        case SID_INSERT_FIELD_DATE_VAR:
+        {
+            SvxDateField aField;
             SvxFieldItem aItem(aField, EE_FEATURE_FIELD);
             pTableView->InsertField(aItem);
         }
@@ -721,7 +728,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                         rSet.DisableItem( SID_THES );
                 }
                 break;
-            case SID_INSERT_FIELD_TEST:
+            case SID_INSERT_FIELD_SHEET:
+            case SID_INSERT_FIELD_DATE_VAR:
             break;
 
         }

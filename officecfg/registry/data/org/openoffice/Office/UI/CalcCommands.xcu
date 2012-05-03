@@ -1514,9 +1514,14 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:InsertFieldTest" oor:op="replace">
+            <node oor:name=".uno:InsertFieldSheet" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Insert Field Test</value>
+                    <value xml:lang="en-US">Insert Sheet Name Field</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertFieldDateVariable" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Insert Date Field (variable)</value>
                 </prop>
             </node>
         </node>

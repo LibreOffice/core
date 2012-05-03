@@ -438,8 +438,13 @@ Menu RID_POPUP_EDIT
                 {
                     MenuItem
                     {
-                        Identifier = SID_INSERT_FIELD_TEST ;
-                        Text [ en-US ] = "Test Field";
+                        Identifier = SID_INSERT_FIELD_DATE_VAR ;
+                        Text [ en-US ] = "Date" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_FIELD_SHEET ;
+                        Text [ en-US ] = "Sheet Name" ;
                     };
                 };
             };

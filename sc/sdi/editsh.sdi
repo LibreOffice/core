@@ -99,7 +99,8 @@ interface TableText
     SID_INSERT_ZWSP             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_INSERT_ZWNBSP           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
-    SID_INSERT_FIELD_TEST [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_INSERT_FIELD_SHEET [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_INSERT_FIELD_DATE_VAR  [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 
 
