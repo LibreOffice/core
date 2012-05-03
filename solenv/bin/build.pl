@@ -1841,7 +1841,7 @@ sub run_job {
             if ($registered_name =~ /tail_build\/prj$/ )
             {
                 $gbuild_flags = '-j' . $ENV{GMAKE_PARALLELISM};
-                #gbuild_target = $ENV{gb_TAILBUILDTARGET};
+                $gbuild_target = $ENV{gb_TAILBUILDTARGET};
             }
             $gbuild_flags .= ' ' . $ENV{GMAKE_OPTIONS};
             $job_to_do = "$ENV{GNUMAKE} -f Makefile $gbuild_flags $gbuild_target gb_PARTIALBUILD=T";
