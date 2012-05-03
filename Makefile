@@ -312,12 +312,14 @@ clean: clean-host clean-build
 
 clean-host:
 	rm -fr $(DEVINSTALLDIR)
+	rm -fr $(SOLARVER)/$(INPATH) # not necessarily below SRCDIR
 	rm -fr $(SRCDIR)/*/$(INPATH)
 	rm -fr install
 
 clean-build:
 ifeq ($(CROSS_COMPILING),YES)
-	rm -rf */$(INPATH_FOR_BUILD)
+	rm -rf $(SOLARVER)/$(INPATH_FOR_BUILD) # not necessarily below SRCDIR
+	rm -rf $(SRCDIR)/*/$(INPATH_FOR_BUILD)
 endif
 
 #
