@@ -53,12 +53,6 @@ using namespace cppu;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-#if OSL_DEBUG_LEVEL > 0
-#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-#else
-#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-#endif
-
 OUString getExePath()
 {
     OUString        exe;
@@ -89,7 +83,7 @@ SAL_IMPLEMENT_MAIN()
     excompRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("excomp.rdb"));
 
     Reference< XMultiServiceFactory > xSMgr  = ::cppu::createRegistryServiceFactory( excompRdb );
-    TEST_ENSHURE( xSMgr.is(), "excomp error 0" );
+    OSL_ENSURE( xSMgr.is(), "excomp error 0" );
 
     typelib_TypeDescription* pTypeDesc = NULL;
     OUString sType(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.XTextDocument"));
@@ -98,7 +92,7 @@ SAL_IMPLEMENT_MAIN()
 
     Reference< XInterface > xIFace = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")));
     Reference< XImplementationRegistration > xImpReg( xIFace, UNO_QUERY);
-    TEST_ENSHURE( xImpReg.is(), "excomp error 1" );
+    OSL_ENSURE( xImpReg.is(), "excomp error 1" );
     try
     {
         xImpReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
@@ -110,15 +104,15 @@ SAL_IMPLEMENT_MAIN()
     }
     catch(const CannotRegisterImplementationException& e)
     {
-        TEST_ENSHURE( e.Message.getLength(), OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+        OSL_ENSURE( e.Message.getLength(), OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
 
     Reference< XTest > xTest1( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("example.ExampleComponent1"))),
                                UNO_QUERY);
-    TEST_ENSHURE( xTest1.is(), "excomp error 2" );
+    OSL_ENSURE( xTest1.is(), "excomp error 2" );
     Reference< XTest > xTest2( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("example.ExampleComponent2"))),
                                UNO_QUERY);
-    TEST_ENSHURE( xTest2.is(), "excomp error 3" );
+    OSL_ENSURE( xTest2.is(), "excomp error 3" );
 
     OUString m1 = xTest1->getMessage();
     OUString m2 = xTest2->getMessage();

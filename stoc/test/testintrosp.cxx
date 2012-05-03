@@ -74,12 +74,6 @@ typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
 #define DEFAULT_INDEX_ACCESS_COUNT  10
 #define DEFAULT_NAME_ACCESS_COUNT   5
 
-#if OSL_DEBUG_LEVEL > 0
-#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-#else
-#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-#endif
-
 //**************************************************************
 //*** Hilfs-Funktion, um vom Type eine XIdlClass zu bekommen ***
 //**************************************************************
@@ -886,7 +880,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     xAccess = xIntrospection->inspect( aObjAny );
     xAccess = xIntrospection->inspect( aObjAny );
-    TEST_ENSHURE( xAccess.is(), "introspection failed, no XIntrospectionAccess returned" );
+    OSL_ENSURE( xAccess.is(), "introspection failed, no XIntrospectionAccess returned" );
     if( !xAccess.is() )
         return sal_False;
 
@@ -897,11 +891,11 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
     Reference< XInterface > xPropSetIface = xAccess->queryAdapter( aType );
     Reference< XPropertySet > xPropSet( xPropSetIface, UNO_QUERY );
-    TEST_ENSHURE( xPropSet.is(), "Could not get XPropertySet by queryAdapter()" );
+    OSL_ENSURE( xPropSet.is(), "Could not get XPropertySet by queryAdapter()" );
 
     // XExactName
     Reference< XExactName > xExactName( xAccess, UNO_QUERY );
-    TEST_ENSHURE( xExactName.is(), "Introspection unterstuetzt kein ExactName" );
+    OSL_ENSURE( xExactName.is(), "Introspection unterstuetzt kein ExactName" );
 
     // Schleife ueber alle Kombinationen von Concepts
     for( sal_Int32 nConcepts = 0 ; nConcepts < 16 ; nConcepts++ )
@@ -927,7 +921,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += OString::valueOf( nDemandedPropCount );
             aErrorStr += " properties but found ";
             aErrorStr += OString::valueOf( nLen );
-            TEST_ENSHURE( nLen == nDemandedPropCount, aErrorStr.getStr() );
+            OSL_ENSURE( nLen == nDemandedPropCount, aErrorStr.getStr() );
 
             const Property* pProps = aRetSeq.getConstArray();
             Any aPropVal;
@@ -956,7 +950,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "\", found \"";
                 aErrorStr += aNameStr;
                 aErrorStr += "\"";
-                TEST_ENSHURE( aNameStr == aDemandedName, aErrorStr.getStr() );
+                OSL_ENSURE( aNameStr == aDemandedName, aErrorStr.getStr() );
 
                 Type aPropType = aProp.Type;
                 OString aTypeNameStr( OUStringToOString(aPropType.getTypeName(), RTL_TEXTENCODING_ASCII_US) );
@@ -968,7 +962,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "< found type >";
                 aErrorStr += aTypeNameStr;
                 aErrorStr += "<";
-                TEST_ENSHURE( aTypeNameStr == aDemandedTypeNameStr, aErrorStr.getStr() );
+                OSL_ENSURE( aTypeNameStr == aDemandedTypeNameStr, aErrorStr.getStr() );
 
                 // Wert des Property lesen und ausgeben
                 aPropVal = xPropSet->getPropertyValue( aPropName );
@@ -982,7 +976,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "< found val >";
                 aErrorStr += aValStr;
                 aErrorStr += "<";
-                TEST_ENSHURE( aValStr == aDemandedValStr, aErrorStr.getStr() );
+                OSL_ENSURE( aValStr == aDemandedValStr, aErrorStr.getStr() );
 
                 // Wert pruefen und typgerecht modifizieren
                 TypeClass eType = aPropVal.getValueType().getTypeClass();
@@ -1038,7 +1032,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                         aErrorStr += "\", not found as \"";
                         aErrorStr += OUStringToOString(aUpperUStr, RTL_TEXTENCODING_ASCII_US );
                         aErrorStr += "\" using XExactName";
-                        TEST_ENSHURE( sal_False, aErrorStr.getStr() );
+                        OSL_ENSURE( sal_False, aErrorStr.getStr() );
                     }
                 }
                 else
@@ -1070,7 +1064,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     aErrorStr += "< found val >";
                     aErrorStr += aModifiedValStr;
                     aErrorStr += "<";
-                    TEST_ENSHURE( aModifiedValStr == aDemandedModifiedValStr, aErrorStr.getStr() );
+                    OSL_ENSURE( aModifiedValStr == aDemandedModifiedValStr, aErrorStr.getStr() );
                 }
 
                 // Checken, ob alle Properties auch einzeln gefunden werden
@@ -1079,7 +1073,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "\" not found with hasProperty()";
                 OUString aWDemandedName = OStringToOUString(aDemandedName, RTL_TEXTENCODING_ASCII_US );
                 sal_Bool bProperty = xAccess->hasProperty( aWDemandedName, nConcepts );
-                TEST_ENSHURE( bProperty, aErrorStr.getStr() );
+                OSL_ENSURE( bProperty, aErrorStr.getStr() );
 
                 aErrorStr  = "property \"";
                 aErrorStr += aDemandedName;
@@ -1093,7 +1087,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     aErrorStr  = "property \"";
                     aErrorStr += aDemandedName;
                     aErrorStr += "\", exception was thrown when trying getProperty()";
-                    TEST_ENSHURE( sal_False, aErrorStr.getStr() );
+                    OSL_ENSURE( sal_False, aErrorStr.getStr() );
                 }
 
             }
@@ -1126,7 +1120,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         aErrorStr += OString::valueOf( nDemandedMethCount );
         aErrorStr += " methods but found ";
         aErrorStr += OString::valueOf( nLen );
-        TEST_ENSHURE( nLen == nDemandedMethCount, aErrorStr.getStr() );
+        OSL_ENSURE( nLen == nDemandedMethCount, aErrorStr.getStr() );
 
         const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
         sal_Int32 i;
@@ -1156,7 +1150,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += "\", found \"";
             aErrorStr += aNameStr;
             aErrorStr += "\"";
-            TEST_ENSHURE( aNameStr == aDemandedName, aErrorStr.getStr() );
+            OSL_ENSURE( aNameStr == aDemandedName, aErrorStr.getStr() );
 
             // Checken, ob alle Methoden auch einzeln gefunden werden
             aErrorStr  = "method \"";
@@ -1164,7 +1158,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += "\" not found with hasMethod()";
             OUString aWDemandedName = OStringToOUString(aDemandedName, RTL_TEXTENCODING_ASCII_US );
             sal_Bool bMethod = xAccess->hasMethod( aWDemandedName, nRealConcepts );
-            TEST_ENSHURE( bMethod, aErrorStr.getStr() );
+            OSL_ENSURE( bMethod, aErrorStr.getStr() );
 
             aErrorStr  = "method \"";
             aErrorStr += aDemandedName;
@@ -1172,14 +1166,14 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             try
             {
                 Reference< XIdlMethod > xGetMethod = xAccess->getMethod( aWDemandedName, nRealConcepts );
-                TEST_ENSHURE( xGetMethod == rxMethod , aErrorStr.getStr() );
+                OSL_ENSURE( xGetMethod == rxMethod , aErrorStr.getStr() );
             }
             catch (const RuntimeException &)
             {
                 aErrorStr  = "method \"";
                 aErrorStr += aDemandedName;
                 aErrorStr += "\", exception was thrown when trying getMethod()";
-                TEST_ENSHURE( sal_False, aErrorStr.getStr() );
+                OSL_ENSURE( sal_False, aErrorStr.getStr() );
             }
         }
     }

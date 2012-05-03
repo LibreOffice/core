@@ -54,12 +54,6 @@ using namespace cppu;
 
 using ::rtl::OUString;
 
-#if OSL_DEBUG_LEVEL > 0
-#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-#else
-#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-#endif
-
 class EmptyComponentContext : public WeakImplHelper1< XComponentContext >
 {
 public:
@@ -104,23 +98,23 @@ SAL_IMPLEMENT_MAIN()
         }
     }
 
-    TEST_ENSHURE( xIFace.is(), "testloader error1");
+    OSL_ENSURE( xIFace.is(), "testloader error1");
 
     Reference<XSingleComponentFactory> xFactory( Reference<XSingleComponentFactory>::query(xIFace) );
 
-    TEST_ENSHURE( xFactory.is(), "testloader error2");
+    OSL_ENSURE( xFactory.is(), "testloader error2");
 
     Reference<XInterface> xLoader = xFactory->createInstanceWithContext( new EmptyComponentContext );
 
-    TEST_ENSHURE( xLoader.is(), "testloader error3");
+    OSL_ENSURE( xLoader.is(), "testloader error3");
 
     Reference<XServiceInfo> xServInfo( Reference<XServiceInfo>::query(xLoader) );
 
-    TEST_ENSHURE( xServInfo.is(), "testloader error4");
+    OSL_ENSURE( xServInfo.is(), "testloader error4");
 
-    TEST_ENSHURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.DLLComponentLoader", "testloader error5");
-    TEST_ENSHURE( xServInfo->supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ), "testloader error6");
-    TEST_ENSHURE( xServInfo->getSupportedServiceNames().getLength() == 1, "testloader error7");
+    OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.DLLComponentLoader", "testloader error5");
+    OSL_ENSURE( xServInfo->supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ), "testloader error6");
+    OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "testloader error7");
 
     xIFace.clear();
     xFactory.clear();

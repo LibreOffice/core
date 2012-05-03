@@ -56,14 +56,6 @@
 #endif
 
 
-
-#if OSL_DEBUG_LEVEL > 0
-#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-#else
-#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-#endif
-
-
 #define IMPLEMENTATION_NAME "com.sun.star.DummyService.V10"
 #define SERVICE_NAME "com.sun.star.ts.TestManagerImpl"
 
@@ -215,24 +207,24 @@ extern "C" void SAL_CALL test_ServiceManager()
     // get the process servicemanager
     Reference <XMultiServiceFactory>  xSMgr = getProcessServiceManager();
 
-    TEST_ENSHURE( xSMgr.is() , "query on XServiceManager failed" );
+    OSL_ENSURE( xSMgr.is() , "query on XServiceManager failed" );
 
     Reference<XContentEnumerationAccess> xContEnum(xSMgr, UNO_QUERY);
-    TEST_ENSHURE( xContEnum.is() , "query on XContentEnumerationAccess failed" );
+    OSL_ENSURE( xContEnum.is() , "query on XContentEnumerationAccess failed" );
     Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))));
-    TEST_ENSHURE( xEnum.is() , "createContentEnumeration failed" );
+    OSL_ENSURE( xEnum.is() , "createContentEnumeration failed" );
     sal_Int32 nLen = 0;
     while( xEnum->hasMoreElements() )
     {
         nLen++;
         xEnum->nextElement();
     }
-    TEST_ENSHURE( nLen == 1, "more than one implementation for SimpleRegistry" );
+    OSL_ENSURE( nLen == 1, "more than one implementation for SimpleRegistry" );
 
     Reference<XEnumerationAccess> xImplEnum(xSMgr, UNO_QUERY);
-    TEST_ENSHURE( xImplEnum.is() , "query on XEnumeration failed" );
+    OSL_ENSURE( xImplEnum.is() , "query on XEnumeration failed" );
     xEnum = Reference<XEnumeration >(xImplEnum->createEnumeration());
-    TEST_ENSHURE( xEnum.is() , "createEnumeration failed" );
+    OSL_ENSURE( xEnum.is() , "createEnumeration failed" );
     nLen = 0;
     while( xEnum->hasMoreElements() )
     {
@@ -241,10 +233,10 @@ extern "C" void SAL_CALL test_ServiceManager()
         OString str( OUStringToOString( sf->getImplementationName(), RTL_TEXTENCODING_ASCII_US ) );
         ::fprintf( stderr, "> implementation name: %s\n", str.getStr() );
     }
-    TEST_ENSHURE( nLen == 8, "more than 6 factories" );
+    OSL_ENSURE( nLen == 8, "more than 6 factories" );
 
     // try to get an instance for a unknown service
-    TEST_ENSHURE( !xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("bla.blup.Q"))).is(), "unknown service provider found" );
+    OSL_VERIFY( !xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("bla.blup.Q"))).is() );
 
     //
     // First test : register service via the internal function of the component itself
@@ -252,30 +244,29 @@ extern "C" void SAL_CALL test_ServiceManager()
     {
         Reference< XImplementationRegistration >
             xInst( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))), UNO_QUERY );
-        TEST_ENSHURE( xInst.is(), "no ImplementationRegistration" );
+        OSL_ENSURE( xInst.is(), "no ImplementationRegistration" );
 
         try {
             // register the services via writeComponentRegInfo (see at end of this file)
             xInst->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2, Reference< XSimpleRegistry >() );
         }
         catch(const CannotRegisterImplementationException &) {
-            TEST_ENSHURE( 0, "register implementation failed" );
+            OSL_ENSURE( 0, "register implementation failed" );
         }
 
         // getImplementations() check
          Sequence<OUString> seqImpl = xInst->getImplementations(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2);
-        TEST_ENSHURE( seqImpl.getLength() == 1, "count of implementantions is wrong" );
-        TEST_ENSHURE( seqImpl.getConstArray()[0] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.DummyService.V10")), "implementation name is not equal" );
+        OSL_ENSURE( seqImpl.getLength() == 1, "count of implementantions is wrong" );
+        OSL_ENSURE( seqImpl.getConstArray()[0] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.DummyService.V10")), "implementation name is not equal" );
 
 
         // tests, if a service provider can be instantiated.
 
         Reference< XInterface > xIFace(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ts.TestManagerImpl"))));
-        TEST_ENSHURE( xIFace.is(), "loadable service not found" );
+        OSL_ENSURE( xIFace.is(), "loadable service not found" );
 
         // remove the service
-        TEST_ENSHURE(   xInst->revokeImplementation(atUModule2, Reference< XSimpleRegistry > ()),
-                        "revoke implementation failed" );
+        OSL_VERIFY( xInst->revokeImplementation(atUModule2, Reference< XSimpleRegistry > ()) );
     }
 
     Reference<XComponent> xComp(xSMgr, UNO_QUERY);

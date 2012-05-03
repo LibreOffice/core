@@ -47,12 +47,6 @@ extern "C" void SAL_CALL test_ServiceManager();
 #define TRUE 1
 #endif
 
-#if OSL_DEBUG_LEVEL > 0
-#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-#else
-#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-#endif
-
 
 using namespace ::rtl;
 OString userRegEnv("STAR_USER_REGISTRY=");
@@ -81,10 +75,10 @@ void setStarUserRegistry()
     userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
     if(myRegistry->open(userReg, REG_READWRITE))
     {
-        TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
+        OSL_VERIFY(!myRegistry->create(userReg));
     }
 
-    TEST_ENSHURE(!myRegistry->close(), "setStarUserRegistry error 9");
+    OSL_VERIFY(!myRegistry->close());
     delete myRegistry;
 
     userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
