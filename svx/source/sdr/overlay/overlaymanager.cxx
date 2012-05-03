@@ -123,9 +123,7 @@ namespace sdr
             return mfDiscreteOne;
         }
 
-        OverlayManager::OverlayManager(
-            OutputDevice& rOutputDevice,
-            OverlayManager* pOldOverlayManager)
+        OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
         :   Scheduler(),
             rmOutputDevice(rOutputDevice),
             maOverlayObjects(),
@@ -147,29 +145,6 @@ namespace sdr
                 xProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedDisplayQuality"));
                 xProperties[0].Value <<= true;
                 maViewInformation2D = drawinglayer::geometry::ViewInformation2D(xProperties);
-            }
-
-            if(pOldOverlayManager)
-            {
-                // take over OverlayObjects from given OverlayManager. Copy
-                // the vector of pointers
-                maOverlayObjects = pOldOverlayManager->maOverlayObjects;
-                const sal_uInt32 nSize(maOverlayObjects.size());
-
-                if(nSize)
-                {
-                    for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); aIter++)
-                    {
-                        OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
-                        OverlayObject& rCandidate = **aIter;
-
-                        // remove from old and add to new OverlayManager
-                        pOldOverlayManager->impApplyRemoveActions(rCandidate);
-                        impApplyAddActions(rCandidate);
-                    }
-
-                    pOldOverlayManager->maOverlayObjects.clear();
-                }
             }
         }
 

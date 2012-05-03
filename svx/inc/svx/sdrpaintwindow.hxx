@@ -94,18 +94,7 @@ private:
     bool mbUseBuffer;
 
     // helpers
-    /** Create mpOverlayManager member on demand.
-        @param bUseBuffer
-            Specifies whether to use the buffered (OverlayManagerBuffered)
-            or the unbuffered (OverlayManager) version of the overlay
-            manager.  When this values is different from that of the
-            previous call then the overlay manager is replaced by the
-            specified one.
-
-            The bUseBuffer flag will typically change its value when text
-            editing is started or stopped.
-    */
-    void impCreateOverlayManager(const bool bUseBuffer);
+    void impCreateOverlayManager();
 
 public:
     SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut);
@@ -118,7 +107,7 @@ public:
     // OVERLAYMANAGER
     ::sdr::overlay::OverlayManager* GetOverlayManager() const;
     // #i73602# add flag if buffer shall be used
-    void DrawOverlay(const Region& rRegion, bool bUseBuffer);
+    void DrawOverlay(const Region& rRegion);
     void HideOverlay(const Region& rRegion);
 
     // calculate visible area and return

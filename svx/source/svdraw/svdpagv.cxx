@@ -46,8 +46,6 @@
 #include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
-
-#include <svx/svdotext.hxx> // fuer PaintOutlinerView
 #include <svx/svdoole2.hxx>
 
 // #110094#
@@ -318,22 +316,6 @@ void SdrPageView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
     if(IsVisible())
     {
         GetView().InvalidateAllWin(rRect, bPlus1Pix);
-    }
-}
-
-void SdrPageView::PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) const
-{
-    if (GetView().pTextEditOutliner==NULL) return;
-    //const SdrObject* pTextObjTmp=GetView().GetTextEditObject();
-    //const SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextObjTmp);
-    //FASTBOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
-    sal_uIntPtr nViewAnz=GetView().pTextEditOutliner->GetViewCount();
-    for (sal_uIntPtr i=0; i<nViewAnz; i++) {
-        OutlinerView* pOLV=GetView().pTextEditOutliner->GetView(i);
-        if (pOLV->GetWindow()==pOut) {
-            GetView().ImpPaintOutlinerView(*pOLV, rRect);
-            return;
-        }
     }
 }
 

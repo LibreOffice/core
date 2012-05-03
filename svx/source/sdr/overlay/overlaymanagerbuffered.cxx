@@ -421,9 +421,8 @@ namespace sdr
 
         OverlayManagerBuffered::OverlayManagerBuffered(
             OutputDevice& rOutputDevice,
-            OverlayManager* pOldOverlayManager,
             bool bRefreshWithPreRendering)
-        :   OverlayManager(rOutputDevice, pOldOverlayManager),
+        :   OverlayManager(rOutputDevice),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer

@@ -305,7 +305,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
             aClipRec = pView->pImpEditView->GetWindowPos( aClipRec );
 
             if ( ( pView == pCurView )  )
-                Paint( pView->pImpEditView, aClipRec, sal_True );
+                Paint( pView->pImpEditView, aClipRec, 0, sal_True );
             else
                 pView->GetWindow()->Invalidate( aClipRec );
         }
@@ -3602,7 +3602,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
         pOutDev->SetFont( aOldFont );
 }
 
-void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool bUseVirtDev )
+void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevice* pTargetDevice, sal_Bool bUseVirtDev )
 {
     DBG_ASSERT( pView, "Keine View - Kein Paint!" );
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
@@ -3614,11 +3614,11 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
     Rectangle aClipRec( pView->GetOutputArea() );
     aClipRec.Intersection( rRec );
 
-    Window* pOutWin = pView->GetWindow();
+    OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow();
 
     if ( bUseVirtDev )
     {
-        Rectangle aClipRecPixel( pOutWin->LogicToPixel( aClipRec ) );
+        Rectangle aClipRecPixel( pTarget->LogicToPixel( aClipRec ) );
         if ( !IsVertical() )
         {
             // etwas mehr, falls abgerundet!
@@ -3633,7 +3633,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
 
         // Wenn aClipRecPixel > XXXX, dann invalidieren ?!
 
-        VirtualDevice* pVDev = GetVirtualDevice( pOutWin->GetMapMode(), pOutWin->GetDrawMode() );
+        VirtualDevice* pVDev = GetVirtualDevice( pTarget->GetMapMode(), pTarget->GetDrawMode() );
         pVDev->SetDigitLanguage( GetRefDevice()->GetDigitLanguage() );
 
         {
@@ -3696,7 +3696,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
         // da sonst die Zeile darunter auch ausgegeben werden muss:
         Rectangle aTmpRec( Point( 0, 0 ), aClipRec.GetSize() );
 
-        aClipRec = pOutWin->PixelToLogic( aClipRecPixel );
+        aClipRec = pTarget->PixelToLogic( aClipRecPixel );
         Point aStartPos;
         if ( !IsVertical() )
         {
@@ -3721,38 +3721,38 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
         if ( GetTextRanger() )
         {
             // Some problems here with push/pop, why?!
-//          pOutWin->Push( PUSH_CLIPREGION|PUSH_MAPMODE );
-            bClipRegion = pOutWin->IsClipRegion();
-            aOldRegion = pOutWin->GetClipRegion();
+//          pTarget->Push( PUSH_CLIPREGION|PUSH_MAPMODE );
+            bClipRegion = pTarget->IsClipRegion();
+            aOldRegion = pTarget->GetClipRegion();
             // Wie bekomme ich das Polygon an die richtige Stelle????
             // Das Polygon bezieht sich auf die View, nicht auf das Window
             // => Origin umsetzen...
-            aOldMapMode = pOutWin->GetMapMode();
+            aOldMapMode = pTarget->GetMapMode();
             Point aOrigin = aOldMapMode.GetOrigin();
             Point aViewPos = pView->GetOutputArea().TopLeft();
             aOrigin.Move( aViewPos.X(), aViewPos.Y() );
             aClipRec.Move( -aViewPos.X(), -aViewPos.Y() );
             MapMode aNewMapMode( aOldMapMode );
             aNewMapMode.SetOrigin( aOrigin );
-            pOutWin->SetMapMode( aNewMapMode );
-            pOutWin->SetClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
+            pTarget->SetMapMode( aNewMapMode );
+            pTarget->SetClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
         }
 
-        pOutWin->DrawOutDev( aClipRec.TopLeft(), aClipRec.GetSize(),
+        pTarget->DrawOutDev( aClipRec.TopLeft(), aClipRec.GetSize(),
                             Point(0,0), aClipRec.GetSize(), *pVDev );
 
         if ( GetTextRanger() )
         {
-//          pOutWin->Pop();
+//          pTarget->Pop();
             if ( bClipRegion )
-                pOutWin->SetClipRegion( aOldRegion );
+                pTarget->SetClipRegion( aOldRegion );
             else
-                pOutWin->SetClipRegion();
-            pOutWin->SetMapMode( aOldMapMode );
+                pTarget->SetClipRegion();
+            pTarget->SetMapMode( aOldMapMode );
         }
 
 
-        pView->DrawSelection();
+        pView->DrawSelection(pView->GetEditSelection(), 0, pTarget);
     }
     else
     {
@@ -3782,18 +3782,18 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
                 aClipRec.Right() = nMaxX;
         }
 
-        sal_Bool bClipRegion = pOutWin->IsClipRegion();
-        Region aOldRegion = pOutWin->GetClipRegion();
-        pOutWin->IntersectClipRegion( aClipRec );
+        sal_Bool bClipRegion = pTarget->IsClipRegion();
+        Region aOldRegion = pTarget->GetClipRegion();
+        pTarget->IntersectClipRegion( aClipRec );
 
-        Paint( pOutWin, aClipRec, aStartPos );
+        Paint( pTarget, aClipRec, aStartPos );
 
         if ( bClipRegion )
-            pOutWin->SetClipRegion( aOldRegion );
+            pTarget->SetClipRegion( aOldRegion );
         else
-            pOutWin->SetClipRegion();
+            pTarget->SetClipRegion();
 
-        pView->DrawSelection();
+        pView->DrawSelection(pView->GetEditSelection(), 0, pTarget);
     }
 
 }

@@ -88,12 +88,7 @@ namespace sdr
             double getDiscreteOne() const;
 
         public:
-            // when handing over another OverlayManager at construction, the OverlayObjects
-            // will be taken over from it. The new one will have added all OverlayObjects
-            // while the handed over one will have none
-            OverlayManager(
-                OutputDevice& rOutputDevice,
-                OverlayManager* pOldOverlayManager = 0);
+            OverlayManager(OutputDevice& rOutputDevice);
             virtual ~OverlayManager();
 
             // access to current ViewInformation2D; this call checks and evtl. updates ViewInformation2D

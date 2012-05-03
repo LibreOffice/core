@@ -119,7 +119,6 @@ public:
     */
     const SdrPageWindow* FindPatchedPageWindow( const OutputDevice& rOutDev ) const;
 
-    void PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) const;
 private:
     SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
 

@@ -2521,7 +2521,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                                 // in Fensterkoordinaten umwandeln....
                                 aClipRec.SetPos( pView->pImpEditView->GetWindowPos( aClipRec.TopLeft() ) );
                                 // Wenn Selektion, dann VDev...
-                                Paint( pView->pImpEditView, aClipRec, pView->HasSelection() );
+                                Paint( pView->pImpEditView, aClipRec, 0, pView->HasSelection() );
                             }
                         }
                     }

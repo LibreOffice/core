@@ -87,7 +87,7 @@ OutlinerView::~OutlinerView()
     delete pEditView;
 }
 
-void OutlinerView::Paint( const Rectangle& rRect )
+void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     DBG_CHKTHIS(OutlinerView,0);
 
@@ -96,7 +96,7 @@ void OutlinerView::Paint( const Rectangle& rRect )
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( String() );
 
-    pEditView->Paint( rRect );
+    pEditView->Paint( rRect, pTargetDevice );
 }
 
 sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
