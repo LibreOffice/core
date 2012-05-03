@@ -134,6 +134,8 @@ $(eval $(call gb_CppunitTest_use_extra_configuration,sc_chart_regression_test,\
 	$(OUTDIR)/unittest/registry \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,sc_chart_regression_test,libxml2))
+
 # we need to
 # - explicitly depend on the sc resource files needed at unit-test runtime
 $(call gb_CppunitTest_get_target,sc_chart_regression_test) : \
