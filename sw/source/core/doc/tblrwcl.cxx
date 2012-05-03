@@ -1152,7 +1152,7 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
         return sal_False;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
-    // the table to complex to be handled with chart.
+    // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
     pDoc->CreateChartInternalDataProviders( this );
 
@@ -1294,7 +1294,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
         return sal_False;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
-    // the table to complex to be handled with chart.
+    // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
     pDoc->CreateChartInternalDataProviders( this );
 
@@ -1743,7 +1743,7 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         return sal_False;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
-    // the table to complex to be handled with chart.
+    // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
     pDoc->CreateChartInternalDataProviders( this );
 
