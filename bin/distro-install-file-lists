@@ -254,9 +254,10 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll.config
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/policy.*.cli_.*.dll
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/libcli_.*.so
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/mono_loader.*.uno.so
     add_used_directories mono_list.txt common_list.txt
     # add the files from GAC if it was installed
-    test -f mono_gac && cat mono_gac >>mono_list.txt
+    test -f $SRC_ROOT/mono_extra_list.txt && cat $SRC_ROOT/mono_extra_list.txt >>mono_list.txt
     
     # postgresql subpackage
     test -f $DESTDIR/gid_Module_Optional_PostgresqlSdbc && cp $DESTDIR/gid_Module_Optional_PostgresqlSdbc postgresql_list.txt || :

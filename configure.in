@@ -1588,6 +1588,16 @@ AC_ARG_WITH(help,
 
          To build without help, use --without-help.]))
 
+AC_ARG_WITH(mono-gac-root,
+    AS_HELP_STRING([--with-mono-gac-root],
+        [Define the root of the mono GAC. It is especially
+         needed if you are using $DESTDIR and want to
+         preinstall the mono DLLs into the GAC.])
+    [
+                          Usage:     --with-mono-gac-root=/usr/lib
+    ],
+,)
+
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
         [Specify the name of the Java interpreter command. Typically "java"
@@ -4267,6 +4277,11 @@ if test "$_os" = "Linux"; then
     else
         AC_MSG_RESULT([no])
     fi
+
+    MONO_GAC_ROOT=
+    if test -n "$with_mono_gac_root" -a "$with_mono_gac_root" != "no" ; then
+        MONO_GAC_ROOT=$with_mono_gac_root
+    fi
 fi
 AC_SUBST(CSC_PATH)
 AC_SUBST(CSC)
@@ -4274,6 +4289,7 @@ AC_SUBST(AL)
 AC_SUBST(ENABLE_MONO)
 AC_SUBST(MONO_CFLAGS)
 AC_SUBST(MONO_LIBS)
+AC_SUBST(MONO_GAC_ROOT)
 AC_SUBST(ENABLE_MONO_CLIMAKER)
 AC_SUBST(MKBUNDLE)
 

@@ -442,6 +442,7 @@ distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-desktop-integration
 	$(SRCDIR)/bin/distro-install-sdk
 	$(SRCDIR)/bin/distro-install-file-lists
+	$(SRCDIR)/bin/distro-install-mono
 
 id:
 	@create-ids
