@@ -120,9 +120,9 @@ ZIP1EXT=		.oxt
 ZIP1FLAGS=-r
 ZIP1LIST=		*
 
-DESCRIPTION:=$(ZIP1DIR)$/description.xml
+EXTENSIONDIR=$(ZIP1DIR)
 
-PACKLICS:=$(ZIP1DIR)$/registry$/LICENSE
+.INCLUDE : extension_pre.mk
 
 .IF "$(WITH_LANG)"==""
 FIND_XCU=registry/data
@@ -135,9 +135,6 @@ COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
     $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   	\
     $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
-
-#COMPONENT_MERGED_XCU= \
-#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
@@ -240,9 +237,6 @@ COMPONENT_IMAGES=\
     $(ZIP1DIR)$/bitmaps$/extension_32.png \
     $(ZIP1DIR)$/bitmaps$/extension_32_h.png
 
-COMPONENT_MANIFEST= 							\
-    $(ZIP1DIR)$/META-INF$/manifest.xml
-
 COMPONENT_LIBRARY= 								\
     $(ZIP1DIR)$/$(TARGET).uno$(DLLPOST)
 
@@ -285,10 +279,6 @@ $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
 $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
     $(TYPE) $< | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
-
-$(COMPONENT_MANIFEST) : $$(@:f)
-    @-$(MKDIRHIER) $(@:d)
-    +$(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
 
 $(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
@@ -357,22 +347,7 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
  .ENDIF	#"$(COM)"=="GCC"
 .ENDIF
 
-
-$(DESCRIPTION) : description.xml
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE_ALv2
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
-$(ZIP1DIR)/%.xcu : %.xcu
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
-$(ZIP1DIR)$/%.xcs : %.xcs
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
+.INCLUDE : extension_post.mk
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
 .ELSE

@@ -25,7 +25,7 @@
   xmlns:dep="http://openoffice.org/extensions/description/2006"
   xmlns:xlink="http://www.w3.org/1999/xlink">
 
-  <identifier value="com.sun.PresenterScreen-UPDATED_PLATFORM" />
+  <identifier value="com.sun.PresenterScreen-UPDATED_SUPPORTED_PLATFORM" />
 
   <dependencies>
     <OpenOffice.org-minimal-version value="3.4" dep:name="Apache OpenOffice"/>
@@ -34,13 +34,13 @@
 
   <registration>
     <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-      <license-text xlink:href="license/LICENSE" lang="isocode" license-id="lic-isocode"/>
+      <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
     </simple-license>
   </registration>
 
   <version value="1.2.0"/>
 
-  <platform value="UPDATED_PLATFORM" />
+  <platform value="UPDATED_SUPPORTED_PLATFORM" />
 
   <publisher>
       <name xlink:href="http://www.openoffice.org" lang="en">Apache Software Foundation</name>
