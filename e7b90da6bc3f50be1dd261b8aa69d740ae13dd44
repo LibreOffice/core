@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACH////E\u003d",
+        "filename": "l10ntools/source/xrmlex.l",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-05-03T12:50:42Z",
+      "side": 1,
+      "message": "probably this needs some kind of version check as #pragma GCC diagnostic doesn\u0027t work with older GCC versions, like 4.0.1 which is used on MacOS",
+      "revId": "e7b90da6bc3f50be1dd261b8aa69d740ae13dd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
