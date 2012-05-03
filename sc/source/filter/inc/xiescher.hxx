@@ -175,6 +175,7 @@ protected:
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
     /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
     virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+public:
     SCTAB               GetTab() const { return mnTab; }
 private:
     /** Reads the contents of a BIFF3 OBJ record. */

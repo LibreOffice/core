@@ -52,6 +52,7 @@
 #include "root.hxx"
 #include "imp_op.hxx"
 #include "excimp8.hxx"
+#include <sfx2/objsh.hxx>
 
 FltError ImportExcel::Read( void )
 {
@@ -1309,6 +1310,14 @@ FltError ImportExcel8::Read( void )
         PostDocLoad();
 
         pD->CalcAfterLoad();
+        SfxObjectShell* pDocShell = GetDocShell();
+
+        if ( pDocShell )
+        {
+            std::vector< OrientationInfo > savedOrientations;
+            ScGlobal::CaptureShapeOrientationInfo( savedOrientations, pDocShell->GetModel() );
+            ScGlobal::ApplyShapeOrientationInfo( savedOrientations, pDocShell->GetModel(), *pD );
+        }
 
         // import change tracking data
         XclImpChangeTrack aImpChTr( GetRoot(), maStrm );
