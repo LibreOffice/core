@@ -62,6 +62,7 @@ class Place
 
         rtl::OUString& GetName( ) { return msName; }
         rtl::OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::NO_DECODE ); }
+        INetURLObject& GetUrlObject( ) { return maUrl; }
         sal_Bool  IsLocal( ) { return maUrl.GetProtocol() == INET_PROT_FILE; };
         sal_Bool& IsEditable( ) { return mbEditable; }
 };

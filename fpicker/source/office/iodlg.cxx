@@ -52,8 +52,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#include "svtools/svtools.hrc"
 #include "svtools/helpid.hrc"
+#include <svtools/svtools.hrc>
+#include "OfficeFilePicker.hrc"
 #include "iodlg.hrc"
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
@@ -398,7 +399,7 @@ SvtFileDialog::SvtFileDialog
     WinBits nBits,
     WinBits nExtraBits
 ) :
-    ModalDialog( _pParent, SvtResId( DLG_SVT_EXPLORERFILE ) )
+    ModalDialog( _pParent, SvtResId( DLG_FPICKER_EXPLORERFILE ) )
 
     ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
@@ -423,7 +424,7 @@ SvtFileDialog::SvtFileDialog
 //*****************************************************************************
 
 SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
-    :ModalDialog( _pParent, SvtResId( DLG_SVT_EXPLORERFILE ) )
+    :ModalDialog( _pParent, SvtResId( DLG_FPICKER_EXPLORERFILE ) )
     ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
@@ -2164,7 +2165,7 @@ short SvtFileDialog::PrepareExecute()
 
     // set up initial filter
     sal_uInt16 nFilterCount = GetFilterCount();
-    String aAll( SvtResId( STR_FILTERNAME_ALL ) );
+    rtl::OUString aAll = SvtResId( STR_FILTERNAME_ALL ).toString();
     sal_Bool bHasAll = _pImp->HasFilterListEntry( aAll );
     if ( _pImp->GetCurFilter() || nFilterCount == 1 || ( nFilterCount == 2 && bHasAll ) )
     {
@@ -2178,7 +2179,7 @@ short SvtFileDialog::PrepareExecute()
                 nPos = nFilterCount;
                 while ( nPos-- )
                 {
-                    if ( GetFilterName( nPos ) != aAll )
+                    if ( aAll != rtl::OUString( GetFilterName( nPos ) ) )
                         break;
                 }
             }
@@ -3370,7 +3371,7 @@ QueryFolderNameDialog::QueryFolderNameDialog
     const String& rDefaultText,
     String* pGroupName
 ) :
-    ModalDialog( _pParent, SvtResId( DLG_SVT_QUERYFOLDERNAME ) ),
+    ModalDialog( _pParent, SvtResId( DLG_FPICKER_QUERYFOLDERNAME ) ),
 
     aNameText   ( this, SvtResId( FT_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
     aNameEdit   ( this, SvtResId( ED_SVT_QUERYFOLDERNAME_DLG_NAME ) ),

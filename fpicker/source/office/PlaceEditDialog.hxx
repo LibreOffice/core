@@ -25,63 +25,89 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _SVTPLACEDIALOG_HXX
-#define _SVTPLACEDIALOG_HXX
+#ifndef _PLACEEDITDIALOG_HXX
+#define _PLACEEDITDIALOG_HXX
 
+#include "fpsofficeResMgr.hxx"
 #include "PlacesListBox.hxx"
+#include "ServerDetailsControls.hxx"
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 
 #include <svtools/inettbc.hxx>
 
-#include <svl/restrictedpaths.hxx>
+#include <boost/shared_ptr.hpp>
+#include <vector>
 
 class Place;
 class PlaceEditDialog : public ModalDialog
 {
 private :
 
-    FixedText m_aFTServerUrl;
     FixedText m_aFTServerName;
     FixedText m_aFTServerType;
-    FixedText m_aFTServerLogin;
-    FixedText m_aFTServerPassword;
-
-    SvtURLBox m_aEDServerUrl;
 
     Edit m_aEDServerName;
-    Edit m_aEDServerType;
-    Edit m_aEDServerLogin;
-    Edit m_aEDServerPassword;
+    ListBox m_aLBServerType;
+    boost::shared_ptr< DetailsContainer > m_pCurrentDetails;
 
+    FixedText    m_aFTHost;
+    Edit         m_aEDHost;
+    FixedText    m_aFTPort;
+    NumericField m_aEDPort;
+    FixedText    m_aFTPath;
+    Edit         m_aEDPath;
+    CheckBox     m_aCBDavs;
+
+    Edit         m_aEDSmbHost;
+    FixedText    m_aFTShare;
+    Edit         m_aEDShare;
+    FixedText    m_aFTSmbPath;
+    Edit         m_aEDSmbPath;
+
+    FixedText    m_aFTUsername;
+    Edit         m_aEDUsername;
     OKButton m_aBTOk;
     CancelButton m_aBTCancel;
 
     PushButton m_aBTDelete;
 
-	::svt::RestrictedPaths m_UrlFilter;
+    /** Vector holding the details UI control for each server type.
 
-	DECL_LINK( OKHdl, Button *);
-	DECL_LINK ( DelHdl, Button *);
-
-	DECL_LINK ( EditHdl, Edit *);
+        The elements in this vector need to match the order in the type listbox, e.g.
+        the m_aDetailsContainer[0] will be shown for the type corresponding to entry 0
+        in the listbox.
+      */
+    std::vector< boost::shared_ptr< DetailsContainer > > m_aDetailsContainers;
 
 public :
 
      PlaceEditDialog( Window* pParent);
-     PlaceEditDialog( Window* pParent, PlacePtr pPlace );
+     PlaceEditDialog( Window* pParent, const PlacePtr& pPlace );
      ~PlaceEditDialog();
 
      // Returns a place instance with given informations
      PlacePtr GetPlace();
 
      rtl::OUString GetServerName() 	{ return m_aEDServerName.GetText(); }
-     rtl::OUString GetServerUrl() 	{ return m_aEDServerUrl.GetText(); }
+     rtl::OUString GetServerUrl();
+
+     ResId GetResId( sal_uInt16 nId ) { return SvtResId( nId ); };
+
+private:
+
+    void InitDetails( );
+
+	DECL_LINK ( OKHdl, Button * );
+	DECL_LINK ( DelHdl, Button * );
+	DECL_LINK ( EditHdl, void * );
+    DECL_LINK ( SelectTypeHdl, void * );
 
 };
 
-#endif //_SVTPLACEDIALOG_HXX
+#endif //_PLACEEDITDIALOG_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

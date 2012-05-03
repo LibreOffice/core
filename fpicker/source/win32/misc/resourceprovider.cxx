@@ -40,7 +40,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#include <svtools/svtools.hrc>
+#include "fpicker.hrc"
 
 //------------------------------------------------------------
 // namespace directives

@@ -26,9 +26,10 @@
  ************************************************************************/
 
  // includes ******************************************************************
-#include "svtools/svtools.hrc"
 #include "svtools/helpid.hrc"
+#include "svtools/svtools.hrc"
 #include "iodlg.hrc"
+#include "OfficeFilePicker.hrc"
 
 #define FILEPICKER_IL_IDLIST \
     IdList = \
@@ -57,7 +58,7 @@ ImageList RID_FILEPICKER_IMAGES
 
  // dialogs *******************************************************************
 
-ModalDialog DLG_SVT_EXPLORERFILE
+ModalDialog DLG_FPICKER_EXPLORERFILE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -255,112 +256,9 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
 };
 
-// Add Place Dialog --------------------------------------------------------------
-
-ModalDialog DLG_SVT_ADDPLACE
-{
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Sizeable = TRUE;
-    HelpId = HID_EXPLORERDLG_FILE ;
-    Size = MAP_APPFONT ( 200 , 140 ) ;
-    FixedText FT_ADDPLACE_SERVERURL
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Server Url" ;
-    };
-    FixedText FT_ADDPLACE_SERVERNAME
-    {
-        Pos = MAP_APPFONT ( 12 , 34 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Server Name" ;
-    };
-    FixedText FT_ADDPLACE_SERVERTYPE
-    {
-        Pos = MAP_APPFONT ( 12 , 54 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Type" ;
-    };
-    FixedText FT_ADDPLACE_SERVERLOGIN
-    {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ en-US ] = "Login" ;
-    };
-    FixedText FT_ADDPLACE_SERVERPASSWORD
-    {
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ en-US ] = "Password" ;
-    };
-    Edit ED_ADDPLACE_SERVERURL
-    {
-        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
-        Pos = MAP_APPFONT ( 62, 12 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        Border = TRUE ;
-        //Left = TRUE ;
-    };
-    Edit ED_ADDPLACE_SERVERNAME
-    {
-        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
-        Pos = MAP_APPFONT ( 62, 32 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        Border = TRUE ;
-        //Left = TRUE ;
-    };
-    Edit ED_ADDPLACE_SERVERTYPE
-    {
-        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
-        Pos = MAP_APPFONT ( 62, 52 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        Border = TRUE ;
-        //Left = TRUE ;
-    };
-    Edit ED_ADDPLACE_SERVERLOGIN
-    {
-        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
-        Pos = MAP_APPFONT ( 62, 72 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        Border = TRUE ;
-        //Left = TRUE ;
-    };
-    Edit ED_ADDPLACE_SERVERPASSWORD
-    {
-        //HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
-        Pos = MAP_APPFONT ( 62, 92 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        Border = TRUE ;
-        //Left = TRUE ;
-    };
-    OKButton BT_ADDPLACE_OK
-    {
-        Pos = MAP_APPFONT ( 80 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_ADDPLACE_CANCEL
-    {
-        Pos = MAP_APPFONT ( 140, 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    PushButton BT_ADDPLACE_DELETE
-    {
-        //HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_CONNECT_TO_SERVER";
-        Pos = MAP_APPFONT ( 10 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Delete" ;
-        //QuickHelpText [ en-US ] = "Connect To Server" ;
-    };
-};
-
 // QueryFolderNameDialog ----------------------------------------------------------
 
-ModalDialog DLG_SVT_QUERYFOLDERNAME
+ModalDialog DLG_FPICKER_QUERYFOLDERNAME
 {
     HelpID = "fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME";
     Border = TRUE ;

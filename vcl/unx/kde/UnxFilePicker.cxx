@@ -44,7 +44,7 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/resmgr.hxx>
 
-#include <svtools/svtools.hrc>
+#include <fpicker/fpicker.hrc>
 #include <UnxFilePicker.hxx>
 #include <UnxCommandThread.hxx>
 #include <UnxNotifyThread.hxx>

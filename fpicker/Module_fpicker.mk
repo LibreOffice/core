@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 	AllLangResTarget_fps_office \
 	Library_fpicker \
 	Library_fps_office \
+	Package_inc \
 ))
 
 ifeq ($(GUIBASE),aqua)

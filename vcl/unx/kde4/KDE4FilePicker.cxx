@@ -39,7 +39,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <svtools/svtools.hrc>
+#include <fpicker/fpicker.hrc>
 
 #include <osl/mutex.hxx>
 

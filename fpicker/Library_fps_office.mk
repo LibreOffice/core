@@ -34,6 +34,11 @@ $(eval $(call gb_Library_use_api,fps_office,\
 	udkapi \
 ))
 
+$(eval $(call gb_Library_set_include,fps_office,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/fpicker/inc \
+))
+
 $(eval $(call gb_Library_use_libraries,fps_office,\
 	comphelper \
 	cppu \
@@ -62,6 +67,7 @@ $(eval $(call gb_Library_add_exception_objects,fps_office,\
 	fpicker/source/office/OfficeFolderPicker \
 	fpicker/source/office/PlaceEditDialog \
 	fpicker/source/office/PlacesListBox \
+	fpicker/source/office/ServerDetailsControls \
 ))
 
 # vim: set noet sw=4 ts=4:

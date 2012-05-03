@@ -26,85 +26,181 @@
  * instead of those above.
  */
 
-#include "iodlg.hrc"
-#include <svtools/svtools.hrc>
-#include <vcl/msgbox.hxx>
-
+#include "OfficeFilePicker.hrc"
+#include "PlaceEditDialog.hrc"
 #include "fpsofficeResMgr.hxx"
 #include "PlacesListBox.hxx"
 #include "PlaceEditDialog.hxx"
+#include "ServerDetailsControls.hxx"
 
+#include <vcl/msgbox.hxx>
+
+using namespace boost;
 
 PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
-	ModalDialog( pParent, SvtResId( DLG_SVT_ADDPLACE ) ),
-	m_aFTServerUrl( this, SvtResId( FT_ADDPLACE_SERVERURL ) ),
+	ModalDialog( pParent, SvtResId( DLG_FPICKER_PLACE_EDIT ) ),
     m_aFTServerName( this, SvtResId( FT_ADDPLACE_SERVERNAME ) ),
     m_aFTServerType( this, SvtResId( FT_ADDPLACE_SERVERTYPE ) ),
-    m_aFTServerLogin( this, SvtResId( FT_ADDPLACE_SERVERLOGIN ) ),
-    m_aFTServerPassword( this, SvtResId( FT_ADDPLACE_SERVERPASSWORD) ),
-	m_aEDServerUrl ( this, SvtResId( ED_ADDPLACE_SERVERURL ) ),
 	m_aEDServerName ( this, SvtResId( ED_ADDPLACE_SERVERNAME ) ),
-	m_aEDServerType ( this, SvtResId( ED_ADDPLACE_SERVERTYPE ) ),
-	m_aEDServerLogin ( this, SvtResId( ED_ADDPLACE_SERVERLOGIN ) ),
-	m_aEDServerPassword ( this, SvtResId( ED_ADDPLACE_SERVERPASSWORD ) ),
+	m_aLBServerType ( this, SvtResId( LB_ADDPLACE_SERVERTYPE ) ),
+    m_pCurrentDetails( ),
+    m_aFTHost( this, SvtResId( FT_ADDPLACE_HOST ) ),
+    m_aEDHost( this, SvtResId( ED_ADDPLACE_HOST ) ),
+    m_aFTPort( this, SvtResId( FT_ADDPLACE_PORT ) ),
+    m_aEDPort( this, SvtResId( ED_ADDPLACE_PORT ) ),
+    m_aFTPath( this, SvtResId( FT_ADDPLACE_PATH ) ),
+    m_aEDPath( this, SvtResId( ED_ADDPLACE_PATH ) ),
+    m_aCBDavs( this, SvtResId( CB_ADDPLACE_DAVS ) ),
+    m_aEDSmbHost( this, SvtResId( ED_ADDPLACE_SMBHOST ) ),
+    m_aFTShare( this, SvtResId( FT_ADDPLACE_SHARE ) ),
+    m_aEDShare( this, SvtResId( ED_ADDPLACE_SHARE ) ),
+    m_aFTSmbPath( this, SvtResId( FT_ADDPLACE_SMBPATH ) ),
+    m_aEDSmbPath( this, SvtResId( ED_ADDPLACE_SMBPATH ) ),
+    m_aFTUsername( this, SvtResId( FT_ADDPLACE_USERNAME ) ),
+    m_aEDUsername( this, SvtResId( ED_ADDPLACE_USERNAME ) ),
     m_aBTOk( this, SvtResId( BT_ADDPLACE_OK ) ),
     m_aBTCancel ( this, SvtResId ( BT_ADDPLACE_CANCEL ) ),
     m_aBTDelete ( this, SvtResId (BT_ADDPLACE_DELETE ) )
 {
-	// This constructor is called when user request a place creation, so
-	// delete button is hidden.
 	m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
 	m_aBTOk.Enable( sal_False );
 
 	m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
-	m_aEDServerUrl.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
 
-	m_aEDServerUrl.SetUrlFilter( &m_UrlFilter );
-	Edit aDummyEdit ( this, SvtResId( ED_ADDPLACE_SERVERURL ) );
-	m_aEDServerUrl.SetPosSizePixel( aDummyEdit.GetPosPixel(), aDummyEdit.GetSizePixel() );
-	m_aEDServerUrl.Show();
+	// This constructor is called when user request a place creation, so
+	// delete button is hidden.
 	m_aBTDelete.Hide();
+
+    m_aLBServerType.SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
+
+    InitDetails( );
 }
 
-PlaceEditDialog::PlaceEditDialog( Window* pParent, PlacePtr pPlace ) :
-	ModalDialog( pParent, SvtResId( DLG_SVT_ADDPLACE ) ),
-	m_aFTServerUrl( this, SvtResId( FT_ADDPLACE_SERVERURL ) ),
+PlaceEditDialog::PlaceEditDialog( Window* pParent, const PlacePtr& pPlace ) :
+	ModalDialog( pParent, SvtResId( DLG_FPICKER_PLACE_EDIT ) ),
     m_aFTServerName( this, SvtResId( FT_ADDPLACE_SERVERNAME ) ),
     m_aFTServerType( this, SvtResId( FT_ADDPLACE_SERVERTYPE ) ),
-    m_aFTServerLogin( this, SvtResId( FT_ADDPLACE_SERVERLOGIN ) ),
-    m_aFTServerPassword( this, SvtResId( FT_ADDPLACE_SERVERPASSWORD) ),
-	m_aEDServerUrl ( this, SvtResId( ED_ADDPLACE_SERVERURL ) ),
 	m_aEDServerName ( this, SvtResId( ED_ADDPLACE_SERVERNAME ) ),
-	m_aEDServerType ( this, SvtResId( ED_ADDPLACE_SERVERTYPE ) ),
-	m_aEDServerLogin ( this, SvtResId( ED_ADDPLACE_SERVERLOGIN ) ),
-	m_aEDServerPassword ( this, SvtResId( ED_ADDPLACE_SERVERPASSWORD ) ),
+	m_aLBServerType ( this, SvtResId( LB_ADDPLACE_SERVERTYPE ) ),
+    m_pCurrentDetails( ),
+    m_aFTHost( this, SvtResId( FT_ADDPLACE_HOST ) ),
+    m_aEDHost( this, SvtResId( ED_ADDPLACE_HOST ) ),
+    m_aFTPort( this, SvtResId( FT_ADDPLACE_PORT ) ),
+    m_aEDPort( this, SvtResId( ED_ADDPLACE_PORT ) ),
+    m_aFTPath( this, SvtResId( FT_ADDPLACE_PATH ) ),
+    m_aEDPath( this, SvtResId( ED_ADDPLACE_PATH ) ),
+    m_aCBDavs( this, SvtResId( CB_ADDPLACE_DAVS ) ),
+    m_aEDSmbHost( this, SvtResId( ED_ADDPLACE_SMBHOST ) ),
+    m_aFTShare( this, SvtResId( FT_ADDPLACE_SHARE ) ),
+    m_aEDShare( this, SvtResId( ED_ADDPLACE_SHARE ) ),
+    m_aFTSmbPath( this, SvtResId( FT_ADDPLACE_SMBPATH ) ),
+    m_aEDSmbPath( this, SvtResId( ED_ADDPLACE_SMBPATH ) ),
+    m_aFTUsername( this, SvtResId( FT_ADDPLACE_USERNAME ) ),
+    m_aEDUsername( this, SvtResId( ED_ADDPLACE_USERNAME ) ),
     m_aBTOk( this, SvtResId( BT_ADDPLACE_OK ) ),
     m_aBTCancel ( this, SvtResId ( BT_ADDPLACE_CANCEL ) ),
     m_aBTDelete ( this, SvtResId (BT_ADDPLACE_DELETE ) )
 {
-	m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
-	m_aBTDelete.SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
+    m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
+    m_aBTDelete.SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
 
-	m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
-	m_aEDServerUrl.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_aLBServerType.SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
 
-	m_aEDServerUrl.SetUrlFilter( &m_UrlFilter );
-	Edit aDummyEdit ( this, SvtResId( ED_ADDPLACE_SERVERURL ) );
-	m_aEDServerUrl.SetPosSizePixel( aDummyEdit.GetPosPixel(), aDummyEdit.GetSizePixel() );
-	m_aEDServerUrl.Show();
+    InitDetails( );
 
-	m_aEDServerName.SetText( pPlace->GetName() );
-	m_aEDServerUrl.SetText( pPlace->GetUrl() );
+    m_aEDServerName.SetText( pPlace->GetName() );
+
+    // Fill the boxes with the URL parts
+    bool bSuccess = false;
+    for ( size_t i = 0 ; i < m_aDetailsContainers.size( ) && !bSuccess; ++i )
+    {
+        INetURLObject& rUrl = pPlace->GetUrlObject( );
+        bSuccess = m_aDetailsContainers[i]->setUrl( rUrl );
+        if ( bSuccess )
+        {
+            m_aLBServerType.SelectEntryPos( i );
+            SelectTypeHdl( &m_aLBServerType );
+
+            // Fill the Username field
+            if ( rUrl.HasUserData( ) )
+                m_aEDUsername.SetText( rUrl.GetUser( ) );
+        }
+    }
 }
 
 PlaceEditDialog::~PlaceEditDialog()
 {
 }
 
+rtl::OUString PlaceEditDialog::GetServerUrl()
+{
+    rtl::OUString sUrl;
+    if ( m_pCurrentDetails.get( ) )
+    {
+        INetURLObject aUrl = m_pCurrentDetails->getUrl();
+        aUrl.SetUser( rtl::OUString( m_aEDUsername.GetText( ) ).trim( ) );
+        if ( !aUrl.HasError( ) )
+            sUrl = aUrl.GetMainURL( INetURLObject::NO_DECODE );
+    }
+
+    return sUrl;
+}
+
 PlacePtr PlaceEditDialog::GetPlace()
 {
-	PlacePtr newPlace( new Place( m_aEDServerName.GetText(), m_aEDServerUrl.GetURL(), true) );
+	PlacePtr newPlace( new Place( m_aEDServerName.GetText(), GetServerUrl(), true ) );
 	return newPlace;
+}
+
+void PlaceEditDialog::InitDetails( )
+{
+    // Create WebDAV / FTP / SSH details control
+    shared_ptr< DetailsContainer > pDavDetails( new DavDetailsContainer( ) );
+    pDavDetails->addControl( FT_ADDPLACE_HOST, &m_aFTHost );
+    pDavDetails->addControl( ED_ADDPLACE_HOST, &m_aEDHost );
+    pDavDetails->addControl( FT_ADDPLACE_PORT, &m_aFTPort );
+    pDavDetails->addControl( ED_ADDPLACE_PORT, &m_aEDPort );
+    pDavDetails->addControl( FT_ADDPLACE_PATH, &m_aFTPath );
+    pDavDetails->addControl( ED_ADDPLACE_PATH, &m_aEDPath );
+    pDavDetails->addControl( CB_ADDPLACE_DAVS, &m_aCBDavs );
+    pDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back( pDavDetails );
+
+    shared_ptr< DetailsContainer > pFtpDetails( new HostDetailsContainer( 21, "ftp" ) );
+    pFtpDetails->addControl( FT_ADDPLACE_HOST, &m_aFTHost );
+    pFtpDetails->addControl( ED_ADDPLACE_HOST, &m_aEDHost );
+    pFtpDetails->addControl( FT_ADDPLACE_PORT, &m_aFTPort );
+    pFtpDetails->addControl( ED_ADDPLACE_PORT, &m_aEDPort );
+    pFtpDetails->addControl( FT_ADDPLACE_PATH, &m_aFTPath );
+    pFtpDetails->addControl( ED_ADDPLACE_PATH, &m_aEDPath );
+    pFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back( pFtpDetails );
+
+    shared_ptr< DetailsContainer > pSshDetails( new HostDetailsContainer( 22, "ssh" ) );
+    pSshDetails->addControl( FT_ADDPLACE_HOST, &m_aFTHost );
+    pSshDetails->addControl( ED_ADDPLACE_HOST, &m_aEDHost );
+    pSshDetails->addControl( FT_ADDPLACE_PORT, &m_aFTPort );
+    pSshDetails->addControl( ED_ADDPLACE_PORT, &m_aEDPort );
+    pSshDetails->addControl( FT_ADDPLACE_PATH, &m_aFTPath );
+    pSshDetails->addControl( ED_ADDPLACE_PATH, &m_aEDPath );
+    pSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back( pSshDetails );
+
+    // Create Windows Share control
+    shared_ptr< DetailsContainer > pSmbDetails( new SmbDetailsContainer( ) );
+    pSmbDetails->addControl( FT_ADDPLACE_HOST, &m_aFTHost );
+    pSmbDetails->addControl( ED_ADDPLACE_SMBHOST, &m_aEDSmbHost );
+    pSmbDetails->addControl( FT_ADDPLACE_SHARE, &m_aFTShare );
+    pSmbDetails->addControl( ED_ADDPLACE_SHARE, &m_aEDShare );
+    pSmbDetails->addControl( FT_ADDPLACE_SMBPATH, &m_aFTSmbPath );
+    pSmbDetails->addControl( ED_ADDPLACE_SMBPATH, &m_aEDSmbPath );
+    pSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back( pSmbDetails );
+
+    // Set default to first value
+    m_aLBServerType.SelectEntryPos( 0 );
+    SelectTypeHdl( &m_aLBServerType );
 }
 
 IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, EMPTYARG )
@@ -120,24 +216,74 @@ IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
 	return 1;
 }
 
-IMPL_LINK ( PlaceEditDialog, EditHdl, Edit *, EMPTYARG )
+IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
 {
-	String anUrl = m_aEDServerUrl.GetText();
-	anUrl.EraseLeadingChars().EraseTrailingChars();
-	String aName = m_aEDServerName.GetText();
-	aName.EraseLeadingChars().EraseTrailingChars();
-	if ( ( anUrl.Len() ) && ( aName.Len() ) )
-	{
-		if ( !m_aBTOk.IsEnabled() )
-			m_aBTOk.Enable( sal_True );
-	}
-	else
-	{
-		if ( m_aBTOk.IsEnabled() )
-			m_aBTOk.Enable( sal_False );
-	}
+    rtl::OUString sUrl = GetServerUrl( );
+    rtl::OUString sName = rtl::OUString( m_aEDServerName.GetText() ).trim( );
+    m_aBTOk.Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
 	return 1;
 }
 
+IMPL_LINK( PlaceEditDialog, SelectTypeHdl, void*, EMPTYARG )
+{
+    // Compute the vertical space between two rows
+    long nRowDelta = m_aLBServerType.GetPosPixel().getY() - m_aEDServerName.GetPosPixel().getY();
+    long nRowSpace = nRowDelta - m_aEDServerName.GetSizePixel().getHeight();
+
+    long nOldHeight = 0;
+    if ( m_pCurrentDetails.get( ) )
+    {
+        m_pCurrentDetails->show( false );
+        Rectangle aOldBounds = m_pCurrentDetails->getBounds( );
+        if ( !aOldBounds.IsEmpty() )
+            nOldHeight = aOldBounds.getHeight();
+    }
+
+    sal_uInt16 nPos = m_aLBServerType.GetSelectEntryPos( );
+    m_pCurrentDetails = m_aDetailsContainers[nPos];
+
+    m_pCurrentDetails->show( true );
+    Rectangle aNewBounds = m_pCurrentDetails->getBounds();
+
+    long nNewHeight = 0;
+    if ( !aNewBounds.IsEmpty() )
+    {
+        nNewHeight = aNewBounds.getHeight();
+
+        // Add row space if old height was 0
+        if ( nOldHeight == 0 )
+            nNewHeight += nRowSpace;
+    }
+
+    // If the new height is 0, but not the old one, then remove the doubled row space
+    if ( nNewHeight == 0 && nOldHeight > 0 )
+        nNewHeight -= nRowSpace;
+
+    long nHeightDelta = nNewHeight - nOldHeight;
+    Control* pToMove[] =
+    {
+        &m_aFTUsername,
+        &m_aEDUsername,
+        &m_aBTOk,
+        &m_aBTCancel,
+        &m_aBTDelete
+    };
+
+    Control** pCurrent = pToMove;
+    for ( sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS( pToMove )); ++i, ++pCurrent )
+    {
+        Point aPos = ( *pCurrent )->GetPosPixel( );
+        aPos.setY( aPos.getY( ) + nHeightDelta );
+        ( *pCurrent )->SetPosPixel( aPos );
+    }
+
+    // Resize the dialog too
+    Size aDlgSize = GetSizePixel( );
+    aDlgSize.setHeight( aDlgSize.getHeight( ) + nHeightDelta );
+    SetSizePixel( aDlgSize );
+
+
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

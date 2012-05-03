@@ -78,7 +78,10 @@
 #define RID_EDIT_START              (RID_LIB_START+5800)
 #define RID_EDIT_END                (RID_LIB_START+6369)
 
-#define RID_SVTOOLS_START           (RID_LIB_START+6370)
+#define RID_FPICKER_START           (RID_LIB_START+6370)
+#define RID_FPICKER_END             (RID_LIB_START+6389)
+
+#define RID_SVTOOLS_START           (RID_LIB_START+6390)
 #define RID_SVTOOLS_END             (RID_LIB_START+6499)
 
 #define RID_INET_START              (RID_LIB_START+6500)
