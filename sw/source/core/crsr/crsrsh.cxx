@@ -77,17 +77,18 @@ using namespace util;
 TYPEINIT2(SwCrsrShell,ViewShell,SwModify);
 
 
-// Funktion loescht, alle ueberlappenden Cursor aus einem Cursor-Ring
+/**
+ * Delete all overlapping Cursors from a Cursor ring.
+ * @param pointer to SwCursor (ring)
+ */
 void CheckRange( SwCursor* );
 
 //-----------------------------------------------------------------------
 
-/*
- * Ueberpruefe ob der pCurCrsr in einen schon bestehenden Bereich zeigt.
- * Wenn ja, dann hebe den alten Bereich auf.
+/**
+ * Check if pCurCrsr points into already existing ranges and delete those.
+ * @param Pointer to SwCursor object
  */
-
-
 void CheckRange( SwCursor* pCurCrsr )
 {
     const SwPosition *pStt = pCurCrsr->Start(),
@@ -96,7 +97,7 @@ void CheckRange( SwCursor* pCurCrsr )
     SwPaM *pTmpDel = 0,
           *pTmp = (SwPaM*)pCurCrsr->GetNext();
 
-    // durchsuche den gesamten Ring
+    // Search the complete ring
     while( pTmp != pCurCrsr )
     {
         const SwPosition *pTmpStt = pTmp->Start(),
@@ -112,54 +113,58 @@ void CheckRange( SwCursor* pCurCrsr )
             if( *pStt < *pTmpEnd )
                 pTmpDel = pTmp;
         /*
-         * liegt ein SPoint oder GetMark innerhalb vom Crsr-Bereich
-         * muss der alte Bereich aufgehoben werden.
-         * Beim Vergleich ist darauf zu achten, das SPoint nicht mehr zum
-         * Bereich gehoert !
+         * If Point or Mark is within the Crsr range, we
+         * need to remove the old range. Take note that Point does
+         * not belong to the range anymore.
          */
         pTmp = (SwPaM*)pTmp->GetNext();
-        delete pTmpDel;         // hebe alten Bereich auf
+        delete pTmpDel;         // Remove old range
         pTmpDel = 0;
     }
 }
 
-// -------------- Methoden von der SwCrsrShell -------------
+
+
+/**
+ Methods of SwCrsrShell
+ */
+
 
 SwPaM * SwCrsrShell::CreateCrsr()
 {
-    // Innerhalb der Tabellen-SSelection keinen neuen Crsr anlegen
-    OSL_ENSURE( !IsTableMode(), "in Tabellen SSelection" );
+    // don't create Crsr in a table Selection (sic!)
+    OSL_ENSURE( !IsTableMode(), "in table Selection" );
 
-    // neuen Cursor als Kopie vom akt. und in den Ring aufnehmen
-    // Verkettung zeigt immer auf den zuerst erzeugten, also vorwaerts
+    // New cursor as copy of current one. Add to the ring.
+    // Links point to previously created one, ie forward.
     SwShellCrsr* pNew = new SwShellCrsr( *pCurCrsr );
 
-    // hier den akt. Pam nur logisch Hiden, weil sonst die Invertierung
-    // vom kopierten Pam aufgehoben wird !!
-
-    // #i75172#
+    // Hide PaM logically, to avoid undoing the inverting from
+    // copied PaM (#i75172#)
     pNew->swapContent(*pCurCrsr);
 
     pCurCrsr->DeleteMark();
 
     UpdateCrsr( SwCrsrShell::SCROLLWIN );
-//  return pCurCrsr;
     return pNew;
 }
 
-// loesche den aktuellen Cursor und der folgende wird zum Aktuellen
 
-
+/**
+ * Delete current Cursor, making the following one the current.
+ * Note, this function does not delete anything if there is no other cursor.
+ * @return - returns sal_True if there was another cursor and we deleted one.
+ */
 sal_Bool SwCrsrShell::DestroyCrsr()
 {
-    // Innerhalb der Tabellen-SSelection keinen neuen Crsr loeschen
-    OSL_ENSURE( !IsTableMode(), "in Tabellen SSelection" );
+    // don't delete Crsr within table selection
+    OSL_ENSURE( !IsTableMode(), "in table Selection" );
 
-    // ist ueberhaupt ein naechtser vorhanden ?
+    // Is there a next one? Don't do anything if not.
     if(pCurCrsr->GetNext() == pCurCrsr)
         return sal_False;
 
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
+    SwCallLink aLk( *this );        // watch Crsr-Moves
     SwCursor* pNextCrsr = (SwCursor*)pCurCrsr->GetNext();
     delete pCurCrsr;
     pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
@@ -168,6 +173,11 @@ sal_Bool SwCrsrShell::DestroyCrsr()
 }
 
 
+/**
+ * Create and return a new shell cursor.
+ * Simply returns the current shell cursor if there is no selection
+ * (HasSelection()).
+ */
 SwPaM & SwCrsrShell::CreateNewShellCursor()
 {
     if (HasSelection())
@@ -177,21 +187,26 @@ SwPaM & SwCrsrShell::CreateNewShellCursor()
     return *GetCrsr();
 }
 
+/**
+ * Return the current shell cursor
+ * @return - returns current `SwPaM` shell cursor
+ */
 SwPaM & SwCrsrShell::GetCurrentShellCursor()
 {
     return *GetCrsr();
 }
 
-
-// gebe den aktuellen zurueck
-
+/**
+ * Return pointer to the current shell cursor
+ * @return - returns pointer to current `SwPaM` shell cursor
+ */
 SwPaM* SwCrsrShell::GetCrsr( sal_Bool bMakeTblCrsr ) const
 {
     if( pTblCrsr )
     {
         if( bMakeTblCrsr && pTblCrsr->IsCrsrMovedUpdt() )
         {
-            // geparkte Cursor werden nicht wieder erzeugt
+            //don't re-create 'parked'(?) cursors
             const SwCntntNode* pCNd;
             if( pTblCrsr->GetPoint()->nNode.GetIndex() &&
                 pTblCrsr->GetMark()->nNode.GetIndex() &&
@@ -217,7 +232,7 @@ void SwCrsrShell::StartAction()
 {
     if( !ActionPend() )
     {
-        // fuer das Update des Ribbon-Bars merken
+        // save for update of the ribbon bar
         const SwNode& rNd = pCurCrsr->GetPoint()->nNode.GetNode();
         nAktNode = rNd.GetIndex();
         nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
@@ -228,22 +243,21 @@ void SwCrsrShell::StartAction()
         else
             nLeftFrmPos = 0;
     }
-    ViewShell::StartAction();           // zur ViewShell
+    ViewShell::StartAction();           // to the ViewShell
 }
 
 
 void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 {
-
     sal_Bool bVis = bSVCrsrVis;
 
-    // Idle-Formatierung ?
+    // Idle-formatting?
     if( bIdleEnd && Imp()->GetRegion() )
     {
         pCurCrsr->Hide();
     }
 
-    // vor der letzten Action alle invaliden Numerierungen updaten
+    // Update all invalid numberings before the last action
     if( 1 == nStartAction )
         GetDoc()->UpdateNumRule();
 
@@ -252,29 +266,28 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     sal_Bool bSavSVCrsrVis = bSVCrsrVis;
     bSVCrsrVis = sal_False;
 
-    ViewShell::EndAction( bIdleEnd );   //der ViewShell den Vortritt lassen
+    ViewShell::EndAction( bIdleEnd );   // have ViewShell go first
 
     bSVCrsrVis = bSavSVCrsrVis;
 
     if( ActionPend() )
     {
-        if( bVis )    // auch SV-Cursor wieder anzeigen
+        if( bVis )    // display SV-Cursor again
             pVisCrsr->Show();
 
-        // falls noch ein ChgCall vorhanden ist und nur noch die Basic
-        // Klammerung vorhanden ist, dann rufe ihn. Dadurch wird die interne
-        // mit der Basic-Klammerung entkoppelt; die Shells werden umgeschaltet
+        // If there is still a ChgCall and just the "basic
+        // parenthiszing(?) (Basic-Klammerung)" exists, call it. This
+        // decouples the internal with the Basic-parenthising, the
+        // Shells are switched.
         if( !BasicActionPend() )
         {
-            // es muss innerhalb einer BasicAction
-            //              der Cursor geupdatet werden; um z.B. den
-            //              TabellenCursor zu erzeugen. Im UpdateCrsr wird
-            //              das jetzt beruecksichtigt!
+            // Within a Basic action, one needs to update the cursor,
+            // to e.g. create the table cursos. This is being done in
+            // UpdateCrsr.
             UpdateCrsr( SwCrsrShell::CHKRANGE, bIdleEnd );
 
             {
-                // Crsr-Moves ueberwachen, evt. Link callen
-                // der DTOR ist das interressante!!
+                // watch Crsr-Moves, call Link if needed, the DTOR is key here!
                 SwCallLink aLk( *this, nAktNode, nAktCntnt, (sal_uInt8)nAktNdTyp,
                                 nLeftFrmPos, bAktSelection );
 
@@ -282,7 +295,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
             if( bCallChgLnk && bChgCallFlag && aChgLnk.IsSet() )
             {
                 aChgLnk.Call( this );
-                bChgCallFlag = sal_False;       // Flag zuruecksetzen
+                bChgCallFlag = sal_False;       // reset flag
             }
         }
         return;
@@ -292,24 +305,25 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     if ( !bIdleEnd )
         nParm |= SwCrsrShell::SCROLLWIN;
 //    if( !IsViewLocked() )
-    UpdateCrsr( nParm, bIdleEnd );      // Cursor-Aenderungen anzeigen
+    UpdateCrsr( nParm, bIdleEnd );      // Show Cursor changes
 
     {
-        SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-        aLk.nNode = nAktNode;           // evt. Link callen
+        SwCallLink aLk( *this );        // watch Crsr-Moves
+        aLk.nNode = nAktNode;           // call Link if needed
         aLk.nNdTyp = (sal_uInt8)nAktNdTyp;
         aLk.nCntnt = nAktCntnt;
         aLk.nLeftFrmPos = nLeftFrmPos;
 
         if( !nCrsrMove ||
             ( 1 == nCrsrMove && bInCMvVisportChgd ) )
-            ShowCrsrs( bSVCrsrVis ? sal_True : sal_False );    // Cursor & Selektionen wieder anzeigen
+            // display Cursor & Selektions again
+            ShowCrsrs( bSVCrsrVis ? sal_True : sal_False );
     }
-    // falls noch ein ChgCall vorhanden ist, dann rufe ihn
+    // call ChgCall if there is still one
     if( bCallChgLnk && bChgCallFlag && aChgLnk.IsSet() )
     {
         aChgLnk.Call( this );
-        bChgCallFlag = sal_False;       // Flag zuruecksetzen
+        bChgCallFlag = sal_False;       // reset flag
     }
 }
 
@@ -325,7 +339,7 @@ void SwCrsrShell::SttCrsrMove()
 
 void SwCrsrShell::EndCrsrMove( const sal_Bool bIdleEnd )
 {
-    OSL_ENSURE( nCrsrMove, "EndCrsrMove() ohne SttCrsrMove()." );
+    OSL_ENSURE( nCrsrMove, "EndCrsrMove() without SttCrsrMove()." );
     EndAction( bIdleEnd );
     if( !--nCrsrMove )
         bInCMvVisportChgd = sal_False;
