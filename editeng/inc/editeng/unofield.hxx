@@ -57,7 +57,6 @@
 #define ID_HEADERFIELD      12
 #define ID_FOOTERFIELD      13
 #define ID_DATETIMEFIELD    14
-#define ID_UNKNOWN          15      // this must be the last entry
 
 class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;

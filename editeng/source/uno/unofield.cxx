@@ -59,6 +59,13 @@ using namespace ::com::sun::star;
 #define WID_STRING2 6
 #define WID_STRING3 7
 
+const sal_Int32 UNKNOWN_FIELD = -1;
+
+inline bool isValidFieldId(sal_Int32 nId)
+{
+    return nId >= 0;
+}
+
 class SvxUnoFieldData_Impl
 {
 public:
@@ -181,8 +188,7 @@ static sal_Char const* aFieldItemNameMap_Impl[] =
     "ExtDate",
     "Header",
     "Footer",
-    "DateTime",
-    "Unknown"
+    "DateTime"
 };
 
 /* conversion routines */
@@ -314,7 +320,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
 :   OComponentHelper( getMutex() )
 ,   mxAnchor( xAnchor )
 ,   mpPropSet(NULL)
-,   mnServiceId(ID_UNKNOWN)
+,   mnServiceId(UNKNOWN_FIELD)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
     DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
@@ -324,8 +330,8 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
     if(pData)
     {
         mnServiceId = GetFieldId(pData);
-        DBG_ASSERT(mnServiceId != ID_UNKNOWN, "unknown SvxFieldData! [CL]");
-        if(mnServiceId != ID_UNKNOWN)
+        DBG_ASSERT(mnServiceId != UNKNOWN_FIELD, "unknown SvxFieldData! [CL]");
+        if(mnServiceId != UNKNOWN_FIELD)
         {
             // extract field properties from data class
             switch( mnServiceId )
@@ -603,8 +609,11 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
 
     if(bShowCommand)
     {
-        DBG_ASSERT( ((sal_uInt32)mnServiceId) < ID_UNKNOWN, "Unknown field type" );
-        return OUString::createFromAscii( aFieldItemNameMap_Impl[(((sal_uInt32)mnServiceId) > ID_UNKNOWN)? ID_UNKNOWN : mnServiceId ] );
+        DBG_ASSERT(mnServiceId >= 0, "Unknown field type");
+        if (isValidFieldId(mnServiceId))
+            return OUString::createFromAscii(aFieldItemNameMap_Impl[mnServiceId]);
+        else
+            return OUString("Unknown");
     }
     else
     {
@@ -1045,7 +1054,7 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
     else if( pFieldData->ISA( SvxDateTimeField ) )
         return ID_DATETIMEFIELD;
 
-    return ID_UNKNOWN;
+    return UNKNOWN_FIELD;
 }
 
 // lang::XServiceInfo
@@ -1125,7 +1134,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 
-        sal_Int32 nId = ID_UNKNOWN;
+        sal_Int32 nId = UNKNOWN_FIELD;
 
         if ( aFieldType == "DateTime" )
         {
@@ -1167,7 +1176,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
             nId = ID_MEASUREFIELD;
         }
 
-        if( nId != ID_UNKNOWN )
+        if (nId != UNKNOWN_FIELD)
             xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
     }
 
