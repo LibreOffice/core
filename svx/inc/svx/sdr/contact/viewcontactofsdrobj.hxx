@@ -80,6 +80,11 @@ namespace sdr
 
             // add Gluepoints (if available)
             virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
+
+            // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
+            // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
+            // for 3D scenes
+            virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
         };
     } // end of namespace contact
 } // end of namespace sdr

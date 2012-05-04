@@ -1430,27 +1430,30 @@ namespace drawinglayer
                 // use color distance and discrete lengths to calculate step count
                 const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
 
-                // prepare loop and polygon
-                double fStart(0.0);
-                double fStep(fDelta / nSteps);
+                // switch off line painting
+                mpOutputDevice->SetLineColor();
+
+                // prepare polygon in needed width at start position (with discrete overlap)
                 const basegfx::B2DPolygon aPolygon(
                     basegfx::tools::createPolygonFromRect(
                         basegfx::B2DRange(
                             rCandidate.getOffsetA() - fDiscreteUnit,
                             0.0,
-                            rCandidate.getOffsetA() + fStep + fDiscreteUnit,
+                            rCandidate.getOffsetA() + (fDelta / nSteps) + fDiscreteUnit,
                             1.0)));
 
-                // switch off line painting
-                mpOutputDevice->SetLineColor();
+
+                // prepare loop ([0.0 .. 1.0[)
+                double fUnitScale(0.0);
+                const double fUnitStep(1.0 / nSteps);
 
                 // loop and paint
-                for(sal_uInt32 a(0); a < nSteps; a++, fStart += fStep)
+                for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
                 {
                     basegfx::B2DPolygon aNew(aPolygon);
 
-                    aNew.transform(maCurrentTransformation * basegfx::tools::createTranslateB2DHomMatrix(fStart, 0.0));
-                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fStart/fDelta)));
+                    aNew.transform(maCurrentTransformation * basegfx::tools::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
+                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
                     mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
                 }
             }
@@ -1472,21 +1475,21 @@ namespace drawinglayer
                 // switch off line painting
                 mpOutputDevice->SetLineColor();
 
-                // prepare loop (outside to inside)
-                double fEndScale(rCandidate.getScaleB());
-                double fStepScale(fDeltaScale / nSteps);
+                // prepare loop ([0.0 .. 1.0[, full polygons, no polypolygons with holes)
+                double fUnitScale(0.0);
+                const double fUnitStep(1.0 / nSteps);
 
-                for(sal_uInt32 a(0); a < nSteps; a++, fEndScale -= fStepScale)
+                for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
                 {
-                    const double fUnitScale(fEndScale/fDeltaScale);
                     basegfx::B2DHomMatrix aTransform;
+                    const double fEndScale(rCandidate.getScaleB() - (fDeltaScale * fUnitScale));
 
                     if(rCandidate.isTranslateSet())
                     {
                         const basegfx::B2DVector aTranslate(
                             basegfx::interpolate(
-                                rCandidate.getTranslateA(),
                                 rCandidate.getTranslateB(),
+                                rCandidate.getTranslateA(),
                                 fUnitScale));
 
                         aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -1505,7 +1508,7 @@ namespace drawinglayer
                     basegfx::B2DPolygon aNew(basegfx::tools::createPolygonFromUnitCircle());
 
                     aNew.transform(maCurrentTransformation * aTransform);
-                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
+                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorB, aColorA, fUnitScale)));
                     mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
                 }
             }

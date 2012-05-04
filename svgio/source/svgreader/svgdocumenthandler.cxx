@@ -43,6 +43,7 @@
 #include <svgio/svgreader/svgmasknode.hxx>
 #include <svgio/svgreader/svgmarkernode.hxx>
 #include <svgio/svgreader/svgpatternnode.hxx>
+#include <svgio/svgreader/svgtitledescnode.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -246,6 +247,15 @@ namespace svgio
                         break;
                     }
 
+                    /// title and description
+                    case SVGTokenTitle:
+                    case SVGTokenDesc:
+                    {
+                        /// new node for Title and/or Desc
+                        mpTarget = new SvgTitleDescNode(aSVGToken, maDocument, mpTarget);
+                        break;
+                    }
+
                     /// gradients
                     case SVGTokenLinearGradient:
                     case SVGTokenRadialGradient:
@@ -360,6 +370,7 @@ namespace svgio
                 const SVGToken aSVGToken(StrToSVGToken(aName));
                 SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : 0);
                 SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : 0);
+                SvgTitleDescNode* pSvgTitleDescNode(SVGTokenTitle == aSVGToken || SVGTokenDesc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : 0);
 
                 switch(aSVGToken)
                 {
@@ -381,6 +392,10 @@ namespace svgio
                     case SVGTokenPolyline:
                     case SVGTokenRect:
                     case SVGTokenImage:
+
+                    /// title and description
+                    case SVGTokenTitle:
+                    case SVGTokenDesc:
 
                     /// gradients
                     case SVGTokenLinearGradient:
@@ -432,6 +447,23 @@ namespace svgio
                     }
                 }
 
+                if(pSvgTitleDescNode && mpTarget)
+                {
+                    const rtl::OUString aText(pSvgTitleDescNode->getText());
+
+                    if(aText.getLength())
+                    {
+                        if(SVGTokenTitle == aSVGToken)
+                        {
+                            mpTarget->parseAttribute(getStrTitle(), aSVGToken, aText);
+                        }
+                        else // if(SVGTokenDesc == aSVGToken)
+                        {
+                            mpTarget->parseAttribute(getStrDesc(), aSVGToken, aText);
+                        }
+                    }
+                }
+
                 if(pCssStyle && pCssStyle->isTextCss())
                 {
                     // css style parsing
@@ -457,72 +489,74 @@ namespace svgio
 
         void SvgDocHdl::characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
-            if(mpTarget)
+            const sal_uInt32 nLength(aChars.getLength());
+
+            if(mpTarget && nLength)
             {
-                const sal_uInt32 nLength(aChars.getLength());
-
-                if(nLength &&
-                    (SVGTokenText == mpTarget->getType() ||
-                    SVGTokenTspan == mpTarget->getType() ||
-                    SVGTokenTextPath == mpTarget->getType() ||
-                    SVGTokenStyle == mpTarget->getType()))
+                switch(mpTarget->getType())
                 {
-                    switch(mpTarget->getType())
+                    case SVGTokenText:
+                    case SVGTokenTspan:
+                    case SVGTokenTextPath:
                     {
-                        case SVGTokenText:
-                        case SVGTokenTspan:
-                        case SVGTokenTextPath:
+                        const SvgNodeVector& rChilds = mpTarget->getChildren();
+                        SvgCharacterNode* pTarget = 0;
+
+                        if(rChilds.size())
                         {
-                            const SvgNodeVector& rChilds = mpTarget->getChildren();
-                            SvgCharacterNode* pTarget = 0;
+                            pTarget = dynamic_cast< SvgCharacterNode* >(rChilds[rChilds.size() - 1]);
+                        }
 
-                            if(rChilds.size())
-                            {
-                                pTarget = dynamic_cast< SvgCharacterNode* >(rChilds[rChilds.size() - 1]);
-                            }
+                        if(pTarget)
+                        {
+                            // concatenate to current character span
+                            pTarget->concatenate(aChars);
+                        }
+                        else
+                        {
+                            // add character span as simplified tspan (no arguments)
+                            // as direct child of SvgTextNode/SvgTspanNode/SvgTextPathNode
+                            new SvgCharacterNode(maDocument, mpTarget, aChars);
+                        }
+                        break;
+                    }
+                    case SVGTokenStyle:
+                    {
+                        SvgStyleNode& rSvgStyleNode = static_cast< SvgStyleNode& >(*mpTarget);
 
-                            if(pTarget)
+                        if(rSvgStyleNode.isTextCss())
+                        {
+                            // collect characters for css style
+                            if(maCssContents.size())
                             {
-                                // concatenate to current character span
-                                pTarget->concatenate(aChars);
+                                const ::rtl::OUString aTrimmedChars(aChars.trim());
+
+                                if(aTrimmedChars.getLength())
+                                {
+                                    std::vector< rtl::OUString >::iterator aString(maCssContents.end() - 1);
+                                    (*aString) += aTrimmedChars;
+                                }
                             }
                             else
                             {
-                                // add character span as simplified tspan (no arguments)
-                                // as direct child of SvgTextNode/SvgTspanNode/SvgTextPathNode
-                                new SvgCharacterNode(maDocument, mpTarget, aChars);
+                                OSL_ENSURE(false, "Closing CssStyle, but no collector string on stack (!)");
                             }
-                            break;
                         }
-                        case SVGTokenStyle:
-                        {
-                            SvgStyleNode& rSvgStyleNode = static_cast< SvgStyleNode& >(*mpTarget);
+                        break;
+                    }
+                    case SVGTokenTitle:
+                    case SVGTokenDesc:
+                    {
+                        SvgTitleDescNode& rSvgTitleDescNode = static_cast< SvgTitleDescNode& >(*mpTarget);
 
-                            if(rSvgStyleNode.isTextCss())
-                            {
-                                // collect characters for css style
-                                if(maCssContents.size())
-                                {
-                                    const ::rtl::OUString aTrimmedChars(aChars.trim());
-
-                                    if(aTrimmedChars.getLength())
-                                    {
-                                        std::vector< rtl::OUString >::iterator aString(maCssContents.end() - 1);
-                                        (*aString) += aTrimmedChars;
-                                    }
-                                }
-                                else
-                                {
-                                    OSL_ENSURE(false, "Closing CssStyle, but no collector string on stack (!)");
-                                }
-                            }
-                            break;
-                        }
-                        default:
-                        {
-                            // characters not used by a known node
-                            break;
-                        }
+                        // add text directly to SvgTitleDescNode
+                        rSvgTitleDescNode.concatenate(aChars);
+                        break;
+                    }
+                    default:
+                    {
+                        // characters not used by a known node
+                        break;
                     }
                 }
             }

@@ -103,6 +103,8 @@ namespace svgio
             SVGTokenPatternContentUnits,
             SVGTokenPatternTransform,
             SVGTokenOpacity,
+            SVGTokenTitle,
+            SVGTokenDesc,
 
             // AspectRatio and params
             SVGTokenPreserveAspectRatio,
@@ -181,6 +183,8 @@ namespace svgio
 
         SVGToken StrToSVGToken(const rtl::OUString& rStr);
 
+        const rtl::OUString& getStrTitle();
+        const rtl::OUString& getStrDesc();
     } // end of namespace svgreader
 } // end of namespace svgio
 

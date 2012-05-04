@@ -277,7 +277,13 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContact::getViewIndependentPrimitive2DSequence() const
         {
             // local up-to-date checks. Create new list and compare.
-            const drawinglayer::primitive2d::Primitive2DSequence xNew(createViewIndependentPrimitive2DSequence());
+            drawinglayer::primitive2d::Primitive2DSequence xNew(createViewIndependentPrimitive2DSequence());
+
+            if(xNew.hasElements())
+            {
+                // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
+                xNew = embedToObjectSpecificInformation(xNew);
+            }
 
             if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxViewIndependentPrimitive2DSequence, xNew))
             {
@@ -294,6 +300,12 @@ namespace sdr
         {
             // default returns empty reference
             return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContact::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const
+        {
+            // nothing to do for default
+            return rSource;
         }
 
         void ViewContact::flushViewObjectContacts(bool bWithHierarchy)

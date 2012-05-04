@@ -90,6 +90,9 @@ namespace sdr
 
             if(xRetval.hasElements())
             {
+                // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
+                xRetval = rViewContact.embedToObjectSpecificInformation(xRetval);
+
                 // handle GluePoint
                 if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
                 {

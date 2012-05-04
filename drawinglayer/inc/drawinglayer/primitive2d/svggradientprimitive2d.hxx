@@ -203,7 +203,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rEnd,
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad);
-        virtual ~SvgLinearGradientPrimitive2D() {}
+            virtual ~SvgLinearGradientPrimitive2D();
 
             /// data read access
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
@@ -217,7 +217,7 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
-} // end of namespace primitive2d
+    } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
@@ -272,6 +272,7 @@ namespace drawinglayer
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = Spread_pad,
                 const basegfx::B2DPoint* pFocal = 0);
+            virtual ~SvgRadialGradientPrimitive2D();
 
             /// data read access
             double getRadius() const { return mfRadius; }

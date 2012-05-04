@@ -92,6 +92,8 @@ namespace svgio
         static rtl::OUString aSVGStrPatternContentUnits(rtl::OUString::createFromAscii("patternContentUnits"));
         static rtl::OUString aSVGStrPatternTransform(rtl::OUString::createFromAscii("patternTransform"));
         static rtl::OUString aSVGStrOpacity(rtl::OUString::createFromAscii("opacity"));
+        static rtl::OUString aSVGStrTitle(rtl::OUString::createFromAscii("title"));
+        static rtl::OUString aSVGStrDesc(rtl::OUString::createFromAscii("desc"));
 
         static rtl::OUString aSVGStrPreserveAspectRatio(rtl::OUString::createFromAscii("preserveAspectRatio"));
         static rtl::OUString aSVGStrDefer(rtl::OUString::createFromAscii("defer"));
@@ -231,6 +233,8 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternContentUnits, SVGTokenPatternContentUnits));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternTransform, SVGTokenPatternTransform));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrOpacity, SVGTokenOpacity));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTitle, SVGTokenTitle));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDesc, SVGTokenDesc));
 
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPreserveAspectRatio, SVGTokenPreserveAspectRatio));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDefer, SVGTokenDefer));
@@ -308,6 +312,16 @@ namespace svgio
             {
                 return aResult->second;
             }
+        }
+
+        const rtl::OUString& getStrTitle()
+        {
+            return aSVGStrTitle;
+        }
+
+        const rtl::OUString& getStrDesc()
+        {
+            return aSVGStrDesc;
         }
     } // end of namespace svgreader
 } // end of namespace svgio

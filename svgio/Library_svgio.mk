@@ -66,6 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,svgio,\
     svgio/source/svgreader/svgsvgnode \
     svgio/source/svgreader/svgsymbolnode \
     svgio/source/svgreader/svgtextnode \
+    svgio/source/svgreader/svgtitledescnode \
     svgio/source/svgreader/svgtoken \
     svgio/source/svgreader/svgtrefnode \
     svgio/source/svgreader/svgtools \
