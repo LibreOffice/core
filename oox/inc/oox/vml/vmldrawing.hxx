@@ -61,9 +61,9 @@ struct ClientData;
 /** Enumerates different types of VML drawings. */
 enum DrawingType
 {
-    VMLDRAWING_WORD,            /// Word: One shape per drawing.
-    VMLDRAWING_EXCEL,           /// Excel: OLE objects are part of VML.
-    VMLDRAWING_POWERPOINT       /// PowerPoint: OLE objects are part of DrawingML.
+    VMLDRAWING_WORD,            ///< Word: One shape per drawing.
+    VMLDRAWING_EXCEL,           ///< Excel: OLE objects are part of VML.
+    VMLDRAWING_POWERPOINT       ///< PowerPoint: OLE objects are part of DrawingML.
 };
 
 // ============================================================================
@@ -71,10 +71,10 @@ enum DrawingType
 /** Contains information about an OLE object embedded in a draw page. */
 struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
 {
-    ::rtl::OUString     maShapeId;          /// Shape identifier for shape lookup.
-    ::rtl::OUString     maName;             /// Programmatical name of the OLE object.
+    ::rtl::OUString     maShapeId;          ///< Shape identifier for shape lookup.
+    ::rtl::OUString     maName;             ///< Programmatical name of the OLE object.
     bool                mbAutoLoad;
-    const bool          mbDmlShape;         /// True = DrawingML shape (PowerPoint), false = VML shape (Excel/Word).
+    const bool          mbDmlShape;         ///< True = DrawingML shape (PowerPoint), false = VML shape (Excel/Word).
 
     explicit            OleObjectInfo( bool bDmlShape = false );
 
@@ -87,9 +87,9 @@ struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
 /** Contains information about a form control embedded in a draw page. */
 struct OOX_DLLPUBLIC ControlInfo
 {
-    ::rtl::OUString     maShapeId;          /// Shape identifier for shape lookup.
-    ::rtl::OUString     maFragmentPath;     /// Path to the fragment describing the form control properties.
-    ::rtl::OUString     maName;             /// Programmatical name of the form control.
+    ::rtl::OUString     maShapeId;          ///< Shape identifier for shape lookup.
+    ::rtl::OUString     maFragmentPath;     ///< Path to the fragment describing the form control properties.
+    ::rtl::OUString     maName;             ///< Programmatical name of the form control.
 
     explicit            ControlInfo();
 
@@ -201,15 +201,15 @@ private:
     typedef ::std::map< ::rtl::OUString, OleObjectInfo >    OleObjectInfoMap;
     typedef ::std::map< ::rtl::OUString, ControlInfo >      ControlInfoMap;
 
-    ::oox::core::XmlFilterBase& mrFilter;   /// Filter object that imports/exports the VML drawing.
+    ::oox::core::XmlFilterBase& mrFilter;   ///< Filter object that imports/exports the VML drawing.
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
-                        mxDrawPage;         /// UNO draw page used to insert the shapes.
-    mutable EmbeddedFormPtr mxCtrlForm;     /// The control form used to process embedded controls.
-    mutable BlockIdVector maBlockIds;       /// Block identifiers used by this drawing.
-    ShapeContainerPtr   mxShapes;           /// All shapes and shape templates.
-    OleObjectInfoMap    maOleObjects;       /// Info about all embedded OLE objects, mapped by shape id.
-    ControlInfoMap      maControls;         /// Info about all embedded form controls, mapped by control name.
-    const DrawingType   meType;             /// Application type containing the drawing.
+                        mxDrawPage;         ///< UNO draw page used to insert the shapes.
+    mutable EmbeddedFormPtr mxCtrlForm;     ///< The control form used to process embedded controls.
+    mutable BlockIdVector maBlockIds;       ///< Block identifiers used by this drawing.
+    ShapeContainerPtr   mxShapes;           ///< All shapes and shape templates.
+    OleObjectInfoMap    maOleObjects;       ///< Info about all embedded OLE objects, mapped by shape id.
+    ControlInfoMap      maControls;         ///< Info about all embedded form controls, mapped by control name.
+    const DrawingType   meType;             ///< Application type containing the drawing.
 };
 
 // ============================================================================
