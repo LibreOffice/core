@@ -45,8 +45,7 @@ public:
     virtual uno::Reference<uno::XInterface> init() = 0;
     virtual uno::Reference<text::XTextContent> getTextContent() = 0;
 
-    void testInsertTextContent();
-    void testRemoveTextContent();
+    void testInsertRemoveTextContent();
 };
 
 }

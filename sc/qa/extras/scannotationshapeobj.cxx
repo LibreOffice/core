@@ -34,7 +34,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 1
 
 namespace sc_apitest {
 
@@ -52,8 +52,7 @@ public:
     CPPUNIT_TEST_SUITE(ScAnnotationShapeObj);
 
     // XText
-    CPPUNIT_TEST(testInsertTextContent);
-    CPPUNIT_TEST(testRemoveTextContent);
+    CPPUNIT_TEST(testInsertRemoveTextContent);
 
     CPPUNIT_TEST_SUITE_END();
 
