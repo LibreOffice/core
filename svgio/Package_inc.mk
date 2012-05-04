@@ -45,6 +45,7 @@ $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgstylenode.hxx
 $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgsvgnode.hxx,svgio/svgreader/svgsvgnode.hxx))
 $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgsymbolnode.hxx,svgio/svgreader/svgsymbolnode.hxx))
 $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgtextnode.hxx,svgio/svgreader/svgtextnode.hxx))
+$(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgtitledescnode.hxx,svgio/svgreader/svgtitledescnode.hxx))
 $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgtoken.hxx,svgio/svgreader/svgtoken.hxx))
 $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgtrefnode.hxx,svgio/svgreader/svgtrefnode.hxx))
 $(eval $(call gb_Package_add_file,svgio_inc,inc/svgio/svgreader/svgtools.hxx,svgio/svgreader/svgtools.hxx))

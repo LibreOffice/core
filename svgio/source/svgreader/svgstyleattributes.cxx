@@ -1193,6 +1193,8 @@ namespace svgio
             maTextAnchor(TextAnchor_notset),
             maColor(),
             maOpacity(1.0),
+            maTitle(),
+            maDesc(),
             maClipPathXLink(),
             maMaskXLink(),
             maMarkerStartXLink(),
@@ -1760,6 +1762,16 @@ namespace svgio
                     {
                         setOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
                     }
+                    break;
+                }
+                case SVGTokenTitle:
+                {
+                    setTitle(aContent);
+                    break;
+                }
+                case SVGTokenDesc:
+                {
+                    setDesc(aContent);
                     break;
                 }
                 case SVGTokenClipPathProperty:

@@ -55,6 +55,19 @@ namespace drawinglayer
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
+            // add graphic content
+            if(255L != getGraphicAttr().GetTransparency())
+            {
+                // standard graphic fill
+                const Primitive2DReference xGraphicContentPrimitive(
+                    new GraphicPrimitive2D(
+                        getTransform(),
+                        getGraphicObject(),
+                        getGraphicAttr()));
+
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xGraphicContentPrimitive);
+            }
+
             // add line
             if(!getSdrLFSTAttribute().getLine().isDefault())
             {
@@ -89,19 +102,6 @@ namespace drawinglayer
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }
-            }
-
-            // add graphic content
-            if(255L != getGraphicAttr().GetTransparency())
-            {
-                // standard graphic fill
-                const Primitive2DReference xGraphicContentPrimitive(
-                    new GraphicPrimitive2D(
-                        getTransform(),
-                        getGraphicObject(),
-                        getGraphicAttr()));
-
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xGraphicContentPrimitive);
             }
 
             // add text

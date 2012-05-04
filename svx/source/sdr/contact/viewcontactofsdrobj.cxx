@@ -38,6 +38,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -183,6 +184,27 @@ namespace sdr
 
             return xRetval;
         }
+
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const
+        {
+            if(rSource.hasElements() &&
+                (GetSdrObject().GetName().Len() ||
+                 GetSdrObject().GetTitle().Len() ||
+                 GetSdrObject().GetDescription().Len()))
+            {
+                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                    new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
+                        rSource,
+                        GetSdrObject().GetName(),
+                        GetSdrObject().GetTitle(),
+                        GetSdrObject().GetDescription()));
+
+                return drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+            }
+
+            return rSource;
+        }
+
     } // end of namespace contact
 } // end of namespace sdr
 
