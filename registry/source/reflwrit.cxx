@@ -1243,7 +1243,7 @@ static void TYPEREG_CALLTYPE setFileName(TypeWriterImpl hEntry, rtl_uString* fil
     static_cast< TypeWriter * >(hEntry)->m_fileName = toByteString(fileName);
 }
 
-sal_Bool typereg_writer_setFieldData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setFieldData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     rtl_uString const * fileName, RTFieldAccess flags, rtl_uString const * name,
     rtl_uString const * typeName, RTValueType valueType,
@@ -1276,7 +1276,7 @@ static void TYPEREG_CALLTYPE setFieldData(TypeWriterImpl    hEntry,
         constValue);
 }
 
-sal_Bool typereg_writer_setMethodData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setMethodData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTMethodMode flags, rtl_uString const * name,
     rtl_uString const * returnTypeName, sal_uInt16 parameterCount,
@@ -1306,7 +1306,7 @@ static void TYPEREG_CALLTYPE setMethodData(TypeWriterImpl   hEntry,
         hEntry, index, doku, mode, name, returnTypeName, paramCount, excCount);
 }
 
-sal_Bool typereg_writer_setMethodParameterData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setMethodParameterData(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
     RTParamMode flags, rtl_uString const * name, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
@@ -1332,7 +1332,7 @@ static void TYPEREG_CALLTYPE setParamData(TypeWriterImpl    hEntry,
         hEntry, index, paramIndex, mode, name, type);
 }
 
-sal_Bool typereg_writer_setMethodExceptionTypeName(
+REG_DLLPUBLIC sal_Bool typereg_writer_setMethodExceptionTypeName(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
     rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
@@ -1354,7 +1354,7 @@ static void TYPEREG_CALLTYPE setExcData(TypeWriterImpl  hEntry,
     typereg_writer_setMethodExceptionTypeName(hEntry, index, excIndex, type);
 }
 
-void const * typereg_writer_getBlob(void * handle, sal_uInt32 * size)
+REG_DLLPUBLIC void const * typereg_writer_getBlob(void * handle, sal_uInt32 * size)
     SAL_THROW_EXTERN_C()
 {
     TypeWriter * writer = static_cast< TypeWriter * >(handle);
@@ -1383,7 +1383,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getBlopSize(TypeWriterImpl hEntry)
     return size;
 }
 
-sal_Bool typereg_writer_setReferenceData(
+REG_DLLPUBLIC sal_Bool typereg_writer_setReferenceData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTReferenceType sort, RTFieldAccess flags, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
@@ -1407,7 +1407,7 @@ static void TYPEREG_CALLTYPE setReferenceData(TypeWriterImpl    hEntry,
     typereg_writer_setReferenceData(hEntry, index, doku, refType, access, name);
 }
 
-void * typereg_writer_create(
+REG_DLLPUBLIC void * typereg_writer_create(
     typereg_Version version, rtl_uString const * documentation,
     rtl_uString const * fileName, RTTypeClass typeClass, sal_Bool published,
     rtl_uString const * typeName, sal_uInt16 superTypeCount,
@@ -1424,11 +1424,11 @@ void * typereg_writer_create(
     }
 }
 
-void typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C() {
+REG_DLLPUBLIC void typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C() {
     delete static_cast< TypeWriter * >(handle);
 }
 
-sal_Bool typereg_writer_setSuperTypeName(
+REG_DLLPUBLIC sal_Bool typereg_writer_setSuperTypeName(
     void * handle, sal_uInt16 index, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
 {

@@ -32,6 +32,7 @@
 #include <stddef.h>
 #include <rtl/ustring.h>
 #include <registry/regtype.h>
+#include <registry/regdllapi.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,7 +64,7 @@ RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
                      reg_closeKey. If the function fails, phNewKey is NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
+REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
                                          RegKeyHandle* phOpenKey);
 
@@ -116,7 +117,7 @@ RegError REGISTRY_CALLTYPE reg_deleteKey(RegKeyHandle hKey,
                  The memory of the variable specifying the key will be freed.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
+REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
 
 
 /** This function returns the name of a key.

@@ -29,6 +29,7 @@
 #ifndef _REGISTRY_REFLREAD_HXX_
 #define _REGISTRY_REFLREAD_HXX_
 
+#include <registry/regdllapi.h>
 #include <registry/refltype.hxx>
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
@@ -91,7 +92,7 @@ struct RegistryTypeReader_Api
 
 /** the API initialization function.
 */
-RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void);
+REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void);
 
 #ifdef __cplusplus
 }

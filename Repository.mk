@@ -30,6 +30,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bestreversemap \
     bmp \
     bmpsum \
+    checksingleton \
     cfgex \
     cppunit/cppunittester \
     g2g \
@@ -44,6 +45,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     osl_process_child \
     pdf2xml \
     pdfunzip \
+    rdbedit \
     rdbmaker \
     regsingleton \
     rsc \
@@ -71,6 +73,7 @@ ifneq ($(OS),IOS)
 $(eval $(call gb_Helper_register_executables,SDK, \
     javamaker \
     cppumaker \
+    regcompare \
     uno-skeletonmaker \
 ))
 
@@ -157,6 +160,8 @@ ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,UREBIN,\
 	regcomp \
+	regmerge \
+	regview \
 	uno \
 ))
 
@@ -588,6 +593,9 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ulingu \
     vclmain \
     writerperfect \
+    $(if $(filter-out $(OS),IOS), \
+        registry_helper \
+    ) \
     $(if $(filter $(OS),IOS), \
         uno \
     ) \

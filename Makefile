@@ -92,6 +92,7 @@ padmin\
 psprint_config\
 qadevOOo\
 regexp\
+registry\
 reportdesign\
 rdbmaker\
 ridljar\
@@ -220,7 +221,6 @@ python\
 pyuno\
 readlicense_oo\
 redland\
-registry\
 remotebridges\
 reportbuilder\
 rhino\
