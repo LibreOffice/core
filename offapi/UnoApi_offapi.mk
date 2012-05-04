@@ -1372,6 +1372,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/te
 	User \
 	WordCount \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text/textfield,\
+	Type \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/textfield/docinfo,\
 	ChangeAuthor \
 	ChangeDateTime \
