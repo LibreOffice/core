@@ -269,6 +269,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
+    bool bSuccess = true;
     // there might be no profile
     if ( !sCertDir.isEmpty() )
     {
@@ -280,10 +281,11 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
             PR_GetErrorText(error);
             if (error)
                 xmlsec_trace("%s",error);
-            return false ;
+            bSuccess = false;
         }
     }
-    else
+
+    if( sCertDir.isEmpty() || !bSuccess )
     {
         xmlsec_trace("Initializing NSS without profile.");
         if ( NSS_NoDB_Init(NULL) != SECSuccess )
