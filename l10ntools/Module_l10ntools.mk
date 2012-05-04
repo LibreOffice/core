@@ -40,7 +40,12 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Library_helplinker \
     Package_inc \
     Package_scripts \
+))
+
+ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Module_add_targets,l10ntools,\
     Jar_FCFGMerge \
 ))
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
