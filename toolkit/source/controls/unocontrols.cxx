@@ -1434,8 +1434,8 @@ UnoFixedHyperlinkControl::UnoFixedHyperlinkControl( const Reference< XMultiServi
 uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XFixedHyperlink*, this ),
-                                        SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
+                                        (static_cast< awt::XFixedHyperlink* >(this)),
+                                        (static_cast< awt::XLayoutConstrains* >(this)) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
@@ -1615,8 +1615,8 @@ UnoFixedTextControl::UnoFixedTextControl( const Reference< XMultiServiceFactory 
 uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XFixedText*, this ),
-                                        SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
+                                        (static_cast< awt::XFixedText* >(this)),
+                                        (static_cast< awt::XLayoutConstrains* >(this)) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
@@ -2824,15 +2824,15 @@ void UnoComboBoxControl::dispose() throw(uno::RuntimeException)
 uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XComboBox*, this ) );
+                                        (static_cast< awt::XComboBox* >(this)) );
     if ( !aRet.hasValue() )
     {
         aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XItemListener*, this ) );
+                                        (static_cast< awt::XItemListener* >(this)) );
         if ( !aRet.hasValue() )
         {
             aRet = ::cppu::queryInterface( rType,
-                                            SAL_STATIC_CAST( awt::XItemListListener*, this ) );
+                                            (static_cast< awt::XItemListListener* >(this)) );
         }
     }
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
@@ -3122,7 +3122,7 @@ UnoSpinFieldControl::UnoSpinFieldControl( const Reference< XMultiServiceFactory 
 uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XSpinField*, this ) );
+                                        (static_cast< awt::XSpinField* >(this)) );
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
 
@@ -3266,7 +3266,7 @@ UnoDateFieldControl::UnoDateFieldControl( const Reference< XMultiServiceFactory 
 uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XDateField*, this ) );
+                                        (static_cast< awt::XDateField* >(this)) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -3507,7 +3507,7 @@ UnoTimeFieldControl::UnoTimeFieldControl( const Reference< XMultiServiceFactory 
 uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XTimeField*, this ) );
+                                        (static_cast< awt::XTimeField* >(this)) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -3708,7 +3708,7 @@ UnoNumericFieldControl::UnoNumericFieldControl( const Reference< XMultiServiceFa
 uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XNumericField*, this ) );
+                                        (static_cast< awt::XNumericField* >(this)) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -3910,7 +3910,7 @@ UnoCurrencyFieldControl::UnoCurrencyFieldControl( const Reference< XMultiService
 uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XCurrencyField*, this ) );
+                                        (static_cast< awt::XCurrencyField* >(this)) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -4128,7 +4128,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
 uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XPatternField*, this ) );
+                                        (static_cast< awt::XPatternField* >(this)) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -4250,7 +4250,7 @@ UnoProgressBarControl::UnoProgressBarControl( const Reference< XMultiServiceFact
 uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XProgressBar*, this ) );
+                                        (static_cast< awt::XProgressBar* >(this)) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 

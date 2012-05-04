@@ -170,9 +170,9 @@ void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
 Any StdTabController::queryAggregation( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( XTabController*, this ),
-                                        SAL_STATIC_CAST( XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( XTypeProvider*, this ) );
+                                        (static_cast< XTabController* >(this)),
+                                        (static_cast< XServiceInfo* >(this)),
+                                        (static_cast< XTypeProvider* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 

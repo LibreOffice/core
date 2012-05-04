@@ -147,7 +147,7 @@ std::vector<String>& SfxStringListItem::GetList()
 
 const std::vector<String>& SfxStringListItem::GetList () const
 {
-    return SAL_CONST_CAST(SfxStringListItem *, this)->GetList();
+    return (const_cast< SfxStringListItem * >(this))->GetList();
 }
 
 //------------------------------------------------------------------------

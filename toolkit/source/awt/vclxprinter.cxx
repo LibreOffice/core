@@ -80,11 +80,11 @@
 ::com::sun::star::uno::Any VCLXPrinterPropertySet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XMultiPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XFastPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertySet*, (::cppu::OPropertySetHelper*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPrinterPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
+                                        (static_cast< ::com::sun::star::beans::XMultiPropertySet* >(this)),
+                                        (static_cast< ::com::sun::star::beans::XFastPropertySet* >(this)),
+                                        (static_cast< ::com::sun::star::beans::XPropertySet* >((::cppu::OPropertySetHelper*) this) ),
+                                        (static_cast< ::com::sun::star::awt::XPrinterPropertySet* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)) );
     return (aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface( rType ));
 }
 
@@ -307,7 +307,7 @@ VCLXPrinter::~VCLXPrinter()
 ::com::sun::star::uno::Any VCLXPrinter::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPrinter*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XPrinter* >(this)) );
 
     if ( !aRet.hasValue() )
         aRet = VCLXPrinterPropertySet::queryInterface( rType );
@@ -392,7 +392,7 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
 ::com::sun::star::uno::Any VCLXInfoPrinter::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XInfoPrinter*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XInfoPrinter* >(this)) );
 
     if ( !aRet.hasValue() )
         aRet = VCLXPrinterPropertySet::queryInterface( rType );
@@ -422,7 +422,7 @@ IMPL_XTYPEPROVIDER_END
 ::com::sun::star::uno::Any VCLXPrinterServer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPrinterServer*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XPrinterServer* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

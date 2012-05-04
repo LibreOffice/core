@@ -814,7 +814,7 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
 String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleName )
 {
     String aURL;
-    SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+    SfxHelp* pHelp = (static_cast< SfxHelp* >(Application::GetHelp()) );
     if ( pHelp )
         aURL = pHelp->CreateHelpURL_Impl( aCommandURL, rModuleName );
     return aURL;
@@ -822,7 +822,7 @@ String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleN
 
 void SfxHelp::OpenHelpAgent( SfxFrame*, const rtl::OString& sHelpId )
 {
-    SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+    SfxHelp* pHelp = (static_cast< SfxHelp* >(Application::GetHelp()) );
     if ( pHelp )
         pHelp->OpenHelpAgent( sHelpId );
 }

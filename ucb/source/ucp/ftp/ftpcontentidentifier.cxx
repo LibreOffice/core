@@ -64,8 +64,8 @@ FTPContentIdentifier::queryInterface(
 {
     Any aRet =
         ::cppu::queryInterface(rType,
-                               SAL_STATIC_CAST(XTypeProvider*,this),
-                               SAL_STATIC_CAST(XContentIdentifier*,this));
+                               (static_cast< XTypeProvider* >(this)),
+                               (static_cast< XContentIdentifier* >(this)));
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

@@ -308,7 +308,7 @@ void SAL_CALL UniversalContentBroker::dispose()
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
         EventObject aEvt;
-        aEvt.Source = SAL_STATIC_CAST( XComponent*, this );
+        aEvt.Source = (static_cast< XComponent* >(this));
         m_pDisposeEventListeners->disposeAndClear( aEvt );
     }
 

@@ -92,7 +92,7 @@ void parseCommandLine( char *argv[] ,
 Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType ,
-            SAL_STATIC_CAST( XInstanceProvider * , this ) );
+            (static_cast< XInstanceProvider *  >(this)) );
     if( a.hasValue() )
     {
         return a;
@@ -292,7 +292,7 @@ Sequence< OUString > ServiceImpl::getSupportedServiceNames()
 Any OCallMe::queryInterface( const  Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
-            SAL_STATIC_CAST( XCallMe * , this ) );
+            (static_cast< XCallMe *  >(this)) );
 
     if( a.hasValue() )
     {
@@ -386,7 +386,7 @@ void OCallMe::callAgain( const Reference< ::test::XCallMe >& callAgainArg,
 Any OInterfaceTest::queryInterface( const Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
-            SAL_STATIC_CAST( XInterfaceTest * , this ) );
+            (static_cast< XInterfaceTest *  >(this)) );
     if( a.hasValue() )
     {
         return a;
@@ -438,7 +438,7 @@ void OInterfaceTest::call()
 Any OTestFactory::queryInterface( const Type & aType )  throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface( aType,
-            SAL_STATIC_CAST( XTestFactory * , this ) );
+            (static_cast< XTestFactory *  >(this)) );
 
     if( a.hasValue() )
     {

@@ -108,9 +108,9 @@ void SAL_CALL ToolbarLayoutManager::release() throw()
 uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const uno::Type & rType ) throw( uno::RuntimeException )
 {
     uno::Any a = ::cppu::queryInterface( rType,
-        SAL_STATIC_CAST( awt::XDockableWindowListener*, this ),
-        SAL_STATIC_CAST( ui::XUIConfigurationListener*, this ),
-        SAL_STATIC_CAST( awt::XWindowListener*,         this ));
+        (static_cast< awt::XDockableWindowListener* >(this)),
+        (static_cast< ui::XUIConfigurationListener* >(this)),
+        (static_cast< awt::XWindowListener* >(this)));
 
     if ( a.hasValue() )
         return a;

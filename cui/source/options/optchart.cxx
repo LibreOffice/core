@@ -86,7 +86,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
     const SfxPoolItem* pItem = NULL;
     if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, sal_False, &pItem ) == SFX_ITEM_SET )
     {
-        pColorConfig = SAL_STATIC_CAST( SvxChartColorTableItem*, pItem->Clone() );
+        pColorConfig = (static_cast< SvxChartColorTableItem* >(pItem->Clone()) );
     }
     else
     {
@@ -129,7 +129,7 @@ SfxTabPage* SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet& r
 sal_Bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( pColorConfig )
-        rOutAttrs.Put( *SAL_STATIC_CAST( SfxPoolItem*, pColorConfig ));
+        rOutAttrs.Put( *(static_cast< SfxPoolItem* >(pColorConfig)));
 
     return sal_True;
 }

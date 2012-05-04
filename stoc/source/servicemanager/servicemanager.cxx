@@ -1898,9 +1898,8 @@ Reference<XInterface > SAL_CALL OServiceManager_CreateInstance(
     const Reference< XComponentContext > & xContext )
 {
     return Reference<XInterface >(
-        SAL_STATIC_CAST(
-            XInterface *, SAL_STATIC_CAST(
-                OWeakObject *, new stoc_smgr::OServiceManager( xContext ) ) ) );
+        static_cast< XInterface * >(
+            static_cast< OWeakObject * >( new stoc_smgr::OServiceManager( xContext ) ) ) );
 }
 
 /**
@@ -1911,9 +1910,8 @@ Reference<XInterface > SAL_CALL ORegistryServiceManager_CreateInstance(
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     return Reference<XInterface >(
-        SAL_STATIC_CAST(
-            XInterface *, SAL_STATIC_CAST(
-                OWeakObject *, new stoc_smgr::ORegistryServiceManager( xContext ) ) ) );
+        static_cast< XInterface * >(
+            static_cast< OWeakObject * >( new stoc_smgr::ORegistryServiceManager( xContext ) ) ) );
 }
 
 Reference<XInterface > SAL_CALL OServiceManagerWrapper_CreateInstance(

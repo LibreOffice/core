@@ -268,11 +268,11 @@ TVBase::queryInterface(
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( XTypeProvider*, this ),
-                                     SAL_STATIC_CAST( XNameAccess*, this ),
-                                     SAL_STATIC_CAST( XHierarchicalNameAccess*, this ),
-                                     SAL_STATIC_CAST( XChangesNotifier*, this ),
-                                     SAL_STATIC_CAST( XComponent*, this ) );
+                                     (static_cast< XTypeProvider* >(this)),
+                                     (static_cast< XNameAccess* >(this)),
+                                     (static_cast< XHierarchicalNameAccess* >(this)),
+                                     (static_cast< XChangesNotifier* >(this)),
+                                     (static_cast< XComponent* >(this)) );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

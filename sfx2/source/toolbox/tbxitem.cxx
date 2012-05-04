@@ -474,8 +474,8 @@ Any SAL_CALL SfxToolBoxControl::queryInterface( const Type & rType )
 throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                           SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindowListener*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::frame::XSubToolbarController*, this ));
+                                           (static_cast< ::com::sun::star::awt::XDockableWindowListener* >(this)),
+                                        (static_cast< ::com::sun::star::frame::XSubToolbarController* >(this)));
     return (aRet.hasValue() ? aRet : svt::ToolboxController::queryInterface( rType ));
 }
 

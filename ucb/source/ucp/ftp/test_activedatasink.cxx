@@ -43,7 +43,7 @@ using namespace com::sun::star::io;
 
 Any SAL_CALL Test_ActiveDataSink::queryInterface( const Type& rType ) throw( RuntimeException ) {
     Any aRet = ::cppu::queryInterface(rType,
-                                      SAL_STATIC_CAST( XActiveDataSink*,this ));
+                                      (static_cast< XActiveDataSink* >(this)));
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

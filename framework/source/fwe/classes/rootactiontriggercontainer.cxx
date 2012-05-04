@@ -76,11 +76,11 @@ throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                SAL_STATIC_CAST( XMultiServiceFactory*  , this ),
-                SAL_STATIC_CAST( XServiceInfo*          , this ),
-                SAL_STATIC_CAST( XUnoTunnel*            , this ),
-                SAL_STATIC_CAST( XTypeProvider*         , this ),
-                SAL_STATIC_CAST( XNamed*                , this ));
+                (static_cast< XMultiServiceFactory*   >(this)),
+                (static_cast< XServiceInfo*           >(this)),
+                (static_cast< XUnoTunnel*             >(this)),
+                (static_cast< XTypeProvider*          >(this)),
+                (static_cast< XNamed*                 >(this)));
 
     if( a.hasValue() )
     {

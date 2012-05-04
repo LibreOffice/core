@@ -234,7 +234,7 @@ public:
                             {
                                 ++m_refCount;
                                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent(
-                                    SAL_STATIC_CAST(::cppu::OWeakObject*, pController ), ::com::sun::star::uno::UNO_QUERY );
+                                    (static_cast< ::cppu::OWeakObject* >(pController)), ::com::sun::star::uno::UNO_QUERY );
                                 if (xComponent.is())
                                     xComponent->addEventListener(this);
                                 --m_refCount;

@@ -133,7 +133,7 @@ SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
     // !!! Color stream operators do not work - they discard any
     // transparency info !!!
     // ??? Why the hell Color::Write(...) isn't const ???
-    SAL_CONST_CAST( CntWallpaperItem*, this )->_nColor.Write( rStream, sal_True );
+    (const_cast< CntWallpaperItem* >(this))->_nColor.Write( rStream, sal_True );
     rStream << _nStyle;
 
     return rStream;

@@ -788,7 +788,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
             pMenuBar = (MenuBar *)pInplaceMenuBar->GetMenuBar();
         else
         {
-            MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, xMenuBar.get() );
+            MenuBarWrapper* pMenuBarWrapper = (static_cast< MenuBarWrapper* >(xMenuBar.get()) );
             pMenuBar = (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar();
         }
 
@@ -1214,7 +1214,7 @@ throw (uno::RuntimeException)
     if ( m_xContainerWindow.is() )
     {
         SolarMutexGuard aGuard;
-        MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
+        MenuBarWrapper* pMenuBarWrapper = (static_cast< MenuBarWrapper* >(m_xMenuBar.get()) );
         SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
         if ( pSysWindow )
         {

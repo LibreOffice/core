@@ -262,12 +262,12 @@ Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( Runtim
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                SAL_STATIC_CAST( ::com::sun::star::frame::XStatusListener*, this ),
-                SAL_STATIC_CAST( ::com::sun::star::frame::XFrameActionListener*, this ),
-                SAL_STATIC_CAST( ::com::sun::star::ui::XUIConfigurationListener*, this ),
-                SAL_STATIC_CAST( XEventListener*, (XStatusListener *)this ),
-                SAL_STATIC_CAST( XComponent*, this ),
-                SAL_STATIC_CAST( ::com::sun::star::awt::XSystemDependentMenuPeer*, this ));
+                (static_cast< ::com::sun::star::frame::XStatusListener* >(this)),
+                (static_cast< ::com::sun::star::frame::XFrameActionListener* >(this)),
+                (static_cast< ::com::sun::star::ui::XUIConfigurationListener* >(this)),
+                (static_cast< XEventListener* >((XStatusListener *)this)),
+                (static_cast< XComponent* >(this)),
+                (static_cast< ::com::sun::star::awt::XSystemDependentMenuPeer* >(this)));
 
     if ( a.hasValue() )
         return a;

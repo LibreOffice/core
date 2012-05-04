@@ -100,210 +100,210 @@ com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
 #define XINTERFACE_IMPL_1( Class, Ifc1 )                                    \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( Ifc1*, this )                                          \
+    (static_cast< Ifc1* >(this))                                          \
 QUERYINTERFACE_IMPL_END
 
 // 2 interfaces implemented
 #define XINTERFACE_IMPL_2( Class, Ifc1, Ifc2 )                              \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( Ifc1*, this ),                                         \
-    SAL_STATIC_CAST( Ifc2*, this )                                          \
+    (static_cast< Ifc1* >(this)),                                         \
+    (static_cast< Ifc2* >(this))                                          \
 QUERYINTERFACE_IMPL_END
 
 // 3 interfaces implemented
 #define XINTERFACE_IMPL_3( Class, Ifc1, Ifc2, Ifc3 )                        \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( Ifc1*, this ),                                         \
-    SAL_STATIC_CAST( Ifc2*, this ),                                         \
-    SAL_STATIC_CAST( Ifc3*, this )                                          \
+    (static_cast< Ifc1* >(this)),                                         \
+    (static_cast< Ifc2* >(this)),                                         \
+    (static_cast< Ifc3* >(this))                                          \
 QUERYINTERFACE_IMPL_END
 
 // 4 interfaces implemented
 #define XINTERFACE_IMPL_4( Class, Ifc1, Ifc2, Ifc3, Ifc4 )                  \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( Ifc1*, this ),                                         \
-    SAL_STATIC_CAST( Ifc2*, this ),                                         \
-    SAL_STATIC_CAST( Ifc3*, this ),                                         \
-    SAL_STATIC_CAST( Ifc4*, this )                                          \
+    (static_cast< Ifc1* >(this)),                                         \
+    (static_cast< Ifc2* >(this)),                                         \
+    (static_cast< Ifc3* >(this)),                                         \
+    (static_cast< Ifc4* >(this))                                          \
 QUERYINTERFACE_IMPL_END
 
 // 5 interfaces implemented
 #define XINTERFACE_IMPL_5( Class, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 )            \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( Ifc1*, this ),                                         \
-    SAL_STATIC_CAST( Ifc2*, this ),                                         \
-    SAL_STATIC_CAST( Ifc3*, this ),                                         \
-    SAL_STATIC_CAST( Ifc4*, this ),                                         \
-    SAL_STATIC_CAST( Ifc5*, this )                                          \
+    (static_cast< Ifc1* >(this)),                                         \
+    (static_cast< Ifc2* >(this)),                                         \
+    (static_cast< Ifc3* >(this)),                                         \
+    (static_cast< Ifc4* >(this)),                                         \
+    (static_cast< Ifc5* >(this))                                          \
 QUERYINTERFACE_IMPL_END
 
 // 6 interfaces implemented
 #define XINTERFACE_IMPL_6( Class,I1,I2,I3,I4,I5,I6 )                        \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this )                                            \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this))                                            \
 QUERYINTERFACE_IMPL_END
 
 // 7 interfaces implemented
 #define XINTERFACE_IMPL_7( Class,I1,I2,I3,I4,I5,I6,I7 )                     \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this )                                            \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this))                                            \
 QUERYINTERFACE_IMPL_END
 
 // 8 interfaces implemented
 #define XINTERFACE_IMPL_8( Class,I1,I2,I3,I4,I5,I6,I7,I8 )                  \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this )                                            \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this))                                            \
 QUERYINTERFACE_IMPL_END
 
 // 9 interfaces implemented
 #define XINTERFACE_IMPL_9( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9 )               \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this )                                            \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this))                                            \
 QUERYINTERFACE_IMPL_END
 
 // 10 interfaces implemented
 #define XINTERFACE_IMPL_10( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10 )          \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this ),                                           \
-    SAL_STATIC_CAST( I10*, this )                                           \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this)),                                           \
+    (static_cast< I10* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
 // 11 interfaces implemented
 #define XINTERFACE_IMPL_11( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11 )      \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this ),                                           \
-    SAL_STATIC_CAST( I10*, this ),                                          \
-    SAL_STATIC_CAST( I11*, this )                                           \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this)),                                           \
+    (static_cast< I10* >(this)),                                          \
+    (static_cast< I11* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
 // 12 interfaces implemented
 #define XINTERFACE_IMPL_12( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12 )  \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this ),                                           \
-    SAL_STATIC_CAST( I10*, this ),                                          \
-    SAL_STATIC_CAST( I11*, this ),                                          \
-    SAL_STATIC_CAST( I12*, this )                                           \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this)),                                           \
+    (static_cast< I10* >(this)),                                          \
+    (static_cast< I11* >(this)),                                          \
+    (static_cast< I12* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
 // 13 interfaces implemented
 #define XINTERFACE_IMPL_13( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13 ) \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this ),                                           \
-    SAL_STATIC_CAST( I10*, this ),                                          \
-    SAL_STATIC_CAST( I11*, this ),                                          \
-    SAL_STATIC_CAST( I12*, this ),                                          \
-    SAL_STATIC_CAST( I13*, this )                                           \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this)),                                           \
+    (static_cast< I10* >(this)),                                          \
+    (static_cast< I11* >(this)),                                          \
+    (static_cast< I12* >(this)),                                          \
+    (static_cast< I13* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
 // 14 interfaces implemented
 #define XINTERFACE_IMPL_14( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14 )  \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this ),                                           \
-    SAL_STATIC_CAST( I10*, this ),                                          \
-    SAL_STATIC_CAST( I11*, this ),                                          \
-    SAL_STATIC_CAST( I12*, this ),                                          \
-    SAL_STATIC_CAST( I13*, this ),                                          \
-    SAL_STATIC_CAST( I14*, this )                                           \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this)),                                           \
+    (static_cast< I10* >(this)),                                          \
+    (static_cast< I11* >(this)),                                          \
+    (static_cast< I12* >(this)),                                          \
+    (static_cast< I13* >(this)),                                          \
+    (static_cast< I14* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
 // 15 interfaces implemented
 #define XINTERFACE_IMPL_15( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15 )  \
 XINTERFACE_COMMON_IMPL( Class )                                             \
 QUERYINTERFACE_IMPL_START( Class )                                          \
-    SAL_STATIC_CAST( I1*, this ),                                           \
-    SAL_STATIC_CAST( I2*, this ),                                           \
-    SAL_STATIC_CAST( I3*, this ),                                           \
-    SAL_STATIC_CAST( I4*, this ),                                           \
-    SAL_STATIC_CAST( I5*, this ),                                           \
-    SAL_STATIC_CAST( I6*, this ),                                           \
-    SAL_STATIC_CAST( I7*, this ),                                           \
-    SAL_STATIC_CAST( I8*, this ),                                           \
-    SAL_STATIC_CAST( I9*, this ),                                           \
-    SAL_STATIC_CAST( I10*, this ),                                          \
-    SAL_STATIC_CAST( I11*, this ),                                          \
-    SAL_STATIC_CAST( I12*, this ),                                          \
-    SAL_STATIC_CAST( I13*, this ),                                          \
-    SAL_STATIC_CAST( I14*, this ),                                          \
-    SAL_STATIC_CAST( I15*, this )                                           \
+    (static_cast< I1* >(this)),                                           \
+    (static_cast< I2* >(this)),                                           \
+    (static_cast< I3* >(this)),                                           \
+    (static_cast< I4* >(this)),                                           \
+    (static_cast< I5* >(this)),                                           \
+    (static_cast< I6* >(this)),                                           \
+    (static_cast< I7* >(this)),                                           \
+    (static_cast< I8* >(this)),                                           \
+    (static_cast< I9* >(this)),                                           \
+    (static_cast< I10* >(this)),                                          \
+    (static_cast< I11* >(this)),                                          \
+    (static_cast< I12* >(this)),                                          \
+    (static_cast< I13* >(this)),                                          \
+    (static_cast< I14* >(this)),                                          \
+    (static_cast< I15* >(this))                                           \
 QUERYINTERFACE_IMPL_END
 
 //=========================================================================

@@ -244,13 +244,13 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         sal_Bool bAssign;
         if (pTD->eTypeClass == typelib_TypeClass_ANY)
         {
-            uno_copyAndConvertData( pArg, SAL_CONST_CAST( Any *, &rValue ),
+            uno_copyAndConvertData( pArg, (const_cast< Any * >(&rValue)),
                                     pTD, getReflection()->getCpp2Uno().get() );
             bAssign = sal_True;
         }
         else if (typelib_typedescriptionreference_equals( rValue.getValueTypeRef(), pTD->pWeakRef ))
         {
-            uno_copyAndConvertData( pArg, SAL_CONST_CAST( void *, rValue.getValue() ),
+            uno_copyAndConvertData( pArg, (const_cast< void * >(rValue.getValue()) ),
                                     pTD, getReflection()->getCpp2Uno().get() );
             bAssign = sal_True;
         }

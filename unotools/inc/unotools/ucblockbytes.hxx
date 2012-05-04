@@ -177,25 +177,25 @@ public:
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream_Impl() const
                             {
-                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xInputStream;
                             }
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > getOutputStream_Impl() const
                             {
-                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xOutputStream;
                             }
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > getSeekable_Impl() const
                             {
-                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xSeekable;
                             }
 
     sal_Bool                hasInputStream_Impl() const
                             {
-                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xInputStream.is();
                             }
 

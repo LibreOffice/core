@@ -84,8 +84,8 @@ FileContentIdentifier::queryInterface(
     throw( uno::RuntimeException )
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( lang::XTypeProvider*, this),
-                                          SAL_STATIC_CAST( XContentIdentifier*, this) );
+                                          (static_cast< lang::XTypeProvider* >(this)),
+                                          (static_cast< XContentIdentifier* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

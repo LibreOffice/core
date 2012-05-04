@@ -112,9 +112,9 @@ XInputStream_impl::queryInterface(
     throw( uno::RuntimeException)
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( io::XInputStream*,this ),
-                                          SAL_STATIC_CAST( lang::XTypeProvider*,this ),
-                                          SAL_STATIC_CAST( io::XSeekable*,this ) );
+                                          (static_cast< io::XInputStream* >(this)),
+                                          (static_cast< lang::XTypeProvider* >(this)),
+                                          (static_cast< io::XSeekable* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

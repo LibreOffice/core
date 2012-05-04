@@ -43,10 +43,10 @@
 ::com::sun::star::uno::Any VCLXBitmap::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XBitmap*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDisplayBitmap*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XBitmap* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XDisplayBitmap* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

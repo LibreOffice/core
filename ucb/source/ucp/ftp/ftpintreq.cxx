@@ -69,8 +69,8 @@ XInteractionApproveImpl::queryInterface( const Type& rType )
 {
     Any aRet = cppu::queryInterface(
         rType,
-        SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-        SAL_STATIC_CAST( XInteractionApprove*,this) );
+        (static_cast< lang::XTypeProvider* >(this)),
+        (static_cast< XInteractionApprove* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -128,8 +128,8 @@ XInteractionDisapproveImpl::queryInterface( const Type& rType )
 {
     Any aRet = cppu::queryInterface(
         rType,
-        SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-        SAL_STATIC_CAST( XInteractionDisapprove*,this) );
+        (static_cast< lang::XTypeProvider* >(this)),
+        (static_cast< XInteractionDisapprove* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -188,8 +188,8 @@ XInteractionRequestImpl::queryInterface( const Type& rType )
 {
     Any aRet = cppu::queryInterface(
         rType,
-        SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-        SAL_STATIC_CAST( XInteractionRequest*,this) );
+        (static_cast< lang::XTypeProvider* >(this)),
+        (static_cast< XInteractionRequest* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

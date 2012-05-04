@@ -341,8 +341,8 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
 
     if ( xDispatch.is() )
     {
-        xDispatch->addStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
-        xDispatch->removeStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
+        xDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
+        xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
     }
 
     svt::PopupMenuControllerBase::updatePopupMenu();

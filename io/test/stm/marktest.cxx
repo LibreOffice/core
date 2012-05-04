@@ -380,7 +380,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
 Reference < XInterface > SAL_CALL OMarkableOutputStreamTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     OMarkableOutputStreamTest *p = new OMarkableOutputStreamTest( rSMgr );
-    return Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
 
 
@@ -652,7 +652,7 @@ void OMarkableInputStreamTest::testSimple(      const Reference< XOutputStream >
 Reference < XInterface > SAL_CALL OMarkableInputStreamTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     OMarkableInputStreamTest *p = new OMarkableInputStreamTest( rSMgr );
-    return Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
 
 

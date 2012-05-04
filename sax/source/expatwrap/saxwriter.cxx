@@ -978,7 +978,7 @@ Reference < XInterface > SAL_CALL SaxWriter_CreateInstance(
     throw (Exception)
 {
     SAXWriter *p = new SAXWriter;
-    return Reference< XInterface > ( SAL_STATIC_CAST(OWeakObject *, p ) );
+    return Reference< XInterface > ( (static_cast< OWeakObject * >(p)) );
 }
 
 OUString SaxWriter_getServiceName() throw()

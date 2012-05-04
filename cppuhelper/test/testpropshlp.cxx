@@ -325,11 +325,11 @@ public:
                     test_OPropertySetHelper( Property * p, sal_Int32    n )
                         : MutexContainer()
                         , OBroadcastHelper( ((MutexContainer *)this)->aMutex )
-//                      , OPropertySetHelper( *SAL_STATIC_CAST(OBroadcastHelper *,this))
+//                      , OPropertySetHelper( *(static_cast< OBroadcastHelper * >(this)))
                         // MSCI 4 bug ! :
                         //      OBroadcastHelper == OBroadcastHelperVar<OMultiTypeInterfaceContainerHelper>
                         , OPropertySetHelper(
-                                *SAL_STATIC_CAST(OBroadcastHelper *,this))
+                                *(static_cast< OBroadcastHelper * >(this)))
                         , bBOOL( sal_False )
                         , nINT16( 0 )
                         , nINT32( 0 )
@@ -359,7 +359,7 @@ public:
                         {
                             disposing();
                             EventObject aEvt;
-                            aEvt.Source = Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * ,this) );
+                            aEvt.Source = Reference < XInterface > ( (static_cast< OWeakObject *  >(this)) );
 
                             rBHelper.aLC.disposeAndClear( aEvt );
                             rBHelper.bDisposed = sal_True;

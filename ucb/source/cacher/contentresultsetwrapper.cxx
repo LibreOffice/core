@@ -351,14 +351,14 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 //list all interfaces inclusive baseclasses of interfaces
 QUERYINTERFACE_IMPL_START( ContentResultSetWrapper )
 
-    SAL_STATIC_CAST( XComponent*, this ),
-    SAL_STATIC_CAST( XCloseable*, this ),
-    SAL_STATIC_CAST( XResultSetMetaDataSupplier*, this ),
-    SAL_STATIC_CAST( XPropertySet*, this ),
+    (static_cast< XComponent* >(this)),
+    (static_cast< XCloseable* >(this)),
+    (static_cast< XResultSetMetaDataSupplier* >(this)),
+    (static_cast< XPropertySet* >(this)),
 
-    SAL_STATIC_CAST( XContentAccess*, this ),
-    SAL_STATIC_CAST( XResultSet*, this ),
-    SAL_STATIC_CAST( XRow*, this )
+    (static_cast< XContentAccess* >(this)),
+    (static_cast< XResultSet* >(this)),
+    (static_cast< XRow* >(this))
 
 QUERYINTERFACE_IMPL_END
 
@@ -1424,8 +1424,8 @@ QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
 
     static_cast< XEventListener * >(
                      static_cast< XPropertyChangeListener * >(this))
-    , SAL_STATIC_CAST( XPropertyChangeListener*, this )
-    , SAL_STATIC_CAST( XVetoableChangeListener*, this )
+    , (static_cast< XPropertyChangeListener* >(this))
+    , (static_cast< XVetoableChangeListener* >(this))
 
 QUERYINTERFACE_IMPL_END
 

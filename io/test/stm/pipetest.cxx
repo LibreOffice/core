@@ -413,7 +413,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 Reference < XInterface > SAL_CALL OPipeTest_CreateInstance( const Reference< XMultiServiceFactory>  & rSMgr ) throw (Exception)
 {
     OPipeTest *p = new OPipeTest( rSMgr );
-    Reference< XInterface > x ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    Reference< XInterface > x ( (static_cast< OWeakObject *  >(p)) );
     return x;
 }
 

@@ -132,13 +132,13 @@ FileProvider::queryInterface(
 {
     Any aRet = cppu::queryInterface(
         rType,
-        SAL_STATIC_CAST( XContentProvider*, this ),
-        SAL_STATIC_CAST( XInitialization*, this ),
-        SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
-        SAL_STATIC_CAST( XServiceInfo*,     this ),
-        SAL_STATIC_CAST( XTypeProvider*,    this ),
-        SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
-        SAL_STATIC_CAST( XPropertySet*, this ) );
+        (static_cast< XContentProvider* >(this)),
+        (static_cast< XInitialization* >(this)),
+        (static_cast< XContentIdentifierFactory* >(this)),
+        (static_cast< XServiceInfo* >(this)),
+        (static_cast< XTypeProvider* >(this)),
+        (static_cast< XFileIdentifierConverter* >(this)),
+        (static_cast< XPropertySet* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -452,7 +452,7 @@ XPropertySetInfoImpl2::queryInterface(
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( XPropertySetInfo*,this) );
+                                          (static_cast< XPropertySetInfo* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

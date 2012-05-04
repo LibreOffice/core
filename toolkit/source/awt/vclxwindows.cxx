@@ -792,8 +792,8 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
 ::com::sun::star::uno::Any VCLXCheckBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XCheckBox*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XButton* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XCheckBox* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
@@ -1093,8 +1093,8 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
 ::com::sun::star::uno::Any VCLXRadioButton::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XRadioButton*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XRadioButton* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XButton* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
@@ -1354,7 +1354,7 @@ VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
 ::com::sun::star::uno::Any VCLXSpinField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XSpinField*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XSpinField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXEdit::queryInterface( rType ));
 }
 
@@ -2202,7 +2202,7 @@ VCLXMessageBox::~VCLXMessageBox()
 ::com::sun::star::uno::Any VCLXMessageBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMessageBox*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XMessageBox* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
@@ -2290,9 +2290,9 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::document::XVbaMethodParameter*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDialog2*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDialog*, this ) );
+                                        (static_cast< ::com::sun::star::document::XVbaMethodParameter* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XDialog2* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XDialog* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
@@ -2924,7 +2924,7 @@ VCLXFixedHyperlink::~VCLXFixedHyperlink()
 ::com::sun::star::uno::Any VCLXFixedHyperlink::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XFixedHyperlink*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XFixedHyperlink* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -3239,7 +3239,7 @@ VCLXFixedText::~VCLXFixedText()
 ::com::sun::star::uno::Any VCLXFixedText::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XFixedText*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XFixedText* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -3381,7 +3381,7 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 ::com::sun::star::uno::Any VCLXScrollBar::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XScrollBar*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XScrollBar* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -3865,9 +3865,9 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
 ::com::sun::star::uno::Any VCLXEdit::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTextComponent*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTextEditField*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTextLayoutConstrains*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XTextComponent* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XTextEditField* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XTextLayoutConstrains* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -4844,7 +4844,7 @@ VCLXDateField::~VCLXDateField()
 ::com::sun::star::uno::Any VCLXDateField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDateField*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XDateField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5186,7 +5186,7 @@ VCLXTimeField::~VCLXTimeField()
 ::com::sun::star::uno::Any VCLXTimeField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTimeField*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XTimeField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5490,7 +5490,7 @@ VCLXNumericField::~VCLXNumericField()
 ::com::sun::star::uno::Any VCLXNumericField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XNumericField*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XNumericField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5846,7 +5846,7 @@ MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::Runt
 ::com::sun::star::uno::Any VCLXMetricField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                                              SAL_STATIC_CAST( ::com::sun::star::awt::XMetricField*, this ) );
+                                                              (static_cast< ::com::sun::star::awt::XMetricField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -6085,7 +6085,7 @@ VCLXCurrencyField::~VCLXCurrencyField()
 ::com::sun::star::uno::Any VCLXCurrencyField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XCurrencyField*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XCurrencyField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -6433,7 +6433,7 @@ VCLXPatternField::~VCLXPatternField()
 ::com::sun::star::uno::Any VCLXPatternField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPatternField*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XPatternField* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 

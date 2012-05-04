@@ -72,7 +72,7 @@ XCommandInfo_impl::queryInterface(
   throw( uno::RuntimeException )
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( XCommandInfo*,this) );
+                                          (static_cast< XCommandInfo* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

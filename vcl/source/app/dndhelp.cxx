@@ -94,10 +94,10 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                            SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, (::com::sun::star::datatransfer::dnd::XDragGestureListener*)this ),
-                            SAL_STATIC_CAST( ::com::sun::star::datatransfer::dnd::XDragGestureListener*, this ),
-                            SAL_STATIC_CAST( ::com::sun::star::datatransfer::dnd::XDragSourceListener*, this ),
-                            SAL_STATIC_CAST( ::com::sun::star::datatransfer::dnd::XDropTargetListener*, this ) );
+                            (static_cast< ::com::sun::star::lang::XEventListener* >( (::com::sun::star::datatransfer::dnd::XDragGestureListener*)this) ),
+                            (static_cast< ::com::sun::star::datatransfer::dnd::XDragGestureListener* >(this)),
+                            (static_cast< ::com::sun::star::datatransfer::dnd::XDragSourceListener* >(this)),
+                            (static_cast< ::com::sun::star::datatransfer::dnd::XDropTargetListener* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

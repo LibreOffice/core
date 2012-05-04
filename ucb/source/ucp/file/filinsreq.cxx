@@ -70,8 +70,8 @@ XInteractionSupplyNameImpl::queryInterface( const Type& rType )
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-                                     SAL_STATIC_CAST( XInteractionSupplyName*,this) );
+                                     (static_cast< lang::XTypeProvider* >(this)),
+                                     (static_cast< XInteractionSupplyName* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -109,8 +109,8 @@ XInteractionAbortImpl::queryInterface( const Type& rType )
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-                                     SAL_STATIC_CAST( XInteractionAbort*,this) );
+                                     (static_cast< lang::XTypeProvider* >(this)),
+                                     (static_cast< XInteractionAbort* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -169,8 +169,8 @@ XInteractionRequestImpl::queryInterface( const Type& rType )
     Any aRet =
         cppu::queryInterface(
             rType,
-            SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-            SAL_STATIC_CAST( XInteractionRequest*,this) );
+            (static_cast< lang::XTypeProvider* >(this)),
+            (static_cast< XInteractionRequest* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

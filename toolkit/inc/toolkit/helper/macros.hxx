@@ -160,8 +160,8 @@ ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
 ::com::sun::star::uno::Any ClassName::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
 { \
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType, \
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ), \
-                                        SAL_STATIC_CAST( InterfaceName*, this ) ); \
+                                        (static_cast< ::com::sun::star::lang::XEventListener* >(this)), \
+                                        (static_cast< InterfaceName* >(this)) ); \
     return (aRet.hasValue() ? aRet : ListenerMultiplexerBase::queryInterface( rType )); \
 } \
 void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException) \

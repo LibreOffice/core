@@ -53,13 +53,13 @@ XStream_impl::queryInterface(
     throw( uno::RuntimeException)
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( lang::XTypeProvider*,this ),
-                                          SAL_STATIC_CAST( io::XStream*,this ),
-                                          SAL_STATIC_CAST( io::XInputStream*,this ),
-                                          SAL_STATIC_CAST( io::XOutputStream*,this ),
-                                          SAL_STATIC_CAST( io::XSeekable*,this ),
-                                          SAL_STATIC_CAST( io::XTruncate*,this ),
-                                          SAL_STATIC_CAST( io::XAsyncOutputMonitor*,this ) );
+                                          (static_cast< lang::XTypeProvider* >(this)),
+                                          (static_cast< io::XStream* >(this)),
+                                          (static_cast< io::XInputStream* >(this)),
+                                          (static_cast< io::XOutputStream* >(this)),
+                                          (static_cast< io::XSeekable* >(this)),
+                                          (static_cast< io::XTruncate* >(this)),
+                                          (static_cast< io::XAsyncOutputMonitor* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

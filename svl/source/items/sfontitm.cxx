@@ -129,8 +129,8 @@ SvStream & SfxFontItem::Store(SvStream & rStream, sal_uInt16) const
                 << sal_Int8(m_bOutline) << sal_Int8(m_bShadow)
                 << sal_Int8(m_bKerning);
     }
-    SAL_CONST_CAST(Color &, m_aColor).Write(rStream, sal_True);
-    SAL_CONST_CAST(Color &, m_aFillColor).Write(rStream, sal_True);
+    (const_cast< Color & >(m_aColor)).Write(rStream, sal_True);
+    (const_cast< Color & >(m_aFillColor)).Write(rStream, sal_True);
     rStream << sal_Int16(m_bHasFont << 2 | m_bHasColor
                           | m_bHasFillColor << 1);
     return rStream;

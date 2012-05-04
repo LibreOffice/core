@@ -320,7 +320,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 // remove listener before we destruct ourself, so we cannot be called back afterwards
                 m_pMenuManager->RemoveListener();
 
-                SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)m_pMenuManager )->release();
+                (static_cast< ::com::sun::star::uno::XInterface* >((OWeakObject*)m_pMenuManager))->release();
 
                 m_pMenuManager = 0;
             }

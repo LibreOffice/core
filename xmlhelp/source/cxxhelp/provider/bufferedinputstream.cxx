@@ -105,8 +105,8 @@ BufferedInputStream::~BufferedInputStream()
 Any SAL_CALL BufferedInputStream::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     Any aRet = ::cppu::queryInterface( rType,
-                                       SAL_STATIC_CAST( XInputStream*,this ),
-                                       SAL_STATIC_CAST( XSeekable*,this ) );
+                                       (static_cast< XInputStream* >(this)),
+                                       (static_cast< XSeekable* >(this)) );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

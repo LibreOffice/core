@@ -113,7 +113,7 @@ throw ( uno::RuntimeException )
 {
     uno::Any a = ::cppu::queryInterface(
                 aType,
-                SAL_STATIC_CAST( XStatusListener*, this ));
+                (static_cast< XStatusListener* >(this)));
 
     if( a.hasValue() )
         return a;
@@ -156,7 +156,7 @@ bool StateEventHelper::isCommandEnabled()
 {
     // Be sure that we cannot die during condition wait
     uno::Reference< frame::XStatusListener > xSelf(
-        SAL_STATIC_CAST( frame::XStatusListener*, this ));
+        (static_cast< frame::XStatusListener* >(this)));
 
     uno::Reference< frame::XDispatch > xDispatch;
     util::URL                          aTargetURL;

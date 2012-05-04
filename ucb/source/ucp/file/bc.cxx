@@ -163,16 +163,16 @@ BaseContent::queryInterface( const Type& rType )
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( lang::XComponent*, this ),
-                                     SAL_STATIC_CAST( lang::XTypeProvider*, this ),
-                                     SAL_STATIC_CAST( lang::XServiceInfo*, this ),
-                                     SAL_STATIC_CAST( XCommandProcessor*, this ),
-                                     SAL_STATIC_CAST( container::XChild*, this ),
-                                     SAL_STATIC_CAST( beans::XPropertiesChangeNotifier*, this ),
-                                     SAL_STATIC_CAST( beans::XPropertyContainer*, this ),
-                                     SAL_STATIC_CAST( XContentCreator*,this ),
-                                     SAL_STATIC_CAST( beans::XPropertySetInfoChangeNotifier*, this ),
-                                     SAL_STATIC_CAST( XContent*,this) );
+                                     (static_cast< lang::XComponent* >(this)),
+                                     (static_cast< lang::XTypeProvider* >(this)),
+                                     (static_cast< lang::XServiceInfo* >(this)),
+                                     (static_cast< XCommandProcessor* >(this)),
+                                     (static_cast< container::XChild* >(this)),
+                                     (static_cast< beans::XPropertiesChangeNotifier* >(this)),
+                                     (static_cast< beans::XPropertyContainer* >(this)),
+                                     (static_cast< XContentCreator* >(this)),
+                                     (static_cast< beans::XPropertySetInfoChangeNotifier* >(this)),
+                                     (static_cast< XContent* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

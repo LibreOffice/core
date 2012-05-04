@@ -136,9 +136,9 @@ void SAL_CALL DynamicResultSetWrapper
 //--------------------------------------------------------------------------
 //list all interfaces inclusive baseclasses of interfaces
 QUERYINTERFACE_IMPL_START( DynamicResultSetWrapper )
-    SAL_STATIC_CAST( XComponent*, this ) //base of XDynamicResultSet
-    , SAL_STATIC_CAST( XDynamicResultSet*, this )
-    , SAL_STATIC_CAST( XSourceInitialization*, this )
+    (static_cast< XComponent* >(this)) //base of XDynamicResultSet
+    , (static_cast< XDynamicResultSet* >(this))
+    , (static_cast< XSourceInitialization* >(this))
 QUERYINTERFACE_IMPL_END
 
 //--------------------------------------------------------------------------

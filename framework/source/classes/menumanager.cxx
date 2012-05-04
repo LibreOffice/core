@@ -313,7 +313,7 @@ MenuManager::~MenuManager()
         MenuItemHandler* pItemHandler = *p;
         pItemHandler->xMenuItemDispatch.clear();
         if ( pItemHandler->pSubMenuManager )
-            SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)pItemHandler->pSubMenuManager )->release();
+            (static_cast< ::com::sun::star::uno::XInterface* >((OWeakObject*)pItemHandler->pSubMenuManager))->release();
         delete pItemHandler;
     }
 
@@ -394,7 +394,7 @@ throw ( RuntimeException )
             {
                 pStatusChangedMenu->xMenuItemDispatch   = xMenuItemDispatch;
                 pStatusChangedMenu->aMenuItemURL        = aTargetURL.Complete;
-                xMenuItemDispatch->addStatusListener( SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
+                xMenuItemDispatch->addStatusListener( (static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
             }
         }
     }
@@ -423,7 +423,7 @@ void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
             m_xURLTransformer->parseStrict( aTargetURL );
 
             pItemHandler->xMenuItemDispatch->removeStatusListener(
-                SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
+                (static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
         }
 
         pItemHandler->xMenuItemDispatch.clear();
@@ -471,7 +471,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
 
                 m_xURLTransformer->parseStrict( aTargetURL );
 
-                pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
+                pMenuItemDisposing->xMenuItemDispatch->removeStatusListener((static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
                 pMenuItemDisposing->xMenuItemDispatch.clear();
             }
         }
@@ -847,7 +847,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                             {
                                 pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
                                 pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
-                                xMenuItemDispatch->addStatusListener( SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
+                                xMenuItemDispatch->addStatusListener( (static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
                             }
                             else
                                 pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );

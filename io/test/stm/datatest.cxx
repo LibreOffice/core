@@ -349,7 +349,7 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
 Reference < XInterface > SAL_CALL ODataStreamTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     ODataStreamTest *p = new ODataStreamTest( rSMgr );
-    return Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
 
 Sequence<OUString> ODataStreamTest_getSupportedServiceNames( int i) throw ()
@@ -627,7 +627,7 @@ Reference < XInterface > SAL_CALL OMyPersistObject_CreateInstance(
     throw(Exception)
 {
     MyPersistObject *p = new MyPersistObject( );
-    return Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
 
 Sequence<OUString> OMyPersistObject_getSupportedServiceNames( ) throw ()
@@ -1077,7 +1077,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
 Reference < XInterface > SAL_CALL OObjectStreamTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     OObjectStreamTest *p = new OObjectStreamTest( rSMgr );
-    return Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
 
 Sequence<OUString> OObjectStreamTest_getSupportedServiceNames( int i) throw ()

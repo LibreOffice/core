@@ -44,7 +44,7 @@ ListenerMultiplexerBase::~ListenerMultiplexerBase()
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any ListenerMultiplexerBase::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::cppu::queryInterface( rType, SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, this ) );
+    return ::cppu::queryInterface( rType, (static_cast< ::com::sun::star::uno::XInterface* >(this)) );
 }
 
 
@@ -60,7 +60,7 @@ EventListenerMultiplexer::EventListenerMultiplexer( ::cppu::OWeakObject& rSource
 ::com::sun::star::uno::Any EventListenerMultiplexer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ) );
+                                        (static_cast< ::com::sun::star::lang::XEventListener* >(this)) );
     return (aRet.hasValue() ? aRet : ListenerMultiplexerBase::queryInterface( rType ));
 }
 

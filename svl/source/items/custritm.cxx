@@ -51,7 +51,7 @@ int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
     DBG_ASSERT(rItem.ISA(CntUnencodedStringItem),
                "CntUnencodedStringItem::operator ==(): Bad type");
     return m_aValue
-            == SAL_STATIC_CAST(const CntUnencodedStringItem *, &rItem)->
+            == (static_cast< const CntUnencodedStringItem * >(&rItem))->
                 m_aValue;
 }
 

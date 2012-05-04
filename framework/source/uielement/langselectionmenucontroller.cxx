@@ -320,8 +320,8 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 
     if ( xDispatch.is() )
     {
-        xDispatch->addStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
-        xDispatch->removeStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
+        xDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
+        xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
     }
 
     // TODO: Fill menu with the information retrieved by the status update

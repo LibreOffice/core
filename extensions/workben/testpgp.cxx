@@ -246,7 +246,7 @@ sal_Bool SAL_CALL DataSource_Impl::queryInterface (
 {
     if (com::sun::star::uno::queryInterface (
         rUik, rIfc,
-        SAL_STATIC_CAST (XInputStream*, this)))
+        (static_cast< XInputStream* >(this))))
         return sal_True;
     else
         return OWeakObject::queryInterface (rUik, rIfc);
@@ -357,7 +357,7 @@ sal_Bool SAL_CALL DataSink_Impl::queryInterface (
 {
     if (com::sun::star::uno::queryInterface (
         rUik, rIfc,
-        SAL_STATIC_CAST (XOutputStream*, this)))
+        (static_cast< XOutputStream* >(this))))
         return sal_True;
     else
         return OWeakObject::queryInterface (rUik, rIfc);
@@ -456,8 +456,8 @@ sal_Bool SAL_CALL DecoderListener_Impl::queryInterface (
 {
     if (com::sun::star::uno::queryInterface (
         rUik, rIfc,
-        SAL_STATIC_CAST (XEventListener*, this),
-        SAL_STATIC_CAST (XPGPDecoderListener*, this)))
+        (static_cast< XEventListener* >(this)),
+        (static_cast< XPGPDecoderListener* >(this))))
         return sal_True;
     else
         return OWeakObject::queryInterface (rUik, rIfc);

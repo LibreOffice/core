@@ -164,7 +164,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
         DBG_ASSERT(pIntlWrapper,
                    "CntContentTypeItem::GetPresentation(): No IntlWrapper");
         if (pIntlWrapper)
-            SAL_CONST_CAST(CntContentTypeItem *, this)->_aPresentation
+            (const_cast< CntContentTypeItem * >(this))->_aPresentation
              = INetContentTypes::GetPresentation(GetEnumValue(),
                                                  pIntlWrapper->
                                                   getLocale());
@@ -187,7 +187,7 @@ INetContentType CntContentTypeItem::GetEnumValue() const
     {
         // Not yet initialized... Get enum value for string content type.
 
-        CntContentTypeItem* pVarThis = SAL_CONST_CAST( CntContentTypeItem*, this );
+        CntContentTypeItem* pVarThis = (const_cast< CntContentTypeItem* >(this));
 
         pVarThis->_eType = INetContentTypes::GetContentType( GetValue() );
     }

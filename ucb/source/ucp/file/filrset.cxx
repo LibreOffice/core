@@ -135,16 +135,16 @@ XResultSet_impl::queryInterface(
 {
     uno::Any aRet = cppu::queryInterface(
         rType,
-        SAL_STATIC_CAST( lang::XComponent*, this),
-        SAL_STATIC_CAST( lang::XTypeProvider*, this),
-        SAL_STATIC_CAST( lang::XEventListener*, this),
-        SAL_STATIC_CAST( sdbc::XRow*, this),
-        SAL_STATIC_CAST( sdbc::XResultSet*, this),
-        SAL_STATIC_CAST( sdbc::XCloseable*, this),
-        SAL_STATIC_CAST( sdbc::XResultSetMetaDataSupplier*, this),
-        SAL_STATIC_CAST( beans::XPropertySet*, this ),
-        SAL_STATIC_CAST( ucb::XContentAccess*, this),
-        SAL_STATIC_CAST( ucb::XDynamicResultSet*,this) );
+        (static_cast< lang::XComponent* >(this)),
+        (static_cast< lang::XTypeProvider* >(this)),
+        (static_cast< lang::XEventListener* >(this)),
+        (static_cast< sdbc::XRow* >(this)),
+        (static_cast< sdbc::XResultSet* >(this)),
+        (static_cast< sdbc::XCloseable* >(this)),
+        (static_cast< sdbc::XResultSetMetaDataSupplier* >(this)),
+        (static_cast< beans::XPropertySet* >(this)),
+        (static_cast< ucb::XContentAccess* >(this)),
+        (static_cast< ucb::XDynamicResultSet* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

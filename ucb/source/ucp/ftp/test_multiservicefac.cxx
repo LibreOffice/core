@@ -48,9 +48,7 @@ Test_MultiServiceFactory::queryInterface(
         RuntimeException
     )
 {
-    Any aRet = ::cppu::queryInterface(rType,
-                                      SAL_STATIC_CAST( XMultiServiceFactory*,
-                                                       this ));
+    Any aRet = ::cppu::queryInterface(rType, (static_cast< XMultiServiceFactory* >( this )) );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 

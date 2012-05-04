@@ -63,7 +63,7 @@ namespace framework
 ActionTriggerPropertySet::ActionTriggerPropertySet( const Reference< XMultiServiceFactory >& /*xServiceManager*/ )
     : ThreadHelpBase           ( &Application::GetSolarMutex()               )
     , OBroadcastHelper         ( m_aLock.getShareableOslMutex()              )
-    ,   OPropertySetHelper       ( *SAL_STATIC_CAST( OBroadcastHelper *, this ))
+    ,   OPropertySetHelper       ( *(static_cast< OBroadcastHelper * >(this)))
     , OWeakObject              ()
     , m_xBitmap                ( 0 )
     , m_xActionTriggerContainer( 0 )
@@ -80,7 +80,7 @@ throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                SAL_STATIC_CAST( XServiceInfo*, this ));
+                (static_cast< XServiceInfo* >(this)));
 
     if( a.hasValue() )
         return a;

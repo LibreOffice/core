@@ -63,7 +63,7 @@ namespace unographic {
 
 uno::Reference< uno::XInterface > SAL_CALL GraphicProvider_CreateInstance( const uno::Reference< lang::XMultiServiceFactory >& )
 {
-    return SAL_STATIC_CAST( ::cppu::OWeakObject*, new GraphicProvider );
+    return (static_cast< ::cppu::OWeakObject* >(new GraphicProvider ));
 }
 
 GraphicProvider::GraphicProvider()

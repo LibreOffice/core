@@ -82,9 +82,9 @@ TVFactory::queryInterface(
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( XServiceInfo*,  this ),
-                                     SAL_STATIC_CAST( XTypeProvider*, this ),
-                                     SAL_STATIC_CAST( XMultiServiceFactory*, this ) );
+                                     (static_cast< XServiceInfo* >(this)),
+                                     (static_cast< XTypeProvider* >(this)),
+                                     (static_cast< XMultiServiceFactory* >(this)) );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

@@ -254,7 +254,7 @@ Any OPropertySetHelper2::queryInterface( const ::com::sun::star::uno::Type & rTy
 void OPropertySetHelper::disposing() SAL_THROW(())
 {
     // Create an event with this as sender
-    Reference < XPropertySet  > rSource( SAL_STATIC_CAST( XPropertySet * , this ) , UNO_QUERY );
+    Reference < XPropertySet  > rSource( (static_cast< XPropertySet *  >(this)) , UNO_QUERY );
     EventObject aEvt;
     aEvt.Source = rSource;
 

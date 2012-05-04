@@ -115,8 +115,8 @@ XRow_impl::queryInterface(
   throw( uno::RuntimeException )
 {
   uno::Any aRet = cppu::queryInterface( rType,
-                    SAL_STATIC_CAST( lang::XTypeProvider*,this),
-                    SAL_STATIC_CAST( sdbc::XRow*,this) );
+                    (static_cast< lang::XTypeProvider* >(this)),
+                    (static_cast< sdbc::XRow* >(this)) );
   return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

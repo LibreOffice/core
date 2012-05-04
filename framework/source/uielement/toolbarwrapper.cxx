@@ -102,7 +102,7 @@ throw( ::com::sun::star::uno::RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                SAL_STATIC_CAST( ::com::sun::star::ui::XUIFunctionListener*, this ) );
+                (static_cast< ::com::sun::star::ui::XUIFunctionListener* >(this)) );
 
     if( a.hasValue() )
         return a;

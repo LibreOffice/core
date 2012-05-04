@@ -350,16 +350,6 @@ typedef struct _sal_Sequence
 #pragma pack(pop)
 #endif
 
-
-/* Historical macros, no need to use, old use cases should be replaced
- * by their expansions.
- */
-#ifdef __cplusplus
-#define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
-#define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
-#define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
-#endif /* __cplusplus */
-
 /** Definition of function throw clause macros.  These have been introduced
     to reduce code size by balancing out compiler bugs.
 

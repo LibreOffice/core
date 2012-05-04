@@ -60,8 +60,8 @@ VCLXContainer::~VCLXContainer()
 ::com::sun::star::uno::Any VCLXContainer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XVclContainer*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XVclContainerPeer*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XVclContainer* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XVclContainerPeer* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 

@@ -77,7 +77,7 @@ int SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     DBG_ASSERT(SfxPoolItem::operator ==(rItem), "unequal type");
-    return m_nValue == SAL_STATIC_CAST(const SfxInt16Item *, &rItem)->
+    return m_nValue == (static_cast< const SfxInt16Item * >(&rItem))->
                         m_nValue;
 }
 
@@ -87,10 +87,10 @@ int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     DBG_ASSERT(SfxPoolItem::operator ==(rWith), "unequal type");
-    return SAL_STATIC_CAST(const SfxInt16Item *, &rWith)->m_nValue
+    return (static_cast< const SfxInt16Item * >(&rWith))->m_nValue
              < m_nValue ?
             -1 :
-           SAL_STATIC_CAST(const SfxInt16Item *, &rWith)->m_nValue
+           (static_cast< const SfxInt16Item * >(&rWith))->m_nValue
              == m_nValue ?
             0 : 1;
 }

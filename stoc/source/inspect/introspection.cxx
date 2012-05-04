@@ -2226,7 +2226,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                     const Reference<XIdlClass>& rxIfaceClass = pParamArray[j];
 
                     // Pruefen, ob das Interface schon beruecksichtigt wurde. 
-                    XInterface* pIface = SAL_STATIC_CAST( XInterface*, rxIfaceClass.get() );
+                    XInterface* pIface = (static_cast< XInterface* >(rxIfaceClass.get()) );
                     if( aCheckedInterfacesMap.count( pIface ) > 0 )
                     {
                         // Kennen wir schon

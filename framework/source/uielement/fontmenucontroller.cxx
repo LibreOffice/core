@@ -240,8 +240,8 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
 
     if ( xDispatch.is() )
     {
-        xDispatch->addStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
-        xDispatch->removeStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
+        xDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
+        xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
     }
 }
 

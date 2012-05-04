@@ -520,7 +520,7 @@ AnimationNode::~AnimationNode()
 #define IMPL_NODE_FACTORY(N,IN,SN)\
 Reference< XInterface > SAL_CALL createInstance_##N( const Reference< XComponentContext > &  ) throw (Exception)\
 {\
-    return Reference < XInterface > ( SAL_STATIC_CAST( ::cppu::OWeakObject * , new AnimationNode( N ) ) );\
+    return Reference < XInterface > ( (static_cast< ::cppu::OWeakObject *  >(new AnimationNode( N )) ) );\
 }\
 OUString getImplementationName_##N()\
 {\

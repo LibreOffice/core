@@ -110,8 +110,8 @@ XPropertySetInfo_impl::queryInterface(
   throw( RuntimeException )
 {
   Any aRet = cppu::queryInterface( rType,
-                    SAL_STATIC_CAST( lang::XTypeProvider*,this),
-                    SAL_STATIC_CAST( beans::XPropertySetInfo*,this) );
+                    (static_cast< lang::XTypeProvider* >(this)),
+                    (static_cast< beans::XPropertySetInfo* >(this)) );
   return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

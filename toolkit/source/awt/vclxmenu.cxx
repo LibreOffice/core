@@ -273,24 +273,24 @@ throw(::com::sun::star::uno::RuntimeException)
 
     if ( bIsPopupMenu )
         aRet = ::cppu::queryInterface(  rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenu*, (::com::sun::star::awt::XMenuBar*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPopupMenu*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XPopupMenuExtended*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended*, (::com::sun::star::awt::XPopupMenuExtended*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended2*, (::com::sun::star::awt::XPopupMenuExtended*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XMenu* >((::com::sun::star::awt::XMenuBar*) this) ),
+                                        (static_cast< ::com::sun::star::awt::XPopupMenu* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XPopupMenuExtended* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XMenuExtended* >((::com::sun::star::awt::XPopupMenuExtended*) this) ),
+                                        (static_cast< ::com::sun::star::awt::XMenuExtended2* >((::com::sun::star::awt::XPopupMenuExtended*) this) ),
+                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XServiceInfo* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)) );
     else
         aRet = ::cppu::queryInterface(  rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenu*, (::com::sun::star::awt::XMenuBar*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuBar*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuBarExtended*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended*, (::com::sun::star::awt::XMenuBarExtended*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended2*, (::com::sun::star::awt::XMenuBarExtended*) this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
+                                        (static_cast< ::com::sun::star::awt::XMenu* >((::com::sun::star::awt::XMenuBar*) this) ),
+                                        (static_cast< ::com::sun::star::awt::XMenuBar* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XMenuBarExtended* >(this)),
+                                        (static_cast< ::com::sun::star::awt::XMenuExtended* >((::com::sun::star::awt::XMenuBarExtended*) this) ),
+                                        (static_cast< ::com::sun::star::awt::XMenuExtended2* >((::com::sun::star::awt::XMenuBarExtended*) this) ),
+                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XServiceInfo* >(this)),
+                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)) );
 
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }

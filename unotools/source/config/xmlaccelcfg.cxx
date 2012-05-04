@@ -198,7 +198,7 @@ void AttributeListImpl::clear()
 
 Any SAL_CALL OReadAccelatorDocumentHandler::queryInterface( const Type & rType ) throw( RuntimeException )
 {
-    Any a = ::cppu::queryInterface( rType ,SAL_STATIC_CAST( XDocumentHandler*, this ));
+    Any a = ::cppu::queryInterface( rType ,(static_cast< XDocumentHandler* >(this)));
     if ( a.hasValue() )
         return a;
     else

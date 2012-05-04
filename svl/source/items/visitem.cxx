@@ -57,7 +57,7 @@ int SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(SfxVisibilityItem, 0);
     DBG_ASSERT(SfxPoolItem::operator ==(rItem), "unequal type");
-    return m_nValue.bVisible == SAL_STATIC_CAST(const SfxVisibilityItem *, &rItem)->
+    return m_nValue.bVisible == (static_cast< const SfxVisibilityItem * >(&rItem))->
                         m_nValue.bVisible;
 }
 

@@ -54,7 +54,7 @@ namespace unographic {
 
 uno::Reference< uno::XInterface > SAL_CALL GraphicRendererVCL_CreateInstance( const uno::Reference< lang::XMultiServiceFactory >& )
 {
-    return SAL_STATIC_CAST( ::cppu::OWeakObject*, new GraphicRendererVCL );
+    return (static_cast< ::cppu::OWeakObject* >(new GraphicRendererVCL ));
 }
 
 

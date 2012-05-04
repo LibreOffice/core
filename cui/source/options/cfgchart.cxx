@@ -28,7 +28,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>            // header for SvStream
-#include <sal/types.h>                 // header for SAL_STATIC_CAST
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
@@ -242,7 +241,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
         // set color values
         for( sal_Int32 i=0; i < nCount; i++ )
         {
-            aCol.SetColor( SAL_STATIC_CAST( ColorData, aColorSeq[ i ] ));
+            aCol.SetColor( (static_cast< ColorData >(aColorSeq[ i ] )));
 
             aName = aPrefix;
             aName.Append( String::CreateFromInt32( i + 1 ));

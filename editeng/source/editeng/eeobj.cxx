@@ -51,7 +51,7 @@ EditDataObject::~EditDataObject()
 // uno::XInterface
 uno::Any EditDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( datatransfer::XTransferable*, this ) );
+    uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

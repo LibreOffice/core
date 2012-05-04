@@ -112,7 +112,7 @@ private:
 Reference < XInterface > SAL_CALL OSaxParserTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     OSaxParserTest *p = new OSaxParserTest( rSMgr );
-    return Reference < XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
+    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
 
 

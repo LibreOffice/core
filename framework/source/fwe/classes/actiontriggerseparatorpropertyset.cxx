@@ -57,7 +57,7 @@ namespace framework
 ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet( const Reference< XMultiServiceFactory >& /*ServiceManager*/ )
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                     )
         ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                    )
-        ,   OPropertySetHelper      ( *SAL_STATIC_CAST( OBroadcastHelper *, this )      )
+        ,   OPropertySetHelper      ( *(static_cast< OBroadcastHelper * >(this))      )
         ,   OWeakObject             (                                                   )
         ,   m_nSeparatorType( 0 )
 {
@@ -73,7 +73,7 @@ throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                SAL_STATIC_CAST( XServiceInfo*, this ));
+                (static_cast< XServiceInfo* >(this)));
 
     if( a.hasValue() )
         return a;

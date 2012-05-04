@@ -72,10 +72,10 @@ throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                SAL_STATIC_CAST( XIndexContainer*, this ),
-                SAL_STATIC_CAST( XIndexReplace*, this ),
-                SAL_STATIC_CAST( XIndexAccess*, this ),
-                SAL_STATIC_CAST( XElementAccess*, this ) );
+                (static_cast< XIndexContainer* >(this)),
+                (static_cast< XIndexReplace* >(this)),
+                (static_cast< XIndexAccess* >(this)),
+                (static_cast< XElementAccess* >(this)) );
 
     if( a.hasValue() )
     {

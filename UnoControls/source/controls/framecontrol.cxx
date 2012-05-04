@@ -71,7 +71,7 @@ namespace unocontrols{
 FrameControl::FrameControl( const Reference< XMultiServiceFactory >& xFactory )
     : BaseControl                   ( xFactory                                                                              )
     , OBroadcastHelper              ( m_aMutex                                                                              )
-    , OPropertySetHelper            ( *SAL_STATIC_CAST( OBroadcastHelper *, this )  )
+    , OPropertySetHelper            ( *(static_cast< OBroadcastHelper * >(this))  )
     , m_aInterfaceContainer         ( m_aMutex                                                                              )
     , m_aConnectionPointContainer   ( m_aMutex                                                                              )
 {

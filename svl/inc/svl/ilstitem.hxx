@@ -50,7 +50,7 @@ public:
     ::com::sun::star::uno::Sequence < sal_Int32 > GetSequence()
     { return m_aList; }
     ::com::sun::star::uno::Sequence < sal_Int32 > GetConstSequence() const
-    { return SAL_CONST_CAST(SfxIntegerListItem *, this)->GetSequence(); }
+    { return (const_cast< SfxIntegerListItem * >(this))->GetSequence(); }
 
     void                    GetList( ::std::vector < sal_Int32 >& rList ) const;
 

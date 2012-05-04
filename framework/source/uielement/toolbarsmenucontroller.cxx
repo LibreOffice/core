@@ -797,8 +797,8 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
             Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
             if ( xDispatch.is() )
             {
-                xDispatch->addStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
-                xDispatch->removeStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
+                xDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
+                xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
             }
         }
         else if ( aCmdVector[i].equalsAscii( CMD_RESTOREVISIBILITY ))
