@@ -39,7 +39,7 @@ $(eval $(call gb_Executable_use_static_libraries,ulfex,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,ulfex,\
+$(eval $(call gb_Executable_add_exception_objects,ulfex,\
     l10ntools/source/lngmerge \
     l10ntools/source/lngex \
 ))

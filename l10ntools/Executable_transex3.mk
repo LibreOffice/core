@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_use_static_libraries,transex3,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,transex3,\
+$(eval $(call gb_Executable_add_exception_objects,transex3,\
     l10ntools/source/export \
 ))
 

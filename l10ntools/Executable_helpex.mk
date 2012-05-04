@@ -41,7 +41,7 @@ $(eval $(call gb_Executable_use_static_libraries,helpex,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,helpex,\
+$(eval $(call gb_Executable_add_exception_objects,helpex,\
     l10ntools/source/helpex \
     l10ntools/source/xmlparse \
     l10ntools/source/helpmerge \

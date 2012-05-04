@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_use_static_libraries,xrmex,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,xrmex,\
+$(eval $(call gb_Executable_add_exception_objects,xrmex,\
     l10ntools/source/xrmmerge \
 ))
 

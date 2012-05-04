@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_use_static_libraries,cfgex,\
     transex \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,cfgex,\
+$(eval $(call gb_Executable_add_exception_objects,cfgex,\
     l10ntools/source/cfgmerge \
 ))
 

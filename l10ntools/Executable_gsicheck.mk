@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_use_libraries,gsicheck,\
     sal \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,gsicheck,\
+$(eval $(call gb_Executable_add_exception_objects,gsicheck,\
     l10ntools/source/gsicheck \
     l10ntools/source/tagtest \
 ))
