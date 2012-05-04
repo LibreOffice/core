@@ -2163,7 +2163,6 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     throw(UnknownPropertyException, PropertyVetoException,
         IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    Any aRet;
     SwNumRule* pDocRule = 0;
     SwNumRule* pCreatedRule = 0;
     if(!pNumRule)
