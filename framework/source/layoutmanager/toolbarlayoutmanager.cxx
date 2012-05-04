@@ -66,6 +66,7 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_xUIElementFactoryManager( xUIElementFactory ),
     m_pParentLayouter( pParentLayouter ),
     m_eDockOperation( DOCKOP_ON_COLROW ),
+    m_ePreviewDetection( PREVIEWFRAME_UNKNOWN ),
     m_bComponentAttached( false ),
     m_bMustLayout( false ),
     m_bLayoutDirty( false ),
@@ -374,6 +375,7 @@ void ToolbarLayoutManager::reset()
     uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr );
     m_xModuleCfgMgr.clear();
     m_xDocCfgMgr.clear();
+    m_ePreviewDetection = PREVIEWFRAME_UNKNOWN;
     m_bComponentAttached = false;
     aWriteLock.unlock();
 
@@ -399,6 +401,21 @@ void ToolbarLayoutManager::attach(
     m_bComponentAttached     = true;
 }
 
+bool ToolbarLayoutManager::isPreviewFrame()
+{
+    ReadGuard aReadLock( m_aLock );
+    if (m_ePreviewDetection == PREVIEWFRAME_UNKNOWN)
+    {
+        uno::Reference< frame::XFrame > xFrame( m_xFrame );
+
+        uno::Reference< frame::XModel > xModel( impl_getModelFromFrame( xFrame ));
+
+        WriteGuard aWriteLock( m_aLock );
+        m_ePreviewDetection = (implts_isPreviewModel( xModel ) ? PREVIEWFRAME_YES : PREVIEWFRAME_NO);
+    }
+    return m_ePreviewDetection == PREVIEWFRAME_YES;
+}
+
 void ToolbarLayoutManager::createStaticToolbars()
 {
     resetDockingArea();
@@ -410,17 +427,12 @@ void ToolbarLayoutManager::createStaticToolbars()
 
 bool ToolbarLayoutManager::requestToolbar( const ::rtl::OUString& rResourceURL )
 {
+    if (isPreviewFrame())
+        return false; // no toolbars for preview frame!
+
     bool bNotify( false );
     bool bMustCallCreate( false );
     uno::Reference< ui::XUIElement > xUIElement;
-
-    ReadGuard aReadLock( m_aLock );
-    uno::Reference< frame::XFrame > xFrame( m_xFrame );
-    aReadLock.unlock();
-
-    uno::Reference< frame::XModel > xModel( impl_getModelFromFrame( xFrame ));
-    if ( implts_isPreviewModel( xModel ))
-        return false; // no toolbars for preview frame!
 
     UIElement aRequestedToolbar = impl_findToolbar( rResourceURL );
     if ( aRequestedToolbar.m_aName != rResourceURL  )
@@ -970,8 +982,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     uno::Reference< frame::XFrame > xFrame( m_xFrame );
     aWriteLock.unlock();
 
-    uno::Reference< frame::XModel > xModel( impl_getModelFromFrame( xFrame ));
-    if ( implts_isPreviewModel( xModel ))
+    if (isPreviewFrame())
         return; // no addon toolbars for preview frame!
 
     UIElementVector aUIElementVector;
@@ -1083,15 +1094,13 @@ void ToolbarLayoutManager::implts_createCustomToolBars()
 
     uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     uno::Reference< frame::XFrame > xFrame( m_xFrame );
-    uno::Reference< frame::XModel > xModel;
     uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr, uno::UNO_QUERY );
     uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr, uno::UNO_QUERY );
     aReadLock.unlock();
 
     if ( xFrame.is() )
     {
-        xModel = impl_getModelFromFrame( xFrame );
-        if ( implts_isPreviewModel( xModel ))
+        if (isPreviewFrame())
             return; // no custom toolbars for preview frame!
 
         uno::Sequence< uno::Sequence< beans::PropertyValue > > aTbxSeq;
@@ -1115,12 +1124,11 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     if ( !m_xPersistentWindowState.is() || !m_xFrame.is() || !m_bComponentAttached )
         return;
 
-    uno::Reference< frame::XFrame >          xFrame( m_xFrame );
     uno::Reference< ui::XUIElementFactory >  xUIElementFactory( m_xUIElementFactoryManager );
     uno::Reference< container::XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
     aReadLock.unlock();
 
-    if ( implts_isPreviewModel( impl_getModelFromFrame( xFrame )))
+    if (isPreviewFrame())
         return;
 
     std::vector< rtl::OUString > aMakeVisibleToolbars;
@@ -1178,7 +1186,8 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     }
 
     if ( !aMakeVisibleToolbars.empty() )
-        ::std::for_each( aMakeVisibleToolbars.begin(), aMakeVisibleToolbars.end(),::boost::bind( &ToolbarLayoutManager::requestToolbar, this,_1 ));
+        ::std::for_each( aMakeVisibleToolbars.begin(), aMakeVisibleToolbars.end(),
+                ::boost::bind( &ToolbarLayoutManager::requestToolbar, this, _1));
 }
 
 void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno::Sequence< beans::PropertyValue > >& aTbxSeqSeq )

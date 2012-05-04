@@ -92,6 +92,13 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
     public:
         enum { DOCKINGAREAS_COUNT = 4 };
 
+        enum PreviewFrameDetection
+        {
+            PREVIEWFRAME_UNKNOWN,
+            PREVIEWFRAME_NO,
+            PREVIEWFRAME_YES
+        };
+
         ToolbarLayoutManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory >& xUIElementFactory,
                               ILayoutNotifications* pParentLayouter );
@@ -110,6 +117,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
 
         ::com::sun::star::awt::Rectangle getDockingArea();
         void setDockingArea( const ::com::sun::star::awt::Rectangle& rDockingArea );
+
+        bool isPreviewFrame();
 
         // layouting
         bool isLayoutDirty();
@@ -316,6 +325,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         Rectangle                                                            m_aDockingArea;
         Rectangle                                                            m_aDockingAreaOffsets;
         DockingOperation                                                     m_eDockOperation;
+        PreviewFrameDetection                                                m_ePreviewDetection;
 
         std::auto_ptr< AddonsOptions >                                       m_pAddonOptions;
         std::auto_ptr< GlobalSettings >                                      m_pGlobalSettings;

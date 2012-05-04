@@ -1464,15 +1464,24 @@ throw (RuntimeException)
     if ( !xFrame.is() )
         return;
 
-    Reference< XModel >  xModel( impl_getModelFromFrame( xFrame ) );
-
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
     bool bMustBeLayouted( false );
     bool bNotify( false );
 
-    if ( m_xContainerWindow.is() && !implts_isPreviewModel( xModel ) ) // no UI elements on preview frames
+    bool bPreviewFrame;
+    if (m_pToolbarManager)
+        // Assumes that we created the ToolbarLayoutManager with our frame, if
+        // not then we're somewhat fouled up ...
+        bPreviewFrame = m_pToolbarManager->isPreviewFrame();
+    else
+    {
+        Reference< XModel >  xModel( impl_getModelFromFrame( xFrame ) );
+        bPreviewFrame = implts_isPreviewModel( xModel );
+    }
+
+    if ( m_xContainerWindow.is() && !bPreviewFrame ) // no UI elements on preview frames
     {
         ::rtl::OUString aElementType;
         ::rtl::OUString aElementName;
