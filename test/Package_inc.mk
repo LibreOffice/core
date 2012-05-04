@@ -51,6 +51,7 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/datapilotfield.hxx,tes
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xprintareas.hxx,test/sheet/xprintareas.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheetdocument.hxx,test/sheet/xspreadsheetdocument.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xspreadsheets2.hxx,test/sheet/xspreadsheets2.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/text/xtext.hxx,test/text/xtext.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/text/xtextfield.hxx,test/text/xtextfield.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/text/xtextcontent.hxx,test/text/xtextcontent.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/util/xreplaceable.hxx,test/util/xreplaceable.hxx))
