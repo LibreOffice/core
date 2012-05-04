@@ -247,7 +247,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     return xShape;
 }
 
-Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::EmbeddedControl& rControl,
+Reference< XShape > Drawing::createAndInsertXControlShape( const ClientData* pClientData, const ::oox::ole::EmbeddedControl& rControl,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect, sal_Int32& rnCtrlIndex ) const
 {
     Reference< XShape > xShape;

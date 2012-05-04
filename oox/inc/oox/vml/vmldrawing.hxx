@@ -157,6 +157,7 @@ public:
         model into the form, and the shape into the passed UNO shape container. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsertXControlShape(
+                            const ClientData* pClientData,
                             const ::oox::ole::EmbeddedControl& rControl,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect,
