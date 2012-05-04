@@ -185,7 +185,8 @@ namespace basegfx
                                      const B2DVector& rOffset,
                                      sal_uInt32       nSteps,
                                      double           fBorder,
-                                     double           fAngle)
+                                     double           fAngle,
+                                     bool             bSquare)
     {
         o_rGradientInfo.maTextureTransform.identity();
         o_rGradientInfo.maBackTextureTransform.identity();
@@ -238,7 +239,10 @@ namespace basegfx
         o_rGradientInfo.maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
+        if( bSquare )
+            o_rGradientInfo.mfAspectRatio = 1.0; // since we want a square
+        else
+            o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
 
         // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
         o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
@@ -322,7 +326,8 @@ namespace basegfx
                                  rOffset,
                                  nSteps,
                                  fBorder,
-                                 fAngle);
+                                 fAngle,
+                                 true);
             return o_rGradientInfo;
         }
 
@@ -338,7 +343,8 @@ namespace basegfx
                                  rOffset,
                                  nSteps,
                                  fBorder,
-                                 fAngle);
+                                 fAngle,
+                                 false);
             return o_rGradientInfo;
         }
 
