@@ -36,8 +36,8 @@ TARGET=so_redland
 
 .IF "$(SYSTEM_REDLAND)" == "YES"
 all:
-    @echo "An already available installation of Redland RDF should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of Redland RDF should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -125,7 +125,7 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 .ENDIF			# "$(SYSBASE)"!=""
 
 .IF "$(OS)"=="MACOSX"
-LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.1.dylib
+LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor-lo.$(RAPTOR_MAJOR).dylib:$(PWD)/$(LB)/libraptor-lo.$(RAPTOR_MAJOR).dylib
 .IF "$(SYSTEM_LIBXML)" != "YES"
 LDFLAGS+:=-Wl,-dylib_file,@loader_path/../ure-link/lib/libxml2.2.dylib:$(SOLARLIBDIR)/libxml2.2.dylib
 .ENDIF
