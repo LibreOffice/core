@@ -2277,7 +2277,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 pImp->xInputStream = m_xInputStreamToLoadFrom;
                 pImp->xInputStream->skipBytes(0);
-                if(m_bIsReadOnly)
+                if(m_bInputStreamIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
             }
             else
