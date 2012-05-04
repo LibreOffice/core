@@ -557,7 +557,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             {
                 // create and return the control shape (including control model)
                 sal_Int32 nCtrlIndex = -1;
-                Reference< XShape > xShape = mrDrawing.createAndInsertXControlShape( *this, aControl, rxShapes, rShapeRect, nCtrlIndex );
+                Reference< XShape > xShape = mrDrawing.createAndInsertXControlShape( aControl, rxShapes, rShapeRect, nCtrlIndex );
                 // on error, proceed and try to create picture from replacement image
                 if( xShape.is() )
                     return xShape;

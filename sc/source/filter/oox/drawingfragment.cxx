@@ -614,6 +614,12 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                     getBaseFilter().getVbaProject().registerMacroAttacher( xAttacher );
                 }
             }
+            if ( !pClientData->maAnchor.isEmpty() )
+            {
+                ShapeAnchor aAnchor( *this );
+                aAnchor.importVmlAnchor( pClientData->maAnchor );
+                aAnchor.applyToXShape( xShape );
+            }
             return xShape;
         }
     }
@@ -631,12 +637,6 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
     // convert settings from VML client data
     if( const ::oox::vml::ClientData* pClientData = rShape.getClientData() )
     {
-        if ( !pClientData->maAnchor.isEmpty() )
-        {
-            ShapeAnchor aAnchor( *this );
-            aAnchor.importVmlAnchor( pClientData->maAnchor );
-            aAnchor.applyToXShape( rxShape );
-        }
         // specific settings for embedded form controls
         try
         {
