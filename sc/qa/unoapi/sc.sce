@@ -15,7 +15,7 @@
 -o sc.ScAccessiblePreviewTable
 # fdo#45337 -o sc.ScAccessibleSpreadsheet
 -o sc.ScAnnotationObj
-# FIXME -o sc.ScAnnotationShapeObj
+-o sc.ScAnnotationShapeObj
 -o sc.ScAnnotationsObj
 -o sc.ScAreaLinkObj
 -o sc.ScAreaLinksObj

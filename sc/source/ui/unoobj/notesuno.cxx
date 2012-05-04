@@ -42,6 +42,7 @@
 #include "hints.hxx"
 #include "editsrc.hxx"
 #include "miscuno.hxx"
+#include "fielduno.hxx"
 
 // setVisible:
 #include <svx/svdundo.hxx>
@@ -50,6 +51,7 @@
 #include "undocell.hxx"
 #include "userdat.hxx"
 #include <editeng/outlobj.hxx>
+#include "editeng/unofield.hxx"
 #include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svditer.hxx>
@@ -390,7 +392,49 @@ void SAL_CALL ScAnnotationShapeObj::insertTextContent( const uno::Reference< tex
 {
     SolarMutexGuard aGuard;
 
-    GetUnoText().insertTextContent( xRange, xContent, bAbsorb );
+    // Evil hack to convert a ScEditFieldObj based text field into a
+    // SvxUnoTextField based one.  See SvxUnoTextBase::insertTextContent() for
+    // the reason why.  We need a clean solution for this.
+
+    ScEditFieldObj* pField = ScEditFieldObj::getImplementation(xContent);
+    uno::Reference<text::XTextContent> xContent2 = xContent;
+    if (pField)
+    {
+        switch (pField->GetFieldType())
+        {
+            case ScEditFieldObj::Date:
+                xContent2.set(new SvxUnoTextField(ID_DATEFIELD));
+            break;
+            case ScEditFieldObj::File:
+                xContent2.set(new SvxUnoTextField(ID_EXT_FILEFIELD));
+            break;
+            case ScEditFieldObj::Page:
+                xContent2.set(new SvxUnoTextField(ID_PAGEFIELD));
+            break;
+            case ScEditFieldObj::Pages:
+                xContent2.set(new SvxUnoTextField(ID_PAGESFIELD));
+            break;
+            case ScEditFieldObj::Sheet:
+                xContent2.set(new SvxUnoTextField(ID_TABLEFIELD));
+            break;
+            case ScEditFieldObj::Time:
+                xContent2.set(new SvxUnoTextField(ID_TIMEFIELD));
+            break;
+            case ScEditFieldObj::ExtTime:
+                xContent2.set(new SvxUnoTextField(ID_EXT_TIMEFIELD));
+            break;
+            case ScEditFieldObj::Title:
+                xContent2.set(new SvxUnoTextField(ID_FILEFIELD));
+            break;
+            case ScEditFieldObj::URL:
+                xContent2.set(new SvxUnoTextField(ID_URLFIELD));
+            break;
+            default:
+                ;
+        }
+    }
+
+    GetUnoText().insertTextContent(xRange, xContent2, bAbsorb);
 }
 
 void SAL_CALL ScAnnotationShapeObj::removeTextContent( const uno::Reference< text::XTextContent >& xContent )
