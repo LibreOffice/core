@@ -104,8 +104,6 @@ public:
 #define SVX_FOOTERFIELD     109
 #define SVX_DATEFIMEFIELD   110
 
-#define SVX_USERFIELD       200 // From here on own fields, not in the SVX
-
 enum SvxDateType { SVXDATETYPE_FIX, SVXDATETYPE_VAR };
 enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT,   // Set as in App
                         SVXDATEFORMAT_SYSTEM,       // Set as in System
