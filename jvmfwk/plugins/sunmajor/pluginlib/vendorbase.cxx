@@ -71,22 +71,6 @@ VendorBase::VendorBase(): m_bAccessibility(false)
 {
 }
 
-char const* const * VendorBase::getJavaExePaths(int* size)
-{
-    static char const * ar[] = {
-#if defined(WNT)
-        "java.exe",
-        "bin/java.exe"
-#elif UNX
-        "java",
-        "bin/java"
-#endif
-    };
-    *size = sizeof(ar) / sizeof(char*);
-    return ar;
-}
-
-
 rtl::Reference<VendorBase> VendorBase::createInstance()
 {
     VendorBase *pBase = new VendorBase();
