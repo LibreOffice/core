@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAACH///9I\u003d",
+        "filename": "l10ntools/Library_helplinker.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-05-04T07:38:23Z",
+      "side": 1,
+      "message": "iI had it actually in Patch Set 5 version, but removed it yesterday, as it was successfully built without.",
+      "parentUuid": "AAAACH///9Q\u003d",
+      "revId": "ea7fcd636a0a5bc62507a2232fd5b30347be8b97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACH///9U\u003d",
         "filename": "l10ntools/StaticLibrary_l10ntools_helper.mk",
         "patchSetId": 8
@@ -47,6 +65,24 @@
       "writtenOn": "2012-05-04T07:29:54Z",
       "side": 1,
       "message": "this file is unused, so it should be removed",
+      "revId": "ea7fcd636a0a5bc62507a2232fd5b30347be8b97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACH///9E\u003d",
+        "filename": "l10ntools/StaticLibrary_l10ntools_helper.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-05-04T07:38:23Z",
+      "side": 1,
+      "message": "yes, it was the first try to build helplinker-library and HelpLinker executable with static library. It didn\u0027t work, though.",
+      "parentUuid": "AAAACH///9U\u003d",
       "revId": "ea7fcd636a0a5bc62507a2232fd5b30347be8b97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
