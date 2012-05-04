@@ -81,11 +81,7 @@ LIBPQ_DEP_LIBS=
 LIBPQ_LINK=-lpq
 .ELSE #SYSTEM_POSTGRESQL==NO
 .IF "$(GUI)$(COM)"=="WNTMSC"
-.IF "$(debug)" == ""
 LIBPQ_LINK:=$(OUTDIR)/lib/libpq.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
-.ELSE
-LIBPQ_LINK:=$(OUTDIR)/lib/libpqd.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
-.ENDIF
 LIBPQ_DEP_LIBS += \
         $(OPENSSLLIB)
 .IF "$(WITH_LDAP)" == "YES"
