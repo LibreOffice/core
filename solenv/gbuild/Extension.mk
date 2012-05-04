@@ -98,8 +98,7 @@ $(call gb_Extension_get_target,%) : \
 		cd $(call gb_Extension_get_rootdir,$*) && \
 		$(gb_Extension_ZIPCOMMAND) -rX --filesync \
 			$(call gb_Extension_get_target,$*) \
-			$(FILES) \
-			$(foreach lang,$(gb_Extension_LANGS),description-$(lang).txt))
+			$(FILES))
 
 # TODO: needs dependency on $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) once readlicense_oo will be gbuildized
 # or just another simpler solution
@@ -115,6 +114,7 @@ $(call gb_Extension_get_target,$(1)) : PLATFORM :=
 $(call gb_Extension_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_Extension_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
+$(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(gb_Extension_LANGS),description-$(lang).txt)
 $(call gb_Extension_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
 $(call gb_Extension_get_workdir,$(1))/description.xml : $$(SDF)
 endif
