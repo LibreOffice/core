@@ -85,8 +85,8 @@ using namespace rtl;
 class ImplWinFontEntry : public ImplFontEntry
 {
 public:
-                            ImplWinFontEntry( ImplFontSelectData& );
-                            ~ImplWinFontEntry();
+    explicit                ImplWinFontEntry( ImplFontSelectData& );
+    virtual                 ~ImplWinFontEntry();
 
 private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
@@ -1306,6 +1306,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+    aScriptControl.fMergeNeutralItems = true;
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
     mnSubStringMin = 0;
@@ -1542,11 +1543,10 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                // #i55716# skip WORDJOINER
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
-                                // <--
                                     rArgs.NeedFallback( c, false );
                            }
                         }
@@ -1558,11 +1558,10 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                // #i55716# skip WORDJOINER
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
-                                // <--
                                     rArgs.NeedFallback( c, true );
                             }
                         }
