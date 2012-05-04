@@ -26,10 +26,9 @@
 
 $(eval $(call gb_Package_Package,l10ntools_scripts,$(SRCDIR)/l10ntools/scripts))
 
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/localize,localize))
+$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/addkeyid2pot.pl,addkeyid2pot.pl))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/fast_merge.pl,fast_merge.pl))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/keyidGen.pl,keyidGen.pl))
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/addkeyid2pot.pl,addkeyid2pot.pl))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/po2lo,po2lo))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propex,propex))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propmerge,propmerge))
