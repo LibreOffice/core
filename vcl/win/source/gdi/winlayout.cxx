@@ -69,8 +69,8 @@ using ::rtl::OUStringToOString;
 class ImplWinFontEntry : public ImplFontEntry
 {
 public:
-                            ImplWinFontEntry( FontSelectPattern& );
-                            ~ImplWinFontEntry();
+    explicit                ImplWinFontEntry( FontSelectPattern& );
+    virtual                 ~ImplWinFontEntry();
 
 private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
@@ -1189,6 +1189,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+    aScriptControl.fMergeNeutralItems = true;
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
     mnSubStringMin = 0;
@@ -1426,7 +1427,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // #i55716#
+                                // #i55716# skip WORDJOINER
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
@@ -1441,7 +1442,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // #i55716#
+                                // #i55716# skip WORDJOINER
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else

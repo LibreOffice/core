@@ -5972,7 +5972,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
             ||  ((*pStr >= 0x1100) && (*pStr < 0x1200))   // hangul jamo
             ||  ((*pStr >= 0x1700) && (*pStr < 0x1900))   // many CTL scripts
             ||  ((*pStr >= 0xFB1D) && (*pStr < 0xFE00))   // middle east presentation
-            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF)) ) // arabic presentation B
+            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF))   // arabic presentation B
+            ||  ((*pStr >= 0xFE00) && (*pStr < 0xFE10))   // variation selectors in BMP
+            ||  ((pStr + 1 < pEnd) && (pStr[0] == 0xDB40) && (0xDD00 <= pStr[1]) && (pStr[1] < 0xDEF0)) // variation selector supplement
+            )
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
