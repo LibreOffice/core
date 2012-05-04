@@ -54,6 +54,8 @@ void YYWarning();
 int bText=0;
 %}
 
+%option never-interactive
+
 %p 24000
 %e 1200
 %n 500

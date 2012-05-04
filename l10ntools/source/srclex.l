@@ -48,6 +48,8 @@ extern "C" void Close();
 void YYWarning();
 %}
 
+%option never-interactive
+
 %p 24000
 %e 1200
 %n 500
