@@ -1531,8 +1531,8 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
     }
     const SwSelBoxes& rBoxes = pTableSelection->GetBoxes();
     SwTableCursor* pTableCrsr = dynamic_cast<SwTableCursor*>(pUnoCrsr);
-    for( SwSelBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
-        pTableCrsr->InsertBox( *it->second );
+    for(sal_uInt16 i = 0; i < rBoxes.Count(); i++)
+        pTableCrsr->InsertBox( *rBoxes.GetObject(i) );
 
     pUnoCrsr->Add(&aCrsrDepend);
     SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
@@ -1701,7 +1701,9 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
             bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
             if(bRet)
             {
-                pTblCrsr->DeleteAllBoxes();
+                sal_uInt16 nCount = pTblCrsr->GetBoxesCount();
+                while(nCount--)
+                    pTblCrsr->DeleteBox(nCount);
             }
         }
         pTblCrsr->MakeBoxSels();
@@ -2378,10 +2380,7 @@ void SwXTextTable::dispose(void) throw( uno::RuntimeException )
         SwTable* pTable = SwTable::FindTable( pFmt );
         SwTableSortBoxes& rBoxes = pTable->GetTabSortBoxes();
         SwSelBoxes aSelBoxes;
-        for( sal_uInt16 i = 0; i < rBoxes.Count(); ++i)
-        {
-            aSelBoxes.insert( rBoxes[i] );
-        }
+        aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
         pFmt->GetDoc()->DeleteRowCol(aSelBoxes);
     }
     else
@@ -2949,7 +2948,8 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
         const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
         for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
         {
-            aBoxes.insert( rTBoxes[ n ] );
+            SwTableBox* pBox = rTBoxes[ n ];
+            aBoxes.Insert( pBox );
         }
         UnoActionContext aContext( pFmt->GetDoc() );
         pFmt->GetDoc()->SortTbl(aBoxes, aSortOpt);
@@ -2976,7 +2976,8 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
                     const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
                     for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
                     {
-                        aBoxes.insert( rTBoxes[ n ] );
+                        SwTableBox* pBox = rTBoxes[ n ];
+                        aBoxes.Insert( pBox );
                     }
                     UnoActionContext aContext( pFmt->GetDoc() );
                     pFmt->GetDoc()->SetTableAutoFmt( aBoxes, *aAutoFmtTbl[i] );

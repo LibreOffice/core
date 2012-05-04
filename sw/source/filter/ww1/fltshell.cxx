@@ -1495,7 +1495,7 @@ void SwFltOutDoc::NextTableRow()
     {
 // duplicate row:
         SwSelBoxes aSelBoxes;
-        aSelBoxes.insert( pTableBox );
+        aSelBoxes.Insert( pTableBox );
         GetDoc().InsertRow(aSelBoxes);
         usTableX = 0;
         SeekCell(++usTableY, usTableX, sal_True);
@@ -1612,7 +1612,7 @@ void SwFltOutDoc::DeleteCell(sal_uInt16 nCell /* = USHRT_MAX */)
     SwTableBox* pTableBox = GetBox(usTableY, nCell);
     if(pTableBox){
         SwSelBoxes aSelBoxes;
-        aSelBoxes.insert( pTableBox );
+        aSelBoxes.Insert( pTableBox );
         GetDoc().DeleteRowCol(aSelBoxes);
         usTableX--;
     }

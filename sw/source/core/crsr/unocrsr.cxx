@@ -240,7 +240,10 @@ void SwUnoTableCrsr::MakeBoxSels()
 
     if ( !bMakeTblCrsrs )
     {
-        DeleteAllBoxes();
+        SwSelBoxes& rTmpBoxes = (SwSelBoxes&)GetBoxes();
+        sal_uInt16 nCount = 0;
+        while( nCount < rTmpBoxes.Count() )
+            DeleteBox( nCount );
     }
 
     if( IsChgd() )
