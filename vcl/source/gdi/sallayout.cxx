@@ -253,6 +253,11 @@ inline bool IsControlChar( sal_UCS4 cChar )
     // byte order markers and invalid unicode
     if( (cChar == 0xFEFF) || (cChar == 0xFFFE) || (cChar == 0xFFFF) )
         return true;
+    // variation selectors
+    if( (0xFE00 <= cChar) && (cChar <= 0xFE0F) )
+        return true;
+    if( (0xE0100 <= cChar) && (cChar <= 0xE01EF) )
+        return true;
     return false;
 }
 
