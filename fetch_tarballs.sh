@@ -189,7 +189,7 @@ echo "downloading tar balls to $TARFILE_LOCATION"
 
 while read line ; do
     # Remove leading and trailing space and comments
-    line=`echo $line | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/[[:space:]]*#.*$//'`
+    line=`echo $line | sed 's/^\s*//;s/\s*$//;s/\s*#.*$//'`
     case $line in
         # Ignore empty lines.
         '')
