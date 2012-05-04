@@ -34,6 +34,11 @@ $(eval $(call gb_Library_use_api,fps_aqua,\
 	udkapi \
 ))
 
+$(eval $(call gb_Library_set_include,fps_aqua,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/fpicker/inc \
+))
+
 $(eval $(call gb_Library_add_libs,fps_aqua,\
     -framework Cocoa \
     -framework CoreFoundation \
