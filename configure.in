@@ -2145,6 +2145,8 @@ if test -n "${with_solver_and_workdir_root}"; then
       AC_MSG_ERROR([directory does not exist: ${with_solver_and_workdir_root}])
     fi
     SOLARVER=${with_solver_and_workdir_root}/solver
+    PathFormat "$SOLARVER"
+    SOLARVER="$formatted_path"
 else
     SOLARVER=${SRC_ROOT}/solver
 fi
@@ -3334,6 +3336,8 @@ fi
 INPATH="${OUTPATH}${PROEXT}"
 if test -n "${with_solver_and_workdir_root}"; then
     WORKDIR=${with_solver_and_workdir_root}/workdir/${INPATH}
+    PathFormat "$WORKDIR"
+    WORKDIR="$formatted_path"
 else
     WORKDIR=${SRC_ROOT}/workdir/${INPATH}
 fi
