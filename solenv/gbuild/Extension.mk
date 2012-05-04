@@ -94,6 +94,7 @@ $(call gb_Extension_get_target,%) : \
 		$(call gb_Extension__subst_platform,$(call gb_Extension_get_workdir,$*)/description.xml,$(call gb_Extension_get_rootdir,$*)/description.xml) && \
 		$(call gb_Extension__subst_platform,$(LOCATION)/manifest.xml,$(call gb_Extension_get_rootdir,$*)/META-INF/manifest.xml) && \
 		cp -f $(OUTDIR)/bin/osl/$(gb_Extension_LICENSEFILE) $(call gb_Extension_get_rootdir,$*)/registration && \
+		$(if $(gb_WITH_LANG),cp $(foreach lang,$(gb_Extension_LANGS),$(call gb_Extension_get_workdir,$*)/description-$(lang).txt) $(call gb_Extension_get_rootdir,$*) &&) \
 		cd $(call gb_Extension_get_rootdir,$*) && \
 		$(gb_Extension_ZIPCOMMAND) -rX --filesync \
 			$(call gb_Extension_get_target,$*) \
