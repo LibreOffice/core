@@ -3,7 +3,6 @@
  * lexer for parsing xml-property source files (*.xml)
  *
  */
-#define YY_NEVER_INTERACTIVE 1
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX

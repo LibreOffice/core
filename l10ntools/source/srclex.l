@@ -4,7 +4,6 @@
  * lexer for parsing ressource source files (*.src)
  *
  */
-#define YY_NEVER_INTERACTIVE 1
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX

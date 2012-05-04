@@ -3,7 +3,6 @@
  * lexer for parsing cfg source files
  *
  */
-#define YY_NEVER_INTERACTIVE 1
 
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX
