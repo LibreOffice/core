@@ -37,7 +37,7 @@
 /************************************************************************
 |*    SvClassManager::Register()
 *************************************************************************/
-void SvClassManager::Register( sal_uInt16 nClassId, SvCreateInstancePersist pFunc )
+void SvClassManager::Register( sal_Int32 nClassId, SvCreateInstancePersist pFunc )
 {
 #ifdef DBG_UTIL
     SvCreateInstancePersist p;
@@ -50,7 +50,7 @@ void SvClassManager::Register( sal_uInt16 nClassId, SvCreateInstancePersist pFun
 /************************************************************************
 |*    SvClassManager::Get()
 *************************************************************************/
-SvCreateInstancePersist SvClassManager::Get( sal_uInt16 nClassId )
+SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
 {
     Map::const_iterator i(aAssocTable.find(nClassId));
     return i == aAssocTable.end() ? 0 : i->second;

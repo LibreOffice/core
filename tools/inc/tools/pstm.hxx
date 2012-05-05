@@ -48,11 +48,11 @@ typedef void * (*SvCreateInstancePersist)( SvPersistBase ** );
 
 class TOOLS_DLLPUBLIC SvClassManager
 {
-    typedef boost::unordered_map< sal_uInt16, SvCreateInstancePersist > Map;
+    typedef boost::unordered_map<sal_Int32, SvCreateInstancePersist> Map;
     Map aAssocTable;
 public:
-    void        Register( sal_uInt16 nClassId, SvCreateInstancePersist pFunc );
-    SvCreateInstancePersist Get( sal_uInt16 nClassId );
+    void Register( sal_Int32 nClassId, SvCreateInstancePersist pFunc );
+    SvCreateInstancePersist Get( sal_Int32 nClassId );
 };
 
 /************************** S v R t t i B a s e **************************/
@@ -67,11 +67,11 @@ SV_DECL_IMPL_REF(SvRttiBase)
 /*************************************************************************/
 #define SV_DECL_PERSIST( Class, CLASS_ID )                          \
     TYPEINFO();                                                     \
-    static  sal_uInt16  StaticClassId() { return CLASS_ID; }            \
+    static  sal_Int32  StaticClassId() { return CLASS_ID; }            \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
                                           Class *& rpObj);          \
-    virtual sal_uInt16  GetClassId() const;                             \
+    virtual sal_Int32  GetClassId() const;                             \
     virtual void    Load( SvPersistStream & );                      \
     virtual void    Save( SvPersistStream & );
 
@@ -85,7 +85,7 @@ SV_DECL_IMPL_REF(SvRttiBase)
                         *ppBase = p;                                \
                         return p;                                   \
                     }                                               \
-    sal_uInt16          Class::GetClassId() const                       \
+    sal_Int32          Class::GetClassId() const                       \
                     { return StaticClassId(); }                     \
     SvPersistStream& operator >> (SvPersistStream & rStm, Class *& rpObj)\
                     {                                               \
@@ -108,7 +108,7 @@ class SvPersistStream;
 class SvPersistBase : public SvRttiBase
 {
 public:
-    virtual sal_uInt16  GetClassId() const = 0;
+    virtual sal_Int32  GetClassId() const = 0;
     virtual void    Load( SvPersistStream & ) = 0;
     virtual void    Save( SvPersistStream & ) = 0;
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> ( SvPersistStream & rStm,
