@@ -29,14 +29,13 @@ $(eval $(call gb_Library_Library,fps_aqua))
 
 $(eval $(call gb_Library_set_componentfile,fps_aqua,fpicker/source/aqua/fps_aqua))
 
+$(eval $(call gb_Library_use_packages,fps_aqua,\
+	fpicker_inc \
+))
+
 $(eval $(call gb_Library_use_api,fps_aqua,\
 	offapi \
 	udkapi \
-))
-
-$(eval $(call gb_Library_set_include,fps_aqua,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/fpicker/inc \
 ))
 
 $(eval $(call gb_Library_add_libs,fps_aqua,\
