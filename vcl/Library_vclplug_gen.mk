@@ -132,6 +132,13 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 endif
 endif
 
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
+    $(if $(VALGRIND_CFLAGS), \
+        $(VALGRIND_CFLAGS) \
+        -DHAVE_MEMCHECK_H=1 \
+    ) \
+))
+
 ## handle Xinerama
 ifneq ($(USE_XINERAMA),NO)
 ifneq ($(OS),SOLARIS)

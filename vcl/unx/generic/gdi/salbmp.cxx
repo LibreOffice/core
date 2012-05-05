@@ -53,6 +53,10 @@
 #include <unx/salinst.h>
 #include <unx/x11/xlimits.hxx>
 
+#if defined(HAVE_MEMCHECK_H)
+#include <memcheck.h>
+#endif
+
 // -----------
 // - Defines -
 // -----------
@@ -112,6 +116,21 @@ void X11SalBitmap::ImplRemovedFromCache()
     if( mpDDB )
         delete mpDDB, mpDDB = NULL;
 }
+
+#if defined(HAVE_MEMCHECK_H)
+void blankExtraSpace(BitmapBuffer* pDIB)
+{
+    size_t nExtraSpaceInScanLine = pDIB->mnScanlineSize - pDIB->mnWidth * pDIB->mnBitCount / 8;
+    if (nExtraSpaceInScanLine)
+    {
+        for (long i = 0; i < pDIB->mnHeight; ++i)
+        {
+            sal_uInt8 *pRow = pDIB->mpBits + (i * pDIB->mnScanlineSize);
+            memset(pRow + (pDIB->mnScanlineSize - nExtraSpaceInScanLine), 0, nExtraSpaceInScanLine);
+        }
+    }
+}
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -186,6 +205,10 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
             try
             {
                 pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
+#if defined(HAVE_MEMCHECK_H)
+                if (RUNNING_ON_VALGRIND)
+                    blankExtraSpace(pDIB);
+#endif
             }
             catch (const std::bad_alloc&)
             {
@@ -530,6 +553,10 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
             if( pDstBuf && pDstBuf->mpBits )
             {
+#if defined(HAVE_MEMCHECK_H)
+                if (RUNNING_ON_VALGRIND)
+                    blankExtraSpace(pDstBuf);
+#endif
                 // set data in buffer as data member in pImage
                 pImage->data = (char*) pDstBuf->mpBits;
 
@@ -704,6 +731,10 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
         try
         {
             mpDIB->mpBits = new sal_uInt8[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
+#if defined(HAVE_MEMCHECK_H)
+            if (RUNNING_ON_VALGRIND)
+                blankExtraSpace(mpDIB);
+#endif
         }
         catch (const std::bad_alloc&)
         {
