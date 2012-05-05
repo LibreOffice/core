@@ -2851,18 +2851,14 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                                  gWidgetData[m_nXScreen].gMenuItemCheckMenuWidget :
                                  gWidgetData[m_nXScreen].gMenuItemRadioMenuWidget;
 
-            GtkStateType nStateType = GTK_STATE_NORMAL;
+            GtkStateType nStateType;
             GtkShadowType nShadowType;
+            NWConvertVCLStateToGTKState( nState, &nStateType, &nShadowType );
 
-            if ( nState & CTRL_STATE_SELECTED )
+            if ( (nState & CTRL_STATE_SELECTED) && (nState & CTRL_STATE_ENABLED) )
                 nStateType = GTK_STATE_PRELIGHT;
 
             NWSetWidgetState( pWidget, nState, nStateType );
-
-            if ( nState & CTRL_STATE_PRESSED )
-                nShadowType = GTK_SHADOW_IN;
-            else
-                nShadowType = GTK_SHADOW_OUT;
 
             if ( nPart == PART_MENU_ITEM_CHECK_MARK )
             {
@@ -2899,19 +2895,15 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
         }
         else if( nPart == PART_MENU_SUBMENU_ARROW )
         {
-            GtkStateType nStateType = GTK_STATE_NORMAL;
+            GtkStateType nStateType;
             GtkShadowType nShadowType;
+            NWConvertVCLStateToGTKState( nState, &nStateType, &nShadowType );
 
-            if ( nState & CTRL_STATE_SELECTED )
+            if ( (nState & CTRL_STATE_SELECTED) && (nState & CTRL_STATE_ENABLED) )
                 nStateType = GTK_STATE_PRELIGHT;
 
             NWSetWidgetState( gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                               nState, nStateType );
-
-            if ( nState & CTRL_STATE_PRESSED )
-                nShadowType = GTK_SHADOW_IN;
-            else
-                nShadowType = GTK_SHADOW_OUT;
 
             GtkArrowType eArrow;
             if( Application::GetSettings().GetLayoutRTL() )
