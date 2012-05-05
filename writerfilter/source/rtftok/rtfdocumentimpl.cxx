@@ -518,8 +518,9 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(sal_uInt32 nFontIndex)
 {
     if (!m_pSuperstream)
     {
-        if (nFontIndex < m_aFontEncodings.size())
-            return m_aFontEncodings[nFontIndex];
+        std::map<int, rtl_TextEncoding>::iterator it = m_aFontEncodings.find(nFontIndex);
+        if (it != m_aFontEncodings.end())
+            return it->second;
         return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLocale());
     }
     else
