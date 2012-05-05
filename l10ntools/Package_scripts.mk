@@ -33,5 +33,8 @@ $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/po2lo,po2lo))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propex,propex))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propmerge,propmerge))
 
+ifeq ($(OS_FOR_BUILD),WNT)
+$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propex,propex.bat))
+endif
 
 # vim: set noet sw=4 ts=4:
