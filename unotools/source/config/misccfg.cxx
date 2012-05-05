@@ -39,11 +39,6 @@
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
-#define DEFAULT_TAB 2000
-
-#define DEF_INCH    2540L
-#define DEF_RELTWIP 1440L
-
 using namespace com::sun::star::uno;
 
 using ::rtl::OUString;

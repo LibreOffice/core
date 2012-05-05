@@ -61,8 +61,6 @@ namespace css = ::com::sun::star;
     #define CONST_ASCII(SASCIIVALUE)            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SASCIIVALUE))
 #endif
 
-#define PATHSEPERATOR                           CONST_ASCII("/")
-
 #define PACKAGE_VIEWS                           CONST_ASCII("org.openoffice.Office.Views")
 
 #define LIST_DIALOGS                            CONST_ASCII("Dialogs"   )
@@ -74,11 +72,6 @@ namespace css = ::com::sun::star;
 #define PROPERTY_PAGEID                         CONST_ASCII("PageID"     )
 #define PROPERTY_VISIBLE                        CONST_ASCII("Visible"    )
 #define PROPERTY_USERDATA                       CONST_ASCII("UserData"   )
-
-#define PROPCOUNT_DIALOGS                       1
-#define PROPCOUNT_TABDIALOGS                    2
-#define PROPCOUNT_TABPAGES                      1
-#define PROPCOUNT_WINDOWS                       2
 
 #define DEFAULT_WINDOWSTATE                     ::rtl::OUString()
 #define DEFAULT_USERDATA                        css::uno::Sequence< css::beans::NamedValue >()

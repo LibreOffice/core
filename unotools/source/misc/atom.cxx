@@ -32,7 +32,6 @@
 using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-#define NMSP_UTIL ::com::sun::star::util
 
 AtomProvider::AtomProvider()
 {

@@ -59,18 +59,12 @@
 #define BOOTSTRAP_ITEM_BASEINSTALLATION     "BRAND_BASE_DIR"
 #define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
 
-#define BOOTSTRAP_ITEM_SHAREDIR             "SharedDataDir"
 #define BOOTSTRAP_ITEM_USERDIR              "UserDataDir"
 
 #define BOOTSTRAP_DEFAULT_BASEINSTALL       "$SYSBINDIR/.."
 
-#define BOOTSTRAP_DIRNAME_SHAREDIR          "share"
 #define BOOTSTRAP_DIRNAME_USERDIR           "user"
 
-#define VERSIONFILE_SECTION                 "Versions"
-
-#define SETUP_DATA_NAME                     SAL_CONFIGFILE("setup")
-#define SETUP_ITEM_ALLUSERS                 "ALLUSERS"
 // ---------------------------------------------------------------------------------------
 typedef char const * AsciiString;
 // ---------------------------------------------------------------------------------------

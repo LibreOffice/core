@@ -58,7 +58,6 @@ using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security/Scripting"))
 #define DEFAULT_SECUREURL               Sequence< OUString >()
-#define DEFAULT_SECLEVEL                3
 #define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
 
 // xmlsec05 depricated

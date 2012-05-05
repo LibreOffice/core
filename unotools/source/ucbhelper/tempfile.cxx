@@ -132,7 +132,6 @@ umask(old_mode);
     return bSuccess;
 }
 
-#define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 String ConstructTempDir_Impl( const String* pParent )
 {
     String aName;

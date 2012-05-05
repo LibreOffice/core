@@ -46,9 +46,6 @@
 #include <list>
 #include <algorithm>
 
-#define DEFAULTFONT_CONFIGNODE "VCL/DefaultFonts"
-#define SUBSTFONT_CONFIGNODE "VCL/FontSubstitutions"
-
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

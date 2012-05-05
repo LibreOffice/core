@@ -42,7 +42,6 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
 #define DEFAULT_SHOWINTRO               sal_True
-#define DEFAULT_CONNECTIONURL           OUString()
 
 #define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office" ))
 #define PROPERTYNAME_SHOWINTRO          OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupShowIntro" ))

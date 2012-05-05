@@ -55,10 +55,6 @@ using namespace ::com::sun::star::beans ;
 
 #define PROPERTYNAME_CMD                                OUString(RTL_CONSTASCII_USTRINGPARAM("Command"                  ))
 
-#define PROPERTYCOUNT                                   1
-
-#define OFFSET_CMD                                      0
-
 // Method to retrieve a hash code from a string. May be we have to change it to decrease collisions in the hash map
 struct OUStringHashCode
 {

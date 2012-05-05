@@ -35,7 +35,6 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/XCalendar3.hpp>
 
-#define CALENDAR_LIBRARYNAME "i18n"
 #define CALENDAR_SERVICENAME "com.sun.star.i18n.LocaleCalendar"
 
 using namespace ::com::sun::star;
