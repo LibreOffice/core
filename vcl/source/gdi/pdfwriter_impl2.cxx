@@ -1666,12 +1666,20 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
             pRunTable = unsetRun;
         }
 
-        while( nByte == nRunByte && nIndex < i_nW )
+        if( nIndex < i_nW )
         {
-            nIndex += 8;
-            pByte++;
-            nByte = *pByte;
+            while( nByte == nRunByte )
+            {
+                nIndex += 8;
+
+                if (nIndex >= i_nW)
+                    break;
+
+                pByte++;
+                nByte = *pByte;
+            }
         }
+
         if( nIndex < i_nW )
         {
             nIndex += pRunTable[nByte];
