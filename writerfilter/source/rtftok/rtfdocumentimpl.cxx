@@ -885,7 +885,15 @@ void RTFDocumentImpl::text(OUString& rString)
                                 writerfilter::Reference<Properties>::Pointer_t const pProp(
                                         new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
                                         );
-                                m_aFontTableEntries.insert(make_pair(m_nCurrentFontIndex, pProp));
+
+                                //See fdo#47347 initial invalid font entry properties are inserted first,
+                                //so when we attempt to insert the correct ones, there's already an
+                                //entry in the map for them, so the new ones aren't inserted.
+                                RTFReferenceTable::Entries_t::iterator lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
+                                if (lb != m_aFontTableEntries.end() && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
+                                    lb->second = pProp;
+                                else
+                                    m_aFontTableEntries.insert(lb, make_pair(m_nCurrentFontIndex, pProp));
                             }
                             break;
                         case DESTINATION_STYLESHEET:
