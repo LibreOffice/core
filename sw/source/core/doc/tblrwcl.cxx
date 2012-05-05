@@ -584,7 +584,7 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
 sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    OSL_ENSURE( pDoc && rBoxes.Count && nCnt, "No valid Box List" );
+    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "No valid Box List" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
