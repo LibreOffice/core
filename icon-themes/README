@@ -24,8 +24,7 @@ How to add a new image set:
 
 - Create a directory for it here (let's call it e.g. new_set)
 
-- Add its images_ name to CUSTOM_IMAGE_SETS in
-  postprocess/packimages/pack/makefile.mk
+- Add its name (new_set) to WITH_THEMES variable
 
 - Add its gid to the Files section of gid_Module_Root_Brand in
   scp2/source/ooo/module_hidden_ooo.scp and add a corresponding File entry
@@ -62,5 +61,4 @@ How to add a new image set:
     ULONG StyleSettings::GetCurrentSymbolsStyle() const in
   vcl/source/app/settings.cxx
 
-- The fallback for particular icons is defined in
-    packimages/pack/Makefile
+- The fallback for particular icons is defined in CUSTOM_PREFERRED_FALLBACK_1
