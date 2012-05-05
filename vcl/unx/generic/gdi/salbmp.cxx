@@ -137,7 +137,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
         {
             pDIB = new BitmapBuffer;
         }
-        catch( std::bad_alloc& )
+        catch (const std::bad_alloc&)
         {
             pDIB = NULL;
         }
@@ -187,7 +187,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
             {
                 pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
             }
-            catch(std::bad_alloc&)
+            catch (const std::bad_alloc&)
             {
                 delete pDIB;
                 pDIB = NULL;
@@ -705,7 +705,7 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
         {
             mpDIB->mpBits = new sal_uInt8[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
         }
-        catch( std::bad_alloc& )
+        catch (const std::bad_alloc&)
         {
             delete mpDIB;
             mpDIB = NULL;
