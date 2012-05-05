@@ -117,6 +117,7 @@ SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):
 
 SvxSimpleTable::~SvxSimpleTable()
 {
+    m_rParentTableContainer.SetTable(NULL);
 }
 
 void SvxSimpleTable::UpdateViewSize()
