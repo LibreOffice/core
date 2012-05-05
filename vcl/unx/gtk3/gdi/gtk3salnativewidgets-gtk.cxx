@@ -68,7 +68,7 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_ACTIVE);
         *nGTKShadow = GTK_SHADOW_IN;
     }
-    
+
     if ( nVCLState & CTRL_STATE_ROLLOVER )
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_PRELIGHT);
 
@@ -191,7 +191,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
                                  "stepper-size", &stepper_size,
                                  "trough-border", &trough_border,
                                  "stepper-spacing", &stepper_spacing, (char *)NULL );
-  
+
     gboolean has_forward;
     gboolean has_forward2;
     gboolean has_backward;
@@ -423,7 +423,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gtk_render_background(context, cr, x, y,
                           scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
     gtk_render_frame(context, cr, x, y,
-                     scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );    
+                     scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
 
     gtk_style_context_restore(context);
 
@@ -431,14 +431,14 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     if ( has_slider )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateFlags, &shadowType );
-        if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )  
+        if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )
             stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
 
         gtk_style_context_save(context);
         gtk_style_context_set_state(context, stateFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_SLIDER);
 
-        gtk_render_slider(context, cr, 
+        gtk_render_slider(context, cr,
                           x+hShim+thumbRect.Left(), y+vShim+thumbRect.Top(),
                           thumbRect.GetWidth(), thumbRect.GetHeight(), scrollbarOrientation);
 
@@ -1059,7 +1059,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
             aEditRect = Rectangle( Point( 0, point / 2),
                                    Size( indicator_size, indicator_size ) );
         }
-    } 
+    }
     else if (nPart == PART_MENU_SEPARATOR)
     {
         switch (nType)
@@ -1094,24 +1094,24 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                                    Size( arrow_size, arrow_size ) );
         }
     }
-    else if ( (nType==CTRL_SCROLLBAR) && 
+    else if ( (nType==CTRL_SCROLLBAR) &&
               ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
                (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
         aEditRect = NWGetScrollButtonRect( nPart, rControlRegion );
-    } 
-    else if ( (nType==CTRL_SPINBOX) && 
+    }
+    else if ( (nType==CTRL_SPINBOX) &&
               ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
                (nPart==PART_SUB_EDIT)) )
     {
         aEditRect = NWGetSpinButtonRect( nPart, rControlRegion );
     }
-    else if ( (nType==CTRL_COMBOBOX) && 
+    else if ( (nType==CTRL_COMBOBOX) &&
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-    else if ( (nType==CTRL_LISTBOX) && 
+    else if ( (nType==CTRL_LISTBOX) &&
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
@@ -1460,7 +1460,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
        (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_CHECKBOX && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_RADIOBUTTON && nPart == PART_ENTIRE_CONTROL) |
-       (nType == CTRL_TOOLBAR && 
+       (nType == CTRL_TOOLBAR &&
         (nPart == PART_BUTTON || nPart == PART_ENTIRE_CONTROL)) ||
         ((nType == CTRL_SPINBOX) &&
          ((nPart == PART_ENTIRE_CONTROL) || (nPart == PART_ALL_BUTTONS) ||
@@ -1475,7 +1475,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
         ( (nPart == PART_DRAW_BACKGROUND_HORZ) || (nPart == PART_DRAW_BACKGROUND_VERT) ||
           (nPart == PART_ENTIRE_CONTROL) || (nPart == HAS_THREE_BUTTONS))) ||
        (nType == CTRL_MENU_POPUP &&
-        ((nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) || 
+        ((nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) ||
          (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW))))
         return sal_True;
 
@@ -1504,7 +1504,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
         return;
 
     GtkWidgetPath* path;
- 
+
     style_loaded = true;
     gtk_init(NULL, NULL);
     /* Load the GtkStyleContexts, it might be a bit slow, but usually,
@@ -1513,7 +1513,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpEntryStyle, gtk_entry_new());
     getStyleContext(&mpButtonStyle, gtk_button_new());
 
-    getStyleContext(&mpToolbarStyle, gtk_toolbar_new());    
+    getStyleContext(&mpToolbarStyle, gtk_toolbar_new());
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
 

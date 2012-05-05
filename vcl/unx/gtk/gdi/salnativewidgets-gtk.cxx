@@ -107,7 +107,7 @@ struct NWFWidgetData
     GtkWidget *  gTreeView;
     GtkWidget *  gHScale;
     GtkWidget *  gVScale;
-    GtkWidget *  gVSeparator;
+    GtkWidget *  gSeparator;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -146,7 +146,7 @@ struct NWFWidgetData
         gTreeView( NULL ),
         gHScale( NULL ),
         gVScale( NULL ),
-        gVSeparator ( NULL ),
+        gSeparator( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -579,7 +579,8 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
                 ||  (nPart==PART_THUMB_HORZ)
                 ||  (nPart==PART_THUMB_VERT)
                 ||  (nPart==PART_BUTTON)
-                ||  (nPart==PART_SEPARATOR)
+                ||  (nPart==PART_SEPARATOR_HORZ)
+                ||  (nPart==PART_SEPARATOR_VERT)
                 )
                                                                 )   ||
         ((nType == CTRL_MENUBAR) &&
@@ -2642,30 +2643,46 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
                                   GTK_ORIENTATION_VERTICAL
                                   );
             }
-            else if(nPart == PART_SEPARATOR )
+            else if( nPart == PART_SEPARATOR_HORZ || nPart == PART_SEPARATOR_VERT )
             {
                 gint separator_height, separator_width, wide_separators;
 
-                gtk_widget_style_get (gWidgetData[m_nXScreen].gVSeparator,
+                gtk_widget_style_get (gWidgetData[m_nXScreen].gSeparator,
                                       "wide-separators",  &wide_separators,
                                       "separator-width",  &separator_width,
                                       "separator-height", &separator_height,
                                       NULL);
+
+                const double shim = 0.2;
+
                 if (wide_separators)
-                    gtk_paint_box (gWidgetData[m_nXScreen].gVSeparator->style, gdkDrawable,
-                               GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
-                               &clipRect, gWidgetData[m_nXScreen].gVSeparator, "vseparator",
-                               x + (w - separator_width) / 2,
-                               y + 7,
-                               separator_width,
-                               h - 14);
+                {
+                    if (nPart == PART_SEPARATOR_VERT)
+                        gtk_paint_box (gWidgetData[m_nXScreen].gSeparator->style, gdkDrawable,
+                                       GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
+                                       &clipRect, gWidgetData[m_nXScreen].gSeparator, "vseparator",
+                                       x + (w - separator_width) / 2, y + h * shim,
+                                       separator_width, h * (1 - 2*shim));
+                    else
+                        gtk_paint_box (gWidgetData[m_nXScreen].gSeparator->style, gdkDrawable,
+                                       GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
+                                       &clipRect, gWidgetData[m_nXScreen].gSeparator, "hseparator",
+                                       x + w * shim, y + (h - separator_width) / 2,
+                                       w * (1 - 2*shim), separator_width);
+                }
                 else
-                    gtk_paint_vline (gWidgetData[m_nXScreen].gVSeparator->style, gdkDrawable,
-                                 GTK_STATE_NORMAL,
-                                 &clipRect, gWidgetData[m_nXScreen].gVSeparator, "vseparator",
-                                 y + 7,
-                                 y + h - 7,
-                                 x + w/2 - 1);
+                {
+                    if (nPart == PART_SEPARATOR_VERT)
+                        gtk_paint_vline (gWidgetData[m_nXScreen].gSeparator->style, gdkDrawable,
+                                         GTK_STATE_NORMAL,
+                                         &clipRect, gWidgetData[m_nXScreen].gSeparator, "vseparator",
+                                         y + h * shim, y + h * (1 - shim), x + w/2 - 1);
+                    else
+                        gtk_paint_hline (gWidgetData[m_nXScreen].gSeparator->style, gdkDrawable,
+                                         GTK_STATE_NORMAL,
+                                         &clipRect, gWidgetData[m_nXScreen].gSeparator, "hseparator",
+                                         x + w * shim, x + w * (1 - shim), y + h/2 - 1);
+                }
             }
         }
     }
@@ -3972,8 +3989,8 @@ static void NWEnsureGTKToolbar( SalX11Screen nScreen )
         gWidgetData[nScreen].gToolbarWidget = gtk_toolbar_new();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarWidget, nScreen );
         gWidgetData[nScreen].gToolbarButtonWidget = GTK_WIDGET(gtk_button_new());
-        gWidgetData[nScreen].gVSeparator = GTK_WIDGET(gtk_separator_tool_item_new());
-        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gVSeparator, nScreen );
+        gWidgetData[nScreen].gSeparator = GTK_WIDGET(gtk_separator_tool_item_new());
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gSeparator, nScreen );
 
         GtkReliefStyle aRelief = GTK_RELIEF_NORMAL;
         gtk_widget_ensure_style( gWidgetData[nScreen].gToolbarWidget );

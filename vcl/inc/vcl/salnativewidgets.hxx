@@ -165,7 +165,8 @@ typedef sal_uInt32      ControlPart;
 #define PART_BUTTON_LEFT            103
 #define PART_BUTTON_RIGHT           104
 #define PART_ALL_BUTTONS            105
-#define PART_SEPARATOR              106
+#define PART_SEPARATOR_HORZ         106
+#define PART_SEPARATOR_VERT         107
 #define PART_TRACK_HORZ_LEFT        200
 #define PART_TRACK_VERT_UPPER       201
 #define PART_TRACK_HORZ_RIGHT       202
