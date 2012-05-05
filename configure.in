@@ -975,7 +975,7 @@ AC_ARG_WITH(vba-package-format,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *classic, crystal, *default (galaxy), *hicontrast, human, industrial, *oxygen, *tango.]),
+         Possible choices: classic, *crystal, *default (galaxy), *hicontrast, human, industrial, *oxygen, *tango.]),
 ,)
 
 AC_ARG_WITH(helppack-integration,
