@@ -403,31 +403,31 @@ void SAL_CALL ScAnnotationShapeObj::insertTextContent( const uno::Reference< tex
         switch (pField->GetFieldType())
         {
             case ScEditFieldObj::Date:
-                xContent2.set(new SvxUnoTextField(ID_DATEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::DATE));
             break;
             case ScEditFieldObj::File:
-                xContent2.set(new SvxUnoTextField(ID_EXT_FILEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::EXTENDED_FILE));
             break;
             case ScEditFieldObj::Page:
-                xContent2.set(new SvxUnoTextField(ID_PAGEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::PAGE));
             break;
             case ScEditFieldObj::Pages:
-                xContent2.set(new SvxUnoTextField(ID_PAGESFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::PAGES));
             break;
             case ScEditFieldObj::Sheet:
-                xContent2.set(new SvxUnoTextField(ID_TABLEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::TABLE));
             break;
             case ScEditFieldObj::Time:
-                xContent2.set(new SvxUnoTextField(ID_TIMEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::TIME));
             break;
             case ScEditFieldObj::ExtTime:
-                xContent2.set(new SvxUnoTextField(ID_EXT_TIMEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::EXTENDED_TIME));
             break;
             case ScEditFieldObj::Title:
-                xContent2.set(new SvxUnoTextField(ID_FILEFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::FILE));
             break;
             case ScEditFieldObj::URL:
-                xContent2.set(new SvxUnoTextField(ID_URLFIELD));
+                xContent2.set(new SvxUnoTextField(text::textfield::Type::URL));
             break;
             default:
                 ;

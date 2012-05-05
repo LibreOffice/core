@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/component.hxx>
 #include "editeng/editengdllapi.h"
@@ -40,23 +41,6 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <editeng/mutxhelp.hxx>
-
-// ids usable for the constructor
-#define ID_DATEFIELD        0
-#define ID_URLFIELD         1
-#define ID_PAGEFIELD        2
-#define ID_PAGESFIELD       3
-#define ID_TIMEFIELD        4
-#define ID_FILEFIELD        5
-#define ID_TABLEFIELD       6
-#define ID_EXT_TIMEFIELD    7
-#define ID_EXT_FILEFIELD    8
-#define ID_AUTHORFIELD      9
-#define ID_MEASUREFIELD     10
-#define ID_EXT_DATEFIELD    11
-#define ID_HEADERFIELD      12
-#define ID_FOOTERFIELD      13
-#define ID_DATETIMEFIELD    14
 
 class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;

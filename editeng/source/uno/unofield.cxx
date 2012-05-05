@@ -146,27 +146,20 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 
     switch( mnId )
     {
-    case ID_EXT_DATEFIELD:
-    case ID_EXT_TIMEFIELD:
+    case text::textfield::Type::EXTENDED_DATE:
+    case text::textfield::Type::EXTENDED_TIME:
         return &aExDateTimeFieldPropertySet_Impl;
-    case ID_URLFIELD:
+    case text::textfield::Type::URL:
         return &aUrlFieldPropertySet_Impl;
-    case ID_DATEFIELD:
-    case ID_TIMEFIELD:
+    case text::textfield::Type::DATE:
+    case text::textfield::Type::TIME:
         return &aDateTimeFieldPropertySet_Impl;
-    case ID_EXT_FILEFIELD:
+    case text::textfield::Type::EXTENDED_FILE:
         return &aExtFileFieldPropertySet_Impl;
-    case ID_AUTHORFIELD:
+    case text::textfield::Type::AUTHOR:
         return &aAuthorFieldPropertySet_Impl;
-    case ID_MEASUREFIELD:
+    case text::textfield::Type::MEASURE:
         return &aMeasureFieldPropertySet_Impl;
-//  case ID_PAGEFIELD:
-//  case ID_PAGESFIELD:
-//  case ID_FILEFIELD:
-//  case ID_TABLEFIELD:
-//  case ID_HEADERFIELD:
-//  case ID_FOOTERFIELD:
-//  case ID_DATETIMEFIELD::
     default:
         return &aEmptyPropertySet_Impl;
     }
@@ -274,36 +267,36 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 
     switch( nServiceId )
     {
-    case ID_EXT_DATEFIELD:
-    case ID_DATEFIELD:
+    case text::textfield::Type::EXTENDED_DATE:
+    case text::textfield::Type::DATE:
         mpImpl->mbBoolean2 = sal_True;
         mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
         mpImpl->mbBoolean1 = sal_False;
         break;
 
-    case ID_EXT_TIMEFIELD:
-    case ID_TIMEFIELD:
+    case text::textfield::Type::EXTENDED_TIME:
+    case text::textfield::Type::TIME:
         mpImpl->mbBoolean2 = sal_False;
         mpImpl->mbBoolean1 = sal_False;
         mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
         break;
 
-    case ID_URLFIELD:
+    case text::textfield::Type::URL:
         mpImpl->mnInt16 = SVXURLFORMAT_REPR;
         break;
 
-    case ID_EXT_FILEFIELD:
+    case text::textfield::Type::EXTENDED_FILE:
         mpImpl->mbBoolean1 = sal_False;
         mpImpl->mnInt16 = text::FilenameDisplayFormat::FULL;
         break;
 
-    case ID_AUTHORFIELD:
+    case text::textfield::Type::AUTHOR:
         mpImpl->mnInt16 = SVXAUTHORFORMAT_FULLNAME;
         mpImpl->mbBoolean1 = sal_False;
         mpImpl->mbBoolean2 = sal_True;
         break;
 
-    case ID_MEASUREFIELD:
+    case text::textfield::Type::MEASURE:
         mpImpl->mnInt16 = SDRMEASUREFIELD_VALUE;
         break;
 
@@ -336,8 +329,8 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             // extract field properties from data class
             switch( mnServiceId )
             {
-            case ID_DATEFIELD:
-            case ID_EXT_DATEFIELD:
+            case text::textfield::Type::DATE:
+            case text::textfield::Type::EXTENDED_DATE:
                 {
                     mpImpl->mbBoolean2 = sal_True;
                     // #i35416# for variable date field, don't use invalid "0000-00-00" date,
@@ -351,20 +344,20 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 }
                 break;
 
-            case ID_TIMEFIELD:
+            case text::textfield::Type::TIME:
                 mpImpl->mbBoolean2 = sal_False;
                 mpImpl->mbBoolean1 = sal_False;
                 mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
                 break;
 
-            case ID_EXT_TIMEFIELD:
+            case text::textfield::Type::EXTENDED_TIME:
                 mpImpl->mbBoolean2 = sal_False;
                 mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = ((SvxExtTimeField*)pData)->GetType() == SVXTIMETYPE_FIX;
                 mpImpl->mnInt32 = ((SvxExtTimeField*)pData)->GetFormat();
                 break;
 
-            case ID_URLFIELD:
+            case text::textfield::Type::URL:
                 mpImpl->msString1 = ((SvxURLField*)pData)->GetRepresentation();
                 mpImpl->msString2 = ((SvxURLField*)pData)->GetTargetFrame();
                 mpImpl->msString3 = ((SvxURLField*)pData)->GetURL();
@@ -372,13 +365,13 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                     ((SvxURLField*)pData)->GetFormat());
                 break;
 
-            case ID_EXT_FILEFIELD:
+            case text::textfield::Type::EXTENDED_FILE:
                 mpImpl->msString1 = ((SvxExtFileField*)pData)->GetFile();
                 mpImpl->mbBoolean1 = ((SvxExtFileField*)pData)->GetType() == SVXFILETYPE_FIX;
                 mpImpl->mnInt16 = getFileNameDisplayFormat(((SvxExtFileField*)pData)->GetFormat());
                 break;
 
-            case ID_AUTHORFIELD:
+            case text::textfield::Type::AUTHOR:
                 mpImpl->msString1  = ((SvxAuthorField*)pData)->GetFormatted();
                 mpImpl->msString2  = ((SvxAuthorField*)pData)->GetFormatted();
                 mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
@@ -387,7 +380,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
                 break;
 
-            case ID_MEASUREFIELD:
+            case text::textfield::Type::MEASURE:
                 mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(((SdrMeasureField*)pData)->GetMeasureFieldKind());
                 break;
             }
@@ -408,10 +401,10 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
     switch( mnServiceId )
     {
-    case ID_TIMEFIELD:
-    case ID_EXT_TIMEFIELD:
-    case ID_DATEFIELD:
-    case ID_EXT_DATEFIELD:
+    case text::textfield::Type::TIME:
+    case text::textfield::Type::EXTENDED_TIME:
+    case text::textfield::Type::DATE:
+    case text::textfield::Type::EXTENDED_DATE:
     {
         if( mpImpl->mbBoolean2 ) // IsDate?
         {
@@ -422,7 +415,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         }
         else
         {
-            if( mnServiceId != ID_TIMEFIELD && mnServiceId != ID_DATEFIELD )
+            if( mnServiceId != text::textfield::Type::TIME && mnServiceId != text::textfield::Type::DATE )
             {
                 Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
@@ -439,30 +432,30 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     }
         break;
 
-    case ID_URLFIELD:
+    case text::textfield::Type::URL:
         pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SVXURLFORMAT_REPR : SVXURLFORMAT_URL );
         ((SvxURLField*)pData)->SetTargetFrame( mpImpl->msString2 );
         if( mpImpl->mnInt16 >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXURLFORMAT_REPR )
             ((SvxURLField*)pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
         break;
 
-    case ID_PAGEFIELD:
+    case text::textfield::Type::PAGE:
         pData = new SvxPageField();
         break;
 
-    case ID_PAGESFIELD:
+    case text::textfield::Type::PAGES:
         pData = new SvxPagesField();
         break;
 
-    case ID_FILEFIELD:
+    case text::textfield::Type::FILE:
         pData = new SvxFileField();
         break;
 
-    case ID_TABLEFIELD:
+    case text::textfield::Type::TABLE:
         pData = new SvxTableField();
         break;
 
-    case ID_EXT_FILEFIELD:
+    case text::textfield::Type::EXTENDED_FILE:
     {
         // #92009# pass fixed attribute to constructor
         pData = new SvxExtFileField( mpImpl->msString1,
@@ -471,7 +464,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
     }
 
-    case ID_AUTHORFIELD:
+    case text::textfield::Type::AUTHOR:
     {
         ::rtl::OUString aContent;
         String aFirstName;
@@ -514,7 +507,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
     }
 
-    case ID_MEASUREFIELD:
+    case text::textfield::Type::MEASURE:
     {
         SdrMeasureFieldKind eKind = SDRMEASUREFIELD_VALUE;
         if( mpImpl->mnInt16 == (sal_Int16)SDRMEASUREFIELD_UNIT || mpImpl->mnInt16 == (sal_Int16)SDRMEASUREFIELD_ROTA90BLANCS )
@@ -522,13 +515,13 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         pData = new SdrMeasureField( eKind);
         break;
     }
-    case ID_HEADERFIELD:
+    case text::textfield::Type::HEADER:
         pData = new SvxHeaderField();
         break;
-    case ID_FOOTERFIELD:
+    case text::textfield::Type::FOOTER:
         pData = new SvxFooterField();
         break;
-    case ID_DATETIMEFIELD:
+    case text::textfield::Type::DATE_TIME:
         pData = new SvxDateTimeField();
         break;
     };
@@ -727,35 +720,35 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
 
         switch( mnId )
         {
-        case ID_DATEFIELD:
+        case text::textfield::Type::DATE:
         {
             SvxDateField* pDate = PTR_CAST( SvxDateField, aFieldItem.GetField() );
             if(pDate)
                 pDate->SetFormat( (SvxDateFormat)nFormat );
             break;
         }
-        case ID_URLFIELD:
+        case text::textfield::Type::URL:
         {
             SvxURLField* pURL = PTR_CAST( SvxURLField, aFieldItem.GetField() );
             if(pURL)
                 pURL->SetFormat( (SvxURLFormat)nFormat );
             break;
         }
-        case ID_EXT_TIMEFIELD:
+        case text::textfield::Type::EXTENDED_TIME:
         {
             SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, aFieldItem.GetField() );
             if(pTime)
                 pTime->SetFormat( (SvxTimeFormat)nFormat );
             break;
         }
-        case ID_EXT_FILEFIELD:
+        case text::textfield::Type::EXTENDED_FILE:
         {
             SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, aFieldItem.GetField() );
             if(pFile)
                 pFile->SetFormat( (SvxFileFormat)nFormat );
             break;
         }
-        case ID_AUTHORFIELD:
+        case text::textfield::Type::AUTHOR:
         {
             SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, aFieldItem.GetField() );
             if(pAuthor)
@@ -774,28 +767,28 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
         sal_Bool bFix( *(sal_Bool*)aValue.getValue() );
         switch( mnId )
         {
-        case ID_EXT_TIMEFIELD:
+        case text::textfield::Type::EXTENDED_TIME:
         {
             SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, aFieldItem.GetField() );
             if(pTime)
                 pTime->SetType( (SvxTimeType)bFix?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
             break;
         }
-        case ID_DATEFIELD:
+        case text::textfield::Type::DATE:
         {
             SvxDateField* pDate = PTR_CAST( SvxDateField, aFieldItem.GetField() );
             if(pDate)
                 pDate->SetType( (SvxDateType)bFix?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
             break;
         }
-        case ID_EXT_FILEFIELD:
+        case text::textfield::Type::EXTENDED_FILE:
         {
             SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, aFieldItem.GetField() );
             if(pFile)
                 pFile->SetType( (SvxFileType)bFix?SVXFILETYPE_FIX:SVXFILETYPE_VAR );
             break;
         }
-        case ID_AUTHORFIELD:
+        case text::textfield::Type::AUTHOR:
         {
             SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, aFieldItem.GetField() );
             if(pAuthor)
@@ -887,35 +880,35 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
     case WID_FORMAT:
         switch( mnId )
         {
-        case ID_DATEFIELD:
+        case text::textfield::Type::DATE:
         {
             SvxDateField* pDate = PTR_CAST( SvxDateField, pFieldItem->GetField() );
             if(pDate)
                 aValue <<= (sal_Int32)pDate->GetFormat();
             break;
         }
-        case ID_URLFIELD:
+        case text::textfield::Type::URL:
         {
             SvxURLField* pURL = PTR_CAST( SvxURLField, pFieldItem->GetField() );
             if(pURL)
                 aValue <<= (sal_Int32)pURL->GetFormat();
             break;
         }
-        case ID_EXT_TIMEFIELD:
+        case text::textfield::Type::EXTENDED_TIME:
         {
             SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, pFieldItem->GetField() );
             if(pTime)
                 aValue <<= (sal_Int32)pTime->GetFormat();
             break;
         }
-        case ID_EXT_FILEFIELD:
+        case text::textfield::Type::EXTENDED_FILE:
         {
             SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, pFieldItem->GetField() );
             if(pFile)
                 aValue <<= (sal_Int32)pFile->GetFormat();
             break;
         }
-        case ID_AUTHORFIELD:
+        case text::textfield::Type::AUTHOR:
         {
             SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, pFieldItem->GetField() );
             if(pAuthor)
@@ -931,28 +924,28 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
             sal_Bool bFix = sal_False;
         switch( mnId )
         {
-        case ID_EXT_TIMEFIELD:
+        case text::textfield::Type::EXTENDED_TIME:
         {
             SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, pFieldItem->GetField() );
             if(pTime)
                 bFix = pTime->GetType() == SVXTIMETYPE_FIX;
             break;
         }
-        case ID_DATEFIELD:
+        case text::textfield::Type::DATE:
         {
             SvxDateField* pDate = PTR_CAST( SvxDateField, pFieldItem->GetField() );
             if(pDate)
                 bFix = pDate->GetType() == SVXDATETYPE_FIX;
             break;
         }
-        case ID_EXT_FILEFIELD:
+        case text::textfield::Type::EXTENDED_FILE:
         {
             SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, pFieldItem->GetField() );
             if(pFile)
                 bFix = pFile->GetType() == SVXFILETYPE_FIX;
             break;
         }
-        case ID_AUTHORFIELD:
+        case text::textfield::Type::AUTHOR:
         {
             SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, pFieldItem->GetField() );
             if(pAuthor)
@@ -1026,33 +1019,33 @@ void SvxUnoTextField::disposing()
 sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const throw()
 {
     if( pFieldData->ISA( SvxURLField ) )
-        return ID_URLFIELD;
+        return text::textfield::Type::URL;
     else if( pFieldData->ISA( SvxPageField ) )
-        return ID_PAGEFIELD;
+        return text::textfield::Type::PAGE;
     else if( pFieldData->ISA( SvxPagesField ) )
-        return ID_PAGESFIELD;
+        return text::textfield::Type::PAGES;
     else if( pFieldData->ISA( SvxTimeField )    )
-        return ID_TIMEFIELD;
+        return text::textfield::Type::TIME;
     else if( pFieldData->ISA( SvxFileField )    )
-        return ID_FILEFIELD;
+        return text::textfield::Type::FILE;
     else if( pFieldData->ISA( SvxTableField ) )
-        return ID_TABLEFIELD;
+        return text::textfield::Type::TABLE;
     else if( pFieldData->ISA( SvxExtTimeField ) )
-        return ID_EXT_TIMEFIELD;
+        return text::textfield::Type::EXTENDED_TIME;
     else if( pFieldData->ISA( SvxExtFileField ) )
-        return ID_EXT_FILEFIELD;
+        return text::textfield::Type::EXTENDED_FILE;
     else if( pFieldData->ISA( SvxAuthorField ) )
-        return ID_AUTHORFIELD;
+        return text::textfield::Type::AUTHOR;
     else if( pFieldData->ISA( SvxDateField ) )
-        return ID_EXT_DATEFIELD;
+        return text::textfield::Type::EXTENDED_DATE;
     else if( pFieldData->ISA( SdrMeasureField ) )
-        return ID_MEASUREFIELD;
+        return text::textfield::Type::MEASURE;
     else if( pFieldData->ISA( SvxHeaderField ) )
-        return ID_HEADERFIELD;
+        return text::textfield::Type::HEADER;
     else if( pFieldData->ISA( SvxFooterField ) )
-        return ID_FOOTERFIELD;
+        return text::textfield::Type::FOOTER;
     else if( pFieldData->ISA( SvxDateTimeField ) )
-        return ID_DATETIMEFIELD;
+        return text::textfield::Type::DATE_TIME;
 
     return UNKNOWN_FIELD;
 }
@@ -1138,42 +1131,42 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
 
         if ( aFieldType == "DateTime" )
         {
-            nId = ID_DATEFIELD;
+            nId = text::textfield::Type::DATE;
         }
         else if ( aFieldType == "URL" )
         {
-            nId = ID_URLFIELD;
+            nId = text::textfield::Type::URL;
         }
         else if ( aFieldType == "PageNumber" )
         {
-            nId = ID_PAGEFIELD;
+            nId = text::textfield::Type::PAGE;
         }
         else if ( aFieldType == "PageCount" )
         {
-            nId = ID_PAGESFIELD;
+            nId = text::textfield::Type::PAGES;
         }
         else if ( aFieldType == "SheetName" )
         {
-            nId = ID_TABLEFIELD;
+            nId = text::textfield::Type::TABLE;
         }
         else if ( aFieldType == "FileName" )
         {
-            nId = ID_EXT_FILEFIELD;
+            nId = text::textfield::Type::EXTENDED_FILE;
         }
         else if (aFieldType.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("docinfo.Title") ) ||
                  aFieldType.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
         {
-            nId = ID_FILEFIELD;
+            nId = text::textfield::Type::FILE;
         }
         else if ( aFieldType == "Author" )
         {
-            nId = ID_AUTHORFIELD;
+            nId = text::textfield::Type::AUTHOR;
         }
         else if ( aFieldType == "Measure" )
         {
-            nId = ID_MEASUREFIELD;
+            nId = text::textfield::Type::MEASURE;
         }
 
         if (nId != UNKNOWN_FIELD)

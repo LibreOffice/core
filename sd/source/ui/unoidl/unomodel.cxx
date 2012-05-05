@@ -907,25 +907,25 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) ) ||
         ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime") ) ) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
+        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::EXTENDED_DATE );
     }
 
     if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Header"))) ||
         (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.Header"))) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_HEADERFIELD );
+        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::HEADER );
     }
 
     if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Footer"))) ||
         (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.Footer"))) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_FOOTERFIELD );
+        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::FOOTER );
     }
 
     if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.DateTime"))) ||
         (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.DateTime"))) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_DATETIMEFIELD );
+        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::DATE_TIME );
     }
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap") ) )

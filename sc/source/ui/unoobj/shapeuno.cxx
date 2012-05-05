@@ -1131,7 +1131,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
         //  To insert it into drawing text, a SvxUnoTextField is needed instead.
         //  The ScCellFieldObj object is left in non-inserted state.
 
-        SvxUnoTextField* pDrawField = new SvxUnoTextField( ID_URLFIELD );
+        SvxUnoTextField* pDrawField = new SvxUnoTextField( text::textfield::Type::URL );
         xEffContent.set(pDrawField);
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_URL );
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_REPR );

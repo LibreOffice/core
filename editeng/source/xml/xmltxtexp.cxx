@@ -245,7 +245,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
             RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime")))
        )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
+        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::EXTENDED_DATE );
     }
 
     return SvxUnoTextCreateTextField( aServiceSpecifier );
