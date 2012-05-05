@@ -221,10 +221,10 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
+    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
     sal_Bool bRet = sal_False;
-    if ( !aBoxes.empty() )
+    if ( aBoxes.Count() )
         bRet = GetDoc()->InsertRow( aBoxes, nCnt, bBehind );
 
     EndAllActionAndCall();
@@ -259,10 +259,10 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
+    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
     sal_Bool bRet = sal_False;
-    if( !aBoxes.empty() )
+    if( aBoxes.Count() )
         bRet = GetDoc()->InsertCol( aBoxes, nCnt, bBehind );
 
     EndAllActionAndCall();
@@ -314,9 +314,9 @@ sal_Bool SwFEShell::DeleteCol()
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
-    if ( !aBoxes.empty() )
+    if ( aBoxes.Count() )
     {
-        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
 
         // remove crsr from the deletion area.
         // Put them behind/on the table; via the
@@ -361,9 +361,9 @@ sal_Bool SwFEShell::DeleteRow()
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
-    if( !aBoxes.empty() )
+    if( aBoxes.Count() )
     {
-        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
 
         // Delete cursors from the deletion area.
         // Then the cursor is:
@@ -522,9 +522,9 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes );
-    if( !aBoxes.empty() )
+    if( aBoxes.Count() )
     {
-        TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
+        TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
         // now delete the columns
         bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt, bSameHeight );
@@ -933,12 +933,12 @@ sal_Bool SwFEShell::HasWholeTabSelection() const
     {
         SwSelBoxes aBoxes;
         ::GetTblSelCrs( *this, aBoxes );
-        if( !aBoxes.empty() )
+        if( aBoxes.Count() )
         {
             const SwTableNode *pTblNd = IsCrsrInTbl();
-            return ( pTblNd && aBoxes.begin()->second->GetSttIdx()-1 == pTblNd->
+            return ( pTblNd && aBoxes[0]->GetSttIdx()-1 == pTblNd->
                 EndOfSectionNode()->StartOfSectionIndex() &&
-                aBoxes.rbegin()->second->GetSttNd()->EndOfSectionIndex()+1
+                aBoxes[aBoxes.Count()-1]->GetSttNd()->EndOfSectionIndex()+1
                 ==  pTblNd->EndOfSectionIndex() );
         }
     }
@@ -1026,12 +1026,12 @@ void SwFEShell::UnProtectCells()
         } while ( pFrm && !pFrm->IsCellFrm() );
         if( pFrm )
         {
-            SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
-            aBoxes.insert( pBox );
+            SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+            aBoxes.Insert( pBox );
         }
     }
 
-    if( !aBoxes.empty() )
+    if( aBoxes.Count() )
         GetDoc()->UnProtectCells( aBoxes );
 
     EndAllActionAndCall();
@@ -1069,11 +1069,11 @@ sal_Bool SwFEShell::CanUnProtectCells() const
             } while ( pFrm && !pFrm->IsCellFrm() );
             if( pFrm )
             {
-                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
-                aBoxes.insert( pBox );
+                SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+                aBoxes.Insert( pBox );
             }
         }
-        if( !aBoxes.empty() )
+        if( aBoxes.Count() )
             bUnProtectAvailable = ::HasProtectedCells( aBoxes );
     }
     return bUnProtectAvailable;
@@ -1230,20 +1230,20 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
     ::GetTblSelCrs( *this, aBoxes );
 
     if ( bBalance )
-        return aBoxes.size() > 1;
+        return aBoxes.Count() > 1;
 
-    if ( aBoxes.empty() )
+    if ( !aBoxes.Count() )
     {
         do
         {   pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
-        SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
-        aBoxes.insert( pBox );
+        SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+        aBoxes.Insert( pBox );
     }
 
-    for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
+    for ( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
     {
-        SwTableBox *pBox = it->second;
+        SwTableBox *pBox = aBoxes[i];
         if ( pBox->GetSttNd() )
         {
             SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
@@ -1283,12 +1283,13 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
         for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
         {
-            aBoxes.insert( rTBoxes[ n ] );
+            SwTableBox* pBox = rTBoxes[ n ];
+            aBoxes.Insert( pBox );
         }
     }
 
     sal_Bool bRet;
-    if( !aBoxes.empty() )
+    if( aBoxes.Count() )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
@@ -1321,7 +1322,8 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
         for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
         {
-            aBoxes.insert( rTBoxes[ n ] );
+            SwTableBox* pBox = rTBoxes[ n ];
+            aBoxes.Insert( pBox );
         }
     }
 
@@ -1353,9 +1355,9 @@ sal_Bool SwFEShell::DeleteTblSel()
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSelCrs( *this, aBoxes );
-    if( !aBoxes.empty() )
+    if( aBoxes.Count() )
     {
-        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
 
         // cursor should be removed from deletion area.
         // Put them behind/on the table; via the document
@@ -2340,10 +2342,10 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
 {
     SwTblBoxFormula aTmp( rFml );
     SwSelBoxes aBoxes;
-    aTmp.GetBoxesOfFormula( rTbl, aBoxes );
-    for( SwSelBoxes::reverse_iterator it = aBoxes.rbegin(); it != aBoxes.rend(); ++it )
+
+    for( sal_uInt16 nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes ); nSelBoxes; )
     {
-        SwTableBox* pBox = it->second;
+        SwTableBox* pBox = aBoxes[ --nSelBoxes ];
         SwCellFrms::iterator iC;
         for( iC = rCells.begin(); iC != rCells.end(); ++iC )
             if( (*iC)->GetTabBox() == pBox )

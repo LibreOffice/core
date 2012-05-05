@@ -277,16 +277,16 @@ sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
             if ( pFrm )
             {
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
-                aBoxes.insert( pBox );
+                aBoxes.Insert( pBox );
             }
         } while( sal_False );
     }
 
-    for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
+    for( sal_uInt16 n = 0; n < aBoxes.Count(); ++n )
     {
-        const SwTableBox* pSelBox = it->second;
-        const SwTableBoxFmt* pTblFmt = static_cast<SwTableBoxFmt*>(pSelBox->GetFrmFmt());
-        if( it == aBoxes.begin() )
+        const SwTableBox* pSelBox = aBoxes[ n ];
+        const SwTableBoxFmt* pTblFmt = (SwTableBoxFmt*)pSelBox->GetFrmFmt();
+        if( !n )
         {
             // Formeln in die externe Darstellung bringen!
             const SwTable& rTbl = pSelBox->GetSttNd()->FindTableNode()->GetTable();
@@ -319,7 +319,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
             if ( pFrm )
             {
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
-                aBoxes.insert( pBox );
+                aBoxes.Insert( pBox );
             }
         } while( sal_False );
     }
@@ -330,8 +330,8 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
 
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-    for( SwSelBoxes::const_iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
-        GetDoc()->SetTblBoxFormulaAttrs( *it->second, rSet );
+    for( sal_uInt16 n = 0; n < aBoxes.Count(); ++n )
+        GetDoc()->SetTblBoxFormulaAttrs( *aBoxes[ n ], rSet );
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     EndAllAction();
 }

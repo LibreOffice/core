@@ -784,21 +784,22 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
             SwPosition aPos( aIndex );
             aPos.nContent.Assign( pNode, 0 );
 
-            if( pSelBoxes && !pSelBoxes->empty() )
+            if( pSelBoxes && pSelBoxes->Count() )
             {
                 // Table selection
                 // Copy parts of a table: create a table with the same width as the
                 // original one and move (copy and delete) the selected boxes.
                 // The size is corrected on a percentage basis.
 
-                const SwTableNode* pTblNd = pSelBoxes->begin()->second->GetSttNd()->FindTableNode();
+                SwTableNode* pTblNd = (SwTableNode*)(*pSelBoxes)[0]->
+                                                GetSttNd()->FindTableNode();
                 if( !pTblNd )
                     break;
 
-                const SwTable& rTbl = pTblNd->GetTable();
+                SwTable& rTbl = pTblNd->GetTable();
 
                 // Did we select the whole table?
-                if( pSelBoxes->size() == rTbl.GetTabSortBoxes().Count() )
+                if( pSelBoxes->Count() == rTbl.GetTabSortBoxes().Count() )
                 {
                     // move the whole table
                     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode(), 1 );

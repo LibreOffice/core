@@ -169,11 +169,11 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     {
         GetTblSel( *this, aBoxes, eType );
 
-        if( aBoxes.empty() )
+        if( !aBoxes.Count() )
             return sal_False;
 
-        pStt = aBoxes.begin()->second;
-        pEnd = aBoxes.rbegin()->second;
+        pStt = aBoxes[0];
+        pEnd = aBoxes[aBoxes.Count() - 1];
     }
     // #i32329# Enhanced table selection
     else if ( pTable->IsNewModel() )
@@ -181,11 +181,11 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         const SwShellCrsr *pCrsr = _GetCrsr();
         SwTable::SearchType eSearchType = bRow ? SwTable::SEARCH_ROW : SwTable::SEARCH_COL;
         pTable->CreateSelection( *pCrsr, aBoxes, eSearchType, bCheckProtected );
-        if( aBoxes.empty() )
+        if( !aBoxes.Count() )
             return sal_False;
 
-        pStt = aBoxes.begin()->second;
-        pEnd = aBoxes.rbegin()->second;
+        pStt = aBoxes[0];
+        pEnd = aBoxes[aBoxes.Count() - 1];
     }
     else
     {
@@ -217,13 +217,13 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
                    static_cast<const SwCellFrm*>(pEndFrm),
                    aBoxes, bSelectUp ? 0 : &aCells, eType );
 
-        if( aBoxes.empty() || ( !bSelectUp && 4 != aCells.size() ) )
+        if( !aBoxes.Count() || ( !bSelectUp && 4 != aCells.size() ) )
             return sal_False;
 
         if ( bSelectUp )
         {
-            pStt = aBoxes.begin()->second;
-            pEnd = aBoxes.rbegin()->second;
+            pStt = aBoxes[0];
+            pEnd = aBoxes[aBoxes.Count() - 1];
         }
         else
         {

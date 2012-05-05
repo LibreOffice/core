@@ -1688,12 +1688,12 @@ void SwChartDataProvider::AddRowCols(
     if (rTable.IsTblComplex())
         return;
 
-    const sal_uInt16 nBoxes     = rBoxes.size();
+    const sal_uInt16 nBoxes     = rBoxes.Count();
     if (nBoxes < 1 || nLines < 1)
         return;
 
-    SwTableBox* pFirstBox = rBoxes.begin()->second;
-    SwTableBox* pLastBox = rBoxes.rbegin()->second;
+    SwTableBox* pFirstBox   = *( rBoxes.GetData() + 0 );
+    SwTableBox* pLastBox    = *( rBoxes.GetData() + nBoxes - 1 );
 
     if (pFirstBox && pLastBox)
     {

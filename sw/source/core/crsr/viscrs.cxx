@@ -644,15 +644,15 @@ void SwShellTableCrsr::FillRects()
 {
     // Calculate the new rectangles.
     // JP 16.01.98: If the cursor is still "parked" do nothing!!
-    if( aSelBoxes.empty() || bParked ||
+    if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex() )
         return;
 
     SwRegionRects aReg( GetShell()->VisArea() );
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( SwSelBoxes::iterator it = aSelBoxes.begin(); it != aSelBoxes.end(); ++it )
+    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
-        const SwStartNode* pSttNd = it->second->GetSttNd();
+        const SwStartNode* pSttNd = (*(aSelBoxes.GetData() + n ))->GetSttNd();
         const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
@@ -696,14 +696,14 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // Calculate the new rectangles.
     // JP 16.01.98: If the cursor is still "parked" do nothing!!
-    if( aSelBoxes.empty() || bParked ||
+    if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex()  )
         return sal_False;
 
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( SwSelBoxes::const_iterator it = aSelBoxes.begin(); it != aSelBoxes.end(); ++it )
+    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
-        SwNodeIndex aIdx( *it->second->GetSttNd() );
+        SwNodeIndex aIdx( *(*(aSelBoxes.GetData() + n ))->GetSttNd() );
         SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
         if( !pCNd )
             continue;

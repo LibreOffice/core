@@ -589,8 +589,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         const SwTableNode* pTblNd;
         SwSelBoxes aBoxes;
         GetTblSel( *this, aBoxes );
-        if( !aBoxes.empty() &&
-            NULL != (pTblNd = aBoxes.begin()->second->GetSttNd()->FindTableNode()) )
+        if( aBoxes.Count() &&
+            0 != (pTblNd = aBoxes[0]->GetSttNd()->FindTableNode()) )
         {
             SwPosition* pDstPos = 0;
             if( this == pDestShell )
@@ -616,7 +616,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 
                 bRet = pDestShell->GetDoc()->InsCopyOfTbl( *pDstPos, aBoxes,0,
                                         bIsMove && this == pDestShell &&
-                                        aBoxes.size() == pTblNd->GetTable().
+                                        aBoxes.Count() == pTblNd->GetTable().
                                         GetTabSortBoxes().Count(),
                                         this != pDestShell );
 
@@ -859,7 +859,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 SwTableBox* pBox = pDestNd->GetTable().GetTblBox(
                                         pSttNd->GetIndex() );
                 OSL_ENSURE( pBox, "Box steht nicht in dieser Tabelle" );
-                aBoxes.insert( pBox );
+                aBoxes.Insert( pBox );
             }
 
             SwNodeIndex aNdIdx( *pDestNd->EndOfSectionNode());

@@ -34,7 +34,6 @@
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <swrect.hxx>
-#include <frmfmt.hxx>
 
 #include <memory>
 #include <boost/noncopyable.hpp>
@@ -42,6 +41,7 @@
 class SwStartNode;
 class SwFmt;
 class Color;
+class SwFrmFmt;
 class SwTableFmt;
 class SwTableLineFmt;
 class SwTableBoxFmt;
@@ -404,7 +404,8 @@ public:
     const SwTableLine *GetUpper() const { return pUpper; }
     void SetUpper( SwTableLine *pNew ) { pUpper = pNew; }
 
-    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     // Creates its own FrmFmt if more boxes depend on it.
     SwFrmFmt* ClaimFrmFmt();
