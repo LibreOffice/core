@@ -66,6 +66,7 @@
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 
 #include "autoform.hxx"
 #include "cellmergeoption.hxx"
@@ -6434,7 +6435,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
                 aSelection.nStartPos  = aSelection.nEndPos;
             }
 
-            if (pCellField->GetFieldType() == ScEditFieldObj::Sheet)
+            if (pCellField->GetFieldType() == text::textfield::Type::TABLE)
                 pCellField->setPropertyValue("SheetPosition", uno::makeAny<sal_Int32>(aCellPos.Tab()));
 
             SvxFieldItem aItem = pCellField->CreateFieldItem();

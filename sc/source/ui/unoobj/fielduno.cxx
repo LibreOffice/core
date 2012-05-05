@@ -52,6 +52,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 
 using namespace com::sun::star;
 
@@ -140,28 +141,28 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
     }
 }
 
-ScEditFieldObj::FieldType getFieldType(sal_uInt16 nSvxType)
+sal_Int32 getFieldType(sal_uInt16 nSvxType)
 {
     switch (nSvxType)
     {
         case SVX_DATEFIELD:
-            return ScEditFieldObj::Date;
+            return text::textfield::Type::DATE;
         case SVX_URLFIELD:
-            return ScEditFieldObj::URL;
+            return text::textfield::Type::URL;
         case SVX_PAGEFIELD:
-            return ScEditFieldObj::Page;
+            return text::textfield::Type::PAGE;
         case SVX_PAGESFIELD:
-            return ScEditFieldObj::Pages;
+            return text::textfield::Type::PAGES;
         case SVX_TIMEFIELD:
-            return ScEditFieldObj::Time;
+            return text::textfield::Type::TIME;
         case SVX_EXT_TIMEFIELD:
-            return ScEditFieldObj::ExtTime;
+            return text::textfield::Type::EXTENDED_TIME;
         case SVX_FILEFIELD:
-            return ScEditFieldObj::Title;
+            return text::textfield::Type::FILE;
         case SVX_TABLEFIELD:
-            return ScEditFieldObj::Sheet;
+            return text::textfield::Type::TABLE;
         case SVX_EXT_FILEFIELD:
-            return ScEditFieldObj::File;
+            return text::textfield::Type::EXTENDED_FILE;
         case SVX_AUTHORFIELD:
         case SVX_HEADERFIELD:
         case SVX_FOOTERFIELD:
@@ -170,7 +171,7 @@ ScEditFieldObj::FieldType getFieldType(sal_uInt16 nSvxType)
         default:
             ;
     }
-    return ScEditFieldObj::URL; // Default to URL for no good reason.
+    return text::textfield::Type::URL; // Default to URL for no good reason.
 }
 
 }
@@ -375,7 +376,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     xub_StrLen nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
 
-    ScEditFieldObj::FieldType eType = getFieldType(pData->GetClassId());
+    sal_Int32 eType = getFieldType(pData->GetClassId());
     uno::Reference<text::XTextField> xRet(
         new ScEditFieldObj(mxContent, new ScCellEditSource(pDocShell, aCellPos), eType, aSelection));
     return xRet;
@@ -556,7 +557,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     xub_StrLen nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
 
-    ScEditFieldObj::FieldType eRealType = getFieldType(pData->GetClassId());
+    sal_Int32 eRealType = getFieldType(pData->GetClassId());
     uno::Reference<text::XTextField> xRet(
         new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection));
     return xRet;
@@ -685,26 +686,26 @@ SvxFieldData* ScEditFieldObj::getData()
     {
         switch (meType)
         {
-            case Date:
+            case text::textfield::Type::DATE:
                 mpData.reset(new SvxDateField);
             break;
-            case File:
+            case text::textfield::Type::EXTENDED_FILE:
                 mpData.reset(
                     new SvxExtFileField(rtl::OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT));
             break;
-            case Page:
+            case text::textfield::Type::PAGE:
                 mpData.reset(new SvxPageField);
             break;
-            case Pages:
+            case text::textfield::Type::PAGES:
                 mpData.reset(new SvxPagesField);
             break;
-            case Sheet:
+            case text::textfield::Type::TABLE:
                 mpData.reset(new SvxTableField);
             break;
-            case Time:
+            case text::textfield::Type::TIME:
                 mpData.reset(new SvxTimeField);
             break;
-            case ExtTime:
+            case text::textfield::Type::EXTENDED_TIME:
             {
                 if (mbIsDate)
                     mpData.reset(new SvxDateField);
@@ -712,10 +713,10 @@ SvxFieldData* ScEditFieldObj::getData()
                     mpData.reset(new SvxExtTimeField);
             }
             break;
-            case Title:
+            case text::textfield::Type::FILE:
                 mpData.reset(new SvxFileField);
             break;
-            case URL:
+            case text::textfield::Type::URL:
                 mpData.reset(
                     new SvxURLField(rtl::OUString(), rtl::OUString(), SVXURLFORMAT_APPDEFAULT));
             break;
@@ -972,7 +973,7 @@ void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno
 
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
-    ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel) :
+    ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel) :
     OComponentHelper(getMutex()),
     pPropSet(NULL),
     mpEditSource(pEditSrc),
@@ -981,13 +982,13 @@ ScEditFieldObj::ScEditFieldObj(
 {
     switch (meType)
     {
-        case File:
+        case text::textfield::Type::EXTENDED_FILE:
             pPropSet = lcl_GetFileFieldPropertySet();
         break;
-        case URL:
+        case text::textfield::Type::URL:
             pPropSet = lcl_GetURLPropertySet();
         break;
-        case ExtTime:
+        case text::textfield::Type::EXTENDED_TIME:
             pPropSet = getExtTimePropertySet();
         break;
         default:
@@ -1019,7 +1020,7 @@ SvxFieldItem ScEditFieldObj::CreateFieldItem()
     return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
 }
 
-ScEditFieldObj::FieldType ScEditFieldObj::GetFieldType() const
+sal_Int32 ScEditFieldObj::GetFieldType() const
 {
     return meType;
 }
@@ -1067,7 +1068,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
 
     switch (meType)
     {
-        case URL:
+        case text::textfield::Type::URL:
         {
             if (pField->GetClassId() != SVX_URLFIELD)
                 // Not an URL field, but URL is expected.
@@ -1145,16 +1146,16 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
     SolarMutexGuard aGuard;
     switch (meType)
     {
-        case URL:
+        case text::textfield::Type::URL:
             setPropertyValueURL(aPropertyName, aValue);
         break;
-        case File:
+        case text::textfield::Type::EXTENDED_FILE:
             setPropertyValueFile(aPropertyName, aValue);
         break;
-        case ExtTime:
+        case text::textfield::Type::EXTENDED_TIME:
             setPropertyValueExtTime(aPropertyName, aValue);
         break;
-        case Sheet:
+        case text::textfield::Type::TABLE:
             setPropertyValueSheet(aPropertyName, aValue);
         break;
         default:
@@ -1190,9 +1191,9 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
 
     switch (meType)
     {
-        case URL:
+        case text::textfield::Type::URL:
             return getPropertyValueURL(aPropertyName);
-        case File:
+        case text::textfield::Type::EXTENDED_FILE:
             return getPropertyValueFile(aPropertyName);
         default:
             throw beans::UnknownPropertyException();

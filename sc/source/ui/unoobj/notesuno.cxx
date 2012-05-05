@@ -399,40 +399,7 @@ void SAL_CALL ScAnnotationShapeObj::insertTextContent( const uno::Reference< tex
     ScEditFieldObj* pField = ScEditFieldObj::getImplementation(xContent);
     uno::Reference<text::XTextContent> xContent2 = xContent;
     if (pField)
-    {
-        switch (pField->GetFieldType())
-        {
-            case ScEditFieldObj::Date:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::DATE));
-            break;
-            case ScEditFieldObj::File:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::EXTENDED_FILE));
-            break;
-            case ScEditFieldObj::Page:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::PAGE));
-            break;
-            case ScEditFieldObj::Pages:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::PAGES));
-            break;
-            case ScEditFieldObj::Sheet:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::TABLE));
-            break;
-            case ScEditFieldObj::Time:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::TIME));
-            break;
-            case ScEditFieldObj::ExtTime:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::EXTENDED_TIME));
-            break;
-            case ScEditFieldObj::Title:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::FILE));
-            break;
-            case ScEditFieldObj::URL:
-                xContent2.set(new SvxUnoTextField(text::textfield::Type::URL));
-            break;
-            default:
-                ;
-        }
-    }
+        xContent2.set(new SvxUnoTextField(pField->GetFieldType()));
 
     GetUnoText().insertTextContent(xRange, xContent2, bAbsorb);
 }

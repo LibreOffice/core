@@ -33,6 +33,7 @@
 #include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 
 #include "servuno.hxx"
 #include "unonames.hxx"
@@ -423,33 +424,33 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
 
 namespace {
 
-ScEditFieldObj::FieldType getFieldType(sal_uInt16 nOldType)
+sal_Int32 getFieldType(sal_uInt16 nOldType)
 {
     switch (nOldType)
     {
         case SC_SERVICE_URLFIELD:
-            return ScEditFieldObj::URL;
+            return text::textfield::Type::URL;
         case SC_SERVICE_PAGEFIELD:
-            return ScEditFieldObj::Page;
+            return text::textfield::Type::PAGE;
         case SC_SERVICE_PAGESFIELD:
-            return ScEditFieldObj::Pages;
+            return text::textfield::Type::PAGES;
         case SC_SERVICE_DATEFIELD:
-            return ScEditFieldObj::Date;
+            return text::textfield::Type::DATE;
         case SC_SERVICE_TIMEFIELD:
-            return ScEditFieldObj::Time;
+            return text::textfield::Type::TIME;
         case SC_SERVICE_EXT_TIMEFIELD:
-            return ScEditFieldObj::ExtTime;
+            return text::textfield::Type::EXTENDED_TIME;
         case SC_SERVICE_TITLEFIELD:
-            return ScEditFieldObj::Title;
+            return text::textfield::Type::FILE;
         case SC_SERVICE_FILEFIELD:
-            return ScEditFieldObj::File;
+            return text::textfield::Type::EXTENDED_FILE;
         case SC_SERVICE_SHEETFIELD:
-            return ScEditFieldObj::Sheet;
+            return text::textfield::Type::TABLE;
         default:
             ;
     }
 
-    return ScEditFieldObj::URL; // default to URL for no reason whatsoever.
+    return text::textfield::Type::URL; // default to URL for no reason whatsoever.
 }
 
 }

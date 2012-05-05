@@ -213,15 +213,11 @@ class ScEditFieldObj : public cppu::WeakImplHelper4<
                         public ::cppu::OComponentHelper,
                         private boost::noncopyable
 {
-public:
-    enum FieldType { URL = 0, Page, Pages, Date, Time, ExtTime, Title, File, Sheet };
-
-private:
     const SfxItemPropertySet* pPropSet;
     ScEditSource* mpEditSource;
     ESelection aSelection;
 
-    FieldType meType;
+    sal_Int32 meType;
     boost::scoped_ptr<SvxFieldData> mpData;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
@@ -247,10 +243,10 @@ public:
 
     ScEditFieldObj(
         const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rContent,
-        ScEditSource* pEditSrc, FieldType eType, const ESelection& rSel);
+        ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel);
     virtual ~ScEditFieldObj();
 
-    FieldType GetFieldType() const;
+    sal_Int32 GetFieldType() const;
     void DeleteField();
     bool IsInserted() const;
     SvxFieldItem CreateFieldItem();
