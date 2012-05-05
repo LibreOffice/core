@@ -64,63 +64,12 @@ using namespace ::com::sun::star::beans ;
 #define FIXPROPERTYNAME_SENDCRASHMAIL       OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
 #define FIXPROPERTYNAME_USEMAILUI           OUString(RTL_CONSTASCII_USTRINGPARAM("UseMailUI"                ))
 #define FIXPROPERTYNAME_CURRENTTEMPURL      OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentTempURL"           ))
-//#define FIXPROPERTYNAME_REMOVEMENUENTRYCLOSE           OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryClose"))
-//#define FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP    OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryBackToWebtop"))
-//#define FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP       OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryNewWebtop"))
-//#define FIXPROPERTYNAME_REMOVEMENUENTRYLOGOUT          OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryLogout"))
 
 #define FIXPROPERTYHANDLE_SLOTCFG           0
 #define FIXPROPERTYHANDLE_SENDCRASHMAIL     1
 #define FIXPROPERTYHANDLE_USEMAILUI         2
 #define FIXPROPERTYHANDLE_CURRENTTEMPURL    3
-//#define FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE   3
-//#define FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP         4
-//#define FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP         5
-//#define FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT         6
 
-#define FIXPROPERTYCOUNT                    4
-/*
-#define PROPERTYNAME_RECOVERYLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"             ))
-#define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("OrgURL"                   ))
-#define PROPERTYNAME_FILTER                 OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"               ))
-#define PROPERTYNAME_TEMPNAME               OUString(RTL_CONSTASCII_USTRINGPARAM("TempURL"                  ))
-
-#define OFFSET_URL                          0
-#define OFFSET_FILTER                       1
-#define OFFSET_TEMPNAME                     2
-*/
-#define PATHDELIMITER                       OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
-#define FIXR                                OUString(RTL_CONSTASCII_USTRINGPARAM("r"                        ))
-
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
-/*
-struct tIMPL_RecoveryEntry
-{
-    OUString    sURL        ;
-    OUString    sFilter     ;
-    OUString    sTempName   ;
-
-    tIMPL_RecoveryEntry()
-    {
-        sURL        =   OUString();
-        sFilter     =   OUString();
-        sTempName   =   OUString();
-    }
-
-    tIMPL_RecoveryEntry(    const   OUString&   sNewURL         ,
-                            const   OUString&   sNewFilter      ,
-                            const   OUString&   sNewTempName    )
-    {
-        sURL        =   sNewURL         ;
-        sFilter     =   sNewFilter      ;
-        sTempName   =   sNewTempName    ;
-    }
-};
-
-typedef deque< tIMPL_RecoveryEntry > tIMPL_RecoveryStack;
-*/
 class SvtInternalOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -137,7 +86,6 @@ class SvtInternalOptions_Impl : public ConfigItem
         sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
         sal_Bool                m_bUseMailUI;
         OUString                m_aCurrentTempURL   ;
-    //  tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -216,15 +164,6 @@ class SvtInternalOptions_Impl : public ConfigItem
 
         OUString    GetCurrentTempURL() const { return m_aCurrentTempURL; }
         void        SetCurrentTempURL( const OUString& aNewCurrentTempURL );
-/*
-        void        PushRecoveryItem    (   const   OUString&   sURL        ,
-                                            const   OUString&   sFilter     ,
-                                             const  OUString&   sTempName   );
-        void        PopRecoveryItem     (           OUString&   sURL        ,
-                                                    OUString&   sFilter     ,
-                                                    OUString&   sTempName   );
-        sal_Bool    IsRecoveryListEmpty (                                   ) const;
-*/
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -322,49 +261,6 @@ void SvtInternalOptions_Impl::Commit()
     pValues[0] <<= m_aCurrentTempURL;
 
     PutProperties( aNames, aValues );
-
-/*
-    // Write set of dynamic properties then.
-    ClearNodeSet( PROPERTYNAME_RECOVERYLIST );
-
-    tIMPL_RecoveryEntry         aItem                   ;
-    OUString                    sNode                   ;
-    Sequence< PropertyValue >   seqPropertyValues( 3 )  ;   // Every node in set has 3 sub-nodes!( url, filter, tempname )
-
-    // Copy list entries to save-list and write it to configuration.
-
-    sal_uInt32 nCount = m_aRecoveryList.size();
-    for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-    {
-        aItem = m_aRecoveryList.top();
-        m_aRecoveryList.pop();
-        sNode = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + FIXR + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
-        seqPropertyValues[OFFSET_URL        ].Name  =   sNode + PROPERTYNAME_URL        ;
-        seqPropertyValues[OFFSET_FILTER     ].Name  =   sNode + PROPERTYNAME_FILTER     ;
-        seqPropertyValues[OFFSET_TEMPNAME   ].Name  =   sNode + PROPERTYNAME_TEMPNAME   ;
-        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                      ;
-        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                   ;
-        seqPropertyValues[OFFSET_TEMPNAME   ].Value <<= aItem.sTempName                 ;
-
-        SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
-    }
-
-    tIMPL_RecoveryStack::iterator iRecovery = m_aRecoveryList.begin();
-    for ( sal_uInt32 nItem=0; iRecovery != m_aRecoveryList.end(); ++nItem, ++iRecovery)
-    {
-        aItem = *iRecovery;
-        sNode = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + FIXR +
-            OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
-        seqPropertyValues[OFFSET_URL        ].Name  =   sNode + PROPERTYNAME_URL        ;
-        seqPropertyValues[OFFSET_FILTER     ].Name  =   sNode + PROPERTYNAME_FILTER     ;
-        seqPropertyValues[OFFSET_TEMPNAME   ].Name  =   sNode + PROPERTYNAME_TEMPNAME   ;
-        seqPropertyValues[OFFSET_URL        ].Value <<= iRecovery->sURL                 ;
-        seqPropertyValues[OFFSET_FILTER     ].Value <<= iRecovery->sFilter              ;
-        seqPropertyValues[OFFSET_TEMPNAME   ].Value <<= iRecovery->sTempName            ;
-        SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
-    }
-
-    */
 }
 
 //*****************************************************************************************************************
@@ -382,14 +278,6 @@ void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTemp
 //*****************************************************************************************************************
 Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
 {
-    /*
-    // First get ALL names of current existing list items in configuration!
-    Sequence< OUString > seqRecoveryItems = GetNodeNames( PROPERTYNAME_RECOVERYLIST );
-    // Get information about list counts ...
-    sal_Int32 nRecoveryCount = seqRecoveryItems.getLength();
-    // ... and create a property list with right size! (+2...for fix properties!) (*3 ... = sub nodes for every set node!)
-    Sequence< OUString > seqProperties( FIXPROPERTYCOUNT + (nRecoveryCount*3) );
-    */
     Sequence< OUString > seqProperties(4);
 
     // Add names of fix properties to list.
@@ -397,25 +285,6 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
     seqProperties[FIXPROPERTYHANDLE_SENDCRASHMAIL   ]   =   FIXPROPERTYNAME_SENDCRASHMAIL   ;
     seqProperties[FIXPROPERTYHANDLE_USEMAILUI       ]   =   FIXPROPERTYNAME_USEMAILUI       ;
     seqProperties[FIXPROPERTYHANDLE_CURRENTTEMPURL  ]   =   FIXPROPERTYNAME_CURRENTTEMPURL  ;
-//    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE        ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYCLOSE;
-//    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP;
-//    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP    ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP;
-//    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT       ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYLOGOUT;
-/*
-    sal_uInt32 nPosition = FIXPROPERTYCOUNT;
-    // Add names for recovery list to list.
-    // 3 subkeys for every item!
-    // nPosition is the start point of an list item, nItem an index into right list of node names!
-    for( sal_Int32 nItem=0; nItem<nRecoveryCount; ++nItem )
-    {
-        seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_URL       ;
-        ++nPosition;
-        seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_FILTER    ;
-        ++nPosition;
-        seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_TEMPNAME  ;
-        ++nPosition;
-    }
-*/
     // Return result.
     return seqProperties;
 }
