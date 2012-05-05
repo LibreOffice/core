@@ -50,6 +50,8 @@
 #include <svl/inethist.hxx>
 #include <unotools/syslocale.hxx>
 
+#include <com/sun/star/text/textfield/Type.hpp>
+
 #include "editutil.hxx"
 #include "global.hxx"
 #include "attrib.hxx"
@@ -59,6 +61,8 @@
 #include "scmod.hxx"
 #include "inputopt.hxx"
 #include "compiler.hxx"
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -722,7 +726,7 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     sal_uInt16 nClsId = pFieldData->GetClassId();
     switch (nClsId)
     {
-        case SVX_URLFIELD:
+        case text::textfield::Type::URL:
         {
             const SvxURLField* pField = static_cast<const SvxURLField*>(pFieldData);
             rtl::OUString aURL = pField->GetURL();
@@ -745,20 +749,20 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             rTxtColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
         }
         break;
-        case SVX_EXT_TIMEFIELD:
+        case text::textfield::Type::EXTENDED_TIME:
         {
             const SvxExtTimeField* pField = static_cast<const SvxExtTimeField*>(pFieldData);
             if (mpDoc)
                 aRet = pField->GetFormatted(*mpDoc->GetFormatTable(), ScGlobal::eLnge);
         }
         break;
-        case SVX_DATEFIELD:
+        case text::textfield::Type::DATE:
         {
             Date aDate(Date::SYSTEM);
             aRet = ScGlobal::pLocaleData->getDate(aDate);
         }
         break;
-        case SVX_TABLEFIELD:
+        case text::textfield::Type::TABLE:
         {
             const SvxTableField* pField = static_cast<const SvxTableField*>(pFieldData);
             SCTAB nTab = pField->GetTab();

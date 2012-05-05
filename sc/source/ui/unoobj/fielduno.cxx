@@ -141,39 +141,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
     }
 }
 
-sal_Int32 getFieldType(sal_uInt16 nSvxType)
-{
-    switch (nSvxType)
-    {
-        case SVX_DATEFIELD:
-            return text::textfield::Type::DATE;
-        case SVX_URLFIELD:
-            return text::textfield::Type::URL;
-        case SVX_PAGEFIELD:
-            return text::textfield::Type::PAGE;
-        case SVX_PAGESFIELD:
-            return text::textfield::Type::PAGES;
-        case SVX_TIMEFIELD:
-            return text::textfield::Type::TIME;
-        case SVX_EXT_TIMEFIELD:
-            return text::textfield::Type::EXTENDED_TIME;
-        case SVX_FILEFIELD:
-            return text::textfield::Type::FILE;
-        case SVX_TABLEFIELD:
-            return text::textfield::Type::TABLE;
-        case SVX_EXT_FILEFIELD:
-            return text::textfield::Type::EXTENDED_FILE;
-        case SVX_AUTHORFIELD:
-        case SVX_HEADERFIELD:
-        case SVX_FOOTERFIELD:
-        case SVX_DATEFIMEFIELD:
-            // These are not supported yet.
-        default:
-            ;
-    }
-    return text::textfield::Type::URL; // Default to URL for no good reason.
-}
-
 }
 
 #define SCTEXTFIELD_SERVICE         "com.sun.star.text.TextField"
@@ -376,7 +343,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     xub_StrLen nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
 
-    sal_Int32 eType = getFieldType(pData->GetClassId());
+    sal_Int32 eType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
         new ScEditFieldObj(mxContent, new ScCellEditSource(pDocShell, aCellPos), eType, aSelection));
     return xRet;
@@ -557,7 +524,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     xub_StrLen nPos = aTempEngine.GetFieldPos();
     ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
 
-    sal_Int32 eRealType = getFieldType(pData->GetClassId());
+    sal_Int32 eRealType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
         new ScEditFieldObj(xTextRange, new ScHeaderFooterEditSource(mrData), eRealType, aSelection));
     return xRet;
@@ -742,7 +709,7 @@ void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::
         if (!pField)
             return;
 
-        if (pField->GetClassId() != SVX_URLFIELD)
+        if (pField->GetClassId() != text::textfield::Type::URL)
             // Make sure this is indeed a URL field.
             return;
 
@@ -814,7 +781,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
         if (!pField)
             throw uno::RuntimeException();
 
-        if (pField->GetClassId() != SVX_URLFIELD)
+        if (pField->GetClassId() != text::textfield::Type::URL)
             throw uno::RuntimeException();
 
         const SvxURLField* pURL = static_cast<const SvxURLField*>(pField);
@@ -936,7 +903,7 @@ void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno
         if (!pField)
             return;
 
-        if (pField->GetClassId() != SVX_TABLEFIELD)
+        if (pField->GetClassId() != text::textfield::Type::TABLE)
             // Make sure this is indeed a URL field.
             return;
 
@@ -1070,7 +1037,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     {
         case text::textfield::Type::URL:
         {
-            if (pField->GetClassId() != SVX_URLFIELD)
+            if (pField->GetClassId() != text::textfield::Type::URL)
                 // Not an URL field, but URL is expected.
                 throw uno::RuntimeException();
 

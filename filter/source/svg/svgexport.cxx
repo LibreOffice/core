@@ -34,6 +34,7 @@
 #include "impsvgdialog.hxx"
 
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
@@ -1772,15 +1773,15 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
             }
             const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( bHasCharSetMap && ( pField->GetClassId() == SVX_HEADERFIELD ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
+            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
             {
                 pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
             }
-            else if( bHasCharSetMap && ( pField->GetClassId() == SVX_FOOTERFIELD ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
             {
                 pCharSet = &( (*pCharSetMap)[ aFooterId ] );
             }
-            else if( pField->GetClassId() == SVX_DATEFIMEFIELD )
+            else if( pField->GetClassId() == text::textfield::Type::DATE_TIME )
             {
                 if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
                 {
@@ -1872,7 +1873,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     }
                 }
             }
-            else if( pField->GetClassId() == SVX_PAGEFIELD )
+            else if( pField->GetClassId() == text::textfield::Type::PAGE )
             {
                 switch( mVisiblePagePropSet.nPageNumberingType )
                 {
@@ -1912,20 +1913,20 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             if( mVisiblePagePropSet.bAreBackgroundObjectsVisible )
             {
                 const SvxFieldData* pField = pInfo->GetField().GetField();
-                if( ( pField->GetClassId() == SVX_HEADERFIELD ) && mVisiblePagePropSet.bIsHeaderFieldVisible )
+                if( ( pField->GetClassId() == text::textfield::Type::HEADER ) && mVisiblePagePropSet.bIsHeaderFieldVisible )
                 {
                     aRepresentation += mVisiblePagePropSet.sHeaderText;
                 }
-                else if( ( pField->GetClassId() == SVX_FOOTERFIELD ) && mVisiblePagePropSet.bIsFooterFieldVisible )
+                else if( ( pField->GetClassId() == text::textfield::Type::FOOTER ) && mVisiblePagePropSet.bIsFooterFieldVisible )
                 {
                     aRepresentation += mVisiblePagePropSet.sFooterText;
                 }
-                else if( ( pField->GetClassId() == SVX_DATEFIMEFIELD ) && mVisiblePagePropSet.bIsDateTimeFieldVisible )
+                else if( ( pField->GetClassId() == text::textfield::Type::DATE_TIME ) && mVisiblePagePropSet.bIsDateTimeFieldVisible )
                 {
                     // TODO: implement the variable case
                     aRepresentation += mVisiblePagePropSet.sDateTimeText;
                 }
-                else if( ( pField->GetClassId() == SVX_PAGEFIELD ) && mVisiblePagePropSet.bIsPageNumberFieldVisible )
+                else if( ( pField->GetClassId() == text::textfield::Type::PAGE ) && mVisiblePagePropSet.bIsPageNumberFieldVisible )
                 {
                     sal_Int16 nPageNumber = mVisiblePagePropSet.nPageNumber;
                     switch( mVisiblePagePropSet.nPageNumberingType )

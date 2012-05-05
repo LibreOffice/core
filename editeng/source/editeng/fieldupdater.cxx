@@ -30,6 +30,10 @@
 #include "editeng/flditem.hxx"
 #include "editobj2.hxx"
 
+#include <com/sun/star/text/textfield/Type.hpp>
+
+using namespace com::sun::star;
+
 namespace editeng {
 
 class FieldUpdaterImpl
@@ -57,7 +61,7 @@ public:
 
                 const SvxFieldItem* pFI = static_cast<const SvxFieldItem*>(pItem);
                 const SvxFieldData* pData = pFI->GetField();
-                if (pData->GetClassId() != SVX_TABLEFIELD)
+                if (pData->GetClassId() != text::textfield::Type::TABLE)
                     // This is not a table field.
                     continue;
 

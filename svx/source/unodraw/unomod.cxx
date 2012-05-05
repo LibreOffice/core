@@ -61,6 +61,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoshape.hxx>
 
+#include <com/sun/star/text/textfield/Type.hpp>
+
 //-////////////////////////////////////////////////////////////////////
 
 using namespace ::rtl;
@@ -411,7 +413,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
+        return (::cppu::OWeakObject * )new SvxUnoTextField(text::textfield::Type::EXTENDED_DATE);
     }
 
     uno::Reference< uno::XInterface > xRet;

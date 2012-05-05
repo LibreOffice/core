@@ -40,7 +40,7 @@
 #endif
 #include "editeng/editengdllapi.h"
 
-#define SDR_MEASUREFIELD 50
+#include <com/sun/star/text/textfield/Type.hpp>
 
 class SdrMeasureObj;
 
@@ -49,7 +49,7 @@ enum SdrMeasureFieldKind {SDRMEASUREFIELD_VALUE,SDRMEASUREFIELD_UNIT,SDRMEASUREF
 class EDITENG_DLLPUBLIC SdrMeasureField: public SvxFieldData {
     SdrMeasureFieldKind eMeasureFieldKind;
 public:
-    SV_DECL_PERSIST1(SdrMeasureField,SvxFieldData,SDR_MEASUREFIELD)
+    SV_DECL_PERSIST1(SdrMeasureField,SvxFieldData,com::sun::star::text::textfield::Type::MEASURE)
     SdrMeasureField(): eMeasureFieldKind(SDRMEASUREFIELD_VALUE) {}
     SdrMeasureField(SdrMeasureFieldKind eNewKind): eMeasureFieldKind(eNewKind) {}
     virtual ~SdrMeasureField();

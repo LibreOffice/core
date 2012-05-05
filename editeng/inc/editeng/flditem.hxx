@@ -35,6 +35,8 @@
 #include <tools/pstm.hxx>
 #include "editeng/editengdllapi.h"
 
+#include <com/sun/star/text/textfield/Type.hpp>
+
 class SvNumberFormatter;
 class MetaAction;
 
@@ -45,7 +47,7 @@ class MetaAction;
 class EDITENG_DLLPUBLIC SvxFieldData : public SvPersistBase
 {
 public:
-                            SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, 1 )
+    SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, -1 )
 
                             SvxFieldData();
     virtual                 ~SvxFieldData();
@@ -89,21 +91,6 @@ public:
 // The following are the derivatives of SvxFieldData ...
 // =================================================================
 
-#define SVX_DATEFIELD       2
-#define SVX_URLFIELD        3
-
-#define SVX_PAGEFIELD       100     // Ex-Calc Fields
-#define SVX_PAGESFIELD      101
-#define SVX_TIMEFIELD       102
-#define SVX_FILEFIELD       103
-#define SVX_TABLEFIELD      104
-#define SVX_EXT_TIMEFIELD   105
-#define SVX_EXT_FILEFIELD   106
-#define SVX_AUTHORFIELD     107
-#define SVX_HEADERFIELD     108
-#define SVX_FOOTERFIELD     109
-#define SVX_DATEFIMEFIELD   110
-
 enum SvxDateType { SVXDATETYPE_FIX, SVXDATETYPE_VAR };
 enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT,   // Set as in App
                         SVXDATEFORMAT_SYSTEM,       // Set as in System
@@ -124,7 +111,7 @@ class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
     SvxDateFormat           eFormat;
 
 public:
-                            SV_DECL_PERSIST1( SvxDateField, SvxFieldData, SVX_DATEFIELD )
+    SV_DECL_PERSIST1( SvxDateField, SvxFieldData, com::sun::star::text::textfield::Type::DATE )
 
                             SvxDateField();
                             SvxDateField( const Date& rDate,
@@ -166,7 +153,7 @@ private:
     rtl::OUString           aTargetFrame;       // In what Frame
 
 public:
-                            SV_DECL_PERSIST1( SvxURLField, SvxFieldData, SVX_URLFIELD )
+    SV_DECL_PERSIST1( SvxURLField, SvxFieldData, com::sun::star::text::textfield::Type::URL )
 
                             SvxURLField();
                             SvxURLField( const rtl::OUString& rURL, const rtl::OUString& rRepres, SvxURLFormat eFmt = SVXURLFORMAT_URL );
@@ -192,7 +179,7 @@ public:
 class EDITENG_DLLPUBLIC SvxPageField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxPageField, SvxFieldData, SVX_PAGEFIELD )
+    SV_DECL_PERSIST1( SvxPageField, SvxFieldData, com::sun::star::text::textfield::Type::PAGE )
     SvxPageField();
 
     virtual SvxFieldData*   Clone() const;
@@ -204,7 +191,7 @@ public:
 class EDITENG_DLLPUBLIC SvxPagesField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, SVX_PAGESFIELD )
+    SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, com::sun::star::text::textfield::Type::PAGES )
     SvxPagesField();
 
     virtual SvxFieldData*   Clone() const;
@@ -214,7 +201,7 @@ public:
 class EDITENG_DLLPUBLIC SvxTimeField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, SVX_TIMEFIELD )
+    SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, com::sun::star::text::textfield::Type::TIME )
     SvxTimeField();
 
     virtual SvxFieldData*   Clone() const;
@@ -226,7 +213,7 @@ public:
 class EDITENG_DLLPUBLIC SvxFileField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxFileField, SvxFieldData, SVX_FILEFIELD )
+    SV_DECL_PERSIST1( SvxFileField, SvxFieldData, com::sun::star::text::textfield::Type::FILE )
     SvxFileField();
 
     virtual SvxFieldData*   Clone() const;
@@ -237,7 +224,7 @@ class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
 {
     int mnTab;
 public:
-    SV_DECL_PERSIST1( SvxTableField, SvxFieldData, SVX_TABLEFIELD )
+    SV_DECL_PERSIST1( SvxTableField, SvxFieldData, com::sun::star::text::textfield::Type::TABLE )
     SvxTableField();
     SvxTableField(int nTab);
 
@@ -272,7 +259,7 @@ private:
     SvxTimeFormat           eFormat;
 
 public:
-                            SV_DECL_PERSIST1( SvxExtTimeField, SvxFieldData, SVX_EXT_TIMEFIELD )
+    SV_DECL_PERSIST1( SvxExtTimeField, SvxFieldData, com::sun::star::text::textfield::Type::EXTENDED_TIME )
                             SvxExtTimeField();
                             SvxExtTimeField( const Time& rTime,
                                 SvxTimeType eType = SVXTIMETYPE_VAR,
@@ -316,7 +303,7 @@ private:
     SvxFileFormat           eFormat;
 
 public:
-                            SV_DECL_PERSIST1( SvxExtFileField, SvxFieldData, SVX_EXT_FILEFIELD )
+    SV_DECL_PERSIST1( SvxExtFileField, SvxFieldData, com::sun::star::text::textfield::Type::EXTENDED_FILE )
                             SvxExtFileField();
                             SvxExtFileField( const rtl::OUString& rString,
                                 SvxFileType eType = SVXFILETYPE_VAR,
@@ -355,7 +342,7 @@ private:
     SvxAuthorFormat eFormat;
 
 public:
-                            SV_DECL_PERSIST1( SvxAuthorField, SvxFieldData, SVX_AUTHORFIELD )
+    SV_DECL_PERSIST1( SvxAuthorField, SvxFieldData, com::sun::star::text::textfield::Type::AUTHOR )
                             SvxAuthorField();
                             SvxAuthorField(
                                 const rtl::OUString& rFirstName,
@@ -390,7 +377,7 @@ public:
 class EDITENG_DLLPUBLIC SvxHeaderField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, SVX_HEADERFIELD )
+    SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, com::sun::star::text::textfield::Type::HEADER )
     SvxHeaderField();
 
     virtual SvxFieldData*   Clone() const;
@@ -402,7 +389,7 @@ public:
 class EDITENG_DLLPUBLIC SvxFooterField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, SVX_FOOTERFIELD )
+    SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, com::sun::star::text::textfield::Type::FOOTER )
     SvxFooterField();
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
@@ -413,7 +400,7 @@ public:
 class EDITENG_DLLPUBLIC SvxDateTimeField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, SVX_DATEFIMEFIELD )
+    SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, com::sun::star::text::textfield::Type::DATE_TIME )
     SvxDateTimeField();
 
     static rtl::OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
