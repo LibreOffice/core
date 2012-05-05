@@ -72,6 +72,7 @@ oslModule SAL_CALL osl_loadAsciiModuleRelative(
     rtl_uString_newFromAscii( &pUniName, pRelativePathName );
     oslModule aModule = osl_loadModuleRelative( baseModule, pUniName, nRtldMode );
     rtl_uString_release( pUniName );
+    return aModule;
 }
 
 }
