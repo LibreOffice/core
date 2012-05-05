@@ -6858,28 +6858,6 @@ AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)
 AC_SUBST(POSTGRESQL_LIB)
 
-dnl ===================================================================
-dnl Check for system beanshell
-dnl ===================================================================
-if test "$with_java" != "no"; then
-AC_MSG_CHECKING([which beanshell to use])
-if test "$with_system_beanshell" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_BSH=YES
-    if test -z $BSH_JAR; then
-        BSH_JAR=/usr/share/java/bsh.jar
-    fi
-    AC_CHECK_FILE($BSH_JAR, [],
-               [AC_MSG_ERROR(bsh.jar not found.)], [])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_BSH=NO
-    BUILD_TYPE="$BUILD_TYPE BSH"
-fi
-fi
-AC_SUBST(SYSTEM_BSH)
-AC_SUBST(BSH_JAR)
-
 
 dnl ===================================================================
 dnl Check for system saxon
@@ -9185,18 +9163,39 @@ AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell]
 if test "x$enable_ext_scripting_beanshell" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_BEANSHELL=YES
+
+   dnl ===================================================================
+   dnl Check for system beanshell
+   dnl ===================================================================
+   AC_MSG_CHECKING([which beanshell to use])
+   if test "$with_system_beanshell" = "yes"; then
+       AC_MSG_RESULT([external])
+       SYSTEM_BSH=YES
+       if test -z $BSH_JAR; then
+           BSH_JAR=/usr/share/java/bsh.jar
+       fi
+       AC_CHECK_FILE($BSH_JAR, [],
+                  [AC_MSG_ERROR(bsh.jar not found.)], [])
+   else
+       AC_MSG_RESULT([internal])
+       SYSTEM_BSH=NO
+       BUILD_TYPE="$BUILD_TYPE BSH"
+   fi
 else
    AC_MSG_RESULT([no])
    ENABLE_SCRIPTING_BEANSHELL=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_BEANSHELL"
 fi
 AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
+AC_SUBST(SYSTEM_BSH)
+AC_SUBST(BSH_JAR)
 
 # scripting provider for JavaScript extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
 if test "x$enable_ext_scripting_javascript" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_JAVASCRIPT=YES
+   BUILD_TYPE="$BUILD_TYPE RHINO"
 else
    AC_MSG_RESULT([no])
    ENABLE_SCRIPTING_JAVASCRIPT=NO

@@ -707,25 +707,29 @@ File gid_File_Share_Registry_Ctlseqcheck_Xcd
     Name (th) = "ctlseqcheck.xcd";
 End
 
-File gid_File_Scripts_Beanshell
-    Dir = gid_Dir_Share_Scripts;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "ScriptsBeanShell.zip";
-End
-
 #ifdef SOLAR_JAVA
 File gid_File_Scripts_Java
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
     Name = "ScriptsJava.zip";
 End
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+File gid_File_Scripts_Beanshell
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsBeanShell.zip";
+End
 #endif
 
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
 File gid_File_Scripts_Javascript
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
     Name = "ScriptsJavaScript.zip";
 End
+#endif
+#endif
 
 // new user interface configuration files
 File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
