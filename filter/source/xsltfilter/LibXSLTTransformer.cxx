@@ -44,6 +44,7 @@
 #include <libxslt/xsltutils.h>
 #include <libxslt/variables.h>
 #include <libxslt/extensions.h>
+#include <libexslt/exslt.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -323,7 +324,12 @@ namespace XSLT
                 (const xmlChar *) m_transformer->getStyleSheetURL().getStr());
         xmlDocPtr result = NULL;
         xsltTransformContextPtr tcontext = NULL;
+        exsltRegisterAll();
         registerExtensionModule();
+#if OSL_DEBUG_LEVEL > 1
+        xsltSetGenericDebugFunc(stderr, NULL);
+        xsltDebugDumpExtensions(NULL);
+#endif
         OleHandler* oh = new OleHandler(m_transformer->getServiceFactory());
         if (styleSheet)
             {
