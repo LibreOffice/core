@@ -210,12 +210,12 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
                         SwTableBox* pBox,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt )
 {
-    OSL_ENSURE( pBox->GetSttNd(), "Box ohne Start-Node" );
+    OSL_ENSURE( pBox->GetSttNd(), "Box with no start node" );
     SwNodeIndex aIdx( *pBox->GetSttNd(), +1 );
     SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = pDoc->GetNodes().GoNext( &aIdx );
-    OSL_ENSURE( pCNd, "Box ohne ContentNode" );
+    OSL_ENSURE( pCNd, "Box with no content node" );
 
     if( pCNd->IsTxtNode() )
     {
