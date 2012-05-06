@@ -106,6 +106,7 @@ sax\
 sc\
 scaddins\
 sccomp\
+scp2\
 scripting\
 sd\
 sdext\
@@ -228,7 +229,6 @@ redland\
 remotebridges\
 rhino\
 saxon\
-scp2\
 setup_native\
 shell\
 soltools\

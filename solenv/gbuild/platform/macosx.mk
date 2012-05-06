@@ -416,7 +416,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 )
 
 $(call gb_InstallModuleTarget_set_include,$(1),\
-	-I$(SRCDIR)/scp2/inc \
 	$(SOLARINC) \
 	$(SCP_INCLUDE) \
 )
