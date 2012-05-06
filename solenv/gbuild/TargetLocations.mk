@@ -38,11 +38,13 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/idl \
 	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
+	$(OUTDIR)/par \
 	$(OUTDIR)/pck \
 	$(OUTDIR)/rdb \
 	$(OUTDIR)/unittest \
 	$(OUTDIR)/xml \
 
+gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 gb_InternalUnoApi_get_target = $(OUTDIR)/rdb/$(1).rdb
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
@@ -92,6 +94,11 @@ gb_Extension_get_workdir = $(WORKDIR)/Extension/$(1)
 gb_ExternalLib_get_workdir = $(WORKDIR)/ExternalLib/$(1)
 gb_ExternalLib_get_builddir = $(WORKDIR)/ExternalLib/$(1)/build
 gb_ExternalLib_get_target = $(WORKDIR)/ExternalLib/$(1).done
+gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
+gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
+gb_InstallModuleTarget_get_target = $(WORKDIR)/InstallModuleTarget/$(1).done
+gb_InstallModuleTarget_get_workdir = $(WORKDIR)/InstallModuleTarget/$(1)
+gb_InstallScriptTarget_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
 gb_Jar_get_target = $(WORKDIR)/Jar/$(1).jar
 gb_Jar_get_classsetname = Jar/$(1)
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
@@ -119,6 +126,13 @@ gb_PyunoFile_get_target = $(WORKDIR)/Pyuno/$(1)/contents/$(2)
 gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
+gb_ScpConvertTarget_get_target = $(WORKDIR)/ScpConvertTarget/$(1).ulf
+gb_ScpMergeTarget_get_target = $(WORKDIR)/ScpMergeTarget/$(1).ulf
+gb_ScpPreprocessTarget_get_target = $(WORKDIR)/ScpPreprocessTarget/$(1).pre
+gb_ScpTarget_get_external_target = $(WORKDIR)/ScpTarget/$(1).external
+gb_ScpTarget_get_target = $(WORKDIR)/ScpTarget/$(1).par
+gb_ScpTemplateTarget_get_dir = $(abspath $(WORKDIR)/ScpTemplateTarget/$(dir $(1)))
+gb_ScpTemplateTarget_get_target = $(abspath $(WORKDIR)/ScpTemplateTarget/$(dir $(1))$(subst pack,modules,$(subst module_,all,$(notdir $(1)))).inc)
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
@@ -177,6 +191,9 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ComponentTarget \
 	ComponentsTarget \
 	Extension \
+	InstallModule \
+	InstallModuleTarget \
+	InstallScriptTarget \
 	JavaClassSet \
 	Jar \
 	JunitTest \
@@ -188,6 +205,11 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Pyuno \
 	Rdb \
 	ResTarget \
+	ScpConvertTarget \
+	ScpMergeTarget \
+	ScpPreprocessTarget \
+	ScpTarget \
+	ScpTemplateTarget \
 	SdiTarget \
 	SrsTarget \
 	SrsTemplateTarget \
@@ -211,6 +233,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Executable \
+	InstallScript \
 	InternalUnoApi \
 	Library \
 	StaticLibrary \
@@ -227,6 +250,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	GenCObject \
 	GenCxxObject \
 	LinkTarget \
+	ScpTarget \
 	SdiTarget \
 	SrsPartTarget \
 	SrsTarget \

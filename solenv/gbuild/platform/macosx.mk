@@ -403,6 +403,34 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
+# InstallModuleTarget class
+
+define gb_InstallModuleTarget_InstallModuleTarget_platform
+$(call gb_InstallModuleTarget_add_defs,$(1),\
+	$(gb_CPUDEFS) \
+	$(gb_OSDEFS) \
+	-DCOMID=gcc3 \
+	-DCOMNAME=gcc3 \
+	-D_gcc3 \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
+)
+
+$(call gb_InstallModuleTarget_set_include,$(1),\
+	-I$(SRCDIR)/scp2/inc \
+	$(SOLARINC) \
+	$(SCP_INCLUDE) \
+)
+
+endef
+
+# ScpConvertTarget class
+
+gb_ScpConvertTarget_ScpConvertTarget_platform :=
+
+# InstallScript class
+
+gb_InstallScript_EXT := .ins
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 

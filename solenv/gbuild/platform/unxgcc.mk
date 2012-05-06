@@ -397,6 +397,39 @@ $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef
 
+# InstallModuleTarget class
+
+# NOTE: values of SHORTSTDC3 and SHORTSTDCPP3 are hardcoded, because we
+# do not really need all the variability of definition that was
+# originally in solenv/inc/tg_compv.mk . Each of the macros is only used
+# on one place, and only for Linux.
+define gb_InstallModuleTarget_InstallModuleTarget_platform
+$(call gb_InstallModuleTarget_add_defs,$(1),\
+	$(gb_CPUDEFS) \
+	$(gb_OSDEFS) \
+	-DCOMID=gcc3 \
+	-DCOMNAME=gcc3 \
+	-DSHORTSTDC3=1 \
+	-DSHORTSTDCPP3=6 \
+	-D_gcc3 \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
+)
+
+$(call gb_InstallModuleTarget_set_include,$(1),\
+	-I$(SRCDIR)/scp2/inc \
+	$(SOLARINC) \
+	$(SCP_INCLUDE) \
+)
+
+endef
+
+# ScpConvertTarget class
+
+gb_ScpConvertTarget_ScpConvertTarget_platform :=
+
+# InstallScript class
+
+gb_InstallScript_EXT := .ins
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload

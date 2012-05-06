@@ -696,6 +696,37 @@ else
 gb_WinResTarget__command_dep =
 endif
 
+# InstallModuleTarget class
+
+define gb_InstallModuleTarget_InstallModuleTarget_platform
+$(call gb_InstallModuleTarget_add_defs,$(1),\
+	$(gb_CPUDEFS) \
+	$(gb_OSDEFS) \
+	-DCOMID=MSC \
+	-DCOMNAME=$(if $(filter INTEL,$(CPUNAME)),msci,mscx) \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
+)
+
+$(call gb_InstallModuleTarget_set_include,$(1),\
+	-I$(SRCDIR)/scp2/inc \
+	$(SOLARINC) \
+	$(SCP_INCLUDE) \
+)
+
+endef
+
+# ScpConvertTarget class
+
+define gb_ScpConvertTarget_ScpConvertTarget_platform
+$(call gb_ScpConvertTarget_get_target,$(1)) :| $(OUTDIR)/bin/msi-encodinglist.txt
+$(call gb_ScpConvertTarget_get_target,$(1)) : SCP_FLAGS := -t $(OUTDIR)/bin/msi-encodinglist.txt
+
+endef
+
+# InstallScript class
+
+gb_InstallScript_EXT := .inf
+
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"
 

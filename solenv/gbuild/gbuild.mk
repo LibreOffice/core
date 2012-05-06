@@ -321,6 +321,9 @@ include $(foreach class, \
 	Zip \
 	Configuration \
 	Extension \
+	InstallModuleTarget \
+	InstallModule \
+	InstallScript \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential

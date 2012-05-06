@@ -53,9 +53,8 @@ my $parfile = pre2par::work::convert($prefile);
 pre2par::work::formatter($parfile);
 
 my $langfilename = pre2par::work::getlangfilename();
-my $ulffilename = pre2par::work::getulffilename($pre2par::globals::prefilename);
 
-my $dolocalization = pre2par::work::check_existence_of_langfiles($langfilename, $ulffilename);
+my $dolocalization = pre2par::work::check_existence_of_langfiles($langfilename);
 
 if ( $dolocalization )
 {

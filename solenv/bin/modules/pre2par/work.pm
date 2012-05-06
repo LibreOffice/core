@@ -321,18 +321,16 @@ sub fileexists
 }
 
 ############################################
-# Checking the existence of ulf and
-# jlf/mlf files
+# Checking the existence of ulf file
 ############################################
 
 sub check_existence_of_langfiles
 {
-    my ($langfilename, $ulffilename) = @_;
+    my ($langfilename) = @_;
 
     my $do_localize = 0;
 
-    if (( fileexists($ulffilename) ) && ( ! fileexists($langfilename) )) { pre2par::exiter::exit_program("Error: Did not find language file $langfilename", "check_existence_of_langfiles"); }
-    if (( fileexists($ulffilename) ) && ( fileexists($langfilename) )) { $do_localize = 1; }
+    if ( fileexists($langfilename) ) { $do_localize = 1; }
 
     return $do_localize;
 }
