@@ -113,6 +113,7 @@ smoketest\
 sot\
 starmath\
 stoc\
+store\
 svl\
 svtools\
 svx\
@@ -232,7 +233,6 @@ solenv\
 soltools\
 stax\
 stlport\
-store\
 sysui\
 testtools\
 tomcat\

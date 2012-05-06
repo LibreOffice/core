@@ -30,6 +30,7 @@
 #define _STORE_STORE_H_
 
 #include <store/types.h>
+#include <store/storedllapi.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +45,7 @@ typedef void* storeHandle;
     @param  Handle [in] the Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_acquireHandle (
+STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
@@ -54,7 +55,7 @@ storeError SAL_CALL store_acquireHandle (
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
-storeError SAL_CALL store_releaseHandle (
+STORE_DLLPUBLIC storeError SAL_CALL store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
@@ -71,7 +72,7 @@ typedef void* storeFileHandle;
     @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_createMemoryFile (
+STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
@@ -89,7 +90,7 @@ storeError SAL_CALL store_createMemoryFile (
     @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_openFile (
+STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
@@ -102,7 +103,7 @@ storeError SAL_CALL store_openFile (
     @return store_E_None upon     success,
             store_E_InvalidHandle otherwise.
  */
-storeError SAL_CALL store_closeFile (
+STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
@@ -111,7 +112,7 @@ storeError SAL_CALL store_closeFile (
     @param  hFile [in] the File Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_flushFile (
+STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
@@ -121,7 +122,7 @@ storeError SAL_CALL store_flushFile (
     @param  pnRefCount [out] number of open directories and streams.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_getFileRefererCount (
+STORE_DLLPUBLIC storeError SAL_CALL store_getFileRefererCount (
     storeFileHandle  hFile,
     sal_uInt32      *pnRefCount
 ) SAL_THROW_EXTERN_C();
@@ -132,7 +133,7 @@ storeError SAL_CALL store_getFileRefererCount (
     @param  pnSize [out] the file size in bytes.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_getFileSize (
+STORE_DLLPUBLIC storeError SAL_CALL store_getFileSize (
     storeFileHandle  hFile,
     sal_uInt32      *pnSize
 ) SAL_THROW_EXTERN_C();
@@ -145,7 +146,7 @@ storeError SAL_CALL store_getFileSize (
     @param  pDstFilename [in] created with store_AccessCreate.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_rebuildFile (
+STORE_DLLPUBLIC storeError SAL_CALL store_rebuildFile (
     rtl_uString *pSrcFilename,
     rtl_uString *pDstFilename
 ) SAL_THROW_EXTERN_C();
@@ -167,7 +168,7 @@ typedef void* storeDirectoryHandle;
     @param  phDirectory [out] the Directory Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_openDirectory (
+STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
     storeFileHandle       hFile,
     rtl_uString          *pPath,
     rtl_uString          *pName,
@@ -181,7 +182,7 @@ storeError SAL_CALL store_openDirectory (
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
-storeError SAL_CALL store_closeDirectory (
+STORE_DLLPUBLIC storeError SAL_CALL store_closeDirectory (
     storeDirectoryHandle hDirectory
 ) SAL_THROW_EXTERN_C();
 
@@ -192,7 +193,7 @@ storeError SAL_CALL store_closeDirectory (
     @return store_E_None       upon success,
             store_E_NoMoreFile upon end of iteration.
  */
-storeError SAL_CALL store_findFirst (
+STORE_DLLPUBLIC storeError SAL_CALL store_findFirst (
     storeDirectoryHandle  hDirectory,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
@@ -204,7 +205,7 @@ storeError SAL_CALL store_findFirst (
     @return store_E_None       upon success,
             store_E_NoMoreFile upon end of iteration.
  */
-storeError SAL_CALL store_findNext (
+STORE_DLLPUBLIC storeError SAL_CALL store_findNext (
     storeDirectoryHandle  hDirectory,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
@@ -226,7 +227,7 @@ typedef void* storeStreamHandle;
     @param  phStrm [out] the Stream Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_openStream (
+STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
     storeFileHandle    hFile,
     rtl_uString       *pPath,
     rtl_uString       *pName,
@@ -240,7 +241,7 @@ storeError SAL_CALL store_openStream (
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
-storeError SAL_CALL store_closeStream (
+STORE_DLLPUBLIC storeError SAL_CALL store_closeStream (
     storeStreamHandle hStrm
 ) SAL_THROW_EXTERN_C();
 
@@ -253,7 +254,7 @@ storeError SAL_CALL store_closeStream (
     @param  pnDone [out] the number of bytes actually read.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_readStream (
+STORE_DLLPUBLIC storeError SAL_CALL store_readStream (
     storeStreamHandle  hStrm,
     sal_uInt32         nOffset,
     void              *pBuffer,
@@ -270,7 +271,7 @@ storeError SAL_CALL store_readStream (
     @param  pnDone [out] the number of bytes actually written.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_writeStream (
+STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
     storeStreamHandle  hStrm,
     sal_uInt32         nOffset,
     const void        *pBuffer,
@@ -283,7 +284,7 @@ storeError SAL_CALL store_writeStream (
     @param  hStrm [in] the Stream Handle.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_flushStream (
+STORE_DLLPUBLIC storeError SAL_CALL store_flushStream (
     storeStreamHandle hStrm
 ) SAL_THROW_EXTERN_C();
 
@@ -293,7 +294,7 @@ storeError SAL_CALL store_flushStream (
     @param  pnSize [out] the stream size in bytes.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_getStreamSize (
+STORE_DLLPUBLIC storeError SAL_CALL store_getStreamSize (
     storeStreamHandle  hStrm,
     sal_uInt32        *pnSize
 ) SAL_THROW_EXTERN_C();
@@ -304,7 +305,7 @@ storeError SAL_CALL store_getStreamSize (
     @param  nSize [in] the new stream size in bytes.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_setStreamSize (
+STORE_DLLPUBLIC storeError SAL_CALL store_setStreamSize (
     storeStreamHandle hStrm,
     sal_uInt32        nSize
 ) SAL_THROW_EXTERN_C();
@@ -320,7 +321,7 @@ storeError SAL_CALL store_setStreamSize (
     @param  pnAttrib [out] the resulting attributes, may be NULL.
     @return store_E_None upon success
  */
-storeError SAL_CALL store_attrib (
+STORE_DLLPUBLIC storeError SAL_CALL store_attrib (
     storeFileHandle hFile,
     rtl_uString    *pPath,
     rtl_uString    *pName,
@@ -342,7 +343,7 @@ storeError SAL_CALL store_attrib (
     @param  pDstName [in] the Destination name
     @return store_E_None upon success
  */
-storeError SAL_CALL store_link (
+STORE_DLLPUBLIC storeError SAL_CALL store_link (
     storeFileHandle hFile,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
     rtl_uString *pDstPath, rtl_uString *pDstName
@@ -361,7 +362,7 @@ storeError SAL_CALL store_link (
     @param  pDstName [in] the Destination name
     @return store_E_None upon success
  */
-storeError SAL_CALL store_symlink (
+STORE_DLLPUBLIC storeError SAL_CALL store_symlink (
     storeFileHandle hFile,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
     rtl_uString *pDstPath, rtl_uString *pDstName
@@ -376,7 +377,7 @@ storeError SAL_CALL store_symlink (
     @param  pDstName [in] the Destination name
     @return store_E_None upon success
  */
-storeError SAL_CALL store_rename (
+STORE_DLLPUBLIC storeError SAL_CALL store_rename (
     storeFileHandle hFile,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
     rtl_uString *pDstPath, rtl_uString *pDstName
@@ -389,7 +390,7 @@ storeError SAL_CALL store_rename (
     @param  pName [in] the entry name
     @return store_E_None upon success
  */
-storeError SAL_CALL store_remove (
+STORE_DLLPUBLIC storeError SAL_CALL store_remove (
     storeFileHandle hFile,
     rtl_uString    *pPath,
     rtl_uString    *pName
