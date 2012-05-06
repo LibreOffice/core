@@ -51,7 +51,6 @@ if [ -x /usr/bin/fetch ]; then
     fetch_bin=/usr/bin/fetch
     fetch_args="-Fpr"
     echo found FreeBSD fetch: $fetch_bin
-    break 1
 else
   for wg in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
     eval "$wg --version" > /dev/null 2>&1
