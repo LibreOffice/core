@@ -456,12 +456,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fd_pipe[1] = (NSP_PIPE_FD) iPipe[1] ;
     NSP_Close_Pipe(fd_pipe[1]);
 
-    la_read_fd = fd_pipe[0];
-    if(la_read_fd < 0)
+    if(iPipe[0] < 0)
     {
-        debug_fprintf(NSP_LOG_APPEND, "print by nsplugin, command error: bad read file id:%s \n", la_read_fd);
+        debug_fprintf(NSP_LOG_APPEND, "print by nsplugin, command error: bad read file id:%s \n", iPipe[0]);
         return 0;
     }
+    la_read_fd = fd_pipe[0];
 
     // the program path is provided only on unix, on windows the registry entry is used
     if ( argc > 4 )
