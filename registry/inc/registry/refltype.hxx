@@ -81,7 +81,7 @@ struct RTUik
     sal_uInt32 m_Data5;
 };
 
-/// specifies the calling onvention for type reader/wrter api
+/// specifies the calling convention for type reader/writer api
 #define TYPEREG_CALLTYPE    SAL_CALL
 
 #endif
