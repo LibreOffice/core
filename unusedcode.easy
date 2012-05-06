@@ -687,7 +687,6 @@ nullcanvas::SpriteCanvasHelper::genericUpdate(basegfx::B2DConnectedRanges<canvas
 nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 oox::PropertyMap::dump(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
-oox::xls::BiffGroupObject::BiffGroupObject(oox::xls::WorksheetHelper const&)
 oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)

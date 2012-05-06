@@ -221,10 +221,6 @@ BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 
 void BiffDrawingObjectContainer::insertGrouped( const BiffDrawingObjectRef& rxDrawingObj )
 {
-    if( !maObjects.empty() )
-        if( BiffGroupObject* pGroupObj = dynamic_cast< BiffGroupObject* >( maObjects.back().get() ) )
-            if( pGroupObj->tryInsert( rxDrawingObj ) )
-                return;
     maObjects.push_back( rxDrawingObj );
 }
 
@@ -533,70 +529,6 @@ void BiffDrawingObjectBase::implReadObjBiff5( BiffInputStream& /*rStrm*/, sal_uI
 
 void BiffDrawingObjectBase::implReadObjBiff8SubRec( BiffInputStream& /*rStrm*/, sal_uInt16 /*nSubRecId*/, sal_uInt16 /*nSubRecSize*/ )
 {
-}
-
-// ============================================================================
-
-BiffGroupObject::BiffGroupObject( const WorksheetHelper& rHelper ) :
-    BiffDrawingObjectBase( rHelper ),
-    mnFirstUngrouped( BIFF_OBJ_INVALID_ID )
-{
-}
-
-bool BiffGroupObject::tryInsert( const BiffDrawingObjectRef& rxDrawingObj )
-{
-    if( rxDrawingObj->getObjId() == mnFirstUngrouped )
-        return false;
-    // insert into own list or into nested group
-    maChildren.insertGrouped( rxDrawingObj );
-    return true;
-}
-
-void BiffGroupObject::implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    rStrm.skip( 4 );
-    rStrm >> mnFirstUngrouped;
-    rStrm.skip( 16 );
-    readMacroBiff3( rStrm, nMacroSize );
-}
-
-void BiffGroupObject::implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    rStrm.skip( 4 );
-    rStrm >> mnFirstUngrouped;
-    rStrm.skip( 16 );
-    readMacroBiff4( rStrm, nMacroSize );
-}
-
-void BiffGroupObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
-{
-    rStrm.skip( 4 );
-    rStrm >> mnFirstUngrouped;
-    rStrm.skip( 16 );
-    readNameBiff5( rStrm, nNameLen );
-    readMacroBiff5( rStrm, nMacroSize );
-}
-
-Reference< XShape > BiffGroupObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
-        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
-{
-    Reference< XShape > xGroupShape;
-    if( !maChildren.empty() ) try
-    {
-        xGroupShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rxShapes, rShapeRect );
-        Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
-        maChildren.convertAndInsert( rDrawing, xChildShapes, &rShapeRect );
-        // no child shape has been created - delete the group shape
-        if( !xChildShapes->hasElements() )
-        {
-            rxShapes->remove( xGroupShape );
-            xGroupShape.clear();
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return xGroupShape;
 }
 
 // ============================================================================

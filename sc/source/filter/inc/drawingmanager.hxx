@@ -196,36 +196,6 @@ private:
 };
 
 // ============================================================================
-
-/** A group object that is able to contain other child objects. */
-class BiffGroupObject : public BiffDrawingObjectBase
-{
-public:
-    explicit            BiffGroupObject( const WorksheetHelper& rHelper );
-
-    /** Tries to insert the passed drawing object into this or a nested group. */
-    bool                tryInsert( const BiffDrawingObjectRef& rxDrawingObj );
-
-protected:
-    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
-
-    /** Creates the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
-
-protected:
-    BiffDrawingObjectContainer maChildren;     /// All child objects contained in this group object.
-    sal_uInt16          mnFirstUngrouped;   /// Object identfier of first object not grouped into this group.
-};
-
-// ============================================================================
 // BIFF drawing page
 // ============================================================================
 
