@@ -47,8 +47,10 @@
 
 #define _WINDOWS
 
+#ifdef _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4668)
+#endif
 
 #include <windows.h>
 #include <direct.h>
@@ -57,7 +59,9 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 
 #endif //end of WNT
 

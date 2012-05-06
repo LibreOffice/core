@@ -28,10 +28,14 @@
 
 
 #ifdef WNT
+#ifdef _MSC_VER
     #pragma warning (push,1)
     #pragma warning (disable:4668)
+#endif
     #include <windows.h>
+#ifdef _MSC_VER
     #pragma warning (pop)
+#endif
 #endif
 
 int NSP_ResetWinStyl(long hParent)

@@ -37,16 +37,18 @@
 #ifdef WNT
 #ifdef _MSC_VER
 #pragma once
-#endif
 #pragma warning (push,1)
 #pragma warning (disable:4668)
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winsock2.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 #endif //end of WNT
 
 #include <unistd.h>

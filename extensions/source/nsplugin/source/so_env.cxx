@@ -42,9 +42,11 @@
 #ifdef WNT
 #define _WINDOWS
 
+#ifdef _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4668)
 #pragma warning (disable:4917)
+#endif
 
 #include <windows.h>
 #include <direct.h>
@@ -54,7 +56,9 @@
 // For vsnprintf()
 #define NSP_vsnprintf _vsnprintf
 
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 #endif // End WNT
 
 #include <sys/stat.h>
