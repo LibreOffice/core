@@ -36,6 +36,10 @@
 
 #include <utility>
 
+#if defined(HAVE_MEMCHECK_H)
+#include <memcheck.h>
+#endif
+
 
 // -----------
 // - Defines -
@@ -903,6 +907,18 @@ sal_Bool Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 
 // ------------------------------------------------------------------
 
+#if defined(HAVE_MEMCHECK_H)
+namespace
+{
+    void blankExtraSpace(sal_uInt8 *pBits, long nWidth, long nScanlineSize, int nBitCount)
+    {
+        size_t nExtraSpaceInScanLine = nScanlineSize - nWidth * nBitCount / 8;
+        if (nExtraSpaceInScanLine)
+            memset(pBits + (nScanlineSize - nExtraSpaceInScanLine), 0, nExtraSpaceInScanLine);
+    }
+}
+#endif
+
 sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
                                sal_uLong nCompression, sal_uInt32& rImageSize )
 {
@@ -975,6 +991,10 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
             const long  nWidth = rAcc.Width();
             const long  nHeight = rAcc.Height();
             sal_uInt8*      pBuf = new sal_uInt8[ nAlignedWidth ];
+#if defined(HAVE_MEMCHECK_H)
+            if (RUNNING_ON_VALGRIND)
+                blankExtraSpace(pBuf, nWidth, nAlignedWidth, discretizeBitcount(nBitCount));
+#endif
             sal_uInt8*      pTmp;
             sal_uInt8       cTmp;
 

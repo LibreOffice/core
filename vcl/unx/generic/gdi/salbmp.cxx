@@ -118,15 +118,18 @@ void X11SalBitmap::ImplRemovedFromCache()
 }
 
 #if defined(HAVE_MEMCHECK_H)
-void blankExtraSpace(BitmapBuffer* pDIB)
+namespace
 {
-    size_t nExtraSpaceInScanLine = pDIB->mnScanlineSize - pDIB->mnWidth * pDIB->mnBitCount / 8;
-    if (nExtraSpaceInScanLine)
+    void blankExtraSpace(BitmapBuffer* pDIB)
     {
-        for (long i = 0; i < pDIB->mnHeight; ++i)
+        size_t nExtraSpaceInScanLine = pDIB->mnScanlineSize - pDIB->mnWidth * pDIB->mnBitCount / 8;
+        if (nExtraSpaceInScanLine)
         {
-            sal_uInt8 *pRow = pDIB->mpBits + (i * pDIB->mnScanlineSize);
-            memset(pRow + (pDIB->mnScanlineSize - nExtraSpaceInScanLine), 0, nExtraSpaceInScanLine);
+            for (long i = 0; i < pDIB->mnHeight; ++i)
+            {
+                sal_uInt8 *pRow = pDIB->mpBits + (i * pDIB->mnScanlineSize);
+                memset(pRow + (pDIB->mnScanlineSize - nExtraSpaceInScanLine), 0, nExtraSpaceInScanLine);
+            }
         }
     }
 }

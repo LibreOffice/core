@@ -429,6 +429,13 @@ vcl_headless_code=\
     vcl/headless/svptext \
     vcl/headless/svpvd
 
+$(eval $(call gb_Library_add_defs,vcl,\
+    $(if $(VALGRIND_CFLAGS), \
+        $(VALGRIND_CFLAGS) \
+        -DHAVE_MEMCHECK_H=1 \
+    ) \
+))
+
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
