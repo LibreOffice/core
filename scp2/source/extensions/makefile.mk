@@ -41,6 +41,10 @@ TARGETTYPE=CUI
 SCPDEFS+=-DSYSTEM_BSH -DBSH_JAR=\""file://$(BSH_JAR)"\"
 .ENDIF
 
+.IF "$(SYSTEM_RHINO)" == "YES"
+SCPDEFS+=-DSYSTEM_RHINO -DRHINO_JAR=\""file://$(RHINO_JAR)"\"
+.ENDIF
+
 SCP_PRODUCT_TYPE=osl
 PARFILES= \
         module_extensions.par                        \

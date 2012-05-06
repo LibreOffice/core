@@ -1338,4 +1338,18 @@ endef
 endif # SYSTEM_BSH
 
 
+ifeq ($(SYSTEM_RHINO),YES)
+
+define gb_JavaClassSet__use_rhino
+$(call gb_JavaClassSet_use_system_jar,$(1),$(RHINO_JAR))
+endef
+
+else # !SYSTEM_RHINO
+
+define gb_JavaClassSet__use_rhino
+$(call gb_JavaClassSet_use_jar,$(1),$(OUTDIR)/bin/js.jar)
+endef
+
+endif # SYSTEM_RHINO
+
 # vim: set noet sw=4 ts=4:
