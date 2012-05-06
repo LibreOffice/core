@@ -29,6 +29,7 @@
 #ifndef _REGISTRY_REGISTRY_HXX_
 #define _REGISTRY_REGISTRY_HXX_
 
+#include <registry/regdllapi.h>
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
 
@@ -86,7 +87,7 @@ struct Registry_Api
 
 /** the API initialization function.
 */
-Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
+REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
 
 #ifdef __cplusplus
 }
