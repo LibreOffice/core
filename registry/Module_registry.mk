@@ -39,7 +39,6 @@ $(eval $(call gb_Module_add_targets,registry,\
     Executable_regview \
     Executable_regcompare \
     Executable_checksingleton \
-    Executable_rdbedit \
 ))
 
 endif
