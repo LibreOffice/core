@@ -746,7 +746,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
         if(0 != strcmp(fname, localPathNew)) {
 
 #ifdef WNT
-        if(NULL == CopyFile(fname, localPathNew, FALSE))
+        if(FALSE == CopyFile(fname, localPathNew, FALSE))
             return;
 #endif //end of WNT
 
