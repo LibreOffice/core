@@ -417,7 +417,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 ifeq ($(OS),MACOSX)
 
-$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal.1 libraptor.1,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
+$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal-lo.1 libraptor-lo.1,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
 
 endif
 
