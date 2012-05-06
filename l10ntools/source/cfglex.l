@@ -45,6 +45,7 @@ extern "C" FILE * init(int, char **);
 int bText=0;
 %}
 
+%option yylineno
 %option never-interactive
 
 %p 24000

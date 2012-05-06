@@ -268,7 +268,7 @@ define gb_LexTarget__command
 $(call gb_Output_announce,$(2),$(true),LEX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
-	$(FLEX) $(T_LEXFLAGS) -o $(4) $(1) && touch $(3) )
+	$(FLEX) $(T_LEXFLAGS) -o$(4) $(1) && touch $(3) )
 endef
 
 

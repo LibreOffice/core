@@ -47,6 +47,7 @@ extern "C" void Close();
 void YYWarning();
 %}
 
+%option yylineno
 %option never-interactive
 
 %p 24000
