@@ -31,15 +31,15 @@
 
 OpenLockedQueryBox::OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const String& aMessage ) :
     MessBox(pParent, 0,
-            String( ResId( STR_OPENLOCKED_TITLE, *pResMgr ) ),
+            ResId(STR_OPENLOCKED_TITLE, *pResMgr).toString(),
             aMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton( String( ResId( STR_OPENLOCKED_OPENREADONLY_BTN, *pResMgr ) ), RET_YES,
+    AddButton(ResId(STR_OPENLOCKED_OPENREADONLY_BTN, *pResMgr).toString(), RET_YES,
             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
 
-    AddButton( String( ResId( STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr ) ), RET_NO, 0);
+    AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO, 0);
 
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     SetButtonHelpText( RET_YES, String() );

@@ -31,23 +31,23 @@
 
 AlreadyOpenQueryBox::AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, const String& aMessage, sal_Bool bIsStoring ) :
     MessBox(pParent, 0,
-            String( ResId( STR_ALREADYOPEN_TITLE, *pResMgr ) ),
+            ResId(STR_ALREADYOPEN_TITLE, *pResMgr).toString(),
             aMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
 
     if ( bIsStoring )
     {
-        AddButton( String( ResId( STR_ALREADYOPEN_RETRY_SAVE_BTN, *pResMgr ) ), RET_YES,
+        AddButton( ResId(STR_ALREADYOPEN_RETRY_SAVE_BTN, *pResMgr).toString(), RET_YES,
                 BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-        AddButton( String( ResId( STR_ALREADYOPEN_SAVE_BTN, *pResMgr ) ), RET_NO, 0 );
+        AddButton( ResId(STR_ALREADYOPEN_SAVE_BTN, *pResMgr).toString(), RET_NO, 0 );
         AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     }
     else
     {
-        AddButton( String( ResId( STR_ALREADYOPEN_READONLY_BTN, *pResMgr ) ), RET_YES,
+        AddButton( ResId(STR_ALREADYOPEN_READONLY_BTN, *pResMgr).toString(), RET_YES,
                 BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-        AddButton( String( ResId( STR_ALREADYOPEN_OPEN_BTN, *pResMgr ) ), RET_NO, 0 );
+        AddButton( ResId(STR_ALREADYOPEN_OPEN_BTN, *pResMgr).toString(), RET_NO, 0 );
         AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     }
 

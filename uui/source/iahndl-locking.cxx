@@ -97,10 +97,9 @@ handleLockedDocumentRequest_(
         {
             aArguments.push_back( !aInfo.isEmpty()
                                   ? aInfo
-                                  : ::rtl::OUString( String(
-                                        ResId( STR_UNKNOWNUSER,
-                                               *xManager.get() ) ) ) );
-            aMessage = String( ResId( STR_OPENLOCKED_MSG, *xManager.get() ) );
+                                  : ResId( STR_UNKNOWNUSER,
+                                               *xManager.get() ).toString() );
+            aMessage = ResId(STR_OPENLOCKED_MSG, *xManager.get()).toString();
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
@@ -112,10 +111,9 @@ handleLockedDocumentRequest_(
         {
             aArguments.push_back( !aInfo.isEmpty()
                                   ? aInfo
-                                  : ::rtl::OUString( String(
-                                        ResId( STR_UNKNOWNUSER,
-                                               *xManager.get() ) ) ) );
-            aMessage = String( ResId( STR_TRYLATER_MSG, *xManager.get() ) );
+                                  : ResId( STR_UNKNOWNUSER,
+                                               *xManager.get() ).toString() );
+            aMessage = ResId(STR_TRYLATER_MSG, *xManager.get()).toString();
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
@@ -127,10 +125,10 @@ handleLockedDocumentRequest_(
                   nMode == UUI_DOC_OWN_SAVE_LOCK )
         {
             aArguments.push_back( aInfo );
-            aMessage = String( ResId( nMode == UUI_DOC_OWN_SAVE_LOCK
+            aMessage = ResId(nMode == UUI_DOC_OWN_SAVE_LOCK
                                           ? STR_ALREADYOPEN_SAVE_MSG
                                           : STR_ALREADYOPEN_MSG,
-                                      *xManager.get() ) );
+                                      *xManager.get() ).toString();
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 

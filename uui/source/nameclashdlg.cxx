@@ -83,11 +83,11 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
     String aInfo;
     if ( bAllowOverwrite )
     {
-        aInfo = String( ResId( STR_RENAME_OR_REPLACE, *pResMgr ) );
+        aInfo = ResId(STR_RENAME_OR_REPLACE, *pResMgr).toString();
     }
     else
     {
-        aInfo = String( ResId( STR_NAME_CLASH_RENAME_ONLY, *pResMgr ) );
+        aInfo = ResId(STR_NAME_CLASH_RENAME_ONLY, *pResMgr).toString();
         maBtnOverwrite.Hide();
     }
 
@@ -95,7 +95,7 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
     if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( rTargetFolderURL, aPath ) )
         aPath = rTargetFolderURL;
 
-    maSameName = String ( ResId( STR_SAME_NAME_USED, *pResMgr ) );
+    maSameName = ResId(STR_SAME_NAME_USED, *pResMgr).toString();
 
     aInfo.SearchAndReplaceAscii( "%NAME", rClashingName );
     aInfo.SearchAndReplaceAscii( "%FOLDER", aPath );

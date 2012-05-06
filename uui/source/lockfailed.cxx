@@ -33,7 +33,7 @@
 
 LockFailedQueryBox::LockFailedQueryBox( Window* pParent, ResMgr* pResMgr ) :
     MessBox(pParent, 0,
-            String( ResId( STR_LOCKFAILED_TITLE, *pResMgr ) ),
+            ResId(STR_LOCKFAILED_TITLE, *pResMgr).toString(),
             String::EmptyString() )
 {
     SetImage( ErrorBox::GetStandardImage() );
@@ -41,8 +41,8 @@ LockFailedQueryBox::LockFailedQueryBox( Window* pParent, ResMgr* pResMgr ) :
     AddButton( BUTTON_OK, RET_OK, BUTTONDIALOG_OKBUTTON );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetMessText( String( ResId( STR_LOCKFAILED_MSG, *pResMgr ) ) );
-    SetCheckBoxText( String( ResId( STR_LOCKFAILED_DONTSHOWAGAIN, *pResMgr ) ) );
+    SetMessText(ResId(STR_LOCKFAILED_MSG, *pResMgr ).toString());
+    SetCheckBoxText(ResId(STR_LOCKFAILED_DONTSHOWAGAIN, *pResMgr).toString());
 }
 
 LockFailedQueryBox::~LockFailedQueryBox()

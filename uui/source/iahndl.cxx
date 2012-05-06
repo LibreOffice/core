@@ -1312,10 +1312,10 @@ UUIInteractionHelper::handleGenericErrorRequest(
             rtl::OUString aTitle( utl::ConfigManager::getProductName() );
 
             ::rtl::OUString aErrTitle
-                  = String( ResId( nError == ERRCODE_SFX_BROKENSIGNATURE
+                  = ResId( nError == ERRCODE_SFX_BROKENSIGNATURE
                                        ? STR_WARNING_BROKENSIGNATURE_TITLE
                                        : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
-                                   *xManager.get() ) );
+                                   *xManager.get() ).toString();
 
             if ( !aTitle.isEmpty() && !aErrTitle.isEmpty() )
                 aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );

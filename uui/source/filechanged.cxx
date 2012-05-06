@@ -31,17 +31,17 @@
 
 FileChangedQueryBox::FileChangedQueryBox( Window* pParent, ResMgr* pResMgr ) :
     MessBox(pParent, 0,
-            String( ResId( STR_FILECHANGED_TITLE, *pResMgr ) ),
+            ResId(STR_FILECHANGED_TITLE, *pResMgr).toString(),
             String::EmptyString() )
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton( String( ResId( STR_FILECHANGED_SAVEANYWAY_BTN, *pResMgr ) ), RET_YES,
-            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+    AddButton(ResId(STR_FILECHANGED_SAVEANYWAY_BTN, *pResMgr).toString(), RET_YES,
+            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON);
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
     SetButtonHelpText( RET_YES, String::EmptyString() );
-    SetMessText( String( ResId( STR_FILECHANGED_MSG, *pResMgr ) ) );
+    SetMessText(ResId(STR_FILECHANGED_MSG, *pResMgr).toString());
 }
 
 FileChangedQueryBox::~FileChangedQueryBox()

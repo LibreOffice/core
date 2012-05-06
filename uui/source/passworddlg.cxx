@@ -73,13 +73,13 @@ PasswordDialog::PasswordDialog(
     {
         const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
-        String aErrorMsg( ResId( nErrStrId, *pResourceMgr ));
+        rtl::OUString aErrorMsg(ResId(nErrStrId, *pResourceMgr).toString());
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
 
     // default settings for enter password or reenter passwd...
-    String aTitle( ResId( STR_TITLE_ENTER_PASSWORD, *pResourceMgr ) );
+    rtl::OUString aTitle(ResId(STR_TITLE_ENTER_PASSWORD, *pResourceMgr).toString());
     aFTConfirmPassword.Hide();
     aEDConfirmPassword.Hide();
     aFTConfirmPassword.Enable( sal_False );
@@ -88,9 +88,9 @@ PasswordDialog::PasswordDialog(
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
     {
-        aTitle = String( ResId( STR_TITLE_CREATE_PASSWORD, *pResourceMgr ) );
+        aTitle = ResId(STR_TITLE_CREATE_PASSWORD, *pResourceMgr).toString();
 
-        aFTConfirmPassword.SetText( String( ResId( STR_CONFIRM_SIMPLE_PASSWORD, *pResourceMgr ) ) );
+        aFTConfirmPassword.SetText(ResId(STR_CONFIRM_SIMPLE_PASSWORD, *pResourceMgr).toString());
 
         aFTConfirmPassword.Show();
         aEDConfirmPassword.Show();
@@ -116,12 +116,12 @@ PasswordDialog::PasswordDialog(
     SetText( aTitle );
 
     sal_uInt16 nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
-    aFTPassword.SetText( String( ResId( nStrId, *pResourceMgr ) ) );
+    aFTPassword.SetText(ResId(nStrId, *pResourceMgr).toString());
     aFTPassword.SetText( aFTPassword.GetText() + aDocURL );
     if (bIsSimplePasswordRequest)
     {
         DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
-        aFTPassword.SetText( String( ResId( STR_ENTER_SIMPLE_PASSWORD, *pResourceMgr ) ) );
+        aFTPassword.SetText(ResId(STR_ENTER_SIMPLE_PASSWORD, *pResourceMgr).toString());
     }
 
     FreeResource();
