@@ -214,12 +214,12 @@ End
 
 WindowsCustomAction gid_Customaction_Register_Extensions
 	Name = "RegisterExtensions";
-	Typ = "1025";
+	Typ = "1";
 	Source = "shlxtmsi.dll";
 	Target = "RegisterExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_SetInstalllocation");
-	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "behind_SetInstalllocation");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
 End
 
 WindowsCustomAction gid_Customaction_Remove_Extensions
