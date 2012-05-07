@@ -531,7 +531,7 @@ public class LocalOfficeConnection
         throws java.net.MalformedURLException
     {
         // Extruct parameters.
-        int idx = url.indexOf(";urp;StarOffice.NamingService");
+        int idx = url.indexOf(";urp;StarOffice.ServiceManager");
         if (idx < 0)
             throw new java.net.MalformedURLException(
                 "Invalid UNO connection URL.");
