@@ -1659,7 +1659,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_slider )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateType, &shadowType );
-        if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )  stateType = GTK_STATE_PRELIGHT;
         gtk_paint_slider( style, gdkDrawable, stateType, GTK_SHADOW_OUT,
                         gdkRect, GTK_WIDGET(scrollbarWidget), "slider",
                         x+hShim+thumbRect.Left(), y+vShim+thumbRect.Top(),
