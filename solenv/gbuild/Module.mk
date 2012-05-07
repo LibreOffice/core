@@ -178,6 +178,11 @@ showmodules :
 	$(info $(strip $(gb_Module_ALLMODULES)))
 	@true 
 
+# enable if: no "-MODULE/" defined AND ["all" defined OR "MODULE/" defined]
+gb_Module__debug_enabled = \
+ $(and $(if $(filter -$(1)/,$(ENABLE_SYMBOLS_FOR)),,$(true)),\
+       $(filter all $(1)/,$(ENABLE_SYMBOLS_FOR)))
+
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -186,6 +191,7 @@ gb_Module_CHECKTARGETSTACK := $(call gb_Module_get_check_target,$(1)) $(gb_Modul
 gb_Module_SLOWCHECKTARGETSTACK := $(call gb_Module_get_slowcheck_target,$(1)) $(gb_Module_SLOWCHECKTARGETSTACK)
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_target,$(1)) $(gb_Module_SUBSEQUENTCHECKTARGETSTACK)
 gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
+gb_Module_CURRENTMODULE_DEBUG_ENABLED := $(call gb_Module__debug_enabled,$(1))
 
 endef
 
@@ -196,7 +202,6 @@ endef
 define gb_Module_register_target
 gb_Module_CURRENTTARGET := $(1)
 gb_Module_CURRENTCLEANTARGET := $(2)
-gb_Module_DEBUG_$(gb_Module_CURRENTMODULE) += $(3)
 
 endef
 
@@ -204,7 +209,6 @@ endef
 define gb_Module__read_targetfile
 gb_Module_CURRENTTARGET :=
 gb_Module_CURRENTCLEANTARGET :=
-gb_Module_CURRENTMODULE := $(1)
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk
 ifneq ($$(words $$(gb_Module_CURRENTTARGET)) $$(words $$(gb_Module_CURRENTCLEANTARGET)),1 1)
 $$(eval $$(call gb_Output_error,No $(3) registered while reading $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk!))
