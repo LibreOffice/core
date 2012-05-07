@@ -421,15 +421,6 @@ en-US = "< &Back"
 [OOO_CONTROL_193]
 en-US = "Cancel"
 
-[OOO_CONTROL_194]
-en-US = "&Yes, check for program updates (Recommended) after the setup completes."
-
-[OOO_CONTROL_195]
-en-US = "Launch the program"
-
-[OOO_CONTROL_196]
-en-US = "Show the readme file"
-
 [OOO_CONTROL_197]
 en-US = "&Finish"
 
@@ -441,15 +432,6 @@ en-US = "The Installation Wizard has successfully installed [ProductName]. Click
 
 [OOO_CONTROL_200]
 en-US = "The Installation Wizard has successfully uninstalled [ProductName]. Click Finish to exit the wizard."
-
-[OOO_CONTROL_201]
-en-US = "Setup has finished installing [ProductName]."
-
-[OOO_CONTROL_202]
-en-US = "Some program files might have been updated since you purchased your copy of [ProductName]."
-
-[OOO_CONTROL_203]
-en-US = "Your Internet connection can be used to make sure that you have the latest updates."
 
 [OOO_CONTROL_204]
 en-US = "&Abort"

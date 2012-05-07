@@ -100,8 +100,6 @@ SetupCompleteError	Back	EndDialog	Return	1	2
 SetupCompleteError	Cancel	[Suspend]	1	1	1
 SetupCompleteError	Cancel	EndDialog	Return	1	2
 SetupCompleteError	Finish	EndDialog	Exit	1	2
-SetupCompleteSuccess	OK	DoAction	CheckForProductUpdates	ISCHECKFORPRODUCTUPDATES="1" And ISENABLEDWUSFINISHDIALOG And NOT ISREBOOTREQUIRED And NOT Installed And ACTION="INSTALL"	4
-SetupCompleteSuccess	OK	DoAction	CheckForProductUpdatesOnReboot	ISCHECKFORPRODUCTUPDATES="1" And ISENABLEDWUSFINISHDIALOG And ISREBOOTREQUIRED And NOT Installed And ACTION="INSTALL"	5
 SetupCompleteSuccess	OK	EndDialog	Exit	1	2
 SetupError	A	EndDialog	ErrorAbort	1	0
 SetupError	C	EndDialog	ErrorCancel	1	0

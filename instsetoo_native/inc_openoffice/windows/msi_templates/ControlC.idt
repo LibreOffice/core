@@ -36,17 +36,8 @@ SetupCompleteError	RestContText1	Hide	NOT UpdateStarted
 SetupCompleteError	RestContText1	Show	UpdateStarted
 SetupCompleteError	RestContText2	Hide	NOT UpdateStarted
 SetupCompleteError	RestContText2	Show	UpdateStarted
-SetupCompleteSuccess	CheckBoxUpdates	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
-SetupCompleteSuccess	CheckForUpdatesText	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
-SetupCompleteSuccess	CheckLaunchProgram	Show	SHOWLAUNCHPROGRAM="-1" And PROGRAMFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
-SetupCompleteSuccess	CheckLaunchReadme	Show	SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
-SetupCompleteSuccess	LaunchProgramText	Show	SHOWLAUNCHPROGRAM="-1" And PROGRAMFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
-SetupCompleteSuccess	LaunchReadmeText	Show	SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND <> "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG
-SetupCompleteSuccess	TextLine2	Show	ProgressType2="installed" And ((ACTION<>"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))
-SetupCompleteSuccess	TextLine3	Show	ProgressType2="uninstalled" And ((ACTION<>"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))
-SetupCompleteSuccess	UpdateTextLine1	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
-SetupCompleteSuccess	UpdateTextLine2	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
-SetupCompleteSuccess	UpdateTextLine3	Show	ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"
+SetupCompleteSuccess	TextLine2	Show	ProgressType2="installed" And ((ACTION<>"INSTALL")
+SetupCompleteSuccess	TextLine3	Show	ProgressType2="uninstalled" And ((ACTION<>"INSTALL")
 SetupInterrupted	Back	Default	UpdateStarted
 SetupInterrupted	Back	Disable	NOT UpdateStarted
 SetupInterrupted	Back	Enable	UpdateStarted
