@@ -839,7 +839,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
 $(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(3)
+$(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
@@ -987,7 +987,7 @@ $(foreach obj,$(2),$(eval $(call gb_GenCxxObject_get_target,$(obj)) : CXXOBJECT_
 endef
 
 define gb_LinkTarget_add_generated_cobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
 endef
 
 define gb_LinkTarget_add_generated_cxxobjects
