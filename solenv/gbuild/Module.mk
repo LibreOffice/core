@@ -196,6 +196,7 @@ endef
 define gb_Module_register_target
 gb_Module_CURRENTTARGET := $(1)
 gb_Module_CURRENTCLEANTARGET := $(2)
+gb_Module_DEBUG_$(gb_Module_CURRENTMODULE) += $(3)
 
 endef
 
@@ -203,6 +204,7 @@ endef
 define gb_Module__read_targetfile
 gb_Module_CURRENTTARGET :=
 gb_Module_CURRENTCLEANTARGET :=
+gb_Module_CURRENTMODULE := $(1)
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk
 ifneq ($$(words $$(gb_Module_CURRENTTARGET)) $$(words $$(gb_Module_CURRENTCLEANTARGET)),1 1)
 $$(eval $$(call gb_Output_error,No $(3) registered while reading $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk!))

@@ -40,15 +40,16 @@
 # convert ENABLE_SYMBOLS_FOR from "all -sc/" syntax to a list of target names
 
 # all targets
-gb_Symbols_get_all=$(foreach item,$(wildcard $(SRCDIR)/*/*.mk),$(basename $(notdir $(item))))
+gb_Symbols_get_all = \
+ $(foreach module,$(gb_Module_ALLMODULES),$(gb_Module_DEBUG_$(module)))
 
-# all targets in a dir
-gb_Symbols_expand_dir=$(foreach item,$(wildcard $(SRCDIR)/$(1)/*.mk),$(basename $(notdir $(item))))
+# all targets in a module
+gb_Symbols_expand_module = $(gb_Module_DEBUG_$(1))
 
 # expand one item: all->all targets, foo/ -> all targets in foo/, otherwise the item itself
 define gb_Symbols_expand_item
 $(if $(filter all,$(1)),$(call gb_Symbols_get_all),
-    $(if $(findstring /,$(1)),$(call gb_Symbols_expand_dir,$(1)),
+    $(if $(findstring /,$(1)),$(call gb_Symbols_expand_module,$(1)),
         $(if $(findstring _,$(1)),$(1),
             $(error no _ or / in --enable-debug item, prepend target type such as Library_ or append / for directory))))
 endef
@@ -68,7 +69,7 @@ endef
 gb_Symbols_create_debugfor=$(filter-out $(call gb_Symbols_expand_nodebug,$(1)),$(call gb_Symbols_expand_debug,$(1)))
 
 # convert the value
-gb_ENABLE_SYMBOLS_FOR:=$(call gb_Symbols_create_debugfor,$(ENABLE_SYMBOLS_FOR))
+gb_ENABLE_SYMBOLS_FOR=$(call gb_Symbols_create_debugfor,$(ENABLE_SYMBOLS_FOR))
 
 # debug flags, if ENABLE_SYMBOLS is set and the LinkTarget is named
 # in the list of libraries of ENABLE_SYMBOLS_FOR
@@ -922,7 +923,7 @@ endef
 # Add flex scanners to the build.
 # gb_LinkTarget_add_scanners(<component>,<scanner file> [<scanner file>*])
 define gb_LinkTarget_add_scanners
-$(foreach scanner,$(2),$(call gb_LinkTarget_add_scanner,$(1),$(scanner)))
+$(foreach scanner,$(2),$(call gb_LinkTarget_add_scanner,$(1),$(scanner),$(4)))
 
 endef
 
