@@ -1,3 +1,4 @@
+/* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*****************************************************************************
  * HIDRemoteControlDevice.m
  * RemoteControlWrapper
@@ -533,3 +534,4 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 
 @end
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

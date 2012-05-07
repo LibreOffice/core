@@ -1,3 +1,4 @@
+/* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*****************************************************************************
  * GlobalKeyboardDevice.m
  * RemoteControlWrapper
@@ -251,3 +252,5 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef inHandlerRef, EventRef in
 }
 
 @end
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

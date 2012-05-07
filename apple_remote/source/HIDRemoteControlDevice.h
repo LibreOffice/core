@@ -1,3 +1,4 @@
+/* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*****************************************************************************
  * HIDRemoteControlDevice.h
  * RemoteControlWrapper
@@ -64,3 +65,5 @@
 + (BOOL) isRemoteAvailable;
 
 @end
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
