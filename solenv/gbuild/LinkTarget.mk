@@ -55,7 +55,9 @@ endif
 # generic cflags/cxxflags to use (optimization flags, debug flags)
 # user supplied CFLAGS/CXXFLAGS override default debug/optimization flags
 gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscflags,$(1)))
+gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscflags,$(1)))
 gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscxxflags,$(1)))
+gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscxxflags,$(1)))
 
 # Overview of dependencies and tasks of LinkTarget
 #
@@ -473,7 +475,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
-$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS) $(OBJCFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -504,8 +506,8 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS) $(OBJCFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -782,7 +784,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCObject_get_target,$(2))
 $(call gb_ObjCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_ObjCObject_get_target,$(2)) : T_OBJCFLAGS += $(3)
+$(call gb_ObjCObject_get_target,$(2)) : T_OBJCFLAGS += $(call gb_LinkTarget__get_objcflags,$(4)) $(3)
 $(call gb_ObjCObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
@@ -800,7 +802,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCxxObject_get_target,$(2))
 $(call gb_ObjCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_ObjCxxObject_get_target,$(2)) : T_OBJCXXFLAGS += $(3)
+$(call gb_ObjCxxObject_get_target,$(2)) : T_OBJCXXFLAGS += $(call gb_LinkTarget__get_objcxxflags,$(4)) $(3)
 $(call gb_ObjCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
@@ -959,11 +961,11 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_cxxobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_objcobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_objcobject,$(1),$(obj),$(3)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_objcobject,$(1),$(obj),$(3),$(4)))
 endef
 
 define gb_LinkTarget_add_objcxxobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxobject,$(1),$(obj),$(3)))
+$(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxobject,$(1),$(obj),$(3),$(4)))
 endef
 
 define gb_LinkTarget_add_asmobjects
