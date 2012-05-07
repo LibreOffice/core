@@ -1352,18 +1352,8 @@ void SvImpLBox::InitScrollBarBox()
 void SvImpLBox::Resize()
 {
     Size aSize( pView->Control::GetOutputSizePixel());
-    long nEntryHeight = pView->GetEntryHeight();
-
     if( aSize.Width() <= 0 || aSize.Height() <= 0 )
         return;
-    if( nEntryHeight )
-    {
-      // Set the view height to an integer multiple of the entry height.
-      int nEntryCount = (int) aSize.Height() / nEntryHeight;
-      aSize.Height() = pView->GetEntryHeight() * nEntryCount;
-      pView->Control::SetOutputSizePixel( aSize );
-    }
-
     nFlags |= F_IN_RESIZE;
     InitScrollBarBox();
 
