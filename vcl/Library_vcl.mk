@@ -445,10 +445,15 @@ $(eval $(call gb_Library_add_defs,vcl,\
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_generic_code) \
     vcl/unx/generic/plugadapt/salplug \
-    vcl/unx/generic/printer/cupsmgr \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
-    vcl/unx/generic/printer/printerinfomanager \
+    $(if $(filter YES,$(ENABLE_CUPS)),\
+        vcl/unx/generic/printer/cupsmgr \
+        vcl/unx/generic/printer/printerinfomanager \
+    ) \
+    $(if $(filter NO,$(ENABLE_CUPS)),\
+        vcl/null/printerinfomanager \
+    ) \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
 	fontconfig \

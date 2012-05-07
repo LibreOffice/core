@@ -84,6 +84,16 @@ void PrinterInfoManager::initialize()
     // ???
 }
 
+bool PrinterInfoManager::isCUPSDisabled() const
+{
+    return m_bDisableCUPS;
+}
+
+void PrinterInfoManager::setCUPSDisabled( bool bDisable )
+{
+    // cups is already disabled in config so do nothing
+}
+
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
     rList.clear();
