@@ -92,6 +92,7 @@ public:
     void testFdo44211();
     void testFdo48037();
     void testFdo47764();
+    void testFdo38786();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(testFdo44211);
     CPPUNIT_TEST(testFdo48037);
     CPPUNIT_TEST(testFdo47764);
+    CPPUNIT_TEST(testFdo38786);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -674,6 +676,17 @@ void Test::testFdo47764()
     // \cbpat with zero argument should mean the auto (-1) color, not a default color (black)
     xPropertySet->getPropertyValue("ParaBackColor") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nValue);
+}
+
+void Test::testFdo38786()
+{
+    load("fdo38786.rtf");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    // \chpgn was ignored, so exception was thrown
+    xFields->nextElement();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

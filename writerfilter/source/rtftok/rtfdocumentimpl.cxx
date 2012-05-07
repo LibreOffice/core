@@ -1552,6 +1552,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     parBreak();
             }
             break;
+        case RTF_CHPGN:
+            {
+                OUString aStr("PAGE");
+                singleChar(0x13);
+                text(aStr);
+                singleChar(0x14);
+                singleChar(0x15);
+            }
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle symbol '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
