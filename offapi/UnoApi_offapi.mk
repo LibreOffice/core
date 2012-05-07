@@ -3660,6 +3660,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	TextGridMode \
 	TextMarkupDescriptor \
 	TextMarkupType \
+	TextPosition \
+	TextRangeSelection \
 	TimeDisplayFormat \
 	UserDataPart \
 	UserFieldFormat \
