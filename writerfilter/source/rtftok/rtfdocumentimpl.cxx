@@ -27,6 +27,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -46,6 +47,7 @@
 #include <svtools/grfmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <filter/msfilter/util.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #include <doctok/sprmids.hxx> // NS_sprm namespace
 #include <doctok/resourceids.hxx> // NS_rtf namespace
@@ -2071,8 +2073,34 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_POSXR: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right); break;
 
         case RTF_DPLINE:
+        case RTF_DPRECT:
                 {
-                    m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.LineShape"), uno::UNO_QUERY);
+                    sal_Int32 nType = 0;
+                    switch (nKeyword)
+                    {
+                        case RTF_DPLINE:
+                            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.LineShape"), uno::UNO_QUERY);
+                            break;
+                        case RTF_DPRECT:
+                            nType = ESCHER_ShpInst_Rectangle;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (nType)
+                            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
+                    uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier( m_xDstDoc, uno::UNO_QUERY);
+                    if (xDrawSupplier.is())
+                    {
+                        uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
+                        if (xShapes.is())
+                            xShapes->add(m_aStates.top().aDrawingObject.xShape);
+                    }
+                    if (nType)
+                    {
+                            uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
+                            xDefaulter->createCustomShapeDefaults(OUString::valueOf(nType));
+                    }
                     m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
                     for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
@@ -3302,13 +3330,6 @@ int RTFDocumentImpl::popState()
         uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
         xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
         xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
-        uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier( m_xDstDoc, uno::UNO_QUERY);
-        if ( xDrawSupplier.is() )
-        {
-            uno::Reference< drawing::XShapes > xShapes( xDrawSupplier->getDrawPage(), uno::UNO_QUERY );
-            if ( xShapes.is() )
-                xShapes->add( xShape );
-        }
         Mapper().startShape(xShape);
         Mapper().endShape();
     }
