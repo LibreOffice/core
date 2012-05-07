@@ -1606,6 +1606,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     parBreak();
             }
             break;
+        case RTF_CHPGN:
+            {
+                OUString aStr(RTL_CONSTASCII_USTRINGPARAM("PAGE"));
+                singleChar(0x13);
+                text(aStr);
+                singleChar(0x14);
+                singleChar(0x15);
+            }
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
