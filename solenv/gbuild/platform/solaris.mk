@@ -168,15 +168,14 @@ gb_LinkTarget_LDFLAGS += \
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS := -O0
 gb_LINKEROPTFLAGS :=
 else
-gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
 gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 
+gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_COMPILERNOOPTFLAGS := -O0
 
 # LinkTarget class

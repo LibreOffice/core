@@ -100,13 +100,7 @@ gb_LinkTarget_LDFLAGS := \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
 gb_DEBUG_CFLAGS := -g
-ifneq ($(gb_DEBUGLEVEL),0)
-
-gb_COMPILEROPTFLAGS := -O0
-else
 gb_COMPILEROPTFLAGS := -O2
-endif
-
 gb_COMPILERNOOPTFLAGS := -O0
 
 # ObjCxxObject class
@@ -168,7 +162,7 @@ endef
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS)
-gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CFLAGS += -g

@@ -44,15 +44,15 @@ gb_LinkTarget__debug_enabled = \
 
 # debug flags, if ENABLE_DEBUG is set and the LinkTarget is named
 # in the list of libraries of ENABLE_DEBUG_FOR
-gb_LinkTarget__get_debugcflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_DEBUG_CFLAGS))
-gb_LinkTarget__get_debugcxxflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS))
+gb_LinkTarget__get_debugcflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))
+gb_LinkTarget__get_debugcxxflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS),$(gb_COMPILEROPTFLAGS))
 
 # generic cflags/cxxflags to use (optimization flags, debug flags)
 # user supplied CFLAGS/CXXFLAGS override default debug/optimization flags
-gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcflags,$(1)))
-gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcflags,$(1)))
-gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcxxflags,$(1)))
-gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcxxflags,$(1)))
+gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(call gb_LinkTarget__get_debugcflags,$(1)))
+gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(call gb_LinkTarget__get_debugcflags,$(1)))
+gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(call gb_LinkTarget__get_debugcxxflags,$(1)))
+gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(call gb_LinkTarget__get_debugcxxflags,$(1)))
 
 # Overview of dependencies and tasks of LinkTarget
 #

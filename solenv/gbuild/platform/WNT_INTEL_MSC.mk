@@ -221,12 +221,7 @@ gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
 
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS :=
-else
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
-endif
-
 gb_COMPILERNOOPTFLAGS := -Od
 
 ifeq ($(gb_FULLDEPS),$(true))

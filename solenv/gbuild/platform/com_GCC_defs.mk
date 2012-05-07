@@ -105,11 +105,7 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 
 
 # optimization level
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS := -O0
-else
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
-endif
 gb_COMPILERNOOPTFLAGS := -O0
 
 # Clang does not know -ggdb2 or some other options
