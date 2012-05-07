@@ -2704,6 +2704,10 @@ static HRESULT WINAPI backwardCompatibleDwmIsCompositionEnabled( BOOL* pOut )
 
 static BOOL ImplDwmIsCompositionEnabled()
 {
+    // FIXME It seems that this wrong advice to use 'DwmIsCompositionEnabled'
+    // is widely spread; causing LO to not theme menus when running in
+    // rdesktop.  We should beter use IsThemeActive() from uxtheme.dll.
+    // But the entire ::UpdateSettings() need a rework anyway ;-)
     SalData* pSalData = GetSalData();
     if( ! pSalData->mpDwmIsCompositionEnabled )
     {
