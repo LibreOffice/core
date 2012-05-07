@@ -428,7 +428,10 @@ public class JavaLoader implements XImplementationLoader,
                 success = ((Boolean) oRet).booleanValue();
         }
         catch (Exception e) {
-            throw new CannotRegisterImplementationException( e.getMessage());
+            CannotRegisterImplementationException e2 =
+                new CannotRegisterImplementationException(e.toString());
+            e2.initCause(e);
+            throw e2;
          }
 
         return success;
