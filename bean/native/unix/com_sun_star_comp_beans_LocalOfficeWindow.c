@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Intrinsic.h>
@@ -40,6 +42,7 @@
 #include "jawt_md.h"
 #include "jawt.h"
 
+#include "sal/types.h"
 
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
@@ -71,7 +74,7 @@ static void ThrowException(JNIEnv * env, char const * type, char const * msg) {
  * Method:    getNativeWindowSystemType
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindowSystemType
+SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
     (void) env; /* avoid warning about unused parameter */
@@ -86,7 +89,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeW
  * Method:    getNativeWindow
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
+SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
   (JNIEnv * env, jobject obj_this)
 {
     jboolean result;

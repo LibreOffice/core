@@ -218,7 +218,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     forui \
     odbc \
     odbcbase \
-    officebean \
     oox \
     ooxml \
     sdbc \
@@ -409,6 +408,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_euro \
     localedata_others \
     mcnttype \
+    officebean \
     package2 \
     scriptframe \
     smoketest \
