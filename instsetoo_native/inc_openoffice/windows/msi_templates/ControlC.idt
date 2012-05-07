@@ -36,8 +36,8 @@ SetupCompleteError	RestContText1	Hide	NOT UpdateStarted
 SetupCompleteError	RestContText1	Show	UpdateStarted
 SetupCompleteError	RestContText2	Hide	NOT UpdateStarted
 SetupCompleteError	RestContText2	Show	UpdateStarted
-SetupCompleteSuccess	TextLine2	Show	ProgressType2="installed" And ((ACTION<>"INSTALL")
-SetupCompleteSuccess	TextLine3	Show	ProgressType2="uninstalled" And ((ACTION<>"INSTALL")
+SetupCompleteSuccess	TextLine2	Show	ProgressType2="installed"
+SetupCompleteSuccess	TextLine3	Show	ProgressType2="uninstalled"
 SetupInterrupted	Back	Default	UpdateStarted
 SetupInterrupted	Back	Disable	NOT UpdateStarted
 SetupInterrupted	Back	Enable	UpdateStarted
