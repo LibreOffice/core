@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Intrinsic.h>
@@ -40,7 +42,7 @@
 #include "jawt_md.h"
 #include "jawt.h"
 
-/*#include "../inc/com_sun_star_comp_beans_LocalOfficeWindow.h"*/
+#include "sal/types.h"
 
 #if defined assert
 #undef assert
@@ -55,7 +57,7 @@
 #define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
 
-JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
+SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
   (JNIEnv * env, jobject obj_this);
 
 /*****************************************************************************/
@@ -64,7 +66,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
  * Method:    getNativeWindowSystemType
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindowSystemType
+SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
     (void) env; /* avoid warning about unused parameter */
@@ -79,7 +81,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
  * Method:    getNativeWindow
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
+SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
   (JNIEnv * env, jobject obj_this)
 {
     (void) env; /* avoid warning about unused parameter */
