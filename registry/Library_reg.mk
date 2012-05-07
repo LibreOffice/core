@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_defs,reg,\
 $(eval $(call gb_Library_use_libraries,reg,\
 	sal \
 	store \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,reg,\
