@@ -79,19 +79,10 @@ else
 gb_PRODUCT := $(false)
 endif
 
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
+gb_SYMBOL := $(true)
+else
 gb_SYMBOL := $(false)
-ifneq ($(strip $(ENABLE_SYMBOLS)),)
-gb_SYMBOL := $(true)
-# make sure symbols are enabled if overriden using the command line
-ifeq ($(origin ENABLE_SYMBOLS),command line)
-ENABLE_SYMBOLS_FOR = all
-endif
-endif
-ifneq ($(strip $(enable_symbols)),)
-gb_SYMBOL := $(true)
-ifeq ($(origin enable_symbols),command line)
-ENABLE_SYMBOLS_FOR = all
-endif
 endif
 
 gb_TIMELOG := 0
@@ -103,13 +94,13 @@ gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)),)
 gb_DEBUGLEVEL := 1
 ifeq ($(origin DEBUG),command line)
-ENABLE_SYMBOLS_FOR = all
+ENABLE_DEBUG_FOR := all
 endif
 endif
 ifneq ($(strip $(debug)),)
 gb_DEBUGLEVEL := 1
 ifeq ($(origin debug),command line)
-ENABLE_SYMBOLS_FOR = all
+ENABLE_DEBUG_FOR := all
 endif
 endif
 ifeq ($(gb_PRODUCT),$(false))
@@ -119,26 +110,18 @@ endif
 ifneq ($(strip $(DBGLEVEL)),)
 gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
 ifeq ($(origin DBGLEVEL),command line)
-ENABLE_SYMBOLS_FOR = all
+ENABLE_DEBUG_FOR := all
 endif
 endif
 ifneq ($(strip $(dbglevel)),)
 gb_DEBUGLEVEL := $(strip $(dbglevel))
 ifeq ($(origin dbglevel),command line)
-ENABLE_SYMBOLS_FOR = all
+ENABLE_DEBUG_FOR := all
 endif
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
-endif
-
-# if symbols are triggered by something else than --enable-symbols,
-# make sure they are actually enabled
-ifeq ($(gb_SYMBOL),$(true))
-ifeq ($(ENABLE_SYMBOLS_FOR),)
-ENABLE_SYMBOLS_FOR = all
-endif
 endif
 
 ifneq ($(nodep),)

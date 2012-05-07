@@ -37,27 +37,22 @@
 # LDFLAGS
 
 # enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
-gb_LinkTarget__symbols_enabled = \
- $(and $(if $(filter -$(1),$(ENABLE_SYMBOLS_FOR)),,$(true)),\
+gb_LinkTarget__debug_enabled = \
+ $(and $(if $(filter -$(1),$(ENABLE_DEBUG_FOR)),,$(true)),\
        $(or $(gb_Module_CURRENTMODULE_DEBUG_ENABLED),\
-            $(filter $(1),$(ENABLE_SYMBOLS_FOR))))
+            $(filter $(1),$(ENABLE_DEBUG_FOR))))
 
-# debug flags, if ENABLE_SYMBOLS is set and the LinkTarget is named
-# in the list of libraries of ENABLE_SYMBOLS_FOR
-ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget__get_symbolscflags=$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUG_CFLAGS))
-gb_LinkTarget__get_symbolscxxflags=$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS))
-else
-gb_LinkTarget__get_symbolscflags=
-gb_LinkTarget__get_symbolscxxflags=
-endif
+# debug flags, if ENABLE_DEBUG is set and the LinkTarget is named
+# in the list of libraries of ENABLE_DEBUG_FOR
+gb_LinkTarget__get_debugcflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_DEBUG_CFLAGS))
+gb_LinkTarget__get_debugcxxflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS))
 
 # generic cflags/cxxflags to use (optimization flags, debug flags)
 # user supplied CFLAGS/CXXFLAGS override default debug/optimization flags
-gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscflags,$(1)))
-gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscflags,$(1)))
-gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscxxflags,$(1)))
-gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscxxflags,$(1)))
+gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcflags,$(1)))
+gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcflags,$(1)))
+gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcxxflags,$(1)))
+gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_debugcxxflags,$(1)))
 
 # Overview of dependencies and tasks of LinkTarget
 #
