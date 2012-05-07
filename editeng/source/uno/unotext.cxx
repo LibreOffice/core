@@ -29,7 +29,9 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/text/XTextField.hdl>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/TextRangeSelection.hpp>
+
 #include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
@@ -53,9 +55,25 @@
 #include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/servicehelper.hxx>
 
+#define UNO_TR_PROP_SELECTION "Selection"
+
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+
+namespace {
+
+ESelection toESelection(const text::TextRangeSelection& rSel)
+{
+    ESelection aESel;
+    aESel.nStartPara = rSel.Start.Paragraph;
+    aESel.nStartPos = rSel.Start.PositionInParagraph;
+    aESel.nEndPara = rSel.End.Paragraph;
+    aESel.nEndPos = rSel.End.PositionInParagraph;
+    return aESel;
+}
+
+}
 
 const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
 {
@@ -396,6 +414,14 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextRangeBase::getPrope
 void SAL_CALL SvxUnoTextRangeBase::setPropertyValue(const OUString& PropertyName, const uno::Any& aValue)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    if (PropertyName == UNO_TR_PROP_SELECTION)
+    {
+        text::TextRangeSelection aSel = aValue.get<text::TextRangeSelection>();
+        SetSelection(toESelection(aSel));
+
+        return;
+    }
+
     _setPropertyValue( PropertyName, aValue, -1 );
 }
 
@@ -561,6 +587,17 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
 uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& PropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    if (PropertyName == UNO_TR_PROP_SELECTION)
+    {
+        const ESelection& rSel = GetSelection();
+        text::TextRangeSelection aSel;
+        aSel.Start.Paragraph = static_cast<sal_Int32>(rSel.nStartPara);
+        aSel.Start.PositionInParagraph = static_cast<sal_Int32>(rSel.nStartPos);
+        aSel.End.Paragraph = static_cast<sal_Int32>(rSel.nEndPara);
+        aSel.End.PositionInParagraph = static_cast<sal_Int32>(rSel.nEndPos);
+        return uno::makeAny(aSel);
+    }
+
     return _getPropertyValue( PropertyName, -1 );
 }
 
@@ -1759,39 +1796,38 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
-    if( pForwarder )
-    {
+    if (!pForwarder)
+        return;
 
-        SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
-        SvxUnoTextField* pField = SvxUnoTextField::getImplementation( xContent );
+    SvxUnoTextField* pField = SvxUnoTextField::getImplementation( xContent );
 
-        if( pRange == NULL || pField == NULL )
-            throw lang::IllegalArgumentException();
+    if (pField == NULL)
+        throw lang::IllegalArgumentException();
 
-        ESelection aSelection = pRange->GetSelection();
-        if( !bAbsorb )
-        {
-            aSelection.nStartPara = aSelection.nEndPara;
-            aSelection.nStartPos  = aSelection.nEndPos;
-        }
+    uno::Reference<beans::XPropertySet> xPropSet(xRange, uno::UNO_QUERY);
+    if (!xPropSet.is())
+        throw lang::IllegalArgumentException();
 
-        SvxFieldData* pFieldData = pField->CreateFieldData();
-        if( pFieldData == NULL )
-            throw lang::IllegalArgumentException();
+    uno::Any aAny = xPropSet->getPropertyValue(UNO_TR_PROP_SELECTION);
+    text::TextRangeSelection aSel = aAny.get<text::TextRangeSelection>();
+    if (!bAbsorb)
+        aSel.Start = aSel.End;
 
-        SvxFieldItem aField( *pFieldData, EE_FEATURE_FIELD );
-        pForwarder->QuickInsertField( aField, aSelection );
-        GetEditSource()->UpdateData();
+    SvxFieldData* pFieldData = pField->CreateFieldData();
+    if( pFieldData == NULL )
+        throw lang::IllegalArgumentException();
 
-        pField->SetAnchor( uno::Reference< text::XTextRange >::query( (cppu::OWeakObject*)this ) );
+    SvxFieldItem aField( *pFieldData, EE_FEATURE_FIELD );
+    pForwarder->QuickInsertField(aField, toESelection(aSel));
+    GetEditSource()->UpdateData();
 
-        aSelection.nEndPos += 1;
-        aSelection.nStartPos = aSelection.nEndPos;
-        //maSelection = aSelection; //???
-        pRange->SetSelection( aSelection );
+    pField->SetAnchor( uno::Reference< text::XTextRange >::query( (cppu::OWeakObject*)this ) );
 
-        delete pFieldData;
-    }
+    aSel.End.PositionInParagraph += 1;
+    aSel.Start.PositionInParagraph = aSel.End.PositionInParagraph;
+    xPropSet->setPropertyValue(UNO_TR_PROP_SELECTION, uno::makeAny(aSel));
+
+    delete pFieldData;
 }
 
 void SAL_CALL SvxUnoTextBase::removeTextContent( const uno::Reference< text::XTextContent >& ) throw(container::NoSuchElementException, uno::RuntimeException)
