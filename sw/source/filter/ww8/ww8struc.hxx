@@ -34,6 +34,7 @@
 #include <sal/config.h>
 
 #include <editeng/borderline.hxx>
+#include <filter/msfilter/util.hxx>
 
 #if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #   define __WW8_NEEDS_COPY
@@ -978,8 +979,7 @@ struct SEPr
 
 namespace wwUtility
 {
-    sal_uInt32 BGRToRGB(sal_uInt32 nColour);
-    inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return BGRToRGB(nColour); }
+    inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return msfilter::util::BGRToRGB(nColour); }
 }
 
 #endif

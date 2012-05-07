@@ -35,6 +35,7 @@
 
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
 #include <filter/msfilter/escherex.hxx>
+#include <filter/msfilter/util.hxx>
 
 #include <rtfsdrimport.hxx>
 
@@ -43,18 +44,6 @@ using rtl::OStringBuffer;
 using rtl::OUString;
 using rtl::OUStringBuffer;
 using rtl::OUStringToOString;
-
-// NEEDSWORK: wwUtility::BGRToRGB does the same.
-static sal_uInt32 lcl_BGRToRGB(sal_uInt32 nColor)
-{
-    sal_uInt8
-        r(static_cast<sal_uInt8>(nColor&0xFF)),
-        g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
-        b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
-        t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
-    nColor = (t<<24) + (r<<16) + (g<<8) + b;
-    return nColor;
-}
 
 namespace writerfilter {
 namespace rtftok {
@@ -132,14 +121,14 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         }
         else if (i->first == "fillColor" && xPropertySet.is())
         {
-            aAny <<= lcl_BGRToRGB(i->second.toInt32());
+            aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "fillBackColor" )
             ; // Ignore: complementer of fillColor
         else if (i->first == "lineColor" && xPropertySet.is())
         {
-            aAny <<= lcl_BGRToRGB(i->second.toInt32());
+            aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue("LineColor", aAny);
         }
         else if ( i->first == "lineBackColor" )

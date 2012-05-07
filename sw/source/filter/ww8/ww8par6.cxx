@@ -3363,24 +3363,13 @@ void SwWW8ImplReader::Read_TxtColor( sal_uInt16, const sal_uInt8* pData, short n
     }
 }
 
-sal_uInt32 wwUtility::BGRToRGB(sal_uInt32 nColor)
-{
-    sal_uInt8
-        r(static_cast<sal_uInt8>(nColor&0xFF)),
-        g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
-        b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
-        t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
-    nColor = (t<<24) + (r<<16) + (g<<8) + b;
-    return nColor;
-}
-
 void SwWW8ImplReader::Read_TxtForeColor(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
     if( nLen < 0 )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
     else
     {
-        Color aColor(wwUtility::BGRToRGB(SVBT32ToUInt32(pData)));
+        Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
         if (pAktColl && pStyles)
             pStyles->bTxtColChanged = true;
@@ -4663,9 +4652,9 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
 {
     (void) bVer67; // unused in non-debug
     OSL_ENSURE(bVer67 == false, "Impossible");
-    sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
+    sal_uInt32 nFore = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
-    sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
+    sal_uInt32 nBack = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt16 nIndex = SVBT16ToShort(rpData);
     rpData+=2;

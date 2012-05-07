@@ -41,6 +41,8 @@ namespace util {
 /// what the encoding is, but you know or can guess the language
 MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale);
 
+/// Convert a color in BGR format to RGB.
+MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
 }
 }
 
