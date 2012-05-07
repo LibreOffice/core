@@ -153,6 +153,7 @@ def build_pretty_printers():
     # basic UNO stuff
     printer.add('_uno_Any', UnoAnyPrinter)
     printer.add('com::sun::star::uno::Any', UnoAnyPrinter)
+    printer.add('com::sun::star::uno::Reference', UnoReferencePrinter)
     printer.add('com::sun::star::uno::Sequence', UnoSequencePrinter)
     printer.add('com::sun::star::uno::Type', UnoTypePrinter)
 
