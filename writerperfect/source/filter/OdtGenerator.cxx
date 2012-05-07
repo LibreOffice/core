@@ -852,8 +852,17 @@ void OdtGenerator::openFootnote(const WPXPropertyList &propList)
     }
     mpImpl->mpCurrentContentElements->push_back(pOpenFootNote);
 
-    mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("text:note-citation"));
-    if (propList["libwpd:number"])
+    TagOpenElement *pOpenFootCitation = new TagOpenElement("text:note-citation");
+    if (propList["text:label"])
+    {
+        WPXString tmpString(propList["text:label"]->getStr(),true);
+        pOpenFootCitation->addAttribute("text:label", tmpString);
+    }
+    mpImpl->mpCurrentContentElements->push_back(pOpenFootCitation);
+
+    if (propList["text:label"])
+        mpImpl->mpCurrentContentElements->push_back(new CharDataElement(propList["text:label"]->getStr().cstr()));
+    else if (propList["libwpd:number"])
         mpImpl->mpCurrentContentElements->push_back(new CharDataElement(propList["libwpd:number"]->getStr().cstr()));
     mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("text:note-citation"));
 
@@ -885,8 +894,17 @@ void OdtGenerator::openEndnote(const WPXPropertyList &propList)
     }
     mpImpl->mpCurrentContentElements->push_back(pOpenEndNote);
 
-    mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("text:note-citation"));
-    if (propList["libwpd:number"])
+    TagOpenElement *pOpenEndCitation = new TagOpenElement("text:note-citation");
+    if (propList["text:label"])
+    {
+        WPXString tmpString(propList["text:label"]->getStr(),true);
+        pOpenEndCitation->addAttribute("text:label", tmpString);
+    }
+    mpImpl->mpCurrentContentElements->push_back(pOpenEndCitation);
+
+    if (propList["text:label"])
+        mpImpl->mpCurrentContentElements->push_back(new CharDataElement(propList["text:label"]->getStr().cstr()));
+    else if (propList["libwpd:number"])
         mpImpl->mpCurrentContentElements->push_back(new CharDataElement(propList["libwpd:number"]->getStr().cstr()));
     mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("text:note-citation"));
 
