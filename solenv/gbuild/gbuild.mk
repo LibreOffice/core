@@ -153,21 +153,13 @@ endif
 endif
 
 # save user-supplied flags for latter use
-ifneq ($(strip $(CFLAGS)),)
-gb__ENV_CFLAGS := $(CFLAGS)
-else
 # TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGS)),)
 gb__ENV_CFLAGS := $(ENVCFLAGS)
 endif
-endif
-ifneq ($(strip $(CXXFLAGS)),)
-gb__ENV_CXXFLAGS := $(CXXFLAGS)
-else
 # TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGSCXX)),)
 gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
-endif
 endif
 
 include $(GBUILDDIR)/Helper.mk

@@ -52,9 +52,10 @@ gb_LinkTarget__get_symbolscflags=
 gb_LinkTarget__get_symbolscxxflags=
 endif
 
-# generic cflags/cxxflags to use (optimization flags, symbols (i.e. debug) flags, flags from environment)
-gb_LinkTarget__get_cflags=$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscflags,$(1)) $(CFLAGS)
-gb_LinkTarget__get_cxxflags=$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscxxflags,$(1)) $(CXXFLAGS)
+# generic cflags/cxxflags to use (optimization flags, debug flags)
+# user supplied CFLAGS/CXXFLAGS override default debug/optimization flags
+gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscflags,$(1)))
+gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(gb_COMPILEROPTFLAGS) $(call gb_LinkTarget__get_symbolscxxflags,$(1)))
 
 # Overview of dependencies and tasks of LinkTarget
 #
