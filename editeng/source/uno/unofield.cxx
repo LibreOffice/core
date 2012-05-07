@@ -41,6 +41,8 @@
 #include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/servicehelper.hxx>
 
+#include "editeng/unonames.hxx"
+
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -671,6 +673,12 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
     if( mpImpl == NULL )
         throw uno::RuntimeException();
 
+    if (aPropertyName == UNO_TC_PROP_ANCHOR)
+    {
+        aValue >>= mxAnchor;
+        return;
+    }
+
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
@@ -837,6 +845,9 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
+
+    if (PropertyName == UNO_TC_PROP_ANCHOR)
+        return uno::makeAny(mxAnchor);
 
     uno::Any aValue;
 

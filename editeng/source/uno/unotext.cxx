@@ -55,7 +55,7 @@
 #include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/servicehelper.hxx>
 
-#define UNO_TR_PROP_SELECTION "Selection"
+#include "editeng/unonames.hxx"
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -1821,7 +1821,11 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     pForwarder->QuickInsertField(aField, toESelection(aSel));
     GetEditSource()->UpdateData();
 
-    pField->SetAnchor( uno::Reference< text::XTextRange >::query( (cppu::OWeakObject*)this ) );
+    uno::Reference<beans::XPropertySet> xPropSetContent(xContent, uno::UNO_QUERY);
+    if (!xContent.is())
+        throw lang::IllegalArgumentException();
+
+    xPropSetContent->setPropertyValue(UNO_TC_PROP_ANCHOR, uno::makeAny(xRange));
 
     aSel.End.PositionInParagraph += 1;
     aSel.Start.PositionInParagraph = aSel.End.PositionInParagraph;
