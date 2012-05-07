@@ -252,7 +252,7 @@ SetupCompleteError	TextLine2	Text	135	55	228	25	65539		OOO_CONTROL_191
 SetupCompleteSuccess	Back	PushButton	164	243	66	17	1		OOO_CONTROL_192	OK	
 SetupCompleteSuccess	Cancel	PushButton	301	243	66	17	1		OOO_CONTROL_193	Image	
 SetupCompleteSuccess	DlgLine	Line	0	234	374	0	1				
-SetupCompleteSuccess	Image	Bitmap	0	0	122	234	1		ImageBmp	CheckBoxUpdates	
+SetupCompleteSuccess	Image	Bitmap	0	0	122	234	1		ImageBmp	Back	
 SetupCompleteSuccess	OK	PushButton	230	243	66	17	3		OOO_CONTROL_197	Cancel	
 SetupCompleteSuccess	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_198		
 SetupCompleteSuccess	TextLine2	Text	135	55	228	45	65538		OOO_CONTROL_199		
