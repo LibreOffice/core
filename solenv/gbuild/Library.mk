@@ -174,6 +174,7 @@ $(eval $(foreach method,\
 	add_cxxflags \
 	set_cxxflags \
 	add_objcxxflags \
+	add_objcflags \
 	set_objcflags \
 	set_objcxxflags \
 	add_defs \

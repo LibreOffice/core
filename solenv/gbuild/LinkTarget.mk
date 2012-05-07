@@ -576,9 +576,15 @@ $$(call gb_Output_error,\
 endef
 
 define gb_LinkTarget_set_objcflags
-$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $(2)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_objcflags: use gb_LinkTarget_add_objcflags instead.)
+
+endef
+
+define gb_LinkTarget_add_objcflags
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS += $(2)
 endif
 
 endef
