@@ -82,9 +82,6 @@ static long ImplIndexFromColor( const BitmapColor& rCol )
 #endif
 }
 
-
-#define COLOR_TO_INDEX( _def_rCol )
-
 // ------------------------
 // - conversion functions -
 // ------------------------

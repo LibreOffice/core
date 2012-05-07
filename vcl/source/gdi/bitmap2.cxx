@@ -49,8 +49,6 @@
 #define DIBINFOHEADERSIZE           ( sizeof( DIBInfoHeader ) )
 #define BITMAPINFOHEADER                        0x28
 
-#define SETPIXEL4( pBuf, nX, cChar )( (pBuf)[ (nX) >> 1 ] |= ( (nX) & 1 ) ? ( cChar ): (cChar) << 4 );
-
 // ----------------------
 // - Compression defines
 // ----------------------

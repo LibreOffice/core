@@ -85,7 +85,6 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
 // ========================================================================
 
 #define COMPAT( _def_rIStm ) VersionCompat aCompat( ( _def_rIStm ), STREAM_READ );
-#define COMPAT_VERSION() aCompat.GetVersion()
 #define WRITE_BASE_COMPAT( _def_rOStm, _def_nVer, _pWriteData )         \
     MetaAction::Write( ( _def_rOStm ), _pWriteData );                   \
     VersionCompat aCompat( ( _def_rOStm ), STREAM_WRITE, ( _def_nVer ) );

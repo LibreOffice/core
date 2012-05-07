@@ -45,11 +45,6 @@
 
 // =======================================================================
 
-#define WORKWIN_WINDOWSTATE_FULLSCREEN          ((sal_uLong)0x00010000)
-#define WORKWIN_WINDOWSTATE_ALL                 ((sal_uLong)0x00FF0000)
-
-// =======================================================================
-
 void WorkWindow::ImplInitWorkWindowData()
 {
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow

@@ -52,8 +52,6 @@
 DBG_NAME( Image )
 DBG_NAME( ImageList )
 
-#define IMAGE_FILE_VERSION 100
-
 using namespace ::com::sun::star;
 
 // ---------

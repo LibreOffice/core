@@ -52,7 +52,6 @@
 #include <boost/scoped_ptr.hpp>
 
 #define DESCRIPTION_1 1
-#define DESCRIPTION_2 2
 #define TITLE 3
 
 #define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"

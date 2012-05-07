@@ -35,13 +35,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 
-
-
-// =======================================================================
-
-#define IMAGEBUTTON_BORDER_OFF1     11
-#define IMAGEBUTTON_BORDER_OFF2     16
-
 // =======================================================================
 
 void MenuButton::ImplInitMenuButtonData()

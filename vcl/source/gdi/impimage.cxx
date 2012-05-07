@@ -43,7 +43,6 @@
 
 #define IMPSYSIMAGEITEM_MASK        ( 0x01 )
 #define IMPSYSIMAGEITEM_ALPHA       ( 0x02 )
-#define DISA_ALL                    ( 0xffff )
 
 // -----------------------------------------------------------------------
 

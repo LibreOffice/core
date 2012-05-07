@@ -56,13 +56,6 @@ DBG_NAME( AllSettings )
 
 // =======================================================================
 
-#define STDSYS_STYLE            (STYLE_OPTION_SCROLLARROW |     \
-                                 STYLE_OPTION_SPINARROW |       \
-                                 STYLE_OPTION_SPINUPDOWN |      \
-                                 STYLE_OPTION_NOMNEMONICS)
-
-// =======================================================================
-
 ImplMouseData::ImplMouseData()
 {
     mnRefCount                  = 1;
