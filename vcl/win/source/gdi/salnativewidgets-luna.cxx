@@ -26,6 +26,16 @@
  *
  ************************************************************************/
 
+// General info:
+//   http://msdn.microsoft.com/en-us/library/windows/desktop/hh270423%28v=vs.85%29.aspx
+//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb773178%28v=vs.85%29.aspx
+//
+// Useful tool to explore the themes & their rendering:
+//   http://privat.rejbrand.se/UxExplore.exe
+// (found at http://stackoverflow.com/questions/4009701/windows-visual-themes-gallery-of-parts-and-states/4009712#4009712)
+//
+// Theme subclasses:
+// http://msdn.microsoft.com/en-us/library/windows/desktop/bb773218%28v=vs.85%29.aspx
 
 #define _SV_SALNATIVEWIDGETS_CXX
 
