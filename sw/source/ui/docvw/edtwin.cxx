@@ -5683,6 +5683,11 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
             if( rS.Len() > rWord.Len() )
             {
                 String* pNew = new String( rS );
+                ByteString bStr( ::rtl::OUStringToOString( rWord, RTL_TEXTENCODING_UTF8) );
+                if( bStr.IsLowerAscii() )
+                    pNew->ToLowerAscii();
+                else if( bStr.IsUpperAscii() )
+                    pNew->ToUpperAscii();
                 if( !aArr.Insert( pNew ) )
                     delete pNew;
             }
