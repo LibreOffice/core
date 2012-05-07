@@ -5653,7 +5653,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
                 String sStr( aNames[ nPos ].FullName );
                 if( rWord.Len() + 1 < sStr.Len() &&
 
-//!!! UNICODE: fehlendes interface
+//!!! TODO: use i18n-sensitive compare if it becomes available
 //                  pIntl->CompareEqual( rWord, sStr.Copy( 0, rWord.Len() ),
 //                              INTN_COMPARE_IGNORECASE ) )
                     COMPARE_EQUAL == rWord.CompareIgnoreCaseToAscii(
@@ -5669,29 +5669,24 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
         }
     }
 
-    // and than add all words from the AutoCompleteWord-List
+    // and then add all words from the AutoCompleteWord-List
     const SwAutoCompleteWord& rACLst = rSh.GetAutoCompleteWords();
     sal_uInt16 nStt, nEnd;
     if( rACLst.GetRange( rWord, nStt, nEnd ) )
     {
-        while( nStt < nEnd )
+        // #i22961# guess letter case-context for autocompletion
+        const CharClass& rCharClass = GetAppCharClass();
+        const bool bIsUpper = (rWord == rCharClass.toUpper( rWord, 0, rWord.Len() ) );
+        const bool bIsLower = (rWord == rCharClass.toLower( rWord, 0, rWord.Len() ) );
+        for(; nStt < nEnd; ++nStt )
         {
             const String& rS = rACLst[ nStt ];
-            //JP 16.06.99: Bug 66927 - only if the count of chars
-            //              from the suggest greater as the
-            //              actual word
-            if( rS.Len() > rWord.Len() )
-            {
-                String* pNew = new String( rS );
-                ByteString bStr( ::rtl::OUStringToOString( rWord, RTL_TEXTENCODING_UTF8) );
-                if( bStr.IsLowerAscii() )
-                    pNew->ToLowerAscii();
-                else if( bStr.IsUpperAscii() )
-                    pNew->ToUpperAscii();
-                if( !aArr.Insert( pNew ) )
-                    delete pNew;
-            }
-            ++nStt;
+            if( rS.Len() <= rWord.Len() )
+                continue;
+            // #i22961# provide case-sensitive autocompletion suggestions
+            String* pNew = new String( (bIsUpper==bIsLower) ? rS : (bIsUpper ? rCharClass.toUpper(rS,0,rS.Len()) : rCharClass.toLower(rS,0,rS.Len())) );
+            if( !aArr.Insert( pNew ) )
+                delete pNew;
         }
     }
 }
