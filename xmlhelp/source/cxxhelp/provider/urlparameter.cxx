@@ -563,7 +563,8 @@ bool URLParameter::scheme()
     if( m_aExpr.compareToAscii( "vnd.sun.star.help:///", 21 ) == 0 )
     {
         sal_Int32 nLen = m_aExpr.getLength();
-        rtl::OUString aLastStr = m_aExpr.copy( nLen - 6 );
+        rtl::OUString aLastStr =
+            m_aExpr.copy(sal::static_int_cast<sal_uInt32>(nLen) - 6);
         if( aLastStr.compareToAscii( "DbPAR=" ) == 0 )
         {
             rtl::OUString aNewExpr = m_aExpr.copy( 0, 20 );
