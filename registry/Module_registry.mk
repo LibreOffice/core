@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,registry,\
     Package_inc \
 ))
 
-ifneq ($(OS),IOS)
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,registry,\
     StaticLibrary_registry_helper \
