@@ -114,7 +114,6 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
         rSortData       ( ((const ScSortItem&)
                            rArgSet.Get( nWhichSort )).
                                 GetSortData() ),
-        aNewSortData    ( rSortData ),
         nFieldCount     ( 0 ),
         nSortKeyCount   ( DEFSORT ),
         nCurrentOffset  ( 0 ),
@@ -143,15 +142,6 @@ void ScTabPageSortFields::Init()
     OSL_ENSURE( pViewData, "ViewData not found!" );
 
     // Create local copy of ScParam
-    aNewSortData = rSortData;
-
-    if (pDlg)
-    {
-        const SfxItemSet* pExample = pDlg->GetExampleSet();
-        const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
-            aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
-    }
 
     // Connect handlers and widgets
     nFieldArr.push_back( 0 );
@@ -194,23 +184,23 @@ SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
 
 void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
-    bSortByRows = aNewSortData.bByRow;
-    bHasHeader  = aNewSortData.bHasHeader;
+    bSortByRows = rSortData.bByRow;
+    bHasHeader  = rSortData.bHasHeader;
 
     if ( aLbSort1.GetEntryCount() == 0 )
         FillFieldLists(0);
 
     // ListBox selection:
-    if ( aNewSortData.maKeyState[0].bDoSort )
+    if ( rSortData.maKeyState[0].bDoSort )
     {
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
         {
-            if ( aNewSortData.maKeyState[i].bDoSort )
+            if ( rSortData.maKeyState[i].bDoSort )
             {
                 aLbSortArr[i]->SelectEntryPos( GetFieldSelPos(
-                                    aNewSortData.maKeyState[i].nField ) );
+                                    rSortData.maKeyState[i].nField ) );
 
-                (aNewSortData.maKeyState[i].bAscending)
+                (rSortData.maKeyState[i].bAscending)
                     ? aBtnUp[i]->Check()
                     : aBtnDown[i]->Check();
             }
@@ -233,12 +223,12 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     {
         SCCOL  nCol = pViewData->GetCurX();
 
-        if( nCol < aNewSortData.nCol1 )
-            nCol = aNewSortData.nCol1;
-        else if( nCol > aNewSortData.nCol2 )
-            nCol = aNewSortData.nCol2;
+        if( nCol < rSortData.nCol1 )
+            nCol = rSortData.nCol1;
+        else if( nCol > rSortData.nCol2 )
+            nCol = rSortData.nCol2;
 
-        sal_uInt16  nSort1Pos = nCol - aNewSortData.nCol1+1;
+        sal_uInt16  nSort1Pos = nCol - rSortData.nCol1+1;
 
         aLbSortArr[0] -> SelectEntryPos( nSort1Pos );
         for ( sal_uInt16 i=1; i<nSortKeyCount; i++ )
@@ -264,6 +254,15 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 
 sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
+    ScSortParam aNewSortData = rSortData;
+
+    if (pDlg)
+    {
+        const SfxItemSet* pExample = pDlg->GetExampleSet();
+        const SfxPoolItem* pItem;
+        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
+            aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
+    }
     std::vector<sal_uInt16>  nSortPos;
 
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
@@ -541,7 +540,6 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         rSortData       ( ((const ScSortItem&)
                           rArgSet.Get( nWhichSort )).GetSortData() ),
-        aNewSortData    ( rSortData ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
         pDlg            ( (ScSortDlg*)(GetParent() ? GetParent()->GetParent() : 0 ) ),
@@ -598,16 +596,6 @@ void ScTabPageSortOptions::Init()
 
     OSL_ENSURE( pViewData, "ViewData not found! :-/" );
 
-    // Create local copy of ScParam
-    aNewSortData = rSortData;
-
-    if (pDlg)
-    {
-        const SfxItemSet* pExample = pDlg->GetExampleSet();
-        const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
-            aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
-    }
 
     if ( pViewData && pDoc )
     {
@@ -639,17 +627,17 @@ void ScTabPageSortOptions::Init()
 
         // Check whether the field that is passed on is a database field:
 
-        ScAddress aScAddress( aNewSortData.nCol1, aNewSortData.nRow1, nCurTab );
+        ScAddress aScAddress( rSortData.nCol1, rSortData.nRow1, nCurTab );
         ScRange( aScAddress,
-                 ScAddress( aNewSortData.nCol2, aNewSortData.nRow2, nCurTab )
+                 ScAddress( rSortData.nCol2, rSortData.nRow2, nCurTab )
                ).Format( theArea, SCR_ABS, pDoc, eConv );
 
         if ( pDBColl )
         {
             ScDBData* pDBData
                     = pDBColl->GetDBAtArea( nCurTab,
-                                            aNewSortData.nCol1, aNewSortData.nRow1,
-                                            aNewSortData.nCol2, aNewSortData.nRow2 );
+                                            rSortData.nCol1, rSortData.nRow1,
+                                            rSortData.nCol2, rSortData.nRow2 );
             if ( pDBData )
             {
                 theDbName = pDBData->GetName();
@@ -755,6 +743,16 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
+    // Create local copy of ScParam
+    ScSortParam aNewSortData = rSortData;
+
+    if (pDlg)
+    {
+        const SfxItemSet* pExample = pDlg->GetExampleSet();
+        const SfxPoolItem* pItem;
+        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
+            aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
+    }
     aNewSortData.bByRow          = aBtnTopDown.IsChecked();
     aNewSortData.bHasHeader      = aBtnHeader.IsChecked();
     aNewSortData.bCaseSens       = aBtnCase.IsChecked();

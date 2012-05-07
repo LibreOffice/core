@@ -99,7 +99,6 @@ private:
     ScSortDlg*          pDlg;
     ScViewData*         pViewData;
     const ScSortParam&  rSortData;
-    ScSortParam         aNewSortData;
     std::vector<SCCOLROW>  nFieldArr;
     sal_uInt16          nFieldCount;
     sal_uInt16          nSortKeyCount;
@@ -188,7 +187,6 @@ private:
 
     const sal_uInt16    nWhichSort;
     const ScSortParam&  rSortData;
-    ScSortParam         aNewSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
     ScSortDlg*          pDlg;
