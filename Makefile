@@ -127,6 +127,7 @@ sw\
 swext\
 tail_build\
 test\
+testtools\
 toolkit\
 tools\
 translations\
@@ -240,7 +241,6 @@ soltools\
 stax\
 stlport\
 sysui\
-testtools\
 tomcat\
 udm\
 vigra\
