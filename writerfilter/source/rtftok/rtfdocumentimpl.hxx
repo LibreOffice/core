@@ -197,9 +197,12 @@ namespace writerfilter {
         class RTFDrawingObject : public RTFShape
         {
             public:
+                RTFDrawingObject();
                 uno::Reference<drawing::XShape> xShape;
                 uno::Reference<beans::XPropertySet> xPropertySet;
                 std::vector<beans::PropertyValue> aPendingProperties;
+                sal_uInt8 nLineColorR, nLineColorG, nLineColorB;
+                bool bHasLineColor;
         };
 
         /// Stores the properties of a picture.
