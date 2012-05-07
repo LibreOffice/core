@@ -37,6 +37,12 @@
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
+namespace com { namespace sun { namespace star { namespace text {
+
+class XTextContent;
+
+}}}}
+
 class SvNumberFormatter;
 class MetaAction;
 
@@ -47,6 +53,8 @@ class MetaAction;
 class EDITENG_DLLPUBLIC SvxFieldData : public SvPersistBase
 {
 public:
+    static SvxFieldData* Create(const com::sun::star::uno::Reference<com::sun::star::text::XTextContent>& xContent);
+
     SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, -1 )
 
                             SvxFieldData();
@@ -92,7 +100,7 @@ public:
 // =================================================================
 
 enum SvxDateType { SVXDATETYPE_FIX, SVXDATETYPE_VAR };
-enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT,   // Set as in App
+enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT = 0,   // Set as in App
                         SVXDATEFORMAT_SYSTEM,       // Set as in System
                         SVXDATEFORMAT_STDSMALL,
                         SVXDATEFORMAT_STDBIG,
@@ -139,7 +147,7 @@ public:
 };
 
 
-enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT,    // Set as in App
+enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT = 0,    // Set as in App
                         SVXURLFORMAT_URL,           // Represent URL
                         SVXURLFORMAT_REPR           // Constitute repraesentation
                     };
@@ -237,7 +245,7 @@ public:
 
 
 enum SvxTimeType { SVXTIMETYPE_FIX, SVXTIMETYPE_VAR };
-enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT,   // Set as in App
+enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT = 0,   // Set as in App
                         SVXTIMEFORMAT_SYSTEM,       // Set as in System
                         SVXTIMEFORMAT_STANDARD,
                         SVXTIMEFORMAT_24_HM,    // 13:49
@@ -287,7 +295,7 @@ public:
 
 
 enum SvxFileType { SVXFILETYPE_FIX, SVXFILETYPE_VAR };
-enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT, // File name with Extension
+enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT = 0, // File name with Extension
                         SVXFILEFORMAT_FULLPATH, // full path
                         SVXFILEFORMAT_PATH,     // only path
                         SVXFILEFORMAT_NAME      // only file name
@@ -326,7 +334,7 @@ public:
 
 
 enum SvxAuthorType { SVXAUTHORTYPE_FIX, SVXAUTHORTYPE_VAR };
-enum SvxAuthorFormat {  SVXAUTHORFORMAT_FULLNAME,   // full name
+enum SvxAuthorFormat {  SVXAUTHORFORMAT_FULLNAME = 0, // full name
                         SVXAUTHORFORMAT_NAME,       // Only Last name
                         SVXAUTHORFORMAT_FIRSTNAME,  // Only first name
                         SVXAUTHORFORMAT_SHORTNAME   // Initials

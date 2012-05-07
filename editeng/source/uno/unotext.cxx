@@ -1799,11 +1799,6 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     if (!pForwarder)
         return;
 
-    SvxUnoTextField* pField = SvxUnoTextField::getImplementation( xContent );
-
-    if (pField == NULL)
-        throw lang::IllegalArgumentException();
-
     uno::Reference<beans::XPropertySet> xPropSet(xRange, uno::UNO_QUERY);
     if (!xPropSet.is())
         throw lang::IllegalArgumentException();
@@ -1813,8 +1808,8 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     if (!bAbsorb)
         aSel.Start = aSel.End;
 
-    SvxFieldData* pFieldData = pField->CreateFieldData();
-    if( pFieldData == NULL )
+    SvxFieldData* pFieldData = SvxFieldData::Create(xContent);
+    if (!pFieldData)
         throw lang::IllegalArgumentException();
 
     SvxFieldItem aField( *pFieldData, EE_FEATURE_FIELD );
