@@ -616,8 +616,16 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                                 rValue.mnError = ((ScFormulaCell*)pCell)->GetErrCode();
                                 return sal_True;    // gefunden
                             }
-                            else
+                            else if(mpParam->mbSkipString)
                                 nRow++;
+                            else
+                            {
+                                static_cast<ScFormulaCell*>(pCell)->GetString( rValue.maString);
+                                rValue.mfValue = 0.0;
+                                rValue.mnError = static_cast<ScFormulaCell*>(pCell)->GetErrCode();
+                                rValue.mbIsNumber = false;
+                                return true;
+                            }
                         }
                         break;
                     case CELLTYPE_STRING:
