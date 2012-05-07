@@ -391,40 +391,41 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     aRet.realloc( aRet.getLength() + nElementAdded );
 
     // add the encryption enable flag
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= maWatermarkText;
+    sal_uInt32 const nLength(aRet.getLength());
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) );
+    aRet[ nLength - nElementAdded ].Value <<= maWatermarkText;
     nElementAdded--;
 
 // add the encryption enable flag
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= mbEncrypt;
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) );
+    aRet[ nLength - nElementAdded ].Value <<= mbEncrypt;
     nElementAdded--;
 
 // add the open password
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= mxPreparedPasswords;
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) );
+    aRet[ nLength - nElementAdded ].Value <<= mxPreparedPasswords;
     nElementAdded--;
 
 //the restrict permission flag (needed to have the scripting consistent with the dialog)
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= mbRestrictPermissions;
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) );
+    aRet[ nLength - nElementAdded ].Value <<= mbRestrictPermissions;
     nElementAdded--;
 
 //add the permission password
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= maPreparedOwnerPassword;
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) );
+    aRet[ nLength - nElementAdded ].Value <<= maPreparedOwnerPassword;
     nElementAdded--;
 
 // this should be the last added...
     if( mbIsRangeChecked )
     {
-        aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
-        aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msPageRange );
+        aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
+        aRet[ nLength - nElementAdded ].Value <<= OUString( msPageRange );
     }
     else if( mbSelectionIsChecked )
     {
-        aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
-        aRet[ aRet.getLength() - nElementAdded ].Value <<= maSelection;
+        aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+        aRet[ nLength - nElementAdded ].Value <<= maSelection;
     }
 
     return aRet;
