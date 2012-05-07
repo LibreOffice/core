@@ -2840,6 +2840,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_DPLINECOB:
             m_aStates.top().aDrawingObject.nLineColorB = nParam; m_aStates.top().aDrawingObject.bHasLineColor = true;
             break;
+        case RTF_DPFILLBGCR:
+            m_aStates.top().aDrawingObject.nFillColorR = nParam; m_aStates.top().aDrawingObject.bHasFillColor = true;
+            break;
+        case RTF_DPFILLBGCG:
+            m_aStates.top().aDrawingObject.nFillColorG = nParam; m_aStates.top().aDrawingObject.bHasFillColor = true;
+            break;
+        case RTF_DPFILLBGCB:
+            m_aStates.top().aDrawingObject.nFillColorB = nParam; m_aStates.top().aDrawingObject.bHasFillColor = true;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3339,12 +3348,15 @@ int RTFDocumentImpl::popState()
         uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
         xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
         xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
+        uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.xPropertySet);
 
         if (rDrawing.bHasLineColor)
-        {
-            uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.xPropertySet);
             xPropertySet->setPropertyValue("LineColor", uno::makeAny(sal_uInt32((rDrawing.nLineColorR<<16) + (rDrawing.nLineColorG<<8) + rDrawing.nLineColorB)));
-        }
+        if (rDrawing.bHasFillColor)
+            xPropertySet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32((rDrawing.nFillColorR<<16) + (rDrawing.nFillColorG<<8) + rDrawing.nFillColorB)));
+        else
+            // If there is no fill, the Word default is 100% transparency.
+            xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
         Mapper().startShape(xShape);
         Mapper().endShape();
@@ -3657,7 +3669,11 @@ RTFDrawingObject::RTFDrawingObject()
     : nLineColorR(0),
     nLineColorG(0),
     nLineColorB(0),
-    bHasLineColor(false)
+    bHasLineColor(false),
+    nFillColorR(0),
+    nFillColorG(0),
+    nFillColorB(0),
+    bHasFillColor(false)
 {
 }
 

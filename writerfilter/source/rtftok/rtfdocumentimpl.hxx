@@ -203,6 +203,8 @@ namespace writerfilter {
                 std::vector<beans::PropertyValue> aPendingProperties;
                 sal_uInt8 nLineColorR, nLineColorG, nLineColorB;
                 bool bHasLineColor;
+                sal_uInt8 nFillColorR, nFillColorG, nFillColorB;
+                bool bHasFillColor;
         };
 
         /// Stores the properties of a picture.
