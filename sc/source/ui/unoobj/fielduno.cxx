@@ -972,6 +972,7 @@ ScEditFieldObj::ScEditFieldObj(
 {
     switch (meType)
     {
+        case text::textfield::Type::FILE:
         case text::textfield::Type::EXTENDED_FILE:
             pPropSet = lcl_GetFileFieldPropertySet();
         break;
@@ -1151,6 +1152,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         case text::textfield::Type::URL:
             setPropertyValueURL(aPropertyName, aValue);
         break;
+        case text::textfield::Type::FILE:
         case text::textfield::Type::EXTENDED_FILE:
             setPropertyValueFile(aPropertyName, aValue);
         break;
@@ -1204,6 +1206,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
     {
         case text::textfield::Type::URL:
             return getPropertyValueURL(aPropertyName);
+        case text::textfield::Type::FILE:
         case text::textfield::Type::EXTENDED_FILE:
             return getPropertyValueFile(aPropertyName);
         case text::textfield::Type::DATE:

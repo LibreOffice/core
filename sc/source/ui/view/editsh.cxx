@@ -621,6 +621,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
             pTableView->InsertField(aItem);
         }
         break;
+        case SID_INSERT_FIELD_TITLE:
+        {
+            SvxFileField aField;
+            SvxFieldItem aItem(aField, EE_FEATURE_FIELD);
+            pTableView->InsertField(aItem);
+        }
+        break;
         case SID_INSERT_FIELD_DATE_VAR:
         {
             SvxDateField aField;
@@ -729,6 +736,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 }
                 break;
             case SID_INSERT_FIELD_SHEET:
+            case SID_INSERT_FIELD_TITLE:
             case SID_INSERT_FIELD_DATE_VAR:
             break;
 

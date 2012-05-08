@@ -51,6 +51,7 @@
 #include <unotools/syslocale.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include "editutil.hxx"
 #include "global.hxx"
@@ -760,6 +761,14 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         {
             Date aDate(Date::SYSTEM);
             aRet = ScGlobal::pLocaleData->getDate(aDate);
+        }
+        break;
+        case text::textfield::Type::FILE:
+        {
+            SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
+            aRet = pDocShell->getDocProperties()->getTitle();
+            if (aRet.isEmpty())
+                aRet = pDocShell->GetTitle();
         }
         break;
         case text::textfield::Type::TABLE:

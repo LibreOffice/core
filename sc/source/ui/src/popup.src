@@ -446,6 +446,11 @@ Menu RID_POPUP_EDIT
                         Identifier = SID_INSERT_FIELD_SHEET ;
                         Text [ en-US ] = "Sheet Name" ;
                     };
+                    MenuItem
+                    {
+                        Identifier = SID_INSERT_FIELD_TITLE ;
+                        Text [ en-US ] = "Title" ;
+                    };
                 };
             };
         };

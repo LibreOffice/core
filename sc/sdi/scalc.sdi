@@ -8025,6 +8025,30 @@ SfxVoidItem InsertFieldSheet SID_INSERT_FIELD_SHEET
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem InsertFieldDocTitle SID_INSERT_FIELD_TITLE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxVoidItem InsertFieldDateVariable SID_INSERT_FIELD_DATE_VAR
 ()
 [

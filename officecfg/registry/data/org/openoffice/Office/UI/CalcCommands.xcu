@@ -1519,6 +1519,11 @@
                     <value xml:lang="en-US">Insert Sheet Name Field</value>
                 </prop>
             </node>
+            <node oor:name=".uno:InsertFieldDocTitle" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Insert Document Title Field</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InsertFieldDateVariable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Date Field (variable)</value>
