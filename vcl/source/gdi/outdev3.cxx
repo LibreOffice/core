@@ -2421,6 +2421,44 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
     return pEntry;
 }
 
+namespace
+{
+    rtl::OUString stripCharSetFromName(rtl::OUString aName)
+    {
+        //I worry that someone will have a font which *does* have
+        //e.g. "Greek" legitimately at the end of its name :-(
+        const char*suffixes[] =
+        {
+            " baltic",
+            " ce",
+            " cyr",
+            " greek",
+            " tur",
+            " (arabic)",
+            " (hebrew)",
+            " (thai)",
+            " (vietnamese)"
+        };
+
+        //These can be crazily piled up, e.g. Times New Roman CYR Greek
+        bool bFinished = false;
+        while (!bFinished)
+        {
+            bFinished = true;
+            for (size_t i = 0; i < SAL_N_ELEMENTS(suffixes); ++i)
+            {
+                size_t nLen = strlen(suffixes[i]);
+                if (aName.endsWithIgnoreAsciiCaseAsciiL(suffixes[i], nLen))
+                {
+                    bFinished = false;
+                    aName = aName.copy(0, aName.getLength() - nLen);
+                }
+            }
+        }
+        return aName;
+    }
+}
+
 // -----------------------------------------------------------------------
 
 ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
@@ -2505,9 +2543,27 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         // use the target name to search in the prematch hook
         rFSD.maTargetName = aBaseFontName;
 #endif
+
+        //Related: fdo#49271 RTF files often contain weird-ass
+        //Win 3.1/Win95 style fontnames which attempt to put the
+        //charset encoding into the filename
+        //http://www.webcenter.ru/~kazarn/eng/fonts_ttf.htm
+        rtl::OUString sStrippedName = stripCharSetFromName(rFSD.maTargetName);
+        if (!sStrippedName.equals(rFSD.maTargetName))
+        {
+            rFSD.maTargetName = sStrippedName;
+            aSearchName = rFSD.maTargetName;
+            GetEnglishSearchFontName(aSearchName);
+            pFoundData = ImplFindBySearchName(aSearchName);
+            if( pFoundData )
+                return pFoundData;
+        }
+
         if( mpPreMatchHook )
+        {
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
                 GetEnglishSearchFontName( aSearchName );
+        }
 #ifdef ENABLE_GRAPHITE
         // the prematch hook uses the target name to search, but we now need
         // to restore the features to make the font selection data unique
