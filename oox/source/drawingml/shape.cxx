@@ -234,11 +234,11 @@ void Shape::addShape(
     }
 }
 
-void Shape::applyShapeReference( const Shape& rReferencedShape )
+void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 {
     OSL_TRACE("apply shape reference: %s to shape id: %s", rtl::OUStringToOString(rReferencedShape.msId, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
 
-    if ( rReferencedShape.mpTextBody.get() )
+    if ( rReferencedShape.mpTextBody.get() && bUseText )
         mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     else
         mpTextBody.reset();

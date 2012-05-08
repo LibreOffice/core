@@ -57,7 +57,7 @@ public:
             const com::sun::star::awt::Rectangle* pShapeRect = 0,
             ::oox::drawingml::ShapeIdMap* pShapeMap = 0 );
 
-    virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape );
+    virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText = true );
 
     void setShapeLocation( const oox::ppt::ShapeLocation eShapeLocation ) { meShapeLocation = eShapeLocation; };
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
