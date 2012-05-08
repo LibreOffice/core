@@ -350,7 +350,7 @@ inline const SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
     // #i95726# - some fault tolerance
-    OSL_ENSURE( nCol < aCells.Count(),
+    OSL_ENSURE( nCol < aCells.size(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
     return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
 }
@@ -360,7 +360,7 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
     // #i95726# - some fault tolerance
-    OSL_ENSURE( nCol < aCells.Count(),
+    OSL_ENSURE( nCol < aCells.size(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
     return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
 }
@@ -380,7 +380,7 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
         nColSpan--;
     }
 
-    OSL_ENSURE( nCells<=aCells.Count(),
+    OSL_ENSURE( nCells<=aCells.size(),
             "SwXMLTableRow_Impl::Expand: wrong number of cells" );
 }
 
