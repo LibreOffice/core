@@ -79,7 +79,6 @@ $(BIN)$/unowinreg.dll : $(TARFILE_LOCATION)/185d60944ea767075d27247c3162b3bc-uno
 
 # --- Files --------------------------------------------------------
 
-LINKFLAGS+=-MANIFEST:NO
 SLOFILES = \
     $(SLO)$/unowinreg.obj
 SHL1TARGET=$(TARGET)
@@ -93,6 +92,8 @@ SHL1STDLIBS += -lstdc++
 SHL1STDLIBS += -lgcc_eh
 .ENDIF
 SHL1STDLIBS += -lgcc -lmingw32 -lmoldname -lmsvcrt
+.ELSE
+LINKFLAGS+=-MANIFEST:NO
 .ENDIF
 
 SHL1STDLIBS +=\
