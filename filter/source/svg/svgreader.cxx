@@ -135,7 +135,7 @@ template<typename Func> void visitChildren(const Func& rFunc,
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
     {
-        SAL_INFO("svg", "node type: " << xChildren->item(i)->getNodeType() << " tag name " << xChildren->item(i)->getNodeName() << " value |" << xChildren->item(i)->getNodeValue() << "|");
+        SAL_INFO("svg", "node type: " << sal::static_int_cast<sal_uInt32>(xChildren->item(i)->getNodeType()) << " tag name " << xChildren->item(i)->getNodeName() << " value |" << xChildren->item(i)->getNodeValue() << "|");
         if( xChildren->item(i)->getNodeType() == eChildType )
             rFunc( *xChildren->item(i).get() );
     }
