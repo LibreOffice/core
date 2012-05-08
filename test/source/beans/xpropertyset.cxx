@@ -31,6 +31,7 @@
 
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <set>
 
@@ -92,7 +93,7 @@ void XPropertySet::testGetPropertyValue()
     // Check writable properties.
     for (size_t i = 0, n = maPropsToTest.normal.size(); i < n; ++i)
     {
-        bool bSuccess = getSinglePropertyValue(xPropSet, maPropsToTest.readonly[i]);
+        bool bSuccess = getSinglePropertyValue(xPropSet, maPropsToTest.normal[i]);
         CPPUNIT_ASSERT(bSuccess);
     }
 }
@@ -168,6 +169,13 @@ bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)
             rtl::OUString aOld = any.get<rtl::OUString>();
             rtl::OUString aNew = aOld + rtl::OUString("foo");
             xPropSet->setPropertyValue(rName, makeAny(aNew));
+        }
+        else if (type == getCppuType<util::DateTime>())
+        {
+            // date time type
+            util::DateTime aDT = any.get<util::DateTime>();
+            aDT.Year += 1;
+            xPropSet->setPropertyValue(rName, makeAny(aDT));
         }
         else
         {
