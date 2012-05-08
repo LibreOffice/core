@@ -2461,8 +2461,10 @@ void CustomAnimationTextGroup::reset()
     mfGroupingAuto = -1.0;
     mnLastPara = -1; // used to check for TextReverse
 
-    int i = 5;
-    while( i-- ) mnDepthFlags[i] = 0;
+    for (int i = 0; i < PARA_LEVELS; ++i)
+    {
+        mnDepthFlags[i] = 0;
+    }
 
     maEffects.clear();
 }
@@ -2487,8 +2489,8 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
 
         const sal_Int32 nParaDepth = pEffect->getParaDepth();
 
-        // only look at the first 5 levels
-        if( nParaDepth < 5 )
+        // only look at the first PARA_LEVELS levels
+        if( nParaDepth < PARA_LEVELS )
         {
             // our first paragraph with this level?
             if( mnDepthFlags[nParaDepth] == 0 )
@@ -2504,9 +2506,10 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
             if( pEffect->getNodeType() == EffectNodeType::AFTER_PREVIOUS )
                 mfGroupingAuto = pEffect->getBegin();
 
-            mnTextGrouping = 0;
-            while( (mnTextGrouping < 5) && (mnDepthFlags[mnTextGrouping] > 0) )
-                mnTextGrouping++;
+            mnTextGrouping = PARA_LEVELS;
+            while( (mnTextGrouping > 0)
+                   && (mnDepthFlags[mnTextGrouping - 1] <= 0) )
+                --mnTextGrouping;
         }
     }
     else

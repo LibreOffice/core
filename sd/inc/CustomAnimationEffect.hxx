@@ -271,12 +271,14 @@ private:
     EffectSequence maEffects;
     ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > maTarget;
 
+    enum { PARA_LEVELS = 5 };
+
     sal_Int32 mnTextGrouping;
     sal_Bool mbAnimateForm;
     sal_Bool mbTextReverse;
     double mfGroupingAuto;
     sal_Int32 mnLastPara;
-    sal_Int8 mnDepthFlags[5];
+    sal_Int8 mnDepthFlags[PARA_LEVELS];
     sal_Int32 mnGroupId;
 };
 
