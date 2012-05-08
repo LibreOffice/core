@@ -970,8 +970,11 @@ struct AnnotatingVisitor
             case XML_FILL_OPACITY:
                 if( aValueUtf8 == "inherit" )
                     maCurrState.mnFillOpacity = maParentStates.back().mnFillOpacity;
-                else
+                else {
                     maCurrState.mnFillOpacity = aValueUtf8.toDouble();
+                    if( maCurrState.mnFillOpacity > 1 )
+                        maCurrState.mnFillOpacity = 1;
+                }
                 break;
             case XML_STROKE_WIDTH:
             {
