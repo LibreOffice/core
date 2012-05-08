@@ -57,6 +57,8 @@
 
 #include "editeng/unonames.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -1808,7 +1810,7 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     if (!bAbsorb)
         aSel.Start = aSel.End;
 
-    SvxFieldData* pFieldData = SvxFieldData::Create(xContent);
+    boost::scoped_ptr<SvxFieldData> pFieldData(SvxFieldData::Create(xContent));
     if (!pFieldData)
         throw lang::IllegalArgumentException();
 
@@ -1825,8 +1827,6 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     aSel.End.PositionInParagraph += 1;
     aSel.Start.PositionInParagraph = aSel.End.PositionInParagraph;
     xPropSet->setPropertyValue(UNO_TR_PROP_SELECTION, uno::makeAny(aSel));
-
-    delete pFieldData;
 }
 
 void SAL_CALL SvxUnoTextBase::removeTextContent( const uno::Reference< text::XTextContent >& ) throw(container::NoSuchElementException, uno::RuntimeException)
