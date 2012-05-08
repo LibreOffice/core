@@ -391,20 +391,7 @@ void SAL_CALL ScAnnotationShapeObj::insertTextContent( const uno::Reference< tex
                                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-#if 1
     GetUnoText().insertTextContent(xRange, xContent, bAbsorb);
-#else
-    // Evil hack to convert a ScEditFieldObj based text field into a
-    // SvxUnoTextField based one.  See SvxUnoTextBase::insertTextContent() for
-    // the reason why.  We need a clean solution for this.
-
-    ScEditFieldObj* pField = ScEditFieldObj::getImplementation(xContent);
-    uno::Reference<text::XTextContent> xContent2 = xContent;
-    if (pField)
-        xContent2.set(new SvxUnoTextField(pField->GetFieldType()));
-
-    GetUnoText().insertTextContent(xRange, xContent2, bAbsorb);
-#endif
 }
 
 void SAL_CALL ScAnnotationShapeObj::removeTextContent( const uno::Reference< text::XTextContent >& xContent )
