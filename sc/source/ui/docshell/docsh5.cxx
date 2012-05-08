@@ -949,15 +949,21 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
                     nTabToUse = aDocument.GetMaxTableNumber() - 1;
                 rtl::OUString sCodeName;
                 rtl::OUString sSource;
-                Reference< XNameContainer > xLib;
-                if( xLibContainer.is() )
+                try
                 {
-                    com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
-                    aLibAny >>= xLib;
+                    Reference< XNameContainer > xLib;
+                    if( xLibContainer.is() )
+                    {
+                        com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                        aLibAny >>= xLib;
+                    }
+                    if( xLib.is() )
+                    {
+                        xLib->getByName( sSrcCodeName ) >>= sSource;
+                    }
                 }
-                if( xLib.is() )
+                catch ( const com::sun::star::uno::Exception& )
                 {
-                    xLib->getByName( sSrcCodeName ) >>= sSource;
                 }
                 VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
             }
