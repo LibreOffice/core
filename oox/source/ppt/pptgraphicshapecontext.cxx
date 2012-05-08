@@ -158,10 +158,14 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
                 }
                 if ( pPlaceholder.get() )
                 {
-                    mpShapePtr->applyShapeReference( *pPlaceholder.get() );
+                    bool bUseText = true;
+                    // TODO: Check if pPlaceholder->getSubType is none (i.e. none explicitly specified)
+                    if( pPlaceholder->getSubType() == XML_obj )
+                        bUseText = false;
+                    mpShapePtr->applyShapeReference( *pPlaceholder.get(), bUseText );
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )
-                    pPPTShape->setReferenced( sal_True );
+                        pPPTShape->setReferenced( sal_True );
                     pPPTShapePtr->setPlaceholder( pPlaceholder );
                 }
             }

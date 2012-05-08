@@ -174,7 +174,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
-    virtual void        applyShapeReference( const Shape& rReferencedShape );
+    virtual void        applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
     const ::std::vector<rtl::OUString>&
                         getExtDrawings() { return maExtDrawings; }
     void                addExtDrawingRelId( const ::rtl::OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }

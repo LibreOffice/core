@@ -230,11 +230,11 @@ void Shape::addShape(
     }
 }
 
-void Shape::applyShapeReference( const Shape& rReferencedShape )
+void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 {
     SAL_INFO("oox", "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
 
-    if ( rReferencedShape.mpTextBody.get() )
+    if ( rReferencedShape.mpTextBody.get() && bUseText )
         mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     else
         mpTextBody.reset();

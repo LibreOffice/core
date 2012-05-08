@@ -331,7 +331,7 @@ void PPTShape::addShape(
                 aCombinedTextListStyle->apply( *aMasterTextListStyle.get() );
 
                 if( mpPlaceholder.get() && mpPlaceholder->getTextBody().get() )
-                aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );
+                    aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );
                 aCombinedTextListStyle->apply( getTextBody()->getTextListStyle() );
 
                 setMasterTextListStyle( aCombinedTextListStyle );
@@ -374,9 +374,9 @@ void PPTShape::addShape(
     }
 }
 
-void PPTShape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
+void PPTShape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText )
 {
-    Shape::applyShapeReference( rReferencedShape );
+    Shape::applyShapeReference( rReferencedShape, bUseText );
 }
 
 oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
