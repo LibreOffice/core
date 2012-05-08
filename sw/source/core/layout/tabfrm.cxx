@@ -3381,27 +3381,6 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 
 /*************************************************************************
 |*
-|*  SwTabFrm::GetLeaf()
-|*
-|*************************************************************************/
-SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
-{
-    SwLayoutFrm *pRet;
-    if ( bFwd )
-    {
-        pRet = GetNextLeaf( eMakePage );
-        while ( IsAnLower( pRet ) )
-            pRet = pRet->GetNextLeaf( eMakePage );
-    }
-    else
-        pRet = GetPrevLeaf();
-    if ( pRet )
-        pRet->Calc();
-    return pRet;
-}
-
-/*************************************************************************
-|*
 |*  SwTabFrm::ShouldBwdMoved()
 |*
 |*  Description        Return value defines if the frm needs to be relocated
