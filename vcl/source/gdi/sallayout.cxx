@@ -1263,7 +1263,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
     {
         nWidth += pCharWidths[ i - mnMinCharPos ] * nFactor;
-        if( nWidth >= nMaxWidth )
+        if( nWidth > nMaxWidth )
             return i;
         nWidth += nCharExtra;
     }

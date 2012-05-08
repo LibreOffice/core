@@ -721,7 +721,7 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
             continue;
         // add char widths until max
         nExtraWidth += mpCharWidths[ n ] * nFactor;
-        if( nExtraWidth >= nMaxWidth )
+        if( nExtraWidth > nMaxWidth )
             return (mnMinCharPos + n);
         nExtraWidth += nCharExtra;
     }
