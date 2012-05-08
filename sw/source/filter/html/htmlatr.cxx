@@ -1233,7 +1233,7 @@ sal_uInt16 HTMLEndPosLst::_FindStartPos( const HTMLSttEndPos *pPos ) const
     for( i = 0; i < aStartLst.size() && aStartLst[i] != pPos;  i++ )
         ;
 
-    OSL_ENSURE( i != aStartLst.Count(), "Item nicht in Start-Liste gefunden!" );
+    OSL_ENSURE(i != aStartLst.size(), "Item not found in Start List!" );
 
     return i==aStartLst.size() ? USHRT_MAX : i;
 }
@@ -1245,7 +1245,7 @@ sal_uInt16 HTMLEndPosLst::_FindEndPos( const HTMLSttEndPos *pPos ) const
     for( i = 0; i < aEndLst.size() && aEndLst[i] != pPos;  i++ )
         ;
 
-    OSL_ENSURE( i != aEndLst.size(), "Item nicht in Ende-Liste gefunden" );
+    OSL_ENSURE(i != aEndLst.size(), "Item not found in End List!" );
 
     return i==aEndLst.size() ? USHRT_MAX : i;
 }
@@ -1693,8 +1693,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
 
 HTMLEndPosLst::~HTMLEndPosLst()
 {
-    OSL_ENSURE( !aStartLst.Count(), "Start-Liste im Destruktor nicht leer" );
-    OSL_ENSURE( !aEndLst.Count(), "End-Liste im Destruktor nicht leer" );
+    OSL_ENSURE(aStartLst.empty(), "Start List not empty in destructor");
+    OSL_ENSURE(aEndLst.empty(), "End List not empty in destructor");
 }
 
 
