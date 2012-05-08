@@ -76,15 +76,15 @@ CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
-.ENDIF			# "$(CPU)"=="X"
+.ENDIF			# "$(CPUNAME)"=="X86_64"
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)$(COM)"=="FREEBSDGCC"
-.IF "$(CPU)"=="X"
+.IF "$(CPUNAME)"=="X86_64"
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
-.ENDIF			# "$(CPU)"=="X"
+.ENDIF			# "$(CPUNAME)"=="X86_64"
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)"=="MACOSX"

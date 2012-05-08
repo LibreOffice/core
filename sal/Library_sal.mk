@@ -198,7 +198,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/osxlocale \
 ))
 endif
-ifneq ($(filter $(OS),SOLARIS FREEBSD NETBSD MACOSX AIX OPENBSD DRAGONFLY)$(filter $(OS)$(CPU),LINUXS),)
+ifneq ($(filter $(OS),SOLARIS FREEBSD NETBSD MACOSX AIX OPENBSD DRAGONFLY)$(filter $(OS)$(CPUNAME),LINUXSPARC),)
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/backtrace \
 ))
@@ -207,7 +207,7 @@ ifneq ($(filter $(OS)$(CPU),SOLARISU SOLARISS NETBSDS LINUXS),)
 $(eval $(call gb_Library_add_asmobjects,sal,\
 	sal/osl/unx/asm/interlck_sparc \
 ))
-else ifeq ($(OS)$(CPU),SOLARISI)
+else ifeq ($(OS)$(CPUNAME),SOLARISINTEL)
 $(eval $(call gb_Library_add_asmobjects,sal,\
 	sal/osl/unx/asm/interlck_x86 \
 ))

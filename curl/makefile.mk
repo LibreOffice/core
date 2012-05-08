@@ -140,7 +140,7 @@ EXCFLAGS="/EHsc /YX"
 
 BUILD_DIR=.$/lib
 
-.IF "$(CPU)" == "I"
+.IF "$(CPUNAME)" == "INTEL"
 MACHINE=X86
 .ELSE
 MACHINE=X64

@@ -53,7 +53,7 @@ CFLAGS+=-D_GNU_SOURCE
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
-.IF "$(CPU)" == "I"
+.IF "$(CPUNAME)" == "INTEL"
 .IF "$(COM)" != "GCC"
 CFLAGS+=-D_KERNEL
 .ENDIF
@@ -65,7 +65,7 @@ CFLAGS+=-D_KERNEL
 # 64 bit builds
 .IF "$(OS)" == "SOLARIS"
 .IF "$(COM)" != "GCC"
-.IF "$(CPU)" == "S"
+.IF "$(CPUNAME)" == "SPARC"
 ENVCFLAGS=-xarch=v8
 .ENDIF
 .IF "$(CPU)"=="U"

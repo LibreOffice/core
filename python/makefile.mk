@@ -98,7 +98,7 @@ my_prefix = python-inst
 
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=/$(my_prefix) --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 
-.IF "$(OS)$(CPU)" == "SOLARISI"
+.IF "$(OS)$(CPUNAME)" == "SOLARISINTEL"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
 
@@ -147,7 +147,7 @@ BUILD_DIR=PC/VS7.1
 BUILD_DIR=PC/VC6
 .ENDIF
 
-.IF "$(CPU)" == "I"
+.IF "$(CPUNAME)" == "INTEL"
 ARCH=Win32
 .ELSE
 ARCH=x64

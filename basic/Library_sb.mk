@@ -156,12 +156,12 @@ $(eval $(call gb_Library_use_libraries,sb,\
 ))
 endif
 
-ifeq ($(GUI)$(CPU),WNTI)
+ifeq ($(GUI)$(CPUNAME),WNTINTEL)
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-x86 \
 ))
 else
-ifeq ($(GUI)$(CPU),WNTX)
+ifeq ($(GUI)$(CPUNAME),WNTX86_64)
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-x64 \
 ))
@@ -171,12 +171,12 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 ))
 endif
 endif
-ifeq ($(GUI)$(COM)$(CPU),WNTMSCI)
+ifeq ($(GUI)$(COM)$(CPUNAME),WNTMSCINTEL)
 $(eval $(call gb_Library_add_asmobjects,sb,\
 	basic/source/runtime/wnt-x86 \
 ))
 endif
-ifeq ($(GUI)$(COM)$(CPU),WNTGCCI)
+ifeq ($(GUI)$(COM)$(CPUNAME),WNTGCCINTEL)
 $(eval $(call gb_Library_add_asmobjects,sb,\
 	basic/source/runtime/wnt-mingw \
 ))

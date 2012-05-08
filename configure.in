@@ -2995,8 +2995,8 @@ darwin*)
         ;;
     powerpc*)
         CPU=P
-        CPUNAME="POWERPC"
-        OUTPATH="unxmacxp"
+        CPUNAME=POWERPC
+        OUTPATH=unxmacxp
         ;;
     i*86|x86_64)
         CPU=I

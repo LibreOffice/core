@@ -117,7 +117,7 @@ LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ld
 pixman_CFLAGS+=-xc99=none
 .ENDIF
 
-.IF "$(CPU)"=="I"
+.IF "$(CPUNAME)"=="INTEL"
 pixman_CFLAGS+=-march=i486
 .ENDIF
 

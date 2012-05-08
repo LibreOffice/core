@@ -156,7 +156,7 @@ LDFLAGS:=$(cairo_LDFLAGS)
 cairo_CFLAGS+=-xc99=none
 .ENDIF
 
-.IF "$(CPU)"=="I"
+.IF "$(CPUNAME)"=="INTEL"
 cairo_CFLAGS+=-march=i486
 .ENDIF
 

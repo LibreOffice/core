@@ -44,7 +44,7 @@ IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll
 ALLTAR : REBASE
 
 REBASE .PHONY : $(BASEADDRESSES)
-.IF "$(GUI)$(COM)$(CPU)"=="WNTMSCI"
+.IF "$(GUI)$(COM)$(CPUNAME)"=="WNTMSCINTEL"
 .IF "$(product)"=="full"
     $(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
 .ELSE	# "$(product)"=="full"
