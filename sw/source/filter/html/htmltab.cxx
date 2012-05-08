@@ -3113,10 +3113,9 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
     rParser.nFontStMin = nFontStMinSave;
     rParser.nFontStHeadStart = nFontStHeadStartSave;
 
-    // Der Kontext-Stack muss schon aufgeraeumt sein!
-    OSL_ENSURE( rParser.aContexts.Count() == rParser.nContextStMin &&
-            rParser.aContexts.Count() == rParser.nContextStAttrMin,
-            "Der Kontext-Stack wurde nicht aufgeraeumt" );
+    OSL_ENSURE( rParser.aContexts.size() == rParser.nContextStMin &&
+            rParser.aContexts.size() == rParser.nContextStAttrMin,
+            "The Context Stack was not cleaned up" );
     rParser.nContextStMin = nContextStMinSave;
     rParser.nContextStAttrMin = nContextStAttrMinSave;
 

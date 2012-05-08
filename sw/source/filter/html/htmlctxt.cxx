@@ -143,10 +143,10 @@ void _HTMLAttrContext::ClearSaveDocContext()
 
 void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 {
-    // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
-    // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    OSL_ENSURE( !aParaAttrs.Count(),
-        "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
+    // preliminary paragraph attributes are not allowed here, they could
+    // be set here and then the pointers become invalid!
+    OSL_ENSURE(aParaAttrs.empty(),
+        "Danger: there are non-final paragraph attributes");
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
@@ -538,9 +538,9 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         pCSS1Parser->SetFmtBreak( rItemSet, rPropInfo );
 // /Feature: PrintExt
 
-    OSL_ENSURE( aContexts.Count() <= nContextStAttrMin ||
-            aContexts[aContexts.Count()-1] != pContext,
-            "SwHTMLParser::InsertAttrs: Kontext doch schon auf dem Stack" );
+    OSL_ENSURE(aContexts.size() <= nContextStAttrMin ||
+            aContexts.back() != pContext,
+            "SwHTMLParser::InsertAttrs: Context already on the Stack");
 
     SfxItemIter aIter( rItemSet );
 

@@ -3104,10 +3104,10 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
 void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
 {
-    // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
-    // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    OSL_ENSURE( !aParaAttrs.Count(),
-            "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
+    // preliminary paragraph attributes are not allowed here, they could
+    // be set here and then the pointers become invalid!
+    OSL_ENSURE(aParaAttrs.empty(),
+        "Danger: there are non-final paragraph attributes");
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
@@ -3162,10 +3162,10 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
 
 void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
 {
-    // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
-    // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    OSL_ENSURE( !aParaAttrs.Count(),
-            "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
+    // preliminary paragraph attributes are not allowed here, they could
+    // be set here and then the pointers become invalid!
+    OSL_ENSURE(aParaAttrs.empty(),
+            "Danger: there are non-final paragraph attributes");
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
@@ -3191,10 +3191,10 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
 void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
                                  sal_Bool bMoveEndBack )
 {
-    // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
-    // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    OSL_ENSURE( !aParaAttrs.Count(),
-            "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
+    // preliminary paragraph attributes are not allowed here, they could
+    // be set here and then the pointers become invalid!
+    OSL_ENSURE(aParaAttrs.empty(),
+            "Danger: there are non-final paragraph attributes");
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
@@ -3298,10 +3298,10 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
                                    sal_Bool bSetNewStart )
 {
-    // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
-    // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    OSL_ENSURE( !aParaAttrs.Count(),
-            "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
+    // preliminary paragraph attributes are not allowed here, they could
+    // be set here and then the pointers become invalid!
+    OSL_ENSURE(aParaAttrs.empty(),
+            "Danger: there are non-final paragraph attributes");
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
