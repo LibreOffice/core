@@ -58,16 +58,7 @@ using ::rtl::OUString;
     only small deviations feasible.
 */
 
-
-// =======================================================================
-
-static long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
-{
-    if (!nDenominator)
-        return 0;
-    double n = ((double)nNumber * (double)nNumerator) / (double)nDenominator;
-    return (long)n;
-}
+#include "thumbpos.hxx"
 
 // =======================================================================
 

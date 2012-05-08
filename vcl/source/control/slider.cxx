@@ -31,16 +31,7 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/slider.hxx>
-
-
-
-// =======================================================================
-
-static long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
-{
-    double n = ((double)nNumber * (double)nNumerator) / (double)nDenominator;
-    return (long)n;
-}
+#include "thumbpos.hxx"
 
 // =======================================================================
 
