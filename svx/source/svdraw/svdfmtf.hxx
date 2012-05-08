@@ -101,7 +101,15 @@ protected:
     // fuer Optimierung mehrerer Linien zu einer Polyline
     sal_Bool                    bLastObjWasLine;
 
+    // clipregion
+    basegfx::B2DPolyPolygon     maClip;
+
 protected:
+    // ckeck for clip and evtl. fill maClip
+    void checkClip();
+    bool isClip() const;
+
+    // actions
     void DoAction(MetaPixelAction           & rAct);
     void DoAction(MetaPointAction           & rAct);
     void DoAction(MetaLineAction            & rAct);
@@ -129,13 +137,13 @@ protected:
     void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaFontAction            & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; }
     void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; }
-    void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&aVD); checkClip(); }
     void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaPushAction            & rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; }
-    void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&aVD); }
+    void DoAction(MetaPushAction            & rAct) { rAct.Execute(&aVD); checkClip(); }
+    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; checkClip(); }
+    void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&aVD); checkClip(); }
+    void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&aVD); checkClip(); }
+    void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&aVD); checkClip(); }
     void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);
 
     void ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct );
