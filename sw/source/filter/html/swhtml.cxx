@@ -2594,7 +2594,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
     SwCntntNode* pCNd;
     sal_uInt16 n;
 
-    _HTMLAttrs aFields( 5 );
+    _HTMLAttrs aFields;
 
     for( n = aSetAttrTab.size(); n; )
     {
