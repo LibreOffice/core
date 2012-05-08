@@ -139,7 +139,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         // fuer die sorted Positions einen Index anlegen.
         // JP 25.11.97: Die IndexList muss aber nach SourcePosition
         //              aufsteigend sortiert aufgebaut werden
-        SwUndoSortList aIdxList( (sal_uInt8)aSortList.size() );
+        SwUndoSortList aIdxList;
         sal_uInt16 i;
 
         for( i = 0; i < aSortList.size(); ++i)
@@ -218,7 +218,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         SetPaM(rPam);
         RemoveIdxFromRange(rPam, true);
 
-        SwUndoSortList aIdxList( (sal_uInt8)aSortList.size() );
+        SwUndoSortList aIdxList;
         sal_uInt16 i;
 
         for( i = 0; i < aSortList.size(); ++i)
