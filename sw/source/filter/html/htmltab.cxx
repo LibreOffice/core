@@ -831,8 +831,8 @@ HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
         pCells->push_back( new HTMLTableCell );
     }
 
-    OSL_ENSURE( nCells==pCells->Count(),
-            "Zellenzahl in neuer HTML-Tabellenzeile stimmt nicht" );
+    OSL_ENSURE(nCells == pCells->size(),
+            "wrong Cell count in new HTML table row");
 }
 
 HTMLTableRow::~HTMLTableRow()
@@ -871,16 +871,16 @@ void HTMLTableRow::Expand( sal_uInt16 nCells, sal_Bool bOneCell )
         nColSpan--;
     }
 
-    OSL_ENSURE( nCells==pCells->Count(),
-            "Zellenzahl in expandierter HTML-Tabellenzeile stimmt nicht" );
+    OSL_ENSURE(nCells == pCells->size(),
+            "wrong Cell count in expanded HTML table row");
 }
 
 void HTMLTableRow::Shrink( sal_uInt16 nCells )
 {
-    OSL_ENSURE( nCells < pCells->Count(), "Anzahl Zellen falsch" );
+    OSL_ENSURE(nCells < pCells->size(), "number of cells too large");
 
 #if OSL_DEBUG_LEVEL > 0
-     sal_uInt16 nEnd = pCells->Count();
+     sal_uInt16 nEnd = pCells->size();
 #endif
     // The colspan of empty cells at the end has to be fixed to the new
     // number of cells.
@@ -902,7 +902,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 #if OSL_DEBUG_LEVEL > 0
     for( i=nCells; i<nEnd; i++ )
     {
-        HTMLTableCell *pCell = (*pCells)[i];
+        HTMLTableCell *pCell = &(*pCells)[i];
         OSL_ENSURE( pCell->GetRowSpan() == 1,
                 "RowSpan von zu loesender Zelle ist falsch" );
         OSL_ENSURE( pCell->GetColSpan() == nEnd - i,
@@ -2084,11 +2084,9 @@ sal_uInt16 HTMLTable::GetBorderWidth( const SvxBorderLine& rBLine,
 inline HTMLTableCell *HTMLTable::GetCell( sal_uInt16 nRow,
                                           sal_uInt16 nCell ) const
 {
-    OSL_ENSURE( nRow<pRows->Count(),
-        "ungueltiger Zeilen-Index in HTML-Tabelle" );
+    OSL_ENSURE(nRow < pRows->size(), "invalid row index in HTML table");
     return (*pRows)[nRow].GetCell( nCell );
 }
-
 
 
 SvxAdjust HTMLTable::GetInheritedAdjust() const
@@ -2141,8 +2139,8 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         for( i=0; i<nRows; i++ )
             (*pRows)[i].Expand( nColsReq, i<nCurRow );
         nCols = nColsReq;
-        OSL_ENSURE( pColumns->Count()==nCols,
-                "Anzahl der Spalten nach Expandieren stimmt nicht" );
+        OSL_ENSURE(pColumns->size() == nCols,
+                "wrong number of columns after expanding");
     }
     if( nColsReq > nFilledCols )
         nFilledCols = nColsReq;
@@ -2154,7 +2152,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         for( i=nRows; i<nRowsReq; i++ )
             pRows->push_back( new HTMLTableRow(nCols) );
         nRows = nRowsReq;
-        OSL_ENSURE( nRows==pRows->Count(), "Zeilenzahl in Insert stimmt nicht" );
+        OSL_ENSURE(nRows == pRows->size(), "wrong number of rows in Insert");
     }
 
     // Testen, ob eine Ueberschneidung vorliegt und diese
