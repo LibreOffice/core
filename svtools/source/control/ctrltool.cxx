@@ -583,7 +583,30 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
     }
 }
 
-// -----------------------------------------------------------------------
+namespace
+{
+    FontInfo makeMissing(ImplFontListFontInfo* pFontNameInfo, const rtl::OUString &rName,
+        FontWeight eWeight, FontItalic eItalic)
+    {
+        FontInfo aInfo;
+        // Falls der Fontname stimmt, uebernehmen wir soviel wie moeglich
+        if (pFontNameInfo)
+        {
+            aInfo = *pFontNameInfo;
+            aInfo.SetStyleName(rtl::OUString());
+        }
+
+        aInfo.SetWeight(eWeight);
+        aInfo.SetItalic(eItalic);
+
+        //If this is a known but uninstalled symbol font which we can remap to
+        //OpenSymbol then toggle its charset to be a symbol font
+        if (ConvertChar::GetRecodeData(rName, rtl::OUString("OpenSymbol")))
+            aInfo.SetCharSet(RTL_TEXTENCODING_SYMBOL);
+
+        return aInfo;
+    }
+}
 
 FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) const
 {
@@ -612,54 +635,50 @@ FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) co
     FontInfo aInfo;
     if ( !pFontInfo )
     {
-        if ( pFontNameInfo )
-            aInfo = *pFontNameInfo;
+        FontWeight eWeight = WEIGHT_DONTKNOW;
+        FontItalic eItalic = ITALIC_NONE;
 
         if ( rStyleName == maNormal )
         {
-            aInfo.SetItalic( ITALIC_NONE );
-            aInfo.SetWeight( WEIGHT_NORMAL );
+            eItalic = ITALIC_NONE;
+            eWeight = WEIGHT_NORMAL;
         }
         else if ( rStyleName == maNormalItalic )
         {
-            aInfo.SetItalic( ITALIC_NORMAL );
-            aInfo.SetWeight( WEIGHT_NORMAL );
+            eItalic = ITALIC_NORMAL;
+            eWeight = WEIGHT_NORMAL;
         }
         else if ( rStyleName == maBold )
         {
-            aInfo.SetItalic( ITALIC_NONE );
-            aInfo.SetWeight( WEIGHT_BOLD );
+            eItalic = ITALIC_NONE;
+            eWeight = WEIGHT_BOLD;
         }
         else if ( rStyleName == maBoldItalic )
         {
-            aInfo.SetItalic( ITALIC_NORMAL );
-            aInfo.SetWeight( WEIGHT_BOLD );
+            eItalic = ITALIC_NORMAL;
+            eWeight = WEIGHT_BOLD;
         }
         else if ( rStyleName == maLight )
         {
-            aInfo.SetItalic( ITALIC_NONE );
-            aInfo.SetWeight( WEIGHT_LIGHT );
+            eItalic = ITALIC_NONE;
+            eWeight = WEIGHT_LIGHT;
         }
         else if ( rStyleName == maLightItalic )
         {
-            aInfo.SetItalic( ITALIC_NORMAL );
-            aInfo.SetWeight( WEIGHT_LIGHT );
+            eItalic = ITALIC_NORMAL;
+            eWeight = WEIGHT_LIGHT;
         }
         else if ( rStyleName == maBlack )
         {
-            aInfo.SetItalic( ITALIC_NONE );
-            aInfo.SetWeight( WEIGHT_BLACK );
+            eItalic = ITALIC_NONE;
+            eWeight = WEIGHT_BLACK;
         }
         else if ( rStyleName == maBlackItalic )
         {
-            aInfo.SetItalic( ITALIC_NORMAL );
-            aInfo.SetWeight( WEIGHT_BLACK );
+            eItalic = ITALIC_NORMAL;
+            eWeight = WEIGHT_BLACK;
         }
-        else
-        {
-            aInfo.SetItalic( ITALIC_NONE );
-            aInfo.SetWeight( WEIGHT_DONTKNOW );
-        }
+        aInfo = makeMissing(pFontNameInfo, rName, eWeight, eItalic);
     }
     else
         aInfo = *pFontInfo;
@@ -700,17 +719,7 @@ FontInfo FontList::Get( const XubString& rName,
     // Attribute nachgebildet werden
     FontInfo aInfo;
     if ( !pFontInfo )
-    {
-        // Falls der Fontname stimmt, uebernehmen wir soviel wie moeglich
-        if ( pFontNameInfo )
-        {
-            aInfo = *pFontNameInfo;
-            aInfo.SetStyleName( XubString() );
-        }
-
-        aInfo.SetWeight( eWeight );
-        aInfo.SetItalic( eItalic );
-    }
+        aInfo = makeMissing(pFontNameInfo, rName, eWeight, eItalic);
     else
         aInfo = *pFontInfo;
 
