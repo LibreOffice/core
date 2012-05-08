@@ -340,9 +340,20 @@ void StringHelper::appendHex( OUStringBuffer& rStr, sal_Int64 nData, bool bPrefi
     appendHex( rStr, static_cast< sal_uInt64 >( nData ), bPrefix );
 }
 
+static sal_uInt64
+lcl_ConvertDouble(double const f)
+{
+    sal_uInt64 i;
+    for (size_t j = 0; j < sizeof(double); ++j)
+    {   // hopefully both endian independent and strict aliasing safe
+        reinterpret_cast<char *>(&i)[j] = reinterpret_cast<char const *>(&f)[j];
+    }
+    return i;
+}
+
 void StringHelper::appendHex( OUStringBuffer& rStr, double fData, bool bPrefix )
 {
-    appendHex( rStr, *reinterpret_cast< const sal_uInt64* >( &fData ), bPrefix );
+    appendHex( rStr, lcl_ConvertDouble(fData), bPrefix );
 }
 
 // append shortened hexadecimal -----------------------------------------------
@@ -459,7 +470,7 @@ void StringHelper::appendBin( OUStringBuffer& rStr, sal_Int64 nData, bool bDots 
 
 void StringHelper::appendBin( OUStringBuffer& rStr, double fData, bool bDots )
 {
-    appendBin( rStr, *reinterpret_cast< const sal_uInt64* >( &fData ), bDots );
+    appendBin( rStr, lcl_ConvertDouble(fData), bDots );
 }
 
 // append formatted value -----------------------------------------------------
