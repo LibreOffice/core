@@ -236,7 +236,7 @@ struct AnnotatingVisitor
                 // that first, as it sets our defaults here (manually
                 // tracking default state on each Gradient variable is
                 // much more overhead)
-                uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem(USTR("href")));
+                uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
                 if(xNode.is())
                 {
                     const rtl::OUString sValue(xNode->getNodeValue());
@@ -274,7 +274,7 @@ struct AnnotatingVisitor
                 // that first, as it sets our defaults here (manually
                 // tracking default state on each Gradient variable is
                 // much more overhead)
-                uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem(USTR("href")));
+                uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
                 if(xNode.is())
                 {
                     const rtl::OUString sValue(xNode->getNodeValue());
@@ -487,10 +487,10 @@ struct AnnotatingVisitor
 
     rtl::OUString getOdfAlign( TextAlign eAlign )
     {
-        static ::rtl::OUString aStart(USTR("start"));
-        static ::rtl::OUString aEnd(USTR("end"));
-        // static ::rtl::OUString aJustify(USTR("justify"));
-        static ::rtl::OUString aCenter(USTR("center"));
+        static ::rtl::OUString aStart("start");
+        static ::rtl::OUString aEnd("end");
+        // static ::rtl::OUString aJustify("justify");
+        static ::rtl::OUString aCenter("center");
         switch(eAlign)
         {
             default:
@@ -546,73 +546,71 @@ struct AnnotatingVisitor
         if( rState.meFillType == GRADIENT && rState.maFillGradient.maStops.size() > 1 )
         {
             // TODO(F3): ODF12 supposedly also groks svg:linear/radialGradient. But CL says: nope.
-            xAttrs->AddAttribute( USTR( "draw:name" ), getStyleName("svggradient", rState.maFillGradient.mnId) );
+            xAttrs->AddAttribute( "draw:name", getStyleName("svggradient", rState.maFillGradient.mnId) );
             if( rState.maFillGradient.meType == Gradient::LINEAR )
             {
                 // should the optimizeGradientStops method decide that
                 // this is a three-color gradient, it prolly wanted us
                 // to take axial instead
-                xAttrs->AddAttribute( USTR( "draw:style" ),
+                xAttrs->AddAttribute( USTR("draw:style"),
                                       rState.maFillGradient.maStops.size() == 3 ?
                                       USTR("axial") :
                                       USTR("linear") );
             }
             else
             {
-                xAttrs->AddAttribute( USTR( "draw:style" ), USTR("ellipsoid") );
-                xAttrs->AddAttribute( USTR( "draw:cx" ), USTR("50%") );
-                xAttrs->AddAttribute( USTR( "draw:cy" ), USTR("50%") );
+                xAttrs->AddAttribute( "draw:style", "ellipsoid" );
+                xAttrs->AddAttribute( "draw:cx", "50%" );
+                xAttrs->AddAttribute( "draw:cy", "50%" );
             }
 
             basegfx::B2DTuple rScale, rTranslate;
             double rRotate, rShearX;
             if( rState.maFillGradient.maTransform.decompose(rScale, rTranslate, rRotate, rShearX) )
-                xAttrs->AddAttribute( USTR( "draw:angle" ),
+                xAttrs->AddAttribute( "draw:angle",
                                       rtl::OUString::valueOf(rRotate*1800.0/M_PI ) );
-            xAttrs->AddAttribute( USTR( "draw:start-color" ),
+            xAttrs->AddAttribute( "draw:start-color",
                                   getOdfColor(
                                       maGradientStopVector[
                                           rState.maFillGradient.maStops[0]].maStopColor) );
-            xAttrs->AddAttribute( USTR( "draw:end-color" ),
+            xAttrs->AddAttribute( "draw:end-color",
                                   getOdfColor(
                                       maGradientStopVector[
                                           rState.maFillGradient.maStops[1]].maStopColor) );
-            xAttrs->AddAttribute( USTR( "draw:border" ), USTR("0%") );
-            mxDocumentHandler->startElement( USTR("draw:gradient"),
-                                             xUnoAttrs );
-            mxDocumentHandler->endElement( USTR("draw:gradient") );
+            xAttrs->AddAttribute( "draw:border", "0%" );
+            mxDocumentHandler->startElement( "draw:gradient", xUnoAttrs );
+            mxDocumentHandler->endElement( "draw:gradient" );
 
             if( hasGradientOpacity(rState.maFillGradient) )
             {
                 // need to write out opacity style as well
                 xAttrs->Clear();
-                xAttrs->AddAttribute( USTR( "draw:name" ), getStyleName("svgopacity", rState.maFillGradient.mnId) );
+                xAttrs->AddAttribute( "draw:name", getStyleName("svgopacity", rState.maFillGradient.mnId) );
                 if( rState.maFillGradient.meType == Gradient::LINEAR )
                 {
-                    xAttrs->AddAttribute( USTR( "draw:style" ), USTR("linear") );
+                    xAttrs->AddAttribute( "draw:style", "linear" );
                 }
                 else
                 {
-                    xAttrs->AddAttribute( USTR( "draw:style" ), USTR("ellipsoid") );
-                    xAttrs->AddAttribute( USTR( "draw:cx" ), USTR("50%") );
-                    xAttrs->AddAttribute( USTR( "draw:cy" ), USTR("50%") );
+                    xAttrs->AddAttribute( "draw:style", "ellipsoid" );
+                    xAttrs->AddAttribute( "draw:cx", "50%" );
+                    xAttrs->AddAttribute( "draw:cy", "50%" );
                 }
 
                 // modulate gradient opacity with overall fill opacity
-                xAttrs->AddAttribute( USTR( "draw:end" ),
+                xAttrs->AddAttribute( "draw:end",
                                       rtl::OUString::valueOf(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[0]].maStopColor.a*
-                                          maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+USTR("%" ) );
-                xAttrs->AddAttribute( USTR( "draw:start" ),
+                                          maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+"%" );
+                xAttrs->AddAttribute( "draw:start",
                                       rtl::OUString::valueOf(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[1]].maStopColor.a*
-                                          maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+USTR("%" ) );
-                xAttrs->AddAttribute( USTR( "draw:border" ), USTR("0%") );
-                mxDocumentHandler->startElement( USTR("draw:opacity"),
-                                                 xUnoAttrs );
-                mxDocumentHandler->endElement( USTR("draw:opacity") );
+                                          maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+"%" );
+                xAttrs->AddAttribute( "draw:border", "0%" );
+                mxDocumentHandler->startElement( "draw:opacity", xUnoAttrs );
+                mxDocumentHandler->endElement( "draw:opacity" );
             }
         }
 
@@ -622,47 +620,42 @@ struct AnnotatingVisitor
             // write paragraph style attributes
             xAttrs->Clear();
 
-            xAttrs->AddAttribute( USTR( "style:name" ), getStyleName("svgparagraphstyle", mnCurrStateId) );
-            xAttrs->AddAttribute( USTR( "style:family" ), USTR("paragraph") );
-            mxDocumentHandler->startElement( USTR("style:style"),
-                                             xUnoAttrs );
+            xAttrs->AddAttribute( "style:name", getStyleName("svgparagraphstyle", mnCurrStateId) );
+            xAttrs->AddAttribute( "style:family", "paragraph" );
+            mxDocumentHandler->startElement( "style:style", xUnoAttrs );
 
             xAttrs->Clear();
-            xAttrs->AddAttribute( USTR( "fo:text-align"), getOdfAlign(rState.meTextAnchor));
+            xAttrs->AddAttribute( "fo:text-align", getOdfAlign(rState.meTextAnchor));
 
-            mxDocumentHandler->startElement( USTR("style:paragraph-properties"),
-                                             xUnoAttrs );
-            mxDocumentHandler->endElement( USTR("style:paragraph-properties") );
-            mxDocumentHandler->endElement( USTR("style:style") );
+            mxDocumentHandler->startElement( "style:paragraph-properties", xUnoAttrs );
+            mxDocumentHandler->endElement( "style:paragraph-properties" );
+            mxDocumentHandler->endElement( "style:style" );
 
             // write text style attributes
             xAttrs->Clear();
 
-            xAttrs->AddAttribute( USTR( "style:name" ), getStyleName("svgtextstyle", mnCurrStateId) );
-            xAttrs->AddAttribute( USTR( "style:family" ), USTR("text") );
-            mxDocumentHandler->startElement( USTR("style:style"),
-                                             xUnoAttrs );
+            xAttrs->AddAttribute( "style:name", getStyleName("svgtextstyle", mnCurrStateId) );
+            xAttrs->AddAttribute( "style:family", "text" );
+            mxDocumentHandler->startElement( "style:style", xUnoAttrs );
             xAttrs->Clear();
-            xAttrs->AddAttribute( USTR( "fo:font-family"), rState.maFontFamily);
-            xAttrs->AddAttribute( USTR( "fo:font-size"),
-                                  rtl::OUString::valueOf(pt2mm(rState.mnFontSize))+USTR("mm"));
-            xAttrs->AddAttribute( USTR( "fo:font-style"), rState.maFontStyle);
-            xAttrs->AddAttribute( USTR( "fo:font-variant"), rState.maFontVariant);
-            xAttrs->AddAttribute( USTR( "fo:font-weight"),
+            xAttrs->AddAttribute( "fo:font-family", rState.maFontFamily);
+            xAttrs->AddAttribute( "fo:font-size",
+                                  rtl::OUString::valueOf(pt2mm(rState.mnFontSize))+"mm");
+            xAttrs->AddAttribute( "fo:font-style", rState.maFontStyle);
+            xAttrs->AddAttribute( "fo:font-variant", rState.maFontVariant);
+            xAttrs->AddAttribute( "fo:font-weight",
                                   rtl::OUString::valueOf(rState.mnFontWeight));
-            xAttrs->AddAttribute( USTR( "fo:color"), getOdfColor(rState.maFillColor));
+            xAttrs->AddAttribute( "fo:color", getOdfColor(rState.maFillColor));
 
-            mxDocumentHandler->startElement( USTR("style:text-properties"),
-                                             xUnoAttrs );
-            mxDocumentHandler->endElement( USTR("style:text-properties") );
-            mxDocumentHandler->endElement( USTR("style:style") );
+            mxDocumentHandler->startElement( "style:text-properties", xUnoAttrs );
+            mxDocumentHandler->endElement( "style:text-properties" );
+            mxDocumentHandler->endElement( "style:style" );
         }
 
         xAttrs->Clear();
-        xAttrs->AddAttribute( USTR( "style:name" ), getStyleName("svggraphicstyle", mnCurrStateId) );
-        xAttrs->AddAttribute( USTR( "style:family" ), USTR("graphic") );
-        mxDocumentHandler->startElement( USTR("style:style"),
-                                         xUnoAttrs );
+        xAttrs->AddAttribute( "style:name" , getStyleName("svggraphicstyle", mnCurrStateId) );
+        xAttrs->AddAttribute( "style:family", "graphic" );
+        mxDocumentHandler->startElement( "style:style", xUnoAttrs );
 
         xAttrs->Clear();
         // text or shape? if the former, no use in processing any
@@ -670,20 +663,20 @@ struct AnnotatingVisitor
         // with text shapes
         if( nTagId == XML_TEXT )
         {
-            //xAttrs->AddAttribute( USTR( "draw:auto-grow-height"), USTR("true"));
-            xAttrs->AddAttribute( USTR( "draw:auto-grow-width"), USTR("true"));
-            xAttrs->AddAttribute( USTR( "draw:textarea-horizontal-align"), USTR("left"));
-            //xAttrs->AddAttribute( USTR( "draw:textarea-vertical-align"), USTR("top"));
-            xAttrs->AddAttribute( USTR( "fo:min-height"), USTR("0cm"));
+            //xAttrs->AddAttribute( "draw:auto-grow-height", "true");
+            xAttrs->AddAttribute( "draw:auto-grow-width", "true");
+            xAttrs->AddAttribute( "draw:textarea-horizontal-align", "left");
+            //xAttrs->AddAttribute( "draw:textarea-vertical-align", "top");
+            xAttrs->AddAttribute( "fo:min-height", "0cm");
 
-            xAttrs->AddAttribute( USTR( "fo:padding-top"), USTR("0cm"));
-            xAttrs->AddAttribute( USTR( "fo:padding-left"), USTR("0cm"));
-            xAttrs->AddAttribute( USTR( "fo:padding-right"), USTR("0cm"));
-            xAttrs->AddAttribute( USTR( "fo:padding-bottom"), USTR("0cm"));
+            xAttrs->AddAttribute( "fo:padding-top", "0cm");
+            xAttrs->AddAttribute( "fo:padding-left", "0cm");
+            xAttrs->AddAttribute( "fo:padding-right", "0cm");
+            xAttrs->AddAttribute( "fo:padding-bottom", "0cm");
 
             // disable any background shape
-            xAttrs->AddAttribute( USTR( "draw:stroke" ), USTR("none"));
-            xAttrs->AddAttribute( USTR( "draw:fill" ), USTR("none"));
+            xAttrs->AddAttribute( "draw:stroke", "none");
+            xAttrs->AddAttribute( "draw:fill", "none");
         }
         else
         {
@@ -691,60 +684,59 @@ struct AnnotatingVisitor
             {
                 if( rState.meFillType == GRADIENT )
                 {
-                    xAttrs->AddAttribute( USTR( "draw:fill" ), USTR("gradient"));
-                    xAttrs->AddAttribute( USTR( "draw:fill-gradient-name" ),
+                    xAttrs->AddAttribute( "draw:fill", "gradient");
+                    xAttrs->AddAttribute( "draw:fill-gradient-name",
                                           getStyleName("svggradient", rState.maFillGradient.mnId) );
                     if( hasGradientOpacity(rState.maFillGradient) )
                     {
                         // needs transparency gradient as well
-                        xAttrs->AddAttribute( USTR( "draw:opacity-name" ),
+                        xAttrs->AddAttribute( "draw:opacity-name",
                                               getStyleName("svgopacity", rState.maFillGradient.mnId) );
                     }
                     else if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
-                        xAttrs->AddAttribute( USTR( "draw:opacity" ),
-                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+USTR("%") );
+                        xAttrs->AddAttribute( "draw:opacity",
+                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
                 else
                 {
-                    xAttrs->AddAttribute( USTR( "draw:fill" ), USTR("solid"));
-                    xAttrs->AddAttribute( USTR( "draw:fill-color" ), getOdfColor(rState.maFillColor));
+                    xAttrs->AddAttribute( "draw:fill", "solid");
+                    xAttrs->AddAttribute( "draw:fill-color", getOdfColor(rState.maFillColor));
                     if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
-                        xAttrs->AddAttribute( USTR( "draw:opacity" ),
-                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+USTR("%") );
+                        xAttrs->AddAttribute( "draw:opacity",
+                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
             }
             else
-                xAttrs->AddAttribute( USTR( "draw:fill" ), USTR("none"));
+                xAttrs->AddAttribute( "draw:fill", "none");
 
             if( rState.meStrokeType != NONE )
             {
-                xAttrs->AddAttribute( USTR( "draw:stroke" ), USTR("solid"));
-                xAttrs->AddAttribute( USTR( "svg:stroke-color" ), getOdfColor(rState.maStrokeColor));
+                xAttrs->AddAttribute( "draw:stroke", "solid");
+                xAttrs->AddAttribute( "svg:stroke-color", getOdfColor(rState.maStrokeColor));
             }
             else
-                xAttrs->AddAttribute( USTR( "draw:stroke" ), USTR("none"));
+                xAttrs->AddAttribute( "draw:stroke", "none");
 
             if( maCurrState.mnStrokeWidth != 0.0 )
             {
                 ::basegfx::B2DVector aVec(maCurrState.mnStrokeWidth,0);
                 aVec *= maCurrState.maCTM;
-                xAttrs->AddAttribute( USTR("svg:stroke-width"), rtl::OUString::valueOf( pt2mm(aVec.getLength()) )+USTR("mm"));
+                xAttrs->AddAttribute( "svg:stroke-width", rtl::OUString::valueOf( pt2mm(aVec.getLength()) )+"mm");
             }
             if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_MITER )
-                xAttrs->AddAttribute( USTR( "draw:stroke-linejoin"), USTR("miter"));
+                xAttrs->AddAttribute( "draw:stroke-linejoin", "miter");
             else if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_ROUND )
-                xAttrs->AddAttribute( USTR( "draw:stroke-linejoin"), USTR("round"));
+                xAttrs->AddAttribute( "draw:stroke-linejoin", "round");
             else if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_BEVEL )
-                xAttrs->AddAttribute( USTR( "draw:stroke-linejoin"), USTR("bevel"));
+                xAttrs->AddAttribute( "draw:stroke-linejoin", "bevel");
             if( maCurrState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
-                xAttrs->AddAttribute( USTR("svg:stroke-opacity"),
-                                      rtl::OUString::valueOf(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+USTR("%"));
+                xAttrs->AddAttribute( "svg:stroke-opacity",
+                                      rtl::OUString::valueOf(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+"%");
         }
 
-        mxDocumentHandler->startElement( USTR("style:graphic-properties"),
-                                         xUnoAttrs );
-        mxDocumentHandler->endElement( USTR("style:graphic-properties") );
-        mxDocumentHandler->endElement( USTR("style:style") );
+        mxDocumentHandler->startElement( "style:graphic-properties", xUnoAttrs );
+        mxDocumentHandler->endElement( "style:graphic-properties" );
+        mxDocumentHandler->endElement( "style:style" );
 
         return true; // newly written
     }
@@ -781,10 +773,10 @@ struct AnnotatingVisitor
         else
             nStyleId = mrStates.find(maCurrState)->mnStyleId;
 
-        xElem->setAttribute(USTR("internal-style-ref"),
+        xElem->setAttribute("internal-style-ref",
                             rtl::OUString::valueOf(
                                 nStyleId)
-                            +USTR("$")
+                            +"$"
                             +rtl::OUString::valueOf(
                                 nEmulatedStyleId));
     }
@@ -1283,8 +1275,7 @@ struct ShapeWritingVisitor
 
         sal_Int32 nDummyIndex(0);
         rtl::OUString sStyleId(
-            xElem->getAttribute(
-                USTR("internal-style-ref")).getToken(
+            xElem->getAttribute("internal-style-ref").getToken(
                     0,'$',nDummyIndex));
         StateMap::iterator pOrigState=mrStateMap.find(
             sStyleId.toInt32());
@@ -1328,8 +1319,8 @@ struct ShapeWritingVisitor
                     }
                 }
 
-                rtl::OUString sLinePath = USTR("M")+rtl::OUString::valueOf(x1)+USTR(",")
-                    +rtl::OUString::valueOf(y1)+USTR("L")+rtl::OUString::valueOf(x2)+USTR(",")
+                rtl::OUString sLinePath = "M"+rtl::OUString::valueOf(x1)+","
+                    +rtl::OUString::valueOf(y1)+"L"+rtl::OUString::valueOf(x2)+","
                     +rtl::OUString::valueOf(y2);
                 basegfx::B2DPolyPolygon aPoly;
                 basegfx::tools::importFromSvgD(aPoly, sLinePath);
@@ -1344,7 +1335,7 @@ struct ShapeWritingVisitor
             case XML_POLYGON:
             case XML_POLYLINE:
             {
-                rtl::OUString sPoints = xElem->hasAttribute(USTR("points")) ? xElem->getAttribute(USTR("points")) : USTR("");
+                rtl::OUString sPoints = xElem->hasAttribute("points") ? xElem->getAttribute("points") : "";
                 basegfx::B2DPolygon aPoly;
                 basegfx::tools::importFromSvgPoints(aPoly, sPoints);
                 if( nTokenId == XML_POLYGON || maCurrState.meFillType != NONE )
@@ -1371,7 +1362,7 @@ struct ShapeWritingVisitor
             }
             case XML_PATH:
             {
-                rtl::OUString sPath = xElem->hasAttribute(USTR("d")) ? xElem->getAttribute(USTR("d")) : USTR("");
+                rtl::OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : USTR("");
                 basegfx::B2DPolyPolygon aPoly;
                 basegfx::tools::importFromSvgD(aPoly, sPath);
 
@@ -1484,7 +1475,7 @@ struct ShapeWritingVisitor
                     }
                 }
 
-                rtl::OUString sValue = xElem->hasAttribute(USTR("href")) ? xElem->getAttribute(USTR("href")) : USTR("");
+                rtl::OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : USTR("");
                 rtl::OString aValueUtf8( sValue.getStr(), sValue.getLength(), RTL_TEXTENCODING_UTF8 );
                 std::string sLinkValue;
                 parseXlinkHref(aValueUtf8.getStr(), sLinkValue);
@@ -1504,13 +1495,6 @@ struct ShapeWritingVisitor
                                               _1)),
                               xElem,
                               xml::dom::NodeType_TEXT_NODE);
-                // visitChildren(boost::bind(
-                //                   (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
-                //                   boost::ref(sText),
-                //                   boost::bind(&xml::dom::XNode::getNodeValue,
-                //                               _1)),
-                //               xElem,
-                //               xml::dom::NodeType_ELEMENT_NODE);
 
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
@@ -1559,27 +1543,27 @@ struct ShapeWritingVisitor
                     y -= 2.0*maCurrState.mnFontSize/3.0;
                 }
 
-                xAttrs->AddAttribute( USTR( "svg:x" ), rtl::OUString::valueOf(pt2mm(x))+USTR("mm"));
-                xAttrs->AddAttribute( USTR( "svg:y" ), rtl::OUString::valueOf(pt2mm(y))+USTR("mm"));
-                xAttrs->AddAttribute( USTR( "draw:style-name" ), USTR("svggraphicstyle")+sStyleId );
+                xAttrs->AddAttribute( "svg:x", rtl::OUString::valueOf(pt2mm(x))+"mm");
+                xAttrs->AddAttribute( "svg:y", rtl::OUString::valueOf(pt2mm(y))+"mm");
+                xAttrs->AddAttribute( "draw:style-name", "svggraphicstyle"+sStyleId );
 
-                mxDocumentHandler->startElement(USTR("draw:frame"),xUnoAttrs);
-
-                xAttrs->Clear();
-                mxDocumentHandler->startElement(USTR("draw:text-box"),xUnoAttrs);
-                xAttrs->AddAttribute( USTR( "text:style-name" ), USTR("svgparagraphstyle")+sStyleId);
-                mxDocumentHandler->startElement(USTR("text:p"),xUnoAttrs);
+                mxDocumentHandler->startElement("draw:frame", xUnoAttrs);
 
                 xAttrs->Clear();
-                xAttrs->AddAttribute( USTR( "text:style-name" ), USTR("svgtextstyle")+sStyleId);
-                mxDocumentHandler->startElement(USTR("text:span"),xUnoAttrs);
+                mxDocumentHandler->startElement("draw:text-box", xUnoAttrs);
+                xAttrs->AddAttribute( "text:style-name", "svgparagraphstyle"+sStyleId);
+                mxDocumentHandler->startElement("text:p", xUnoAttrs);
+
+                xAttrs->Clear();
+                xAttrs->AddAttribute( "text:style-name", "svgtextstyle"+sStyleId);
+                mxDocumentHandler->startElement("text:span", xUnoAttrs);
 
                 xAttrs->Clear();
                 mxDocumentHandler->characters(sText.makeStringAndClear());
-                mxDocumentHandler->endElement(USTR("text:span"));
-                mxDocumentHandler->endElement(USTR("text:p"));
-                mxDocumentHandler->endElement(USTR("draw:text-box"));
-                mxDocumentHandler->endElement(USTR("draw:frame"));
+                mxDocumentHandler->endElement("text:span");
+                mxDocumentHandler->endElement("text:p");
+                mxDocumentHandler->endElement("draw:text-box");
+                mxDocumentHandler->endElement("draw:frame");
                 break;
             }
         }
@@ -1598,25 +1582,25 @@ struct ShapeWritingVisitor
                         const std::string&                              data)
     {
         xAttrs->Clear();
-        xAttrs->AddAttribute( USTR( "svg:x" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+USTR("mm"));
-        xAttrs->AddAttribute( USTR( "svg:y" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+USTR("mm"));
-        xAttrs->AddAttribute( USTR( "svg:width" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+USTR("mm"));
-        xAttrs->AddAttribute( USTR( "svg:height" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+USTR("mm"));
+        xAttrs->AddAttribute( "svg:x", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
+        xAttrs->AddAttribute( "svg:y", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
+        xAttrs->AddAttribute( "svg:width", rtl::OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
+        xAttrs->AddAttribute( "svg:height", rtl::OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
 
-        mxDocumentHandler->startElement(USTR("draw:frame"),xUnoAttrs);
+        mxDocumentHandler->startElement("draw:frame", xUnoAttrs);
 
         xAttrs->Clear();
-        mxDocumentHandler->startElement(USTR("draw:image"),xUnoAttrs);
+        mxDocumentHandler->startElement("draw:image", xUnoAttrs);
 
-        mxDocumentHandler->startElement(USTR("office:binary-data"),xUnoAttrs);
+        mxDocumentHandler->startElement("office:binary-data", xUnoAttrs);
 
         mxDocumentHandler->characters(rtl::OUString::createFromAscii(data.c_str()));
 
-        mxDocumentHandler->endElement(USTR("office:binary-data"));
+        mxDocumentHandler->endElement("office:binary-data");
 
-        mxDocumentHandler->endElement(USTR("draw:image"));
+        mxDocumentHandler->endElement("draw:image");
 
-        mxDocumentHandler->endElement(USTR("draw:frame"));
+        mxDocumentHandler->endElement("draw:frame");
     }
 
 
@@ -1628,19 +1612,19 @@ struct ShapeWritingVisitor
         if (!rMatrix.decompose(rScale, rTranslate, rRotate, rShearX))
             return;
         if (rScale.getX() != 1.0 || rScale.getY() != 1.0)
-            sTransformValue += USTR("scale(")+::rtl::OUString::valueOf(rScale.getX())+USTR(" ")
-                 +::rtl::OUString::valueOf(rScale.getY())+USTR(") ");
+            sTransformValue += "scale("+::rtl::OUString::valueOf(rScale.getX())+" "
+                 +::rtl::OUString::valueOf(rScale.getY())+") ";
         if (rTranslate.getX() != 0.0f || rTranslate.getY() != 0.0f)
-            sTransformValue += USTR("translate(")+::rtl::OUString::valueOf(rTranslate.getX()/100.0f)+USTR("mm ")
-                 +::rtl::OUString::valueOf(rTranslate.getY()/100.0f)+USTR("mm) ");
+            sTransformValue += "translate("+::rtl::OUString::valueOf(rTranslate.getX()/100.0f)+"mm "
+                 +::rtl::OUString::valueOf(rTranslate.getY()/100.0f)+"mm) ";
         if (rRotate != 0.0f)
-            sTransformValue += USTR("rotate(")+::rtl::OUString::valueOf(rRotate)+USTR(") ");
+            sTransformValue += "rotate("+::rtl::OUString::valueOf(rRotate)+") ";
 
         if (rShearX != 0.0f)
-            sTransformValue += USTR("skewX(")+::rtl::OUString::valueOf(rShearX)+USTR(") ");
+            sTransformValue += "skewX("+::rtl::OUString::valueOf(rShearX)+") ";
         if (sTransformValue.isEmpty())
             return;
-        xAttrs->AddAttribute( USTR("draw:transform"), sTransformValue);
+        xAttrs->AddAttribute( "draw:transform", sTransformValue);
     }
 
     void writeEllipseShape( rtl::Reference<SvXMLAttributeList>&          xAttrs,
@@ -1700,7 +1684,7 @@ struct ShapeWritingVisitor
 
             sal_Int32 nDummyIndex(0);
             aStyleId = xElem->getAttribute(
-                USTR("internal-style-ref")).getToken(1,'$',nDummyIndex);
+                "internal-style-ref").getToken(1,'$',nDummyIndex);
             StateMap::iterator pAlternateState=mrStateMap.find(aStyleId.toInt32());
             OSL_ASSERT(pAlternateState != mrStateMap.end());
             aState = pAlternateState->second;
@@ -1725,7 +1709,7 @@ struct ShapeWritingVisitor
             fillShapeProperties(xAttrs,
                                 xElem,
                                 aBounds,
-                                USTR("svggraphicstyle")+aStyleId);
+                                "svggraphicstyle"+aStyleId);
 
             // force path coordinates to 100th millimeter, after
             // putting polygon data at origin (odf viewbox
@@ -1736,13 +1720,12 @@ struct ShapeWritingVisitor
             aNormalize.scale(2540.0/72.0,2540.0/72.0);
             aPolys[i].transform(aNormalize);
 
-            xAttrs->AddAttribute( USTR( "svg:d" ), basegfx::tools::exportToSvgD(
+            xAttrs->AddAttribute( "svg:d", basegfx::tools::exportToSvgD(
                 aPolys[i],
                 false,   // no relative coords. causes rounding errors
                 false )); // no quad bezier detection. crashes older versions.
-            mxDocumentHandler->startElement(USTR("draw:path"),
-                                            xUnoAttrs);
-            mxDocumentHandler->endElement(USTR("draw:path"));
+            mxDocumentHandler->startElement("draw:path", xUnoAttrs);
+            mxDocumentHandler->endElement("draw:path");
         }
     }
 
@@ -1751,25 +1734,25 @@ struct ShapeWritingVisitor
                               const basegfx::B2DRange&                  rShapeBounds,
                               const rtl::OUString&                      rStyleName )
     {
-        xAttrs->AddAttribute( USTR( "draw:z-index" ), rtl::OUString::valueOf( mnShapeNum++ ));
-        xAttrs->AddAttribute( USTR( "draw:style-name" ), rStyleName);
-        xAttrs->AddAttribute( USTR( "svg:width" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+USTR("mm"));
-        xAttrs->AddAttribute( USTR( "svg:height" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+USTR("mm"));
+        xAttrs->AddAttribute( "draw:z-index", rtl::OUString::valueOf( mnShapeNum++ ));
+        xAttrs->AddAttribute( "draw:style-name", rStyleName);
+        xAttrs->AddAttribute( "svg:width", rtl::OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
+        xAttrs->AddAttribute( "svg:height", rtl::OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
 
         // OOo expects the viewbox to be in 100th of mm
-        xAttrs->AddAttribute( USTR( "svg:viewBox" ),
-            USTR("0 0 ")
+        xAttrs->AddAttribute( "svg:viewBox",
+            "0 0 "
             + rtl::OUString::valueOf(
                 basegfx::fround(pt100thmm(rShapeBounds.getWidth())) )
-            + USTR(" ")
+            + " "
             + rtl::OUString::valueOf(
                 basegfx::fround(pt100thmm(rShapeBounds.getHeight())) ));
 
         // TODO(F1): decompose transformation in calling code, and use
         // transform attribute here
         // writeTranslate(maCurrState.maCTM, xAttrs);
-        xAttrs->AddAttribute( USTR( "svg:x" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+USTR("mm"));
-        xAttrs->AddAttribute( USTR( "svg:y" ), rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+USTR("mm"));
+        xAttrs->AddAttribute( "svg:x", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
+        xAttrs->AddAttribute( "svg:y", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
     }
 
     State                                      maCurrState;
@@ -1846,8 +1829,7 @@ SVGReader::SVGReader(const uno::Reference<lang::XMultiServiceFactory>&     xServ
 sal_Bool SVGReader::parseAndConvert()
 {
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
-        m_xServiceFactory->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.dom.DocumentBuilder" ))), uno::UNO_QUERY_THROW );
+        m_xServiceFactory->createInstance( "com.sun.star.xml.dom.DocumentBuilder" ), uno::UNO_QUERY_THROW );
 
     uno::Reference<xml::dom::XDocument> xDom(
         xDomBuilder->parse(m_xInputStream),
@@ -1869,135 +1851,131 @@ sal_Bool SVGReader::parseAndConvert()
 
     // if the "width" and "height" attributes are missing, inkscape fakes
     // A4 portrait for. Let's do the same.
-    if (!xDocElem->hasAttribute(USTR("width")))
-        xDocElem->setAttribute(USTR("width"), USTR("210mm"));
-    if (!xDocElem->hasAttribute(USTR("height")))
-        xDocElem->setAttribute(USTR("height"), USTR("297mm"));
+    if (!xDocElem->hasAttribute("width"))
+        xDocElem->setAttribute("width", "210mm");
+    if (!xDocElem->hasAttribute("height"))
+        xDocElem->setAttribute("height", "297mm");
 
-    double fViewPortWidth( pt2mm(convLength(xDocElem->getAttribute(USTR("width")),aInitialState,'h')) );
-    double fViewPortHeight( pt2mm(convLength(xDocElem->getAttribute(USTR("height")),aInitialState,'v')) );
+    double fViewPortWidth( pt2mm(convLength(xDocElem->getAttribute("width"),aInitialState,'h')) );
+    double fViewPortHeight( pt2mm(convLength(xDocElem->getAttribute("height"),aInitialState,'v')) );
 
     // document prolog
     rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
     uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
-    xAttrs->AddAttribute( USTR( "xmlns:office" ), USTR( OASIS_STR "office:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:style" ), USTR( OASIS_STR "style:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:text" ), USTR( OASIS_STR "text:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:svg" ), USTR( OASIS_STR "svg-compatible:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:table" ), USTR( OASIS_STR "table:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:draw" ), USTR( OASIS_STR "drawing:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:fo" ), USTR( OASIS_STR "xsl-fo-compatible:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:xlink" ), USTR( "http://www.w3.org/1999/xlink" ));
-    xAttrs->AddAttribute( USTR( "xmlns:dc" ), USTR( "http://purl.org/dc/elements/1.1/" ));
-    xAttrs->AddAttribute( USTR( "xmlns:number" ), USTR( OASIS_STR "datastyle:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:presentation" ), USTR( OASIS_STR "presentation:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:math" ), USTR( "http://www.w3.org/1998/Math/MathML" ));
-    xAttrs->AddAttribute( USTR( "xmlns:form" ), USTR( OASIS_STR "form:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:script" ), USTR( OASIS_STR "script:1.0" ));
-    xAttrs->AddAttribute( USTR( "xmlns:dom" ), USTR( "http://www.w3.org/2001/xml-events" ));
-    xAttrs->AddAttribute( USTR( "xmlns:xforms" ), USTR( "http://www.w3.org/2002/xforms" ));
-    xAttrs->AddAttribute( USTR( "xmlns:xsd" ), USTR( "http://www.w3.org/2001/XMLSchema" ));
-    xAttrs->AddAttribute( USTR( "xmlns:xsi" ), USTR( "http://www.w3.org/2001/XMLSchema-instance" ));
-    xAttrs->AddAttribute( USTR( "office:version" ), USTR( "1.0" ));
-    xAttrs->AddAttribute( USTR( "office:mimetype" ), USTR( "application/vnd.oasis.opendocument.graphics" ));
+    xAttrs->AddAttribute( "xmlns:office", USTR( OASIS_STR "office:1.0" ));
+    xAttrs->AddAttribute( "xmlns:style", USTR( OASIS_STR "style:1.0" ));
+    xAttrs->AddAttribute( "xmlns:text", USTR( OASIS_STR "text:1.0" ));
+    xAttrs->AddAttribute( "xmlns:svg", USTR( OASIS_STR "svg-compatible:1.0" ));
+    xAttrs->AddAttribute( "xmlns:table", USTR( OASIS_STR "table:1.0" ));
+    xAttrs->AddAttribute( "xmlns:draw", USTR( OASIS_STR "drawing:1.0" ));
+    xAttrs->AddAttribute( "xmlns:fo", USTR( OASIS_STR "xsl-fo-compatible:1.0" ));
+    xAttrs->AddAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink");
+    xAttrs->AddAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    xAttrs->AddAttribute( "xmlns:number", USTR( OASIS_STR "datastyle:1.0" ));
+    xAttrs->AddAttribute( "xmlns:presentation", USTR( OASIS_STR "presentation:1.0" ));
+    xAttrs->AddAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML");
+    xAttrs->AddAttribute( "xmlns:form", USTR( OASIS_STR "form:1.0" ));
+    xAttrs->AddAttribute( "xmlns:script", USTR( OASIS_STR "script:1.0" ));
+    xAttrs->AddAttribute( "xmlns:dom", "http://www.w3.org/2001/xml-events");
+    xAttrs->AddAttribute( "xmlns:xforms", "http://www.w3.org/2002/xforms");
+    xAttrs->AddAttribute( "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+    xAttrs->AddAttribute( "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    xAttrs->AddAttribute( "office:version", "1.0");
+    xAttrs->AddAttribute( "office:mimetype", "application/vnd.oasis.opendocument.graphics");
 
-    m_xDocumentHandler->startElement( USTR("office:document"), xUnoAttrs );
-
-    xAttrs->Clear();
-
-    m_xDocumentHandler->startElement( USTR("office:settings"), xUnoAttrs);
-
-    xAttrs->AddAttribute( USTR( "config:name" ), USTR( "ooo:view-settings" ));
-    m_xDocumentHandler->startElement( USTR("config:config-item-set"), xUnoAttrs);
+    m_xDocumentHandler->startElement( "office:document", xUnoAttrs );
 
     xAttrs->Clear();
 
-    xAttrs->AddAttribute( USTR( "config:name" ), USTR( "VisibleAreaTop" ));
-    xAttrs->AddAttribute( USTR( "config:type" ), USTR( "int" ));
-    m_xDocumentHandler->startElement( USTR( "config:config-item" ), xUnoAttrs);
+    m_xDocumentHandler->startElement( "office:settings", xUnoAttrs);
 
-    m_xDocumentHandler->characters( USTR( "0" ));
-
-    m_xDocumentHandler->endElement( USTR( "config:config-item" ));
+    xAttrs->AddAttribute( "config:name", "ooo:view-settings");
+    m_xDocumentHandler->startElement( "config:config-item-set", xUnoAttrs);
 
     xAttrs->Clear();
 
-    xAttrs->AddAttribute( USTR( "config:name" ), USTR( "VisibleAreaLeft" ));
-    xAttrs->AddAttribute( USTR( "config:type" ), USTR( "int" ));
-    m_xDocumentHandler->startElement( USTR( "config:config-item" ), xUnoAttrs);
+    xAttrs->AddAttribute( "config:name", "VisibleAreaTop");
+    xAttrs->AddAttribute( "config:type", "int");
+    m_xDocumentHandler->startElement( "config:config-item", xUnoAttrs);
 
-    m_xDocumentHandler->characters( USTR( "0" ));
+    m_xDocumentHandler->characters( "0" );
 
-    m_xDocumentHandler->endElement( USTR( "config:config-item" ));
+    m_xDocumentHandler->endElement( "config:config-item" );
 
     xAttrs->Clear();
 
-    xAttrs->AddAttribute( USTR( "config:name" ), USTR( "VisibleAreaWidth" ));
-    xAttrs->AddAttribute( USTR( "config:type" ), USTR( "int" ));
-    m_xDocumentHandler->startElement( USTR( "config:config-item" ), xUnoAttrs);
+    xAttrs->AddAttribute( "config:name", "VisibleAreaLeft" );
+    xAttrs->AddAttribute( "config:type", "int" );
+    m_xDocumentHandler->startElement( "config:config-item" , xUnoAttrs);
+
+    m_xDocumentHandler->characters( "0" );
+
+    m_xDocumentHandler->endElement( "config:config-item" );
+
+    xAttrs->Clear();
+
+    xAttrs->AddAttribute( "config:name" , "VisibleAreaWidth" );
+    xAttrs->AddAttribute( "config:type" , "int" );
+    m_xDocumentHandler->startElement( "config:config-item" , xUnoAttrs);
 
     sal_Int64 iWidth = sal_Int64(fViewPortWidth);
     m_xDocumentHandler->characters( ::rtl::OUString::valueOf(iWidth) );
 
-    m_xDocumentHandler->endElement( USTR( "config:config-item" ));
+    m_xDocumentHandler->endElement( "config:config-item" );
 
     xAttrs->Clear();
 
-    xAttrs->AddAttribute( USTR( "config:name" ), USTR( "VisibleAreaHeight" ));
-    xAttrs->AddAttribute( USTR( "config:type" ), USTR( "int" ));
-    m_xDocumentHandler->startElement( USTR( "config:config-item" ), xUnoAttrs);
+    xAttrs->AddAttribute( "config:name", "VisibleAreaHeight" );
+    xAttrs->AddAttribute( "config:type", "int" );
+    m_xDocumentHandler->startElement( "config:config-item", xUnoAttrs);
 
     sal_Int64 iHeight = sal_Int64(fViewPortHeight);
     m_xDocumentHandler->characters( ::rtl::OUString::valueOf(iHeight) );
 
-    m_xDocumentHandler->endElement( USTR( "config:config-item" ));
+    m_xDocumentHandler->endElement( "config:config-item" );
 
-    m_xDocumentHandler->endElement( USTR( "config:config-item-set" ));
+    m_xDocumentHandler->endElement( "config:config-item-set" );
 
-    m_xDocumentHandler->endElement( USTR( "office:settings" ));
+    m_xDocumentHandler->endElement( "office:settings" );
 
     xAttrs->Clear();
 
-    m_xDocumentHandler->startElement( USTR("office:automatic-styles"),
+    m_xDocumentHandler->startElement( "office:automatic-styles",
                                       xUnoAttrs );
 
-    xAttrs->AddAttribute( USTR( "style:name" ), USTR("pagelayout1"));
-    m_xDocumentHandler->startElement( USTR("style:page-layout"),
-                                      xUnoAttrs );
+    xAttrs->AddAttribute( "style:name", "pagelayout1");
+    m_xDocumentHandler->startElement( "style:page-layout", xUnoAttrs );
     // TODO(Q3): this is super-ugly. In-place container come to mind.
     xAttrs->Clear();
 
     // make page viewport-width times viewport-height mm large - add
     // 5% border at every side
-    xAttrs->AddAttribute( USTR( "fo:margin-top" ), USTR("0mm"));
-    xAttrs->AddAttribute( USTR( "fo:margin-bottom" ), USTR("0mm"));
-    xAttrs->AddAttribute( USTR( "fo:margin-left" ), USTR("0mm"));
-    xAttrs->AddAttribute( USTR( "fo:margin-right" ), USTR("0mm"));
-    xAttrs->AddAttribute( USTR( "fo:page-width" ), rtl::OUString::valueOf(fViewPortWidth)+USTR("mm"));
-    xAttrs->AddAttribute( USTR( "fo:page-height" ), rtl::OUString::valueOf(fViewPortHeight)+USTR("mm"));
-    xAttrs->AddAttribute( USTR( "style:print-orientation" ),
+    xAttrs->AddAttribute( "fo:margin-top", "0mm");
+    xAttrs->AddAttribute( "fo:margin-bottom", "0mm");
+    xAttrs->AddAttribute( "fo:margin-left", "0mm");
+    xAttrs->AddAttribute( "fo:margin-right", "0mm");
+    xAttrs->AddAttribute( "fo:page-width", rtl::OUString::valueOf(fViewPortWidth)+"mm");
+    xAttrs->AddAttribute( "fo:page-height", rtl::OUString::valueOf(fViewPortHeight)+"mm");
+    xAttrs->AddAttribute( USTR("style:print-orientation"),
         fViewPortWidth > fViewPortHeight ?
         USTR("landscape") :
         USTR("portrait"));
-    m_xDocumentHandler->startElement( USTR("style:page-layout-properties"),
-                                      xUnoAttrs );
-    m_xDocumentHandler->endElement( USTR("style:page-layout-properties") );
-    m_xDocumentHandler->endElement( USTR("style:page-layout") );
+    m_xDocumentHandler->startElement( "style:page-layout-properties", xUnoAttrs );
+    m_xDocumentHandler->endElement( "style:page-layout-properties" );
+    m_xDocumentHandler->endElement( "style:page-layout" );
 
     xAttrs->Clear();
-    xAttrs->AddAttribute( USTR( "style:name" ), USTR("pagestyle1"));
-    xAttrs->AddAttribute( USTR( "style:family" ), USTR("drawing-page"));
-    m_xDocumentHandler->startElement( USTR("style:style"),
-                                      xUnoAttrs );
+    xAttrs->AddAttribute( "style:name", "pagestyle1" );
+    xAttrs->AddAttribute( "style:family", "drawing-page" );
+    m_xDocumentHandler->startElement( "style:style", xUnoAttrs );
 
     xAttrs->Clear();
-    xAttrs->AddAttribute( USTR( "draw:background-size" ), USTR("border"));
-    xAttrs->AddAttribute( USTR( "draw:fill" ), USTR("none"));
-    m_xDocumentHandler->startElement( USTR("style:drawing-page-properties"),
-                                      xUnoAttrs );
-    m_xDocumentHandler->endElement( USTR("style:drawing-page-properties") );
-    m_xDocumentHandler->endElement( USTR("style:style") );
+    xAttrs->AddAttribute( "draw:background-size", "border");
+    xAttrs->AddAttribute( "draw:fill", "none");
+    m_xDocumentHandler->startElement( "style:drawing-page-properties", xUnoAttrs );
+    m_xDocumentHandler->endElement( "style:drawing-page-properties" );
+    m_xDocumentHandler->endElement( "style:style" );
 
     StatePool aStatePool;
     StateMap  aStateMap;
@@ -2008,42 +1986,36 @@ sal_Bool SVGReader::parseAndConvert()
     dumpTree(xDocElem);
 #endif
 
-    m_xDocumentHandler->endElement( USTR("office:automatic-styles") );
+    m_xDocumentHandler->endElement( "office:automatic-styles" );
 
     ////////////////////////////////////////////////////////////////////
 
     xAttrs->Clear();
-    m_xDocumentHandler->startElement( USTR("office:styles"),
-                                      xUnoAttrs);
-    m_xDocumentHandler->endElement( USTR("office:styles") );
+    m_xDocumentHandler->startElement( "office:styles", xUnoAttrs);
+    m_xDocumentHandler->endElement( "office:styles" );
 
     ////////////////////////////////////////////////////////////////////
 
-    m_xDocumentHandler->startElement( USTR("office:master-styles"),
-                                      xUnoAttrs );
+    m_xDocumentHandler->startElement( "office:master-styles", xUnoAttrs );
     xAttrs->Clear();
-    xAttrs->AddAttribute( USTR( "style:name" ), USTR("Default"));
-    xAttrs->AddAttribute( USTR( "style:page-layout-name" ), USTR("pagelayout1"));
-    xAttrs->AddAttribute( USTR( "draw:style-name" ), USTR("pagestyle1"));
-    m_xDocumentHandler->startElement( USTR("style:master-page"),
-                                      xUnoAttrs );
-    m_xDocumentHandler->endElement( USTR("style:master-page") );
+    xAttrs->AddAttribute( "style:name", "Default");
+    xAttrs->AddAttribute( "style:page-layout-name", "pagelayout1");
+    xAttrs->AddAttribute( "draw:style-name", "pagestyle1");
+    m_xDocumentHandler->startElement( "style:master-page", xUnoAttrs );
+    m_xDocumentHandler->endElement( "style:master-page" );
 
-    m_xDocumentHandler->endElement( USTR("office:master-styles") );
+    m_xDocumentHandler->endElement( "office:master-styles" );
 
     ////////////////////////////////////////////////////////////////////
 
     xAttrs->Clear();
-    m_xDocumentHandler->startElement( USTR("office:body"),
-                                      xUnoAttrs );
-    m_xDocumentHandler->startElement( USTR("office:drawing"),
-                                      xUnoAttrs );
+    m_xDocumentHandler->startElement( "office:body", xUnoAttrs );
+    m_xDocumentHandler->startElement( "office:drawing", xUnoAttrs );
 
     xAttrs->Clear();
-    xAttrs->AddAttribute( USTR( "draw:master-page-name" ), USTR("Default"));
-    xAttrs->AddAttribute( USTR( "draw:style-name" ), USTR("pagestyle1"));
-    m_xDocumentHandler->startElement(USTR("draw:page"),
-                                     xUnoAttrs);
+    xAttrs->AddAttribute( "draw:master-page-name", "Default");
+    xAttrs->AddAttribute( "draw:style-name", "pagestyle1");
+    m_xDocumentHandler->startElement("draw:page", xUnoAttrs);
 
     // write out all shapes
     writeShapes(aStatePool,
@@ -2051,10 +2023,10 @@ sal_Bool SVGReader::parseAndConvert()
                 xDocElem,
                 m_xDocumentHandler);
 
-    m_xDocumentHandler->endElement( USTR("draw:page") );
-    m_xDocumentHandler->endElement( USTR("office:drawing") );
-    m_xDocumentHandler->endElement( USTR("office:body") );
-    m_xDocumentHandler->endElement( USTR("office:document") );
+    m_xDocumentHandler->endElement( "draw:page" );
+    m_xDocumentHandler->endElement( "office:drawing" );
+    m_xDocumentHandler->endElement( "office:body" );
+    m_xDocumentHandler->endElement( "office:document" );
     m_xDocumentHandler->endDocument();
 
     return sal_True;
