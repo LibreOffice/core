@@ -42,6 +42,7 @@
 
 #include "units.hxx"
 #include "tokenmap.hxx"
+#include "sal/log.hxx"
 
 using namespace ::com::sun::star;
 
@@ -72,6 +73,12 @@ void setIntColor( double& rChannel, sal_uInt8 nVal )
 {
     OSL_TRACE( "setIntColor %d color", nVal );
     rChannel = nVal/255.0;
+}
+
+void setPercentColor( double& rChannel, double nVal )
+{
+    rChannel = nVal/100.0;
+    SAL_INFO("svg", "setPercentColor " << nVal << " " << rChannel);
 }
 
 void calcRotation(std::vector<geometry::AffineMatrix2D>& rTransforms,
@@ -176,6 +183,14 @@ namespace
                                 (real_p[assign_a(self.m_rColor.r)] >> ',' >>
                                  real_p[assign_a(self.m_rColor.g)] >> ',' >>
                                  real_p[assign_a(self.m_rColor.b)])
+                             |
+                                // rgb(percent,percent,percent)
+                                (real_p[boost::bind(&setPercentColor,
+                                                    boost::ref(self.m_rColor.r),_1)] >> "%," >>
+                                 real_p[boost::bind(&setPercentColor,
+                                                    boost::ref(self.m_rColor.g),_1)] >> "%," >>
+                                 real_p[boost::bind(&setPercentColor,
+                                                    boost::ref(self.m_rColor.b),_1)] >> "%")
                              )
                          >> ')')
                      );
