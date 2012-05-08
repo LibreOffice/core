@@ -607,7 +607,10 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     const Color aBlack( COL_BLACK );
 
     if( mpMetaFile )
+    {
+         // missing here is to map the data using the DeviceTransformation
         mpMetaFile->AddAction( new MetaFloatTransparentAction( rMtf, rPos, rSize, rTransparenceGradient ) );
+    }
 
     if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
         ( mnDrawMode & ( DRAWMODE_NOTRANSPARENCY ) ) )

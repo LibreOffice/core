@@ -529,27 +529,27 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 
         if( !aMtf.GetActionSize() )
         {
-            VirtualDevice   aOut;
-            Size            aDummySize( 2, 2 );
+            VirtualDevice aOut;
+            const Size aDummySize(2, 2);
 
-            aOut.SetOutputSizePixel( aDummySize );
-            aOut.EnableOutput( sal_False );
-            aOut.SetMapMode( aMap );
-
+            aOut.SetOutputSizePixel(aDummySize);
+            aOut.EnableOutput(false);
+            aOut.SetMapMode(aMap);
             aMtf.Clear();
-            aMtf.Record( &aOut );
-
-            // Replace offset given formally to DrawMarkedObj and used at XOutDev with relative
-            // MapMode (which was also used in XOutDev in that case). Goal is to paint the object
-            // as if TopLeft point is (0,0)
-            const Fraction aNeutralFraction(1, 1);
-            const MapMode aRelativeMapMode(MAP_RELATIVE, Point(-aBound.Left(), -aBound.Top()), aNeutralFraction, aNeutralFraction);
-            aOut.SetMapMode(aRelativeMapMode);
+            aMtf.Record(&aOut);
 
             DrawMarkedObj(aOut);
 
             aMtf.Stop();
             aMtf.WindStart();
+
+            // moving the result is more reliable then setting a relative MapMode at the VDev (used
+            // before), also see #i99268# in GetObjGraphic() below. Some draw actions at
+            // the OutDev are simply not handled correctly when a MapMode is set at the
+            // target devive, e.g. MetaFloatTransparentAction. Even the Move for this action
+            // was missing the manipulation of the embedded Metafile
+            aMtf.Move(-aBound.Left(), -aBound.Top());
+
             aMtf.SetPrefMapMode( aMap );
 
             // removed PrefSize extension. It is principally wrong to set a reduced size at
@@ -633,8 +633,8 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
             // #i99268# replace the original offset from using XOutDev's SetOffset
             // NOT (as tried with #i92760#) with another MapMode which gets recorded
-            // by the Metafile itself (what always leads to problems), but by hardly
-            // moving the result
+            // by the Metafile itself (what always leads to problems), but by
+            // moving the result directly
             aMtf.Move(-aBoundRect.Left(), -aBoundRect.Top());
 
             aMtf.SetPrefMapMode( aMap );

@@ -1427,10 +1427,17 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
         return rDeviceRegion;
 
     Region          aRegion;
-    PolyPolygon*    pPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
+    basegfx::B2DPolyPolygon* pB2DPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpB2DPolyPoly;
+    PolyPolygon* pPolyPoly = pB2DPolyPoly ? 0 : rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
 
-    if ( pPolyPoly )
+    if ( pB2DPolyPoly ) // conversion with B2DPolyPolygon lost polygon-based ClipRegion
+    {
+        aRegion = Region( PixelToLogic( *pB2DPolyPoly ) );
+    }
+    else if ( pPolyPoly )
+    {
         aRegion = Region( PixelToLogic( *pPolyPoly ) );
+    }
     else
     {
         long                nX;
