@@ -40,7 +40,7 @@
 // URL
 #define UNO_TC_PROP_URL_FORMAT         "Format"
 #define UNO_TC_PROP_URL_REPRESENTATION "Representation"
-#define UNO_TC_PROP_URL_TARGET         "Target"
+#define UNO_TC_PROP_URL_TARGET         "TargetFrame"
 #define UNO_TC_PROP_URL                "URL"
 
 // Table
