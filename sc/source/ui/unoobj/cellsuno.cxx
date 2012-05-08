@@ -6436,7 +6436,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             }
 
             if (pCellField->GetFieldType() == text::textfield::Type::TABLE)
-                pCellField->setPropertyValue("SheetPosition", uno::makeAny<sal_Int32>(aCellPos.Tab()));
+                pCellField->setPropertyValue(SC_UNONAME_TABLEPOS, uno::makeAny<sal_Int32>(aCellPos.Tab()));
 
             SvxFieldItem aItem = pCellField->CreateFieldItem();
             SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();

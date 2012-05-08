@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -221,7 +222,10 @@ class ScEditFieldObj : public cppu::WeakImplHelper4<
     boost::scoped_ptr<SvxFieldData> mpData;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
+    com::sun::star::util::DateTime maDateTime;
+    sal_Int32 mnNumFormat;
     bool mbIsDate:1;
+    bool mbIsFixed:1;
 
 private:
     ScEditFieldObj(); // disabled
@@ -234,7 +238,9 @@ private:
     void setPropertyValueFile(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
     com::sun::star::uno::Any getPropertyValueFile(const rtl::OUString& rName);
 
-    void setPropertyValueExtTime(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
+    void setPropertyValueDateTime(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
+    com::sun::star::uno::Any getPropertyValueDateTime(const rtl::OUString& rName);
+
     void setPropertyValueSheet(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal);
 
 public:

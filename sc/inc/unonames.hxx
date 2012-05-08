@@ -323,6 +323,7 @@
 #define SC_UNONAME_ANCTYPES         "AnchorTypes"
 #define SC_UNONAME_TEXTWRAP         "TextWrap"
 #define SC_UNONAME_FILEFORM         "FileFormat"
+#define SC_UNONAME_TEXTFIELD_TYPE   "TextFieldType"
 
 //  url field
 #define SC_UNONAME_REPR             "Representation"
@@ -333,6 +334,9 @@
 #define SC_UNONAME_ISDATE           "IsDate"
 #define SC_UNONAME_ISFIXED          "IsFixed"
 #define SC_UNONAME_DATETIME         "DateTime"
+
+// table field
+#define SC_UNONAME_TABLEPOS         "TablePosition"
 
 //  conditional format
 #define SC_UNONAME_OPERATOR         "Operator"

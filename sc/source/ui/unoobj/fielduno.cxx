@@ -60,7 +60,7 @@ namespace {
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertySet* getExtTimePropertySet()
+const SfxItemPropertySet* getDateTimePropertySet()
 {
     static SfxItemPropertyMapEntry aMapContent[] =
     {
@@ -881,12 +881,35 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
     return aRet;
 }
 
-void ScEditFieldObj::setPropertyValueExtTime(const rtl::OUString& rName, const uno::Any& rVal)
+void ScEditFieldObj::setPropertyValueDateTime(const rtl::OUString& rName, const uno::Any& rVal)
 {
-    if (rName == "IsDate")
-    {
+    if (rName == SC_UNONAME_ISDATE)
         mbIsDate = rVal.get<sal_Bool>();
-    }
+    else if (rName == SC_UNONAME_ISFIXED)
+        mbIsFixed = rVal.get<sal_Bool>();
+    else if (rName == SC_UNONAME_DATETIME)
+        maDateTime = rVal.get<util::DateTime>();
+    else if (rName == SC_UNONAME_NUMFMT)
+        mnNumFormat = rVal.get<sal_Int32>();
+    else
+        throw beans::UnknownPropertyException();
+}
+
+uno::Any ScEditFieldObj::getPropertyValueDateTime(const rtl::OUString& rName)
+{
+    if (rName == SC_UNONAME_ISDATE)
+        return uno::makeAny<sal_Bool>(mbIsDate);
+
+    if (rName == SC_UNONAME_ISFIXED)
+        return uno::makeAny<sal_Bool>(mbIsFixed);
+
+    if (rName == SC_UNONAME_DATETIME)
+        return uno::makeAny(maDateTime);
+
+    if (rName == SC_UNONAME_NUMFMT)
+        return uno::makeAny(mnNumFormat);
+
+    throw beans::UnknownPropertyException();
 }
 
 void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno::Any& rVal)
@@ -909,7 +932,7 @@ void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno
 
         SvxTableField* p = static_cast<SvxTableField*>(pField);
 
-        if (rName == "SheetPosition")
+        if (rName == SC_UNONAME_TABLEPOS)
         {
             sal_Int32 nTab = rVal.get<sal_Int32>();
             p->SetTab(nTab);
@@ -928,7 +951,7 @@ void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno
         throw uno::RuntimeException();
 
     SvxTableField* p = static_cast<SvxTableField*>(pData);
-    if (rName == "SheetPosition")
+    if (rName == SC_UNONAME_TABLEPOS)
     {
         sal_Int32 nTab = rVal.get<sal_Int32>();
         p->SetTab(nTab);
@@ -945,7 +968,7 @@ ScEditFieldObj::ScEditFieldObj(
     pPropSet(NULL),
     mpEditSource(pEditSrc),
     aSelection(rSel),
-    meType(eType), mpData(NULL), mpContent(rContent), mbIsDate(false)
+    meType(eType), mpData(NULL), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
 {
     switch (meType)
     {
@@ -955,12 +978,18 @@ ScEditFieldObj::ScEditFieldObj(
         case text::textfield::Type::URL:
             pPropSet = lcl_GetURLPropertySet();
         break;
+        case text::textfield::Type::DATE:
+        case text::textfield::Type::EXTENDED_DATE:
+        case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
-            pPropSet = getExtTimePropertySet();
+            pPropSet = getDateTimePropertySet();
         break;
         default:
             pPropSet = lcl_GetHeaderFieldPropertySet();
     }
+
+    if (meType == text::textfield::Type::DATE || meType == text::textfield::Type::EXTENDED_DATE)
+        mbIsDate = true;
 }
 
 void ScEditFieldObj::InitDoc(
@@ -1111,6 +1140,12 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
+    if (aPropertyName == SC_UNONAME_ANCHOR)
+    {
+        aValue >>= mpContent;
+        return;
+    }
+
     switch (meType)
     {
         case text::textfield::Type::URL:
@@ -1119,8 +1154,11 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         case text::textfield::Type::EXTENDED_FILE:
             setPropertyValueFile(aPropertyName, aValue);
         break;
+        case text::textfield::Type::DATE:
+        case text::textfield::Type::EXTENDED_DATE:
+        case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
-            setPropertyValueExtTime(aPropertyName, aValue);
+            setPropertyValueDateTime(aPropertyName, aValue);
         break;
         case text::textfield::Type::TABLE:
             setPropertyValueSheet(aPropertyName, aValue);
@@ -1135,13 +1173,19 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
+    if (aPropertyName.equals(SC_UNONAME_TEXTFIELD_TYPE))
+        return uno::makeAny(meType);
+
+    if (aPropertyName == SC_UNONAME_ANCHOR)
+        return uno::makeAny(mpContent);
+
     if (aPropertyName == SC_UNONAME_ANCTYPE)
     {
         uno::Any aRet;
         aRet <<= text::TextContentAnchorType_AS_CHARACTER;
         return aRet;
     }
-    else if (aPropertyName == SC_UNONAME_ANCTYPES)
+    if (aPropertyName == SC_UNONAME_ANCTYPES)
     {
         uno::Any aRet;
         uno::Sequence<text::TextContentAnchorType> aSeq(1);
@@ -1149,7 +1193,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
         aRet <<= aSeq;
         return aRet;
     }
-    else if (aPropertyName == SC_UNONAME_TEXTWRAP)
+    if (aPropertyName == SC_UNONAME_TEXTWRAP)
     {
         uno::Any aRet;
         aRet <<= text::WrapTextMode_NONE;
@@ -1162,6 +1206,11 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
             return getPropertyValueURL(aPropertyName);
         case text::textfield::Type::EXTENDED_FILE:
             return getPropertyValueFile(aPropertyName);
+        case text::textfield::Type::DATE:
+        case text::textfield::Type::TIME:
+        case text::textfield::Type::EXTENDED_DATE:
+        case text::textfield::Type::EXTENDED_TIME:
+            return getPropertyValueDateTime(aPropertyName);
         default:
             throw beans::UnknownPropertyException();
     }
