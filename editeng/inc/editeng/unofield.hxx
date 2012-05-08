@@ -71,7 +71,6 @@ public:
     virtual ~SvxUnoTextField() throw();
 
     // Internal
-    virtual sal_Int32 GetFieldId( const SvxFieldData* pFieldData ) const throw();
     SvxFieldData* CreateFieldData() const throw();
     void SetAnchor( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xAnchor ) { mxAnchor = xAnchor; }
 

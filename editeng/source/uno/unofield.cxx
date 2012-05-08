@@ -61,8 +61,6 @@ using namespace ::com::sun::star;
 #define WID_STRING2 6
 #define WID_STRING3 7
 
-const sal_Int32 UNKNOWN_FIELD = -1;
-
 inline bool isValidFieldId(sal_Int32 nId)
 {
     return nId >= 0;
@@ -315,7 +313,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
 :   OComponentHelper( getMutex() )
 ,   mxAnchor( xAnchor )
 ,   mpPropSet(NULL)
-,   mnServiceId(UNKNOWN_FIELD)
+,   mnServiceId(SvxFieldData::UNKNOWN_FIELD)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
     DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
@@ -324,9 +322,9 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
 
     if(pData)
     {
-        mnServiceId = GetFieldId(pData);
-        DBG_ASSERT(mnServiceId != UNKNOWN_FIELD, "unknown SvxFieldData! [CL]");
-        if(mnServiceId != UNKNOWN_FIELD)
+        mnServiceId = pData->GetClassId();
+        DBG_ASSERT(mnServiceId != SvxFieldData::UNKNOWN_FIELD, "unknown SvxFieldData! [CL]");
+        if (mnServiceId != SvxFieldData::UNKNOWN_FIELD)
         {
             // extract field properties from data class
             switch( mnServiceId )
@@ -781,40 +779,6 @@ void SvxUnoTextField::disposing()
     // nothing to do
 }
 
-sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const throw()
-{
-    if( pFieldData->ISA( SvxURLField ) )
-        return text::textfield::Type::URL;
-    else if( pFieldData->ISA( SvxPageField ) )
-        return text::textfield::Type::PAGE;
-    else if( pFieldData->ISA( SvxPagesField ) )
-        return text::textfield::Type::PAGES;
-    else if( pFieldData->ISA( SvxTimeField )    )
-        return text::textfield::Type::TIME;
-    else if( pFieldData->ISA( SvxFileField )    )
-        return text::textfield::Type::FILE;
-    else if( pFieldData->ISA( SvxTableField ) )
-        return text::textfield::Type::TABLE;
-    else if( pFieldData->ISA( SvxExtTimeField ) )
-        return text::textfield::Type::EXTENDED_TIME;
-    else if( pFieldData->ISA( SvxExtFileField ) )
-        return text::textfield::Type::EXTENDED_FILE;
-    else if( pFieldData->ISA( SvxAuthorField ) )
-        return text::textfield::Type::AUTHOR;
-    else if( pFieldData->ISA( SvxDateField ) )
-        return text::textfield::Type::EXTENDED_DATE;
-    else if( pFieldData->ISA( SdrMeasureField ) )
-        return text::textfield::Type::MEASURE;
-    else if( pFieldData->ISA( SvxHeaderField ) )
-        return text::textfield::Type::HEADER;
-    else if( pFieldData->ISA( SvxFooterField ) )
-        return text::textfield::Type::FOOTER;
-    else if( pFieldData->ISA( SvxDateTimeField ) )
-        return text::textfield::Type::DATE_TIME;
-
-    return UNKNOWN_FIELD;
-}
-
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextField::getImplementationName() throw(uno::RuntimeException)
 {
@@ -892,7 +856,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 
-        sal_Int32 nId = UNKNOWN_FIELD;
+        sal_Int32 nId = SvxFieldData::UNKNOWN_FIELD;
 
         if ( aFieldType == "DateTime" )
         {
@@ -934,7 +898,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
             nId = text::textfield::Type::MEASURE;
         }
 
-        if (nId != UNKNOWN_FIELD)
+        if (nId != SvxFieldData::UNKNOWN_FIELD)
             xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
     }
 

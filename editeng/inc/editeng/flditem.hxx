@@ -53,9 +53,11 @@ class MetaAction;
 class EDITENG_DLLPUBLIC SvxFieldData : public SvPersistBase
 {
 public:
+    static const sal_Int32 UNKNOWN_FIELD;
+
     static SvxFieldData* Create(const com::sun::star::uno::Reference<com::sun::star::text::XTextContent>& xContent);
 
-    SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, -1 )
+    SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, UNKNOWN_FIELD)
 
                             SvxFieldData();
     virtual                 ~SvxFieldData();

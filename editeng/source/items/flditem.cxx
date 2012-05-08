@@ -49,6 +49,8 @@ using namespace com::sun::star;
 #define FRAME_MARKER    (sal_uInt32)0x21981357
 #define CHARSET_MARKER  (FRAME_MARKER+1)
 
+const sal_Int32 SvxFieldData::UNKNOWN_FIELD = -1;
+
 SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTextContent)
 {
     uno::Reference<beans::XPropertySet> xPropSet(xTextContent, uno::UNO_QUERY);
