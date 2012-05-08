@@ -1579,7 +1579,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // wird in sich selbst kopiert, dann kann beim Einfuegen ein
     // Attribut geloescht werden. Darum erst ins Tmp-Array kopieren und
     // dann erst ins eigene uebertragen.
-    SwpHts aArr( 5 );
+    SwpHts aArr;
 
     // Del-Array fuer alle RefMarks ohne Ausdehnung
     SwpHts aRefMrkArr;
@@ -1879,7 +1879,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // dann suche mal alle Attribute zusammen, die im verschobenen
         // Bereich liegen. Diese werden in das extra Array verschoben,
         // damit sich die Indizies beim Updaten nicht veraendern !!!
-        SwpHts aArr( 5 );
+        SwpHts aArr;
 
         // 2. Attribute verschieben
         // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
@@ -2119,7 +2119,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // "uebergeplaettet".   (Bug: 6977)
         if( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
         {
-            SwpHts aArr( 5 );
+            SwpHts aArr;
             while ( nAttrCnt < m_pSwpHints->Count() )
             {
                 SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
