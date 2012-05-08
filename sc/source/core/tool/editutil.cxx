@@ -653,22 +653,29 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
                                     Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
-    String aRet;
     const SvxFieldData* pFieldData = rField.GetField();
-    if ( pFieldData )
+    if (!pFieldData)
+        return rtl::OUString("?");
+
+    rtl::OUString aRet;
+    sal_Int32 nClsId = pFieldData->GetClassId();
+    switch (nClsId)
     {
-        TypeId aType = pFieldData->Type();
-        if (aType == TYPE(SvxPageField))
+        case text::textfield::Type::PAGE:
             aRet = lcl_GetNumStr( aData.nPageNo,aData.eNumType );
-        else if (aType == TYPE(SvxPagesField))
+        break;
+        case text::textfield::Type::PAGES:
             aRet = lcl_GetNumStr( aData.nTotalPages,aData.eNumType );
-        else if (aType == TYPE(SvxTimeField))
+        break;
+        case text::textfield::Type::TIME:
             aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
-        else if (aType == TYPE(SvxFileField))
+        break;
+        case text::textfield::Type::FILE:
             aRet = aData.aTitle;
-        else if (aType == TYPE(SvxExtFileField))
+        break;
+        case text::textfield::Type::EXTENDED_FILE:
         {
-            switch ( ((const SvxExtFileField*)pFieldData)->GetFormat() )
+            switch (static_cast<const SvxExtFileField*>(pFieldData)->GetFormat())
             {
                 case SVXFILEFORMAT_FULLPATH :
                     aRet = aData.aLongDocName;
@@ -677,19 +684,15 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                     aRet = aData.aShortDocName;
             }
         }
-        else if (aType == TYPE(SvxTableField))
+        break;
+        case text::textfield::Type::TABLE:
             aRet = aData.aTabName;
-        else if (aType == TYPE(SvxDateField))
+        break;
+        case text::textfield::Type::DATE:
             aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
-        else
-        {
-            aRet = '?';
-        }
-    }
-    else
-    {
-        OSL_FAIL("FieldData ist 0");
-        aRet = '?';
+        break;
+        default:
+            aRet = "?";
     }
 
     return aRet;
