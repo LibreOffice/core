@@ -222,7 +222,7 @@ ReadyToInstall	Banner	Bitmap	0	0	374	44	1		BannerBmp
 ReadyToInstall	BannerLine	Line	0	44	374	0	1				
 ReadyToInstall	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
 ReadyToInstall	Branding2	Text	3	228	88	13	65537		[ProductName]		
-ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	Back	
+ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	DesktopLink	
 ReadyToInstall	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_167		
 ReadyToInstall	DlgLine	Line	90	234	284	0	1				
 ReadyToInstall	DlgText	Text	21	51	326	20	3		OOO_CONTROL_168		
@@ -231,7 +231,8 @@ ReadyToInstall	DlgTitle	Text	13	6	280	25	65538		OOO_CONTROL_170
 ReadyToInstall	DlgTitle2	Text	13	6	280	25	65538		OOO_CONTROL_171		
 ReadyToInstall	DlgTitle3	Text	13	6	280	25	65538		OOO_CONTROL_172		
 ReadyToInstall	InstallNow	PushButton	230	243	66	17	3		OOO_CONTROL_173	Cancel	
-ReadyToInstall	DesktopLink	CheckBox	21	100	300	10	3	CREATEDESKTOPLINK	OOO_CONTROL_319		
+ReadyToInstall	DesktopLink	CheckBox	21	100	300	10	3	CREATEDESKTOPLINK	OOO_CONTROL_319	EnableATTools	
+ReadyToInstall	EnableATTools	CheckBox	21	125	300	10	3	ENABLEATTOOLS	OOO_CONTROL_320	Back	
 ReadyToRemove	Back	PushButton	164	243	66	17	3		OOO_CONTROL_174	RemoveNow	
 ReadyToRemove	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 ReadyToRemove	BannerLine	Line	0	44	374	0	1				
