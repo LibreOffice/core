@@ -2854,15 +2854,14 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList();
     if (pList)
     {
-        sal_Int32 nFormatCount = pList->Count();
         sal_Int32 nIndex = 0;
-        for(sal_Int32 nItem = 0; nItem < nFormatCount; ++nItem)
+        for (ScConditionalFormatList::const_iterator itr = pList->begin();
+                                itr != pList->end(); ++itr)
         {
-            ScConditionalFormat* pFormat = (*pList)[nItem];
-            sal_Int32 nEntryCount = pFormat->Count();
+            sal_Int32 nEntryCount = itr->Count();
             for (sal_Int32 nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
             {
-                const ScCondFormatEntry* pEntry = pFormat->GetEntry(nFormatEntry);
+                const ScCondFormatEntry* pEntry = itr->GetEntry(nFormatEntry);
                 if (!pEntry)
                     continue;
 

@@ -608,12 +608,11 @@ sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
         pCondFormList = new ScConditionalFormatList;
 
     sal_uLong nMax = 0;
-    sal_uInt16 nCount = pCondFormList->Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (ScConditionalFormatList::const_iterator itr = pCondFormList->begin();
+            itr != pCondFormList->end(); ++itr)
     {
-        const ScConditionalFormat* pForm = (*pCondFormList)[i];
-        sal_uLong nKey = pForm->GetKey();
-        if ( pForm->EqualEntries( rNew ) )
+        sal_uLong nKey = itr->GetKey();
+        if ( itr->EqualEntries( rNew ) )
             return nKey;
         if ( nKey > nMax )
             nMax = nKey;
@@ -761,7 +760,6 @@ void ScDocument::SetCondFormList(ScConditionalFormatList* pNew)
 {
     if (pCondFormList)
     {
-        pCondFormList->DeleteAndDestroy( 0, pCondFormList->Count() );
         delete pCondFormList;
     }
 

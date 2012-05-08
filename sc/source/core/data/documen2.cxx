@@ -410,7 +410,6 @@ ScDocument::~ScDocument()
 
     if (pCondFormList)
     {
-        pCondFormList->DeleteAndDestroy( 0, pCondFormList->Count() );
         DELETEZ(pCondFormList);
     }
     if (pValidationList)
@@ -458,7 +457,6 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     if (pCondFormList)
     {
-        pCondFormList->DeleteAndDestroy( 0, pCondFormList->Count() );
         DELETEZ(pCondFormList);
     }
     if (pValidationList)

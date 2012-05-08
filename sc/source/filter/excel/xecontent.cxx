@@ -936,18 +936,12 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
 {
     if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList() )
     {
-        if( const ScConditionalFormatPtr* ppCondFmt = pCondFmtList->GetData() )
+        for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
+                        itr != pCondFmtList->end(); ++itr)
         {
-            const ScConditionalFormatPtr* ppCondEnd = ppCondFmt + pCondFmtList->Count();
-            for( ; ppCondFmt < ppCondEnd; ++ppCondFmt )
-            {
-                if( *ppCondFmt )
-                {
-                    XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), **ppCondFmt ) );
-                    if( xCondfmtRec->IsValid() )
-                        maCondfmtList.AppendRecord( xCondfmtRec );
-                }
-            }
+            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr ) );
+            if( xCondfmtRec->IsValid() )
+                maCondfmtList.AppendRecord( xCondfmtRec );
         }
     }
 }

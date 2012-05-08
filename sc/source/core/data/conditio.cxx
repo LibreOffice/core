@@ -49,10 +49,6 @@
 using namespace formula;
 //------------------------------------------------------------------------
 
-SV_IMPL_OP_PTRARR_SORT( ScConditionalFormats_Impl, ScConditionalFormatPtr );
-
-//------------------------------------------------------------------------
-
 bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
@@ -1579,15 +1575,12 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 
 //------------------------------------------------------------------------
 
-ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList) :
-    ScConditionalFormats_Impl()
+ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {
     //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
-    sal_uInt16 nCount = rList.Count();
-
-    for (sal_uInt16 i=0; i<nCount; i++)
-        InsertNew( rList[i]->Clone() );
+    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
+        InsertNew( itr->Clone() );
 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
@@ -1597,10 +1590,8 @@ ScConditionalFormatList::ScConditionalFormatList(ScDocument* pNewDoc,
 {
     //  fuer neues Dokument - echte Kopie mit neuen Tokens!
 
-    sal_uInt16 nCount = rList.Count();
-
-    for (sal_uInt16 i=0; i<nCount; i++)
-        InsertNew( rList[i]->Clone(pNewDoc) );
+    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
+        InsertNew( itr->Clone(pNewDoc) );
 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
@@ -1609,10 +1600,11 @@ bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) con
 {
     // fuer Ref-Undo - interne Variablen werden nicht verglichen
 
-    sal_uInt16 nCount = Count();
-    bool bEqual = ( nCount == r.Count() );
-    for (sal_uInt16 i=0; i<nCount && bEqual; i++)           // Eintraege sind sortiert
-        if ( !(*this)[i]->EqualEntries(*r[i]) )         // Eintraege unterschiedlich ?
+    sal_uInt16 nCount = size();
+    bool bEqual = ( nCount == r.size() );
+    const_iterator locIterator = begin();
+    for(const_iterator itr = r.begin(); itr != r.end() && bEqual; ++itr, ++locIterator)
+        if ( !locIterator->EqualEntries(*itr) )         // Eintraege unterschiedlich ?
             bEqual = false;
 
     return bEqual;
@@ -1622,10 +1614,9 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
     //! binaer suchen
 
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if ((*this)[i]->GetKey() == nKey)
-            return (*this)[i];
+    for( iterator itr = begin(); itr != end(); ++itr)
+        if (itr->GetKey() == nKey)
+            return &(*itr);
 
     OSL_FAIL("ScConditionalFormatList: Eintrag nicht gefunden");
     return NULL;
@@ -1633,45 +1624,64 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 
 void ScConditionalFormatList::CompileAll()
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->CompileAll();
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->CompileAll();
 }
 
 void ScConditionalFormatList::CompileXML()
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->CompileXML();
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->CompileXML();
 }
 
 void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
 }
 
 void ScConditionalFormatList::RenameCellStyle( const String& rOld, const String& rNew )
 {
-    sal_uLong nCount=Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->RenameCellStyle(rOld,rNew);
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->RenameCellStyle(rOld,rNew);
 }
 
 void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->UpdateMoveTab( nOldPos, nNewPos );
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->UpdateMoveTab( nOldPos, nNewPos );
 }
 
 void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->SourceChanged( rAddr );
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->SourceChanged( rAddr );
+}
+
+ScConditionalFormatList::iterator ScConditionalFormatList::begin()
+{
+    return maConditionalFormats.begin();
+}
+
+ScConditionalFormatList::const_iterator ScConditionalFormatList::begin() const
+{
+    return maConditionalFormats.begin();
+}
+
+ScConditionalFormatList::iterator ScConditionalFormatList::end()
+{
+    return maConditionalFormats.end();
+}
+
+ScConditionalFormatList::const_iterator ScConditionalFormatList::end() const
+{
+    return maConditionalFormats.end();
+}
+
+size_t ScConditionalFormatList::size() const
+{
+    return maConditionalFormats.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

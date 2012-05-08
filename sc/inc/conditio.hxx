@@ -36,6 +36,8 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 
+#include <boost/ptr_container/ptr_set.hpp>
+
 class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;
@@ -261,13 +263,11 @@ public:
 //  List of areas and formats:
 //
 
-typedef ScConditionalFormat* ScConditionalFormatPtr;
-
-SV_DECL_PTRARR_SORT(ScConditionalFormats_Impl, ScConditionalFormatPtr,
-                        SC_COND_GROW)
-
-class ScConditionalFormatList : public ScConditionalFormats_Impl
+class ScConditionalFormatList
 {
+private:
+    boost::ptr_set<ScConditionalFormat> maConditionalFormats;
+    typedef boost::ptr_set<ScConditionalFormat> ConditionalFormatContainer;
 public:
         ScConditionalFormatList() {}
         ScConditionalFormatList(const ScConditionalFormatList& rList);
@@ -275,7 +275,7 @@ public:
         ~ScConditionalFormatList() {}
 
     void    InsertNew( ScConditionalFormat* pNew )
-                { if (!Insert(pNew)) delete pNew; }
+                { maConditionalFormats.insert(pNew); }
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
 
@@ -289,6 +289,16 @@ public:
     void    SourceChanged( const ScAddress& rAddr );
 
     bool    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
+
+    typedef ConditionalFormatContainer::iterator iterator;
+    typedef ConditionalFormatContainer::const_iterator const_iterator;
+
+    SC_DLLPUBLIC iterator begin();
+    SC_DLLPUBLIC const_iterator begin() const;
+    SC_DLLPUBLIC iterator end();
+    SC_DLLPUBLIC const_iterator end() const;
+
+    size_t size() const;
 };
 
 #endif
