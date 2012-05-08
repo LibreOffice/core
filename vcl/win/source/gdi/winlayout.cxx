@@ -1110,10 +1110,11 @@ static bool bManualCellAlign = true;
 static bool InitUSP()
 {
     // get the usp10.dll version info
+    HMODULE usp10 = ::GetModuleHandle("usp10.dll");
+    void *pScriptIsComplex = ::GetProcAddress(usp10, "ScriptIsComplex");
     int nUspVersion = 0;
-    // TODO: there must be a simpler way to get the friggin version info from OSL?
     rtl_uString* pModuleURL = NULL;
-    osl_getModuleURLFromAddress( (void*)ScriptIsComplex, &pModuleURL );
+    osl_getModuleURLFromAddress( pScriptIsComplex, &pModuleURL );
     rtl_uString* pModuleFileName = NULL;
     if( pModuleURL )
         osl_getSystemPathFromFileURL( pModuleURL, &pModuleFileName );
