@@ -536,12 +536,23 @@ void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
+#ifndef ODM_VIEW_DETAIL
+
+// Reverse-engineered command codes for SHELLDLL_DefView
+// See http://msdn.microsoft.com/en-us/magazine/cc164009.aspx
+#define ODM_VIEW_DETAIL 0x702c
+
+#endif
 
 UINT_PTR CALLBACK CFileOpenDialog::ofnHookProc(
     HWND hChildDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndDlg = GetParent(hChildDlg);
     CFileOpenDialog* pImpl = NULL;
+
+    static bool set_view_details = false;
+    static bool view_was_set = false;
+
 
     switch( uiMsg )
     {
@@ -561,11 +572,39 @@ UINT_PTR CALLBACK CFileOpenDialog::ofnHookProc(
             // connect the instance handle to the window
             SetProp(hwndDlg, CURRENT_INSTANCE, pImpl);
             pImpl->handleInitDialog(hwndDlg, hChildDlg);
+
+            static bool beenhere = false;
+
+            if (!beenhere)
+            {
+                HKEY hkey;
+                beenhere = true;
+                if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                                 L"Software\\Novell\\OpenOffice.org",
+                                 0, KEY_READ, &hkey) == ERROR_SUCCESS)
+                {
+                    if (RegQueryValueEx(hkey, L"FileOpenUseDetailsViewByDefault",
+                                        NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
+                        set_view_details = true;
+                    RegCloseKey(hkey);
+                }
+            }
+            view_was_set = false;
         }
         return 0;
 
     case WM_NOTIFY:
         {
+            if (set_view_details && !view_was_set)
+            {
+                // See http://msdn.microsoft.com/en-us/magazine/cc164009.aspx
+                HWND shell = GetDlgItem(hwndDlg, lst2);
+                if (shell != NULL)
+                {
+                    SendMessage (shell, WM_COMMAND, ODM_VIEW_DETAIL, 0);
+                    view_was_set = true;
+                }
+            }
             pImpl = getCurrentInstance(hwndDlg);
             return pImpl->onWMNotify(
                 hChildDlg, reinterpret_cast<LPOFNOTIFY>(lParam));
