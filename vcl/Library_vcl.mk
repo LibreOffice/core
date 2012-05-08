@@ -583,6 +583,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     ole32 \
     shell32 \
     uuid \
+	usp10 \
     uwinapi \
     winspool \
     version \

@@ -1101,30 +1101,7 @@ private:
     bool           mbDisableGlyphInjection;
 };
 
-// -----------------------------------------------------------------------
-// dynamic loading of usp library
-
-static oslModule aUspModule = NULL;
-static bool bUspEnabled = true;
-
-static HRESULT ((WINAPI *pScriptIsComplex)( const WCHAR*, int, DWORD ));
-static HRESULT ((WINAPI *pScriptItemize)( const WCHAR*, int, int,
-    const SCRIPT_CONTROL*, const SCRIPT_STATE*, SCRIPT_ITEM*, int* ));
-static HRESULT ((WINAPI *pScriptShape)( HDC, SCRIPT_CACHE*, const WCHAR*,
-    int, int, SCRIPT_ANALYSIS*, WORD*, WORD*, SCRIPT_VISATTR*, int* ));
-static HRESULT ((WINAPI *pScriptPlace)( HDC, SCRIPT_CACHE*, const WORD*, int,
-    const SCRIPT_VISATTR*, SCRIPT_ANALYSIS*, int*, GOFFSET*, ABC* ));
-static HRESULT ((WINAPI *pScriptGetLogicalWidths)( const SCRIPT_ANALYSIS*,
-    int, int, const int*, const WORD*, const SCRIPT_VISATTR*, int* ));
-static HRESULT ((WINAPI *pScriptApplyLogicalWidth)( const int*, int, int, const WORD*,
-    const SCRIPT_VISATTR*, const int*, const SCRIPT_ANALYSIS*, ABC*, int* ));
-static HRESULT ((WINAPI *pScriptJustify)( const SCRIPT_VISATTR*,
-    const int*, int, int, int, int* ));
-static HRESULT ((WINAPI *pScriptTextOut)( const HDC, SCRIPT_CACHE*,
-    int, int, UINT, const RECT*, const SCRIPT_ANALYSIS*, const WCHAR*,
-    int, const WORD*, int, const int*, const int*, const GOFFSET* ));
-static HRESULT ((WINAPI *pScriptGetFontProperties)( HDC, SCRIPT_CACHE*, SCRIPT_FONTPROPERTIES* ));
-static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
+static bool bUspInited = false;
 
 static bool bManualCellAlign = true;
 
@@ -1132,70 +1109,11 @@ static bool bManualCellAlign = true;
 
 static bool InitUSP()
 {
-    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "usp10" ) );
-    aUspModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-    if( !aUspModule )
-        return (bUspEnabled = false);
-
-    pScriptIsComplex = (HRESULT (WINAPI*)(const WCHAR*,int,DWORD))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptIsComplex" );
-    bUspEnabled &= (NULL != pScriptIsComplex);
-
-    pScriptItemize = (HRESULT (WINAPI*)(const WCHAR*,int,int,
-        const SCRIPT_CONTROL*,const SCRIPT_STATE*,SCRIPT_ITEM*,int*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptItemize" );
-    bUspEnabled &= (NULL != pScriptItemize);
-
-    pScriptShape = (HRESULT (WINAPI*)(HDC,SCRIPT_CACHE*,const WCHAR*,
-        int,int,SCRIPT_ANALYSIS*,WORD*,WORD*,SCRIPT_VISATTR*,int*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptShape" );
-    bUspEnabled &= (NULL != pScriptShape);
-
-    pScriptPlace = (HRESULT (WINAPI*)(HDC, SCRIPT_CACHE*, const WORD*, int,
-        const SCRIPT_VISATTR*,SCRIPT_ANALYSIS*,int*,GOFFSET*,ABC*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptPlace" );
-    bUspEnabled &= (NULL != pScriptPlace);
-
-    pScriptGetLogicalWidths = (HRESULT (WINAPI*)(const SCRIPT_ANALYSIS*,
-        int,int,const int*,const WORD*,const SCRIPT_VISATTR*,int*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptGetLogicalWidths" );
-    bUspEnabled &= (NULL != pScriptGetLogicalWidths);
-
-    pScriptApplyLogicalWidth = (HRESULT (WINAPI*)(const int*,int,int,const WORD*,
-        const SCRIPT_VISATTR*,const int*,const SCRIPT_ANALYSIS*,ABC*,int*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptApplyLogicalWidth" );
-    bUspEnabled &= (NULL != pScriptApplyLogicalWidth);
-
-    pScriptJustify = (HRESULT (WINAPI*)(const SCRIPT_VISATTR*,const int*,
-        int,int,int,int*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptJustify" );
-    bUspEnabled &= (NULL != pScriptJustify);
-
-    pScriptGetFontProperties = (HRESULT (WINAPI*)( HDC,SCRIPT_CACHE*,SCRIPT_FONTPROPERTIES*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptGetFontProperties" );
-    bUspEnabled &= (NULL != pScriptGetFontProperties);
-
-    pScriptTextOut = (HRESULT (WINAPI*)(const HDC,SCRIPT_CACHE*,
-        int,int,UINT,const RECT*,const SCRIPT_ANALYSIS*,const WCHAR*,
-        int,const WORD*,int,const int*,const int*,const GOFFSET*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptTextOut" );
-    bUspEnabled &= (NULL != pScriptTextOut);
-
-    pScriptFreeCache = (HRESULT (WINAPI*)(SCRIPT_CACHE*))
-        osl_getAsciiFunctionSymbol( aUspModule, "ScriptFreeCache" );
-    bUspEnabled &= (NULL != pScriptFreeCache);
-
-    if( !bUspEnabled )
-    {
-        osl_unloadModule( aUspModule );
-        aUspModule = NULL;
-    }
-
-    // get the DLL version info
+    // get the usp10.dll version info
     int nUspVersion = 0;
     // TODO: there must be a simpler way to get the friggin version info from OSL?
     rtl_uString* pModuleURL = NULL;
-    osl_getModuleURLFromAddress( (void*)pScriptIsComplex, &pModuleURL );
+    osl_getModuleURLFromAddress( (void*)ScriptIsComplex, &pModuleURL );
     rtl_uString* pModuleFileName = NULL;
     if( pModuleURL )
         osl_getSystemPathFromFileURL( pModuleURL, &pModuleFileName );
@@ -1221,7 +1139,9 @@ static bool InitUSP()
     if( nUspVersion >= 10600 )
         bManualCellAlign = false;
 
-    return bUspEnabled;
+    bUspInited = true;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1328,7 +1248,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     for( int nItemCapacity = 16;; nItemCapacity *= 8 )
     {
         mpScriptItems = new SCRIPT_ITEM[ nItemCapacity ];
-        HRESULT nRC = (*pScriptItemize)(
+        HRESULT nRC = ScriptItemize(
             reinterpret_cast<LPCWSTR>(rArgs.mpStr + mnSubStringMin), nSubStringEnd - mnSubStringMin,
             nItemCapacity - 1, &aScriptControl, &aScriptState,
             mpScriptItems, &mnItemCount );
@@ -1465,7 +1385,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         // convert the unicodes to glyphs
         int nGlyphCount = 0;
         int nCharCount = rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos;
-        HRESULT nRC = (*pScriptShape)( mhDC, &rScriptCache,
+        HRESULT nRC = ScriptShape( mhDC, &rScriptCache,
             reinterpret_cast<LPCWSTR>(rArgs.mpStr + rVisualItem.mnMinCharPos),
             nCharCount,
             mnGlyphCapacity - rVisualItem.mnMinGlyphPos, // problem when >0xFFFF
@@ -1490,7 +1410,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
             // the primitive layout engine is good enough for the default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
-            nRC = (*pScriptShape)( mhDC, &rScriptCache,
+            nRC = ScriptShape( mhDC, &rScriptCache,
                 reinterpret_cast<LPCWSTR>(rArgs.mpStr + rVisualItem.mnMinCharPos),
                 nCharCount,
                 mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
@@ -1567,7 +1487,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         // now place the glyphs
-        nRC = (*pScriptPlace)( mhDC, &rScriptCache,
+        nRC = ScriptPlace( mhDC, &rScriptCache,
             mpOutGlyphs + rVisualItem.mnMinGlyphPos,
             nGlyphCount,
             mpVisualAttrs + rVisualItem.mnMinGlyphPos,
@@ -1580,7 +1500,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             continue;
 
         // calculate the logical char widths from the glyph layout
-        nRC = (*pScriptGetLogicalWidths)(
+        nRC = ScriptGetLogicalWidths(
             &rVisualItem.mpScriptItem->a,
             nCharCount, nGlyphCount,
             mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
@@ -2230,7 +2150,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
         Point aPos = GetDrawPosition( aRelPos );
         SCRIPT_CACHE& rScriptCache = GetScriptCache();
-        (*pScriptTextOut)( mhDC, &rScriptCache,
+        ScriptTextOut( mhDC, &rScriptCache,
             aPos.X(), aPos.Y(), 0, NULL,
             &rVisualItem.mpScriptItem->a, NULL, 0,
             mpOutGlyphs + nMinGlyphPos,
@@ -2488,7 +2408,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         }
 
         // convert virtual charwidths to glyph justification values
-        HRESULT nRC = (*pScriptApplyLogicalWidth)(
+        HRESULT nRC = ScriptApplyLogicalWidth(
             mpCharWidths + rVisualItem.mnMinCharPos,
             rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos,
             rVisualItem.mnEndGlyphPos - rVisualItem.mnMinGlyphPos,
@@ -2723,7 +2643,7 @@ void UniscribeLayout::Justify( long nNewWidth )
                 nItemWidth += mpCharWidths[ i ];
             nItemWidth = (int)((fStretch - 1.0) * nItemWidth + 0.5);
 
-            (*pScriptJustify) (
+            ScriptJustify(
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
                 rVisualItem.mnEndGlyphPos - rVisualItem.mnMinGlyphPos,
@@ -3002,7 +2922,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 #if defined( USE_UNISCRIBE )
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
-    &&   (aUspModule || (bUspEnabled && InitUSP())) )   // CTL layout engine
+    &&   (bUspInited || InitUSP()) )   // CTL layout engine
     {
 #ifdef ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
@@ -3079,7 +2999,7 @@ ImplWinFontEntry::~ImplWinFontEntry()
 {
 #ifdef USE_UNISCRIBE
     if( maScriptCache != NULL )
-        (*pScriptFreeCache)( &maScriptCache );
+        ScriptFreeCache( &maScriptCache );
 #endif // USE_UNISCRIBE
 #ifdef GCP_KERN_HACK
     delete[] mpKerningPairs;
@@ -3134,12 +3054,12 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
     mnMinKashidaWidth = 0;
     mnMinKashidaGlyph = 0;
 #ifdef USE_UNISCRIBE
-    if (aUspModule || (bUspEnabled && InitUSP()))
+    if (bUspInited || InitUSP())
     {
         SCRIPT_FONTPROPERTIES aFontProperties;
         aFontProperties.cBytes = sizeof (aFontProperties);
         SCRIPT_CACHE& rScriptCache = GetScriptCache();
-        HRESULT nRC = (*pScriptGetFontProperties)( hDC, &rScriptCache, &aFontProperties );
+        HRESULT nRC = ScriptGetFontProperties( hDC, &rScriptCache, &aFontProperties );
         if( nRC != 0 )
             return false;
         mnMinKashidaWidth = aFontProperties.iKashidaWidth;

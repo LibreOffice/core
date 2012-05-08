@@ -410,6 +410,7 @@ gb_Library_PLAINLIBS_NONE += \
 	shlwapi \
 	urlmon \
 	user32 \
+	usp10 \
 	uuid \
 	version \
 	wininet \
