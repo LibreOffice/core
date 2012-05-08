@@ -1,0 +1,91 @@
+Intel AppUp specific notes
+
+Intel AppUp is kind of an Application Store, see more info at http://www.appup.com.
+It has special requirements regarding the MSI installer, see the requirements at
+http://appdeveloper.intel.com/en-us/article/packaging-requirements. It is also
+helpful to read http://appdeveloper.intel.com/en-us/article/troubleshooting-validation-failures
+
+LibreOffice MSI does not fulfil the requirements. 
+
+1. Configure and buld with --enable-silent-msi. The MSI submitted to AppUp was built with
+   distro-configs\SUSEWin32.conf. This solves one part of the issues.
+
+2. Build produces a multi language MSI installer. But we will need to edit the localizable
+   Shortcut table, and we cannot edit embedded substorages with Orca. So we need to remove
+   them and remove everything but 1033 from the Summary. Use WiSubStg.vbs to remove the
+   substorages. WiSubStg.vbs is part of the Windows SDK.
+
+3. One problem remains, the shortcuts. Edit the resulting MSI with Orca.
+
+a. Add a new component to Component table for soffice.exe.
+b. Assign this new component to a feature in FeatureComponents table (gm_r_Brand).
+c. Change the entry of soffice.exe in the File table accordingly.
+d. Change the shortcut to the desired "advertised" type in Shortcut table.
+   The Target will be the gm_r_Brand feature.
+e. Change the RemoveFile table accordingly.
+
+The following diff shows the exact changes that need to be made for LibreOffice 3.4.
+
+diff -ur 2. removed_substorage//Component.idt 3. advertised_shortcut//Component.idt
+--- 2. removed_substorage//Component.idt	2012-05-08 18:37:29.243612800 +0200
++++ 3. advertised_shortcut//Component.idt	2012-05-08 18:38:11.713672300 +0200
+@@ -54,6 +54,7 @@
+ gid_brand_file_bin_soffice__libreoffice3_4_program	{CDAF0FFB-7315-CE76-B572-863A513C6680}	LO34_progr	4		userreg_sofficeexe
+ gid_brand_file_bin_soffice_bin__libreoffice3_4_program	{4ABF73EE-8A0E-49FE-F02B-EC62753C0A83}	LO34_progr	2		soffice.bin
+ gid_brand_file_bin_soffice_bin_manifest__libreoffice3_4_program	{ABC3C6F3-9F0E-2808-982C-A9124F7BAB05}	LO34_progr	2		soffice.bin.manifest
++gid_brand_file_bin_soffice_exe__libreoffice3_4_program	{36C2B884-6302-4B5A-B641-4AC9B331580C}	LO34_progr	2		soffice.exe
+ gid_brand_file_bin_unoinfo__libreoffice3_4_program	{B8E3A604-E546-5946-08D5-41226CA5D56E}	LO34_progr	2		unoinfo.exe
+ gid_brand_file_bin_unopkg__libreoffice3_4_program	{1FBA63A5-31C5-EBFB-0D13-D2C3FCAC3269}	LO34_progr	2		unopkg.bin
+ gid_brand_file_bin_unopkgcom__libreoffice3_4_program	{FBA19D42-7F79-944A-A407-256E21C57A26}	LO34_progr	2		unopkg.com
+diff -ur 2. removed_substorage//FeatureComponents.idt 3. advertised_shortcut//FeatureComponents.idt
+--- 2. removed_substorage//FeatureComponents.idt	2012-05-08 18:37:29.463613100 +0200
++++ 3. advertised_shortcut//FeatureComponents.idt	2012-05-08 18:38:11.933672600 +0200
+@@ -1164,6 +1164,7 @@
+ gm_r_Brand	gid_brand_file_bin_soffice__libreoffice3_4_program
+ gm_r_Brand	gid_brand_file_bin_soffice_bin__libreoffice3_4_program
+ gm_r_Brand	gid_brand_file_bin_soffice_bin_manifest__libreoffice3_4_program
++gm_r_Brand	gid_brand_file_bin_soffice_exe__libreoffice3_4_program
+ gm_r_Brand	gid_brand_file_bin_unoinfo__libreoffice3_4_program
+ gm_r_Brand	gid_brand_file_bin_unopkg__libreoffice3_4_program
+ gm_r_Brand	gid_brand_file_bin_unopkgcom__libreoffice3_4_program
+diff -ur 2. removed_substorage//File.idt 3. advertised_shortcut//File.idt
+--- 2. removed_substorage//File.idt	2012-05-08 18:37:30.113614100 +0200
++++ 3. advertised_shortcut//File.idt	2012-05-08 18:38:12.573673500 +0200
+@@ -4293,7 +4293,7 @@
+ soffice.bin	gid_brand_file_bin_soffice_bin__libreoffice3_4_program	soffice.bin	1095168	9.400.1505.0		16384	5
+ soffice.bin.manifest	gid_brand_file_bin_soffice_bin_manifest__libreoffice3_4_program	SOFFIC~1.MAN|soffice.bin.manifest	1005	9.400.1505.0		16384	6
+ soffice.dic	gid_file_extra_wordbook_lang__libreoffice3_4_basis_share_wor_1	soffice.dic	819	9.400.1505.0	1033	16384	2050
+-soffice.exe	gid_brand_file_bin_soffice__libreoffice3_4_program	soffice.exe	1102848	9.400.1505.0		16384	4
++soffice.exe	gid_brand_file_bin_soffice_exe__libreoffice3_4_program	soffice.exe	1102848	9.400.1505.0		16384	4
+ soffice.ini	gid_brand_profile_soffice_ini__libreoffice3_4_program	soffice.ini	204	9.400.1505.0		16384	5063
+ soffice.odg	gid_file_shellnew2_odg_soffice__libreoffice3_4_basis_program_2shellnew	soffice.odg	8428	9.400.1505.0		16384	4988
+ soffice.odp	gid_file_shellnew2_odp_soffice__libreoffice3_4_basis_program_2shellnew	soffice.odp	9026	9.400.1505.0		16384	4989
+diff -ur 2. removed_substorage//RemoveFile.idt 3. advertised_shortcut//RemoveFile.idt
+--- 2. removed_substorage//RemoveFile.idt	2012-05-08 18:37:30.253614200 +0200
++++ 3. advertised_shortcut//RemoveFile.idt	2012-05-08 18:38:12.713673700 +0200
+@@ -1,5 +1,5 @@
+ FileKey	Component_	FileName	DirProperty	InstallMode
+ s72	s72	L255	s72	i2
+ RemoveFile	FileKey
+-remove_desktopfolder	gid_brand_file_desktophelper_txt__libreoffice3_4_program		DesktopFolder	2
+-remove_programmenufolder	gid_brand_file_bin_soffice__libreoffice3_4_program		ProgramMenuFolder	2
++remove_desktopfolder	gid_brand_file_bin_soffice_exe__libreoffice3_4_program		DesktopFolder	2
++remove_programmenufolder	gid_brand_file_bin_soffice_exe__libreoffice3_4_program		ProgramMenuFolder	2
+diff -ur 2. removed_substorage//Shortcut.idt 3. advertised_shortcut//Shortcut.idt
+--- 2. removed_substorage//Shortcut.idt	2012-05-08 18:37:30.253614200 +0200
++++ 3. advertised_shortcut//Shortcut.idt	2012-05-08 18:38:12.713673700 +0200
+@@ -1,5 +1,5 @@
+ Shortcut	Directory_	Name	Component_	Target	Arguments	Description	Hotkey	Icon_	IconIndex	ShowCmd	WkDir
+ s72	s72	l128	s72	s72	S255	L255	I2	S72	I2	I2	S72
+ Shortcut	Shortcut
+-gid_Folderitem_Soffice	ProgramMenuFolder	LIBREO~1|LibreOffice	gid_brand_file_bin_soffice__libreoffice3_4_program	[LO34_progr]\soffice.exe		LibreOffice, the office productivity suite provided by The Document Foundation. See http://www.documentfoundation.org				1	LO34_Basis_progr
+-gid_Folderitem_Soffice_Desktop	DesktopFolder	LIBREO~2|LibreOffice	gid_brand_file_desktophelper_txt__libreoffice3_4_program	[LO34_progr]\soffice.exe		LibreOffice, the office productivity suite provided by The Document Foundation. See http://www.documentfoundation.org				1	LO34_Basis_progr
++gid_Folderitem_Soffice	ProgramMenuFolder	LIBREO~1|LibreOffice	gid_brand_file_bin_soffice_exe__libreoffice3_4_program	gm_r_Brand		LibreOffice		soffice.ico		1	LO34_Basis_progr
++gid_Folderitem_Soffice_Desktop	DesktopFolder	LIBREO~2|LibreOffice	gid_brand_file_bin_soffice_exe__libreoffice3_4_program	gm_r_Brand		LibreOffice		soffice.ico		1	LO34_Basis_progr
+
+Intel did not like links pointing to "external" (i.e. not AppUp) sites on the start center. 
+I removed them by a hack in 3.4 and 3.5:
+framework\source\services\backingwindow.cxx
+    if( mnLayoutStyle == 0 ) <-- I put if ( 0 ) here
+        maToolbox.Show(); 
+In 3.6 we have to use STARTCENTER_HIDE_EXTERNAL_LINKS set to 0 in instsetoo_native\util\openoffice.lst.
