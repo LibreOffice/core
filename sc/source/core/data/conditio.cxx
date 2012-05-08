@@ -468,7 +468,7 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     }
 }
 
-void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, bool& rChanged )
+void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, bool& rChanged, SCTAB nTabs )
 {
     //  Insert table: only update absolute table references.
     //  (Similar to ScCompiler::UpdateInsertTab with bIsName=true, result is the same as for named ranges)
@@ -481,7 +481,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
         ScSingleRefData& rRef1 = p->GetSingleRef();
         if ( !rRef1.IsTabRel() && nInsTab <= rRef1.nTab )
         {
-            rRef1.nTab += 1;
+            rRef1.nTab += nTabs;
             rRef1.nRelTab = rRef1.nTab - nPosTab;
             rChanged = true;
         }
@@ -490,7 +490,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
             ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
             if ( !rRef2.IsTabRel() && nInsTab <= rRef2.nTab )
             {
-                rRef2.nTab += 1;
+                rRef2.nTab += nTabs;
                 rRef2.nRelTab = rRef2.nTab - nPosTab;
                 rChanged = true;
             }
@@ -502,8 +502,8 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
-    bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
+    bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz >= 1 );
+    bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz <= -1 );
 
     bool bChanged1 = false;
     bool bChanged2 = false;
@@ -511,13 +511,13 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     if (pFormula1)
     {
         if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1 );
+            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1, nDz );
         else
         {
             ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
             aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged1 );
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged1, static_cast<SCTAB>(-1 * nDz) );
             else
                 aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged1 );
         }
@@ -528,13 +528,13 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     if (pFormula2)
     {
         if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2 );
+            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2, nDz );
         else
         {
             ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
             aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged2 );
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged2, static_cast<SCTAB>(-1*nDz) );
             else
                 aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged2 );
         }
