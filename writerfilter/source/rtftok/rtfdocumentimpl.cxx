@@ -1416,7 +1416,23 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_PAR:
             {
                 checkFirstRun();
+                bool bNeedPap = m_bNeedPap;
                 checkNeedPap();
+                if (bNeedPap)
+                {
+                    if (!m_pCurrentBuffer)
+                    {
+                        writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                                new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
+                                );
+                        Mapper().props(pProperties);
+                    }
+                    else
+                    {
+                        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
+                        m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+                    }
+                }
                 if (!m_pCurrentBuffer)
                     parBreak();
                 else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)

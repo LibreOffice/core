@@ -90,6 +90,7 @@ public:
     void testFdo38786();
     void testN757651();
     void testFdo49501();
+    void testFdo49271();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -123,6 +124,7 @@ public:
     CPPUNIT_TEST(testFdo38786);
     CPPUNIT_TEST(testN757651);
     CPPUNIT_TEST(testFdo49501);
+    CPPUNIT_TEST(testFdo49271);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -677,6 +679,21 @@ void Test::testFdo49501()
     CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
     xStyle->getPropertyValue("BottomMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
+}
+
+void Test::testFdo49271()
+{
+    load("fdo49271.rtf");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    float fValue = 0;
+    xPropertySet->getPropertyValue("CharHeight") >>= fValue;
+
+    CPPUNIT_ASSERT_EQUAL(25.f, fValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
