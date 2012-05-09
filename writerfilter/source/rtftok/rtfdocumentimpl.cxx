@@ -2620,34 +2620,30 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, true);
             break;
-        case RTF_MARGL:
+        case RTF_MARGL: // fall through: set the default + current value
             lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, true);
-            break;
-        case RTF_MARGR:
-            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, true);
-            break;
-        case RTF_MARGT:
-            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, true);
-            break;
-        case RTF_MARGB:
-            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, true);
-            break;
         case RTF_MARGLSXN:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, true);
             break;
+        case RTF_MARGR: // fall through: set the default + current value
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, true);
         case RTF_MARGRSXN:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, true);
             break;
+        case RTF_MARGT: // fall through: set the default + current value
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, true);
         case RTF_MARGTSXN:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, true);
             break;
+        case RTF_MARGB: // fall through: set the default + current value
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, true);
         case RTF_MARGBSXN:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, true);

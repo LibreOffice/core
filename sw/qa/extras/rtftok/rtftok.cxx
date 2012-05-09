@@ -95,6 +95,7 @@ public:
     void testFdo47764();
     void testFdo38786();
     void testN757651();
+    void testFdo49501();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testFdo47764);
     CPPUNIT_TEST(testFdo38786);
     CPPUNIT_TEST(testN757651);
+    CPPUNIT_TEST(testFdo49501);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -699,6 +701,30 @@ void Test::testN757651()
     // The bug was that due to buggy layout the text expanded to two pages.
     if (Application::GetDefaultDevice()->IsFontAvailable(OUString("Times New Roman")))
         CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+void Test::testFdo49501()
+{
+    load("fdo49501.rtf");
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+
+    sal_Bool bIsLandscape = sal_False;
+    xStyle->getPropertyValue("IsLandscape") >>= bIsLandscape;
+    CPPUNIT_ASSERT_EQUAL(sal_True, bIsLandscape);
+    sal_Int32 nExpected(TWIP_TO_MM100(567));
+    sal_Int32 nValue = 0;
+    xStyle->getPropertyValue("LeftMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
+    xStyle->getPropertyValue("RightMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
+    xStyle->getPropertyValue("TopMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
+    xStyle->getPropertyValue("BottomMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
