@@ -41,8 +41,6 @@
 
 // ------------------------------------------------------------------------
 
-#define WIN_MTF_MAX_CLIP_DEPTH 16
-
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x
 #else

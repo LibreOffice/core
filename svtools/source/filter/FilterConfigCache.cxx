@@ -34,11 +34,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#define TOKEN_COUNT_FOR_OWN_FILTER      3
-// #define TOKEN_INDEX_FOR_IDENT          0
-#define TOKEN_INDEX_FOR_FILTER          1
-// #define TOKEN_INDEX_FOR_HASDIALOG      2
-
 using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
 using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference

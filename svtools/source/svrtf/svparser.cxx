@@ -34,14 +34,6 @@
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 
-#define SVPAR_CSM_
-
-#define SVPAR_CSM_ANSI      0x0001U
-#define SVPAR_CSM_UTF8      0x0002U
-#define SVPAR_CSM_UCS2B     0x0004U
-#define SVPAR_CSM_UCS2L     0x0008U
-#define SVPAR_CSM_SWITCH    0x8000U
-
 // Struktur, um sich die akt. Daten zumerken
 struct SvParser_Impl
 {

@@ -72,10 +72,6 @@ using namespace ::rtl;
 
 typedef TextView* TextViewPtr;
 SV_DECL_PTRARR( TextViews, TextViewPtr, 0 )
-// SV_IMPL_PTRARR( TextViews, TextViewPtr );
-
-#define RESDIFF     10
-#define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
 
 
 // -------------------------------------------------------------------------

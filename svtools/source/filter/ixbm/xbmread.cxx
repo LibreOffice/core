@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#define XBMMINREAD 512
-
 #define _XBMPRIVATE
 #include <ctype.h>
 #include <comphelper/string.hxx>

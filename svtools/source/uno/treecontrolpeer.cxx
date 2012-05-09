@@ -56,8 +56,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::graphic;
 
-#define O(x) OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 struct LockGuard
 {
 public:

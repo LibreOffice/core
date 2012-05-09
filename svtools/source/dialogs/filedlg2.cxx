@@ -52,17 +52,6 @@ using namespace com::sun::star::uno;
 
 typedef ::std::vector< UniString* > UniStringList;
 
-#define STD_BTN_WIDTH   80
-#define STD_BTN_HEIGHT  26
-
-#ifndef UNX
-    #define ALLFILES                "*.*"
-#else
-    #define ALLFILES                "*"
-#endif
-//      #define STD_BTN_WIDTH   90
-//      #define STD_BTN_HEIGHT  35
-
 #define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, rHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
     p->SetHelpId( rHelpId ); \
