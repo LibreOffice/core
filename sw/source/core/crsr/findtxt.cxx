@@ -258,7 +258,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     {
         if( pNode->IsTxtNode() )
         {
-            nTxtLen = ((SwTxtNode*)pNode)->GetTxt().Len();
+            nTxtLen = static_cast<SwTxtNode*>(pNode)->GetTxt().Len();
             if( rNdIdx == pPam->GetMark()->nNode )
                 nEnd = pPam->GetMark()->nContent.GetIndex();
             else
@@ -655,30 +655,14 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( sal_False ) )
         {
             utl::TextSearch aSTxt( rSearchOpt );
-            String aStr( pPam->GetTxt() );
-            String aReplaceStr( rSearchOpt.replaceString );
-            aStr = comphelper::string::remove(aStr, CH_TXTATR_BREAKWORD);
-            aStr = comphelper::string::remove(aStr, CH_TXTATR_INWORD);
-            xub_StrLen nStart = 0;
-            rtl::OUString sX( 'x' );
-            if( pPam->Start()->nContent > 0 )
-            {
-                aStr.Insert( sX, 0 );
-                ++nStart;
-            }
-            xub_StrLen nEnd = aStr.Len();
-            bool bDeleteLastX = false;
-            if( pPam->End()->nContent < (static_cast<const SwTxtNode*>(pTxtNode))->GetTxt().Len() )
-            {
-                aStr.Insert( sX );
-                bDeleteLastX = true;
-            }
+            const String& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();
+            xub_StrLen nStart = pPam->Start()->nContent.GetIndex();
+            xub_StrLen nEnd = pPam->End()->nContent.GetIndex();
             SearchResult aResult;
-            if( aSTxt.SearchFrwrd( aStr, &nStart, &nEnd, &aResult ) )
+            if( aSTxt.SearchFrwrd( rStr, &nStart, &nEnd, &aResult ) )
             {
-                if( bDeleteLastX )
-                    aStr.Erase( aStr.Len() - 1 );
-                aSTxt.ReplaceBackReferences( aReplaceStr, aStr, aResult );
+                String aReplaceStr( rSearchOpt.replaceString );
+                aSTxt.ReplaceBackReferences( aReplaceStr, rStr, aResult );
                 pRet = new String( aReplaceStr );
             }
         }
