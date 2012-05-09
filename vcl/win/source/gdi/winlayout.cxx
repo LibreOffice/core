@@ -1081,7 +1081,7 @@ static bool InitUSP()
 {
     // get the usp10.dll version info
     HMODULE usp10 = ::GetModuleHandle("usp10.dll");
-    void *pScriptIsComplex = ::GetProcAddress(usp10, "ScriptIsComplex");
+    void *pScriptIsComplex = reinterpret_cast< void* >( ::GetProcAddress(usp10, "ScriptIsComplex"));
     int nUspVersion = 0;
     rtl_uString* pModuleURL = NULL;
     osl_getModuleURLFromAddress( pScriptIsComplex, &pModuleURL );
