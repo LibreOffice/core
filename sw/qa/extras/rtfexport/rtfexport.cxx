@@ -25,26 +25,22 @@
  * instead of those above.
  */
 
+#include "../swmodeltestbase.hxx"
+
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
-using namespace com::sun::star;
 
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public SwModelTestBase
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
     void testZoom();
     void testFdo38176();
     void testFdo49683();
@@ -59,9 +55,6 @@ public:
 
 private:
     void roundtrip(const OUString& rURL);
-    /// Get the length of the whole document.
-    int getLength();
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void Test::roundtrip(const OUString& rFilename)
@@ -75,41 +68,6 @@ void Test::roundtrip(const OUString& rFilename)
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent = loadFromDesktop(aTempFile.GetURL());
-}
-
-int Test::getLength()
-{
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    OUStringBuffer aBuf;
-    while (xParaEnum->hasMoreElements())
-    {
-        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
-        while (xRangeEnum->hasMoreElements())
-        {
-            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
-            aBuf.append(xRange->getString());
-        }
-    }
-    return aBuf.getLength();
-}
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 void Test::testZoom()

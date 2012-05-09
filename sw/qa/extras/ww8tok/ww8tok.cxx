@@ -25,24 +25,21 @@
  * instead of those above.
  */
 
+#include "../swmodeltestbase.hxx"
+
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
 #include <vcl/svapp.hxx>
 
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
-using namespace com::sun::star;
 
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public SwModelTestBase
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
     void testN757910();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -54,28 +51,11 @@ public:
 private:
     /// Load a WW8 file and make the document available via mxComponent.
     void load(const OUString& rURL);
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void Test::load(const OUString& rFilename)
 {
     mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8tok/data/") + rFilename);
-}
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 void Test::testN757910()

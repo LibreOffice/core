@@ -25,7 +25,8 @@
  * instead of those above.
  */
 
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include "../swmodeltestbase.hxx"
+
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
@@ -39,7 +40,6 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
@@ -48,24 +48,18 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/fontmanager.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
-using namespace com::sun::star;
 
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public SwModelTestBase
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
     void testFdo45553();
     void testN192129();
     void testFdo45543();
@@ -135,36 +129,14 @@ public:
 private:
     /// Load an RTF file and make the document available via mxComponent.
     void load(const OUString& rURL);
-    /// Get the length of the whole document.
-    int getLength();
     /// Get page count.
     int getPages();
     uno::Reference<container::XNameAccess> getStyles(OUString aFamily);
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void Test::load(const OUString& rFilename)
 {
     mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtftok/data/") + rFilename);
-}
-
-int Test::getLength()
-{
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    OUStringBuffer aBuf;
-    while (xParaEnum->hasMoreElements())
-    {
-        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
-        while (xRangeEnum->hasMoreElements())
-        {
-            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
-            aBuf.append(xRange->getString());
-        }
-    }
-    return aBuf.getLength();
 }
 
 int Test::getPages()
@@ -182,22 +154,6 @@ uno::Reference<container::XNameAccess> Test::getStyles(OUString aFamily)
     uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(aFamily), uno::UNO_QUERY);
     return xPageStyles;
-}
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 void Test::testFdo45553()

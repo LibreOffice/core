@@ -25,6 +25,8 @@
  * instead of those above.
  */
 
+#include "../swmodeltestbase.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -33,25 +35,19 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
 #include <vcl/svapp.hxx>
 
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
-using namespace com::sun::star;
 
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public SwModelTestBase
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
     void testN751054();
     void testN751117();
     void testN751017();
@@ -71,28 +67,11 @@ public:
 private:
     /// Load an OOXML file and make the document available via mxComponent.
     void load(const OUString& rURL);
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 void Test::load(const OUString& rFilename)
 {
     mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmltok/data/") + rFilename);
-}
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(getMultiServiceFactory()->createInstance("com.sun.star.frame.Desktop"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 void Test::testN751054()
