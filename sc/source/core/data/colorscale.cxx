@@ -148,12 +148,13 @@ void ScColorScaleFormatList::AddFormat( ScColorScaleFormat* pFormat )
     maColorScaleFormats.push_back( pFormat );
 }
 
+// attention nFormat is 1 based, 0 is reserved for no format
 ScColorScaleFormat* ScColorScaleFormatList::GetFormat(sal_uInt32 nFormat)
 {
-    if( nFormat >= size() )
+    if( nFormat > size() || !nFormat )
         return NULL;
 
-    return &maColorScaleFormats[nFormat];
+    return &maColorScaleFormats[nFormat-1];
 }
 
 ScColorScaleFormatList::iterator ScColorScaleFormatList::begin()

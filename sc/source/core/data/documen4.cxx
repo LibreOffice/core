@@ -629,6 +629,7 @@ sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
 }
 
 //takes ownership
+// returns a 1-based index, 0 is reserved for no entry
 sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )
 {
     if(!pNew)
@@ -639,7 +640,7 @@ sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )
 
     mpColorScaleList->AddFormat( pNew );
 
-    return mpColorScaleList->size()-1;
+    return mpColorScaleList->size();
 }
 
 sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
