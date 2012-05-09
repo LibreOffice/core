@@ -139,6 +139,7 @@ private:
     int getLength();
     /// Get page count.
     int getPages();
+    uno::Reference<container::XNameAccess> getStyles(OUString aFamily);
     uno::Reference<lang::XComponent> mxComponent;
 };
 
@@ -173,6 +174,14 @@ int Test::getPages()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     return xCursor->getPage();
+}
+
+uno::Reference<container::XNameAccess> Test::getStyles(OUString aFamily)
+{
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(aFamily), uno::UNO_QUERY);
+    return xPageStyles;
 }
 
 void Test::setUp()
@@ -332,10 +341,7 @@ void Test::testFdo46662()
 {
     load("fdo46662.rtf");
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName("NumberingStyles"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xNumberingStyles->getByName("WWNum3"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum3"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(1) >>= aProps; // 2nd level
@@ -487,10 +493,7 @@ void Test::testFdo45394()
 {
     load("fdo45394.rtf");
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
     uno::Reference<text::XText> xHeaderText(xPropertySet->getPropertyValue("HeaderText"), uno::UNO_QUERY);
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
@@ -512,9 +515,7 @@ void Test::testFdo47107()
 {
     load("fdo47107.rtf");
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName("NumberingStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNumberingStyles(getStyles("NumberingStyles"));
     // Make sure numbered and bullet legacy syntax is recognized, this used to throw a NoSuchElementException
     xNumberingStyles->getByName("WWNum1");
     xNumberingStyles->getByName("WWNum2");
@@ -536,9 +537,7 @@ void Test::testFdo44176()
 {
     load("fdo44176.rtf");
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
     uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName("Default"), uno::UNO_QUERY);
     sal_Int32 nFirstTop = 0, nDefaultTop = 0, nDefaultHeader = 0;
@@ -707,10 +706,7 @@ void Test::testFdo49501()
 {
     load("fdo49501.rtf");
 
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
 
     sal_Bool bIsLandscape = sal_False;
     xStyle->getPropertyValue("IsLandscape") >>= bIsLandscape;
