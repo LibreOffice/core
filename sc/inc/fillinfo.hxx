@@ -31,12 +31,14 @@
 
 #include <svx/framelinkarray.hxx>
 #include "global.hxx"
+#include <boost/shared_ptr.hpp>
 
 class SfxItemSet;
 class SvxBrushItem;
 class SvxBoxItem;
 class SvxLineItem;
 class SvxShadowItem;
+class Color;
 
 class ScBaseCell;
 class ScPatternAttr;
@@ -67,6 +69,7 @@ struct CellInfo
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
+    boost::shared_ptr<Color>    pColorScale;
 
     const SvxBrushItem*         pBackground;
 

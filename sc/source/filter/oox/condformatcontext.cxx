@@ -38,6 +38,56 @@ using ::rtl::OUString;
 
 // ============================================================================
 
+ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+    WorksheetContextBase( rFragment ),
+    mxRule( xRule )
+{
+}
+
+ContextHandlerRef ColorScaleContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( cfRule ):
+            return (nElement == XLS_TOKEN( colorScale )) ? this : 0;
+        case XLS_TOKEN( colorScale ):
+            if (nElement == XLS_TOKEN( cfvo ))
+                return this;
+            else if (nElement == XLS_TOKEN( color ))
+                return this;
+            else
+                return 0;
+    }
+    return 0;
+}
+
+void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( cfvo ):
+            mxRule->getColorScale()->importValue( rAttribs );
+        break;
+        case XLS_TOKEN( color ):
+            mxRule->getColorScale()->importColor( rAttribs );
+        break;
+    }
+}
+
+void ColorScaleContext::onCharacters( const OUString& rChars )
+{
+
+}
+
+ContextHandlerRef ColorScaleContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
+{
+    return 0;
+}
+
+void ColorScaleContext::onStartRecord( SequenceInputStream& rStrm )
+{
+}
+
 CondFormatContext::CondFormatContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
 {
@@ -50,7 +100,12 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( conditionalFormatting ):
             return (nElement == XLS_TOKEN( cfRule )) ? this : 0;
         case XLS_TOKEN( cfRule ):
-            return (nElement == XLS_TOKEN( formula )) ? this : 0;
+            if (nElement == XLS_TOKEN( formula ))
+                return this;
+            else if (nElement == XLS_TOKEN( colorScale ) )
+                return new ColorScaleContext( *this, mxRule );
+            else
+                return 0;
     }
     return 0;
 }
@@ -70,8 +125,6 @@ void CondFormatContext::onStartElement( const AttributeList& rAttribs )
 
 void CondFormatContext::onCharacters( const OUString& rChars )
 {
-    if( isCurrentElement( XLS_TOKEN( formula ) ) && mxCondFmt.get() && mxRule.get() )
-        mxRule->appendFormula( rChars );
 }
 
 ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )

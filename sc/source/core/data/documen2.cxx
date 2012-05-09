@@ -74,6 +74,7 @@
 #include "chartlis.hxx"
 #include "markdata.hxx"
 #include "conditio.hxx"
+#include "colorscale.hxx"
 #include "validat.hxx"
 #include "progress.hxx"
 #include "detdata.hxx"

@@ -32,13 +32,18 @@
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
+#include <boost/scoped_ptr.hpp>
+#include <tools/color.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace sheet { class XSheetConditionalEntries; }
 } } }
+class ScColorScaleFormat;
 
 namespace oox {
 namespace xls {
+
+class CondFormat;
 
 // ============================================================================
 
@@ -71,9 +76,25 @@ struct CondFormatRuleModel
     void                setBiff12TextType( sal_Int32 nOperator );
 };
 
+class ColorScaleRule : public WorksheetHelper
+{
+public:
+    ColorScaleRule( const CondFormat& rFormat );
+
+    void importValue( const AttributeList& rAttribs );
+    void importColor( const AttributeList& rAttribs );
+
+    void AddEntries( ScColorScaleFormat* pFormat );
+
+private:
+    const CondFormat& mrCondFormat;
+    std::vector< ::Color > maColors;
+    std::vector< double > maValues;
+};
+
+
 // ============================================================================
 
-class CondFormat;
 
 /** Represents a single rule in a conditional formatting. */
 class CondFormatRule : public WorksheetHelper
@@ -96,9 +117,12 @@ public:
     /** Returns the priority of this rule. */
     inline sal_Int32    getPriority() const { return maModel.mnPriority; }
 
+    ColorScaleRule*     getColorScale();
+
 private:
     const CondFormat&   mrCondFormat;
     CondFormatRuleModel maModel;
+    boost::scoped_ptr<ColorScaleRule> mpColor;
 };
 
 typedef ::boost::shared_ptr< CondFormatRule > CondFormatRuleRef;

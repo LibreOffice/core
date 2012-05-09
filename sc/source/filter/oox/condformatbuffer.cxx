@@ -50,6 +50,10 @@
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "stylesbuffer.hxx"
+#include "colorscale.hxx"
+#include "document.hxx"
+
+#include <iostream>
 
 namespace oox {
 namespace xls {
@@ -133,6 +137,55 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
 
 } // namespace
 
+ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
+    WorksheetHelper( rFormat ),
+    mrCondFormat( rFormat )
+{
+}
+
+void ColorScaleRule::importValue( const AttributeList& rAttribs )
+{
+    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
+    if (aType == "num")
+    {
+        double nVal = rAttribs.getDouble( XML_val, 0.0 );
+        maValues.push_back(nVal);
+        std::cout << "ColorScaleRule::importValue: " << nVal << std::endl;
+    }
+}
+
+namespace {
+
+::Color RgbToRgbComponents( sal_Int32& nRgb )
+{
+    sal_Int32 ornR = (nRgb >> 16) & 0xFF;
+    sal_Int32 ornG = (nRgb >> 8) & 0xFF;
+    sal_Int32 ornB = nRgb & 0xFF;
+
+    return ::Color(ornR, ornG, ornB);
+}
+
+}
+
+void ColorScaleRule::importColor( const AttributeList& rAttribs )
+{
+    sal_Int32 nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+
+    ::Color aColor = RgbToRgbComponents( nColor );
+    maColors.push_back(aColor);
+}
+
+void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat )
+{
+    //assume that both vectors contain the same entries
+    // TODO: check it
+    size_t n = std::min<size_t>(maColors.size(), maValues.size());
+    for(size_t i = 0; i < n; ++i)
+    {
+        pFormat->AddEntry( new ScColorScaleEntry(maValues[i], maColors[i]) );
+    }
+}
+
 // ============================================================================
 
 CondFormatRuleModel::CondFormatRuleModel() :
@@ -191,6 +244,12 @@ void CondFormatRule::importCfRule( const AttributeList& rAttribs )
     maModel.mbPercent      = rAttribs.getBool( XML_percent, false );
     maModel.mbAboveAverage = rAttribs.getBool( XML_aboveAverage, true );
     maModel.mbEqualAverage = rAttribs.getBool( XML_equalAverage, false );
+
+    if(maModel.mnType == XML_colorScale)
+    {
+        //import the remaining values
+
+    }
 }
 
 void CondFormatRule::appendFormula( const OUString& rFormula )
@@ -507,6 +566,8 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             if( maModel.mnStdDev == 0 )
                 aReplaceFormula = CREATE_OUSTRING( "#B#CAVERAGE(#R)" );
         break;
+        case XML_colorScale:
+        break;
     }
 
     if( !aReplaceFormula.isEmpty() )
@@ -587,6 +648,21 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         {
         }
     }
+    else if( mpColor )
+    {
+        ScDocument& rDoc = getScDocument();
+        ScColorScaleFormat* pFormat = new ScColorScaleFormat();
+
+        mpColor->AddEntries( pFormat );
+        rDoc.AddColorScaleFormat(pFormat);
+    }
+}
+
+ColorScaleRule* CondFormatRule::getColorScale()
+{
+    if(!mpColor)
+        mpColor.reset( new ColorScaleRule(mrCondFormat) );
+    return mpColor.get();
 }
 
 // ============================================================================

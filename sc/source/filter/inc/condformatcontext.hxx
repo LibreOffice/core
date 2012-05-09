@@ -36,6 +36,24 @@ namespace oox {
 namespace xls {
 
 // ============================================================================
+//
+class CondFormatContext;
+
+class ColorScaleContext : public WorksheetContextBase
+{
+public:
+    explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule );
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
+
+private:
+    CondFormatRuleRef mxRule;
+};
 
 class CondFormatContext : public WorksheetContextBase
 {

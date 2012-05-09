@@ -54,6 +54,7 @@
 #include "paramisc.hxx"
 #include "compiler.hxx"
 #include "externalrefmgr.hxx"
+#include "colorscale.hxx"
 
 using namespace formula;
 
@@ -625,6 +626,20 @@ sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
     pInsert->SetKey( nNewKey );
     pCondFormList->InsertNew( pInsert );
     return nNewKey;
+}
+
+//takes ownership
+sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )
+{
+    if(!pNew)
+        return 0;
+
+    if(!mpColorScaleList)
+        mpColorScaleList.reset(new ScColorScaleFormatList());
+
+    mpColorScaleList->AddFormat( pNew );
+
+    return mpColorScaleList->size()-1;
 }
 
 sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )

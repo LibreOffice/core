@@ -54,6 +54,11 @@ const Color& ScColorScaleEntry::GetColor() const
     return maColor;
 }
 
+void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
+{
+    maColorScales.push_back( pEntry );
+}
+
 namespace {
 
 sal_uInt8 GetColorValue( double nVal, double nVal1, sal_uInt8 nColVal1, double nVal2, sal_uInt8 nColVal2 )
@@ -136,6 +141,11 @@ ScColorScaleFormat::iterator ScColorScaleFormat::end()
 ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
 {
     return maColorScales.end();
+}
+
+void ScColorScaleFormatList::AddFormat( ScColorScaleFormat* pFormat )
+{
+    maColorScaleFormats.push_back( pFormat );
 }
 
 ScColorScaleFormat* ScColorScaleFormatList::GetFormat(sal_uInt32 nFormat)

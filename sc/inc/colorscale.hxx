@@ -34,7 +34,7 @@
 
 class ScDocument;
 
-class ScColorScaleEntry
+class SC_DLLPUBLIC ScColorScaleEntry
 {
 private:
     double mnVal;
@@ -47,7 +47,7 @@ public:
     double GetValue() const;
 };
 
-class ScColorScaleFormat
+class SC_DLLPUBLIC ScColorScaleFormat
 {
 private:
     ScRangeList maRange;
@@ -56,6 +56,7 @@ private:
     ColorScaleEntries maColorScales;
 public:
     Color* GetColor(const ScAddress& rAddr) const;
+    void AddEntry(ScColorScaleEntry* pEntry);
 
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
@@ -77,6 +78,7 @@ public:
     typedef ColorScaleFormatContainer::const_iterator const_iterator;
 
     ScColorScaleFormat* GetFormat(sal_uInt32 nFormat);
+    void AddFormat( ScColorScaleFormat* pFormat );
 
     iterator begin();
     const_iterator begin() const;

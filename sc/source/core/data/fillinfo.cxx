@@ -36,6 +36,7 @@
 #include <editeng/bolnitem.hxx>
 #include <editeng/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
 #include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
 
 #include "fillinfo.hxx"
 #include "document.hxx"
@@ -49,6 +50,7 @@
 #include "poolhelp.hxx"
 #include "docpool.hxx"
 #include "conditio.hxx"
+#include "colorscale.hxx"
 #include "stlpool.hxx"
 
 // -----------------------------------------------------------------------
@@ -478,9 +480,16 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                         sal_uLong nConditional = ((const SfxUInt32Item&)pPattern->
                                                 GetItem(ATTR_CONDITIONAL)).GetValue();
+                        sal_uLong nColorScale = ((const SfxUInt32Item&)pPattern->
+                                                GetItem(ATTR_COLORSCALE)).GetValue();
+
                         const ScConditionalFormat* pCondForm = NULL;
                         if ( nConditional && pCondFormList )
                             pCondForm = pCondFormList->GetFormat( nConditional );
+
+                        const ScColorScaleFormat* pColorScale = NULL;
+                        if ( nColorScale && mpColorScaleList )
+                            pColorScale = mpColorScaleList->GetFormat( nColorScale );
 
                         do
                         {
@@ -555,6 +564,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         }
                                         // if style is not there, treat like no condition
                                     }
+                                }
+                                if ( pColorScale )
+                                {
+                                    Color* pColor = pColorScale->GetColor( ScAddress( nX, nCurRow, nTab ) );
+                                    pInfo->pColorScale.reset(pColor);
                                 }
 
                                 ++nArrY;
@@ -672,6 +686,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
                         bAnyShadow = true;
                     }
+                }
+                if(pInfo->pColorScale)
+                {
+                    pRowInfo[nArrY].bEmptyBack = false;
+                    pInfo->pBackground = new SvxBrushItem(*pInfo->pColorScale, ATTR_BACKGROUND);
                 }
             }
         }

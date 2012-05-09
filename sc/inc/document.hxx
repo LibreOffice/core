@@ -54,6 +54,7 @@
 #include <set>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace editeng { class SvxBorderLine; }
 
@@ -95,6 +96,8 @@ class ScChartCollection;
 class ScChartListenerCollection;
 class ScConditionalFormat;
 class ScConditionalFormatList;
+class ScColorScaleFormat;
+class ScColorScaleFormatList;
 class ScDBCollection;
 class ScDBData;
 class ScDetOpData;
@@ -243,6 +246,7 @@ private:
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScConditionalFormatList* pCondFormList;             // conditional formats
+    boost::scoped_ptr<ScColorScaleFormatList> mpColorScaleList; //color scales
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
@@ -1195,6 +1199,7 @@ public:
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
     SC_DLLPUBLIC sal_uLong          AddCondFormat( const ScConditionalFormat& rNew );
+    SC_DLLPUBLIC sal_uLong          AddColorScaleFormat( ScColorScaleFormat* pNew );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( sal_uLong nKey );
@@ -1206,6 +1211,8 @@ public:
     ScConditionalFormatList* GetCondFormList() const        // Ref-Undo
                     { return pCondFormList; }
     void            SetCondFormList(ScConditionalFormatList* pNew);
+
+    ScColorScaleFormatList* GetColorScaleList() const;
 
     ScValidationDataList* GetValidationList() const
                     { return pValidationList; }
