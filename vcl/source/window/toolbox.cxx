@@ -3239,7 +3239,7 @@ void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
     bool bNativeOk = false;
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
 
-    if( IsNativeControlSupported( CTRL_TOOLBAR, PART_SEPARATOR ) )
+    if( IsHorizontal() && IsNativeControlSupported( CTRL_TOOLBAR, PART_SEPARATOR ) )
     {
         ImplControlValue    aControlValue;
         ControlState        nState = 0;
