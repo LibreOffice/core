@@ -1205,3 +1205,7 @@ mkdir: %_DEST%\inc\boost\xpressive\traits\detail
 ..\%__SRC%\inc\boost\xpressive\detail\utility\* %_DEST%\inc\boost\xpressive\detail\utility
 ..\%__SRC%\inc\boost\xpressive\traits\* %_DEST%\inc\boost\xpressive\traits
 ..\%__SRC%\inc\boost\xpressive\traits\detail\* %_DEST%\inc\boost\xpressive\traits\detail
+
+..\%__SRC%\lib\libboostdatetime.a %_DEST%\lib
+..\%__SRC%\slb\boostdatetime.lib %_DEST%\lib
+..\%__SRC%\slb\boostthread.lib %_DEST%\lib
