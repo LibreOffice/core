@@ -69,9 +69,7 @@
 #include "outdev.h"         // for ImplGlyphFallbackFontSubstitution
 #include "sft.hxx"
 
-#ifdef GCP_KERN_HACK
 #include <algorithm>
-#endif
 
 #ifdef ENABLE_GRAPHITE
 #include <graphite2/Font.h>
@@ -1797,17 +1795,10 @@ sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKer
         int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
         if( nCount )
         {
-            #ifdef GCP_KERN_HACK
             pPairs = new KERNINGPAIR[ nCount+1 ];
             mpFontKernPairs = pPairs;
             mnFontKernPairCount = nCount;
             ::GetKerningPairsW( mhDC, nCount, pPairs );
-            #else // GCP_KERN_HACK
-            pPairs = pKernPairs;
-            nCount = (nCount < nPairs) : nCount : nPairs;
-            ::GetKerningPairsW( mhDC, nCount, pPairs );
-            return nCount;
-            #endif // GCP_KERN_HACK
         }
 
         mbFontKernInit = FALSE;

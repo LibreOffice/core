@@ -55,7 +55,6 @@ class ImplFontAttrCache;
 
 // win32 platform specific options. Move them to the PMK file?
 
-#define GCP_KERN_HACK
 #define GNG_VERT_HACK
 
 #ifdef ENABLE_GRAPHITE

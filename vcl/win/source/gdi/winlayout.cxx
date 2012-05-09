@@ -48,9 +48,7 @@
 #define alloca _alloca
 #endif
 
-#ifdef GCP_KERN_HACK
-    #include <algorithm>
-#endif // GCP_KERN_HACK
+#include <algorithm>
 
 #include <usp10.h>
 #include <shlwapi.h>
@@ -87,7 +85,6 @@ public:
 private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
 
-#ifdef GCP_KERN_HACK
 public:
     bool                    HasKernData() const;
     void                    SetKernData( int, const KERNINGPAIR* );
@@ -95,7 +92,6 @@ public:
 private:
     KERNINGPAIR*            mpKerningPairs;
     int                     mnKerningPairs;
-#endif // GCP_KERN_HACK
 
 public:
     SCRIPT_CACHE&           GetScriptCache() const
@@ -389,13 +385,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
         mpGlyphOrigAdvs = new int[ mnGlyphCount ];
 
-#ifndef GCP_KERN_HACK
-    DWORD nGcpOption = 0;
-    // enable kerning if requested
-    if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
-        nGcpOption |= GCP_USEKERNING;
-#endif // GCP_KERN_HACK
-
     for( i = 0; i < mnGlyphCount; ++i )
         mpOutGlyphs[i] = pBidiStr[ i ];
     mnWidth = 0;
@@ -478,18 +467,11 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             mpGlyphOrigAdvs[i] = mnNotdefWidth;
     }
 
-#ifdef GCP_KERN_HACK
     // apply kerning if the layout engine has not yet done it
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_ASIAN|SAL_LAYOUT_KERNING_PAIRS) )
     {
-#else // GCP_KERN_HACK
-    // apply just asian kerning
-    if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
-    {
-        if( !(rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) )
-#endif // GCP_KERN_HACK
-            for( i = 0; i < mnGlyphCount; ++i )
-                mpGlyphOrigAdvs[i] = mpGlyphAdvances[i];
+        for( i = 0; i < mnGlyphCount; ++i )
+            mpGlyphOrigAdvs[i] = mpGlyphAdvances[i];
 
         // #99658# also apply asian kerning on the substring border
         int nLen = mnGlyphCount;
@@ -497,7 +479,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             ++nLen;
         for( i = 1; i < nLen; ++i )
         {
-#ifdef GCP_KERN_HACK
             if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
             {
                 int nKernAmount = mrWinFontEntry.GetKerning( pBidiStr[i-1], pBidiStr[i] );
@@ -505,7 +486,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 mnWidth += nKernAmount;
             }
             else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
-#endif // GCP_KERN_HACK
 
             if( ( (0x3000 == (0xFF00 & pBidiStr[i-1])) || (0x2010 == (0xFFF0 & pBidiStr[i-1])) || (0xFF00 == (0xFF00 & pBidiStr[i-1])))
             &&  ( (0x3000 == (0xFF00 & pBidiStr[i])) || (0x2010 == (0xFFF0 & pBidiStr[i])) || (0xFF00 == (0xFF00 & pBidiStr[i])) ) )
@@ -2927,7 +2907,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     }
     else
     {
-#ifdef GCP_KERN_HACK
         if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && !rFontInstance.HasKernData() )
         {
             // TODO: directly cache kerning info in the rFontInstance
@@ -2935,7 +2914,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
             GetKernPairs( 0, NULL );
             rFontInstance.SetKernData( mnFontKernPairCount, mpFontKernPairs );
         }
-#endif // GCP_KERN_HACK
 
         BYTE eCharSet = ANSI_CHARSET;
         if( mpLogFont )
@@ -2984,9 +2962,7 @@ ImplWinFontEntry::~ImplWinFontEntry()
 {
     if( maScriptCache != NULL )
         ScriptFreeCache( &maScriptCache );
-#ifdef GCP_KERN_HACK
     delete[] mpKerningPairs;
-#endif // GCP_KERN_HACK
 }
 
 // -----------------------------------------------------------------------
