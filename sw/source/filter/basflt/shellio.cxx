@@ -290,10 +290,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                 }
                                 else if( pCrsr )
                                 {
-                                    // seitengebundene Flys eingefuegt, dann schalte
-                                    // die Optimierungs-Flags vom SwDoc ab. Sonst
-                                    // werden die Flys nicht an der Position erzeugt.
-                                    pDoc->SetLoaded( sal_False );
+                                    pDoc->SetContainsAtPageObjWithContentAnchor( true );
                                 }
                             }
                             else
@@ -352,6 +349,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->UpdateNumRule();
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
+    pDoc->SetLoaded( true );
 
     pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
     if (!bReadPageDescs)

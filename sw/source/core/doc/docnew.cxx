@@ -292,6 +292,7 @@ SwDoc::SwDoc()
     mbLinksUpdated( sal_False ),
     mbClipBoard( false ),
     mbColumnSelection( false ),
+    mbContainsAtPageObjWithContentAnchor( false ),
     // i#78591#
     mbProtectForm(false),
     mbLastBrowseMode( false ),

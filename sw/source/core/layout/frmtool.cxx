@@ -871,7 +871,7 @@ SwCntntNotify::~SwCntntNotify()
         }
     }
 
-    sal_Bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
+    const bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
 
     if ( pCnt->IsNoTxtFrm() )
     {
@@ -947,55 +947,47 @@ SwCntntNotify::~SwCntntNotify()
 
         SwDoc *pDoc = pCnt->GetNode()->GetDoc();
         if ( pDoc->GetSpzFrmFmts()->Count() &&
-             !pDoc->IsLoaded() && !pDoc->IsNewDoc() )
+             pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->IsNewDoc() )
         {
-            //Der Frm wurde wahrscheinlich zum ersten mal formatiert.
-            //Wenn ein Filter Flys oder Zeichenobjekte einliest und diese
-            //Seitengebunden sind, hat er ein Problem, weil er i.d.R. die
-            //Seitennummer nicht kennt. Er weiss lediglich welches der Inhalt
-            //(CntntNode) an dieser Stelle ist.
-            //Die Filter stellen dazu das Ankerattribut der Objekte so ein, dass
-            //sie vom Typ zwar Seitengebunden sind, aber der Index des Ankers
-            //auf diesen CntntNode zeigt.
-            //Hier werden diese vorlauefigen Verbindungen aufgeloest.
+            // If certain import filters for foreign file format import
+            // AT_PAGE anchored objects, the corresponding page number is
+            // typically not known. In this case the content position is
+            // stored at which the anchored object is found in the
+            // imported document.
+            // When this content is formatted it is the time at which
+            // the page is known. Thus, this data can be corrected now.
 
-            const SwPageFrm *pPage = 0;
-            SwNodeIndex   *pIdx  = 0;
+            const SwPageFrm* pPage = 0;
+            SwNodeIndex *pIdx  = 0;
             SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
-
             for ( sal_uInt16 i = 0; i < pTbl->Count(); ++i )
             {
-                if ( !pPage )
-                    pPage = pCnt->FindPageFrm();
                 SwFrmFmt *pFmt = (*pTbl)[i];
                 const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-
-                if ((FLY_AT_PAGE != rAnch.GetAnchorId()) &&
-                    (FLY_AT_PARA != rAnch.GetAnchorId()))
+                if ( FLY_AT_PAGE != rAnch.GetAnchorId() ||
+                     rAnch.GetCntntAnchor() == 0 )
                 {
-                    continue;   //#60878# nicht etwa zeichengebundene.
+                    continue;
                 }
 
-                sal_Bool bCheckPos = sal_False;
-                if ( rAnch.GetCntntAnchor() )
+                if ( !pIdx )
                 {
-                    if ( !pIdx )
+                    pIdx = new SwNodeIndex( *pCnt->GetNode() );
+                }
+                if ( rAnch.GetCntntAnchor()->nNode == *pIdx )
+                {
+                    ASSERT( false, "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
+                    if ( !pPage )
                     {
-                        pIdx = new SwNodeIndex( *pCnt->GetNode() );
+                        pPage = pCnt->FindPageFrm();
                     }
-                    if ( rAnch.GetCntntAnchor()->nNode == *pIdx )
+                    SwFmtAnchor aAnch( rAnch );
+                    aAnch.SetAnchor( 0 );
+                    aAnch.SetPageNum( pPage->GetPhyPageNum() );
+                    pFmt->SetFmtAttr( aAnch );
+                    if ( RES_DRAWFRMFMT != pFmt->Which() )
                     {
-                        bCheckPos = sal_True;
-                        if (FLY_AT_PAGE == rAnch.GetAnchorId())
-                        {
-                            ASSERT( false, "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
-                            SwFmtAnchor aAnch( rAnch );
-                            aAnch.SetAnchor( 0 );
-                            aAnch.SetPageNum( pPage->GetPhyPageNum() );
-                            pFmt->SetFmtAttr( aAnch );
-                            if ( RES_DRAWFRMFMT != pFmt->Which() )
-                                pFmt->MakeFrms();
-                        }
+                        pFmt->MakeFrms();
                     }
                 }
             }

@@ -495,6 +495,10 @@ private:
     bool mbApplyWorkaroundForB6375613 : 1;
     // <--
 
+    // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
+    //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
+    bool mbContainsAtPageObjWithContentAnchor : 1;
+
     //
     // COMPATIBILITY FLAGS START
     //
@@ -1037,6 +1041,15 @@ public:
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
+
+    void SetContainsAtPageObjWithContentAnchor( const bool bFlag )
+    {
+        mbContainsAtPageObjWithContentAnchor = bFlag;
+    }
+    bool DoesContainAtPageObjWithContentAnchor()
+    {
+        return mbContainsAtPageObjWithContentAnchor;
+    }
 
     // liefert zu allen fliegenden Rahmen die Position im Dokument.
     // Wird ein Pam-Pointer uebergeben, muessen die absatzgebundenen

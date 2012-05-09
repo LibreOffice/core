@@ -2146,7 +2146,7 @@ void SwDoc::SetAllUniqueFlyNames()
         n = 255;
     SwSpzFrmFmts aArr( (sal_Int8)n, 10 );
     SwFrmFmtPtr pFlyFmt;
-    sal_Bool bLoadedFlag = sal_True;            // noch etwas fuers Layout
+    bool bContainsAtPageObjWithContentAnchor = false;
 
     for( n = GetSpzFrmFmts()->Count(); n; )
     {
@@ -2172,22 +2172,17 @@ void SwDoc::SetAllUniqueFlyNames()
                 aArr.Insert( pFlyFmt, aArr.Count() );
 
         }
-        if( bLoadedFlag )
+        if ( !bContainsAtPageObjWithContentAnchor )
         {
             const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
-            if (((FLY_AT_PAGE == rAnchor.GetAnchorId()) &&
-                 rAnchor.GetCntntAnchor()) ||
-                // oder werden DrawObjecte rel. zu irgendetwas ausgerichtet?
-                ( RES_DRAWFRMFMT == pFlyFmt->Which() && (
-                    SFX_ITEM_SET == pFlyFmt->GetItemState(
-                                        RES_VERT_ORIENT )||
-                    SFX_ITEM_SET == pFlyFmt->GetItemState(
-                                        RES_HORI_ORIENT ))) )
+            if ( (FLY_AT_PAGE == rAnchor.GetAnchorId()) &&
+                 rAnchor.GetCntntAnchor() )
             {
-                bLoadedFlag = sal_False;
+                bContainsAtPageObjWithContentAnchor = true;
             }
         }
     }
+    SetContainsAtPageObjWithContentAnchor( bContainsAtPageObjWithContentAnchor );
 
     const SwNodeIndex* pIdx;
 
@@ -2234,11 +2229,6 @@ void SwDoc::SetAllUniqueFlyNames()
             GetFtnIdxs().UpdateFtn( aTmp );
         }
     }
-
-    // neues Document und keine seitengebundenen Rahmen/DrawObjecte gefunden,
-    // die an einem Node verankert sind.
-    if( bLoadedFlag )
-        SetLoaded( sal_True );
 }
 
 sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
