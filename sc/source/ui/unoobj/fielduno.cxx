@@ -898,31 +898,199 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
 
 void ScEditFieldObj::setPropertyValueDateTime(const rtl::OUString& rName, const uno::Any& rVal)
 {
-    if (rName == SC_UNONAME_ISDATE)
-        mbIsDate = rVal.get<sal_Bool>();
-    else if (rName == SC_UNONAME_ISFIXED)
-        mbIsFixed = rVal.get<sal_Bool>();
-    else if (rName == SC_UNONAME_DATETIME)
-        maDateTime = rVal.get<util::DateTime>();
-    else if (rName == SC_UNONAME_NUMFMT)
-        mnNumFormat = rVal.get<sal_Int32>();
+    if (mpEditSource)
+    {
+        // Field already inserted.
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+        SvxFieldData* pField = aTempEngine.FindByPos(aSelection.nStartPara, aSelection.nStartPos, meType);
+        if (!pField)
+            return;
+
+        switch (meType)
+        {
+            case text::textfield::Type::DATE:
+            {
+                SvxDateField* p = static_cast<SvxDateField*>(pField);
+                if (rName == SC_UNONAME_ISDATE)
+                {
+                    // Do nothing for now.
+                }
+                else if (rName == SC_UNONAME_ISFIXED)
+                {
+                    SvxDateType eType = rVal.get<sal_Bool>() ? SVXDATETYPE_FIX : SVXDATETYPE_VAR;
+                    p->SetType(eType);
+                }
+                else if (rName == SC_UNONAME_DATETIME)
+                {
+                    maDateTime = rVal.get<util::DateTime>();
+                    Date aDate(maDateTime.Day, maDateTime.Month, maDateTime.Year);
+                    p->SetFixDate(aDate);
+                }
+                else if (rName == SC_UNONAME_NUMFMT)
+                {
+                    mnNumFormat = rVal.get<sal_Int32>();
+                    p->SetFormat(static_cast<SvxDateFormat>(mnNumFormat));
+                }
+                else
+                    throw beans::UnknownPropertyException();
+            }
+            break;
+            case text::textfield::Type::TIME:
+            {
+                // SvxTimeField doesn't have any attributes.
+                if (rName != SC_UNONAME_ISDATE && rName != SC_UNONAME_ISFIXED &&
+                    rName != SC_UNONAME_DATETIME && rName != SC_UNONAME_NUMFMT)
+                    throw beans::UnknownPropertyException();
+            }
+            break;
+            case text::textfield::Type::EXTENDED_TIME:
+            {
+                SvxExtTimeField* p = static_cast<SvxExtTimeField*>(pField);
+                if (rName == SC_UNONAME_ISDATE)
+                {
+                    // Do nothing for now.
+                }
+                else if (rName == SC_UNONAME_ISFIXED)
+                {
+                    SvxTimeType eType = rVal.get<sal_Bool>() ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR;
+                    p->SetType(eType);
+                }
+                else if (rName == SC_UNONAME_DATETIME)
+                {
+                    maDateTime = rVal.get<util::DateTime>();
+                    Time aTime(maDateTime.Hours, maDateTime.Minutes, maDateTime.Seconds, maDateTime.HundredthSeconds);
+                    p->SetFixTime(aTime);
+                }
+                else if (rName == SC_UNONAME_NUMFMT)
+                {
+                    mnNumFormat = rVal.get<sal_Int32>();
+                    p->SetFormat(static_cast<SvxTimeFormat>(mnNumFormat));
+                }
+                else
+                    throw beans::UnknownPropertyException();
+            }
+            break;
+            default:
+                throw beans::UnknownPropertyException();
+        }
+    }
     else
-        throw beans::UnknownPropertyException();
+    {
+        if (rName == SC_UNONAME_ISDATE)
+            mbIsDate = rVal.get<sal_Bool>();
+        else if (rName == SC_UNONAME_ISFIXED)
+            mbIsFixed = rVal.get<sal_Bool>();
+        else if (rName == SC_UNONAME_DATETIME)
+            maDateTime = rVal.get<util::DateTime>();
+        else if (rName == SC_UNONAME_NUMFMT)
+            mnNumFormat = rVal.get<sal_Int32>();
+        else
+            throw beans::UnknownPropertyException();
+    }
 }
 
 uno::Any ScEditFieldObj::getPropertyValueDateTime(const rtl::OUString& rName)
 {
-    if (rName == SC_UNONAME_ISDATE)
-        return uno::makeAny<sal_Bool>(mbIsDate);
+    if (mpEditSource)
+    {
+        // Field already inserted.
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+        SvxFieldData* pField = aTempEngine.FindByPos(aSelection.nStartPara, aSelection.nStartPos, meType);
+        if (!pField)
+            throw uno::RuntimeException();
 
-    if (rName == SC_UNONAME_ISFIXED)
-        return uno::makeAny<sal_Bool>(mbIsFixed);
+        switch (meType)
+        {
+            case text::textfield::Type::DATE:
+            {
+                SvxDateField* p = static_cast<SvxDateField*>(pField);
+                if (rName == SC_UNONAME_ISDATE)
+                    return uno::makeAny(sal_True);
 
-    if (rName == SC_UNONAME_DATETIME)
-        return uno::makeAny(maDateTime);
+                if (rName == SC_UNONAME_ISFIXED)
+                    return uno::makeAny<sal_Bool>(p->GetType() == SVXDATETYPE_FIX);
 
-    if (rName == SC_UNONAME_NUMFMT)
-        return uno::makeAny(mnNumFormat);
+                if (rName == SC_UNONAME_DATETIME)
+                {
+                    Date aD(p->GetFixDate());
+                    maDateTime.Year = aD.GetYear();
+                    maDateTime.Month = aD.GetMonth();
+                    maDateTime.Day = aD.GetDay();
+                    maDateTime.Hours = 0;
+                    maDateTime.Minutes = 0;
+                    maDateTime.Seconds = 0;
+                    maDateTime.HundredthSeconds = 0;
+                    return uno::makeAny(maDateTime);
+                }
+
+                if (rName == SC_UNONAME_NUMFMT)
+                    return uno::makeAny<sal_Int32>(p->GetFormat());
+            }
+            break;
+            case text::textfield::Type::TIME:
+            {
+                // SvxTimeField doesn't have any attributes.
+                if (rName == SC_UNONAME_ISDATE)
+                    return uno::makeAny(sal_False);
+
+                if (rName == SC_UNONAME_ISFIXED)
+                    return uno::makeAny(sal_False);
+
+                if (rName == SC_UNONAME_DATETIME)
+                    // This is the best we can do.
+                    return uno::makeAny(maDateTime);
+
+                if (rName == SC_UNONAME_NUMFMT)
+                    // Same as above.
+                    return uno::makeAny<sal_Int32>(0);
+            }
+            break;
+            case text::textfield::Type::EXTENDED_TIME:
+            {
+                SvxExtTimeField* p = static_cast<SvxExtTimeField*>(pField);
+                if (rName == SC_UNONAME_ISDATE)
+                    return uno::makeAny(sal_False);
+
+                if (rName == SC_UNONAME_ISFIXED)
+                    return uno::makeAny<sal_Bool>(p->GetType() == SVXTIMETYPE_FIX);
+
+                if (rName == SC_UNONAME_DATETIME)
+                {
+                    Time aT(p->GetFixTime());
+                    maDateTime.Year = 0;
+                    maDateTime.Month = 0;
+                    maDateTime.Day = 0;
+                    maDateTime.Hours = aT.GetHour();
+                    maDateTime.Minutes = aT.GetMin();
+                    maDateTime.Seconds = aT.GetSec();
+                    maDateTime.HundredthSeconds = aT.Get100Sec();
+                    return uno::makeAny(maDateTime);
+                }
+
+                if (rName == SC_UNONAME_NUMFMT)
+                    return uno::makeAny<sal_Int32>(p->GetFormat());
+            }
+            break;
+            default:
+                ;
+        }
+    }
+    else
+    {
+        if (rName == SC_UNONAME_ISDATE)
+            return uno::makeAny<sal_Bool>(mbIsDate);
+
+        if (rName == SC_UNONAME_ISFIXED)
+            return uno::makeAny<sal_Bool>(mbIsFixed);
+
+        if (rName == SC_UNONAME_DATETIME)
+            return uno::makeAny(maDateTime);
+
+        if (rName == SC_UNONAME_NUMFMT)
+            return uno::makeAny(mnNumFormat);
+    }
 
     throw beans::UnknownPropertyException();
 }
