@@ -2966,8 +2966,8 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
             String sAutoFmtName(aName);
             SwTableAutoFmtTbl aAutoFmtTbl;
             aAutoFmtTbl.Load();
-            for( sal_uInt16 i = aAutoFmtTbl.Count(); i; )
-                if( sAutoFmtName == aAutoFmtTbl[ --i ]->GetName() )
+            for( sal_uInt16 i = aAutoFmtTbl.size(); i; )
+                if( sAutoFmtName == aAutoFmtTbl[ --i ].GetName() )
                 {
                     SwSelBoxes aBoxes;
                     const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
@@ -2977,7 +2977,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
                         aBoxes.Insert( pBox );
                     }
                     UnoActionContext aContext( pFmt->GetDoc() );
-                    pFmt->GetDoc()->SetTableAutoFmt( aBoxes, *aAutoFmtTbl[i] );
+                    pFmt->GetDoc()->SetTableAutoFmt( aBoxes, aAutoFmtTbl[i] );
                     break;
                 }
         }

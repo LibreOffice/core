@@ -259,9 +259,9 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
         nIndex = 255;
     }
 
-    for( sal_uInt8 i = 0, nCount = (sal_uInt8)pTableTbl->Count(); i < nCount; i++ )
+    for( sal_uInt8 i = 0, nCount = (sal_uInt8)pTableTbl->size(); i < nCount; i++ )
     {
-        SwTableAutoFmt* pFmt = (*pTableTbl)[ i ];
+        SwTableAutoFmt* pFmt = &(*pTableTbl)[ i ];
         aLbFormat.InsertEntry( pFmt->GetName() );
         if( pSelFmt && pFmt->GetName() == pSelFmt->GetName() )
             nIndex = i;
@@ -297,9 +297,9 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
     if( 255 != nIndex )
     {
         if( rToFill )
-            *rToFill = *(*pTableTbl)[ nIndex ];
+            *rToFill = (*pTableTbl)[ nIndex ];
         else
-            rToFill = new SwTableAutoFmt( *(*pTableTbl)[ nIndex ] );
+            rToFill = new SwTableAutoFmt( (*pTableTbl)[ nIndex ] );
     }
     else
         delete rToFill, rToFill = 0;
@@ -313,7 +313,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
-    SwTableAutoFmtPtr pData  = (*pTableTbl)[nIndex];
+    SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
     sal_Bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = sal_True;
 
     if( pBtn == &aBtnNumFormat )
@@ -362,24 +362,24 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
             if( aFormatName.Len() > 0 )
             {
                 sal_uInt16 n;
-                for( n = 0; n < pTableTbl->Count(); ++n )
-                    if( (*pTableTbl)[n]->GetName() == aFormatName )
+                for( n = 0; n < pTableTbl->size(); ++n )
+                    if( (*pTableTbl)[n].GetName() == aFormatName )
                         break;
 
-                if( n >= pTableTbl->Count() )
+                if( n >= pTableTbl->size() )
                 {
                     // Format mit dem Namen noch nicht vorhanden, also
                     // aufnehmen
-                    SwTableAutoFmtPtr pNewData = new
+                    SwTableAutoFmt* pNewData = new
                                         SwTableAutoFmt( aFormatName );
                     pShell->GetTableAutoFmt( *pNewData );
 
                     // Sortiert einfuegen!!
-                    for( n = 1; n < pTableTbl->Count(); ++n )
-                        if( (*pTableTbl)[ n ]->GetName() > aFormatName )
+                    for( n = 1; n < pTableTbl->size(); ++n )
+                        if( (*pTableTbl)[ n ].GetName() > aFormatName )
                             break;
 
-                    pTableTbl->Insert( pNewData, n );
+                    pTableTbl->insert( pTableTbl->begin() + n, pNewData );
                     aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
                     aLbFormat.SelectEntryPos( nDfltStylePos + n );
                     bFmtInserted = sal_True;
@@ -427,7 +427,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
         aLbFormat.RemoveEntry( nDfltStylePos + nIndex );
         aLbFormat.SelectEntryPos( nDfltStylePos + nIndex-1 );
 
-        pTableTbl->DeleteAndDestroy( nIndex );
+        pTableTbl->erase( pTableTbl->begin() + nIndex );
         nIndex--;
 
         if( !nIndex )
@@ -466,27 +466,27 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
             if ( aFormatName.Len() > 0 )
             {
                 sal_uInt16 n;
-                for( n = 0; n < pTableTbl->Count(); ++n )
-                    if ((*pTableTbl)[n]->GetName() == aFormatName)
+                for( n = 0; n < pTableTbl->size(); ++n )
+                    if ((*pTableTbl)[n].GetName() == aFormatName)
                         break;
 
-                if( n >= pTableTbl->Count() )
+                if( n >= pTableTbl->size() )
                 {
                     // Format mit dem Namen noch nicht vorhanden, also
                     // umbenennen
 
                     aLbFormat.RemoveEntry( nDfltStylePos + nIndex );
-                    SwTableAutoFmtPtr p = (*pTableTbl)[ nIndex ];
-                    pTableTbl->Remove( nIndex );
+                    SwTableAutoFmt* p = &(*pTableTbl)[ nIndex ];
+                    pTableTbl->erase( pTableTbl->begin() + nIndex );
 
                     p->SetName( aFormatName );
 
                     // Sortiert einfuegen!!
-                    for( n = 1; n < pTableTbl->Count(); ++n )
-                        if( (*pTableTbl)[ n ]->GetName() > aFormatName )
+                    for( n = 1; n < pTableTbl->size(); ++n )
+                        if( (*pTableTbl)[ n ].GetName() > aFormatName )
                             break;
 
-                    pTableTbl->Insert( p, n );
+                    pTableTbl->insert( pTableTbl->begin() + n, p );
                     aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
                     aLbFormat.SelectEntryPos( nDfltStylePos + n );
 
@@ -526,9 +526,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
     if( nSelPos >= nDfltStylePos )
     {
         nIndex = nSelPos - nDfltStylePos;
-        pWndPreview->NotifyChange( *(*pTableTbl)[nIndex] );
+        pWndPreview->NotifyChange( (*pTableTbl)[nIndex] );
         bBtnEnable = 0 != nIndex;
-        UpdateChecks( *(*pTableTbl)[nIndex], sal_True );
+        UpdateChecks( (*pTableTbl)[nIndex], sal_True );
     }
     else
     {
@@ -557,7 +557,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
 IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 {
     if( bSetAutoFmt )
-        pShell->SetTableAutoFmt( *(*pTableTbl)[ nIndex ] );
+        pShell->SetTableAutoFmt( (*pTableTbl)[ nIndex ] );
     EndDialog( RET_OK );
     return sal_True;
 }

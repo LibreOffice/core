@@ -305,8 +305,7 @@ public:
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
-typedef SwTableAutoFmt* SwTableAutoFmtPtr ;
-SV_DECL_PTRARR_DEL( _SwTableAutoFmtTbl, SwTableAutoFmtPtr, 1 )
+typedef boost::ptr_vector<SwTableAutoFmt> _SwTableAutoFmtTbl;
 
 class SW_DLLPUBLIC SwTableAutoFmtTbl : public _SwTableAutoFmtTbl
 {

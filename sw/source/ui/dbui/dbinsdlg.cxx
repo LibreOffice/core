@@ -120,9 +120,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-// tblafmt.hxx
-SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
-
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
 
@@ -1830,10 +1827,10 @@ void SwInsertDBColAutoPilot::Load()
                 // then load the AutoFmt file and look for Autoformat first
                 SwTableAutoFmtTbl aAutoFmtTbl;
                 aAutoFmtTbl.Load();
-                for( sal_uInt16 nAutoFmt = aAutoFmtTbl.Count(); nAutoFmt; )
-                    if( sTmp == aAutoFmtTbl[ --nAutoFmt ]->GetName() )
+                for( sal_uInt16 nAutoFmt = aAutoFmtTbl.size(); nAutoFmt; )
+                    if( sTmp == aAutoFmtTbl[ --nAutoFmt ].GetName() )
                     {
-                        pTAutoFmt = new SwTableAutoFmt( *aAutoFmtTbl[ nAutoFmt ] );
+                        pTAutoFmt = new SwTableAutoFmt( aAutoFmtTbl[ nAutoFmt ] );
                         break;
                     }
             }

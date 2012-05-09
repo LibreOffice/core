@@ -97,9 +97,6 @@ SwBoxAutoFmt* SwTableAutoFmt::pDfltBoxAutoFmt = 0;
 
 #define sAutoTblFmtName "autotbl.fmt"
 
-// SwTable AutoFormat Table
-SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
-
 namespace
 {
     /// Begins a writer-specific data block. Call before serializing any writer-specific properties.
@@ -1084,7 +1081,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
         ((SwBoxAutoFmt&)pNew->GetBoxFmt( i )).SetBox( aBox );
     }
 
-    Insert( pNew, Count() );
+    push_back( pNew );
 }
 
 sal_Bool SwTableAutoFmtTbl::Load()
@@ -1164,7 +1161,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                     bRet = pNew->Load( rStream, aVersions );
                     if( bRet )
                     {
-                        Insert( pNew, Count() );
+                        push_back( pNew );
                     }
                     else
                     {
@@ -1199,14 +1196,14 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         bRet = 0 == rStream.GetError();
 
         // Write this version number for all attributes
-        (*this)[ 0 ]->GetBoxFmt( 0 ).SaveVersionNo( rStream, AUTOFORMAT_FILE_VERSION );
+        (*this)[ 0 ].GetBoxFmt( 0 ).SaveVersionNo( rStream, AUTOFORMAT_FILE_VERSION );
 
-        rStream << (sal_uInt16)(Count() - 1);
+        rStream << (sal_uInt16)(size() - 1);
         bRet = 0 == rStream.GetError();
 
-        for( sal_uInt16 i = 1; bRet && i < Count(); ++i )
+        for( sal_uInt16 i = 1; bRet && i < size(); ++i )
         {
-            SwTableAutoFmt* pFmt = (*this)[ i ];
+            const SwTableAutoFmt* pFmt = &(*this)[ i ];
             bRet = pFmt->Save( rStream, AUTOFORMAT_FILE_VERSION );
         }
     }

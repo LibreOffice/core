@@ -804,9 +804,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     pAutoFmtTbl = new SwTableAutoFmtTbl;
                     pAutoFmtTbl->Load();
 
-                    for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->Count(); i < nCount; i++ )
+                    for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->size(); i < nCount; i++ )
                     {
-                        SwTableAutoFmt* pFmt = (*pAutoFmtTbl)[ i ];
+                        SwTableAutoFmt* pFmt = &(*pAutoFmtTbl)[ i ];
                         if( pFmt->GetName() == sAutoFmt )
                         {
                             pTAFmt = pFmt;
@@ -2598,11 +2598,11 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     {
                         SwTableAutoFmtTbl aTableTbl;
                         aTableTbl.Load();
-                        for ( sal_uInt16 n=0; n<aTableTbl.Count(); n++ )
+                        for ( sal_uInt16 n=0; n<aTableTbl.size(); n++ )
                         {
-                            if ( aTableTbl[n]->GetName() == aAutoName )
+                            if ( aTableTbl[n].GetName() == aAutoName )
                             {
-                                pTAFmt = new SwTableAutoFmt( *aTableTbl[n] );
+                                pTAFmt = new SwTableAutoFmt( aTableTbl[n] );
                                 break;
                             }
                         }
