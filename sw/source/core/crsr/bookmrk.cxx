@@ -118,9 +118,11 @@ namespace sw { namespace mark
         }
     }
 
+    //We consider the CH_TXT_ATR_FIELDSTART and CH_TXT_ATR_FIELDEND
+    //themselves to be part of the covered range
     bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
     {
-        return GetMarkStart() <= rPos && rPos < GetMarkEnd();
+        return rPos >= GetMarkStart() && rPos <= GetMarkEnd();
     }
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
