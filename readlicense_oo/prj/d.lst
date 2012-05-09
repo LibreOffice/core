@@ -12,6 +12,9 @@ dos: echo =====================================================================
 ..\%__SRC%\misc\CREDITS.odt %_DEST%\bin\CREDITS.odt
 ..\%__SRC%\misc\NOTICE %_DEST%\bin\NOTICE
 
+..\%__SRC%\misc\EULA_*.rtf %_DEST%\bin
+
+
 # URE:
 mkdir: %_DEST%\bin\ure
 ..\%__SRC%\misc\LICENSE %_DEST%\bin\ure\LICENSE

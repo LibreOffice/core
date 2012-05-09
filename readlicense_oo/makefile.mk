@@ -13,7 +13,8 @@ TARGET=source
 ALLTAR: $(MISC)/$/license.txt $(MISC)/$/LICENSE \
 	$(MISC)/$/NOTICE \
         $(MISC)$/LICENSE.odt $(MISC)$/CREDITS.odt \
-        $(MISC)$/THIRDPARTYLICENSEREADME.html
+        $(MISC)$/THIRDPARTYLICENSEREADME.html \
+        $(MISC)/EULA_en-US.rtf
 
 .IF "$(fallbacklicenses)"!=""
 $(fallbacklicenses) : $(SOURCELICENCES)
@@ -43,3 +44,5 @@ $(MISC)$/THIRDPARTYLICENSEREADME.html: html/THIRDPARTYLICENSEREADME.html
     $(COPY) html/THIRDPARTYLICENSEREADME.html $@
 $(MISC)$/NOTICE: txt/NOTICE
     $(COPY) txt/NOTICE $@
+$(MISC)/EULA_en-US.rtf: eula/EULA_en-US.rtf
+    $(COPY) eula/EULA_*.rtf $(MISC)
