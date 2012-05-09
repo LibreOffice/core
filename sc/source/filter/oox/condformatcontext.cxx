@@ -74,17 +74,17 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-void ColorScaleContext::onCharacters( const OUString& rChars )
+void ColorScaleContext::onCharacters( const OUString&  )
 {
 
 }
 
-ContextHandlerRef ColorScaleContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
+ContextHandlerRef ColorScaleContext::onCreateRecordContext( sal_Int32, SequenceInputStream& )
 {
     return 0;
 }
 
-void ColorScaleContext::onStartRecord( SequenceInputStream& rStrm )
+void ColorScaleContext::onStartRecord( SequenceInputStream& )
 {
 }
 
@@ -125,6 +125,8 @@ void CondFormatContext::onStartElement( const AttributeList& rAttribs )
 
 void CondFormatContext::onCharacters( const OUString& rChars )
 {
+    if( isCurrentElement( XLS_TOKEN( formula ) ) && mxCondFmt.get() && mxRule.get() )
+        mxRule->appendFormula( rChars );
 }
 
 ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
