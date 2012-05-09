@@ -408,6 +408,11 @@ sub create_package
         my $sla = 'sla.r';
         my $ref = "";
 
+        if ( ! $allvariables->{'HIDELICENSEDIALOG'} )
+        {
+            installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+        }
+
         my $localtempdir = $tempdir;
 
         if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
