@@ -434,6 +434,7 @@
 #define HID_FUNC_WOCHENTAG                                      "SC_HID_FUNC_WOCHENTAG"
 #define HID_FUNC_JAHR                                           "SC_HID_FUNC_JAHR"
 #define HID_FUNC_TAGE                                           "SC_HID_FUNC_TAGE"
+#define HID_FUNC_DATEDIF                                        "SC_HID_FUNC_DATEDIF"
 #define HID_FUNC_KALENDERWOCHE                                  "SC_HID_FUNC_KALENDERWOCHE"
 #define HID_FUNC_OSTERSONNTAG                                   "SC_HID_FUNC_OSTERSONNTAG"
 

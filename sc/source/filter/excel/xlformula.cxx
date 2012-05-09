@@ -382,6 +382,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocChiSqDist,     2,  3,  0,  "CHISQDIST" ),
     EXC_FUNCENTRY_ODF( ocChiSqInv,      2,  2,  0,  "CHISQINV" ),
     EXC_FUNCENTRY_ODF( ocKombin2,       2,  2,  0,  "COMBINA" ),
+    EXC_FUNCENTRY_ODF( ocGetDateDif,    3,  3,  0,  "DATEDIF" ),
     EXC_FUNCENTRY_ODF( ocGetDiffDate,   2,  2,  0,  "DAYS" ),
     EXC_FUNCENTRY_ODF( ocDecimal,       2,  2,  0,  "DECIMAL" ),
     EXC_FUNCENTRY_ODF( ocFDist,         3,  4,  0,  "FDIST" ),

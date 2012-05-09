@@ -113,6 +113,7 @@ hidspecial HID_FUNC_HEUTE        { HelpID = HID_FUNC_HEUTE; };
 hidspecial HID_FUNC_WOCHENTAG    { HelpID = HID_FUNC_WOCHENTAG; };
 hidspecial HID_FUNC_JAHR         { HelpID = HID_FUNC_JAHR; };
 hidspecial HID_FUNC_TAGE         { HelpID = HID_FUNC_TAGE; };
+hidspecial HID_FUNC_DATEDIF      { HelpID = HID_FUNC_DATEDIF; };
 hidspecial HID_FUNC_KALENDERWOCHE        { HelpID = HID_FUNC_KALENDERWOCHE; };
 hidspecial HID_FUNC_OSTERSONNTAG         { HelpID = HID_FUNC_OSTERSONNTAG; };
 hidspecial HID_FUNC_BW       { HelpID = HID_FUNC_BW; };

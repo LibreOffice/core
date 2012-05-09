@@ -591,6 +591,7 @@ void ScGetDate();
 void ScGetTime();
 void ScGetDiffDate();
 void ScGetDiffDate360();
+void ScGetDateDif();
 void ScPower();
 void ScAmpersand();
 void ScAdd();

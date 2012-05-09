@@ -412,6 +412,97 @@ void ScInterpreter::ScGetDiffDate360()
     }
 }
 
+//fdo#44456 function DATEDIF as defined in ODF1.2 (Par. 6.10.3)
+void ScInterpreter::ScGetDateDif()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDateDif" );
+    if ( MustHaveParamCount( GetByte(), 3 ) )
+    {
+        String aFormat = GetString();
+        double nDate2  = GetDouble();
+        double nDate1  = GetDouble();
+        int    dd      = nDate2 - nDate1;
+
+        //split dates in day, month, year for use with formats other than "d"
+        int d1, m1, y1, d2, m2, y2;
+        Date aDate = *( pFormatter->GetNullDate() );
+        aDate += (long) ::rtl::math::approxFloor( nDate1 );
+        y1 = aDate.GetYear();
+        m1 = aDate.GetMonth();
+        d1 = aDate.GetDay();
+        aDate = *( pFormatter->GetNullDate() );
+        aDate += (long) ::rtl::math::approxFloor( nDate2 );
+        y2 = aDate.GetYear();
+        m2 = aDate.GetMonth();
+        d2 = aDate.GetDay();
+
+        if ( dd == 0 )
+            PushInt( 0 );     // nothing to do...
+
+        if ( aFormat.EqualsIgnoreCaseAscii( "d" ) )        // return number of days
+            PushInt( dd );
+        else if (  aFormat.EqualsIgnoreCaseAscii( "m" ) )  // return number of months
+        {
+            int md = m2 - m1 + 12 * (y2 - y1);
+            if ( nDate2 > nDate1 )
+            {
+                if ( d2 < d1 )
+                    md -= 1;
+            }
+            else
+            {
+                if ( d2 > d1 )
+                    md += 1;
+            }
+            PushInt( md );
+        }
+        else if ( aFormat.EqualsIgnoreCaseAscii( "y" ) )   // return number of years
+        {
+            int yd = y2 - y1;
+            if ( y2 > y1 )
+            {
+                if ( ( m2 == m1 and d2 >= d1 ) || ( m2 > m1 ) )
+                    yd = y2 - y1 - 1;
+            }
+            else
+            {
+                if ( ( m2 == m1 and d2 <= d1 ) || ( m2 < m1 ) )
+                    yd = y2 - y1 + 1;
+            }
+            PushInt( yd );
+        }
+        else if ( aFormat.EqualsIgnoreCaseAscii( "md" ) )  // return number of days, ignoring months and years
+        {
+            aDate = Date( d2, m1, y1 );
+            double nd2 = double( aDate - *( pFormatter->GetNullDate() ) );
+            PushInt( nd2 - nDate1 );
+        }
+        else if ( aFormat.EqualsIgnoreCaseAscii( "ym" ) )  // return number of months, ignoring years
+        {
+            int md = m2 - m1;
+            if ( m2 > m1 )
+            {
+                if ( d2 < d1 )
+                    md -= 1;
+            }
+            else
+            {
+                if ( m2 < m1 && d2 > d1 )
+                    md += 1;
+            }
+            PushInt( md );
+        }
+        else if ( aFormat.EqualsIgnoreCaseAscii( "yd" ) ) // return number of days, ignoring years
+        {
+            aDate = Date( d2, m2, y1 );
+            double nd2 = double( aDate - *( pFormatter->GetNullDate() ) );
+            PushInt( nd2 - nDate1 );
+        }
+        else
+            PushIllegalArgument();               // unsupported format
+    }
+}
+
 void ScInterpreter::ScGetTimeValue()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetTimeValue" );

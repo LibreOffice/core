@@ -3076,6 +3076,7 @@ void Test::testFunctionLists()
 
     const char* aDateTime[] = {
         "DATE",
+        "DATEDIF",
         "DATEVALUE",
         "DAY",
         "DAYS",

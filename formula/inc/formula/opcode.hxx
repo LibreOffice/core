@@ -212,6 +212,7 @@ enum OpCodeEnum
         ocGetTime           = SC_OPCODE_GET_TIME,
         ocGetDiffDate       = SC_OPCODE_GET_DIFF_DATE,
         ocGetDiffDate360    = SC_OPCODE_GET_DIFF_DATE_360,
+        ocGetDateDif        = SC_OPCODE_GET_DATEDIF,
         ocMin               = SC_OPCODE_MIN,
         ocMax               = SC_OPCODE_MAX,
         ocSum               = SC_OPCODE_SUM,

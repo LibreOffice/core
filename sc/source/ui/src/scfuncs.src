@@ -972,6 +972,52 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The start date for calculating the difference in days." ;
         };
     };
+     // -=*# Resource for function DATEDIF #*=-
+    Resource SC_OPCODE_GET_DATEDIF
+    {
+        String 1    // description
+        {
+            Text [ en-US ] = "Returns the number of whole days, months or years between 'start date' and 'end date'";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_DATETIME;
+            U2S( HID_FUNC_DATEDIF );
+            3;  0;  0; 0;
+            0;
+        };
+
+        String 2 // name of parameter 1         DateDif
+        {
+            Text [ en-US ] = "Start date";
+        };
+
+        String 3 // description of parameter 1  DateDif
+        {
+            Text [ en-US ] = "The start date";
+        };
+
+        String 4 // name of parameter 2         DateDif
+        {
+            Text [ en-US ] = "End date";
+        };
+
+        String 5 // description of parameter 2  DateDif
+        {
+            Text [ en-US ] = "The end date";
+        };
+
+        String 6 // name of parameter 3         DateDif
+        {
+            Text [ en-US ] = "Format";
+        };
+
+        String 7 // description of parameter 3  DateDif
+        {
+            Text [ en-US ] = "Format of the result";
+        };
+    };
      // -=*# Resource for function KALENDERWOCHE #*=-
     Resource SC_OPCODE_WEEK
     {

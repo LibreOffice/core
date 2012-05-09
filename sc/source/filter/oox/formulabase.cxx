@@ -665,7 +665,6 @@ static const FunctionData saFuncTableBiff5[] =
     { "COUNTIF",                "COUNTIF",              346,    346,    2,  2,  V, { RO, VR }, 0 },
     { "COUNTBLANK",             "COUNTBLANK",           347,    347,    1,  1,  V, { RO }, 0 },
     { "ISPMT",                  "ISPMT",                350,    350,    4,  4,  V, { VR }, 0 },
-    { 0,                        "DATEDIF",              351,    351,    3,  3,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc
     { 0,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { 0,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { VR }, 0 },
@@ -742,6 +741,7 @@ static const FunctionData saFuncTableOdf[] =
     { "CHISQINV",               0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "COMBINA",                0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "DAYS",                   0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "DATEDIF",                0,                      NOID,   NOID,   3,  3,  V, { RR }, FUNCFLAG_MACROCALLODF },
     { "DECIMAL",                0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "FDIST",                  0,                      NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "FINV",                   0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },

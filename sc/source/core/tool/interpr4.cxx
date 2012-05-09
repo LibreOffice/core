@@ -3910,6 +3910,7 @@ StackVar ScInterpreter::Interpret()
                 case ocGetTime          : ScGetTime();                  break;
                 case ocGetDiffDate      : ScGetDiffDate();              break;
                 case ocGetDiffDate360   : ScGetDiffDate360();           break;
+                case ocGetDateDif       : ScGetDateDif();               break;
                 case ocMin              : ScMin( false );               break;
                 case ocMinA             : ScMin( true );                break;
                 case ocMax              : ScMax( false );               break;

@@ -170,6 +170,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GET_TIME { Text = "TIME" ; };
     String SC_OPCODE_GET_DIFF_DATE { Text = "DAYS" ; };
     String SC_OPCODE_GET_DIFF_DATE_360 { Text = "DAYS360" ; };
+    String SC_OPCODE_GET_DATEDIF { Text = "DATEDIF" ; };
     String SC_OPCODE_MIN { Text = "MIN" ; };
     String SC_OPCODE_MIN_A { Text = "MINA" ; };
     String SC_OPCODE_MAX { Text = "MAX" ; };
@@ -502,6 +503,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GET_TIME { Text = "TIME" ; };
     String SC_OPCODE_GET_DIFF_DATE { Text = "DAYS" ; };
     String SC_OPCODE_GET_DIFF_DATE_360 { Text = "DAYS360" ; };
+    String SC_OPCODE_GET_DATEDIF { Text = "DATEDIF" ; };
     String SC_OPCODE_MIN { Text = "MIN" ; };
     String SC_OPCODE_MIN_A { Text = "MINA" ; };
     String SC_OPCODE_MAX { Text = "MAX" ; };
@@ -1174,6 +1176,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_GET_DIFF_DATE_360
     {
         Text [ en-US ] = "DAYS360" ;
+    };
+    String SC_OPCODE_GET_DATEDIF
+    {
+        Text [ en-US ] = "DATEDIF" ;
     };
     String SC_OPCODE_MIN
     {
