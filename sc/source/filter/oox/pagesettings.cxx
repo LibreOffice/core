@@ -208,7 +208,7 @@ void PageSettings::importPageSetup( const Relations& rRelations, const Attribute
     maModel.mnPageOrder     = rAttribs.getToken( XML_pageOrder, XML_downThenOver );
     maModel.mnCellComments  = rAttribs.getToken( XML_cellComments, XML_none );
     maModel.mnPrintErrors   = rAttribs.getToken( XML_errors, XML_displayed );
-    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
+    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, false );
     maModel.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
     maModel.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
     maModel.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
@@ -230,7 +230,7 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, const Attr
     maModel.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
     maModel.mnVerPrintRes   = rAttribs.getInteger( XML_verticalDpi, 600 );
     maModel.mnOrientation   = rAttribs.getToken( XML_orientation, XML_default );
-    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
+    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, false );
     maModel.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
     maModel.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
     maModel.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
@@ -1050,8 +1050,8 @@ void PageSettingsConverter::writePageSettingsProperties(
     // paper orientation
     bool bLandscape = rModel.mnOrientation == XML_landscape;
     // default orientation for current sheet type (chart sheets default to landscape)
-    if( !rModel.mbValidSettings || (rModel.mnOrientation == XML_default) )
-        bLandscape = bChartSheet;
+    if( bChartSheet && ( !rModel.mbValidSettings || (rModel.mnOrientation == XML_default) ) )
+        bLandscape = true;
 
     // paper size
     if( !rModel.mbValidSettings )
