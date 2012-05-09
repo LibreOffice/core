@@ -123,19 +123,33 @@ private:
                             {}
 };
 
-// =======================================================================
+//sort normal to the start
+static int sortWeightValue(FontWeight eWeight)
+{
+    if (eWeight == WEIGHT_NORMAL)
+        return 0;
+    if (eWeight < WEIGHT_NORMAL)
+        return eWeight + 1;
+    if (eWeight > WEIGHT_NORMAL)
+        return eWeight - 1;
+}
 
 static StringCompare ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
                                           ImplFontListFontInfo* pInfo2 )
 {
-    if ( pInfo1->GetWeight() < pInfo2->GetWeight() )
-        return COMPARE_LESS;
-    else if ( pInfo1->GetWeight() > pInfo2->GetWeight() )
-        return COMPARE_GREATER;
-
+    //Sort non italic before italics
     if ( pInfo1->GetItalic() < pInfo2->GetItalic() )
         return COMPARE_LESS;
     else if ( pInfo1->GetItalic() > pInfo2->GetItalic() )
+        return COMPARE_GREATER;
+
+    //Sort normal weight to the start, followed by lightest to heaviest weights
+    int nWeight1 = sortWeightValue(pInfo1->GetWeight());
+    int nWeight2 = sortWeightValue(pInfo2->GetWeight());
+
+    if ( nWeight1 < nWeight2 )
+        return COMPARE_LESS;
+    else if ( nWeight1 > nWeight2 )
         return COMPARE_GREATER;
 
     return pInfo1->GetStyleName().CompareTo( pInfo2->GetStyleName() );
