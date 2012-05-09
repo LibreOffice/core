@@ -213,11 +213,11 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     // creates a new format
     sal_uInt8       nL, nH; // Low-/High-Nibble
     sal_uInt8       nForm = nFormat;
-    String      aFormString;
-    const sal_Char* pFormString = 0;
+    String          aFormString;
     sal_Int16       eType = NUMBERFORMAT_ALL;
     sal_uInt32      nIndex1;
     sal_uInt32      nHandle;
+    NfIndexTableOffset eIndexTableOffset = NF_NUMERIC_START;
     sal_Bool        bDefault = false;
     //void GenerateFormat( aFormString, eType, COUNTRY_SYSTEM, LANGUAGE_SYSTEM,
     //  sal_Bool bThousand, sal_Bool IsRed, sal_uInt16 nPrecision, sal_uInt16 nAnzLeading );
@@ -302,57 +302,61 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                 case 0x02:  // Date: Day, Month, Year
                     //fDate;dfDayMonthYearLong;
                     eType = NUMBERFORMAT_DATE;
-                    pFormString = "DD.MM.YYYY";
+                    eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
                 case 0x03:  // Date: Day, Month
                     //fDate;dfDayMonthLong;
                     eType = NUMBERFORMAT_DATE;
-                    pFormString = "DD.MMMM";
+                    aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_DD);
+                    aFormString += pFormTable->GetDateSep();    // matches last eLanguage
+                    aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_MMMM);
                     break;
                 case 0x04:  // Date: Month, Year
                     //fDate;dfMonthYearLong;
                     eType = NUMBERFORMAT_DATE;
-                    pFormString = "MM.YYYY";
+                    aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_MM);
+                    aFormString += pFormTable->GetDateSep();    // matches last eLanguage
+                    aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_YYYY);
                     break;
                 case 0x05:  // text format
                     //fString;nSt;
                     eType = NUMBERFORMAT_TEXT;
-                    pFormString = "@";
+                    eIndexTableOffset = NF_TEXT;
                     break;
                 case 0x06:  // hidden
                     //wFlag |= paHideAll;bSetFormat = sal_False;
                     eType = NUMBERFORMAT_NUMBER;
-                    pFormString = "";
+                    aFormString = "\"\"";
                     break;
                 case 0x07:  // Time: hour, min, sec
                     //fTime;tfHourMinSec24;
                     eType = NUMBERFORMAT_TIME;
-                    pFormString = "HH:MM:SS";
+                    eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
                 case 0x08:  // Time: hour, min
                     //fTime;tfHourMin24;
                     eType = NUMBERFORMAT_TIME;
-                    pFormString = "HH:MM";
+                    eIndexTableOffset = NF_TIME_HHMM;
                     break;
                 case 0x09:  // Date, intern sal_Int32 1
                     //fDate;dfDayMonthYearLong;
                     eType = NUMBERFORMAT_DATE;
-                    pFormString = "DD.MM.YYYY";
+                    eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
                 case 0x0A:  // Date, intern sal_Int32 2
                     //fDate;dfDayMonthYearLong;
                     eType = NUMBERFORMAT_DATE;
-                    pFormString = "DD.MM.YYYY";
+                    eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
                 case 0x0B:  // Time, intern sal_Int32 1
                     //fTime;tfHourMinSec24;
                     eType = NUMBERFORMAT_TIME;
-                    pFormString = "HH:MM:SS";
+                    eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
                 case 0x0C:  // Time, intern sal_Int32 2
                     //fTime;tfHourMinSec24;
                     eType = NUMBERFORMAT_TIME;
-                    pFormString = "HH:MM:SS";
+                    eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
                 case 0x0F:  // standard
                     //fStandard;nSt;
@@ -377,11 +381,10 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     // put format into table
     if( bDefault )
         nHandle = 0;
+    else if (eIndexTableOffset != NF_NUMERIC_START)
+        nHandle = pFormTable->GetFormatIndex( eIndexTableOffset, eLanguage);
     else
     {
-        if( pFormString )
-            aFormString.AssignAscii( pFormString );
-
         xub_StrLen  nDummy;
         pFormTable->PutEntry( aFormString, nDummy, eType, nHandle, eLanguage );
     }
