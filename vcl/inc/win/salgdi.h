@@ -53,10 +53,6 @@ class ImplFontAttrCache;
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
-// win32 platform specific options. Move them to the PMK file?
-
-#define GNG_VERT_HACK
-
 #ifdef ENABLE_GRAPHITE
 class RawFontData;
 class GrFontData
@@ -144,7 +140,6 @@ private:
     void                    ReadCmapTable( HDC ) const;
     void                    GetFontCapabilities( HDC hDC ) const;
 
-#ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
     typedef boost::unordered_set<sal_UCS4> UcsHashSet;
@@ -153,7 +148,6 @@ private:
 public:
     bool                    HasGSUBstitutions( HDC ) const;
     bool                    IsGSUBstituted( sal_UCS4 ) const;
-#endif // GNG_VERT_HACK
 };
 
 // ------------------
