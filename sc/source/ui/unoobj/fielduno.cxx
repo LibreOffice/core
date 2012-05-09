@@ -74,6 +74,16 @@ const SfxItemPropertySet* getDateTimePropertySet()
     return &aMap;
 }
 
+const SfxItemPropertySet* getEmptyPropertySet()
+{
+    static SfxItemPropertyMapEntry aMapContent[] =
+    {
+        {0,0,0,0,0,0}
+    };
+    static SfxItemPropertySet aMap(aMapContent);
+    return &aMap;
+}
+
 const SfxItemPropertySet* lcl_GetURLPropertySet()
 {
     static SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
@@ -979,6 +989,8 @@ ScEditFieldObj::ScEditFieldObj(
     switch (meType)
     {
         case text::textfield::Type::FILE:
+            pPropSet = getEmptyPropertySet();
+        break;
         case text::textfield::Type::EXTENDED_FILE:
             pPropSet = lcl_GetFileFieldPropertySet();
         break;
@@ -1159,7 +1171,6 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         case text::textfield::Type::URL:
             setPropertyValueURL(aPropertyName, aValue);
         break;
-        case text::textfield::Type::FILE:
         case text::textfield::Type::EXTENDED_FILE:
             setPropertyValueFile(aPropertyName, aValue);
         break;
@@ -1172,6 +1183,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         case text::textfield::Type::TABLE:
             setPropertyValueSheet(aPropertyName, aValue);
         break;
+        case text::textfield::Type::FILE:
         default:
             throw beans::UnknownPropertyException();
     }
@@ -1213,7 +1225,6 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
     {
         case text::textfield::Type::URL:
             return getPropertyValueURL(aPropertyName);
-        case text::textfield::Type::FILE:
         case text::textfield::Type::EXTENDED_FILE:
             return getPropertyValueFile(aPropertyName);
         case text::textfield::Type::DATE:
@@ -1221,6 +1232,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
         case text::textfield::Type::EXTENDED_DATE:
         case text::textfield::Type::EXTENDED_TIME:
             return getPropertyValueDateTime(aPropertyName);
+        case text::textfield::Type::FILE:
         default:
             throw beans::UnknownPropertyException();
     }
