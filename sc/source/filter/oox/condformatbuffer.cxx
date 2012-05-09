@@ -43,6 +43,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <svl/intitem.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -50,8 +51,15 @@
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "stylesbuffer.hxx"
+
 #include "colorscale.hxx"
 #include "document.hxx"
+#include "convuno.hxx"
+#include "docsh.hxx"
+#include "docfunc.hxx"
+#include "markdata.hxx"
+#include "docpool.hxx"
+#include "scitems.hxx"
 
 #include <iostream>
 
@@ -654,7 +662,22 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         ScColorScaleFormat* pFormat = new ScColorScaleFormat();
 
         mpColor->AddEntries( pFormat );
-        rDoc.AddColorScaleFormat(pFormat);
+        sal_Int32 nIndex = rDoc.AddColorScaleFormat(pFormat);
+
+        // apply attributes to cells
+        //
+        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
+        for( ApiCellRangeList::const_iterator itr = rRanges.begin(); itr != rRanges.end(); ++itr)
+        {
+            ScRange aRange;
+            ScUnoConversion::FillScRange(aRange, *itr);
+            ScPatternAttr aPattern( rDoc.GetPool() );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
+            ScDocShell* pShell = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+            ScMarkData aMarkData;
+            aMarkData.SetMarkArea(aRange);
+            pShell->GetDocFunc().ApplyAttributes( aMarkData, aPattern, sal_True, sal_True );
+        }
     }
 }
 
