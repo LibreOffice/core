@@ -314,7 +314,7 @@ sub collect_children
     my ( $itemhash, $parent, $order ) = @_;
 
     my $item;
-    foreach $item ( keys %{$itemhash} )
+    foreach $item ( sort keys %{$itemhash} )
     {
         if ( $itemhash->{$item}->{'ParentID'} eq $parent )
         {
