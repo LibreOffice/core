@@ -411,10 +411,15 @@ rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
     switch( c )
     {
     case 0xA0:      // is a hard blank
+        pStr = OOO_STRING_SVTOOLS_HTML_S_nbsp;
+        break;
+// This was labelled as:
 //!! the TextConverter has a problem with this character - so change it to
 // a hard space - that's the same as our 5.2
-    case 0x2011:    // is a hard hyphen
-        pStr = OOO_STRING_SVTOOLS_HTML_S_nbsp;
+//   but that just breaks html output.  Setting the numberic html entity
+//   seems fine.
+    case 0x2011:       // is a hard hyphen
+        pStr = "#8209";
         break;
     case 0xAD:      // is a soft hyphen
         pStr = OOO_STRING_SVTOOLS_HTML_S_shy;
