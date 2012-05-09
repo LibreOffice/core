@@ -27,16 +27,17 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,unoil/javamaker))
 
-UIJM := $(call gb_CustomTarget_get_workdir,unoil/javamaker)
+unoil_JAVADIR := $(call gb_CustomTarget_get_workdir,unoil/javamaker)
 
-$(call gb_CustomTarget_get_target,unoil/javamaker) : $(UIJM)/done
+$(call gb_CustomTarget_get_target,unoil/javamaker) : $(unoil_JAVADIR)/done
 
-$(UIJM)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker) | $(UIJM)/.dir
+$(unoil_JAVADIR)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
+		$(call gb_Executable_get_target_for_build,javamaker) \
+		| $(unoil_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
-	rm -r $(UIJM) && \
-	$(call gb_Helper_execute,javamaker -BUCR -O$(UIJM) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
+	rm -r $(unoil_JAVADIR) && \
+	$(call gb_Helper_execute,javamaker -BUCR -O$(unoil_JAVADIR) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
 	touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

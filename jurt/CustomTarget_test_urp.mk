@@ -27,26 +27,28 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,jurt/test/com/sun/star/lib/uno/protocols/urp))
 
-JUTU := $(call gb_CustomTarget_get_workdir,jurt/test/com/sun/star/lib/uno/protocols/urp)
+jurt_TESTURP := $(call gb_CustomTarget_get_workdir,jurt/test/com/sun/star/lib/uno/protocols/urp)
 
-$(call gb_CustomTarget_get_target,jurt/test/com/sun/star/lib/uno/protocols/urp) : $(JUTU)/done
+$(call gb_CustomTarget_get_target,jurt/test/com/sun/star/lib/uno/protocols/urp) : $(jurt_TESTURP)/done
 
-$(JUTU)/done : $(JUTU)/registry.rdb $(OUTDIR)/bin/types.rdb \
+$(jurt_TESTURP)/done : $(jurt_TESTURP)/registry.rdb $(OUTDIR)/bin/types.rdb \
 		$(call gb_Executable_get_target_for_build,javamaker)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
-	$(call gb_Helper_execute,javamaker -BUCR -O$(JUTU) -nD $< -X$(OUTDIR)/bin/types.rdb) && \
+	$(call gb_Helper_execute,javamaker -BUCR -O$(jurt_TESTURP) -nD $< -X$(OUTDIR)/bin/types.rdb) && \
 	touch $@
 
 # TODO: would it be possible to reuse UnoApiTarget for this?
-$(JUTU)/registry.rdb : $(JUTU)/interfaces.urd \
+$(jurt_TESTURP)/registry.rdb : $(jurt_TESTURP)/interfaces.urd \
 		$(call gb_Executable_get_target_for_build,regmerge)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),RGM,1)
 	rm -f $@ && \
 	$(call gb_Helper_execute,regmerge $@ /UCR $<)
 
-$(JUTU)/interfaces.urd : $(SRCDIR)/jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl \
-		$(call gb_Executable_get_target_for_build,idlc) | $(JUTU)/urd/.dir
+$(jurt_TESTURP)/interfaces.urd : \
+		$(SRCDIR)/jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl \
+		$(call gb_Executable_get_target_for_build,idlc) \
+		| $(jurt_TESTURP)/urd/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
-	$(call gb_Helper_execute,idlc -O$(JUTU) -I$(OUTDIR)/idl -cid -we $<)
+	$(call gb_Helper_execute,idlc -O$(jurt_TESTURP) -I$(OUTDIR)/idl -cid -we $<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

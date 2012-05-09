@@ -26,37 +26,34 @@
 ## instead of those above.
 ##
 
-OCDIR := $(SRCDIR)/officecfg/registry
-include $(OCDIR)/files.mk
+include $(SRCDIR)/officecfg/registry/files.mk
 
 $(eval $(call gb_CustomTarget_CustomTarget,officecfg/registry))
 
-OCRG := $(call gb_CustomTarget_get_workdir,officecfg/registry)
-
 $(call gb_CustomTarget_get_target,officecfg/registry) : \
-	$(foreach i,$(officecfg_FILES),$(OCRG)/$(i).hxx)
+	$(foreach i,$(officecfg_FILES),$(call gb_CustomTarget_get_workdir,officecfg/registry)/$(i).hxx)
 
-define oc_target
-$(OCRG)/$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
-            $(OCDIR)/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
-            $(OCDIR)/cppheader.xsl | $(gb_XSLTPROCTARGET)
+define officecfg_TARGET
+$(call gb_CustomTarget_get_workdir,officecfg/registry)/$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
+            $(SRCDIR)/officecfg/registry/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
+            $(SRCDIR)/officecfg/registry/cppheader.xsl | $(gb_XSLTPROCTARGET)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),XSL,1)
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(dir $$@) && \
         $$(gb_XSLTPROC) --nonet --stringparam ns1 \
             $(if $(1), \
                 $(1) --stringparam ns2 $(if $(2),$(2) --stringparam ns3)) $$* \
-            -o $$@ $(OCDIR)/cppheader.xsl $$<)
+            -o $$@ $(SRCDIR)/officecfg/registry/cppheader.xsl $$<)
 
 endef
 
 # Sort longer paths before their prefixes, as at least GNU Make 3.81 on Mac OS X
 # appears to let % span sub-directories, so that the above rule would produce
 # unexpected results; sorting this way seems to avoid the problem:
-$(eval $(call oc_target,Office,DataAccess))
-$(eval $(call oc_target,Office,OOoImprovement))
-$(eval $(call oc_target,Office,UI))
-$(eval $(call oc_target,Office))
-$(eval $(call oc_target,TypeDetection))
-$(eval $(call oc_target,ucb))
-$(eval $(call oc_target))
+$(eval $(call officecfg_TARGET,Office,DataAccess))
+$(eval $(call officecfg_TARGET,Office,OOoImprovement))
+$(eval $(call officecfg_TARGET,Office,UI))
+$(eval $(call officecfg_TARGET,Office))
+$(eval $(call officecfg_TARGET,TypeDetection))
+$(eval $(call officecfg_TARGET,ucb))
+$(eval $(call officecfg_TARGET))

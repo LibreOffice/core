@@ -27,13 +27,12 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde/fpicker))
 
-VCKF := $(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)
-
 $(call gb_CustomTarget_get_target,vcl/unx/kde/fpicker) : \
-	$(VCKF)/kdefilepicker.moc.cxx
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)/kdefilepicker.moc.cxx
 
-$(VCKF)/kdefilepicker.moc.cxx : \
-		$(SRCDIR)/vcl/unx/kde/fpicker/kdefilepicker.hxx | $(VCKF)/.dir
+$(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)/kdefilepicker.moc.cxx :\
+		$(SRCDIR)/vcl/unx/kde/fpicker/kdefilepicker.hxx \
+		| $(call gb_CustomTarget_get_workdir,vcl/unx/kde/fpicker)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
 	$(MOC) -o $@ $<
 

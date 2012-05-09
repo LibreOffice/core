@@ -27,13 +27,7 @@
 
 $(eval $(call gb_Library_Library,emboleobj))
 
-ifeq ($(OS),WNT)
-emboleobj_suffix := .windows
-else
-emboleobj_suffix :=
-endif
-
-$(eval $(call gb_Library_set_componentfile,emboleobj,embeddedobj/source/msole/emboleobj$(emboleobj_suffix)))
+$(eval $(call gb_Library_set_componentfile,emboleobj,embeddedobj/source/msole/emboleobj$(if $(filter WNT,$(OS)),.windows)))
 
 $(eval $(call gb_Library_set_include,emboleobj,\
 	-I$(SRCDIR)/embeddedobj/source/inc \

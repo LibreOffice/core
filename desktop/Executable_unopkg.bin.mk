@@ -26,21 +26,21 @@
 # instead of those above.
 
 ifeq ($(OS),WNT)
-unopkgbin := unopkg_bin
+desktop_UNOPKGBIN := unopkg_bin
 else
-unopkgbin := unopkg.bin
+desktop_UNOPKGBIN := unopkg.bin
 endif
 
-$(eval $(call gb_Executable_Executable,$(unopkgbin)))
+$(eval $(call gb_Executable_Executable,$(desktop_UNOPKGBIN)))
 
-$(eval $(call gb_Executable_set_targettype_gui,$(unopkgbin),YES))
+$(eval $(call gb_Executable_set_targettype_gui,$(desktop_UNOPKGBIN),YES))
 
-$(eval $(call gb_Executable_set_include,$(unopkgbin),\
+$(eval $(call gb_Executable_set_include,$(desktop_UNOPKGBIN),\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_use_libraries,$(unopkgbin),\
+$(eval $(call gb_Executable_use_libraries,$(desktop_UNOPKGBIN),\
     comphelper \
     sal \
     tl \
@@ -48,15 +48,15 @@ $(eval $(call gb_Executable_use_libraries,$(unopkgbin),\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,$(unopkgbin),\
+$(eval $(call gb_Executable_add_cobjects,$(desktop_UNOPKGBIN),\
     desktop/source/pkgchk/unopkg/unopkg_main \
 ))
 
 ifeq ($(OS),WNT)
 
-# the resulting executable is called $(unopkgbin).exe, copy it to $(unopkgbin)
-$(eval $(call gb_Package_Package,$(unopkgbin),$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,$(unopkgbin),bin/unopkg.bin,$(unopkgbin).exe))
+# the resulting executable is called $(desktop_UNOPKGBIN).exe, copy it to $(desktop_UNOPKGBIN)
+$(eval $(call gb_Package_Package,$(desktop_UNOPKGBIN),$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,$(desktop_UNOPKGBIN),bin/unopkg.bin,$(desktop_UNOPKGBIN).exe))
 
 endif
 

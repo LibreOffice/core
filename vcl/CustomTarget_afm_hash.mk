@@ -25,11 +25,12 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/generic/fontmanager))
 
-VCFM := $(call gb_CustomTarget_get_workdir,vcl/generic/fontmanager)
+$(call gb_CustomTarget_get_target,vcl/generic/fontmanager) : \
+	$(call gb_CustomTarget_get_workdir,vcl/generic/fontmanager)/afm_hash.hpp
 
-$(call gb_CustomTarget_get_target,vcl/generic/fontmanager) : $(VCFM)/afm_hash.hpp
-
-$(VCFM)/afm_hash.hpp : $(SRCDIR)/vcl/generic/fontmanager/afm_keyword_list | $(VCFM)/.dir
+$(call gb_CustomTarget_get_workdir,vcl/generic/fontmanager)/afm_hash.hpp : \
+		$(SRCDIR)/vcl/generic/fontmanager/afm_keyword_list \
+		| $(call gb_CustomTarget_get_workdir,vcl/generic/fontmanager)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GPF,1)
 	$(GPERF) -C -t -l -L C++ -m 20 -Z AfmKeywordHash -k '1,4,6,$$' $< | sed -e "s/(char\*)0/(char\*)0, NOPE/g" | grep -v "^#line" > $@
 

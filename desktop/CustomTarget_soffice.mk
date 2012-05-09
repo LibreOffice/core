@@ -27,11 +27,12 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,desktop/soffice))
 
-DESO := $(call gb_CustomTarget_get_workdir,desktop/soffice)
+$(call gb_CustomTarget_get_target,desktop/soffice) : \
+	$(call gb_CustomTarget_get_workdir,desktop/soffice)/soffice.sh
 
-$(call gb_CustomTarget_get_target,desktop/soffice) : $(DESO)/soffice.sh
-
-$(DESO)/soffice.sh : $(SRCDIR)/desktop/scripts/soffice.sh | $(DESO)/.dir
+$(call gb_CustomTarget_get_workdir,desktop/soffice)/soffice.sh : \
+		$(SRCDIR)/desktop/scripts/soffice.sh \
+		| $(call gb_CustomTarget_get_workdir,desktop/soffice)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 ifneq ($(JITC_PROCESSOR_TYPE),)
 	sed -e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/export JITC_PROCESSOR_TYPE=$(JITC_PROCESSOR_TYPE)/" $< > $@

@@ -27,17 +27,16 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extensions/source/activex))
 
-EXSA := $(call gb_CustomTarget_get_workdir,extensions/source/activex)
-
 $(call gb_CustomTarget_get_target,extensions/source/activex) : \
-	$(EXSA)/SOActionsApproval.cxx \
-	$(EXSA)/SOActiveX.cxx \
-	$(EXSA)/SOComWindowPeer.cxx \
-	$(EXSA)/SODispatchInterceptor.cxx \
-	$(EXSA)/StdAfx2.cxx \
-	$(EXSA)/so_activex.cxx \
+	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/SOActionsApproval.cxx \
+	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/SOActiveX.cxx \
+	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/SOComWindowPeer.cxx \
+	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/SODispatchInterceptor.cxx \
+	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/StdAfx2.cxx \
+	$(call gb_CustomTarget_get_workdir,extensions/source/activex)/so_activex.cxx \
 
-$(EXSA)/% : $(SRCDIR)/extensions/source/activex/%
+$(call gb_CustomTarget_get_workdir,extensions/source/activex)/% : \
+		$(SRCDIR)/extensions/source/activex/%
 	cp $< $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

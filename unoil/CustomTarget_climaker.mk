@@ -29,17 +29,18 @@ include $(SRCDIR)/unoil/climaker/version.txt
 
 $(eval $(call gb_CustomTarget_CustomTarget,unoil/climaker))
 
-UICM := $(call gb_CustomTarget_get_workdir,unoil/climaker)
+unoil_CLIDIR := $(call gb_CustomTarget_get_workdir,unoil/climaker)
 
 $(call gb_CustomTarget_get_target,unoil/climaker) : \
-	$(UICM)/cli_oootypes.dll \
-	$(UICM)/cli_oootypes.config \
-	$(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
+	$(unoil_CLIDIR)/cli_oootypes.dll \
+	$(unoil_CLIDIR)/cli_oootypes.config \
+	$(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
 
-$(UICM)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
+$(unoil_CLIDIR)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		$(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
 		$(OUTDIR)/bin/cliuno.snk $(OUTDIR)/bin/cli_uretypes.dll \
-		$(call gb_Executable_get_target_for_build,climaker) | $(UICM)/.dir
+		$(call gb_Executable_get_target_for_build,climaker) \
+		| $(unoil_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,climaker \
@@ -53,14 +54,16 @@ $(UICM)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		--keyfile $(OUTDIR)/bin/cliuno.snk \
 		$(OUTDIR)/bin/offapi.rdb) > /dev/null)
 
-$(UICM)/cli_oootypes.config : $(SRCDIR)/unoil/climaker/cli_oootypes_config \
-		$(SRCDIR)/unoil/climaker/version.txt | $(UICM)/.dir
+$(unoil_CLIDIR)/cli_oootypes.config : \
+		$(SRCDIR)/unoil/climaker/cli_oootypes_config \
+		$(SRCDIR)/unoil/climaker/version.txt | $(unoil_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	perl $(SRCDIR)/solenv/bin/clipatchconfig.pl $^ $@)
 
-$(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : $(UICM)/cli_oootypes.config \
-		$(UICM)/cli_oootypes.dll $(OUTDIR)/bin/cliuno.snk
+$(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : \
+		$(unoil_CLIDIR)/cli_oootypes.config \
+		$(unoil_CLIDIR)/cli_oootypes.dll $(OUTDIR)/bin/cliuno.snk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AL ,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	al -out:$@ \

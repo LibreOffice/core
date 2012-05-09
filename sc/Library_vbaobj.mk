@@ -135,10 +135,10 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 
 #http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50255
 ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-INTEL)
-gccthunkBroken := $(shell expr $(gb_CCVER) \>= 40500 \& $(gb_CCVER) \< 40602)
+sc_gccthunkBroken := $(shell expr $(gb_CCVER) \>= 40500 \& $(gb_CCVER) \< 40602)
 endif
 
-ifeq ($(gccthunkBroken),1)
+ifeq ($(sc_gccthunkBroken),1)
 $(eval $(call gb_Library_add_cxxobjects,vbaobj,\
     sc/source/ui/vba/vbasheetobjects \
     , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \

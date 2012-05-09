@@ -27,12 +27,11 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge/inc))
 
-ACBI := $(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)
-
 $(call gb_CustomTarget_get_target,accessibility/bridge/inc) : \
-    $(ACBI)/WindowsAccessBridgeAdapter.h
+    $(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)/WindowsAccessBridgeAdapter.h
 
-$(ACBI)/WindowsAccessBridgeAdapter.h :| $(ACBI)/.dir \
+$(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)/WindowsAccessBridgeAdapter.h :| \
+        $(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)/.dir \
         $(call gb_Jar_get_target,java_uno_accessbridge)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVH,1)
 	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) && \

@@ -28,15 +28,15 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,clucene/source))
 
-CLSO := $(call gb_CustomTarget_get_workdir,clucene/source)
+clucene_DIR := $(call gb_CustomTarget_get_workdir,clucene/source)
 
-$(call gb_CustomTarget_get_target,clucene/source) : $(CLSO)/done
+$(call gb_CustomTarget_get_target,clucene/source) : $(clucene_DIR)/done
 
 # FIXME: do not hardcode the path here
 ifeq ($(OS_FOR_BUILD),WNT)
-cl_FIXED_TARFILE_LOCATION := $(shell cygpath -u $(TARFILE_LOCATION))/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
+clucene_FIXED_TARFILE_LOCATION := $(shell cygpath -u $(TARFILE_LOCATION))/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
 else
-cl_FIXED_TARFILE_LOCATION := $(TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
+clucene_FIXED_TARFILE_LOCATION := $(TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz
 endif
 
 ifeq ($(OS),WNT)
@@ -57,7 +57,7 @@ endif
 
 # clucene-multimap-put.patch was proposed upstream, see
 # <http://sourceforge.net/mailarchive/message.php?msg_id=29143260>:
-$(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
+$(clucene_DIR)/done : $(clucene_FIXED_TARFILE_LOCATION) \
 		$(_CLUCENE_CONFIG_H) $(CLUCENE_CONFIG_H)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TAR,1)
 	$(call gb_Helper_abbreviate_dirs, \
@@ -69,16 +69,16 @@ $(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-debug.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-narrowing-conversions.patch && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-multimap-put.patch && \
-	for i in `find $(CLSO)/ -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done)
+	for i in `find $(clucene_DIR)/ -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done)
 	#FIXME ?, our rules expect .cxx
 ifneq ($(OS),WNT)
 	#dirent.h is a problem, move it around
-	mkdir -p $(CLSO)/inc/internal/CLucene/util
-	mv $(CLSO)/src/shared/CLucene/util/dirent.h $(CLSO)/inc/internal/CLucene/util
+	mkdir -p $(clucene_DIR)/inc/internal/CLucene/util
+	mv $(clucene_DIR)/src/shared/CLucene/util/dirent.h $(clucene_DIR)/inc/internal/CLucene/util
 endif
 	#To generate these, run cmake for each sufficiently different platform, customize and stick into configs
-	cp $(CLUCENE_CONFIG_H) $(CLSO)/src/shared/CLucene/clucene-config.h
-	cp $(_CLUCENE_CONFIG_H) $(CLSO)/src/shared/CLucene/_clucene-config.h
+	cp $(CLUCENE_CONFIG_H) $(clucene_DIR)/src/shared/CLucene/clucene-config.h
+	cp $(_CLUCENE_CONFIG_H) $(clucene_DIR)/src/shared/CLucene/_clucene-config.h
 	touch $@
 
 # vim: set noet sw=4 ts=4:

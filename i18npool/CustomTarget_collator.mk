@@ -28,22 +28,25 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,i18npool/collator))
 
-IPCO := $(call gb_CustomTarget_get_workdir,i18npool/collator)
-TXTLIST := $(notdir $(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt))
+i18npool_CODIR := $(call gb_CustomTarget_get_workdir,i18npool/collator)
+i18npool_COTXTS := $(notdir $(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt))
 
 $(call gb_CustomTarget_get_target,i18npool/collator) : \
-	$(IPCO)/lrl_include.hxx $(foreach txt,$(TXTLIST), \
-		$(patsubst %.txt,$(IPCO)/collator_%.cxx,$(txt)))
+	$(i18npool_CODIR)/lrl_include.hxx $(foreach txt,$(i18npool_COTXTS), \
+		$(patsubst %.txt,$(i18npool_CODIR)/collator_%.cxx,$(txt)))
 
-$(IPCO)/collator_%.cxx : $(SRCDIR)/i18npool/source/collator/data/%.txt \
-		$(call gb_Executable_get_target_for_build,gencoll_rule) | $(IPCO)/.dir
+$(i18npool_CODIR)/collator_%.cxx : \
+		$(SRCDIR)/i18npool/source/collator/data/%.txt \
+		$(call gb_Executable_get_target_for_build,gencoll_rule) \
+		| $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLR,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,gencoll_rule) $< $@ $*)
 
-$(IPCO)/lrl_include.hxx : $(SRCDIR)/i18npool/source/collator/data | $(IPCO)/.dir
+$(i18npool_CODIR)/lrl_include.hxx : \
+		$(SRCDIR)/i18npool/source/collator/data | $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(TXTLIST), \
+	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(i18npool_COTXTS), \
 		$(firstword $(subst _, ,$(txt)))))"' > $@
 
 # vim: set noet sw=4 ts=4:

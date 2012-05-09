@@ -41,18 +41,20 @@ $(eval $(call gb_Executable_add_exception_objects,osl_process_child,\
 # Also this batch file is required by sal_osl_process.
 # See qa/osl/process/osl_process.cxx:675
 ifeq ($(OS),WNT)
-BATCH_FILE:=batch.bat
+sal_BATCH_FILE := batch.bat
 else
-BATCH_FILE:=batch.sh
+sal_BATCH_FILE := batch.sh
 endif
 
-$(call gb_Executable_get_target,osl_process_child): $(WORKDIR)/LinkTarget/Executable/$(BATCH_FILE)
+$(call gb_Executable_get_target,osl_process_child) : \
+	$(WORKDIR)/LinkTarget/Executable/$(sal_BATCH_FILE)
 
-$(WORKDIR)/LinkTarget/Executable/$(BATCH_FILE): $(SRCDIR)/sal/qa/osl/process/$(BATCH_FILE)
+$(WORKDIR)/LinkTarget/Executable/$(sal_BATCH_FILE) : \
+		$(SRCDIR)/sal/qa/osl/process/$(sal_BATCH_FILE)
 	mkdir -p $(dir $@) && \
 	$(call gb_Deliver_deliver,$<,$@)
 
-$(call gb_Executable_get_clean_target,osl_process_child): 
-	rm -f $(WORKDIR)/LinkTarget/Executable/$(BATCH_FILE)
+$(call gb_Executable_get_clean_target,osl_process_child) :
+	rm -f $(WORKDIR)/LinkTarget/Executable/$(sal_BATCH_FILE)
 
 # vim: set noet sw=4 ts=4:

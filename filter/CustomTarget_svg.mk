@@ -27,23 +27,22 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,filter/source/svg))
 
-FISS := $(call gb_CustomTarget_get_workdir,filter/source/svg)
+filter_SVGSRC := $(SRCDIR)/filter/source/svg
+filter_SVGWORK := $(call gb_CustomTarget_get_workdir,filter/source/svg)
 
-SRCDIR_FILTER := $(SRCDIR)/filter/source/svg
-WORKDIR_FILTER := $(FISS)
+filter_SRC_svg_Tokens := $(filter_SVGSRC)/tokens.txt
+filter_SRC_svg_GenToken := $(filter_SVGSRC)/gentoken.pl
+filter_SRC_svg_PresentationEngine := $(filter_SVGSRC)/presentation_engine.js
+filter_SRC_svg_Js2Hxx := $(filter_SVGSRC)/js2hxx.py
 
-filter_SRC_svg_Tokens := $(SRCDIR_FILTER)/tokens.txt
-filter_SRC_svg_GenToken := $(SRCDIR_FILTER)/gentoken.pl
-filter_SRC_svg_PresentationEngine := $(SRCDIR_FILTER)/presentation_engine.js
-filter_SRC_svg_Js2Hxx := $(SRCDIR_FILTER)/js2hxx.py
-
-filter_GEN_svg_Tokens_gperf := $(WORKDIR_FILTER)/tokens.gperf
-filter_GEN_svg_Tokens_hxx := $(WORKDIR_FILTER)/tokens.hxx
-filter_GEN_svg_Tokens_cxx := $(WORKDIR_FILTER)/tokens.cxx
-filter_GEN_svg_Script_hxx := $(WORKDIR_FILTER)/svgscript.hxx
+filter_GEN_svg_Tokens_gperf := $(filter_SVGWORK)/tokens.gperf
+filter_GEN_svg_Tokens_hxx := $(filter_SVGWORK)/tokens.hxx
+filter_GEN_svg_Tokens_cxx := $(filter_SVGWORK)/tokens.cxx
+filter_GEN_svg_Script_hxx := $(filter_SVGWORK)/svgscript.hxx
 
 $(filter_GEN_svg_Tokens_gperf) : \
-			$(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) | $(FISS)/.dir
+			$(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) \
+			| $(filter_SVGWORK)/.dir
 	$(call gb_Output_announce,$@,build,GPF,3)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) \
@@ -60,7 +59,8 @@ $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 			 > $(filter_GEN_svg_Tokens_cxx))
 
 $(filter_GEN_svg_Script_hxx) : \
-			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) | $(FISS)/.dir
+			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) \
+			| $(filter_SVGWORK)/.dir
 	$(call gb_Output_announce,$@,build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(gb_PYTHON) $(filter_SRC_svg_Js2Hxx) \

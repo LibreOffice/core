@@ -27,15 +27,15 @@
 #*************************************************************************
 
 ifeq ($(OS),WNT)
-gengalbin := gengal
+svx_GENGALBIN := gengal
 else
-gengalbin := gengal.bin
+svx_GENGALBIN := gengal.bin
 endif
 
 
-$(eval $(call gb_Executable_Executable,$(gengalbin)))
+$(eval $(call gb_Executable_Executable,$(svx_GENGALBIN)))
 
-$(eval $(call gb_Executable_set_include,$(gengalbin),\
+$(eval $(call gb_Executable_set_include,$(svx_GENGALBIN),\
     $$(INCLUDE) \
     -I$(SRCDIR)/svx/inc/ \
     -I$(SRCDIR)/svx/inc/pch \
@@ -44,11 +44,11 @@ $(eval $(call gb_Executable_set_include,$(gengalbin),\
     -I$(OUTDIR)/inc/offapi \
 ))
 
-$(eval $(call gb_Executable_add_cxxflags,$(gengalbin),\
+$(eval $(call gb_Executable_add_cxxflags,$(svx_GENGALBIN),\
     $$(CXXFLAGS) \
 ))
 
-$(eval $(call gb_Executable_use_libraries,$(gengalbin),\
+$(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     sal \
     tl \
     svl \
@@ -61,16 +61,16 @@ $(eval $(call gb_Executable_use_libraries,$(gengalbin),\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,$(gengalbin),\
+$(eval $(call gb_Executable_add_exception_objects,$(svx_GENGALBIN),\
     svx/source/gengal/gengal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,$(gengalbin),\
+$(eval $(call gb_Executable_use_static_libraries,$(svx_GENGALBIN),\
     vclmain \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_use_libraries,$(gengalbin),\
+$(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     kernel32 \
     msvcrt \
     $(gb_Library_win32_OLDNAMES) \
@@ -80,7 +80,7 @@ $(eval $(call gb_Executable_use_libraries,$(gengalbin),\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_use_libraries,$(gengalbin),\
+$(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     dl \
     pthread \
 ))

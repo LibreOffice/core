@@ -27,43 +27,45 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,packimages/images))
 
-PIIM := $(call gb_CustomTarget_get_workdir,packimages/images)
+packimages_DIR := $(call gb_CustomTarget_get_workdir,packimages/images)
 
 # Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
 # (Tango fallbacks to Industrial for the missing icons)
-CUSTOM_PREFERRED_FALLBACK_1 := -c $(SRCDIR)/icon-themes/tango
-CUSTOM_PREFERRED_FALLBACK_2 := -c $(SRCDIR)/icon-themes/industrial
+packimages_CUSTOM_FALLBACK_1 := -c $(SRCDIR)/icon-themes/tango
+packimages_CUSTOM_FALLBACK_2 := -c $(SRCDIR)/icon-themes/industrial
 
 $(call gb_CustomTarget_get_target,packimages/images) : \
-	$(PIIM)/images.zip $(PIIM)/images_brand.zip $(foreach theme,$(WITH_THEMES),\
-		$(PIIM)/images_$(theme).zip)
+	$(packimages_DIR)/images.zip $(packimages_DIR)/images_brand.zip $(foreach theme,$(WITH_THEMES),\
+		$(packimages_DIR)/images_$(theme).zip)
 
-$(PIIM)/images.zip : $(PIIM)/sorted.lst $(PIIM)/commandimagelist.ilst
+$(packimages_DIR)/images.zip : \
+		$(packimages_DIR)/sorted.lst $(packimages_DIR)/commandimagelist.ilst
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
-			-m $(SRCDIR)/icon-themes/galaxy -c $(PIIM) \
-			-l $(PIIM) -l $(OUTDIR)/res/img -s $< -o $@ \
+			-m $(SRCDIR)/icon-themes/galaxy -c $(packimages_DIR) \
+			-l $(packimages_DIR) -l $(OUTDIR)/res/img -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
-$(PIIM)/images_%.zip : $(PIIM)/sorted.lst $(PIIM)/commandimagelist.ilst
+$(packimages_DIR)/images_%.zip : \
+		$(packimages_DIR)/sorted.lst $(packimages_DIR)/commandimagelist.ilst
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(SRCDIR)/icon-themes/$* \
-			$(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) \
-			-l $(PIIM) -l $(OUTDIR)/res/img -s $< -o $@ \
+			$(packimages_CUSTOM_FALLBACK_1) $(packimages_CUSTOM_FALLBACK_2) \
+			-l $(packimages_DIR) -l $(OUTDIR)/res/img -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # make sure to have one to keep packing happy
-$(PIIM)/images_brand.zip :| $(PIIM)/.dir
+$(packimages_DIR)/images_brand.zip :| $(packimages_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TCH,2)
 	touch $@
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
-.PHONY : $(PIIM)/commandimagelist.ilst $(PIIM)/sorted.lst
+.PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst
 
-$(PIIM)/commandimagelist.ilst :| $(PIIM)/.dir
+$(packimages_DIR)/commandimagelist.ilst :| $(packimages_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
@@ -72,7 +74,8 @@ $(PIIM)/commandimagelist.ilst :| $(PIIM)/.dir
 		$(PERL) $(SOLARENV)/bin/diffmv.pl $@.$(INPATH) $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 
-$(PIIM)/sorted.lst : $(SRCDIR)/packimages/pack/image-sort.lst | $(PIIM)/.dir
+$(packimages_DIR)/sorted.lst : \
+		$(SRCDIR)/packimages/pack/image-sort.lst | $(packimages_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(OUTDIR)/xml $@)

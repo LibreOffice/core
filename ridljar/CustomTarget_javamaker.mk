@@ -27,14 +27,15 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,ridljar/javamaker))
 
-RJJM := $(call gb_CustomTarget_get_workdir,ridljar/javamaker)
+ridljar_DIR := $(call gb_CustomTarget_get_workdir,ridljar/javamaker)
 
-$(call gb_CustomTarget_get_target,ridljar/javamaker) : $(RJJM)/done
+$(call gb_CustomTarget_get_target,ridljar/javamaker) : $(ridljar_DIR)/done
 
-$(RJJM)/done : $(OUTDIR)/bin/udkapi.rdb \
-		$(call gb_Executable_get_target_for_build,javamaker) | $(RJJM)/.dir
+$(ridljar_DIR)/done : $(OUTDIR)/bin/udkapi.rdb \
+		$(call gb_Executable_get_target_for_build,javamaker) \
+		| $(ridljar_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_Helper_execute,javamaker -BUCR -O$(RJJM)/class $<) && touch $@)
+	$(call gb_Helper_execute,javamaker -BUCR -O$(ridljar_DIR)/class $<) && touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

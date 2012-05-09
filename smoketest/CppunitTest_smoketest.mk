@@ -39,15 +39,15 @@ $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 ))
 
 ifeq ($(OS),MACOSX)
-my_soffice:=path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice
+smoketest_SOFFICE := path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice
 else
-my_soffice:=path:$(DEVINSTALLDIR)/opt/program/soffice
+smoketest_SOFFICE := path:$(DEVINSTALLDIR)/opt/program/soffice
 endif
 
 $(eval $(call gb_CppunitTest_use_ure,smoketest))
 
 $(eval $(call gb_CppunitTest_add_arguments,smoketest,\
-	-env:arg-soffice=$(my_soffice) \
+	-env:arg-soffice=$(smoketest_SOFFICE) \
 	-env:arg-user=$(WORKDIR)/CustomTarget/smoketest \
 	-env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 	-env:arg-testarg.smoketest.doc=$(OUTDIR)/bin/smoketestdoc.sxw \

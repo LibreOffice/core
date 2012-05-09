@@ -27,12 +27,12 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,sdext/pdfimport))
 
-SEPI := $(call gb_CustomTarget_get_workdir,sdext/pdfimport)
+$(call gb_CustomTarget_get_target,sdext/pdfimport) : \
+	$(call gb_CustomTarget_get_workdir,sdext/pdfimport)/hash.cxx
 
-$(call gb_CustomTarget_get_target,sdext/pdfimport) : $(SEPI)/hash.cxx
-
-$(SEPI)/hash.cxx : $(SRCDIR)/sdext/source/pdfimport/wrapper/keyword_list \
-		| $(SEPI)/.dir
+$(call gb_CustomTarget_get_workdir,sdext/pdfimport)/hash.cxx : \
+		$(SRCDIR)/sdext/source/pdfimport/wrapper/keyword_list \
+		| $(call gb_CustomTarget_get_workdir,sdext/pdfimport)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GPF,1)
 	$(GPERF) -C -t -l -L C++ -m 20 -Z PdfKeywordHash -k'4-5,$$' $< > $@
 

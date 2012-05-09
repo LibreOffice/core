@@ -27,26 +27,24 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge))
 
-ACBR := $(call gb_CustomTarget_get_workdir,accessibility/bridge)
-
 $(call gb_CustomTarget_get_target,accessibility/bridge) : \
-    $(ACBR)/org/openoffice/java/accessibility/Build.java
+    $(call gb_CustomTarget_get_workdir,accessibility/bridge)/org/openoffice/java/accessibility/Build.java
 
 ifeq ($(PRODUCT),)
-ac_DEBUGSWITCH := true
-ac_PRODUCTSWITCH := false
+accessibility_DEBUG := true
+accessibility_PRODUCT := false
 else
-ac_DEBUGSWITCH := false
-ac_PRODUCTSWITCH := true
+accessibility_DEBUG := false
+accessibility_PRODUCT := true
 endif
 
-$(ACBR)/org/openoffice/java/accessibility/Build.java :
+$(call gb_CustomTarget_get_workdir,accessibility/bridge)/org/openoffice/java/accessibility/Build.java :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	mkdir -p $(dir $@) && (\
         echo package org.openoffice.java.accessibility\; && \
         echo public class Build \{ && \
-        echo public static final boolean DEBUG = $(ac_DEBUGSWITCH)\; && \
-        echo public static final boolean PRODUCT = $(ac_PRODUCTSWITCH)\; && \
+        echo public static final boolean DEBUG = $(accessibility_DEBUG)\; && \
+        echo public static final boolean PRODUCT = $(accessibility_PRODUCT)\; && \
         echo \} \
         ) > $@
 

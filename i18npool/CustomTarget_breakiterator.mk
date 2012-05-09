@@ -28,75 +28,80 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
-IPBI := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
+i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
-	$(IPBI)/dict_ja.cxx $(IPBI)/dict_zh.cxx $(IPBI)/OpenOffice_dat.c
+	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
 
-$(IPBI)/dict_%.cxx : $(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
-		$(call gb_Executable_get_target_for_build,gendict) | $(IPBI)/.dir
+$(i18npool_BIDIR)/dict_%.cxx : \
+		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
+		$(call gb_Executable_get_target_for_build,gendict) \
+		| $(i18npool_BIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(IPBI)/dict_%.cxx,%,$@))
+		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
 
 ifeq ($(SYSTEM_GENBRK),)
-GENBRKTARGET := $(call gb_Executable_get_target_for_build,genbrk)
-GENBRK := $(call gb_Helper_execute,genbrk)
+i18npool_GENBRKTARGET := $(call gb_Executable_get_target_for_build,genbrk)
+i18npool_GENBRK := $(call gb_Helper_execute,genbrk)
 else
-GENBRKTARGET :=
-GENBRK := $(SYSTEM_GENBRK)
+i18npool_GENBRKTARGET :=
+i18npool_GENBRK := $(SYSTEM_GENBRK)
 endif
 
 ifeq ($(SYSTEM_GENCCODE),)
-GENCCODETARGET := $(call gb_Executable_get_target_for_build,genccode)
-GENCCODE := $(call gb_Helper_execute,genccode)
+i18npool_GENCCODETARGET := $(call gb_Executable_get_target_for_build,genccode)
+i18npool_GENCCODE := $(call gb_Helper_execute,genccode)
 else
-GENCCODETARGET :=
-GENCCODE := $(SYSTEM_GENCCODE)
+i18npool_GENCCODETARGET :=
+i18npool_GENCCODE := $(SYSTEM_GENCCODE)
 endif
 
 ifeq ($(SYSTEM_GENCMN),)
-GENCMNTARGET := $(call gb_Executable_get_target_for_build,gencmn)
-GENCMN := $(call gb_Helper_execute,gencmn)
+i18npool_GENCMNTARGET := $(call gb_Executable_get_target_for_build,gencmn)
+i18npool_GENCMN := $(call gb_Helper_execute,gencmn)
 else
-GENCMNTARGET :=
-GENCMN := $(SYSTEM_GENCMN)
+i18npool_GENCMNTARGET :=
+i18npool_GENCMN := $(SYSTEM_GENCMN)
 endif
 
-BRKFILES := $(subst .txt,.brk,$(notdir \
+i18npool_BRKFILES := $(subst .txt,.brk,$(notdir \
 	$(wildcard $(SRCDIR)/i18npool/source/breakiterator/data/*.txt)))
 
 # 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
 # so the output (OpenOffice_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_tmp.c with the -t switch.
-$(IPBI)/OpenOffice_dat.c : $(patsubst %.brk,$(IPBI)/%_brk.c,$(BRKFILES)) $(GENCMNTARGET)
+$(i18npool_BIDIR)/OpenOffice_dat.c : \
+		$(patsubst %.brk,$(i18npool_BIDIR)/%_brk.c,$(i18npool_BRKFILES)) \
+		$(i18npool_GENCMNTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CMN,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(shell $(gb_MKTEMP)) && \
-		$(foreach brk,$(BRKFILES),echo '$(brk)' >> $${RESPONSEFILE} && ) \
-		$(GENCMN) -n OpenOffice -t tmp -S -d $(IPBI)/ 0 $${RESPONSEFILE} && \
+		$(foreach brk,$(i18npool_BRKFILES),echo '$(brk)' >> $${RESPONSEFILE} && ) \
+		$(i18npool_GENCMN) -n OpenOffice -t tmp -S -d $(i18npool_BIDIR)/ 0 $${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE} && \
 		echo '#ifdef _MSC_VER' > $@ && \
 		echo '#pragma warning( disable : 4229 4668 )' >> $@ && \
 		echo '#endif' >> $@ && \
 		cat $(subst _dat,_tmp,$@) >> $@)
 
-$(IPBI)/%_brk.c : $(IPBI)/%.brk $(GENCCODETARGET)
+$(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(i18npool_GENCCODETARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CCD,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(GENCCODE) -n OpenOffice -d $(IPBI)/ $< \
+		$(i18npool_GENCCODE) -n OpenOffice -d $(i18npool_BIDIR)/ $< \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
-$(IPBI)/%.brk : $(IPBI)/%.txt $(GENBRKTARGET)
+$(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(i18npool_GENBRKTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(GENBRK) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
+		$(i18npool_GENBRK) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4
 # Prepend set empty as of Unicode Version 6.1 / ICU 4.9, which bails out if used.
 # NOTE: strips every line with _word_ 'Prepend', including $Prepend
-$(IPBI)/%.txt : $(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(IPBI)/.dir
+$(i18npool_BIDIR)/%.txt : \
+	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
 ifeq ($(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),YES)
 ifeq ($(ICU_RECLASSIFIED_PREPEND_SET_EMPTY),YES)
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#;/\<Prepend\>/d" $< > $@
