@@ -101,7 +101,7 @@ void TestTextSearch::testSearches()
     sal_Int32 startPos = 2, endPos = 20 ;
     OUString searchStr( "(ab)*a(c|d)+" );
     sal_Int32 fStartRes = 10, fEndRes = 18 ;
-    sal_Int32 bStartRes = 18, bEndRes = 14 ;
+    sal_Int32 bStartRes = 18, bEndRes = 10 ;
 
     // set options
     util::SearchOptions aOptions;
