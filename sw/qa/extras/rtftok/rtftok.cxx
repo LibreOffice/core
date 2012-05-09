@@ -52,6 +52,7 @@
 #include <unotest/macros_test.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/fontmanager.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -93,6 +94,7 @@ public:
     void testFdo48037();
     void testFdo47764();
     void testFdo38786();
+    void testN757651();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -124,6 +126,7 @@ public:
     CPPUNIT_TEST(testFdo48037);
     CPPUNIT_TEST(testFdo47764);
     CPPUNIT_TEST(testFdo38786);
+    CPPUNIT_TEST(testN757651);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -687,6 +690,15 @@ void Test::testFdo38786()
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     // \chpgn was ignored, so exception was thrown
     xFields->nextElement();
+}
+
+void Test::testN757651()
+{
+    load("n757651.rtf");
+
+    // The bug was that due to buggy layout the text expanded to two pages.
+    if (Application::GetDefaultDevice()->IsFontAvailable(OUString("Times New Roman")))
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

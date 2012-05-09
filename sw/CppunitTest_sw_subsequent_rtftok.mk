@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtftok, \
     test \
     unotest \
     vcl \
+    tl \
     $(gb_STDLIBS) \
 ))
 
