@@ -126,12 +126,11 @@ private:
 //sort normal to the start
 static int sortWeightValue(FontWeight eWeight)
 {
-    if (eWeight == WEIGHT_NORMAL)
-        return 0;
     if (eWeight < WEIGHT_NORMAL)
         return eWeight + 1;
     if (eWeight > WEIGHT_NORMAL)
         return eWeight - 1;
+    return 0; // eWeight == WEIGHT_NORMAL
 }
 
 static StringCompare ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
