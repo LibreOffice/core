@@ -2164,6 +2164,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     m_aStates.top().aTableSprms->push_back(make_pair(NS_rtf::LN_NFC, RTFValue::Pointer_t(new RTFValue(23)))); // bullets, same as \levelnfc23
                 }
                 break;
+        case RTF_LANDSCAPE:
+                lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, RTFValue::Pointer_t(new RTFValue(1)));
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
