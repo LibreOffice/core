@@ -197,6 +197,8 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpScanPrior     ( NULL ),
     mpTransTab      ( NULL ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
+    mnColorType( 0xFF ),
+    mbPalette( false ),
     mbzCodecInUse   ( sal_False ),
     mbStatus( sal_True),
     mbIDAT( sal_False ),
@@ -366,6 +368,10 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     // reset to the first chunk
     maChunkIter = maChunkSeq.begin();
 
+    // read the first chunk which must be the IHDR chunk
+    ReadNextChunk();
+    mbStatus = (mnChunkType == PNGCHUNK_IHDR) && ImplReadHeader( rPreviewSizeHint );
+
     // parse the chunks
     while( mbStatus && !mbIDAT && ReadNextChunk() )
     {
@@ -373,7 +379,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
         {
             case PNGCHUNK_IHDR :
             {
-                mbStatus = ImplReadHeader( rPreviewSizeHint );
+                mbStatus = false; // only one IHDR possible
             }
             break;
 
