@@ -186,7 +186,7 @@ void SlideSorterViewShell::Initialize (void)
         mpScrollBarBox);
     mpView = &mpSlideSorter->GetView();
 
-    ViewShell::doShow();
+    doShow();
 
     SetPool( &GetDoc()->GetPool() );
     SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
