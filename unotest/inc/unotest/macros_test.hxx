@@ -26,6 +26,9 @@
  * instead of those above.
  */
 
+#ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
+#define INCLUDED_UNOTEST_MACROS_TEST_HXX
+
 #include <rtl/ustring.hxx>
 #include "unotest/detail/unotestdllapi.hxx"
 
@@ -50,5 +53,7 @@ protected:
 };
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
