@@ -161,11 +161,16 @@ enum ScUnoCollectMode
     SC_UNO_COLLECT_FINDPOS
 };
 
+/**
+ * This class exists solely to allow searching through field items.  TODO:
+ * Look into providing the same functionality directly in EditEngine, to
+ * avoid having this class altogether.
+ */
 class ScUnoEditEngine : public ScEditEngineDefaulter
 {
     ScUnoCollectMode    eMode;
     sal_uInt16              nFieldCount;
-    TypeId              aFieldType;
+    sal_Int32           mnFieldType;
     SvxFieldData*       pFound;         // lokale Kopie
     sal_uInt16              nFieldPar;
     xub_StrLen          nFieldPos;
@@ -179,9 +184,9 @@ public:
     virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                     Color*& rTxtColor, Color*& rFldColor );
 
-    sal_uInt16          CountFields(TypeId aType);
-    SvxFieldData*   FindByIndex(sal_uInt16 nIndex, TypeId aType);
-    SvxFieldData*   FindByPos(sal_uInt16 nPar, xub_StrLen nPos, TypeId aType);
+    sal_uInt16 CountFields();
+    SvxFieldData* FindByIndex(sal_uInt16 nIndex);
+    SvxFieldData* FindByPos(sal_uInt16 nPar, xub_StrLen nPos, sal_Int32 nType);
 
     sal_uInt16          GetFieldPar() const     { return nFieldPar; }
     xub_StrLen      GetFieldPos() const     { return nFieldPos; }
@@ -191,7 +196,7 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource) :
     ScEditEngineDefaulter( *pSource ),
     eMode( SC_UNO_COLLECT_NONE ),
     nFieldCount( 0 ),
-    aFieldType( NULL ),
+    mnFieldType(SvxFieldData::UNKNOWN_FIELD),
     pFound( NULL )
 {
     if (pSource)
@@ -216,7 +221,7 @@ String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         const SvxFieldData* pFieldData = rField.GetField();
         if ( pFieldData )
         {
-            if ( !aFieldType || pFieldData->Type() == aFieldType )
+            if (mnFieldType == SvxFieldData::UNKNOWN_FIELD || pFieldData->GetClassId() == mnFieldType)
             {
                 if ( eMode == SC_UNO_COLLECT_FINDINDEX && !pFound && nFieldCount == nFieldIndex )
                 {
@@ -237,40 +242,38 @@ String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return aRet;
 }
 
-sal_uInt16 ScUnoEditEngine::CountFields(TypeId aType)
+sal_uInt16 ScUnoEditEngine::CountFields()
 {
     eMode = SC_UNO_COLLECT_COUNT;
-    aFieldType = aType;
+    mnFieldType = SvxFieldData::UNKNOWN_FIELD;
     nFieldCount = 0;
     UpdateFields();
-    aFieldType = NULL;
     eMode = SC_UNO_COLLECT_NONE;
 
     return nFieldCount;
 }
 
-SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex, TypeId aType)
+SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex)
 {
     eMode = SC_UNO_COLLECT_FINDINDEX;
     nFieldIndex = nIndex;
-    aFieldType = aType;
+    mnFieldType = SvxFieldData::UNKNOWN_FIELD;
     nFieldCount = 0;
     UpdateFields();
-    aFieldType = NULL;
     eMode = SC_UNO_COLLECT_NONE;
 
     return pFound;
 }
 
-SvxFieldData* ScUnoEditEngine::FindByPos(sal_uInt16 nPar, xub_StrLen nPos, TypeId aType)
+SvxFieldData* ScUnoEditEngine::FindByPos(sal_uInt16 nPar, xub_StrLen nPos, sal_Int32 nType)
 {
     eMode = SC_UNO_COLLECT_FINDPOS;
     nFieldPar = nPar;
     nFieldPos = nPos;
-    aFieldType = aType;
+    mnFieldType = nType;
     nFieldCount = 0;
     UpdateFields();
-    aFieldType = NULL;
+    mnFieldType = SvxFieldData::UNKNOWN_FIELD;
     eMode = SC_UNO_COLLECT_NONE;
 
     return pFound;
@@ -335,7 +338,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
-    SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index), 0);
+    SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index));
     if (!pData)
         return uno::Reference<text::XTextField>();
 
@@ -357,7 +360,7 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    return aTempEngine.CountFields(NULL);       // Felder zaehlen, in Zelle ist der Typ egal
+    return aTempEngine.CountFields();       // Felder zaehlen, in Zelle ist der Typ egal
 }
 
 uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -501,7 +504,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    SvxFieldData* pData = aTempEngine.FindByIndex((sal_uInt16)Index, 0);
+    SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index));
     if (!pData)
         return NULL;
 
@@ -537,7 +540,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
-    return aTempEngine.CountFields(0);
+    return aTempEngine.CountFields();
 }
 
 uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -704,7 +707,8 @@ void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
-        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        SvxFieldData* pField = aTempEngine.FindByPos(
+            aSelection.nStartPara, aSelection.nStartPos, SvxFieldData::UNKNOWN_FIELD);
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
         if (!pField)
             return;
@@ -776,7 +780,8 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
-        const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        const SvxFieldData* pField = aTempEngine.FindByPos(
+            aSelection.nStartPara, aSelection.nStartPos, SvxFieldData::UNKNOWN_FIELD);
         OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
         if (!pField)
             throw uno::RuntimeException();
@@ -827,7 +832,7 @@ void ScEditFieldObj::setPropertyValueFile(const rtl::OUString& rName, const uno:
                 ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
                 ScUnoEditEngine aTempEngine(pEditEngine);
                 SvxFieldData* pField = aTempEngine.FindByPos(
-                        aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField));
+                        aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
                 OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
                 if (pField)
                 {
@@ -861,7 +866,7 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
             ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
             ScUnoEditEngine aTempEngine(pEditEngine);
             pField = aTempEngine.FindByPos(
-                aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField));
+                aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
         }
         else
             pField = getData();
@@ -921,7 +926,8 @@ void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno
         ScUnoEditEngine aTempEngine(pEditEngine);
 
         //  Typ egal (in Zellen gibts nur URLs)
-        SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+        SvxFieldData* pField = aTempEngine.FindByPos(
+            aSelection.nStartPara, aSelection.nStartPos, SvxFieldData::UNKNOWN_FIELD);
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
         if (!pField)
             return;
@@ -1058,7 +1064,8 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     //  Typ egal (in Zellen gibts nur URLs)
-    const SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
+    const SvxFieldData* pField = aTempEngine.FindByPos(
+        aSelection.nStartPara, aSelection.nStartPos, SvxFieldData::UNKNOWN_FIELD);
     OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
     if (!pField)
         return rtl::OUString();
