@@ -82,7 +82,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/solarmutex.hxx,tools/solar
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/stream.hxx,tools/stream.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/string.hxx,tools/string.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svborder.hxx,tools/svborder.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/svlibrary.hxx,tools/svlibrary.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tempfile.hxx,tools/tempfile.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tenccvt.hxx,tools/tenccvt.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/time.hxx,tools/time.hxx))

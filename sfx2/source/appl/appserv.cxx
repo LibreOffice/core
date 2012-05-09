@@ -124,7 +124,6 @@
 #include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
 #include "sfx2/sfxhelp.hxx"
-#include <tools/svlibrary.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

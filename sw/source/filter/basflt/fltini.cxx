@@ -67,7 +67,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <rtl/uri.hxx>
-#include <tools/svlibrary.hxx>
 
 using namespace utl;
 using rtl::OUString;
@@ -162,9 +161,11 @@ Filters::~Filters()
 
 oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 {
-    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
     if (!msword_.is())
-        SvLibrary::LoadModule( msword_, aLibName, &thisModule, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+    {
+        bool ok = msword_.loadRelative( &thisModule, SVLIBRARY( "msword" ), SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+        SAL_WARN_IF(!ok, "sw", "failed to load msword library");
+    }
     if (msword_.is())
         return msword_.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
     return NULL;

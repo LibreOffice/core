@@ -74,7 +74,6 @@
 #include <sfx2/fcontnr.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 #include "sfxpicklist.hxx"
-#include <tools/svlibrary.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

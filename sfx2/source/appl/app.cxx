@@ -106,7 +106,6 @@
 #include "sfx2/stbitem.hxx"
 #include "eventsupplier.hxx"
 #include <sfx2/dockwin.hxx>
-#include <tools/svlibrary.hxx>
 
 #ifdef DBG_UTIL
 #include <sfx2/mnuitem.hxx>
