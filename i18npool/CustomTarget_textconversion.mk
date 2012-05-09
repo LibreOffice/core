@@ -37,7 +37,7 @@ $(call gb_CustomTarget_get_target,i18npool/textconversion) : \
 $(IPTC)/%.cxx : $(SRCDIR)/i18npool/source/textconversion/data/%.dic \
 		$(call gb_Executable_get_target_for_build,genconv_dict) | $(IPTC)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CDC,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,genconv_dict) $* $< $@.tmp && \
 		sed 's/\(^.*get\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
 		rm $@.tmp)

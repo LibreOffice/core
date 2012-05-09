@@ -72,7 +72,7 @@ gb_XcsTarget_DTD_Schema := $(OUTDIR)/xml/registry/component-schema.dtd
 
 define gb_XcsTarget__command
 $(call gb_Output_announce,$(2),$(true),XCS,1)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet \
 		--noout \
@@ -120,7 +120,7 @@ gb_XcuDataTarget_DTD_ComponentUpdate := $(OUTDIR)/xml/registry/component-update.
 
 define gb_XcuDataTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,2)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet \
 		--noout \
@@ -171,7 +171,7 @@ endef
 
 define gb_XcuModuleTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,3)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet \
 		-o $(1) \
@@ -249,7 +249,7 @@ gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_C
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,5)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XcuMergeTarget_CFGEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
@@ -282,7 +282,7 @@ endef
 # locale is extracted from the stem (parameter $(2))
 define gb_XcuResTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,6)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet \
 		-o $(1) \

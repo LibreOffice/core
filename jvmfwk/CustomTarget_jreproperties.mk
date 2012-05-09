@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,jvmfwk/jreproperties) : $(JFJP)/JREProperties.
 $(JFJP)/JREProperties.class : $(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java \
 		| $(JFJP)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JCS,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	cd $(dir $@) && $(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(dir $@) $^)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

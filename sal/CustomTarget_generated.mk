@@ -40,7 +40,7 @@ $(SAUT)/rtlbootstrap.mk :| $(SAUT)/.dir
 else
 $(SAUT)/rtlbootstrap.mk : $(SAUT)/sal/typesizes.h | $(SAUT)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CXX,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	(echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) > $(SAUT)/bootstrap.cxx && \
 	$(CXX) -E $(gb_OSDEFS) $(gb_CXXFLAGS) -D$(CPUNAME) -I$(SAUT) -I$(SRCDIR)/sal/rtl/source \
 		-I$(SRCDIR)/sal/inc $(SAUT)/bootstrap.cxx > $@.tmp && \

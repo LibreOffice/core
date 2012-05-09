@@ -40,7 +40,7 @@ $(call gb_CustomTarget_get_target,packimages/images) : \
 
 $(PIIM)/images.zip : $(PIIM)/sorted.lst $(PIIM)/commandimagelist.ilst
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(PIIM) \
 			-l $(PIIM) -l $(OUTDIR)/res/img -s $< -o $@ \
@@ -48,7 +48,7 @@ $(PIIM)/images.zip : $(PIIM)/sorted.lst $(PIIM)/commandimagelist.ilst
 
 $(PIIM)/images_%.zip : $(PIIM)/sorted.lst $(PIIM)/commandimagelist.ilst
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(SRCDIR)/icon-themes/$* \
 			$(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) \
@@ -65,7 +65,7 @@ $(PIIM)/images_brand.zip :| $(PIIM)/.dir
 
 $(PIIM)/commandimagelist.ilst :| $(PIIM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
 			sed "s#$(SRCDIR)/icon-themes/galaxy#%MODULE%#" | \
 			$(PERL) $(SOLARENV)/bin/sort.pl > $@.$(INPATH) && \
@@ -74,7 +74,7 @@ $(PIIM)/commandimagelist.ilst :| $(PIIM)/.dir
 
 $(PIIM)/sorted.lst : $(SRCDIR)/packimages/pack/image-sort.lst | $(PIIM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(OUTDIR)/xml $@)
 
 # vim: set noet sw=4 ts=4:

@@ -39,7 +39,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 	$(call gb_Output_announce,$*,$(true),SDI,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) $(dir $(call gb_SdiTarget_get_dep_target,$*)))
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
 		$(gb_SdiTarget_SVIDLCOMMAND) -quiet \
 			$(INCLUDE) \

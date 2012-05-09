@@ -74,7 +74,7 @@ $(call gb_Extension_get_workdir,%)/description.xml :
 else
 $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		$(gb_Extension_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
@@ -89,7 +89,7 @@ endif
 $(call gb_Extension_get_target,%) : \
 		$(call gb_Extension_get_workdir,%)/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
 			$(call gb_Extension_get_rootdir,$*)/registration && \
 		$(call gb_Extension__subst_platform,$(call gb_Extension_get_workdir,$*)/description.xml,$(call gb_Extension_get_rootdir,$*)/description.xml) && \

@@ -49,30 +49,30 @@ endef
 $(call gb_ComponentsTarget_get_target,%): \
             $(call gb_ComponentsTarget_get_target,%).input
 	$(call gb_Output_announce,$*,$(true),CPS,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
             mkdir -p $(dir $@))
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
             $(gb_XSLTPROC) --nonet --stringparam prefix $(WORKDIR) -o $@ \
             $(SOLARENV)/bin/packcomponents.xslt $@.input)
 
 $(call gb_ComponentsTarget_get_clean_target,%): \
             $(call gb_ComponentsTarget_get_clean_target,%).input
 	$(call gb_Output_announce,$*,$(false),CPS,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
             rm -f $(call gb_ComponentsTarget_get_target,$*))
 
 $(call gb_ComponentsTarget_get_target,%).input:
 	$(call gb_Output_announce,$*,$(true),CPI,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
             mkdir -p $(dir $@))
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
             printf '<list>%s</list>' \
             "$(foreach i,$(COMPONENTFILES),<filename>$(subst $(WORKDIR),,$i)</filename>)" \
             > $@)
 
 $(call gb_ComponentsTarget_get_clean_target,%).input:
 	$(call gb_Output_announce,$*,$(false),CPI,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
             rm -f $(call gb_ComponentsTarget_get_target,$*).input)
 
 # vim: set noet sw=4:

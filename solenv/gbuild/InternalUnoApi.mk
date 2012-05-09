@@ -27,7 +27,7 @@
 
 .PHONY : $(call gb_InternalUnoApi_get_clean_target,%)
 $(call gb_InternalUnoApi_get_clean_target,%) :
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_InternalUnoApi_get_target,$*))
 
 # Note: The rdb root for the internal rdbs should be / . On the other

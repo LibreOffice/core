@@ -41,7 +41,7 @@ $(UICM)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		$(OUTDIR)/bin/cliuno.snk $(OUTDIR)/bin/cli_uretypes.dll \
 		$(call gb_Executable_get_target_for_build,climaker) | $(UICM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,climaker \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ \
@@ -56,13 +56,13 @@ $(UICM)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 $(UICM)/cli_oootypes.config : $(SRCDIR)/unoil/climaker/cli_oootypes_config \
 		$(SRCDIR)/unoil/climaker/version.txt | $(UICM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	perl $(SRCDIR)/solenv/bin/clipatchconfig.pl $^ $@)
 
 $(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : $(UICM)/cli_oootypes.config \
 		$(UICM)/cli_oootypes.dll $(OUTDIR)/bin/cliuno.snk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AL ,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	al -out:$@ \
 		-version:$(CLI_OOOTYPES_POLICY_VERSION) \
 		-keyfile:$(OUTDIR)/bin/cliuno.snk \

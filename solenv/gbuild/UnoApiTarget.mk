@@ -298,7 +298,7 @@ $(call gb_UnoApiHeadersTarget_get_target,%) :
 .PHONY : $(call gb_UnoApiHeadersTarget_get_clean_target,%)
 $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HPP,3)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
 			$(call gb_UnoApiHeadersTarget_get_dir,$*) \
 			$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*) \

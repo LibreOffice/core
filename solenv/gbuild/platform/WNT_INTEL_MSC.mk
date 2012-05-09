@@ -262,7 +262,7 @@ endef
 # $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
 $(call gb_Output_announce,$(2).c,$(true),C  ,3)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
@@ -282,7 +282,7 @@ endef
 # $(call gb_CxxObject__command,object,relative-source,source,dep-file)
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
@@ -304,7 +304,7 @@ gb_AsmObject_get_source = $(1)/$(2).asm
 
 define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	"$(ML_EXE)" $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
 	echo "$(1) : $(3)" > $(4)
@@ -326,7 +326,7 @@ gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
@@ -638,7 +638,7 @@ endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(INCLUDE) \
 		$(DEFS) \
@@ -661,7 +661,7 @@ gb_WinResTarget_POSTFIX :=.res
 
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RES,3)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
 		$(DEFS) $(FLAGS) \
@@ -676,7 +676,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(INCLUDE) \
 		$(DEFS) \

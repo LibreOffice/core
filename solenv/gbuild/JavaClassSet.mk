@@ -38,7 +38,7 @@ gb_JavaClassSet_JAVACDEBUG := -g
 endif
 
 define gb_JavaClassSet__command
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(filter-out $(JARDEPS),$(4)), \
 		rm -rf $(call gb_JavaClassSet_get_classdir,$(2))/* && \

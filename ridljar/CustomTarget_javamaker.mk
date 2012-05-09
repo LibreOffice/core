@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,ridljar/javamaker) : $(RJJM)/done
 $(RJJM)/done : $(OUTDIR)/bin/udkapi.rdb \
 		$(call gb_Executable_get_target_for_build,javamaker) | $(RJJM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,javamaker -BUCR -O$(RJJM)/class $<) && touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

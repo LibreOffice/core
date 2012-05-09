@@ -46,7 +46,7 @@ $(call gb_Zip_get_clean_target,%) :
 # --filesync makes sure that all files in the zip package will be removed that no longer are in $(FILES)
 $(call gb_Zip_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ZIP,3)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
 	cd $(LOCATION) && $(gb_Zip_ZIPCOMMAND) -rX --filesync $(call gb_Zip_get_target,$*) $(FILES) )
 
@@ -59,7 +59,7 @@ $(call gb_Zip_get_final_target,%) : $(call gb_Zip_get_outdir_target,%)
 # the preparation target is here to ensure proper ordering of actions in cases
 # when we want to, e.g., create a zip from files created by a custom target
 $(call gb_Zip__get_preparation_target,%) :
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
 # clear file list, set location (zipping uses relative paths)

@@ -36,7 +36,7 @@ $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 $(IPBI)/dict_%.cxx : $(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
 		$(call gb_Executable_get_target_for_build,gendict) | $(IPBI)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(IPBI)/dict_%.cxx,%,$@))
 
 ifeq ($(SYSTEM_GENBRK),)
@@ -72,7 +72,7 @@ BRKFILES := $(subst .txt,.brk,$(notdir \
 # Output of gencmn is redirected to OpenOffice_tmp.c with the -t switch.
 $(IPBI)/OpenOffice_dat.c : $(patsubst %.brk,$(IPBI)/%_brk.c,$(BRKFILES)) $(GENCMNTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CMN,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(shell $(gb_MKTEMP)) && \
 		$(foreach brk,$(BRKFILES),echo '$(brk)' >> $${RESPONSEFILE} && ) \
 		$(GENCMN) -n OpenOffice -t tmp -S -d $(IPBI)/ 0 $${RESPONSEFILE} && \
@@ -84,13 +84,13 @@ $(IPBI)/OpenOffice_dat.c : $(patsubst %.brk,$(IPBI)/%_brk.c,$(BRKFILES)) $(GENCM
 
 $(IPBI)/%_brk.c : $(IPBI)/%.brk $(GENCCODETARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CCD,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		$(GENCCODE) -n OpenOffice -d $(IPBI)/ $< \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 $(IPBI)/%.brk : $(IPBI)/%.txt $(GENBRKTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		$(GENBRK) -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4

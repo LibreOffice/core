@@ -81,7 +81,7 @@ $(call gb_CppunitTest_get_clean_target,%) :
 .PHONY : $(call gb_CppunitTest_get_target,%)
 $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \

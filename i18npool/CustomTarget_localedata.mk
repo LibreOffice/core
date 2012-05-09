@@ -37,7 +37,7 @@ $(call gb_CustomTarget_get_target,i18npool/localedata) : \
 $(IPLD)/localedata_%.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml \
 		$(IPLD)/saxparser.rdb $(call gb_Executable_get_target_for_build,saxparser)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SAX,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,saxparser) $* $< $@.tmp \
 			$(call gb_Helper_make_url,$(IPLD)/saxparser.rdb) \
 			$(call gb_Helper_make_url,$(OUTDIR_FOR_BUILD)/bin/types.rdb) \
@@ -49,7 +49,7 @@ $(IPLD)/localedata_%.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml \
 $(IPLD)/saxparser.rdb : $(IPLD)/saxparser.input \
 		$(gb_XSLTPROCTARGET) $(SOLARENV)/bin/packcomponents.xslt
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),RDB,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR_FOR_BUILD)/xml/ \
 			-o $@ $(SOLARENV)/bin/packcomponents.xslt $<)
 

@@ -41,7 +41,7 @@ $(OCRG)/$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
             $(OCDIR)/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
             $(OCDIR)/cppheader.xsl | $(gb_XSLTPROCTARGET)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),XSL,1)
-	$$(call gb_Helper_abbreviate_dirs_native, \
+	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(dir $$@) && \
         $$(gb_XSLTPROC) --nonet --stringparam ns1 \
             $(if $(1), \

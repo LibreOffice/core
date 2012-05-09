@@ -43,7 +43,7 @@ ifneq (,$(strip $(OOO_JUNIT_JAR)))
 .PHONY : $(call gb_JunitTest_get_target,%)
 $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
         (DBGSV_ERROR_OUT=shell $(gb_JunitTest_JAVACOMMAND) \

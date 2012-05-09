@@ -62,7 +62,7 @@ $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 $(filter_GEN_svg_Script_hxx) : \
 			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) | $(FISS)/.dir
 	$(call gb_Output_announce,$@,build,PY ,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(gb_PYTHON) $(filter_SRC_svg_Js2Hxx) \
 			$(filter_SRC_svg_PresentationEngine) \
 			$(filter_GEN_svg_Script_hxx))

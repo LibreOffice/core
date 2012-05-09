@@ -37,7 +37,7 @@ $(call gb_CustomTarget_get_target,i18npool/indexentry) : \
 $(IPIE)/%.cxx : $(SRCDIR)/i18npool/source/indexentry/data/%.txt \
 		$(call gb_Executable_get_target_for_build,genindex_data) | $(IPIE)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IND,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,genindex_data) $< $@.tmp $* && \
 		sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
 		rm $@.tmp)

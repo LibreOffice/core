@@ -53,7 +53,7 @@ gb_SrsPartMergeTarget_TRANSEXCOMMAND := \
 
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
@@ -77,7 +77,7 @@ gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc$(gb_Executable_EXT_for
 gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 define gb_SrsPartTarget__command
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	RESPONSEFILE=`$(gb_MKTEMP)` && \
 	echo "-s \
@@ -334,7 +334,7 @@ $(call gb_ResTarget_get_clean_target,%) :
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCTARGET)
 	$(call gb_Output_announce,$*,$(true),RES,2)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) $(OUTDIR)/bin \
 			$(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \

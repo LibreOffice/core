@@ -56,7 +56,7 @@ endef
 # the other one(s), which seems to work .-)
 define gb_Jar__command
 	$(call gb_Output_announce,$*,$(true),JAR,3)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
 	$(if $(JARCLASSPATH),echo "Class-Path: $(strip $(JARCLASSPATH))" >> $(call gb_Jar_get_manifest_target,$(1)) &&) \

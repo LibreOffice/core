@@ -27,7 +27,7 @@
 
 .PHONY : $(call gb_UnoApi_get_clean_target,%)
 $(call gb_UnoApi_get_clean_target,%) :
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApi_get_target,$*))
 
 define gb_UnoApi_UnoApi

@@ -48,7 +48,7 @@ $(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(1))))
 endef
 
 define gb_Helper_abbreviate_dirs_native
-$(call gb_Helper_abbreviate_dirs,$(1))
+$$(call gb_Output_error,gb_Helper_abbreviate_dirs_native: use gb_Helper_abbreviate_dirs instead.)
 endef
 
 define gb_Helper_native_path

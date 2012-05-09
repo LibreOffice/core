@@ -38,7 +38,7 @@ $(call gb_CustomTarget_get_target,extensions/source/activex/idl) : \
 $(EXAI)/so_activex.tlb : \
 		$(SRCDIR)/extensions/source/activex/so_activex.idl | $(EXAI)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	midl.exe \
 		-tlb $@ \
 		-h $(EXAI)/so_activex.h \
