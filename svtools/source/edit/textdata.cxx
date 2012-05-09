@@ -113,19 +113,6 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
     return ( Count() - 1 );
 }
 
-/*
-sal_uInt16 TETextPortionList::GetPortionStartIndex( sal_uInt16 nPortion )
-{
-    sal_uInt16 nPos = 0;
-    for ( sal_uInt16 nP = 0; nP < nPortion; nP++ )
-    {
-        TETextPortion* pPortion = GetObject( nP );
-        nPos += pPortion->GetLen();
-    }
-    return nPos;
-}
-*/
-
 
 // -------------------------------------------------------------------------
 // (+) class TEParaPortion

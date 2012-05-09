@@ -131,12 +131,6 @@ public:
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
     sal_uInt16              GetLeftMargin() const       { return mnLeftMargin; }
 
-//  sal_Bool                RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd ), sal_uInt16 nWhich = 0 );
-//  sal_Bool                RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, TextCharAttrib*& rpStarting, TextCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
-//  void                InsertAttrib( const EditCharAttrib* pAttr );
-//  void                InsertAttribInSelection( const EditCharAttrib* pAttr );
-//  void                FindAttribs( TextNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
-
     sal_Bool                IsValidPaM( const TextPaM& rPaM );
 };
 

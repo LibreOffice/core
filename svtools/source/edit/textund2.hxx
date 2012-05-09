@@ -90,9 +90,6 @@ public:
                     TYPEINFO();
                     TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
 
-//  const TextPaM&  GetTextPaM() { return aTextPaM; }
-//  String&         GetStr() { return aText; }
-
     virtual void    Undo();
     virtual void    Redo();
 
@@ -110,9 +107,6 @@ public:
                     TYPEINFO();
                     TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
 
-//  const TextPaM&      GetTextPaM() { return aTextPaM; }
-//  String&         GetStr() { return aText; }
-
     virtual void    Undo();
     virtual void    Redo();
 };
@@ -122,25 +116,11 @@ class TextUndoSetAttribs: public TextUndo
 {
 private:
     TextSelection       maSelection;
-//  SfxItemSet          aNewAttribs;
-//  TextInfoArray       aPrevAttribs;
-//  sal_uInt8               nSpecial;
-//  sal_Bool                bSetIsRemove;
-//  sal_uInt16              nRemoveWhich;
-//
-//  void                ImpSetSelection( TextView* pView );
-
 
 public:
                         TYPEINFO();
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
                         ~TextUndoSetAttribs();
-
-//  TextInfoArray&      GetTextInfos()  { return aPrevAttribs; }
-//  SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
-//  void                SetSpecial( sal_uInt8 n )           { nSpecial = n; }
-//  void                SetRemoveAttribs( sal_Bool b )      { bSetIsRemove = b; }
-//  void                SetRemoveWhich( sal_uInt16 n )      { nRemoveWhich = n; }
 
     virtual void        Undo();
     virtual void        Redo();

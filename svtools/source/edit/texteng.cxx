@@ -523,16 +523,9 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
             TextCharAttrib* pAttr = pNode->GetCharAttribs().GetAttrib( --nAttr );
             if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetStart() < nEnd ) )
             {
-//              TextSelection aSel( rPaM );
-//              aSel.GetEnd().GetIndex() += nChars;
-//              TextUndoSetAttribs* pAttrUndo = CreateAttribUndo( aSel );
-//              InsertUndo( pAttrUndo );
                 break;  // for
             }
         }
-//      if ( pCurUndo && ( CreateTextPaM( pCurUndo->GetEPaM() ) == rPaM ) )
-//          pCurUndo->GetStr() += aStr;
-//      else
             InsertUndo( new TextUndoRemoveChars( this, rPaM, aStr ) );
     }
 
@@ -1920,9 +1913,6 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
             sal_uInt16 nNewPortionPos = 0;
             if ( nStartPos )
                 nNewPortionPos = SplitTextPortion( nPara, nStartPos ) + 1;
-//          else if ( ( pTEParaPortion->GetTextPortions().Count() == 1 ) &&
-//                      !pTEParaPortion->GetTextPortions()[0]->GetLen() )
-//              pTEParaPortion->GetTextPortions().Reset();  // DummyPortion
 
             // Eine leere Portion kann hier stehen, wenn der Absatz leer war,
             // oder eine Zeile durch einen harten Zeilenumbruch entstanden ist.
@@ -2833,14 +2823,6 @@ void TextEngine::ImpParagraphInserted( sal_uLong nPara )
             TextView* pView = mpViews->GetObject( --nView );
             if ( pView != GetActiveView() )
             {
-//              sal_Bool bInvers = pView->maSelection.GetEnd() < pView->maSelection.GetStart();
-//              TextPaM& rMin = !bInvers ? pView->maSelection.GetStart(): pView->maSelection.GetEnd();
-//              TextPaM& rMax = bInvers ? pView->maSelection.GetStart() : pView->maSelection.GetEnd();
-//
-//              if ( rMin.GetPara() >= nPara )
-//                  rMin.GetPara()++;
-//              if ( rMax.GetPara() >= nPara )
-//                  rMax.GetPara()++;
                 for ( int n = 0; n <= 1; n++ )
                 {
                     TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
@@ -3142,16 +3124,6 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
             }
         }
     }
-/*
-    if ( IsRightToLeft() )
-    {
-        // Switch X postions...
-        DBG_ASSERT( GetMaxTextWidth(), "GetPortionXOffset - max text width?!" );
-        DBG_ASSERT( nX <= (long)GetMaxTextWidth(), "GetPortionXOffset - position out of paper size!" );
-        nX = GetMaxTextWidth() - nX;
-        nX -= pDestPortion->GetWidth();
-    }
-*/
 
     return nX;
 }

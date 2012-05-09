@@ -300,40 +300,6 @@ Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) const
                     aDiff.X() = -aDiff.X(); // workaround for move in RTL mode
                 aTrackRect.SetPos( aTrackRect.TopLeft() + aDiff );
                 break;
-/*
-            case 0:
-                aTrackRect = Rectangle( rTrackPos, aOuter.BottomRight() );
-                break;
-            case 1:
-                aTrackRect = Rectangle( Point( aOuter.Left(), rTrackPos.Y() ),
-                                         aOuter.BottomRight() );
-                break;
-            case 2:
-                aTrackRect = Rectangle( rTrackPos, aOuter.BottomLeft() );
-                break;
-            case 3:
-                aTrackRect = Rectangle( Point( rTrackPos.X(), aOuter.Top() ),
-                                         aOuter.BottomLeft() );
-                break;
-            case 4:
-                aTrackRect = Rectangle( rTrackPos, aOuter.TopLeft() );
-                break;
-            case 5:
-                aTrackRect = Rectangle( aOuter.TopLeft(),
-                                     Point( aOuter.Right(), rTrackPos.Y() ) );
-                break;
-            case 6:
-                aTrackRect = Rectangle( aOuter.TopRight(), rTrackPos );
-                break;
-            case 7:
-                aTrackRect = Rectangle( Point( rTrackPos.X(), aOuter.Top() ),
-                                         aOuter.BottomRight() );
-                break;
-            case 8:
-                aTrackRect = Rectangle( aOuter.TopLeft() + rTrackPos - aSelPos,
-                                        aOuter.GetSize() );
-                break;
-*/
         }
     }
     return aTrackRect;

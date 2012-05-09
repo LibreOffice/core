@@ -169,17 +169,9 @@ int SvRTFParser::_GetNextToken()
                             if( 0 <= nTokenValue )
                             {
                                 nUCharOverread = (sal_uInt8)nTokenValue;
-#if 1
                                 //cmc: other ifdef breaks #i3584
                                 aParserStates.top().
                                     nUCharOverread = nUCharOverread;
-#else
-                                if( !nUCharOverread )
-                                    nUCharOverread = aParserStates.top().nUCharOverread;
-                                else
-                                    aParserStates.top().
-                                        nUCharOverread = nUCharOverread;
-#endif
                             }
                             aToken.Erase(); // #i47831# erase token to prevent the token from beeing treated as text
                             // read next token
@@ -521,7 +513,7 @@ short nBrackets=1;
 if (_inSkipGroup>0)
     return;
 _inSkipGroup++;
-#if 1   //#i16185# fecking \bin keyword
+//#i16185# fecking \bin keyword
     do
     {
         switch (nNextCh)
@@ -548,30 +540,6 @@ _inSkipGroup++;
             nNextCh = GetNextChar();
         }
     } while (sal_Unicode(EOF) != nNextCh && IsParserWorking());
-#else
-    sal_Unicode cPrev = 0;
-    do {
-        switch( nNextCh )
-        {
-        case '{':
-            if( '\\' != cPrev )
-                ++nBrackets;
-            break;
-
-        case '}':
-            if( '\\' != cPrev && !--nBrackets )
-                return;
-            break;
-
-        case '\\':
-            if( '\\' == cPrev )
-                nNextCh = 0;
-            break;
-        }
-        cPrev = nNextCh;
-        nNextCh = GetNextChar();
-    } while( sal_Unicode(EOF) != nNextCh && IsParserWorking() );
-#endif
 
     if( SVPAR_PENDING != eState && '}' != nNextCh )
         eState = SVPAR_ERROR;

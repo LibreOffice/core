@@ -1397,33 +1397,6 @@ void TextView::InsertNewText( const rtl::OUString& rStr, sal_Bool bSelect )
     mpImpl->mpTextEngine->FormatAndUpdate( this );
 }
 
-/*
-void TextView::InsertText( const XubString& rStr, sal_Bool bSelect )
-{
-//  HideSelection();
-
-    TextSelection aNewSel( mpImpl->maSelection );
-
-    mpImpl->mpTextEngine->UndoActionStart();
-    TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, rStr );
-    mpImpl->mpTextEngine->UndoActionEnd();
-
-    if ( bSelect )
-    {
-        aNewSel.Justify();
-        aNewSel.GetEnd() = aPaM;
-    }
-    else
-    {
-        aNewSel = aPaM;
-    }
-
-    ImpSetSelection( aNewSel );
-
-    mpImpl->mpTextEngine->FormatAndUpdate( this );
-}
-*/
-
 TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIteratorMode )
 {
     TextPaM aPaM( rPaM );
@@ -2236,16 +2209,6 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
     Point aDocPos = GetDocPos( aMousePos );
     mpImpl->mpDDInfo->maDropPos = mpImpl->mpTextEngine->GetPaM( aDocPos );
-
-/*
-    Size aOutSize = mpImpl->mpWindow->GetOutputSizePixel();
-    if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) ||
-         ( aMousePos.Y() < 0 ) || ( aMousePos.Y() > aOutSize.Height() ) )
-    {
-        // Scroll?
-        // No, I will not receive events for this...
-    }
-*/
 
     sal_Bool bProtected = sal_False;
     if(mpImpl->mbSupportProtectAttribute)
