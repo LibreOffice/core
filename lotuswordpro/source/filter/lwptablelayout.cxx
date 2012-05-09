@@ -1245,7 +1245,7 @@ void LwpTableLayout::ConvertColumn(XFTable *pXFTable,sal_uInt8 nStartCol,sal_uIn
         return;
     }
 
-    for (sal_uInt16 iLoop = 0; iLoop < nEndCol-nStartCol ; iLoop ++)
+    for (sal_uInt32 iLoop = 0; iLoop < static_cast<sal_uInt32>(nEndCol)-nStartCol; ++iLoop)
     {
         // add row to table
         LwpObjectID *pColID = GetColumnLayoutHead();

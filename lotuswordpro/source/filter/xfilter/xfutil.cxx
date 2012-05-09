@@ -488,44 +488,59 @@ rtl::OUString   GetDrawKind(enumXFDrawKind kind)
 
 rtl::OUString   GetPageUsageName(enumXFPageUsage usage)
 {
+    rtl::OUString sRet;
     switch(usage)
     {
     case enumXFPageUsageAll:
-        return A2OUSTR("all");
+        sRet = A2OUSTR("all");
+        break;
     case enumXFPageUsageLeft:
-        return A2OUSTR("left");
+        sRet = A2OUSTR("left");
+        break;
     case enumXFPageUsageRight:
-        return A2OUSTR("right");
+        sRet = A2OUSTR("right");
+        break;
     case enumXFPageUsageMirror:
-        return A2OUSTR("mirrored");
+        sRet = A2OUSTR("mirrored");
+        break;
     default:
-        return A2OUSTR("mirrored");
+        sRet = A2OUSTR("mirrored");
+        break;
     }
-    return A2OUSTR("");
+    return sRet;
 }
 
 rtl::OUString   GetValueType(enumXFValueType type)
 {
+    rtl::OUString sRet;
     switch(type)
     {
     case enumXFValueTypeBoolean:
-        return A2OUSTR("boolean");
+        sRet = A2OUSTR("boolean");
+        break;
     case enumXFValueTypeCurrency:
-        return A2OUSTR("currency");
+        sRet = A2OUSTR("currency");
+        break;
     case enumXFValueTypeDate:
-        return A2OUSTR("date");
+        sRet = A2OUSTR("date");
+        break;
     case enumXFValueTypeFloat:
-        return A2OUSTR("float");
+        sRet = A2OUSTR("float");
+        break;
     case enumXFValueTypePercentage:
-        return A2OUSTR("percentage");
+        sRet = A2OUSTR("percentage");
+        break;
     case enumXFValueTypeString:
-        return A2OUSTR("string");
+        sRet = A2OUSTR("string");
+        break;
     case enumXFValueTypeTime:
-        return A2OUSTR("time");
+        sRet = A2OUSTR("time");
+        break;
     default:
-        return A2OUSTR("mirrored");
+        sRet = A2OUSTR("mirrored");
+        break;
     }
-    return A2OUSTR("");
+    return sRet;
 }
 
 rtl::OUString   GetColorMode(enumXFColorMode mode)
