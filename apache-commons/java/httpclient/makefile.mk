@@ -45,14 +45,14 @@ TARFILE_MD5=2c9b0f83ed5890af02c0df1c1776f39b
 
 TARFILE_ROOTDIR=commons-httpclient-3.1
 
-#PATCH_FILES=$(PRJ)$/patches$/httpclient.patch
+PATCH_FILES=$(PRJ)$/patches$/httpclient.patch
 
 #CONVERTFILES=build.xml
                 
 OUT2CLASS=dist$/commons-httpclient.jar
 
 COMMONS_LOGGING_JAR=..$/..$/..$/..$/$(INPATH)$/class$/commons-logging-1.1.1-SNAPSHOT.jar
-COMMONS_CODEC_JAR=..$/..$/..$/..$/$/$(INPATH)$/class$/commons-codec-1.3.jar
+COMMONS_CODEC_JAR=..$/..$/..$/..$/$/$(INPATH)$/class$/commons-codec-1.6-SNAPSHOT.jar
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

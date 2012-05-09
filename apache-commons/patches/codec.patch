@@ -1,17 +1,20 @@
---- misc/build/commons-codec-1.3/build.xml-old	2008-01-31 15:28:58.000000000 +0100
-+++ misc/build/commons-codec-1.3/build.xml	2008-01-31 15:29:21.000000000 +0100
-@@ -90,14 +90,12 @@
+--- misc/build/commons-codec-1.6-src/build.xml-old	2012-05-05 22:12:32.000000000 -0500
++++ misc/build/commons-codec-1.6-src/build.xml	2012-05-05 22:16:00.000000000 -0500
+@@ -96,7 +96,6 @@
      </target>
-     <target name="dist" depends="compile,javadoc" description="Create binary distribution">
+     <target name="dist" depends="compile, javadoc" description="Create binary distribution">
          <mkdir dir="${dist.home}"/>
--        <copy file="../LICENSE" todir="${dist.home}"/>
+-        <copy file="${basedir}/LICENSE.txt" todir="${dist.home}"/>
+         <copy file="${basedir}/NOTICE.txt" todir="${dist.home}"/>
          <copy file="${basedir}/RELEASE-NOTES.txt" todir="${dist.home}"/>
          <antcall target="jar"/>
-     </target>
+@@ -104,8 +103,7 @@
      <target name="jar" depends="compile" description="Create jar">
          <mkdir dir="${dist.home}"/>
          <mkdir dir="${build.home}/classes/META-INF"/>
--        <copy file="../LICENSE" tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
-         <jar jarfile="${dist.home}/${final.name}.jar" basedir="${build.home}/classes" manifest="${build.home}/conf/MANIFEST.MF"/>
-     </target>
-     <target name="install-jar" depends="jar" description="--> Installs jar file in ${lib.repo}">
+-        <copy file="${basedir}/LICENSE.txt" tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+-        <copy file="${basedir}/LICENSE.txt" tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
++        <copy file="${basedir}/NOTICE.txt" tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
+         <jar jarfile="${dist.home}/${final.name}.jar" basedir="${build.home}/classes">
+             <manifest>
+                 <attribute name="Specification-Title" value="Commons Codec"/>

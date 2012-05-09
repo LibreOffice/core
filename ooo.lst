@@ -10,19 +10,19 @@ http://svn.apache.org/repos/asf/incubator/ooo/trunk/ext_sources/
 # Libraries with category A license
 0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz
 067201ea8b126597670b5eff72e1f66c-mythes-1.2.0.tar.gz
-0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
 128cfc86ed5953e57fe0f5ae98b62c2e-libtextcat-2.2.tar.gz
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
 284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz
-2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
+2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
 2f6ecca935948f7db92d925d88d0d078-icu4c-4_0_1-src.tgz
 3b179ed18f65c43141528aa6d2440db4-serf-1.0.0.tar.bz2
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
 48d8169acc35f97e05d8dcdfd45be7f2-lucene-2.3.2.tar.gz
+625ff5f2f968dd908bca43c9469d6e6b-commons-lang-2.4-src.tar.gz
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 666a5d56098a9debf998510e304c8095-apr-util-1.4.1.tar.gz
 7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz
@@ -32,7 +32,6 @@ http://svn.apache.org/repos/asf/incubator/ooo/trunk/ext_sources/
 980143f96b3f6ce45d2e4947da21a5e9-stax-src-1.2.0.zip
 a2c10c04f396a9ce72894beb18b4e1f9-jpeg-8c.tar.gz
 a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
-af3c3acf618de6108d65fcdc92b492e1-commons-codec-1.3-src.tar.gz
 bc702168a2af16869201dbe91e46ae48-LICENSE_Python-2.6.1
 c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 c735eab2d659a96e5a594c9e8541ad63-zlib-1.2.5.tar.gz
