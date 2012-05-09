@@ -475,6 +475,10 @@ private:
     bool mbXMLExport : 1;                ///< sal_True: during XML export
 #endif
 
+    // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
+    //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
+    bool mbContainsAtPageObjWithContentAnchor : 1;
+
     //
     // COMPATIBILITY FLAGS START
     //
@@ -1029,6 +1033,15 @@ public:
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
+
+    void SetContainsAtPageObjWithContentAnchor( const bool bFlag )
+    {
+        mbContainsAtPageObjWithContentAnchor = bFlag;
+    }
+    bool DoesContainAtPageObjWithContentAnchor()
+    {
+        return mbContainsAtPageObjWithContentAnchor;
+    }
 
     /** Returns positions of all FlyFrames in the document.
      If a Pam-Pointer is passed the FlyFrames attached to paragraphes

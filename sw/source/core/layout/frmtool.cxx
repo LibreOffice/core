@@ -835,7 +835,7 @@ SwCntntNotify::~SwCntntNotify()
         }
     }
 
-    bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
+    const bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
 
     if ( pCnt->IsNoTxtFrm() )
     {
@@ -909,53 +909,48 @@ SwCntntNotify::~SwCntntNotify()
 
         SwDoc *pDoc = pCnt->GetNode()->GetDoc();
         if ( !pDoc->GetSpzFrmFmts()->empty() &&
-             !pDoc->IsLoaded() && !pDoc->IsNewDoc() )
+             pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->IsNewDoc() )
         {
-            //The Frm has been formatted probably for the first time.
-            //If a filter read Flys or Drawingobjects and these
-            //are bound to the page, he has a problem, because he typically
-            //does not know the number of the page. He knows only wich is the
-            //content (CntntNode) at this position.
-            //The filter provides the anchor attribut of the objects so, that
-            //they are side bound type, but the index of the anchor points
-            //to this CntntNode.
-            //Here these preliminary connections are dissolved.
+            // If certain import filters for foreign file format import
+            // AT_PAGE anchored objects, the corresponding page number is
+            // typically not known. In this case the content position is
+            // stored at which the anchored object is found in the
+            // imported document.
+            // When this content is formatted it is the time at which
+            // the page is known. Thus, this data can be corrected now.
 
             const SwPageFrm *pPage = 0;
-            SwNodeIndex   *pIdx  = 0;
+            SwNodeIndex *pIdx  = 0;
             SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
 
             for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
             {
-                if ( !pPage )
-                    pPage = pCnt->FindPageFrm();
                 SwFrmFmt *pFmt = (*pTbl)[i];
                 const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-
-                if ((FLY_AT_PAGE != rAnch.GetAnchorId()) &&
-                    (FLY_AT_PARA != rAnch.GetAnchorId()))
+                if ( FLY_AT_PAGE != rAnch.GetAnchorId() ||
+                     rAnch.GetCntntAnchor() == 0 )
                 {
-                    continue;   //#60878# It's not that character bound.
+                    continue;
                 }
 
-                if ( rAnch.GetCntntAnchor() )
+                if ( !pIdx )
                 {
-                    if ( !pIdx )
+                    pIdx = new SwNodeIndex( *pCnt->GetNode() );
+                }
+                if ( rAnch.GetCntntAnchor()->nNode == *pIdx )
+                {
+                    OSL_FAIL( "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
+                    if ( !pPage )
                     {
-                        pIdx = new SwNodeIndex( *pCnt->GetNode() );
+                        pPage = pCnt->FindPageFrm();
                     }
-                    if ( rAnch.GetCntntAnchor()->nNode == *pIdx )
+                    SwFmtAnchor aAnch( rAnch );
+                    aAnch.SetAnchor( 0 );
+                    aAnch.SetPageNum( pPage->GetPhyPageNum() );
+                    pFmt->SetFmtAttr( aAnch );
+                    if ( RES_DRAWFRMFMT != pFmt->Which() )
                     {
-                        if (FLY_AT_PAGE == rAnch.GetAnchorId())
-                        {
-                            OSL_FAIL( "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
-                            SwFmtAnchor aAnch( rAnch );
-                            aAnch.SetAnchor( 0 );
-                            aAnch.SetPageNum( pPage->GetPhyPageNum() );
-                            pFmt->SetFmtAttr( aAnch );
-                            if ( RES_DRAWFRMFMT != pFmt->Which() )
-                                pFmt->MakeFrms();
-                        }
+                        pFmt->MakeFrms();
                     }
                 }
             }

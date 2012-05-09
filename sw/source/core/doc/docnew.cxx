@@ -282,6 +282,7 @@ SwDoc::SwDoc()
 #ifdef DBG_UTIL
     mbXMLExport(false),
 #endif
+    mbContainsAtPageObjWithContentAnchor(false), //#i119292#, fdo#37024
 
     // COMPATIBILITY FLAGS START
 

@@ -2068,7 +2068,7 @@ void SwDoc::SetAllUniqueFlyNames()
     SwFrmFmts aArr;
     aArr.reserve( n );
     SwFrmFmt* pFlyFmt;
-    bool bLoadedFlag = true;            // something for the Layout
+    bool bContainsAtPageObjWithContentAnchor = false;
 
     for( n = GetSpzFrmFmts()->size(); n; )
     {
@@ -2094,22 +2094,17 @@ void SwDoc::SetAllUniqueFlyNames()
                 aArr.push_back( pFlyFmt );
 
         }
-        if( bLoadedFlag )
+        if ( !bContainsAtPageObjWithContentAnchor )
         {
             const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
-            if (((FLY_AT_PAGE == rAnchor.GetAnchorId()) &&
-                 rAnchor.GetCntntAnchor()) ||
-                // Or are DrawObjects adjusted relatively to something?
-                ( RES_DRAWFRMFMT == pFlyFmt->Which() && (
-                    SFX_ITEM_SET == pFlyFmt->GetItemState(
-                                        RES_VERT_ORIENT )||
-                    SFX_ITEM_SET == pFlyFmt->GetItemState(
-                                        RES_HORI_ORIENT ))) )
+            if ( (FLY_AT_PAGE == rAnchor.GetAnchorId()) &&
+                 rAnchor.GetCntntAnchor() )
             {
-                bLoadedFlag = false;
+                bContainsAtPageObjWithContentAnchor = true;
             }
         }
     }
+    SetContainsAtPageObjWithContentAnchor( bContainsAtPageObjWithContentAnchor );
 
     const SwNodeIndex* pIdx;
 
@@ -2154,11 +2149,6 @@ void SwDoc::SetAllUniqueFlyNames()
             GetFtnIdxs().UpdateFtn( aTmp );
         }
     }
-
-    // Found a new document, but not a page anchored Frame/DrawObjects
-    // that are anchored to another Node.
-    if( bLoadedFlag )
-        SetLoaded( sal_True );
 }
 
 bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
