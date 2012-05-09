@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <comphelper/string.hxx>
 
 #include <doctok/sprmids.hxx> // NS_sprm namespace
 #include <doctok/resourceids.hxx> // NS_rtf namespace
@@ -931,6 +932,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_FORMFIELDLIST:
         case DESTINATION_DATAFIELD:
         case DESTINATION_AUTHOR:
+        case DESTINATION_KEYWORDS:
         case DESTINATION_OPERATOR:
         case DESTINATION_COMPANY:
         case DESTINATION_COMMENT:
@@ -1305,6 +1307,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_AUTHOR:
             m_aStates.top().nDestinationState = DESTINATION_AUTHOR;
+            break;
+        case RTF_KEYWORDS:
+            m_aStates.top().nDestinationState = DESTINATION_KEYWORDS;
             break;
         case RTF_OPERATOR:
             m_aStates.top().nDestinationState = DESTINATION_OPERATOR;
@@ -3242,6 +3247,8 @@ int RTFDocumentImpl::popState()
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
     else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR && m_xDocumentProperties.is())
         m_xDocumentProperties->setAuthor(m_aStates.top().aDestinationText.makeStringAndClear());
+    else if (m_aStates.top().nDestinationState == DESTINATION_KEYWORDS && m_xDocumentProperties.is())
+        m_xDocumentProperties->setKeywords(comphelper::string::convertCommaSeparated(m_aStates.top().aDestinationText.makeStringAndClear()));
     else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT && m_xDocumentProperties.is())
         m_xDocumentProperties->setGenerator(m_aStates.top().aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR

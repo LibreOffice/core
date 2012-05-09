@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -46,11 +47,13 @@ public:
     virtual void tearDown();
     void testZoom();
     void testFdo38176();
+    void testFdo49683();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
     CPPUNIT_TEST(testFdo38176);
+    CPPUNIT_TEST(testFdo49683);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -125,6 +128,18 @@ void Test::testFdo38176()
 {
     roundtrip("fdo38176.rtf");
     CPPUNIT_ASSERT_EQUAL(9, getLength());
+}
+
+void Test::testFdo49683()
+{
+    roundtrip("fdo49683.rtf");
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
+    uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aKeywords.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("one"), aKeywords[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("two"), aKeywords[1]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

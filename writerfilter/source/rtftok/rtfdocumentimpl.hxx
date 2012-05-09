@@ -100,6 +100,7 @@ namespace writerfilter {
             DESTINATION_REVISIONTIME,
             DESTINATION_PRINTTIME,
             DESTINATION_AUTHOR,
+            DESTINATION_KEYWORDS,
             DESTINATION_OPERATOR,
             DESTINATION_COMPANY,
             DESTINATION_COMMENT,
