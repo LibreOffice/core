@@ -40,6 +40,24 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
+namespace
+{
+    Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsigned int height, unsigned int depth)
+    {
+        // The X protocol request CreatePixmap puts an upper bound
+        // of 16 bit to the size.
+        //
+        // see, e.g. moz#424333, fdo#48961
+        // we've a duplicate of this in vcl :-(
+        if (width > SAL_MAX_INT16 || height > SAL_MAX_INT16)
+        {
+            SAL_WARN("canvas", "overlarge pixmap: " << width << " x " << height);
+            return None;
+        }
+        return XCreatePixmap(display, d, width, height, depth);
+    }
+}
+
 namespace cairo
 {
 
@@ -232,7 +250,7 @@ namespace cairo
             }
 
             pFormat = XRenderFindStandardFormat( (Display*)maSysData.pDisplay, nFormat );
-            hPixmap = XCreatePixmap( (Display*)maSysData.pDisplay, maSysData.hDrawable,
+            hPixmap = limitXCreatePixmap( (Display*)maSysData.pDisplay, maSysData.hDrawable,
                                      width > 0 ? width : 1, height > 0 ? height : 1,
                                      pFormat->depth );
 
