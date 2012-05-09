@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,apache_commons_lang_inc,$(call gb_UnpackedTarba
 
 $(eval $(call gb_Package_use_external_project,apache_commons_lang_inc,apache_commons_lang))
 
-$(eval $(call gb_Package_add_file,apache_commons_lang_inc,bin/commons-lang-2.3.jar,dist/commons-lang-2.3.jar))
+$(eval $(call gb_Package_add_file,apache_commons_lang_inc,bin/commons-lang-2.4.jar,dist/commons-lang-2.4.jar))
 
 # vim: set noet sw=4 ts=4:

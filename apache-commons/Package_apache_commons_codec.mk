@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,apache_commons_codec_inc,$(call gb_UnpackedTarb
 
 $(eval $(call gb_Package_use_external_project,apache_commons_codec_inc,apache_commons_codec))
 
-$(eval $(call gb_Package_add_file,apache_commons_codec_inc,bin/commons-codec-1.3.jar,dist/commons-codec-1.3.jar))
+$(eval $(call gb_Package_add_file,apache_commons_codec_inc,bin/commons-codec-1.6.jar,dist/commons-codec-1.6-SNAPSHOT.jar))
 
 # vim: set noet sw=4 ts=4:
