@@ -52,13 +52,9 @@
     #include <algorithm>
 #endif // GCP_KERN_HACK
 
-
-#define USE_UNISCRIBE
-#ifdef USE_UNISCRIBE
 #include <usp10.h>
 #include <shlwapi.h>
 #include <winver.h>
-#endif // USE_UNISCRIBE
 
 #include <boost/unordered_map.hpp>
 #include <set>
@@ -101,13 +97,11 @@ private:
     int                     mnKerningPairs;
 #endif // GCP_KERN_HACK
 
-#ifdef USE_UNISCRIBE
 public:
     SCRIPT_CACHE&           GetScriptCache() const
                             { return maScriptCache; }
 private:
     mutable SCRIPT_CACHE    maScriptCache;
-#endif // USE_UNISCRIBE
 
 public:
     int                     GetCachedGlyphWidth( int nCharCode ) const;
@@ -149,10 +143,8 @@ public:
     float               GetFontScale() const    { return mfFontScale; }
     HFONT               DisableFontScaling( void) const;
 
-#ifdef USE_UNISCRIBE
     SCRIPT_CACHE&       GetScriptCache() const
                             { return mrWinFontEntry.GetScriptCache(); }
-#endif // USE_UNISCRIBE
 
 protected:
     HDC                 mhDC;               // WIN32 device handle
@@ -1012,8 +1004,6 @@ void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
 }
 
 // =======================================================================
-
-#ifdef USE_UNISCRIBE
 
 struct VisualItem
 {
@@ -2697,8 +2687,6 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
     return true;
 }
 
-#endif // USE_UNISCRIBE
-
 #ifdef ENABLE_GRAPHITE
 
 class GraphiteLayoutWinImpl : public GraphiteLayout
@@ -2921,7 +2909,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     const ImplWinFontData& rFontFace = *mpWinFontData[ nFallbackLevel ];
     ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
-#if defined( USE_UNISCRIBE )
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
     &&   (bUspInited || InitUSP()) )   // CTL layout engine
     {
@@ -2939,7 +2926,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         // constructor might become invalid too early
     }
     else
-#endif // USE_UNISCRIBE
     {
 #ifdef GCP_KERN_HACK
         if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && !rFontInstance.HasKernData() )
@@ -2989,19 +2975,15 @@ ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 ,    mnMinKashidaWidth( -1 )
 ,    mnMinKashidaGlyph( -1 )
 {
-#ifdef USE_UNISCRIBE
     maScriptCache = NULL;
-#endif // USE_UNISCRIBE
 }
 
 // -----------------------------------------------------------------------
 
 ImplWinFontEntry::~ImplWinFontEntry()
 {
-#ifdef USE_UNISCRIBE
     if( maScriptCache != NULL )
         ScriptFreeCache( &maScriptCache );
-#endif // USE_UNISCRIBE
 #ifdef GCP_KERN_HACK
     delete[] mpKerningPairs;
 #endif // GCP_KERN_HACK
@@ -3054,7 +3036,6 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
     // initialize the kashida width
     mnMinKashidaWidth = 0;
     mnMinKashidaGlyph = 0;
-#ifdef USE_UNISCRIBE
     if (bUspInited || InitUSP())
     {
         SCRIPT_FONTPROPERTIES aFontProperties;
@@ -3066,7 +3047,6 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
         mnMinKashidaWidth = aFontProperties.iKashidaWidth;
         mnMinKashidaGlyph = aFontProperties.wgKashida;
     }
-#endif // USE_UNISCRIBE
 
     return true;
 }
