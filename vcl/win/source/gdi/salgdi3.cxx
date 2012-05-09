@@ -1067,16 +1067,11 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 static FILE * grLogFile = NULL;
 static FILE * grLog()
 {
-#ifdef WNT
     std::string logFileName(getenv("TEMP"));
     logFileName.append("\\grface.log");
     if (grLogFile == NULL) grLogFile = fopen(logFileName.c_str(),"w");
     else fflush(grLogFile);
     return grLogFile;
-#else
-    fflush(stdout);
-    return stdout;
-#endif
 }
 #undef NDEBUG
 #endif

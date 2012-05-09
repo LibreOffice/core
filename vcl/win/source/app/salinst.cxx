@@ -28,10 +28,8 @@
 
 
 #include <string.h>
-#ifdef WNT
 #include <svsys.h>
 #include <process.h>
-#endif
 
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>

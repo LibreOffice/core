@@ -37,8 +37,6 @@ SalShlData aSalShlData;
 
 // =======================================================================
 
-#ifdef WNT
-
 extern "C"
 {
 
@@ -72,8 +70,6 @@ BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 }
 
 }
-
-#endif
 
 // =======================================================================
 
