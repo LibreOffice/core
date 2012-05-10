@@ -133,8 +133,7 @@ class SwPrintData;
 class SwRenderData;
 class ViewShell;
 
-typedef UnoActionContext* UnoActionContextPtr;
-SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4)
+typedef std::deque<UnoActionContext*> ActionContextArr;
 
 
 /******************************************************************************

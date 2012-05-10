@@ -478,7 +478,7 @@ void SwXTextDocument::lockControllers(void) throw( RuntimeException )
     if(IsValid())
     {
         UnoActionContext* pContext = new UnoActionContext(pDocShell->GetDoc());
-        aActionArr.Insert(pContext, 0);
+        aActionArr.push_front(pContext);
     }
     else
         throw RuntimeException();
@@ -487,10 +487,10 @@ void SwXTextDocument::lockControllers(void) throw( RuntimeException )
 void SwXTextDocument::unlockControllers(void) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
-    if(aActionArr.Count())
+    if(!aActionArr.empty())
     {
-        UnoActionContext* pContext = aActionArr.GetObject(0);
-        aActionArr.Remove(0);
+        UnoActionContext* pContext = aActionArr.front();
+        aActionArr.pop_front();
         delete pContext;
     }
     else
@@ -500,7 +500,7 @@ void SwXTextDocument::unlockControllers(void) throw( RuntimeException )
 sal_Bool SwXTextDocument::hasControllersLocked(void) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
-    return aActionArr.Count() > 0;
+    return !aActionArr.empty();
 }
 
 Reference< frame::XController >  SwXTextDocument::getCurrentController(void) throw( RuntimeException )
