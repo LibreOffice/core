@@ -125,7 +125,7 @@ void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xO
             return m_sTitle;
 
         // Title seams to be unused till now ... do bootstraping
-        impl_updateTitle ();
+        impl_updateTitle (true);
 
         return m_sTitle;
 
@@ -314,7 +314,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 }
 
 //-----------------------------------------------
-void TitleHelper::impl_updateTitle ()
+void TitleHelper::impl_updateTitle (bool init)
 {
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
@@ -328,25 +328,20 @@ void TitleHelper::impl_updateTitle ()
 
     if (xModel.is ())
     {
-        impl_updateTitleForModel (xModel);
-        return;
+        impl_updateTitleForModel (xModel, init);
     }
-
-    if (xController.is ())
+    else if (xController.is ())
     {
-        impl_updateTitleForController (xController);
-        return;
+        impl_updateTitleForController (xController, init);
     }
-
-    if (xFrame.is ())
+    else if (xFrame.is ())
     {
-        impl_updateTitleForFrame (xFrame);
-        return;
+        impl_updateTitleForFrame (xFrame, init);
     }
 }
 
 //-----------------------------------------------
-void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel)
+void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel, bool init)
 {
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
@@ -404,7 +399,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
 
     // WORKAROUND: the notification is currently sent always,
     //             can be changed after shared mode is supported per UNO API
-    sal_Bool bChanged        = sal_True; // (! m_sTitle.equals(sTitle));
+    sal_Bool bChanged        = !init; // && m_sTitle != sTitle
 
              m_sTitle        = sTitle;
              m_nLeasedNumber = nLeasedNumber;
@@ -417,7 +412,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
 }
 
 //-----------------------------------------------
-void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController)
+void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init)
 {
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
@@ -471,7 +466,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
     aLock.reset ();
 
         ::rtl::OUString sNewTitle       = sTitle.makeStringAndClear ();
-        sal_Bool        bChanged        = (! m_sTitle.equals(sNewTitle));
+        sal_Bool        bChanged        = !init && m_sTitle != sNewTitle;
                         m_sTitle        = sNewTitle;
                         m_nLeasedNumber = nLeasedNumber;
 
@@ -483,7 +478,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
 }
 
 //-----------------------------------------------
-void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame, bool init)
 {
     if ( ! xFrame.is ())
         return;
@@ -516,7 +511,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     aLock.reset ();
 
         ::rtl::OUString sNewTitle = sTitle.makeStringAndClear ();
-        sal_Bool        bChanged  = (! m_sTitle.equals(sNewTitle));
+        sal_Bool        bChanged  = !init && m_sTitle != sNewTitle;
                         m_sTitle  = sNewTitle;
 
     aLock.clear ();

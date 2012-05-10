@@ -163,10 +163,10 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
         void impl_sendTitleChangedEvent ();
 
-        void impl_updateTitle ();
-        void impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel);
-        void impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController);
-        void impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void impl_updateTitle (bool init = false);
+        void impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel >& xModel, bool init);
+        void impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init);
+        void impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame, bool init);
 
         void impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel);
         void impl_startListeningForController (const css::uno::Reference< css::frame::XController >& xController);
