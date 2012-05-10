@@ -330,9 +330,9 @@ bool ImplImageTree::find(
                 throw;
             } catch (css::uno::Exception & e) {
                 OSL_TRACE(
-                    "ImplImageTree::find exception \"%s\"",
-                    rtl::OUStringToOString(
-                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    "ImplImageTree::find exception \"%s\" for \"%s\"",
+                    rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8).getStr(),
+                    rtl::OUStringToOString( i->first, RTL_TEXTENCODING_UTF8).getStr());
                 i = m_zips.erase(i);
                 continue;
             }
