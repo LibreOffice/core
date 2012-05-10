@@ -2744,7 +2744,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
     aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
     aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
-    aStyleSettings.SetWorkspaceColor( ImplWinColorToSal( GetSysColor( COLOR_APPWORKSPACE ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
     aStyleSettings.SetDialogColor( aStyleSettings.GetFaceColor() );
