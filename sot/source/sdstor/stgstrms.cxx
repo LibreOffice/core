@@ -455,17 +455,14 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         }
         else
         {
-            size_t nBgnDistance = std::distance(m_aPagesCache.begin(), aI);
+            size_t nBgnIndex = std::distance(m_aPagesCache.begin(), aI);
+            size_t nIndex = nBgnIndex + nRel;
 
-            size_t nIndex = nBgnDistance + nRel;
-
-            if (nIndex > m_aPagesCache.size())
-            {
-                nRel = m_aPagesCache.size() - nBgnDistance;
+            if (nIndex >= m_aPagesCache.size())
                 nIndex = m_aPagesCache.size() - 1;
-            }
-            else
-                nRel = 0;
+
+            size_t nSuccessfulStepsTaken = nIndex - nBgnIndex;
+            nRel -= nSuccessfulStepsTaken;
 
             nLast = nIndex ? m_aPagesCache[nIndex - 1] : STG_EOF;
             nBgn = m_aPagesCache[nIndex];
