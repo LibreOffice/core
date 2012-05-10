@@ -172,8 +172,14 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
     {
         maColorScaleRuleEntries[mnCfvo].mbMax = true;
     }
+    else if( aType == "percent" )
+    {
+        maColorScaleRuleEntries[mnCfvo].mbPercent = true;
+    }
     else if( aType == "percentile" )
     {
+        // this is most likely wrong but I have no idea what the difference
+        // between percent and percentile should be when calculating colors
         maColorScaleRuleEntries[mnCfvo].mbPercent = true;
     }
 
