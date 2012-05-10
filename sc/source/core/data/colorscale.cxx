@@ -311,6 +311,38 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     return new Color(aColor);
 }
 
+void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+{
+    size_t n = maRanges.size();
+    SCTAB nMinTab = std::min<SCTAB>(nOldTab, nNewTab);
+    SCTAB nMaxTab = std::max<SCTAB>(nOldTab, nNewTab);
+    for(size_t i = 0; i < n; ++i)
+    {
+        ScRange* pRange = maRanges[i];
+        SCTAB nTab = pRange->aStart.Tab();
+        if(nTab < nMinTab || nTab > nMaxTab)
+            continue;
+
+        if(nTab == nOldTab)
+        {
+            pRange->aStart.SetTab(nNewTab);
+            pRange->aEnd.SetTab(nNewTab);
+            continue;
+        }
+
+        if(nNewTab < nOldTab)
+        {
+            pRange->aStart.IncTab();
+            pRange->aEnd.IncTab();
+        }
+        else
+        {
+            pRange->aStart.IncTab(-1);
+            pRange->aEnd.IncTab(-1);
+        }
+    }
+}
+
 bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
 {
     bool bNeedUpdate = false;
@@ -404,6 +436,14 @@ void ScColorScaleFormatList::DataChanged(const ScRange& rRange)
     for(iterator itr = begin(); itr != end(); ++itr)
     {
         itr->DataChanged(rRange);
+    }
+}
+
+void ScColorScaleFormatList::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateMoveTab(nOldTab, nNewTab);
     }
 }
 

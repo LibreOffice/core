@@ -79,6 +79,7 @@ public:
     void SetRange(const ScRangeList& rList);
 
     void DataChanged(const ScRange& rRange);
+    void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
 
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
@@ -103,6 +104,7 @@ public:
     void AddFormat( ScColorScaleFormat* pFormat );
 
     void DataChanged(const ScRange& rRange);
+    void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
 
     iterator begin();
     const_iterator begin() const;

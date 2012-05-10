@@ -753,6 +753,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
                 if ( pCondFormList )
                     pCondFormList->UpdateMoveTab( nOldPos, nNewPos );
+                if ( mpColorScaleList )
+                    mpColorScaleList->UpdateMoveTab( nOldPos, nNewPos );
                 if ( pValidationList )
                     pValidationList->UpdateMoveTab( nOldPos, nNewPos );
                 if ( pUnoBroadcaster )
