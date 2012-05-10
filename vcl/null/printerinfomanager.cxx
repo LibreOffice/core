@@ -89,7 +89,7 @@ bool PrinterInfoManager::isCUPSDisabled() const
     return m_bDisableCUPS;
 }
 
-void PrinterInfoManager::setCUPSDisabled( bool bDisable )
+void PrinterInfoManager::setCUPSDisabled( bool /* bDisable */ )
 {
     // cups is already disabled in config so do nothing
 }
