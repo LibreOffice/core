@@ -66,7 +66,7 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( cfvo ):
-            mxRule->getColorScale()->importValue( rAttribs );
+            mxRule->getColorScale()->importCfvo( rAttribs );
         break;
         case XLS_TOKEN( color ):
             mxRule->getColorScale()->importColor( rAttribs );

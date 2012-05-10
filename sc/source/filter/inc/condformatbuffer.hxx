@@ -76,20 +76,39 @@ struct CondFormatRuleModel
     void                setBiff12TextType( sal_Int32 nOperator );
 };
 
+struct ColorScaleRuleModelEntry
+{
+    ::Color maColor;
+    double mnVal;
+
+    bool mbMin;
+    bool mbMax;
+    bool mbPercent;
+
+    ColorScaleRuleModelEntry():
+        maColor(),
+        mnVal(0),
+        mbMin(false),
+        mbMax(false),
+        mbPercent(false) {}
+};
+
 class ColorScaleRule : public WorksheetHelper
 {
 public:
     ColorScaleRule( const CondFormat& rFormat );
 
-    void importValue( const AttributeList& rAttribs );
+    void importCfvo( const AttributeList& rAttribs );
     void importColor( const AttributeList& rAttribs );
 
     void AddEntries( ScColorScaleFormat* pFormat );
 
 private:
     const CondFormat& mrCondFormat;
-    std::vector< ::Color > maColors;
-    std::vector< double > maValues;
+    std::vector< ColorScaleRuleModelEntry > maColorScaleRuleEntries;
+
+    sal_uInt32 mnCfvo;
+    sal_uInt32 mnCol;
 };
 
 

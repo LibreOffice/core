@@ -145,18 +145,39 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
 
 ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mrCondFormat( rFormat )
+    mrCondFormat( rFormat ),
+    mnCfvo(0),
+    mnCol(0)
 {
 }
 
-void ColorScaleRule::importValue( const AttributeList& rAttribs )
+void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
 {
+    if(mnCfvo >= maColorScaleRuleEntries.size())
+        maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
+
     rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
+
+    double nVal = rAttribs.getDouble( XML_val, 0.0 );
+    maColorScaleRuleEntries[mnCfvo].mnVal = nVal;
     if (aType == "num")
     {
-        double nVal = rAttribs.getDouble( XML_val, 0.0 );
-        maValues.push_back(nVal);
+        // nothing to do
     }
+    else if( aType == "min" )
+    {
+        maColorScaleRuleEntries[mnCfvo].mbMin = true;
+    }
+    else if( aType == "max" )
+    {
+        maColorScaleRuleEntries[mnCfvo].mbMax = true;
+    }
+    else if( aType == "percent" )
+    {
+        maColorScaleRuleEntries[mnCfvo].mbPercent = true;
+    }
+
+    ++mnCfvo;
 }
 
 namespace {
@@ -177,17 +198,31 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
     sal_Int32 nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
 
     ::Color aColor = RgbToRgbComponents( nColor );
-    maColors.push_back(aColor);
+
+    if(mnCol >= maColorScaleRuleEntries.size())
+        maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
+
+    maColorScaleRuleEntries[mnCol].maColor = aColor;
+    ++mnCol;
 }
 
 void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat )
 {
     //assume that both vectors contain the same entries
     // TODO: check it
-    size_t n = std::min<size_t>(maColors.size(), maValues.size());
-    for(size_t i = 0; i < n; ++i)
+    for(size_t i = 0; i < maColorScaleRuleEntries.size(); ++i)
     {
-        pFormat->AddEntry( new ScColorScaleEntry(maValues[i], maColors[i]) );
+        ScColorScaleEntry* pEntry = new ScColorScaleEntry(maColorScaleRuleEntries[i].mnVal, maColorScaleRuleEntries[i].maColor);
+        const ColorScaleRuleModelEntry& rEntry = maColorScaleRuleEntries[i];
+
+        if(rEntry.mbMin)
+            pEntry->SetMin(true);
+        if(rEntry.mbMax)
+            pEntry->SetMax(true);
+        if(rEntry.mbPercent)
+            pEntry->SetPercent(true);
+
+        pFormat->AddEntry( pEntry );
     }
 }
 
