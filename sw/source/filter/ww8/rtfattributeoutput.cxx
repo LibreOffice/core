@@ -412,10 +412,10 @@ void RtfAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*/
     m_aRun->append(m_aStyles.makeStringAndClear());
 }
 
-void RtfAttributeOutput::RunText( const String& rText, rtl_TextEncoding eCharSet )
+void RtfAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    RawText( rText, 0, eCharSet );
+    RawText( rText, 0, m_rExport.eCurrentEncoding );
 }
 
 OStringBuffer& RtfAttributeOutput::RunText()
@@ -1911,7 +1911,7 @@ void RtfAttributeOutput::CharFont( const SvxFontItem& rFont)
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LOCH);
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_F);
     m_aStylesEnd.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
-    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(rFont.GetCharSet()));
+    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(rtl_getBestWindowsCharsetFromTextEncoding(rFont.GetCharSet()));
 }
 
 void RtfAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)

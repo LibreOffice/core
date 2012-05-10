@@ -882,27 +882,13 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
             if (c >= ' ' && c <= '~')
                 aBuf.append((sal_Char)c);
             else {
-                //If we can't convert to the dest encoding, or if
-                //its an uncommon multibyte sequence which most
-                //readers won't be able to handle correctly, then
-                //If we can't convert to the dest encoding, then
-                //export as unicode
                 OUString sBuf(&c, 1);
                 OString sConverted;
-                sal_uInt32 nFlags =
-                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
-                    RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
-                bool bWriteAsUnicode = !(sBuf.convertToString(&sConverted,
-                            eDestEnc, nFlags))
-                    || (RTL_TEXTENCODING_UTF8==eDestEnc); // #i43933# do not export UTF-8 chars in RTF;
-                if (bWriteAsUnicode)
-                    sBuf.convertToString(&sConverted,
-                            eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
+                sBuf.convertToString(&sConverted, eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
                 const sal_Int32 nLen = sConverted.getLength();
 
-                if (bWriteAsUnicode && pUCMode)
+                if (pUCMode)
                 {
-                    // then write as unicode - character
                     if (*pUCMode != nLen)
                     {
                         aBuf.append("\\uc");

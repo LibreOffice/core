@@ -735,7 +735,7 @@ void wwFont::WriteRtf( const RtfAttributeOutput* rAttrOutput ) const
 {
     rAttrOutput->FontFamilyType( meFamily, *this );
     rAttrOutput->FontPitchType( mePitch );
-    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ) );
+    rAttrOutput->FontCharset( rtl_getBestWindowsCharsetFromTextEncoding( meChrSet ) );
     rAttrOutput->StartFont( msFamilyNm );
     if ( mbAlt )
         rAttrOutput->FontAlternateName( msAltNm );
