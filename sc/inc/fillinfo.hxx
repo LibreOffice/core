@@ -31,7 +31,6 @@
 
 #include <svx/framelinkarray.hxx>
 #include "global.hxx"
-#include <boost/shared_ptr.hpp>
 
 class SfxItemSet;
 class SvxBrushItem;
@@ -69,7 +68,7 @@ struct CellInfo
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
-    boost::shared_ptr<Color>    pColorScale;
+    const Color*                pColorScale;
 
     const SvxBrushItem*         pBackground;
 
@@ -103,6 +102,14 @@ struct CellInfo
 
     sal_Bool                        bHideGrid : 1;              // output-internal
     sal_Bool                        bEditEngine : 1;            // output-internal
+
+    CellInfo():
+        pColorScale(NULL) {}
+
+    ~CellInfo()
+    {
+        delete pColorScale;
+    }
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;

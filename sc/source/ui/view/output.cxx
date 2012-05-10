@@ -73,6 +73,8 @@
 
 #include <math.h>
 
+#include <iostream>
+
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -760,6 +762,17 @@ sal_Bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
             if ( rFirst.pCellInfo[nX+1].bPrinted != rOther.pCellInfo[nX+1].bPrinted )
                 return false;
 
+    for ( nX=nX1; nX<=nX2; nX++ )
+    {
+        const Color* pCol1 = rFirst.pCellInfo[nX+1].pColorScale;
+        const Color* pCol2 = rOther.pCellInfo[nX+1].pColorScale;
+        if( (pCol1 && !pCol2) || (!pCol1 && pCol2) )
+            return false;
+
+        if (pCol1 && (*pCol1 != *pCol2))
+            return false;
+    }
+
     return sal_True;
 }
 
@@ -869,7 +882,22 @@ void ScOutputData::DrawBackground()
                         pBackground = lcl_FindBackground( pDoc, nX, nY, nTab );
                     }
 
-                    if ( pBackground != pOldBackground )
+                    if( pInfo->pColorScale )
+                    {
+                        std::cout << "pColorScale: finally Found it !" << std::endl;
+                        std::cout << nX << " " << nArrY << std::endl;
+                        pOldBackground = NULL;
+
+                        aRect.Right() = nPosX-nSignedOneX;
+                        const Color* pColor = pInfo->pColorScale;
+                        if( !pColor->GetTransparency() )
+                        {
+                            pDev->SetFillColor( *pColor );
+                            pDev->DrawRect( aRect );
+                        }
+                        aRect.Left() = nPosX - nSignedOneX;
+                    }
+                    else if ( pBackground != pOldBackground )
                     {
                         aRect.Right() = nPosX-nSignedOneX;
                         if (pOldBackground)             // ==0 if hidden
@@ -1463,27 +1491,46 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                             //  high contrast for cell borders and backgrounds -> empty background
                             pBackground = ScGlobal::GetEmptyBrushItem();
                         }
-                        const Color& rColor = pBackground->GetColor();
-                        if ( rColor.GetTransparency() != 255 )
+                        if(!pInfo->pColorScale)
                         {
-                            //  draw background only for the changed row itself
-                            //  (background doesn't extend into other cells).
-                            //  For the borders (rotated and normal), clipping should be
-                            //  set if the row isn't changed, but at least the borders
-                            //  don't cover the cell contents.
-                            if ( rThisRowInfo.bChanged )
+                            const Color& rColor = pBackground->GetColor();
+                            if ( rColor.GetTransparency() != 255 )
                             {
-                                Polygon aPoly( 4, aPoints );
+                                //  draw background only for the changed row itself
+                                //  (background doesn't extend into other cells).
+                                //  For the borders (rotated and normal), clipping should be
+                                //  set if the row isn't changed, but at least the borders
+                                //  don't cover the cell contents.
+                                if ( rThisRowInfo.bChanged )
+                                {
+                                    Polygon aPoly( 4, aPoints );
 
-                                //  ohne Pen wird bei DrawPolygon rechts und unten
-                                //  ein Pixel weggelassen...
-                                if ( rColor.GetTransparency() == 0 )
-                                    pDev->SetLineColor(rColor);
-                                else
-                                    pDev->SetLineColor();
-                                pDev->SetFillColor(rColor);
-                                pDev->DrawPolygon( aPoly );
+                                    //  ohne Pen wird bei DrawPolygon rechts und unten
+                                    //  ein Pixel weggelassen...
+                                    if ( rColor.GetTransparency() == 0 )
+                                        pDev->SetLineColor(rColor);
+                                    else
+                                        pDev->SetLineColor();
+                                    pDev->SetFillColor(rColor);
+                                    pDev->DrawPolygon( aPoly );
+                                }
                             }
+                        }
+                        else
+                        {
+                            std::cout << "ColorScale" << std::endl;
+                            Polygon aPoly( 4, aPoints );
+                            const Color* pColor = pInfo->pColorScale;
+
+                            //  ohne Pen wird bei DrawPolygon rechts und unten
+                            //  ein Pixel weggelassen...
+                            if ( pColor->GetTransparency() == 0 )
+                                pDev->SetLineColor(*pColor);
+                            else
+                                pDev->SetLineColor();
+                            pDev->SetFillColor(*pColor);
+                            pDev->DrawPolygon( aPoly );
+
                         }
 
                         svx::frame::Style aTopLine, aBottomLine, aLeftLine, aRightLine;

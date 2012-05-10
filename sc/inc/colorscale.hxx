@@ -55,6 +55,8 @@ private:
     typedef boost::ptr_vector<ScColorScaleEntry> ColorScaleEntries;
     ColorScaleEntries maColorScales;
 public:
+    ScColorScaleFormat(ScDocument* pDoc);
+
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
 

@@ -61,8 +61,6 @@
 #include "docpool.hxx"
 #include "scitems.hxx"
 
-#include <iostream>
-
 namespace oox {
 namespace xls {
 
@@ -158,7 +156,6 @@ void ColorScaleRule::importValue( const AttributeList& rAttribs )
     {
         double nVal = rAttribs.getDouble( XML_val, 0.0 );
         maValues.push_back(nVal);
-        std::cout << "ColorScaleRule::importValue: " << nVal << std::endl;
     }
 }
 
@@ -659,7 +656,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
     else if( mpColor )
     {
         ScDocument& rDoc = getScDocument();
-        ScColorScaleFormat* pFormat = new ScColorScaleFormat();
+        ScColorScaleFormat* pFormat = new ScColorScaleFormat(&rDoc);
 
         mpColor->AddEntries( pFormat );
         sal_Int32 nIndex = rDoc.AddColorScaleFormat(pFormat);

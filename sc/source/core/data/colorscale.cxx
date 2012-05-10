@@ -54,6 +54,11 @@ const Color& ScColorScaleEntry::GetColor() const
     return maColor;
 }
 
+ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
+    mpDoc(pDoc)
+{
+}
+
 void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
 {
     maColorScales.push_back( pEntry );
@@ -99,7 +104,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     // now we have for sure a value
     double nVal = mpDoc->GetValue(rAddr);
 
-    if (!maColorScales.size() < 2)
+    if (maColorScales.size() < 2)
         return NULL;
 
     const_iterator itr = begin();
@@ -109,13 +114,14 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     double nValMax = itr->GetValue();
     Color rColMax = itr->GetColor();
 
+    ++itr;
     while(itr != end() && nVal > nValMin)
     {
-        ++itr;
         rColMin = rColMax;
         nValMin = nValMax;
         rColMax = itr->GetColor();
         nValMax = itr->GetValue();
+        ++itr;
     }
 
     Color aColor = CalcColor(nVal, nValMin, rColMin, nValMax, rColMax);

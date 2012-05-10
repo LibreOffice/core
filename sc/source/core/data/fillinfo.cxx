@@ -568,7 +568,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 if ( pColorScale )
                                 {
                                     Color* pColor = pColorScale->GetColor( ScAddress( nX, nCurRow, nTab ) );
-                                    pInfo->pColorScale.reset(pColor);
+                                    pInfo->pColorScale = pColor;
                                 }
 
                                 ++nArrY;
