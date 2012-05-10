@@ -58,6 +58,7 @@
 #include "autofilterbuffer.hxx"
 #include "commentsbuffer.hxx"
 #include "condformatbuffer.hxx"
+#include "document.hxx"
 #include "drawingfragment.hxx"
 #include "drawingmanager.hxx"
 #include "formulaparser.hxx"
@@ -77,7 +78,7 @@ namespace xls {
 
 // ============================================================================
 
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
@@ -263,17 +264,17 @@ public:
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     Reference< XDrawPage > getDrawPage() const;
     /** Returns the size of the entire drawing page in 1/100 mm. */
-    const Size&         getDrawPageSize() const;
+    const awt::Size&         getDrawPageSize() const;
 
     /** Returns the absolute position of the top-left corner of the cell in 1/100 mm. */
-    Point               getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
+    awt::Point               getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the size of the cell in 1/100 mm. */
-    Size                getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
+    awt::Size                getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the address of the cell that contains the passed point in 1/100 mm. */
-    CellAddress         getCellAddressFromPosition( const Point& rPosition ) const;
+    CellAddress         getCellAddressFromPosition( const awt::Point& rPosition ) const;
     /** Returns the cell range address that contains the passed rectangle in 1/100 mm. */
-    CellRangeAddress    getCellRangeFromRectangle( const Rectangle& rRect ) const;
+    CellRangeAddress    getCellRangeFromRectangle( const awt::Rectangle& rRect ) const;
 
     /** Returns the buffer for cell contents and cell formatting. */
     inline SheetDataBuffer& getSheetData() { return maSheetData; }
@@ -314,7 +315,7 @@ public:
     /** Extends the used area of this sheet by the passed cell range. */
     void                extendUsedArea( const CellRangeAddress& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle. */
-    void                extendShapeBoundingBox( const Rectangle& rShapeRect );
+    void                extendShapeBoundingBox( const awt::Rectangle& rShapeRect );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if base width has not been set with setDefaultColumnWidth(). */
@@ -407,8 +408,8 @@ private:
     BiffSheetDrawingPtr mxBiffDrawing;      /// Collection of all BIFF/DFF shapes.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
-    Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
-    Rectangle           maShapeBoundingBox; /// Bounding box for all shapes from all drawings.
+    awt::Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
+    awt::Rectangle           maShapeBoundingBox; /// Bounding box for all shapes from all drawings.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
     ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
@@ -589,23 +590,23 @@ Reference< XDrawPage > WorksheetGlobals::getDrawPage() const
     return xDrawPage;
 }
 
-const Size& WorksheetGlobals::getDrawPageSize() const
+const awt::Size& WorksheetGlobals::getDrawPageSize() const
 {
     OSL_ENSURE( (maDrawPageSize.Width > 0) && (maDrawPageSize.Height > 0), "WorksheetGlobals::getDrawPageSize - called too early, size invalid" );
     return maDrawPageSize;
 }
 
-Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
+awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    Point aPoint;
+    awt::Point aPoint;
     PropertySet aCellProp( getCell( CellAddress( getSheetIndex(), nCol, nRow ) ) );
     aCellProp.getProperty( aPoint, PROP_Position );
     return aPoint;
 }
 
-Size WorksheetGlobals::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
+awt::Size WorksheetGlobals::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    Size aSize;
+    awt::Size aSize;
     PropertySet aCellProp( getCell( CellAddress( getSheetIndex(), nCol, nRow ) ) );
     aCellProp.getProperty( aSize, PROP_Size );
     return aSize;
@@ -680,23 +681,23 @@ bool lclUpdateInterval( sal_Int32& rnBegAddr, sal_Int32& rnMidAddr, sal_Int32& r
 
 } // namespace
 
-CellAddress WorksheetGlobals::getCellAddressFromPosition( const Point& rPosition ) const
+CellAddress WorksheetGlobals::getCellAddressFromPosition( const awt::Point& rPosition ) const
 {
     // starting cell address and its position in drawing layer (top-left edge)
     sal_Int32 nBegCol = 0;
     sal_Int32 nBegRow = 0;
-    Point aBegPos( 0, 0 );
+    awt::Point aBegPos( 0, 0 );
 
     // end cell address and its position in drawing layer (bottom-right edge)
     sal_Int32 nEndCol = mrMaxApiPos.Column + 1;
     sal_Int32 nEndRow = mrMaxApiPos.Row + 1;
-    Point aEndPos( maDrawPageSize.Width, maDrawPageSize.Height );
+    awt::Point aEndPos( maDrawPageSize.Width, maDrawPageSize.Height );
 
     // starting point for interval search
     sal_Int32 nMidCol, nMidRow;
     bool bLoopCols = lclPrepareInterval( nBegCol, nMidCol, nEndCol, aBegPos.X, aEndPos.X, rPosition.X );
     bool bLoopRows = lclPrepareInterval( nBegRow, nMidRow, nEndRow, aBegPos.Y, aEndPos.Y, rPosition.Y );
-    Point aMidPos = getCellPosition( nMidCol, nMidRow );
+    awt::Point aMidPos = getCellPosition( nMidCol, nMidRow );
 
     /*  The loop will find the column/row index of the cell right of/below
         the cell containing the passed point, unless the point is located at
@@ -716,10 +717,10 @@ CellAddress WorksheetGlobals::getCellAddressFromPosition( const Point& rPosition
     return CellAddress( getSheetIndex(), nMidCol, nMidRow );
 }
 
-CellRangeAddress WorksheetGlobals::getCellRangeFromRectangle( const Rectangle& rRect ) const
+CellRangeAddress WorksheetGlobals::getCellRangeFromRectangle( const awt::Rectangle& rRect ) const
 {
-    CellAddress aStartAddr = getCellAddressFromPosition( Point( rRect.X, rRect.Y ) );
-    Point aBotRight( rRect.X + rRect.Width, rRect.Y + rRect.Height );
+    CellAddress aStartAddr = getCellAddressFromPosition( awt::Point( rRect.X, rRect.Y ) );
+    awt::Point aBotRight( rRect.X + rRect.Width, rRect.Y + rRect.Height );
     CellAddress aEndAddr = getCellAddressFromPosition( aBotRight );
     bool bMultiCols = aStartAddr.Column < aEndAddr.Column;
     bool bMultiRows = aStartAddr.Row < aEndAddr.Row;
@@ -727,7 +728,7 @@ CellRangeAddress WorksheetGlobals::getCellRangeFromRectangle( const Rectangle& r
     {
         /*  Reduce end position of the cell range to previous column or row, if
             the rectangle ends exactly between two columns or rows. */
-        Point aEndPos = getCellPosition( aEndAddr.Column, aEndAddr.Row );
+        awt::Point aEndPos = getCellPosition( aEndAddr.Column, aEndAddr.Row );
         if( bMultiCols && (aBotRight.X <= aEndPos.X) )
             --aEndAddr.Column;
         if( bMultiRows && (aBotRight.Y <= aEndPos.Y) )
@@ -779,7 +780,7 @@ void WorksheetGlobals::extendUsedArea( const CellRangeAddress& rRange )
     extendUsedArea( CellAddress( rRange.Sheet, rRange.EndColumn, rRange.EndRow ) );
 }
 
-void WorksheetGlobals::extendShapeBoundingBox( const Rectangle& rShapeRect )
+void WorksheetGlobals::extendShapeBoundingBox( const awt::Rectangle& rShapeRect )
 {
     if( (maShapeBoundingBox.Width == 0) && (maShapeBoundingBox.Height == 0) )
     {
@@ -1413,17 +1414,17 @@ Reference< XDrawPage > WorksheetHelper::getDrawPage() const
     return mrSheetGlob.getDrawPage();
 }
 
-Point WorksheetHelper::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
+awt::Point WorksheetHelper::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     return mrSheetGlob.getCellPosition( nCol, nRow );
 }
 
-Size WorksheetHelper::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
+awt::Size WorksheetHelper::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     return mrSheetGlob.getCellSize( nCol, nRow );
 }
 
-Size WorksheetHelper::getDrawPageSize() const
+awt::Size WorksheetHelper::getDrawPageSize() const
 {
     return mrSheetGlob.getDrawPageSize();
 }
@@ -1508,7 +1509,7 @@ void WorksheetHelper::extendUsedArea( const CellRangeAddress& rRange )
     mrSheetGlob.extendUsedArea( rRange );
 }
 
-void WorksheetHelper::extendShapeBoundingBox( const Rectangle& rShapeRect )
+void WorksheetHelper::extendShapeBoundingBox( const awt::Rectangle& rShapeRect )
 {
     mrSheetGlob.extendShapeBoundingBox( rShapeRect );
 }
@@ -1545,9 +1546,7 @@ void WorksheetHelper::setManualRowHeight( sal_Int32 nRow )
 
 void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) const
 {
-    Reference< XCell > xCell = getCell( rAddress );
-    OSL_ENSURE( xCell.is(), "WorksheetHelper::putValue - missing cell interface" );
-    if( xCell.is() ) xCell->setValue( fValue );
+    getScDocument().SetValue( (SCCOL)rAddress.Column, (SCROW)rAddress.Row, (SCTAB)rAddress.Sheet, fValue );
 }
 
 void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fValue ) const
