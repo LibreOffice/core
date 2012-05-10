@@ -27,6 +27,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
+#include <svx/xbtmpit.hxx>
 
 using namespace com::sun::star;
 
@@ -48,7 +49,6 @@ uno::Reference< container::XNameContainer > XBitmapList::createInstance()
 
 sal_Bool XBitmapList::Create()
 {
-    // Array der Bitmap
     //-----------------------
     // 00 01 02 03 04 05 06 07
     // 08 09 10 11 12 13 14 15
@@ -58,31 +58,38 @@ sal_Bool XBitmapList::Create()
     // 40 41 42 43 44 45 46 47
     // 48 49 50 51 52 53 54 55
     // 56 57 58 59 60 61 62 63
+    String aStr(SVX_RES(RID_SVXSTR_BITMAP));
+    sal_uInt16 aArray[64];
+    Bitmap aBitmap;
+    const xub_StrLen nLen(aStr.Len() - 1);
 
-    String  aStr( SVX_RES( RID_SVXSTR_BITMAP ) );
-    Color   aColWhite( RGB_Color( COL_WHITE ) );
-    xub_StrLen nLen;
-    sal_uInt16  aArray[64];
+    memset(aArray, 0, sizeof(aArray));
 
-    memset( aArray, 0, sizeof( aArray ) );
+    // white/white bitmap
     aStr.AppendAscii(" 1");
-    nLen = aStr.Len() - 1;
-    Insert( new XBitmapEntry( XOBitmap( aArray, aColWhite, aColWhite ), aStr ) );
+    aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_WHITE), RGB_Color(COL_WHITE));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
 
+    // black/white bitmap
     aArray[ 0] = 1; aArray[ 9] = 1; aArray[18] = 1; aArray[27] = 1;
     aArray[36] = 1; aArray[45] = 1; aArray[54] = 1; aArray[63] = 1;
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert( new XBitmapEntry( XOBitmap( aArray, RGB_Color( COL_BLACK ), aColWhite ), aStr ) );
+    aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
 
+    // lightred/white bitmap
     aArray[ 7] = 1; aArray[14] = 1; aArray[21] = 1; aArray[28] = 1;
     aArray[35] = 1; aArray[42] = 1; aArray[49] = 1; aArray[56] = 1;
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert( new XBitmapEntry( XOBitmap( aArray, RGB_Color( COL_LIGHTRED ), aColWhite ), aStr ) );
+    aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTRED), RGB_Color(COL_WHITE));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
 
+    // lightblue/white bitmap
     aArray[24] = 1; aArray[25] = 1; aArray[26] = 1;
     aArray[29] = 1; aArray[30] = 1; aArray[31] = 1;
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert( new XBitmapEntry( XOBitmap( aArray, RGB_Color( COL_LIGHTBLUE ), aColWhite ), aStr ) );
+    aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTBLUE), RGB_Color(COL_WHITE));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
 
     return sal_True;
 }

@@ -241,9 +241,13 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
                     switch( nWhich )
                     {
                     case XATTR_FILLBITMAP:
-                        bFound =  (((XFillBitmapItem*)pCheckItem)->GetBitmapValue().GetGraphicObject().GetUniqueID() ==
-                            ((XBitmapEntry*)pEntry)->GetXBitmap().GetGraphicObject().GetUniqueID());
+                    {
+                        const GraphicObject& rGraphicObjectA(((XFillBitmapItem*)pCheckItem)->GetGraphicObject());
+                        const GraphicObject& rGraphicObjectB(((XBitmapEntry*)pEntry)->GetGraphicObject());
+
+                        bFound = (rGraphicObjectA == rGraphicObjectB);
                         break;
+                    }
                     case XATTR_LINEDASH:
                         bFound = (((XLineDashItem*)pCheckItem)->GetDashValue() == ((XDashEntry*)pEntry) ->GetDash());
                         break;

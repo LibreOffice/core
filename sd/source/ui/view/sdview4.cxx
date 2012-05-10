@@ -155,10 +155,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 EndUndo();
             }
 
-            XOBitmap aXOBitmap( rGraphic.GetBitmap() );
             SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), aXOBitmap));
+            aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
             pPickObj->SetMergedItemSetAndBroadcast(aSet);
         }
     }

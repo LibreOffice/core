@@ -670,16 +670,9 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
-            aBitmap.Read( aMemStrm, false );
-            XOBitmap aXOBitmap( aBitmap );
-            aXOBitmap.Bitmap2Array();
-            aXOBitmap.SetBitmapType( XBITMAP_8X8 );
-            if( aXOBitmap.GetBackgroundColor().GetColor() == COL_BLACK )
-                ::std::swap( aPattColor, aBackColor );
-            aXOBitmap.SetPixelColor( aPattColor );
-            aXOBitmap.SetBackgroundColor( aBackColor );
-            rSdrObj.SetMergedItem( XFillStyleItem( XFILL_BITMAP ) );
-            rSdrObj.SetMergedItem( XFillBitmapItem( EMPTY_STRING, aXOBitmap ) );
+            aBitmap.Read( aMemStrm, sal_False );
+            rSdrObj.SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+            rSdrObj.SetMergedItem(XFillBitmapItem(EMPTY_STRING, Graphic(aBitmap)));
         }
     }
 }

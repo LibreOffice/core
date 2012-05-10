@@ -20,25 +20,32 @@
 #ifndef _SVX_XBTMPIT_HXX
 #define _SVX_XBTMPIT_HXX
 
-#include "svx/svxdllapi.h"
-
-#include <svx/xbitmap.hxx>
+#include <svx/svxdllapi.h>
 #include <svx/xit.hxx>
+#include <svtools/grfmgr.hxx>
 
 class SdrModel;
+class BitmapColor;
 
-//----------------------
+//////////////////////////////////////////////////////////////////////////////
+// helper to construct historical 8x8 bitmaps with two colors
+
+Bitmap SVX_DLLPUBLIC createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, Color aColorBack);
+bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront);
+
+//////////////////////////////////////////////////////////////////////////////
 // class XFillBitmapItem
-//----------------------
+
 class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex
 {
-    XOBitmap aXOBitmap;
+private:
+    GraphicObject   maGraphicObject;
 
 public:
             TYPEINFO();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
-            XFillBitmapItem( const String& rName, const XOBitmap& rTheBitmap );
-            XFillBitmapItem( SfxItemPool* pPool, const XOBitmap& rTheBitmap );
+            XFillBitmapItem(const String& rName, const GraphicObject& rGraphicObject);
+            XFillBitmapItem(SfxItemPool* pPool, const GraphicObject& rGraphicObject);
             XFillBitmapItem( const XFillBitmapItem& rItem );
             XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer = 0 );
 
@@ -56,8 +63,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
-    const XOBitmap& GetBitmapValue() const; // GetValue -> GetBitmapValue
-    void  SetBitmapValue( const XOBitmap& rNew )  { aXOBitmap = rNew; Detach(); } // SetValue -> SetBitmapValue
+    const GraphicObject& GetGraphicObject() const;
+    void SetGraphicObject(const GraphicObject& rGraphicObject);
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillBitmapItem* checkForUniqueItem( SdrModel* pModel ) const;

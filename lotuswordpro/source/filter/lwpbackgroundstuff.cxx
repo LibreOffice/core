@@ -65,7 +65,6 @@
 
 #include "tools/stream.hxx"
 #include "vcl/bmpacc.hxx"
-#include "svx/xbitmap.hxx"
 
 
 void LwpBackgroundStuff::Read(LwpObjectStream* pStrm)
@@ -129,38 +128,9 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
         pPttnArray = NULL;
     }
 
-    // create XOBitmap object from bitmap object
-    XOBitmap aXOBitmap;
-    aXOBitmap.SetBitmap( aBmp );
-    aXOBitmap.Bitmap2Array();
-    aXOBitmap.SetBitmapType( XBITMAP_8X8 );
-
-    // set back/fore-ground colors
-    if (m_aFillColor.IsValidColor() && m_aPatternColor.IsValidColor())
-    {
-        Color aBackColor(static_cast<sal_uInt8>(m_aFillColor.GetRed()),
-            static_cast<sal_uInt8>(m_aFillColor.GetGreen()),
-            static_cast<sal_uInt8>(m_aFillColor.GetBlue()));
-        Color aForeColor(static_cast<sal_uInt8>(m_aPatternColor.GetRed()),
-            static_cast<sal_uInt8>(m_aPatternColor.GetGreen()),
-            static_cast<sal_uInt8>(m_aPatternColor.GetBlue()));
-
-        if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
-        {
-            aXOBitmap.SetPixelColor( aBackColor );
-            aXOBitmap.SetBackgroundColor( aForeColor );
-        }
-        else
-        {
-            aXOBitmap.SetPixelColor( aForeColor );
-            aXOBitmap.SetBackgroundColor( aBackColor );
-        }
-    }
-
-    // transfer image data from XOBitmap->SvStream->BYTE-Array
+    // transfer image data from Bitmap->SvStream->BYTE-Array
     SvMemoryStream aPicMemStream;
-    aXOBitmap.Array2Bitmap();
-    aXOBitmap.GetBitmap().Write(aPicMemStream);
+    aBmp.Write(aPicMemStream);
     sal_uInt32 nSize = aPicMemStream.GetEndOfData();
     sal_uInt8* pImageBuff = new sal_uInt8 [nSize];
     memcpy(pImageBuff, aPicMemStream.GetData(), nSize);

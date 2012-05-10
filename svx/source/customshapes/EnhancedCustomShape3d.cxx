@@ -405,13 +405,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     aPlaceholderObjectList.push_back( p3DObj );
                 else if ( bUseTwoFillStyles )
                 {
-                    Bitmap aFillBmp;
+                    BitmapEx aFillBmp;
                     sal_Bool bFillBmpTile = ((XFillBmpTileItem&)p3DObj->GetMergedItem( XATTR_FILLBMP_TILE )).GetValue();
                     if ( bFillBmpTile )
                     {
-                        const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
-                        const XOBitmap& rXOBmp = rBmpItm.GetBitmapValue();
-                        aFillBmp = rXOBmp.GetBitmap();
+                        const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem(XATTR_FILLBITMAP);
+                        aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
                         Size aLogicalSize = aFillBmp.GetPrefSize();
                         if ( aFillBmp.GetPrefMapMode() == MAP_PIXEL )
                             aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
@@ -421,15 +420,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         aLogicalSize.Height() *= 5;
                         aFillBmp.SetPrefSize( aLogicalSize );
                         aFillBmp.SetPrefMapMode( MAP_100TH_MM );
-                        p3DObj->SetMergedItem( XFillBitmapItem( String(), aFillBmp ) );
+                        p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
                     }
                     else
                     {
                         if ( aSnapRect != aBoundRect )
                         {
-                            const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
-                            const XOBitmap& rXOBmp = rBmpItm.GetBitmapValue();
-                            aFillBmp = rXOBmp.GetBitmap();
+                            const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem(XATTR_FILLBITMAP);
+                            aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
                             Size aBmpSize( aFillBmp.GetSizePixel() );
                             double fXScale = (double)aBoundRect.GetWidth() / (double)aSnapRect.GetWidth();
                             double fYScale = (double)aBoundRect.GetHeight() / (double)aSnapRect.GetHeight();
@@ -440,7 +438,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                                     (sal_Int32)( aBmpSize.Height() * fYScale ) );
                             Rectangle aCropRect( aPt, aSize );
                              aFillBmp.Crop( aCropRect );
-                            p3DObj->SetMergedItem( XFillBitmapItem( String(), aFillBmp ) );
+                            p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
                         }
                     }
                     pScene->Insert3DObj( p3DObj );
@@ -462,7 +460,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->NbcSetTransform( aFrontTransform );
 
                     if ( ( eFillStyle == XFILL_BITMAP ) && !aFillBmp.IsEmpty() )
-                        p3DObj->SetMergedItem( XFillBitmapItem( String(), aFillBmp ) );
+                    {
+                        p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
+                    }
                 }
                 else if ( eFillStyle == XFILL_NONE )
                 {

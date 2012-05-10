@@ -1234,9 +1234,8 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                 }
             }
 
-            XOBitmap aXBmp( aBitmap, XBITMAP_STRETCH );
-            rSet.Put( XFillBmpTileItem( sal_False ) );
-            rSet.Put( XFillBitmapItem( OUString(), aXBmp ) );
+            rSet.Put(XFillBmpTileItem(false));
+            rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmap)));
         }
     }
 }
@@ -1370,54 +1369,30 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                     bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && rManager.GetBLIPDirect( rIn, aGraf, NULL );
                 if ( bOK )
                 {
-                    Bitmap aBmp( aGraf.GetBitmap() );
-
                     if ( eMSO_FillType == mso_fillPattern )
                     {
                         Color aCol1( COL_WHITE ), aCol2( COL_WHITE );
+
                         if ( IsProperty( DFF_Prop_fillColor ) )
                             aCol1 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor );
+
                         if ( IsProperty( DFF_Prop_fillBackColor ) )
                             aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor ), DFF_Prop_fillBackColor );
 
-                        XOBitmap aXOBitmap;
-                        aXOBitmap.SetBitmap( aBmp );
-                        aXOBitmap.SetBitmapType( XBITMAP_IMPORT );
-
-                        if( aBmp.GetSizePixel().Width() == 8 && aBmp.GetSizePixel().Height() == 8 && aBmp.GetColorCount() == 2)
-                        {
-                            aXOBitmap.Bitmap2Array();
-                            aXOBitmap.SetBitmapType( XBITMAP_8X8 );
-                            aXOBitmap.SetPixelSize( aBmp.GetSizePixel() );
-
-                            if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
-                            {
-                                aXOBitmap.SetPixelColor( aCol1 );
-                                aXOBitmap.SetBackgroundColor( aCol2 );
-                            }
-                            else
-                            {
-                                aXOBitmap.SetPixelColor( aCol2 );
-                                aXOBitmap.SetBackgroundColor( aCol1 );
-                            }
-                           aXOBitmap.Array2Bitmap();
-                        }
-                        rSet.Put( XFillBitmapItem( OUString(), aXOBitmap ) );
+                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
                     }
                     else if ( eMSO_FillType == mso_fillTexture )
                     {
-                        XOBitmap aXBmp( aBmp, XBITMAP_STRETCH );
-                        rSet.Put( XFillBmpTileItem( sal_True ) );
-                        rSet.Put( XFillBitmapItem( OUString(), aXBmp ) );
-                        rSet.Put( XFillBmpSizeXItem( GetPropertyValue( DFF_Prop_fillWidth, 0 ) / 360 ) );
-                        rSet.Put( XFillBmpSizeYItem( GetPropertyValue( DFF_Prop_fillHeight, 0 ) / 360 ) );
-                        rSet.Put( XFillBmpSizeLogItem( sal_True ) );
+                        rSet.Put(XFillBmpTileItem(true));
+                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBmpSizeXItem(GetPropertyValue(DFF_Prop_fillWidth, 0) / 360));
+                        rSet.Put(XFillBmpSizeYItem(GetPropertyValue(DFF_Prop_fillHeight, 0) / 360));
+                        rSet.Put(XFillBmpSizeLogItem(true));
                     }
                     else
                     {
-                        XOBitmap aXBmp( aBmp, XBITMAP_STRETCH );
-                        rSet.Put( XFillBitmapItem( OUString(), aXBmp ) );
-                        rSet.Put( XFillBmpTileItem( sal_False ) );
+                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBmpTileItem(false));
                     }
                 }
             }

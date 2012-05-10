@@ -31,7 +31,6 @@
 #include <svx/xsflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 

@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-class Bitmap;
+class BitmapEx;
 
 namespace basegfx {
     class B2DRange;
@@ -51,7 +51,7 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             SdrFillBitmapAttribute(
-                const Bitmap& rBitmap,
+                const BitmapEx& rBitmapEx,
                 const basegfx::B2DVector& rSize,
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rOffsetPosition,
@@ -71,7 +71,7 @@ namespace drawinglayer
             bool operator==(const SdrFillBitmapAttribute& rCandidate) const;
 
             // data read access
-            const Bitmap& getBitmap() const;
+            const BitmapEx& getBitmapEx() const;
             const basegfx::B2DVector& getSize() const;
             const basegfx::B2DVector& getOffset() const;
             const basegfx::B2DVector& getOffsetPosition() const;

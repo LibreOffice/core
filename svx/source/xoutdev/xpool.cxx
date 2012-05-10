@@ -39,7 +39,7 @@ XOutdevItemPool::XOutdevItemPool(
 {
     // prepare some defaults
     const XubString aNullStr;
-    const Bitmap aNullBmp;
+    const Graphic aNullGraphic;
     const basegfx::B2DPolyPolygon aNullPol;
     const Color aNullLineCol(RGB_Color(COL_BLACK));
     const Color aNullFillCol(RGB_COLORDATA( 153, 204, 255 ));
@@ -85,7 +85,7 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
     mppLocalPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(aNullGrad);
     mppLocalPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (this,aNullHatch);
-    mppLocalPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (this,aNullBmp);
+    mppLocalPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (this, aNullGraphic);
     mppLocalPoolDefaults[XATTR_FILLTRANSPARENCE     -XATTR_START] = new XFillTransparenceItem;
     mppLocalPoolDefaults[XATTR_GRADIENTSTEPCOUNT        -XATTR_START] = new XGradientStepCountItem;
     mppLocalPoolDefaults[XATTR_FILLBMP_TILE         -XATTR_START] = new XFillBmpTileItem;

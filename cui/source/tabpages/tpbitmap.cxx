@@ -89,7 +89,7 @@ SvxBitmapTabPage::SvxBitmapTabPage
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_BITMAP ),
-    aXBitmapItem        ( String(), XOBitmap() ),
+    aXBitmapItem        ( String(), Graphic() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
@@ -237,32 +237,26 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 {
     if( *pDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
     {
-        if( *pPageType == PT_BITMAP )
+        if(PT_BITMAP == *pPageType)
         {
-            // CheckChanges_Impl(); <-- duplicate inquiry?
-
-            XOBitmap aXOBitmap;
-            String aString;
+            _rOutAttrs.Put(XFillStyleItem(XFILL_BITMAP));
             sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
-            if( nPos != LISTBOX_ENTRY_NOTFOUND )
+            if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
-                aXOBitmap = pBitmapList->GetBitmap( nPos )->GetXBitmap();
-                aString = aLbBitmaps.GetSelectEntry();
+                const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
+                const String aString(aLbBitmaps.GetSelectEntry());
 
+                _rOutAttrs.Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
             }
             else
             {
-                aXOBitmap = aBitmapCtl.GetXBitmap();
+                const BitmapEx aBitmapEx(aBitmapCtl.GetBitmapEx());
 
-                // #85339# if it's an array, force conversion to bitmap before using it.
-                if(aXOBitmap.GetBitmapType() == XBITMAP_8X8)
-                    aXOBitmap.GetBitmap();
-
+                _rOutAttrs.Put(XFillBitmapItem(String(), Graphic(aBitmapEx)));
             }
-            _rOutAttrs.Put( XFillStyleItem( XFILL_BITMAP ) );
-            _rOutAttrs.Put( XFillBitmapItem( aString, aXOBitmap ) );
         }
     }
+
     return sal_True;
 }
 
@@ -278,7 +272,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     aBitmapCtl.SetBmpArray( aCtlPixel.GetBitmapPixelPtr() );
 
     // get bitmap and display it
-    XFillBitmapItem aBmpItem( (const String &) String(), aBitmapCtl.GetXBitmap() );
+    const XFillBitmapItem aBmpItem(OUString(), Graphic(aBitmapCtl.GetBitmapEx()));
     rXFSet.Put( aBmpItem );
     aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
@@ -313,145 +307,49 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
-    XOBitmap* pXOBitmap = NULL;
-    int nPos = aLbBitmaps.GetSelectEntryPos();
+    GraphicObject* pGraphicObject = 0;
+    int nPos(aLbBitmaps.GetSelectEntryPos());
 
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pXOBitmap = new XOBitmap( ( (XBitmapEntry*) pBitmapList->GetBitmap( nPos ) )->GetXBitmap() );
+    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    {
+        pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+    }
     else
     {
-        const SfxPoolItem* pPoolItem = NULL;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), sal_True, &pPoolItem ) )
+        const SfxPoolItem* pPoolItem = 0;
+
+        if(SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
         {
-            XFillStyle eXFS = (XFillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue();
-            if( ( XFILL_BITMAP == eXFS ) &&
-                ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True, &pPoolItem ) ) )
+            const XFillStyle eXFS((XFillStyle)((const XFillStyleItem*)pPoolItem)->GetValue());
+
+            if((XFILL_BITMAP == eXFS) && (SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
             {
-                pXOBitmap = new XOBitmap( ( ( const XFillBitmapItem* ) pPoolItem )->GetBitmapValue() );
+                pGraphicObject = new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject());
             }
         }
-        if( !pXOBitmap )
+
+        if(!pGraphicObject)
         {
-            aLbBitmaps.SelectEntryPos( 0 );
+            aLbBitmaps.SelectEntryPos(0);
             nPos = aLbBitmaps.GetSelectEntryPos();
-            if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pXOBitmap = new XOBitmap( ( (XBitmapEntry*) pBitmapList->GetBitmap( nPos ) )->GetXBitmap() );
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            {
+                pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+            }
         }
     }
-    if( pXOBitmap )
+
+    if(pGraphicObject)
     {
-        // #85339# try to convert bitmapped item to array item.
-        if(pXOBitmap->GetBitmapType() == XBITMAP_IMPORT)
-        {
-            Bitmap aBitmap(pXOBitmap->GetBitmap());
-            Size aSizePixel(aBitmap.GetSizePixel());
-
-            if(8 == aSizePixel.Width() && 8 == aSizePixel.Height())
-            {
-                sal_uInt16* pPixelArray = new sal_uInt16[64];
-                sal_uInt32 nCol1(0xffffffff); // background
-                sal_uInt32 nCol2(0xffffffff); // pixel
-                BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
-                sal_Bool bValid(sal_True);
-
-                if(pAccess)
-                {
-                    for(sal_uInt32 a(0); bValid && a < 64; a++)
-                    {
-                        const BitmapColor aBmCol = pAccess->GetColor(a>>3, a%8);
-                        Color aRgbCol(aBmCol.GetRed(), aBmCol.GetGreen(), aBmCol.GetBlue());
-                        sal_uInt32 nColVal = aRgbCol.GetRGBColor();
-
-                        // test with nCol1
-                        if(nCol1 != nColVal)
-                        {
-                            if(0xffffffff == nCol1)
-                            {
-                                // nCol1 is used first time
-                                nCol1 = nColVal;
-                                pPixelArray[a] = 0;
-                            }
-                            else
-                            {
-                                // test with nCol2
-                                if(nCol2 != nColVal)
-                                {
-                                    if(0xffffffff == nCol2)
-                                    {
-                                        // nCol2 used first time
-                                        nCol2 = nColVal;
-                                        pPixelArray[a] = 1;
-                                    }
-                                    else
-                                    {
-                                        // Third color detected
-                                        bValid = sal_False;
-                                    }
-                                }
-                                else
-                                {
-                                    // color is pixel color
-                                    pPixelArray[a] = 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // color is background color
-                            pPixelArray[a] = 0;
-                        }
-                    }
-
-                    // release ReadAccess
-                    aBitmap.ReleaseAccess(pAccess);
-                }
-                else
-                {
-                    // no access -> no success
-                    bValid = sal_False;
-                }
-
-                if(bValid)
-                {
-                    Color aCol1(nCol1);
-                    Color aCol2(nCol2);
-
-                    // no pixel color found? Use opposite od background color.
-                    if(0xffffffff == nCol2)
-                    {
-                        aCol2 = Color(
-                            0xff - aCol1.GetRed(),
-                            0xff - aCol1.GetGreen(),
-                            0xff - aCol1.GetBlue());
-                    }
-
-                    // transformation did work, create a new Item
-                    delete pXOBitmap;
-                    pXOBitmap = new XOBitmap(pPixelArray, aCol2, aCol1);
-                }
-
-                // cleanup
-                delete[] pPixelArray;
-            }
-        }
+        BitmapColor aBack;
+        BitmapColor aFront;
+        bool bIs8x8(isHistorical8x8(pGraphicObject->GetGraphic().GetBitmap(), aBack, aFront));
 
         aLbColor.SetNoSelection();
         aLbBackgroundColor.SetNoSelection();
 
-        if( pXOBitmap->GetBitmapType() == XBITMAP_IMPORT )
-        {
-            aCtlPixel.Reset();
-            aCtlPixel.SetPaintable( sal_False );
-            aCtlPixel.Disable();
-            aFtPixelEdit.Disable();
-            aFtColor.Disable();
-            aLbColor.Disable();
-            aFtBackgroundColor.Disable();
-            aLbBackgroundColor.Disable();
-            aBtnModify.Disable();
-            aBtnAdd.Disable();
-        }
-        else if( pXOBitmap->GetBitmapType() == XBITMAP_8X8 )
+        if(bIs8x8)
         {
             aCtlPixel.SetPaintable( sal_True );
             aCtlPixel.Enable();
@@ -464,10 +362,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
             aBtnAdd.Enable();
 
             // setting the pixel control
-            aCtlPixel.SetXBitmap( *pXOBitmap );
+            aCtlPixel.SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
 
-            Color aPixelColor = pXOBitmap->GetPixelColor();
-            Color aBackColor  = pXOBitmap->GetBackgroundColor();
+            Color aPixelColor = aFront;
+            Color aBackColor = aBack;
 
             aBitmapCtl.SetPixelColor( aPixelColor );
             aBitmapCtl.SetBackgroundColor( aBackColor );
@@ -493,19 +391,34 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
                 aLbBackgroundColor.SelectEntry( aBackColor );
             }
         }
+        else
+        {
+            aCtlPixel.Reset();
+            aCtlPixel.SetPaintable( sal_False );
+            aCtlPixel.Disable();
+            aFtPixelEdit.Disable();
+            aFtColor.Disable();
+            aLbColor.Disable();
+            aFtBackgroundColor.Disable();
+            aLbBackgroundColor.Disable();
+            aBtnModify.Disable();
+            aBtnAdd.Disable();
+        }
+
         aCtlPixel.Invalidate();
 
         // display bitmap
-        XFillBitmapItem aXBmpItem( (const String &) String(), *pXOBitmap );
+        const XFillBitmapItem aXBmpItem(String(), *pGraphicObject);
         rXFSet.Put( aXBmpItem );
 
         aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
         bBmpChanged = sal_False;
-        delete pXOBitmap;
+        delete pGraphicObject;
     }
-    return 0L;
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -624,21 +537,17 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         XBitmapEntry* pEntry = 0;
         if( aCtlPixel.IsEnabled() )
         {
-            XOBitmap aXOBitmap = aBitmapCtl.GetXBitmap();
+            const BitmapEx aBitmapEx(aBitmapCtl.GetBitmapEx());
 
-            // #85339# if it's an array, force conversion to bitmap before using it.
-            if(aXOBitmap.GetBitmapType() == XBITMAP_8X8)
-                aXOBitmap.GetBitmap();
-
-            pEntry = new XBitmapEntry( aXOBitmap, aName );
+            pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
         }
         else // it must be a not existing imported bitmap
         {
-            const SfxPoolItem* pPoolItem = NULL;
-            if( SFX_ITEM_SET == rOutAttrs.GetItemState( XATTR_FILLBITMAP, sal_True, &pPoolItem ) )
+            const SfxPoolItem* pPoolItem = 0;
+
+            if(SFX_ITEM_SET == rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
             {
-                XOBitmap aXOBitmap( ( ( const XFillBitmapItem* ) pPoolItem )->GetBitmapValue() );
-                pEntry = new XBitmapEntry( aXOBitmap, aName );
+                pEntry = new XBitmapEntry(dynamic_cast< const XFillBitmapItem* >(pPoolItem)->GetGraphicObject(), aName);
             }
         }
 
@@ -746,9 +655,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
             if( !nError )
             {
-                Bitmap aBmp( aGraphic.GetBitmap() );
-                XBitmapEntry* pEntry =
-                    new XBitmapEntry( XOBitmap( aBmp ), aName );
+                XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
                 pBitmapList->Insert( pEntry );
 
                 aLbBitmaps.Append( pEntry );
@@ -819,13 +726,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 
                 pEntry->SetName( aName );
 
-                XOBitmap aXOBitmap = aBitmapCtl.GetXBitmap();
+                const BitmapEx aBitmapEx(aBitmapCtl.GetBitmapEx());
 
-                // #85339# if it's an array, force conversion to bitmap before using it.
-                if(aXOBitmap.GetBitmapType() == XBITMAP_8X8)
-                    aXOBitmap.GetBitmap();
-
-                pEntry->SetXBitmap( aXOBitmap );
+                pEntry->SetGraphicObject(Graphic(aBitmapEx));
 
                 aLbBitmaps.Modify( pEntry, nPos );
                 aLbBitmaps.SelectEntryPos( nPos );
@@ -1043,7 +946,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
     aBitmapCtl.SetPixelColor( aLbColor.GetSelectEntryColor() );
 
     // get bitmap and display it
-    rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
+    rXFSet.Put(XFillBitmapItem(String(), Graphic(aBitmapCtl.GetBitmapEx())));
     aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
@@ -1062,7 +965,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
     aBitmapCtl.SetBackgroundColor( aLbBackgroundColor.GetSelectEntryColor() );
 
     // get bitmap and display it
-    rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
+    rXFSet.Put(XFillBitmapItem(String(), Graphic(aBitmapCtl.GetBitmapEx())));
     aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
@@ -1080,7 +983,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
         aBitmapCtl.SetBmpArray( aCtlPixel.GetBitmapPixelPtr() );
 
         // get bitmap and display it
-        rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
+        rXFSet.Put(XFillBitmapItem(String(), Graphic(aBitmapCtl.GetBitmapEx())));
         aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 

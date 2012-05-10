@@ -146,7 +146,7 @@ public:
             SvxBitmapCtl( Window* pParent, const Size& rSize );
             ~SvxBitmapCtl();
 
-    XOBitmap GetXBitmap();
+    BitmapEx GetBitmapEx();
 
     void    SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
     void    SetLines( sal_uInt16 nLns ) { nLines = nLns; }
@@ -182,7 +182,7 @@ public:
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
-    void    SetXBitmap( const XOBitmap& rXOBitmap );
+    void    SetXBitmap( const BitmapEx& rBitmapEx );
 
     void    SetPixelColor( const Color& rCol ) { aPixelColor = rCol; }
     void    SetBackgroundColor( const Color& rCol ) { aBackgroundColor = rCol; }
@@ -253,20 +253,20 @@ public:
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-    BitmapLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
+    BitmapLB(Window* pParent, ResId Id, bool bUserDraw = true);
 
-    virtual void Fill( const XBitmapListRef &pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void Fill(const XBitmapListRef &pList);
+    virtual void UserDraw(const UserDrawEvent& rUDEvt);
 
-    void    Append( XBitmapEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XBitmapEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
+    void Append(XBitmapEntry* pEntry, BitmapEx* pBmpEx = NULL);
+    void Modify(XBitmapEntry* pEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = NULL);
 
 private:
-    VirtualDevice   aVD;
-    Bitmap          aBitmap;
+    VirtualDevice   maVD;
+    BitmapEx        maBitmapEx;
 
     XBitmapListRef  mpList;
-    sal_Bool        mbUserDraw;
+    bool            mbUserDraw;
 
     SVX_DLLPRIVATE void SetVirtualDevice();
 };
@@ -276,13 +276,13 @@ private:
 class FillAttrLB : public ColorListBox
 {
 private:
-    VirtualDevice   aVD;
-    Bitmap          aBitmap;
+    VirtualDevice   maVD;
+    BitmapEx        maBitmapEx;
 
     void SetVirtualDevice();
 
 public:
-         FillAttrLB( Window* pParent, WinBits aWB );
+    FillAttrLB( Window* pParent, WinBits aWB );
 
     virtual void Fill( const XColorListRef    &pList );
     virtual void Fill( const XHatchListRef    &pList );

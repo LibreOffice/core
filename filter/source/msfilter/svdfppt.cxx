@@ -7315,15 +7315,13 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                 {
                     eFS = com::sun::star::drawing::FillStyle_BITMAP;
 
-                    XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
-                    XOBitmap aLocalXOBitmap( aXFillBitmapItem.GetBitmapValue() );
+                    const XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-                    aURL += rtl::OStringToOUString(
-                        aLocalXOBitmap.GetGraphicObject().GetUniqueID(),
+                    aURL += OStringToOUString(
+                        aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
                         RTL_TEXTENCODING_ASCII_US);
 
-                    static const rtl::OUString sFillBitmapURL( String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) );
-                    xPropSet->setPropertyValue( sFillBitmapURL, Any( aURL ) );
+                    xPropSet->setPropertyValue( OUString("FillBitmapURL"), Any( aURL ) );
                 }
             break;
             case XFILL_NONE :

@@ -26,7 +26,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/objsh.hxx>
@@ -452,15 +451,12 @@ sal_Bool ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& r
             /******************************************************************
             * Object gets filled with the graphic
             ******************************************************************/
-            //pScDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
             pScDrawView->AddUndo(new SdrUndoAttrObj(*pPickObj));
-            //pScDrawView->EndUndo();
 
-            XOBitmap aXOBitmap( rGraphic.GetBitmap() );
             SfxItemSet aSet( pScDrawView->GetModel()->GetItemPool(),
                                 XATTR_FILLSTYLE, XATTR_FILLBITMAP );
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(String(), aXOBitmap));
+            aSet.Put(XFillBitmapItem(String(), rGraphic));
 
             pPickObj->SetMergedItemSetAndBroadcast(aSet);
 

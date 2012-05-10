@@ -1803,28 +1803,19 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             break;
             case XFILL_BITMAP:
                 {
-                    const Graphic aGraphic(
-                        static_cast< XFillBitmapItem const & >(
-                            rOldSet.Get(XATTR_FILLBITMAP)).
-                        GetBitmapValue().GetBitmap());
-                    bool bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE,
-                        SfxBoolItem) ? true: false;
-                    GraphicObject aGrfObj(aGraphic);
+                    GraphicObject aGrfObj(static_cast< XFillBitmapItem const & >(rOldSet.Get(XATTR_FILLBITMAP)).GetGraphicObject());
+                    const bool bTile(WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, SfxBoolItem) ? true: false);
 
-                    aBrushItem.SetGraphicObject(aGrfObj);
-
-                    if (bBrushItemOk) //has trans
+                    if(bBrushItemOk) //has trans
                     {
-                        GraphicObject *pGraphicObject =
-                            const_cast<GraphicObject *>
-                            (aBrushItem.GetGraphicObject());
-                        GraphicAttr aAttr(pGraphicObject->GetAttr());
+                        GraphicAttr aAttr(aGrfObj.GetAttr());
+
                         aAttr.SetTransparency(nTrans);
-                        pGraphicObject->SetAttr(aAttr);
+                        aGrfObj.SetAttr(aAttr);
                     }
 
+                    aBrushItem.SetGraphicObject(aGrfObj);
                     aBrushItem.SetGraphicPos(bTile ? GPOS_TILED : GPOS_AREA);
-
                     bBrushItemOk = true;
                 }
             break;

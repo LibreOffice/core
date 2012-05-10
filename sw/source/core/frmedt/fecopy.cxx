@@ -1524,11 +1524,11 @@ sal_Bool SwFEShell::Paste( const Graphic &rGrf )
 
     if( bRet )
     {
-        XOBitmap aXOBitmap( rGrf.GetBitmap() );
-        SfxItemSet aSet( GetAttrPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP );
-        aSet.Put( XFillStyleItem( XFILL_BITMAP ));
-        aSet.Put( XFillBitmapItem( aEmptyStr, aXOBitmap ));
-        pView->SetAttributes( aSet, sal_False );
+        SfxItemSet aSet(GetAttrPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+
+        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+        aSet.Put(XFillBitmapItem(aEmptyStr, rGrf));
+        pView->SetAttributes(aSet, false);
     }
     return bRet;
 }

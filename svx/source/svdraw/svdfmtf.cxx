@@ -442,7 +442,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, sal_Bool bScale)
                         Size(ceil(aPixel.getWidth()), ceil(aPixel.getHeight())));
 
                     pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-                    pObj->SetMergedItem(XFillBitmapItem(String(), aClippedBitmap.GetBitmap()));
+                    pObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aClippedBitmap)));
                 }
             }
         }

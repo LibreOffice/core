@@ -586,42 +586,42 @@ namespace drawinglayer
 
         attribute::SdrFillBitmapAttribute createNewSdrFillBitmapAttribute(const SfxItemSet& rSet)
         {
-            Bitmap aBitmap((((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue()).GetBitmap());
+            BitmapEx aBitmapEx(((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetGraphicObject().GetGraphic().GetBitmapEx());
 
             // make sure it's not empty, use default instead
-            if(aBitmap.IsEmpty())
+            if(aBitmapEx.IsEmpty())
             {
                 // #i118485# Add PrefMapMode and PrefSize to avoid mini-tiling and
                 // expensive primitive processing in this case. Use 10x10 cm
-                aBitmap = Bitmap(Size(4,4), 8);
-                aBitmap.SetPrefMapMode(MapMode(MAP_100TH_MM));
-                aBitmap.SetPrefSize(Size(10000.0, 10000.0));
+                aBitmapEx = Bitmap(Size(4,4), 8);
+                aBitmapEx.SetPrefMapMode(MapMode(MAP_100TH_MM));
+                aBitmapEx.SetPrefSize(Size(10000.0, 10000.0));
             }
 
             // if there is no logical size, create a size from pixel size and set MapMode accordingly
-            if(0L == aBitmap.GetPrefSize().Width() || 0L == aBitmap.GetPrefSize().Height())
+            if(0L == aBitmapEx.GetPrefSize().Width() || 0L == aBitmapEx.GetPrefSize().Height())
             {
-                aBitmap.SetPrefSize(aBitmap.GetSizePixel());
-                aBitmap.SetPrefMapMode(MAP_PIXEL);
+                aBitmapEx.SetPrefSize(aBitmapEx.GetSizePixel());
+                aBitmapEx.SetPrefMapMode(MAP_PIXEL);
             }
 
             // convert size and MapMode to destination logical size and MapMode. The created
             // bitmap must have a valid logical size (PrefSize)
             const MapUnit aDestinationMapUnit((MapUnit)rSet.GetPool()->GetMetric(0));
 
-            if(aBitmap.GetPrefMapMode() != aDestinationMapUnit)
+            if(aBitmapEx.GetPrefMapMode() != aDestinationMapUnit)
             {
                 // #i100360# for MAP_PIXEL, LogicToLogic will not work properly,
                 // so fallback to Application::GetDefaultDevice()
-                if(MAP_PIXEL == aBitmap.GetPrefMapMode().GetMapUnit())
+                if(MAP_PIXEL == aBitmapEx.GetPrefMapMode().GetMapUnit())
                 {
-                    aBitmap.SetPrefSize(Application::GetDefaultDevice()->PixelToLogic(
-                        aBitmap.GetPrefSize(), aDestinationMapUnit));
+                    aBitmapEx.SetPrefSize(Application::GetDefaultDevice()->PixelToLogic(
+                        aBitmapEx.GetPrefSize(), aDestinationMapUnit));
                 }
                 else
                 {
-                    aBitmap.SetPrefSize(OutputDevice::LogicToLogic(
-                        aBitmap.GetPrefSize(), aBitmap.GetPrefMapMode(), aDestinationMapUnit));
+                    aBitmapEx.SetPrefSize(OutputDevice::LogicToLogic(
+                        aBitmapEx.GetPrefSize(), aBitmapEx.GetPrefMapMode(), aDestinationMapUnit));
                 }
             }
 
@@ -637,7 +637,7 @@ namespace drawinglayer
                 (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETY))).GetValue());
 
             return attribute::SdrFillBitmapAttribute(
-                aBitmap,
+                aBitmapEx,
                 aSize,
                 aOffset,
                 aOffsetPosition,

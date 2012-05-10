@@ -69,7 +69,8 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
         const XFillBitmapItem* pBitmapItem = dynamic_cast< const XFillBitmapItem* >( pItem );
         if( pBitmapItem )
         {
-            const GraphicObject& rGraphic = pBitmapItem->GetBitmapValue().GetGraphicObject();
+            const Graphic& rGraphic = pBitmapItem->GetGraphicObject().GetGraphic();
+
             return rGraphic.GetSizeBytes() > 0;
         }
     }

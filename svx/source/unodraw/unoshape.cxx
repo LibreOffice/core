@@ -1506,7 +1506,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
             XFillBitmapItem aBmpItem;
             aBmpItem.SetWhich( XATTR_FILLBITMAP );
             aBmpItem.SetName( rName );
-            aBmpItem.SetBitmapValue( pEntry->GetXBitmap() );
+            aBmpItem.SetGraphicObject(pEntry->GetGraphicObject());
             rSet.Put( aBmpItem );
             break;
         }

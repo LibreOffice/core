@@ -413,7 +413,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XBitmapEntry* pEntry = new XBitmapEntry( pBitmapItem->GetBitmapValue(), aTmpStr );
+                        XBitmapEntry* pEntry = new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr);
                         XBitmapListRef xBitmapList =
                             XPropertyList::CreatePropertyList(XBITMAP_LIST,
                             rtl::OUString("TmpList"))->AsBitmapList();
@@ -766,14 +766,13 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
                     if ( nPos < aItem.GetBitmapList()->Count() )  // kein temp. Eintrag ?
                     {
-                        XOBitmap aXOBitmap = aItem.GetBitmapList()->GetBitmap( nPos )->GetXBitmap();
-                        XFillBitmapItem aXFillBitmapItem( pLbFillAttr->GetSelectEntry(), aXOBitmap );
+                        const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
+                        const XFillBitmapItem aXFillBitmapItem(pLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ));
                         aXFillBitmapItem.QueryValue( a );
                         aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillBitmap" )),
-                                                                       aArgs );
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillBitmap")), aArgs);
                     }
                 }
             }

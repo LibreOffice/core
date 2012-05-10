@@ -24,7 +24,6 @@
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xlnasit.hxx>
 
@@ -38,6 +37,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <svtools/grfmgr.hxx>
 
 class Color;
 class Bitmap;
@@ -170,14 +170,31 @@ public:
 
 class XBitmapEntry : public XPropertyEntry
 {
-    XOBitmap aXOBitmap;
+private:
+    GraphicObject   maGraphicObject;
 
 public:
-            XBitmapEntry( const XOBitmap& rXOBitmap, const String& rName ):
-                XPropertyEntry( rName ), aXOBitmap( rXOBitmap ) {}
+    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
+    :   XPropertyEntry(rName),
+        maGraphicObject(rGraphicObject)
+    {
+    }
 
-    void     SetXBitmap(const XOBitmap& rXOBitmap) { aXOBitmap = rXOBitmap; }
-    XOBitmap& GetXBitmap()                    { return aXOBitmap; }
+    XBitmapEntry(const XBitmapEntry& rOther)
+    :   XPropertyEntry(rOther),
+        maGraphicObject(rOther.maGraphicObject)
+    {
+    }
+
+    const GraphicObject& GetGraphicObject() const
+    {
+        return maGraphicObject;
+    }
+
+    void SetGraphicObject(const GraphicObject& rGraphicObject)
+    {
+        maGraphicObject = rGraphicObject;
+    }
 };
 
 // --------------------

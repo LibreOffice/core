@@ -47,7 +47,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/svdundo.hxx>
@@ -1216,9 +1215,8 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText ) cons
                 SfxItemSet aSet(GetObjectItemSet());
 
                 aSet.Put(XFillStyleItem(XFILL_BITMAP));
-                Bitmap aBitmap( GetTransformedGraphic().GetBitmap() );
-                XOBitmap aXBmp(aBitmap, XBITMAP_STRETCH);
-                aSet.Put(XFillBitmapItem(String(), aXBmp));
+                const BitmapEx aBitmapEx(GetTransformedGraphic().GetBitmapEx());
+                aSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
                 aSet.Put(XFillBmpTileItem(false));
 
                 pRetval->SetMergedItemSet(aSet);

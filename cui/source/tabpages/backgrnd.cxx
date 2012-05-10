@@ -53,6 +53,8 @@
 #include <svx/xflgrit.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
+#include <svtools/grfmgr.hxx>
+
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
