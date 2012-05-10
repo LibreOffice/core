@@ -49,7 +49,7 @@ PATCH_FILES=\
     icu4c-rpath.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch \
-    icu4c-4_4_2-wchar_t.patch \
+    icu4c-wchar_t.patch \
     icu4c-warnings.patch \
     icu4c-escapespace.patch \
     icu4c-strict-c.patch \
@@ -241,7 +241,7 @@ CONFIGURE_FLAGS=
 # note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 OUT2LIB=
 
 OUT2BIN= \
@@ -256,61 +256,25 @@ OUT2BIN= \
 
 .ELSE
 BUILD_DIR=source
-.IF "full_debug" == ""
-
-# Activating the debug mechanism produces incompatible libraries, you'd have
-# at least to relink all modules that are directly using ICU. Note that library
-# names get a 'd' appended and you'd have to edit the solenv/inc/libs.mk
-# ICU*LIB macros as well. Normally you don't want all this.
-#
-# Instead, use the normal already existing Release build and edit the
-# corresponding *.vcproj file of the section you're interested in. Make sure
-# that
-# - for the VCCLCompilerTool section the following line exists:
-#   DebugInformationFormat="3"
-# - and for the VCLinkerTool the line
-#   GenerateDebugInformation="TRUE"
-# Then delete the corresponding Release output directory, and delete the target
-# flag files
-# $(OUTPATH)/misc/build/so_built_so_icu
-# $(OUTPATH)/misc/build/so_predeliver_so_icu
-# and run dmake again, after which you may copy the resulting libraries to your
-# OOo/SO installation.
-ICU_BUILD_VERSION=Debug
-ICU_BUILD_LIBPOST=d
-.ELSE
-ICU_BUILD_VERSION=Release
-ICU_BUILD_LIBPOST=
-.ENDIF
-
-.IF "$(CPUNAME)" == "INTEL"
-ICU_BUILD_ARCH=Win32
-.ELSE
-ICU_BUILD_ARCH=x64
-.ENDIF
-
-.IF "$(CCNUMVER)" >= "001600000000"
-BUILD_ACTION=cd allinone && MSBuild.exe allinone.sln /p:Configuration=$(ICU_BUILD_VERSION) /p:Platform=$(ICU_BUILD_ARCH)
-.ELSE
-BUILD_ACTION=cd allinone && $(COMPATH)$/vcpackages$/vcbuild.exe allinone.sln "$(ICU_BUILD_VERSION)|$(ICU_BUILD_ARCH)"
-.ENDIF
+CONFIGURE_ACTION=bash ./runConfigureICU Cygwin/MSVC
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
 OUT2LIB= \
-    $(BUILD_DIR)$/..$/lib$/icudt.lib \
-    $(BUILD_DIR)$/..$/lib$/icuin$(ICU_BUILD_LIBPOST).lib \
-    $(BUILD_DIR)$/..$/lib$/icuuc$(ICU_BUILD_LIBPOST).lib \
-    $(BUILD_DIR)$/..$/lib$/icule$(ICU_BUILD_LIBPOST).lib \
-    $(BUILD_DIR)$/..$/lib$/icutu$(ICU_BUILD_LIBPOST).lib
+    $(BUILD_DIR)$/lib$/icudt.lib \
+    $(BUILD_DIR)$/lib$/icuin$(ICU_BUILD_LIBPOST).lib \
+    $(BUILD_DIR)$/lib$/icuuc$(ICU_BUILD_LIBPOST).lib \
+    $(BUILD_DIR)$/lib$/icule$(ICU_BUILD_LIBPOST).lib \
+    $(BUILD_DIR)$/lib$/icutu$(ICU_BUILD_LIBPOST).lib
 
 OUT2BIN= \
-    $(BUILD_DIR)$/..$/bin$/icudt$(ICU_MAJOR)$(ICU_MINOR).dll \
-    $(BUILD_DIR)$/..$/bin$/icuin$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/icuuc$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/icule$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/icutu$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/..$/bin$/genccode.exe \
-    $(BUILD_DIR)$/..$/bin$/genbrk.exe \
-    $(BUILD_DIR)$/..$/bin$/gencmn.exe
+    $(BUILD_DIR)$/lib$/icudt$(ICU_MAJOR)$(ICU_MINOR).dll \
+    $(BUILD_DIR)$/lib$/icuin$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icuuc$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icule$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icutu$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/bin$/genccode.exe \
+    $(BUILD_DIR)$/bin$/genbrk.exe \
+    $(BUILD_DIR)$/bin$/gencmn.exe
 
 .ENDIF
 .ENDIF		# "$(GUI)"=="WNT"
