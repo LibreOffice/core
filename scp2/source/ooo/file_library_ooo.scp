@@ -704,9 +704,9 @@ End
 File gid_File_Lib_Icudata
     LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT7(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
+    Name = STRING(CONCAT8(libicudata,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR,.,ICU_MICRO));
   #else
-    Name = STRING(CONCAT4(icudt,ICU_MAJOR,ICU_MINOR,.dll));
+    Name = STRING(CONCAT3(icudt,ICU_MAJOR,.dll));
   #endif
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
@@ -715,9 +715,9 @@ End
 File gid_File_Lib_Icui18n
     LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT7(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
+    Name = STRING(CONCAT8(libicui18n,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR,.,ICU_MICRO));
   #else
-    Name = STRING(CONCAT4(icuin,ICU_MAJOR,ICU_MINOR,.dll));
+    Name = STRING(CONCAT3(icuin,ICU_MAJOR,.dll));
   #endif
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
@@ -726,9 +726,9 @@ End
 File gid_File_Lib_Icule
     LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT7(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
+    Name = STRING(CONCAT8(libicule,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR,.,ICU_MICRO));
   #else
-    Name = STRING(CONCAT4(icule,ICU_MAJOR,ICU_MINOR,.dll));
+    Name = STRING(CONCAT3(icule,ICU_MAJOR,.dll));
   #endif
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
@@ -737,9 +737,9 @@ End
 File gid_File_Lib_Icuuc
     LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT7(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
+    Name = STRING(CONCAT8(libicuuc,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR,.,ICU_MICRO));
   #else
-    Name = STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll));
+    Name = STRING(CONCAT3(icuuc,ICU_MAJOR,.dll));
   #endif
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);

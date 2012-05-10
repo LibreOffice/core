@@ -26,13 +26,13 @@
 #*************************************************************************
 # major
 .IF "$(ICU_MAJOR)" == ""
-ICU_MAJOR=4
+ICU_MAJOR=49
 .ENDIF
 # minor
 .IF "$(ICU_MINOR)" == ""
-ICU_MINOR=4
+ICU_MINOR=1
 .ENDIF
 # micro
 .IF "$(ICU_MICRO)" == ""
-ICU_MICRO=2
+ICU_MICRO=1
 .ENDIF

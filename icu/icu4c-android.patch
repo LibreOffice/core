@@ -9,3 +9,67 @@
  #SH# # We can't depend on MIDDLE_SO_TARGET being set.
  #SH# LD_SONAME=
  
+--- misc/icu/source/configure
++++ misc/build/icu/source/configure
+@@ -5053,7 +5053,7 @@
+ 	else
+ 		icu_cv_host_frag=mh-linux-va
+ 	fi ;;
+-*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
++*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
+ *-*-cygwin|*-*-mingw32)
+ 	if test "$GCC" = yes; then
+ 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -6127,6 +6127,9 @@
+ # Check to see if genccode can generate simple assembly.
+ GENCCODE_ASSEMBLY=
+ case "${host}" in
++*-*-linux-androideabi)
++    GENCCODE_ASSEMBLY="-a gcc-android"
++    ;;
+ *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
+     if test "$GCC" = yes; then
+         # We're using gcc, and the simple -a gcc command line works for genccode
+@@ -7200,6 +7203,10 @@
+     # wchar_t can be used
+     CHECK_UTF16_STRING_RESULT="available"
+     ;;
++*-*-*-androideabi*)
++    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
++    CHECK_UTF16_STRING_RESULT="nope"
++    ;;
+ *)
+     ;;
+ esac
+--- misc/icu/source/tools/toolutil/pkg_genc.c
++++ misc/build/icu/source/tools/toolutil/pkg_genc.c
+@@ -145,6 +145,28 @@
+ 
+         ".long ","",HEX_0X
+     },
++    {"gcc-android",
++	"\t.arch armv5te\n"
++	"\t.fpu softvfp\n"
++	"\t.eabi_attribute 20, 1\n"
++	"\t.eabi_attribute 21, 1\n"
++	"\t.eabi_attribute 23, 3\n"
++	"\t.eabi_attribute 24, 1\n"
++	"\t.eabi_attribute 25, 1\n"
++	"\t.eabi_attribute 26, 2\n"
++	"\t.eabi_attribute 30, 6\n"
++	"\t.eabi_attribute 18, 4\n"
++	"\t.file \"%s.s\"\n"
++	"\t.global %s\n"
++	"\t.section .rodata\n"
++	"\t.align 2\n"
++	"\t.type %s, %%object\n"
++	"%s:\n",
++
++	"\t.word ",
++	"\t.section .note.GNU-stack,\"\",%%progbits\n",
++	HEX_0X
++    },
+     {"sun",
+         "\t.section \".rodata\"\n"
+         "\t.align   8\n"
+

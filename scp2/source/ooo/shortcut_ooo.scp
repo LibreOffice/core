@@ -34,7 +34,7 @@ Shortcut gid_Shortcut_Lib_Icudata
     FileID = gid_File_Lib_Icudata;
     Dir = SCP2_OOO_BIN_DIR;
 #ifndef AIX
-    Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Name = STRING(CONCAT4(libicudata,UNXSUFFIX,.,ICU_MAJOR));
 #else
     Name = "libicudata.so";
 #endif
@@ -45,7 +45,7 @@ Shortcut gid_Shortcut_Lib_Icui18n
     FileID = gid_File_Lib_Icui18n;
     Dir = SCP2_OOO_BIN_DIR;
 #ifndef AIX
-    Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Name = STRING(CONCAT4(libicui18n,UNXSUFFIX,.,ICU_MAJOR));
 #else
     Name = "libicui18n.so";
 #endif
@@ -56,7 +56,7 @@ Shortcut gid_Shortcut_Lib_Icule
     FileID = gid_File_Lib_Icule;
     Dir = SCP2_OOO_BIN_DIR;
 #ifndef AIX
-    Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Name = STRING(CONCAT4(libicule,UNXSUFFIX,.,ICU_MAJOR));
 #else
     Name = "libicule.so";
 #endif
@@ -67,7 +67,7 @@ Shortcut gid_Shortcut_Lib_Icuuc
     FileID = gid_File_Lib_Icuuc;
     Dir = SCP2_OOO_BIN_DIR;
 #ifndef AIX
-    Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Name = STRING(CONCAT4(libicuuc,UNXSUFFIX,.,ICU_MAJOR));
 #else
     Name = "libicuuc.so";
 #endif

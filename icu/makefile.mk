@@ -37,8 +37,8 @@ TARGET=so_icu
 
 .INCLUDE :	icuversion.mk
 
-TARFILE_NAME=icu4c-4_4_2-src
-TARFILE_MD5=314e582264c36b3735466c522899aa07
+TARFILE_NAME=icu4c-49_1_1-src
+TARFILE_MD5=7c53f83e0327343f4060c0eb83842daf
 TARFILE_ROOTDIR=icu
 
 #icu4c.8320.freeserif.crash.patch, see
@@ -51,11 +51,7 @@ PATCH_FILES=\
     icu4c-aix.patch \
     icu4c-wchar_t.patch \
     icu4c-warnings.patch \
-    icu4c-escapespace.patch \
-    icu4c-strict-c.patch \
-    CVE-2011-4599.patch \
-    arm-assembler.patch \
-    icu4c-parallel-buid.patch
+    icu4c.9313.cygwin.patch \
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
@@ -184,20 +180,20 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicutulo.so
 .ELSE
 OUT2LIB= \
-    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
-    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST) \
-    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
-    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST).$(ICU_MAJOR) \
     $(BUILD_DIR)$/lib$/libicuuc$(DLLPOST) \
-    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
-    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST).$(ICU_MAJOR) \
     $(BUILD_DIR)$/lib$/libicui18n$(DLLPOST) \
-    $(BUILD_DIR)$/lib$/libicule$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
-    $(BUILD_DIR)$/lib$/libicule$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicule$(DLLPOST).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicule$(DLLPOST).$(ICU_MAJOR) \
     $(BUILD_DIR)$/lib$/libicule$(DLLPOST) \
-    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
-    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
+    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO) \
+    $(BUILD_DIR)$/lib$/libicutu$(DLLPOST).$(ICU_MAJOR) \
     $(BUILD_DIR)$/lib$/libicutu$(DLLPOST)
 
 OUT2BIN_NONE= \
@@ -267,11 +263,11 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/icutu$(ICU_BUILD_LIBPOST).lib
 
 OUT2BIN= \
-    $(BUILD_DIR)$/lib$/icudt$(ICU_MAJOR)$(ICU_MINOR).dll \
-    $(BUILD_DIR)$/lib$/icuin$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/lib$/icuuc$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/lib$/icule$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
-    $(BUILD_DIR)$/lib$/icutu$(ICU_MAJOR)$(ICU_MINOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icudt$(ICU_MAJOR).dll \
+    $(BUILD_DIR)$/lib$/icuin$(ICU_MAJOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icuuc$(ICU_MAJOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icule$(ICU_MAJOR)$(ICU_BUILD_LIBPOST).dll \
+    $(BUILD_DIR)$/lib$/icutu$(ICU_MAJOR)$(ICU_BUILD_LIBPOST).dll \
     $(BUILD_DIR)$/bin$/genccode.exe \
     $(BUILD_DIR)$/bin$/genbrk.exe \
     $(BUILD_DIR)$/bin$/gencmn.exe

@@ -1,142 +1,41 @@
---- misc/icu/source/config.sub	2010-09-29 20:38:38.000000000 +0200
-+++ misc/build/icu/source/config.sub	2011-09-26 22:51:02.000000000 +0200
-@@ -120,7 +120,7 @@
- # Here we must recognize all the valid KERNEL-OS combinations.
- maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
- case $maybe_os in
--  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
-+  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
-   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
-   storm-chaos* | os2-emx* | rtmk-nova*)
-     os=-$maybe_os
-@@ -1250,7 +1250,7 @@
- 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
- 	      | -chorusos* | -chorusrdb* \
- 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
--	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
-+	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-newlib* | -linux-uclibc* \
- 	      | -uxpv* | -beos* | -mpeix* | -udk* \
- 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
- 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
---- misc/icu/source/configure
-+++ misc/build/icu/source/configure
-@@ -5438,7 +5438,7 @@
- 	else
- 		icu_cv_host_frag=mh-linux-va
- 	fi ;;
--*-*-linux*|*-pc-gnu) icu_cv_host_frag=mh-linux ;;
-+*-*-linux*|*-pc-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
- *-*-cygwin|*-*-mingw32)
- 	if test "$GCC" = yes; then
- 		cat >conftest.$ac_ext <<_ACEOF
-@@ -7429,6 +7429,9 @@
- # Check to see if genccode can generate simple assembly.
- GENCCODE_ASSEMBLY=
- case "${host}" in
-+*-*-linux-androideabi)
-+    GENCCODE_ASSEMBLY="-a gcc-android"
-+    ;;
- *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
-     if test "$GCC" = yes; then
-         # We're using gcc, and the simple -a gcc command line works for genccode
-@@ -8001,8 +8001,9 @@
- 	# Check for potential -arch flags.  It is not universal unless
- 	# there are some -arch flags.  Note that *ppc* also matches
- 	# ppc64.  This check is also rather less than ideal.
-+	# Huh? This breaks the ICU build on MacOSX 10.6 at least --tml@iki.fi
- 	case "${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}" in  #(
--	  *-arch*ppc*|*-arch*i386*|*-arch*x86_64*) ac_cv_c_bigendian=universal;;
-+	  # *-arch*ppc*|*-arch*i386*|*-arch*x86_64*) ac_cv_c_bigendian=universal;;
- 	esac
- else
-   $as_echo "$as_me: failed program was:" >&5
-@@ -11115,6 +1115,10 @@
-     # wchar_t can be used
-     CHECK_UTF16_STRING_RESULT="available"
-     ;;
-+*-*-*-androideabi*)
-+    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
-+    CHECK_UTF16_STRING_RESULT="nope"
-+    ;;
- *)
-     ;;
- esac
---- misc/icu/source/tools/toolutil/pkg_genc.c
-+++ misc/build/icu/source/tools/toolutil/pkg_genc.c
-@@ -145,6 +145,28 @@
- 
-         ".long ","",HEX_0X
-     },
-+    {"gcc-android",
-+	"\t.arch armv5te\n"
-+	"\t.fpu softvfp\n"
-+	"\t.eabi_attribute 20, 1\n"
-+	"\t.eabi_attribute 21, 1\n"
-+	"\t.eabi_attribute 23, 3\n"
-+	"\t.eabi_attribute 24, 1\n"
-+	"\t.eabi_attribute 25, 1\n"
-+	"\t.eabi_attribute 26, 2\n"
-+	"\t.eabi_attribute 30, 6\n"
-+	"\t.eabi_attribute 18, 4\n"
-+	"\t.file \"%s.s\"\n"
-+	"\t.global %s\n"
-+	"\t.section .rodata\n"
-+	"\t.align 2\n"
-+	"\t.type %s, %%object\n"
-+	"%s:\n",
-+
-+	"\t.word ",
-+	"\t.section .note.GNU-stack,\"\",%%progbits\n",
-+	HEX_0X
-+    },
-     {"sun",
-         "\t.section \".rodata\"\n"
-         "\t.align   8\n"
---- misc/icu/source/tools/pkgdata/pkgdata.cpp
-+++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp
-@@ -97,7 +97,7 @@
+--- misc/icu/source/tools/toolutil/pkg_genc.h
++++ misc/build/icu/source/tools/toolutil/pkg_genc.h
+@@ -58,7 +58,7 @@
  #endif
  
  #define LARGE_BUFFER_MAX_SIZE 2048
 -#define SMALL_BUFFER_MAX_SIZE 512
 +#define SMALL_BUFFER_MAX_SIZE 2048
- 
- static void loadLists(UPKGOptions *o, UErrorCode *status);
- 
---- misc/icu/source/common/putil.c	2010-09-29 20:37:22.000000000 +0200
-+++ misc/build/icu/source/common/putil.c	2011-03-15 10:58:44.054592942 +0100
-@@ -52,7 +52,7 @@
- Poorly upgraded Solaris machines can't have this defined.
- Cleanly installed Solaris can use this #define.
- */
--#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ >= 199901L)
-+#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L)
- #define _XOPEN_SOURCE_EXTENDED 1
- #endif
+ #define SMALL_BUFFER_FLAG_NAMES 32
+ #define BUFFER_PADDING_SIZE 20
  
 --- misc/icu/source/common/stringpiece.cpp	2010-09-29 20:37:20.000000000 +0200
 +++ misc/build/icu/source/common/stringpiece.cpp	2011-03-15 10:57:24.722045561 +0100
-@@ -71,7 +71,7 @@
+@@ -75,7 +75,7 @@
   * Visual Studios 9.0.
   * Cygwin with MSVC 9.0 also complains here about redefinition.
   */
--#if (!defined(_MSC_VER) || (_MSC_VER >= 1500)) && !defined(CYGWINMSVC)
+-#if (!defined(_MSC_VER) || (_MSC_VER > 1500)) && !defined(CYGWINMSVC)
 +#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
  const int32_t StringPiece::npos;
  #endif
  
 --- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
 +++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
-@@ -25,7 +25,7 @@
+@@ -25,11 +25,7 @@
  SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
  
  ## Compiler switches to embed a library name and version information
+-ifeq ($(ENABLE_RPATH),YES)
+-LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(libdir)/$(notdir $(MIDDLE_SO_TARGET))
+-else
 -LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
+-endif
 +LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @executable_path/$(notdir $(MIDDLE_SO_TARGET))
  
  ## Compiler switch to embed a runtime search path
  LD_RPATH=
-@@ -41,10 +41,6 @@
+@@ -45,10 +41,6 @@
  ## Non-shared intermediate object suffix
  STATIC_O = ao
  
@@ -147,7 +46,7 @@
  ## Compilation rules
  %.$(STATIC_O): $(srcdir)/%.c
  	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
-@@ -76,16 +72,10 @@
+@@ -80,16 +72,10 @@
  
  ## Versioned libraries rules
  
@@ -181,33 +80,6 @@
  ## These are the library specific LDFLAGS
  LDFLAGSICUDT=-nodefaultlibs -nostdlib
  
---- misc/icu/source/config/mh-solaris	2010-09-29 20:37:36.000000000 +0200
-+++ misc/build/icu/source/config/mh-solaris	2011-03-15 11:01:04.370475053 +0100
-@@ -36,17 +36,21 @@
- 
- ## Commands to link
- ## For Sun Workshop, use CC to link to bring in C++ runtime
--LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
--LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
-+LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
-+LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
- 
- ## Commands to make a shared library
- SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
--SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
-+SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G -norunpath
- 
- ## Compiler switch to embed a runtime search path
- LD_RPATH=       -R'$$'ORIGIN
- LD_RPATH_PRE=   -R
- 
-+## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
-+ENABLE_RPATH=YES
-+RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
-+
- #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
- 
- ## Compiler switch to embed a library name
 --- misc/icu/source/layout/ArabicShaping.cpp	2010-09-29 20:38:38.000000000 +0200
 +++ misc/build/icu/source/layout/ArabicShaping.cpp	2011-03-15 10:56:26.655056238 +0100
 @@ -79,7 +79,6 @@
