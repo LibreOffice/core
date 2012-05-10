@@ -91,6 +91,7 @@ public:
     void testN757651();
     void testFdo49501();
     void testFdo49271();
+    void testFdo49692();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testN757651);
     CPPUNIT_TEST(testFdo49501);
     CPPUNIT_TEST(testFdo49271);
+    CPPUNIT_TEST(testFdo49692);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -694,6 +696,29 @@ void Test::testFdo49271()
     xPropertySet->getPropertyValue("CharHeight") >>= fValue;
 
     CPPUNIT_ASSERT_EQUAL(25.f, fValue);
+}
+
+void Test::testFdo49692()
+{
+    load("fdo49692.rtf");
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "Suffix")
+        {
+            rtl::OUString sValue;
+            rProp.Value >>= sValue;
+
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

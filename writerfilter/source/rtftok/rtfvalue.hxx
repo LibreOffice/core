@@ -41,7 +41,7 @@ namespace writerfilter {
             public:
                 typedef boost::shared_ptr<RTFValue> Pointer_t;
                 RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes, RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
-                        uno::Reference<io::XInputStream> rStream);
+                        uno::Reference<io::XInputStream> rStream, bool bForceString);
                 RTFValue(int nValue);
                 RTFValue(rtl::OUString sValue, bool bForce = false);
                 RTFValue(RTFSprms rAttributes);

@@ -35,12 +35,12 @@ using rtl::OUString;
 
 RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes,
         RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
-        uno::Reference<io::XInputStream> xStream)
+        uno::Reference<io::XInputStream> xStream, bool bForceString)
     : m_nValue(nValue),
     m_sValue(sValue),
     m_xShape(xShape),
     m_xStream(xStream),
-    m_bForceString(false)
+    m_bForceString(bForceString)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms(rSprms));
@@ -176,7 +176,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream);
+    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream, m_bForceString);
 }
 
 RTFSprms& RTFValue::getAttributes()
