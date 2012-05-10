@@ -559,7 +559,8 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
             aWndClassEx.hbrBackground   = (HBRUSH)(COLOR_WINDOW+1);
             aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
             aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEA;
-            pSalData->mbObjClassInit = TRUE;
+            if ( RegisterClassExA( &aWndClassEx ) )
+                pSalData->mbObjClassInit = TRUE;
         }
     }
 
@@ -593,6 +594,15 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 
         if ( !hWndChild )
         {
+#if OSL_DEBUG_LEVEL > 1
+            char *msg = NULL;
+            FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER
+                          |FORMAT_MESSAGE_IGNORE_INSERTS
+                          |FORMAT_MESSAGE_FROM_SYSTEM,
+                           NULL, GetLastError(), 0,
+                           (LPSTR) &msg, 0, NULL);
+            MessageBoxA(NULL, msg, "CreateWindowExA failed", MB_OK);
+#endif
             delete pObject;
             return NULL;
         }
