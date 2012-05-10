@@ -211,13 +211,6 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
         maColSpans[ nRow ] = rColSpans.getRanges();
 }
 
-CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
-{
-    (void) rCellAddr;
-    // TODO: Fix this.
-    return NULL;
-}
-
 void CellBlockBuffer::finalizeImport()
 {
     maCellBlocks.forEachMem( &CellBlock::finalizeImport );
@@ -244,19 +237,13 @@ void SheetDataBuffer::setBlankCell( const CellModel& rModel )
 
 void SheetDataBuffer::setValueCell( const CellModel& rModel, double fValue )
 {
-    if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rModel.maCellAddr ) )
-        pCellBlock->getCellAny( rModel.maCellAddr.Column ) <<= fValue;
-    else
-        putValue( rModel.maCellAddr, fValue );
+    putValue( rModel.maCellAddr, fValue );
     setCellFormat( rModel );
 }
 
 void SheetDataBuffer::setStringCell( const CellModel& rModel, const OUString& rText )
 {
-    if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rModel.maCellAddr ) )
-        pCellBlock->getCellAny( rModel.maCellAddr.Column ) <<= rText;
-    else
-        putString( rModel.maCellAddr, rText );
+    putString( rModel.maCellAddr, rText );
     setCellFormat( rModel );
 }
 
@@ -271,10 +258,7 @@ void SheetDataBuffer::setStringCell( const CellModel& rModel, const RichStringRe
     }
     else
     {
-        if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rModel.maCellAddr ) )
-            pCellBlock->insertRichString( rModel.maCellAddr, rxString, pFirstPortionFont );
-        else
-            putRichString( rModel.maCellAddr, *rxString, pFirstPortionFont );
+        putRichString( rModel.maCellAddr, *rxString, pFirstPortionFont );
         setCellFormat( rModel );
     }
 }
@@ -574,10 +558,7 @@ void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTok
 {
     if( rTokens.hasElements() )
     {
-        if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rCellAddr ) )
-            pCellBlock->getCellAny( rCellAddr.Column ) <<= rTokens;
-        else
-            putFormulaTokens( rCellAddr, rTokens );
+        putFormulaTokens( rCellAddr, rTokens );
     }
 }
 

@@ -152,10 +152,6 @@ public:
     /** Sets column span information for a row. */
     void                setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans );
 
-    /** Tries to find a cell block. Recalculates the map of cell blocks, if the
-        passed cell address is located in another row than the last cell. */
-    CellBlock*          getCellBlock( const ::com::sun::star::table::CellAddress& rCellAddr );
-
     /** Inserts all cells of all open cell blocks into the Calc document. */
     void                finalizeImport();
 
