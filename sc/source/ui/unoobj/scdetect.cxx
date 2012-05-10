@@ -441,14 +441,13 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             }
             else
             {
-                bool bIsXLS = false;
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
-                bool bCsvSelected = (pPreselectedFilter ?
-                        pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) : false);
-                if ( pPreselectedFilter && ( ( pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND ) ||
-                    ( !aPreselectedFilterName.Len() && bCsvSelected ) ) )
-                    bIsXLS = true;
+                bool bCsvSelected = (pPreselectedFilter &&
+                        pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ));
+                bool bExcelSelected = (pPreselectedFilter &&
+                        (pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND));
+                bool bIsXLS = (bExcelSelected || (bCsvSelected && !aPreselectedFilterName.Len()));
                 pFilter = 0;
                 if ( pStream )
                 {
@@ -750,12 +749,14 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             const sal_Size nTrySize = 80;
                             rtl::OString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
 
+                            bool bMaybeHtml = HTMLParser::IsHTMLFormat( aHeader.getStr());
+
                             if ( aHeader.copy(0, 5).equalsL("{\\rtf", 5) )
                             {
                                 // test for RTF
                                 pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
                             }
-                            else if ( bIsXLS && bMaybeText )
+                            else if ( bIsXLS && (bMaybeText && !bMaybeHtml) )
                             {
                                 aHeader = comphelper::string::stripStart(aHeader, ' ');
                                 // Detect Excel 2003 XML here only if XLS was preselected.
@@ -769,7 +770,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 pFilter = pPreselectedFilter;
                             else if ( bCsvSelected && bMaybeText )
                                 pFilter = pPreselectedFilter;
-                            else if ( HTMLParser::IsHTMLFormat(aHeader.getStr()) )
+                            else if ( bMaybeHtml )
                             {
                                 // test for HTML
 
