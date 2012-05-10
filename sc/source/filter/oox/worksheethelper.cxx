@@ -56,8 +56,10 @@
 #include "oox/helper/propertyset.hxx"
 #include "addressconverter.hxx"
 #include "autofilterbuffer.hxx"
+#include "cell.hxx"
 #include "commentsbuffer.hxx"
 #include "condformatbuffer.hxx"
+#include "convuno.hxx"
 #include "document.hxx"
 #include "drawingfragment.hxx"
 #include "drawingmanager.hxx"
@@ -1551,9 +1553,16 @@ void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) con
 
 void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fValue ) const
 {
-    Reference< XCell2 > xCell( getCell( rAddress ), UNO_QUERY );
-    OSL_ENSURE( xCell.is(), "WorksheetHelper::putFormulaResult - missing cell interface" );
-    if( xCell.is() ) xCell->setFormulaResult( fValue );
+    ScDocument& rDoc = getScDocument();
+    ScAddress aCellPos;
+    ScUnoConversion::FillScAddress( aCellPos, rAddress );
+    if ( rDoc.GetCellType( aCellPos ) == CELLTYPE_FORMULA )
+    {
+        ScFormulaCell* pCell = (ScFormulaCell *)rDoc.GetCell( aCellPos );
+        pCell->SetHybridDouble( fValue );
+        pCell->ResetDirty();
+        pCell->ResetChanged();
+    }
 }
 
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
