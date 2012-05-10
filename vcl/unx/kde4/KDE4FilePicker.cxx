@@ -342,9 +342,6 @@ rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
 void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString& , const uno::Sequence<beans::StringPair>& filters)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    if (!_filter.isNull())
-        _filter.append(QString("\n"));
-
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
     {
