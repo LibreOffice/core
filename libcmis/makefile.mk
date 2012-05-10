@@ -41,14 +41,14 @@ TARGET=cmis
     @echo "Using system libcmis..."
 .ENDIF
 
-TARFILE_NAME=libcmis-0.1.0
-TARFILE_MD5=7c2549f6b0a8bb604e6c4c729ffdcfe6
-ADDITIONAL_FILES=src$/libcmis$/makefile.mk
+TARFILE_NAME=libcmis-0.2.0
+TARFILE_MD5=36c168b03593dfa386fba23a0c32d11b
 
-PATCH_FILES=$(TARFILE_NAME).patch
-#https://sourceforge.net/p/libcmis/tickets/1/
-PATCH_FILES+=libcmis-0001-virtualdtor.patch
-PATCH_FILES+=libcmis-0.1.0-non-virtual-dtor.patch
+.IF "$(debug)" != ""
+CFLAGS+=-g
+.ELSE
+CFLAGS+=-O
+.ENDIF
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/libcmis

@@ -270,6 +270,28 @@ endef
 endif # SYSTEM_HUNSPELL
 
 
+ifeq ($(SYSTEM_BOOST),YES)
+
+# No need of libboostdatetime at all
+define gb_LinkTarget__use_boostdatetime
+endef
+
+else # !SYSTEM_BOOST
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	boostdatetime \
+))
+
+define gb_LinkTarget__use_boostdatetime
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	boostdatetime \
+)
+
+endef
+
+endif # SYSTEM_BOOST
+
+
 ifeq ($(SYSTEM_LIBCMIS),YES)
 
 define gb_LinkTarget__use_cmis

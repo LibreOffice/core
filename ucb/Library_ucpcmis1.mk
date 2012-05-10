@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_externals,ucpcmis1,\
 	cmis \
 	curl \
 	libxml2 \
+	boostdatetime \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpcmis1,\
