@@ -436,6 +436,12 @@ $(eval $(call gb_Library_add_defs,vcl,\
     ) \
 ))
 
+ifeq ($(ENABLE_CUPS),YES)
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DENABLE_CUPS\
+))
+endif
+
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
