@@ -860,11 +860,12 @@ inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 //---------------------------------------------------------------------------
 //      GetTimeRef
 
-void ImpSvNumberInputScan::GetTimeRef(
+bool ImpSvNumberInputScan::GetTimeRef(
         double& fOutNumber,
         sal_uInt16 nIndex,          // j-value of the first numeric time part of input, default 0
         sal_uInt16 nAnz )           // count of numeric time parts
 {
+    bool bRet = true;
     sal_uInt16 nHour;
     sal_uInt16 nMinute = 0;
     sal_uInt16 nSecond = 0;
@@ -893,6 +894,7 @@ void ImpSvNumberInputScan::GetTimeRef(
     else
     {
         nHour = 0;
+        bRet = false;
         SAL_WARN( "svl.items", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
     if (nDecPos == 2 && nAnz == 2)                  // 45.5
@@ -903,7 +905,9 @@ void ImpSvNumberInputScan::GetTimeRef(
         nSecond = (sal_uInt16) sStrArray[nNums[nIndex++]].ToInt32();
     if (nIndex - nStartIndex < nAnz)
         fSecond100 = StringToDouble( sStrArray[nNums[nIndex]], true );
-    if (nAmPm == -1 && nHour != 12)             // PM
+    if (nAmPm && nHour > 12)                    // not a valid AM/PM clock time
+        bRet = false;
+    else if (nAmPm == -1 && nHour != 12)        // PM
         nHour += 12;
     else if (nAmPm == 1 && nHour == 12)         // 12 AM
         nHour = 0;
@@ -912,6 +916,7 @@ void ImpSvNumberInputScan::GetTimeRef(
                   (double)nMinute*60 +
                   (double)nSecond +
                   fSecond100)/86400.0;
+    return bRet;
 }
 
 
@@ -3171,7 +3176,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
                 break;
 
             case NUMBERFORMAT_TIME:
-                GetTimeRef(fOutNumber, 0, nAnzNums);
+                res = GetTimeRef(fOutNumber, 0, nAnzNums);
                 if ( nSign < 0 )
                     fOutNumber = -fOutNumber;
                 break;
@@ -3190,7 +3195,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
                 if ( res )
                 {
                     double fTime;
-                    GetTimeRef( fTime, nCounter, nAnzNums - nCounter );
+                    res = GetTimeRef( fTime, nCounter, nAnzNums - nCounter );
                     fOutNumber += fTime;
                 }
             }

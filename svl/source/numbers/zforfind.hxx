@@ -294,7 +294,11 @@ private:
             sal_uInt16& i,
             sal_uInt16& j );
 
-    void GetTimeRef(                                // Converts time -> double (only decimals)
+    /** Converts time -> double (only decimals)
+
+        @return TRUE if time, FALSE if not (e.g. hours >12 with AM/PM)
+     */
+    bool GetTimeRef(
             double& fOutNumber,                     // result as double
             sal_uInt16 nIndex,                      // Index of hour in input
             sal_uInt16 nAnz );                      // Count of time substrings in input
