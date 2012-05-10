@@ -92,7 +92,7 @@ namespace salhelper
 
         ConditionWaiter(Condition& aCond);
 
-        struct timedout {
+        struct SALHELPER_DLLPUBLIC timedout {
             timedout();
 
             timedout(timedout const &);
