@@ -24,18 +24,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest_javamaker))
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-    CustomTarget_bridgetest_javamaker \
-))
+TTBJ := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_javamaker)
 
-#ifneq ($(SOLAR_JAVA),)
-#$(eval $(call gb_Module_add_targets,testtools,\
-#   Jar_testComponent \
-#))
-#endif
+$(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(TTBJ)/done
 
+$(TTBJ)/done : $(OUTDIR)/rdb/bridgetest.rdb \
+	$(call gb_Executable_get_target_for_build,javamaker) | $(TTBJ)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_execute,javamaker -BUCR -nD -O$(TTBJ)/class -X$(OUTDIR)/bin/types.rdb $<) && touch $@)
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
