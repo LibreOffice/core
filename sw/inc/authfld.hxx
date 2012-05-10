@@ -33,6 +33,7 @@
 #include <toxe.hxx>
 #include <svl/svstdarr.hxx>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwAuthDataArr;
 
@@ -64,14 +65,14 @@ struct SwTOXSortKey
 };
 
 class SwAuthorityField;
-class SortKeyArr;
+typedef boost::ptr_vector<SwTOXSortKey> SortKeyArr;
 
 class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
     SwDoc*          m_pDoc;
     SwAuthDataArr*  m_pDataArr;
     std::vector<long> m_SequArr;
-    SortKeyArr*     m_pSortKeyArr;
+    SortKeyArr      m_SortKeyArr;
     sal_Unicode     m_cPrefix;
     sal_Unicode     m_cSuffix;
     sal_Bool            m_bIsSequence :1;
@@ -79,15 +80,11 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     LanguageType    m_eLanguage;
     String          m_sSortAlgorithm;
 
-    // @@@ private copy assignment, but public copy ctor? @@@
-    const SwAuthorityFieldType& operator=( const SwAuthorityFieldType& );
-
 protected:
 virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
-    SwAuthorityFieldType( const SwAuthorityFieldType& );
     ~SwAuthorityFieldType();
 
     virtual SwFieldType* Copy()    const;

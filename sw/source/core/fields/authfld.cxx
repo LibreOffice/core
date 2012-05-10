@@ -61,10 +61,6 @@ SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5 )
 SV_IMPL_PTRARR( SwAuthDataArr, SwAuthEntryPtr )
 
 
-typedef SwTOXSortKey* TOXSortKeyPtr;
-SV_DECL_PTRARR_DEL( SortKeyArr, TOXSortKeyPtr, 5 )
-SV_IMPL_PTRARR( SortKeyArr, TOXSortKeyPtr )
-
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : nRefCount(0)
 {
@@ -84,7 +80,7 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
     m_pDataArr(new SwAuthDataArr ),
-    m_pSortKeyArr(new SortKeyArr(3)),
+    m_SortKeyArr(3),
     m_cPrefix('['),
     m_cSuffix(']'),
     m_bIsSequence(sal_False),
@@ -93,25 +89,8 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
 {
 }
 
-SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
-    : SwFieldType( RES_AUTHORITY ),
-    m_pDataArr(new SwAuthDataArr ),
-    m_pSortKeyArr(new SortKeyArr(3)),
-    m_cPrefix(rFType.m_cPrefix),
-    m_cSuffix(rFType.m_cSuffix),
-    m_bIsSequence(rFType.m_bIsSequence),
-    m_bSortByDocument(rFType.m_bSortByDocument),
-    m_eLanguage(rFType.m_eLanguage),
-    m_sSortAlgorithm(rFType.m_sSortAlgorithm)
-{
-    for(sal_uInt16 i = 0; i < rFType.m_pSortKeyArr->Count(); i++)
-        m_pSortKeyArr->Insert((*rFType.m_pSortKeyArr)[i], i);
-}
-
 SwAuthorityFieldType::~SwAuthorityFieldType()
 {
-    m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
-    delete m_pSortKeyArr;
     m_SequArr.clear();
     delete m_pDataArr;
 }
@@ -432,13 +411,13 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
 
     case FIELD_PROP_PROP_SEQ:
         {
-            Sequence<PropertyValues> aRet(m_pSortKeyArr->Count());
+            Sequence<PropertyValues> aRet(m_SortKeyArr.size());
             PropertyValues* pValues = aRet.getArray();
             OUString sProp1( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
                      sProp2( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
-            for(sal_uInt16 i = 0; i < m_pSortKeyArr->Count(); i++)
+            for(sal_uInt16 i = 0; i < m_SortKeyArr.size(); i++)
             {
-                const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
+                const SwTOXSortKey* pKey = &m_SortKeyArr[i];
                 pValues[i].realloc(2);
                 PropertyValue* pValue = pValues[i].getArray();
                 pValue[0].Name = sProp1;
@@ -496,7 +475,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
             Sequence<PropertyValues> aSeq;
             if( 0 != (bRet = rAny >>= aSeq) )
             {
-                m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
+                m_SortKeyArr.clear();
                 const PropertyValues* pValues = aSeq.getConstArray();
                 for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
                 {
@@ -517,7 +496,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                             pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
                         }
                     }
-                    m_pSortKeyArr->Insert(pSortKey, m_pSortKeyArr->Count());
+                    m_SortKeyArr.push_back(pSortKey);
                 }
             }
         }
@@ -537,25 +516,24 @@ void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *p
 
 sal_uInt16 SwAuthorityFieldType::GetSortKeyCount() const
 {
-    return m_pSortKeyArr->Count();
+    return m_SortKeyArr.size();
 }
 
 const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(sal_uInt16 nIdx) const
 {
-    SwTOXSortKey* pRet = 0;
-    if(m_pSortKeyArr->Count() > nIdx)
-        pRet = (*m_pSortKeyArr)[nIdx];
+    const SwTOXSortKey* pRet = 0;
+    if(m_SortKeyArr.size() > nIdx)
+        pRet = &m_SortKeyArr[nIdx];
     OSL_ENSURE(pRet, "Sort key not found");
     return pRet;
 }
 
 void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[])
 {
-    m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
-    sal_uInt16 nArrIdx = 0;
+    m_SortKeyArr.clear();
     for(sal_uInt16 i = 0; i < nKeyCount; i++)
         if(aKeys[i].eField < AUTH_FIELD_END)
-            m_pSortKeyArr->Insert(new SwTOXSortKey(aKeys[i]), nArrIdx++);
+            m_SortKeyArr.push_back(new SwTOXSortKey(aKeys[i]));
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
