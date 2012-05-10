@@ -128,7 +128,7 @@ void SwDDETable::ChangeContent()
     {
         String aLine = aExpand.GetToken( n, '\n' );
         SwTableLine* pLine = aLines[ n ];
-        for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().Count(); ++i )
+        for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().size(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
             OSL_ENSURE( pBox->GetSttIdx(), "keine InhaltsBox" );

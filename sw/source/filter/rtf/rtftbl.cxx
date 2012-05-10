@@ -187,8 +187,8 @@ void SwRTFParser::ReadTable( int nToken )
         if( pLine )
         {
             sal_uInt16 nTmpBox = m_nCurrentBox;
-            if( nTmpBox > pLine->GetTabBoxes().Count() )
-                nTmpBox = pLine->GetTabBoxes().Count();
+            if( nTmpBox > pLine->GetTabBoxes().size() )
+                nTmpBox = pLine->GetTabBoxes().size();
 
             for (sal_uInt16 n = nTmpBox; n; )
             {
@@ -548,7 +548,7 @@ void SwRTFParser::ReadTable( int nToken )
         pNewLine = (*pLns)[ pLns->Count() - 1 ];
 
         // jetzt die Boxen abgleichen
-        sal_uInt16 nBoxes = Min( pNewLine->GetTabBoxes().Count(), (sal_uInt16)aBoxFmts.size() );
+        sal_uInt16 nBoxes = Min( pNewLine->GetTabBoxes().size(), aBoxFmts.size() );
         sal_uInt16 n;
 
         for( n = 0; n < nBoxes; ++n )
@@ -567,7 +567,7 @@ void SwRTFParser::ReadTable( int nToken )
         {
             // remove ContentIndex of other Bound
             pPam->SetMark(); pPam->DeleteMark();
-            while( n < pNewLine->GetTabBoxes().Count() )
+            while( n < pNewLine->GetTabBoxes().size() )
                 _DeleteBox( pTableNode->GetTable(),
                             pNewLine->GetTabBoxes()[ n ], 0, sal_False, sal_False );
         }
@@ -747,7 +747,7 @@ void SwRTFParser::ReadTable( int nToken )
     if (pNewLine)
     {
         SwTableBoxes &rBoxes = pNewLine->GetTabBoxes();
-        if (SwTableBox* pBox = ((m_nCurrentBox < rBoxes.Count())
+        if (SwTableBox* pBox = ((m_nCurrentBox < rBoxes.size())
                 ? rBoxes[m_nCurrentBox] : 0))
         {
             if (const SwStartNode *pStart = pBox->GetSttNd())
@@ -816,7 +816,7 @@ void SwRTFParser::GotoNextBox()
     SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
     SwTableLine* pLine = rLns[ rLns.Count()-1 ];
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
+    SwTableBox* pBox = rBoxes.back();
 
     if( ++m_nCurrentBox >= aMergeBoxes.size() )
         m_nCurrentBox = aMergeBoxes.size()-1;
@@ -831,7 +831,7 @@ void SwRTFParser::GotoNextBox()
                 if( !aMergeBoxes[ nTmp ] )
                     ++nRealBox;
 
-            if( nRealBox < rBoxes.Count() )
+            if( nRealBox < rBoxes.size() )
             {
                 pPam->GetPoint()->nNode = *rBoxes[ nRealBox ]->GetSttNd()->EndOfSectionNode();
                 pPam->Move( fnMoveBackward, fnGoCntnt );
@@ -870,7 +870,7 @@ void SwRTFParser::NewTblLine()
     SwTableLines* pLns = &pTableNode->GetTable().GetTabLines();
     SwTableLine* pLine = (*pLns)[ pLns->Count()-1 ];
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
+    SwTableBox* pBox = rBoxes.back();
 
     if(nRowsToRepeat>0)
         pTableNode->GetTable().SetRowsToRepeat( nRowsToRepeat );
@@ -919,7 +919,7 @@ void SwRTFParser::NewTblLine()
         pPam->SetMark();
 
         pLine = (*pLns)[ pLns->Count()-1 ];
-        pBox = pLine->GetTabBoxes()[ pLine->GetTabBoxes().Count() -1 ];
+        pBox = pLine->GetTabBoxes().back();
         pPam->GetPoint()->nNode = *pBox->GetSttNd()->EndOfSectionNode();
         pPam->Move( fnMoveBackward );
         pDoc->SetTxtFmtColl( *pPam, pColl );

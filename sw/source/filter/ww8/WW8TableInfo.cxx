@@ -186,7 +186,7 @@ TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow()
         const SwTableLine * pTabLine = getTableBox()->GetUpper();
         const SwTableBoxes & rTblBoxes = pTabLine->GetTabBoxes();
 
-        sal_uInt8 nBoxes = rTblBoxes.Count();
+        sal_uInt8 nBoxes = rTblBoxes.size();
         for ( sal_uInt8 n = 0; n < nBoxes; n++ )
         {
             pResult->push_back(rTblBoxes[n]);
@@ -249,7 +249,7 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()
 
         pWidths = WidthsPtr(new Widths);
         // number of cell written
-        sal_uInt32 nBoxes = rTabBoxes.Count();
+        sal_uInt32 nBoxes = rTabBoxes.size();
         if ( nBoxes > MAXTABLECELLS )
             nBoxes = MAXTABLECELLS;
 
@@ -280,7 +280,7 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
         const SwTableLine * pTabLine = pTabBox->GetUpper();
         const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
-        sal_uInt32 nBoxes = rTabBoxes.Count();
+        sal_uInt32 nBoxes = rTabBoxes.size();
         if (nBoxes > MAXTABLECELLS)
             nBoxes = MAXTABLECELLS;
 
@@ -680,11 +680,11 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
 
     WW8TableNodeInfo::Pointer_t pTextNodeInfo;
 
-    for (sal_uInt16 n = 0; n < rBoxes.Count(); n++)
+    for (sal_uInt16 n = 0; n < rBoxes.size(); n++)
     {
         const SwTableBox * pBox = rBoxes[n];
 
-        pPrev = processTableBox(pTable, pBox, nRow, n, nDepth, n == rBoxes.Count() - 1, pPrev);
+        pPrev = processTableBox(pTable, pBox, nRow, n, nDepth, n == rBoxes.size() - 1, pPrev);
     }
 
 #ifdef DBG_UTIL
@@ -717,7 +717,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
             const SwTableLine * pLine = rLines[n];
             const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
 
-            for (sal_uInt16 nBox = 0; nBox < rBoxes.Count(); nBox++)
+            for (sal_uInt16 nBox = 0; nBox < rBoxes.size(); nBox++)
                 pNodeInfo = processTableBoxLines(rBoxes[nBox], pTable, pBoxToSet, nRow, nCell, nDepth);
         }
     }

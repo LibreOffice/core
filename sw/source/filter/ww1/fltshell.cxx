@@ -1446,9 +1446,9 @@ SwTableBox* SwFltOutDoc::GetBox(sal_uInt16 ny, sal_uInt16 nx /*= USHRT_MAX */)
         OSL_FAIL("SwFltOutDoc:GetBox:pTableBoxes");
         return 0;
     }
-    if( nx >= pTableBoxes->Count() ){   // Notbremse
+    if( nx >= pTableBoxes->size() ){   // Notbremse
         OSL_FAIL("SwFltOutDoc:GetBox:nx >= Count()");
-        nx = pTableBoxes->Count() - 1;
+        nx = pTableBoxes->size() - 1;
     }
     SwTableBox* pTableBox = (*pTableBoxes)[nx];
 
@@ -1471,14 +1471,14 @@ void SwFltOutDoc::NextTableCell()
         return;
 //#pragma message(__FILE__ "(?) : Sw's const problem")
 // insert cells:
-    if (++usTableX >= pTableBoxes->Count())
+    if (++usTableX >= pTableBoxes->size())
         GetDoc().GetNodes().InsBoxen(
          GetDoc().IsIdxInTbl(pPaM->GetPoint()->nNode),
          pTableLine,
          (SwTableBoxFmt*)pTableBox->GetFrmFmt(),
          GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ),
          0,
-         pTableBoxes->Count());
+         pTableBoxes->size());
     SeekCell(usTableY, usTableX, sal_True);
     pTableBox = (*pTableBoxes)[usTableX];
     OSL_ENSURE(pTableBox != 0, "SwFltOutDoc:pTableBox");
@@ -1671,7 +1671,7 @@ sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
     }
     pTableLine = (*pTableLines)[nRow];
     pTableBoxes = &pTableLine->GetTabBoxes();
-    if (nCol >= pTableBoxes->Count())
+    if (nCol >= (short)pTableBoxes->size())
         return sal_False;
     pTableBox = (*pTableBoxes)[nCol];
     if( !pTableBox->GetSttNd() )

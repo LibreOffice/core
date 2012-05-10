@@ -399,13 +399,12 @@ sal_Bool SwFEShell::DeleteRow()
             }
 
             SwTableLine* pDelLine = pFndBox->GetLines().back().GetLine();
-            SwTableBox* pDelBox = pDelLine->GetTabBoxes()[
-                                pDelLine->GetTabBoxes().Count() - 1 ];
+            SwTableBox* pDelBox = pDelLine->GetTabBoxes().back();
             while( !pDelBox->GetSttNd() )
             {
                 SwTableLine* pLn = pDelBox->GetTabLines()[
                             pDelBox->GetTabLines().Count()-1 ];
-                pDelBox = pLn->GetTabBoxes()[ pLn->GetTabBoxes().Count() - 1 ];
+                pDelBox = pLn->GetTabBoxes().back();
             }
             SwTableBox* pNextBox = pDelLine->FindNextBox( pTblNd->GetTable(),
                                                             pDelBox, sal_True );

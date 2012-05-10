@@ -1890,7 +1890,7 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwTableBoxes & rTblBoxes = pTabLine->GetTabBoxes();
 
-    sal_uInt8 nBoxes = rTblBoxes.Count();
+    sal_uInt8 nBoxes = rTblBoxes.size();
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
     {
         const SwTableBox * pTabBox1 = rTblBoxes[n];
@@ -2282,7 +2282,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
-    sal_uInt8 nBoxes = rTabBoxes.Count();
+    sal_uInt8 nBoxes = rTabBoxes.size();
     if ( m_rWW8Export.bWrtWW8 )
         m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd );
     else
@@ -2311,7 +2311,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     if ( m_rWW8Export.bWrtWW8 )
     {
         sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
-        sal_uInt8 nBoxes0 = rTabBoxes.Count();
+        sal_uInt8 nBoxes0 = rTabBoxes.size();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
 

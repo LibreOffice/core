@@ -135,7 +135,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     }
 
     const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    sal_uInt16 nBoxes = rBoxes.Count();
+    sal_uInt16 nBoxes = rBoxes.size();
 
     for( sal_uInt16 nBox=0; nBox<nBoxes; nBox++ )
     {
@@ -479,7 +479,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 
         // Fuer alle Boxen der Zeile ggf. eine Spalte einfuegen
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        sal_uInt16 nBoxes = rBoxes.Count();
+        sal_uInt16 nBoxes = rBoxes.size();
 
         sal_uInt32 nCPos = nStartCPos;
         for( sal_uInt16 nBox=0; nBox<nBoxes; nBox++ )
@@ -648,7 +648,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             pBrushItem = 0;
         }
 
-        sal_uInt16 nBoxes = rBoxes.Count();
+        sal_uInt16 nBoxes = rBoxes.size();
         sal_uInt32 nCPos = nStartCPos;
         sal_uInt16 nCol = nStartCol;
 

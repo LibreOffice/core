@@ -192,7 +192,7 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     if( !bRet )
     {
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
-        sal_uInt16 nCount = rBoxes.Count();
+        sal_uInt16 nCount = rBoxes.size();
         sal_Bool bTopBottom = bTop || bBottom;
         for( sal_uInt16 i=0; !bRet && i<nCount; i++ )
         {
@@ -206,23 +206,22 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     return bRet;
 }
 
-sal_Bool lcl_WrtHTMLTbl_HasTabBorders( const SwTableLine*& rpLine, void* pPara );
+static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine*& rpLine, void* pPara );
 
-sal_Bool lcl_WrtHTMLTbl_HasTabBorders( const SwTableBox*& rpBox, void* pPara )
+static sal_Bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, sal_Bool *pBorders )
 {
-    sal_Bool *pBorders = (sal_Bool *)pPara;
     if( *pBorders )
         return sal_False;
 
-    if( !rpBox->GetSttNd() )
+    if( !pBox->GetSttNd() )
     {
-        ((SwTableBox *)rpBox)->GetTabLines().ForEach(
-                                &lcl_WrtHTMLTbl_HasTabBorders, pPara );
+        ((SwTableBox *)pBox)->GetTabLines().ForEach(
+                                &lcl_TableLine_HasTabBorders, (void*)pBorders );
     }
     else
     {
         const SvxBoxItem& rBoxItem =
-            (const SvxBoxItem&)rpBox->GetFrmFmt()->GetFmtAttr( RES_BOX );
+            (const SvxBoxItem&)pBox->GetFrmFmt()->GetFmtAttr( RES_BOX );
 
         *pBorders = rBoxItem.GetTop() || rBoxItem.GetBottom() ||
                     rBoxItem.GetLeft() || rBoxItem.GetRight();
@@ -231,14 +230,18 @@ sal_Bool lcl_WrtHTMLTbl_HasTabBorders( const SwTableBox*& rpBox, void* pPara )
     return !*pBorders;
 }
 
-sal_Bool lcl_WrtHTMLTbl_HasTabBorders( const SwTableLine*& rpLine, void* pPara )
+static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine*& rpLine, void* pPara )
 {
     sal_Bool *pBorders = (sal_Bool *)pPara;
     if( *pBorders )
         return sal_False;
 
-    ((SwTableLine *)rpLine)->GetTabBoxes().ForEach(
-                                    &lcl_WrtHTMLTbl_HasTabBorders, pPara );
+    for( SwTableBoxes::const_iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
+             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
+    {
+        if ( lcl_TableBox_HasTabBorders( *it, (sal_Bool*)pPara ) )
+            break;
+    }
     return !*pBorders;
 }
 
@@ -253,7 +256,7 @@ sal_Bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
         // MIB 30.6.97: Wenn schon eine Box expandiert wurde, wird eine
         // weitere nur expandiert, wenn sie Umrandungen besitzt.
         sal_Bool bBorders = sal_False;
-        lcl_WrtHTMLTbl_HasTabBorders( pBox, &bBorders );
+        lcl_TableBox_HasTabBorders( pBox, &bBorders );
         if( !bBorders )
             bBorders = HasTabBackground( *pBox, sal_True, sal_True, sal_True, sal_True );
         bExpand = bBorders;

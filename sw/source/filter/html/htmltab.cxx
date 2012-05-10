@@ -1806,7 +1806,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                 OSL_ENSURE( pBox, "Colspan trouble" );
 
                 if( pBox )
-                    rBoxes.C40_INSERT( SwTableBox, pBox, rBoxes.Count() );
+                    rBoxes.push_back( pBox );
             }
             nCol++;
         }
@@ -1880,8 +1880,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                 pCnts->SetTableBox( pCntBox );
                 FixFrameFmt( pCntBox, nTopRow, nLeftCol, nRowSpan, nColSpan,
                              bFirstPara, 0==pCnts->Next() );
-                pLine->GetTabBoxes().C40_INSERT( SwTableBox, pCntBox,
-                                             pLine->GetTabBoxes().Count() );
+                pLine->GetTabBoxes().push_back( pCntBox );
 
                 rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
             }
@@ -2587,7 +2586,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         // die erste Box merken und aus der ersten Zeile ausketten
         SwTableLine *pLine1 = (pSwTable->GetTabLines())[0];
         pBox1 = (pLine1->GetTabBoxes())[0];
-        pLine1->GetTabBoxes().Remove(0);
+        pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
         pLineFmt = (SwTableLineFmt*)pLine1->GetFrmFmt();
         pBoxFmt = (SwTableBoxFmt*)pBox1->GetFrmFmt();
@@ -2635,14 +2634,14 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             pPrevStNd = pParser->InsertTableSection( pPrevStNd );
 
             pNewBox = NewTableBox( pPrevStNd, pLine );
-            rBoxes.C40_INSERT( SwTableBox, pNewBox, rBoxes.Count() );
+            rBoxes.push_back( pNewBox );
             FixFillerFrameFmt( pNewBox, sal_False );
             pLayoutInfo->SetLeftFillerBox( pNewBox );
         }
 
         // jetzt die Tabelle bearbeiten
         pNewBox = new SwTableBox( pBoxFmt, 0, pLine );
-        rBoxes.C40_INSERT( SwTableBox, pNewBox, rBoxes.Count() );
+        rBoxes.push_back( pNewBox );
 
         SwFrmFmt *pFrmFmt = pNewBox->ClaimFrmFmt();
         pFrmFmt->ResetFmtAttr( RES_BOX );
@@ -2661,7 +2660,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             pStNd = pParser->InsertTableSection( pStNd );
 
             pNewBox = NewTableBox( pStNd, pLine );
-            rBoxes.C40_INSERT( SwTableBox, pNewBox, rBoxes.Count() );
+            rBoxes.push_back( pNewBox );
 
             FixFillerFrameFmt( pNewBox, sal_True );
             pLayoutInfo->SetRightFillerBox( pNewBox );

@@ -636,7 +636,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         }
 
         SwTableBox* pBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
-        pLine->GetTabBoxes().C40_INSERT( SwTableBox, pBox, 0 );
+        pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin(), pBox );
     }
     return pTblNd;
 }
@@ -1066,7 +1066,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
 
             // TL_CHART2: notify chart about boxes to be removed
             const SwTableBoxes &rBoxes = pOld->GetTabBoxes();
-            sal_uInt16 nBoxes = rBoxes.Count();
+            sal_uInt16 nBoxes = rBoxes.size();
             for (sal_uInt16 k = 0;  k < nBoxes;  ++k)
             {
                 SwTableBox *pBox = rBoxes[k];
@@ -1088,7 +1088,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
         for (sal_uInt16 k1 = 0; k1 < nOldLines - n;  ++k1)
         {
             const SwTableBoxes &rBoxes = rTbl.GetTabLines()[n + k1]->GetTabBoxes();
-            sal_uInt16 nBoxes = rBoxes.Count();
+            sal_uInt16 nBoxes = rBoxes.size();
             for (sal_uInt16 k2 = 0;  k2 < nBoxes;  ++k2)
             {
                 SwTableBox *pBox = rBoxes[k2];
@@ -1177,7 +1177,7 @@ _SaveLine::_SaveLine( _SaveLine* pPrev, const SwTableLine& rLine, _SaveTable& rS
 
     pBox = new _SaveBox( 0, *rLine.GetTabBoxes()[ 0 ], rSTbl );
     _SaveBox* pBx = pBox;
-    for( sal_uInt16 n = 1; n < rLine.GetTabBoxes().Count(); ++n )
+    for( sal_uInt16 n = 1; n < rLine.GetTabBoxes().size(); ++n )
         pBx = new _SaveBox( pBx, *rLine.GetTabBoxes()[ n ], rSTbl );
 }
 
@@ -1194,7 +1194,7 @@ void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
     rSTbl.NewFrmFmt( &rLine, 0, nItemSet, rLine.GetFrmFmt() );
 
     _SaveBox* pBx = pBox;
-    for( sal_uInt16 n = 0; n < rLine.GetTabBoxes().Count(); ++n, pBx = pBx->pNext )
+    for( sal_uInt16 n = 0; n < rLine.GetTabBoxes().size(); ++n, pBx = pBx->pNext )
     {
         if( !pBx )
         {
@@ -1387,7 +1387,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
     if( ULONG_MAX == nSttNode )     // keine EndBox
     {
         SwTableBox* pNew = new SwTableBox( pFmt, 1, &rParent );
-        rParent.GetTabBoxes().C40_INSERT( SwTableBox, pNew, rParent.GetTabBoxes().Count() );
+        rParent.GetTabBoxes().push_back( pNew );
 
         Ptrs.pLine->CreateNew( rTbl, *pNew, rSTbl );
     }
@@ -1405,11 +1405,11 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         pBox->setRowSpan( nRowSpan );
 
         SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
-        pTBoxes->Remove( pTBoxes->C40_GETPOS( SwTableBox, pBox ) );
+        pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pBox ) );
 
         pBox->SetUpper( &rParent );
         pTBoxes = &rParent.GetTabBoxes();
-        pTBoxes->C40_INSERT( SwTableBox, pBox, pTBoxes->Count() );
+        pTBoxes->push_back( pBox );
     }
 
     if( pNext )
@@ -1775,7 +1775,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 pSave->GetHistory()->Rollback( &rDoc );
             SwTableBox* pBox = new SwTableBox( (SwTableBoxFmt*)pCpyBox->GetFrmFmt(), aIdx,
                                                 pCpyBox->GetUpper() );
-            rLnBoxes.C40_INSERT( SwTableBox, pBox, rLnBoxes.Count() );
+            rLnBoxes.push_back( pBox );
         }
         pDelSects->clear();
     }
@@ -1843,7 +1843,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwTableBox* pCurrBox = aDelBoxes[n];
         SwTableBoxes* pTBoxes = &pCurrBox->GetUpper()->GetTabBoxes();
-        pTBoxes->Remove( pTBoxes->C40_GETPOS( SwTableBox, pCurrBox ) );
+        pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pCurrBox ) );
         delete pCurrBox;
     }
 
@@ -2027,7 +2027,7 @@ CHECKTABLE(pTblNd->GetTable())
                                             SwTableBoxStartNode, pColl );
         pBox = new SwTableBox( (SwTableBoxFmt*)pCpyBox->GetFrmFmt(), *pSttNd,
                                 pCpyBox->GetUpper() );
-        rLnBoxes.C40_INSERT( SwTableBox, pBox, rLnBoxes.Count() );
+        rLnBoxes.push_back( pBox );
 
         aSelBoxes.Insert( pBox );
     }
@@ -2101,7 +2101,7 @@ CHECKTABLE(pTblNd->GetTable())
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
 
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
-            pTBoxes->Remove( pTBoxes->C40_GETPOS( SwTableBox, pBox ) );
+            pTBoxes->erase( std::find(pTBoxes->begin(), pTBoxes->end(), pBox ) );
 
 
             // Indizies aus dem Bereich loeschen

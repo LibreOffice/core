@@ -307,7 +307,7 @@ void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSi
 {
     lcl_ProcessRowAttr( rFmtCmp, pLine, rNew );
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-    for ( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
         ::lcl_ProcessBoxSize( rFmtCmp, rBoxes[i], rNew );
 }
 

@@ -276,7 +276,7 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
         SwTableBox* pBox = (SwTableBox*)pLastTblBox;
         nStackCnt = 0;
         rCalc.SetCalcError( CALC_NOERR );
-        aStackOverFlows.C40_INSERT( SwTableBox, pBox, nCnt++ );
+        aStackOverFlows.insert( aStackOverFlows.begin() + nCnt++, pBox );
 
         pBoxStk->Remove( pBox );
         pBox->GetValue( *this );
@@ -297,7 +297,7 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
     }
 
     nMaxSize = nSaveMaxSize;
-    aStackOverFlows.Remove( 0, aStackOverFlows.Count() );
+    aStackOverFlows.clear();
     return !rCalc.IsCalcError();
 }
 
@@ -786,7 +786,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
 
         // dann suche die Box
         pBoxes = &pLine->GetTabBoxes();
-        if( nBoxOffset >= long(pBoxes->Count()) )
+        if( nBoxOffset >= long(pBoxes->size()) )
             return 0;
         pBox = (*pBoxes)[ sal_uInt16(nBoxOffset) ];
 
@@ -806,7 +806,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
 
             // bestimme die Box
             pBoxes = &pLine->GetTabBoxes();
-            if( nSttBox >= pBoxes->Count() )
+            if( nSttBox >= pBoxes->size() )
                 break;
             pBox = (*pBoxes)[ nSttBox ];
         }

@@ -50,7 +50,6 @@ class SwFmtFrmSize;
 struct _CpyPara;
 struct _InsULPara;
 
-sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
 
 
@@ -111,10 +110,10 @@ public:
     sal_Bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );
 };
 
-sal_Bool lcl_Box_CollectBox( const SwTableBox*& rpBox, void* pPara );
+void lcl_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
 sal_Bool lcl_Line_CollectBox( const SwTableLine*& rpLine, void* pPara );
 
-sal_Bool lcl_BoxSetSplitBoxFmts( const SwTableBox*& rpBox, void* pPara );
+void lcl_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
 
 // This structure is needed by Undo to restore row span attributes
 // when a table has been splitted into two tables
@@ -157,13 +156,11 @@ public:
 };
 
 sal_Bool lcl_GC_Line_Border( const SwTableLine*& , void* pPara );
-sal_Bool lcl_GC_Box_Border( const SwTableBox*& , void* pPara );
 
 sal_Bool lcl_GCBorder_ChkBoxBrd_L( const SwTableLine*& , void* pPara );
 sal_Bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox*& , void* pPara );
 
 sal_Bool lcl_GCBorder_GetLastBox_L( const SwTableLine*& , void* pPara );
-sal_Bool lcl_GCBorder_GetLastBox_B( const SwTableBox*& , void* pPara );
 
 
 class SwShareBoxFmt

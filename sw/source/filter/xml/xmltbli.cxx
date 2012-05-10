@@ -2395,7 +2395,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 OSL_ENSURE( bHasSubTables || pBox, "Colspan trouble" );
 
                 if( pBox )
-                    rBoxes.C40_INSERT( SwTableBox, pBox, rBoxes.Count() );
+                    rBoxes.push_back( pBox );
             }
             nCol++;
         }
@@ -2795,7 +2795,7 @@ void SwXMLTableContext::MakeTable()
     OSL_ENSURE( pBox1 == pLine1->GetTabBoxes()[0U],
                 "Why is box 1 change?" );
     pBox1->pSttNd = pSttNd1;
-    pLine1->GetTabBoxes().Remove(0U);
+    pLine1->GetTabBoxes().erase( pLine1->GetTabBoxes().begin() );
 
     pLineFmt = (SwTableLineFmt*)pLine1->GetFrmFmt();
     pBoxFmt = (SwTableBoxFmt*)pBox1->GetFrmFmt();

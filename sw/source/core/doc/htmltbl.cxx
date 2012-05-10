@@ -419,7 +419,7 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
     {
         OSL_ENSURE( pBox->GetTabLines().Count() > 0,
                 "Box without start node and lines" );
-        OSL_ENSURE( pBox->GetTabLines()[0]->GetTabBoxes().Count() > 0,
+        OSL_ENSURE( pBox->GetTabLines()[0]->GetTabBoxes().size() > 0,
                 "Line without boxes" );
         pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];
     }
@@ -1537,20 +1537,18 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
 
 static sal_Bool lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara );
 
-static sal_Bool lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
+static sal_Bool lcl_ResizeBox( SwTableBox* pBox, sal_uInt16* pWidth )
 {
-    sal_uInt16 *pWidth = (sal_uInt16 *)pPara;
-
-    if( !rpBox->GetSttNd() )
+    if( !pBox->GetSttNd() )
     {
         sal_uInt16 nWidth = 0;
-        ((SwTableBox *)rpBox)->GetTabLines().ForEach( &lcl_ResizeLine, &nWidth );
-        rpBox->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
+        pBox->GetTabLines().ForEach( &lcl_ResizeLine, &nWidth );
+        pBox->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
         *pWidth = *pWidth + nWidth;
     }
     else
     {
-        *pWidth = *pWidth + (sal_uInt16)rpBox->GetFrmFmt()->GetFrmSize().GetSize().Width();
+        *pWidth = *pWidth + (sal_uInt16)pBox->GetFrmFmt()->GetFrmSize().GetSize().Width();
     }
 
     return sal_True;
@@ -1563,7 +1561,9 @@ static sal_Bool lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara )
     sal_uInt16 nOldWidth = *pWidth;
 #endif
     *pWidth = 0;
-    ((SwTableLine *)rpLine)->GetTabBoxes().ForEach( &lcl_ResizeBox, pWidth );
+    for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
+             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
+        lcl_ResizeBox(*it, pWidth );
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !nOldWidth || Abs(*pWidth-nOldWidth) < COLFUZZY,

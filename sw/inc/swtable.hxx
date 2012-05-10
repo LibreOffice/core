@@ -37,6 +37,8 @@
 
 #include <memory>
 #include <boost/noncopyable.hpp>
+#include <vector>
+#include <algorithm>
 
 class SwStartNode;
 class SwFmt;
@@ -72,7 +74,16 @@ SV_DECL_REF( SwServerObject )
 #endif
 
 SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10)
-SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25)
+
+class SwTableBoxes : public std::vector<SwTableBox*> {
+public:
+    // return USHRT_MAX if not found, else index of position
+    sal_uInt16 GetPos(const SwTableBox* pBox) const
+    {
+        const_iterator it = std::find(begin(), end(), pBox);
+        return it == end() ? USHRT_MAX : it - begin();
+    }
+};
 
 // Save content-bearing box-pointers additionally in a sorted array
 // (for calculation in table).

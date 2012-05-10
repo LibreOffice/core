@@ -720,7 +720,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             // get a character map in the size of the table to mark
             // all the ranges to use in
             sal_Int32 nRows = pTable->GetTabLines().Count();
-            sal_Int32 nCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().Count();
+            sal_Int32 nCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().size();
             std::vector< std::vector< sal_Char > > aMap( nRows );
             for (sal_Int32 i = 0;  i < nRows;  ++i)
                 aMap[i].resize( nCols );
@@ -1206,7 +1206,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (!pTable || pTable->IsTblComplex())
                 return aResult; // failed -> return empty property sequence
             nTableRows = pTable->GetTabLines().Count();
-            nTableCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().Count();
+            nTableCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().size();
             aMap.resize( nTableRows );
             for (sal_Int32 i = 0;  i < nTableRows;  ++i)
                 aMap[i].resize( nTableCols );

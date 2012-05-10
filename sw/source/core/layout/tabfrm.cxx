@@ -3676,10 +3676,10 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent )
     nType = FRMC_ROW;
 
     //Create the boxes and insert them.
-       const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
+    const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
     SwFrm *pTmpPrev = 0;
-      for ( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
-       {
+    for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+    {
         SwCellFrm *pNew = new SwCellFrm( *rBoxes[i], this, bInsertContent );
         pNew->InsertBehind( this, pTmpPrev );
         pTmpPrev = pNew;

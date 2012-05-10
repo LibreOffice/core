@@ -258,7 +258,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
             for( ; nSttPos <= nEndPos; ++nSttPos )
             {
                 pLine = rLines[ nSttPos ];
-                for( sal_uInt16 n = pLine->GetTabBoxes().Count(); n ; )
+                for( sal_uInt16 n = pLine->GetTabBoxes().size(); n ; )
                 {
                     SwTableBox* pBox = pLine->GetTabBoxes()[ --n ];
                     // check for cell protection??
@@ -955,7 +955,6 @@ sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     return bRet;
 }
 
-
 void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo )
 {
@@ -1027,7 +1026,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             if( ( rUnion.Right() + COLFUZZY ) < pCell->Frm().Right() )
                             {
                                 sal_uInt16 nInsPos = pBox->GetUpper()->
-                                                    GetTabBoxes().C40_GETPOS( SwTableBox, pBox )+1;
+                                                    GetTabBoxes().GetPos( pBox )+1;
                                 lcl_InsTblBox( pTblNd, pDoc, pBox, nInsPos );
                                 pBox->ClaimFrmFmt();
                                 SwFmtFrmSize aNew(
@@ -1070,8 +1069,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         else if( ( rUnion.Left() - COLFUZZY ) >= pCell->Frm().Left() &&
                                 ( rUnion.Right() + COLFUZZY ) < pCell->Frm().Right() )
                         {
-                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().
-                                            C40_GETPOS( SwTableBox, pBox )+1;
+                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().GetPos(
+                                            pBox )+1;
                             lcl_InsTblBox( pTblNd, pDoc, pBox, nInsPos, 2 );
                             pBox->ClaimFrmFmt();
                             SwFmtFrmSize aNew(
@@ -1127,8 +1126,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                  ( pCell->Frm().Left() + COLFUZZY ) < rUnion.Left() )
                         {
                             // then we should insert a new box and adjust the widths
-                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().
-                                            C40_GETPOS( SwTableBox, pBox )+1;
+                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().GetPos(
+                                            pBox )+1;
                             lcl_InsTblBox( pTblNd, pDoc, pBox, nInsPos, 1 );
 
                             SwFmtFrmSize aNew(pBox->GetFrmFmt()->GetFrmSize() );
@@ -1362,11 +1361,11 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     {
         SwTableBox* pTmpBox = rBoxes[0];
         SwTableLine* pInsLine = pTmpBox->GetUpper();
-        sal_uInt16 nInsPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, pTmpBox );
+        sal_uInt16 nInsPos = pInsLine->GetTabBoxes().GetPos( pTmpBox );
 
         lcl_InsTblBox( pTblNd, pDoc, pTmpBox, nInsPos );
         (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ];
-        pInsLine->GetTabBoxes().Remove( nInsPos );  // remove again
+        pInsLine->GetTabBoxes().erase( pInsLine->GetTabBoxes().begin() + nInsPos );  // remove again
         (*ppMergeBox)->SetUpper( 0 );
         (*ppMergeBox)->ClaimFrmFmt();
 
@@ -2099,32 +2098,29 @@ void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 }
 
 
-sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
+static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
 {
-    _FndPara* pFndPara = (_FndPara*)pPara;
-    _FndBox* pFndBox = new _FndBox( (SwTableBox*)rpBox, pFndPara->pFndLine );
-    if( rpBox->GetTabLines().Count() )
+    _FndBox* pFndBox = new _FndBox( pBox, pFndPara->pFndLine );
+    if( pBox->GetTabLines().Count() )
     {
         _FndPara aPara( *pFndPara, pFndBox );
         pFndBox->GetBox()->GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
         if( pFndBox->GetLines().empty() )
         {
             delete pFndBox;
-            return sal_True;
+            return;
         }
     }
     else
     {
-        SwTableBoxPtr pSrch = (SwTableBoxPtr)rpBox;
         sal_uInt16 nFndPos;
-        if( !pFndPara->rBoxes.Seek_Entry( pSrch, &nFndPos ))
+        if( !pFndPara->rBoxes.Seek_Entry( pBox, &nFndPos ))
         {
             delete pFndBox;
-            return sal_True;
+            return;
         }
     }
     pFndPara->pFndLine->GetBoxes().push_back( pFndBox );
-    return sal_True;
 }
 
 sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
@@ -2132,7 +2128,9 @@ sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
     _FndPara* pFndPara = (_FndPara*)pPara;
     _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
     _FndPara aPara( *pFndPara, pFndLine );
-    pFndLine->GetLine()->GetTabBoxes().ForEach( &_FndBoxCopyCol, &aPara );
+    for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
+             it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
+        _FndBoxCopyCol(*it, &aPara );
     if( pFndLine->GetBoxes().size() )
     {
         pFndPara->pFndBox->GetLines().push_back( pFndLine );

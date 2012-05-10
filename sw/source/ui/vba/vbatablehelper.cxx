@@ -62,7 +62,7 @@ sal_Int32 SwVbaTableHelper::getTabColumnsCount( sal_Int32 nRowIndex ) throw (uno
     {
         SwTableLines& rLines = pTable->GetTabLines();
         SwTableLine* pLine = rLines.GetObject( nRowIndex );
-        nRet = pLine->GetTabBoxes().Count();
+        nRet = pLine->GetTabBoxes().size();
     }
     return nRet;
 }
@@ -155,7 +155,7 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw 
 
     SwTableBox* pStart = NULL;
     SwTableLine* pLine = rLines.GetObject( nRow );
-    if( pLine->GetTabBoxes().Count() < nCol )
+    if( (sal_Int32)pLine->GetTabBoxes().size() < nCol )
         throw uno::RuntimeException();
 
     pStart = pLine->GetTabBoxes()[ nCol ];

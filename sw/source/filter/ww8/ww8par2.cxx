@@ -2577,9 +2577,9 @@ void WW8TabDesc::MergeCells()
                     sal_uInt16 nCol = pActBand->nTransCell[ i ];
                     if (!pActBand->bExist[i])
                         continue;
-                    OSL_ENSURE(nCol < pTabBoxes->Count(),
+                    OSL_ENSURE(nCol < pTabBoxes->size(),
                         "Too few columns, table ended early");
-                    if (nCol >= pTabBoxes->Count())
+                    if (nCol >= pTabBoxes->size())
                         return;
                     pTabBox = (*pTabBoxes)[nCol];
                     WW8_TCell& rCell = pActBand->pTCs[ i ];
@@ -2683,7 +2683,7 @@ void WW8TabDesc::ParkPaM()
         if (SwTableLine *pLine = (*pTabLines)[nRow])
         {
             SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-            pTabBox2 = rBoxes.Count() ? rBoxes[0] : 0;
+            pTabBox2 = rBoxes.empty() ? 0 : rBoxes.front();
         }
     }
 
@@ -2880,7 +2880,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     pTabLine = (*pTabLines)[nAktRow];
     pTabBoxes = &pTabLine->GetTabBoxes();
 
-    if (nCol >= pTabBoxes->Count())
+    if (nCol >= pTabBoxes->size())
     {
         if (bPam)
         {
@@ -2974,7 +2974,7 @@ void WW8TabDesc::InsertCells( short nIns )
     pTabBox = (*pTabBoxes)[0];
 
     pIo->rDoc.GetNodes().InsBoxen( pTblNd, pTabLine, (SwTableBoxFmt*)pTabBox->GetFrmFmt(),
-                            (SwTxtFmtColl*)pIo->pDfltTxtFmtColl, 0, pTabBoxes->Count(), nIns );
+                            (SwTxtFmtColl*)pIo->pDfltTxtFmtColl, 0, pTabBoxes->size(), nIns );
     // mit dem Dritten Parameter wird das FrmFmt der Boxen angegeben.
     // hier kann man auch noch optimieren, um FrmFmts zu sparen
 }
@@ -3130,7 +3130,7 @@ void WW8TabDesc::AdjustNewBand()
         InsertCells( pActBand->nSwCols - nDefaultSwCols );
 
     SetPamInCell( 0, false);
-    OSL_ENSURE( pTabBoxes && pTabBoxes->Count() == (sal_uInt16)pActBand->nSwCols,
+    OSL_ENSURE( pTabBoxes && pTabBoxes->size() == (sal_uInt16)pActBand->nSwCols,
         "Falsche Spaltenzahl in Tabelle" );
 
     if( bClaimLineFmt )

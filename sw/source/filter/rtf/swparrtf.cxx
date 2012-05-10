@@ -1785,7 +1785,7 @@ void SwRTFParser::NextToken( int nToken )
                 const SwTableBox* pBox = pTblNd->GetTable().GetTblBox(
                                                 pBoxStt->GetIndex() );
                 const SwTableLine* pLn = pBox->GetUpper();
-                pBox = pLn->GetTabBoxes()[ pLn->GetTabBoxes().Count() - 1 ];
+                pBox = pLn->GetTabBoxes().back();
                 rIdx = *pBox->GetSttNd()->EndOfSectionNode();
                 pPam->Move( fnMoveForward, fnGoNode );
             }
