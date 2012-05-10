@@ -788,6 +788,59 @@ void ScOutputData::DrawDocumentBackground()
     pDev->DrawRect(aRect);
 }
 
+namespace {
+
+void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
+        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev)
+{
+
+    // need to paint if old color scale has been used and now
+    // we have a different color or a style based background
+    // we can here fall back to pointer comparison
+    if (pOldColor && (pBackground || pOldColor != pColor))
+    {
+
+        rRect.Right() = nPosX-nSignedOneX;
+        if( !pOldColor->GetTransparency() )
+        {
+            pDev->SetFillColor( *pOldColor );
+            pDev->DrawRect( rRect );
+        }
+        rRect.Left() = nPosX - nSignedOneX;
+    }
+
+    if ( pOldBackground && (pColor ||pBackground != pOldBackground) )
+    {
+        rRect.Right() = nPosX-nSignedOneX;
+        if (pOldBackground)             // ==0 if hidden
+        {
+            Color aBackCol = pOldBackground->GetColor();
+            if ( !aBackCol.GetTransparency() )      //! partial transparency?
+            {
+                pDev->SetFillColor( aBackCol );
+                pDev->DrawRect( rRect );
+            }
+        }
+        rRect.Left() = nPosX - nSignedOneX;
+    }
+
+    if(pColor)
+    {
+        // only update pOldColor if the colors changed
+        if (!pOldColor || *pOldColor != *pColor)
+            pOldColor = pColor;
+
+        pOldBackground = NULL;
+    }
+    else if(pBackground)
+    {
+        pOldBackground = pBackground;
+        pOldColor = NULL;
+    }
+}
+
+}
+
 void ScOutputData::DrawBackground()
 {
     FindRotated();              //! von aussen ?
@@ -842,6 +895,8 @@ void ScOutputData::DrawBackground()
 
                 const SvxBrushItem* pOldBackground = NULL;
                 const SvxBrushItem* pBackground;
+                const Color* pOldColor = NULL;
+                const Color* pColor = NULL;
                 for (SCCOL nX=nX1; nX<=nX2; nX++)
                 {
                     CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
@@ -880,46 +935,12 @@ void ScOutputData::DrawBackground()
                         pBackground = lcl_FindBackground( pDoc, nX, nY, nTab );
                     }
 
-                    if( pInfo->pColorScale )
-                    {
-                        pOldBackground = NULL;
+                    pColor = pInfo->pColorScale;
+                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDev );
 
-                        aRect.Right() = nPosX-nSignedOneX;
-                        const Color* pColor = pInfo->pColorScale;
-                        if( !pColor->GetTransparency() )
-                        {
-                            pDev->SetFillColor( *pColor );
-                            pDev->DrawRect( aRect );
-                        }
-                        aRect.Left() = nPosX - nSignedOneX;
-                    }
-                    else if ( pBackground != pOldBackground )
-                    {
-                        aRect.Right() = nPosX-nSignedOneX;
-                        if (pOldBackground)             // ==0 if hidden
-                        {
-                            Color aBackCol = pOldBackground->GetColor();
-                            if ( !aBackCol.GetTransparency() )      //! partial transparency?
-                            {
-                                pDev->SetFillColor( aBackCol );
-                                pDev->DrawRect( aRect );
-                            }
-                        }
-                        aRect.Left() = nPosX - nSignedOneX;
-                        pOldBackground = pBackground;
-                    }
                     nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
                 }
-                aRect.Right() = nPosX-nSignedOneX;
-                if (pOldBackground)
-                {
-                    Color aBackCol = pOldBackground->GetColor();
-                    if ( !aBackCol.GetTransparency() )      //! partial transparency?
-                    {
-                        pDev->SetFillColor( aBackCol );
-                        pDev->DrawRect( aRect );
-                    }
-                }
+                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDev );
 
                 nArrY += nSkip;
             }
