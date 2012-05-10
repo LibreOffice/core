@@ -1616,9 +1616,6 @@ void SwTxtNode::TransliterateText(
                 nEnd = (xub_StrLen)aCurWordBndry.endPos;
                 sal_Int32 nLen = nEnd - nStt;
                 OSL_ENSURE( nLen > 0, "invalid word length of 0" );
-#if OSL_DEBUG_LEVEL > 1
-                String aText( GetTxt().Copy( nStt, nLen ) );
-#endif
 
                 Sequence <sal_Int32> aOffsets;
                 String sChgd( rTrans.transliterate( GetTxt(), GetLang( nStt ), nStt, nLen, &aOffsets ));
@@ -1699,9 +1696,6 @@ void SwTxtNode::TransliterateText(
             {
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 OSL_ENSURE( nLen > 0, "invalid word length of 0" );
-#if OSL_DEBUG_LEVEL > 1
-                String aText( GetTxt().Copy( nCurrentStart, nLen ) );
-#endif
 
                 Sequence <sal_Int32> aOffsets;
                 String sChgd( rTrans.transliterate( GetTxt(),
