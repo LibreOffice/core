@@ -140,6 +140,18 @@ test_xrender=yes
 test_cups=yes
 test_fontconfig=yes
 
+# Default values, as such probably valid just for Linux, set
+# differently below just for Mac OS X,but at least better than
+# hardcoding these as we used to do. Much of this is duplicated also
+# in solenv for old build system and for gbuild, ideally we should
+# perhaps define stuff like this only here in configure.in?
+
+LINKFLAGSSHL="-shared"
+PICSWITCH="-fpic"
+DLLPOST=".so"
+
+LINKFLAGSNOUNDEFS="-Wl,-z,defs"
+
 case "$host_os" in
 
 solaris*)
@@ -244,6 +256,16 @@ darwin*) # Mac OS X or iOS
         _os=Darwin
     fi
     enable_systray=no
+    # See comment above the case "$host_os"
+    LINKFLAGSSHL="-dynamiclib -single_module"
+
+    # -fPIC is default
+    PICSWITCH=""
+
+    DLLPOST=".dylib"
+
+    # -undefined error is the default
+    LINKFLAGSNOUNDEFS=""
 ;;
 
 freebsd*)
@@ -4661,6 +4683,11 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
 
     AC_LANG_PUSH([C++])
 
+    save_CPPFLAGS="$CPPFLAGS"
+    if test -n "$MACOSX_SDK_PATH"; then
+        CPPFLAGS="-isysroot $MACOSX_SDK_PATH $CPPFLAGS"
+    fi
+
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
         AC_MSG_CHECKING([if STL headers are visibility safe])
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
@@ -4674,7 +4701,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
 
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
         sharedlink_ldflags_save=$LDFLAGS
-        LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden -fpic -shared"
+        LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden $PICSWITCH $LINKFLAGSSHL"
 
         AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe with STL headers])
         AC_LINK_IFELSE([AC_LANG_PROGRAM([[
@@ -4682,7 +4709,13 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
 using namespace std;
             ]], [[
 istringstream strm( "test" ); return 0;
-            ]])],[$EGREP -q  unresolvable conftest.err;
+            ]])],
+            # Ugh, surely bad to assume an error message will contain
+            # the word "unresolvable", a problem with
+            # -fvisibility-inlines-hidden and STL headers might cause
+            # some more obscure message on some platform, and anway,
+            # the error message could be localised.
+            [$EGREP -q unresolvable conftest.err;
             if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi],[gccvisok=no
         ])
         AC_MSG_RESULT([$gccvisok])
@@ -4708,16 +4741,15 @@ struct S2: S1<int> { virtual ~S2(); };
 struct S3: S2 { virtual ~S3(); }; S3::~S3() {}
 _ACEOF
         gccvisinlineshiddenok=yes
-        if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o libconftest1.so >/dev/null 2>/dev/null; then
+        if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o libconftest1$DLLPOST; then
             gccvisinlineshiddenok=no
         else
-            if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -lconftest1 -Wl,-z,defs -o libconftest2.so >/dev/null 2>/dev/null; then
+            if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -lconftest1 $LINKFLAGSNOUNDEFS -o libconftest2$DLLPOST; then
                 gccvisinlineshiddenok=no
             fi
         fi
         
-        rm -f libconftest1.so libconftest2.so
-
+        rm -f libconftest1$DLLPOST libconftest2$DLLPOST
         AC_MSG_RESULT([$gccvisinlineshiddenok])
         if test "$gccvisinlineshiddenok" = "no"; then
             AC_MSG_WARN([Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that.])
@@ -4766,6 +4798,8 @@ _ACEOF
             unset HAVE_GCC_VISIBILITY_FEATURE
         fi
     fi
+
+    CPPFLAGS="$save_CPPFLAGS"
 
     AC_LANG_POP([C++])
 fi
