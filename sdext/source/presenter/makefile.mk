@@ -38,13 +38,20 @@ MAXLINELENGTH:=80000
 
 PACKAGE=com.sun.PresenterScreen-$(PLATFORMID)
 
-.IF "$(L10N_framework)"==""
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
 @all:
     @echo "Presenter Screen build disabled."
 .ELSE
+
+.IF "$(L10N_framework)" != ""
+
+@all:
+    @echo "L10N framework disabled => Presenter Screen can not be built."
+
+.ELSE
+
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
 
 DLLPRE=
 common_build_zip=
@@ -269,12 +276,10 @@ LINKLINKFILES= \
     $(PACKAGE)/{$(my_XHPFILES)}
 
 # --- Targets ----------------------------------
-.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
 .INCLUDE : extension_helplink.mk
 
-.IF "$(L10N_framework)"==""
 $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
 $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
@@ -349,9 +354,5 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
 
 .INCLUDE : extension_post.mk
 
-.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
-.ELSE
-ivo:
-    $(ECHO)
 .ENDIF # L10N_framework
-
+.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
