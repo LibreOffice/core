@@ -44,6 +44,7 @@
 #include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "conditio.hxx"
+#include "colorscale.hxx"
 #include "sheetevents.hxx"
 #include <tools/shl.hxx>
 
@@ -111,6 +112,9 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
 
+    if( mpColorScaleList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+        mpColorScaleList->DataChanged( rHint.GetAddress() );
+
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
     {
         SCTAB nTab = rHint.GetAddress().Tab();
@@ -134,6 +138,9 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
+
+    if( mpColorScaleList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+        mpColorScaleList->DataChanged( rHint.GetAddress() );
 }
 
 
@@ -176,6 +183,11 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
                 }
             }
         }
+    }
+
+    if(mpColorScaleList)
+    {
+        mpColorScaleList->DataChanged(rRange);
     }
 }
 

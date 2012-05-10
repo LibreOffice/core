@@ -311,6 +311,35 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     return new Color(aColor);
 }
 
+bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
+{
+    bool bNeedUpdate = false;
+    for(const_iterator itr = begin(); itr != end(); ++itr)
+    {
+        if(itr->GetMin() || itr->GetMax())
+            bNeedUpdate = true;
+    }
+
+    // TODO: check also if the changed value is the new min/max
+    // or has been the old min/max value
+    bNeedUpdate = bNeedUpdate && maRanges.Intersects(rRange);
+    return bNeedUpdate;
+}
+
+void ScColorScaleFormat::DataChanged(const ScRange& rRange)
+{
+    bool bNeedUpdate = CheckEntriesForRel(rRange);
+    if(bNeedUpdate)
+    {
+        size_t n = maRanges.size();
+        for(size_t i = 0; i < n; ++i)
+        {
+            ScRange* pRange = maRanges[i];
+            mpDoc->RepaintRange(*pRange);
+        }
+    }
+}
+
 ScColorScaleFormat::iterator ScColorScaleFormat::begin()
 {
     return maColorScales.begin();
@@ -368,6 +397,14 @@ ScColorScaleFormatList::const_iterator ScColorScaleFormatList::end() const
 size_t ScColorScaleFormatList::size() const
 {
     return maColorScaleFormats.size();
+}
+
+void ScColorScaleFormatList::DataChanged(const ScRange& rRange)
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->DataChanged(rRange);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
