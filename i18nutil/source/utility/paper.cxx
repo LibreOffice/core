@@ -262,7 +262,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
         // try libpaper
         // #i78617# workaround missing paperconf command
-        FILE* pPipe = popen( "sh -c paperconf 2>/dev/null", "r" );
+        FILE* pPipe = popen( "paperconf 2>/dev/null", "r" );
         if( pPipe )
         {
             Paper ePaper = PAPER_USER;
