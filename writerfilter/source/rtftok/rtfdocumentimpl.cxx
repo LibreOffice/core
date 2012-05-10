@@ -439,6 +439,22 @@ void RTFDocumentImpl::checkNeedPap()
     }
 }
 
+void RTFDocumentImpl::runProps()
+{
+    if (!m_pCurrentBuffer)
+    {
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
+                );
+        Mapper().props(pProperties);
+    }
+    else
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+    }
+}
+
 void RTFDocumentImpl::runBreak()
 {
     sal_uInt8 sBreak[] = { 0xd };
@@ -979,20 +995,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL
             || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
             || m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
-    {
-        if (!m_pCurrentBuffer)
-        {
-            writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                    new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
-                    );
-            Mapper().props(pProperties);
-        }
-        else
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
-            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
-        }
-    }
+        runProps();
     if (!m_pCurrentBuffer)
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
     else
@@ -1419,20 +1422,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 bool bNeedPap = m_bNeedPap;
                 checkNeedPap();
                 if (bNeedPap)
-                {
-                    if (!m_pCurrentBuffer)
-                    {
-                        writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                                new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
-                                );
-                        Mapper().props(pProperties);
-                    }
-                    else
-                    {
-                        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
-                        m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
-                    }
-                }
+                    runProps();
                 if (!m_pCurrentBuffer)
                     parBreak();
                 else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)

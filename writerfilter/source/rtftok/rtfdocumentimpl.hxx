@@ -405,6 +405,8 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
                 // Sends a single character to dmapper, taking care of buffering.
                 void singleChar(sal_uInt8 nValue);
+                // Sends run properties to dmapper, taking care of buffering.
+                void runProps();
                 void parBreak();
                 void tableBreak();
                 void checkNeedPap();
