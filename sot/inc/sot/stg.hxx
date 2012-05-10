@@ -90,6 +90,7 @@ public:
     virtual sal_uLong   Tell() = 0;
     virtual void    Flush() = 0;
     virtual sal_Bool    SetSize( sal_uLong nNewSize ) = 0;
+    virtual sal_uLong   GetSize() const = 0;
     virtual sal_Bool    CopyTo( BaseStorageStream * pDestStm ) = 0;
     virtual sal_Bool    Commit() = 0;
     virtual sal_Bool    Revert() = 0;
@@ -171,6 +172,7 @@ public:
     virtual sal_uLong   Tell() { return nPos; }
     virtual void    Flush();
     virtual sal_Bool    SetSize( sal_uLong nNewSize );
+    virtual sal_uLong   GetSize() const;
     virtual sal_Bool    CopyTo( BaseStorageStream * pDestStm );
     virtual sal_Bool    Commit();
     virtual sal_Bool    Revert();
@@ -266,6 +268,7 @@ public:
     virtual sal_uLong               Tell();
     virtual void                Flush();
     virtual sal_Bool                SetSize( sal_uLong nNewSize );
+    virtual sal_uLong               GetSize() const;
     virtual sal_Bool                CopyTo( BaseStorageStream * pDestStm );
     virtual sal_Bool                Commit();
     virtual sal_Bool                Revert();

@@ -252,6 +252,13 @@ sal_Bool StorageStream::SetSize( sal_uLong nNewSize )
         return sal_False;
 }
 
+sal_uLong StorageStream::GetSize() const
+{
+    if( Validate() )
+        return pEntry->GetSize();
+    return 0;
+}
+
 sal_Bool StorageStream::Commit()
 {
     if( !Validate() )

@@ -1566,6 +1566,11 @@ sal_Bool UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::u
     return sal_False;
 }
 
+sal_uLong UCBStorageStream::GetSize() const
+{
+    return pImp->GetSize();
+}
+
 UCBStorage::UCBStorage( SvStream& rStrm, sal_Bool bDirect )
 {
     String aURL = GetLinkedFile( rStrm );
