@@ -1844,42 +1844,6 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     return pWindow;
 }
 
-String SfxObjectShell::UpdateTitle( SfxMedium* pMed, sal_uInt16 nDocViewNumber )
-{
-    // Title of the windows
-    String aTitle;
-    if ( pMed )
-    {
-        INetURLObject aTmp( pMed->GetName() );
-        aTitle = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    }
-    else
-    {
-        pMed = GetMedium();
-        aTitle = GetTitle(SFX_TITLE_CAPTION);
-        String aName(aTitle);
-        if ( nDocViewNumber )
-        {
-            aName += ':';
-            aName += String::CreateFromInt32( nDocViewNumber );
-        }
-    }
-
-    if ( pMed )
-    {
-        SFX_ITEMSET_ARG( pMed->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
-        if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
-            aTitle += String( SfxResId(STR_REPAIREDDOCUMENT) );
-    }
-
-    if ( IsReadOnlyUI() || (pMed && pMed->IsReadOnly()) )
-        aTitle += String( SfxResId(STR_READONLY) );
-    else if ( IsDocShared() )
-        aTitle += String( SfxResId(STR_SHARED) );
-
-    return aTitle;
-}
-
 void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
 {
     eCreateMode = nMode;

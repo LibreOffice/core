@@ -1884,33 +1884,6 @@ SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem FrameTitle SID_FRAMETITLE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem FullName SID_PROGFILENAME
 
 [

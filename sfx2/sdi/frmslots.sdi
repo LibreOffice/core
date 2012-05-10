@@ -392,10 +392,6 @@ interface TopWindow : BrowseWindow
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_FRAMETITLE // ole(no) api(play/rec)
-    [
-        StateMethod = StateView_Impl ;
-    ]
     SID_CLOSEWIN // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;

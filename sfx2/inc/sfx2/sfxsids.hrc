@@ -374,7 +374,6 @@
 
 #define SID_PLUGFRAMEARG                    (SID_SFX_START + 666)
 #define SID_NEWWINDOWFOREDIT                (SID_SFX_START + 667)
-#define SID_FRAMETITLE                      (SID_SFX_START + 668)
 
 #define SID_DOCTEMPLATE                     (SID_SFX_START + 538)
 #define SID_JSCALL                          (SID_SFX_START + 1382)

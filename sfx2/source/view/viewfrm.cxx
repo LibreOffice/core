@@ -2467,15 +2467,6 @@ void SfxViewFrame::StateView_Impl
                         rSet.DisableItem( nWhich );
                     break;
                 }
-                case SID_FRAMETITLE:
-                {
-                    if( GetFrameType() & SFXFRAME_HASTITLE )
-                        rSet.Put( SfxStringItem(
-                            SID_FRAMETITLE, pImp->aFrameTitle) );
-                    else
-                        rSet.DisableItem( nWhich );
-                    break;
-                }
 
                 case SID_NEWWINDOW:
                 {

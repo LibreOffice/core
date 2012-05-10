@@ -44,13 +44,9 @@
 #include "sfx2/viewfrm.hxx"
 #include "sfx2/viewsh.hxx"
 
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/componentcontext.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -58,8 +54,6 @@
 #include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
-#include <unotools/bootstrap.hxx>
-#include <unotools/configmgr.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
@@ -70,28 +64,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
-
-//------------------------------------------------------------------------
-
-static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
-{
-    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))), uno::UNO_QUERY );
-    ::rtl::OUString sVar;
-    if ( !xMM.is() )
-        return sVar;
-
-    try
-    {
-        ::comphelper::NamedValueCollection aAnalyzer( xMM->getByName( sDocService ) );
-        sVar = aAnalyzer.getOrDefault( "ooSetupFactoryUIName", ::rtl::OUString() );
-    }
-    catch( uno::Exception& )
-    {
-        sVar = ::rtl::OUString();
-    }
-
-    return sVar;
-}
 
 //--------------------------------------------------------------------
 void SfxFrameViewWindow_Impl::StateChanged( StateChangedType nStateChange )
@@ -114,34 +86,10 @@ void SfxFrameViewWindow_Impl::Resize()
         pFrame->Resize();
 }
 
-static String _getTabString()
-{
-    String result;
-
-    Reference < XMaterialHolder > xHolder(
-        ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.tab.tabreg") ), UNO_QUERY );
-    if (xHolder.is())
-    {
-        rtl::OUString aTabString;
-        Sequence< NamedValue > sMaterial;
-        if (xHolder->getMaterial() >>= sMaterial) {
-            for (int i=0; i < sMaterial.getLength(); i++) {
-                if (( sMaterial[i].Name == "title" ) && ( sMaterial[i].Value >>= aTabString ))
-                {
-                    result += ' ';
-                    result += String(aTabString);
-                }
-            }
-        }
-    }
-    return result;
-}
-
 //========================================================================
 
 //--------------------------------------------------------------------
-String SfxViewFrame::UpdateTitle()
+void SfxViewFrame::UpdateTitle()
 
 /*  [Description]
 
@@ -187,7 +135,7 @@ String SfxViewFrame::UpdateTitle()
 
     SfxObjectShell *pObjSh = GetObjectShell();
     if ( !pObjSh )
-        return String();
+        return;
 
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
@@ -203,23 +151,6 @@ String SfxViewFrame::UpdateTitle()
         // URL has changed
         pImp->aActualURL = aURL;
 
-    // Is there another view?
-    sal_uInt16 nViews=0;
-    for ( SfxViewFrame *pView= GetFirst(pObjSh);
-          pView && nViews<2;
-          pView = GetNext(*pView,pObjSh) )
-        if ( ( pView->GetFrameType() & SFXFRAME_HASTITLE ) &&
-             !IsDowning_Impl())
-            nViews++;
-
-    // Window Title
-    String aTitle;
-    if ( nViews == 2 || pImp->nDocViewNo > 1 )
-        // Then attach the number
-        aTitle = pObjSh->UpdateTitle( NULL, pImp->nDocViewNo );
-    else
-        aTitle = pObjSh->UpdateTitle();
-
     // SbxObjects name
     String aSbxName = pObjSh->SfxShell::GetName();
     if ( IsVisible() )
@@ -229,29 +160,8 @@ String SfxViewFrame::UpdateTitle()
     }
 
     SetName( aSbxName );
-    pImp->aFrameTitle = aTitle;
-    GetBindings().Invalidate( SID_FRAMETITLE );
     GetBindings().Invalidate( SID_CURRENT_URL );
-
-    aTitle += String::CreateFromAscii( " - " );
-    aTitle += utl::ConfigManager::getProductName();
-    aTitle += ' ';
-    ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
-    aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifdef DBG_UTIL
-    ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
-    aTitle += DEFINE_CONST_UNICODE(" [");
-    String aVerId( utl::Bootstrap::getProductSource( aDefault ));
-    aTitle += aVerId;
-    aTitle += ']';
-#endif
-
-    // append TAB string if available
-    aTitle += _getTabString();
-
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
-
-    return aTitle;
 }
 
 void SfxViewFrame::Exec_Impl(SfxRequest &rReq )

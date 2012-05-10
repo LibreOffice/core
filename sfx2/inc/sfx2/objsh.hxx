@@ -562,7 +562,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
-    String                      UpdateTitle( SfxMedium* pMed=NULL, sal_uInt16 nDocViewNo=0 );
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >

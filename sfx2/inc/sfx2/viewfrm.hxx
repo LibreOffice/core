@@ -163,7 +163,7 @@ public:
     void                    ShowStatusText( const String& rText );
     void                    HideStatusText();
 
-    String                  UpdateTitle();
+    void                    UpdateTitle();
 
     static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
 

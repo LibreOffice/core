@@ -39,7 +39,6 @@ struct SfxViewFrame_Impl
     SvBorder            aBorder;
     Size                aMargin;
     Size                aSize;
-    String              aFrameTitle;
     TypeId              aLastType;
     String              aActualURL;
     SfxFrame&           rFrame;
