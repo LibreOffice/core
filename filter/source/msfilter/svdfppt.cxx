@@ -120,7 +120,8 @@
 #include <editeng/scripttypeitem.hxx>
 #include "com/sun/star/awt/Gradient.hpp"
 #include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <vcl/virdev.hxx>
 #include <algorithm>
 #include <set>
@@ -7305,7 +7306,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     {
         SfxItemSet aSet( pLine->GetMergedItemSet() );
         XLineStyle eLineStyle(((XLineStyleItem&)pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
-        com::sun::star::table::BorderLine aBorderLine;
+        com::sun::star::table::BorderLine2 aBorderLine;
         switch( eLineStyle )
         {
             case XLINE_DASH :
@@ -7313,16 +7314,14 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 {
                     Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
-                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
-                    aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
-                    aBorderLine.LineDistance = 0;
+                    aBorderLine.LineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
+                    aBorderLine.LineStyle = eLineStyle == XLINE_SOLID ? table::BorderLineStyle::SOLID : table::BorderLineStyle::DASHED;
                 }
                 break;
             case XLINE_NONE :
                 {
-                    aBorderLine.OuterLineWidth = 0;
-                    aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.LineDistance = 0;
+                    aBorderLine.LineWidth = 0;
+                    aBorderLine.LineStyle = table::BorderLineStyle::NONE;
                 }
             break;
         }
