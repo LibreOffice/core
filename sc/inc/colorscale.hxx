@@ -39,21 +39,37 @@ class SC_DLLPUBLIC ScColorScaleEntry
 private:
     double mnVal;
     Color maColor;
+
+    bool mbMin;
+    bool mbMax;
+    bool mbPercent;
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
 
     const Color& GetColor() const;
     double GetValue() const;
+
+    bool GetMin() const;
+    bool GetMax() const;
+    bool GetPercent() const;
+    void SetMin(bool bMin);
+    void SetMax(bool bMax);
+    void SetPercent(bool bPercent);
 };
 
 class SC_DLLPUBLIC ScColorScaleFormat
 {
 private:
-    ScRangeList maRange;
+    ScRangeList maRanges;
     ScDocument* mpDoc;
     typedef boost::ptr_vector<ScColorScaleEntry> ColorScaleEntries;
     ColorScaleEntries maColorScales;
+
+    double GetMinValue() const;
+    double GetMaxValue() const;
+
+    void calcMinMax(double& nMin, double nMax) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);
 

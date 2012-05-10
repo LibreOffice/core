@@ -64,6 +64,152 @@ void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
     maColorScales.push_back( pEntry );
 }
 
+bool ScColorScaleEntry::GetMin() const
+{
+    return mbMin;
+}
+
+bool ScColorScaleEntry::GetMax() const
+{
+    return mbMax;
+}
+
+bool ScColorScaleEntry::GetPercent() const
+{
+    return mbPercent;
+}
+
+void ScColorScaleEntry::SetMin(bool bMin)
+{
+    mbMin = bMin;
+}
+
+void ScColorScaleEntry::SetMax(bool bMax)
+{
+    mbMax = bMax;
+}
+
+void ScColorScaleEntry::SetPercent(bool bPercent)
+{
+    mbPercent = bPercent;
+}
+
+namespace {
+
+double getMinValue(const ScRange& rRange, ScDocument* pDoc)
+{
+    double aMinValue = std::numeric_limits<double>::max();
+    //iterate through columns
+    SCTAB nTab = rRange.aStart.Tab();
+    for(SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        for(SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            ScAddress aAddr(nCol, nRow, rRange.aStart.Tab());
+            CellType eType = pDoc->GetCellType(aAddr);
+            if(eType == CELLTYPE_VALUE)
+            {
+                double aVal = pDoc->GetValue(nCol, nRow, nTab);
+                if( aVal < aMinValue )
+                    aMinValue = aVal;
+            }
+            else if(eType == CELLTYPE_FORMULA)
+            {
+                if(static_cast<ScFormulaCell*>(pDoc->GetCell(aAddr))->IsValue())
+                {
+                    double aVal = pDoc->GetValue(nCol, nRow, nTab);
+                    if( aVal < aMinValue )
+                        aMinValue = aVal;
+                }
+            }
+        }
+    }
+    return aMinValue;
+}
+
+double getMaxValue(const ScRange& rRange, ScDocument* pDoc)
+{
+    double aMaxValue = std::numeric_limits<double>::min();
+    //iterate through columns
+    SCTAB nTab = rRange.aStart.Tab();
+    for(SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        for(SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            ScAddress aAddr(nCol, nRow, rRange.aStart.Tab());
+            CellType eType = pDoc->GetCellType(aAddr);
+            if(eType == CELLTYPE_VALUE)
+            {
+                double aVal = pDoc->GetValue(nCol, nRow, nTab);
+                if( aVal > aMaxValue )
+                    aMaxValue = aVal;
+            }
+            else if(eType == CELLTYPE_FORMULA)
+            {
+                if(static_cast<ScFormulaCell*>(pDoc->GetCell(aAddr))->IsValue())
+                {
+                    double aVal = pDoc->GetValue(nCol, nRow, nTab);
+                    if( aVal > aMaxValue )
+                        aMaxValue = aVal;
+                }
+            }
+        }
+    }
+    return aMaxValue;
+}
+
+}
+
+double ScColorScaleFormat::GetMinValue() const
+{
+    const_iterator itr = maColorScales.begin();
+
+    double aMinValue = std::numeric_limits<double>::max();
+    if(!itr->GetMin())
+        return itr->GetValue();
+    else
+    {
+        size_t n = maRanges.size();
+        for(size_t i = 0; i < n; ++i)
+        {
+            const ScRange* pRange = maRanges[i];
+            double aVal = getMinValue(*pRange, mpDoc);
+            if( aVal < aMinValue )
+                aMinValue = aVal;
+        }
+    }
+
+    return aMinValue;
+}
+
+double ScColorScaleFormat::GetMaxValue() const
+{
+    ColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
+
+    double aMaxVal = std::numeric_limits<double>::min();
+    if(!itr->GetMax())
+        return itr->GetValue();
+    else
+    {
+        size_t n = maRanges.size();
+        for(size_t i = 0; i < n; ++i)
+        {
+            const ScRange* pRange = maRanges[i];
+            double aVal = getMaxValue(*pRange, mpDoc);
+            if( aVal > aMaxVal )
+                aMaxVal = aVal;
+        }
+    }
+
+    return aMaxVal;;
+}
+
+void ScColorScaleFormat::calcMinMax(double& rMin, double rMax) const
+{
+    rMin = GetMinValue();
+    rMax = GetMaxValue();
+}
+
 namespace {
 
 sal_uInt8 GetColorValue( double nVal, double nVal1, sal_uInt8 nColVal1, double nVal2, sal_uInt8 nColVal2 )
@@ -113,6 +259,10 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     ++itr;
     double nValMax = itr->GetValue();
     Color rColMax = itr->GetColor();
+
+    double nMin;
+    double nMax;
+    calcMinMax(nMin, nMax);
 
     ++itr;
     while(itr != end() && nVal > nValMin)
