@@ -47,6 +47,29 @@ gb_OSDEFS := \
 	$(EXTRA_CDEFS) \
 
 
+gb_CFLAGS := \
+	-isysroot $(gb_SDKDIR) \
+	$(gb_CFLAGS_COMMON) \
+	-fPIC \
+	-fno-strict-aliasing \
+    #-Wshadow \ break in compiler headers already
+
+# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
+# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
+# Feb 1, 2006:
+gb_CXXFLAGS := \
+	-isysroot $(gb_SDKDIR) \
+	$(gb_CXXFLAGS_COMMON) \
+	-fPIC \
+	-Wno-ctor-dtor-privacy \
+	-Wno-non-virtual-dtor \
+	-fno-strict-aliasing \
+	-fsigned-char \
+	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),,-malign-natural) \
+	#-Wshadow \ break in compiler headers already
+	#-fsigned-char \ might be removed?
+	#-malign-natural \ might be removed?
+
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_COMPILERDEFS += \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
@@ -70,29 +93,6 @@ gb_COMPILERDEFS += \
         -DHAVE_SFINAE_ANONYMOUS_BROKEN \
 
 endif
-
-gb_CFLAGS := \
-	-isysroot $(gb_SDKDIR) \
-	$(gb_CFLAGS_COMMON) \
-	-fPIC \
-	-fno-strict-aliasing \
-    #-Wshadow \ break in compiler headers already
-
-# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
-# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
-# Feb 1, 2006:
-gb_CXXFLAGS := \
-	-isysroot $(gb_SDKDIR) \
-	$(gb_CXXFLAGS_COMMON) \
-	-fPIC \
-	-Wno-ctor-dtor-privacy \
-	-Wno-non-virtual-dtor \
-	-fno-strict-aliasing \
-	-fsigned-char \
-	$(if $(filter TRUE,$(COM_GCC_IS_CLANG)),,-malign-natural) \
-	#-Wshadow \ break in compiler headers already
-	#-fsigned-char \ might be removed?
-	#-malign-natural \ might be removed?
 
 ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS += -Wno-long-double
