@@ -69,12 +69,13 @@ private:
     double GetMinValue() const;
     double GetMaxValue() const;
 
-    void calcMinMax(double& nMin, double nMax) const;
+    void calcMinMax(double& nMin, double& nMax) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);
 
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
+    void SetRange(const ScRangeList& rList);
 
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;

@@ -32,14 +32,19 @@
 
 ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
     mnVal(nVal),
-    maColor(rCol)
-{
+    maColor(rCol),
+    mbMin(false),
+    mbMax(false),
+    mbPercent(false){
 
 }
 
 ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
-    maColor(rEntry.maColor)
+    maColor(rEntry.maColor),
+    mbMin(false),
+    mbMax(false),
+    mbPercent(false)
 {
 
 }
@@ -204,10 +209,15 @@ double ScColorScaleFormat::GetMaxValue() const
     return aMaxVal;;
 }
 
-void ScColorScaleFormat::calcMinMax(double& rMin, double rMax) const
+void ScColorScaleFormat::calcMinMax(double& rMin, double& rMax) const
 {
     rMin = GetMinValue();
     rMax = GetMaxValue();
+}
+
+void ScColorScaleFormat::SetRange(const ScRangeList& rList)
+{
+    maRanges = rList;
 }
 
 namespace {
@@ -233,6 +243,24 @@ Color CalcColor( double nVal, double nVal1, const Color& rCol1, double nVal2, co
     return Color(nColRed, nColGreen, nColBlue);
 }
 
+double CalcValue(double nMin, double nMax, ScColorScaleFormat::const_iterator& itr)
+{
+    if(itr->GetPercent())
+    {
+        return nMin + (nMax-nMin)*(itr->GetValue()/100);
+    }
+    else if(itr->GetMin())
+    {
+        return nMin;
+    }
+    else if(itr->GetMax())
+    {
+        return nMax;
+    }
+
+    return itr->GetValue();
+}
+
 }
 
 Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
@@ -253,16 +281,20 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     if (maColorScales.size() < 2)
         return NULL;
 
+    double nMin = std::numeric_limits<double>::max();
+    double nMax = std::numeric_limits<double>::min();
+    calcMinMax(nMin, nMax);
+
+    // this check is for safety
+    if(nMin >= nMax)
+        return NULL;
+
     const_iterator itr = begin();
-    double nValMin = itr->GetValue();
+    double nValMin = CalcValue(nMin, nMax, itr);
     Color rColMin = itr->GetColor();
     ++itr;
-    double nValMax = itr->GetValue();
+    double nValMax = CalcValue(nMin, nMax, itr);
     Color rColMax = itr->GetColor();
-
-    double nMin;
-    double nMax;
-    calcMinMax(nMin, nMax);
 
     ++itr;
     while(itr != end() && nVal > nValMin)
@@ -270,6 +302,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
         rColMin = rColMax;
         nValMin = nValMax;
         rColMax = itr->GetColor();
+        nValMax = CalcValue(nMin, nMax, itr);
         nValMax = itr->GetValue();
         ++itr;
     }

@@ -172,7 +172,7 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
     {
         maColorScaleRuleEntries[mnCfvo].mbMax = true;
     }
-    else if( aType == "percent" )
+    else if( aType == "percentile" )
     {
         maColorScaleRuleEntries[mnCfvo].mbPercent = true;
     }
@@ -696,6 +696,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         mpColor->AddEntries( pFormat );
         sal_Int32 nIndex = rDoc.AddColorScaleFormat(pFormat);
 
+        ScRangeList aList;
         // apply attributes to cells
         //
         const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
@@ -709,7 +710,10 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             ScMarkData aMarkData;
             aMarkData.SetMarkArea(aRange);
             pShell->GetDocFunc().ApplyAttributes( aMarkData, aPattern, sal_True, sal_True );
+
+            aList.Append(aRange);
         }
+        pFormat->SetRange(aList);
     }
 }
 
