@@ -88,7 +88,6 @@ private:
 public:
                     Gradient();
                     Gradient( const Gradient& rGradient );
-                    Gradient( GradientStyle eStyle );
                     Gradient( GradientStyle eStyle,
                               const Color& rStartColor,
                               const Color& rEndColor );

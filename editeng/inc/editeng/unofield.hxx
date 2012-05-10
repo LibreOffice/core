@@ -74,7 +74,8 @@ public:
     SvxFieldData* CreateFieldData() const throw();
     void SetAnchor( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xAnchor ) { mxAnchor = xAnchor; }
 
-    UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextField )
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

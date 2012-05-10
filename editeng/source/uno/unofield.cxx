@@ -253,7 +253,25 @@ inline Time setTime( util::DateTime& rDate )
 // ====================================================================
 // class SvxUnoTextField
 // ====================================================================
-UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextField );
+namespace
+{
+    class theSvxUnoTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldUnoTunnelId> {};
+}
+
+const ::com::sun::star::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() throw()
+{
+    return theSvxUnoTextFieldUnoTunnelId::get().getSeq();
+}
+
+sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                                         rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return 0;
+}
 
 SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 :   OComponentHelper( getMutex() )

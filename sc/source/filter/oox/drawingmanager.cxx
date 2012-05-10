@@ -219,11 +219,6 @@ BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 {
 }
 
-void BiffDrawingObjectContainer::insertGrouped( const BiffDrawingObjectRef& rxDrawingObj )
-{
-    maObjects.push_back( rxDrawingObj );
-}
-
 void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, const Reference< XShapes >& rxShapes, const Rectangle* pParentRect ) const
 {
     maObjects.forEachMem( &BiffDrawingObjectBase::convertAndInsert, ::boost::ref( rDrawing ), ::boost::cref( rxShapes ), pParentRect );
@@ -279,40 +274,6 @@ Reference< XShape > BiffDrawingObjectBase::convertAndInsert( BiffDrawingBase& rD
         }
     }
     return xShape;
-}
-
-// protected ------------------------------------------------------------------
-
-void BiffDrawingObjectBase::readNameBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen )
-{
-    maObjName = OUString();
-    if( nNameLen > 0 )
-    {
-        // name length field is repeated before the name
-        maObjName = rStrm.readByteStringUC( false, getTextEncoding() );
-        // skip padding byte for word boundaries
-        rStrm.alignToBlock( 2 );
-    }
-}
-
-void BiffDrawingObjectBase::readMacroBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    maMacroName = OUString();
-    rStrm.skip( nMacroSize );
-    // skip padding byte for word boundaries, not contained in nMacroSize
-    rStrm.alignToBlock( 2 );
-}
-
-void BiffDrawingObjectBase::readMacroBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    maMacroName = OUString();
-    rStrm.skip( nMacroSize );
-}
-
-void BiffDrawingObjectBase::readMacroBiff5( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
-{
-    maMacroName = OUString();
-    rStrm.skip( nMacroSize );
 }
 
 void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows ) const
@@ -555,27 +516,6 @@ void BiffDrawingBase::finalizeImport()
 
     // process drawing objects without DFF data
     maRawObjs.convertAndInsert( *this, xShapes );
-}
-
-Reference< XShape > BiffDrawingBase::createAndInsertXShape( const OUString& rService,
-        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
-{
-    OSL_ENSURE( !rService.isEmpty(), "BiffDrawingBase::createAndInsertXShape - missing UNO shape service name" );
-    OSL_ENSURE( rxShapes.is(), "BiffDrawingBase::createAndInsertXShape - missing XShapes container" );
-    Reference< XShape > xShape;
-    if( !rService.isEmpty() && rxShapes.is() ) try
-    {
-        xShape.set( getBaseFilter().getModelFactory()->createInstance( rService ), UNO_QUERY_THROW );
-        // insert shape into passed shape collection (maybe drawpage or group shape)
-        rxShapes->add( xShape );
-        xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
-        xShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( xShape.is(), "BiffDrawingBase::createAndInsertXShape - cannot instanciate shape object" );
-    return xShape;
 }
 
 // ============================================================================

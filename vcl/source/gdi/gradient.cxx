@@ -106,16 +106,6 @@ Gradient::Gradient( const Gradient& rGradient )
 
 // -----------------------------------------------------------------------
 
-Gradient::Gradient( GradientStyle eStyle )
-{
-    DBG_CTOR( Gradient, NULL );
-
-    mpImplGradient          = new Impl_Gradient;
-    mpImplGradient->meStyle = eStyle;
-}
-
-// -----------------------------------------------------------------------
-
 Gradient::Gradient( GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor )
 {

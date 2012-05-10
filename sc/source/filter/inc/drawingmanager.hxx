@@ -92,9 +92,6 @@ public:
     /** Returns true, if the object list is empty. */
     inline bool         empty() const { return maObjects.empty(); }
 
-    /** Tries to insert the passed object into the last group or appends it. */
-    void                insertGrouped( const BiffDrawingObjectRef& rxDrawingObj );
-
     /** Creates and inserts all UNO shapes into the passed shape container. */
     void                convertAndInsert( BiffDrawingBase& rDrawing,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
@@ -145,15 +142,6 @@ public:
                             const ::com::sun::star::awt::Rectangle* pParentRect = 0 ) const;
 
 protected:
-    /** Reads the object name in a BIFF5 OBJ record. */
-    void                readNameBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen );
-    /** Reads the macro link in a BIFF3 OBJ record. */
-    void                readMacroBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the macro link in a BIFF4 OBJ record. */
-    void                readMacroBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the macro link in a BIFF5 OBJ record. */
-    void                readMacroBiff5( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-
     /** Converts the passed line formatting to the passed property map. */
     void                convertLineProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
     /** Converts the passed fill formatting to the passed property map. */
@@ -224,14 +212,6 @@ public:
 
     /** Final processing after import of the all drawing objects. */
     void                finalizeImport();
-
-    /** Creates a new UNO shape object, inserts it into the passed UNO shape
-        container, and sets the shape position and size. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        createAndInsertXShape(
-                            const ::rtl::OUString& rService,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 
     /** Derived classes may want to know that a shape has been inserted. Will
         be called from the convertAndInsert() implementation. */
