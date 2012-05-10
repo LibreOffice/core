@@ -5020,11 +5020,11 @@ void SwChartEventListenerContainer::ChartDataChanged()
         aEvent.StartRow = 0;
         aEvent.EndRow = 1;
 
-        for(sal_uInt16 i = 0; i < pListenerArr->Count(); i++)
+        for(sal_uInt16 i = 0; i < pListenerArr->size(); i++)
         {
             try
             {
-                XEventListenerPtr pElem = pListenerArr->GetObject(i);
+                XEventListenerPtr pElem = (*pListenerArr)[i];
                 uno::Reference<lang::XEventListener> xEventListener = *pElem;
                 uno::Reference<chart::XChartDataChangeEventListener> xChartEventListener = (chart::XChartDataChangeEventListener*)(*pElem).get();
                 xChartEventListener->chartDataChanged( aEvent );

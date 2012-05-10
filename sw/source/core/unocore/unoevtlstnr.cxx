@@ -37,8 +37,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-SV_IMPL_PTRARR(SwEvtLstnrArray, XEventListenerPtr);
-
 SwEventListenerContainer::SwEventListenerContainer( uno::XInterface* _pxParent) :
     pListenerArr(0),
     pxParent(_pxParent)
@@ -47,9 +45,11 @@ SwEventListenerContainer::SwEventListenerContainer( uno::XInterface* _pxParent) 
 
 SwEventListenerContainer::~SwEventListenerContainer()
 {
-    if(pListenerArr && pListenerArr->Count())
+    if(pListenerArr && !pListenerArr->empty())
     {
-        pListenerArr->DeleteAndDestroy(0, pListenerArr->Count());
+        for(SwEvtLstnrArray::iterator it = pListenerArr->begin(); it != pListenerArr->end(); ++it)
+            delete *it;
+        pListenerArr->clear();
     }
     delete pListenerArr;
 }
@@ -60,7 +60,7 @@ void    SwEventListenerContainer::AddListener(const uno::Reference< lang::XEvent
         pListenerArr = new SwEvtLstnrArray;
     uno::Reference< lang::XEventListener > * pInsert = new uno::Reference< lang::XEventListener > ;
     *pInsert = rxListener;
-    pListenerArr->Insert(pInsert, pListenerArr->Count());
+    pListenerArr->push_back(pInsert);
 }
 
 sal_Bool    SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XEventListener > & rxListener)
@@ -70,13 +70,13 @@ sal_Bool    SwEventListenerContainer::RemoveListener(const uno::Reference< lang:
     else
     {
          lang::XEventListener* pLeft = rxListener.get();
-        for(sal_uInt16 i = 0; i < pListenerArr->Count(); i++)
+        for(sal_uInt16 i = 0; i < pListenerArr->size(); i++)
         {
-            XEventListenerPtr pElem = pListenerArr->GetObject(i);
-             lang::XEventListener* pRight = pElem->get();
+            XEventListenerPtr pElem = (*pListenerArr)[i];
+            lang::XEventListener* pRight = pElem->get();
             if(pLeft == pRight)
             {
-                pListenerArr->Remove(i);
+                pListenerArr->erase(pListenerArr->begin() + i);
                 delete pElem;
                 return sal_True;
             }
@@ -91,12 +91,13 @@ void    SwEventListenerContainer::Disposing()
         return;
 
     lang::EventObject aObj(pxParent);
-    for(sal_uInt16 i = 0; i < pListenerArr->Count(); i++)
+    for(sal_uInt16 i = 0; i < pListenerArr->size(); i++)
     {
-        XEventListenerPtr pElem = pListenerArr->GetObject(i);
+        XEventListenerPtr pElem = (*pListenerArr)[i];
         (*pElem)->disposing(aObj);
+        delete pElem;
     }
-    pListenerArr->DeleteAndDestroy(0, pListenerArr->Count());
+    pListenerArr->clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

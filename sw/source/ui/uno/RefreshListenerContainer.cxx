@@ -49,9 +49,9 @@ void SwRefreshListenerContainer::Refreshed ()
         return;
 
     lang::EventObject aObj(pxParent);
-    for(sal_uInt16 i = 0, nEnd = pListenerArr->Count(); i < nEnd ; i++)
+    for(sal_uInt16 i = 0, nEnd = pListenerArr->size(); i < nEnd ; i++)
     {
-        Reference < XRefreshListener > xRefreshListener = Reference < XRefreshListener > ( *pListenerArr->GetObject(i), UNO_QUERY );
+        Reference < XRefreshListener > xRefreshListener = Reference < XRefreshListener > ( *(*pListenerArr)[i], UNO_QUERY );
         xRefreshListener->refreshed(aObj);
     }
 }

@@ -30,6 +30,7 @@
 
 #include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <vector>
 
 namespace com{namespace sun{namespace star{
     namespace lang
@@ -41,7 +42,7 @@ namespace com{namespace sun{namespace star{
 // Managing the EventListeners.
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *  XEventListenerPtr;
-SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4)
+typedef std::vector<XEventListenerPtr> SwEvtLstnrArray;
 
 class SwEventListenerContainer
 {
