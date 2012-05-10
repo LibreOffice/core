@@ -1543,13 +1543,16 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     return sal_False;
 }
 
-struct TransliterationChgData
+namespace
 {
-    xub_StrLen              nStart;
-    xub_StrLen              nLen;
-    String                  sChanged;
-    Sequence< sal_Int32 >   aOffsets;
-};
+    struct swTransliterationChgData
+    {
+        xub_StrLen              nStart;
+        xub_StrLen              nLen;
+        String                  sChanged;
+        Sequence< sal_Int32 >   aOffsets;
+    };
+}
 
 // change text to Upper/Lower/Hiragana/Katagana/...
 void SwTxtNode::TransliterateText(
@@ -1572,8 +1575,8 @@ void SwTxtNode::TransliterateText(
         //! This way the offsets for the yet to be changed words will be
         //! left unchanged by the already replaced text.
         //! For this we temporarily save the changes to be done in this vector
-        std::vector< TransliterationChgData >   aChanges;
-        TransliterationChgData                  aChgData;
+        std::vector< swTransliterationChgData >   aChanges;
+        swTransliterationChgData                  aChgData;
 
         if (rTrans.getType() == (sal_uInt32)TransliterationModulesExtra::TITLE_CASE)
         {
@@ -1771,7 +1774,7 @@ void SwTxtNode::TransliterateText(
             // yet unchanged text parts remain the same.
             for (size_t i = 0; i < aChanges.size(); ++i)
             {
-                TransliterationChgData &rData = aChanges[ aChanges.size() - 1 - i ];
+                swTransliterationChgData &rData = aChanges[ aChanges.size() - 1 - i ];
                 if (pUndo)
                     pUndo->AddChanges( *this, rData.nStart, rData.nLen, rData.aOffsets );
                 ReplaceTextOnly( rData.nStart, rData.nLen, rData.sChanged, rData.aOffsets );

@@ -2673,16 +2673,17 @@ void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipW
         Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), String(), 0 );
 }
 
-
-struct TransliterationChgData
+namespace
 {
-    sal_uInt16                      nStart;
-    xub_StrLen                  nLen;
-    EditSelection               aSelection;
-    String                      aNewText;
-    uno::Sequence< sal_Int32 >  aOffsets;
-};
-
+    struct eeTransliterationChgData
+    {
+        sal_uInt16                      nStart;
+        xub_StrLen                  nLen;
+        EditSelection               aSelection;
+        String                      aNewText;
+        uno::Sequence< sal_Int32 >  aOffsets;
+    };
+}
 
 EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
 {
@@ -2736,8 +2737,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         //! This way the offsets for the yet to be changed words will be
         //! left unchanged by the already replaced text.
         //! For this we temporarily save the changes to be done in this vector
-        std::vector< TransliterationChgData >   aChanges;
-        TransliterationChgData                  aChgData;
+        std::vector< eeTransliterationChgData >   aChanges;
+        eeTransliterationChgData                  aChgData;
 
         if (nTransliterationMode == i18n::TransliterationModulesExtra::TITLE_CASE)
         {
@@ -2960,7 +2961,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             // yet unchanged text parts remain the same.
             for (size_t i = 0; i < aChanges.size(); ++i)
             {
-                TransliterationChgData& rData = aChanges[ aChanges.size() - 1 - i ];
+                eeTransliterationChgData& rData = aChanges[ aChanges.size() - 1 - i ];
 
                 bChanges = sal_True;
                 if (rData.nLen != rData.aNewText.Len())
