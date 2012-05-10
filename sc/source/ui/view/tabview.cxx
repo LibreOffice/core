@@ -1095,7 +1095,7 @@ IMPL_LINK( ScTabView, EndScrollHdl, ScrollBar*, pScroll )
 
             if ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight )
             {
-                sal_Bool bMirror = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() ) != Application::GetSettings().GetLayoutRTL();
+                bool bMirror = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() ) != Application::GetSettings().GetLayoutRTL();
                 ScHSplitPos eWhich = (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
                 long nDelta = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin - aViewData.GetPosX(eWhich);
                 if (nDelta) ScrollX( nDelta, eWhich );
@@ -1116,7 +1116,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 {
     sal_Bool bOnlineScroll = sal_True;      //! Optionen
 
-    sal_Bool bHoriz = ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight );
+    bool bHoriz = ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight );
     long nViewPos;
     if ( bHoriz )
         nViewPos = aViewData.GetPosX( (pScroll == &aHScrollLeft) ?
@@ -1125,8 +1125,8 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
         nViewPos = aViewData.GetPosY( (pScroll == &aVScrollTop) ?
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
-    sal_Bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
-    sal_Bool bMirror = bHoriz && (bLayoutRTL != Application::GetSettings().GetLayoutRTL());
+    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bMirror = bHoriz && (bLayoutRTL != Application::GetSettings().GetLayoutRTL());
 
     ScrollType eType = pScroll->GetType();
     if ( eType == SCROLL_DRAG )

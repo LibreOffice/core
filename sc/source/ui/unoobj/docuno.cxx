@@ -1388,9 +1388,10 @@ sal_Bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled() throw(uno::Runtime
     return false;
 }
 
-void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabled )
+void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabledIn )
                                                 throw(uno::RuntimeException)
 {
+    bool bEnabled(bEnabledIn);
     SolarMutexGuard aGuard;
     if (pDocShell)
     {

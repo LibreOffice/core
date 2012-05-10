@@ -89,7 +89,7 @@ private:
     void Impl_Reset();
     sal_Bool Impl_CheckRefStrings();
     void Impl_FillLists();
-    sal_Bool Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
+    bool Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
 
     // Handler:
     DECL_LINK( Impl_SelectHdl,      ListBox*    );

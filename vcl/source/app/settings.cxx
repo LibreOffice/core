@@ -1490,7 +1490,7 @@ void AllSettings::SetUILanguage( LanguageType  )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AllSettings::GetLayoutRTL() const
+bool AllSettings::GetLayoutRTL() const
 {
     static const char* pEnv = getenv("SAL_RTL_ENABLED" );
     static int  nUIMirroring = -1;   // -1: undef, 0: auto, 1: on 2: off
@@ -1499,7 +1499,7 @@ sal_Bool AllSettings::GetLayoutRTL() const
     if( pEnv )
         return true;
 
-    sal_Bool bRTL = sal_False;
+    bool bRTL = false;
 
     if( nUIMirroring == -1 )
     {

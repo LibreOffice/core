@@ -71,7 +71,7 @@ private:
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
-    sal_Bool                    bFitWidth;
+    bool                    bFitWidth;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    mbRTL;
     Size                    aPrvSize;
@@ -90,7 +90,7 @@ private:
     //-------------------------------------------
     SC_DLLPRIVATE void  Init            ();
     SC_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
-    SC_DLLPRIVATE void  CalcCellArray   ( sal_Bool bFitWidth );
+    SC_DLLPRIVATE void  CalcCellArray   ( bool bFitWidth );
     SC_DLLPRIVATE void  CalcLineMap     ();
     SC_DLLPRIVATE void  PaintCells      ();
 

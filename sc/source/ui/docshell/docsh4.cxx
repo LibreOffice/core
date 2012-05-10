@@ -1134,7 +1134,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJust
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
     if ( pChangeTrack )
     {
-        sal_Bool bProtected = pChangeTrack->IsProtected();
+        bool bProtected = pChangeTrack->IsProtected();
         if ( bJustQueryIfProtected && !bProtected )
             return true;
 

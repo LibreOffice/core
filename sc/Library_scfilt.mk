@@ -142,6 +142,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/lotus/lotus \
 	sc/source/filter/lotus/memory \
 	sc/source/filter/lotus/op \
+        sc/source/filter/lotus/optab \
 	sc/source/filter/lotus/tool \
 	sc/source/filter/qpro/biff \
 	sc/source/filter/qpro/qpro \
@@ -214,10 +215,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
         sc/source/filter/oox/worksheetfragment \
         sc/source/filter/oox/worksheethelper \
         sc/source/filter/oox/worksheetsettings \
-))
-
-$(eval $(call gb_Library_add_noexception_objects,scfilt,\
-   sc/source/filter/lotus/optab \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -785,35 +785,44 @@ namespace {
 
 const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
 {
+    const char *pRet = "";
     switch(eMode)
     {
         case SC_COND_EQUAL:
-            return "equal";
+            pRet = "equal";
+            break;
         case SC_COND_LESS:
-            return "lessThan";
+            pRet = "lessThan";
+            break;
         case SC_COND_GREATER:
-            return "greaterThan";
+            pRet = "greaterThan";
+            break;
         case SC_COND_EQLESS:
-            return "lessThanOrEqual";
+            pRet = "lessThanOrEqual";
+            break;
         case SC_COND_EQGREATER:
-            return "greaterThanOrEqual";
+            pRet = "greaterThanOrEqual";
+            break;
         case SC_COND_NOTEQUAL:
-            return "notEqual";
+            pRet = "notEqual";
+            break;
         case SC_COND_BETWEEN:
             bFrmla2 = true;
-            return "between";
+            pRet = "between";
+            break;
         case SC_COND_NOTBETWEEN:
             bFrmla2 = true;
-            return "notBetween";
+            pRet = "notBetween";
+            break;
         case SC_COND_DUPLICATE:
         case SC_COND_NOTDUPLICATE:
         case SC_COND_DIRECT:
         case SC_COND_NONE:
         default:
-            return "";
+            pRet = "";
             break;
     }
-    return "";
+    return pRet;
 }
 
 const char* GetTypeString(ScConditionMode eMode)

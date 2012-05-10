@@ -193,7 +193,7 @@ sal_Bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
 
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -229,7 +229,7 @@ sal_Bool ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return false;
@@ -273,7 +273,7 @@ sal_Bool ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -309,7 +309,7 @@ sal_Bool ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return false;
@@ -353,7 +353,7 @@ sal_Bool ScDocFunc::DetectiveAddError(const ScAddress& rPos)
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -392,7 +392,7 @@ sal_Bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     rDocShell.MakeDrawLayer();
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
 
     Window* pWaitWin = rDocShell.GetActiveDialogParent();
@@ -431,7 +431,7 @@ sal_Bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return false;
@@ -474,7 +474,7 @@ sal_Bool ScDocFunc::DetectiveRefresh( sal_Bool bAutomatic )
     sal_Bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScDetOpList* pList = pDoc->GetDetOpList();
     if ( pList && pList->Count() )
     {
@@ -771,7 +771,7 @@ sal_Bool ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText,
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
     ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
     if (!aTester.IsEditable())
     {
@@ -833,7 +833,7 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     sal_Bool bXMLLoading(pDoc->IsImportingXML());
 
     // #i925#; it is not neccessary to test whether the cell is editable on loading a XML document
@@ -2858,10 +2858,10 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
     return bSuccess;
 }
 
-sal_Bool ScDocFunc::SetTableVisible( SCTAB nTab, sal_Bool bVisible, sal_Bool bApi )
+sal_Bool ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, sal_Bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
     if ( pDoc->IsVisible( nTab ) == bVisible )
         return sal_True;                                // nichts zu tun - ok
 
@@ -2907,10 +2907,10 @@ sal_Bool ScDocFunc::SetTableVisible( SCTAB nTab, sal_Bool bVisible, sal_Bool bAp
     return sal_True;
 }
 
-sal_Bool ScDocFunc::SetLayoutRTL( SCTAB nTab, sal_Bool bRTL, sal_Bool /* bApi */ )
+sal_Bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL, sal_Bool /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
     if ( pDoc->IsLayoutRTL( nTab ) == bRTL )
         return sal_True;                                // nothing to do - ok
 
@@ -3564,7 +3564,7 @@ sal_Bool ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhic
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (pDoc->IsUndoEnabled());
     ScEditableTester aTester( pDoc, rMark );
     if (!aTester.IsEditable())
     {
@@ -3611,7 +3611,7 @@ sal_Bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, 
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
     ScEditableTester aTester( pDoc, rMark );
     if (!aTester.IsEditable())
     {
@@ -3786,7 +3786,7 @@ sal_Bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMa
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
 
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
 
     ScMarkData aMark;
     if (pTabMark)
@@ -4584,7 +4584,7 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
 
     OSL_ENSURE( pNewRanges, "pNewRanges is 0" );
     ScDocument* pDoc = rDocShell.GetDocument();
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
 
     if (bUndo)
     {
@@ -4933,7 +4933,7 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
     SCROW nStartRow = rOldRange.aStart.Row();
     SCTAB nTab = rOldRange.aStart.Tab();
 
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(pDoc->IsUndoEnabled());
 
     sal_Bool bRet = false;
 

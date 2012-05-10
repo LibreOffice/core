@@ -451,7 +451,7 @@ void ScAutoFmtPreview::Init()
 
 //------------------------------------------------------------------------
 
-void ScAutoFmtPreview::CalcCellArray( sal_Bool bFitWidthP )
+void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( bFitWidthP ? mnDataColWidth2 : mnDataColWidth1 );

@@ -356,7 +356,7 @@ void ScDocShell::UnlockDocument()
 
 //------------------------------------------------------------------
 
-void ScDocShell::SetInplace( sal_Bool bInplace )
+void ScDocShell::SetInplace( bool bInplace )
 {
     if (bIsInplace != bInplace)
     {

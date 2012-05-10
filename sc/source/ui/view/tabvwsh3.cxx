@@ -997,7 +997,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
-                        ((const SfxBoolItem*)pItem)->GetValue() == pDoc->IsDocProtected() )
+                        ((const SfxBoolItem*)pItem)->GetValue() == static_cast<sal_Bool>(pDoc->IsDocProtected()) )
                     {
                         rReq.Ignore();
                         break;

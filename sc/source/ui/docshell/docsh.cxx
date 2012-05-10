@@ -3039,7 +3039,7 @@ bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
     if (pChangeTrack)
     {
-        sal_Bool bProtected = pChangeTrack->IsProtected();
+        bool bProtected = pChangeTrack->IsProtected();
 
         if (rNewPassword.Len())
         {

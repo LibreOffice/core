@@ -1046,7 +1046,7 @@ public:
     LanguageType                            GetLanguage() const;
     void                                    SetUILanguage( LanguageType eLang );
     LanguageType                            GetUILanguage() const;
-    sal_Bool                                    GetLayoutRTL() const;   // returns sal_True if UI language requires right-to-left UI
+    bool                                    GetLayoutRTL() const;   // returns true if UI language requires right-to-left UI
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;

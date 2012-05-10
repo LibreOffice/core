@@ -360,7 +360,7 @@ public:
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
-    void            SetInplace( sal_Bool bInplace );
+    void            SetInplace( bool bInplace );
     bool            IsEmpty() const;
     void            SetEmpty(bool bSet);
 

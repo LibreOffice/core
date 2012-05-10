@@ -360,10 +360,10 @@ void ScPrintAreasDlg::Impl_Reset()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
+bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 {
     String  aRangeStr = pEd->GetText();
-    sal_Bool    bDataChanged = (pEd->GetSavedValue() != aRangeStr);
+    bool bDataChanged = (pEd->GetSavedValue() != aRangeStr);
 
     if ( (aRangeStr.Len() > 0) && &aEdPrintArea != pEd )
     {
@@ -529,7 +529,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
     {
         if ( Impl_CheckRefStrings() )
         {
-            sal_Bool            bDataChanged = false;
+            bool            bDataChanged = false;
             String          aStr;
             SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, aStr );
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
@@ -540,7 +540,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
             //-------------------------
 
             // first try the list box, if "Entite sheet" is selected
-            sal_Bool bEntireSheet = (aLbPrintArea.GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
+            bool bEntireSheet = (aLbPrintArea.GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
             SfxBoolItem aEntireSheet( FN_PARAM_4, bEntireSheet );
 
             bDataChanged = bEntireSheet != pDoc->IsPrintEntireSheet( nCurTab );

@@ -132,9 +132,9 @@ public:
     virtual bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
     virtual bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi );
 
-    virtual sal_Bool        SetTableVisible( SCTAB nTab, sal_Bool bVisible, sal_Bool bApi );
+    virtual sal_Bool        SetTableVisible( SCTAB nTab, bool bVisible, sal_Bool bApi );
 
-    virtual sal_Bool        SetLayoutRTL( SCTAB nTab, sal_Bool bRTL, sal_Bool bApi );
+    virtual sal_Bool        SetLayoutRTL( SCTAB nTab, bool bRTL, sal_Bool bApi );
 
     virtual SC_DLLPUBLIC sal_Bool
                             SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
