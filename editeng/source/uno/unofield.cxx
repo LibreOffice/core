@@ -166,25 +166,6 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
     }
 }
 
-static sal_Char const* aFieldItemNameMap_Impl[] =
-{
-    "Date",
-    "URL",
-    "Page",
-    "Pages",
-    "Time",
-    "File",
-    "Table",
-    "ExtTime",
-    "ExtFile",
-    "Author",
-    "Measure",
-    "ExtDate",
-    "Header",
-    "Footer",
-    "DateTime"
-};
-
 /* conversion routines */
 
 static sal_Int16 getFileNameDisplayFormat( SvxFileFormat nFormat )
@@ -618,14 +599,43 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-
-    if(bShowCommand)
+    if (bShowCommand)
     {
-        DBG_ASSERT(mnServiceId >= 0, "Unknown field type");
-        if (isValidFieldId(mnServiceId))
-            return OUString::createFromAscii(aFieldItemNameMap_Impl[mnServiceId]);
-        else
-            return OUString("Unknown");
+        switch (mnServiceId)
+        {
+            case text::textfield::Type::DATE:
+                return OUString("Date");
+            case text::textfield::Type::URL:
+                return OUString("URL");
+            case text::textfield::Type::PAGE:
+                return OUString("Page");
+            case text::textfield::Type::PAGES:
+                return OUString("Pages");
+            case text::textfield::Type::TIME:
+                return OUString("Time");
+            case text::textfield::Type::FILE:
+                return OUString("File");
+            case text::textfield::Type::TABLE:
+                return OUString("Table");
+            case text::textfield::Type::EXTENDED_TIME:
+                return OUString("ExtTime");
+            case text::textfield::Type::EXTENDED_FILE:
+                return OUString("ExtFile");
+            case text::textfield::Type::AUTHOR:
+                return OUString("Author");
+            case text::textfield::Type::MEASURE:
+                return OUString("Measure");
+            case text::textfield::Type::HEADER:
+                return OUString("Header");
+            case text::textfield::Type::FOOTER:
+                return OUString("Footer");
+            case text::textfield::Type::DATE_TIME:
+                return OUString("DateTime");
+            case text::textfield::Type::EXTENDED_DATE:
+                return OUString("ExtDate");
+            default:
+                return OUString("Unknown");
+        }
     }
     else
     {
