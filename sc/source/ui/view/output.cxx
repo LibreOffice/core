@@ -73,8 +73,6 @@
 
 #include <math.h>
 
-#include <iostream>
-
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -884,8 +882,6 @@ void ScOutputData::DrawBackground()
 
                     if( pInfo->pColorScale )
                     {
-                        std::cout << "pColorScale: finally Found it !" << std::endl;
-                        std::cout << nX << " " << nArrY << std::endl;
                         pOldBackground = NULL;
 
                         aRect.Right() = nPosX-nSignedOneX;
@@ -1518,7 +1514,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                         }
                         else
                         {
-                            std::cout << "ColorScale" << std::endl;
                             Polygon aPoly( 4, aPoints );
                             const Color* pColor = pInfo->pColorScale;
 
