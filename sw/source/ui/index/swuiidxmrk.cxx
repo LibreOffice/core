@@ -1127,7 +1127,7 @@ public:
 
 struct TextInfo
 {
-    sal_uInt16 nToxField;
+    ToxAuthorityField nToxField;
     const char* pHelpId;
 };
 
@@ -1764,14 +1764,15 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
         {
             for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
             {
-                if(AUTH_FIELD_IDENTIFIER == i)
+                const TextInfo aCurInfo = aTextInfoArr[i];
+                if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
                     continue;
-                if(AUTH_FIELD_AUTHORITY_TYPE == i)
+                if(AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField)
                     pTypeListBox->SelectEntry(
-                                pEntry->GetAuthorField((ToxAuthorityField)i));
+                                pEntry->GetAuthorField(aCurInfo.nToxField));
                 else
                     pEdits[i]->SetText(
-                                pEntry->GetAuthorField((ToxAuthorityField)i));
+                                pEntry->GetAuthorField(aCurInfo.nToxField));
             }
         }
     }
