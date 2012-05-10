@@ -2513,10 +2513,9 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
             else
                 sTxt = pTxtNd->GetNumString();
 
-            m_aStyles.append(' ');
-
             if (sTxt.Len())
             {
+                m_aStyles.append(' ');
                 m_aStyles.append(m_rExport.OutString(sTxt, m_rExport.eDefaultEncoding));
             }
 
@@ -2524,7 +2523,8 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
             {
                 if( OUTLINE_RULE != pRule->GetRuleType() )
                 {
-                    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
+                    if (sTxt.Len())
+                        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
                     m_aStyles.append('}');
                     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
                     if( nLvl > 8 )            // RTF knows only 9 levels
