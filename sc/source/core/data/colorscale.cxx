@@ -297,13 +297,12 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     Color rColMax = itr->GetColor();
 
     ++itr;
-    while(itr != end() && nVal > nValMin)
+    while(itr != end() && nVal > nValMax)
     {
         rColMin = rColMax;
         nValMin = nValMax;
         rColMax = itr->GetColor();
         nValMax = CalcValue(nMin, nMax, itr);
-        nValMax = itr->GetValue();
         ++itr;
     }
 
