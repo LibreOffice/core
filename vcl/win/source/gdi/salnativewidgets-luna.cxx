@@ -77,6 +77,7 @@ private:
     typedef HRESULT (WINAPI * DrawThemeBackground_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     typedef HRESULT (WINAPI * DrawThemeText_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     typedef HRESULT (WINAPI * GetThemePartSize_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
+    typedef BOOL    (WINAPI * IsThemeActive_Proc_T) ( void );
 
     OpenThemeData_Proc_T                    lpfnOpenThemeData;
     CloseThemeData_Proc_T                   lpfnCloseThemeData;
@@ -84,6 +85,7 @@ private:
     DrawThemeBackground_Proc_T              lpfnDrawThemeBackground;
     DrawThemeText_Proc_T                    lpfnDrawThemeText;
     GetThemePartSize_Proc_T                 lpfnGetThemePartSize;
+    IsThemeActive_Proc_T                    lpfnIsThemeActive;
 
     oslModule mhModule;
 
@@ -98,6 +100,7 @@ public:
     HRESULT DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     HRESULT DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     HRESULT GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
+    BOOL IsThemeActive( void );
 };
 
 static VisualStylesAPI vsAPI;
@@ -115,6 +118,7 @@ VisualStylesAPI::VisualStylesAPI()
         lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeBackground" );
         lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeText" );
         lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" );
+        lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "IsThemeActive" );
     }
     else
     {
@@ -126,11 +130,13 @@ VisualStylesAPI::VisualStylesAPI()
         lpfnGetThemePartSize = NULL;
     }
 }
+
 VisualStylesAPI::~VisualStylesAPI()
 {
     if( mhModule )
         osl_unloadModule( mhModule );
 }
+
 HTHEME VisualStylesAPI::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
 {
     if(lpfnOpenThemeData)
@@ -146,6 +152,7 @@ HRESULT VisualStylesAPI::CloseThemeData( HTHEME hTheme )
     else
         return S_FALSE;
 }
+
 HRESULT VisualStylesAPI::GetThemeBackgroundContentRect( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pBoundingRect, RECT *pContentRect )
 {
     if(lpfnGetThemeBackgroundContentRect)
@@ -153,6 +160,7 @@ HRESULT VisualStylesAPI::GetThemeBackgroundContentRect( HTHEME hTheme, HDC hdc, 
     else
         return S_FALSE;
 }
+
 HRESULT VisualStylesAPI::DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect )
 {
     if(lpfnDrawThemeBackground)
@@ -160,6 +168,7 @@ HRESULT VisualStylesAPI::DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartI
     else
         return S_FALSE;
 }
+
 HRESULT VisualStylesAPI::DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect )
 {
     if(lpfnDrawThemeText)
@@ -167,6 +176,7 @@ HRESULT VisualStylesAPI::DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int
     else
         return S_FALSE;
 }
+
 HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz )
 {
     if(lpfnGetThemePartSize)
@@ -175,6 +185,13 @@ HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, 
         return S_FALSE;
 }
 
+BOOL VisualStylesAPI::IsThemeActive( void )
+{
+    if(lpfnIsThemeActive)
+        return (*lpfnIsThemeActive) ();
+    else
+        return FALSE;
+}
 
 /*********************************************************
  * Initialize XP theming and local stuff
@@ -1415,6 +1432,30 @@ sal_Bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
     ReleaseDC( mhWnd, hDC );
     return( bRet );
+}
+
+void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
+{
+    if ( !vsAPI.IsThemeActive() )
+        return;
+
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // check if vista or newer runs
+    // in Aero theme (and similar ?) the menu text color does not change
+    // for selected items; also on WinXP and earlier menus are not themed
+    // FIXME get the color directly from the theme, not from the settings
+    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
+    {
+        // in aero menuitem highlight text is drawn in the same color as normal
+        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
+        pSVData->maNWFData.mnMenuFormatExtraBorder = 2;
+        pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
+        GetSalData()->mbThemeMenuSupport = TRUE;
+    }
+
+    rSettings.SetStyleSettings( aStyleSettings );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -371,6 +371,9 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
+
+    /// Update settings based on the platform values
+    static void updateSettingsNative( AllSettings& rSettings );
 };
 
 // Init/Deinit Graphics

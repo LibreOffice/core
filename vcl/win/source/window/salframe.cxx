@@ -2696,33 +2696,6 @@ static long ImplA2I( const BYTE* pStr )
 }
 
 // -----------------------------------------------------------------------
-static HRESULT WINAPI backwardCompatibleDwmIsCompositionEnabled( BOOL* pOut )
-{
-    *pOut = FALSE;
-    return S_OK;
-}
-
-static BOOL ImplDwmIsCompositionEnabled()
-{
-    // FIXME It seems that this wrong advice to use 'DwmIsCompositionEnabled'
-    // is widely spread; causing LO to not theme menus when running in
-    // rdesktop.  We should beter use IsThemeActive() from uxtheme.dll.
-    // But the entire ::UpdateSettings() need a rework anyway ;-)
-    SalData* pSalData = GetSalData();
-    if( ! pSalData->mpDwmIsCompositionEnabled )
-    {
-        rtl::OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "Dwmapi.dll" ) );
-        pSalData->maDwmLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-        if( pSalData->maDwmLib )
-            pSalData->mpDwmIsCompositionEnabled = (DwmIsCompositionEnabled_ptr)osl_getAsciiFunctionSymbol( pSalData->maDwmLib, "DwmIsCompositionEnabled" );
-        if( ! pSalData->mpDwmIsCompositionEnabled ) // something failed
-            pSalData->mpDwmIsCompositionEnabled = backwardCompatibleDwmIsCompositionEnabled;
-    }
-    BOOL aResult = FALSE;
-    HRESULT nError = pSalData->mpDwmIsCompositionEnabled( &aResult );
-    return nError == S_OK && aResult;
-}
-
 
 void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 {
@@ -2824,19 +2797,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             // this is not active in the classic style appearance
             aStyleSettings.SetUseFlatBorders( TRUE );
         }
-    }
-    // check if vista or newer runs
-    // in Aero theme (and similar ?) the menu text color does not change
-    // for selected items; also on WinXP and earlier menus are not themed
-    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 &&
-       ImplDwmIsCompositionEnabled()
-       )
-    {
-        // in aero menuitem highlight text is drawn in the same color as normal
-        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
-        pSVData->maNWFData.mnMenuFormatExtraBorder = 2;
-        pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
-        GetSalData()->mbThemeMenuSupport = TRUE;
     }
     aStyleSettings.SetCheckedColorSpecialCase( );
 
@@ -2957,6 +2917,9 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     rSettings.SetMouseSettings( aMouseSettings );
     rSettings.SetStyleSettings( aStyleSettings );
+
+    // now apply the values from theming, if available
+    WinSalGraphics::updateSettingsNative( rSettings );
 }
 
 // -----------------------------------------------------------------------
