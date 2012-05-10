@@ -41,7 +41,7 @@ namespace drawinglayer
             sal_uInt32                              mnRefCount;
 
             // data definitions
-            Bitmap                                  maBitmap;
+            BitmapEx                                maBitmapEx;
             basegfx::B2DVector                      maSize;
             basegfx::B2DVector                      maOffset;
             basegfx::B2DVector                      maOffsetPosition;
@@ -53,7 +53,7 @@ namespace drawinglayer
             unsigned                                mbLogSize : 1;
 
             ImpSdrFillBitmapAttribute(
-                const Bitmap& rBitmap,
+                const BitmapEx& rBitmapEx,
                 const basegfx::B2DVector& rSize,
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rOffsetPosition,
@@ -62,7 +62,7 @@ namespace drawinglayer
                 bool bStretch,
                 bool bLogSize)
             :   mnRefCount(0),
-                maBitmap(rBitmap),
+                maBitmapEx(rBitmapEx),
                 maSize(rSize),
                 maOffset(rOffset),
                 maOffsetPosition(rOffsetPosition),
@@ -74,7 +74,7 @@ namespace drawinglayer
             }
 
             // data read access
-            const Bitmap& getBitmap() const { return maBitmap; }
+            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DVector& getSize() const { return maSize; }
             const basegfx::B2DVector& getOffset() const { return maOffset; }
             const basegfx::B2DVector& getOffsetPosition() const { return maOffsetPosition; }
@@ -85,7 +85,7 @@ namespace drawinglayer
 
             bool operator==(const ImpSdrFillBitmapAttribute& rCandidate) const
             {
-                return (getBitmap() == rCandidate.getBitmap()
+                return (getBitmapEx() == rCandidate.getBitmapEx()
                     && getSize() == rCandidate.getSize()
                     && getOffset() == rCandidate.getOffset()
                     && getOffsetPosition() == rCandidate.getOffsetPosition()
@@ -102,7 +102,7 @@ namespace drawinglayer
                 if(!pDefault)
                 {
                     pDefault = new ImpSdrFillBitmapAttribute(
-                        Bitmap(),
+                        BitmapEx(),
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
@@ -120,7 +120,7 @@ namespace drawinglayer
         };
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute(
-            const Bitmap& rBitmap,
+            const BitmapEx& rBitmapEx,
             const basegfx::B2DVector& rSize,
             const basegfx::B2DVector& rOffset,
             const basegfx::B2DVector& rOffsetPosition,
@@ -128,8 +128,16 @@ namespace drawinglayer
             bool bTiling,
             bool bStretch,
             bool bLogSize)
-        :   mpSdrFillBitmapAttribute(new ImpSdrFillBitmapAttribute(
-                rBitmap, rSize, rOffset, rOffsetPosition, rRectPoint, bTiling,  bStretch, bLogSize))
+        :   mpSdrFillBitmapAttribute(
+                new ImpSdrFillBitmapAttribute(
+                    rBitmapEx,
+                    rSize,
+                    rOffset,
+                    rOffsetPosition,
+                    rRectPoint,
+                    bTiling,
+                    bStretch,
+                    bLogSize))
         {
         }
 
@@ -197,9 +205,9 @@ namespace drawinglayer
             return (*rCandidate.mpSdrFillBitmapAttribute == *mpSdrFillBitmapAttribute);
         }
 
-        const Bitmap& SdrFillBitmapAttribute::getBitmap() const
+        const BitmapEx& SdrFillBitmapAttribute::getBitmapEx() const
         {
-            return mpSdrFillBitmapAttribute->getBitmap();
+            return mpSdrFillBitmapAttribute->getBitmapEx();
         }
 
         const basegfx::B2DVector& SdrFillBitmapAttribute::getSize() const
@@ -240,8 +248,8 @@ namespace drawinglayer
         FillBitmapAttribute SdrFillBitmapAttribute::getFillBitmapAttribute(const basegfx::B2DRange& rRange) const
         {
             // get logical size of bitmap (before expanding eventually)
-            Bitmap aBitmap(getBitmap());
-            const basegfx::B2DVector aLogicalSize(aBitmap.GetPrefSize().getWidth(), aBitmap.GetPrefSize().getHeight());
+            BitmapEx aBitmapEx(getBitmapEx());
+            const basegfx::B2DVector aLogicalSize(aBitmapEx.GetPrefSize().getWidth(), aBitmapEx.GetPrefSize().getHeight());
 
             // get hor/ver shiftings and apply them eventually to the bitmap, but only
             // when tiling is on
@@ -252,45 +260,45 @@ namespace drawinglayer
             {
                 if(0.0 != getOffset().getX() || 0.0 != getOffset().getY())
                 {
-                    const sal_uInt32 nWidth(aBitmap.GetSizePixel().getWidth());
-                    const sal_uInt32 nHeight(aBitmap.GetSizePixel().getHeight());
+                    const sal_uInt32 nWidth(aBitmapEx.GetSizePixel().getWidth());
+                    const sal_uInt32 nHeight(aBitmapEx.GetSizePixel().getHeight());
 
                     if(0.0 != getOffset().getX())
                     {
                         bExpandHeight = true;
                         const sal_uInt32 nOffset(basegfx::fround(((double)nWidth * getOffset().getX()) / 100.0));
-                        aBitmap.Expand(0L, nHeight);
+                        aBitmapEx.Expand(0L, nHeight);
 
                         const Size aSizeA(nOffset, nHeight);
                         const Rectangle aDstA(Point(0L, nHeight), aSizeA);
                         const Rectangle aSrcA(Point(nWidth - nOffset, 0L), aSizeA);
-                        aBitmap.CopyPixel(aDstA, aSrcA);
+                        aBitmapEx.CopyPixel(aDstA, aSrcA);
 
                         const Size aSizeB(nWidth - nOffset, nHeight);
                         const Rectangle aDstB(Point(nOffset, nHeight), aSizeB);
                         const Rectangle aSrcB(Point(0L, 0L), aSizeB);
-                        aBitmap.CopyPixel(aDstB, aSrcB);
+                        aBitmapEx.CopyPixel(aDstB, aSrcB);
                     }
                     else
                     {
                         bExpandWidth = true;
                         const sal_uInt32 nOffset(basegfx::fround(((double)nHeight * getOffset().getY()) / 100.0));
-                        aBitmap.Expand(nWidth, 0L);
+                        aBitmapEx.Expand(nWidth, 0L);
 
                         const Size aSize(nWidth, nHeight);
                         const Rectangle aDst(Point(nWidth, 0L), aSize);
                         const Rectangle aSrc(Point(0L, 0L), aSize);
-                        aBitmap.CopyPixel(aDst, aSrc);
+                        aBitmapEx.CopyPixel(aDst, aSrc);
 
                         const Size aSizeA(nWidth, nOffset);
                         const Rectangle aDstA(Point(0L, 0L), aSizeA);
                         const Rectangle aSrcA(Point(nWidth, nHeight - nOffset), aSizeA);
-                        aBitmap.CopyPixel(aDstA, aSrcA);
+                        aBitmapEx.CopyPixel(aDstA, aSrcA);
 
                         const Size aSizeB(nWidth, nHeight - nOffset);
                         const Rectangle aDstB(Point(0L, nOffset), aSizeB);
                         const Rectangle aSrcB(Point(nWidth, 0L), aSizeB);
-                        aBitmap.CopyPixel(aDstB, aSrcB);
+                        aBitmapEx.CopyPixel(aDstB, aSrcB);
                     }
                 }
             }
@@ -391,7 +399,7 @@ namespace drawinglayer
                 aBitmapSize.setY(aBitmapSize.getY() / fRangeHeight);
             }
 
-            return FillBitmapAttribute(BitmapEx(aBitmap), aBitmapTopLeft, aBitmapSize, getTiling());
+            return FillBitmapAttribute(aBitmapEx, aBitmapTopLeft, aBitmapSize, getTiling());
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

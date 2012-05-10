@@ -63,6 +63,8 @@
 #include <svx/flagsdef.hxx> //CHINA001
 #include <svl/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
+#include <svtools/grfmgr.hxx>
+
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 

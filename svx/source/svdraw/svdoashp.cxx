@@ -292,15 +292,17 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // bitmap and transparence like shadow
         if(bBitmapFillUsed)
         {
-            XOBitmap aFillBitmap(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetBitmapValue());
-            Bitmap aSourceBitmap(aFillBitmap.GetBitmap());
-            BitmapReadAccess* pReadAccess = aSourceBitmap.AcquireReadAccess();
+            GraphicObject aGraphicObject(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetGraphicObject());
+            const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
+            Bitmap aBitmap(aBitmapEx.GetBitmap());
 
-            if(!aSourceBitmap.IsEmpty())
+            if(!aBitmap.IsEmpty())
             {
+                BitmapReadAccess* pReadAccess = aBitmap.AcquireReadAccess();
+
                 if(pReadAccess)
                 {
-                    Bitmap aDestBitmap(aSourceBitmap.GetSizePixel(), 24L);
+                    Bitmap aDestBitmap(aBitmap.GetSizePixel(), 24L);
                     BitmapWriteAccess* pWriteAccess = aDestBitmap.AcquireWriteAccess();
 
                     if(pWriteAccess)
@@ -319,14 +321,29 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                         }
 
                         aDestBitmap.ReleaseAccess(pWriteAccess);
-                        aFillBitmap.SetBitmap(aDestBitmap);
                     }
 
-                    aSourceBitmap.ReleaseAccess(pReadAccess);
+                    aBitmap.ReleaseAccess(pReadAccess);
+
+                    if(aBitmapEx.IsTransparent())
+                    {
+                        if(aBitmapEx.IsAlpha())
+                        {
+                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
+                        }
+                        else
+                        {
+                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
+                        }
+                    }
+                    else
+                    {
+                        aGraphicObject.SetGraphic(Graphic(aDestBitmap));
+                    }
                 }
             }
 
-            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), aFillBitmap));
+            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), aGraphicObject));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 

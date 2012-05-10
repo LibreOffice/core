@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-
 #ifndef _XTABLE_HXX
 #define _XTABLE_HXX
 
@@ -29,20 +28,14 @@
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xlnasit.hxx>
-
-#ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
-#endif
 #include <tools/string.hxx>
-
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include "svx/svxdllapi.h"
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <svtools/grfmgr.hxx>
 
 class Color;
 class Bitmap;
@@ -186,16 +179,31 @@ public:
 
 class XBitmapEntry : public XPropertyEntry
 {
-    XOBitmap aXOBitmap;
+private:
+    GraphicObject   maGraphicObject;
 
 public:
-            XBitmapEntry( const XOBitmap& rXOBitmap, const String& rName ):
-                XPropertyEntry( rName ), aXOBitmap( rXOBitmap ) {}
-            XBitmapEntry( const XBitmapEntry& rOther ) :
-                XPropertyEntry( rOther ), aXOBitmap( rOther.aXOBitmap ) {}
+    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
+    :   XPropertyEntry(rName),
+        maGraphicObject(rGraphicObject)
+    {
+    }
 
-    void     SetXBitmap(const XOBitmap& rXOBitmap) { aXOBitmap = rXOBitmap; }
-    XOBitmap& GetXBitmap()                    { return aXOBitmap; }
+    XBitmapEntry(const XBitmapEntry& rOther)
+    :   XPropertyEntry(rOther),
+        maGraphicObject(rOther.maGraphicObject)
+    {
+    }
+
+    const GraphicObject& GetGraphicObject() const
+    {
+        return maGraphicObject;
+    }
+
+    void SetGraphicObject(const GraphicObject& rGraphicObject)
+    {
+        maGraphicObject = rGraphicObject;
+    }
 };
 
 // ---------------------

@@ -51,7 +51,6 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xhatch.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
@@ -1960,15 +1959,17 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             }
             case XFILL_BITMAP:
             {
-                Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetBitmapValue().GetBitmap());
                 if ( nColorCount )
                 {
+                    Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+
                     aBitmap.Adjust(
                         static_cast< short > ( GetLuminanceChange(
                             std::min(nColorIndex, nColorCount-1))));
+
+                    rObj.SetMergedItem(XFillBitmapItem(String(), Graphic(aBitmap)));
                 }
 
-                rObj.SetMergedItem( XFillBitmapItem( String(), aBitmap ) );
                 break;
             }
         }

@@ -26,15 +26,11 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-
 #include <svx/dialogs.hrc>
-#include "accessibility.hrc"
+#include <accessibility.hrc>
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/poly.hxx>
@@ -42,18 +38,18 @@
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <svtools/colorcfg.hxx>
-
-#include "svxrectctaccessiblecontext.hxx"
+#include <svxrectctaccessiblecontext.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/svdorect.hxx>
-
 #include <svx/svdmodel.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include "linectrl.hrc"
+#include <linectrl.hrc>
+#include <vcl/bmpacc.hxx>
+#include <svx/xbtmpit.hxx>
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
@@ -1003,17 +999,34 @@ void SvxPixelCtl::Paint( const Rectangle& )
 |*
 \************************************************************************/
 
-void SvxPixelCtl::SetXBitmap( const XOBitmap& rXBmp )
+void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
 {
-    if( rXBmp.GetBitmapType() == XBITMAP_8X8 )
+    BitmapColor aBack;
+    BitmapColor aFront;
+
+    if(isHistorical8x8(rBitmapEx, aBack, aFront))
     {
-        aPixelColor = rXBmp.GetPixelColor();
-        aBackgroundColor = rXBmp.GetBackgroundColor();
+        Bitmap aBitmap(rBitmapEx.GetBitmap());
+        BitmapReadAccess* pRead = aBitmap.AcquireReadAccess();
 
-        sal_uInt16* pArray = rXBmp.GetPixelArray();
+        aBackgroundColor = aBack;
+        aPixelColor = aFront;
 
-        for( sal_uInt16 i = 0; i < nSquares; i++ )
-            *( pPixel + i ) = *( pArray + i );
+        for(sal_uInt16 i(0); i < nSquares; i++)
+        {
+            const BitmapColor aColor(pRead->GetColor(i/8, i%8));
+
+            if(aColor == aBack)
+            {
+                *( pPixel + i ) = 0;
+            }
+            else
+            {
+                *( pPixel + i ) = 1;
+            }
+        }
+
+        aBitmap.ReleaseAccess(pRead);
     }
 }
 
@@ -1069,11 +1082,11 @@ SvxBitmapCtl::~SvxBitmapCtl()
 |*
 \************************************************************************/
 
-XOBitmap SvxBitmapCtl::GetXBitmap()
+BitmapEx SvxBitmapCtl::GetBitmapEx()
 {
-    XOBitmap aXOBitmap( pBmpArray, aPixelColor, aBackgroundColor );
+    const Bitmap aRetval(createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor));
 
-    return( aXOBitmap );
+    return BitmapEx(aRetval);
 }
 
 /*************************************************************************
@@ -1468,169 +1481,169 @@ void FillAttrLB::Fill( const XGradientList* pList )
 |*
 \************************************************************************/
 
-BitmapLB::BitmapLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_True*/ )
-: ListBox( pParent, Id ),
-  mpList( NULL ),
-  mbUserDraw( bUserDraw )
+BitmapLB::BitmapLB(Window* pParent, ResId Id, bool bUserDraw /*= false*/ )
+:   ListBox(pParent, Id),
+    maVD(),
+    maBitmapEx(),
+    mpList(NULL),
+    mbUserDraw(bUserDraw)
 {
-    aVD.SetOutputSizePixel( Size( 32, 16 ) );
-    EnableUserDraw( mbUserDraw );
+    maVD.SetOutputSizePixel(Size(32, 16));
+    EnableUserDraw(mbUserDraw);
 }
 
 /************************************************************************/
 
 void BitmapLB::SetVirtualDevice()
 {
-    if( aBitmap.GetSizePixel().Width() > 8 ||
-        aBitmap.GetSizePixel().Height() > 8 )
+    if(maBitmapEx.GetSizePixel().Width() > 8 || maBitmapEx.GetSizePixel().Height() > 8)
     {
-        aVD.DrawBitmap( Point( 0, 0 ), Size( 32, 16 ), aBitmap );
+        maVD.DrawBitmapEx(Point(0, 0), Size(32, 16), maBitmapEx);
     }
     else
     {
-        aVD.DrawBitmap( Point( 0, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 8, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 16, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 24, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 0, 8 ), aBitmap );
-        aVD.DrawBitmap( Point( 8, 8 ), aBitmap );
-        aVD.DrawBitmap( Point( 16, 8 ), aBitmap );
-        aVD.DrawBitmap( Point( 24, 8 ), aBitmap );
+        maVD.DrawBitmapEx(Point(0,  0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(8,  0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(16, 0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(24, 0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(0,  8), maBitmapEx);
+        maVD.DrawBitmapEx(Point(8,  8), maBitmapEx);
+        maVD.DrawBitmapEx(Point(16, 8), maBitmapEx);
+        maVD.DrawBitmapEx(Point(24, 8), maBitmapEx);
     }
 }
 
 /************************************************************************/
 
-void BitmapLB::Fill( const XBitmapList* pList )
+void BitmapLB::Fill(const XBitmapList* pList)
 {
     mpList = (XBitmapList*)pList;
     XBitmapEntry* pEntry;
-    long nCount = pList->Count();
+    const long nCount(pList->Count());
 
-    SetUpdateMode( sal_False );
+    SetUpdateMode(false);
 
-    if( mbUserDraw )
+    if(mbUserDraw)
     {
-        for( long i = 0; i < nCount; i++ )
-            InsertEntry( pList->GetBitmap( i )->GetName() );
+        for(long i(0); i < nCount; i++)
+        {
+            InsertEntry(pList->GetBitmap(i)->GetName());
+        }
     }
     else
     {
-        for( long i = 0; i < nCount; i++ )
+        for(long i(0); i < nCount; i++)
         {
-            pEntry = pList->GetBitmap( i );
-            aBitmap = pEntry->GetXBitmap().GetBitmap();
-
+            pEntry = pList->GetBitmap(i);
+            maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
             SetVirtualDevice();
-
-            InsertEntry( pEntry->GetName(), aVD.GetBitmap( Point( 0, 2 ), Size( 32, 12 ) ) );
+            InsertEntry(pEntry->GetName(), maVD.GetBitmap(Point(0, 2), Size(32, 12)));
         }
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode(true);
 }
 
-void BitmapLB::UserDraw( const UserDrawEvent& rUDEvt )
+void BitmapLB::UserDraw(const UserDrawEvent& rUDEvt)
 {
-    if( mpList != NULL )
+    if(mpList)
     {
         // Draw bitmap
         const Rectangle& rDrawRect = rUDEvt.GetRect();
-        Rectangle aRect( rDrawRect.nLeft+1, rDrawRect.nTop+1, rDrawRect.nLeft+33, rDrawRect.nBottom-1 );
+        const Rectangle aRect(rDrawRect.nLeft + 1, rDrawRect.nTop + 1, rDrawRect.nLeft + 33, rDrawRect.nBottom - 1);
+        const sal_Int32 nId(rUDEvt.GetItemId());
 
-        sal_Int32 nId = rUDEvt.GetItemId();
-        if( nId >= 0 && nId <= mpList->Count() )
+        if(nId >= 0 && nId <= mpList->Count())
         {
-            Rectangle aClipRect( rDrawRect.nLeft+1, rDrawRect.nTop+1, rDrawRect.nRight-1, rDrawRect.nBottom-1 );
-
+            const Rectangle aClipRect(rDrawRect.nLeft + 1, rDrawRect.nTop + 1, rDrawRect.nRight - 1, rDrawRect.nBottom - 1);
             OutputDevice* pDevice = rUDEvt.GetDevice();
-            pDevice->SetClipRegion( Region( aClipRect ) );
-
-            aBitmap = mpList->GetBitmap( nId )->GetXBitmap().GetBitmap();
-
+            pDevice->SetClipRegion(Region(aClipRect));
+            maBitmapEx = mpList->GetBitmap(nId)->GetGraphicObject().GetGraphic().GetBitmapEx();
             long nPosBaseX = aRect.nLeft;
             long nPosBaseY = aRect.nTop;
 
-            if( aBitmap.GetSizePixel().Width() > 8 ||
-                aBitmap.GetSizePixel().Height() > 8 )
+            if(maBitmapEx.GetSizePixel().Width() > 8 || maBitmapEx.GetSizePixel().Height() > 8)
             {
-                pDevice->DrawBitmap( Point( nPosBaseX, nPosBaseY ), Size( 32, 16 ), aBitmap );
+                pDevice->DrawBitmapEx(Point(nPosBaseX, nPosBaseY), Size(32, 16), maBitmapEx);
             }
             else
             {
-                pDevice->DrawBitmap( Point( nPosBaseX+ 0, nPosBaseY+0 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+ 8, nPosBaseY+0 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+16, nPosBaseY+0 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+24, nPosBaseY+0 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+ 0, nPosBaseY+8 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+ 8, nPosBaseY+8 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+16, nPosBaseY+8 ), aBitmap );
-                pDevice->DrawBitmap( Point( nPosBaseX+24, nPosBaseY+8 ), aBitmap );
+                pDevice->DrawBitmapEx(Point(nPosBaseX+ 0, nPosBaseY+0 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+ 8, nPosBaseY+0 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+16, nPosBaseY+0 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+24, nPosBaseY+0 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+ 0, nPosBaseY+8 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+ 8, nPosBaseY+8 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+16, nPosBaseY+8 ), maBitmapEx);
+                pDevice->DrawBitmapEx(Point(nPosBaseX+24, nPosBaseY+8 ), maBitmapEx);
             }
 
             pDevice->SetClipRegion();
 
             // Draw name
-            pDevice->DrawText( Point( aRect.nRight+7, aRect.nTop-1 ), mpList->GetBitmap( nId )->GetName() );
+            pDevice->DrawText(Point(aRect.nRight + 7, aRect.nTop - 1), mpList->GetBitmap(nId)->GetName());
         }
     }
 }
 
 /************************************************************************/
 
-void BitmapLB::Append( XBitmapEntry* pEntry, Bitmap* pBmp )
+void BitmapLB::Append(XBitmapEntry* pEntry, BitmapEx* pBmpEx)
 {
-    if( pBmp )
+    if(pBmpEx)
     {
-        aBitmap = pEntry->GetXBitmap().GetBitmap();
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         SetVirtualDevice();
-        InsertEntry( pEntry->GetName(), aVD.GetBitmap( Point( 0, 2 ), Size( 32, 12 ) ) );
+        InsertEntry(pEntry->GetName(), maVD.GetBitmap(Point(0, 2), Size(32, 12)));
     }
     else
-        InsertEntry( pEntry->GetName() );
+    {
+        InsertEntry(pEntry->GetName());
+    }
 }
 
 /************************************************************************/
 
-void BitmapLB::Modify( XBitmapEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
+void BitmapLB::Modify(XBitmapEntry* pEntry, sal_uInt16 nPos, BitmapEx* pBmpEx)
 {
-    RemoveEntry( nPos );
+    RemoveEntry(nPos);
 
-    if( pBmp )
+    if(pBmpEx)
     {
-        aBitmap = pEntry->GetXBitmap().GetBitmap();
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         SetVirtualDevice();
-
-        InsertEntry( pEntry->GetName(), aVD.GetBitmap( Point( 0, 2 ), Size( 32, 12 ) ), nPos );
+        InsertEntry(pEntry->GetName(), maVD.GetBitmap(Point(0, 2), Size(32, 12)), nPos);
     }
     else
-        InsertEntry( pEntry->GetName() );
+    {
+        InsertEntry(pEntry->GetName());
+    }
 }
 
 /************************************************************************/
 
-void BitmapLB::SelectEntryByList( const XBitmapList* pList, const String& rStr,
-                            const Bitmap& )
+void BitmapLB::SelectEntryByList(const XBitmapList* pList, const String& rStr)
 {
-    long nCount = pList->Count();
+    const long nCount(pList->Count());
     XBitmapEntry* pEntry;
-    sal_Bool bFound = sal_False;
+    bool bFound(false);
+    long i(0);
 
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
+    for(i = 0; i < nCount && !bFound; i++)
     {
-        pEntry = pList->GetBitmap( i );
+        pEntry = pList->GetBitmap(i);
+        const String aStr(pEntry->GetName());
 
-        String aStr = pEntry->GetName();
-        // Bitmap aBmp = pEntry->GetBitmap();
-
-        if( rStr == aStr )
+        if(rStr == aStr)
         {
-            bFound = sal_True;
+            bFound = true;
         }
     }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 ) );
+
+    if(bFound)
+    {
+        SelectEntryPos((sal_uInt16)(i - 1));
+    }
 }
 
 /*************************************************************************
@@ -1639,89 +1652,89 @@ void BitmapLB::SelectEntryByList( const XBitmapList* pList, const String& rStr,
 |*
 \************************************************************************/
 
-FillAttrLB::FillAttrLB( Window* pParent, ResId Id ) :
-                    ColorListBox( pParent, Id )
+FillAttrLB::FillAttrLB( Window* pParent, ResId Id )
+:   ColorListBox(pParent, Id),
+    maVD(),
+    maBitmapEx()
 {
-    aVD.SetOutputSizePixel( Size( 32, 16 ) );
+    maVD.SetOutputSizePixel(Size(32, 16));
 }
 
 /************************************************************************/
 
-FillAttrLB::FillAttrLB( Window* pParent, WinBits aWB ) :
-                    ColorListBox( pParent, aWB )
+FillAttrLB::FillAttrLB(Window* pParent, WinBits aWB)
+:   ColorListBox(pParent, aWB)
 {
-    aVD.SetOutputSizePixel( Size( 32, 16 ) );
+    maVD.SetOutputSizePixel(Size(32, 16));
 }
 
 /************************************************************************/
 
 void FillAttrLB::SetVirtualDevice()
 {
-    if( aBitmap.GetSizePixel().Width() > 8 ||
-        aBitmap.GetSizePixel().Height() > 8 )
+    maVD.Erase();
+
+    if(maBitmapEx.GetSizePixel().Width() > 8 || maBitmapEx.GetSizePixel().Height() > 8)
     {
-        aVD.DrawBitmap( Point( 0, 0 ), Size( 32, 16 ), aBitmap );
+        maVD.DrawBitmapEx(Point(0, 0), Size(32, 16), maBitmapEx);
     }
     else
     {
-        aVD.DrawBitmap( Point( 0, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 8, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 16, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 24, 0 ), aBitmap );
-        aVD.DrawBitmap( Point( 0, 8 ), aBitmap );
-        aVD.DrawBitmap( Point( 8, 8 ), aBitmap );
-        aVD.DrawBitmap( Point( 16, 8 ), aBitmap );
-        aVD.DrawBitmap( Point( 24, 8 ), aBitmap );
+        maVD.DrawBitmapEx(Point(0,  0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(8,  0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(16, 0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(24, 0), maBitmapEx);
+        maVD.DrawBitmapEx(Point(0,  8), maBitmapEx);
+        maVD.DrawBitmapEx(Point(8,  8), maBitmapEx);
+        maVD.DrawBitmapEx(Point(16, 8), maBitmapEx);
+        maVD.DrawBitmapEx(Point(24, 8), maBitmapEx);
     }
 }
 
 /************************************************************************/
 
-void FillAttrLB::Fill( const XBitmapList* pList )
+void FillAttrLB::Fill(const XBitmapList* pList)
 {
-    long nCount = pList->Count();
+    const long nCount(pList->Count());
     XBitmapEntry* pEntry;
-    ListBox::SetUpdateMode( sal_False );
 
-    for( long i = 0; i < nCount; i++ )
+    ListBox::SetUpdateMode(false);
+
+    for(long i(0); i < nCount; i++)
     {
         pEntry = pList->GetBitmap( i );
-        aBitmap = pEntry->GetXBitmap().GetBitmap();
-
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         SetVirtualDevice();
-
-        ListBox::InsertEntry( pEntry->GetName(), aVD.GetBitmap( Point( 0, 2 ), Size( 32, 12 ) ) );
+        ListBox::InsertEntry(pEntry->GetName(), maVD.GetBitmap(Point(0, 2), Size(32, 12)));
     }
-    ListBox::SetUpdateMode( sal_True );
+
+    ListBox::SetUpdateMode(true);
 }
 
 /************************************************************************/
 
-void FillAttrLB::SelectEntryByList( const XBitmapList* pList, const String& rStr,
-                            const Bitmap& /*rBmp*/)
+void FillAttrLB::SelectEntryByList( const XBitmapList* pList, const String& rStr)
 {
-    long nCount = pList->Count();
+    const long nCount(pList->Count());
     XBitmapEntry* pEntry;
-    sal_Bool bFound = sal_False;
+    bool bFound(false);
+    long i(0);
 
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
+    for(i = 0; i < nCount && !bFound; i++)
     {
-        pEntry = pList->GetBitmap( i );
+        pEntry = pList->GetBitmap(i);
+        const String aStr(pEntry->GetName());
 
-        String aStr = pEntry->GetName();
-        // Bitmap aBmp = pEntry->GetBitmap();
-
-        if( rStr == aStr )
+        if(rStr == aStr)
         {
-            bFound = sal_True;
+            bFound = true;
         }
-        /*
-        if( rStr == aStr && rBmp == aBmp )
-            bFound = sal_True; */
     }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 ) );
+
+    if(bFound)
+    {
+        SelectEntryPos((sal_uInt16)(i - 1));
+    }
 }
 
 /*************************************************************************

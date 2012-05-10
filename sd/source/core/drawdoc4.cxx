@@ -190,7 +190,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     Color   aNullColor( COL_WHITE );
     Bitmap  aNullBmp( aNullSize, 8 );
     aNullBmp.Erase( aNullColor );
-    rISet.Put(XFillBitmapItem(pPool,aNullBmp));
+    rISet.Put(XFillBitmapItem(pPool, Graphic(aNullBmp)));
 
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(sal_False));

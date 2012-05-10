@@ -1132,9 +1132,9 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( nPos != LISTBOX_ENTRY_NOTFOUND &&
                     nPos != aLbBitmap.GetSavedValue() )
                 {
-                    XOBitmap aXOBitmap = pBitmapList->GetBitmap( nPos )->GetXBitmap();
-                    String aString = aLbBitmap.GetSelectEntry();
-                    XFillBitmapItem aFillBitmapItem( aString, aXOBitmap );
+                    const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
+                    const String aString(aLbBitmap.GetSelectEntry());
+                    const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
                     pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
                     if ( !pOld || !( *(const XFillBitmapItem*)pOld == aFillBitmapItem ) )
                     {
@@ -2250,16 +2250,16 @@ IMPL_LINK( SvxAreaTabPage, ModifyBitmapHdl_Impl, void *, EMPTYARG )
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // ItemSet fuellen und an aCtlXRectPreview weiterleiten
-        XBitmapEntry* pEntry = pBitmapList->GetBitmap( _nPos );
+        const XBitmapEntry* pEntry = pBitmapList->GetBitmap(_nPos);
 
-        rXFSet.Put( XFillStyleItem( XFILL_BITMAP ) );
-        rXFSet.Put( XFillBitmapItem( String(), pEntry->GetXBitmap() ) );
+        rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
+        rXFSet.Put(XFillBitmapItem(String(), pEntry->GetGraphicObject()));
     }
     // NEU
     else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True, &pPoolItem ) )
     {
-        rXFSet.Put( XFillStyleItem( XFILL_BITMAP ) );
-        rXFSet.Put( XFillBitmapItem( String(), ( ( const XFillBitmapItem* ) pPoolItem )->GetBitmapValue() ) );
+        rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
+        rXFSet.Put(XFillBitmapItem(String(), ((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));
     }
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );

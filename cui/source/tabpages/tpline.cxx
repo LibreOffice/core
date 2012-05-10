@@ -62,7 +62,6 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/brshitem.hxx>
 #include <svx/gallery.hxx>
-#include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "paragrph.hrc"
 #include "sfx2/opengrf.hxx"
