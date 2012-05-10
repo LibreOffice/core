@@ -779,7 +779,6 @@ sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 {
     sal_uLong                       nRet = STYLE_SYMBOLS_DEFAULT;
-    bool                        bCont = true;
 
     try
     {
@@ -787,9 +786,6 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
         sal_Int32 nValue( 0 );
 
         aAny >>= nValue;
-
-        if( 0 == nValue )
-            bCont = false;
     }
     catch ( ::com::sun::star::uno::Exception& )
     {
