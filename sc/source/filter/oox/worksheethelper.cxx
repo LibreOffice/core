@@ -1558,9 +1558,7 @@ void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fVal
 
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
 {
-    Reference< XText > xText( getCell( rAddress ), UNO_QUERY );
-    OSL_ENSURE( xText.is(), "WorksheetHelper::putString - missing text interface" );
-    if( xText.is() ) xText->setString( rText );
+    getScDocument().SetString( (SCCOL)rAddress.Column, (SCROW)rAddress.Row, (SCTAB)rAddress.Sheet, rText );
 }
 
 void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
