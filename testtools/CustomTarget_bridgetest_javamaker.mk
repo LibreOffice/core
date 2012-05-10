@@ -30,7 +30,7 @@ TTBJ := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_javamaker)
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(TTBJ)/done
 
-$(TTBJ)/done : $(OUTDIR)/rdb/bridgetest.rdb \
+$(TTBJ)/done : $(call gb_UnoApiTarget_get_target,bridgetest) \
 	$(call gb_Executable_get_target_for_build,javamaker) | $(TTBJ)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
