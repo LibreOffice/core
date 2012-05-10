@@ -822,7 +822,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 {
 #if OSL_DEBUG_LEVEL > 0
                     sal_Int32 nRowSpan = aRowSpanFind->second;
-                    nRowSpan = nRowSpan;
+                    (void) nRowSpan;
                     sal_Int32 nColSpanTemp = aColIter->nColSpan;
                     (void) nColSpanTemp;
 #endif
