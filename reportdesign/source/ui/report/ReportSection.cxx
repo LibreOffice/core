@@ -727,8 +727,7 @@ void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< un
             const OObjectBase* pObj = dynamic_cast<const OObjectBase*>(pDlgEdObj);
             if ( pObj )
             {
-                uno::Reference<uno::XInterface> xInterface =
-                    pObj->getReportComponent();
+                uno::Reference<uno::XInterface> xInterface(pObj->getReportComponent());
                 _rSelection.push_back(xInterface);
             }
         }
