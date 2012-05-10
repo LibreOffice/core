@@ -153,6 +153,7 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         return &aUrlFieldPropertySet_Impl;
     case text::textfield::Type::DATE:
     case text::textfield::Type::TIME:
+    case text::textfield::Type::DATE_TIME:
         return &aDateTimeFieldPropertySet_Impl;
     case text::textfield::Type::EXTENDED_FILE:
         return &aExtFileFieldPropertySet_Impl;
@@ -803,53 +804,79 @@ OUString SAL_CALL SvxUnoTextField::getImplementationName() throw(uno::RuntimeExc
     return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextField"));
 }
 
-static const sal_Char* pOldServiceNames[] =
-{
-    "com.sun.star.text.TextField.DateTime",
-    "com.sun.star.text.TextField.URL",
-    "com.sun.star.text.TextField.PageNumber",
-    "com.sun.star.text.TextField.PageCount",
-    "com.sun.star.text.TextField.DateTime",
-    "com.sun.star.text.TextField.DocInfo.Title",    // SvxFileField is used for title
-    "com.sun.star.text.TextField.SheetName",
-    "com.sun.star.text.TextField.DateTime",
-    "com.sun.star.text.TextField.FileName",
-    "com.sun.star.text.TextField.Author",
-    "com.sun.star.text.TextField.Measure",
-    "com.sun.star.text.TextField.DateTime",
-    "com.sun.star.presentation.TextField.Header",
-    "com.sun.star.presentation.TextField.Footer",
-    "com.sun.star.presentation.TextField.DateTime"
-};
-
-static const sal_Char* pNewServiceNames[] =
-{
-    "com.sun.star.text.textfield.DateTime",
-    "com.sun.star.text.textfield.URL",
-    "com.sun.star.text.textfield.PageNumber",
-    "com.sun.star.text.textfield.PageCount",
-    "com.sun.star.text.textfield.DateTime",
-    "com.sun.star.text.textfield.docinfo.Title",    // SvxFileField is used for title
-    "com.sun.star.text.textfield.SheetName",
-    "com.sun.star.text.textfield.DateTime",
-    "com.sun.star.text.textfield.FileName",
-    "com.sun.star.text.textfield.Author",
-    "com.sun.star.text.textfield.Measure",
-    "com.sun.star.text.textfield.DateTime",
-    "com.sun.star.presentation.textfield.Header",
-    "com.sun.star.presentation.textfield.Footer",
-    "com.sun.star.presentation.textfield.DateTime"
-};
-
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( 4 );
+    uno::Sequence<OUString> aSeq(4);
     OUString* pServices = aSeq.getArray();
-    pServices[0] = OUString::createFromAscii( pNewServiceNames[mnServiceId] );
-    pServices[1] = OUString::createFromAscii( pOldServiceNames[mnServiceId] );
-    pServices[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextContent" )),
-    pServices[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextField" ));
+    pServices[0] = "com.sun.star.text.TextContent";
+    pServices[1] = "com.sun.star.text.TextField";
+
+    switch (mnServiceId)
+    {
+        case text::textfield::Type::DATE:
+            pServices[2] = "com.sun.star.text.TextField.DateTime";
+            pServices[3] = "com.sun.star.text.textfield.DateTime";
+        break;
+        case text::textfield::Type::URL:
+            pServices[2] = "com.sun.star.text.TextField.URL";
+            pServices[3] = "com.sun.star.text.textfield.URL";
+        break;
+        case text::textfield::Type::PAGE:
+            pServices[2] = "com.sun.star.text.TextField.PageNumber";
+            pServices[3] = "com.sun.star.text.textfield.PageNumber";
+        break;
+        case text::textfield::Type::PAGES:
+            pServices[2] = "com.sun.star.text.TextField.PageCount";
+            pServices[3] = "com.sun.star.text.textfield.PageCount";
+        break;
+        case text::textfield::Type::TIME:
+            pServices[2] = "com.sun.star.text.TextField.DateTime";
+            pServices[3] = "com.sun.star.text.textfield.DateTime";
+        break;
+        case text::textfield::Type::FILE:
+            pServices[2] = "com.sun.star.text.TextField.docinfo.Title";
+            pServices[3] = "com.sun.star.text.textfield.docinfo.Title";
+        break;
+        case text::textfield::Type::TABLE:
+            pServices[2] = "com.sun.star.text.TextField.SheetName";
+            pServices[3] = "com.sun.star.text.textfield.SheetName";
+        break;
+        case text::textfield::Type::EXTENDED_TIME:
+            pServices[2] = "com.sun.star.text.TextField.DateTime";
+            pServices[3] = "com.sun.star.text.textfield.DateTime";
+        break;
+        case text::textfield::Type::EXTENDED_FILE:
+            pServices[2] = "com.sun.star.text.TextField.FileName";
+            pServices[3] = "com.sun.star.text.textfield.FileName";
+        break;
+        case text::textfield::Type::AUTHOR:
+            pServices[2] = "com.sun.star.text.TextField.Author";
+            pServices[3] = "com.sun.star.text.textfield.Author";
+        break;
+        case text::textfield::Type::MEASURE:
+            pServices[2] = "com.sun.star.text.TextField.Measure";
+            pServices[3] = "com.sun.star.text.textfield.Measure";
+        break;
+        case text::textfield::Type::HEADER:
+            pServices[2] = "com.sun.star.presentation.TextField.Header";
+            pServices[3] = "com.sun.star.presentation.textfield.Header";
+        break;
+        case text::textfield::Type::FOOTER:
+            pServices[2] = "com.sun.star.presentation.TextField.Footer";
+            pServices[3] = "com.sun.star.presentation.textfield.Footer";
+        break;
+        case text::textfield::Type::DATE_TIME:
+            pServices[2] = "com.sun.star.text.TextField.DateTime";
+            pServices[3] = "com.sun.star.text.textfield.DateTime";
+        break;
+        case text::textfield::Type::EXTENDED_DATE:
+            pServices[2] = "com.sun.star.presentation.TextField.DateTime";
+            pServices[3] = "com.sun.star.presentation.textfield.DateTime";
+        break;
+        default:
+            aSeq.realloc(0);
+    }
 
     return aSeq;
 }
