@@ -820,12 +820,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 ::std::map<sal_Int32,sal_Int32>::iterator aRowSpanFind = aRowSpan.find(nColIndex);
                 if ( aRowSpanFind != aRowSpan.end() )
                 {
-#if OSL_DEBUG_LEVEL > 0
-                    sal_Int32 nRowSpan = aRowSpanFind->second;
-                    (void) nRowSpan;
-                    sal_Int32 nColSpanTemp = aColIter->nColSpan;
-                    (void) nColSpanTemp;
-#endif
                     nColSpan = 1;
                     if ( !--(aRowSpanFind->second) )
                         aRowSpan.erase(aRowSpanFind);
