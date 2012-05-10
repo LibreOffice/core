@@ -35,8 +35,6 @@
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class SwAuthDataArr;
-
 class SwAuthEntry
 {
     String      aAuthFields[AUTH_FIELD_END];
@@ -66,11 +64,12 @@ struct SwTOXSortKey
 
 class SwAuthorityField;
 typedef boost::ptr_vector<SwTOXSortKey> SortKeyArr;
+typedef boost::ptr_vector<SwAuthEntry> SwAuthDataArr;
 
 class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
     SwDoc*          m_pDoc;
-    SwAuthDataArr*  m_pDataArr;
+    SwAuthDataArr   m_DataArr;
     std::vector<long> m_SequArr;
     SortKeyArr      m_SortKeyArr;
     sal_Unicode     m_cPrefix;

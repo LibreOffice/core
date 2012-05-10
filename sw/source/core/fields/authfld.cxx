@@ -56,11 +56,6 @@ using namespace ::com::sun::star::lang;
 using rtl::OUString;
 
 
-typedef SwAuthEntry* SwAuthEntryPtr;
-SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5 )
-SV_IMPL_PTRARR( SwAuthDataArr, SwAuthEntryPtr )
-
-
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : nRefCount(0)
 {
@@ -79,7 +74,7 @@ sal_Bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
-    m_pDataArr(new SwAuthDataArr ),
+    m_DataArr(),
     m_SortKeyArr(3),
     m_cPrefix('['),
     m_cSuffix(']'),
@@ -91,8 +86,6 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
 
 SwAuthorityFieldType::~SwAuthorityFieldType()
 {
-    m_SequArr.clear();
-    delete m_pDataArr;
 }
 
 SwFieldType*    SwAuthorityFieldType::Copy()  const
@@ -105,9 +98,9 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
 #if OSL_DEBUG_LEVEL > 0
     sal_Bool bRemoved = sal_False;
 #endif
-    for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
+    for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        SwAuthEntry* pTemp = &m_DataArr[j];
         long nRet = (long)(void*)pTemp;
         if(nRet == nHandle)
         {
@@ -117,7 +110,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
             pTemp->RemoveRef();
             if(!pTemp->GetRefCount())
             {
-                m_pDataArr->DeleteAndDestroy(j, 1);
+                m_DataArr.erase(m_DataArr.begin() + j);
                 //re-generate positions of the fields
                 DelSequenceArray();
             }
@@ -137,9 +130,9 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
         pEntry->SetAuthorField( (ToxAuthorityField)i,
                         rFieldContents.GetToken( i, TOX_STYLE_DELIMITER ));
 
-    for(sal_uInt16 j = 0; j < m_pDataArr->Count() && pEntry; j++)
+    for(sal_uInt16 j = 0; j < m_DataArr.size() && pEntry; j++)
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        SwAuthEntry* pTemp = &m_DataArr[j];
         if(*pTemp == *pEntry)
         {
             DELETEZ(pEntry);
@@ -152,7 +145,7 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
     {
         nRet = (long)(void*)pEntry;
         pEntry->AddRef();
-        m_pDataArr->Insert(pEntry, m_pDataArr->Count());
+        m_DataArr.push_back(pEntry);
         //re-generate positions of the fields
         DelSequenceArray();
     }
@@ -162,9 +155,9 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
 sal_Bool SwAuthorityFieldType::AddField(long nHandle)
 {
     sal_Bool bRet = sal_False;
-    for( sal_uInt16 j = 0; j < m_pDataArr->Count(); j++ )
+    for( sal_uInt16 j = 0; j < m_DataArr.size(); j++ )
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        SwAuthEntry* pTemp = &m_DataArr[j];
         long nTmp = (long)(void*)pTemp;
         if( nTmp == nHandle )
         {
@@ -182,9 +175,9 @@ sal_Bool SwAuthorityFieldType::AddField(long nHandle)
 const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 {
     const SwAuthEntry* pRet = 0;
-    for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
+    for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
-        const SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        const SwAuthEntry* pTemp = &m_DataArr[j];
         long nTmp = (long)(void*)pTemp;
         if( nTmp == nHandle )
         {
@@ -199,9 +192,9 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 void SwAuthorityFieldType::GetAllEntryIdentifiers(
     std::vector<String>& rToFill )const
 {
-    for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
+    for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        const SwAuthEntry* pTemp = &m_DataArr[j];
         rToFill.push_back(pTemp->GetAuthorField(AUTH_FIELD_IDENTIFIER));
     }
 }
@@ -210,9 +203,9 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
                                 const String& rIdentifier)const
 {
     const SwAuthEntry* pRet = 0;
-    for( sal_uInt16 j = 0; j < m_pDataArr->Count(); ++j )
+    for( sal_uInt16 j = 0; j < m_DataArr.size(); ++j )
     {
-        const SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        const SwAuthEntry* pTemp = &m_DataArr[j];
         if( rIdentifier == pTemp->GetAuthorField( AUTH_FIELD_IDENTIFIER ))
         {
             pRet = pTemp;
@@ -225,9 +218,9 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
 bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 {
     bool bChanged = false;
-    for( sal_uInt16 j = 0; j < m_pDataArr->Count(); ++j )
+    for( sal_uInt16 j = 0; j < m_DataArr.size(); ++j )
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
+        SwAuthEntry* pTemp = &m_DataArr[j];
         if(pTemp->GetAuthorField(AUTH_FIELD_IDENTIFIER) ==
                     pNewEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER))
         {
@@ -247,9 +240,9 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
     sal_uInt16 nRet = 0;
-    for( nRet = 0; nRet < m_pDataArr->Count(); ++nRet )
+    for( nRet = 0; nRet < m_DataArr.size(); ++nRet )
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject( nRet );
+        SwAuthEntry* pTemp = &m_DataArr[ nRet ];
         if( *pTemp == rInsert )
         {
             break;
@@ -258,8 +251,8 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     }
 
     //if it is a new Entry - insert
-    if( nRet == m_pDataArr->Count() )
-        m_pDataArr->Insert( new SwAuthEntry( rInsert ), nRet );
+    if( nRet == m_DataArr.size() )
+        m_DataArr.push_back( new SwAuthEntry( rInsert ) );
 
     return nRet;
 }
@@ -267,9 +260,9 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 long    SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
 {
     long nRet = 0;
-    if( nPos < m_pDataArr->Count() )
+    if( nPos < m_DataArr.size() )
     {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject(nPos);
+        SwAuthEntry* pTemp = &m_DataArr[nPos];
         nRet = (long)(void*)pTemp;
     }
     return nRet;
@@ -281,7 +274,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
 #if OSL_DEBUG_LEVEL > 0
     sal_Bool bCurrentFieldWithoutTextNode = sal_False;
 #endif
-    if(!m_SequArr.empty() && m_SequArr.size() != m_pDataArr->Count())
+    if(!m_SequArr.empty() && m_SequArr.size() != m_DataArr.size())
         DelSequenceArray();
     if(m_SequArr.empty())
     {
