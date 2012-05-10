@@ -737,12 +737,14 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             const sal_Size nTrySize = 80;
                             ByteString aHeader = read_uInt8s_AsOString(rStr, nTrySize);
 
+                            bool bMaybeHtml = HTMLParser::IsHTMLFormat( aHeader.GetBuffer());
+
                             if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
                             {
                                 // test for RTF
                                 pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
                             }
-                            else if ( bIsXLS && bMaybeText )
+                            else if ( bIsXLS && (bMaybeText && !bMaybeHtml) )
                             {
                                 aHeader = comphelper::string::stripStart(aHeader, ' ');
                                 // Detect Excel 2003 XML here only if XLS was preselected.
@@ -756,7 +758,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 pFilter = pPreselectedFilter;
                             else if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
                                 pFilter = pPreselectedFilter;
-                            else if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                            else if ( bMaybeHtml )
                             {
                                 // test for HTML
 
