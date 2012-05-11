@@ -52,7 +52,6 @@ using namespace ::com::sun::star;
 
 
 const sal_Int32 MAX_LEN( 1024L );
-const sal_Int32 MAX_MACRO_LEN( 1024 );
 
 const sal_Int32 MAX_ENTITY_LEN( 8L );
 

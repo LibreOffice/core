@@ -57,7 +57,6 @@ class ToolbarMenuEntry;
 typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener > > EventListenerVector;
 typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
 
-const int EXTRAITEMHEIGHT = 0; // 4;
 const int SEPARATOR_HEIGHT = 4;
 const int TITLE_ID = -1;
 const int BORDER_X = 0;

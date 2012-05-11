@@ -169,13 +169,8 @@ void FilterConfigCache::ImplInit()
 {
     static OUString STYPE                ( RTL_CONSTASCII_USTRINGPARAM( "Type"               ) );
     static OUString SUINAME              ( RTL_CONSTASCII_USTRINGPARAM( "UIName"             ) );
-    static OUString SDOCUMENTSERVICE     ( RTL_CONSTASCII_USTRINGPARAM( "DocumentService"    ) );
-    static OUString SFILTERSERVICE       ( RTL_CONSTASCII_USTRINGPARAM( "FilterService"      ) );
-    static OUString STEMPLATENAME        ( RTL_CONSTASCII_USTRINGPARAM( "TemplateName"       ) );
-    static OUString SFILEFORMATVERSION   ( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion"  ) );
     static OUString SUICOMPONENT         ( RTL_CONSTASCII_USTRINGPARAM( "UIComponent"        ) );
     static OUString SFLAGS               ( RTL_CONSTASCII_USTRINGPARAM( "Flags"              ) );
-    static OUString SUSERDATA            ( RTL_CONSTASCII_USTRINGPARAM( "UserData"           ) );
     static OUString SMEDIATYPE           ( RTL_CONSTASCII_USTRINGPARAM( "MediaType"          ) );
     static OUString SEXTENSIONS          ( RTL_CONSTASCII_USTRINGPARAM( "Extensions"         ) );
     static OUString SFORMATNAME          ( RTL_CONSTASCII_USTRINGPARAM( "FormatName"         ) );

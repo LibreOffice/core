@@ -45,10 +45,6 @@ class SfxItemSet;
 
 namespace sdr { namespace table {
 
-const sal_Int16 SELTYPE_NONE = 0;
-const sal_Int16 SELTYPE_MOUSE = 1;
-const sal_Int16 SELTYPE_KEYS = 2;
-
 class SVX_DLLPUBLIC SvxTableController: public sdr::SelectionController
 {
 public:
