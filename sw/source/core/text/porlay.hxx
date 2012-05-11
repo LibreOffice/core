@@ -75,9 +75,9 @@ public:
  *                      class SwRepaint
  *************************************************************************/
 
-// SwRepaint ist ein dokumentglobales SwRect mit einem nOfst der angibt,
-// ab wo in der ersten Zeile gepaintet werden soll
-// und einem nRightOfst, der den rechten Rand bestimmt
+// SwRepaint is a document-global SwRect
+// nOfst states from where in the first line should be painted
+// nRightOfst gives teh right margin
 class SwRepaint : public SwRect
 {
     SwTwips nOfst;
@@ -100,10 +100,10 @@ public:
 class SwLineLayout : public SwTxtPortion
 {
 private:
-    SwLineLayout *pNext;                // Die naechste Zeile.
+    SwLineLayout *pNext;                // The next Line
     std::vector<long>* pLLSpaceAdd;     // Used for justified alignment.
     std::deque<sal_uInt16>* pKanaComp;  // Used for Kana compression.
-    KSHORT nRealHeight;                 // Die aus Zeilenabstand/Register resultierende Hoehe.
+    KSHORT nRealHeight;                 // The height resulting from line spacing and register
     sal_Bool bFormatAdj : 1;
     sal_Bool bDummy     : 1;
     sal_Bool bFntChg    : 1;
@@ -113,17 +113,17 @@ private:
     sal_Bool bFly       : 1;
     sal_Bool bRest      : 1;
     sal_Bool bBlinking  : 1;
-    sal_Bool bClipping  : 1; // Clipping erforderlich wg. exakter Zeilenhoehe
-    sal_Bool bContent   : 1; // enthaelt Text, fuer Zeilennumerierung
-    sal_Bool bRedline   : 1; // enthaelt Redlining
-    sal_Bool bForcedLeftMargin : 1; // vom Fly verschobener linker Einzug
+    sal_Bool bClipping  : 1; // Clipping needed for exact line height
+    sal_Bool bContent   : 1; // Text for line numbering
+    sal_Bool bRedline   : 1; // The Redlining
+    sal_Bool bForcedLeftMargin : 1; // Left adjustment moved by the Fly
     sal_Bool bHanging : 1; // contents a hanging portion in the margin
     sal_Bool bUnderscore : 1;
 
     SwTwips _GetHangingMargin() const;
 
 public:
-    // von SwLinePortion
+    // From SwLinePortion
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );
     virtual SwLinePortion *Append( SwLinePortion *pPortion );
     inline SwLinePortion *GetFirstPortion() const;
@@ -157,8 +157,7 @@ public:
     inline void SetUnderscore( const sal_Bool bNew = sal_True ) { bUnderscore = bNew; }
     inline sal_Bool HasUnderscore() const { return bUnderscore; }
 
-    // Beruecksichtigung von Dummyleerzeilen
-    // 4147, 8221:
+    // Respecting empty dummy lines
     inline void SetDummy( const sal_Bool bNew ) { bDummy = bNew; }
     inline sal_Bool IsDummy() const { return bDummy; }
 
@@ -174,19 +173,19 @@ public:
 
     void Init( SwLinePortion *pNextPortion = NULL);
 
-    // Sammelt die Daten fuer die Zeile.
+    // Collects the data for the line
     void CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf );
 
     inline void SetRealHeight( KSHORT nNew ) { nRealHeight = nNew; }
     inline KSHORT GetRealHeight() const { return nRealHeight; }
 
-    // Erstellt bei kurzen Zeilen die Glue-Kette.
+    // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();
 
     inline SwTwips GetHangingMargin() const
         { return _GetHangingMargin(); }
 
-    // fuer die Sonderbehandlung bei leeren Zeilen
+    // For special treatment for empty lines
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
     //
@@ -263,46 +262,46 @@ public:
 
 class SwParaPortion : public SwLineLayout
 {
-    // neu zu paintender Bereich
+    // Area that needs repainting
     SwRepaint aRepaint;
-    // neu zu formatierender Bereich
+    // Area that needs reformatting
     SwCharRange aReformat;
     SwScriptInfo aScriptInfo;
-//   Fraction aZoom;
+    // Fraction aZoom;
     long nDelta;
 
-    // Wenn ein SwTxtFrm gelocked ist, werden keine Veraenderungen an den
-    // Formatierungsdaten (unter pLine) vorgenommen (vgl. ORPHANS)
-    sal_Bool bFlys          : 1; // Ueberlappen Flys ?
+    // If a SwTxtFrma is locked, no changes occur to the formatting data (under
+    // pLine) (compare with Orphans)
+    sal_Bool bFlys          : 1; // Overlapping Flys?
     sal_Bool bPrep          : 1; // PREP_*
     sal_Bool bPrepWidows    : 1; // PREP_WIDOWS
     sal_Bool bPrepAdjust    : 1; // PREP_ADJUST_FRM
     sal_Bool bPrepMustFit   : 1; // PREP_MUST_FIT
-    sal_Bool bFollowField   : 1; // Es steht noch ein Feldrest fuer den Follow an.
+    sal_Bool bFollowField   : 1; // We have a bit of field left for the Follow
 
-    sal_Bool bFixLineHeight : 1; // Feste Zeilenhoehe
+    sal_Bool bFixLineHeight : 1; // Fixed line height
     sal_Bool bFtnNum    : 1; // contents a footnotenumberportion
     sal_Bool bMargin    : 1; // contents a hanging punctuation in the margin
 
-    sal_Bool bFlag00    : 1; //
-    sal_Bool bFlag11    : 1; //
-    sal_Bool bFlag12    : 1; //
-    sal_Bool bFlag13    : 1; //
-    sal_Bool bFlag14    : 1; //
-    sal_Bool bFlag15    : 1; //
-    sal_Bool bFlag16    : 1; //
+    sal_Bool bFlag00    : 1;
+    sal_Bool bFlag11    : 1;
+    sal_Bool bFlag12    : 1;
+    sal_Bool bFlag13    : 1;
+    sal_Bool bFlag14    : 1;
+    sal_Bool bFlag15    : 1;
+    sal_Bool bFlag16    : 1;
 
 public:
     SwParaPortion();
     virtual ~SwParaPortion();
 
-    // setzt alle Formatinformationen zurueck (ausser bFlys wg. 9916)
+    // Resets all formatting information (except for bFlys)
     inline void FormatReset();
 
-    // Setzt die Flags zurueck
+    // Resets the Flags
     inline void ResetPreps();
 
-    // Get/Set-Methoden
+    // Get/Set methods
     inline SwRepaint *GetRepaint() { return &aRepaint; }
     inline const SwRepaint *GetRepaint() const { return &aRepaint; }
     inline SwCharRange *GetReformat() { return &aReformat; }
@@ -312,10 +311,10 @@ public:
     inline SwScriptInfo& GetScriptInfo() { return aScriptInfo; }
     inline const SwScriptInfo& GetScriptInfo() const { return aScriptInfo; }
 
-    // fuer SwTxtFrm::Format: liefert die aktuelle Laenge des Absatzes
+    // For SwTxtFrm::Format: returns the paragraph's current length
     xub_StrLen GetParLen() const;
 
-    // fuer Prepare()
+    // For Prepare()
     sal_Bool UpdateQuoVadis( const XubString &rQuo );
 
     // Flags
@@ -355,11 +354,11 @@ public:
     inline void SetFlag16( const sal_Bool bNew = sal_True ) { bFlag16 = bNew; }
     inline sal_Bool  IsFlag16() const { return bFlag16; }
 
-    // schneller, hoeher, weiter: Read/Write-Methoden fuer den SWG-Filter
+    // Read/Write methods for the SWG filter
     SvStream &ReadSwg ( SvStream& rStream ); //$ istream
     SvStream &WriteSwg( SvStream& rStream ); //$ ostream
 
-    // nErgo in der QuoVadisPortion setzen
+    // Set nErgo in the QuoVadisPortion
     void SetErgoSumNum( const XubString &rErgo );
 
     const SwDropPortion *FindDropPortion() const;
@@ -400,16 +399,16 @@ inline void SwParaPortion::FormatReset()
 {
     nDelta = 0;
     aReformat = SwCharRange( 0, STRING_LEN );
-//  AMA 9916: bFlys muss in SwTxtFrm::_Format() erhalten bleiben, damit
-//  leere Absaetze, die Rahmen ohne Umfluss ausweichen mussten, sich
-//  neu formatieren, wenn der Rahmen aus dem Bereich verschwindet.
-//  bFlys = sal_False;
+    // bFlys needs to be retained in SwTxtFrm::_Format() so that empty
+    // paragraphs that needed to avoid Frames with no flow, reformat
+    // when the Frame disappears from the Area
+    // bFlys = sal_False;
     ResetPreps();
     bFollowField = bFixLineHeight = bMargin = sal_False;
 }
 
 #ifdef UNX
-// C30 ist mit dem ternaeren Ausdruck ueberfordert.
+// The terniary expression is too much for the C30
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
 {
     SwLinePortion *pTmp = pPortion;
