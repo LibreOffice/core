@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <oor:component-data oor:name="Addons" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="AddonUI">
+    <node oor:name="AddonUI" install:module="onlineupdate">
         <node oor:name="OfficeHelp">
             <node oor:name="UpdateCheckJob" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">

@@ -531,30 +531,47 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
 $(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
-$(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
-.ENDIF
+$(MISC)/lang/registry_{$(alllangiso)}.xcd : \
+    $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
+.END
+
+.IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
+$(MISC)/lang/registry_{$(alllangiso)}.xcd : \
+    $(SOLARPCKDIR)/updchk_$$(@:b:s/registry_//).zip
+.END
 
 $(MISC)/lang/registry_%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
+    - $(RM) $(MISC)/$(@:b).list
+    echo '<list>' > $(MISC)/$(@:b).list
+    # Add registry_*.zip content to *.list:
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
     cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
+    # Filter out filenames starting with ".":
+    echo $(foreach,i,$(shell cd $(MISC) && \
+        find $(@:b).unzip -name \[!.\]\*.xcu -print) \
+        '<filename>$i</filename>') >> $(MISC)/$(@:b).list
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
+    # Add fcfg_drivers_*.zip content to *.list:
     rm -rf $(MISC)/fcfg_drivers_$*.unzip
     mkdir $(MISC)/fcfg_drivers_$*.unzip
-    cd $(MISC)/fcfg_drivers_$*.unzip && \
-        unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
-.ENDIF
-    - $(RM) $(MISC)/$(@:b).list
-    # filter out filenames starting with "."
-.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
-    echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip fcfg_drivers_$*.unzip -name \[!.\]\*.xcu -print) \
-        '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
-.ELSE
-    echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip -name \[!.\]\*.xcu -print) \
-        '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
-.ENDIF
+    cd $(MISC)/fcfg_drivers_$*.unzip && unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
+    # Filter out filenames starting with ".":
+    echo $(foreach,i,$(shell cd $(MISC) && \
+        find fcfg_drivers_$*.unzip -name \[!.\]\*.xcu -print) \
+        '<filename>$i</filename>') >> $(MISC)/$(@:b).list
+.END
+.IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
+    # Add updchk_*.zip content to *.list:
+    rm -rf $(MISC)/updchk_$*.unzip
+    mkdir $(MISC)/updchk_$*.unzip
+    cd $(MISC)/updchk_$*.unzip && unzip $(SOLARPCKDIR)/updchk_$*.zip
+    # Filter out filenames starting with ".":
+    echo $(foreach,i,$(shell cd $(MISC) && \
+        find updchk_$*.unzip -name \[!.\]\*.xcu -print) \
+        '<filename>$i</filename>') >> $(MISC)/$(@:b).list
+.END
+    echo '</list>' >> $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
