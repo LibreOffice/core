@@ -39,11 +39,13 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SvgData::ensureReplacement()
+BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
+    const Primitive2DSequence& rSequence,
+    const basegfx::B2DRange& rTargetRange)
 {
-    ensureSequenceAndRange();
+    BitmapEx aRetval;
 
-    if(maReplacement.IsEmpty() && maSequence.hasElements())
+    if(rSequence.hasElements())
     {
         // create replacement graphic from maSequence
         // create XPrimitive2DRenderer
@@ -57,20 +59,19 @@ void SvgData::ensureReplacement()
             if(xPrimitive2DRenderer.is())
             {
                 uno::Sequence< beans::PropertyValue > aViewParameters;
-                const basegfx::B2DRange& rRange(getRange());
                 geometry::RealRectangle2D aRealRect;
 
-                aRealRect.X1 = rRange.getMinX();
-                aRealRect.Y1 = rRange.getMinY();
-                aRealRect.X2 = rRange.getMaxX();
-                aRealRect.Y2 = rRange.getMaxY();
+                aRealRect.X1 = rTargetRange.getMinX();
+                aRealRect.Y1 = rTargetRange.getMinY();
+                aRealRect.X2 = rTargetRange.getMaxX();
+                aRealRect.Y2 = rTargetRange.getMaxY();
 
                 // get system DPI
                 const Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MAP_INCH));
 
                 const uno::Reference< rendering::XBitmap > xBitmap(
                     xPrimitive2DRenderer->rasterize(
-                        maSequence,
+                        rSequence,
                         aViewParameters,
                         aDPI.getWidth(),
                         aDPI.getHeight(),
@@ -83,7 +84,7 @@ void SvgData::ensureReplacement()
 
                     if(xIntBmp.is())
                     {
-                        maReplacement = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+                        aRetval = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
                     }
                 }
             }
@@ -92,6 +93,20 @@ void SvgData::ensureReplacement()
         {
             OSL_ENSURE(sal_False, "Got no graphic::XPrimitive2DRenderer (!)" );
         }
+    }
+
+    return aRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SvgData::ensureReplacement()
+{
+    ensureSequenceAndRange();
+
+    if(maReplacement.IsEmpty() && maSequence.hasElements())
+    {
+        maReplacement = convertPrimitive2DSequenceToBitmapEx(maSequence, getRange());
     }
 }
 

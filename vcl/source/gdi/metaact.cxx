@@ -3816,9 +3816,6 @@ MetaAction* MetaFloatTransparentAction::Clone()
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
-
-    // also neeed to move the content metafile
-    maMtf.Move( nHorzMove, nVertMove );
 }
 
 // ------------------------------------------------------------------------

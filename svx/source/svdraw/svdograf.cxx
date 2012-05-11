@@ -1145,10 +1145,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
         case GRAPHIC_GDIMETAFILE:
         {
             // NUR die aus dem MetaFile erzeugbaren Objekte in eine Gruppe packen und zurueckliefern
-            ImpSdrGDIMetaFileImport aFilter(*GetModel());
-            aFilter.SetScaleRect(aRect);
-            aFilter.SetLayer(GetLayer());
-
+            ImpSdrGDIMetaFileImport aFilter(*GetModel(), GetLayer(), aRect);
             SdrObjGroup* pGrp = new SdrObjGroup();
             sal_uInt32 nInsAnz = aFilter.DoImport(aMtf, *pGrp->GetSubList(), 0);
 
