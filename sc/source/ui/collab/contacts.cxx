@@ -58,7 +58,7 @@ public:
     {
         static long aStaticTabs[]=
         {
-            3 /* count */, 0, 20, 80, 150, 200
+            3 /* count */, 0, 20, 100, 150, 200
         };
 
         maList.SvxSimpleTable::SetTabs( aStaticTabs );

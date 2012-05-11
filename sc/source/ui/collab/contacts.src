@@ -15,8 +15,8 @@ ModelessDialog RID_SCDLG_CONTACTS
 
     FixedLine FL_LABEL
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 400 , 8 ) ;
+        Pos = MAP_APPFONT ( 8 , 2 ) ;
+        Size = MAP_APPFONT ( 198 , 8 ) ;
         Text [ en-US ] = "Select a contact to collaborate with" ;
     };
     Control CTL_LIST
