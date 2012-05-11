@@ -79,6 +79,7 @@
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
 #include "sheetevents.hxx"
+#include "colorscale.hxx"
 #include "queryentry.hxx"
 
 #include "globalnames.hxx"
@@ -1006,6 +1007,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
             UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
+            if ( mpColorScaleList )
+                mpColorScaleList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pCondFormList )
                 pCondFormList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pValidationList )

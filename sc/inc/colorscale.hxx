@@ -56,6 +56,8 @@ public:
     double GetValue() const;
     void SetFormula(const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo);
+    void UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     bool GetMin() const;
     bool GetMax() const;

@@ -75,6 +75,7 @@
 #include "markdata.hxx"
 #include "drwlayer.hxx"
 #include "conditio.hxx"
+#include "colorscale.hxx"
 #include "validat.hxx"
 #include "prnsave.hxx"
 #include "chgtrack.hxx"
@@ -477,6 +478,8 @@ bool ScDocument::InsertTab( SCTAB nPos, const rtl::OUString& rName,
                 //  update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                if ( mpColorScaleList )
+                    mpColorScaleList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 // sheet names of references are not valid until sheet is inserted
@@ -565,6 +568,8 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rName
                 //    update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets);
+                if ( mpColorScaleList )
+                    mpColorScaleList->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets);
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets );
                 // sheet names of references are not valid until sheet is inserted
@@ -629,6 +634,8 @@ bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
+                if ( mpColorScaleList )
+                    mpColorScaleList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pUnoBroadcaster )
@@ -718,6 +725,8 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc 
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
+                if ( mpColorScaleList )
+                    mpColorScaleList->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if ( pUnoBroadcaster )

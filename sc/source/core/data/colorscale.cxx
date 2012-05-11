@@ -82,6 +82,15 @@ void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabN
     }
 }
 
+void ScColorScaleEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    if(mpCell)
+    {
+        mpCell->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+    }
+}
+
 const Color& ScColorScaleEntry::GetColor() const
 {
     return maColor;
@@ -390,6 +399,17 @@ void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
     }
 }
 
+void ScColorScaleFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    maRanges.UpdateReference( eUpdateRefMode, mpDoc, rRange, nDx, nDy, nDz );
+
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+    }
+}
+
 bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
 {
     bool bNeedUpdate = false;
@@ -497,6 +517,15 @@ void ScColorScaleFormatList::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
     for(iterator itr = begin(); itr != end(); ++itr)
     {
         itr->UpdateMoveTab(nOldTab, nNewTab);
+    }
+}
+
+void ScColorScaleFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
     }
 }
 
