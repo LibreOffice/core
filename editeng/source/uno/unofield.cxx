@@ -148,12 +148,11 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
     {
     case text::textfield::Type::EXTENDED_DATE:
     case text::textfield::Type::EXTENDED_TIME:
+    case text::textfield::Type::DATE:
         return &aExDateTimeFieldPropertySet_Impl;
     case text::textfield::Type::URL:
         return &aUrlFieldPropertySet_Impl;
-    case text::textfield::Type::DATE:
     case text::textfield::Type::TIME:
-    case text::textfield::Type::DATE_TIME:
         return &aDateTimeFieldPropertySet_Impl;
     case text::textfield::Type::EXTENDED_FILE:
         return &aExtFileFieldPropertySet_Impl;
@@ -161,6 +160,7 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         return &aAuthorFieldPropertySet_Impl;
     case text::textfield::Type::MEASURE:
         return &aMeasureFieldPropertySet_Impl;
+    case text::textfield::Type::DATE_TIME:
     default:
         return &aEmptyPropertySet_Impl;
     }
@@ -877,12 +877,12 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
             pServices[3] = "com.sun.star.presentation.textfield.Footer";
         break;
         case text::textfield::Type::DATE_TIME:
-            pServices[2] = "com.sun.star.text.TextField.DateTime";
-            pServices[3] = "com.sun.star.text.textfield.DateTime";
-        break;
-        case text::textfield::Type::EXTENDED_DATE:
             pServices[2] = "com.sun.star.presentation.TextField.DateTime";
             pServices[3] = "com.sun.star.presentation.textfield.DateTime";
+        break;
+        case text::textfield::Type::EXTENDED_DATE:
+            pServices[2] = "com.sun.star.text.TextField.DateTime";
+            pServices[3] = "com.sun.star.text.textfield.DateTime";
         break;
         default:
             aSeq.realloc(0);
