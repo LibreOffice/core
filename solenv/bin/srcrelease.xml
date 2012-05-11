@@ -31,7 +31,7 @@
   <property name="release.tar.gz" value="${out.dir}/${release.file.name}.tar.gz"/>
   <property name="release.tar.bz2" value="${out.dir}/${release.file.name}.tar.bz2"/>
 
-  <property name="excludes.list" value="configure, moz/zipped/**, **/.svn **/.gitignore, **/.git, warn, set_soenv, solver/**, makefile.mk, config.log, config.parms, config.status, bootstrap, autom4te.cache/**, MacOSXX86Env.*, external/unowinreg/unowinreg.dll" />
+  <property name="excludes.list" value="configure, moz/zipped/*.zip, **/.svn **/.gitignore, **/.git, warn, set_soenv, solver/**, makefile.mk, config.log, config.parms, config.status, bootstrap, autom4te.cache/**, MacOSXX86Env.*, external/unowinreg/unowinreg.dll" />
   <property name="excludes.executables" value="solenv/bin/macosx-create-bundle, solenv/bin/linkoo, solenv/bin/localize, solenv/bin/createpdbrelocators, solenv/bin/langwrap, solenv/bin/makedepn, solenv/bin/packmodule, solenv/bin/rpm-wrapper, solenv/bin/relocate, solenv/bin/receditor, solenv/bin/subsequenttests, **/*.sh, **/*.bat, **/*.exe, configure.cmd, oowintool, config.sub, config.guess, **/*.pl"/>
   <property name="includes.mk" value="inc/unxmac*.mk inc/unxlng*.mk inc/wntmsci*.mk inc/unxsol*.mk" />
   <property name="excludes.outdirs" value="**/unxmacx*/**, **/unxlng*/**, **/unxsol*/**, **/wntmsci*/**" />
@@ -59,7 +59,7 @@
       <zipfileset dir="main" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
       <zipfileset dir="extras" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
       <zipfileset dir="main" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
-      <zipfileset dir="extras" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <zipfileset dir="extras" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
       <zipfileset dir="main/solenv" includes="${includes.mk}" prefix="${release.dir.name}/main/solenv"/>
     </zip>
     <echo level="verbose" message="   ... DONE"/>
@@ -75,7 +75,7 @@
       <tarfileset dir="main" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
       <tarfileset dir="extras" excludes="${excludes.list},${excludes.executables},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
       <tarfileset dir="main" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
-      <tarfileset dir="extras" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/main"/>
+      <tarfileset dir="extras" includes="${excludes.executables}" filemode="755" excludes="${excludes.list},${excludes.outdirs}" prefix="${release.dir.name}/extras"/>
       <tarfileset dir="main/solenv" includes="${includes.mk}" prefix="${release.dir.name}/main/solenv"/>
     </tar>
     <echo level="verbose" message="   ... DONE"/>
