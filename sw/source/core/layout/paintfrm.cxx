@@ -4544,6 +4544,89 @@ double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine* pOppo
     return nExtent;
 }
 
+static void
+lcl_MakeBorderLine(SwRect const& rRect,
+        bool const isVerticalInModel,
+        bool const isLeftOrTopBorderInModel,
+        SvxBorderLine const& rBorder,
+        SvxBorderLine const*const pLeftOrTopNeighbour,
+        SvxBorderLine const*const pRightOrBottomNeighbour)
+{
+    // fdo#44010: for vertical text lcl_PaintTopBottomLine produces vertical
+    // borders and lcl_PaintLeftRightLine horizontal ones.
+    bool const isVertical(rRect.Height() > rRect.Width());
+    bool const isLeftOrTopBorder((isVerticalInModel == isVertical)
+            ? isLeftOrTopBorderInModel
+            : (isLeftOrTopBorderInModel != isVertical));
+    SvxBorderLine const*const pStartNeighbour(
+            (!isVertical && isVerticalInModel)
+            ? pRightOrBottomNeighbour : pLeftOrTopNeighbour);
+    SvxBorderLine const*const pEndNeighbour(
+            (pStartNeighbour == pLeftOrTopNeighbour)
+            ? pRightOrBottomNeighbour : pLeftOrTopNeighbour);
+
+    basegfx::B2DPoint aStart;
+    basegfx::B2DPoint aEnd;
+    if (isVertical)
+    {   // fdo#38635: always from outer edge
+        double const fStartX( (isLeftOrTopBorder)
+                ? rRect.Left()  + (rRect.Width() / 2.0)
+                : rRect.Right() - (rRect.Width() / 2.0));
+        aStart.setX(fStartX);
+        aStart.setY(rRect.Top() +
+                lcl_AlignHeight(lcl_GetLineWidth(pStartNeighbour))/2.0);
+        aEnd.setX(fStartX);
+        aEnd.setY(rRect.Bottom() -
+                lcl_AlignHeight(lcl_GetLineWidth(pEndNeighbour))/2.0);
+    }
+    else
+    {   // fdo#38635: always from outer edge
+        double const fStartY( (isLeftOrTopBorder)
+                ? rRect.Top()    + (rRect.Height() / 2.0)
+                : rRect.Bottom() - (rRect.Height() / 2.0));
+        aStart.setX(rRect.Left() +
+                lcl_AlignWidth(lcl_GetLineWidth(pStartNeighbour))/2.0);
+        aStart.setY(fStartY);
+        aEnd.setX(rRect.Right() -
+                lcl_AlignWidth(lcl_GetLineWidth(pEndNeighbour))/2.0);
+        aEnd.setY(fStartY);
+    }
+
+    double const nExtentLeftStart = (isLeftOrTopBorder == isVertical)
+        ?   lcl_GetExtent(pStartNeighbour, 0)
+        :   lcl_GetExtent(0, pStartNeighbour);
+    double const nExtentLeftEnd = (isLeftOrTopBorder == isVertical)
+        ?   lcl_GetExtent(pEndNeighbour, 0)
+        :   lcl_GetExtent(0, pEndNeighbour);
+    double const nExtentRightStart = (isLeftOrTopBorder == isVertical)
+        ?   lcl_GetExtent(0, pStartNeighbour)
+        :   lcl_GetExtent(pStartNeighbour, 0);
+    double const nExtentRightEnd = (isLeftOrTopBorder == isVertical)
+        ?   lcl_GetExtent(0, pEndNeighbour)
+        :   lcl_GetExtent(pEndNeighbour, 0);
+
+    double const nLeftWidth = (isLeftOrTopBorder == isVertical)
+         ? rBorder.GetInWidth() : rBorder.GetOutWidth();
+    double const nRightWidth = (isLeftOrTopBorder == isVertical)
+         ? rBorder.GetOutWidth() : rBorder.GetInWidth();
+    Color const aLeftColor = (isLeftOrTopBorder == isVertical)
+        ? rBorder.GetColorIn(isLeftOrTopBorder)
+        : rBorder.GetColorOut(isLeftOrTopBorder);
+    Color const aRightColor = (isLeftOrTopBorder == isVertical)
+        ? rBorder.GetColorOut(isLeftOrTopBorder)
+        : rBorder.GetColorIn(isLeftOrTopBorder);
+
+    ::rtl::Reference<BorderLinePrimitive2D> const xLine =
+        new BorderLinePrimitive2D(
+            aStart, aEnd, nLeftWidth, rBorder.GetDistance(), nRightWidth,
+            nExtentLeftStart, nExtentLeftEnd,
+            nExtentRightStart, nExtentRightEnd,
+            aLeftColor.getBColor(), aRightColor.getBColor(),
+            rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
+            rBorder.GetStyle() );
+    g_pBorderLines->AddBorderLine(xLine);
+}
+
 // OD 19.05.2003 #109667# - merge <lcl_PaintLeftLine> and <lcl_PaintRightLine>
 // into new method <lcl_PaintLeftRightLine(..)>
 void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
@@ -4608,41 +4691,8 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
 
     if ( lcl_GetLineWidth( pLeftRightBorder ) > 0 )
     {
-        double nExtentIS = lcl_GetExtent( pTopBorder, NULL );
-        double nExtentIE = lcl_GetExtent( pBottomBorder, NULL );
-        double nExtentOS = lcl_GetExtent( NULL, pTopBorder );
-        double nExtentOE = lcl_GetExtent( NULL, pBottomBorder );
-
-        if ( !_bLeft )
-        {
-            nExtentIS = lcl_GetExtent( NULL, pTopBorder );
-            nExtentIE = lcl_GetExtent( NULL, pBottomBorder );
-            nExtentOS = lcl_GetExtent( pTopBorder, NULL );
-            nExtentOE = lcl_GetExtent( pBottomBorder, NULL );
-        }
-
-        double const fStartX( (_bLeft) // fdo#38635: always from outer edge
-                ? aRect.Left()  + (aRect.Width() / 2.0)
-                : aRect.Right() - (aRect.Width() / 2.0));
-        basegfx::B2DPoint const aStart(fStartX,
-            aRect.Top() + lcl_AlignHeight(lcl_GetLineWidth(pTopBorder))/2.0 );
-        basegfx::B2DPoint const aEnd(fStartX,
-            aRect.Bottom() - lcl_AlignHeight(lcl_GetLineWidth(pBottomBorder))/2.0 );
-
-        double nLeftWidth = !_bLeft ? pLeftRightBorder->GetOutWidth() : pLeftRightBorder->GetInWidth( );
-        double nRightWidth = !_bLeft ? pLeftRightBorder->GetInWidth() : pLeftRightBorder->GetOutWidth( );
-        Color aLeftColor = _bLeft ? pLeftRightBorder->GetColorOut( _bLeft ) : pLeftRightBorder->GetColorIn( _bLeft );
-        Color aRightColor = _bLeft ? pLeftRightBorder->GetColorIn( _bLeft ) : pLeftRightBorder->GetColorOut( _bLeft );
-
-        ::rtl::Reference<BorderLinePrimitive2D> xLine =
-            new BorderLinePrimitive2D(
-                aStart, aEnd, nLeftWidth, pLeftRightBorder->GetDistance(), nRightWidth,
-                nExtentIS, nExtentIE, nExtentOS, nExtentOE,
-                aLeftColor.getBColor(), aRightColor.getBColor(),
-                pLeftRightBorder->GetColorGap().getBColor(),
-                pLeftRightBorder->HasGapColor(), pLeftRightBorder->GetStyle( ) );
-
-        g_pBorderLines->AddBorderLine(xLine);
+        lcl_MakeBorderLine(
+            aRect, true, _bLeft, *pLeftRightBorder, pTopBorder, pBottomBorder);
     }
 }
 
@@ -4688,43 +4738,8 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
 
     if ( lcl_GetLineWidth( pTopBottomBorder ) > 0 )
     {
-        double nExtentIS = lcl_GetExtent( NULL, pLeftBorder );
-        double nExtentIE = lcl_GetExtent( NULL, pRightBorder );
-        double nExtentOS = lcl_GetExtent( pLeftBorder, NULL );
-        double nExtentOE = lcl_GetExtent( pRightBorder, NULL );
-
-        if ( !_bTop )
-        {
-            nExtentIS = lcl_GetExtent( pLeftBorder, NULL );
-            nExtentIE = lcl_GetExtent( pRightBorder, NULL );
-            nExtentOS = lcl_GetExtent( NULL, pLeftBorder );
-            nExtentOE = lcl_GetExtent( NULL, pRightBorder );
-        }
-
-        double const fStartY( (_bTop) // fdo#38635: always from outer edge
-                ? aRect.Top()    + (aRect.Height() / 2.0)
-                : aRect.Bottom() - (aRect.Height() / 2.0));
-        basegfx::B2DPoint const aStart(
-            aRect.Left() + lcl_AlignWidth(lcl_GetLineWidth(pLeftBorder))/2.0,
-            fStartY );
-        basegfx::B2DPoint const aEnd(
-            aRect.Right() - lcl_AlignWidth(lcl_GetLineWidth(pRightBorder))/2.0,
-            fStartY );
-
-        double nLeftWidth = !_bTop ? pTopBottomBorder->GetOutWidth() : pTopBottomBorder->GetInWidth( );
-        double nRightWidth = !_bTop ? pTopBottomBorder->GetInWidth() : pTopBottomBorder->GetOutWidth( );
-        Color aLeftColor = _bTop ? pTopBottomBorder->GetColorOut( _bTop ) : pTopBottomBorder->GetColorIn( _bTop );
-        Color aRightColor = _bTop ? pTopBottomBorder->GetColorIn( _bTop ) : pTopBottomBorder->GetColorOut( _bTop );
-
-        ::rtl::Reference<BorderLinePrimitive2D> xLine =
-            new BorderLinePrimitive2D(
-                aStart, aEnd, nLeftWidth, pTopBottomBorder->GetDistance(), nRightWidth,
-                nExtentIS, nExtentIE, nExtentOS, nExtentOE,
-                aLeftColor.getBColor(), aRightColor.getBColor(),
-                pTopBottomBorder->GetColorGap().getBColor(),
-                pTopBottomBorder->HasGapColor(), pTopBottomBorder->GetStyle( ) );
-
-        g_pBorderLines->AddBorderLine(xLine);
+        lcl_MakeBorderLine(
+            aRect, false, _bTop, *pTopBottomBorder, pLeftBorder, pRightBorder);
     }
 }
 
