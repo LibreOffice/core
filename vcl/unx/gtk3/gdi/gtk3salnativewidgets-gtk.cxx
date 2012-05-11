@@ -1153,18 +1153,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetButtonRolloverTextColor( aTextColor );
     aStyleSet.SetFieldRolloverTextColor( aTextColor );
 
-    // FIXME: each gtk3 theme needs to define a set of well-known
-    // color names for LibreOffice eg.
-    // @define-color tooltip_bg_color #343434;
-    GdkRGBA tooltip_bg_color;
-    if( gtk_style_context_lookup_color( pStyle, "tooltip_bg_color", &tooltip_bg_color ) )
-    {
-        aStyleSet.SetHelpTextColor( getColor( tooltip_bg_color ) );
-        fprintf (stderr, "Set tooltip bg color %g %g %g %g\n",
-                 tooltip_bg_color.red, tooltip_bg_color.green,
-                 tooltip_bg_color.blue, tooltip_bg_color.alpha );
-    }
-
     // background colors
     GdkRGBA background_color;
     gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_NORMAL, &background_color);
@@ -1175,6 +1163,25 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetDialogColor( aBackColor );
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetCheckedColorSpecialCase( );
+
+    // highlighting colors
+    gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
+    ::Color aHighlightColor = getColor( text_color );
+    gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
+    ::Color aHighlightTextColor = getColor( text_color );
+    aStyleSet.SetHighlightColor( aHighlightColor );
+    aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+
+    // tooltip colors
+    GdkRGBA tooltip_bg_color, tooltip_fg_color;
+    gtk_style_context_save (pStyle);
+    gtk_style_context_add_class (pStyle, GTK_STYLE_CLASS_TOOLTIP);
+    gtk_style_context_get_color (pStyle, GTK_STATE_FLAG_NORMAL, &tooltip_fg_color);
+    gtk_style_context_get_background_color (pStyle, GTK_STATE_FLAG_NORMAL, &tooltip_bg_color);
+    gtk_style_context_restore (pStyle);
+
+    aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
+    aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
 
 { // FIXME: turn me into a helper function ...
     // construct style context for text view
@@ -1194,14 +1201,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // This baby is the default page/paper color
     aStyleSet.SetWindowColor( aBackFieldColor );
 }
-
-    // highlighting colors
-    gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-    ::Color aHighlightColor = getColor( text_color );
-    gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-    ::Color aHighlightTextColor = getColor( text_color );
-    aStyleSet.SetHighlightColor( aHighlightColor );
-    aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( sal_True );
