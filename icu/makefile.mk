@@ -174,6 +174,7 @@ OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicule.a \
     $(BUILD_DIR)$/lib$/libicutu.a
 .ELIF "$(OS)"=="ANDROID"
+BUILD_ACTION+= && cat uconfig.h.prepend common/unicode/uconfig.h >common/unicode/uconfig.h.new && mv common/unicode/uconfig.h.new common/unicode/uconfig.h
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudatalo.so \
     $(BUILD_DIR)$/lib$/libicuuclo.so \
