@@ -385,10 +385,6 @@ void PresenterHelpView::CheckFontSize (void)
     if (mpFont.get() == NULL)
         return;
 
-    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-    if (aWindowBox.Width<=0 || aWindowBox.Height<=0)
-        return;
-
     sal_Int32 nBestSize (6);
 
     // Scaling down and then reformatting can cause the text to be too large
@@ -396,7 +392,7 @@ void PresenterHelpView::CheckFontSize (void)
     // small enough.  Restrict the number of loops.
     for (int nLoopCount=0; nLoopCount<5; ++nLoopCount)
     {
-        double nY (gnVerticalBorder);
+        double nY (0.0);
         TextContainer::iterator iBlock (mpTextContainer->begin());
         TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
         for ( ; iBlock!=iBlockEnd; ++iBlock)
@@ -404,7 +400,7 @@ void PresenterHelpView::CheckFontSize (void)
                 (*iBlock)->maLeft.GetHeight(),
                 (*iBlock)->maRight.GetHeight());
 
-        const double nHeightDifference (nY - (aWindowBox.Height-gnVerticalBorder));
+        const double nHeightDifference (nY - (mnSeparatorY-gnVerticalBorder));
         if (nHeightDifference <= 0 && nHeightDifference > -50)
         {
             // We have found a good font size that is large and leaves not
@@ -412,16 +408,14 @@ void PresenterHelpView::CheckFontSize (void)
             return;
         }
 
-        // Font is too large.  Make it smaller.
-
         // Use a simple linear transformation to calculate initial guess of
         // a size that lets all help text be shown inside the window.
-        const double nScale (double(aWindowBox.Height-gnVerticalBorder) / nY);
-        if (nScale > 0.95 && nScale <1.05)
+        const double nScale (double(mnSeparatorY-gnVerticalBorder) / nY);
+        if (nScale > 1.0 && nScale < 1.05)
             break;
 
-        sal_Int32 nFontSizeGuess (::std::max(sal_Int32(1),sal_Int32(mpFont->mnSize * nScale)));
-        if (nHeightDifference<0 && mpFont->mnSize>nBestSize)
+        sal_Int32 nFontSizeGuess (sal_Int32(mpFont->mnSize * nScale));
+        if (nHeightDifference<=0 && mpFont->mnSize>nBestSize)
             nBestSize = mpFont->mnSize;
         mpFont->mnSize = nFontSizeGuess;
         mpFont->mxFont = NULL;
@@ -673,12 +667,53 @@ void LineDescriptorList::FormatText (
 
     vector<OUString>::const_iterator iPart (rTextParts.begin());
     vector<OUString>::const_iterator iEnd (rTextParts.end());
-    for ( ; iPart!=iEnd; ++iPart)
+    while (iPart!=iEnd)
     {
         if (aLineDescriptor.IsEmpty())
         {
             // Avoid empty lines.
-            aLineDescriptor.AddPart(*iPart, rxFont);
+            if (PresenterCanvasHelper::GetTextSize(
+                rxFont, *iPart).Width > nMaximalWidth)
+            {
+                const sal_Char cSpace (' ');
+
+                sal_Int32 nIndex (0);
+                sal_Int32 nStart (0);
+                sal_Int32 nLength (iPart->getLength());
+                while (nIndex < nLength)
+                {
+                    sal_Int32  nSpaceIndex (iPart->indexOf(cSpace, nIndex));
+                    while (nSpaceIndex >= 0 && PresenterCanvasHelper::GetTextSize(
+                        rxFont, iPart->copy(nStart, nSpaceIndex-nStart)).Width <= nMaximalWidth)
+                    {
+                        nIndex = nSpaceIndex;
+                        nSpaceIndex = iPart->indexOf(cSpace, nIndex+1);
+                    }
+
+                    if (nSpaceIndex < 0 && PresenterCanvasHelper::GetTextSize(
+                        rxFont, iPart->copy(nStart, nLength-nStart)).Width <= nMaximalWidth)
+                    {
+                        nIndex = nLength;
+                    }
+
+                    if (nIndex == nStart)
+                    {
+                        nIndex = nLength;
+                    }
+
+                    aLineDescriptor.AddPart(iPart->copy(nStart, nIndex-nStart), rxFont);
+                    if (nIndex != nLength)
+                    {
+                        mpLineDescriptors->push_back(aLineDescriptor);
+                        aLineDescriptor = LineDescriptor();
+                    }
+                    nStart = nIndex;
+                }
+            }
+            else
+            {
+                aLineDescriptor.AddPart(*iPart, rxFont);
+            }
         }
         else if (PresenterCanvasHelper::GetTextSize(
             rxFont, aLineDescriptor.msLine+A2S(", ")+*iPart).Width > nMaximalWidth)
@@ -686,12 +721,13 @@ void LineDescriptorList::FormatText (
             aLineDescriptor.AddPart(A2S(","), rxFont);
             mpLineDescriptors->push_back(aLineDescriptor);
             aLineDescriptor = LineDescriptor();
-            aLineDescriptor.AddPart(*iPart, rxFont);
+            continue;
         }
         else
         {
             aLineDescriptor.AddPart(A2S(", ")+*iPart, rxFont);
         }
+        ++iPart;
     }
     if ( ! aLineDescriptor.IsEmpty())
     {
