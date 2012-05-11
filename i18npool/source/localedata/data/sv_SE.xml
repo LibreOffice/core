@@ -35,6 +35,8 @@
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$kr-41D]">
+    <DateAcceptancePattern>D/M</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M Y</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>Standard</FormatCode>
     </FormatElement>
