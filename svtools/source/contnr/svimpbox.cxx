@@ -1656,14 +1656,6 @@ void SvImpLBox::EntrySelected( SvLBoxEntry* pEntry, sal_Bool bSelect )
     if( nFlags & F_IGNORE_SELECT )
         return;
 
-    /*
-    if( (m_nStyle & WB_HIDESELECTION) && pEntry && !pView->HasFocus() )
-    {
-        SvViewData* pViewData = pView->GetViewData( pEntry );
-        pViewData->SetCursored( bSelect );
-    }
-    */
-
     nFlags &= (~F_DESEL_ALL);
     if( bSelect &&
         aSelEng.GetSelectionMode() == SINGLE_SELECTION &&
@@ -1912,23 +1904,6 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
         }
         else if( !pStartEntry )
             pView->Invalidate();
-
-        // invalidate the lines
-        /*
-        if( (bEntryVisible || bPrevEntryVisible) &&
-            (m_nStyle & ( WB_HASLINES | WB_HASLINESATROOT )) )
-        {
-            SvLBoxTab* pTab = pView->GetFirstDynamicTab();
-            if( pTab )
-            {
-                long nDX = pView->GetTabPos( pEntry, pTab );
-                Point aTmpPoint;
-                Size aSize( nDX, nY );
-                Rectangle aRect( aTmpPoint, aSize );
-                pView->Invalidate( aRect );
-            }
-        }
-        */
 
         SetMostRight( pEntry );
         aVerSBar.SetRange( Range(0, pView->GetVisibleCount()-1));
@@ -2650,21 +2625,6 @@ void SvImpLBox::GetFocus()
             InvalidateEntry( pEntry );
             pEntry = pView->NextSelected( pEntry );
         }
-        /*
-        SvLBoxEntry* pEntry = pView->GetModel()->First();
-        while( pEntry )
-        {
-            SvViewData* pViewData = pView->GetViewData( pEntry );
-            if( pViewData->IsCursored() )
-            {
-                pViewData->SetCursored( sal_False );
-                InvalidateEntry( pEntry );
-            }
-            pEntry = pView->GetModel()->Next( pEntry );
-        }
-        */
-
-
     }
 }
 
@@ -2715,12 +2675,6 @@ void ImpLBSelEng::BeginDrag()
     pImp->BeginDrag();
 }
 
-/*
-void ImpLBSelEng::EndDrag( const Point& )
-{
-}
-*/
-
 void ImpLBSelEng::CreateAnchor()
 {
     pImp->pAnchor = pImp->pCursor;
@@ -2730,14 +2684,6 @@ void ImpLBSelEng::DestroyAnchor()
 {
     pImp->pAnchor = 0;
 }
-
-/*
-void ImpLBSelEng::CreateCursor()
-{
-    pImp->pAnchor = 0;
-}
-*/
-
 
 sal_Bool ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
 {
@@ -2772,16 +2718,6 @@ void ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
         return;
     pImp->SelectEntry( pEntry, sal_False );
 }
-
-/*
-void ImpLBSelEng::SelectAtPoint( const Point& rPoint )
-{
-    SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
-    if( !pEntry )
-        return;
-    pImp->SelectEntry( pEntry, sal_True );
-}
-*/
 
 void ImpLBSelEng::DeselectAll()
 {

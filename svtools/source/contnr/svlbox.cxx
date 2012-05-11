@@ -344,31 +344,6 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
     return nOffset;
 }
 
-/*
-long SvLBoxTab::CalcOffset( const String& rStr, const OutputDevice& rOutDev )
-{
-    DBG_CHKTHIS(SvLBoxTab,0);
-    long nWidth;
-    if ( nFlags & SV_LBOXTAB_ADJUST_NUMERIC )
-    {
-        sal_uInt16 nPos = rStr.Search( '.' );
-        if ( nPos == STRING_NOTFOUND )
-            nPos = rStr.Search( ',' );
-        if ( nPos == STRING_NOTFOUND )
-            nPos = STRING_LEN;
-
-        nWidth = rOutDev.GetTextSize( rStr, 0, nPos ).Width();
-        nWidth *= -1;
-    }
-    else
-    {
-        nWidth = rOutDev.GetTextSize( rStr ).Width();
-        nWidth = CalcOffset( nWidth );
-    }
-    return nWidth;
-}
-*/
-
 // ***************************************************************
 // class SvLBoxItem
 // ***************************************************************
@@ -821,31 +796,6 @@ sal_Bool SvLBox::NotifyCopying(
 {
     DBG_CHKTHIS(SvLBox,0);
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
-    /*
-    DBG_ASSERT(pEntry,"NotifyCopying:SourceEntry?");
-    if( !pTarget )
-    {
-        rpNewParent = 0;
-        rNewChildPos = 0;
-        return sal_True;
-    }
-    if ( !pTarget->HasChildren() && !pTarget->HasChildrenOnDemand() )
-    {
-        // Fall 1
-        rpNewParent = GetParent( pTarget );
-        rNewChildPos = GetRelPos( pTarget ) + 1;
-    }
-    else
-    {
-        // Faelle 2 & 3
-        rpNewParent = pTarget;
-        if( IsExpanded(pTarget))
-            rNewChildPos = 0;
-        else
-            rNewChildPos = LIST_APPEND;
-    }
-    return sal_True;
-    */
 }
 
 SvLBoxEntry* SvLBox::CloneEntry( SvLBoxEntry* pSource )
