@@ -257,7 +257,7 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
             OSL_ENSURE( pDeepInner, "TableNodeInfoInner not found");
             // Make sure we always start a row between ending one and starting a cell.
             // In case of subtables, we may not get the first cell.
-            if ((pDeepInner && pDeepInner->getCell() == 0) || m_bTableRowEnded)
+            if (pDeepInner && (pDeepInner->getCell() == 0 || m_bTableRowEnded))
             {
                 m_bTableRowEnded = false;
                 StartTableRow( pDeepInner );
