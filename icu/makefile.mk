@@ -121,7 +121,7 @@ icu_CXXFLAGS+=-fno-omit-frame-pointer
 .ENDIF
 
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
-# Problems with uint64_t on Android unless disabling strictness
+# Problems on Android unless disabling dynamic loading
 DISABLE_DYLOAD=--disable-dyload
 .ENDIF
 
