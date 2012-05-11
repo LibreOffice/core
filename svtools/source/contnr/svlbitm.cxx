@@ -36,8 +36,6 @@
 #include <vcl/sound.hxx>
 #include <vcl/salnativewidgets.hxx>
 
-#define TABOFFS_NOT_VALID -2000000
-
 struct SvLBoxButtonData_Impl
 {
     SvLBoxEntry*    pEntry;

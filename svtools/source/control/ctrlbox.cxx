@@ -62,9 +62,6 @@
 #define GAPTOEXTRAPREVIEW 10
 #define MAXPREVIEWWIDTH 120
 
-#define TWIPS_TO_PT100(val) (val * 5)
-#define PT100_TO_TWIPS(val) (val / 5)
-
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
 
 using namespace ::com::sun::star;

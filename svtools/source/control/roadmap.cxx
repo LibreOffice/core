@@ -43,7 +43,6 @@
 #define ROADMAP_INDENT_Y        27
 #define ROADMAP_ITEM_DISTANCE_Y 6
 #define RMINCOMPLETE        -1
-#define NADDITEM            1
 
 //.........................................................................
 namespace svt

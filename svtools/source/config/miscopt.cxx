@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 
 #define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 #define ROOTNODE_MISC                       ASCII_STR("Office.Common/Misc")
-#define DEFAULT_PLUGINSENABLED              sal_True;
 
 #define PROPERTYNAME_PLUGINSENABLED         ASCII_STR("PluginsEnabled")
 #define PROPERTYHANDLE_PLUGINSENABLED       0
@@ -75,8 +74,6 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_ALWAYSALLOWSAVE      9
 #define PROPERTYNAME_EXPERIMENTALMODE       ASCII_STR("ExperimentalMode")
 #define PROPERTYHANDLE_EXPERIMENTALMODE     10
-
-#define PROPERTYCOUNT                       11
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 

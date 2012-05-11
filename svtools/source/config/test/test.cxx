@@ -96,9 +96,6 @@ using namespace ::com::sun::star::registry  ;
 
 #define ASCII( STEXT )                      OUString( RTL_CONSTASCII_USTRINGPARAM( STEXT ))
 
-#define SERVICENAME_SIMPLEREGISTRY          OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.SimpleRegistry" ))
-#define SERVICENAME_NESTEDREGISTRY          OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.NestedRegistry" ))
-
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________

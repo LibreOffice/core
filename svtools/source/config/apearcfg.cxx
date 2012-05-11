@@ -36,7 +36,6 @@
 #include <rtl/logfile.hxx>
 #include <sal/macros.h>
 
-#define DEFAULT_LOOKNFEEL   0
 #define DEFAULT_DRAGMODE    2
 #define DEFAULT_SNAPMODE    0
 #define DEFAULT_SCALEFACTOR 100

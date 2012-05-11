@@ -46,7 +46,6 @@
 #include <algorithm>
 #include <memory>
 
-#define DD_SCROLL_PIXEL 24
 #define IMPICNVIEW_ACC_RETURN 1
 #define IMPICNVIEW_ACC_ESCAPE 2
 
