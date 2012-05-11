@@ -99,7 +99,6 @@
 #define CMD_SID_FOCUSURLBOX                         ".uno:FocusUrlBox"
 #define CMD_SID_FORMATMENU                          ".uno:FormatMenu"
 #define CMD_SID_STYLE_FAMILY3                       ".uno:FrameStyle"
-#define CMD_SID_FRAMETITLE                          ".uno:FrameTitle"
 #define CMD_SID_PROGFILENAME                        ".uno:FullName"
 #define CMD_SID_DOCFULLNAME                         ".uno:FullName"
 #define CMD_SID_WIN_FULLSCREEN                      ".uno:FullScreen"
