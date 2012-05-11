@@ -33,24 +33,44 @@
 ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
     mnVal(nVal),
     maColor(rCol),
+    mpCell(NULL),
     mbMin(false),
     mbMax(false),
-    mbPercent(false){
-
+    mbPercent(false)
+{
 }
 
 ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     maColor(rEntry.maColor),
-    mbMin(false),
-    mbMax(false),
-    mbPercent(false)
+    mpCell(NULL),
+    mbMin(rEntry.mbMin),
+    mbMax(rEntry.mbMax),
+    mbPercent(rEntry.mbPercent)
 {
+}
 
+ScColorScaleEntry::~ScColorScaleEntry()
+{
+}
+
+void ScColorScaleEntry::SetFormula( const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
+{
+    mpCell.reset(new ScFormulaCell( pDoc, rAddr, rFormula, eGrammar ));
+    mpCell->StartListeningTo( pDoc );
 }
 
 double ScColorScaleEntry::GetValue() const
 {
+    if(mpCell)
+    {
+        mpCell->Interpret();
+        if(mpCell->IsValue())
+            return mpCell->GetValue();
+
+        return std::numeric_limits<double>::max();
+    }
+
     return mnVal;
 }
 

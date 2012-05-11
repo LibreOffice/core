@@ -27,18 +27,22 @@
  */
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <formula/grammar.hxx>
 #include <tools/color.hxx>
 #include <rangelst.hxx>
 
 //TODO: merge this with conditio.hxx
 
 class ScDocument;
+class ScFormulaCell;
 
 class SC_DLLPUBLIC ScColorScaleEntry
 {
 private:
     double mnVal;
     Color maColor;
+    boost::scoped_ptr<ScFormulaCell> mpCell;
 
     bool mbMin;
     bool mbMax;
@@ -46,9 +50,11 @@ private:
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
+    ~ScColorScaleEntry();
 
     const Color& GetColor() const;
     double GetValue() const;
+    void SetFormula(const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
     bool GetMin() const;
     bool GetMax() const;
@@ -80,6 +86,8 @@ public:
 
     void DataChanged(const ScRange& rRange);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
+    void UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
@@ -105,6 +113,8 @@ public:
 
     void DataChanged(const ScRange& rRange);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
+    void UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     iterator begin();
     const_iterator begin() const;
