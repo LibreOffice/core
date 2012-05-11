@@ -26,12 +26,12 @@
  *
  ************************************************************************/
 
+#include <algorithm>
 
 #include <string.h>     // memcpy()
-
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
-#include <tools/debug.hxx>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"
@@ -334,13 +334,46 @@ void StgStrm::SetEntry( StgDirEntry& r )
     r.SetDirty();
 }
 
+/*
+ * The page chain, is basically a singly linked list of slots each
+ * point to the next page. Instead of traversing the file structure
+ * for this each time build a simple flat in-memory vector list
+ * of pages.
+ */
+void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
+{
+    if (nSize > 0)
+        m_aPagesCache.reserve(nSize/nPageSize);
+
+    bool bError = false;
+    sal_Int32 nBgn = nStart;
+    sal_Int32 nOldBgn = -1;
+    sal_Int32 nOptSize = 0;
+    while( nBgn >= 0 && nBgn != nOldBgn )
+    {
+        if( nBgn >= 0 )
+            m_aPagesCache.push_back(nBgn);
+        nOldBgn = nBgn;
+        nBgn = pFat->GetNextPage( nBgn );
+        if( nBgn == nOldBgn )
+            bError = true;
+        nOptSize += nPageSize;
+    }
+    if (bError)
+    {
+        if (pOptionalCalcSize)
+            rIo.SetError( ERRCODE_IO_WRONGFORMAT );
+        m_aPagesCache.clear();
+    }
+    if (pOptionalCalcSize)
+        *pOptionalCalcSize = nOptSize;
+}
+
 // Compute page number and offset for the given byte position.
 // If the position is behind the size, set the stream right
 // behind the EOF.
-
 sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
 {
-    sal_Int32 nRel, nBgn;
     // Values < 0 seek to the end
     if( nBytePos < 0 || nBytePos >= nSize )
         nBytePos = nSize;
@@ -353,41 +386,60 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     nPos = nBytePos;
     if( nOld == nNew )
         return sal_True;
-    if( nNew > nOld )
+
+    // See fdo#47644 for a .doc with a vast amount of pages where seeking around the
+    // document takes a colossal amount of time
+    //
+    // Please Note: we build the pagescache incrementally as we go if necessary,
+    // so that a corrupted FAT doesn't poison the stream state for earlier reads
+    size_t nIdx = nNew / nPageSize;
+    if( nIdx >= m_aPagesCache.size() )
     {
-        // the new position is behind the current, so an incremental
-        // positioning is OK. Set the page relative position
-        nRel = nNew - nOld;
-        nBgn = nPage;
+        // Extend the FAT cache ! ...
+        size_t nToAdd = nIdx + 1;
+
+        if (m_aPagesCache.empty())
+            m_aPagesCache.push_back( nStart );
+
+        nToAdd -= m_aPagesCache.size();
+
+        sal_Int32 nBgn = m_aPagesCache.back();
+
+        // Start adding pages while we can
+        while( nToAdd > 0 && nBgn >= 0 )
+        {
+            nBgn = pFat->GetNextPage( nBgn );
+            if( nBgn >= 0 )
+            {
+                m_aPagesCache.push_back( nBgn );
+                nToAdd--;
+            }
+        }
     }
-    else
+
+    if ( nIdx > m_aPagesCache.size() )
     {
-        // the new position is before the current, so we have to scan
-        // the entire chain.
-        nRel = nNew;
-        nBgn = nStart;
-    }
-    // now, traverse the FAT chain.
-    nRel /= nPageSize;
-    sal_Int32 nLast = STG_EOF;
-    while( nRel && nBgn >= 0 )
-    {
-        nLast = nBgn;
-        nBgn = pFat->GetNextPage( nBgn );
-        nRel--;
+        rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
+        nPage = STG_EOF;
+        nOffset = nPageSize;
+        return sal_False;
     }
     // special case: seek to 1st byte of new, unallocated page
     // (in case the file size is a multiple of the page size)
-    if( nBytePos == nSize && nBgn == STG_EOF && !nRel && !nOffset )
-        nBgn = nLast, nOffset = nPageSize;
-    if( nBgn < 0 && nBgn != STG_EOF )
+    if( nBytePos == nSize && !nOffset && nIdx > 0 && nIdx == m_aPagesCache.size() )
     {
-        rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        nBgn = STG_EOF;
+        nIdx--;
         nOffset = nPageSize;
     }
-    nPage = nBgn;
-    return sal_Bool( nRel == 0 && nPage >= 0 );
+    else if ( nIdx == m_aPagesCache.size() )
+    {
+        nPage = STG_EOF;
+        return sal_False;
+    }
+
+    nPage = m_aPagesCache[ nIdx ];
+
+    return nPage >= 0;
 }
 
 // Retrieve the physical page for a given byte offset.
@@ -404,6 +456,8 @@ StgPage* StgStrm::GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce )
 
 sal_Bool StgStrm::Copy( sal_Int32 nFrom, sal_Int32 nBytes )
 {
+    m_aPagesCache.clear();
+
     sal_Int32 nTo = nStart;
     sal_Int32 nPgs = ( nBytes + nPageSize - 1 ) / nPageSize;
     while( nPgs-- )
@@ -430,6 +484,8 @@ sal_Bool StgStrm::Copy( sal_Int32 nFrom, sal_Int32 nBytes )
 
 sal_Bool StgStrm::SetSize( sal_Int32 nBytes )
 {
+    m_aPagesCache.clear();
+
     // round up to page size
     sal_Int32 nOld = ( ( nSize + nPageSize - 1 ) / nPageSize ) * nPageSize;
     sal_Int32 nNew = ( ( nBytes + nPageSize - 1 ) / nPageSize ) * nPageSize;
@@ -528,6 +584,8 @@ sal_Int32 StgFATStrm::GetPage( short nOff, sal_Bool bMake, sal_uInt16 *pnMasterA
         {
             if( bMake )
             {
+                m_aPagesCache.clear();
+
                 // create a new master page
                 nFAT = nMaxPage++;
                 pMaster = rIo.Copy( nFAT, STG_FREE );
@@ -582,6 +640,8 @@ sal_Int32 StgFATStrm::GetPage( short nOff, sal_Bool bMake, sal_uInt16 *pnMasterA
 
 sal_Bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
 {
+    m_aPagesCache.clear();
+
     sal_Bool bRes = sal_True;
     if( nOff < rIo.aHdr.GetFAT1Size() )
         rIo.aHdr.SetFATPage( nOff, nNewPage );
@@ -631,6 +691,8 @@ sal_Bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
 
 sal_Bool StgFATStrm::SetSize( sal_Int32 nBytes )
 {
+    m_aPagesCache.clear();
+
     // Set the number of entries to a multiple of the page size
     short nOld = (short) ( ( nSize + ( nPageSize - 1 ) ) / nPageSize );
     short nNew = (short) (
@@ -747,16 +809,7 @@ void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
     {
         // determine the actual size of the stream by scanning
         // the FAT chain and counting the # of pages allocated
-        nSize = 0;
-        sal_Int32 nOldBgn = -1;
-        while( nBgn >= 0 && nBgn != nOldBgn )
-        {
-            nOldBgn = nBgn;
-            nBgn = pFat->GetNextPage( nBgn );
-            if( nBgn == nOldBgn )
-                rIo.SetError( ERRCODE_IO_WRONGFORMAT );
-            nSize += nPageSize;
-        }
+        scanBuildPageChainCache( &nSize );
     }
 }
 

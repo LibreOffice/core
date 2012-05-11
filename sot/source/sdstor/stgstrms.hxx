@@ -30,6 +30,7 @@
 #define _STGSTRMS_HXX
 
 #include <tools/stream.hxx>
+#include <vector>
 
 class StgIo;
 class StgStrm;
@@ -77,6 +78,8 @@ protected:
     sal_Int32 nPage;                        // current logical page
     short nOffset;                      // offset into current page
     short nPageSize;                    // logical page size
+    std::vector<sal_Int32> m_aPagesCache;
+    void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
     sal_Bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
     StgStrm( StgIo& );
 public:
