@@ -92,6 +92,7 @@ public:
     void testFdo49501();
     void testFdo49271();
     void testFdo49692();
+    void testFdo45190();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testFdo49501);
     CPPUNIT_TEST(testFdo49271);
     CPPUNIT_TEST(testFdo49692);
+    CPPUNIT_TEST(testFdo45190);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -719,6 +721,26 @@ void Test::testFdo49692()
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
         }
     }
+}
+
+void Test::testFdo45190()
+{
+    load("fdo45190.rtf");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    // inherited \fi should be reset
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValue);
+
+    // but direct one not
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-100)), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -2233,7 +2233,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
         case RTF_FI: nSprm = NS_sprm::LN_PDxaLeft1; break;
-        case RTF_LI: nSprm = NS_sprm::LN_PDxaLeft; break;
         case RTF_LIN: nSprm = 0x845e; break;
         case RTF_RI: nSprm = NS_sprm::LN_PDxaRight; break;
         case RTF_RIN: nSprm = 0x845d; break;
@@ -2867,6 +2866,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_DPFILLBGCB:
             m_aStates.top().aDrawingObject.nFillColorB = nParam; m_aStates.top().aDrawingObject.bHasFillColor = true;
+            break;
+        case RTF_LI:
+            m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PDxaLeft, pIntValue));
+            // It turns out \li should reset the \fi inherited from the stylesheet.
+            // So set the direct formatting to zero, if we don't have such direct formatting yet.
+            if (!m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PDxaLeft1).get())
+                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PDxaLeft1, RTFValue::Pointer_t(new RTFValue(0))));
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
