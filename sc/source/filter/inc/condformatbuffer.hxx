@@ -84,6 +84,7 @@ struct ColorScaleRuleModelEntry
     bool mbMin;
     bool mbMax;
     bool mbPercent;
+    rtl::OUString maFormula;
 
     ColorScaleRuleModelEntry():
         maColor(),
@@ -101,7 +102,7 @@ public:
     void importCfvo( const AttributeList& rAttribs );
     void importColor( const AttributeList& rAttribs );
 
-    void AddEntries( ScColorScaleFormat* pFormat );
+    void AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 
 private:
     const CondFormat& mrCondFormat;

@@ -182,6 +182,11 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
         // between percent and percentile should be when calculating colors
         maColorScaleRuleEntries[mnCfvo].mbPercent = true;
     }
+    else if( aType == "formula" )
+    {
+        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
+        maColorScaleRuleEntries[mnCfvo].maFormula = aFormula;
+    }
 
     ++mnCfvo;
 }
@@ -212,7 +217,7 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
     ++mnCol;
 }
 
-void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat )
+void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
 {
     //assume that both vectors contain the same entries
     // TODO: check it
@@ -227,6 +232,9 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat )
             pEntry->SetMax(true);
         if(rEntry.mbPercent)
             pEntry->SetPercent(true);
+
+        if(!rEntry.maFormula.isEmpty())
+            pEntry->SetFormula(rEntry.maFormula, pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
         pFormat->AddEntry( pEntry );
     }
@@ -699,7 +707,6 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         ScDocument& rDoc = getScDocument();
         ScColorScaleFormat* pFormat = new ScColorScaleFormat(&rDoc);
 
-        mpColor->AddEntries( pFormat );
         sal_Int32 nIndex = rDoc.AddColorScaleFormat(pFormat);
 
         ScRangeList aList;
@@ -720,6 +727,10 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             aList.Append(aRange);
         }
         pFormat->SetRange(aList);
+        if(aList.size())
+            mpColor->AddEntries( pFormat, &rDoc, aList.front()->aStart );
+        else
+            mpColor->AddEntries( pFormat, &rDoc, ScAddress() );
     }
 }
 
