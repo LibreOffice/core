@@ -84,3 +84,12 @@
  #else
  #   define U_HAVE_NL_LANGINFO_CODESET 1
  #endif
+@@ -114,6 +114,8 @@
+ 
+ #ifdef U_TIMEZONE
+     /* Use the predefined value. */
++#elif defined(__ANDROID__)
++#   define U_TIMEZONE timezone
+ #elif U_PLATFORM_IS_LINUX_BASED
+ #   define U_TIMEZONE __timezone
+ #elif U_PLATFORM_USES_ONLY_WIN32_API
