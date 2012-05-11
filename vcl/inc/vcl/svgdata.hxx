@@ -35,6 +35,14 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2
 typedef ::com::sun::star::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
 //////////////////////////////////////////////////////////////////////////////
+// helper to convert any Primitive2DSequence to a good quality BitmapEx,
+// using default parameters and graphic::XPrimitive2DRenderer
+
+BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
+    const Primitive2DSequence& rSequence,
+    const basegfx::B2DRange& rTargetRange);
+
+//////////////////////////////////////////////////////////////////////////////
 
 class VCL_DLLPUBLIC SvgData : private boost::noncopyable
 {

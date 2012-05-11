@@ -2014,8 +2014,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 
             if(pGraf->HasGDIMetaFile())
             {
-                aMetaFile = pGraf->GetTransformedGraphic(
-                    SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile();
+                aMetaFile = pGraf->GetTransformedGraphic(SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile();
             }
             else if(pGraf->isEmbeddedSvg())
             {
@@ -2024,23 +2023,16 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 
             if(aMetaFile.GetActionSize())
             {
-                ImpSdrGDIMetaFileImport aFilter(*pMod);
-
                 aLogicRect = pGraf->GetLogicRect();
-                aFilter.SetScaleRect(aLogicRect);
-                aFilter.SetLayer(pObj->GetLayer());
-
+                ImpSdrGDIMetaFileImport aFilter(*pMod, pObj->GetLayer(), aLogicRect);
                 nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
             }
         }
         if ( pOle2!=NULL && pOle2->GetGraphic() )
         {
-            ImpSdrGDIMetaFileImport aFilter(*pMod);
-
             aLogicRect = pOle2->GetLogicRect();
-            aFilter.SetScaleRect(aLogicRect);
-            aFilter.SetLayer(pObj->GetLayer());
-            nInsAnz=aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
+            ImpSdrGDIMetaFileImport aFilter(*pMod, pObj->GetLayer(), aLogicRect);
+            nInsAnz = aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
         }
         if (nInsAnz!=0)
         {

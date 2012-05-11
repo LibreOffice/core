@@ -2964,9 +2964,13 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*)pAction;
-                    const Rectangle aTargetRectangle(pA->GetPoint(), pA->GetSize());
+                    const basegfx::B2DRange aTargetRange(
+                        pA->GetPoint().X(),
+                        pA->GetPoint().Y(),
+                        pA->GetPoint().X() + pA->GetSize().Width(),
+                        pA->GetPoint().Y() + pA->GetSize().Height());
 
-                    if(!aTargetRectangle.IsEmpty())
+                    if(!aTargetRange.isEmpty())
                     {
                         const GDIMetaFile& rContent = pA->GetGDIMetaFile();
 
@@ -2987,6 +2991,32 @@ namespace
 
                             if(xSubContent.hasElements())
                             {
+                                // create SourceRange
+                                const basegfx::B2DRange aSourceRange(
+                                    rContent.GetPrefMapMode().GetOrigin().X(),
+                                    rContent.GetPrefMapMode().GetOrigin().Y(),
+                                    rContent.GetPrefMapMode().GetOrigin().X() + rContent.GetPrefSize().Width(),
+                                    rContent.GetPrefMapMode().GetOrigin().Y() + rContent.GetPrefSize().Height());
+
+                                // apply mapping if aTargetRange and aSourceRange are not equal
+                                if(!aSourceRange.equal(aTargetRange))
+                                {
+                                    basegfx::B2DHomMatrix aTransform;
+
+                                    aTransform.translate(-aSourceRange.getMinX(), -aSourceRange.getMinY());
+                                    aTransform.scale(
+                                        aTargetRange.getWidth() / (basegfx::fTools::equalZero(aSourceRange.getWidth()) ? 1.0 : aSourceRange.getWidth()),
+                                        aTargetRange.getHeight() / (basegfx::fTools::equalZero(aSourceRange.getHeight()) ? 1.0 : aSourceRange.getHeight()));
+                                    aTransform.translate(aTargetRange.getMinX(), aTargetRange.getMinY());
+
+                                    const drawinglayer::primitive2d::Primitive2DReference aEmbeddedTransform(
+                                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                                            aTransform,
+                                            xSubContent));
+
+                                    xSubContent = drawinglayer::primitive2d::Primitive2DSequence(&aEmbeddedTransform, 1);
+                                }
+
                                 // check if gradient is a real gradient
                                 const Gradient& rGradient = pA->GetGradient();
                                 const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
@@ -3002,9 +3032,7 @@ namespace
                                 else
                                 {
                                     // really a gradient. Create gradient sub-content (with correct scaling)
-                                    basegfx::B2DRange aRange(
-                                        aTargetRectangle.Left(), aTargetRectangle.Top(),
-                                        aTargetRectangle.Right(), aTargetRectangle.Bottom());
+                                    basegfx::B2DRange aRange(aTargetRange);
                                     aRange.transform(rPropertyHolders.Current().getTransformation());
 
                                     // prepare gradient for transparent content
