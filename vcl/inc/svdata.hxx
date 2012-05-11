@@ -300,30 +300,30 @@ struct ImplSVHelpData
 
 struct ImplSVNWFData
 {
-    bool                    mbMenuBarDockingAreaCommonBG; // e.g. WinXP default theme
-    bool                    mbDockingAreaSeparateTB;      // individual toolbar backgrounds
-                                                          // instead of one for docking area
-    bool                    mbToolboxDropDownSeparate;    // two adjacent buttons for
-                                                          // toolbox dropdown buttons
-    int                     mnMenuFormatExtraBorder;      // inner popup menu border
-    bool                    mbFlatMenu;                   // no popup 3D border
-    ::Color                 maMenuBarHighlightTextColor;  // override higlight text color
-                                                          // in menubar if not transparent
-    bool                    mbOpenMenuOnF10;              // on gnome the first menu opens on F10
-    bool                    mbNoFocusRects;               // on Aqua focus rects are not used
-    bool                    mbNoBoldTabFocus;             // on Aqua and Gnome the focused tab has not bold text
-    bool                    mbCenteredTabs;               // on Aqua, tabs are centered
-    bool                    mbNoActiveTabTextRaise;       // on Aqua the text for the selected tab
-                                                          // should not "jump up" a pixel
-    bool                    mbProgressNeedsErase;         // set true for platforms that should draw the
-                                                          // window background before drawing the native
-                                                          // progress bar
-    bool                    mbCheckBoxNeedsErase;         // set true for platforms that should draw the
-                                                          // window background before drawing the native
-                                                          // checkbox
-    bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
-    int                     mnStatusBarLowerRightOffset;  // amount in pixel to avoid in the lower righthand corner
-    bool                    mbCanDrawWidgetAnySize;       // set to true currently on gtk
+    int                     mnStatusBarLowerRightOffset;    // amount in pixel to avoid in the lower righthand corner
+    int                     mnMenuFormatExtraBorder;        // inner popup menu border
+    ::Color                 maMenuBarHighlightTextColor;    // override higlight text color
+                                                            // in menubar if not transparent
+    bool                    mbMenuBarDockingAreaCommonBG:1; // e.g. WinXP default theme
+    bool                    mbDockingAreaSeparateTB:1;      // individual toolbar backgrounds
+                                                            // instead of one for docking area
+    bool                    mbToolboxDropDownSeparate:1;    // two adjacent buttons for
+                                                            // toolbox dropdown buttons
+    bool                    mbFlatMenu:1;                   // no popup 3D border
+    bool                    mbOpenMenuOnF10:1;              // on gnome the first menu opens on F10
+    bool                    mbNoFocusRects:1;               // on Aqua focus rects are not used
+    bool                    mbNoBoldTabFocus:1;             // on Aqua and Gnome the focused tab has not bold text
+    bool                    mbCenteredTabs:1;               // on Aqua, tabs are centered
+    bool                    mbNoActiveTabTextRaise:1;       // on Aqua the text for the selected tab
+                                                            // should not "jump up" a pixel
+    bool                    mbProgressNeedsErase:1;         // set true for platforms that should draw the
+                                                            // window background before drawing the native
+                                                            // progress bar
+    bool                    mbCheckBoxNeedsErase:1;         // set true for platforms that should draw the
+                                                            // window background before drawing the native
+                                                            // checkbox
+    bool                    mbScrollbarJumpPage:1;          // true for "jump to here" behavior
+    bool                    mbCanDrawWidgetAnySize:1;       // set to true currently on gtk
 };
 
 
