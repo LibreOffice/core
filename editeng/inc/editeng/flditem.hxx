@@ -387,7 +387,7 @@ public:
 class EDITENG_DLLPUBLIC SvxHeaderField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, com::sun::star::text::textfield::Type::HEADER )
+    SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_HEADER )
     SvxHeaderField();
 
     virtual SvxFieldData*   Clone() const;
@@ -399,7 +399,7 @@ public:
 class EDITENG_DLLPUBLIC SvxFooterField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, com::sun::star::text::textfield::Type::FOOTER )
+    SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_FOOTER )
     SvxFooterField();
     virtual SvxFieldData*   Clone() const;
     virtual int             operator==( const SvxFieldData& ) const;
@@ -410,7 +410,7 @@ public:
 class EDITENG_DLLPUBLIC SvxDateTimeField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, com::sun::star::text::textfield::Type::DATE_TIME )
+    SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_DATE_TIME )
     SvxDateTimeField();
 
     static rtl::OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );

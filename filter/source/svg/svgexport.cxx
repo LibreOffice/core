@@ -1773,15 +1773,15 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
             }
             const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
+            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
             {
                 pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
             }
-            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
             {
                 pCharSet = &( (*pCharSetMap)[ aFooterId ] );
             }
-            else if( pField->GetClassId() == text::textfield::Type::DATE_TIME )
+            else if( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME )
             {
                 if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
                 {
@@ -1913,15 +1913,15 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             if( mVisiblePagePropSet.bAreBackgroundObjectsVisible )
             {
                 const SvxFieldData* pField = pInfo->GetField().GetField();
-                if( ( pField->GetClassId() == text::textfield::Type::HEADER ) && mVisiblePagePropSet.bIsHeaderFieldVisible )
+                if( ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && mVisiblePagePropSet.bIsHeaderFieldVisible )
                 {
                     aRepresentation += mVisiblePagePropSet.sHeaderText;
                 }
-                else if( ( pField->GetClassId() == text::textfield::Type::FOOTER ) && mVisiblePagePropSet.bIsFooterFieldVisible )
+                else if( ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && mVisiblePagePropSet.bIsFooterFieldVisible )
                 {
                     aRepresentation += mVisiblePagePropSet.sFooterText;
                 }
-                else if( ( pField->GetClassId() == text::textfield::Type::DATE_TIME ) && mVisiblePagePropSet.bIsDateTimeFieldVisible )
+                else if( ( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME ) && mVisiblePagePropSet.bIsDateTimeFieldVisible )
                 {
                     // TODO: implement the variable case
                     aRepresentation += mVisiblePagePropSet.sDateTimeText;

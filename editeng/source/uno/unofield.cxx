@@ -160,7 +160,6 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         return &aAuthorFieldPropertySet_Impl;
     case text::textfield::Type::MEASURE:
         return &aMeasureFieldPropertySet_Impl;
-    case text::textfield::Type::DATE_TIME:
     default:
         return &aEmptyPropertySet_Impl;
     }
@@ -515,13 +514,13 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         pData = new SdrMeasureField( eKind);
         break;
     }
-    case text::textfield::Type::HEADER:
+    case text::textfield::Type::PRESENTATION_HEADER:
         pData = new SvxHeaderField();
         break;
-    case text::textfield::Type::FOOTER:
+    case text::textfield::Type::PRESENTATION_FOOTER:
         pData = new SvxFooterField();
         break;
-    case text::textfield::Type::DATE_TIME:
+    case text::textfield::Type::PRESENTATION_DATE_TIME:
         pData = new SvxDateTimeField();
         break;
     };
@@ -625,11 +624,11 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
                 return OUString("Author");
             case text::textfield::Type::MEASURE:
                 return OUString("Measure");
-            case text::textfield::Type::HEADER:
+            case text::textfield::Type::PRESENTATION_HEADER:
                 return OUString("Header");
-            case text::textfield::Type::FOOTER:
+            case text::textfield::Type::PRESENTATION_FOOTER:
                 return OUString("Footer");
-            case text::textfield::Type::DATE_TIME:
+            case text::textfield::Type::PRESENTATION_DATE_TIME:
                 return OUString("DateTime");
             case text::textfield::Type::EXTENDED_DATE:
                 return OUString("ExtDate");
@@ -868,15 +867,15 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
             pServices[2] = "com.sun.star.text.TextField.Measure";
             pServices[3] = "com.sun.star.text.textfield.Measure";
         break;
-        case text::textfield::Type::HEADER:
+        case text::textfield::Type::PRESENTATION_HEADER:
             pServices[2] = "com.sun.star.presentation.TextField.Header";
             pServices[3] = "com.sun.star.presentation.textfield.Header";
         break;
-        case text::textfield::Type::FOOTER:
+        case text::textfield::Type::PRESENTATION_FOOTER:
             pServices[2] = "com.sun.star.presentation.TextField.Footer";
             pServices[3] = "com.sun.star.presentation.textfield.Footer";
         break;
-        case text::textfield::Type::DATE_TIME:
+        case text::textfield::Type::PRESENTATION_DATE_TIME:
             pServices[2] = "com.sun.star.presentation.TextField.DateTime";
             pServices[3] = "com.sun.star.presentation.textfield.DateTime";
         break;

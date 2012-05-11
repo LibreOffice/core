@@ -56,9 +56,10 @@ constants Type
     const long EXTENDED_FILE = 8;
     const long AUTHOR        = 9;
     const long MEASURE       = 10;
-    const long HEADER        = 11;
-    const long FOOTER        = 12;
-    const long DATE_TIME     = 13;
+
+    const long PRESENTATION_HEADER    = 11;
+    const long PRESENTATION_FOOTER    = 12;
+    const long PRESENTATION_DATE_TIME = 13;
 
     const long EXTENDED_DATE = 14;
 };

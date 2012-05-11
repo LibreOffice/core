@@ -208,11 +208,11 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 
             return new SdrMeasureField(eKind);
         }
-        case text::textfield::Type::HEADER:
+        case text::textfield::Type::PRESENTATION_HEADER:
             return new SvxHeaderField();
-        case text::textfield::Type::FOOTER:
+        case text::textfield::Type::PRESENTATION_FOOTER:
             return new SvxFooterField();
-        case text::textfield::Type::DATE_TIME:
+        case text::textfield::Type::PRESENTATION_DATE_TIME:
             return new SvxDateTimeField();
         default:
             ;
