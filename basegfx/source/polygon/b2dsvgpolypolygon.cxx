@@ -143,35 +143,36 @@ namespace basegfx
                 return true;
             }
 
-            bool lcl_importNumberAndSpaces(sal_Int32&                o_nRetval,
-                                           sal_Int32&               io_rPos,
-                                           const ::rtl::OUString&   rStr,
-                                           const sal_Int32      nLen)
+            bool lcl_importFlagAndSpaces(sal_Int32&               o_nRetval,
+                                         sal_Int32&               io_rPos,
+                                         const ::rtl::OUString&   rStr,
+                                         const sal_Int32          nLen)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
                 ::rtl::OUStringBuffer sNumberString;
 
-                if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+                if(sal_Unicode('+') == aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
                     aChar = rStr[++io_rPos];
                 }
 
-                while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+                if(sal_Unicode('0') == aChar)
                 {
-                    sNumberString.append(rStr[io_rPos]);
-                    aChar = rStr[++io_rPos];
+                    o_nRetval = 0;
+                    ++io_rPos;
                 }
-
-                if(sNumberString.getLength())
+                else if (sal_Unicode('1') == aChar)
                 {
-                    o_nRetval = sNumberString.makeStringAndClear().toInt32();
-                    lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
-
-                    return true;
+                    o_nRetval = 1;
+                    ++io_rPos;
                 }
+                else
+                    return false;
 
-                return false;
+                lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
+
+                return true;
             }
 
             void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr,
@@ -621,8 +622,8 @@ namespace basegfx
                             if(!lcl_importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen)) return false;
                             if(!lcl_importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen)) return false;
                             if(!lcl_importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importNumberAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importNumberAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
+                            if(!lcl_importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
+                            if(!lcl_importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
                             if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
                             if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
