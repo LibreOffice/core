@@ -41,38 +41,6 @@
  *)
      ;;
  esac
---- misc/icu/source/tools/toolutil/pkg_genc.c
-+++ misc/build/icu/source/tools/toolutil/pkg_genc.c
-@@ -145,6 +145,28 @@
- 
-         ".long ","",HEX_0X
-     },
-+    {"gcc-android",
-+	"\t.arch armv5te\n"
-+	"\t.fpu softvfp\n"
-+	"\t.eabi_attribute 20, 1\n"
-+	"\t.eabi_attribute 21, 1\n"
-+	"\t.eabi_attribute 23, 3\n"
-+	"\t.eabi_attribute 24, 1\n"
-+	"\t.eabi_attribute 25, 1\n"
-+	"\t.eabi_attribute 26, 2\n"
-+	"\t.eabi_attribute 30, 6\n"
-+	"\t.eabi_attribute 18, 4\n"
-+	"\t.file \"%s.s\"\n"
-+	"\t.global %s\n"
-+	"\t.section .rodata\n"
-+	"\t.align 2\n"
-+	"\t.type %s, %%object\n"
-+	"%s:\n",
-+
-+	"\t.word ",
-+	"\t.section .note.GNU-stack,\"\",%%progbits\n",
-+	HEX_0X
-+    },
-     {"sun",
-         "\t.section \".rodata\"\n"
-         "\t.align   8\n"
-
 --- misc/icu/source/common/putilimp.h
 +++ misc/build/icu/source/common/putilimp.h
 @@ -86,6 +86,8 @@
