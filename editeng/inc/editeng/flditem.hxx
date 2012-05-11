@@ -57,7 +57,7 @@ public:
 
     static SvxFieldData* Create(const com::sun::star::uno::Reference<com::sun::star::text::XTextContent>& xContent);
 
-    SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, UNKNOWN_FIELD)
+    SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, com::sun::star::text::textfield::Type::UNSPECIFIED)
 
                             SvxFieldData();
     virtual                 ~SvxFieldData();

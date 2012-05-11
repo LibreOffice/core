@@ -313,7 +313,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
 :   OComponentHelper( getMutex() )
 ,   mxAnchor( xAnchor )
 ,   mpPropSet(NULL)
-,   mnServiceId(SvxFieldData::UNKNOWN_FIELD)
+,   mnServiceId(text::textfield::Type::UNSPECIFIED)
 ,   mpImpl( new SvxUnoFieldData_Impl )
 {
     DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
@@ -323,8 +323,8 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
     if(pData)
     {
         mnServiceId = pData->GetClassId();
-        DBG_ASSERT(mnServiceId != SvxFieldData::UNKNOWN_FIELD, "unknown SvxFieldData! [CL]");
-        if (mnServiceId != SvxFieldData::UNKNOWN_FIELD)
+        DBG_ASSERT(mnServiceId != text::textfield::Type::UNSPECIFIED, "unknown SvxFieldData! [CL]");
+        if (mnServiceId != text::textfield::Type::UNSPECIFIED)
         {
             // extract field properties from data class
             switch( mnServiceId )
@@ -911,7 +911,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 
-        sal_Int32 nId = SvxFieldData::UNKNOWN_FIELD;
+        sal_Int32 nId = text::textfield::Type::UNSPECIFIED;
 
         if ( aFieldType == "DateTime" )
         {
@@ -953,7 +953,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
             nId = text::textfield::Type::MEASURE;
         }
 
-        if (nId != SvxFieldData::UNKNOWN_FIELD)
+        if (nId != text::textfield::Type::UNSPECIFIED)
             xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
     }
 
