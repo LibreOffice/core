@@ -907,7 +907,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) ) ||
         ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime") ) ) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::EXTENDED_DATE );
+        return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::DATE );
     }
 
     if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Header"))) ||

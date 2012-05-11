@@ -60,8 +60,6 @@ constants Type
     const long PRESENTATION_HEADER    = 11;
     const long PRESENTATION_FOOTER    = 12;
     const long PRESENTATION_DATE_TIME = 13;
-
-    const long EXTENDED_DATE = 14;
 };
 
 }; }; }; }; };

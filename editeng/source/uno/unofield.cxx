@@ -146,7 +146,6 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 
     switch( mnId )
     {
-    case text::textfield::Type::EXTENDED_DATE:
     case text::textfield::Type::EXTENDED_TIME:
     case text::textfield::Type::DATE:
         return &aExDateTimeFieldPropertySet_Impl;
@@ -266,7 +265,6 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 
     switch( nServiceId )
     {
-    case text::textfield::Type::EXTENDED_DATE:
     case text::textfield::Type::DATE:
         mpImpl->mbBoolean2 = sal_True;
         mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
@@ -329,7 +327,6 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             switch( mnServiceId )
             {
             case text::textfield::Type::DATE:
-            case text::textfield::Type::EXTENDED_DATE:
                 {
                     mpImpl->mbBoolean2 = sal_True;
                     // #i35416# for variable date field, don't use invalid "0000-00-00" date,
@@ -403,7 +400,6 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::TIME:
     case text::textfield::Type::EXTENDED_TIME:
     case text::textfield::Type::DATE:
-    case text::textfield::Type::EXTENDED_DATE:
     {
         if( mpImpl->mbBoolean2 ) // IsDate?
         {
@@ -630,8 +626,6 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
                 return OUString("Footer");
             case text::textfield::Type::PRESENTATION_DATE_TIME:
                 return OUString("DateTime");
-            case text::textfield::Type::EXTENDED_DATE:
-                return OUString("ExtDate");
             default:
                 return OUString("Unknown");
         }
@@ -878,10 +872,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
         case text::textfield::Type::PRESENTATION_DATE_TIME:
             pServices[2] = "com.sun.star.presentation.TextField.DateTime";
             pServices[3] = "com.sun.star.presentation.textfield.DateTime";
-        break;
-        case text::textfield::Type::EXTENDED_DATE:
-            pServices[2] = "com.sun.star.text.TextField.DateTime";
-            pServices[3] = "com.sun.star.text.textfield.DateTime";
         break;
         default:
             aSeq.realloc(0);

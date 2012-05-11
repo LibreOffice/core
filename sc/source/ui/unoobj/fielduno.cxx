@@ -1166,7 +1166,6 @@ ScEditFieldObj::ScEditFieldObj(
             pPropSet = lcl_GetURLPropertySet();
         break;
         case text::textfield::Type::DATE:
-        case text::textfield::Type::EXTENDED_DATE:
         case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
             pPropSet = getDateTimePropertySet();
@@ -1175,7 +1174,7 @@ ScEditFieldObj::ScEditFieldObj(
             pPropSet = lcl_GetHeaderFieldPropertySet();
     }
 
-    if (meType == text::textfield::Type::DATE || meType == text::textfield::Type::EXTENDED_DATE)
+    if (meType == text::textfield::Type::DATE)
         mbIsDate = true;
 }
 
@@ -1343,7 +1342,6 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
             setPropertyValueFile(aPropertyName, aValue);
         break;
         case text::textfield::Type::DATE:
-        case text::textfield::Type::EXTENDED_DATE:
         case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
             setPropertyValueDateTime(aPropertyName, aValue);
@@ -1397,7 +1395,6 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
             return getPropertyValueFile(aPropertyName);
         case text::textfield::Type::DATE:
         case text::textfield::Type::TIME:
-        case text::textfield::Type::EXTENDED_DATE:
         case text::textfield::Type::EXTENDED_TIME:
             return getPropertyValueDateTime(aPropertyName);
         case text::textfield::Type::FILE:

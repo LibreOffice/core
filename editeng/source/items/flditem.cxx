@@ -63,7 +63,6 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
         case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
         case text::textfield::Type::DATE:
-        case text::textfield::Type::EXTENDED_DATE:
         {
             sal_Bool bIsDate = false;
             xPropSet->getPropertyValue(UNO_TC_PROP_IS_DATE) >>= bIsDate;

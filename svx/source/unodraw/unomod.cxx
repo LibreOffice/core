@@ -413,7 +413,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
     {
-        return (::cppu::OWeakObject * )new SvxUnoTextField(text::textfield::Type::EXTENDED_DATE);
+        return (::cppu::OWeakObject * )new SvxUnoTextField(text::textfield::Type::DATE);
     }
 
     uno::Reference< uno::XInterface > xRet;
