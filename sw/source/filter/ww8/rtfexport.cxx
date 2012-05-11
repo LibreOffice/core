@@ -1188,6 +1188,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteRes
     // title page
     if( pAktPageDesc != &rPgDsc )
     {
+        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
         pAktPageDesc = &rPgDsc;
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_HEADER,
                     sal_False, &pItem ) == SFX_ITEM_SET )

@@ -30,6 +30,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
@@ -44,12 +46,14 @@ public:
     void testZoom();
     void testFdo38176();
     void testFdo49683();
+    void testFdo44174();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
     CPPUNIT_TEST(testFdo38176);
     CPPUNIT_TEST(testFdo49683);
+    CPPUNIT_TEST(testFdo44174);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -98,6 +102,18 @@ void Test::testFdo49683()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aKeywords.getLength());
     CPPUNIT_ASSERT_EQUAL(OUString("one"), aKeywords[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("two"), aKeywords[1]);
+}
+
+void Test::testFdo44174()
+{
+    roundtrip("fdo44174.rtf");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    OUString aValue;
+    xPropertySet->getPropertyValue("PageStyleName") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
