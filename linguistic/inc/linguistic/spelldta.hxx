@@ -91,7 +91,7 @@ class SpellAlternatives
     sal_Int16                   nLanguage;
 
 public:
-    SpellAlternatives();
+    LNG_DLLPUBLIC SpellAlternatives();
     SpellAlternatives(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
                       const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlternatives );
     virtual ~SpellAlternatives();
@@ -108,9 +108,9 @@ public:
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) throw (::com::sun::star::uno::RuntimeException);
 
     // non-interface specific functions
-    void    SetWordLanguage(const ::rtl::OUString &rWord, sal_Int16 nLang);
-    void    SetFailureType(sal_Int16 nTypeP);
-    void    SetAlternatives( const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
+    void    LNG_DLLPUBLIC SetWordLanguage(const ::rtl::OUString &rWord, sal_Int16 nLang);
+    void    LNG_DLLPUBLIC SetFailureType(sal_Int16 nTypeP);
+    void    LNG_DLLPUBLIC SetAlternatives( const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
     static com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives > LNG_DLLPUBLIC CreateSpellAlternatives(
         const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
 };

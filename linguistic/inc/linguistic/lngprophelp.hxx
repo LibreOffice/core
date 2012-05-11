@@ -139,8 +139,8 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 
     // non-UNO functions
-    void    AddAsPropListener();
-    void    RemoveAsPropListener();
+    void    LNG_DLLPUBLIC AddAsPropListener();
+    void    LNG_DLLPUBLIC RemoveAsPropListener();
     void    LaunchEvent(
                 const ::com::sun::star::linguistic2::LinguServiceEvent& rEvt );
 
@@ -201,7 +201,7 @@ public:
 };
 
 
-class PropertyHelper_Spell :
+class LNG_DLLPUBLIC PropertyHelper_Spell :
     public PropertyChgHelper
 {
     // default values
