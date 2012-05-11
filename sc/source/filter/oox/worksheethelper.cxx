@@ -69,6 +69,7 @@
 #include "sharedstringsbuffer.hxx"
 #include "sheetdatabuffer.hxx"
 #include "stylesbuffer.hxx"
+#include "tokenuno.hxx"
 #include "unitconverter.hxx"
 #include "viewsettings.hxx"
 #include "workbooksettings.hxx"
@@ -1587,9 +1588,13 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
 
 void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens ) const
 {
-    Reference< XFormulaTokens > xTokens( getCell( rAddress ), UNO_QUERY );
-    OSL_ENSURE( xTokens.is(), "WorksheetHelper::putFormulaTokens - missing token interface" );
-    if( xTokens.is() ) xTokens->setTokens( rTokens );
+    ScDocument& rDoc = getScDocument();
+    ScTokenArray aTokenArray;
+    ScAddress aCellPos;
+    ScUnoConversion::FillScAddress( aCellPos, rAddress );
+    ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
+    ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
+    rDoc.PutCell( aCellPos, pNewCell, sal_True );
 }
 
 void WorksheetHelper::initializeWorksheetImport()
