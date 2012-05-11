@@ -1013,29 +1013,22 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
     Rectangle aEditRect = rControlRegion;
     gint indicator_size, point;
 
-    if( nPart == PART_ENTIRE_CONTROL)
+    if(((nType == CTRL_CHECKBOX) || (nType == CTRL_RADIOBUTTON)) &&
+       nPart == PART_ENTIRE_CONTROL)
     {
-        switch(nType)
-        {
-        case CTRL_CHECKBOX:
-        case CTRL_RADIOBUTTON:
-            gtk_style_context_get_style( mpCheckButtonStyle,
-                                         "indicator-size", &indicator_size,
-                                         (char *)NULL );
+        gtk_style_context_get_style( mpCheckButtonStyle,
+                                     "indicator-size", &indicator_size,
+                                     (char *)NULL );
 
-            point = MAX(0, rControlRegion.GetHeight() - indicator_size);
-            aEditRect = Rectangle( Point( 0, point / 2),
-                                   Size( indicator_size, indicator_size ) );
-            break;
-        default:
-            return sal_False;
-        }
+        point = MAX(0, rControlRegion.GetHeight() - indicator_size);
+        aEditRect = Rectangle( Point( 0, point / 2),
+                               Size( indicator_size, indicator_size ) );
     }
-    else if( (nPart == PART_MENU_ITEM_CHECK_MARK) ||
-             (nPart == PART_MENU_ITEM_RADIO_MARK) )  {
-        switch (nType)
+    else if( nType == CTRL_MENU_POPUP)
+    {
+        if (((nPart == PART_MENU_ITEM_CHECK_MARK) ||
+              (nPart == PART_MENU_ITEM_RADIO_MARK) ))
         {
-        case CTRL_MENU_POPUP:
             indicator_size = 0;
 
             gtk_style_context_get_style( mpMenuItemStyle,
@@ -1046,12 +1039,8 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
             aEditRect = Rectangle( Point( 0, point / 2),
                                    Size( indicator_size, indicator_size ) );
         }
-    }
-    else if (nPart == PART_MENU_SEPARATOR)
-    {
-        switch (nType)
+        else if (nPart == PART_MENU_SEPARATOR)
         {
-        case CTRL_MENU_POPUP:
             gint separator_height, separator_width, wide_separators;
 
             gtk_style_context_get_style (mpMenuItemStyle,
@@ -1063,12 +1052,8 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
             aEditRect = Rectangle( aEditRect.TopLeft(),
                                    Size( aEditRect.GetWidth(), wide_separators ? separator_height : 1 ) );
         }
-    }
-    else if (nPart == PART_MENU_SUBMENU_ARROW)
-    {
-        switch (nType)
+        else if (nPart == PART_MENU_SUBMENU_ARROW)
         {
-        case CTRL_MENU_POPUP:
             gfloat arrow_scaling, arrow_size;
 
             arrow_scaling = 0;
