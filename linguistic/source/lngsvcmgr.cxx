@@ -1267,9 +1267,8 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
     {
-        // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
-        // already found without the need to restart the office
-        delete pAvailGrammarSvcs;  pAvailGrammarSvcs = 0;
+// disable force re-loading of the cache - re-start needed for new grammer checkers: fdo#35270
+//        delete pAvailGrammarSvcs;  pAvailGrammarSvcs = 0;
         GetAvailableGrammarSvcs_Impl();
         pInfoArray = pAvailGrammarSvcs;
     }
