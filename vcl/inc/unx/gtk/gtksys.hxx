@@ -33,6 +33,7 @@
 #include "generic/gensys.h"
 #include <gtk/gtk.h>
 #include <unx/saltype.h>
+#include <deque>
 
 class GtkSalSystem : public SalGenericSystem
 {
