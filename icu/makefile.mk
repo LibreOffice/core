@@ -52,6 +52,7 @@ PATCH_FILES=\
     icu4c-wchar_t.patch \
     icu4c-warnings.patch \
     icu4c.9313.cygwin.patch \
+    icu4c-macosx.patch \
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
