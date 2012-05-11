@@ -458,7 +458,7 @@ MY_FILES_gnome += \
 .END
 
 .IF "$(ENABLE_ONLINE_UPDATE)" == "TRUE"
-MY_XCDS += $(MISC)/onlineupdate.xcd \
+MY_XCDS += $(MISC)/onlineupdate.xcd
 MY_DEPS_onlineupdate = main
 MY_FILES_onlineupdate = \
     $(MY_MOD)/org/openoffice/Office/Addons-onlineupdate.xcu \
