@@ -537,11 +537,12 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
  *                      SwTxtFrm::AdjustFollow()
  *************************************************************************/
 
-/* AdjustFollow erwartet folgende Situation:
- * Der SwTxtIter steht am unteren Ende des Masters, der Offset wird
- * im Follow eingestellt.
- * nOffset haelt den Offset im Textstring, ab dem der Master abschliesst
- * und der Follow beginnt. Wenn er 0 ist, wird der FolgeFrame geloescht.
+/* AdjustFollow expects the following situtation:
+ * The SwTxtIter points to the lower end of the Master, the Offset is set in
+ * the Follow.
+ * nOffset holds the Offset in the text string, from which the Master closes
+ * and the Follow starts.
+ * If it's 0, the FollowFrame is deleted.
  */
 
 void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
@@ -550,8 +551,8 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
 {
     SwFrmSwapper aSwapper( this, sal_False );
 
-    // Wir haben den Rest der Textmasse: alle Follows loeschen
-    // Sonderfall sind DummyPortions()
+    // We got the rest of the text mass: Delete all Follows
+    // DummyPortions() are a special caseSonderfall
     // - special cases are controlled by parameter <nMode>.
     if( HasFollow() && !(nMode & 1) && nOffset == nEnd )
     {
@@ -559,7 +560,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         {
             if( ((SwTxtFrm*)GetFollow())->IsLocked() )
             {
-                OSL_FAIL( "+SwTxtFrm::JoinFrm: Follow ist locked." );
+                OSL_FAIL( "+SwTxtFrm::JoinFrm: Follow is locked." );
                 return;
             }
             JoinFrm();
@@ -568,16 +569,16 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         return;
     }
 
-    // Tanz auf dem Vulkan: Wir formatieren eben schnell noch einmal
-    // die letzte Zeile fuer das QuoVadis-Geraffel. Selbstverstaendlich
-    // kann sich dadurch auch der Offset verschieben:
+    // Dancing on the vulcano: We'll just format the last line quickly
+    // for the QuoVadis stuff.
+    // The Offset can move of course:
     const xub_StrLen nNewOfst = ( IsInFtn() && ( !GetIndNext() || HasFollow() ) ) ?
                             rLine.FormatQuoVadis(nOffset) : nOffset;
 
     if( !(nMode & 1) )
     {
-        // Wir klauen unseren Follows Textmasse, dabei kann es passieren,
-        // dass wir einige Follows Joinen muessen.
+        // We steal text mass from our Follows
+        // It can happen that we have to join some of them
         while( GetFollow() && GetFollow()->GetFollow() &&
                nNewOfst >= GetFollow()->GetFollow()->GetOfst() )
         {
@@ -585,7 +586,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         }
     }
 
-    // Der Ofst hat sich verschoben.
+    // The Offset moved
     if( GetFollow() )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -595,7 +596,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         if ( nMode )
             GetFollow()->ManipOfst( 0 );
 
-        if ( CalcFollow( nNewOfst ) )   // CalcFollow erst zum Schluss, dort erfolgt ein SetOfst
+        if ( CalcFollow( nNewOfst ) )   // CalcFollow only at the end, we do a SetOfst there
             rLine.SetOnceMore( sal_True );
     }
 }
@@ -611,8 +612,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 
     SwTxtFrm *pNxt = pFoll->GetFollow();
 
-    // Alle Fussnoten des zu zerstoerenden Follows werden auf uns
-    // umgehaengt.
+    // All footnotes of the to-be-destroyed Follow are reloacted to us
     xub_StrLen nStart = pFoll->GetOfst();
     if ( pFoll->HasFtn() )
     {
@@ -684,8 +684,8 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 {
     SWAP_IF_SWAPPED( this )
 
-    // Durch das Paste wird ein Modify() an mich verschickt.
-    // Damit meine Daten nicht verschwinden, locke ich mich.
+    // The Paste sends a Modify() to me
+    // I lock myself, so that my data does not disappear
     SwTxtFrmLocker aLock( this );
     SwTxtFrm *pNew = (SwTxtFrm *)(GetTxtNode()->MakeFrm( this ));
 
@@ -709,8 +709,8 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
         }
     }
 
-    // Wenn durch unsere Aktionen Fussnoten in pNew landen,
-    // so muessen sie umgemeldet werden.
+    // If footnotes end up in pNew bz our actions, we need
+    // to reregister them
     if ( HasFtn() )
     {
         const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
@@ -751,7 +751,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 
     MoveFlyInCnt( pNew, nTxtPos, STRING_LEN );
 
-    // Kein SetOfst oder CalcFollow, weil gleich ohnehin ein AdjustFollow folgt.
+    // No SetOfst or CalcFollow, because an AdjustFollow follows immediately anyways
 
     pNew->ManipOfst( nTxtPos );
 
@@ -802,10 +802,8 @@ sal_Bool SwTxtFrm::CalcPreps()
     sal_Bool bRet = sal_False;
     if( bPrep && !pPara->GetReformat()->Len() )
     {
-        // PREP_WIDOWS bedeutet, dass im Follow die Orphans-Regel
-        // zuschlug.
-        // Es kann in unguenstigen Faellen vorkommen, dass auch ein
-        // PrepAdjust vorliegt (3680)!
+        // PREP_WIDOWS means that the orphans rule got activated in the Follow.
+        // In unfortunate cases we could also have a PrepAdjust!
         if( bPrepWidows )
         {
             if( !GetFollow() )
@@ -814,11 +812,11 @@ sal_Bool SwTxtFrm::CalcPreps()
                 return sal_False;
             }
 
-            // Wir muessen uns auf zwei Faelle einstellen:
-            // Wir konnten dem Follow noch ein paar Zeilen abgeben,
-            // -> dann muessen wir schrumpfen
-            // oder wir muessen auf die naechste Seite
-            // -> dann lassen wir unseren Frame zu gross werden.
+            // We need to prepare for two cases:
+            // We were able to hand over a few lines to the Follow
+            // -> we need to shrink
+            // or we need to go on the next page
+            // -> we let our Frame become too big
 
             SwTwips nChgHeight = GetParHeight();
             if( nChgHeight >= (Prt().*fnRect->fnGetHeight)() )
@@ -892,32 +890,30 @@ sal_Bool SwTxtFrm::CalcPreps()
             SwTxtFormatter aLine( this, &aInf );
 
             WidowsAndOrphans aFrmBreak( this );
-            // Egal was die Attribute meinen, bei MustFit wird
-            // der Absatz im Notfall trotzdem gesplittet...
+            // Whatever the attributes say: we split the paragraph in
+            // MustFit in any case
             if( bPrepMustFit )
             {
                 aFrmBreak.SetKeep( sal_False );
                 aFrmBreak.ClrOrphLines();
             }
-            // Bevor wir FormatAdjust aufrufen muessen wir dafuer
-            // sorgen, dass die Zeilen, die unten raushaengen
-            // auch tatsaechlich abgeschnitten werden.
-            // OD 2004-02-25 #i16128# - method renamed
+            // Before calling FormatAdjust, we need to make sure
+            // that the lines protruding at the bottom get indeed
+            // truncated
             sal_Bool bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
             bRet = sal_True;
             while( !bBreak && aLine.Next() )
             {
-                // OD 2004-02-25 #i16128# - method renamed
                 bBreak = aFrmBreak.IsBreakNowWidAndOrp( aLine );
             }
             if( bBreak )
             {
-                // Es gibt Komplikationen: wenn TruncLines gerufen wird,
-                // veraendern sich ploetzlich die Bedingungen in
-                // IsInside, so dass IsBreakNow andere Ergebnisse
-                // liefern kann. Aus diesem Grund wird rFrmBreak bekannt
-                // gegeben, dass da wo rLine steht, das Ende erreicht
-                // ist. Mal sehen, ob's klappt ...
+                // We run into troubles: when TruncLines get called, the
+                // conditions in IsInside change immediately such that
+                // IsBreakNow can return different results.
+                // For this reason, we make it clear to rFrmBreak, that the
+                // end is reached at the location of rLine.
+                // Let's see if it works ...
                 aLine.TruncLines();
                 aFrmBreak.SetRstHeight( aLine );
                 FormatAdjust( aLine, aFrmBreak, aInf.GetTxt().Len(), aInf.IsStop() );
@@ -931,19 +927,18 @@ sal_Bool SwTxtFrm::CalcPreps()
                 }
                 else if ( !aFrmBreak.IsKeepAlways() )
                 {
-                    // Siehe Bug: 2320
-                    // Vor dem Master wird eine Zeile geloescht, der Follow
-                    // koennte eine Zeile abgeben.
+                    // We delete a line before the Master, because the Follow
+                    // could hand over a line
                     const SwCharRange aFollowRg( GetFollow()->GetOfst(), 1 );
                     *(pPara->GetReformat()) += aFollowRg;
-                    // Es soll weitergehen!
+                    // We should continue!
                     bRet = sal_False;
                 }
             }
 
             UNDO_SWAP( this )
-            // Eine letzte Ueberpruefung, falls das FormatAdjust() nichts
-            // brachte, muessen wir amputieren.
+            // A final check, if FormatAdjust() didn't help we need to
+            // truncate
             if( bPrepMustFit )
             {
                 const SwTwips nMust = (GetUpper()->*fnRect->fnGetPrtBottom)();
@@ -975,7 +970,7 @@ sal_Bool SwTxtFrm::CalcPreps()
  *                      SwTxtFrm::FormatAdjust()
  *************************************************************************/
 
-// Hier werden die Fussnoten und "als Zeichen"-gebundenen Objekte umgehaengt
+// We rewire the footnotes and the character bound objects
 #define CHG_OFFSET( pFrm, nNew )\
     {\
         if( pFrm->GetOfst() < nNew )\
@@ -997,9 +992,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     sal_Bool bHasToFit = pPara->IsPrepMustFit();
 
-    // Das StopFlag wird durch Fussnoten gesetzt,
-    // die auf die naechste Seite wollen.
-    // OD, FME 2004-03-03 - call base class method <SwTxtFrmBreak::IsBreakNow(..)>
+    // The StopFlag is set by footnotes which want to go onto the next page
+    // Call base class method <SwTxtFrmBreak::IsBreakNow(..)>
     // instead of method <WidowsAndOrphans::IsBreakNow(..)> to get a break,
     // even if due to widow rule no enough lines exists.
     sal_uInt8 nNew = ( !GetFollow() &&
@@ -1032,8 +1026,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                                           pBodyFrm->Frm().Width() :
                                           pBodyFrm->Frm().Height() ) : 0;
 
-    // Wenn die aktuellen Werte berechnet wurden, anzeigen, dass
-    // sie jetzt gueltig sind.
+    // If the current values have been calculated, show that they
+    // are valid now
     *(pPara->GetReformat()) = SwCharRange();
     sal_Bool bDelta = *pPara->GetDelta() != 0;
     *(pPara->GetDelta()) = 0;
@@ -1044,12 +1038,12 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         nNew = 1;
     }
 
-    // FindBreak schneidet die letzte Zeile ab.
+    // FindBreak truncates the last line
     if( !rFrmBreak.FindBreak( this, rLine, bHasToFit ) )
     {
-        // Wenn wir bis zum Ende durchformatiert haben, wird nEnd auf das Ende
-        // gesetzt. In AdjustFollow wird dadurch ggf. JoinFrm() ausgefuehrt.
-        // Ansonsten ist nEnd das Ende der letzten Zeile im Master.
+        // If we're done formatting, we set nEnd to the end.
+        // AdjustFollow might execute JoinFrm() because of this.
+        // Else, nEnd is the end of the last line in the Master.
         xub_StrLen nOld = nEnd;
         nEnd = rLine.GetEnd();
         if( GetFollow() )
@@ -1062,15 +1056,14 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         }
     }
     else
-    {   // Wenn wir Zeilen abgeben, darf kein Join auf den Folows gerufen werden,
-        // im Gegenteil, es muss ggf. sogar ein Follow erzeugt werden.
-        // Dies muss auch geschehen, wenn die Textmasse komplett im Master
-        // bleibt, denn es k???nnte ja ein harter Zeilenumbruch noch eine weitere
-        // Zeile (ohne Textmassse) notwendig machen!
+    {   // If we pass over lines, we must not call Join in Follows, instead we even
+        // need to create a Follow.
+        // We also need to do this if the whole mass of text remains in the Master,
+        // because a hard line break could necessitate another line (without text mass)!
         nEnd = rLine.GetEnd();
         if( GetFollow() )
         {
-            // OD 21.03.2003 #108121# - Another case for not joining the follow:
+            // Another case for not joining the follow:
             // Text frame has no content, but a numbering. Then, do *not* join.
             // Example of this case: When an empty, but numbered paragraph
             // at the end of page is completely displaced by a fly frame.
@@ -1088,7 +1081,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         }
         else
         {
-            // OD 21.03.2003 #108121# - Only split frame, if the frame contains
+            // Only split frame, if the frame contains
             // content or contains no content, but has a numbering.
             // OD #i84870# - no split, if text frame only contains one
             // as-character anchored object.
@@ -1101,8 +1094,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                 nNew |= 3;
             }
         }
-        // Wenn sich die Resthoehe geaendert hat, z.B. durch RemoveFtn()
-        // dann muessen wir auffuellen, um Oszillationen zu vermeiden!
+        // If the remaining height changed e.g by RemoveFtn() we need to
+        // fill up in order to avoid oscillation.
         if( bDummy && pBodyFrm &&
            nBodyHeight < ( IsVertical() ?
                            pBodyFrm->Frm().Width() :
@@ -1110,8 +1103,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
             rLine.MakeDummyLine();
     }
 
-    // In AdjustFrm() stellen wir uns selbst per Grow/Shrink ein,
-    // in AdjustFollow() stellen wir unseren FolgeFrame ein.
+    // In AdjustFrm() we set ourselves via Grow/Shrink
+    // In AdjustFollow() we set our FollowFrame
 
     const SwTwips nDocPrtTop = Frm().Top() + Prt().Top();
     const SwTwips nOldHeight = Prt().SSize().Height();
@@ -1153,9 +1146,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
  *                      SwTxtFrm::FormatLine()
  *************************************************************************/
 
-// bPrev zeigt an, ob Reformat.Start() wegen Prev() vorgezogen wurde.
-// Man weiss sonst nicht, ob man Repaint weiter einschraenken kann oder nicht.
-
+// bPrev is set whether Reformat.Start() was called because of Prev().
+// Else, wo don't know whether we can limit the repaint or not.
 
 sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 {
@@ -1180,7 +1172,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     OSL_ENSURE( rLine.GetCurr()->Height(),
             "SwTxtFrm::FormatLine: line height is zero" );
 
-    // Das aktuelle Zeilenumbruchobjekt.
+    // The current line break object
     const SwLineLayout *pNew = rLine.GetCurr();
 
     sal_Bool bUnChg = nOldLen == pNew->GetLen() &&
@@ -1199,7 +1191,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
                  pOldCur->GetNext();
     }
 
-    // rRepaint wird berechnet:
+    // Calculate rRepaint
     const SwTwips nBottom = rLine.Y() + rLine.GetLineHeight();
     SwRepaint &rRepaint = *(pPara->GetRepaint());
     if( bUnChg && rRepaint.Top() == rLine.Y()
@@ -1265,25 +1257,25 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     if( !bUnChg )
         rLine.SetChanges();
 
-    // Die gute, alte nDelta-Berechnung:
+    // Calculating the good ol' nDelta
     *(pPara->GetDelta()) -= long(pNew->GetLen()) - long(nOldLen);
 
     // Stop!
     if( rLine.IsStop() )
         return sal_False;
 
-    // Unbedingt noch eine Zeile
+    // Absolutely another line
     if( rLine.IsNewLine() )
         return sal_True;
 
-    // bis zum Ende des Strings ?
+    // Until the String's end?
     if( nNewStart >= GetTxtNode()->GetTxt().Len() )
         return sal_False;
 
     if( rLine.GetInfo().IsShift() )
         return sal_True;
 
-    // Ende des Reformats erreicht ?
+    // Reached the Reformat's end?
     const xub_StrLen nEnd = pPara->GetReformat()->Start() +
                         pPara->GetReformat()->Len();
 
@@ -1305,7 +1297,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     rLine.SetUnclipped( sal_False );
 
-    // Das war dem C30 zu kompliziert: aString( GetTxt() );
+    // That was too complicated for the C30: aString( GetTxt() );
     const XubString &rString = GetTxtNode()->GetTxt();
     const xub_StrLen nStrLen = rString.Len();
 
@@ -1313,12 +1305,12 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     SwRepaint   &rRepaint = *(pPara->GetRepaint());
     SwRepaint *pFreeze = NULL;
 
-    // Aus Performancegruenden wird in Init() rReformat auf STRING_LEN gesetzt.
-    // Fuer diesen Fall wird rReformat angepasst.
+    // Due to performance reasons we set rReformat to STRING_LEN in Init()
+    // In this case we adjust rReformat
     if( rReformat.Len() > nStrLen )
         rReformat.Len() = nStrLen;
 
-    // Optimiert:
+    // Optimized:
     xub_StrLen nEnd = rReformat.Start() + rReformat.Len();
     if( nEnd > nStrLen )
     {
@@ -1337,19 +1329,19 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         nOldBottom = 0;
     rLine.CharToLine( rReformat.Start() );
 
-    // Worte koennen durch Fortfall oder Einfuegen eines Space
-    // auf die Zeile vor der editierten hinausgezogen werden,
-    // deshalb muss diese ebenfalls formatiert werden.
-    // Optimierung: Wenn rReformat erst hinter dem ersten Wort der
-    // Zeile beginnt, so kann diese Zeile die vorige nicht mehr beeinflussen.
-    // AMA: Leider doch, Textgroessenaenderungen + FlyFrames, die Rueckwirkung
-    // kann im Extremfall mehrere Zeilen (Frames!!!) betreffen!
+    // Words can be swapped-out when inserting a space into the
+    // line that comes before the edited one. That's why we also
+    // need to format that.
+    // Optimization: If rReformat starts after the first word of the line
+    // this line cannot possibly influence the previous one.
+    // Unfortunately it can: Text size changes + FlyFrames.
+    // The backlash can affact multiple lines (Frame!)!
 
     // #i46560#
-    // FME: Yes, consider this case: (word ) has to go to the next line
-    // because ) is a forbidden character at the beginning of a line although
+    // FME: Yes, consider this case: (word) has to go to the next line
+    // because) is a forbidden character at the beginning of a line although
     // (word would still fit on the previous line. Adding text right in front
-    // of ) would not trigger a reformatting of the previous line. Adding 1
+    // of) would not trigger a reformatting of the previous line. Adding 1
     // to the result of FindBrk() does not solve the problem in all cases,
     // nevertheless it should be sufficient.
     sal_Bool bPrev = rLine.GetPrev() &&
@@ -1364,7 +1356,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             if( rLine.GetCurr()->GetLen() && !rLine.GetCurr()->IsRest() )
             {
                 if( !rLine.GetStart() )
-                    rLine.Top(); // damit NumDone nicht durcheinander kommt
+                    rLine.Top(); // So that NumDone doesn't get confused
                 break;
             }
         xub_StrLen nNew = rLine.GetStart() + rLine.GetLength();
@@ -1392,26 +1384,23 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         rRepaint.Width(1);
     WidowsAndOrphans aFrmBreak( this, rInf.IsTest() ? 1 : 0 );
 
-    // rLine steht jetzt auf der ersten Zeile, die formatiert werden
-    // muss. Das Flag bFirst sorgt dafuer, dass nicht Next() gerufen wird.
-    // Das ganze sieht verdreht aus, aber es muss sichergestellt werden,
-    // dass bei IsBreakNow rLine auf der Zeile zum stehen kommt, die
-    // nicht mehr passt.
+    // rLine is now set to the first line which needs formatting.
+    // The bFirst flag makes sure that Next() is not called.
+    // The whole thing looks weird, but we need to make sure that
+    // rLine stops at the last non-fitting line when calling IsBreakNow.
     sal_Bool bFirst  = sal_True;
     sal_Bool bFormat = sal_True;
 
-    // 5383: Das CharToLine() kann uns auch in den roten Bereich fuehren.
-    // In diesem Fall muessen wir zurueckwandern, bis die Zeile, die
-    // nicht mehr passt in rLine eingestellt ist. Ansonsten geht Textmasse
-    // verloren, weil der Ofst im Follow falsch eingestellt wird.
+    // The CharToLine() can also get us into the danger zone.
+    // In that case we need to walk back until rLine is set
+    // to the non-fitting line. Or else the mass of text is lost,
+    // because the Ofst was set wrongly in the Follow.
 
-    // OD 2004-02-25 #i16128# - method renamed
     sal_Bool bBreak = ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 )
                     && aFrmBreak.IsBreakNowWidAndOrp( rLine );
     if( bBreak )
     {
         sal_Bool bPrevDone = 0 != rLine.Prev();
-        // OD 2004-02-25 #i16128# - method renamed
         while( bPrevDone && aFrmBreak.IsBreakNowWidAndOrp(rLine) )
             bPrevDone = 0 != rLine.Prev();
         if( bPrevDone )
@@ -1421,22 +1410,24 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         }
         rLine.TruncLines();
 
-        // auf Nummer sicher:
-        // OD 2004-02-25 #i16128# - method renamed
+        // Play it safe
         bBreak = aFrmBreak.IsBreakNowWidAndOrp(rLine) &&
                   ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 );
     }
 
- /* Bedeutung der folgenden Flags:
-    Ist das Watch(End/Mid)Hyph-Flag gesetzt, so muss formatiert werden, wenn
-    eine Trennung am (Zeilenende/Fly) vorliegt, sofern MaxHyph erreicht ist.
-    Das Jump(End/Mid)Flag bedeutet, dass die naechste Zeile, bei der keine
-    Trennung (Zeilenende/Fly) vorliegt, formatiert werden muss, da jetzt
-    umgebrochen werden koennte, was vorher moeglicherweise durch MaxHyph
-    verboten war.
-    Watch(End/Mid)Hyph wird gesetzt, wenn die letzte formatierte Zeile eine
-    Trennstelle erhalten hat, vorher aber keine hatte,
-    Jump(End/Mid)Hyph, wenn eine Trennstelle verschwindet.
+ /* Meaning if the following flags are set:
+
+    Watch(End/Mid)Hyph: we need to format if we have a break at
+    the line end/Fly, as long as MaxHyph is reached
+
+    Jump(End/Mid)Flag: the next line which has no break (line end/Fly),
+    needs to be formatted, because we could wrap now. This might have been
+    forbidden earlier by MaxHyph
+
+    Watch(End/Mid)Hyph: if the last formatted line got a cutoff point, but
+    didn't have one before
+
+    Jump(End/Mid)Hyph: if a cutoff point disappears
  */
     sal_Bool bJumpEndHyph  = sal_False,
          bWatchEndHyph = sal_False,
@@ -1471,13 +1462,13 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             SetFieldFollow( sal_False );
     }
 
-    /* Zum Abbruchkriterium:
-     * Um zu erkennen, dass eine Zeile nicht mehr auf die Seite passt,
-     * muss sie formatiert werden. Dieser Ueberhang wird z.B. in AdjustFollow
-     * wieder entfernt.
-     * Eine weitere Komplikation: wenn wir der Master sind, so muessen
-     * wir die Zeilen durchgehen, da es ja sein kann, dass eine Zeile
-     * vom Follow in den Master rutschen kann.
+    /* Ad cancel criterion:
+     * In order to recognize, whether a line does not fit onto the page
+     * anymore, we need to format it. This overflow is removed again in
+     * e.g. AdjustFollow.
+     * Another complication: if we are the Master, we need to traverse
+     * the lines, because it could happen that one line can overflow
+     * from the Follow to the Master.
      */
     do
     {
@@ -1541,7 +1532,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             sal_Bool bOldEndHyph = rLine.GetCurr()->IsEndHyph();
             sal_Bool bOldMidHyph = rLine.GetCurr()->IsMidHyph();
             bFormat = FormatLine( rLine, bPrev );
-            //9334: Es kann nur ein bPrev geben... (???)
+            // There can only have one bPrev ... (???)
             bPrev = sal_False;
             if ( bMaxHyph )
             {
@@ -1577,7 +1568,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                     break;
             }
         }
-        // OD 2004-02-25 #i16128# - method renamed
         bBreak = aFrmBreak.IsBreakNowWidAndOrp(rLine);
     }while( !bBreak );
 
@@ -1589,9 +1579,9 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
     if( !rLine.IsStop() )
     {
-        // Wurde aller Text formatiert und gibt es noch weitere
-        // Zeilenobjekte, dann sind diese jetzt ueberfluessig,
-        // weil der Text kuerzer geworden ist.
+        // If we're finished formatting the text and we still
+        // have other line objects left, these are superfluous
+        // now because the text has gotten shorter.
         if( rLine.GetStart() + rLine.GetLength() >= nStrLen &&
             rLine.GetCurr()->GetNext() )
         {
@@ -1602,7 +1592,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
     if( !rInf.IsTest() )
     {
-        // Bei OnceMore lohnt sich kein FormatAdjust
+        // FormatAdjust does not pay off at OnceMore
         if( bAdjust || !rLine.GetDropFmt() || !rLine.CalcOnceMore() )
         {
             FormatAdjust( rLine, aFrmBreak, nStrLen, rInf.IsStop() );
@@ -1610,9 +1600,10 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         if( rRepaint.HasArea() )
             SetRepaint();
         rLine.SetTruncLines( sal_False );
-        if( nOldBottom )                    // Bei "gescollten" Absaetzen wird
-        {                                   // noch ueberprueft, ob durch Schrumpfen
-            rLine.Bottom();                 // das Scrolling ueberfluessig wurde.
+        if( nOldBottom )                    // We check if, for paragraphs that need scrolling
+                                            // can be shrunk, so that the don't need scrolling anymore
+        {
+            rLine.Bottom();
             SwTwips nNewBottom = rLine.Y();
             if( nNewBottom < nOldBottom )
                 _SetOfst( 0 );
@@ -1633,7 +1624,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     if( !pPara )
         return;
 
-    // ggf gegen pPara
+    // If necessary the pPara
     KSHORT nOld  = ((const SwTxtMargin&)rLine).GetDropHeight();
     sal_Bool bShrink = sal_False,
          bGrow   = sal_False,
@@ -1669,7 +1660,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 nOld = nNew;
             }
 
-            // 6107: Wenn was schief ging, muss noch einmal formatiert werden.
+            // If something went wrong, we need to reformat again
             if( !bGoOn )
             {
                 rInf.CtorInitTxtFormatInfo( this );
@@ -1679,7 +1670,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 SwCharRange aTmpRange( 0, rInf.GetTxt().Len() );
                 *(pPara->GetReformat()) = aTmpRange;
                 _Format( rLine, rInf, sal_True );
-                // 8047: Wir painten alles...
+                // We paint everything ...
                 SetCompletePaint();
             }
         }
@@ -1697,9 +1688,9 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 
     if ( !nStrLen )
     {
-        // Leere Zeilen werden nicht lange gequaelt:
-        // pPara wird blank geputzt
-        // entspricht *pPara = SwParaPortion;
+        // Empty lines do not get tortured for very long:
+        // pPara is cleared, which is the same as:
+        // *pPara = SwParaPortion;
         sal_Bool bMustFit = pPara->IsPrepMustFit();
         pPara->Truncate();
         pPara->FormatReset();
@@ -1721,7 +1712,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
     SwTxtFormatInfo aInf( this );
     SwTxtFormatter  aLine( this, &aInf );
 
-    // OD 2004-01-15 #110582#
     HideAndShowObjects();
 
     _Format( aLine, aInf );
@@ -1756,9 +1746,8 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
  *************************************************************************/
 
 /*
- * Format berechnet die Groesse des Textframes und ruft, wenn
- * diese feststeht, Shrink() oder Grow(), um die Framegroesse dem
- * evtl. veraenderten Platzbedarf anzupassen.
+ * We calculate the text frame's size and send a notification.
+ * Shrink() or Grow() to adjust the frame's size to the changed required space.
  */
 
 void SwTxtFrm::Format( const SwBorderAttrs * )
@@ -1767,13 +1756,12 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
     CalcAdditionalFirstLineOffset();
 
-    // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
-    // gelegentlich TxtFrms mit einer Breite <=0.
+    // The raneg autopilot or the BASIC interface pass us TxtFrms with
+    // a width <= 0 from time to time
     if( (Prt().*fnRect->fnGetWidth)() <= 0 )
     {
-        // Wenn MustFit gesetzt ist, schrumpfen wir ggf. auf die Unterkante
-        // des Uppers, ansonsten nehmen wir einfach eine Standardgroesse
-        // von 12 Pt. ein (240 Twip).
+        // If MustFit is set, we shrink to the Upper's bottom edge if needed.
+        // Else we just take a standard size of 12 Pt. (240 twip).
         SwTxtLineAccess aAccess( this );
         long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
         if( aAccess.GetPara()->IsPrepMustFit() )
@@ -1802,17 +1790,16 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     {
 
         SetEmpty( sal_False );
-        // Um nicht durch verschachtelte Formats irritiert zu werden.
+        // In order to not get confused by nested Formats
         FormatLevel aLevel;
         if( 12 == aLevel.GetLevel() )
             return;
 
-        // Die Formatinformationen duerfen u.U. nicht veraendert werden.
+        // We could be possibly not allowed to alter the format information
         if( IsLocked() )
             return;
 
-        // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
-        // angestossen werden.
+        // Attention: Format() could be triggered by GetFormatted()
         if( IsHiddenNow() )
         {
             long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
@@ -1823,7 +1810,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             }
             else
             {
-                // OD 2004-01-20 #110582# - assure that objects anchored
+                // Assure that objects anchored
                 // at paragraph resp. at/as character inside paragraph
                 // are hidden.
                 HideAndShowObjects();
@@ -1832,7 +1819,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             return;
         }
 
-        // Waehrend wir formatieren, wollen wir nicht gestoert werden.
+        // We do not want to be interrupted during formatting
         SwTxtFrmLocker aLock(this);
         SwTxtLineAccess aAccess( this );
         const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
@@ -1840,9 +1827,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
         if( CalcPreps() )
             ; // nothing
-        // Wir returnen, wenn schon formatiert wurde, nicht aber, wenn
-        // der TxtFrm gerade erzeugt wurde und ueberhaupt keine Format-
-        // informationen vorliegen.
+        // We return if already formated, but if the TxtFrm was just created
+        // and does not have any format information
         else if( !bNew && !aAccess.GetPara()->GetReformat()->Len() )
         {
             if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
@@ -1948,7 +1934,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
     (void)nDbgY;
-    // nStopAt laesst sich vom CV bearbeiten.
+    // nStopAt allows CV to alter it
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
     {
@@ -1960,7 +1946,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     if( IsEmpty() && FormatEmpty() )
         return sal_True;
 
-    // Wir sind sehr waehlerisch:
+    // We're very picky:
     if( HasPara() || IsWidow() || IsLocked()
         || !GetValidSizeFlag() ||
         ( ( IsVertical() ? Prt().Width() : Prt().Height() ) && IsHiddenNow() ) )
@@ -1975,12 +1961,12 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 
     SwTxtFrmLocker aLock(this);
     SwTxtFormatInfo aInf( this, sal_False, sal_True );
-    if( 0 != aInf.MaxHyph() )   // 27483: MaxHyphen beachten!
+    if( 0 != aInf.MaxHyph() )   // Respect MaxHyphen!
         return sal_False;
 
     SwTxtFormatter  aLine( this, &aInf );
 
-    // DropCaps sind zu kompliziert...
+    // DropCaps are too complicated ...
     if( aLine.GetDropFmt() )
         return sal_False;
 
@@ -1994,7 +1980,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
             aLine.Insert( new SwLineLayout() );
     } while( aLine.Next() );
 
-    // Last exit: die Hoehen muessen uebereinstimmen.
+    // Last exit: the heights need to match
     Point aTopLeft( Frm().Pos() );
     aTopLeft += Prt().Pos();
     const SwTwips nNewHeight = aLine.Y() + aLine.GetLineHeight();
@@ -2002,22 +1988,22 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 
     if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
-        // Achtung: Durch FormatLevel==12 kann diese Situation auftreten, don't panic!
+        // Attention: This situation can occur due to FormatLevel==12. Don't panic!
         const xub_StrLen nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
         return sal_False;
     }
 
     if (m_pFollow && nStart != (static_cast<SwTxtFrm*>(m_pFollow))->GetOfst())
-        return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
+        return sal_False; // can be caused by e.g. Orphans
 
-    // Geschafft, wir sind durch ...
+    // We made it!
 
-    // Repaint setzen
+    // Set repaint
     pPara->GetRepaint()->Pos( aTopLeft );
     pPara->GetRepaint()->SSize( Prt().SSize() );
 
-    // Reformat loeschen
+    // Delete reformat
     *(pPara->GetReformat()) = SwCharRange();
     *(pPara->GetDelta()) = 0;
 
