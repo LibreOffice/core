@@ -825,7 +825,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         case PART_MENU_SUBMENU_ARROW:
             context = mpMenuStyle;
             renderType = RENDER_ARROW;
-            additionalContext = mpMenuStyle;
+            renderWindowBackground = false;
             break;
         }
         break;
@@ -1206,7 +1206,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuBarTextColor( aTextColor );
 
     // menu items
-    gtk_style_context_get_color( mpMenuItemStyle, GTK_STATE_FLAG_NORMAL, &color );
+    gtk_style_context_get_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &color );
     aTextColor = getColor( color );
     aStyleSet.SetMenuTextColor( aTextColor );
 
@@ -1521,6 +1521,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Menu bar */
     getStyleContext(&mpMenuBarStyle, gtk_menu_bar_new());
+    gtk_style_context_add_class(mpMenuBarStyle, GTK_STYLE_CLASS_MENU);
 
     /* Menu items in a menu bar */
     path = gtk_widget_path_new();
