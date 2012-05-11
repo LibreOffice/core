@@ -7712,6 +7712,16 @@ if test "$with_system_icu" = "yes"; then
     ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
     ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
     ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
+    if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
+        ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+    else
+        ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
+    fi
+    if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
+        ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
+    else
+        ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
+    fi
 
     if test "$ICU_MAJOR" -ge "4"; then
         AC_MSG_RESULT([OK, $ICU_VERSION])
@@ -7760,16 +7770,6 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
         if test -z "$SYSTEM_GENCMN"; then
             AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
-        fi
-        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
-            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
-        else
-            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
-        fi
-        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
-            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
-        else
-            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
         fi
     fi
 
