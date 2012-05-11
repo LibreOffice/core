@@ -3571,7 +3571,6 @@ if test -n "$enable_debug" && test "$enable_debug" != "no"; then
         ENABLE_DEBUG_FOR="$enable_debug"
         AC_MSG_RESULT([for $enable_debug])
     fi
-    AC_MSG_RESULT([yes])
 else
     ENABLE_DEBUG=""
     ENABLE_DEBUG_FOR=""
