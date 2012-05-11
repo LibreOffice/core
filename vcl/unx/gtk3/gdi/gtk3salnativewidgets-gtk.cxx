@@ -284,9 +284,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gint            stepper_spacing = 0;
     gint            trough_border = 0;
     gint            min_slider_length = 0;
-    gint            vShim = 0;
-    gint            hShim = 0;
-    gint            x,y,w,h;
 
     // make controlvalue rectangles relative to area
     thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
@@ -322,17 +319,15 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                  "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
     gint magic = trough_border ? 1 : 0;
     gint nFirst = 0;
+    gint slider_side = slider_width + (trough_border * 2);
 
     if ( has_backward )  nFirst  += 1;
     if ( has_forward2 )  nFirst  += 1;
 
     if ( nPart == PART_DRAW_BACKGROUND_HORZ )
     {
-        unsigned int sliderHeight = slider_width + (trough_border * 2);
-        vShim = (scrollbarRect.GetHeight() - sliderHeight) / 2;
-
-        scrollbarRect.Move( 0, vShim );
-        scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), sliderHeight ) );
+        scrollbarRect.Move( 0, (scrollbarRect.GetHeight() - slider_side) / 2 );
+        scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), slider_side ) );
 
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
         arrow1Angle = G_PI * 3 / 2;
@@ -371,11 +366,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     }
     else
     {
-        unsigned int sliderWidth = slider_width + (trough_border * 2);
-        hShim = (scrollbarRect.GetWidth() - sliderWidth) / 2;
-
-        scrollbarRect.Move( hShim, 0 );
-        scrollbarRect.SetSize( Size( sliderWidth, scrollbarRect.GetHeight() ) );
+        scrollbarRect.Move( (scrollbarRect.GetWidth() - slider_side) / 2, 0 );
+        scrollbarRect.SetSize( Size( slider_side, scrollbarRect.GetHeight() ) );
 
         scrollbarOrientation = GTK_ORIENTATION_VERTICAL;
         arrow1Angle = 0;
@@ -411,18 +403,13 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     }
 
     sal_Bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
-    x = y = 0;
-    w = scrollbarRect.GetWidth();
-    h = scrollbarRect.GetHeight();
 
     // ----------------- TROUGH
-    gtk_render_background(context, cr, x, y, w, h);
-
     gtk_style_context_save(context);
     gtk_style_context_add_class(context, GTK_STYLE_CLASS_TROUGH);
-    gtk_render_background(context, cr, x, y,
+    gtk_render_background(context, cr, 0, 0,
                           scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-    gtk_render_frame(context, cr, x, y,
+    gtk_render_frame(context, cr, 0, 0,
                      scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
 
     gtk_style_context_restore(context);
@@ -439,7 +426,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_SLIDER);
 
         gtk_render_slider(context, cr,
-                          x+hShim+thumbRect.Left(), y+vShim+thumbRect.Top(),
+                          thumbRect.Left(), thumbRect.Top(),
                           thumbRect.GetWidth(), thumbRect.GetHeight(), scrollbarOrientation);
 
         gtk_style_context_restore(context);
@@ -454,17 +441,17 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
         gtk_render_background(context, cr,
-                              x+hShim+button11BoundRect.Left(), y+vShim+button11BoundRect.Top(),
+                              button11BoundRect.Left(), button11BoundRect.Top(),
                               button11BoundRect.GetWidth(), button11BoundRect.GetHeight() );
         gtk_render_frame(context, cr,
-                         x+hShim+button11BoundRect.Left(), y+vShim+button11BoundRect.Top(),
+                         button11BoundRect.Left(), button11BoundRect.Top(),
                          button11BoundRect.GetWidth(), button11BoundRect.GetHeight() );
 
         // ----------------- ARROW 1
         NWCalcArrowRect( button11BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow1Angle,
-                         x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
+                         arrowRect.Left(), arrowRect.Top(),
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
 
         gtk_style_context_restore(context);
@@ -478,17 +465,17 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
         gtk_render_background(context, cr,
-                              x+hShim+button12BoundRect.Left(), y+vShim+button12BoundRect.Top(),
+                              button12BoundRect.Left(), button12BoundRect.Top(),
                               button12BoundRect.GetWidth(), button12BoundRect.GetHeight() );
         gtk_render_frame(context, cr,
-                         x+hShim+button12BoundRect.Left(), y+vShim+button12BoundRect.Top(),
+                         button12BoundRect.Left(), button12BoundRect.Top(),
                          button12BoundRect.GetWidth(), button12BoundRect.GetHeight() );
 
         // ----------------- ARROW 1
         NWCalcArrowRect( button12BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow2Angle,
-                         x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
+                         arrowRect.Left(), arrowRect.Top(),
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
 
         gtk_style_context_restore(context);
@@ -503,17 +490,17 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
         gtk_render_background(context, cr,
-                              x+hShim+button21BoundRect.Left(), y+vShim+button21BoundRect.Top(),
+                              button21BoundRect.Left(), button21BoundRect.Top(),
                               button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
         gtk_render_frame(context, cr,
-                         x+hShim+button21BoundRect.Left(), y+vShim+button21BoundRect.Top(),
+                         button21BoundRect.Left(), button21BoundRect.Top(),
                          button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
 
         // ----------------- ARROW 2
         NWCalcArrowRect( button21BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow1Angle,
-                         x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
+                         arrowRect.Left(), arrowRect.Top(),
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
 
         gtk_style_context_restore(context);
@@ -527,17 +514,17 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
         gtk_render_background(context, cr,
-                       x+hShim+button22BoundRect.Left(), y+vShim+button22BoundRect.Top(),
+                       button22BoundRect.Left(), button22BoundRect.Top(),
                        button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
         gtk_render_frame(context, cr,
-                       x+hShim+button22BoundRect.Left(), y+vShim+button22BoundRect.Top(),
+                       button22BoundRect.Left(), button22BoundRect.Top(),
                        button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
 
         // ----------------- ARROW 2
         NWCalcArrowRect( button22BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow2Angle,
-                         x+hShim+arrowRect.Left(), y+vShim+arrowRect.Top(),
+                         arrowRect.Left(), arrowRect.Top(),
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
 
         gtk_style_context_restore(context);
