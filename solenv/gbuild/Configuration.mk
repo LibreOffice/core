@@ -404,7 +404,7 @@ endif
 
 endef
 
-#$(call gb_Configuration_add_schemas,zipfile,prefix,xcufiles)
+#$(call gb_Configuration_add_datas,zipfile,prefix,xcufiles)
 define gb_Configuration_add_datas
 $(foreach xcu,$(3),$(call gb_Configuration_add_data,$(1),$(2),$(xcu)))
 
