@@ -104,7 +104,7 @@ $(i18npool_BIDIR)/%.txt : \
 	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
 ifeq ($(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),YES)
 ifeq ($(ICU_RECLASSIFIED_PREPEND_SET_EMPTY),YES)
-	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#;/\<Prepend\>/d" $< > $@
+	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< | sed "/\<Prepend\>/d" > $@
 else
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< > $@
 endif
