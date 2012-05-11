@@ -1548,7 +1548,9 @@ void WorksheetHelper::setManualRowHeight( sal_Int32 nRow )
 
 void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) const
 {
-    getScDocument().SetValue( (SCCOL)rAddress.Column, (SCROW)rAddress.Row, (SCTAB)rAddress.Sheet, fValue );
+    ScAddress aAddress;
+    ScUnoConversion::FillScAddress( aAddress, rAddress );
+    getScDocument().SetValue( aAddress.Col(), aAddress.Row(), aAddress.Tab(), fValue );
 }
 
 void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fValue ) const
@@ -1567,7 +1569,9 @@ void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fVal
 
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
 {
-    getScDocument().SetString( (SCCOL)rAddress.Column, (SCROW)rAddress.Row, (SCTAB)rAddress.Sheet, rText );
+    ScAddress aAddress;
+    ScUnoConversion::FillScAddress( aAddress, rAddress );
+    getScDocument().SetString( aAddress.Col(), aAddress.Row(), aAddress.Tab(), rText );
 }
 
 void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
