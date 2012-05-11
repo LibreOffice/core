@@ -334,27 +334,12 @@ void StgStrm::SetEntry( StgDirEntry& r )
     r.SetDirty();
 }
 
-namespace lcl
-{
-#if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
-    using std::is_sorted;
-#else
-    template <typename iter> bool is_sorted(iter aStart, iter aEnd)
-    {
-        if (aStart == aEnd)
-            return true;
-
-        for (iter aNext = aStart + 1; aNext != aEnd; aStart = aNext, ++aNext)
-        {
-            if (*aNext < *aStart)
-                return false;
-        }
-
-        return true;
-    }
-#endif
-}
-
+/*
+ * The page chain, is basically a singly linked list of slots each
+ * point to the next page. Instead of traversing the file structure
+ * for this each time build a simple flat in-memory vector list
+ * of pages.
+ */
 bool StgStrm::buildPageChainCache()
 {
     if (nSize > 0)
@@ -370,10 +355,6 @@ bool StgStrm::buildPageChainCache()
             return false;
     }
 
-    m_bSortedPageChain = lcl::is_sorted(m_aPagesCache.begin(), m_aPagesCache.end());
-
-    SAL_WARN_IF(!m_bSortedPageChain, "sot", "unsorted page chain, that's suspicious");
-
     return true;
 }
 
@@ -382,7 +363,7 @@ bool StgStrm::buildPageChainCache()
 //
 //There's a cost to building a page cache, so only build one if the number of
 //pages to seek through hits some sufficiently high value where it's worth it.
-#define ARBITRARY_LARGE_AMOUNT_OF_PAGES 256
+#define ARBITRARY_LARGE_AMOUNT_OF_PAGES 8 * 512
 
 // Compute page number and offset for the given byte position.
 // If the position is behind the size, set the stream right
@@ -403,6 +384,32 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     nPos = nBytePos;
     if( nOld == nNew )
         return sal_True;
+
+    if (m_aPagesCache.empty() && nNew > ARBITRARY_LARGE_AMOUNT_OF_PAGES)
+    {
+        SAL_WARN("sot", "kicking off large seek helper\n");
+        buildPageChainCache();
+    }
+
+    if (!m_aPagesCache.empty())
+    {
+        size_t nIdx = nNew / nPageSize;
+
+        // special case: seek to 1st byte of new, unallocated page
+        // (in case the file size is a multiple of the page size)
+        if( nBytePos == nSize && !nOffset && nIdx == m_aPagesCache.size() )
+        {
+            nIdx--;
+            nOffset = nPageSize;
+        }
+
+        if (nIdx < m_aPagesCache.size())
+        {
+            nPage = m_aPagesCache[ nIdx ];
+            return sal_Bool( nPage >= 0 );
+        }
+    }
+
     if( nNew > nOld )
     {
         // the new position is after the current, so an incremental
@@ -421,58 +428,18 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     nRel /= nPageSize;
 
     sal_Int32 nLast = STG_EOF;
-    if (m_aPagesCache.empty() && nRel < ARBITRARY_LARGE_AMOUNT_OF_PAGES)
+    while (nRel && nBgn >= 0)
     {
-        while (nRel && nBgn >= 0)
-        {
-            nLast = nBgn;
-            nBgn = pFat->GetNextPage( nBgn );
-            nRel--;
-        }
-    }
-    else if (nBgn >= 0)
-    {
-        //Seeking large distances is slow, so if we're starting seeking (some
-        //fairly arbitrary) large distances, build a cache and re-use it for
-        //subsequent seeks
-        if (m_aPagesCache.empty())
-        {
-            SAL_WARN("sot", "kicking off large seek helper\n");
-            buildPageChainCache();
-        }
-
-        std::vector<sal_Int32>::iterator aI;
-
-        if (m_bSortedPageChain)
-            aI = std::lower_bound(m_aPagesCache.begin(), m_aPagesCache.end(), nBgn);
-        else
-            aI = std::find(m_aPagesCache.begin(), m_aPagesCache.end(), nBgn);
-
-        if (aI == m_aPagesCache.end())
-        {
-            SAL_WARN("sot", "Unknown page position");
-            nBgn = STG_EOF;
-        }
-        else
-        {
-            size_t nBgnIndex = std::distance(m_aPagesCache.begin(), aI);
-            size_t nIndex = nBgnIndex + nRel;
-
-            if (nIndex >= m_aPagesCache.size())
-                nIndex = m_aPagesCache.size() - 1;
-
-            size_t nSuccessfulStepsTaken = nIndex - nBgnIndex;
-            nRel -= nSuccessfulStepsTaken;
-
-            nLast = nIndex ? m_aPagesCache[nIndex - 1] : STG_EOF;
-            nBgn = m_aPagesCache[nIndex];
-        }
+        nLast = nBgn;
+        nBgn = pFat->GetNextPage( nBgn );
+        nRel--;
     }
 
     // special case: seek to 1st byte of new, unallocated page
     // (in case the file size is a multiple of the page size)
     if( nBytePos == nSize && nBgn == STG_EOF && !nRel && !nOffset )
         nBgn = nLast, nOffset = nPageSize;
+
     if( nBgn < 0 && nBgn != STG_EOF )
     {
         rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
