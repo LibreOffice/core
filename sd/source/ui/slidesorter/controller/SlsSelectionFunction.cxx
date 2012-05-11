@@ -261,9 +261,10 @@ public:
     MultiSelectionModeHandler (
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction,
-        const Point& rMouseModelPosition,
-        const sal_uInt32 nEventCode);
+        const Point& rMouseModelPosition);
     virtual ~MultiSelectionModeHandler (void);
+
+    void Initialize(const sal_uInt32 nEventCode);
 
     virtual SelectionFunction::Mode GetMode (void) const;
     virtual void Abort (void);
@@ -310,11 +311,10 @@ class DragAndDropModeHandler : public SelectionFunction::ModeHandler
 public:
     DragAndDropModeHandler (
         SlideSorter& rSlideSorter,
-        SelectionFunction& rSelectionFunction,
-        const Point& rMousePosition,
-        ::Window* pWindow);
+        SelectionFunction& rSelectionFunction);
     virtual ~DragAndDropModeHandler (void);
 
+    void Initialize(const Point& rMousePosition, ::Window* pWindow);
     virtual SelectionFunction::Mode GetMode (void) const;
     virtual void Abort (void);
 
@@ -827,8 +827,13 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point aMousePosition)
 {
     if (mpModeHandler->GetMode() != DragAndDropMode)
     {
-        SwitchMode(::boost::shared_ptr<ModeHandler>(
-            new DragAndDropModeHandler(mrSlideSorter, *this, aMousePosition, mpWindow)));
+        ::boost::shared_ptr<DragAndDropModeHandler> handler(
+            new DragAndDropModeHandler(mrSlideSorter, *this));
+        SwitchMode(handler);
+        // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
+        // could already trigger DND events, which would recursively trigger this code again,
+        // and without mpModeHandler set it would again try to set a new handler.
+        handler->Initialize(aMousePosition, mpWindow);
     }
 }
 
@@ -840,8 +845,14 @@ void SelectionFunction::SwitchToMultiSelectionMode (
     const sal_uInt32 nEventCode)
 {
     if (mpModeHandler->GetMode() != MultiSelectionMode)
-        SwitchMode(::boost::shared_ptr<ModeHandler>(
-            new MultiSelectionModeHandler(mrSlideSorter, *this, aMousePosition, nEventCode)));
+    {
+        ::boost::shared_ptr<MultiSelectionModeHandler> handler(
+            new MultiSelectionModeHandler(mrSlideSorter, *this, aMousePosition));
+        SwitchMode(handler);
+        // Delayed initialization, only after mpModeHanler is set, the handle ctor
+        // is non-trivial, so it could possibly recurse just like the DND handler above.
+        handler->Initialize(nEventCode);
+    }
 }
 
 
@@ -1558,8 +1569,7 @@ void NormalModeHandler::ResetButtonDownLocation (void)
 MultiSelectionModeHandler::MultiSelectionModeHandler (
     SlideSorter& rSlideSorter,
     SelectionFunction& rSelectionFunction,
-    const Point& rMouseModelPosition,
-    const sal_uInt32 nEventCode)
+    const Point& rMouseModelPosition)
     : ModeHandler(rSlideSorter, rSelectionFunction, false),
       meSelectionMode(SM_Normal),
       maSecondCorner(rMouseModelPosition),
@@ -1567,6 +1577,11 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
       mnAnchorIndex(-1),
       mnSecondIndex(-1),
       maButtonBarLock(rSlideSorter)
+{
+}
+
+
+void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
 {
     const Pointer aSelectionPointer (POINTER_TEXT);
     mrSlideSorter.GetContentWindow()->SetPointer(aSelectionPointer);
@@ -1807,10 +1822,12 @@ void MultiSelectionModeHandler::UpdateSelection (void)
 
 DragAndDropModeHandler::DragAndDropModeHandler (
     SlideSorter& rSlideSorter,
-    SelectionFunction& rSelectionFunction,
-    const Point& rMousePosition,
-    ::Window* pWindow)
+    SelectionFunction& rSelectionFunction)
     : ModeHandler(rSlideSorter, rSelectionFunction, false)
+{
+}
+
+void DragAndDropModeHandler::Initialize(const Point& rMousePosition, ::Window* pWindow)
 {
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
     if (pDragTransferable==NULL && mrSlideSorter.GetViewShell() != NULL)
