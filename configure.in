@@ -7734,6 +7734,16 @@ if test "$with_system_icu" = "yes"; then
 You can use --with-system-icu-for-build=force to use it anyway.])
             fi
         fi
+        if test "$ICU_MAJOR_FOR_BUILD" -ge "5" -o "$ICU_MAJOR_FOR_BUILD" = "4" -a "$ICU_MINOR_FOR_BUILD" -ge "4"; then
+            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+        else
+            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
+        fi
+        if test "$ICU_MAJOR_FOR_BUILD" -ge "5" -o "$ICU_MAJOR_FOR_BUILD" = "4" -a "$ICU_MINOR_FOR_BUILD" -ge "9"; then
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
+        else
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
+        fi
     fi
 
     if test "$cross_compiling" != "yes" -o "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force"; then
@@ -7753,9 +7763,13 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         fi
         if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
             ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+        else
+            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
         fi
         if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
             ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
+        else
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
         fi
     fi
 
