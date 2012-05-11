@@ -42,8 +42,9 @@ SLOFILES=	\
             $(EXCEPTIONSFILES) \
             $(SLO)$/levdis.obj
 
-# on unxsoli, no optimization for textsearch because of i105945
-.IF "$(OS)$(COM)$(CPUNAME)"=="SOLARISC52INTEL"
+# disabled optimization on unxsol*
+# for textsearch because of i105945 and i119332
+.IF "$(OS)"=="SOLARIS"
 EXCEPTIONSNOOPTFILES= \
         $(SLO)$/textsearch.obj
 .ENDIF
