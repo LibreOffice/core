@@ -51,6 +51,7 @@
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "stylesbuffer.hxx"
+#include "themebuffer.hxx"
 
 #include "colorscale.hxx"
 #include "document.hxx"
@@ -206,7 +207,14 @@ namespace {
 
 void ColorScaleRule::importColor( const AttributeList& rAttribs )
 {
-    sal_Int32 nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+    sal_Int32 nColor = 0;
+    if( rAttribs.hasAttribute( XML_rgb ) )
+        nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+    else if( rAttribs.hasAttribute( XML_theme ) )
+    {
+        sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
+        nColor = getTheme().getColorByToken( nThemeIndex );
+    }
 
     ::Color aColor = RgbToRgbComponents( nColor );
 
