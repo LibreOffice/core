@@ -144,11 +144,8 @@ $ENV{PWD} = $cwd_str;
 
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
-if ($aclocal_flags eq "")
-{
-    $aclocal_flags = "-I ./m4";
-    $aclocal_flags .= " -I ./m4/mac" if ($system eq 'Darwin');
-}
+$aclocal_flags .= " -I ./m4";
+$aclocal_flags .= " -I ./m4/mac" if ($system eq 'Darwin');
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
