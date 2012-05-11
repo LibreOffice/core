@@ -104,6 +104,11 @@ bool ScColorScaleEntry::GetPercent() const
     return mbPercent;
 }
 
+bool ScColorScaleEntry::HasFormula() const
+{
+    return mpCell;
+}
+
 void ScColorScaleEntry::SetMin(bool bMin)
 {
     mbMin = bMin;
@@ -369,7 +374,13 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
     for(const_iterator itr = begin(); itr != end(); ++itr)
     {
         if(itr->GetMin() || itr->GetMax())
+        {
             bNeedUpdate = true;
+            break;
+        }
+
+        if(itr->HasFormula())
+            return true;
     }
 
     // TODO: check also if the changed value is the new min/max

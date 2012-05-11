@@ -59,6 +59,7 @@ public:
     bool GetMin() const;
     bool GetMax() const;
     bool GetPercent() const;
+    bool HasFormula() const;
     void SetMin(bool bMin);
     void SetMax(bool bMax);
     void SetPercent(bool bPercent);
