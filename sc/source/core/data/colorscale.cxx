@@ -74,6 +74,14 @@ double ScColorScaleEntry::GetValue() const
     return mnVal;
 }
 
+void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo )
+{
+    if(mpCell)
+    {
+        mpCell->UpdateMoveTab( nOldTab, nNewTab, nTabNo );
+    }
+}
+
 const Color& ScColorScaleEntry::GetColor() const
 {
     return maColor;
@@ -341,17 +349,22 @@ void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
     size_t n = maRanges.size();
     SCTAB nMinTab = std::min<SCTAB>(nOldTab, nNewTab);
     SCTAB nMaxTab = std::max<SCTAB>(nOldTab, nNewTab);
+    SCTAB nThisTab = -1;
     for(size_t i = 0; i < n; ++i)
     {
         ScRange* pRange = maRanges[i];
         SCTAB nTab = pRange->aStart.Tab();
         if(nTab < nMinTab || nTab > nMaxTab)
+        {
+            nThisTab = nTab;
             continue;
+        }
 
         if(nTab == nOldTab)
         {
             pRange->aStart.SetTab(nNewTab);
             pRange->aEnd.SetTab(nNewTab);
+            nThisTab = nNewTab;
             continue;
         }
 
@@ -359,12 +372,21 @@ void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
         {
             pRange->aStart.IncTab();
             pRange->aEnd.IncTab();
+            nThisTab = nTab + 1;
         }
         else
         {
             pRange->aStart.IncTab(-1);
             pRange->aEnd.IncTab(-1);
+            nThisTab = nTab - 1;
         }
+    }
+
+    if(nThisTab == -1)
+        nThisTab = 0;
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
     }
 }
 

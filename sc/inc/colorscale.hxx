@@ -55,6 +55,7 @@ public:
     const Color& GetColor() const;
     double GetValue() const;
     void SetFormula(const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
+    void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo);
 
     bool GetMin() const;
     bool GetMax() const;

@@ -227,8 +227,6 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
 
 void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
 {
-    //assume that both vectors contain the same entries
-    // TODO: check it
     for(size_t i = 0; i < maColorScaleRuleEntries.size(); ++i)
     {
         ScColorScaleEntry* pEntry = new ScColorScaleEntry(maColorScaleRuleEntries[i].mnVal, maColorScaleRuleEntries[i].maColor);
