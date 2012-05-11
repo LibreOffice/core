@@ -62,7 +62,6 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
-#include <basebmp/debug.hxx>
 
 #include <rtl/bootstrap.hxx>
 

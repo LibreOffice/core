@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#if OSL_DEBUG_LEVEL > 2
+
 #include <osl/diagnose.h>
 
 #include <basegfx/point/b2ipoint.hxx>
@@ -105,5 +107,7 @@ namespace basebmp
         }
     }
 }
+
+#endif // OSL_DEBUG_LEVEL > 2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

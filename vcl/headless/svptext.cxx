@@ -34,10 +34,6 @@
 
 #include <tools/debug.hxx>
 
-#if OSL_DEBUG_LEVEL > 2
-#include <basebmp/debug.hxx>
-#endif
-
 #include <outfont.hxx>
 #include <impfont.hxx>
 #include <rtl/instance.hxx>
