@@ -766,9 +766,9 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 
 void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 {
-    // Die Invalidierung unseres Follows ist nicht noetig.
-    // Wir sind ein Follow, werden gleich formatiert und
-    // rufen von dort aus das SetOfst() !
+    // We do not need to invalidate out Follow.
+    // We are a Follow, get formatted right away and call
+    // SetOfst() from there
     nOfst = nNewOfst;
     SwParaPortion *pPara = GetPara();
     if( pPara )
@@ -1532,7 +1532,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             sal_Bool bOldEndHyph = rLine.GetCurr()->IsEndHyph();
             sal_Bool bOldMidHyph = rLine.GetCurr()->IsMidHyph();
             bFormat = FormatLine( rLine, bPrev );
-            // There can only have one bPrev ... (???)
+            // There can only be one bPrev ... (???)
             bPrev = sal_False;
             if ( bMaxHyph )
             {
