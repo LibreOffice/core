@@ -1558,9 +1558,10 @@ void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fVal
     ScDocument& rDoc = getScDocument();
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
-    if ( rDoc.GetCellType( aCellPos ) == CELLTYPE_FORMULA )
+    ScBaseCell* pBaseCell = rDoc.GetCell( aCellPos );
+    if ( pBaseCell->GetCellType() == CELLTYPE_FORMULA )
     {
-        ScFormulaCell* pCell = (ScFormulaCell *)rDoc.GetCell( aCellPos );
+        ScFormulaCell* pCell = static_cast< ScFormulaCell* >( pBaseCell );
         pCell->SetHybridDouble( fValue );
         pCell->ResetDirty();
         pCell->ResetChanged();
