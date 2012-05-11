@@ -960,7 +960,8 @@ void RtfAttributeOutput::EndTableCell( )
     m_bTableCellOpen = false;
     m_bTblAfterCell = true;
     m_bWroteCellInfo = false;
-    m_aCells[m_nTableDepth]--;
+    if (m_aCells[m_nTableDepth] > 0)
+        m_aCells[m_nTableDepth]--;
 }
 
 void RtfAttributeOutput::EndTableRow( )
