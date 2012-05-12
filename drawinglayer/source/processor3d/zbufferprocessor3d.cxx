@@ -374,6 +374,7 @@ public:
         mbModifyColor(false),
         mbUseTex(false),
         mbHasTexCoor(false),
+        mbHasInvTexCoor(false),
         mbUseNrm(false),
         mbUseCol(false)
     {}
