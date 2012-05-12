@@ -45,10 +45,6 @@
 namespace formula
 {
 
-FormulaListBox::FormulaListBox( Window* pParent, WinBits nWinStyle):
-    ListBox(pParent,nWinStyle)
-{}
-
 FormulaListBox::FormulaListBox( Window* pParent, const ResId& rResId ):
     ListBox(pParent,rResId)
 {}

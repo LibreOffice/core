@@ -59,8 +59,6 @@ protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-                    FormulaListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
-
                     FormulaListBox( Window* pParent, const ResId& rResId );
 
 };

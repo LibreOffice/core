@@ -672,29 +672,6 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
 #*
 #*  Function:   Constructor from Class ArgInput
 #*
-#*  Input:      Parent, Window-Style
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-EditBox::EditBox(   Window* pParent,WinBits nWinStyle)
-        :Control(pParent,nWinStyle|WB_DIALOGCONTROL)
-{
-    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | (nWinStyle & WB_TABSTOP) |
-                    WB_NOBORDER | WB_NOHIDESELECTION | WB_IGNORETAB);
-
-    pMEdit->Show();
-    aOldSel=pMEdit->GetSelection();
-}
-
-/*************************************************************************
-#*  Member:     EditBox                                 Date:20.01.97
-#*------------------------------------------------------------------------
-#*
-#*  Class:      EditBox
-#*
-#*  Function:   Constructor from Class ArgInput
-#*
 #*  Input:      Parent, Resource
 #*
 #*  Output:     ---

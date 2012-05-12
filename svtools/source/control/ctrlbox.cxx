@@ -1442,13 +1442,6 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 // FontStyleBox
 // ===================================================================
 
-FontStyleBox::FontStyleBox( Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
-{
-}
-
-// -------------------------------------------------------------------
-
 FontStyleBox::FontStyleBox( Window* pParent, const ResId& rResId ) :
     ComboBox( pParent, rResId )
 {

@@ -1,7 +1,6 @@
 FmFieldWinMgr::GetChildWindowId()
 FmPropBrwMgr::GetChildWindowId()
 FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, int, bool)
-FontStyleBox::FontStyleBox(Window*, long)
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
 HTMLControls::Insert(HTMLControl const**, unsigned short)
 HTMLControls::Insert(HTMLControls const*, unsigned short, unsigned short)
@@ -30,10 +29,6 @@ ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
 ScChartListener::SetName(rtl::OUString const&)
-ScColorScaleFormatList::begin()
-ScColorScaleFormatList::begin() const
-ScColorScaleFormatList::end()
-ScColorScaleFormatList::end() const
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetEntryCount() const
@@ -668,8 +663,6 @@ dp_misc::writeConsoleError(rtl::OString const&)
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
 drawinglayer::attribute::SdrTextAttribute::getPropertiesVersion() const
 drawinglayer::attribute::SdrTextAttribute::isWrongSpell() const
-formula::EditBox::EditBox(Window*, long)
-formula::FormulaListBox::FormulaListBox(Window*, long)
 formula::FormulaTokenIterator::First()
 jfw_plugin::VendorBase::createInstance()
 nullcanvas::SpriteCanvasHelper::backgroundPaint(basegfx::B2DRange const&)

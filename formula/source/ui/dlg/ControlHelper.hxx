@@ -71,8 +71,6 @@ protected:
 
 
 public:
-                    EditBox( Window* pParent,
-                                WinBits nWinStyle = WB_LEFT | WB_BORDER );
                     EditBox( Window* pParent, const ResId& rResId );
 
                     virtual ~EditBox();
