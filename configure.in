@@ -7690,8 +7690,8 @@ SYSTEM_GENCMN=
 ICU_MAJOR=
 ICU_MINOR=
 ICU_MICRO=
-ICU_RECLASSIFIED_CLOSE_PARENTHESIS=
-ICU_RECLASSIFIED_PREPEND_SET_EMPTY=
+ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
 AC_MSG_CHECKING([which icu to use])
 if test "$with_system_icu" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7712,16 +7712,6 @@ if test "$with_system_icu" = "yes"; then
     ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
     ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
     ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
-    if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
-        ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
-    else
-        ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
-    fi
-    if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
-        ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
-    else
-        ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
-    fi
 
     if test "$ICU_MAJOR" -ge "4"; then
         AC_MSG_RESULT([OK, $ICU_VERSION])
@@ -7744,16 +7734,6 @@ if test "$with_system_icu" = "yes"; then
 You can use --with-system-icu-for-build=force to use it anyway.])
             fi
         fi
-        if test "$ICU_MAJOR_FOR_BUILD" -ge "5" -o "$ICU_MAJOR_FOR_BUILD" = "4" -a "$ICU_MINOR_FOR_BUILD" -ge "4"; then
-            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
-        else
-            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
-        fi
-        if test "$ICU_MAJOR_FOR_BUILD" -ge "5" -o "$ICU_MAJOR_FOR_BUILD" = "4" -a "$ICU_MINOR_FOR_BUILD" -ge "9"; then
-            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
-        else
-            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
-        fi
     fi
 
     if test "$cross_compiling" != "yes" -o "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force"; then
@@ -7771,6 +7751,16 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         if test -z "$SYSTEM_GENCMN"; then
             AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
         fi
+        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
+            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+        else
+            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="NO"
+        fi
+        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "9"; then
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
+        else
+            ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
+        fi
     fi
 
     libo_MINGW_CHECK_DLL([ICUDATA], [icudata][$ICU_MAJOR][$ICU_MINOR])
@@ -7779,8 +7769,6 @@ You can use --with-system-icu-for-build=force to use it anyway.])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
-    ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
-    ICU_RECLASSIFIED_PREPEND_SET_EMPTY="YES"
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
 
