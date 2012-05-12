@@ -77,6 +77,7 @@ sub getparameter
         my $param = shift(@ARGV);
 
         if ($param eq "-o") { $par2script::globals::scriptname = shift(@ARGV); }
+        elsif ($param eq "-q") { $par2script::globals::verbose = 0; }
         elsif ($param eq "-v") { $par2script::globals::logging = 1; }
         elsif ($param =~ /\@\@/) { $par2script::globals::parfilelistorig = $param; }
         elsif ($param eq "-i") { $par2script::globals::includepathlist = shift(@ARGV); }

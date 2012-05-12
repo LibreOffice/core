@@ -169,7 +169,7 @@ sub check_rootmodule
         die "\nERROR: Could not find Root module. Did not find module without ParentID or with empty ParentID.\n";
     }
 
-    print " $rootgid\n";
+    print " $rootgid\n" if $par2script::globals::verbose;
 
 }
 

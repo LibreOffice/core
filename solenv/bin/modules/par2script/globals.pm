@@ -57,6 +57,8 @@ BEGIN
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
 
+    $verbose = 1;
+
     $multidefinitionerror = 0;
     $multiassignmenterror = 0;
 
