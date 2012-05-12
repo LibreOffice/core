@@ -1110,6 +1110,8 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                                       rUnitConverter );
                 if( bOk )
                     aOut.append( sValue );
+
+                delete pWritingModeHandler;
             }
         }
         break;
