@@ -64,7 +64,7 @@ private:
     static bool getSinglePropertyValue(
         const uno::Reference<beans::XPropertySet>& xPropSet, const rtl::OUString& rName);
 
-    struct PropsToTest
+    struct OOO_DLLPUBLIC_TEST PropsToTest
     {
         std::vector<rtl::OUString> constrained;
         std::vector<rtl::OUString> bound;
