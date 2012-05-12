@@ -47,8 +47,8 @@ JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
 EXTRAJARFILES = $(LUCENE_CORE_JAR) $(LUCENE_ANALYZERS_JAR)
 JARCLASSPATH = $(EXTRAJARFILES)
 .ELSE
-JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
-JARCLASSPATH = lucene-core-2.3.jar lucene-analyzers-2.3.jar
+JARFILES += lucene-core-2.9.4-dev.jar lucene-analyzers-2.9.4-dev.jar
+JARCLASSPATH = lucene-core-2.9.4-dev.jar lucene-analyzers-2.9.4-dev.jar
 .ENDIF
   
 JARTARGET	   	   = LuceneHelpWrapper.jar

@@ -26,7 +26,7 @@ my_cp:=$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)/jaxp.jar$(PATH_SEPERATOR)$(SO
 .IF "$(SYSTEM_LUCENE)" == "YES"
 my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
 .ELSE
-my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-core-2.3.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-analyzers-2.3.jar
+my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-core-2.9.4-dev.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-analyzers-2.9.4-dev.jar
 .ENDIF
  
 #aux_alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(aux_langdirs) $(eq,$i,$j  $i $(NULL))))

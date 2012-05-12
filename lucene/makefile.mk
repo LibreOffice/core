@@ -36,27 +36,24 @@ TARGET=so_lucene
 .IF "$(SOLAR_JAVA)" != ""
 
 LUCENE_MAJOR=2
-LUCENE_MINOR=3
-LUCENE_MICRO=2
+LUCENE_MINOR=9
+LUCENE_MICRO=4
 
 LUCENE_NAME=lucene-$(LUCENE_MAJOR).$(LUCENE_MINOR).$(LUCENE_MICRO)
 # NOTE that the jar names do not contain the micro version
-LUCENE_CORE_JAR=lucene-core-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
-LUCENE_ANALYZERS_JAR=lucene-analyzers-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
+LUCENE_CORE_JAR=lucene-core-$(LUCENE_MAJOR).$(LUCENE_MINOR).$(LUCENE_MICRO)-dev.jar
+LUCENE_ANALYZERS_JAR=lucene-analyzers-$(LUCENE_MAJOR).$(LUCENE_MINOR).$(LUCENE_MICRO)-dev.jar
 
-TARFILE_NAME=$(LUCENE_NAME)
-TARFILE_MD5=48d8169acc35f97e05d8dcdfd45be7f2
+TARFILE_NAME=$(LUCENE_NAME)-src
+TARFILE_MD5=17960f35b2239654ba608cf1f3e256b3
+TARFILE_ROOTDIR=$(LUCENE_NAME)
+
 PATCH_FILES=lucene.patch 
-
-.IF "$(OS)" == "WNT"
-PATCH_FILES+= long_path.patch
-.ENDIF
-
 
 BUILD_DIR=.
 BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
 
-OUT2BIN=.$/build$/$(LUCENE_CORE_JAR) .$/build$/contrib$/analyzers$/$(LUCENE_ANALYZERS_JAR)
+OUT2BIN=.$/build$/$(LUCENE_CORE_JAR) .$/build$/contrib$/analyzers/common$/$(LUCENE_ANALYZERS_JAR)
 
 .ENDIF
 

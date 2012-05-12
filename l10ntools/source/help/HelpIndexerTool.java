@@ -35,21 +35,14 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.util.Version;
+import org.apache.lucene.store.NIOFSDirectory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
-
-/**
-   When this tool is used with long path names on Windows, that is paths which start
-   with \\?\, then the caller must make sure that the path is unique. This is achieved
-   by removing '.' and '..' from the path. Paths which are created by
-   osl_getSystemPathFromFileURL fulfill this requirement. This is necessary because
-   lucene is patched to not use File.getCanonicalPath. See long_path.patch in the lucene
-   module.
- */
 public class HelpIndexerTool
 {
     public HelpIndexerTool()
@@ -182,8 +175,8 @@ public class HelpIndexerTool
         try
         {
             Date start = new Date();
-            Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
-            IndexWriter writer = new IndexWriter( aIndexDir, analyzer, true );
+        Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer(Version.LUCENE_29) : (Analyzer)new StandardAnalyzer(Version.LUCENE_29);
+        IndexWriter writer = new IndexWriter( NIOFSDirectory.open(aIndexDir), analyzer, true, IndexWriter.MaxFieldLength.LIMITED );
             if( !bExtensionMode )
                 System.out.println( "Lucene: Indexing to directory '" + aIndexDir + "'..." );
             int nRet = indexDocs( writer, aModule, bExtensionMode, aCaptionFilesDir, aContentFilesDir );

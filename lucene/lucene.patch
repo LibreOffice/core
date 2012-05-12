@@ -1,12 +1,24 @@
---- lucene-2.3.2/common-build.xml	2008-05-01 22:28:56.000000000 +0200
-+++ misc/build/lucene-2.3.2/common-build.xml	2008-06-16 16:01:28.812500000 +0200
-@@ -280 +280 @@
--		           value="${version} ${svnversion} - ${user.name} - ${DSTAMP} ${TSTAMP}"/>
+--- lucene-2.9.4/common-build.xml	2012-05-11 17:34:48.000000000 -0500
++++ misc/build/lucene-2.9.4/common-build.xml	2012-05-11 17:37:20.000000000 -0500
+@@ -304,7 +304,7 @@
+ 		<attribute name="Implementation-Title" value="org.apache.lucene"/>
+ 		<!-- impl version can be any string -->
+ 		<attribute name="Implementation-Version"
+-		           value="${version} ${svnversion} - ${DSTAMP} ${TSTAMP}"/>
 +		           value="${version}"/>
-@@ -297,6 +296,0 @@
+ 		<attribute name="Implementation-Vendor"
+ 		           value="The Apache Software Foundation"/>
+ 		<attribute name="X-Compile-Source-JDK" 
+@@ -321,12 +321,6 @@
+     <element name="manifest-attributes" optional="yes"/>
+   	<element name="metainf-includes" optional="yes"/>
+     <sequential>
 -      <!-- If possible, include the svnversion -->
--      <exec dir="." executable="svnversion"
+-      <exec dir="." executable="${svnversion.exe}"
 -            outputproperty="svnversion" failifexecutionfails="false">
 -        <arg line="."/>
 -      </exec>
 -      
+       <build-manifest/>
+     	
+       <jar

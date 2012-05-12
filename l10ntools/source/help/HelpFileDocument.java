@@ -63,7 +63,7 @@ public class HelpFileDocument
         if( aFile != null )
         {
             String aPath = "#HLP#" + aModule + "/" + aFile.getName();
-            doc.add(new Field("path", aPath, Field.Store.YES, Field.Index.UN_TOKENIZED));
+            doc.add(new Field("path", aPath, Field.Store.YES, Field.Index.NOT_ANALYZED));
         }
 
         // Add the caption of the file to a field named "caption".  Specify a Reader,

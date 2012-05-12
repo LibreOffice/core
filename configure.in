@@ -4102,7 +4102,22 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
             }'; then
             AC_MSG_RESULT([yes])
          else
-            AC_MSG_ERROR([no, you need lucene 2])
+            AC_MSG_RESULT([no])
+            AC_MSG_CHECKING([whether lucene is version 3.x])
+
+            if $PERL -e 'use Archive::Zip;
+                my $file = "$ENV{'LUCENE_CORE_JAR'}";
+                my $zip = Archive::Zip->new( $file );
+                my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+                if ( $mf =~ m/Specification-Version: 3.*/ ) {
+                    exit 0;
+                } else {
+                    exit 1;
+                }'; then
+                AC_MSG_RESULT([yes])
+             else
+                AC_MSG_ERROR([no, you need lucene 2 or 3])
+             fi
          fi
 
 else

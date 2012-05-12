@@ -40,15 +40,20 @@ import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
+import org.apache.lucene.util.Version;
+import org.apache.lucene.store.NIOFSDirectory;
 
 import com.sun.star.script.XInvocation;
 import com.sun.star.beans.XIntrospectionAccess;
+
+import java.io.File;
 
 /** This class capsulates the class, that implements the minimal component and a
  * factory for creating the service (<CODE>__getComponentFactory</CODE>).
@@ -249,9 +254,10 @@ public class HelpSearch
         private static String[] queryImpl( String aLanguageStr, String aIndexStr, String aQueryStr,
             boolean bCaptionOnly, Object[] aScoreOutArray ) throws Exception
         {
-            IndexReader reader = IndexReader.open( aIndexStr );
+            File aIndexFile = new File( aIndexStr );
+            IndexReader reader = IndexReader.open( NIOFSDirectory.open( aIndexFile ), true );
             Searcher searcher = new IndexSearcher( reader );
-            Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
+            Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer(Version.LUCENE_29) : (Analyzer)new StandardAnalyzer(Version.LUCENE_29);
 
             String aField;
             if( bCaptionOnly )
@@ -266,18 +272,18 @@ public class HelpSearch
                 aQuery = new TermQuery( new Term( aField, aQueryStr ) );
 
             // Perform search
-            Hits aHits = searcher.search( aQuery );
-            int nHitCount = aHits.length();
+            TopDocs aHits = searcher.search( aQuery, 100 );
+            int nHitCount = aHits.totalHits;
 
             String aDocs[] = new String[nHitCount];
             float aScores[] = null;
             aScores = new float[nHitCount];
             for( int iHit = 0 ; iHit < nHitCount ; iHit++ )
             {
-                Document aDoc = aHits.doc( iHit );
-                String aPath = aDoc.get( "path" );
+                ScoreDoc aDoc = aHits.scoreDocs[iHit];
+                String aPath = searcher.doc(aDoc.doc).get( "path" );
                 aDocs[iHit] = ( aPath != null ) ? aPath : "";
-                aScores[iHit] = aHits.score( iHit );
+                aScores[iHit] = aDoc.score;
             }
             aScoreOutArray[0] = aScores;
 
