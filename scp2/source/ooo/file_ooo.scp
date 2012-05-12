@@ -108,8 +108,6 @@ File gid_File_Basic_Tutorials
     Name = "basicsrvtutorials.zip";
 End
 
-#ifndef WITHOUT_MOZILLA
-
 #ifdef ENABLE_NSPLUGIN
 File gid_File_Exe_Nsplugin
         BIN_FILE_BODY;
@@ -121,7 +119,6 @@ File gid_File_Exe_Nsplugin
     Name = "nsplugin.exe";
   #endif
 End
-#endif
 #endif
 
 File gid_File_Bin_Gengal
