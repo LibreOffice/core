@@ -1077,8 +1077,7 @@ AC_ARG_WITH(system-headers,
 AC_ARG_WITH(system-jars,
     AS_HELP_STRING([--without-system-jars],
         [When building with --with-system-libs, also the needed jars are expected
-         on the system. Use this to disable that (except for the db case where
-         --with-system-db *has to* imply using the db.jar from there, too).]),,
+         on the system. Use this to disable that]),,
     [with_system_jars="$with_system_libs"])
 
 AC_ARG_WITH(system-stdlibs,
