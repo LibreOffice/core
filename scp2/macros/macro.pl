@@ -48,7 +48,6 @@ if (!args_require_build()) {
     print STDERR "No new languages, or config. Keeping old file\n";
     exit 0;
 }
-print STDERR "re-building macros\n";
 
 my @completelangiso = split " +", $completelangiso_var;
 
