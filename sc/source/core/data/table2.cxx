@@ -650,14 +650,13 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag,
                             bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable)
 {
-    SCCOL i;
 
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         IncRecalcLevel();
-        for ( i = nCol1; i <= nCol2; i++)
+        for ( SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
         //remove old notes
@@ -675,7 +674,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if ((nInsFlag & IDF_ATTRIB) != 0)
         {
             if (nRow1==0 && nRow2==MAXROW && pColWidth && pTable->pColWidth)
-                for (i=nCol1; i<=nCol2; i++)
+                for (SCCOL i=nCol1; i<=nCol2; i++)
                     pColWidth[i] = pTable->pColWidth[i-nDx];
 
             if (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pTable->mpRowHeights &&
