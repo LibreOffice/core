@@ -10623,32 +10623,6 @@ fi
 AC_SUBST(SYSTEM_LIBPNG)
 
 dnl ===================================================================
-dnl Test whether to build libjpeg or rely on the system version
-dnl ===================================================================
-dnl FIXME: this is currently because we have jpeg-6b for our filters
-dnl        and jpeg-8 as dependency for librsvg
-dnl        this should be unified into using only one version for both
-
-AC_MSG_CHECKING([whether to use the system libjpeg])
-
-if test "$SYSTEM_JPEG" = "YES"; then
-    SYSTEM_LIBJPEG=YES
-    AC_MSG_RESULT([yes])
-else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_LIBJPEG=NO
-        AC_MSG_RESULT([no])
-        ;;
-    *)
-        SYSTEM_LIBJPEG=YES
-        AC_MSG_RESULT([yes])
-        ;;
-    esac
-fi
-AC_SUBST(SYSTEM_LIBJPEG)
-
-dnl ===================================================================
 dnl Check for runtime JVM search path
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
