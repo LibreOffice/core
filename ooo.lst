@@ -13,6 +13,7 @@ http://svn.apache.org/repos/asf/incubator/ooo/trunk/ext_sources/
 128cfc86ed5953e57fe0f5ae98b62c2e-libtextcat-2.2.tar.gz
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
+17960f35b2239654ba608cf1f3e256b3-lucene-2.9.4-src.tar.gz
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
 284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz
@@ -21,7 +22,6 @@ http://svn.apache.org/repos/asf/incubator/ooo/trunk/ext_sources/
 2f6ecca935948f7db92d925d88d0d078-icu4c-4_0_1-src.tgz
 3b179ed18f65c43141528aa6d2440db4-serf-1.0.0.tar.bz2
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
-48d8169acc35f97e05d8dcdfd45be7f2-lucene-2.3.2.tar.gz
 625ff5f2f968dd908bca43c9469d6e6b-commons-lang-2.4-src.tar.gz
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 666a5d56098a9debf998510e304c8095-apr-util-1.4.1.tar.gz
