@@ -64,9 +64,6 @@
 
 //! not found in unonames.hxx
 #define SC_USERLIST "UserList"
-#define SC_SORTASCENDING "SortAscending"
-#define SC_ENABLEUSERSORTLIST "EnableUserSortList"
-#define SC_USERSORTLISTINDEX "UserSortListIndex"
 
 using namespace com::sun::star;
 using namespace xmloff::token;

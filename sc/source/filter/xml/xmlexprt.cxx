@@ -139,10 +139,8 @@
 #include <vector>
 
 //! not found in unonames.hxx
-#define SC_STANDARDFORMAT "StandardFormat"
 #define SC_LAYERID "LayerID"
 
-#define SC_DEFAULT_TABLE_COUNT                      3
 #define SC_VIEWCHANGES_COUNT                        13
 #define SC_SHOW_CHANGES                             0
 #define SC_SHOW_ACCEPTED_CHANGES                    1

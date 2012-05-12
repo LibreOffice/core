@@ -114,7 +114,6 @@
 
 #define STANDARDWIDTH 2267
 #define STANDARDHEIGHT 427
-#define DOESNOTEXIST -1
 
 using namespace com::sun::star;
 using namespace ooo::vba;

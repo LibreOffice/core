@@ -1426,10 +1426,6 @@ void ImplListBoxWindow::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-#define IMPL_SELECT_NODIRECTION 0
-#define IMPL_SELECT_UP          1
-#define IMPL_SELECT_DOWN        2
-
 sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 {
     // zu selektierender Eintrag

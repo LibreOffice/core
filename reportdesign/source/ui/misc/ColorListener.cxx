@@ -29,7 +29,6 @@
 #include <svl/smplhint.hxx>
 #include "uistrings.hrc"
 
-#define BORDERCOLORCHANGE 191
 //=====================================================================
 namespace rptui
 {

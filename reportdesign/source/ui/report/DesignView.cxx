@@ -59,7 +59,6 @@ using namespace lang;
 using namespace beans;
 using namespace container;
 
-#define LINE_SIZE           50
 #define START_SIZE_TASKPANE 30
 #define COLSET_ID           1
 #define REPORT_ID           2

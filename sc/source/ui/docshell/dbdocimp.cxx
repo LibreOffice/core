@@ -77,8 +77,6 @@ using namespace com::sun::star;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
-#define SC_DBPROP_SELECTION         "Selection"
-#define SC_DBPROP_CURSOR            "Cursor"
 
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame )
 {

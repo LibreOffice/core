@@ -98,7 +98,6 @@
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
-#define SC_NAMEDRANGES      "NamedRanges"
 #define SC_REPEAT_COLUMN "repeat-column"
 #define SC_REPEAT_ROW "repeat-row"
 #define SC_FILTER "filter"

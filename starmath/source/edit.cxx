@@ -66,11 +66,6 @@
 
 #define SCROLL_LINE         24
 
-#define MINWIDTH        200
-#define MINHEIGHT       200
-#define MINSPLIT        40
-#define SPLITTERWIDTH   2
-
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;

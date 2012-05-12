@@ -82,11 +82,6 @@
 #include "cursor.hxx"
 #include "accessibility.hxx"
 
-#define MINWIDTH        200
-#define MINHEIGHT       200
-#define MINSPLIT        40
-#define SPLITTERWIDTH       2
-
 #define MINZOOM         25
 #define MAXZOOM         800
 

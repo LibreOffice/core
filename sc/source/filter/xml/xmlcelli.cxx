@@ -91,8 +91,6 @@
 #include <i18npool/lang.h>
 #include <comphelper/extract.hxx>
 
-#define SC_CURRENCYSYMBOL   "CurrencySymbol"
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 

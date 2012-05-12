@@ -37,7 +37,6 @@
 
 namespace rptui
 {
-#define LINE_SIZE           50
 #define SECTION_OFFSET      3
 #define SCR_LINE_SIZE       10
 using namespace ::com::sun::star;

@@ -1604,8 +1604,6 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 // -----------------------------------------------------------------------
 
 #define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
-#define POSTSCRIPT_BOUNDINGSEARCH 0x1000    // we only try to get the BoundingBox
-                                            // in the first 4096 bytes
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_uLong nSize )
 {

@@ -54,8 +54,6 @@
     #define VCL_RSVG_LIBRSVG_LIBNAME    "nolibrsvglib"
 #endif
 
-#define VCL_RSVG_DEFAULT_DPI 72
-
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------

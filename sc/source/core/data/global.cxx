@@ -106,11 +106,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 
-#define CLIPST_AVAILABLE    0
-#define CLIPST_CAPTURED     1
-#define CLIPST_DELETE       2
-#define CLIPST_DRAW         3
-
 ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
 ScAutoFormat*   ScGlobal::pAutoFormat = NULL;

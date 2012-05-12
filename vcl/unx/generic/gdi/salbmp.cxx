@@ -57,12 +57,6 @@
 #include <memcheck.h>
 #endif
 
-// -----------
-// - Defines -
-// -----------
-
-#define SAL_DRAWPIXMAP_MAX_EXT 4096
-
 // -------------
 // - SalBitmap -
 // -------------

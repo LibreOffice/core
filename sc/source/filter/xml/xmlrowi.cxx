@@ -54,7 +54,6 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #define SC_ISVISIBLE "IsVisible"
-#define SC_OPTIMALHEIGHT "OptimalHeight"
 #define SC_ISFILTERED "IsFiltered"
 
 using namespace com::sun::star;

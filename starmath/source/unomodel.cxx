@@ -164,7 +164,6 @@ SmPrintUIOptions::SmPrintUIOptions()
 
 // values from com/sun/star/beans/PropertyAttribute
 #define PROPERTY_NONE        0
-#define PROPERTY_READONLY   16
 
 enum SmModelPropertyHandles
 {

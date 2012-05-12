@@ -67,8 +67,6 @@
 
 #include <memory>
 
-#define SC_ENABLEUSERSORTLIST   "EnableUserSortList"
-#define SC_USERSORTLISTINDEX    "UserSortListIndex"
 #define SC_USERLIST             "UserList"
 
 using namespace com::sun::star;

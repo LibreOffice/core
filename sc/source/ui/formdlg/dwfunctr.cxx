@@ -51,7 +51,6 @@
 
 // -----------------------------------------------------------------------
 
-#define ARG_SEPERATOR String("; ")
 SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
 /*************************************************************************

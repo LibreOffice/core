@@ -50,8 +50,6 @@
 
 namespace rptui
 {
-#define SECTION_OFFSET  3
-
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
