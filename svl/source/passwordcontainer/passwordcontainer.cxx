@@ -933,7 +933,7 @@ UrlRecord PasswordContainer::find(
                     else
                     {
                         vector< ::rtl::OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
-                        if( !aRM.size() || !aPass.equals( aRM[0] ) )
+                        if( aRM.empty() || !aPass.equals( aRM[0] ) )
                         {
                             bAskAgain = sal_True;
                             aRMode = PasswordRequestMode_PASSWORD_REENTER;
