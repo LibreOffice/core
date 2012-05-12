@@ -35,7 +35,6 @@ $(eval $(call gb_Library_use_packages,vclplug_kde,\
 $(eval $(call gb_Library_set_include,vclplug_kde,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
 ))
 
 $(eval $(call gb_Library_set_include,vclplug_kde,\

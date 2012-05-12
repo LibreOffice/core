@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/vcl/unx/gtk/inc \
-    -I$(SRCDIR)/solenv/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\

@@ -50,5 +50,4 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,headless,\
 $(eval $(call gb_StaticLibrary_set_include,headless,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
 ))

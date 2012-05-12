@@ -31,7 +31,6 @@ $(eval $(call gb_Library_Library,vclplug_gen))
 $(eval $(call gb_Library_set_include,vclplug_gen,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
 ))
 
 $(eval $(call gb_Library_use_api,vclplug_gen,\
