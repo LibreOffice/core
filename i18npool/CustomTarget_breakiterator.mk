@@ -102,27 +102,11 @@ $(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(i18npool_GENBRKTARGET)
 # NOTE: strips every line with _word_ 'Prepend', including $Prepend
 $(i18npool_BIDIR)/%.txt : \
 	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
-ifeq ($(GUI)$(COM),WNTGCC)
-	echo DEBUG i18npool ICU_RECLASSIFIED_CLOSE_PARENTHESIS=$(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
-	echo DEBUG i18npool ICU_RECLASSIFIED_PREPEND_SET_EMPTY=$(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
-	cat $(SRC_ROOT)/config_host.mk
-	cat $(SRC_ROOT)/config.log
-	cat $(SRC_ROOT)/configure
-endif
 ifeq ($(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),YES)
 ifeq ($(ICU_RECLASSIFIED_PREPEND_SET_EMPTY),YES)
-ifeq ($(GUI)$(COM),WNTGCC)
-	echo DEBUG both
-endif
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< | sed "/Prepend/d" > $@
 else
-ifeq ($(GUI)$(COM),WNTGCC)
-	echo DEBUG only one
-endif
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< > $@
-endif
-ifeq ($(GUI)$(COM),WNTGCC)
-	cat $@
 endif
 else
 	cp $< $@
