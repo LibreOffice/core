@@ -35,14 +35,21 @@ gb_ScpTemplateTarget_COMMAND := $(PERL) -w $(gb_ScpTemplateTarget_TARGET)
 
 gb_ScpTemplateTarget_LANGS := $(sort $(ALL_LANGS))
 
+# Pass first arg if make is running in silent mode, second arg otherwise
+define gb_ScpTemplateTarget__if_silent
+$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),$(1),$(2))
+endef
+
 gb_ScpTemplateTarget_get_source = $(SRCDIR)/$(1).sct
 
-# TODO: verbose mode
 define gb_ScpTemplateTarget__command
 $(call gb_Output_announce,$(2),$(true),SCT,1)
 $(call gb_Helper_abbreviate_dirs,\
 	export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
-	$(gb_ScpTemplateTarget_COMMAND) -verbose -i $(3) -o $(1) \
+	$(gb_ScpTemplateTarget_COMMAND) \
+		$(call gb_ScpTemplateTarget__if_silent,,-verbose) \
+		-i $(3) \
+		-o $(1) \
 )
 endef
 

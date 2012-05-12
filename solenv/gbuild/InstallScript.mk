@@ -27,11 +27,15 @@
 
 # InstallScriptTarget class
 
-# TODO: make par2script quiet, if necessary
 gb_InstallScriptTarget_TARGET := $(SOLARENV)/bin/par2script.pl
 gb_InstallScriptTarget_COMMAND := $(PERL) $(gb_InstallScriptTarget_TARGET)
 
 gb_InstallScriptTarget__make_arglist = $(subst $(WHITESPACE),$(COMMA),$(strip $(1)))
+
+# Pass first arg if make is running in silent mode, second arg otherwise
+define gb_InstallScriptTarget__if_silent
+$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),$(1),$(2))
+endef
 
 define gb_InstallScriptTarget__command
 $(call gb_Output_announce,$(2),$(true),INS,4)
@@ -41,6 +45,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			$(notdir $(foreach module,$(SCP_MODULE_DIRS),$(wildcard $(module)/*$(SCP_SUFFIX))))) \
 	) && \
 	$(gb_InstallScriptTarget_COMMAND) \
+		$(call gb_InstallScriptTarget__if_silent,-q) \
 		-i $(call gb_InstallScriptTarget__make_arglist,$(SCP_MODULE_DIRS) $(OUTDIR)/par) \
 	   	-o $(1) \
 	   	@@$${RESPONSEFILE} && \
