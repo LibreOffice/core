@@ -50,6 +50,7 @@ private:
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
+    ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
     ~ScColorScaleEntry();
 
     const Color& GetColor() const;
@@ -83,6 +84,7 @@ private:
     bool CheckEntriesForRel(const ScRange& rRange) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);
+    ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
 
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
@@ -108,6 +110,7 @@ private:
     boost::ptr_vector<ScColorScaleFormat> maColorScaleFormats;
 public:
     ScColorScaleFormatList() {};
+    ScColorScaleFormatList(ScDocument* pDoc, const ScColorScaleFormatList& rList);
 
     typedef ColorScaleFormatContainer::iterator iterator;
     typedef ColorScaleFormatContainer::const_iterator const_iterator;

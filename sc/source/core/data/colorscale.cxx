@@ -50,6 +50,16 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
 {
 }
 
+ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry):
+    mnVal(rEntry.mnVal),
+    maColor(rEntry.maColor),
+    mpCell(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*pDoc))),
+    mbMin(rEntry.mbMin),
+    mbMax(rEntry.mbMax),
+    mbPercent(rEntry.mbPercent)
+{
+}
+
 ScColorScaleEntry::~ScColorScaleEntry()
 {
 }
@@ -100,6 +110,17 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
     mpDoc(pDoc)
 {
 }
+
+ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat):
+    maRanges(rFormat.maRanges),
+    mpDoc(pDoc)
+{
+    for(const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
+    {
+        maColorScales.push_back(new ScColorScaleEntry(pDoc, *itr));
+    }
+}
+
 
 void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
 {
@@ -463,6 +484,14 @@ ScColorScaleFormat::iterator ScColorScaleFormat::end()
 ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
 {
     return maColorScales.end();
+}
+
+ScColorScaleFormatList::ScColorScaleFormatList(ScDocument* pDoc, const ScColorScaleFormatList& rList)
+{
+    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
+    {
+        maColorScaleFormats.push_back(new ScColorScaleFormat(pDoc, *itr));
+    }
 }
 
 void ScColorScaleFormatList::AddFormat( ScColorScaleFormat* pFormat )
