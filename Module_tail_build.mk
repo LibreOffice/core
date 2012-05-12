@@ -72,6 +72,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sc \
     scaddins \
     sccomp \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		scp2 \
+	) \
     scripting \
     sd \
     sdext \
