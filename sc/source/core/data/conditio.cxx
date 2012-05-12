@@ -1536,6 +1536,8 @@ void ScConditionalFormat::CompileXML()
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
+    if(pRanges)
+        pRanges->UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
     for (sal_uInt16 i=0; i<nEntryCount; i++)
         ppEntries[i]->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 
@@ -1552,6 +1554,40 @@ void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew
 
 void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
+    if(pRanges)
+    {
+        size_t n = pRanges->size();
+        SCTAB nMinTab = std::min<SCTAB>(nOldPos, nNewPos);
+        SCTAB nMaxTab = std::max<SCTAB>(nOldPos, nNewPos);
+        for(size_t i = 0; i < n; ++i)
+        {
+            ScRange* pRange = (*pRanges)[i];
+            SCTAB nTab = pRange->aStart.Tab();
+            if(nTab < nMinTab || nTab > nMaxTab)
+            {
+                continue;
+            }
+
+            if(nTab == nOldPos)
+            {
+                pRange->aStart.SetTab(nNewPos);
+                pRange->aEnd.SetTab(nNewPos);
+                continue;
+            }
+
+            if(nNewPos < nOldPos)
+            {
+                pRange->aStart.IncTab();
+                pRange->aEnd.IncTab();
+            }
+            else
+            {
+                pRange->aStart.IncTab(-1);
+                pRange->aEnd.IncTab(-1);
+            }
+        }
+    }
+
     for (sal_uInt16 i=0; i<nEntryCount; i++)
         ppEntries[i]->UpdateMoveTab( nOldPos, nNewPos );
 
