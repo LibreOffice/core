@@ -93,13 +93,12 @@ sub multidefinitionerror
 sub multiassignmenterror
 {
     my ( $multiassignmentgids ) = @_;
-    #print "************************************************\n";
-    #print "ERROR: multiple assignments of gids:\n";
-    #print "************************************************\n";
+    print "************************************************\n";
+    print "WARNING: multiple assignments of gids:\n";
+    print "************************************************\n";
 
     my $line;
     foreach $line ( @{$multiassignmentgids} ) { print "\t$line\n"; }
-    # exit(-1);
 }
 
 #####################################
