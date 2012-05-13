@@ -278,6 +278,10 @@ OUT2BIN= \
 .ENDIF
 .ENDIF		# "$(GUI)"=="WNT"
 
+#make sure that when we deliver the headers of a new icu that the timestamps
+#are newer than the last icu to ensure dependencies are correctly rebuilt
+INSTALL_ACTION=find . -name "*.h" -print0 | xargs -0 touch
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
@@ -324,4 +328,3 @@ $(LB)$/icutu$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 # Changes in this makefile could also make a complete build necessary if
 # configure is affected.
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : makefile.mk
-

@@ -1,5 +1,4 @@
 mkdir: %_DEST%\inc\icu
-mkdir: %_DEST%\inc\external\icu
 mkdir: %_DEST%\inc\external\layout
 mkdir: %_DEST%\inc\external\unicode
 ..\%__SRC%\misc\build\icu\source\layout\*.h %_DEST%\inc\external\layout\*.h
