@@ -322,7 +322,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocTInv,               332,    2,  2,  V, { VR }, 0, 0 }
 };
 
-/** Functions new in BIFF5/BIFF7. Unsupported functions: DATEDIF, DATESTRING, NUMBERSTRING. */
+/** Functions new in BIFF5/BIFF7. Unsupported functions: DATESTRING, NUMBERSTRING. */
 static const XclFunctionInfo saFuncTable_5[] =
 {
     { ocGetDayOfWeek,       70,     1,  2,  V, { VR }, 0, 0 },                  // BIFF2-4: 1, BIFF5: 1-2
@@ -340,7 +340,7 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocCountIf,            346,    2,  2,  V, { RO, VR }, 0, 0 },
     { ocCountEmptyCells,    347,    1,  1,  V, { RO }, 0, 0 },
     { ocISPMT,              350,    4,  4,  V, { VR }, 0, 0 },
-    { ocNoName,             351,    3,  3,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // DATEDIF
+    { ocGetDateDif,         351,    3,  3,  V, { VR }, 0, 0 },
     { ocNoName,             352,    1,  1,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // DATESTRING
     { ocNoName,             353,    2,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // NUMBERSTRING
     { ocRoman,              354,    1,  2,  V, { VR }, 0, 0 }
@@ -382,7 +382,6 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocChiSqDist,     2,  3,  0,  "CHISQDIST" ),
     EXC_FUNCENTRY_ODF( ocChiSqInv,      2,  2,  0,  "CHISQINV" ),
     EXC_FUNCENTRY_ODF( ocKombin2,       2,  2,  0,  "COMBINA" ),
-    EXC_FUNCENTRY_ODF( ocGetDateDif,    3,  3,  0,  "DATEDIF" ),
     EXC_FUNCENTRY_ODF( ocGetDiffDate,   2,  2,  0,  "DAYS" ),
     EXC_FUNCENTRY_ODF( ocDecimal,       2,  2,  0,  "DECIMAL" ),
     EXC_FUNCENTRY_ODF( ocFDist,         3,  4,  0,  "FDIST" ),
