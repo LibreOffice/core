@@ -61,11 +61,13 @@ $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
+$CJ = [:LineBreak =  Conditional_Japanese_Starter:];
 $CL = [:LineBreak =  Close_Punctuation:] ;
 $CM = [:LineBreak =  Combining_Mark:];
 $CR = [:LineBreak =  Carriage_Return:];
 $EX = [:LineBreak =  Exclamation:];
 $GL = [:LineBreak =  Glue:];
+$HL = [:LineBreak =  Hebrew_Letter:];
 $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
@@ -77,7 +79,7 @@ $JV = [:LineBreak =  JV:];
 $JT = [:LineBreak =  JT:];
 $LF = [:LineBreak =  Line_Feed:];
 $NL = [:LineBreak =  Next_Line:];
-$NS = [:LineBreak =  Nonstarter:];
+$NS = [[:LineBreak =  Nonstarter:] $CJ];
 $NU = [:LineBreak =  Numeric:];
 $OP = [[:LineBreak =  Open_Punctuation:] - $DG];
 $PO = [:LineBreak =  Postfix_Numeric:];
@@ -118,6 +120,7 @@ $B2cm = $B2 $CM*;
 $CLcm = $CL $CM*;
 $EXcm = $EX $CM*;
 $GLcm = $GL $CM*;
+$HLcm = $HL $CM*;
 $HYcm = $HY $CM*;
 $H2cm = $H2 $CM*;
 $H3cm = $H3 $CM*;
@@ -150,6 +153,7 @@ $B2 $CM+;
 $CL $CM+;
 $EX $CM+;
 $GL $CM+;
+$HL $CM+;
 $HY $CM+;
 $H2 $CM+;
 $H3 $CM+;
@@ -186,7 +190,7 @@ $CANT_CM = [ $SP $BK $CR $LF $NL $ZW $CM];       # Bases that can't take CMs
 #            so for this one case we need to manually list out longer sequences.
 #
 $AL_FOLLOW_NOCM = [$BK $CR $LF $NL $ZW $SP];
-$AL_FOLLOW_CM   = [$CL $EX $IS $SY $WJ $GL $QU $BA $HY $NS $IN $NU $ALPlus $OP];
+$AL_FOLLOW_CM   = [$CL $EX $HL $IS $SY $WJ $GL $QU $BA $HY $NS $IN $NU $ALPlus $OP];
 $AL_FOLLOW      = [$AL_FOLLOW_NOCM $AL_FOLLOW_CM];
 
 
@@ -320,8 +324,13 @@ $LB20NonBreaks $CM* ($BAcm | $HYcm | $NScm);
 $BBcm [^$CB];                                  #  $BB  x
 $BBcm $LB20NonBreaks $CM*;
 
+# LB 21a Don't break after Hebrew + Hyphen
+#   HL (HY | BA) x
+#  
+$HLcm ($HYcm | $BAcm) [^$CB]?;
+
 # LB 22
-$ALcm    $INcm;
+($ALcm | $HLcm) $INcm;
 $CM+     $INcm;     #  by rule 10, any otherwise unattached CM behaves as AL
 $IDcm    $INcm;
 $INcm    $INcm;
@@ -331,16 +340,18 @@ $NUcm    $INcm;
 # $LB 23
 $IDcm  $POcm;
 $ALcm  $NUcm;       # includes $LB19
+$HLcm  $NUcm;
 $CM+   $NUcm;       # Rule 10, any otherwise unattached CM behaves as AL
 $NUcm  $ALcm;
+$NUcm  $HLcm;
 
 #
 # LB 24
 #
 $PRcm $IDcm;
 $ALcm $PRcm;
-$PRcm $ALcm;
-$POcm $ALcm;
+$PRcm ($ALcm | $HLcm);
+$POcm ($ALcm | $HLcm);
 
 #
 # LB 25   Numbers.
@@ -361,8 +372,8 @@ $PRcm ($JLcm | $JVcm | $JTcm | $H2cm | $H3cm);
 
 # LB 28   Do not break between alphabetics
 #
-$ALcm $ALcm;
-$CM+ $ALcm;      # The $CM+ is from rule 10, and unattached CM is treated as AL
+($ALcm | $HLcm) ($ALcm | $HLcm);
+$CM+ ($ALcm | $HLcm);      # The $CM+ is from rule 10, an unattached CM is treated as AL
 
 # LB 29
 $IScm ($ALcm | $NUcm);
@@ -371,11 +382,9 @@ $IScm ($ALcm | $NUcm);
 # Rule 30   Do not break between letters, numbers or ordinary symbols
 #           and opening or closing punctuation
 #
-($ALcm | $NUcm) $OPcm;
+($ALcm | $HLcm | $NUcm) $OPcm;
 $CM+ $OPcm;
-$CLcm ($ALcm | $NUcm);
-
-
+$CLcm ($ALcm | $HLcm | $NUcm);
 
 #
 #  Reverse Rules.
@@ -391,6 +400,7 @@ $CM+ $B2;
 $CM+ $CL;
 $CM+ $EX;
 $CM+ $GL;
+$CM+ $HL;
 $CM+ $HY;
 $CM+ $H2;
 $CM+ $H3;
@@ -544,24 +554,25 @@ $CM* ($BA | $HY | $NS) $CM* [$LB20NonBreaks-$CM];     #  . x (BA | HY | NS)
 $CM* [$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
 [^$CB] $CM* $BB;                                      # 
 
-
+# LB21a
+[^$CB] $CM* ($HY | $BA) $CM* $HL;
 
 # LB 22
-$CM* $IN $CM* $ALPlus;
+$CM* $IN $CM* ($ALPlus | $HL);
 $CM* $IN $CM* $ID;
 $CM* $IN $CM* $IN;
 $CM* $IN $CM* $NU;
 
 # LB 23
 $CM* $PO $CM* $ID;
-$CM* $NU $CM* $ALPlus;
-$CM* $ALPlus $CM* $NU;
+$CM* $NU $CM* ($ALPlus | $HL);
+$CM* ($ALPlus | $HL) $CM* $NU;
 
 # LB 24
 $CM* $ID $CM* $PR;
 $CM* $PR $CM* $ALPlus;
-$CM* $ALPlus $CM* $PR;
-$CM* $ALPlus $CM* $PO;
+$CM* ($ALPlus | $HL) $CM* $PR;
+$CM* ($ALPlus | $HL) $CM* $PO;
 
 $CM* $ALPlus $CM* ($IS | $SY | $HY)+ / $SP;
 $CM* $NU+ $CM* $HY+ / $SP;
@@ -580,15 +591,14 @@ $CM* $PO $CM* ($H3 | $H2 | $JT | $JV | $JL);
 $CM* ($H3 | $H2 | $JT | $JV | $JL) $CM* $PR;
 
 # LB 28
-$CM* $ALPlus $CM* $ALPlus;
-
+$CM* ($ALPlus | $HL) $CM* ($ALPlus | $HL);
 
 # LB 29
 $CM* ($NU | $ALPlus) $CM* $IS+ [^$SP];
 
 # LB 30
-$CM* $OP $CM* ($NU | $ALPlus);
-$CM* ($NU | $ALPlus) $CM* ($CL | $SY)+ [^$SP];
+$CM* $OP $CM* ($ALPlus | $HL | $NU);
+$CM* ($ALPlus | $HL | $NU) $CM* ($CL | $SY)+ [^$SP];
 
 
 ## -------------------------------------------------
@@ -608,6 +618,9 @@ $SP+ $CM* $QU;
 # LB 11
 $SP+ $CM* $CL;
 $SP+ $CM* $B2;
+
+# LB 21
+$CM* ($HY | $BA) $CM* $HL;
 
 # LB 18
 ($CM* ($IS | $SY))+ $CM* $NU;
@@ -629,6 +642,6 @@ $dictionary $dictionary;
 #  turn off rule chaining.  We don't want to move more
 #  than necessary.
 #
-[$CM $OP $QU $CL $B2 $PR $HY $SP $dictionary]+ [^$CM $OP $QU $CL $B2 $PR $HY $dictionary];
+[$CM $OP $QU $CL $B2 $PR $HY $BA $SP $dictionary]+ [^$CM $OP $QU $CL $B2 $PR $HY $BA $dictionary];
 $dictionary $dictionary;
 

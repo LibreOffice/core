@@ -1,0 +1,12 @@
+The originals of these come from svn checkout
+http://source.icu-project.org/repos/icu/icu/trunk/source/data/brkitr they no
+longer appear in the icu tarballs, but are in icu's svn
+
+At various stages these copies have been customized and are not horribly out of
+sync. It unclear which diffs from the base versions are deliberate and which
+are now accidental :-(
+
+We need to review the various issues referenced in the commits that caused
+custimizations and see if they're still relevant or not, write regression tests
+for them, if any are still relavant then apply the changes back on top of the
+latest versions.

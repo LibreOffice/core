@@ -42,6 +42,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <string.h>
 
@@ -58,6 +59,9 @@ public:
     void testWeak();
     void testAsian();
     void testThai();
+#if TODO
+    void testNorthernThai();
+#endif
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -65,33 +69,54 @@ public:
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
+#if TODO
+    CPPUNIT_TEST(testNorthernThai);
+#endif
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 };
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=31271
 void TestBreakIterator::testLineBreaking()
 {
-    ::rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
-
     i18n::LineBreakHyphenationOptions aHyphOptions;
     i18n::LineBreakUserOptions aUserOptions;
     lang::Locale aLocale;
 
-    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
-
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=31271
     {
-        //Here we want the line break to leave text here) on the next line
-        i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some tex"), aLocale, 0, aHyphOptions, aUserOptions);
-        CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 6);
+        ::rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
+
+        aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+        aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+
+        {
+            //Here we want the line break to leave text here) on the next line
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some tex"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 6);
+        }
+
+        {
+            //Here we want the line break to leave "here)" on the next line
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some text here"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 11);
+        }
     }
 
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=49849
     {
-        //Here we want the line break to leave "here)" on the next line
-        i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("(some text here"), aLocale, 0, aHyphOptions, aUserOptions);
-        CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == 11);
+        const sal_Unicode HEBREW1[] = { 0x05DE, 0x05D9, 0x05DC, 0x05D9, 0x5DD };
+        ::rtl::OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
+        ::rtl::OUString aTest(rtl::OUStringBuffer(aWord).append(' ').append(aWord).makeStringAndClear());
+
+        aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("he"));
+        aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IL"));
+
+        {
+            //Here we want the line break to happen at the whitespace
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-1, aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == aWord.getLength()+1);
+        }
     }
 }
 
@@ -295,27 +320,29 @@ void TestBreakIterator::testThai()
     aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("th"));
     aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TH"));
 
-    i18n::Boundary aBounds;
-    {
-        const sal_Unicode THAI1[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-        ::rtl::OUString aTest(THAI1, SAL_N_ELEMENTS(THAI1));
-        aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
-            i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT_MESSAGE("Should skip full word",
-            aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
-    }
-
-#ifdef TODO
-    {
-        const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-        ::rtl::OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
-        aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
-            i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT_MESSAGE("Should skip full word",
-            aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
-    }
-#endif
+    const sal_Unicode THAI1[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
+    ::rtl::OUString aTest(THAI1, SAL_N_ELEMENTS(THAI1));
+    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+    CPPUNIT_ASSERT_MESSAGE("Should skip full word",
+        aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
 }
+
+#if TODO
+void TestBreakIterator::testNorthernThai()
+{
+    lang::Locale aLocale;
+    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nod"));
+    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TH"));
+
+    const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
+    ::rtl::OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
+    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+    CPPUNIT_ASSERT_MESSAGE("Should skip full word",
+        aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
+}
+#endif
 
 void TestBreakIterator::setUp()
 {
