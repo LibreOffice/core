@@ -821,6 +821,7 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             pRet = "uniqueValues";
             break;
         case SC_COND_DIRECT:
+            pRet = "expression";
         case SC_COND_NONE:
         default:
             pRet = "";
@@ -850,9 +851,13 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
     rWorksheet->startElement( XML_formula, FSEND );
     rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
-    if (bFmla2)
-        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
     rWorksheet->endElement( XML_formula );
+    if (bFmla2)
+    {
+        rWorksheet->startElement( XML_formula, FSEND );
+        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
+        rWorksheet->endElement( XML_formula );
+    }
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
 }
