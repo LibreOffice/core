@@ -818,6 +818,8 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             pRet = "duplicateValues";
             break;
         case SC_COND_NOTDUPLICATE:
+            pRet = "uniqueValues";
+            break;
         case SC_COND_DIRECT:
         case SC_COND_NONE:
         default:
