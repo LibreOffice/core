@@ -30,3 +30,4 @@ Name=%PRODUCTNAME Calc
 GenericName=Spreadsheet
 Comment=Perform calculation, analyze information and manage lists in spreadsheets by using Calc.
 InitialPreference=5
+StartupNotify=true

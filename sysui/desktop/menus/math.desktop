@@ -30,3 +30,4 @@ Name=%PRODUCTNAME Math
 GenericName=Formula Editor
 Comment=Create and edit scientific formulas and equations by using Math.
 InitialPreference=5
+StartupNotify=true

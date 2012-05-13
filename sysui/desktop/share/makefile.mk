@@ -150,9 +150,6 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
-.IF "$(WITH_LIBSN)"=="YES"
-    @noop x$(foreach,i,$(LAUNCHERLIST) $(shell @echo "StartupNotify=true" >> $(@:db).$(INPATH).$(@:f)/$i.desktop))x
-.ENDIF
     @$(MV) -f $(@:db).$(INPATH).$(@:f)/* $(@:d)
     @rmdir $(@:db).$(INPATH).$(@:f)
     @touch $@

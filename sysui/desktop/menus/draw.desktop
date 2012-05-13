@@ -30,3 +30,4 @@ Name=%PRODUCTNAME Draw
 GenericName=Drawing Program
 Comment=Create and edit drawings, flow charts, and logos by using Draw.
 InitialPreference=5
+StartupNotify=true

@@ -26,3 +26,4 @@ Type=Application
 Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;
 Exec=openoffice-printeradmin
 Name=%PRODUCTNAME Printer Administration
+StartupNotify=true
