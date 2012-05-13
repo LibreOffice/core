@@ -977,7 +977,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1    // description
         {
-            Text [ en-US ] = "Returns the number of whole days, months or years between 'start date' and 'end date'";
+            Text [ en-US ] = "Returns the number of whole days, months or years between 'start date' and 'end date'.";
         };
         ExtraData =
         {
@@ -995,7 +995,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
 
         String 3 // description of parameter 1  DateDif
         {
-            Text [ en-US ] = "The start date";
+            Text [ en-US ] = "The start date.";
         };
 
         String 4 // name of parameter 2         DateDif
@@ -1005,17 +1005,17 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
 
         String 5 // description of parameter 2  DateDif
         {
-            Text [ en-US ] = "The end date";
+            Text [ en-US ] = "The end date.";
         };
 
         String 6 // name of parameter 3         DateDif
         {
-            Text [ en-US ] = "Format";
+            Text [ en-US ] = "Interval";
         };
 
         String 7 // description of parameter 3  DateDif
         {
-            Text [ en-US ] = "Format of the result";
+            Text [ en-US ] = "Interval to be calculated. Can be \"d\", \"m\", \"y\", \"ym\", \"md\" or \"yd\".";
         };
     };
      // -=*# Resource for function KALENDERWOCHE #*=-

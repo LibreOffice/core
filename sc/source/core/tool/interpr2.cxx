@@ -412,37 +412,53 @@ void ScInterpreter::ScGetDiffDate360()
     }
 }
 
-//fdo#44456 function DATEDIF as defined in ODF1.2 (Par. 6.10.3)
+// fdo#44456 function DATEDIF as defined in ODF1.2 (Par. 6.10.3)
 void ScInterpreter::ScGetDateDif()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDateDif" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        String aFormat = GetString();
-        double nDate2  = GetDouble();
-        double nDate1  = GetDouble();
-        int    dd      = nDate2 - nDate1;
+        String aInterval = GetString();
+        double nDate2    = GetDouble();
+        double nDate1    = GetDouble();
 
-        //split dates in day, month, year for use with formats other than "d"
-        int d1, m1, y1, d2, m2, y2;
-        Date aDate = *( pFormatter->GetNullDate() );
-        aDate += (long) ::rtl::math::approxFloor( nDate1 );
-        y1 = aDate.GetYear();
-        m1 = aDate.GetMonth();
-        d1 = aDate.GetDay();
-        aDate = *( pFormatter->GetNullDate() );
-        aDate += (long) ::rtl::math::approxFloor( nDate2 );
-        y2 = aDate.GetYear();
-        m2 = aDate.GetMonth();
-        d2 = aDate.GetDay();
-
-        if ( dd == 0 )
-            PushInt( 0 );     // nothing to do...
-
-        if ( aFormat.EqualsIgnoreCaseAscii( "d" ) )        // return number of days
-            PushInt( dd );
-        else if (  aFormat.EqualsIgnoreCaseAscii( "m" ) )  // return number of months
+        if (nGlobalError)
         {
+            PushError( nGlobalError);
+            return;
+        }
+
+        // Excel doesn't swap dates or return negative numbers, so don't we.
+        if (nDate1 > nDate2)
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        long dd = nDate2 - nDate1;
+        // Zero difference or number of days can be returned immediately.
+        if (dd == 0 || aInterval.EqualsIgnoreCaseAscii( "d" ))
+        {
+            PushDouble( dd );
+            return;
+        }
+
+        // split dates in day, month, year for use with formats other than "d"
+        sal_uInt16 d1, m1, y1, d2, m2, y2;
+        Date aDate1( *( pFormatter->GetNullDate()));
+        aDate1 += (long) ::rtl::math::approxFloor( nDate1 );
+        y1 = aDate1.GetYear();
+        m1 = aDate1.GetMonth();
+        d1 = aDate1.GetDay();
+        Date aDate2( *( pFormatter->GetNullDate()));
+        aDate2 += (long) ::rtl::math::approxFloor( nDate2 );
+        y2 = aDate2.GetYear();
+        m2 = aDate2.GetMonth();
+        d2 = aDate2.GetDay();
+
+        if (  aInterval.EqualsIgnoreCaseAscii( "m" ) )
+        {
+            // Return number of months.
             int md = m2 - m1 + 12 * (y2 - y1);
             if ( nDate2 > nDate1 )
             {
@@ -451,52 +467,116 @@ void ScInterpreter::ScGetDateDif()
             }
             else
             {
-                if ( d2 > d1 )
+                if ( d2 >= d1 )
                     md += 1;
             }
             PushInt( md );
         }
-        else if ( aFormat.EqualsIgnoreCaseAscii( "y" ) )   // return number of years
+        else if ( aInterval.EqualsIgnoreCaseAscii( "y" ) )
         {
-            int yd = y2 - y1;
+            // Return number of years.
+            int yd;
             if ( y2 > y1 )
             {
-                if ( ( m2 == m1 and d2 >= d1 ) || ( m2 > m1 ) )
-                    yd = y2 - y1 - 1;
+                if (m2 > m1 || (m2 == m1 && d2 >= d1))
+                    yd = y2 - y1;       // complete years between dates
+                else
+                    yd = y2 - y1 - 1;   // one incomplete year
             }
             else
             {
-                if ( ( m2 == m1 and d2 <= d1 ) || ( m2 < m1 ) )
-                    yd = y2 - y1 + 1;
+                // Year is equal as we don't allow reversed arguments, no
+                // complete year between dates.
+                yd = 0;
             }
             PushInt( yd );
         }
-        else if ( aFormat.EqualsIgnoreCaseAscii( "md" ) )  // return number of days, ignoring months and years
+        else if ( aInterval.EqualsIgnoreCaseAscii( "md" ) )
         {
-            aDate = Date( d2, m1, y1 );
-            double nd2 = double( aDate - *( pFormatter->GetNullDate() ) );
-            PushInt( nd2 - nDate1 );
-        }
-        else if ( aFormat.EqualsIgnoreCaseAscii( "ym" ) )  // return number of months, ignoring years
-        {
-            int md = m2 - m1;
-            if ( m2 > m1 )
+            // Return number of days, ignoring months and years.
+            // This is actually the remainder of days when subtracting years
+            // and months from the difference of dates. Birthday-like 23 years
+            // and 10 months and 42 days.
+
+            // Algorithm's roll-over behavior extracted from Excel by try and
+            // error..
+            // If day1 < day2 then simply day2 - day1.
+            // If day1 > day2 and month1 <= month2 then set day1 in month
+            // before date of day2 and subtract dates, e.g. for
+            // 2012-01-28,2012-03-01 set 2012-02-28 and then
+            // (2012-03-01)-(2012-02-28) => 2 days (leap year).
+            // For 2011-01-29,2011-03-01 the non-existent 2011-02-29 rolls over
+            // to 2011-03-01 so the result is 0. Same for day 31 in months with
+            // only 30 days.
+            // If day1 >= day2 and month1 > month2 then set year2 to year1 and
+            // subtract dates reverse (effectively swaps day1/month1 with
+            // day2/month2).
+            // If day1 == day2 and month1 <= month2 the result is 0.
+
+            long nd;
+            if (d1 < d2)
+                nd = d2 - d1;
+            else if (m1 > m2)   // && d1 >= d2
             {
-                if ( d2 < d1 )
-                    md -= 1;
+                aDate2.SetYear( y1 );
+                aDate2.Normalize();
+                nd = aDate1 - aDate2;
             }
+            else if (d1 == d2)  // && m1 <= m2
+                nd = 0;
+            else                // d1 > d2 && m1 <= m2
+            {
+                if (m2 == 1)
+                {
+                    aDate1.SetYear( y2 - 1 );
+                    aDate1.SetMonth( 12 );
+                }
+                else
+                {
+                    aDate1.SetYear( y2 );
+                    aDate1.SetMonth( m2 - 1 );
+                }
+                // aDate1 day is still d1
+                aDate1.Normalize();
+                nd = aDate2 - aDate1;
+            }
+            PushDouble( nd );
+        }
+        else if ( aInterval.EqualsIgnoreCaseAscii( "ym" ) )
+        {
+            // Return number of months, ignoring years.
+
+            /* TODO: check what Excel really does, though this seems to be
+             * reasonable */
+
+            int md;
+            if (m1 == m2)
+                md = 0;
             else
             {
-                if ( m2 < m1 && d2 > d1 )
-                    md += 1;
+                md = m2 - m1;
+                if (m1 > m2)
+                    md += 12;   // year roll-over
+                if (d1 > d2)
+                    --md;       // one incomplete month
             }
             PushInt( md );
         }
-        else if ( aFormat.EqualsIgnoreCaseAscii( "yd" ) ) // return number of days, ignoring years
+        else if ( aInterval.EqualsIgnoreCaseAscii( "yd" ) )
         {
-            aDate = Date( d2, m2, y1 );
-            double nd2 = double( aDate - *( pFormatter->GetNullDate() ) );
-            PushInt( nd2 - nDate1 );
+            // Return number of days, ignoring years.
+
+            /* TODO: check what Excel really does, though this seems to be
+             * reasonable */
+
+            // Condition corresponds with "y".
+            if (m2 > m1 || (m2 == m1 && d2 >= d1))
+                aDate1.SetYear( y2 );
+            else
+                aDate1.SetYear( y2 - 1 );   // one incomplete year
+            aDate1.Normalize();
+            double nd = aDate2 - aDate1;
+            PushDouble( nd );
         }
         else
             PushIllegalArgument();               // unsupported format
