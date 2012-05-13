@@ -815,6 +815,8 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             pRet = "notBetween";
             break;
         case SC_COND_DUPLICATE:
+            pRet = "duplicateValues";
+            break;
         case SC_COND_NOTDUPLICATE:
         case SC_COND_DIRECT:
         case SC_COND_NONE:
