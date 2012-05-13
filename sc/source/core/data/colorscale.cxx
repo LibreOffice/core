@@ -70,6 +70,16 @@ void ScColorScaleEntry::SetFormula( const rtl::OUString& rFormula, ScDocument* p
     mpCell->StartListeningTo( pDoc );
 }
 
+const ScTokenArray* ScColorScaleEntry::GetFormula() const
+{
+    if(mpCell)
+    {
+        return mpCell->GetCode();
+    }
+
+    return NULL;
+}
+
 double ScColorScaleEntry::GetValue() const
 {
     if(mpCell)
@@ -281,6 +291,11 @@ void ScColorScaleFormat::calcMinMax(double& rMin, double& rMax) const
 void ScColorScaleFormat::SetRange(const ScRangeList& rList)
 {
     maRanges = rList;
+}
+
+const ScRangeList& ScColorScaleFormat::GetRange() const
+{
+    return maRanges;
 }
 
 namespace {

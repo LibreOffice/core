@@ -1212,7 +1212,7 @@ public:
                     { return pCondFormList; }
     void            SetCondFormList(ScConditionalFormatList* pNew);
 
-    ScColorScaleFormatList* GetColorScaleList() const;
+    SC_DLLPUBLIC const ScColorScaleFormatList* GetColorScaleList() const;
 
     ScValidationDataList* GetValidationList() const
                     { return pValidationList; }

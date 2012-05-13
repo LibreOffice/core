@@ -628,6 +628,11 @@ sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
     return nNewKey;
 }
 
+const ScColorScaleFormatList* ScDocument::GetColorScaleList() const
+{
+    return mpColorScaleList.get();
+}
+
 //takes ownership
 // returns a 1-based index, 0 is reserved for no entry
 sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )

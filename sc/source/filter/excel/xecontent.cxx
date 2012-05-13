@@ -876,6 +876,76 @@ void XclExpCF::SaveXml( XclExpXmlStream& rStrm )
     mxImpl->SaveXml( rStrm );
 }
 
+XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr):
+    XclExpRecord(),
+    XclExpRoot( rRoot ),
+    mrEntry(rEntry),
+    maSrcPos(rAddr)
+{
+}
+
+namespace {
+
+rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
+{
+    if (rEntry.GetMin())
+        return "min";
+    if(rEntry.GetMax())
+        return "max";
+    if(rEntry.GetPercent())
+        return "percent";
+    if(rEntry.HasFormula())
+        return "formula";
+
+    return "num";
+}
+
+}
+
+void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rtl::OString aValue;
+    if(mrEntry.HasFormula())
+    {
+        rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), maSrcPos, mrEntry.GetFormula()->Clone() );
+        aValue = rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
+    }
+    else
+    {
+        aValue = OString::valueOf( mrEntry.GetValue() );
+    }
+
+    rWorksheet->startElement( XML_cfvo,
+            XML_type, getColorScaleType(mrEntry).getStr(),
+            XML_val, aValue.getStr(),
+            FSEND );
+
+    rWorksheet->endElement( XML_cfvo );
+}
+
+XclExpColScaleCol::XclExpColScaleCol( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry ):
+    XclExpRecord(),
+    XclExpRoot( rRoot ),
+    mrEntry( rEntry )
+{
+}
+
+XclExpColScaleCol::~XclExpColScaleCol()
+{
+}
+
+void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement( XML_color,
+            XML_rgb, XclXmlUtils::ToOString( mrEntry.GetColor() ).getStr(),
+            FSEND );
+
+    rWorksheet->endElement( XML_color );
+}
 // ----------------------------------------------------------------------------
 
 XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat ) :
@@ -933,7 +1003,58 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
             XML_sqref, XclXmlUtils::ToOString( msSeqRef ).getStr(),
             // OOXTODO: XML_pivot,
             FSEND );
+
     maCFList.SaveXml( rStrm );
+
+    // OOXTODO: XML_extLst
+    rWorksheet->endElement( XML_conditionalFormatting );
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat ):
+    XclExpRecord(),
+    XclExpRoot( rRoot ),
+    mrFormat( rFormat )
+{
+    const ScRange* pRange = rFormat.GetRange().front();
+    ScAddress aAddr = pRange->aStart;
+    for(ScColorScaleFormat::const_iterator itr = rFormat.begin();
+            itr != rFormat.end(); ++itr)
+    {
+        // exact position is not important, we allow only absolute refs
+
+        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr, aAddr ) );
+        maCfvoList.AppendRecord( xCfvo );
+        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), *itr ) );
+        maColList.AppendRecord( xClo );
+    }
+}
+
+void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
+{
+    rtl::OUString sSeqRef;
+    const ScRangeList& rRanges = mrFormat.GetRange();
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_conditionalFormatting,
+            XML_sqref, XclXmlUtils::ToOString(rRanges).getStr(),
+            FSEND );
+
+    rWorksheet->startElement( XML_cfRule,
+            XML_type, "colorScale",
+            XML_priority, "1",
+            FSEND );
+
+    rWorksheet->startElement( XML_colorScale, FSEND );
+
+    maCfvoList.SaveXml(rStrm);
+    maColList.SaveXml(rStrm);
+
+    rWorksheet->endElement( XML_colorScale );
+
+    rWorksheet->endElement( XML_cfRule );
+
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_conditionalFormatting );
 }
@@ -953,6 +1074,15 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }
     }
+    if( const ScColorScaleFormatList* pColorScaleList = GetDoc().GetColorScaleList() )
+    {
+        for( ScColorScaleFormatList::const_iterator itr = pColorScaleList->begin();
+                itr != pColorScaleList->end(); ++itr)
+        {
+            XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), *itr ) );
+            maColorScaleList.AppendRecord( xColorScaleRec );
+        }
+    }
 }
 
 void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
@@ -962,7 +1092,10 @@ void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
 
 void XclExpCondFormatBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
+
     maCondfmtList.SaveXml( rStrm );
+    maColorScaleList.SaveXml( rStrm );
+
 }
 
 // Validation =================================================================

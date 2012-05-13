@@ -37,6 +37,8 @@
 #include "xestring.hxx"
 #include "xeformula.hxx"
 
+#include "colorscale.hxx"
+
 /* ============================================================================
 Classes to export the big Excel document contents (related to several cells or
 globals for the sheet or document).
@@ -195,6 +197,29 @@ private:
     XclExpCFImplPtr     mxImpl;
 };
 
+class XclExpCfvo : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry, const ScAddress& rPos);
+    virtual ~XclExpCfvo() {}
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    const ScColorScaleEntry& mrEntry;
+    ScAddress maSrcPos;
+};
+
+class XclExpColScaleCol : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpColScaleCol( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry);
+    virtual ~XclExpColScaleCol();
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    const ScColorScaleEntry& mrEntry;
+};
+
 // ----------------------------------------------------------------------------
 
 class ScConditionalFormat;
@@ -226,6 +251,21 @@ private:
     String              msSeqRef;       /// OOXML Sequence of References
 };
 
+class XclExpColorScale: public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat );
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    typedef XclExpRecordList< XclExpCfvo > XclExpCfvoList;
+    typedef XclExpRecordList< XclExpColScaleCol > XclExpColScaleColList;
+
+    XclExpCfvoList maCfvoList;
+    XclExpColScaleColList maColList;
+    const ScColorScaleFormat& mrFormat;
+};
+
 // ----------------------------------------------------------------------------
 
 /** Contains all conditional formats of a specific sheet. */
@@ -241,7 +281,9 @@ public:
 
 private:
     typedef XclExpRecordList< XclExpCondfmt > XclExpCondfmtList;
+    typedef XclExpRecordList< XclExpColorScale > XclExpColorScaleList;
     XclExpCondfmtList   maCondfmtList;  /// List of CONDFMT records.
+    XclExpColorScaleList maColorScaleList; // Color scale entries
 };
 
 // Data Validation ============================================================

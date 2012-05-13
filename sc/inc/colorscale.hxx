@@ -36,6 +36,7 @@
 
 class ScDocument;
 class ScFormulaCell;
+class ScTokenArray;
 
 class SC_DLLPUBLIC ScColorScaleEntry
 {
@@ -64,6 +65,7 @@ public:
     bool GetMax() const;
     bool GetPercent() const;
     bool HasFormula() const;
+    const ScTokenArray* GetFormula() const;
     void SetMin(bool bMin);
     void SetMax(bool bMax);
     void SetPercent(bool bPercent);
@@ -89,6 +91,7 @@ public:
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
     void SetRange(const ScRangeList& rList);
+    const ScRangeList& GetRange() const;
 
     void DataChanged(const ScRange& rRange);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
@@ -103,7 +106,7 @@ public:
     const_iterator end() const;
 };
 
-class ScColorScaleFormatList
+class SC_DLLPUBLIC ScColorScaleFormatList
 {
 private:
     typedef boost::ptr_vector<ScColorScaleFormat> ColorScaleFormatContainer;
