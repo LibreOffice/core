@@ -157,7 +157,7 @@ class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg // add 
 {
     DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg)
     virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
-                    SwTableAutoFmt *& prTAFmt );
+                    SwTableAutoFmt const*& prTAFmt);
 };
 //add for SwConvertTableDlg end
 

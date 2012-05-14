@@ -786,7 +786,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 ( nSlot == FN_CONVERT_TEXT_TABLE && 0 == rSh.GetTableFmt() ))
                 bToTable = true;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            SwTableAutoFmt* pTAFmt = 0;
+            SwTableAutoFmt const* pTAFmt = 0;
             SwTableAutoFmtTbl* pAutoFmtTbl = 0;
             bool bDeleteFormat = true;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem))
@@ -806,7 +806,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                     for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->size(); i < nCount; i++ )
                     {
-                        SwTableAutoFmt* pFmt = &(*pAutoFmtTbl)[ i ];
+                        SwTableAutoFmt const*const pFmt = &(*pAutoFmtTbl)[ i ];
                         if( pFmt->GetName() == sAutoFmt )
                         {
                             pTAFmt = pFmt;

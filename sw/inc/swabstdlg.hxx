@@ -240,7 +240,7 @@ class AbstractSwConvertTableDlg :  public VclAbstractDialog // add for SwConvert
 public:
     virtual void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTblFlags,
-                    SwTableAutoFmt *& prTAFmt ) = 0;
+                    SwTableAutoFmt const*& prTAFmt ) = 0;
 };
 
 class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog // add for SwInsertDBColAutoPilot

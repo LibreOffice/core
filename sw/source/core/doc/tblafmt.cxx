@@ -1026,7 +1026,48 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 }
 
 
+struct SwTableAutoFmtTbl::Impl
+{
+    boost::ptr_vector<SwTableAutoFmt> m_AutoFormats;
+};
+
+size_t SwTableAutoFmtTbl::size() const
+{
+    return m_pImpl->m_AutoFormats.size();
+}
+
+SwTableAutoFmt const& SwTableAutoFmtTbl::operator[](size_t const i) const
+{
+    return m_pImpl->m_AutoFormats[i];
+}
+SwTableAutoFmt      & SwTableAutoFmtTbl::operator[](size_t const i)
+{
+    return m_pImpl->m_AutoFormats[i];
+}
+
+void
+SwTableAutoFmtTbl::InsertAutoFmt(size_t const i, SwTableAutoFmt *const pFmt)
+{
+    m_pImpl->m_AutoFormats.insert(m_pImpl->m_AutoFormats.begin() + i, pFmt);
+}
+
+void SwTableAutoFmtTbl::EraseAutoFmt(size_t const i)
+{
+    m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
+}
+
+void SwTableAutoFmtTbl::MoveAutoFmt(size_t const target, size_t source)
+{
+    m_pImpl->m_AutoFormats.transfer(m_pImpl->m_AutoFormats.begin() + target,
+            m_pImpl->m_AutoFormats.begin() + source, m_pImpl->m_AutoFormats);
+}
+
+SwTableAutoFmtTbl::~SwTableAutoFmtTbl()
+{
+}
+
 SwTableAutoFmtTbl::SwTableAutoFmtTbl()
+    : m_pImpl(new Impl)
 {
     String sNm;
     SwTableAutoFmt* pNew = new SwTableAutoFmt(
@@ -1081,7 +1122,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
         ((SwBoxAutoFmt&)pNew->GetBoxFmt( i )).SetBox( aBox );
     }
 
-    push_back( pNew );
+    m_pImpl->m_AutoFormats.push_back(pNew);
 }
 
 sal_Bool SwTableAutoFmtTbl::Load()
@@ -1161,7 +1202,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                     bRet = pNew->Load( rStream, aVersions );
                     if( bRet )
                     {
-                        push_back( pNew );
+                        m_pImpl->m_AutoFormats.push_back(pNew);
                     }
                     else
                     {
@@ -1196,15 +1237,16 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         bRet = 0 == rStream.GetError();
 
         // Write this version number for all attributes
-        (*this)[ 0 ].GetBoxFmt( 0 ).SaveVersionNo( rStream, AUTOFORMAT_FILE_VERSION );
+        m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
+                rStream, AUTOFORMAT_FILE_VERSION);
 
-        rStream << (sal_uInt16)(size() - 1);
+        rStream << static_cast<sal_uInt16>(m_pImpl->m_AutoFormats.size() - 1);
         bRet = 0 == rStream.GetError();
 
-        for( sal_uInt16 i = 1; bRet && i < size(); ++i )
+        for (sal_uInt16 i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)
         {
-            const SwTableAutoFmt* pFmt = &(*this)[ i ];
-            bRet = pFmt->Save( rStream, AUTOFORMAT_FILE_VERSION );
+            SwTableAutoFmt const& rFmt = m_pImpl->m_AutoFormats[i];
+            bRet = rFmt.Save(rStream, AUTOFORMAT_FILE_VERSION);
         }
     }
     rStream.Flush();

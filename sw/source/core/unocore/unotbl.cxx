@@ -2966,7 +2966,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
             String sAutoFmtName(aName);
             SwTableAutoFmtTbl aAutoFmtTbl;
             aAutoFmtTbl.Load();
-            for( sal_uInt16 i = aAutoFmtTbl.size(); i; )
+            for (sal_uInt16 i = aAutoFmtTbl.size(); i;)
                 if( sAutoFmtName == aAutoFmtTbl[ --i ].GetName() )
                 {
                     SwSelBoxes aBoxes;

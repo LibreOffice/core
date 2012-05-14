@@ -83,7 +83,7 @@ public:
 
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTblOpts,
-                    SwTableAutoFmt *& prTAFmt );
+                    SwTableAutoFmt const*& prTAFmt );
 };
 
 

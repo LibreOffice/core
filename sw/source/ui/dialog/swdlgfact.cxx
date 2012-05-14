@@ -224,7 +224,7 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetPageNumber()
 }
 
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
-                                                SwTableAutoFmt *& prTAFmt )
+                                                SwTableAutoFmt const*& prTAFmt)
 {
     pDlg->GetValues(rDelim,rInsTblFlags, prTAFmt);
 }

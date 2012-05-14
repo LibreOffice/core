@@ -63,7 +63,7 @@ static sal_Unicode uOther = ',';
 
 void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
                                     SwInsertTableOptions& rInsTblOpts,
-                                    SwTableAutoFmt *& prTAFmt )
+                                    SwTableAutoFmt const*& prTAFmt )
 {
     if( aTabBtn.IsChecked() )
     {

@@ -259,11 +259,12 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
         nIndex = 255;
     }
 
-    for( sal_uInt8 i = 0, nCount = (sal_uInt8)pTableTbl->size(); i < nCount; i++ )
+    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTbl->size());
+            i < nCount; i++)
     {
-        SwTableAutoFmt* pFmt = &(*pTableTbl)[ i ];
-        aLbFormat.InsertEntry( pFmt->GetName() );
-        if( pSelFmt && pFmt->GetName() == pSelFmt->GetName() )
+        SwTableAutoFmt const& rFmt = (*pTableTbl)[ i ];
+        aLbFormat.InsertEntry(rFmt.GetName());
+        if (pSelFmt && rFmt.GetName() == pSelFmt->GetName())
             nIndex = i;
     }
 
@@ -379,7 +380,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                         if( (*pTableTbl)[ n ].GetName() > aFormatName )
                             break;
 
-                    pTableTbl->insert( pTableTbl->begin() + n, pNewData );
+                    pTableTbl->InsertAutoFmt(n, pNewData);
                     aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
                     aLbFormat.SelectEntryPos( nDfltStylePos + n );
                     bFmtInserted = sal_True;
@@ -427,7 +428,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
         aLbFormat.RemoveEntry( nDfltStylePos + nIndex );
         aLbFormat.SelectEntryPos( nDfltStylePos + nIndex-1 );
 
-        pTableTbl->erase( pTableTbl->begin() + nIndex );
+        pTableTbl->EraseAutoFmt(nIndex);
         nIndex--;
 
         if( !nIndex )
@@ -486,8 +487,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                             break;
                         }
 
-                    pTableTbl->transfer(pTableTbl->begin() + n,
-                            pTableTbl->begin() + nIndex, *pTableTbl);
+                    pTableTbl->MoveAutoFmt(n, nIndex);
                     aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
                     aLbFormat.SelectEntryPos( nDfltStylePos + n );
 

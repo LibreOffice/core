@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TBLAFMT_HXX
-#define _TBLAFMT_HXX
+#ifndef SW_TBLAFMT_HXX
+#define SW_TBLAFMT_HXX
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -36,6 +36,8 @@
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 **************************************************************************/
+
+#include <boost/scoped_ptr.hpp>
 
 #include <svl/svarray.hxx>
 #include "hintids.hxx"          // _Always_ before the solar-items!
@@ -305,15 +307,24 @@ public:
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
-typedef boost::ptr_vector<SwTableAutoFmt> _SwTableAutoFmtTbl;
-
-class SW_DLLPUBLIC SwTableAutoFmtTbl : public _SwTableAutoFmtTbl
+class SW_DLLPUBLIC SwTableAutoFmtTbl
 {
+    class Impl;
+    ::boost::scoped_ptr<Impl> m_pImpl;
+
     SW_DLLPRIVATE sal_Bool Load( SvStream& rStream );
     SW_DLLPRIVATE sal_Bool Save( SvStream& rStream ) const;
 
 public:
-    SwTableAutoFmtTbl();
+    explicit SwTableAutoFmtTbl();
+    ~SwTableAutoFmtTbl();
+
+    size_t size() const;
+    SwTableAutoFmt const& operator[](size_t i) const;
+    SwTableAutoFmt      & operator[](size_t i);
+    void InsertAutoFmt(size_t i, SwTableAutoFmt * pFmt);
+    void EraseAutoFmt(size_t i);
+    void MoveAutoFmt(size_t target, size_t source);
 
     sal_Bool Load();
     sal_Bool Save() const;
