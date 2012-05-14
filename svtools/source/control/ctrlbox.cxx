@@ -61,6 +61,7 @@
 #define EXTRAFONTSIZE 5
 #define GAPTOEXTRAPREVIEW 10
 #define MAXPREVIEWWIDTH 120
+#define MINGAPWIDTH 2
 
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
 
@@ -338,9 +339,9 @@ long BorderWidthImpl::GetGap( long nWidth ) const
     if ( ( m_nFlags & CHANGE_DIST ) > 0 )
         result = static_cast<long>(m_nRateGap * nWidth);
 
-    // Avoid having too small distances (less than 1pt)
-    if ( result < 20 && m_nRate1 > 0 && m_nRate2 > 0 )
-        result = 20;
+    // Avoid having too small distances (less than 0.1pt)
+    if ( result < MINGAPWIDTH && m_nRate1 > 0 && m_nRate2 > 0 )
+        result = MINGAPWIDTH;
 
     return result;
 }
@@ -380,7 +381,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
 
     bool bGapChange = ( m_nFlags & CHANGE_DIST ) > 0;
     double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
-    if ( bGapChange && nGap > 20 )
+    if ( bGapChange && nGap > MINGAPWIDTH )
         aToCompare.push_back( nWidthGap );
     else if ( !bGapChange && nWidthGap < 0 )
         bInvalid = true;
