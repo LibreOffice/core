@@ -280,7 +280,7 @@ OUT2BIN= \
 
 #make sure that when we deliver the headers of a new icu that the timestamps
 #are newer than the last icu to ensure dependencies are correctly rebuilt
-INSTALL_ACTION=find . -name "*.h" -print0 | xargs -0 touch
+#INSTALL_ACTION=find . -name "*.h" -print0 | xargs -0 touch
 
 # --- Targets ------------------------------------------------------
 
