@@ -487,6 +487,7 @@ findunusedcode:
               | grep -v ^libcmis:: \
               | grep -v ^libvisio:: \
               | grep -v ^libwpg:: \
+              | grep -v ^libwps_tools_win:: \
               | grep -v ^lucene:: \
               | grep -v ^Matrix3d:: \
               | grep -v ^salhelper:: \
