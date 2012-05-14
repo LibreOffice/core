@@ -340,38 +340,40 @@ void StgStrm::SetEntry( StgDirEntry& r )
  * for this each time build a simple flat in-memory vector list
  * of pages.
  */
-bool StgStrm::buildPageChainCache()
+void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
 {
     if (nSize > 0)
         m_aPagesCache.reserve(nSize/nPageSize);
 
+    bool bError = false;
     sal_Int32 nBgn = nStart;
-    while (nBgn >= 0)
+    sal_Int32 nOldBgn = -1;
+    sal_Int32 nOptSize = 0;
+    while( nBgn >= 0 && nBgn != nOldBgn )
     {
-        m_aPagesCache.push_back(nBgn);
-        sal_Int32 nOldBgn = nBgn;
-        nBgn = pFat->GetNextPage(nBgn);
-        if (nBgn == nOldBgn)
-            return false;
+        if( nBgn >= 0 )
+            m_aPagesCache.push_back(nBgn);
+        nOldBgn = nBgn;
+        nBgn = pFat->GetNextPage( nBgn );
+        if( nBgn == nOldBgn )
+            bError = true;
+        nOptSize += nPageSize;
     }
-
-    return true;
+    if (bError)
+    {
+        if (pOptionalCalcSize)
+            rIo.SetError( ERRCODE_IO_WRONGFORMAT );
+        m_aPagesCache.clear();
+    }
+    if (pOptionalCalcSize)
+        *pOptionalCalcSize = nOptSize;
 }
-
-//See fdo#47644 for a .doc with a vast amount of pages where seeking around the
-//document takes a colossal amount of time
-//
-//There's a cost to building a page cache, so only build one if the number of
-//pages to seek through hits some sufficiently high value where it's worth it.
-#define ARBITRARY_LARGE_AMOUNT_OF_PAGES 8 * 512
 
 // Compute page number and offset for the given byte position.
 // If the position is behind the size, set the stream right
 // behind the EOF.
-
 sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
 {
-    sal_Int32 nRel, nBgn;
     // Values < 0 seek to the end
     if( nBytePos < 0 || nBytePos >= nSize )
         nBytePos = nSize;
@@ -385,69 +387,59 @@ sal_Bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     if( nOld == nNew )
         return sal_True;
 
-    if (m_aPagesCache.empty() && nNew > ARBITRARY_LARGE_AMOUNT_OF_PAGES)
+    // See fdo#47644 for a .doc with a vast amount of pages where seeking around the
+    // document takes a colossal amount of time
+    //
+    // Please Note: we build the pagescache incrementally as we go if necessary,
+    // so that a corrupted FAT doesn't poison the stream state for earlier reads
+    size_t nIdx = nNew / nPageSize;
+    if( nIdx >= m_aPagesCache.size() )
     {
-        SAL_WARN("sot", "kicking off large seek helper\n");
-        buildPageChainCache();
-    }
+        // Extend the FAT cache ! ...
+        size_t nToAdd = nIdx + 1;
 
-    if (!m_aPagesCache.empty())
-    {
-        size_t nIdx = nNew / nPageSize;
+        if (m_aPagesCache.empty())
+            m_aPagesCache.push_back( nStart );
 
-        // special case: seek to 1st byte of new, unallocated page
-        // (in case the file size is a multiple of the page size)
-        if( nBytePos == nSize && !nOffset && nIdx == m_aPagesCache.size() )
+        nToAdd -= m_aPagesCache.size();
+
+        sal_Int32 nBgn = m_aPagesCache.back();
+
+        // Start adding pages while we can
+        while( nToAdd > 0 && nBgn >= 0 )
         {
-            nIdx--;
-            nOffset = nPageSize;
-        }
-
-        if (nIdx < m_aPagesCache.size())
-        {
-            nPage = m_aPagesCache[ nIdx ];
-            return sal_Bool( nPage >= 0 );
+            nBgn = pFat->GetNextPage( nBgn );
+            if( nBgn >= 0 )
+            {
+                m_aPagesCache.push_back( nBgn );
+                nToAdd--;
+            }
         }
     }
 
-    if( nNew > nOld )
-    {
-        // the new position is after the current, so an incremental
-        // positioning is OK. Set the page relative position
-        nRel = nNew - nOld;
-        nBgn = nPage;
-    }
-    else
-    {
-        // the new position is before the current, so we have to scan
-        // the entire chain.
-        nRel = nNew;
-        nBgn = nStart;
-    }
-    // now, traverse the FAT chain.
-    nRel /= nPageSize;
-
-    sal_Int32 nLast = STG_EOF;
-    while (nRel && nBgn >= 0)
-    {
-        nLast = nBgn;
-        nBgn = pFat->GetNextPage( nBgn );
-        nRel--;
-    }
-
-    // special case: seek to 1st byte of new, unallocated page
-    // (in case the file size is a multiple of the page size)
-    if( nBytePos == nSize && nBgn == STG_EOF && !nRel && !nOffset )
-        nBgn = nLast, nOffset = nPageSize;
-
-    if( nBgn < 0 && nBgn != STG_EOF )
+    if ( nIdx > m_aPagesCache.size() )
     {
         rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        nBgn = STG_EOF;
+        nPage = STG_EOF;
+        nOffset = nPageSize;
+        return sal_False;
+    }
+    // special case: seek to 1st byte of new, unallocated page
+    // (in case the file size is a multiple of the page size)
+    if( nBytePos == nSize && !nOffset && nIdx > 0 && nIdx == m_aPagesCache.size() )
+    {
+        nIdx--;
         nOffset = nPageSize;
     }
-    nPage = nBgn;
-    return sal_Bool( nRel == 0 && nPage >= 0 );
+    else if ( nIdx == m_aPagesCache.size() )
+    {
+        nPage = STG_EOF;
+        return sal_False;
+    }
+
+    nPage = m_aPagesCache[ nIdx ];
+
+    return nPage >= 0;
 }
 
 // Retrieve the physical page for a given byte offset.
@@ -817,10 +809,7 @@ void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
     {
         // determine the actual size of the stream by scanning
         // the FAT chain and counting the # of pages allocated
-        bool bOk = buildPageChainCache();
-        if (!bOk)
-            rIo.SetError( ERRCODE_IO_WRONGFORMAT );
-        nSize = m_aPagesCache.size() * nPageSize;
+        scanBuildPageChainCache( &nSize );
     }
 }
 
