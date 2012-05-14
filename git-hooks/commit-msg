@@ -100,7 +100,7 @@ add_ChangeId() {
                 return
         fi
 
-        id=`grep -i '^Change-Id:' "$MSG" | sed -e "s/.*://"`
+        id=`grep -i '^Change-Id:' "$MSG" | sed -e "s/.*: I//"`
         temp_msg=`grep -v -i '^Change-Id:' "$MSG"`
         echo "$temp_msg" > "$MSG"
 
