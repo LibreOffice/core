@@ -1561,6 +1561,10 @@ SwTableLine::SwTableLine( SwTableLineFmt *pFmt, sal_uInt16 nBoxes,
 
 SwTableLine::~SwTableLine()
 {
+    for (size_t i = 0; i < aBoxes.size(); ++i)
+    {
+        delete aBoxes[i];
+    }
     // ist die TabelleLine der letzte Client im FrameFormat, kann dieses
     // geloescht werden
     SwModify* pMod = GetFrmFmt();

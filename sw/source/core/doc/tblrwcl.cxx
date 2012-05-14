@@ -3488,7 +3488,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 
     SwTwips nAktSize = 0;
     // See if the tables have a correct width
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n  )
+    for (sal_uInt16 n = 0; n < rBoxes.size(); ++n)
     {
         const SwTableBox* pBox = rBoxes[ n ];
         const SwTwips nBoxW = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
@@ -3498,7 +3498,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
             _CheckBoxWidth( *pBox->GetTabLines()[ i ], nBoxW );
     }
 
-    if( Abs( nAktSize - nSize ) > ( COLFUZZY * rBoxes.Count() ) )
+    if (Abs(nAktSize - nSize) > (COLFUZZY * rBoxes.size()))
     {
         OSL_FAIL( "Line's Boxes are too small or too large" );
     }
