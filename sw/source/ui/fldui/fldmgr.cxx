@@ -890,11 +890,11 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         {
             SwAuthorityFieldType* pType =
                 (SwAuthorityFieldType*)pCurShell->GetFldType(0, RES_AUTHORITY);
-            if(!pType)
+            if (!pType)
             {
-                pType =
-                    (SwAuthorityFieldType*)pCurShell->InsertFldType(
-                                    SwAuthorityFieldType(pCurShell->GetDoc()));
+                SwAuthorityFieldType const type(pCurShell->GetDoc());
+                pType = static_cast<SwAuthorityFieldType*>(
+                            pCurShell->InsertFldType(type));
             }
             pFld = new SwAuthorityField(pType, rData.sPar1);
         }

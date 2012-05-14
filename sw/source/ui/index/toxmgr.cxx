@@ -368,9 +368,12 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 SwAuthorityFieldType* pFType = (SwAuthorityFieldType*)
                                                 pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
-                if(!pFType)
-                    pFType = (SwAuthorityFieldType*)pSh->InsertFldType(
-                                    SwAuthorityFieldType(pSh->GetDoc()));
+                if (!pFType)
+                {
+                    SwAuthorityFieldType const type(pSh->GetDoc());
+                    pFType = static_cast<SwAuthorityFieldType*>(
+                                pSh->InsertFldType(type));
+                }
                 pFType->SetPreSuffix(rDesc.GetAuthBrackets().GetChar(0),
                     rDesc.GetAuthBrackets().GetChar(1));
                 pFType->SetSequence(rDesc.IsAuthSequence());

@@ -1680,15 +1680,18 @@ void SwXTextField::attachToRange(
             }
             break;
             case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
-                pFld = new SwAuthorityField( (SwAuthorityFieldType*)
-                        pDoc->InsertFldType(SwAuthorityFieldType(pDoc)),
+            {
+                SwAuthorityFieldType const type(pDoc);
+                pFld = new SwAuthorityField(static_cast<SwAuthorityFieldType*>(
+                            pDoc->InsertFldType(type)),
                         aEmptyStr );
                 if(m_pProps->aPropSeq.getLength())
                 {
                     uno::Any aVal; aVal <<= m_pProps->aPropSeq;
                     pFld->PutValue( aVal, FIELD_PROP_PROP_SEQ );
                 }
-                break;
+            }
+            break;
             case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS:
                 // create field
                 pFld = new SwCombinedCharField( (SwCombinedCharFieldType*)
