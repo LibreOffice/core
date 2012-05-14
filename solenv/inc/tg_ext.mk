@@ -113,6 +113,16 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
+$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.xz
+    @-$(RM) $@
+.IF "$(GUI)"=="UNX"
+    @noop $(assign UNPACKCMD := sh -c "xz -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.xz $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
+.ELSE			# "$(GUI)"=="UNX"
+    @noop $(assign UNPACKCMD := xz -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.xz $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+.ENDIF			# "$(GUI)"=="UNX"
+    @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
+    @$(RENAME) $@.$(INPATH) $@
+
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
