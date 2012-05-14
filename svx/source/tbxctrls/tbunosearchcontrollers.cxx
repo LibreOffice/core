@@ -33,6 +33,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/util/URL.hpp>
 
@@ -185,7 +186,24 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_GETFOCUS:
             if ( m_bToClearTextField )
             {
-                SetText( String() );
+                String aString;
+
+                try
+                {
+                    css::uno::Reference<css::frame::XController> xController(m_xFrame->getController(), css::uno::UNO_QUERY_THROW);
+                    css::uno::Reference<css::frame::XModel> xModel(xController->getModel(), css::uno::UNO_QUERY_THROW);
+                    css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
+                    if (xIndexAccess->getCount() > 0)
+                    {
+                        css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY_THROW);
+                        aString = xTextRange->getString();
+                    }
+                }
+                catch ( ... )
+                {
+                }
+
+                SetText( aString );
                 m_bToClearTextField = sal_False;
             }
             SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
