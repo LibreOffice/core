@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -24,31 +25,25 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_StaticLibrary_StaticLibrary,testtools_bridgetest))
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-	Library_cppobj \
-	Library_bridgetest \
-	Library_constructors \
-	StaticLibrary_bridgetest \
-	CustomTarget_uno_services \
-	Rdb_cppobj \
+$(eval $(call gb_StaticLibrary_set_include,cppobj,\
+    -I$(SRCDIR)/testtools/source/bridgetest \
+    $$(INCLUDE) \
 ))
 
-
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_javamaker \
+$(eval $(call gb_StaticLibrary_use_internal_api,testtools_bridgetest,\
+    bridgetest \
 ))
-endif
 
-#	Jar_testComponent \
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_climaker \
+$(eval $(call gb_StaticLibrary_use_api,testtools_bridgetest,\
+    offapi \
+    udkapi \
 ))
-endif
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+$(eval $(call gb_StaticLibrary_add_exception_objects,testtools_bridgetest,\
+    testtools/source/bridgetest/currentcontextchecker \
+    testtools/source/bridgetest/multi \
+))
+
+# vim: set noet sw=4 ts=4:

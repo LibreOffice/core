@@ -24,31 +24,36 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_Library_Library,bridgetest))
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-	Library_cppobj \
-	Library_bridgetest \
-	Library_constructors \
-	StaticLibrary_bridgetest \
-	CustomTarget_uno_services \
-	Rdb_cppobj \
+$(eval $(call gb_Library_set_componentfile,bridgetest,testtools/source/bridgetest/bridgetest))
+
+$(eval $(call gb_Executable_set_include,bridgetest,\
+    -I$(SRCDIR)/testtools/source/bridgetest \
+    $$(INCLUDE) \
 ))
 
-
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_javamaker \
+$(eval $(call gb_Library_use_internal_api,bridgetest,\
+    bridgetest \
 ))
-endif
 
-#	Jar_testComponent \
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_climaker \
+$(eval $(call gb_Library_use_api,bridgetest,\
+    offapi \
+    udkapi \
 ))
-endif
+
+$(eval $(call gb_Library_use_static_libraries,bridgetest,\
+    testtools_bridgetest \
+))
+
+$(eval $(call gb_Library_use_libraries,bridgetest,\
+    cppu \
+    cppuhelper \
+    sal \
+))
+
+$(eval $(call gb_Library_add_exception_objects,bridgetest,\
+    testtools/source/bridgetest/bridgetest \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

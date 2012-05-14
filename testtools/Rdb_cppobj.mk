@@ -24,31 +24,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_Rdb_Rdb,cppobj))
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-	Library_cppobj \
-	Library_bridgetest \
-	Library_constructors \
-	StaticLibrary_bridgetest \
-	CustomTarget_uno_services \
-	Rdb_cppobj \
+$(eval $(call gb_Rdb_add_components,cppobj,\
+    testtools/source/bridgetest/cppobj \
 ))
-
-
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_javamaker \
-))
-endif
-
-#	Jar_testComponent \
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_climaker \
-))
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
