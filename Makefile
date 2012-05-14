@@ -244,6 +244,7 @@ xsltml\
 zlib\
 
 gb_TAILBUILDMODULES := $(shell make -f $(SRCDIR)/tail_build/Makefile showmodules)
+export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).clean $(1).deliver
@@ -257,7 +258,8 @@ $(1).all: bootstrap fetch
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 else 
 $(1).all: bootstrap fetch
-	cd tail_build && unset MAKEFLAGS && export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1)" && \
+	cd tail_build && unset MAKEFLAGS && \
+	export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)" && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
 endif
 
