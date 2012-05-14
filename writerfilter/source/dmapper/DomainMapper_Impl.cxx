@@ -3133,6 +3133,9 @@ void DomainMapper_Impl::PopFieldContext()
     dmapper_logger->element("popFieldContext");
 #endif
 
+    if (m_aFieldStack.empty())
+        return;
+
     FieldContextPtr pContext = m_aFieldStack.top();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
