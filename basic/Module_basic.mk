@@ -36,8 +36,7 @@ $(eval $(call gb_Module_add_targets,basic,\
 
 $(eval $(call gb_Module_add_check_targets,basic,\
      CppunitTest_basic_scanner \
-     $(if $(filter-out $(OS),WIN), \
-         CppunitTest_basic_enable) \
+     CppunitTest_basic_enable \
 ))
 
 endif
