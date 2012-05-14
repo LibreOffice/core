@@ -30,7 +30,6 @@
 #ifndef _FILTER_CONFIG_CACHE_HXX_
 #define _FILTER_CONFIG_CACHE_HXX_
 
-#include "svtools/svtdllapi.h"
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
@@ -42,7 +41,7 @@
 #define INCLUDED_VECTOR
 #endif
 
-class SVT_DLLPUBLIC FilterConfigCache
+class FilterConfigCache
 {
         struct FilterConfigCacheEntry
         {
@@ -93,8 +92,8 @@ class SVT_DLLPUBLIC FilterConfigCache
 
         static const char*  InternalFilterListForSvxLight[];
 
-        SVT_DLLPRIVATE void             ImplInit();
-        SVT_DLLPRIVATE void             ImplInitSmart();
+        void             ImplInit();
+        void             ImplInitSmart();
 
     public :
 
