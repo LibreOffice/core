@@ -127,7 +127,7 @@ namespace
     {
         SvFileStream aStream(rURL, STREAM_READ);
         SotStorageRef xObjStor = new SotStorage(aStream);
-        if (!xObjStor.Is() && !xObjStor->GetError())
+        if (!xObjStor.Is() || xObjStor->GetError())
             return false;
 
         CPPUNIT_ASSERT_MESSAGE("sot storage is not valid", xObjStor->Validate());
