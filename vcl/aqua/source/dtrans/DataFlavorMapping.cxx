@@ -519,6 +519,16 @@ DataFlavorMapper::DataFlavorMapper()
     throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot create com.sun.star.datatransfer.MimeContentTypeFactory")), NULL);
 }
 
+DataFlavorMapper::~DataFlavorMapper()
+{
+    // release potential NSStrings
+    for( OfficeOnlyTypes::iterator it = maOfficeOnlyTypes.begin(); it != maOfficeOnlyTypes.end(); ++it )
+    {
+        [it->second release];
+        it->second = nil;
+    }
+}
+
 DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor) const
 {
   DataFlavor oOOFlavor;
@@ -534,22 +544,41 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor
         }
     } // for
 
-  return oOOFlavor;
+    // look if this might be an internal type; if it comes in here it must have
+    // been through openOfficeToSystemFlavor before, so it should then be in the map
+    rtl::OUString aTryFlavor( NSStringToOUString( systemDataFlavor ) );
+    if( maOfficeOnlyTypes.find( aTryFlavor ) != maOfficeOnlyTypes.end() )
+    {
+        oOOFlavor.MimeType = aTryFlavor;
+        oOOFlavor.HumanPresentableName = rtl::OUString();
+        oOOFlavor.DataType = CPPUTYPE_SEQINT8;
+    }
+
+    return oOOFlavor;
 }
 
 NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor) const
 {
-  NSString* sysFlavor = NULL;
+    NSString* sysFlavor = NULL;
 
-  for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
+    for( size_t i = 0; i < SIZE_FLAVOR_MAP; ++i )
     {
-      if (oOOFlavor.MimeType.compareToAscii(flavorMap[i].OOoFlavor, strlen(flavorMap[i].OOoFlavor)) == 0)
+        if (oOOFlavor.MimeType.compareToAscii(flavorMap[i].OOoFlavor, strlen(flavorMap[i].OOoFlavor)) == 0)
         {
-          sysFlavor = flavorMap[i].SystemFlavor;
+            sysFlavor = flavorMap[i].SystemFlavor;
         }
     }
 
-  return sysFlavor;
+    if( ! sysFlavor )
+    {
+        OfficeOnlyTypes::const_iterator it = maOfficeOnlyTypes.find( oOOFlavor.MimeType );
+        if( it == maOfficeOnlyTypes.end() )
+            sysFlavor = maOfficeOnlyTypes[ oOOFlavor.MimeType ] = OUStringToNSString( oOOFlavor.MimeType );
+        else
+            sysFlavor = it->second;
+    }
+
+    return sysFlavor;
 }
 
 NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const
@@ -686,6 +715,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
 
           if (str != NULL)
           {
+              [str retain];
               [array addObject: str];
           }
       }
