@@ -2525,8 +2525,8 @@ BmpWindow::BmpWindow( Window* pPar, sal_uInt16 nId,
     bGraphic(sal_False),
     bLeftAlign(false)
 {
-    SetBackground();
-    SetPaintTransparent(sal_True);
+    // #i119307# use background, the graphic might have transparency
+    SetBackground(Wallpaper(Color(COL_WHITE)));
 }
 
 void BmpWindow::Paint( const Rectangle& )
@@ -2572,6 +2572,9 @@ void BmpWindow::Paint( const Rectangle& )
         aPntPos.X()--;
         aPntSz.Width()  *= -1;
     }
+
+    // #i119307# clear window background, the graphic might have transparency
+    Erase();
 
     if ( bGraphic )
         aGraphic.Draw( this, aPntPos, aPntSz );
