@@ -37,7 +37,10 @@ TARGET=lpsolve
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(PRJNAME)-5.5.2.0
-TARFILE_MD5=b7aeff93c2cf713056b30f832843ba3e
+TARFILE_MD5=266cf74764e2225192357d8f90cc68b3
+
+PATCH_FILES=\
+    $(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure

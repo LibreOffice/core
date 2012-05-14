@@ -1,0 +1,10 @@
+--- misc/lpsolve-5.5.2.0/Makefile.in	2012-05-14 20:06:24.000000000 +0200
++++ misc/build/lpsolve-5.5.2.0/Makefile.in	2012-05-14 21:38:39.621988142 +0200
+@@ -310,6 +310,7 @@
+ ACLOCAL_AMFLAGS = -I m4
+ AM_MAKEFLAGS = --no-print-directory
+ AM_LDFLAGS = -Wl,--as-needed
++AM_CFLAGS = -I ./colamd
+ CLEANFILES = 
+ HEADER_FILES = \
+ 	bfp/bfp_LUSOL/lp_LUSOL.h \
