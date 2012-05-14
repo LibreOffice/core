@@ -3633,10 +3633,18 @@ dnl ===================================================================
 if test "$enable_cups" = "no"; then
     test_cups=no
     ENABLE_CUPS="NO"
+elif test "$enable_cups" = "yes"; then
+    if test $_os = iOS -o $_os = Android; then
+        AC_MSG_ERROR([CUPS makes no sense for $_os])
+    fi
+    ENABLE_CUPS="YES"
+elif test $_os = iOS -o $_os = Android; then
+    ENABLE_CUPS=NO
 else
     ENABLE_CUPS="YES"
 fi
 AC_SUBST(ENABLE_CUPS)
+
 if test "$test_cups" = "yes"; then
     AC_MSG_CHECKING([whether cups support is present])
     AC_CHECK_LIB([cups], [cupsPrintFiles], [:])
