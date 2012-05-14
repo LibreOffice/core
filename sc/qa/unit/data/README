@@ -1,0 +1,7 @@
+Files with the string 'CVE' in their name are encrypted to avoid
+problems with virus checkers on source code download.; use:
+
+mdecrypt --bare -a arcfour -o hex -k 435645 -s 3 foo.doc # to unencrypt
+mcrypt --bare -a arcfour -o hex -k 435645 -s 3   foo.doc # to create new tests
+
+to get access to the plain files for manual testing.
