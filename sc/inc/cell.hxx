@@ -79,6 +79,8 @@ const int SC_CLONECELL_ADJUST3DREL      = 0x0002;
     copying cells to undo document, where captions are handled in drawing undo). */
 const int SC_CLONECELL_NOCAPTION        = 0x0004;
 
+/** If set, absolute refs will not transformed to external references */
+const int SC_CLONECELL_NOMAKEABS_EXTERNAL = 0x0008;
 // ============================================================================
 
 class SC_DLLPUBLIC ScBaseCell

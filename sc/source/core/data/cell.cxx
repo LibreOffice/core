@@ -812,7 +812,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         }
 
         bool bCopyBetweenDocs = pDocument->GetPool() != rCell.pDocument->GetPool();
-        if (bCopyBetweenDocs)
+        if (bCopyBetweenDocs && !(nCloneFlags & SC_CLONECELL_NOMAKEABS_EXTERNAL))
         {
             pCode->ReadjustAbsolute3DReferences( rCell.pDocument, &rDoc, rCell.aPos);
         }

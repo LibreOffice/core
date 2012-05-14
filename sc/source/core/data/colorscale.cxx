@@ -60,7 +60,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
 {
     if(rEntry.mpCell)
     {
-        mpCell.reset(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*pDoc)));
+        mpCell.reset(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*pDoc, SC_CLONECELL_NOMAKEABS_EXTERNAL)));
     }
 }
 
