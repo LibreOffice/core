@@ -33,10 +33,14 @@ $(call gb_CustomTarget_get_target,sal/generated) : \
 	$(sal_DIR)/rtlbootstrap.mk $(sal_DIR)/sal/udkversion.h \
 	$(if $(filter-out $(COM),MSC),$(sal_DIR)/sal/typesizes.h)
 
-# FIXME: rtlbootstrap.mk is empty on cygwin
 ifeq ($(COM),MSC)
 $(sal_DIR)/rtlbootstrap.mk :| $(sal_DIR)/.dir
-	touch $@
+	echo RTL_OS:=Windows > $@
+ifeq ($(CPUNAME),INTEL)
+	echo RTL_ARCH:=x86 >> $@
+else
+	echo RTL_ARCH:=X86_64 >> $@
+endif
 else
 $(sal_DIR)/rtlbootstrap.mk : $(sal_DIR)/sal/typesizes.h | $(sal_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CXX,1)
