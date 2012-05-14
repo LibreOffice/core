@@ -376,7 +376,7 @@ private:
     sal_Bool            mbInSelect;
     sal_Bool            mbSelColor;
     sal_Bool            mbSelTextColor;
-    sal_Bool            mbMirrored;
+    bool            mbMirrored;
     bool            mbHasInsertTab; // if true, the tab bar has an extra tab at the end.
     Link            maSelectHdl;
     Link            maDoubleClickHdl;
@@ -496,16 +496,16 @@ public:
         @param bMirrored  sal_True = the control will draw itself RTL in LTR GUI,
             and vice versa; sal_False = the control behaves according to the
             current direction of the GUI. */
-    void            SetMirrored( sal_Bool bMirrored = sal_True );
+    void            SetMirrored(bool bMirrored = true);
     /** Returns sal_True, if the control is set to mirrored mode (see SetMirrored()). */
-    sal_Bool            IsMirrored() const { return mbMirrored; }
+    bool            IsMirrored() const { return mbMirrored; }
 
     /** Sets the control to LTR or RTL mode regardless of the GUI direction.
         @param bRTL  sal_False = the control will draw from left to right;
             sal_True = the control will draw from right to left. */
-    void            SetEffectiveRTL( sal_Bool bRTL );
-    /** Returns sal_True, if the control draws from right to left (see SetEffectiveRTL()). */
-    sal_Bool            IsEffectiveRTL() const;
+    void            SetEffectiveRTL( bool bRTL );
+    /** Returns true, if the control draws from right to left (see SetEffectiveRTL()). */
+    bool            IsEffectiveRTL() const;
 
     sal_Bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
     sal_uInt16          ShowDropPos( const Point& rPos );

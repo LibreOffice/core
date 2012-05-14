@@ -2413,24 +2413,24 @@ void TabBar::EndEditMode( sal_Bool bCancel )
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetMirrored( sal_Bool bMirrored )
+void TabBar::SetMirrored(bool bMirrored)
 {
     if( mbMirrored != bMirrored )
     {
         mbMirrored = bMirrored;
-        mbSizeFormat = sal_True;
+        mbSizeFormat = true;
         ImplInitControls();     // for button images
         Resize();               // recalculates control positions
         Mirror();
     }
 }
 
-void TabBar::SetEffectiveRTL( sal_Bool bRTL )
+void TabBar::SetEffectiveRTL( bool bRTL )
 {
     SetMirrored( bRTL != Application::GetSettings().GetLayoutRTL() );
 }
 
-sal_Bool TabBar::IsEffectiveRTL() const
+bool TabBar::IsEffectiveRTL() const
 {
     return IsMirrored() != Application::GetSettings().GetLayoutRTL();
 }
