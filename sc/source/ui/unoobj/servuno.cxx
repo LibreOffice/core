@@ -441,7 +441,7 @@ sal_Int32 getFieldType(sal_uInt16 nOldType)
         case SC_SERVICE_EXT_TIMEFIELD:
             return text::textfield::Type::EXTENDED_TIME;
         case SC_SERVICE_TITLEFIELD:
-            return text::textfield::Type::FILE;
+            return text::textfield::Type::DOCINFO_TITLE;
         case SC_SERVICE_FILEFIELD:
             return text::textfield::Type::EXTENDED_FILE;
         case SC_SERVICE_SHEETFIELD:

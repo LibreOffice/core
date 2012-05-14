@@ -442,7 +442,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         pData = new SvxPagesField();
         break;
 
-    case text::textfield::Type::FILE:
+    case text::textfield::Type::DOCINFO_TITLE:
         pData = new SvxFileField();
         break;
 
@@ -608,7 +608,7 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
                 return OUString("Pages");
             case text::textfield::Type::TIME:
                 return OUString("Time");
-            case text::textfield::Type::FILE:
+            case text::textfield::Type::DOCINFO_TITLE:
                 return OUString("File");
             case text::textfield::Type::TABLE:
                 return OUString("Table");
@@ -837,7 +837,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
             pServices[2] = "com.sun.star.text.TextField.DateTime";
             pServices[3] = "com.sun.star.text.textfield.DateTime";
         break;
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
             pServices[2] = "com.sun.star.text.TextField.docinfo.Title";
             pServices[3] = "com.sun.star.text.textfield.docinfo.Title";
         break;
@@ -931,7 +931,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
                  aFieldType.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
         {
-            nId = text::textfield::Type::FILE;
+            nId = text::textfield::Type::DOCINFO_TITLE;
         }
         else if ( aFieldType == "Author" )
         {

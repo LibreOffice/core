@@ -223,7 +223,7 @@ public:
 class EDITENG_DLLPUBLIC SvxFileField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxFileField, SvxFieldData, com::sun::star::text::textfield::Type::FILE )
+    SV_DECL_PERSIST1( SvxFileField, SvxFieldData, com::sun::star::text::textfield::Type::DOCINFO_TITLE )
     SvxFileField();
 
     virtual SvxFieldData*   Clone() const;

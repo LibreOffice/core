@@ -153,7 +153,7 @@ void Test::testUnoTextFields()
 
     {
         // FILE
-        SvxUnoTextField aField(text::textfield::Type::FILE);
+        SvxUnoTextField aField(text::textfield::Type::DOCINFO_TITLE);
         uno::Sequence<rtl::OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.docinfo.Title");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);

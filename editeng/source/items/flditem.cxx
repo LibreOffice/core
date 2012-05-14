@@ -122,7 +122,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
             return new SvxPageField();
         case text::textfield::Type::PAGES:
             return new SvxPagesField();
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
             return new SvxFileField();
         case text::textfield::Type::TABLE:
         {

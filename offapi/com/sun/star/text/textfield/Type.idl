@@ -50,12 +50,13 @@ constants Type
     const long PAGE          = 2;
     const long PAGES         = 3;
     const long TIME          = 4;
-    const long FILE          = 5;
-    const long TABLE         = 6;
-    const long EXTENDED_TIME = 7;
-    const long EXTENDED_FILE = 8;
-    const long AUTHOR        = 9;
-    const long MEASURE       = 10;
+    const long TABLE         = 5;
+    const long EXTENDED_TIME = 6;
+    const long EXTENDED_FILE = 7;
+    const long AUTHOR        = 8;
+    const long MEASURE       = 9;
+
+    const long DOCINFO_TITLE = 10;
 
     const long PRESENTATION_HEADER    = 11;
     const long PRESENTATION_FOOTER    = 12;

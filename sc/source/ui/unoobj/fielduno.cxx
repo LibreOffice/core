@@ -693,7 +693,7 @@ SvxFieldData* ScEditFieldObj::getData()
                     mpData.reset(new SvxExtTimeField);
             }
             break;
-            case text::textfield::Type::FILE:
+            case text::textfield::Type::DOCINFO_TITLE:
                 mpData.reset(new SvxFileField);
             break;
             case text::textfield::Type::URL:
@@ -1156,7 +1156,7 @@ ScEditFieldObj::ScEditFieldObj(
 {
     switch (meType)
     {
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
             pPropSet = getEmptyPropertySet();
         break;
         case text::textfield::Type::EXTENDED_FILE:
@@ -1349,7 +1349,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
         case text::textfield::Type::TABLE:
             setPropertyValueSheet(aPropertyName, aValue);
         break;
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
         default:
             throw beans::UnknownPropertyException();
     }
@@ -1397,7 +1397,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aProper
         case text::textfield::Type::TIME:
         case text::textfield::Type::EXTENDED_TIME:
             return getPropertyValueDateTime(aPropertyName);
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
         default:
             throw beans::UnknownPropertyException();
     }

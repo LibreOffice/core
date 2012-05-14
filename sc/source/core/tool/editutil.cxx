@@ -670,7 +670,7 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         case text::textfield::Type::TIME:
             aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
         break;
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
             aRet = aData.aTitle;
         break;
         case text::textfield::Type::EXTENDED_FILE:
@@ -766,7 +766,7 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = ScGlobal::pLocaleData->getDate(aDate);
         }
         break;
-        case text::textfield::Type::FILE:
+        case text::textfield::Type::DOCINFO_TITLE:
         {
             SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
             aRet = pDocShell->getDocProperties()->getTitle();
