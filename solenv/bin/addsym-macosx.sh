@@ -22,8 +22,30 @@ s#^#^#
 s#$#$#' | tr '\n' '|' | sed "s#|\$##" >$2
 
 # Please note that the awk expression expects to get the output of 'nm -gx'!
+
+# The fields in the nm -gx output are apparently (see
+# /usr/include/mach-o/nlist.h>):
+
+# xxxxxxxx xx xx xxxx xxxxxxxx symbol
+# !        !  !  !    n_value
+# !        !  !  n_desc
+# !        !  n_sect
+# !        n_type
+# n_strx
+
+# Original comment:
 # On Panther we have to filter out symbols with a value "1f" otherwise external
 # symbols will erroneously be added to the generated export symbols list file.
+#
+# Of course it isn't actually the "value" (n_value) of the symbol that
+# is meant, but (as is seen from the use of $2) the n_type .
+#
+# Now, what does a n_type of 1f actually mean? The N_PEXT bit (0x10)
+# is on and the N_EXT (0x01) bit is on. It is what in Mach-O
+# documentation is called "private external". This includes symbols
+# produced by using -fvisibility=hidden. Whether that is a problem I
+# don't know.
+#
 awk -v SYMBOLSREGEXP="`cat $2`" '
 match ($6,SYMBOLSREGEXP) > 0 &&  $6 !~ /_GLOBAL_/ { if (($2 != 1) && ( $2 != "1f" ) ) print $6 }'
 
