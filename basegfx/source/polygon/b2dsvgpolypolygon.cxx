@@ -149,13 +149,6 @@ namespace basegfx
                                          const sal_Int32          nLen)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
-                ::rtl::OUStringBuffer sNumberString;
-
-                if(sal_Unicode('+') == aChar)
-                {
-                    sNumberString.append(rStr[io_rPos]);
-                    aChar = rStr[++io_rPos];
-                }
 
                 if(sal_Unicode('0') == aChar)
                 {
