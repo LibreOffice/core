@@ -43,7 +43,7 @@ ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
 ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     maColor(rEntry.maColor),
-    mpCell(NULL),
+    mpCell(),
     mbMin(rEntry.mbMin),
     mbMax(rEntry.mbMax),
     mbPercent(rEntry.mbPercent)
@@ -53,11 +53,15 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
 ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     maColor(rEntry.maColor),
-    mpCell(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*pDoc))),
+    mpCell(),
     mbMin(rEntry.mbMin),
     mbMax(rEntry.mbMax),
     mbPercent(rEntry.mbPercent)
 {
+    if(rEntry.mpCell)
+    {
+        mpCell.reset(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*pDoc)));
+    }
 }
 
 ScColorScaleEntry::~ScColorScaleEntry()
