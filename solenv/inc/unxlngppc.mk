@@ -31,3 +31,6 @@ DEFAULTOPT=-Os
 PICSWITCH:=-fPIC
 .INCLUDE : unxlng.mk
 CDEFS+=-DPOWERPC -DPPC
+CFLAGS+=-fsigned-char
+CFLAGSCC+=-fsigned-char
+CFLAGSCXX+=-fsigned-char
