@@ -54,11 +54,11 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-
-// #i38135#
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -133,6 +133,32 @@ SvxViewHint::HintType SvxViewHint::GetHintType (void) const
     return meHintType;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+BitmapEx convertMetafileToBitmapEx(
+    const GDIMetaFile& rMtf,
+    const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels)
+{
+    BitmapEx aBitmapEx;
+
+    if(rMtf.GetActionSize())
+    {
+        const drawinglayer::primitive2d::Primitive2DReference aMtf(
+            new drawinglayer::primitive2d::MetafilePrimitive2D(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rTargetRange.getRange(),
+                    rTargetRange.getMinimum()),
+                rMtf));
+        aBitmapEx = convertPrimitive2DSequenceToBitmapEx(
+            drawinglayer::primitive2d::Primitive2DSequence(&aMtf, 1),
+            rTargetRange,
+            nMaximumQuadraticPixels);
+    }
+
+    return aBitmapEx;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

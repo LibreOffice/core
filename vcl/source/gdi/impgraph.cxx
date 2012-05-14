@@ -25,9 +25,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
-
 #include <ucbhelper/content.hxx>
-
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/outdev.hxx>
@@ -36,9 +34,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
-
 #include <impgraph.hxx>
-
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
 // -----------

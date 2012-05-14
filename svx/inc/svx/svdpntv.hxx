@@ -113,6 +113,15 @@ private:
 class SdrPaintWindow;
 typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
+//////////////////////////////////////////////////////////////////////////////
+// helper to convert any GDIMetaFile to a good quality BitmapEx,
+// using default parameters and graphic::XPrimitive2DRenderer
+
+BitmapEx SVX_DLLPUBLIC convertMetafileToBitmapEx(
+    const GDIMetaFile& rMtf,
+    const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels = 500000);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener

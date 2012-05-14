@@ -65,8 +65,9 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xfltrit.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/svgdata.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/svdpntv.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -513,6 +514,8 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
 
                     pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
                     pObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aClippedBitmap)));
+                    pObj->SetMergedItem(XFillBmpTileItem(false));
+                    pObj->SetMergedItem(XFillBmpStretchItem(true));
                 }
             }
         }
@@ -1399,21 +1402,16 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
 
     if(rMtf.GetActionSize())
     {
-        Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
-        aRect.Right()++; aRect.Bottom()++;
+        const Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
 
-        // get metafile content as bitmap
-        const basegfx::B2DRange aTargetRange(
-            aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
-        const drawinglayer::primitive2d::Primitive2DReference aMtf(
-            new drawinglayer::primitive2d::MetafilePrimitive2D(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                    aTargetRange.getRange(),
-                    aTargetRange.getMinimum()),
-                rMtf));
-        BitmapEx aBitmapEx(convertPrimitive2DSequenceToBitmapEx(
-            drawinglayer::primitive2d::Primitive2DSequence(&aMtf, 1),
-            aTargetRange));
+        // convert metafile sub-content to BitmapEx
+        BitmapEx aBitmapEx(
+            convertMetafileToBitmapEx(
+                rMtf,
+                basegfx::B2DRange(
+                    aRect.Left(), aRect.Top(),
+                    aRect.Right(), aRect.Bottom()),
+                125000));
 
         // handle colors
         const Gradient& rGradient = rAct.GetGradient();
@@ -1435,12 +1433,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
         bool bCreateObject(true);
         bool bHasNewMask(false);
         AlphaMask aNewMask;
+        double fTransparence(0.0);
+        bool bFixedTransparence(false);
 
         if(bEqualColors || bNoSteps)
         {
             // single transparence
             const basegfx::BColor aMedium(basegfx::average(aStart, aEnd));
-            const double fTransparence(aMedium.luminance());
+            fTransparence = aMedium.luminance();
 
             if(basegfx::fTools::lessOrEqual(fTransparence, 0.0))
             {
@@ -1453,11 +1453,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
             }
             else
             {
-                // 0.0 < transparence < 1.0, apply
-                sal_uInt8 aAlpha(basegfx::fround(fTransparence * 255.0));
-
-                aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &aAlpha);
-                bHasNewMask = true;
+                // 0.0 < transparence < 1.0, apply fixed transparence
+                bFixedTransparence = true;
             }
         }
         else
@@ -1474,11 +1471,18 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
 
         if(bCreateObject)
         {
-            if(bHasNewMask)
+            if(bHasNewMask || bFixedTransparence)
             {
                 if(!aBitmapEx.IsAlpha() && !aBitmapEx.IsTransparent())
                 {
                     // no transparence yet, apply new one
+                    if(bFixedTransparence)
+                    {
+                        sal_uInt8 aAlpha(basegfx::fround(fTransparence * 255.0));
+
+                        aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &aAlpha);
+                    }
+
                     aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aNewMask);
                 }
                 else
@@ -1499,40 +1503,69 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                         aOldMask = aBitmapEx.GetBitmap().CreateMask(aBitmapEx.GetTransparentColor());
                     }
 
-                    BitmapReadAccess* pOld = aOldMask.AcquireReadAccess();
-                    BitmapWriteAccess* pNew = aNewMask.AcquireWriteAccess();
+                    BitmapWriteAccess* pOld = aOldMask.AcquireWriteAccess();
 
-                    if(pOld && pNew)
+                    if(pOld)
                     {
-                        if(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height())
-                        {
-                            for(sal_uInt32 y(0); y < pNew->Height(); y++)
-                            {
-                                for(sal_uInt32 x(0); x < pNew->Width(); x++)
-                                {
-                                    const BitmapColor aColOld(pOld->GetPixel(y, x));
-                                    const BitmapColor aColNew(pNew->GetPixel(y, x));
-                                    const sal_uInt16 aCombine(sal_uInt16(aColOld.GetIndex()) + sal_uInt16(aColNew.GetIndex()));
+                        const double fFactor(1.0 / 255.0);
 
-                                    pNew->SetPixel(y, x, BitmapColor(aCombine > 255 ? 255 : sal_uInt8(aCombine)));
+                        if(bFixedTransparence)
+                        {
+                            const double fOpNew(1.0 - fTransparence);
+
+                            for(sal_uInt32 y(0); y < pOld->Height(); y++)
+                            {
+                                for(sal_uInt32 x(0); x < pOld->Width(); x++)
+                                {
+                                    const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
+                                    const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+
+                                    pOld->SetPixel(y, x, BitmapColor(aCol));
                                 }
                             }
                         }
                         else
                         {
-                            OSL_ENSURE(false, "Alpha masks have different sizes (!)");
+                            BitmapReadAccess* pNew = aNewMask.AcquireReadAccess();
+
+                            if(pNew)
+                            {
+                                if(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height())
+                                {
+                                    for(sal_uInt32 y(0); y < pOld->Height(); y++)
+                                    {
+                                        for(sal_uInt32 x(0); x < pOld->Width(); x++)
+                                        {
+                                            const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
+                                            const double fOpNew(1.0 - (pNew->GetPixel(y, x).GetIndex() * fFactor));
+                                            const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+
+                                            pOld->SetPixel(y, x, BitmapColor(aCol));
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    OSL_ENSURE(false, "Alpha masks have different sizes (!)");
+                                }
+
+                                aNewMask.ReleaseAccess(pNew);
+                            }
+                            else
+                            {
+                                OSL_ENSURE(false, "Got no access to new alpha mask (!)");
+                            }
                         }
 
                         aOldMask.ReleaseAccess(pOld);
-                        aNewMask.ReleaseAccess(pNew);
                     }
                     else
                     {
-                        OSL_ENSURE(false, "Got no access to alpha bitmaps (!)");
+                        OSL_ENSURE(false, "Got no access to old alpha mask (!)");
                     }
 
                     // apply combined bitmap as mask
-                    aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aNewMask);
+                    aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aOldMask);
                 }
             }
 

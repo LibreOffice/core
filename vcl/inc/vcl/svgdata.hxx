@@ -40,7 +40,8 @@ typedef ::com::sun::star::uno::Sequence< Primitive2DReference > Primitive2DSeque
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const Primitive2DSequence& rSequence,
-    const basegfx::B2DRange& rTargetRange);
+    const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels = 500000);
 
 //////////////////////////////////////////////////////////////////////////////
 
