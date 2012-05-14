@@ -950,6 +950,22 @@ void ServiceManager::insert(css::uno::Any const & aElement)
         insertLegacyFactory(info);
         return;
     }
+// At least revisions up to 1.7 of LanguageTool.oxt (incl. the bundled 1.4.0 in
+// module languagetool) contain an (actively registered) factory that does not
+// implement XServiceInfo; the old OServiceManager::insert
+// (stoc/source/servicemanager/servicemanager.cxx) silently did not add such
+// broken factories to its m_ImplementationNameMap, so ignore them here for
+// backwards compatibility of live-insertion of extensions, too (can go again
+// for incompatible LO 4):
+#if SUPD < 400
+    css::uno::Reference< css::lang::XSingleComponentFactory > legacy;
+    if ((aElement >>= legacy) && legacy.is()) {
+        SAL_WARN(
+            "cppuhelper",
+            "Ignored XSingleComponentFactory not implementing XServiceInfo");
+        return;
+    }
+#endif
     throw css::lang::IllegalArgumentException(
         "Bad insert element", static_cast< cppu::OWeakObject * >(this), 0);
 }
