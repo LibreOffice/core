@@ -952,7 +952,9 @@ void ServiceManager::insert(css::uno::Any const & aElement)
     }
 // At least revisions up to 1.7 of LanguageTool.oxt (incl. the bundled 1.4.0 in
 // module languagetool) contain an (actively registered) factory that does not
-// implement XServiceInfo; the old OServiceManager::insert
+// implement XServiceInfo (see <http://sourceforge.net/tracker/?
+// func=detail&aid=3526635&group_id=110216&atid=655717> "SingletonFactory should
+// implement XServiceInfo"); the old OServiceManager::insert
 // (stoc/source/servicemanager/servicemanager.cxx) silently did not add such
 // broken factories to its m_ImplementationNameMap, so ignore them here for
 // backwards compatibility of live-insertion of extensions, too (can go again
