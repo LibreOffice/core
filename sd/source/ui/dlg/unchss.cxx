@@ -171,7 +171,7 @@ StyleSheetUndoAction::~StyleSheetUndoAction()
 |*
 \************************************************************************/
 
-String StyleSheetUndoAction::GetComment() const
+rtl::OUString StyleSheetUndoAction::GetComment() const
 {
     return aComment;
 }

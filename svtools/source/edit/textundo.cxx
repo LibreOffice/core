@@ -117,10 +117,9 @@ TextUndo::~TextUndo()
 {
 }
 
-XubString TextUndo::GetComment() const
+rtl::OUString TextUndo::GetComment() const
 {
-//  return mpTextEngine->GetUndoComment( this );
-    return String();
+    return rtl::OUString();
 }
 
 void TextUndo::SetSelection( const TextSelection& rSel )

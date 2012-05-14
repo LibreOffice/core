@@ -53,7 +53,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 #endif      // _SD_UNCHSS_HXX

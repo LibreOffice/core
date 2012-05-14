@@ -1055,7 +1055,7 @@ void FmUndoPropertyAction::Redo()
 }
 
 //------------------------------------------------------------------------------
-String FmUndoPropertyAction::GetComment() const
+rtl::OUString FmUndoPropertyAction::GetComment() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::GetComment" );
     String aStr(static_STR_UNDO_PROPERTY);
@@ -1315,10 +1315,10 @@ void FmUndoModelReplaceAction::Undo()
 }
 
 //------------------------------------------------------------------------------
-String FmUndoModelReplaceAction::GetComment() const
+rtl::OUString FmUndoModelReplaceAction::GetComment() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::GetComment" );
-    return SVX_RES(RID_STR_UNDO_MODEL_REPLACE);
+    return SVX_RESSTR(RID_STR_UNDO_MODEL_REPLACE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

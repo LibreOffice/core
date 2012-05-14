@@ -127,7 +127,7 @@ ScUndoDeleteContents::~ScUndoDeleteContents()
 
 //----------------------------------------------------------------------------
 
-String ScUndoDeleteContents::GetComment() const
+rtl::OUString ScUndoDeleteContents::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );    // "Loeschen"
 }
@@ -304,7 +304,7 @@ ScUndoFillTable::~ScUndoFillTable()
 
 //----------------------------------------------------------------------------
 
-String ScUndoFillTable::GetComment() const
+rtl::OUString ScUndoFillTable::GetComment() const
 {
     return ScGlobal::GetRscString( STR_FILL_TAB );
 }
@@ -475,7 +475,7 @@ ScUndoSelectionAttr::~ScUndoSelectionAttr()
 
 //----------------------------------------------------------------------------
 
-String ScUndoSelectionAttr::GetComment() const
+rtl::OUString ScUndoSelectionAttr::GetComment() const
 {
     //"Attribute" "/Linien"
     return ScGlobal::GetRscString( pLineOuter ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
@@ -631,7 +631,7 @@ ScUndoAutoFill::~ScUndoAutoFill()
 
 //----------------------------------------------------------------------------
 
-String ScUndoAutoFill::GetComment() const
+rtl::OUString ScUndoAutoFill::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_AUTOFILL ); //"Ausfuellen"
 }
@@ -797,7 +797,7 @@ ScUndoMerge::~ScUndoMerge()
 
 //----------------------------------------------------------------------------
 
-String ScUndoMerge::GetComment() const
+rtl::OUString ScUndoMerge::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_MERGE );
 }
@@ -953,7 +953,7 @@ ScUndoAutoFormat::~ScUndoAutoFormat()
 
 //----------------------------------------------------------------------------
 
-String ScUndoAutoFormat::GetComment() const
+rtl::OUString ScUndoAutoFormat::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_AUTOFORMAT );   //"Auto-Format"
 }
@@ -1166,7 +1166,7 @@ void ScUndoReplace::SetChangeTrack()
 
 //----------------------------------------------------------------------------
 
-String ScUndoReplace::GetComment() const
+rtl::OUString ScUndoReplace::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REPLACE );  // "Ersetzen"
 }
@@ -1344,7 +1344,7 @@ ScUndoTabOp::~ScUndoTabOp()
 
 //----------------------------------------------------------------------------
 
-String ScUndoTabOp::GetComment() const
+rtl::OUString ScUndoTabOp::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TABOP );    // "Mehrfachoperation"
 }
@@ -1465,9 +1465,9 @@ void ScUndoConversion::SetChangeTrack()
 
 //----------------------------------------------------------------------------
 
-String ScUndoConversion::GetComment() const
+rtl::OUString ScUndoConversion::GetComment() const
 {
-    String aText;
+    rtl::OUString aText;
     switch( maConvParam.GetType() )
     {
         case SC_CONVERSION_SPELLCHECK:      aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
@@ -1574,7 +1574,7 @@ ScUndoRefConversion::~ScUndoRefConversion()
     delete pRedoDoc;
 }
 
-String ScUndoRefConversion::GetComment() const
+rtl::OUString ScUndoRefConversion::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Eingabe"
 }
@@ -1667,7 +1667,7 @@ ScUndoRefreshLink::~ScUndoRefreshLink()
 
 //----------------------------------------------------------------------------
 
-String ScUndoRefreshLink::GetComment() const
+rtl::OUString ScUndoRefreshLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );
 }
@@ -1824,7 +1824,7 @@ ScUndoInsertAreaLink::~ScUndoInsertAreaLink()
 
 //----------------------------------------------------------------------------
 
-String ScUndoInsertAreaLink::GetComment() const
+rtl::OUString ScUndoInsertAreaLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
 }
@@ -1914,7 +1914,7 @@ ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink()
 
 //----------------------------------------------------------------------------
 
-String ScUndoRemoveAreaLink::GetComment() const
+rtl::OUString ScUndoRemoveAreaLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );   //! eigener Text ??
 }
@@ -2018,7 +2018,7 @@ ScUndoUpdateAreaLink::~ScUndoUpdateAreaLink()
 
 //----------------------------------------------------------------------------
 
-String ScUndoUpdateAreaLink::GetComment() const
+rtl::OUString ScUndoUpdateAreaLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );   //! eigener Text ??
 }

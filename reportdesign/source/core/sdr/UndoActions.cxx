@@ -401,15 +401,14 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
     }
 }
 
-//------------------------------------------------------------------------------
-String ORptUndoPropertyAction::GetComment() const
+rtl::OUString ORptUndoPropertyAction::GetComment() const
 {
     String aStr(ModuleRes(RID_STR_UNDO_PROPERTY));
 
     aStr.SearchAndReplace( '#', m_aPropertyName );
     return aStr;
 }
-// -----------------------------------------------------------------------------
+
 OUndoPropertyGroupSectionAction::OUndoPropertyGroupSectionAction(SdrModel& _rMod
                                              ,const PropertyChangeEvent& evt
                                              ,::std::mem_fun_t< uno::Reference< report::XSection >

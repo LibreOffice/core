@@ -88,7 +88,7 @@ namespace framework
                             );
         virtual             ~UndoActionWrapper();
 
-        virtual String      GetComment() const;
+        virtual rtl::OUString GetComment() const;
         virtual void        Undo();
         virtual void        Redo();
         virtual sal_Bool    CanRepeat(SfxRepeatTarget&) const;
@@ -121,9 +121,9 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    String UndoActionWrapper::GetComment() const
+    rtl::OUString UndoActionWrapper::GetComment() const
     {
-        String sComment;
+        rtl::OUString sComment;
         try
         {
             sComment = m_xUndoAction->getTitle();

@@ -87,7 +87,7 @@ sal_Bool ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
     return sal_False;
 }
 
-String ScUndoAllRangeNames::GetComment() const
+rtl::OUString ScUndoAllRangeNames::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }
@@ -160,7 +160,7 @@ sal_Bool ScUndoAddRangeData::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
     return sal_False;
 }
 
-String ScUndoAddRangeData::GetComment() const
+rtl::OUString ScUndoAddRangeData::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }

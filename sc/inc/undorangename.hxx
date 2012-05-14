@@ -51,7 +51,7 @@ public:
     virtual void Redo();
     virtual void Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     void DoChange(const boost::ptr_map<rtl::OUString, ScRangeName>& rNames);
@@ -73,7 +73,7 @@ public:
     virtual void Redo();
     virtual void Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScRangeData* mpRangeData;

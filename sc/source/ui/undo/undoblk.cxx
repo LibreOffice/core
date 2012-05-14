@@ -136,7 +136,7 @@ ScUndoInsertCells::~ScUndoInsertCells()
     delete []pScenarios;
 }
 
-String ScUndoInsertCells::GetComment() const
+rtl::OUString ScUndoInsertCells::GetComment() const
 {
     return ScGlobal::GetRscString( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
 }
@@ -374,7 +374,7 @@ ScUndoDeleteCells::~ScUndoDeleteCells()
     delete []pScenarios;
 }
 
-String ScUndoDeleteCells::GetComment() const
+rtl::OUString ScUndoDeleteCells::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECELLS ); // "Loeschen"
 }
@@ -596,7 +596,7 @@ ScUndoDeleteMulti::~ScUndoDeleteMulti()
     delete [] pRanges;
 }
 
-String ScUndoDeleteMulti::GetComment() const
+rtl::OUString ScUndoDeleteMulti::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECELLS );  // wie DeleteCells
 }
@@ -785,7 +785,7 @@ ScUndoCut::~ScUndoCut()
     delete pUndoDoc;
 }
 
-String ScUndoCut::GetComment() const
+rtl::OUString ScUndoCut::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CUT ); // "Ausschneiden"
 }
@@ -906,7 +906,7 @@ ScUndoPaste::~ScUndoPaste()
     delete pRefRedoData;
 }
 
-String ScUndoPaste::GetComment() const
+rtl::OUString ScUndoPaste::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PASTE ); // "Einfuegen"
 }
@@ -1183,7 +1183,7 @@ ScUndoDragDrop::~ScUndoDragDrop()
 {
 }
 
-String ScUndoDragDrop::GetComment() const
+rtl::OUString ScUndoDragDrop::GetComment() const
 {   // "Verschieben" : "Kopieren"
     return bCut ?
         ScGlobal::GetRscString( STR_UNDO_MOVE ) :
@@ -1412,7 +1412,7 @@ ScUndoListNames::~ScUndoListNames()
     delete pRedoDoc;
 }
 
-String ScUndoListNames::GetComment() const
+rtl::OUString ScUndoListNames::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_LISTNAMES );
 }
@@ -1485,7 +1485,7 @@ ScUndoUseScenario::~ScUndoUseScenario()
     delete pUndoDoc;
 }
 
-String ScUndoUseScenario::GetComment() const
+rtl::OUString ScUndoUseScenario::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_USESCENARIO );
 }
@@ -1608,7 +1608,7 @@ ScUndoSelectionStyle::~ScUndoSelectionStyle()
     delete pUndoDoc;
 }
 
-String ScUndoSelectionStyle::GetComment() const
+rtl::OUString ScUndoSelectionStyle::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_APPLYCELLSTYLE );
 }
@@ -1719,7 +1719,7 @@ ScUndoEnterMatrix::~ScUndoEnterMatrix()
     delete pUndoDoc;
 }
 
-String ScUndoEnterMatrix::GetComment() const
+rtl::OUString ScUndoEnterMatrix::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERMATRIX );
 }
@@ -1819,7 +1819,7 @@ ScUndoIndent::~ScUndoIndent()
     delete pUndoDoc;
 }
 
-String ScUndoIndent::GetComment() const
+rtl::OUString ScUndoIndent::GetComment() const
 {
     sal_uInt16 nId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
     return ScGlobal::GetRscString( nId );
@@ -1881,7 +1881,7 @@ ScUndoTransliterate::~ScUndoTransliterate()
     delete pUndoDoc;
 }
 
-String ScUndoTransliterate::GetComment() const
+rtl::OUString ScUndoTransliterate::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TRANSLITERATE );
 }
@@ -1951,7 +1951,7 @@ ScUndoClearItems::~ScUndoClearItems()
     delete pWhich;
 }
 
-String ScUndoClearItems::GetComment() const
+rtl::OUString ScUndoClearItems::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
 }
@@ -2010,7 +2010,7 @@ ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
     delete pUndoDoc;
 }
 
-String ScUndoRemoveBreaks::GetComment() const
+rtl::OUString ScUndoRemoveBreaks::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMOVEBREAKS );
 }
@@ -2078,7 +2078,7 @@ ScUndoRemoveMerge::~ScUndoRemoveMerge()
     delete pUndoDoc;
 }
 
-String ScUndoRemoveMerge::GetComment() const
+rtl::OUString ScUndoRemoveMerge::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "Zusammenfassung aufheben"
 }
@@ -2226,7 +2226,7 @@ ScUndoBorder::~ScUndoBorder()
     delete pInner;
 }
 
-String ScUndoBorder::GetComment() const
+rtl::OUString ScUndoBorder::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_SELATTRLINES );     //! eigener String?
 }

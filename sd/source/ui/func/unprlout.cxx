@@ -109,7 +109,7 @@ SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
 |*
 \************************************************************************/
 
-String SdPresentationLayoutUndoAction::GetComment() const
+rtl::OUString SdPresentationLayoutUndoAction::GetComment() const
 {
     return aComment;
 }

@@ -203,7 +203,7 @@ ModifyPageUndoAction::~ModifyPageUndoAction()
 |*
 \************************************************************************/
 
-String ModifyPageUndoAction::GetComment() const
+rtl::OUString ModifyPageUndoAction::GetComment() const
 {
     return maComment;
 }
@@ -239,7 +239,7 @@ void RenameLayoutTemplateUndoAction::Redo()
     mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );
 }
 
-String RenameLayoutTemplateUndoAction::GetComment() const
+rtl::OUString RenameLayoutTemplateUndoAction::GetComment() const
 {
     return  maComment;
 }

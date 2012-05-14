@@ -287,7 +287,7 @@ OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
     }
 }
 //----------------------------------------------------------------------------
-String OGroupSectionUndo::GetComment() const
+rtl::OUString OGroupSectionUndo::GetComment() const
 {
     if ( m_sName.isEmpty() )
     {
@@ -298,8 +298,9 @@ String OGroupSectionUndo::GetComment() const
             if ( xSection.is() )
                 m_sName = xSection->getName();
         }
-        catch(uno::Exception&)
-        {}
+        catch (const uno::Exception&)
+        {
+        }
     }
     return m_strComment + m_sName;
 }

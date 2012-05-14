@@ -115,7 +115,7 @@ public:
 
     void SetComment(const String& rStr) { aComment=rStr; }
     void SetObjDescription(const String& rStr) { aObjDescription=rStr; }
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void Undo();
@@ -188,7 +188,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
@@ -218,7 +218,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
@@ -248,7 +248,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //************************************************************
@@ -334,7 +334,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
@@ -358,9 +358,9 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
-    static  String GetComment( const SdrObject& _rForObject );
+    static  rtl::OUString GetComment( const SdrObject& _rForObject );
 };
 
 //************************************************************
@@ -409,7 +409,7 @@ public:
     SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoNewObj(rNewObj,bOrdNumDirect) {}
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //************************************************************
@@ -428,7 +428,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String   GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -470,7 +470,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
@@ -502,7 +502,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -553,7 +553,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //************************************************************
@@ -572,7 +572,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //************************************************************
@@ -593,7 +593,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -674,7 +674,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
@@ -697,7 +697,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //************************************************************
@@ -713,7 +713,7 @@ class SdrUndoCopyPage : public SdrUndoNewPage
 public:
     SdrUndoCopyPage(SdrPage& rNewPg): SdrUndoNewPage(rNewPg) {}
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
@@ -741,7 +741,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -794,7 +794,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 //************************************************************
@@ -818,7 +818,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 ///////////////////////////////////////////////////////////////////////

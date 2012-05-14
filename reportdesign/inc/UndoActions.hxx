@@ -186,7 +186,7 @@ namespace rptui
                             ,sal_uInt16 nCommentID);
         virtual ~OCommentUndoAction();
 
-        virtual UniString   GetComment() const { return m_strComment; }
+        virtual rtl::OUString GetComment() const { return m_strComment; }
         virtual void        Undo();
         virtual void        Redo();
     };
@@ -292,7 +292,7 @@ namespace rptui
         virtual void Undo();
         virtual void Redo();
 
-        virtual String          GetComment() const;
+        virtual rtl::OUString GetComment() const;
     };
 
     //==================================================================

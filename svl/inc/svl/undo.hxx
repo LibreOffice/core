@@ -76,7 +76,7 @@ public:
 
     virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
-    virtual UniString       GetComment() const;
+    virtual rtl::OUString   GetComment() const;
     virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16  GetId() const;
 
@@ -183,7 +183,7 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
     virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
-    virtual UniString       GetComment() const;
+    virtual rtl::OUString   GetComment() const;
     virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16  GetId() const;
 
@@ -462,7 +462,7 @@ public:
 
     virtual void            Repeat(SfxRepeatTarget&r);
 
-    virtual UniString       GetComment() const;
+    virtual rtl::OUString   GetComment() const;
     virtual UniString       GetRepeatComment(SfxRepeatTarget&r) const;
     virtual sal_uInt16  GetId() const;
 

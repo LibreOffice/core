@@ -77,7 +77,7 @@ public:
     virtual void        Undo()      = 0;
     virtual void        Redo()      = 0;
 
-    virtual XubString   GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 #endif // _TEXTUNDO_HXX

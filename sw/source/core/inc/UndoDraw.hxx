@@ -57,7 +57,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 class SwUndoDrawGroup : public SwUndo

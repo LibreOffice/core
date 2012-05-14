@@ -112,7 +112,7 @@ public:
 
        @return textual comment for this undo object
     */
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
     // UndoObject remembers which mode was turned on.
     // In Undo/Redo/Repeat this remembered mode is switched on.
@@ -304,7 +304,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 };
 

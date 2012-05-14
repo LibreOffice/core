@@ -99,9 +99,9 @@ SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
 {
 }
 
-String SdMoveStyleSheetsUndoAction::GetComment() const
+rtl::OUString SdMoveStyleSheetsUndoAction::GetComment() const
 {
-    return String();
+    return rtl::OUString();
 }
 
 

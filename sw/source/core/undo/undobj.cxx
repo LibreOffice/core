@@ -290,7 +290,7 @@ bool SwUndo::CanRepeatImpl( ::sw::RepeatContext & ) const
     return ((REPEAT_START <= GetId()) && (GetId() < REPEAT_END));
 }
 
-String SwUndo::GetComment() const
+rtl::OUString SwUndo::GetComment() const
 {
     String aResult;
 

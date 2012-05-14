@@ -51,7 +51,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     UndoAnimationImpl*  mpImpl;
@@ -67,7 +67,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     UndoAnimationPathImpl* mpImpl;
@@ -84,7 +84,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     UndoTransitionImpl* mpImpl;

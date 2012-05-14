@@ -187,11 +187,11 @@ public:
     virtual void            Undo();
     virtual void            Redo();
     virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool            CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
-    virtual String          GetComment() const;
+    virtual sal_Bool        CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual sal_Bool        Merge( SfxUndoAction *pNextAction );
+    virtual rtl::OUString   GetComment() const;
     virtual String          GetRepeatComment(SfxRepeatTarget&) const;
-    virtual sal_uInt16          GetId() const;
+    virtual sal_uInt16      GetId() const;
 };
 
 

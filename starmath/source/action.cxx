@@ -58,9 +58,9 @@ void SmFormatAction::Repeat(SfxRepeatTarget& rDocSh)
     dynamic_cast< SmDocShell & >(rDocSh).SetFormat(aNewFormat);
 }
 
-UniString SmFormatAction::GetComment() const
+rtl::OUString SmFormatAction::GetComment() const
 {
-    return (SmResId(RID_UNDOFORMATNAME));
+    return SmResId(RID_UNDOFORMATNAME).toString();
 }
 
 

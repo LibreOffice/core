@@ -103,10 +103,10 @@ sal_Bool SfxUndoAction::Merge( SfxUndoAction * )
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoAction::GetComment() const
+rtl::OUString SfxUndoAction::GetComment() const
 {
     DBG_CHKTHIS(SfxUndoAction, 0);
-    return XubString();
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------
@@ -1159,11 +1159,11 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
     }
 
     // if the undo array has no comment, try to get it from its children
-    if ( pListAction->GetComment().Len() == 0 )
+    if ( pListAction->GetComment().isEmpty() )
     {
         for( size_t n = 0; n < pListAction->aUndoActions.size(); n++ )
         {
-            if( pListAction->aUndoActions[n].pAction->GetComment().Len() )
+            if (!pListAction->aUndoActions[n].pAction->GetComment().isEmpty())
             {
                 pListAction->SetComment( pListAction->aUndoActions[n].pAction->GetComment() );
                 break;
@@ -1294,7 +1294,7 @@ sal_uInt16 SfxListUndoAction::GetId() const
 
 //------------------------------------------------------------------------
 
-XubString SfxListUndoAction::GetComment() const
+rtl::OUString SfxListUndoAction::GetComment() const
 {
     return aComment;
 }
@@ -1454,12 +1454,11 @@ void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 
 //------------------------------------------------------------------------
 
-XubString SfxLinkUndoAction::GetComment() const
+rtl::OUString SfxLinkUndoAction::GetComment() const
 {
     if ( pAction )
         return pAction->GetComment();
-    else
-        return XubString();
+    return rtl::OUString();
 }
 
 

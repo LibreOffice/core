@@ -117,7 +117,7 @@ void SwSdrUndo::RedoImpl(::sw::UndoRedoContext & rContext)
     rContext.SetSelections(0, pMarkList);
 }
 
-String SwSdrUndo::GetComment() const
+rtl::OUString SwSdrUndo::GetComment() const
 {
     return pSdrUndo->GetComment();
 }

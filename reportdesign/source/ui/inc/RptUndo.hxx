@@ -132,7 +132,7 @@ namespace rptui
                             ,Action _eAction
                             ,sal_uInt16 nCommentID);
 
-        virtual String      GetComment() const;
+        virtual rtl::OUString GetComment() const;
     };
 
     /** /class OGroupUndo

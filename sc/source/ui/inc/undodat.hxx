@@ -66,7 +66,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCCOLROW        nStart;
@@ -96,7 +96,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aBlockStart;
@@ -122,7 +122,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCCOLROW        nStart;
@@ -151,7 +151,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aBlockStart;
@@ -177,7 +177,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aBlockStart;
@@ -202,7 +202,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aBlockStart;
@@ -228,7 +228,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCTAB           nTab;
@@ -257,7 +257,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCTAB           nTab;
@@ -285,7 +285,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SdrUndoAction*  pDrawUndo;
@@ -320,7 +320,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 };
 
 
@@ -337,7 +337,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScDBCollection* pUndoColl;
@@ -361,7 +361,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCTAB           nTab;
@@ -394,7 +394,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aBlockStart;
@@ -426,7 +426,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScDocument*     pOldUndoDoc;
@@ -453,7 +453,7 @@ public:
     virtual void        Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool        CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String      GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScArea              aDestArea;
@@ -483,7 +483,7 @@ public:
     virtual void        Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool        CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String      GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     String              aChartName;
@@ -519,7 +519,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     boost::scoped_ptr<ScMarkData> mpMarkData;

@@ -115,9 +115,9 @@ void UndoAnimation::Redo()
     }
 }
 
-String UndoAnimation::GetComment() const
+rtl::OUString UndoAnimation::GetComment() const
 {
-    return String(SdResId(STR_UNDO_ANIMATION));
+    return SdResId(STR_UNDO_ANIMATION).toString();
 }
 
 struct UndoAnimationPathImpl
@@ -193,9 +193,9 @@ void UndoAnimationPath::Redo()
     }
 }
 
-String UndoAnimationPath::GetComment() const
+rtl::OUString UndoAnimationPath::GetComment() const
 {
-    return String(SdResId(STR_UNDO_ANIMATION));
+    return SdResId(STR_UNDO_ANIMATION).toString();
 }
 
 struct UndoTransitionImpl
@@ -284,9 +284,9 @@ void UndoTransition::Redo()
     mpImpl->mpPage->mbStopSound = mpImpl->mbNewStopSound;
 }
 
-String UndoTransition::GetComment() const
+rtl::OUString UndoTransition::GetComment() const
 {
-    return String(SdResId(STR_UNDO_SLIDE_PARAMS));
+    return SdResId(STR_UNDO_SLIDE_PARAMS).toString();
 }
 
 }

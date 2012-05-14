@@ -148,10 +148,11 @@ sal_Bool EditUndo::CanRepeat(SfxRepeatTarget&) const
     return sal_False;
 }
 
-XubString EditUndo::GetComment() const
+rtl::OUString EditUndo::GetComment() const
 {
-    String aComment;
-    if ( mpEditEngine )
+    rtl::OUString aComment;
+
+    if (mpEditEngine)
         aComment = mpEditEngine->GetUndoComment( GetId() );
 
     return aComment;

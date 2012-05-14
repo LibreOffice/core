@@ -91,7 +91,7 @@ ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-String ScUndoWidthOrHeight::GetComment() const
+rtl::OUString ScUndoWidthOrHeight::GetComment() const
 {
     // [ "optimale " ] "Spaltenbreite" | "Zeilenhoehe"
     return ( bWidth ?

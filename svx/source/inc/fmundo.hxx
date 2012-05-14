@@ -80,7 +80,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String          GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 };
 
@@ -142,7 +142,7 @@ public:
     virtual void Undo();
     virtual void Redo() { Undo(); }
 
-    virtual String          GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
     static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced );
 };

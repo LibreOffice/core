@@ -48,7 +48,7 @@ namespace dbaui
         TYPEINFO();
         OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
-        virtual UniString   GetComment() const { return m_strComment; }
+        virtual rtl::OUString GetComment() const { return m_strComment; }
     };
 }
 #endif // DBAUI_GENERALUNDO_HXX

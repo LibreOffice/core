@@ -60,7 +60,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
     /** once the objects are passed to this class, their life-cycle is
         managed by this class; the calling function must pass new'ed
@@ -98,7 +98,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     String          aNewString;
@@ -132,7 +132,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aPos;
@@ -159,7 +159,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       aPos;
@@ -186,7 +186,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCCOL           nCol;
@@ -211,7 +211,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCTAB           nTab;
@@ -238,7 +238,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     SCCOL           nCol;
@@ -286,7 +286,7 @@ public:
     virtual void    Repeat( SfxRepeatTarget& rTarget );
     virtual sal_Bool    CanRepeat( SfxRepeatTarget& rTarget ) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     void            DoInsertNote( const ScNoteData& rNoteData );
@@ -314,7 +314,7 @@ public:
     virtual void    Repeat( SfxRepeatTarget& rTarget );
     virtual sal_Bool    CanRepeat( SfxRepeatTarget& rTarget ) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScAddress       maPos;
@@ -337,7 +337,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     sal_Bool            bIsDelete;
@@ -362,7 +362,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual rtl::OUString GetComment() const;
 
 private:
     ScRangeName*    pOldRanges;

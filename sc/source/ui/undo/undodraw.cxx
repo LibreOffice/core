@@ -58,12 +58,11 @@ void ScUndoDraw::ForgetDrawUndo()
     pDrawUndo = NULL;   // nicht loeschen (Draw-Undo muss dann von aussen gemerkt werden)
 }
 
-String ScUndoDraw::GetComment() const
+rtl::OUString ScUndoDraw::GetComment() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetComment();
-    else
-        return String();
+    return rtl::OUString();
 }
 
 String ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
