@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_use_externals,HelpIndexer,\
     clucene \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,HelpIndexer,\
+$(eval $(call gb_Executable_add_exception_objects,HelpIndexer,\
     l10ntools/source/help/HelpIndexer_main \
 ))
 

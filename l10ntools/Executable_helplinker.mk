@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_use_externals,HelpLinker,\
     clucene \
 ))
 
-$(eval $(call gb_Executable_add_cxxobjects,HelpLinker,\
+$(eval $(call gb_Executable_add_exception_objects,HelpLinker,\
     l10ntools/source/help/HelpLinker_main \
 ))
 
