@@ -585,7 +585,7 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
 }
 
 
-//  pTable = Clipboard
+// pTable = Clipboard
 void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         ScTable* pTable, bool bKeepScenarioFlags, bool bCloneNoteCaptions)
 {
@@ -651,8 +651,11 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable)
 {
 
-    if (nCol2 > MAXCOL) nCol2 = MAXCOL;
-    if (nRow2 > MAXROW) nRow2 = MAXROW;
+    if (nCol2 > MAXCOL)
+        nCol2 = MAXCOL;
+    if (nRow2 > MAXROW)
+        nRow2 = MAXROW;
+
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         IncRecalcLevel();
@@ -691,10 +694,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
             }
 
-                //
-                // Zellschutz auf geschuetzter Tabelle nicht setzen
-                //
-
+            // Zellschutz auf geschuetzter Tabelle nicht setzen
             if ( IsProtected() && (nInsFlag & IDF_ATTRIB) )
             {
                 ScPatternAttr aPattern(pDocument->GetPool());
