@@ -909,10 +909,10 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
 bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         const enum InsertFlags nInsertMode )
 {
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
+    // fetching DoesUndo is surprisingly expensive
+    bool bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+    if (bDoesUndo)
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called!
-    }
 
     const SwPosition& rPos = *rRg.GetPoint();
 
@@ -927,18 +927,15 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 
     SwTxtNode *const pNode = rPos.nNode.GetNode().GetTxtNode();
     if(!pNode)
-    {
         return false;
-    }
 
     SwDataChanged aTmp( rRg, 0 );
 
-    if (!GetIDocumentUndoRedo().DoesUndo() ||
-        !GetIDocumentUndoRedo().DoesGroupUndo())
+    if (!bDoesUndo || !GetIDocumentUndoRedo().DoesGroupUndo())
     {
         pNode->InsertText( rStr, rPos.nContent, nInsertMode );
 
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if (bDoesUndo)
         {
             SwUndoInsert * const pUndo( new SwUndoInsert(
                 rPos.nNode, rPos.nContent.GetIndex(), rStr.Len(), nInsertMode));
