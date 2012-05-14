@@ -472,21 +472,22 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 
                 if( n >= pTableTbl->size() )
                 {
-                    // Format mit dem Namen noch nicht vorhanden, also
-                    // umbenennen
-
+                    // no format with this name exists, so rename it
                     aLbFormat.RemoveEntry( nDfltStylePos + nIndex );
                     SwTableAutoFmt* p = &(*pTableTbl)[ nIndex ];
-                    pTableTbl->erase( pTableTbl->begin() + nIndex );
 
                     p->SetName( aFormatName );
 
-                    // Sortiert einfuegen!!
+                    // keep all arrays sorted!
                     for( n = 1; n < pTableTbl->size(); ++n )
-                        if( (*pTableTbl)[ n ].GetName() > aFormatName )
+                        if ((n != nIndex) &&
+                            ((*pTableTbl)[n].GetName() > aFormatName))
+                        {
                             break;
+                        }
 
-                    pTableTbl->insert( pTableTbl->begin() + n, p );
+                    pTableTbl->transfer(pTableTbl->begin() + n,
+                            pTableTbl->begin() + nIndex, *pTableTbl);
                     aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
                     aLbFormat.SelectEntryPos( nDfltStylePos + n );
 
