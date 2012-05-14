@@ -970,11 +970,14 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     if( pWrtShell->GetDoc()->IsUpdateExpFld() )
     {
-        SET_CURR_SHELL( pWrtShell );
-        pWrtShell->StartAction();
-        pWrtShell->CalcLayout();
-        pWrtShell->GetDoc()->UpdateFlds(NULL, false);
-        pWrtShell->EndAction();
+        if (pWrtShell->GetDoc()->containsUpdatableFields())
+        {
+            SET_CURR_SHELL( pWrtShell );
+            pWrtShell->StartAction();
+            pWrtShell->CalcLayout();
+            pWrtShell->GetDoc()->UpdateFlds(NULL, false);
+            pWrtShell->EndAction();
+        }
         pWrtShell->GetDoc()->SetUpdateExpFldStat( sal_False );
     }
 

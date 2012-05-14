@@ -411,6 +411,20 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
             pFldType->ModifyNotification( 0, pHt );
 }
 
+//For simplicity assume that all field types have updatable contents so
+//optimization currently only available when no fields exist.
+bool SwDoc::containsUpdatableFields()
+{
+    for (sal_uInt16 i = 0; i < pFldTypes->Count(); ++i)
+    {
+        SwFieldType* pFldType = (*pFldTypes)[i];
+        SwIterator<SwFmtFld,SwFieldType> aIter(*pFldType);
+        if (aIter.First())
+            return true;
+    }
+    return false;
+}
+
 void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 {
     OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
