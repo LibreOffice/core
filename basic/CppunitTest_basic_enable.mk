@@ -4,8 +4,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basic_enable, \
     basic/qa/cppunit/test_append \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,basic_enable,sb))
-
 # add a list of all needed libraries here
 $(eval $(call gb_CppunitTest_use_libraries,basic_enable, \
     comphelper \
