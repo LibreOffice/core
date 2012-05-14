@@ -374,6 +374,10 @@ public:
                             sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
                             const ScMarkData* pMarkData = NULL);
 
+    void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                            SCsCOL nDx, SCsROW nDy, ScTable* pTable);
+    void        CopyColorScales( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                            SCsCOL nDx, SCsROW nDy, ScTable* pTable);
     void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ScTable* pTransClip, sal_uInt16 nFlags, bool bAsLink );
 

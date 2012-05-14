@@ -633,6 +633,11 @@ const ScColorScaleFormatList* ScDocument::GetColorScaleList() const
     return mpColorScaleList.get();
 }
 
+ScColorScaleFormatList* ScDocument::GetColorScaleList()
+{
+    return mpColorScaleList.get();
+}
+
 //takes ownership
 // returns a 1-based index, 0 is reserved for no entry
 sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )
