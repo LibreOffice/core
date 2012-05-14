@@ -1155,11 +1155,7 @@ AC_ARG_WITH(external-thes-dir,
 AC_ARG_WITH(system-zlib,
     AS_HELP_STRING([--with-system-zlib],
         [Use zlib already on system.]),,
- [if test "$_os" != "WINNT"; then
-    with_system_zlib=yes
-  else
-    with_system_zlib="$with_system_libs"
-  fi])
+    [with_system_zlib=auto])
 
 AC_ARG_WITH(system-openssl,
     AS_HELP_STRING([--with-system-openssl],
@@ -1169,11 +1165,7 @@ AC_ARG_WITH(system-openssl,
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
         [Use jpeg already on system.]),,
- [if test "$_os" = "Linux"; then
-    with_system_jpeg=yes
-  else
-    with_system_jpeg="$with_system_libs"
-  fi])
+    [with_system_jpeg=auto])
 
 AC_ARG_WITH(system-clucene,
     AS_HELP_STRING([--with-system-clucene],
@@ -1223,11 +1215,7 @@ AC_ARG_WITH(system-libwpg,
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml/libxslt already on system.]),,
- [if test "$_os" = "Darwin"; then
-    with_system_libxml=yes
-  else
-    with_system_libxml="$with_system_libs"
-  fi])
+    [with_system_libxml=auto])
 
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
@@ -1450,11 +1438,7 @@ AC_ARG_WITH(system-mesa-headers,
 AC_ARG_WITH(system-curl,
     AS_HELP_STRING([--with-system-curl],
         [Use curl already on system.]),,
- [if test "$_os" = "Darwin"; then
-    with_system_curl=yes
-  else
-    with_system_curl="$with_system_libs"
-  fi])
+    [with_system_curl=auto])
 
 AC_ARG_WITH(system-boost,
     AS_HELP_STRING([--with-system-boost],
@@ -1535,7 +1519,7 @@ AC_ARG_WITH(system-gettext,
 AC_ARG_WITH(system-libpng,
     AS_HELP_STRING([--with-system-libpng],
         [Use libpng already on system.]),,
-    [with_system_libpng="$with_system_libs"])
+    [with_system_libpng=auto])
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -6039,6 +6023,17 @@ AC_SUBST(SYSTEM_STDLIBS)
 dnl ===================================================================
 dnl Check for system zlib
 dnl ===================================================================
+if test "$with_system_zlib" = "auto"; then
+    case "$_os" in
+    WINNT)
+        with_system_zlib="$with_system_libs"
+        ;;
+    *)
+        with_system_zlib=yes
+        ;;
+    esac
+fi
+
 AC_MSG_CHECKING([which zlib to use])
 if test "$with_system_zlib" = "yes"; then
     AC_MSG_RESULT([external])
@@ -6067,6 +6062,17 @@ dnl ===================================================================
 dnl Check for system jpeg
 dnl ===================================================================
 AC_MSG_CHECKING([which jpeg to use])
+if test "$with_system_jpeg" = "auto"; then
+    case "$_os" in
+    WINNT|Darwin|iOS|Android)
+        with_system_jpeg="$with_system_libs"
+        ;;
+    *)
+        with_system_jpeg=yes
+        ;;
+    esac
+fi
+
 if test "$with_system_jpeg" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_JPEG=YES
@@ -6325,6 +6331,17 @@ AC_SUBST(USE_FT_EMBOLDEN)
 # to prevent incompatibilities between internal libxml2 and external libxslt,
 # or vice versa, use with_system_libxml here
 # ===================================================================
+if test "$with_system_libxml" = "auto"; then
+    case "$_os" in
+    WINNT|iOS|Android)
+        with_system_libxml="$with_system_libs"
+        ;;
+    *)
+        with_system_libxml=yes
+        ;;
+    esac
+fi
+
 AC_MSG_CHECKING([which libxslt to use])
 if test "$with_system_libxml" = "yes"; then
     AC_MSG_RESULT([external])
@@ -7075,6 +7092,17 @@ dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
 AC_MSG_CHECKING([which libcurl to use])
+if test "$with_system_curl" = "auto"; then
+    case "$_os" in
+    Darwin)
+        with_system_curl=yes
+        ;;
+    *)
+        with_system_curl="$with_system_libs"
+        ;;
+    esac
+fi
+
 if test "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=YES
@@ -10627,20 +10655,24 @@ dnl How should and does this interact with the checks for libpng
 dnl related to use of libpng in the quickstarter above? This needs to
 dnl be unified.
 
+if test "$with_system_libpng" = "auto"; then
+    case "$_os" in
+    WINNT|Darwin|iOS|Android)
+        with_system_libpng="$with_system_libs"
+        ;;
+    *)
+        with_system_libpng=yes
+        ;;
+    esac
+fi
+
 if test "$with_system_libpng" = yes; then
     SYSTEM_LIBPNG=YES
     AC_MSG_RESULT([yes])
 else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_LIBPNG=NO
-        AC_MSG_RESULT([no])
-        ;;
-    *)
-        SYSTEM_LIBPNG=YES
-        AC_MSG_RESULT([yes])
-        ;;
-    esac
+    SYSTEM_LIBPNG=NO
+    BUILD_TYPE="$BUILD_TYPE LIBPNG"
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(SYSTEM_LIBPNG)
 
