@@ -56,7 +56,6 @@
 #include "colorscale.hxx"
 #include "document.hxx"
 #include "convuno.hxx"
-#include "docsh.hxx"
 #include "docfunc.hxx"
 #include "markdata.hxx"
 #include "docpool.hxx"
@@ -725,10 +724,9 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             ScUnoConversion::FillScRange(aRange, *itr);
             ScPatternAttr aPattern( rDoc.GetPool() );
             aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
-            ScDocShell* pShell = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
             ScMarkData aMarkData;
             aMarkData.SetMarkArea(aRange);
-            pShell->GetDocFunc().ApplyAttributes( aMarkData, aPattern, sal_True, sal_True );
+            rDoc.ApplySelectionPattern( aPattern , aMarkData);
 
             aList.Append(aRange);
         }
