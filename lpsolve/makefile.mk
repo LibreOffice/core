@@ -36,45 +36,64 @@ TARGET=lpsolve
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=$(PRJNAME)-5.5.2.0
-TARFILE_MD5=266cf74764e2225192357d8f90cc68b3
+TARFILE_NAME=lp_solve_5.5
+TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
+.IF "$(GUI_FOR_BUILD)"=="WNT"
+PATCH_FILES=lp_solve_5.5-windows.patch
+.ELSE
 PATCH_FILES=\
-    $(TARFILE_NAME).patch
+    lp_solve_5.5.patch \
+    lp_solve-aix.patch
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios
+.ENDIF
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure
+CONFIGURE_ACTION=
 CONFIGURE_FLAGS=
-.IF "$(CROSS_COMPILING)"=="YES"
-BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
-CONFIGURE_FLAGS+=$(BUILD_AND_HOST)
-.ENDIF # "$(CROSS_COMPILING)"=="YES"
 
-.IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS+=--disable-shared
-.ELSE # "$(OS)"=="IOS"
-CONFIGURE_FLAGS+=--disable-static
-.ENDIF # "$(OS)"=="IOS"
-
-BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
-
-OUTDIR2INC=.$/
-
-.IF "$(OS)"=="MACOSX"
-EXTRPATH=URELIB
-OUT2LIB+=.libs$/liblpsolve55.*.dylib
-.ELIF "$(OS)"=="IOS"
-OUT2LIB+=.libs$/liblpsolve55.a
-.ELIF "$(OS)"=="WNT"
+BUILD_DIR=lpsolve55
+.IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2LIB+=.libs$/liblpsolve55*.a
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+lpsolve_LDFLAGS=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+lpsolve_LIBS=$(MINGW_SHARED_LIBSTDCPP)
+.ENDIF
+.IF "$(GUI_FOR_BUILD)"=="WNT"
+BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
 .ELSE
-OUT2LIB+=win32$/bin.msvc$/*.lib
+BUILD_ACTION=sh ccc
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dll.a
 .ENDIF
 .ELSE
-OUT2LIB+=.libs$/liblpsolve55.so*
+BUILD_ACTION=cmd /c cvc6.bat
+OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
 .ENDIF
+OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
+.ELSE
+.IF "$(OS)"=="MACOSX"
+.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS verbose
+BUILD_ACTION=sh ccc.osx
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
+.ELIF "$(OS)"=="IOS"
+.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
+BUILD_ACTION=sh ccc.ios
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
+.ELSE
+.IF "$(COMNAME)"=="sunpro5"
+BUILD_ACTION=sh ccc.solaris
+.ELIF "$(OS)$(COM)"=="AIXGCC"
+BUILD_ACTION=lpsolve_LDFLAGS="$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)" sh ccc.aix.gcc
+.ELSE
+BUILD_ACTION=sh ccc
+.ENDIF
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.so
+.ENDIF
+.ENDIF
+
+OUT2INC=lp_lib.h lp_types.h lp_utils.h lp_Hash.h lp_matrix.h lp_mipbb.h lp_SOS.h
 
 # --- Targets ------------------------------------------------------
 
