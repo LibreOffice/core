@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -5521,56 +5520,45 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                 Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
                 Push( PUSH_CLIPREGION );
                 IntersectClipRegion( aRect );
-                if ( bHighlight )
+
+                if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
+                    IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
                 {
-                    if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
-                        IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+                    // draw background (transparency)
+                    MenubarValue aControlValue;
+                    aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
+
+                    Point tmp(0,0);
+                    Rectangle aBgRegion( tmp, GetOutputSizePixel() );
+                    DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
+                            aBgRegion,
+                            CTRL_STATE_ENABLED,
+                            aControlValue,
+                            OUString() );
+                    ImplAddNWFSeparator( this, aControlValue );
+
+                    if ( bHighlight )
                     {
-                        // draw background (transparency)
-                        MenubarValue aControlValue;
-                        aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-
-                        Point tmp(0,0);
-                        Rectangle aBgRegion( tmp, GetOutputSizePixel() );
-                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
-                                           aBgRegion,
-                                           CTRL_STATE_ENABLED,
-                                           aControlValue,
-                                           OUString() );
-                        ImplAddNWFSeparator( this, aControlValue );
-
                         // draw selected item
                         DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
-                                           aRect,
-                                           CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
-                                           aControlValue,
-                                           OUString() );
+                                aRect,
+                                CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
+                                aControlValue,
+                                OUString() );
                     }
-                    else
+                }
+                else
+                {
+                    if ( bHighlight )
                     {
                         SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
                         SetLineColor();
                         DrawRect( aRect );
                     }
-                }
-                else
-                {
-                    if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
-                    {
-                        MenubarValue aMenubarValue;
-                        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-
-                        // use full window size to get proper gradient
-                        // but clip accordingly
-                        Point aPt;
-                        Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
-
-                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
-                        ImplAddNWFSeparator( this, aMenubarValue );
-                    }
                     else
                         Erase( aRect );
                 }
+
                 Pop();
                 pMenu->ImplPaint( this, 0, 0, pData, bHighlight );
             }
