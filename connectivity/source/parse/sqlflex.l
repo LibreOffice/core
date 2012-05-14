@@ -76,7 +76,7 @@ using namespace connectivity;
 
 static ::rtl::OUString aEmptyString;
 
-static sal_Int32	gatherString(sal_Int32 delim, sal_Int32 nTyp);
+static sal_Int32	gatherString(int delim, sal_Int32 nTyp);
 static sal_Int32	gatherName(const sal_Char*);
 static sal_Int32	gatherNamePre(const sal_Char* );
 // has to be set before the parser starts
@@ -94,8 +94,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 #define YY_INPUT(buf,result,max_size) 				\
 {													\
-	buf[0] = xxx_pGLOBAL_SQLSCAN->SQLyygetc();		\
-	result = buf[0] != -1;							\
+    int c = xxx_pGLOBAL_SQLSCAN->SQLyygetc();		\
+    result = (c == EOF) ? YY_NULL : (buf[0] = c, 1);\
 }
 
 #define YY_FATAL_ERROR(msg)							\
@@ -518,9 +518,9 @@ inline bool checkeof(int c) { return c == 0 || c == EOF; }
  * nTyp == 1 -> SQL_NODE_STRING
  * nTyp == 2 -> SQL_NODE_ACCESS_DATE
  */
-sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
+sal_Int32 gatherString(int delim, sal_Int32 nTyp)
 {
-	sal_Char ch;
+	int ch;
 	::rtl::OStringBuffer sBuffer(256);
 
 	while (!checkeof(ch = yyinput())) 
@@ -547,7 +547,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 			} 
 			else
 			{
-			    sBuffer.append(ch);
+			    sBuffer.append(static_cast<sal_Char>(ch));
 			}
 
 		} 
@@ -555,7 +555,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 			break;					
 		else
 		{
-		    sBuffer.append(ch);
+		    sBuffer.append(static_cast<sal_Char>(ch));
 		}
 	}
 	YY_FATAL_ERROR("Unterminated name string"); 
@@ -746,7 +746,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 
 		sal_Char *s = Buffer;
 		sal_Int32 nPos = 1;
-		sal_Int32 ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
+		int ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
 		*s++ = ch;
 		while (!checkeof(ch = yyinput())) 
 		{
@@ -800,7 +800,7 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IPars
 //------------------------------------------------------------------------------
 sal_Int32 OSQLScanner::SQLyygetc(void)
 {
-	sal_Int32 nPos = (m_nCurrentPos >= m_sStatement.getLength()) ? -1 : m_sStatement.getStr()[m_nCurrentPos];
+	sal_Int32 nPos = (m_nCurrentPos >= m_sStatement.getLength()) ? EOF : m_sStatement.getStr()[m_nCurrentPos];
     m_nCurrentPos++;
     return nPos;
 }
