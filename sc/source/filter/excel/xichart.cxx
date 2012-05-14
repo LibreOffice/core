@@ -3194,6 +3194,11 @@ Color XclImpChTick::GetFontColor() const
 
 sal_uInt16 XclImpChTick::GetRotation() const
 {
+    /* n#720443: Ignore auto-rotation if there is a suggested rotation.
+     * Better fix would be to improve our axis auto rotation algorithm.
+     */
+    if( maData.mnRotation != EXC_ROT_NONE )
+        return maData.mnRotation;
     return ::get_flag( maData.mnFlags, EXC_CHTICK_AUTOROT ) ? EXC_CHART_AUTOROTATION : maData.mnRotation;
 }
 
