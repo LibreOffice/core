@@ -302,6 +302,7 @@ sub merge_mergemodules_into_msi_database
                 $onemergemodulehash{'cabinetfile'} = $workdir . $installer::globals::separator . $cabinetfile;
                 $onemergemodulehash{'filenumber'} = $filecounter;
                 $onemergemodulehash{'componentnames'} = \%componentnames;
+                $onemergemodulehash{'componentcondition'} = $mergemodule->{'ComponentCondition'};
                 $onemergemodulehash{'cabfilename'} = $cabfilename;
                 $onemergemodulehash{'feature'} = $mergemodule->{'Feature'};
                 $onemergemodulehash{'rootdir'} = $mergemodule->{'RootDir'};
@@ -404,6 +405,7 @@ sub merge_mergemodules_into_msi_database
             if ( -f "FeatureC.idt" ) { installer::systemactions::rename_one_file("FeatureC.idt", "old.FeatureC.idt.$counter"); }
             if ( -f "MsiAssembly.idt" ) { installer::systemactions::rename_one_file("MsiAssembly.idt", "old.MsiAssembly.idt.$counter"); }
             if ( -f "MsiAssem.idt" ) { installer::systemactions::rename_one_file("MsiAssem.idt", "old.MsiAssem.idt.$counter"); }
+            if ( -f "Componen.idt" ) { installer::systemactions::rename_one_file("Componen.idt", "old.Componen.idt.$counter"); }
 
             # Extracting tables
 
@@ -412,6 +414,7 @@ sub merge_mergemodules_into_msi_database
             my $workingtables = "File Media Directory FeatureComponents"; # required tables
             # Optional tables can be added now
             if ( $mergemodulehash->{'hasmsiassemblies'} ) { $workingtables = $workingtables . " MsiAssembly"; }
+            if ( $mergemodulehash->{'componentcondition'} ) { $workingtables = $workingtables . " Component"; }
 
             # Table "Feature" has to be exported, but it is not necessary to import it.
             if ( $^O =~ /cygwin/i ) {
@@ -451,8 +454,9 @@ sub merge_mergemodules_into_msi_database
             if ( -f "Directory.idt" ) { installer::systemactions::rename_one_file("Directory.idt", "Director.idt"); }
             if ( -f "FeatureComponents.idt" ) { installer::systemactions::rename_one_file("FeatureComponents.idt", "FeatureC.idt"); }
             if ( -f "MsiAssembly.idt" ) { installer::systemactions::rename_one_file("MsiAssembly.idt", "MsiAssem.idt"); }
+            if ( -f "Component.idt" ) { installer::systemactions::rename_one_file("Component.idt", "Componen.idt"); }
 
-            # Changing content of tables: File, Media, Directory, FeatureComponent, MsiAssembly
+            # Changing content of tables: File, Media, Directory, FeatureComponent, MsiAssembly, Component
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Media table");
             change_media_table($mergemodulehash, $workdir, $mergemodulegid, $allupdatelastsequences, $allupdatediskids);
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing File table");
@@ -465,6 +469,12 @@ sub merge_mergemodules_into_msi_database
             {
                 installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing MsiAssembly table");
                 change_msiassembly_table($mergemodulehash, $workdir);
+            }
+
+            if ( $mergemodulehash->{'componentcondition'} )
+            {
+                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Component table");
+                change_component_table($mergemodulehash, $workdir);
             }
 
             # msidb.exe does not merge InstallExecuteSequence, AdminExecuteSequence and AdvtExecuteSequence. Instead it creates
@@ -1359,6 +1369,50 @@ sub change_featurecomponent_table
         push(@{$filecontent}, $line);
         $infoline = "Adding line: $line\n";
         push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    # saving file
+    installer::files::save_file($idtfilename, $filecontent);
+}
+
+###############################################################################
+# In the components table, the conditions of merge modules should be updated
+###############################################################################
+
+sub change_component_table
+{
+    my ($mergemodulehash, $workdir) = @_;
+
+    my $infoline = "Changing content of table \"Component\"\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $idtfilename = "Componen.idt";
+    if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_component_table"); }
+
+    my $filecontent = installer::files::read_file($idtfilename);
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        my $component;
+        foreach $component ( keys %{$mergemodulehash->{'componentnames'}} )
+        {
+            if ( ${$filecontent}[$i] =~ /^\s*$component/)
+            {
+                if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.*?)\t(.+?)\t(.+?)\t(.*?)\t(.*?)\s*$/ )
+                {
+                    $infoline = "Adding condition ($5) from scp to component $1\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    if ($5)
+                    {
+                        ${$filecontent}[$i] = "$1\t$2\t$3\t$4\t($5) AND ($mergemodulehash->{'componentcondition'})\t$6\n";
+                    }
+                    else
+                    {
+                        ${$filecontent}[$i] = "$1\t$2\t$3\t$4\t$mergemodulehash->{'componentcondition'}\t$6\n";
+                    }
+                }
+            }
+        }
     }
 
     # saving file
