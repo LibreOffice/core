@@ -1,5 +1,5 @@
---- misc/zlib-1.2.5/makefile.mk	Fri Mar 14 10:17:06 2008
-+++ misc/build/zlib-1.2.5/makefile.mk	Fri Mar 14 10:16:56 2008
+--- misc/zlib-1.2.7/makefile.mk	Fri Mar 14 10:17:06 2008
++++ misc/build/zlib-1.2.7/makefile.mk	Fri Mar 14 10:16:56 2008
 @@ -1 +1,63 @@
 -dummy
 +#*************************************************************************
