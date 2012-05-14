@@ -57,15 +57,8 @@ namespace migration
 
 static ::rtl::OUString sExtensionSubDir = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/uno_packages/" ) );
 static ::rtl::OUString sSubDirName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cache" ) );
-static ::rtl::OUString sConfigDir = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/registry/data" ) );
-static ::rtl::OUString sOrgDir = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/registry/data/org" ) );
-static ::rtl::OUString sExcludeDir1 = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/registry/data/org" ) );
-static ::rtl::OUString sExcludeDir2 = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/registry/data/org/openoffice" ) );
 static ::rtl::OUString sDescriptionXmlFile = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/description.xml" ) );
 static ::rtl::OUString sExtensionRootSubDirName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/uno_packages" ) );
-
-static ::rtl::OUString sConfigurationDataType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.configuration-data"));
-static ::rtl::OUString sConfigurationSchemaType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.configuration-schema"));
 
 // =============================================================================
 // component operations

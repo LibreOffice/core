@@ -2583,8 +2583,6 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
                                            const css::uno::Any&   aValue   )
 
 {
-    static ::rtl::OUString MATERIALPROP_TITLE(RTL_CONSTASCII_USTRINGPARAM("title"));
-
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
        see ctor of PropertySetHelper for further informations.

@@ -1433,7 +1433,6 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
         static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
         static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
         static const ::rtl::OUString s_sReportPrefix(RTL_CONSTASCII_USTRINGPARAM("rpt:"));
-        static const ::rtl::OUString s_sConcatOperator(RTL_CONSTASCII_USTRINGPARAM("&"));
         sFieldData = sFieldData.copy(s_sReportPrefix.getLength(),sFieldData.getLength() - s_sReportPrefix.getLength());
         sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
         if ( nPageNumberIndex != -1 )

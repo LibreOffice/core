@@ -537,7 +537,6 @@ static void printParameterPairData(int level, EnhancedCustomShapeParameterPair &
 
 static const char* lclDumpAnyValueCode( Any value, int level = 0)
 {
-    static OUString sVoid = CREATE_OUSTRING("void");
     OUString strValue;
     Sequence< OUString > strArray;
     Sequence< Any > anyArray;

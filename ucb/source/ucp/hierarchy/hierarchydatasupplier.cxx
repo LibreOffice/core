@@ -367,11 +367,6 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 
     if ( getResult( nIndex ) )
     {
-        static rtl::OUString aFolderType(
-            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) );
-        static rtl::OUString aLinkType(
-            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) );
-
         HierarchyContentProperties aData(
             m_pImpl->m_aResults[ nIndex ]->aData );
 

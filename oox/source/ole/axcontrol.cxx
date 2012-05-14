@@ -2507,7 +2507,6 @@ HtmlSelectModel::HtmlSelectModel()
 bool
 HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-    static OUString sTerm( RTL_CONSTASCII_USTRINGPARAM("</SELECT") );
     static String sMultiple( RTL_CONSTASCII_USTRINGPARAM("<SELECT MULTIPLE") );
     static String sSelected( RTL_CONSTASCII_USTRINGPARAM("OPTION SELECTED") );
 

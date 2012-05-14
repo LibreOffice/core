@@ -669,8 +669,6 @@ public:
 
 
 const static ::rtl::OUString ISVISIBLE(  RTL_CONSTASCII_USTRINGPARAM( "IsVisible"));
-const static ::rtl::OUString WIDTH(  RTL_CONSTASCII_USTRINGPARAM( "Width"));
-const static ::rtl::OUString HEIGHT(  RTL_CONSTASCII_USTRINGPARAM( "Height"));
 const static ::rtl::OUString POSITION(  RTL_CONSTASCII_USTRINGPARAM( "Position"));
 const static rtl::OUString EQUALS( RTL_CONSTASCII_USTRINGPARAM("=") );
 const static rtl::OUString NOTEQUALS( RTL_CONSTASCII_USTRINGPARAM("<>") );
@@ -682,7 +680,6 @@ const static rtl::OUString CONTS_HEADER( RTL_CONSTASCII_USTRINGPARAM("ContainsHe
 const static rtl::OUString INSERTPAGEBREAKS( RTL_CONSTASCII_USTRINGPARAM("InsertPageBreaks" ));
 const static rtl::OUString STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY( RTL_CONSTASCII_USTRINGPARAM("The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again") );
 const static rtl::OUString STR_ERRORMESSAGE_NOCELLSWEREFOUND( RTL_CONSTASCII_USTRINGPARAM("No cells were found") );
-const static rtl::OUString STR_ERRORMESSAGE_APPLIESTOROWCOLUMNSONLY( RTL_CONSTASCII_USTRINGPARAM("Property only applicable for Columns and Rows") );
 const static rtl::OUString CELLSTYLE( RTL_CONSTASCII_USTRINGPARAM("CellStyle") );
 
 class CellValueSetter : public ValueSetter

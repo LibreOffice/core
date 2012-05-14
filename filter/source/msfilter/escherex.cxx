@@ -3037,8 +3037,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             sal_uInt16 nElements = (sal_uInt16)aHandlesPropSeq.getLength();
                             if ( nElements )
                             {
-                                const rtl::OUString sHandle ( RTL_CONSTASCII_USTRINGPARAM( "Handle" ) );
-
                                 sal_uInt16 k, j, nElementSize = 36;
                                 sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                 SvMemoryStream aOut( nStreamSize );

@@ -78,8 +78,6 @@ SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, 
 : SvXMLImportContext(rImport, nPrefix, rLocalName)
 , mxLayerManager( xLayerManager )
 {
-    const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
-
     OUString aName;
 
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

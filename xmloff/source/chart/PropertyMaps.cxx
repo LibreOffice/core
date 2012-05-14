@@ -503,7 +503,6 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    static const ::rtl::OUString sPackageProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
     sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
     sal_Bool bRet = (nContextId != 0);
 

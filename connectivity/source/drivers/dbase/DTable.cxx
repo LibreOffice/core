@@ -329,7 +329,6 @@ void ODbaseTable::fillColumns()
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
-    static const ::rtl::OUString sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
     const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
 

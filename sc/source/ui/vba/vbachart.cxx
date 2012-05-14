@@ -73,7 +73,6 @@ const rtl::OUString STACKED( RTL_CONSTASCII_USTRINGPARAM("Stacked") );
 const rtl::OUString DIM3D( RTL_CONSTASCII_USTRINGPARAM("Dim3D") );
 const rtl::OUString HASMAINTITLE( RTL_CONSTASCII_USTRINGPARAM("HasMainTitle") );
 const rtl::OUString HASLEGEND( RTL_CONSTASCII_USTRINGPARAM("HasLegend") );
-const rtl::OUString DATACAPTION( RTL_CONSTASCII_USTRINGPARAM("DataCaption") );
 
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {

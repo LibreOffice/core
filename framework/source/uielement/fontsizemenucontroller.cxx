@@ -148,7 +148,6 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
 // private function
 void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    const rtl::OUString     aFontNameCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight?FontHeight=" ));
     VCLXPopupMenu*          pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*              pVCLPopupMenu = 0;
 
