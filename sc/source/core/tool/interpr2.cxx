@@ -460,16 +460,8 @@ void ScInterpreter::ScGetDateDif()
         {
             // Return number of months.
             int md = m2 - m1 + 12 * (y2 - y1);
-            if ( nDate2 > nDate1 )
-            {
-                if ( d2 < d1 )
-                    md -= 1;
-            }
-            else
-            {
-                if ( d2 >= d1 )
-                    md += 1;
-            }
+            if (d1 > d2)
+                --md;
             PushInt( md );
         }
         else if ( aInterval.EqualsIgnoreCaseAscii( "y" ) )
@@ -493,38 +485,26 @@ void ScInterpreter::ScGetDateDif()
         }
         else if ( aInterval.EqualsIgnoreCaseAscii( "md" ) )
         {
-            // Return number of days, ignoring months and years.
+            // Return number of days, excluding months and years.
             // This is actually the remainder of days when subtracting years
             // and months from the difference of dates. Birthday-like 23 years
-            // and 10 months and 42 days.
+            // and 10 months and 19 days.
 
             // Algorithm's roll-over behavior extracted from Excel by try and
             // error..
-            // If day1 < day2 then simply day2 - day1.
-            // If day1 > day2 and month1 <= month2 then set day1 in month
-            // before date of day2 and subtract dates, e.g. for
-            // 2012-01-28,2012-03-01 set 2012-02-28 and then
-            // (2012-03-01)-(2012-02-28) => 2 days (leap year).
+            // If day1 <= day2 then simply day2 - day1.
+            // If day1 > day2 then set month1 to month2-1 and year1 to
+            // year2(-1) and subtract dates, e.g. for 2012-01-28,2012-03-01 set
+            // 2012-02-28 and then (2012-03-01)-(2012-02-28) => 2 days (leap
+            // year).
             // For 2011-01-29,2011-03-01 the non-existent 2011-02-29 rolls over
             // to 2011-03-01 so the result is 0. Same for day 31 in months with
             // only 30 days.
-            // If day1 >= day2 and month1 > month2 then set year2 to year1 and
-            // subtract dates reverse (effectively swaps day1/month1 with
-            // day2/month2).
-            // If day1 == day2 and month1 <= month2 the result is 0.
 
             long nd;
-            if (d1 < d2)
+            if (d1 <= d2)
                 nd = d2 - d1;
-            else if (m1 > m2)   // && d1 >= d2
-            {
-                aDate2.SetYear( y1 );
-                aDate2.Normalize();
-                nd = aDate1 - aDate2;
-            }
-            else if (d1 == d2)  // && m1 <= m2
-                nd = 0;
-            else                // d1 > d2 && m1 <= m2
+            else
             {
                 if (m2 == 1)
                 {
@@ -536,7 +516,6 @@ void ScInterpreter::ScGetDateDif()
                     aDate1.SetYear( y2 );
                     aDate1.SetMonth( m2 - 1 );
                 }
-                // aDate1 day is still d1
                 aDate1.Normalize();
                 nd = aDate2 - aDate1;
             }
@@ -544,27 +523,16 @@ void ScInterpreter::ScGetDateDif()
         }
         else if ( aInterval.EqualsIgnoreCaseAscii( "ym" ) )
         {
-            // Return number of months, ignoring years.
-
-            /* TODO: check what Excel really does, though this seems to be
-             * reasonable */
-
-            int md;
-            if (m1 == m2)
-                md = 0;
-            else
-            {
-                md = m2 - m1;
-                if (m1 > m2)
-                    md += 12;   // year roll-over
-                if (d1 > d2)
-                    --md;       // one incomplete month
-            }
+            // Return number of months, excluding years.
+            int md = m2 - m1 + 12 * (y2 - y1);
+            if (d1 > d2)
+                --md;
+            md %= 12;
             PushInt( md );
         }
         else if ( aInterval.EqualsIgnoreCaseAscii( "yd" ) )
         {
-            // Return number of days, ignoring years.
+            // Return number of days, excluding years.
 
             /* TODO: check what Excel really does, though this seems to be
              * reasonable */
@@ -573,7 +541,15 @@ void ScInterpreter::ScGetDateDif()
             if (m2 > m1 || (m2 == m1 && d2 >= d1))
                 aDate1.SetYear( y2 );
             else
-                aDate1.SetYear( y2 - 1 );   // one incomplete year
+                aDate1.SetYear( y2 - 1 );
+                // XXX NOTE: Excel for the case 1988-06-22,2012-05-11 returns
+                // 323, whereas the result here is 324. Don't they use the leap
+                // year of 2012?
+                // http://www.cpearson.com/excel/datedif.aspx "DATEDIF And Leap
+                // Years" is not correct and Excel 2010 correctly returns 0 in
+                // both cases mentioned there. Also using year1 as mentioned
+                // produces incorrect results in other cases and different from
+                // Excel 2010. Apparently they fixed some calculations.
             aDate1.Normalize();
             double nd = aDate2 - aDate1;
             PushDouble( nd );
