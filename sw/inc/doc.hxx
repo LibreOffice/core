@@ -841,6 +841,7 @@ public:
        @return pointer to field at the given position or NULL in case no field is found
     */
     static SwTxtFld* GetTxtFld(const SwPosition& rPos);
+    bool containsUpdatableFields();
 
     /** IDocumentContentOperations
     */
