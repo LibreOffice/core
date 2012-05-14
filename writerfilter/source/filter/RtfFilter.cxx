@@ -69,6 +69,9 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         return xFltr->filter(aDescriptor);
     }
 
+    sal_Bool bResult(sal_False);
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+
     try
     {
         MediaDescriptor aMediaDesc( aDescriptor );
@@ -89,7 +92,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
                 uno::Reference<frame::XFrame>());
 
-        uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(),
+        xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(),
                 uno::Reference<task::XStatusIndicator>());
 
         writerfilter::Stream::Pointer_t pStream(
@@ -97,20 +100,21 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
                 writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);
+        bResult = sal_True;
 #ifdef DEBUG_IMPORT
         dmapperLogger->endDocument();
 #endif
-        if (xStatusIndicator.is())
-            xStatusIndicator->end();
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
-        return sal_True;
     }
     catch (const uno::Exception& e)
     {
         SAL_INFO("writerfilter", "Exception caught: " << e.Message);
-        return sal_False;
     }
+
+    if (xStatusIndicator.is())
+        xStatusIndicator->end();
+    return bResult;
 }
 
 void RtfFilter::cancel(  ) throw (uno::RuntimeException)
