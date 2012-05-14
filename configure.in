@@ -28,14 +28,23 @@ PathFormat()
         done
         if test "$pf_conv_to_dos" = "yes"; then
             formatted_path=`cygpath -d "$formatted_path"`
+            if test $? -ne 0;  then
+                AC_MSG_ERROR([path conversion failed for "$1".])
+            fi
         fi
         fp_count_colon=`echo "$formatted_path" | $GREP -c "[:]"`
         fp_count_slash=`echo "$formatted_path" | $GREP -c "[/]"`
         if test "$fp_count_slash$fp_count_colon" != "00"; then
             if test "$fp_count_colon" = "0"; then
                 formatted_path=`realpath "$formatted_path"`
+                if test $? -ne 0;  then
+                    AC_MSG_ERROR([realpath failed for "$1".])
+                fi
             fi
             formatted_path=`cygpath -m "$formatted_path"`
+            if test $? -ne 0;  then
+                AC_MSG_ERROR([path conversion failed for "$1".])
+            fi
         fi
     fi
 }
