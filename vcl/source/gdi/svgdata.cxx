@@ -41,7 +41,8 @@ using namespace ::com::sun::star;
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const Primitive2DSequence& rSequence,
-    const basegfx::B2DRange& rTargetRange)
+    const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels)
 {
     BitmapEx aRetval;
 
@@ -76,7 +77,7 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
                         aDPI.getWidth(),
                         aDPI.getHeight(),
                         aRealRect,
-                        500000));
+                        nMaximumQuadraticPixels));
 
                 if(xBitmap.is())
                 {

@@ -26,11 +26,11 @@
 
 #include <vector>
 #include <editeng/editeng.hxx>
-#include "svx/xexch.hxx"
+#include <svx/xexch.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdoutl.hxx>
-#include "svx/svditext.hxx"
+#include <svx/svditext.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
@@ -49,16 +49,11 @@
 #include <svl/itempool.hxx>
 #include <tools/bigint.hxx>
 #include <sot/formats.hxx>
-
-// #i13033#
 #include <clonelist.hxx>
 #include <vcl/virdev.hxx>
-
-// b4967543
 #include <svl/style.hxx>
-
-// #i72535#
-#include "fmobj.hxx"
+#include <fmobj.hxx>
+#include <vcl/svgdata.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -527,8 +522,6 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 {
     BitmapEx aBmp;
@@ -560,18 +553,14 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 
         if( !aBmp )
         {
-            const Graphic aGraphic(GetMarkedObjMetaFile(bNoVDevIfOneBmpMarked));
+            const GDIMetaFile aGDIMetaFile(GetMarkedObjMetaFile(bNoVDevIfOneBmpMarked));
+            const Rectangle aBound(GetMarkedObjBoundRect());
 
-            // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
-            // rasterconverted to a bitmap
-            const SvtOptionsDrawinglayer aDrawinglayerOpt;
-            const GraphicConversionParameters aParameters(
-                Size(),
-                false,
-                aDrawinglayerOpt.IsAntiAliasing(),
-                aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
-
-            aBmp = aGraphic.GetBitmapEx(aParameters);
+            aBmp = convertMetafileToBitmapEx(
+                aGDIMetaFile,
+                basegfx::B2DRange(
+                    aBound.Left(), aBound.Top(),
+                    aBound.Right(), aBound.Bottom()));
         }
     }
 
@@ -910,3 +899,5 @@ sal_Bool SdrExchangeView::Paste(Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
     DBG_ERROR( "SdrExchangeView::Paste: Not supported anymore" );
     return sal_False;
 }
+
+// eof
