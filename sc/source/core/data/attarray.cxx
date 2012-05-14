@@ -1762,6 +1762,8 @@ const SCROW SC_VISATTR_STOP = 84;
 
 bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFullFormattedArea ) const
 {
+    OSL_ENSURE( nCount, "nCount == 0" );
+
     //  #i30830# changed behavior:
     //  ignore all attributes starting with the first run of SC_VISATTR_STOP equal rows
     //  below the last content cell
@@ -1772,36 +1774,49 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
         return true;
     }
 
-    bool bFound = false;
-
-    //  loop backwards from the end instead of using Search, assuming that
-    //  there usually aren't many attributes below the last cell
-
-    SCSIZE nPos = nCount;
-    while ( nPos > 0 && pData[nPos-1].nRow > nLastData )
+    // Quick check: last data row in or immediately preceding a run that is the
+    // last attribution down to the end, e.g. default style or column style.
+    SCSIZE nPos = nCount - 1;
+    SCROW nStartRow = (nPos ? pData[nPos-1].nRow + 1 : 0);
+    if (nStartRow <= nLastData + 1)
     {
-        SCSIZE nEndPos = nPos - 1;
-        SCSIZE nStartPos = nEndPos;         // find range of visually equal formats
-        while ( nStartPos > 0 &&
-                pData[nStartPos-1].nRow > nLastData &&
-                pData[nStartPos-1].pPattern->IsVisibleEqual(*pData[nStartPos].pPattern) )
-            --nStartPos;
+        if (bFullFormattedArea && pData[nPos].pPattern->IsVisible())
+        {
+            rLastRow = pData[nPos].nRow;
+            return true;
+        }
+        else
+        {
+            // Ignore here a few rows if data happens to end within
+            // SC_VISATTR_STOP rows before MAXROW.
+            rLastRow = nLastData;
+            return false;
+        }
+    }
 
+    // Find a run below last data row.
+    bool bFound = false;
+    Search( nLastData, nPos );
+    while ( nPos < nCount )
+    {
+        // find range of visually equal formats
+        SCSIZE nStartPos = nPos;
+        SCSIZE nEndPos = nStartPos + 1;
+        while ( nEndPos < nCount-1 &&
+                pData[nEndPos].pPattern->IsVisibleEqual( *pData[nEndPos+1].pPattern))
+            ++nEndPos;
         SCROW nAttrStartRow = ( nStartPos > 0 ) ? ( pData[nStartPos-1].nRow + 1 ) : 0;
         if ( nAttrStartRow <= nLastData )
             nAttrStartRow = nLastData + 1;
         SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
         if ( nAttrSize >= SC_VISATTR_STOP && !bFullFormattedArea )
-        {
-            bFound = false;        // ignore this range and below
-        }
-        else if ( !bFound && pData[nEndPos].pPattern->IsVisible() )
+            break;  // while, ignore this range and below
+        else if ( pData[nEndPos].pPattern->IsVisible() )
         {
             rLastRow = pData[nEndPos].nRow;
             bFound = true;
         }
-
-        nPos = nStartPos;           // look further from the top of the range
+        nPos = nEndPos;
     }
 
     return bFound;
