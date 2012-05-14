@@ -50,6 +50,8 @@ using ::rtl::OString;
 
 namespace // private
 {
+  const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
+
   /* Determine whether or not a DataFlavor is valid.
    */
   bool isValidFlavor(const DataFlavor& aFlavor)
@@ -57,6 +59,22 @@ namespace // private
     size_t len = aFlavor.MimeType.getLength();
     Type dtype = aFlavor.DataType;
     return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == getCppuType( (OUString*)0 ))));
+  }
+
+  OUString NSStringToOUString(NSString* cfString)
+  {
+    BOOST_ASSERT(cfString && "Invalid parameter");
+
+    const char* utf8Str = [cfString UTF8String];
+    unsigned int len = rtl_str_getLength(utf8Str);
+
+    return OUString(utf8Str, len, RTL_TEXTENCODING_UTF8);
+  }
+
+  NSString* OUStringToNSString(const OUString& ustring)
+  {
+    OString utf8Str = OUStringToOString(ustring, RTL_TEXTENCODING_UTF8);
+    return [NSString stringWithCString: utf8Str.getStr() encoding: NSUTF8StringEncoding];
   }
 
   NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
@@ -499,6 +517,16 @@ DataFlavorMapper::DataFlavorMapper()
     mrXMimeCntFactory = MimeContentTypeFactory::create( xContext );
 }
 
+DataFlavorMapper::~DataFlavorMapper()
+{
+    // release potential NSStrings
+    for( OfficeOnlyTypes::iterator it = maOfficeOnlyTypes.begin(); it != maOfficeOnlyTypes.end(); ++it )
+    {
+        [it->second release];
+        it->second = nil;
+    }
+}
+
 DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor) const
 {
   DataFlavor oOOFlavor;
@@ -514,22 +542,41 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor
         }
     } // for
 
-  return oOOFlavor;
+    // look if this might be an internal type; if it comes in here it must have
+    // been through openOfficeToSystemFlavor before, so it should then be in the map
+    OUString aTryFlavor( NSStringToOUString( systemDataFlavor ) );
+    if( maOfficeOnlyTypes.find( aTryFlavor ) != maOfficeOnlyTypes.end() )
+    {
+        oOOFlavor.MimeType = aTryFlavor;
+        oOOFlavor.HumanPresentableName = OUString();
+        oOOFlavor.DataType = CPPUTYPE_SEQINT8;
+    }
+
+    return oOOFlavor;
 }
 
 NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor) const
 {
-  NSString* sysFlavor = NULL;
+    NSString* sysFlavor = NULL;
 
-  for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
+    for( size_t i = 0; i < SIZE_FLAVOR_MAP; ++i )
     {
-      if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
+       if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
         {
-          sysFlavor = flavorMap[i].SystemFlavor;
+            sysFlavor = flavorMap[i].SystemFlavor;
         }
     }
 
-  return sysFlavor;
+    if( ! sysFlavor )
+    {
+        OfficeOnlyTypes::const_iterator it = maOfficeOnlyTypes.find( oOOFlavor.MimeType );
+        if( it == maOfficeOnlyTypes.end() )
+            sysFlavor = maOfficeOnlyTypes[ oOOFlavor.MimeType ] = OUStringToNSString( oOOFlavor.MimeType );
+        else
+            sysFlavor = it->second;
+    }
+
+    return sysFlavor;
 }
 
 NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const
@@ -668,6 +715,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
 
           if (str != NULL)
           {
+              [str retain];
               [array addObject: str];
           }
       }

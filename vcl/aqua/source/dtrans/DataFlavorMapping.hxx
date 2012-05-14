@@ -29,6 +29,7 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
+#include <boost/unordered_map.hpp>
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
@@ -65,6 +66,7 @@ public:
      cannot be created.
    */
   DataFlavorMapper();
+  ~DataFlavorMapper();
 
 
   /* Map a system data flavor to an OpenOffice data flavor.
@@ -128,6 +130,8 @@ private:
 
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  typedef boost::unordered_map< rtl::OUString, NSString*, rtl::OUStringHash > OfficeOnlyTypes;
+  mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };
 
 typedef boost::shared_ptr<DataFlavorMapper> DataFlavorMapperPtr_t;
