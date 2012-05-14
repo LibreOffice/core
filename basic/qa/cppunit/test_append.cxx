@@ -14,6 +14,7 @@
 
 #include "basic/sbstar.hxx"
 #include "basic/sbmod.hxx"
+#include "basic/sbmeth.hxx"
 #include "basic/basrdll.hxx"
 namespace
 {
@@ -24,11 +25,13 @@ namespace
         public:
         EnableTest() : mbError(false) {};
         void testDimEnable();
+        void testEnableRuntime();
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(EnableTest);
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testDimEnable);
+        CPPUNIT_TEST(testEnableRuntime);
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
@@ -49,18 +52,35 @@ IMPL_LINK( EnableTest, BasicErrorHdl, StarBASIC *, /*pBasic*/)
     return 0;
 }
 
-class MyBASIC : public StarBASIC
+void EnableTest::testEnableRuntime()
 {
-    public:
-    MyBASIC(){}
-    ~MyBASIC(){}
-};
+    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
+    StarBASICRef pBasic = new StarBASIC();
+    StarBASIC::SetGlobalErrorHdl( LINK( this, EnableTest, BasicErrorHdl ) );
 
+    rtl::OUString    sSource("Function Test as Integer\n");
+    sSource += rtl::OUString("Dim Enable as Integer\n");
+    sSource += rtl::OUString("Enable = 1\n");
+    sSource += rtl::OUString("Enable = Enable + 2\n");
+    sSource += rtl::OUString("Test = Enable\n");
+    sSource += rtl::OUString("End Function\n");
+
+    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sSource );
+    pMod->Compile();
+    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime fails with compile error",!mbError );
+    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("Test"),  SbxCLASS_METHOD ));
+    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime no method found", pMeth );
+    SbxVariableRef refTemp = pMeth;
+    // forces a broadcast
+    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    CPPUNIT_ASSERT(pNew->GetInteger() == 3 );
+    StarBASIC::SetGlobalErrorHdl( Link() );
+
+}
 void EnableTest::testDimEnable()
 {
     CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    std::auto_ptr<MyBASIC> pBasic;
-    pBasic.reset( new MyBASIC() );
+    StarBASICRef pBasic = new StarBASIC();
     StarBASIC::SetGlobalErrorHdl( LINK( this, EnableTest, BasicErrorHdl ) );
 
     rtl::OUString sSource("Sub Test\n");
