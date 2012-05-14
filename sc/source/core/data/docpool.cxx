@@ -149,6 +149,7 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_BORDER_SHADOW,       SFX_ITEM_POOLABLE },    // ATTR_SHADOW
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_VALIDDATA
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CONDITIONAL
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_COLORSCALE
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PATTERN
     { SID_ATTR_LRSPACE,             SFX_ITEM_POOLABLE },    // ATTR_LRSPACE
     { SID_ATTR_ULSPACE,             SFX_ITEM_POOLABLE },    // ATTR_ULSPACE
