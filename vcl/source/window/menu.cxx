@@ -52,6 +52,7 @@
 #include "vcl/toolbox.hxx"
 #include "vcl/dockingarea.hxx"
 
+#include "salframe.hxx"
 #include "salinst.hxx"
 #include "svdata.hxx"
 #include "svids.hrc"
@@ -2673,6 +2674,29 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
                 }
 
+                // Menubar highlights
+                if ( bIsMenuBar && pWin->IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) )
+                {
+                    bool bHighlight = pThisItemOnly && bHighlighted;
+                    if ( bHighlight || ImplGetSVData()->maNWFData.mbTransparentMenubar )
+                    {
+                        Rectangle aRect = Rectangle( Point( aTopLeft.X(), 1 ), Size( pData->aSz.Width(), pWin->GetOutputSizePixel().Height()-2 ) );
+                        pWin->Push( PUSH_CLIPREGION );
+                        pWin->IntersectClipRegion( aRect );
+
+                        // draw selected item
+                        MenubarValue aControlValue;
+                        aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( pWin );
+                        pWin->DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
+                                aRect,
+                                CTRL_STATE_ENABLED | ( bHighlight? CTRL_STATE_SELECTED: 0 ),
+                                aControlValue,
+                                OUString() );
+
+                        pWin->Pop();
+                    }
+                }
+
                 // Separator
                 if ( !bLayout && !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
                 {
@@ -3331,6 +3355,9 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
         ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
         nHeight = 0;
 
+    if ( pParent )
+        pParent->ImplGetFrame()->extendWindowManagerFrameNative( 0, 0, nHeight, 0 );
+
     pWindow->SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
     return pWindow;
 }
@@ -3914,6 +3941,18 @@ static void ImplInitMenuWindow( Window* pWin, sal_Bool bFont, sal_Bool bMenuBar 
         pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
     pWin->SetLineColor();
+
+    // update the window manager frame here too in order to be able to switch
+    // themes
+    if ( bMenuBar )
+    {
+        const Window *pParent = pWin->GetParent();
+        if ( pParent )
+        {
+            Size aSize = pWin->GetSizePixel();
+            pParent->ImplGetFrame()->extendWindowManagerFrameNative( 0, 0, aSize.Height(), 0 );
+        }
+    }
 }
 
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nStyle ) :
@@ -5537,15 +5576,9 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                             OUString() );
                     ImplAddNWFSeparator( this, aControlValue );
 
-                    if ( bHighlight )
-                    {
-                        // draw selected item
-                        DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
-                                aRect,
-                                CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
-                                aControlValue,
-                                OUString() );
-                    }
+                    // NWF item highlight is drawn in ImplPaint() instead of
+                    // here, so that we can NWF-paint even the non-higlighted
+                    // items there
                 }
                 else
                 {

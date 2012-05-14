@@ -144,6 +144,12 @@ public:
     virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
+
+    /// Update the region that is supposed to be handled by the window manager
+    ///
+    /// This is primarily for Windows Aero theme in order to be able to draw
+    /// to the Glass area.
+    virtual void extendWindowManagerFrameNative( int nLeft, int nRight, int nTop, int nBottom );
 };
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
