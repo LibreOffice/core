@@ -406,10 +406,6 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
     int nSize = 0;
 
     GooString* pFamily = gfxFont->getName();
-#if !POPPLER_CHECK_VERSION(0, 20, 0)
-    if( ! pFamily )
-        pFamily = gfxFont->getOrigName();
-#endif
     if( pFamily )
     {
         aNewFont.familyName.clear();
