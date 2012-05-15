@@ -794,6 +794,19 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin + nFooterHeight );
 }
 
+uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
+{
+    uno::Reference< beans::XPropertySet > xRangeProperties;
+    if (bIsFirstSection)
+    {
+        uno::Reference<container::XEnumerationAccess> xEnumAccess(rDM_Impl.GetBodyText(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
+        xRangeProperties = uno::Reference<beans::XPropertySet>(xEnum->nextElement(), uno::UNO_QUERY_THROW);
+    }
+    else
+        xRangeProperties = uno::Reference<beans::XPropertySet>(xStartingRange, uno::UNO_QUERY_THROW);
+    return xRangeProperties;
+}
 
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
@@ -834,6 +847,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                                     rDM_Impl.appendTextSectionAfter( m_xStartingRange );
         if( m_nColumnCount > 0 && xSection.is())
             ApplyColumnProperties( xSection );
+        uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
+        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
     }
     else
     {
@@ -963,15 +978,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         {
             {
                 //now apply this break at the first paragraph of this section
-                uno::Reference< beans::XPropertySet > xRangeProperties;
-                if( m_bIsFirstSection )
-                {
-                    uno::Reference< container::XEnumerationAccess > xEnumAccess( rDM_Impl.GetBodyText( ), uno::UNO_QUERY_THROW );
-                    uno::Reference< container::XEnumeration >  xEnum = xEnumAccess->createEnumeration( );
-                    xRangeProperties = uno::Reference< beans::XPropertySet >( xEnum->nextElement( ), uno::UNO_QUERY_THROW );
-                }
-                else
-                    xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
+                uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
             /* break type
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
                 xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
