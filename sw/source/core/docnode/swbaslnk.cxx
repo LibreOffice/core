@@ -135,13 +135,15 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
     if( pCntntNode->IsGrfNode() )
     {
-        GraphicObject& rGrfObj = ((SwGrfNode*)pCntntNode)->GetGrfObj();
+        SwGrfNode* pSwGrfNode = dynamic_cast< SwGrfNode* >(pCntntNode);
+        OSL_ENSURE(pSwGrfNode, "Error, pSwGrfNode expected when node answers IsGrfNode() with true (!)");
+        const GraphicObject& rGrfObj = pSwGrfNode->GetGrfObj();
 
-        bDontNotify = ((SwGrfNode*)pCntntNode)->IsFrameInPaint();
+        bDontNotify = pSwGrfNode->IsFrameInPaint();
 
         bGraphicArrived = GetObj()->IsDataComplete();
         bGraphicPieceArrived = GetObj()->IsPending();
-        ((SwGrfNode*)pCntntNode)->SetGrafikArrived( bGraphicArrived );
+        pSwGrfNode->SetGrafikArrived( bGraphicArrived );
 
         Graphic aGrf;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
@@ -149,7 +151,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {
             aGrfSz = ::GetGraphicSizeTwip( aGrf, 0 );
-            if( static_cast< const SwGrfNode * >( pCntntNode )->IsChgTwipSizeFromPixel() )
+            if( pSwGrfNode->IsChgTwipSizeFromPixel() )
             {
                 const MapMode aMapTwip( MAP_TWIP );
                 aFrmFmtSz =
@@ -161,7 +163,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             {
                 aFrmFmtSz = aGrfSz;
             }
-            Size aSz( ((SwGrfNode*)pCntntNode)->GetTwipSize() );
+            Size aSz( pSwGrfNode->GetTwipSize() );
 
             if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
                 ( !aSz.Width() || !aSz.Height() ) )
@@ -173,7 +175,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 bGraphicPieceArrived = sal_False;
             }
 
-            rGrfObj.SetGraphic( aGrf, rGrfObj.GetLink() );
+            pSwGrfNode->SetGraphic(aGrf, rGrfObj.GetLink());
             bUpdate = true;
 
             // In order for the Node to have the right transparency status
@@ -185,11 +187,11 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 if( aGrfSz.Height() && aGrfSz.Width() &&
                     aSz.Height() && aSz.Width() &&
                     aGrfSz != aSz )
-                    ((SwGrfNode*)pCntntNode)->SetTwipSize( aGrfSz );
+                    pSwGrfNode->SetTwipSize( aGrfSz );
             }
         }
         if ( bUpdate && !bGraphicArrived && !bGraphicPieceArrived )
-            ((SwGrfNode*)pCntntNode)->SetTwipSize( Size(0,0) );
+            pSwGrfNode->SetTwipSize( Size(0,0) );
     }
     else if( pCntntNode->IsOLENode() )
         bUpdate = true;

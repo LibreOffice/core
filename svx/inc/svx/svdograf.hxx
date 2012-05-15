@@ -116,6 +116,7 @@ private:
     bool                    ImpUpdateGraphicLink( bool bAsynchron = true ) const;
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
+    void onGraphicChanged();
 
 public:
                             TYPEINFO();

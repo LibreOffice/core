@@ -58,6 +58,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <osl/thread.hxx>
+#include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
+#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -302,6 +304,58 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// check if SVG and if try to get ObjectInfoPrimitive2D and extract info
+
+void SdrGrafObj::onGraphicChanged()
+{
+    String aName;
+    String aTitle;
+    String aDesc;
+
+    if(pGraphic)
+    {
+        const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+
+        if(rSvgDataPtr.get())
+        {
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(rSvgDataPtr->getPrimitive2DSequence());
+
+            if(aSequence.hasElements())
+            {
+                drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
+
+                aProcessor.process(aSequence);
+
+                const drawinglayer::primitive2d::ObjectInfoPrimitive2D* pResult = aProcessor.getResult();
+
+                if(pResult)
+                {
+                    aName = pResult->getName();
+                    aTitle = pResult->getTitle();
+                    aDesc = pResult->getDesc();
+                }
+            }
+        }
+    }
+
+    if(aName.Len())
+    {
+        SetName(aName);
+    }
+
+    if(aTitle.Len())
+    {
+        SetTitle(aTitle);
+    }
+
+    if(aDesc.Len())
+    {
+        SetDescription(aDesc);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrGrafObj,SdrRectObj);
 
@@ -315,6 +369,7 @@ SdrGrafObj::SdrGrafObj()
     pGraphic = new GraphicObject;
     mpReplacementGraphic = 0;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
     bNoShear = false;
@@ -340,6 +395,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = 0;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
     bNoShear = false;
@@ -365,6 +421,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = 0;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
     bNoShear = false;
@@ -401,6 +458,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
     mbIsPreview = false;
     SetChanged();
     BroadcastObjectChange();
+    onGraphicChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -439,6 +497,7 @@ void SdrGrafObj::NbcSetGraphic( const Graphic& rGrf )
     mpReplacementGraphic = 0;
     pGraphic->SetUserData();
     mbIsPreview = false;
+    onGraphicChanged();
 }
 
 void SdrGrafObj::SetGraphic( const Graphic& rGrf )

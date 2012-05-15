@@ -131,6 +131,7 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/hittestprocessor2d.hxx,drawinglayer/processor2d/hittestprocessor2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/processorfromoutputdevice.hxx,drawinglayer/processor2d/processorfromoutputdevice.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/linegeometryextractor2d.hxx,drawinglayer/processor2d/linegeometryextractor2d.hxx))
+$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/objectinfoextractor2d.hxx,drawinglayer/processor2d/objectinfoextractor2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/textaspolygonextractor2d.hxx,drawinglayer/processor2d/textaspolygonextractor2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/vclmetafileprocessor2d.hxx,drawinglayer/processor2d/vclmetafileprocessor2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor2d/vclpixelprocessor2d.hxx,drawinglayer/processor2d/vclpixelprocessor2d.hxx))
