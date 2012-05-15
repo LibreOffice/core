@@ -37,6 +37,7 @@ use installer::worker;
 use installer::windows::font;
 use installer::windows::idtglobal;
 use installer::windows::language;
+use installer::windows::component;
 
 ##########################################################################
 # Assigning one cabinet file to each file. This is requrired,
@@ -848,7 +849,7 @@ sub collect_shortnames_from_old_database
 
 sub create_files_table
 {
-    my ($filesref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref) = @_;
+    my ($filesref, $dirref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref) = @_;
 
     installer::logger::include_timestamp_into_logfile("Performance Info: File Table start");
 
@@ -876,6 +877,7 @@ sub create_files_table
 
     installer::windows::idtglobal::write_idt_header(\@filetable, "file");
     installer::windows::idtglobal::write_idt_header(\@filehashtable, "filehash");
+    installer::windows::idtglobal::write_idt_header(\@installer::globals::removefiletable, "removefile");
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
@@ -921,6 +923,23 @@ sub create_files_table
                 . $file{'Attributes'} . "\t" . $file{'Sequence'} . "\n";
 
         push(@filetable, $oneline);
+
+        if ( $file{'File'} =~ /\.py$/ )
+        {
+            my %removefile = ();
+
+            $removefile{'FileKey'} = "remove_" . $file{'File'} . "c";
+            $removefile{'Component_'} = $file{'Component_'};
+            $removefile{'FileName'} = $file{'FileName'};
+            $removefile{'FileName'} =~ s/\.py$/.pyc/;
+            $removefile{'FileName'} =~ s/\.PY\|/.PYC|/;
+            $removefile{'DirProperty'} = installer::windows::component::get_file_component_directory($file{'Component_'}, $filesref, $dirref);
+            $removefile{'InstallMode'} = 2; # msiInstallStateAbsent
+            $oneline = $removefile{'FileKey'} . "\t" . $removefile{'Component_'} . "\t" . $removefile{'FileName'} . "\t"
+                        . $removefile{'DirProperty'} . "\t" . $removefile{'InstallMode'} . "\n";
+
+            push(@installer::globals::removefiletable, $oneline);
+        }
 
         if ( ! $installer::globals::insert_file_at_end ) { push(@allfiles, $onefile); }
 

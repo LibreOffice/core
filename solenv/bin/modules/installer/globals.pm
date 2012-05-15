@@ -446,6 +446,7 @@ BEGIN
     @forced_properties = ("SERVICETAG_PRODUCTNAME", "SERVICETAG_PRODUCTVERSION", "SERVICETAG_PARENTNAME", "SERVICETAG_SOURCE", "SERVICETAG_URN");
 
     @removedirs = ();
+    @removefiletable = ();
     @emptypackages = ();
     %fontpackageexists = ();
 

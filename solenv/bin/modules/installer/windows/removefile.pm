@@ -107,10 +107,6 @@ sub create_removefile_table
 {
     my ($folderitemsref, $basedir) = @_;
 
-    my @removefiletable = ();
-
-    installer::windows::idtglobal::write_idt_header(\@removefiletable, "removefile");
-
     # Only the directories created for the FolderItems have to be deleted
     # with the information in the table RemoveFile
 
@@ -137,13 +133,13 @@ sub create_removefile_table
         my $oneline = $removefile{'FileKey'} . "\t" . $removefile{'Component_'} . "\t" . $removefile{'FileName'} . "\t"
                     . $removefile{'DirProperty'} . "\t" . $removefile{'InstallMode'} . "\n";
 
-        push(@removefiletable, $oneline);
+        push(@installer::globals::removefiletable, $oneline);
     }
 
     # Saving the file
 
     my $removefiletablename = $basedir . $installer::globals::separator . "RemoveFi.idt";
-    installer::files::save_file($removefiletablename ,\@removefiletable);
+    installer::files::save_file($removefiletablename ,\@installer::globals::removefiletable);
     my $infoline = "Created idt file: $removefiletablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
