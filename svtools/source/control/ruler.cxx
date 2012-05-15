@@ -288,6 +288,9 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Default-Groesse setzen
     long nDefHeight = GetTextHeight() + RULER_OFF*2 + RULER_TEXTOFF*2 + mnBorderWidth;
+    if ( ( nDefHeight % 2 ) != 0 )
+        ++nDefHeight;
+
     Size aDefSize;
     if ( nWinBits & WB_HORZ )
         aDefSize.Height() = nDefHeight;
@@ -550,8 +553,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         long nX;
         long nY;
         long n = 0;
-        long nTxtWidth2;
-        long nTxtHeight2 = GetTextHeight()/2;
         long nTick = 0;
         while ( ((nStart-n) >= nMin) || ((nStart+n) <= nMax) )
         {
@@ -564,7 +565,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     if ( (mpData->nMargin1Style & RULER_STYLE_INVISIBLE) || (mpData->nMargin1 != 0) )
                     {
                         aNumStr = (sal_Unicode)'0';
-                        nTxtWidth2 = maVirDev.GetTextWidth( aNumStr )/2;
+                        Rectangle aRect;
+                        GetTextBoundRect( aRect, aNumStr );
+                        long nTxtWidth2 = aRect.Right() / 2 + 1;
+                        long nTxtHeight2 = aRect.Bottom() / 2 + 1;
+
                         if ( (mnWinStyle & WB_HORZ)^mpData->bTextRTL )
                             nX = nStart-nTxtWidth2;
                         else
@@ -590,7 +595,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                         aNumStr = UniString::CreateFromInt32( nTick / nTickUnit );
                     else
                         aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
-                    nTxtWidth2 = GetTextWidth( aNumStr )/2;
+
+                    Rectangle aRect;
+                    GetTextBoundRect( aRect, aNumStr );
+                    long nTxtWidth2 = aRect.Right() / 2 + 1;
+                    long nTxtHeight2 = aRect.Bottom() / 2 + 1;
 
                     nX = nStart+n;
                     //different orientation needs a different starting position
@@ -787,7 +796,7 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
                 maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-                ImplVDrawLine( n, nVirTop, n, nVirBottom-1 );
+                ImplVDrawLine( n, nVirTop+1, n, nVirBottom-1 );
             }
             else if ( nIndentStyle == RULER_INDENT_BOTTOM )
             {
@@ -1157,8 +1166,8 @@ void Ruler::ImplFormat()
 
     // Obere/untere Kante ausgeben
     maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-    ImplVDrawLine( nVirLeft, nVirTop, nM1 - 1, nVirTop ); //top left line
-    ImplVDrawLine( nM2 +1, nVirTop, nP2 -1, nVirTop );      //top right line
+    ImplVDrawLine( nVirLeft, nVirTop+1, nM1 - 1, nVirTop+1 ); //top left line
+    ImplVDrawLine( nM2 +1, nVirTop+1, nP2 -1, nVirTop+1 );      //top right line
 
     // Jetzt wird zwischen dem Schatten ausgegeben
     nVirTop++;
@@ -1168,9 +1177,9 @@ void Ruler::ImplFormat()
     maVirDev.SetLineColor();
     maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
     if ( nM1 > nVirLeft )
-        ImplVDrawRect( nP1, nVirTop, nM1-1, nVirBottom ); //left gray rectangle
+        ImplVDrawRect( nP1, nVirTop+1, nM1-1, nVirBottom ); //left gray rectangle
     if ( nM2 < nP2 )
-        ImplVDrawRect( nM2+1, nVirTop, nP2, nVirBottom ); //right gray rectangle
+        ImplVDrawRect( nM2+1, nVirTop+1, nP2, nVirBottom ); //right gray rectangle
     if ( nM2-nM1 > 0 )
     {
         maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
@@ -1179,20 +1188,20 @@ void Ruler::ImplFormat()
     maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
     if ( nM1 > nVirLeft )
     {
-        ImplVDrawLine( nM1-1, nVirTop, nM1-1, nVirBottom );//right line of the left rectangle
+        ImplVDrawLine( nM1-1, nVirTop+1, nM1-1, nVirBottom );//right line of the left rectangle
         ImplVDrawLine( nP1, nVirBottom, nM1-1, nVirBottom );//bottom line of the left rectangle
         if ( nP1 >= nVirLeft )
         {
-            ImplVDrawLine( nP1, nVirTop, nP1, nVirBottom );//left line of the left rectangle
+            ImplVDrawLine( nP1, nVirTop+1, nP1, nVirBottom );//left line of the left rectangle
             ImplVDrawLine( nP1, nVirBottom, nP1+1, nVirBottom );//?
         }
     }
     if ( nM2 < nP2 )
     {
         ImplVDrawLine( nM2+1, nVirBottom, nP2-1, nVirBottom );//bottom line of the right rectangle
-        ImplVDrawLine( nM2+1, nVirTop, nM2+1, nVirBottom );//left line of the right rectangle
+        ImplVDrawLine( nM2+1, nVirTop+1, nM2+1, nVirBottom );//left line of the right rectangle
         if ( nP2 <= nVirRight+1 )
-            ImplVDrawLine( nP2-1, nVirTop, nP2-1, nVirBottom );//right line of the right rectangle
+            ImplVDrawLine( nP2-1, nVirTop+1, nP2-1, nVirBottom );//right line of the right rectangle
     }
 
     // Lineal-Beschriftung (nur wenn keine Bemassungspfeile)
