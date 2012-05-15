@@ -1,5 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -24,21 +24,23 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
-
-#ifndef INCLUDED_VCL_DESKTOPS_HXX
-#define INCLUDED_VCL_DESKTOPS_HXX
-
-enum DesktopType {
-    DESKTOP_NONE, // headless, i.e. no X connection at all
-    DESKTOP_UNKNOWN, // unknown desktop, simple WM, etc.
-    DESKTOP_GNOME,
-    DESKTOP_TDE,
-    DESKTOP_KDE,
-    DESKTOP_KDE4,
-    DESKTOP_CDE
-}; // keep in sync with desktop_strings[] in salplug.cxx
-
-#endif // INCLUDED_VCL_DESKTOPS_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+ ************************************************************************ -->
+<oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <node oor:name="Installed">
+    <node oor:name="sdbc:address:tdeab" oor:op="replace">
+      <prop oor:name="Driver">
+        <value>com.sun.star.comp.sdbc.tdeab.Driver</value>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
+        <value xml:lang="en-US">TDE Address Book</value>
+      </prop>
+      <node oor:name="Features">
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

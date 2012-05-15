@@ -29,9 +29,19 @@
 #ifndef _KDECOMMANDTHREAD_HXX_
 #define _KDECOMMANDTHREAD_HXX_
 
+#ifdef ENABLE_TDE
+#include <shell/tde_defines.h>
+#endif // ENABLE_TDE
+
+#ifdef ENABLE_TDE
+#include <tqevent.h>
+#include <tqmutex.h>
+#include <tqthread.h>
+#else // ENABLE_TDE
 #include <qevent.h>
 #include <qmutex.h>
 #include <qthread.h>
+#endif // ENABLE_TDE
 
 class KDECommandEvent : public QCustomEvent
 {

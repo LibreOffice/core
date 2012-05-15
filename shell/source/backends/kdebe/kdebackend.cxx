@@ -58,7 +58,7 @@
 #include "uno/current_context.hxx"
 #include "uno/lbnames.h"
 
-#include "kde_headers.h"
+#include "shell/kde_headers.h"
 
 #include "kdeaccess.hxx"
 

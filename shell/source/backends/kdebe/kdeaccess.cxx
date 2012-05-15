@@ -35,7 +35,7 @@
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
-#include "kde_headers.h"
+#include "shell/kde_headers.h"
 
 #include "kdeaccess.hxx"
 

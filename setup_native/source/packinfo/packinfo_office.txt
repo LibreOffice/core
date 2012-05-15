@@ -33,6 +33,21 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
+module = "gid_Module_Optional_Tde"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-tde-integration"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-tde-integration"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+copyright = "1999-2012 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "TDE integration module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%ABOUTBOXPRODUCTVERSION"
+End
+
+Start
 module = "gid_Module_Optional_Kde"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-kde-integration"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"

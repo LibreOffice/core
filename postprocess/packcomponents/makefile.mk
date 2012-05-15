@@ -245,6 +245,14 @@ my_components += component/ucb/source/ucp/gio/ucpgio
 my_components += component/ucb/source/ucp/gvfs/ucpgvfs
 .END
 
+.IF "$(ENABLE_TDEAB)" != ""
+my_components += tdeab1
+.END
+
+.IF "$(ENABLE_TDE)" != ""
+my_components += tdebe1
+.END
+
 .IF "$(ENABLE_KAB)" != ""
 my_components += kab1
 .END

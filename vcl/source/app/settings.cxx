@@ -616,6 +616,8 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
         ( env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("gnome")) ||
           env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("windows")) )
         ? STYLE_SYMBOLS_TANGO
+        : env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde"))
+        ? STYLE_SYMBOLS_CRYSTAL
         : env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde"))
         ? STYLE_SYMBOLS_CRYSTAL
         : env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4"))

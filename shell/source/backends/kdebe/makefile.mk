@@ -27,8 +27,8 @@
 PRJ=..$/..$/..
 
 PRJNAME=shell
-TARGET=kdebe
 
+TARGET=kdebe
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
@@ -47,7 +47,39 @@ CFLAGSCXX+=-Wno-shadow
 # no "lib" prefix
 DLLPRE =
 
+.IF "$(ENABLE_TDE)" == "TRUE"
+TARGET=tdebe
+
+CFLAGS+=$(TDE_CFLAGS)
+CFLAGS+=-DENABLE_TDE
+CFLAGSCXX+=-DENABLE_TDE
+
+# --- Files ---
+
+SLOFILES=\
+    $(SLO)$/kdeaccess.obj \
+    $(SLO)$/kdebackend.obj
+
+SHL1NOCHECK=TRUE
+SHL1TARGET=$(TARGET)1.uno
+SHL1OBJS=$(SLOFILES)
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+
+SHL1IMPLIB=i$(SHL1TARGET)
+SHL1STDLIBS=    \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(SALLIB) \
+        $(TDE_LIBS) \
+        -lkio
+
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
+.ENDIF          # "$(ENABLE_TDE)" == "TRUE"
+
 .IF "$(ENABLE_KDE)" == "TRUE"
+TARGET=kdebe
 
 CFLAGS+=$(KDE_CFLAGS)
 
@@ -79,10 +111,13 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
-ALLTAR : $(MISC)/kdebe1.component
+.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_TDE)" == "TRUE"
 
-$(MISC)/kdebe1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        kdebe1.component
+ALLTAR : $(MISC)/$(TARGET)1.component
+
+$(MISC)/$(TARGET)1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        $(TARGET)1.component
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt kdebe1.component
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET)1.component
+.ENDIF

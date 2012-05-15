@@ -432,6 +432,22 @@ End
 
 #ifdef UNX
 
+#ifdef ENABLE_TDEAB
+File gid_File_Lib_Tdeab_1
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libtdeab1,UNXSUFFIX));
+End
+
+File gid_File_Lib_Tdeab_Drv_1
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libtdeabdrv1,UNXSUFFIX));
+End
+#endif
+
 #ifdef ENABLE_KAB
 File gid_File_Lib_Kab_1
     LIB_FILE_BODY;
@@ -446,7 +462,6 @@ File gid_File_Lib_Kab_Drv_1
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libkabdrv1,UNXSUFFIX));
 End
-
 #endif
 
 #ifdef MACOSX
@@ -463,8 +478,7 @@ File gid_File_Lib_Macab_Drv_1
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libmacabdrv1,UNXSUFFIX));
 End
-
-#endif  // #ifdef ENABLE_KAB
+#endif  // #ifdef MACOSX
 
 #ifdef ENABLE_EVOAB2
 
@@ -501,6 +515,17 @@ File gid_File_Lib_Desktopbe
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
 End
+
+#ifdef ENABLE_TDE
+#ifndef MACOSX
+File gid_File_Bin_TdeFilePicker
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "tdefilepicker";
+End
+#endif
+#endif
 
 #ifdef ENABLE_KDE
 #ifndef MACOSX
@@ -990,6 +1015,16 @@ File gid_File_Lib_Vclplug_Gtk3
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
+#ifdef ENABLE_TDE
+#ifndef MACOSX
+File gid_File_Lib_Vclplug_Tde
+    Name = LIBNAME(vclplug_tde);
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+#endif
 #endif
 #ifdef ENABLE_KDE
 #ifndef MACOSX

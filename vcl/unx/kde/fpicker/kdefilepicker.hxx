@@ -29,6 +29,10 @@
 #ifndef _KDEFILEPICKER_HXX_
 #define _KDEFILEPICKER_HXX_
 
+#ifdef ENABLE_TDE
+#include <shell/tde_defines.h>
+#endif // ENABLE_TDE
+
 #include <cstddef>
 
 #include <kfiledialog.h>
@@ -40,7 +44,11 @@ class QVBox;
 
 class KDEFileDialog : public KFileDialog
 {
+#ifdef ENABLE_TDE
+    TQ_OBJECT
+#else // ENABLE_TDE
     Q_OBJECT
+#endif // ENABLE_TDE
 
 protected:
     typedef QPair< QString, QString > FilterEntry;

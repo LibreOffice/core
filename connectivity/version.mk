@@ -90,6 +90,17 @@ MYSQL_TARGET=mysql
 # target
 EVOAB_TARGET=evoab
 
+# ----------------------------TDEab settings-------------------------------------#
+# target
+TDEAB_TARGET=tdeab
+
+# the major 
+TDEAB_MAJOR=1
+# the minor 
+TDEAB_MINOR=0
+# the micro 
+TDEAB_MICRO=0
+
 # ----------------------------Kab settings-------------------------------------#
 # target
 KAB_TARGET=kab

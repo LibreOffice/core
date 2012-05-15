@@ -203,6 +203,12 @@ SCP1FILES += \
              module_kde.par     \
              file_kde.par
 .ENDIF
+
+.IF "$(ENABLE_TDE)" == "TRUE"
+SCP1FILES += \
+             module_tde.par     \
+             file_tde.par
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != ""

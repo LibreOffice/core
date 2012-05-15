@@ -228,6 +228,10 @@ ifneq ($(strip $(ENABLE_GTK)),)
 gb_GLOBALDEFS += -DENABLE_GTK
 endif
 
+ifneq ($(strip $(ENABLE_TDE)),)
+gb_GLOBALDEFS += -DENABLE_TDE
+endif
+
 ifneq ($(strip $(ENABLE_KDE)),)
 gb_GLOBALDEFS += -DENABLE_KDE
 endif

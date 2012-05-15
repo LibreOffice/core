@@ -332,6 +332,9 @@ MY_FILES_main += \
     $(MY_MOD)/DataAccess/hsqldb.xcu \
     $(MY_MOD)/DataAccess/jdbc.xcu
 .END
+.IF "$(ENABLE_TDEAB)" == "TRUE"
+MY_FILES_main += $(MY_MOD)/DataAccess/tdeab.xcu
+.END
 .IF "$(ENABLE_KAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/kab.xcu
 .END

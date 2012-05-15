@@ -29,6 +29,12 @@
 #ifndef INCLUDED_VCL_KDE_HEADERS_H
 #define INCLUDED_VCL_KDE_HEADERS_H
 
+#ifdef ENABLE_TDE
+
+#include "shell/tde_headers.h"
+
+#else // ENABLE_TDE
+
 /* ********* Suppress warnings if needed */
 #include "sal/config.h"
 
@@ -92,6 +98,8 @@
 #include <kabc/addressee.h>
 #include <kabc/field.h>
 #include <kabc/stdaddressbook.h>
+
+#endif // ENABLE_TDE
 
 #endif
 

@@ -28,8 +28,6 @@
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
-TARGET=kab
-TARGET2=$(TARGET)drv
 
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
@@ -41,6 +39,9 @@ VISIBILITY_HIDDEN=TRUE
 
 .IF "$(GUI)" == "UNX"
 .IF "$(ENABLE_KAB)" == "TRUE"
+
+TARGET=kab
+TARGET2=$(TARGET)drv
 
 CFLAGS+=$(KDE_CFLAGS)
 
@@ -130,12 +131,113 @@ DEF2NAME=   $(SHL2TARGET)
 # --- Targets -----------------------------------
 .ELSE		# "$(ENABLE_KAB)" == "TRUE"
 
-dummy:
-# nothing
+.IF "$(ENABLE_TDEAB)" == "TRUE"
+
+TARGET=tdeab
+TARGET2=$(TARGET)drv
+
+CFLAGS+=$(TDE_CFLAGS)
+CFLAGS+=-DENABLE_TDE -I$(SRCDIR)/shell/inc
+CFLAGSCXX+=-DENABLE_TDE -I$(SRCDIR)/shell/inc
+
+.IF "$(TDE_ROOT)"!=""
+    EXTRALIBPATHS+=-L$(TDE_ROOT)$/lib
+    .IF "$(OS)$(CPU)" == "LINUXX"
+        EXTRALIBPATHS+=-L$(TDE_ROOT)$/lib64
+    .ENDIF
+.ENDIF
+
+# === TDEAB base library ==========================
+
+# --- Files -------------------------------------
+
+SLOFILES= \
+$(SLO)$/KDriver.obj     \
+$(SLO)$/KServices.obj
+
+DEPOBJFILES= \
+$(SLO2FILES)
+
+# --- Library -----------------------------------
+
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+
+SHL1TARGET= $(TARGET)$(TDEAB_MAJOR)
+SHL1OBJS=$(SLOFILES)
+SHL1STDLIBS=\
+$(COMPHELPERLIB)            \
+$(CPPULIB)                  \
+$(CPPUHELPERLIB)            \
+$(DBTOOLSLIB)               \
+$(SALLIB)                   \
+$(SALHELPERLIB)
+
+SHL1DEPN=
+SHL1IMPLIB= i$(TARGET)
+
+SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=   $(SHL1TARGET)
+
+# === TDEAB impl library ==========================
+
+# --- Files -------------------------------------
+
+SLO2FILES=\
+$(SLO)$/KColumns.obj            \
+$(SLO)$/KTable.obj              \
+$(SLO)$/KTables.obj             \
+$(SLO)$/KCatalog.obj            \
+$(SLO)$/KResultSet.obj          \
+$(SLO)$/KStatement.obj          \
+$(SLO)$/KPreparedStatement.obj  \
+$(SLO)$/KDatabaseMetaData.obj   \
+$(SLO)$/KConnection.obj         \
+$(SLO)$/KResultSetMetaData.obj  \
+$(SLO)$/kcondition.obj          \
+$(SLO)$/korder.obj              \
+$(SLO)$/kfields.obj             \
+$(SLO)$/KDEInit.obj
+
+TDEAB_LIB=$(TDE_LIBS) -lkabc
+
+# --- Library -----------------------------------
+
+SHL2VERSIONMAP=$(TARGET2).map
+
+SHL2TARGET= $(TARGET2)$(TDEAB_MAJOR)
+SHL2OBJS=$(SLO2FILES)
+SHL2STDLIBS=\
+$(CPPULIB)                  \
+$(CPPUHELPERLIB)            \
+$(SALLIB)                   \
+$(SALHELPERLIB)                   \
+$(DBTOOLSLIB)               \
+$(COMPHELPERLIB)            \
+$(TDEAB_LIB)
+
+SHL2DEPN=
+SHL2IMPLIB= i$(TARGET2)
+
+SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=   $(SHL2TARGET)
+
+# --- Targets -----------------------------------
+.ELSE		# "$(ENABLE_TDEAB)" == "TRUE"
+    TARGET=kab
+    TARGET2=$(TARGET)drv
+
+    dummy:
+    # nothing
+
+.ENDIF
 
 .ENDIF
 
 .ELSE		# "$(GUI)" == "UNX"
+TARGET=kab
+TARGET2=$(TARGET)drv
 
 dummy:
 # nothing
@@ -145,10 +247,10 @@ dummy:
 .INCLUDE : $(PRJ)$/target.pmk
 
 
-ALLTAR : $(MISC)/kab1.component
+ALLTAR : $(MISC)/$(TARGET)1.component
 
-$(MISC)/kab1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        kab1.component
+$(MISC)/$(TARGET)1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        $(TARGET)1.component
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt kab1.component
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET)1.component

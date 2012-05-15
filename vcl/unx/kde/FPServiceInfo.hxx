@@ -30,17 +30,32 @@
 #ifndef _FPSERVICEINFO_HXX_
 #define _FPSERVICEINFO_HXX_
 
+#ifdef ENABLE_TDE
+
+// the service names
+#define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.TDEFilePicker"
+
+// the registry key names
+// a key under which this service will be registered,
+// Format: -> "/ImplName/UNO/SERVICES/ServiceName"
+//  <Implementation-Name></UNO/SERVICES/><Service-Name>
+#define FILE_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.UnxFilePicker/UNO/SERVICES/com.sun.star.ui.dialogs.TDEFilePicker"
+
+#else // ENABLE_TDE
+
 // the service names
 #define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.KDEFilePicker"
-
-// the implementation names
-#define FILE_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.UnxFilePicker"
 
 // the registry key names
 // a key under which this service will be registered,
 // Format: -> "/ImplName/UNO/SERVICES/ServiceName"
 //  <Implementation-Name></UNO/SERVICES/><Service-Name>
 #define FILE_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.UnxFilePicker/UNO/SERVICES/com.sun.star.ui.dialogs.KDEFilePicker"
+
+#endif // ENABLE_TDE
+
+// the implementation names
+#define FILE_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.UnxFilePicker"
 
 #endif
 

@@ -34,12 +34,25 @@
 #define KAB_DRIVER_VERSION_MAJOR    0
 #define KAB_DRIVER_VERSION_MINOR    2
 
+#ifdef ENABLE_TDE
+
+// the minimum TDE version which is required at runtime
+#define MIN_KDE_VERSION_MAJOR   14
+#define MIN_KDE_VERSION_MINOR   0
+
+#define MAX_KDE_VERSION_MAJOR   255
+#define MAX_KDE_VERSION_MINOR   255
+
+#else // ENABLE_TDE
+
 // the minimum KDE version which is required at runtime
 #define MIN_KDE_VERSION_MAJOR   3
 #define MIN_KDE_VERSION_MINOR   2
 
 #define MAX_KDE_VERSION_MAJOR   3
 #define MAX_KDE_VERSION_MINOR   6
+
+#endif // ENABLE_TDE
 
 
 #endif // CONNECTIVITY_KAB_KDEINIT_H

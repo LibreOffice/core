@@ -11,6 +11,7 @@
 ..\source\cpool\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\adabas\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\ado\*.xml %_DEST%\xml\*.xml
+..\source\drivers\tdeab\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\kab\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\macab\*.xml %_DEST%\xml\*.xml
 ..\source\drivers\file\*.xml %_DEST%\xml\*.xml
@@ -45,6 +46,7 @@ mkdir: %_DEST%\xml\registry\spool\DataAccess
 ..\%__SRC%\misc\flat.component %_DEST%\xml\flat.component
 ..\%__SRC%\misc\hsqldb.component %_DEST%\xml\hsqldb.component
 ..\%__SRC%\misc\jdbc.component %_DEST%\xml\jdbc.component
+..\%__SRC%\misc\tdeab1.component %_DEST%\xml\tdeab1.component
 ..\%__SRC%\misc\kab1.component %_DEST%\xml\kab1.component
 ..\%__SRC%\misc\macab1.component %_DEST%\xml\macab1.component
 ..\%__SRC%\misc\mozab.component %_DEST%\xml\mozab.component

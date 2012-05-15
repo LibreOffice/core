@@ -52,6 +52,7 @@ SCRIPTFILES = \
     $(BIN)$/open-url \
     $(BIN)$/cde-open-url \
     $(BIN)$/gnome-open-url \
+    $(BIN)$/tde-open-url \
     $(BIN)$/kde-open-url
 
 APP1TARGET = gnome-open-url.bin

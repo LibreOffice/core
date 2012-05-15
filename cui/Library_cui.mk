@@ -36,6 +36,7 @@ $(eval $(call gb_Library_set_include,cui,\
 
 $(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_GTK)),-DENABLE_GTK) \
+    $(if $(filter TRUE,$(ENABLE_TDE)),-DENABLE_TDE) \
     $(if $(filter TRUE,$(ENABLE_KDE)),-DENABLE_KDE) \
     $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
 ))

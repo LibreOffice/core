@@ -30,7 +30,11 @@
 
 #include <kdecommandthread.hxx>
 
+#ifdef ENABLE_TDE
+#include <tqstringlist.h>
+#else // ENABLE_TDE
 #include <qstringlist.h>
+#endif // ENABLE_TDE
 
 #include <kapplication.h>
 

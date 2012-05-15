@@ -98,7 +98,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  * #i109007# KDE3 seems to have the same problem.
 		 * And same applies for KDE4.
                  */
-                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde" || rModuleBase == "kde4" )
+                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "tde" || rModuleBase == "kde" || rModuleBase == "kde4" )
                 {
                     pCloseModule = NULL;
                 }
@@ -159,6 +159,11 @@ static DesktopType get_desktop_environment()
 
 static SalInstance* autodetect_plugin()
 {
+    static const char* pTDEFallbackList[] =
+    {
+        "tde", "kde4", "kde", "gtk3", "gtk", "gen", 0
+    };
+
     static const char* pKDEFallbackList[] =
     {
         "kde4", "kde", "gtk3", "gtk", "gen", 0
@@ -183,6 +188,11 @@ static SalInstance* autodetect_plugin()
         pList = pHeadlessFallbackList;
     else if ( desktop == DESKTOP_GNOME )
         pList = pStandardFallbackList;
+    else if( desktop == DESKTOP_TDE )
+    {
+        pList = pTDEFallbackList;
+        nListEntry = 1;
+    }
     else if( desktop == DESKTOP_KDE )
     {
         pList = pKDEFallbackList;
@@ -236,7 +246,7 @@ SalInstance *CreateSalInstance()
         pInst = autodetect_plugin();
 
     // fallback, try everything
-    const char* pPlugin[] = { "gtk3", "gtk", "kde4", "kde", "gen", 0 };
+    const char* pPlugin[] = { "gtk3", "gtk", "tde", "kde4", "kde", "gen", 0 };
 
     for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
@@ -291,7 +301,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
         _exit(1);
 }
 
-static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4" };
+static const char * desktop_strings[] = { "none", "unknown", "GNOME", "TDE", "KDE", "KDE4" };
 
 const OUString& SalGetDesktopEnvironment()
 {

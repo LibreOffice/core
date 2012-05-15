@@ -145,6 +145,47 @@ extern "C"
     typedef int(* XErrorHandler)(Display*,XErrorEvent*);
 }
 
+static int TDEVersion( Display* pDisplay )
+{
+    int nRet = 0;
+
+    Atom nFullSession = XInternAtom( pDisplay, "TDE_FULL_SESSION", True );
+    Atom nTDEVersion  = XInternAtom( pDisplay, "TDE_SESSION_VERSION", True );
+
+    if( nFullSession )
+    {
+        if( !nTDEVersion )
+            return 14;
+
+        Atom                aRealType   = None;
+        int                 nFormat     = 8;
+        unsigned long       nItems      = 0;
+        unsigned long       nBytesLeft  = 0;
+        unsigned char*  pProperty   = NULL;
+        XGetWindowProperty( pDisplay,
+                            DefaultRootWindow( pDisplay ),
+                            nTDEVersion,
+                            0, 1,
+                            False,
+                            AnyPropertyType,
+                            &aRealType,
+                            &nFormat,
+                            &nItems,
+                            &nBytesLeft,
+                            &pProperty );
+        if( !WasXError() && nItems != 0 && pProperty )
+        {
+            nRet = *reinterpret_cast< sal_Int32* >( pProperty );
+        }
+        if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+    }
+    return nRet;
+}
+
 static int KDEVersion( Display* pDisplay )
 {
     int nRet = 0;
@@ -184,6 +225,19 @@ static int KDEVersion( Display* pDisplay )
         }
     }
     return nRet;
+}
+
+static bool is_tde_desktop( Display* pDisplay )
+{
+    if ( NULL != getenv( "TDE_FULL_SESSION" ) )
+    {
+        return true; // TDE
+    }
+
+    if ( TDEVersion( pDisplay ) >= 14 )
+        return true;
+
+    return false;
 }
 
 static bool is_kde_desktop( Display* pDisplay )
@@ -237,6 +291,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     {
         OString aOver( pOverride );
 
+        if ( aOver.equalsIgnoreAsciiCase( "tde" ) )
+            return DESKTOP_TDE;
         if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
             return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
@@ -295,7 +351,9 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
     XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
 
-    if ( is_kde4_desktop( pDisplay ) )
+    if ( is_tde_desktop( pDisplay ) )
+        ret = DESKTOP_TDE;
+    else if ( is_kde4_desktop( pDisplay ) )
         ret = DESKTOP_KDE4;
     else if ( is_gnome_desktop( pDisplay ) )
         ret = DESKTOP_GNOME;

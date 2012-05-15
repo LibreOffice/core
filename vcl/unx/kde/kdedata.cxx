@@ -28,7 +28,8 @@
 
 
 #define _SV_SALDATA_CXX
-#include <unx/kde/kde_headers.h>
+
+#include <shell/kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -55,6 +56,14 @@
 #include "unx/i18n_xkb.hxx"
 
 #include "vclpluginapi.h"
+
+#ifdef ENABLE_TDE
+#define THIS_DESKENV_NAME_CAP "TDE"
+#define THIS_DESKENV_NAME_LOW "tde"
+#else // ENABLE_TDE
+#define THIS_DESKENV_NAME_CAP "KDE"
+#define THIS_DESKENV_NAME_LOW "kde"
+#endif // ENABLE_TDE
 
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.
@@ -123,7 +132,7 @@ void KDEXLib::Init()
     KAboutData *kAboutData = new KAboutData( "LibreOffice",
             I18N_NOOP( "LibreOffice" ),
             "1.1.0",
-            I18N_NOOP( "LibreOffice with KDE Native Widget Support." ),
+            I18N_NOOP( "LibreOffice with " THIS_DESKENV_NAME_CAP " Native Widget Support." ),
             KAboutData::License_LGPL,
             "(c) 2003, 2004 Novell, Inc",
             I18N_NOOP( "LibreOffice is an office suite.\n" ),

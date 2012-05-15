@@ -167,6 +167,18 @@ DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 .ENDIF
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
+# enable building/linking TDE-dependent code in both OOo and SO build environment
+.IF "$(ENABLE_TDE)" != ""
+.IF "$(TDE_ROOT)"!=""
+TDE_CFLAGS:=-I$(TDE_ROOT)/include -I/usr/include/tqt -DQT_CLEAN_NAMESPACE
+TDE_LIBS:=-ltdeui -ltdecore -ltqt -ltqt-mt
+SOLARLIB+=-L$(TDE_ROOT)/lib
+.IF "$(OS)$(CPU)" == "LINUXX"
+SOLARLIB+=-L$(TDE_ROOT)/lib64
+.ENDIF          # "$(OS)$(CPU)" == "LINUXX"
+.ENDIF          # "$(TDE_ROOT)"!=""
+.ENDIF          # "$(ENABLE_TDE)" != ""
+
 # enable building/linking KDE-dependent code in both OOo and SO build environment
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""

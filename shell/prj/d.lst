@@ -14,6 +14,7 @@
 
 ..\%__SRC%\bin\open-url %_DEST%\bin\open-url
 ..\%__SRC%\bin\cde-open-url %_DEST%\bin\cde-open-url
+..\%__SRC%\bin\tde-open-url %_DEST%\bin\tde-open-url
 ..\%__SRC%\bin\kde-open-url %_DEST%\bin\kde-open-url
 ..\%__SRC%\bin\gnome-open-url %_DEST%\bin\gnome-open-url
 ..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin\gnome-open-url.bin
@@ -25,9 +26,12 @@
 
 ..\%__SRC%\misc\desktopbe1.component  %_DEST%\xml\desktopbe1.component
 ..\%__SRC%\misc\gconfbe1.component  %_DEST%\xml\gconfbe1.component
+..\%__SRC%\misc\tdebe1.component  %_DEST%\xml\tdebe1.component
 ..\%__SRC%\misc\kde4be1.component  %_DEST%\xml\kde4be1.component
 ..\%__SRC%\misc\kdebe1.component  %_DEST%\xml\kdebe1.component
-..\inc\kde_headers.h %_DEST%\inc\shell\kde_headers.h
+..\inc\shell\tde_headers.h %_DEST%\inc\shell\tde_headers.h
+..\inc\shell\tde_defines.h %_DEST%\inc\shell\tde_defines.h
+..\inc\shell\kde_headers.h %_DEST%\inc\shell\kde_headers.h
 ..\%__SRC%\misc\localebe1.component %_DEST%\xml\localebe1.component
 ..\%__SRC%\misc\macbe1.component %_DEST%\xml\macbe1.component
 ..\%__SRC%\misc\smplmail.component %_DEST%\xml\smplmail.component

@@ -31,6 +31,34 @@
 #include <kdecommandthread.hxx>
 #include <kdefilepicker.hxx>
 
+#ifdef ENABLE_TDE
+
+#include <tqcheckbox.h>
+#include <tqcombobox.h>
+#include <tqgrid.h>
+#include <tqhbox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqobjectlist.h>
+#include <tqpushbutton.h>
+#include <tqregexp.h>
+#include <tqvbox.h>
+
+#ifdef TQT_NO_EMIT
+#define emit
+#endif
+
+#include <tdeversion.h>
+#include <kdiroperator.h>
+#include <kfiledialog.h>
+#include <kfilefiltercombo.h>
+#include <kio/netaccess.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <ktempfile.h>
+
+#else // ENABLE_TDE
+
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qgrid.h>
@@ -54,6 +82,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktempfile.h>
+
+#endif // ENABLE_TDE
 
 #include <algorithm>
 #include <iostream>

@@ -140,6 +140,14 @@ namespace
                 return rtl::OUString();
                 #endif
             }
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")) )
+            {
+                #ifdef ENABLE_TDE
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.TDEFilePicker") );
+                #else
+                return rtl::OUString();
+                #endif
+            }
             #if defined WNT
             return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker") );
             #elif (defined MACOSX && defined QUARTZ)

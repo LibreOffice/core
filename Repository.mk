@@ -82,6 +82,9 @@ $(eval $(call gb_Helper_register_executables,OOO, \
     HelpLinker \
     HelpIndexer \
     spadmin.bin \
+	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
+		tdefilepicker \
+	) \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
 		kdefilepicker \
 	) \
@@ -346,6 +349,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_gen \
     vclplug_gtk \
     vclplug_gtk3 \
+    vclplug_tde \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \

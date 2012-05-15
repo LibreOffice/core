@@ -29,7 +29,15 @@
 #ifndef _KDEMODALITYFILTER_HXX_
 #define _KDEMODALITYFILTER_HXX_
 
+#ifdef ENABLE_TDE
+#include <shell/tde_defines.h>
+#endif // ENABLE_TDE
+
+#ifdef ENABLE_TDE
+#include <tqobject.h>
+#else // ENABLE_TDE
 #include <qobject.h>
+#endif // ENABLE_TDE
 
 class KDEModalityFilter : public QObject
 {

@@ -39,6 +39,14 @@
 #include <iostream>
 #include <stdlib.h>
 
+#ifdef ENABLE_TDE
+#define THIS_DESKENV_NAME_CAP "TDE"
+#define THIS_DESKENV_NAME_LOW "tde"
+#else // ENABLE_TDE
+#define THIS_DESKENV_NAME_CAP "KDE"
+#define THIS_DESKENV_NAME_LOW "kde"
+#endif // ENABLE_TDE
+
 //////////////////////////////////////////////////////////////////////////
 // Main
 //////////////////////////////////////////////////////////////////////////
@@ -54,13 +62,13 @@ int main( int argc, char* argv[] )
     // we fake the name of the application to have "LibreOffice" in the
     // title
     KAboutData qAboutData( "kdefilepicker", I18N_NOOP( "LibreOffice" ),
-            "0.1", I18N_NOOP( "kdefilepicker is an implementation of the KDE file dialog for LibreOffice." ),
+            "0.1", I18N_NOOP( "kdefilepicker is an implementation of the " THIS_DESKENV_NAME_CAP " file dialog for LibreOffice." ),
             KAboutData::License_LGPL,
             "(c) 2004, Jan Holesovsky" );
     qAboutData.addAuthor( "Jan Holesovsky", I18N_NOOP("Original author and current maintainer"), "kendy@openoffice.org" );
 
     // Let the user see that this does something...
-    ::std::cerr << "kdefilepicker, an implementation of KDE file dialog for OOo." << ::std::endl
+    ::std::cerr << "kdefilepicker, an implementation of a " THIS_DESKENV_NAME_CAP " file dialog for OOo." << ::std::endl
         << "Type 'exit' and press Enter to finish." << ::std::endl;
 
     KCmdLineArgs::addCmdLineOptions( sOptions );
@@ -77,7 +85,7 @@ int main( int argc, char* argv[] )
 
     KDEModalityFilter qModalityFilter( nWinId );
 
-    KDEFileDialog aFileDialog( NULL, QString(), NULL, "kdefiledialog" );
+    KDEFileDialog aFileDialog( NULL, QString(), NULL, THIS_DESKENV_NAME_LOW "filedialog" );
 
     KDECommandThread qCommandThread( &aFileDialog );
     qCommandThread.start();

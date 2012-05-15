@@ -181,6 +181,13 @@ File gid_File_Bin_Gnome_Open_Url_Bin
     Styles = (PACKED);
 End
 
+File gid_File_Bin_Tde_Open_Url
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "tde-open-url";
+    Styles = (PACKED);
+End
+
 File gid_File_Bin_Kde_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
