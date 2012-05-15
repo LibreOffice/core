@@ -4709,7 +4709,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
     fi
 
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
-        AC_MSG_CHECKING([if STL headers are visibility safe])
+        dnl gcc#19664, gcc#22482, rhbz#162935
+        AC_MSG_CHECKING([if STL headers are visibility safe (GCC bug 22482)])
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
         AC_MSG_RESULT([$stlvisok])
         if test "$stlvisok" = "no"; then
