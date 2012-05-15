@@ -1089,8 +1089,12 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
         for( ScColorScaleFormatList::const_iterator itr = pColorScaleList->begin();
                 itr != pColorScaleList->end(); ++itr)
         {
-            XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), *itr ) );
-            maColorScaleList.AppendRecord( xColorScaleRec );
+            const ScRangeList& rList = itr->GetRange();
+            if (rList.front()->aStart.Tab() == GetCurrScTab())
+            {
+                XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), *itr ) );
+                maColorScaleList.AppendRecord( xColorScaleRec );
+            }
         }
     }
 }
