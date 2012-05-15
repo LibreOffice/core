@@ -1400,14 +1400,18 @@ sub change_component_table
             {
                 if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.*?)\t(.+?)\t(.+?)\t(.*?)\t(.*?)\s*$/ )
                 {
-                    $infoline = "Adding condition ($5) from scp to component $1\n";
+                    $infoline = "Adding condition ($mergemodulehash->{'componentcondition'}) from scp2 to component $1\n";
                     push( @installer::globals::logfileinfo, $infoline);
                     if ($5)
                     {
+                        $infoline = "Old condition: $5\nNew condition: ($5) AND ($mergemodulehash->{'componentcondition'})\n";
+                        push( @installer::globals::logfileinfo, $infoline);
                         ${$filecontent}[$i] = "$1\t$2\t$3\t$4\t($5) AND ($mergemodulehash->{'componentcondition'})\t$6\n";
                     }
                     else
                     {
+                        $infoline = "Old condition: <none>\nNew condition: $mergemodulehash->{'componentcondition'}\n";
+                        push( @installer::globals::logfileinfo, $infoline);
                         ${$filecontent}[$i] = "$1\t$2\t$3\t$4\t$mergemodulehash->{'componentcondition'}\t$6\n";
                     }
                 }
