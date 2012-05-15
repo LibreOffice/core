@@ -53,6 +53,7 @@ public:
     void testN751017();
     void testN750935();
     void testN757890();
+    void testFdo49940();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -61,6 +62,7 @@ public:
     CPPUNIT_TEST(testN751017);
     CPPUNIT_TEST(testN750935);
     CPPUNIT_TEST(testN757890);
+    CPPUNIT_TEST(testFdo49940);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -189,6 +191,19 @@ void Test::testN757890()
     sal_Int16 nValue;
     xFrame->getPropertyValue("HoriOrient") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
+}
+
+void Test::testFdo49940()
+{
+    load("fdo49940.docx");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    OUString aValue;
+    xPara->getPropertyValue("PageStyleName") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
