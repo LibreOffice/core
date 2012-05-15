@@ -67,7 +67,8 @@ namespace basegfx
             {
                 const bool bPredicate( (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                                        || (bSignAllowed && sal_Unicode('+') == aChar)
-                                       || (bSignAllowed && sal_Unicode('-') == aChar) );
+                                       || (bSignAllowed && sal_Unicode('-') == aChar)
+                                       || (sal_Unicode('.') == aChar) );
 
                 return bPredicate;
             }
@@ -85,6 +86,7 @@ namespace basegfx
             {
                 sal_Unicode aChar( rStr[io_rPos] );
                 ::rtl::OUStringBuffer sNumberString;
+                bool separator_seen=false;
 
                 if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
                 {
@@ -93,8 +95,9 @@ namespace basegfx
                 }
 
                 while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                      || sal_Unicode('.') == aChar)
+                      || (!separator_seen && sal_Unicode('.') == aChar))
                 {
+                    if (sal_Unicode('.') == aChar) separator_seen = true;
                     sNumberString.append(rStr[io_rPos]);
                     aChar = rStr[++io_rPos];
                 }
