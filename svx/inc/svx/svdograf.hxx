@@ -120,6 +120,7 @@ protected:
     sal_Bool                ImpUpdateGraphicLink( sal_Bool bAsynchron = sal_True ) const;
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
+    void onGraphicChanged();
 
 public:
 

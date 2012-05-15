@@ -653,7 +653,7 @@ sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
 }
 
 #define CLEARCACHE( pNd ) {\
-    (pNd)->GetGrfObj().ReleaseFromCache();\
+    (pNd)->ReleaseGraphicFromCache();\
     SwFlyFrm* pFly = FindFlyFrm();\
     if( pFly && pFly->GetFmt()->GetSurround().IsContour() )\
     {\
@@ -948,7 +948,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     if( pGrfNd )
     {
         sal_Bool bForceSwap = sal_False, bContinue = sal_True;
-        GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
+        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
         pGrfNd->GetGraphicAttr( aGrfAttr, this );
@@ -991,9 +991,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
             {
-                rGrfObj.DrawWithPDFHandling( *pOut,
-                                             aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                             &aGrfAttr );
+                pGrfNd->DrawGraphicWithPDFHandling(*pOut,
+                    aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
+                    &aGrfAttr );
                 bContinue = sal_False;
             }
         }
@@ -1027,7 +1027,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                             pShell->GetViewOptions()->IsPDFExport(),
                             "pOut sollte kein virtuelles Device sein" );
 
-                    rGrfObj.StartAnimation( pOut, aAlignedGrfArea.Pos(),
+                    pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), long(this),
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
@@ -1060,7 +1060,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     if(!bDone)
                     {
                         // fallback paint, uses replacement image
-                        rGrfObj.DrawWithPDFHandling(*pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), &aGrfAttr);
+                        pGrfNd->DrawGraphicWithPDFHandling(*pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), &aGrfAttr);
                     }
                 }
             }
@@ -1221,9 +1221,12 @@ sal_Bool SwNoTxtFrm::IsTransparent() const
 void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
 {
     //animierte Grafiken anhalten
-    SwGrfNode* pGrfNd = (SwGrfNode*)GetNode()->GetGrfNode();
+    const SwGrfNode* pGrfNd = dynamic_cast< const SwGrfNode* >(GetNode()->GetGrfNode());
+
     if( pGrfNd && pGrfNd->IsAnimated() )
-        pGrfNd->GetGrfObj().StopAnimation( pOut, long(this) );
+    {
+        const_cast< SwGrfNode* >(pGrfNd)->StopGraphicAnimation( pOut, long(this) );
+    }
 }
 
 

@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 {
     friend class SwNodes;
 
-    GraphicObject aGrfObj;
+    GraphicObject maGrfObj;
     GraphicObject* mpReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
@@ -89,7 +89,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     void InsertLink( const String& rGrfName, const String& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
-    sal_Bool HasStreamName() const { return aGrfObj.HasUserData(); }
+    sal_Bool HasStreamName() const { return maGrfObj.HasUserData(); }
     // --> OD 2005-05-04 #i48434# - adjust return type and rename method to
     // indicate that its an private one.
     // --> OD 2005-08-17 #i53025#
@@ -144,12 +144,23 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
 public:
     virtual ~SwGrfNode();
-    const Graphic&          GetGrf() const      { return aGrfObj.GetGraphic(); }
-    const GraphicObject&    GetGrfObj() const   { return aGrfObj; }
-          GraphicObject&    GetGrfObj()         { return aGrfObj; }
+    const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
+    const GraphicObject&    GetGrfObj() const   { return maGrfObj; }
     const GraphicObject* GetReplacementGrfObj() const;
-
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
+
+    /// isolated only way to set GraphicObject to allow more actions when doing so
+    void SetGraphic(const Graphic& rGraphic, const String& rLink);
+
+    /// wrappers for non-const calls at GraphicObject
+    void ReleaseGraphicFromCache() { maGrfObj.ReleaseFromCache(); }
+    void DrawGraphicWithPDFHandling(OutputDevice& rOutDev, const Point& rPt, const Size& rSz, const GraphicAttr* pGrfAttr = NULL, const sal_uLong nFlags = GRFMGR_DRAW_STANDARD) { maGrfObj.DrawWithPDFHandling(rOutDev, rPt, rSz, pGrfAttr, nFlags); }
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
+    void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
+
+    /// allow reaction on change of content of GraphicObject, so always call
+    /// when GraphicObject content changes
+    void onGraphicChanged();
 
     virtual Size GetTwipSize() const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
@@ -157,7 +168,7 @@ public:
 
     sal_Bool IsTransparent() const;
 
-    inline sal_Bool IsAnimated() const              { return aGrfObj.IsAnimated(); }
+    inline sal_Bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
 
     inline sal_Bool IsChgTwipSize() const           { return bChgTwipSize; }
     inline sal_Bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
@@ -187,7 +198,7 @@ public:
         // Entfernen der Grafik, um Speicher freizugeben
     short SwapOut();
         // Zugriff auf den Storage-Streamnamen
-    void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
+    void SetStreamName( const String& r ) { maGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     // is this node selected by any shell?
     sal_Bool IsSelected() const;

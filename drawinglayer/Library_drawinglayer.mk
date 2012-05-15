@@ -168,6 +168,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/processor2d/canvasprocessor \
 	drawinglayer/source/processor2d/hittestprocessor2d \
 	drawinglayer/source/processor2d/textaspolygonextractor2d \
+	drawinglayer/source/processor2d/objectinfoextractor2d \
 	drawinglayer/source/processor3d/baseprocessor3d \
 	drawinglayer/source/processor3d/cutfindprocessor3d \
 	drawinglayer/source/processor3d/defaultprocessor3d \
