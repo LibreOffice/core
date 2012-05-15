@@ -44,11 +44,11 @@ class Place
         rtl::OUString msName;
         INetURLObject maUrl;
 
-        sal_Bool mbEditable;
+        bool mbEditable;
 
     public:
 
-        Place( rtl::OUString sName, rtl::OUString sUrl, sal_Bool bEditable = false) :
+        Place( rtl::OUString sName, rtl::OUString sUrl, bool bEditable = false) :
 			msName( sName ),
 			maUrl( sUrl ),
 			mbEditable( bEditable ) {};
@@ -63,8 +63,8 @@ class Place
         rtl::OUString& GetName( ) { return msName; }
         rtl::OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::NO_DECODE ); }
         INetURLObject& GetUrlObject( ) { return maUrl; }
-        sal_Bool  IsLocal( ) { return maUrl.GetProtocol() == INET_PROT_FILE; };
-        sal_Bool& IsEditable( ) { return mbEditable; }
+        bool  IsLocal( ) { return maUrl.GetProtocol() == INET_PROT_FILE; }
+        bool  IsEditable( ) { return mbEditable; }
 };
 
 typedef boost::shared_ptr< Place > PlacePtr;
