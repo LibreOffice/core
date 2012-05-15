@@ -24,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include <sfx2/tabpage.hrc>
+
 #include "HelpIds.hrc"
 #include "tp_Scale.hrc"
 
@@ -59,7 +62,7 @@ TabPage TP_SCALE
     HelpID = "chart2:TabPage:TP_SCALE";
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
 
     FixedLine FL_SCALE
     {

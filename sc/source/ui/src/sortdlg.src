@@ -31,7 +31,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_SORT_FIELDS ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     ListBox LB_SORT1
     {
         HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT1";
@@ -133,7 +133,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_SORT_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     CheckBox BTN_CASESENSITIVE
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_CASESENSITIVE";

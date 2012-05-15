@@ -34,7 +34,7 @@ TabPage TP_FLD_VAR
     HelpID = HID_FLD_VAR ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_VARTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

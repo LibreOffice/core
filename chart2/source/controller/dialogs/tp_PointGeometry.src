@@ -32,5 +32,5 @@ TabPage TP_LAYOUT
     HelpID = "chart2:TabPage:TP_LAYOUT";
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size   = MAP_APPFONT ( 260 , 185 ) ;
+    Size   = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
 };

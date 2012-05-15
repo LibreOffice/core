@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include <sfx2/sfx.hrc>
+#include <sfx2/tabpage.hrc>
 #include "helpid.hrc"
 #include "mgetempl.hrc"
 
@@ -34,7 +35,7 @@ TabPage TP_MANAGE_STYLES
 {
     HelpId = HID_MANAGE_STYLES ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;

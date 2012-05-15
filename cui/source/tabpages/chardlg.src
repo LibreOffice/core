@@ -36,7 +36,7 @@
 TabPage RID_SVXPAGE_CHAR_NAME
 {
     HelpId = HID_SVXPAGE_CHAR_NAME ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_WEST
     {
@@ -385,7 +385,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
 TabPage RID_SVXPAGE_CHAR_EFFECTS
 {
     HelpId = HID_SVXPAGE_CHAR_EFFECTS ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText FT_FONTCOLOR
     {
@@ -710,7 +710,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
 TabPage RID_SVXPAGE_CHAR_POSITION
 {
     HelpId = HID_SVXPAGE_CHAR_POSITION ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_POSITION
     {
@@ -931,7 +931,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
 TabPage RID_SVXPAGE_CHAR_TWOLINES
 {
     HelpId = HID_SVXPAGE_CHAR_TWOLINES ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_SWITCHON
     {

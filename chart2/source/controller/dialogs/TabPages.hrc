@@ -27,6 +27,8 @@
 #ifndef CHART_TABPAGES_HRC
 #define CHART_TABPAGES_HRC
 
+#include <sfx2/tabpage.hrc>
+
 #include "ResourceIds.hrc"
 
 //see attrib.hrc in old chart

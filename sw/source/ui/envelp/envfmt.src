@@ -31,7 +31,7 @@
 TabPage TP_ENV_FMT
 {
     HelpID = HID_ENV_FMT ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_ADDRESSEE
     {

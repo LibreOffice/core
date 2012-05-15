@@ -38,7 +38,7 @@ TabPage RID_SCPAGE_CALC
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     CheckBox BTN_ITERATE
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_ITERATE";
@@ -191,7 +191,7 @@ TabPage RID_SCPAGE_FORMULA
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
 
     FixedLine FL_FORMULA_OPTIONS
     {
@@ -291,7 +291,7 @@ TabPage RID_SCPAGE_COMPATIBILITY
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
 
     FixedLine FL_KEY_BINDINGS
     {
@@ -334,7 +334,7 @@ TabPage RID_SCPAGE_USERLISTS
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_LISTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -439,7 +439,7 @@ TabPage RID_SCPAGE_CONTENT
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine GB_LINES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -696,7 +696,7 @@ TabPage RID_SCPAGE_LAYOUT
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine GB_UNIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -881,7 +881,7 @@ TabPage RID_SCPAGE_PRINT
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -916,7 +916,7 @@ TabPage RID_SCPAGE_DEFAULTS
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_INIT_SPREADSHEET
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

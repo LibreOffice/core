@@ -39,7 +39,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
 {
     HelpID = HID_SVXPAGE_PICK_BULLET ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedLine FL_VALUES
     {
@@ -63,7 +63,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
 {
     HelpID = HID_SVXPAGE_PICK_SINGLE_NUM ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedLine FL_VALUES
     {
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_PICK_NUM
 {
     HelpID = HID_SVXPAGE_PICK_NUM;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedLine FL_VALUES
     {
@@ -111,7 +111,7 @@ TabPage RID_SVXPAGE_PICK_BMP
 {
     HelpID = HID_SVXPAGE_PICK_BMP;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedLine FL_VALUES
     {
@@ -152,7 +152,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
 {
     HelpID = HID_SVXPAGE_NUM_OPTIONS ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedText FT_LEVEL
     {
@@ -546,7 +546,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
 {
     HelpID = HID_SVXPAGE_NUM_POSITION ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedText FT_LEVEL
     {

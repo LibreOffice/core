@@ -31,7 +31,7 @@
 TabPage TP_LAB_PRT
 {
     HelpID = HID_LAB_PRT ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     RadioButton BTN_PAGE
     {

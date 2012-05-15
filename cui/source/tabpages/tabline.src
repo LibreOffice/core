@@ -37,7 +37,7 @@
 
 TabPage RID_SVXPAGE_LINE
 {
-    Size = MAP_APPFONT ( 260 , 185 );
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT );
     HelpId = HID_LINE_LINE ;
     Hide = TRUE ;
     Text [ en-US ] = "Lines" ;
@@ -419,7 +419,7 @@ TabPage RID_SVXPAGE_LINE
 
 TabPage RID_SVXPAGE_LINE_DEF
 {
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     HelpId = HID_LINE_DEF ;
     Hide = TRUE ;
     Text [ en-US ] = "Define line styles" ;
@@ -693,7 +693,7 @@ TabPage RID_SVXPAGE_LINE_DEF
 
 TabPage RID_SVXPAGE_LINEEND_DEF
 {
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     HelpId = HID_LINE_ENDDEF ;
     Hide = TRUE ;
     Text [ en-US ] = "Arrowheads" ;

@@ -72,7 +72,7 @@ TabDialog DLG_ENV
 TabPage TP_ENV_ENV
 {
     HelpID = HID_ENV_ENV ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText TXT_ADDR
     {

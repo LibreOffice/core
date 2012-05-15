@@ -164,7 +164,7 @@ TabPage RID_SCPAGE_TABLE
     HelpId = HID_SCPAGE_TABLE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     CheckBox BTN_HEADER
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_HEADER";

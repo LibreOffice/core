@@ -122,6 +122,7 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/stbitem.hxx,sfx2/stbitem.hxx
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/styfitem.hxx,sfx2/styfitem.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/styledlg.hxx,sfx2/styledlg.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/tabdlg.hxx,sfx2/tabdlg.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/tabpage.hrc,sfx2/tabpage.hrc))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/taskpane.hxx,sfx2/taskpane.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/tbxctrl.hxx,sfx2/tbxctrl.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/templdlg.hxx,sfx2/templdlg.hxx))

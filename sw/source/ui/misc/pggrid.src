@@ -31,7 +31,7 @@ TabPage TP_TEXTGRID_PAGE
 {
     HelpID = HID_TEXTGRID_PAGE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedLine       FL_GRID_TYPE
     {

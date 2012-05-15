@@ -35,7 +35,7 @@
  // RID_SVXPAGE_BORDER ---------------------------------------------------
 TabPage RID_SVXPAGE_BORDER
 {
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Helpid = HID_BORDER ;
     Hide = TRUE ;
     Text [ en-US ] = "Borders" ;

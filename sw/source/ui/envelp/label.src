@@ -96,7 +96,7 @@ TabDialog DLG_LAB
 TabPage TP_LAB_LAB
 {
     HelpID = HID_LAB_LAB ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText TXT_WRITING
     {
@@ -282,7 +282,7 @@ String STR_CUSTOM
 TabPage TP_VISITING_CARDS
 {
     HelpID = HID_TP_VISITING_CARDS ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
 
     Control LB_AUTO_TEXT
@@ -326,7 +326,7 @@ TabPage TP_VISITING_CARDS
 TabPage TP_PRIVATE_DATA
 {
     HelpID = HID_TP_PRIVATE_DATA  ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_DATA
     {
@@ -518,7 +518,7 @@ TabPage TP_PRIVATE_DATA
 TabPage TP_BUSINESS_DATA
 {
     HelpID = HID_TP_BUSINESS_DATA;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_DATA
     {

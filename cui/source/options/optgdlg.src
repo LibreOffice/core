@@ -40,7 +40,7 @@ TabPage OFA_TP_MISC
 {
     HelpID = HID_OFA_TP_MISC ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_HELP
     {
@@ -204,7 +204,7 @@ TabPage OFA_TP_VIEW
 {
     HelpID = HID_OFA_TP_VIEW ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_USERINTERFACE
     {
@@ -485,7 +485,7 @@ TabPage OFA_TP_LANGUAGES
 {
     HelpID = HID_OFA_TP_LANGUAGES ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_UI_LANG
     {

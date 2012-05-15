@@ -31,7 +31,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
 {
     HelpId = HID_SCPAGE_SUBT_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_GROUP
     {
@@ -119,7 +119,7 @@ TabPage RID_SUBTBASE
      // aus den Ableitungen nicht in der HID-Liste auftauchen wuerden
     HelpId = HID_SCPAGE_SUBT_GROUP ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText FT_GROUP
     {

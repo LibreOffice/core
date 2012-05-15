@@ -34,7 +34,7 @@ TabPage TP_FRM_WRAP
     SVLook = TRUE ;
     HelpID = HID_FRM_EXT ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     FixedLine C_WRAP_FL
     {

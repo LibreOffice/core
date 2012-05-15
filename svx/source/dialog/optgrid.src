@@ -35,7 +35,7 @@ TabPage RID_SVXPAGE_GRID
     HelpId = HID_OPTIONS_GRID ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine GRP_DRAWGRID
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

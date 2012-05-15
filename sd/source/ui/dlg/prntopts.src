@@ -25,13 +25,15 @@
  *
  ************************************************************************/
 
+#include <sfx2/tabpage.hrc>
+
 #include "prntopts.hrc"
 #include "helpids.h"
 TabPage TP_PRINT_OPTIONS
 {
     HelpID = HID_SD_PRINT_OPTIONS ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Text [ en-US ] = "Options" ;
     Hide = TRUE;
     FixedLine GRP_PRINT

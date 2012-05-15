@@ -39,7 +39,7 @@ TabPage RID_SVXPAGE_PAGE
 {
     HelpId = HID_FORMAT_PAGE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_PAPER_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

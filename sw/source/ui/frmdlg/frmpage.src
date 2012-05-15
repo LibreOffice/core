@@ -225,7 +225,7 @@ TabPage TP_FRM_STD
     HelpID = HID_FRM_STD ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText FT_WIDTH
     {
@@ -538,7 +538,7 @@ TabPage TP_GRF_EXT
     HelpID = HID_GRF_EXT ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Bitmap BMP_EXAMPLE
     {
         File = "image-example.bmp" ;
@@ -639,7 +639,7 @@ TabPage TP_FRM_URL
     SVLook = TRUE ;
     HelpID = HID_FRM_URL ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_URL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
@@ -726,7 +726,7 @@ TabPage TP_FRM_ADD
     SVLook = TRUE ;
     HelpID = HID_FRM_ADD ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;

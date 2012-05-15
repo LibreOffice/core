@@ -63,7 +63,7 @@ TabPage TP_AXIS_POSITIONS
     HelpID = "chart2:TabPage:TP_AXIS_POSITIONS";
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
 
     FixedLine FL_AXIS_LINE
     {

@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <sfx2/tabpage.hrc>
+
 #include "tp_PolarOptions.hrc"
 #include "HelpIds.hrc"
 
@@ -33,7 +35,7 @@ TabPage TP_POLAROPTIONS
     HelpID = "chart2:TabPage:TP_POLAROPTIONS";
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
 
     CheckBox CB_CLOCKWISE
     {

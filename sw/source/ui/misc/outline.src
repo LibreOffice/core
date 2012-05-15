@@ -208,7 +208,7 @@ TabPage TP_OUTLINE_NUM
 {
     HelpID = HID_TP_OUTLINE_NUM ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
         Hide = TRUE;
     ListBox LB_LEVEL
     {

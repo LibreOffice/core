@@ -201,7 +201,7 @@ TabPage RID_SFXPAGE_LINGU
     HelpId = HID_OPTIONS_LINGU ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Text [ en-US ] = "Options";
     FixedLine FL_LINGUISTIC
     {

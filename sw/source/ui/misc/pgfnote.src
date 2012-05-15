@@ -31,7 +31,7 @@ TabPage TP_FOOTNOTE_PAGE
 {
     HelpID = HID_FOOTNOTE_PAGE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE;
     RadioButton RB_MAXHEIGHT_PAGE
     {

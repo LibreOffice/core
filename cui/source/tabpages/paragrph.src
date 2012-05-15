@@ -36,7 +36,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     HelpId = HID_FORMAT_PARAGRAPH_STD ;
     Hide = TRUE ;
     Text [ en-US ] = "Indents and Spacing" ;
-    Size = MAP_APPFONT ( 260 , 199 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_LEFTINDENT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
@@ -282,7 +282,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     HelpId = HID_FORMAT_PARAGRAPH_ALIGN ;
     Hide = TRUE ;
     Text [ en-US ] = "Alignment" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_ALIGN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -431,7 +431,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     HelpId = HID_FORMAT_PARAGRAPH_EXT ;
     Hide = TRUE ;
     Text [ en-US ] = "Text Flow" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     TriStateBox BTN_HYPHEN
     {
         HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_HYPHEN";
@@ -708,7 +708,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     HelpId = HID_SVXPAGE_PARA_ASIAN ;
     Hide = TRUE ;
     Text [ en-US ] = "Asian Typography";
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_AS_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

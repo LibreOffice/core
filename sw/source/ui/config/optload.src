@@ -37,7 +37,7 @@
 TabPage TP_OPTLOAD_PAGE
 {
     HelpID = HID_OPTLOAD_PAGE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_UPDATE
     {
@@ -162,7 +162,7 @@ TabPage TP_OPTLOAD_PAGE
 TabPage TP_OPTCAPTION_PAGE
 {
     HelpID = HID_OPTCAPTION_PAGE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     Text [ en-US ] = "Caption" ;
 

@@ -106,7 +106,7 @@ TabPage RID_SCPAGE_PROTECTION
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_PROTECTION ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     TriStateBox BTN_PROTECTED
     {
         HelpID = "sc:TriStateBox:RID_SCPAGE_PROTECTION:BTN_PROTECTED";

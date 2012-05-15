@@ -409,7 +409,7 @@ TabPage TP_INSERT_SECTION
     HelpID = HID_INSERT_SECTION_PAGE;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_NAME
     {
@@ -624,7 +624,7 @@ TabPage TP_SECTION_FTNENDNOTES
     HelpID = HID_SECTION_FTNENDNOTES_PAGE;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_FTN
     {
@@ -828,7 +828,7 @@ TabPage TP_SECTION_INDENTS
     HelpID = HID_SECTION_INDENTS_PAGE;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_INDENT
     {

@@ -34,7 +34,7 @@
 TabPage TP_MAILCONFIG
 {
     HelpID = HID_TP_MAILCONFIG;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
 
     Text[ en-US ] = "Mail Merge E-mail";

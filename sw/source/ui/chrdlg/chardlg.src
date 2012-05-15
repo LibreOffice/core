@@ -104,7 +104,7 @@ TabPage TP_CHAR_URL
 {
     HelpID = HID_CHAR_URL ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_URL
     {

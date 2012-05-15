@@ -31,7 +31,7 @@
 TabPage TP_LAB_FMT
 {
     HelpID = HID_LAB_FMT ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText FI_MAKE
     {

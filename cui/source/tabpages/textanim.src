@@ -289,7 +289,7 @@ TabDialog RID_SVXDLG_TEXT
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 185 ) ;
+        Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
         PageList =
         {
             PageItem

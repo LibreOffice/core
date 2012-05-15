@@ -62,7 +62,7 @@ TabPage TP_FOOTNOTEOPTION
     Hide = TRUE;
     HelpID = HID_FOOTNOTE_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_NUM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -313,7 +313,7 @@ TabPage TP_ENDNOTEOPTION
     Hide = TRUE;
     HelpID = HID_ENDNOTE_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_NUM
     {
         Pos = MAP_APPFONT ( 6 , 2 ) ;

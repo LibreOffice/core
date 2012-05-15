@@ -45,7 +45,7 @@ TabPage TP_CONTENT_OPT
 {
     HelpID = HID_CONTENT_OPT ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_LINE
     {
@@ -207,7 +207,7 @@ TabPage TP_CONTENT_OPT
 TabPage TP_OPTPRINT_PAGE
 {
     HelpID = HID_OPTPRINT_PAGE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_1
     {
@@ -439,7 +439,7 @@ TabPage TP_OPTPRINT_PAGE
 TabPage TP_STD_FONT
 {
     HelpID = HID_STD_FONT ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_STDCHR
     {
@@ -614,7 +614,7 @@ TabPage TP_STD_FONT
 TabPage TP_OPTTABLE_PAGE
 {
     HelpID = HID_OPTTABLE_PAGE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_TABLE
     {
@@ -858,7 +858,7 @@ TabPage TP_OPTSHDWCRSR
 {
     HelpID = HID_OPTSHDWCRSR ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
      //_----------------------------
     FixedLine FL_NOPRINT
@@ -1068,7 +1068,7 @@ TabPage TP_COMPARISON_OPT
     HelpID = HID_COMPARISON_OPT;
     SVLook = TRUE ;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 260 , 185 );
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT );
     FixedLine FL_CMP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

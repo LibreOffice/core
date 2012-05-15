@@ -44,7 +44,7 @@ TabPage TP_LINENUMBERING
     HelpID = HID_LINENUMBERING ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     CheckBox CB_NUMBERING_ON
     {
         HelpID = "sw:CheckBox:TP_LINENUMBERING:CB_NUMBERING_ON";

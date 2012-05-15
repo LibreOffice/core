@@ -28,6 +28,7 @@
  // include ---------------------------------------------------------------
 
 #include "sfx2/sfx.hrc"
+#include "sfx2/tabpage.hrc"
 #include "helpid.hrc"
 #include "sfxlocal.hrc"
 #include "dinfdlg.hrc"
@@ -43,7 +44,7 @@ TabPage TP_DOCINFODESC
 {
     HelpId = HID_DOCINFODESC ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
@@ -117,7 +118,7 @@ TabPage TP_DOCINFODOC
 {
     HelpId = HID_DOCINFODOC ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedImage BMP_FILE_1
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
@@ -323,7 +324,7 @@ TabPage TP_DOCINFOUSER
 {
     HelpId = HID_DOCINFOUSER ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_INFO1
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
@@ -395,7 +396,7 @@ TabPage TP_DOCINFORELOAD
 {
     HelpId = HID_DOCINFORELOAD ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     RadioButton RB_NOAUTOUPDATE
     {
         HelpID = "sfx2:RadioButton:TP_DOCINFORELOAD:RB_NOAUTOUPDATE";
@@ -520,7 +521,7 @@ TabPage TP_CUSTOMPROPERTIES
 {
     HelpId = HID_TP_CUSTOMPROPERTIES ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedText FT_PROPERTIES
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;

@@ -37,7 +37,7 @@ TabPage TP_COLUMN
 {
     HelpID = HID_COLUMN ;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Text [ en-US ] = "Columns" ;
     FixedText FT_NUMBER
     {

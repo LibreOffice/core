@@ -41,7 +41,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
 {
     HelpID = HID_AREA_TRANSPARENCE;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 260 , 185 );
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT );
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -258,7 +258,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
 // ------------------------------------------------------
 TabPage RID_SVXPAGE_AREA
 {
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     HelpID = HID_AREA_AREA ;
     Hide = TRUE ;
     Text [ en-US ] = "Area" ;
@@ -581,7 +581,7 @@ TabPage RID_SVXPAGE_SHADOW
 {
     HelpID = HID_AREA_SHADOW ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Text [ en-US ] = "Shadow" ;
     FixedLine FL_PROP
     {
@@ -688,7 +688,7 @@ TabPage RID_SVXPAGE_HATCH
     HelpID = HID_AREA_HATCH ;
     Hide = TRUE ;
     Text [ en-US ] = "Hatching" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -868,7 +868,7 @@ TabPage RID_SVXPAGE_BITMAP
     HelpID = HID_AREA_BITMAP ;
     Hide = TRUE ;
     Text [ en-US ] = "Bitmap Patterns" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -1017,7 +1017,7 @@ TabPage RID_SVXPAGE_GRADIENT
     HelpID = HID_AREA_GRADIENT ;
     Hide = TRUE ;
     Text [ en-US ] = "Gradients" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -1283,7 +1283,7 @@ TabPage RID_SVXPAGE_COLOR
     Hide = TRUE ;
     Text [ en-US ] = "Colors" ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;

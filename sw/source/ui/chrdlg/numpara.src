@@ -33,7 +33,7 @@
 TabPage TP_NUMPARA
 {
     HelpID = HID_NUMPARA ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_OUTLINE_START
     {

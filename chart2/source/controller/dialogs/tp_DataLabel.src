@@ -33,6 +33,6 @@ TabPage TP_DATA_DESCR
     Hide = TRUE ;
     HelpID = HID_SCH_DATA_DESCR ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     RESOURCE_DATALABEL( 6, 8 )
 };

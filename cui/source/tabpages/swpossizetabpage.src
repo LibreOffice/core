@@ -36,7 +36,7 @@ TabPage RID_SVXPAGE_SWPOSSIZE
     HelpId = HID_SVXPAGE_SWPOSSIZE;
     Hide = TRUE ;
     Text[ en-US ] = "Position and Size" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;

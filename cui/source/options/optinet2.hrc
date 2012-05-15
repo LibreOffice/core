@@ -27,6 +27,8 @@
 #ifndef _SVX_OPTINET_HRC
 #define _SVX_OPTINET_HRC
 
+#include <sfx2/tabpage.hrc>
+
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
 #endif
@@ -99,8 +101,6 @@
 
 #define STR_SEC_NOPASSWDSAVE        12
 
-#define TP_WIDTH                    260
-#define TP_HEIGHT                   185
 #define OFFS_BUTTON_Y               (-6)
 #define BORDER_OFFSET               8
 #define COL_0                       (RSC_SP_TBPG_INNERBORDER_LEFT)

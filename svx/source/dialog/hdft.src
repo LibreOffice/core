@@ -42,7 +42,7 @@ TabPage RID_SVXPAGE_HEADER
     HelpId = HID_FORMAT_HEADER ;
     Hide = TRUE ;
     Text [ en-US ] = "Header" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     CheckBox CB_TURNON
     {
         HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_TURNON";
@@ -190,7 +190,7 @@ TabPage RID_SVXPAGE_FOOTER
     HelpId = HID_FORMAT_FOOTER ;
     Hide = TRUE ;
     Text [ en-US ] = "Footer" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     CheckBox CB_TURNON
     {
         HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_TURNON";

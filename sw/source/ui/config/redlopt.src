@@ -44,7 +44,7 @@ TabPage TP_REDLINE_OPT
     HelpID = HID_REDLINE_OPT ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     FixedLine FL_TE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

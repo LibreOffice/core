@@ -54,7 +54,7 @@ TabDialog DLG_DROPCAPS
 TabPage TP_DROPCAPS
 {
     HelpID = HID_DROPCAPS ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     CheckBox CB_SWITCH
     {

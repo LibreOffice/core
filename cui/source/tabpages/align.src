@@ -41,7 +41,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     HelpId = HID_ALIGNMENT ;
     Hide = TRUE ;
     Text [ en-US ] = "Alignment" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     SVLook = TRUE ;
     FixedLine FL_ALIGNMENT
     {
