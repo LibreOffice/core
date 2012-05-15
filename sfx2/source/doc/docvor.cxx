@@ -1679,8 +1679,17 @@ sal_Bool SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry* pEntry )
         return sal_True;
     }
 
+    //If delete is pressed on e.g. a style entry go up the chain to find the
+    //owning template
+    while (nDepth > 1)
+    {
+        pEntry = pFocusBox->GetParent(pEntry);
+        --nDepth;
+    }
+    SvLBoxEntry *pTemplateEntry = pEntry;
+
     sal_uInt16 nRegion = 0, nIndex = 0;
-    GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
+    GetIndices_Impl( pFocusBox, pTemplateEntry, nRegion, nIndex );
     const SfxDocumentTemplates* pTemplates = aMgr.GetTemplates();
     if ( !pTemplates || !pTemplates->HasUserContents( nRegion, nIndex ) )
         return sal_True;
