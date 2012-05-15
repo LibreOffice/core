@@ -1105,15 +1105,12 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
 
     if(isAfterLast())
         return sal_False;
+    ++m_aKeyIter;
     if(!m_bRowCountFinal) // not yet all records fetched
     {
-        ++m_aKeyIter; // this is possible because we stand on begin() and this is the "beforefirst" row
-                      // LEM: above comment is wrong; we may be anywhere but after last.
         if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
             m_aKeyIter = m_aKeyMap.end();
     }
-    else if(!isAfterLast())
-        ++m_aKeyIter;
 
     refreshRow();
     return !isAfterLast();
