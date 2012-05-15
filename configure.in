@@ -7829,7 +7829,7 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         else
             ICU_RECLASSIFIED_PREPEND_SET_EMPTY="NO"
         fi
-        if test "$ICU_MAJOR" -eq 4 -a "$ICU_MINOR" -le 6; then
+        if test "$ICU_MAJOR" -le 4; then
             ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="NO"
             ICU_RECLASSIFIED_HEBREW_LETTER="NO"
         fi
