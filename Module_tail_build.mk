@@ -106,4 +106,22 @@ $(eval $(call gb_Module_add_targets,tail_end,\
 ))
 endif
 
+# Especially when building everything with symbols, the linking of the largest
+# libraries takes enormous amounts of RAM.  To prevent annoying OOM situations
+# etc., try to prevent linking these in parallel by adding artificial build
+# order dependencies here.
+define tailbuild_serialize1
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) \
+	:| $(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
+endef
+
+define tailbuild_serialize
+$(if $(filter-out 0 1,$(words $(1))),\
+$(call tailbuild_serialize1,$(firstword $(1)),$(wordlist 2,$(words $(1)),$(1))))
+$(if $(strip $(1)),\
+$(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
+endef
+
+$(eval $(call tailbuild_serialize,scfilt sc sw sd dbu ooxml oox svxcore vcl xo))
+
 # vim: set noet sw=4 ts=4:
