@@ -598,7 +598,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     void* pData = (void*)aMemStream.GetData();
     sal_Int32 nLen = aMemStream.Seek(STREAM_SEEK_TO_END);
 
-    rContentType = UniString(aParent.GetContentType());
+    rContentType = aParent.GetContentType();
     return Sequence<sal_Int8>((sal_Int8*)pData, nLen);
 }
 
@@ -669,18 +669,23 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 if (xSubmitButtonComponent == xComponentSet)
                 {
                     // <name>.x=<pos.X>&<name>.y=<pos.Y>
-                    ::rtl::OUString aLhs = aName;
                     ::rtl::OUString aRhs = ::rtl::OUString::valueOf( MouseEvt.X );
 
                     // Only if a name is available we have a name.x
-                    aLhs += !aName.isEmpty() ? UniString::CreateFromAscii(".x") : UniString::CreateFromAscii("x");
-                    rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
+                    rtl::OUStringBuffer aLhs(aName);
+                    if (!aName.isEmpty())
+                        aLhs.append(".x");
+                    else
+                        aLhs.append("x");
+                    rList.push_back( HtmlSuccessfulObj(aLhs.makeStringAndClear(), aRhs) );
 
-                    aLhs = aName;
+                    aLhs.append(aName);
                     aRhs = ::rtl::OUString::valueOf( MouseEvt.Y );
-                    aLhs += !aName.isEmpty() ? UniString::CreateFromAscii(".y") : UniString::CreateFromAscii("y");
-                    rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
-
+                    if (!aName.isEmpty())
+                        aLhs.append(".y");
+                    else
+                        aLhs.append("y");
+                    rList.push_back( HtmlSuccessfulObj(aLhs.makeStringAndClear(), aRhs) );
                 }
             }
         } break;
@@ -921,7 +926,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if (!xContainer.is())
                 break;
 
-            aName += UniString('.');
+            aName += rtl::OUString(static_cast<sal_Unicode>('.'));
 
             Reference<XPropertySet>  xSet;
             sal_Int32 nCount = xContainer->getCount();
@@ -961,7 +966,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
 //------------------------------------------------------------------------
 void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 {
-    ::rtl::OUString aResult;
+    ::rtl::OUStringBuffer aResult;
 
     // Line endings are represented as CR
     rString = convertLineEnd(rString, LINEEND_CR);
@@ -979,7 +984,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
             switch( nCharCode )
             {
                 case 13:    // CR
-                    aResult += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%0D%0A") ); // CR LF in hex
+                    aResult.append("%0D%0A"); // CR LF in hex
                     break;
 
 
@@ -989,7 +994,7 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
                 case 46:    // '.'
                 case 64:    // '@'
                 case 95:    // '_'
-                    aResult += UniString(nCharCode);
+                    aResult.append(nCharCode);
                     break;
 
                 default:
@@ -999,21 +1004,18 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
                     short nLo = ((sal_Int16)nCharCode) - (nHi*16);
                     if( nHi > 9 ) nHi += (int)'A'-10; else nHi += (int)'0';
                     if( nLo > 9 ) nLo += (int)'A'-10; else nLo += (int)'0';
-                    aResult += UniString('%');
-                    aResult += UniString((sal_Unicode)nHi);
-                    aResult += UniString((sal_Unicode)nLo);
+                    aResult.append('%');
+                    aResult.append((sal_Unicode)nHi);
+                    aResult.append((sal_Unicode)nLo);
                 }
             }
         }
         else
-            aResult += UniString(nCharCode);
+            aResult.append(nCharCode);
     }
 
-
     // Replace spaces with '+'
-    aResult = aResult.replace(' ', '+');
-
-    rString = aResult;
+    rString = aResult.makeStringAndClear().replace(' ', '+');
 }
 
 //------------------------------------------------------------------------
@@ -1026,15 +1028,16 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
 
 
     // Header
-    ::rtl::OUString aContentDisp (RTL_CONSTASCII_USTRINGPARAM("form-data; name=\"") );
-    aContentDisp += rName;
-    aContentDisp += UniString('\"');
-    pChild->SetContentDisposition( aContentDisp );
+    ::rtl::OUStringBuffer aContentDisp;
+    aContentDisp.append("form-data; name=\"");
+    aContentDisp.append(rName);
+    aContentDisp.append('\"');
+    pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
     pChild->SetContentType(::rtl::OUString("text/plain"));
 
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
     const sal_Char* pBestMatchingEncoding = rtl_getBestMimeCharsetFromTextEncoding( eSystemEncoding );
-    UniString aBestMatchingEncoding = UniString::CreateFromAscii( pBestMatchingEncoding );
+    rtl::OUString aBestMatchingEncoding = rtl::OUString::createFromAscii(pBestMatchingEncoding);
     pChild->SetContentTransferEncoding(aBestMatchingEncoding);
 
     // Body
@@ -1050,11 +1053,11 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
 sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::OUString& rName,
     const ::rtl::OUString& rFileName )
 {
-    UniString aFileName( rFileName );
-    UniString aContentType(UniString::CreateFromAscii(CONTENT_TYPE_STR_TEXT_PLAIN));
+    rtl::OUString aFileName(rFileName);
+    rtl::OUString aContentType(CONTENT_TYPE_STR_TEXT_PLAIN);
     SvStream *pStream = 0;
 
-    if( aFileName.Len() )
+    if (!aFileName.isEmpty())
     {
         // We can only process File URLs yet
         INetURLObject aURL;
@@ -1090,13 +1093,14 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
 
 
     // Header
-    ::rtl::OUString aContentDisp (RTL_CONSTASCII_USTRINGPARAM( "form-data; name=\"") );
-    aContentDisp += rName;
-    aContentDisp += UniString('\"');
-    aContentDisp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("; filename=\"") );
-    aContentDisp += aFileName;
-    aContentDisp += UniString('\"');
-    pChild->SetContentDisposition( aContentDisp );
+    ::rtl::OUStringBuffer aContentDisp;
+    aContentDisp.append("form-data; name=\"");
+    aContentDisp.append(rName);
+    aContentDisp.append('\"');
+    aContentDisp.append("; filename=\"");
+    aContentDisp.append(aFileName);
+    aContentDisp.append('\"');
+    pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
     pChild->SetContentType( aContentType );
     pChild->SetContentTransferEncoding(::rtl::OUString("8bit"));
 

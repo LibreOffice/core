@@ -494,8 +494,8 @@ public:
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_TYPE]);
     }
 
-    void      SetContentTransferEncoding (const UniString& rEncoding);
-    UniString GetContentTransferEncoding() const
+    void      SetContentTransferEncoding (const rtl::OUString& rEncoding);
+    rtl::OUString GetContentTransferEncoding() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
     }

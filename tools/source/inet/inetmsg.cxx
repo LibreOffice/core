@@ -1022,7 +1022,7 @@ void INetMIMEMessage::SetContentType (const String& rType)
 }
 
 void INetMIMEMessage::SetContentTransferEncoding (
-    const String& rEncoding)
+    const rtl::OUString& rEncoding)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
