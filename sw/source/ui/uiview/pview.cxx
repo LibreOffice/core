@@ -1367,7 +1367,7 @@ void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*
     const long nTmp = rSet.GetScrollBarSize();
     if ( pVScrollbar->IsVisible( true ) )
         rToFill.Right()  = nTmp;
-    if ( pHScrollbar->IsVisible( false ) )
+    if ( pHScrollbar->IsVisible( true ) )
         rToFill.Bottom() = nTmp;
     SetBorderPixel( rToFill );
 }
