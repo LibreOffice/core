@@ -2988,12 +2988,7 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
         m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XDocumentEventListener >*)0 ) );
     if ( pIC )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(
-            "SfxDocumentEvent: "));
-        aTmp.append(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
-        OSL_TRACE(aTmp.getStr());
-#endif
+        SAL_INFO("sfx2", "SfxDocumentEvent: " + aName);
 
         document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );
 
@@ -3006,12 +3001,7 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
     pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ) );
     if ( pIC )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(
-            "SfxEvent: "));
-        aTmp.append(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
-        OSL_TRACE(aTmp.getStr());
-#endif
+        SAL_INFO("sfx2", "SfxEvent: " + aName);
 
         document::EventObject aEvent( (frame::XModel*)this, aName );
 
