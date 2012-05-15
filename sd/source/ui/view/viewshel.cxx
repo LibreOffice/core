@@ -1062,9 +1062,8 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
         {
             // prepare list
             ::std::vector< String > aStringList;
-            sal_uInt16 a;
 
-            for( a = 0; a < nCount; a++)
+            for (sal_uInt16 a = 0; a < nCount; ++a)
             {
                 // generate one String in list per undo step
                 aStringList.push_back( String(pUndoManager->GetUndoActionComment(a)) );

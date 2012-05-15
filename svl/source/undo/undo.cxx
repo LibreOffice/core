@@ -691,17 +691,15 @@ size_t SfxUndoManager::GetUndoActionCount( bool const i_currentLevel ) const
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentLevel ) const
+rtl::OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentLevel ) const
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    String sComment;
+    rtl::OUString sComment;
     const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
     DBG_ASSERT( nNo < pUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment: illegal index!" );
     if( nNo < pUndoArray->nCurUndoAction )
-    {
         sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction - 1 - nNo ].pAction->GetComment();
-    }
     return sComment;
 }
 
@@ -852,7 +850,7 @@ size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) 
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
+rtl::OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
 {
     UndoManagerGuard aGuard( *m_pData );
     const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;

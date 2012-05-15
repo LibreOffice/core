@@ -242,11 +242,11 @@ namespace svl
 
         virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual sal_uInt16      GetUndoActionId() const = 0;
-        virtual UniString       GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
+        virtual rtl::OUString   GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const = 0;
 
         virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
-        virtual UniString       GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
+        virtual rtl::OUString   GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
 
         virtual sal_Bool        Undo() = 0;
         virtual sal_Bool        Redo() = 0;
@@ -356,10 +356,10 @@ public:
     virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
     virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     virtual sal_uInt16      GetUndoActionId() const;
-    virtual UniString       GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
+    virtual rtl::OUString   GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
-    virtual UniString       GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
+    virtual rtl::OUString   GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual sal_Bool        Undo();
     virtual sal_Bool        Redo();
     virtual void            Clear();

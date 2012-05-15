@@ -1030,7 +1030,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
     aContentDisp += rName;
     aContentDisp += UniString('\"');
     pChild->SetContentDisposition( aContentDisp );
-    pChild->SetContentType( UniString::CreateFromAscii("text/plain") );
+    pChild->SetContentType(::rtl::OUString("text/plain"));
 
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
     const sal_Char* pBestMatchingEncoding = rtl_getBestMimeCharsetFromTextEncoding( eSystemEncoding );
@@ -1098,7 +1098,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
     aContentDisp += UniString('\"');
     pChild->SetContentDisposition( aContentDisp );
     pChild->SetContentType( aContentType );
-    pChild->SetContentTransferEncoding( UniString(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("8bit") ) ) );
+    pChild->SetContentTransferEncoding(::rtl::OUString("8bit"));
 
 
     // Body

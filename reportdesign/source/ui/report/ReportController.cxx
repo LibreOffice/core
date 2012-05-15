@@ -475,7 +475,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     // TODO: add "Undo/Redo: prefix"
-                    String ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
+                    rtl::OUString ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
                         ( _nId == SID_UNDO ) ? &SfxUndoManager::GetUndoActionComment : &SfxUndoManager::GetRedoActionComment;
                     aReturn.sTitle = (rUndoManager.*retrieveComment)( 0, ::svl::IUndoManager::TopLevel );
                 }
