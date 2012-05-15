@@ -195,6 +195,8 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                 pPDFExtOutDevData->SetIsExportNotesPages( bExportNotesPages );
 
                 sal_Int32 nSel = aMultiSelection.FirstSelected();
+                sal_Int32 nIncreasingPageNumber(0);
+
                 while ( nSel != sal_Int32(SFX_ENDOFSELECTION) )
                 {
                     Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( nSel - 1, rSelection, rRenderOptions ) );
@@ -206,7 +208,11 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                             aRenderer[ nProperty].Value >>= aPageSize;
                     }
 
-                    pPDFExtOutDevData->SetCurrentPageNumber( nSel - 1 );
+                    // #119348# The PageNumber at PDFExtOutDevDatahas to be the target page number,
+                    // e.g. when exporting only page#2 from two pages, the old mechanism would
+                    // have set it to '1', but a üpage '1' does not yet exist in the export. This
+                    // will make PDFWriterImpl::createLink and PDFWriterImpl::setLinkURL fail (see there).
+                    pPDFExtOutDevData->SetCurrentPageNumber(nIncreasingPageNumber++ /* nSel - 1 */);
 
                     GDIMetaFile                 aMtf;
                     const MapMode               aMapMode( MAP_100TH_MM );
