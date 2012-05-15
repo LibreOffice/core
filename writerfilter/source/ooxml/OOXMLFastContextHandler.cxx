@@ -1894,7 +1894,6 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
         uno::Reference<XMultiComponentFactory> rServiceManager
             (xContext->getServiceManager());
 
-        mrShapeContext.set( getDocument( )->getShapeContext( ) );
         if ( !mrShapeContext.is( ) )
         {
             // Define the shape context for the whole document
@@ -1905,7 +1904,6 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
                    (RTL_CONSTASCII_USTRINGPARAM
                     ("com.sun.star.xml.sax.FastShapeContextHandler")), xContext),
                   uno::UNO_QUERY);
-            getDocument()->setShapeContext( mrShapeContext );
         }
 
         if (mrShapeContext.is())
