@@ -28,8 +28,10 @@
 #include "../swmodeltestbase.hxx"
 
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -41,10 +43,12 @@ class Test : public SwModelTestBase
 {
 public:
     void testN757910();
+    void testN760294();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN757910);
+    CPPUNIT_TEST(testN760294);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -74,6 +78,19 @@ void Test::testN757910()
     table::BorderLine2 aBorder;
     xPropertySet->getPropertyValue("LeftBorder") >>= aBorder;
     CPPUNIT_ASSERT(aBorder.LineWidth > 0);
+}
+
+void Test::testN760294()
+{
+    load("n760294.doc");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    table::TableBorder aTableBorder;
+    xTable->getPropertyValue("TableBorder") >>= aTableBorder;
+    CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.OuterLineWidth);
+    CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.LineDistance);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
