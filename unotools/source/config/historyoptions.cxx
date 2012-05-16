@@ -533,7 +533,23 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
                 ::rtl::OUString sRemove;
                 xOrderList->getByName(::rtl::OUString::valueOf(nLength-1)) >>= xSet;
                 xSet->getPropertyValue(sHistoryItemRef) >>= sRemove;
-                xItemList->removeByName(sRemove);
+                try
+                {
+                    xItemList->removeByName(sRemove);
+                }
+                catch (css::container::NoSuchElementException &)
+                {
+                    // <https://bugs.freedesktop.org/show_bug.cgi?id=46074>
+                    // "FILEOPEN: No Recent Documents..." discusses a problem
+                    // with corrupted /org.openoffice.Office/Histories/Histories
+                    // configuration items; to work around that problem, simply
+                    // ignore such corrupted individual items here, so that at
+                    // least newly added items are successfully added:
+                    if (!sRemove.isEmpty())
+                    {
+                        throw;
+                    }
+                }
             }
             if ( nLength != nMaxSize )
             {
