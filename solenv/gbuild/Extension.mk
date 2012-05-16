@@ -166,7 +166,8 @@ $(call gb_Extension_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(S
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $$(SDF)
 endif
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
-$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) \
+		$(gb_Extension_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@) && \
 	cp -f $$< $$@ \
@@ -188,7 +189,7 @@ $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2
 $(call gb_Extension_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(dir $(3))))localize.sdf
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $$(SDF)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(gb_Extension_HELPEXTARGET)
-$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
+$(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) $(gb_Extension_HELPEXTARGET)
 	$$(call gb_Output_announce,$(2),$(true),XHP,3)
 	mkdir -p $$(dir $$@) && \
 	$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$(SDF)

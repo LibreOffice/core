@@ -51,7 +51,8 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 		$(call gb_ComponentTarget_get_target,$*) \
 
 
-$(call gb_ComponentTarget_get_target,%) : $(call gb_ComponentTarget_get_source,$(SRCDIR),%) | $(gb_XSLTPROCTARGET)
+$(call gb_ComponentTarget_get_target,%) : \
+		$(call gb_ComponentTarget_get_source,$(SRCDIR),%) $(gb_XSLTPROCTARGET)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
 $(call gb_ComponentTarget_get_target,%) :

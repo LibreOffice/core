@@ -73,8 +73,8 @@ $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) 
 # defined by platform
 #  gb_SrsPartTarget__command_dep
 
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc$(gb_Executable_EXT_for_build)
-gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_ResTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc$(gb_Executable_EXT_for_build)
+gb_ResTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_ResTarget_RSCTARGET)
 
 define gb_SrsPartTarget__command
 $(call gb_Helper_abbreviate_dirs,\
@@ -86,12 +86,13 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(DEFS) \
 		-fp=$(1) \
 		$(if $(MERGEDFILE),$(MERGEDFILE),$<)" > $${RESPONSEFILE} && \
-	$(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
+	$(gb_ResTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
 	rm -rf $${RESPONSEFILE})
 
 endef
 
-$(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
+$(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) \
+		$(gb_ResTarget_RSCTARGET)
 	$(call gb_SrsPartTarget__command_dep,$*,$<)
 	$(call gb_SrsPartTarget__command,$@,$*,$<)
 
@@ -315,8 +316,6 @@ endef
 
 # ResTarget
 
-gb_ResTarget_RSCTARGET := $(gb_SrsPartTarget_RSCTARGET)
-gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
 gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/icon-themes/galaxy/
 
 $(call gb_ResTarget_get_clean_target,%) :
@@ -324,7 +323,8 @@ $(call gb_ResTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_ResTarget_get_target,$*) $(call gb_ResTarget_get_imagelist_target,$*) $(call gb_ResTarget_get_outdir_target,$*) $(call gb_ResTarget_get_outdir_imagelist_target,$*))
 
-$(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCTARGET)
+$(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
+		$(gb_ResTarget_RSCTARGET)
 	$(call gb_Output_announce,$*,$(true),RES,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) $(OUTDIR)/bin \
@@ -344,7 +344,8 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 			-subMODULE=$(dir $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
 			-subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
 			-oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
-			$(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
+			$(filter-out $(gb_Helper_MISCDUMMY) $(gb_ResTarget_RSCTARGET),$^)" \
+			> $${RESPONSEFILE} && \
 		$(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
 

@@ -66,8 +66,9 @@ define gb_UnoApiPartTarget__command
 
 endef
 
-$(call gb_UnoApiPartTarget_get_target,%.done) :
-	$(call gb_UnoApiPartTarget__command,$@,$*,$?)
+$(call gb_UnoApiPartTarget_get_target,%.done) : \
+		$(gb_UnoApiPartTarget_IDLCTARGET)
+	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$?))
 
 ifeq ($(gb_FULLDEPS),$(true))
 
@@ -133,9 +134,12 @@ $(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3
 $(if $(4),,$(error No root has been set for the rdb file))
 endef
 
-$(call gb_UnoApiTarget_get_target,%):
+# FIXME cannot have a dependency on $(gb_UnoApiTarget_RDBMAKERTARGET) here
+# because that leads to dependency cycle because rdbmaker depends on offapi
+$(call gb_UnoApiTarget_get_target,%) : $(gb_UnoApiTarget_XML2CMPTARGET) \
+		$(gb_UnoApiTarget_REGCOMPARETARGET) $(gb_UnoApiTarget_REGMERGETARGET)
 	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML),$(UNOAPI_ROOT))
-	$(call gb_UnoApiTarget__command,$@,$*,$<,$?)
+	$(call gb_UnoApiTarget__command,$@,$*)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
@@ -281,15 +285,18 @@ touch $(1)
 
 endef
 
-$(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) :
+$(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) : \
+		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 	$(call gb_Output_announce,$*,$(true),HPB,3)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
 
-$(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) :
+$(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
+		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 	$(call gb_Output_announce,$*,$(true),HPC,3)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*),-C)
 
-$(call gb_UnoApiHeadersTarget_get_target,%) :
+$(call gb_UnoApiHeadersTarget_get_target,%) : \
+		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 	$(call gb_Output_announce,$*,$(true),HPP,3)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
 
