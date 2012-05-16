@@ -1779,6 +1779,7 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
 {
     static jboolean current = JNI_FALSE;
     pthread_t thread;
+    pthread_attr_t attr;
 
     (void) env;
     (void) clazz;
@@ -1827,7 +1828,9 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
         close(stdout_pipe[1]);
         close(stderr_pipe[1]);
 
-        if (pthread_create(&thread, NULL, redirect_thread, NULL) != 0) {
+        if (pthread_attr_init(&attr) != 0 ||
+            pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0 ||
+            pthread_create(&thread, &attr, redirect_thread, NULL) != 0) {
             LOGE("redirect_stdio: Could not create thread: %s", strerror(errno));
             redirect_to_null();
             close(stdout_pipe[0]);
