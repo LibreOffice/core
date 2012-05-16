@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
     msfilter \
     sal \
     sax \
+    sfx \
     svl \
     svt \
     svxcore \
