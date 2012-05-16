@@ -114,6 +114,10 @@ public:
         size can be zero and the default value is returned. */
     float                               getCharHeightPoints( float fDefault ) const;
 
+#ifdef DBG_UTIL
+    void dump() const;
+#endif
+
 protected:
 
     TextCharacterProperties         maTextCharacterProperties;

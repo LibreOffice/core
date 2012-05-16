@@ -51,6 +51,10 @@ public:
     inline const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
     inline TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
 
+#ifdef DBG_UTIL
+    void dump() const;
+#endif
+
 protected:
 
     TextParagraphPropertiesVector maListStyle;

@@ -124,6 +124,10 @@ public:
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
 
+#ifdef DBG_UTIL
+    void dump();
+#endif
+
     // ------------------------------------------------------------------------
 private:
     /** Gets the specified property from the property set.
