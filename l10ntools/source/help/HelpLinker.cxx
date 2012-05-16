@@ -437,11 +437,12 @@ void HelpLinker::link() throw( HelpProcessingException )
         if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
         {
             // only work on .xhp - files
-            std::cerr <<
+            SAL_WARN("l10ntools",
                 "ERROR: input list entry '"
                     << xhpFileName
                     << "' has the wrong extension (only files with extension .xhp "
-                    << "are accepted)";
+                    << "are accepted)");
+
             continue;
         }
 
@@ -642,8 +643,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
             fs::path fsAdditionalFileName( additionalFileName, fs::native );
                 std::string aNativeStr = fsAdditionalFileName.native_file_string();
-                const char* pStr = aNativeStr.c_str();
-                HCDBG(std::cerr << pStr << std::endl);
+            HCDBG(const char* pStr = aNativeStr.c_str(); std::cerr << pStr << std::endl);
 
             fs::path fsTargetName( indexDirParentName / additionalFileKey );
 

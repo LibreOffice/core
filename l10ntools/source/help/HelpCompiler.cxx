@@ -266,7 +266,6 @@ std::string myparser::dump(xmlNodePtr node)
         xmlChar *pContent = xmlNodeGetContent(node);
         app += std::string((const char*)pContent);
         xmlFree(pContent);
-        // std::cout << app << std::endl;
     }
     return app;
 }

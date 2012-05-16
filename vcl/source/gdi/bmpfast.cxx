@@ -37,7 +37,6 @@
 #define FAST_ARGB_BGRA
 
 #include <stdlib.h>
-static bool bDisableFastBitops = (getenv( "SAL_DISABLE_BITMAPS_OPTS" ) != NULL);
 
 typedef unsigned char PIXBYTE;
 
@@ -502,9 +501,6 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
 bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     const SalTwoRect& rTR )
 {
-    if( bDisableFastBitops )
-        return false;
-
     // horizontal mirroring not implemented yet
     if( rTR.mnDestWidth < 0 )
         return false;
@@ -760,9 +756,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     const BitmapReadAccess& rSrcRA, const BitmapReadAccess& rMskRA,
     const SalTwoRect& rTR )
 {
-    if( bDisableFastBitops )
-        return false;
-
     // accelerated blending of paletted bitmaps not implemented yet
     if( rSrcRA.HasPalette() )
         return false;
@@ -884,9 +877,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
 
 bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 {
-    if( bDisableFastBitops )
-        return false;
-
     const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
     // erasing a bitmap is often just a byte-wise memory fill

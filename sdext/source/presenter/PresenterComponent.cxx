@@ -44,8 +44,6 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-static OUString gsBasePath;
-
 ::rtl::OUString PresenterComponent::GetBasePath (
     const Reference<XComponentContext>& rxComponentContext)
 {
@@ -56,7 +54,8 @@ static OUString gsBasePath;
     const Reference<XComponentContext>& rxComponentContext,
     const OUString& rsExtensionIdentifier)
 {
-    if (gsBasePath.isEmpty())
+    static ::rtl::OUString sBasePath;
+    if (sBasePath.isEmpty())
     {
         // Determine the base path of the bitmaps.
         Reference<deployment::XPackageInformationProvider> xInformationProvider (
@@ -68,16 +67,16 @@ static OUString gsBasePath;
         {
             try
             {
-                gsBasePath = xInformationProvider->getPackageLocation(rsExtensionIdentifier)
+                sBasePath = xInformationProvider->getPackageLocation(rsExtensionIdentifier)
                     + OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             }
-            catch(deployment::DeploymentException&)
+            catch (const deployment::DeploymentException&)
             {
             }
         }
     }
 
-    return gsBasePath;
+    return sBasePath;
 }
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;

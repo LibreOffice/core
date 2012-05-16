@@ -83,7 +83,6 @@ using namespace com::sun::star::beans;
 
 
 static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
-static rtl::OUString aHelpFilesBaseName(RTL_CONSTASCII_USTRINGPARAM("help"));
 
 rtl::OUString Databases::expandURL( const rtl::OUString& aURL )
 {
@@ -1629,7 +1628,7 @@ rtl::OUString ExtensionIteratorBase::implGetFileFromPackage(
         if( !bLangFolderOnly )
         {
             aStrBuf.append( aSlash );
-            aStrBuf.append( aHelpFilesBaseName );
+            aStrBuf.append( "help" );
             aStrBuf.append( rFileExtension );
         }
 
@@ -1773,6 +1772,8 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
     {
         rtl::OUString aRegDataUrl(optRegData.Value);
         aRegDataUrl += aSlash;
+
+        rtl::OUString aHelpFilesBaseName("help");
 
         rtl::OUString aUsedLanguage = m_aLanguage;
         pRetDb = m_rDatabases.getBerkeley(

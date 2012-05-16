@@ -234,39 +234,32 @@ extern "C" int CDECL compare_strings( const void *arg1, const void *arg2 )
 }
 
 
-namespace {
-
-class LetterTable
+namespace
 {
-    bool        IsLetterTab[256];
 
-public:
-    LetterTable( void );
-
-    inline bool isLetter( sal_Unicode c )
+    class LetterTable
     {
-        bool bRet = (c < 256) ? IsLetterTab[c] : isLetterUnicode( c );
-        return bRet;
-    }
-    bool isLetterUnicode( sal_Unicode c );
-};
+        bool        IsLetterTab[256];
 
+    public:
+        LetterTable( void );
+
+        inline bool isLetter( sal_Unicode c )
+        {
+            bool bRet = (c < 256) ? IsLetterTab[c] : isLetterUnicode( c );
+            return bRet;
+        }
+        bool isLetterUnicode( sal_Unicode c );
+    };
+
+    static bool isAlpha(sal_Unicode c)
+    {
+        if (comphelper::string::isalphaAscii(c))
+            return true;
+        static LetterTable aLetterTable;
+        return aLetterTable.isLetter(c);
+    }
 }
-
-class BasicSimpleCharClass
-{
-    static LetterTable aLetterTable;
-
-public:
-    static sal_Bool isAlpha( sal_Unicode c )
-    {
-        sal_Bool bRet = comphelper::string::isalphaAscii(c) ||
-            aLetterTable.isLetter(c);
-        return bRet;
-    }
-};
-
-LetterTable BasicSimpleCharClass::aLetterTable;
 
 LetterTable::LetterTable( void )
 {
@@ -358,7 +351,7 @@ sal_Bool SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, sal_uInt16 nTestFla
     else if( c > 255 )
     {
         bRet = (( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER ) & nTestFlags) != 0
-            ? BasicSimpleCharClass::isAlpha(c) : false;
+            ? isAlpha(c) : false;
     }
     return bRet;
 }
@@ -469,7 +462,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 {
                     // Naechstes Zeichen holen
                     c = peekChar();
-                    bIdentifierChar =  BasicSimpleCharClass::isAlpha(c);
+                    bIdentifierChar = isAlpha(c);
                     if( bIdentifierChar )
                         getChar();
                 }

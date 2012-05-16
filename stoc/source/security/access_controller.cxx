@@ -80,7 +80,7 @@ namespace stoc_sec
 {
 // static stuff initialized when loading lib
 static OUString s_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-static OUString s_acRestriction = OUSTR("access-control.restriction");
+const char s_acRestriction[] = "access-control.restriction";
 
 //##################################################################################################
 
@@ -325,7 +325,7 @@ void acc_CurrentContext::release()
 Any acc_CurrentContext::getValueByName( OUString const & name )
     throw (RuntimeException)
 {
-    if (name.equals( s_acRestriction ))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_acRestriction)))
     {
         return m_restriction;
     }
@@ -358,7 +358,7 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
 {
     if (xContext.is())
     {
-        Any acc( xContext->getValueByName( s_acRestriction ) );
+        Any acc(xContext->getValueByName(rtl::OUString(s_acRestriction)));
         if (typelib_TypeClass_INTERFACE == acc.pType->eTypeClass)
         {
             // avoid ref-counting
@@ -1047,8 +1047,7 @@ Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW(())
 //--------------------------------------------------------------------------------------------------
 OUString ac_getImplementationName() SAL_THROW(())
 {
-    static OUString s_implName = OUSTR(IMPL_NAME);
-    return s_implName;
+    return OUSTR(IMPL_NAME);
 }
 //--------------------------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL filepolicy_create(

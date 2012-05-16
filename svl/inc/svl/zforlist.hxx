@@ -339,9 +339,6 @@ public:
      */
     static const sal_uInt16 INPUTSTRING_PRECISION;
 
-    /** THE set of installed locales. */
-    static NfInstalledLocales theInstalledLocales;
-
     /// Preferred ctor with service manager and language/country enum
     SvNumberFormatter(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr,
@@ -809,15 +806,7 @@ public:
     String GetStandardName( LanguageType eLnge );
 
     /** Check if a specific locale has supported locale data. */
-    static bool IsLocaleInstalled( LanguageType eLang )
-    {
-        // The set is initialized as a side effect of the currency table
-        // created, make sure that exists, which usually is the case unless a
-        // SvNumberFormatter was never instanciated.
-        GetTheCurrencyTable();
-        return theInstalledLocales.find( eLang) != theInstalledLocales.end();
-    }
-
+    static bool IsLocaleInstalled( LanguageType eLang );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;

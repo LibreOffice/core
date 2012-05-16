@@ -28,7 +28,7 @@
 
 #include "HelpCompiler.hxx"
 #include "l10ntools/HelpLinker.hxx"
-
+#include <iostream>
 #include <sal/main.h>
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {

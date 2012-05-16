@@ -319,37 +319,45 @@ throw (css::uno::RuntimeException)
     }
 }
 
-//====================================================================
-
-typedef boost::unordered_map< sal_Int32, rtl::OUString > ToolBarResIdToResourceURLMap;
-
-static sal_Bool bMapInitialized = sal_False;
-static ToolBarResIdToResourceURLMap aResIdToResourceURLMap;
-
-static rtl::OUString GetResourceURLFromResId( sal_uInt16 nResId )
+namespace
 {
-    if ( !bMapInitialized )
+    class FilledToolBarResIdToResourceURLMap
     {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-        if ( !bMapInitialized )
+    private:
+        typedef boost::unordered_map< sal_Int32, rtl::OUString > ToolBarResIdToResourceURLMap;
+        ToolBarResIdToResourceURLMap m_aResIdToResourceURLMap;
+    public:
+        FilledToolBarResIdToResourceURLMap()
         {
             sal_Int32 nIndex( 0 );
             while ( pToolBarResToName[nIndex].nId != 0 )
             {
                 rtl::OUString aResourceURL( rtl::OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
-                aResIdToResourceURLMap.insert( ToolBarResIdToResourceURLMap::value_type(
+                m_aResIdToResourceURLMap.insert( ToolBarResIdToResourceURLMap::value_type(
                                                     sal_Int32( pToolBarResToName[nIndex].nId ), aResourceURL ));
                 ++nIndex;
             }
-            bMapInitialized = sal_True;
         }
-    }
 
-    ToolBarResIdToResourceURLMap::const_iterator pIter = aResIdToResourceURLMap.find( nResId );
-    if ( pIter != aResIdToResourceURLMap.end() )
-        return pIter->second;
-    else
-        return rtl::OUString();
+        rtl::OUString findURL(sal_uInt16 nResId) const
+        {
+            ToolBarResIdToResourceURLMap::const_iterator aIter = m_aResIdToResourceURLMap.find( nResId );
+            if ( aIter != m_aResIdToResourceURLMap.end() )
+                return aIter->second;
+            return rtl::OUString();
+        }
+    };
+
+    class theFilledToolBarResIdToResourceURLMap
+        : public rtl::Static<FilledToolBarResIdToResourceURLMap,
+                             theFilledToolBarResIdToResourceURLMap>
+    {
+    };
+}
+
+static rtl::OUString GetResourceURLFromResId( sal_uInt16 nResId )
+{
+    return theFilledToolBarResIdToResourceURLMap::get().findURL(nResId);
 }
 
 sal_Bool IsAppWorkWinToolbox_Impl( sal_uInt16 nPos )

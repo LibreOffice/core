@@ -267,8 +267,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
-    static rtl::OString s_aEmptyOString;
-
     fontID                                      m_nNextFontID;
     boost::unordered_map< fontID, PrintFont* >       m_aFonts;
     boost::unordered_map< int, FontFamily >        m_aFamilyTypes;
@@ -328,7 +326,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
 
-    const rtl::OString& getDirectory( int nAtom ) const;
+    rtl::OString getDirectory( int nAtom ) const;
     int getDirectoryAtom( const rtl::OString& rDirectory, bool bCreate = false );
 
     /* try to initialize fonts from libfontconfig

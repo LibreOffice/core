@@ -34,7 +34,6 @@
 #include <vector>
 #include <list>
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <ctype.h>
@@ -61,9 +60,10 @@
 #include <compilehelp.hxx>
 
 #if OSL_DEBUG_LEVEL > 2
+    #include <iostream>
     #define HCDBG(foo) do { if (1) foo; } while(0)
 #else
-    #define HCDBG(foo) do { if (0) foo; } while(0)
+    #define HCDBG(foo) do { } while(0)
 #endif
 
 namespace fs

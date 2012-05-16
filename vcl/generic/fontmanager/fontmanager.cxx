@@ -994,10 +994,6 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     return true;
 }
 
-// -------------------------------------------------------------------------
-
-OString PrintFontManager::s_aEmptyOString;
-
 /*
  *  one instance only
  */
@@ -1051,10 +1047,10 @@ PrintFontManager::~PrintFontManager()
 
 // -------------------------------------------------------------------------
 
-const OString& PrintFontManager::getDirectory( int nAtom ) const
+OString PrintFontManager::getDirectory( int nAtom ) const
 {
     ::boost::unordered_map< int, OString >::const_iterator it( m_aAtomToDir.find( nAtom ) );
-    return it != m_aAtomToDir.end() ? it->second : s_aEmptyOString;
+    return it != m_aAtomToDir.end() ? it->second : OString();
 }
 
 // -------------------------------------------------------------------------

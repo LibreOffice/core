@@ -178,6 +178,11 @@ namespace
 
     struct theLegacyOnlyCurrencyTable :
         public rtl::Static< NfCurrencyTable, theLegacyOnlyCurrencyTable > {};
+
+    /** THE set of installed locales. */
+    struct theInstalledLocales :
+        public rtl::Static< NfInstalledLocales, theInstalledLocales> {};
+
 }
 sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
@@ -192,7 +197,6 @@ SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
-NfInstalledLocales SvNumberFormatter::theInstalledLocales;
 
 SvNumberFormatter::SvNumberFormatter(
             const Reference< XMultiServiceFactory >& xSMgr,
@@ -3514,6 +3518,16 @@ void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
     }
 }
 
+// static
+bool SvNumberFormatter::IsLocaleInstalled( LanguageType eLang )
+{
+    // The set is initialized as a side effect of the currency table
+    // created, make sure that exists, which usually is the case unless a
+    // SvNumberFormatter was never instanciated.
+    GetTheCurrencyTable();
+    const NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
+    return rInstalledLocales.find( eLang) != rInstalledLocales.end();
+}
 
 // static
 void SvNumberFormatter::ImpInitCurrencyTable()
@@ -3554,12 +3568,13 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     Locale const * const pLocales = xLoc.getConstArray();
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
+    NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
         LanguageType eLang = MsLangId::convertLocaleToLanguage(
                 pLocales[nLocale]);
-        theInstalledLocales.insert( eLang);
+        rInstalledLocales.insert( eLang);
         pLocaleData->setLocale( pLocales[nLocale] );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();

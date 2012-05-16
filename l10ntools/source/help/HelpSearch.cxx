@@ -31,8 +31,6 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 
-#include <iostream>
-
 #include "LuceneHelper.hxx"
 
 HelpSearch::HelpSearch(rtl::OUString const &lang, rtl::OUString const &indexDir)

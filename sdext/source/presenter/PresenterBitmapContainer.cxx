@@ -47,22 +47,6 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-namespace {
-static OUString gsNameProperty (A2S("Name"));
-static OUString gsNormalFileNameProperty (A2S("NormalFileName"));
-static OUString gsMouseOverFileNameProperty (A2S("MouseOverFileName"));
-static OUString gsButtonDownFileNameProperty (A2S("ButtonDownFileName"));
-static OUString gsDisabledFileNameProperty (A2S("DisabledFileName"));
-static OUString gsMaskFileNameProperty (A2S("MaskFileName"));
-static OUString gsXOffsetProperty (A2S("XOffset"));
-static OUString gsYOffsetProperty (A2S("YOffset"));
-static OUString gsXHotSpotProperty (A2S("XHotSpot"));
-static OUString gsYHotSpotProperty (A2S("YHotSpot"));
-static OUString gsReplacementColorProperty (A2S("ReplacementColor"));
-static OUString gsHorizontalTexturingModeProperty (A2S("HorizontalTexturingMode"));
-static OUString gsVerticalTexturingModeProperty (A2S("VerticalTexturingMode"));
-}
-
 //===== PresenterBitmapContainer ==============================================
 
 PresenterBitmapContainer::PresenterBitmapContainer (
@@ -210,7 +194,7 @@ void PresenterBitmapContainer::ProcessBitmap (
     const Reference<beans::XPropertySet>& rxProperties)
 {
     OUString sName;
-    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, gsNameProperty) >>= sName))
+    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("Name")) >>= sName))
         sName = rsKey;
 
     maIconContainer[sName] = LoadBitmap(
@@ -239,7 +223,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     OUString sFileName;
 
     // Load bitmaps.
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsNormalFileNameProperty) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("NormalFileName")) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -248,7 +232,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsMouseOverFileNameProperty) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("MouseOverFileName")) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -257,7 +241,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsButtonDownFileNameProperty) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("ButtonDownFileName")) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -266,7 +250,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsDisabledFileNameProperty) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("DisabledFileName")) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -275,7 +259,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsMaskFileNameProperty) >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("MaskFileName")) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -285,18 +269,18 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         catch (Exception&)
         {}
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, gsXOffsetProperty) >>= pBitmap->mnXOffset;
-    PresenterConfigurationAccess::GetProperty(rxProperties, gsYOffsetProperty) >>= pBitmap->mnYOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("XOffset")) >>= pBitmap->mnXOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("YOffset")) >>= pBitmap->mnYOffset;
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, gsXHotSpotProperty) >>= pBitmap->mnXHotSpot;
-    PresenterConfigurationAccess::GetProperty(rxProperties, gsYHotSpotProperty) >>= pBitmap->mnYHotSpot;
+    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("XHotSpot")) >>= pBitmap->mnXHotSpot;
+    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("YHotSpot")) >>= pBitmap->mnYHotSpot;
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, gsReplacementColorProperty) >>= pBitmap->maReplacementColor;
+    PresenterConfigurationAccess::GetProperty(rxProperties, A2S("ReplacementColor")) >>= pBitmap->maReplacementColor;
 
     OUString sTexturingMode;
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsHorizontalTexturingModeProperty) >>= sTexturingMode)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("HorizontalTexturingMode")) >>= sTexturingMode)
         pBitmap->meHorizontalTexturingMode = StringToTexturingMode(sTexturingMode);
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, gsVerticalTexturingModeProperty) >>= sTexturingMode)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, A2S("VerticalTexturingMode")) >>= sTexturingMode)
         pBitmap->meVerticalTexturingMode = StringToTexturingMode(sTexturingMode);
 
     return pBitmap;
