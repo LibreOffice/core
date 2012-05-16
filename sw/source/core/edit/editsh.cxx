@@ -71,8 +71,6 @@
 using namespace com::sun::star;
 
 
-SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
-
 /******************************************************************************
  *                      void SwEditShell::Insert(char c)
  ******************************************************************************/
@@ -772,8 +770,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
 
 sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 {
-    if( rArr.Count() )
-        rArr.DeleteAndDestroy( 0, rArr.Count() );
+    rArr.clear();
 
     const SwTxtNode* pTxtNd;
     const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
@@ -795,12 +792,12 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 if( sTxt.Len() )
                 {
                     SwGetINetAttr* pNew = new SwGetINetAttr( sTxt, rAttr );
-                    rArr.C40_INSERT( SwGetINetAttr, pNew, rArr.Count() );
+                    rArr.push_back( pNew );
                 }
             }
     }
     }
-    return rArr.Count();
+    return rArr.size();
 }
 
 

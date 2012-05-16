@@ -48,6 +48,7 @@
 #include <set>
 #include <swundo.hxx>
 #include <svtools/embedhlp.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class PolyPolygon;
 class SwDoc;
@@ -139,7 +140,7 @@ struct SwGetINetAttr
         : sText( rTxt ), rINetAttr( rAttr )
     {}
 };
-SV_DECL_PTRARR_DEL( SwGetINetAttrs, SwGetINetAttr*, 0 )
+typedef boost::ptr_vector<SwGetINetAttr> SwGetINetAttrs;
 
 // Types of forms of content.
 #define CNT_TXT 0x0001

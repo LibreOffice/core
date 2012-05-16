@@ -366,7 +366,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             nMemberCount = pWrtShell->GetINetAttrs( aArr );
             for( sal_uInt16 n = 0; n < nMemberCount; ++n )
             {
-                SwGetINetAttr* p = aArr[ n ];
+                SwGetINetAttr* p = &aArr[ n ];
                 SwURLFieldContent* pCnt = new SwURLFieldContent(
                                     this,
                                     p->sText,
@@ -675,7 +675,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             nMemberCount = pWrtShell->GetINetAttrs( aArr );
             for( sal_uInt16 n = 0; n < nMemberCount; ++n )
             {
-                SwGetINetAttr* p = aArr[ n ];
+                SwGetINetAttr* p = &aArr[ n ];
                 SwURLFieldContent* pCnt = new SwURLFieldContent(
                                     this,
                                     p->sText,
