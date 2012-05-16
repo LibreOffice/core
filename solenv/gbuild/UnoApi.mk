@@ -30,6 +30,14 @@ $(call gb_UnoApi_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApi_get_target,$*))
 
+# override the rule from Package.mk:44:
+# preserving timestamps is not desirable here, because the OUTDIR target
+# depends on package targets _inc and _idl, and those depend on the WORKDIR
+# target, so with timestamps preserved the RDB always gets delivered again
+$(call gb_UnoApi_get_target,%) : $(call gb_UnoApiTarget_get_target,%)
+	$(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --no-dereference --force $< $@
+
+
 define gb_UnoApi_UnoApi
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
