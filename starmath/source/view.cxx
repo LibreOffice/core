@@ -536,7 +536,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                 rCursor.MoveAfterBracket(pBraceNode);
             }else{
                 if(code != 0){
-                    rCursor.InsertText(code);
+                    rCursor.InsertText(rtl::OUString(code));
                 }else if (! (GetView() && GetView()->KeyInput(rKEvt)) )
                     ScrollableWindow::KeyInput(rKEvt);
             }

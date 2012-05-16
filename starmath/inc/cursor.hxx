@@ -139,7 +139,7 @@ public:
     void DeletePrev(OutputDevice* pDev);
 
     /** Insert text at the current position */
-    void InsertText(XubString aString);
+    void InsertText(rtl::OUString aString);
 
     /** Insert an element into the formula */
     void InsertElement(SmFormulaElement element);
@@ -166,7 +166,7 @@ public:
      * For more complex expressions use InsertCommandText, this method doesn't
      * use SmParser, this means that it's faster, but not as strong.
      */
-    void InsertSpecial(XubString aString);
+    void InsertSpecial(rtl::OUString aString);
 
     /** Create sub-/super script
      *

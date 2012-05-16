@@ -981,7 +981,8 @@ void SmCursor::InsertFraction() {
     FinishEdit(pLineList, pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
 }
 
-void SmCursor::InsertText(XubString aString){
+void SmCursor::InsertText(rtl::OUString aString)
+{
     BeginEdit();
 
     Delete();
@@ -1109,7 +1110,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
     EndEdit();
 }
 
-void SmCursor::InsertSpecial(XubString aString) {
+void SmCursor::InsertSpecial(rtl::OUString aString)
+{
     BeginEdit();
     Delete();
 
