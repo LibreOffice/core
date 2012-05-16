@@ -64,8 +64,8 @@ private:
     sal_Bool IsPresObj() const throw();
     void SetPresObj( sal_Bool bPresObj ) throw();
 
-    sal_Bool IsEmptyPresObj() const throw();
-    void SetEmptyPresObj( sal_Bool bEmpty ) throw();
+    bool IsEmptyPresObj() const throw();
+    void SetEmptyPresObj( bool bEmpty ) throw();
 
     sal_Bool IsMasterDepend() const throw();
     void SetMasterDepend( sal_Bool bDepend ) throw();

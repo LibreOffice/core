@@ -526,7 +526,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                 if(bNewObj)
                     aPt = mrView.GetSnapPos(aPt,mrView.GetSdrPageView());
 
-                sal_Bool bClosed0(mpPathObj->IsClosedObj());
+                bool bClosed0(mpPathObj->IsClosedObj());
 
                 sal_uInt32 nInsPointNum = mpPathObj->NbcInsPointOld(aPt, bNewObj, sal_True);
 
