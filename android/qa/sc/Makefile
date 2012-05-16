@@ -23,6 +23,10 @@ endef
 
 all: build-ant
 
+properties:
+	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties 
+
 copy-stuff:
 #
 # Copy shared libraries we need to libs/armeabi-v7a so that ant will
@@ -157,10 +161,10 @@ copy-stuff:
 	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
 
 
-build-ant: copy-stuff
+build-ant: copy-stuff properties
 	unset JAVA_HOME && $(ANT) debug
 
-install: copy-stuff
+install: copy-stuff properties
 	unset JAVA_HOME && $(ANT) debug install
 	@echo
 	@echo 'Run it with "make run"'
@@ -191,7 +195,7 @@ stop-start-cycle:
 redirect-stdio:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell setprop log.redirect-stdio true && $(ANDROID_SDK_HOME)/platform-tools/adb shell start
 
-clean:
+clean: properties
 	$(ANT) clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
 

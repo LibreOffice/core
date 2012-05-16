@@ -26,6 +26,10 @@ endef
 
 all: build-ant
 
+properties:
+	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties 
+
 buildrcs:
 # main sofficerc ini ...
 	mkdir -p assets/program/
@@ -229,10 +233,10 @@ copy-stuff: buildrcs
 	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
 
 
-build-ant: copy-stuff
+build-ant: copy-stuff properties
 	unset JAVA_HOME && $(ANT) debug
 
-install: copy-stuff
+install: copy-stuff properties
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell rm -r $(APP_DATA_PATH)
 	unset JAVA_HOME && $(ANT) debug install
 	@echo
@@ -254,7 +258,7 @@ run:
 stop-start-cycle:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
-clean:
+clean: properties
 	$(ANT) clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
 

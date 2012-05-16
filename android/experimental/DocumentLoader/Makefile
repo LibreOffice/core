@@ -32,6 +32,10 @@ endef
 
 all: build-ant
 
+properties:
+	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties 
+
 copy-stuff: 
 # First always clean 
 	rm -rf libs $(OBJLOCAL)
@@ -230,7 +234,7 @@ copy-stuff:
 	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
 	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
 
-build-ant: copy-stuff
+build-ant: copy-stuff properties
 #
 # Copy jar files we need, and even construct one.
 #
@@ -259,6 +263,6 @@ uninstall:
 run:
 	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt:/assets/border.xls:/assets/test.odt:/assets/testVba.doc
 
-clean:
+clean: properties
 	$(ANT) clean
 	rm -rf assets libs $(SODEST) $(OBJLOCAL)
