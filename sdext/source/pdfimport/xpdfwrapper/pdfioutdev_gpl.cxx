@@ -181,7 +181,8 @@ void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, b
     o_rOutputBuf[0] = 'P';
     o_rOutputBuf[1] = '4';
     o_rOutputBuf[2] = 0x0A;
-    int nOutLen = snprintf(&o_rOutputBuf[3], WRITE_BUFFER_SIZE-10, "%d %d", width, height);
+    char *pAsCharPtr = reinterpret_cast<char *>(&o_rOutputBuf[3]);
+    int nOutLen = snprintf(pAsCharPtr, WRITE_BUFFER_SIZE-10, "%d %d", width, height);
     if( nOutLen < 0 )
         nOutLen = WRITE_BUFFER_SIZE-10;
     o_rOutputBuf[3+nOutLen]  =0x0A;
@@ -228,7 +229,8 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
     o_rOutputBuf[0] = 'P';
     o_rOutputBuf[1] = '6';
     o_rOutputBuf[2] = '\n';
-    int nOutLen = snprintf(&o_rOutputBuf[3], WRITE_BUFFER_SIZE-10, "%d %d", width, height);
+    char *pAsCharPtr = reinterpret_cast<char *>(&o_rOutputBuf[3]);
+    int nOutLen = snprintf(pAsCharPtr, WRITE_BUFFER_SIZE-10, "%d %d", width, height);
     if( nOutLen < 0 )
         nOutLen = WRITE_BUFFER_SIZE-10;
     o_rOutputBuf[3+nOutLen]  ='\n';

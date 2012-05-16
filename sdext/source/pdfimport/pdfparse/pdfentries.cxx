@@ -225,8 +225,8 @@ bool PDFString::emit( EmitContext& rWriteContext ) const
         // check for string or hex string
         const sal_Char* pStr = aFiltered.getStr();
         if( aFiltered.getLength() > 1 &&
-           ( (pStr[0] == sal_Char(0xff) && pStr[1] == sal_Char(0xfe)) ||
-             (pStr[0] == sal_Char(0xfe) && pStr[1] == sal_Char(0xff)) ) )
+           ( ((unsigned char)pStr[0] == 0xff && (unsigned char)pStr[1] == 0xfe) ||
+             ((unsigned char)pStr[0] == 0xfe && (unsigned char)pStr[1] == 0xff) ) )
         {
             static const char pHexTab[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
                                               '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };

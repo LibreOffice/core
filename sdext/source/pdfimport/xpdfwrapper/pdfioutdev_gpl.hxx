@@ -295,7 +295,7 @@ extern FILE* g_binary_out;
 
 // note: if you ever hcange Output_t, please keep in mind that the current code
 // relies on it being of 8 bit size
-typedef char Output_t;
+typedef Guchar Output_t;
 typedef std::vector< Output_t > OutputBuffer;
 
 #endif /* INCLUDED_PDFI_OUTDEV_HXX */
