@@ -1632,8 +1632,6 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
                                               CacheItem&                                          rItem)
     throw(css::uno::Exception)
 {
-    static ::rtl::OUString FORMATNAME_VAR(    RTL_CONSTASCII_USTRINGPARAM( "%productname%" ));
-    static ::rtl::OUString FORMATVERSION_VAR( RTL_CONSTASCII_USTRINGPARAM( "%formatversion%" ));
 
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -1652,6 +1650,8 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
           ::comphelper::SequenceAsVector< ::rtl::OUString >::const_iterator pLocale ;
           ::comphelper::SequenceAsHashMap                                   lUINames;
 
+    const char FORMATNAME_VAR[] = "%productname%";
+    const char FORMATVERSION_VAR[] = "%formatversion%";
     // patch %PRODUCTNAME and %FORMATNAME
     for (  pLocale  = lLocales.begin();
            pLocale != lLocales.end()  ;
@@ -1666,14 +1666,14 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
         sal_Int32 nIndex = sValue.indexOf(FORMATNAME_VAR);
         while(nIndex != -1)
         {
-            sValue = sValue.replaceAt(nIndex, FORMATNAME_VAR.getLength(), sFormatName);
+            sValue = sValue.replaceAt(nIndex, RTL_CONSTASCII_LENGTH(FORMATNAME_VAR), sFormatName);
             nIndex = sValue.indexOf(FORMATNAME_VAR, nIndex);
         }
         // replace %formatversion%
         nIndex = sValue.indexOf(FORMATVERSION_VAR);
         while(nIndex != -1)
         {
-            sValue = sValue.replaceAt(nIndex, FORMATVERSION_VAR.getLength(), sFormatVersion);
+            sValue = sValue.replaceAt(nIndex, RTL_CONSTASCII_LENGTH(FORMATVERSION_VAR), sFormatVersion);
             nIndex = sValue.indexOf(FORMATVERSION_VAR, nIndex);
         }
 
@@ -2298,9 +2298,6 @@ void FilterCache::impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
 void FilterCache::impl_readOldFormat()
     throw(css::uno::Exception)
 {
-    static ::rtl::OUString TYPES_SET(  RTL_CONSTASCII_USTRINGPARAM( "Types" ));
-    static ::rtl::OUString FILTER_SET( RTL_CONSTASCII_USTRINGPARAM( "Filters" ));
-
     // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
     // Its optional and shouldnt disturb our normal work!
     // E.g. we must check, if the package exists ...
@@ -2318,6 +2315,8 @@ void FilterCache::impl_readOldFormat()
     catch(const css::uno::Exception&)
         { return; }
 
+    ::rtl::OUString TYPES_SET("Types");
+
     // May be there is no type set ...
     if (xCfg->hasByName(TYPES_SET))
     {
@@ -2329,6 +2328,7 @@ void FilterCache::impl_readOldFormat()
             m_lTypes[pItems[i]] = impl_readOldItem(xSet, E_TYPE, pItems[i]);
     }
 
+    ::rtl::OUString FILTER_SET("Filters");
     // May be there is no filter set ...
     if (xCfg->hasByName(FILTER_SET))
     {

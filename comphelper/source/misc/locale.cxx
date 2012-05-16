@@ -45,28 +45,19 @@ const sal_Unicode Locale::SEPERATOR_CV_LINUX = (sal_Unicode)'.';
 //-----------------------------------------------
 const Locale Locale::X_DEFAULT()
 {
-    static Locale aLocale(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")));
-    return aLocale;
+    return Locale(::rtl::OUString("x"), ::rtl::OUString("default"));
 }
 
 //-----------------------------------------------
 const Locale Locale::EN_US()
 {
-    static Locale aLocale(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")));
-    return aLocale;
+    return Locale(::rtl::OUString("en"), ::rtl::OUString("US"));
 }
 
 //-----------------------------------------------
 const Locale Locale::X_NOTRANSLATE()
 {
-    static Locale aLocale(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("notranslate")));
-    return aLocale;
+    return Locale(::rtl::OUString("x"), ::rtl::OUString("notranslate"));
 }
 
 //-----------------------------------------------

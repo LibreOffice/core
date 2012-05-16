@@ -144,8 +144,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 //-----------------------------------------------
 ::rtl::OUString ConfigFlush::impl_getImplementationName()
 {
-    static ::rtl::OUString IMPLNAME( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.ConfigFlush" ));
-    return IMPLNAME;
+    return ::rtl::OUString("com.sun.star.comp.filter.config.ConfigFlush");
 }
 
 //-----------------------------------------------
