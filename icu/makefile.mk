@@ -46,7 +46,6 @@ TARFILE_ROOTDIR=icu
 
 PATCH_FILES=\
     icu4c-build.patch \
-    icu4c-rpath.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch \
     icu4c-wchar_t.patch \
@@ -58,6 +57,9 @@ PATCH_FILES=\
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
     icu4c-android.patch
+.ELSE
+PATCH_FILES+=\
+    icu4c-rpath.patch
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
