@@ -48,7 +48,6 @@ copy-stuff:
 		   basebmplo \
 		   basegfxlo \
 		   bootstrap.uno \
-		   cdrimportlo \
 		   comphelpgcc3 \
 		   datelo \
 		   dbaxmllo \
@@ -84,7 +83,6 @@ copy-stuff:
 		   mergedlo \
 		   msfilterlo \
 		   mswordlo \
-		   msworkslo \
 		   ooxlo \
 		   reflection.uno \
 		   reg \
@@ -116,10 +114,9 @@ copy-stuff:
 		   utllo \
 		   vbahelperlo \
 		   vbaswobj.uno \
+		   wpftdrawlo \
+		   wpftwriterlo \
 		   vcllo \
-		   visioimportlo \
-		   wpftlo \
-		   wpgimportlo \
 		   xml2 \
 		   xmlfdlo \
 		   xmlreader \
