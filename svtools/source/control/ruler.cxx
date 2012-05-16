@@ -1166,8 +1166,8 @@ void Ruler::ImplFormat()
 
     // Obere/untere Kante ausgeben
     maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-    ImplVDrawLine( nVirLeft, nVirTop+1, nM1 - 1, nVirTop+1 ); //top left line
-    ImplVDrawLine( nM2 +1, nVirTop+1, nP2 -1, nVirTop+1 );      //top right line
+    ImplVDrawLine( nVirLeft, nVirTop+1, nM1, nVirTop+1 ); //top left line
+    ImplVDrawLine( nM2, nVirTop+1, nP2 -1, nVirTop+1 );      //top right line
 
     // Jetzt wird zwischen dem Schatten ausgegeben
     nVirTop++;
@@ -1177,19 +1177,19 @@ void Ruler::ImplFormat()
     maVirDev.SetLineColor();
     maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
     if ( nM1 > nVirLeft )
-        ImplVDrawRect( nP1, nVirTop+1, nM1-1, nVirBottom ); //left gray rectangle
+        ImplVDrawRect( nP1, nVirTop+1, nM1, nVirBottom ); //left gray rectangle
     if ( nM2 < nP2 )
-        ImplVDrawRect( nM2+1, nVirTop+1, nP2, nVirBottom ); //right gray rectangle
+        ImplVDrawRect( nM2, nVirTop+1, nP2, nVirBottom ); //right gray rectangle
     if ( nM2-nM1 > 0 )
     {
         maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
-        ImplVDrawRect( nM1, nVirTop, nM2-1, nVirBottom ); //center rectangle
+        ImplVDrawRect( nM1+1, nVirTop, nM2-1, nVirBottom ); //center rectangle
     }
     maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
     if ( nM1 > nVirLeft )
     {
-        ImplVDrawLine( nM1-1, nVirTop+1, nM1-1, nVirBottom );//right line of the left rectangle
-        ImplVDrawLine( nP1, nVirBottom, nM1-1, nVirBottom );//bottom line of the left rectangle
+        ImplVDrawLine( nM1, nVirTop+1, nM1, nVirBottom );//right line of the left rectangle
+        ImplVDrawLine( nP1, nVirBottom, nM1, nVirBottom );//bottom line of the left rectangle
         if ( nP1 >= nVirLeft )
         {
             ImplVDrawLine( nP1, nVirTop+1, nP1, nVirBottom );//left line of the left rectangle
@@ -1198,8 +1198,8 @@ void Ruler::ImplFormat()
     }
     if ( nM2 < nP2 )
     {
-        ImplVDrawLine( nM2+1, nVirBottom, nP2-1, nVirBottom );//bottom line of the right rectangle
-        ImplVDrawLine( nM2+1, nVirTop+1, nM2+1, nVirBottom );//left line of the right rectangle
+        ImplVDrawLine( nM2, nVirBottom, nP2-1, nVirBottom );//bottom line of the right rectangle
+        ImplVDrawLine( nM2, nVirTop+1, nM2, nVirBottom );//left line of the right rectangle
         if ( nP2 <= nVirRight+1 )
             ImplVDrawLine( nP2-1, nVirTop+1, nP2-1, nVirBottom );//right line of the right rectangle
     }
