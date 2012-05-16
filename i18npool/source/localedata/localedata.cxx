@@ -1460,8 +1460,6 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
     }
 
     oslGenericFunction pSymbol = 0;
-    static OUString tw(RTL_CONSTASCII_USTRINGPARAM("TW"));
-    static OUString en_US(RTL_CONSTASCII_USTRINGPARAM("en_US"));
 
     sal_Int32 l = rLocale.Language.getLength();
     sal_Int32 c = rLocale.Country.getLength();
@@ -1490,7 +1488,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
     {
         // if the country code is HK or MO, one more step to try TW.
         pSymbol = rLookupTable.getFunctionSymbolByName(
-                aBuf.append(rLocale.Language).append(under).append(tw).makeStringAndClear(),
+                aBuf.append(rLocale.Language).append(under).append("TW").makeStringAndClear(),
                 pFunction, &pCachedItem);
     }
 
@@ -1503,7 +1501,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
     if (!pSymbol)
     {
         // load default function with name <func>_en_US
-        pSymbol = rLookupTable.getFunctionSymbolByName(en_US, pFunction, &pCachedItem);
+        pSymbol = rLookupTable.getFunctionSymbolByName(OUString("en_US"), pFunction, &pCachedItem);
     }
 
     if (!pSymbol)
