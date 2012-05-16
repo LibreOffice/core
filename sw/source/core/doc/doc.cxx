@@ -254,7 +254,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                 mbOldNumbering = value;
 
                 const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
-                for( sal_uInt16 n = 0; n < rNmTbl.Count(); ++n )
+                for( sal_uInt16 n = 0; n < rNmTbl.size(); ++n )
                     rNmTbl[n]->SetInvalidRule(sal_True);
 
                 UpdateNumRule();
@@ -2711,6 +2711,18 @@ void SwDoc::setExternalData(::sw::tExternalDataType eType,
 ::sw::tExternalDataPointer SwDoc::getExternalData(::sw::tExternalDataType eType)
 {
     return m_externalData[eType];
+}
+
+sal_uInt16 SwNumRuleTbl::GetPos(const SwNumRule* pRule) const
+{
+    const_iterator it = std::find(begin(), end(), pRule);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+SwNumRuleTbl::~SwNumRuleTbl()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

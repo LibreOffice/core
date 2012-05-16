@@ -322,16 +322,18 @@ void StgReader::SetFltName( const String& rFltNm )
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNDoc )
         : bNewDoc( bNDoc )
 {
-        pNumRuleTbl = new SwNumRuleTbl( 8 );
+        pNumRuleTbl = new SwNumRuleTbl();
+        pNumRuleTbl->reserve(8);
         if( !bNDoc )
-                pNumRuleTbl->Insert( &rDoc.GetNumRuleTbl(), 0 );
+                pNumRuleTbl->insert( pNumRuleTbl->begin(),
+                    rDoc.GetNumRuleTbl().begin(), rDoc.GetNumRuleTbl().end() );
 }
 
 SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
 {
         if( pNumRuleTbl )
         {
-                pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+                pNumRuleTbl->clear();
                 delete pNumRuleTbl;
         }
 }
@@ -345,17 +347,17 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
                 // jetzt alle schon vorhanden NumRules aus dem Array entfernen,
                 // damit nur die neuen angepasst werden
                 SwNumRuleTbl aNumRuleTbl;
-                aNumRuleTbl.Insert( pNumRuleTbl, 0 );
-                pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+                aNumRuleTbl.insert( aNumRuleTbl.begin(), pNumRuleTbl->begin(), pNumRuleTbl->end() );
+                pNumRuleTbl->clear();
                 const SwNumRuleTbl& rRuleTbl = rDoc.GetNumRuleTbl();
                 SwNumRule* pRule;
 
-                for( sal_uInt16 n = 0; n < rRuleTbl.Count(); ++n )
-                        if( USHRT_MAX == aNumRuleTbl.GetPos( ( pRule = rRuleTbl[ n ] )))
+                for( sal_uInt16 n = 0; n < rRuleTbl.size(); ++n )
+                        if( USHRT_MAX == aNumRuleTbl.GetPos( pRule = rRuleTbl[ n ] ))
                                 // war noch nicht vorhanden, also neu
-                                pNumRuleTbl->Insert( pRule, pNumRuleTbl->Count() );
+                                pNumRuleTbl->push_back( pRule );
 
-                aNumRuleTbl.Remove( 0, aNumRuleTbl.Count() );
+                aNumRuleTbl.clear();
 
         pRuleTbl = pNumRuleTbl;
         }
@@ -366,7 +368,7 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
 
         if( pRuleTbl )
         {
-                for( sal_uInt16 n = pRuleTbl->Count(); n; )
+                for( sal_uInt16 n = pRuleTbl->size(); n; )
                 {
                         SwNumRule* pRule = (*pRuleTbl)[ --n ];
                         // Rule noch gueltig und am Doc vorhanden?
@@ -386,7 +388,7 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
 
         if( pNumRuleTbl )
         {
-                pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+                pNumRuleTbl->clear();
                 delete pNumRuleTbl, pNumRuleTbl = 0;
         }
 

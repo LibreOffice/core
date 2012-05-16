@@ -2181,7 +2181,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     }
 
     // then there are the numbering templates
-    nCnt = rSource.GetNumRuleTbl().Count();
+    nCnt = rSource.GetNumRuleTbl().size();
     if( nCnt )
     {
         const SwNumRuleTbl& rArr = rSource.GetNumRuleTbl();

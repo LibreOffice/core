@@ -1616,7 +1616,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     SwNumRule* pNewRule;
     sal_uInt16 n;
 
-    for( n = 0; n < GetNumRuleTbl().Count(); ++n )
+    for( n = 0; n < GetNumRuleTbl().size(); ++n )
         if( nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId() )
         {
             return pNewRule;

@@ -1062,7 +1062,8 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
         const String aTmpName( rName );
-        pNumRuleTbl->DeleteAndDestroy( nPos );
+        delete (*pNumRuleTbl)[ nPos ];
+        pNumRuleTbl->erase( pNumRuleTbl->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
 
         SetModified();
@@ -1132,7 +1133,7 @@ sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
 
 void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
 {
-    for( sal_uInt16 n = GetNumRuleTbl().Count(); n; )
+    for( sal_uInt16 n = GetNumRuleTbl().size(); n; )
     {
         SwNumRule::tTxtNodeList aTxtNodeList;
         GetNumRuleTbl()[ --n ]->GetTxtNodeList( aTxtNodeList );
@@ -1381,7 +1382,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 
 void SwDoc::InvalidateNumRules()
 {
-    for (sal_uInt16 n = 0; n < pNumRuleTbl->Count(); ++n)
+    for (sal_uInt16 n = 0; n < pNumRuleTbl->size(); ++n)
         (*pNumRuleTbl)[n]->SetInvalidRule(sal_True);
 }
 
@@ -2132,7 +2133,7 @@ SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
 
 sal_uInt16 SwDoc::FindNumRule( const String& rName ) const
 {
-    for( sal_uInt16 n = pNumRuleTbl->Count(); n; )
+    for( sal_uInt16 n = pNumRuleTbl->size(); n; )
         if( (*pNumRuleTbl)[ --n ]->GetName() == rName )
             return n;
 
@@ -2147,7 +2148,7 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
     if ( !pResult )
     {
-        for (sal_uInt16 n = 0; n < pNumRuleTbl->Count(); ++n)
+        for (sal_uInt16 n = 0; n < pNumRuleTbl->size(); ++n)
         {
             if ((*pNumRuleTbl)[n]->GetName() == rName)
             {
@@ -2163,7 +2164,7 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
 void SwDoc::AddNumRule(SwNumRule * pRule)
 {
-    pNumRuleTbl->Insert(pRule, pNumRuleTbl->Count());
+    pNumRuleTbl->push_back(pRule);
     maNumRuleMap[pRule->GetName()] = pRule;
     pRule->SetNumRuleMap(&maNumRuleMap);
 
@@ -2197,7 +2198,7 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
                               eDefaultNumberFormatPositionAndSpaceMode );
     }
 
-    sal_uInt16 nRet = pNumRuleTbl->Count();
+    sal_uInt16 nRet = pNumRuleTbl->size();
 
     AddNumRule(pNew);
 
@@ -2233,7 +2234,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
         aName = SW_RESSTR( STR_NUMRULE_DEFNAME );
     }
 
-    sal_uInt16 nNum(0), nTmp, nFlagSize = ( pNumRuleTbl->Count() / 8 ) +2;
+    sal_uInt16 nNum(0), nTmp, nFlagSize = ( pNumRuleTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
@@ -2254,7 +2255,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
     const SwNumRule* pNumRule;
     sal_uInt16 n;
 
-    for( n = 0; n < pNumRuleTbl->Count(); ++n )
+    for( n = 0; n < pNumRuleTbl->size(); ++n )
         if( 0 != ( pNumRule = (*pNumRuleTbl)[ n ] ) )
         {
             const String& rNm = pNumRule->GetName();
@@ -2262,7 +2263,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
             {
                 // Determine Number and set the Flag
                 nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
-                if( nNum-- && nNum < pNumRuleTbl->Count() )
+                if( nNum-- && nNum < pNumRuleTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && pChkStr->Equals( rNm ) )
@@ -2272,7 +2273,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
     if( !pChkStr )
     {
         // All Numbers have been flagged accordingly, so identify the right Number
-        nNum = pNumRuleTbl->Count();
+        nNum = pNumRuleTbl->size();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {
@@ -2293,7 +2294,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
 void SwDoc::UpdateNumRule()
 {
     const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
-    for( sal_uInt16 n = 0; n < rNmTbl.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rNmTbl.size(); ++n )
         if( rNmTbl[ n ]->IsInvalidRule() )
             rNmTbl[ n ]->Validate();
 }

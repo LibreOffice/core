@@ -115,6 +115,7 @@
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
+#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -126,7 +127,6 @@ const sal_Char sCharFmtStr[] = "Zeichenformat";
 const sal_Char sTxtCollStr[] = "Textformatvorlage";
 const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
-SV_IMPL_PTRARR( SwNumRuleTbl, SwNumRulePtr)
 SV_IMPL_PTRARR( SwTxtFmtColls, SwTxtFmtCollPtr)
 SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 
@@ -805,7 +805,9 @@ void SwDoc::ClearDoc()
     // destruction of numbering rules and creation of new outline rule
     // *after* the document nodes are deleted.
     pOutlineRule = NULL;
-    pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
+    BOOST_FOREACH( SwNumRule* pNumRule, *pNumRuleTbl )
+        delete pNumRule;
+    pNumRuleTbl->clear();
     // creation of new outline numbering rule
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // #i89178#

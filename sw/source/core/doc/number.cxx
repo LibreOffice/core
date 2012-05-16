@@ -357,7 +357,7 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
     sal_Bool bDocIsModified = pDoc->IsModified();
     sal_Bool bFnd = sal_False;
     const SwNumRule* pRule;
-    for( sal_uInt16 n = pDoc->GetNumRuleTbl().Count(); !bFnd && n; )
+    for( sal_uInt16 n = pDoc->GetNumRuleTbl().size(); !bFnd && n; )
     {
         pRule = pDoc->GetNumRuleTbl()[ --n ];
         for( sal_uInt8 i = 0; i < MAXLEVEL; ++i )

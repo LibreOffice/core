@@ -3067,7 +3067,7 @@ void WW8Export::ExportDocument_Impl()
         // clear the part of the list array that was copied from the document
         // - it's an auto delete array, so the rest of the array which are
         // duplicated lists that were added during the export will be deleted.
-        pUsedNumTbl->Remove(0, pUsedNumTbl->Count()-nUniqueList);
+        pUsedNumTbl->erase(pUsedNumTbl->begin(), pUsedNumTbl->begin() + pUsedNumTbl->size() - nUniqueList);
         delete pUsedNumTbl;
     }
 

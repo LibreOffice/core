@@ -213,11 +213,11 @@ void RtfExport::BuildNumbering()
 {
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
 
-    for( sal_uInt16 n = rListTbl.Count()+1; n; )
+    for( sal_uInt16 n = rListTbl.size()+1; n; )
     {
         SwNumRule* pRule;
         --n;
-        if( n == rListTbl.Count() )
+        if( n == rListTbl.size() )
             pRule = (SwNumRule*)pDoc->GetOutlineNumRule();
         else
         {

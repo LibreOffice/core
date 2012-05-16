@@ -30,6 +30,7 @@
 
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <vector>
+#include <algorithm>
 
 class SwFieldType;
 class SwFrmFmt;
@@ -73,9 +74,12 @@ SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0 )
 typedef SwSectionFmt* SwSectionFmtPtr;
 SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0)
 
-
-typedef SwNumRule* SwNumRulePtr;
-SV_DECL_PTRARR_DEL_VISIBILITY( SwNumRuleTbl, SwNumRulePtr, 0, SW_DLLPUBLIC )
+class SW_DLLPUBLIC SwNumRuleTbl : public std::vector<SwNumRule*> {
+public:
+    // the destructor will free all objects still in the vector
+    ~SwNumRuleTbl();
+    sal_uInt16 GetPos(const SwNumRule* pRule) const;
+};
 
 typedef SwRedline* SwRedlinePtr;
 SV_DECL_PTRARR_SORT_DEL( _SwRedlineTbl, SwRedlinePtr, 0 )

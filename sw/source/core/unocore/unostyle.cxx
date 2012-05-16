@@ -585,7 +585,7 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
             sal_uInt16 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
             nIndex = nIndex - nBaseCount;
             const SwNumRuleTbl& rNumTbl = rDoc.GetNumRuleTbl();
-            for(sal_uInt16 i = 0; i < rNumTbl.Count(); ++i)
+            for(sal_uInt16 i = 0; i < rNumTbl.size(); ++i)
             {
                 const SwNumRule& rRule = *rNumTbl[ i ];
                 if( rRule.IsAutoRule() )

@@ -59,7 +59,7 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
     SwNumRule* pMyNumRule =
             new SwNumRule( pDoc->GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    pUsedNumTbl->Insert( pMyNumRule, pUsedNumTbl->Count() );
+    pUsedNumTbl->push_back( pMyNumRule );
 
     for ( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
     {
@@ -84,16 +84,16 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
     if ( !pUsedNumTbl )
     {
         pUsedNumTbl = new SwNumRuleTbl;
-        pUsedNumTbl->Insert( &pDoc->GetNumRuleTbl(), 0 );
+        pUsedNumTbl->insert( pUsedNumTbl->begin(), pDoc->GetNumRuleTbl().begin(), pDoc->GetNumRuleTbl().end() );
         // Check, if the outline rule is already inserted into <pUsedNumTbl>.
         // If yes, do not insert it again.
         bool bOutlineRuleAdded( false );
-        for ( sal_uInt16 n = pUsedNumTbl->Count(); n; )
+        for ( sal_uInt16 n = pUsedNumTbl->size(); n; )
         {
-            const SwNumRule& rRule = *pUsedNumTbl->GetObject( --n );
+            const SwNumRule& rRule = *(*pUsedNumTbl)[ --n ];
             if ( !pDoc->IsUsed( rRule ) )
             {
-                pUsedNumTbl->Remove( n );
+                pUsedNumTbl->erase( pUsedNumTbl->begin() + n );
             }
             else if ( &rRule == pDoc->GetOutlineNumRule() )
             {
@@ -105,7 +105,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
         {
             // jetzt noch die OutlineRule einfuegen
             SwNumRule* pR = (SwNumRule*)pDoc->GetOutlineNumRule();
-            pUsedNumTbl->Insert( pR, pUsedNumTbl->Count() );
+            pUsedNumTbl->push_back( pR );
         }
     }
     SwNumRule* p = (SwNumRule*)&rNumRule;
@@ -147,7 +147,7 @@ void WW8Export::WriteNumbering()
 
     // list formats - LSTF
     pFib->fcPlcfLst = pTableStrm->Tell();
-    SwWW8Writer::WriteShort( *pTableStrm, pUsedNumTbl->Count() );
+    SwWW8Writer::WriteShort( *pTableStrm, pUsedNumTbl->size() );
     NumberingDefinitions();
     // set len to FIB
     pFib->lcbPlcfLst = pTableStrm->Tell() - pFib->fcPlcfLst;
@@ -183,12 +183,12 @@ void MSWordExportBase::NumberingDefinitions()
     if ( !pUsedNumTbl )
         return; // no numbering is used
 
-    sal_uInt16 nCount = pUsedNumTbl->Count();
+    sal_uInt16 nCount = pUsedNumTbl->size();
 
     // Write static data of SwNumRule - LSTF
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
-        const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
+        const SwNumRule& rRule = *(*pUsedNumTbl)[ n ];
 
         AttrOutput().NumberingDefinition( n + 1, rRule );
     }
@@ -300,7 +300,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
 
 void MSWordExportBase::AbstractNumberingDefinitions()
 {
-    sal_uInt16 nCount = pUsedNumTbl->Count();
+    sal_uInt16 nCount = pUsedNumTbl->size();
     sal_uInt16 n;
 
     // prepare the NodeNum to generate the NumString
@@ -313,7 +313,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
     {
         AttrOutput().StartAbstractNumbering( n + 1 );
 
-        const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
+        const SwNumRule& rRule = *(*pUsedNumTbl)[ n ];
         sal_uInt8 nLvl;
         sal_uInt8 nLevels = static_cast< sal_uInt8 >(rRule.IsContinusNum() ?
             WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
@@ -503,7 +503,7 @@ void WW8Export::OutOverrideListTab()
         return ;            // no numbering is used
 
     // write the "list format override" - LFO
-    sal_uInt16 nCount = pUsedNumTbl->Count();
+    sal_uInt16 nCount = pUsedNumTbl->size();
     sal_uInt16 n;
 
     pFib->fcPlfLfo = pTableStrm->Tell();
@@ -527,7 +527,7 @@ void WW8Export::OutListNamesTab()
         return ;            // no numbering is used
 
     // write the "list format override" - LFO
-    sal_uInt16 nNms = 0, nCount = pUsedNumTbl->Count();
+    sal_uInt16 nNms = 0, nCount = pUsedNumTbl->size();
 
     pFib->fcSttbListNames = pTableStrm->Tell();
     SwWW8Writer::WriteShort( *pTableStrm, -1 );
@@ -535,7 +535,7 @@ void WW8Export::OutListNamesTab()
 
     for( ; nNms < nCount; ++nNms )
     {
-        const SwNumRule& rRule = *pUsedNumTbl->GetObject( nNms );
+        const SwNumRule& rRule = *(*pUsedNumTbl)[ nNms ];
         String sNm;
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();

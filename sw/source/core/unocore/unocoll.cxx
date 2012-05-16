@@ -1740,7 +1740,7 @@ sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeExcepti
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetNumRuleTbl().Count();
+    return GetDoc()->GetNumRuleTbl().size();
 }
 
 uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
@@ -1751,7 +1751,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
     if(IsValid())
     {
         uno::Reference< XIndexReplace >  xRef;
-        if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
+        if ( nIndex < (sal_Int32)GetDoc()->GetNumRuleTbl().size() )
         {
             xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ], GetDoc());
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
@@ -1775,7 +1775,7 @@ sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeExcep
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetNumRuleTbl().Count() > 0;
+    return !GetDoc()->GetNumRuleTbl().empty();
 }
 
 OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )

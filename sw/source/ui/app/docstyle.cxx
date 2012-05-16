@@ -1420,7 +1420,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
     case SFX_STYLE_FAMILY_PSEUDO:
         {
             const SwNumRuleTbl& rTbl = rDoc.GetNumRuleTbl();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 rArr.Insert( p, n );
@@ -1500,7 +1500,7 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             SvPtrarr aDelArr;
             const SwNumRuleTbl& rTbl = rDoc.GetNumRuleTbl();
-            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
@@ -2713,7 +2713,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
         const SwNumRuleTbl& rNumTbl = rDoc.GetNumRuleTbl();
-        for(sal_uInt16 i = 0; i < rNumTbl.Count(); ++i)
+        for(sal_uInt16 i = 0; i < rNumTbl.size(); ++i)
         {
             const SwNumRule& rRule = *rNumTbl[ i ];
             if( !rRule.IsAutoRule() )

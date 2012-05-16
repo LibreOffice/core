@@ -372,7 +372,7 @@ void Writer::PutNumFmtFontsInAttrPool()
     const Font* pDefFont = &numfunc::GetDefBulletFont();
     sal_Bool bCheck = sal_False;
 
-    for( sal_uInt16 nGet = rListTbl.Count(); nGet; )
+    for( sal_uInt16 nGet = rListTbl.size(); nGet; )
         if( pDoc->IsUsed( *(pRule = rListTbl[ --nGet ] )))
             for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
                 if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->GetNumberingType() ||
