@@ -1,0 +1,31 @@
+--- misc/libvisio-0.0.16/src/lib/VisioDocument.cpp	2012-04-13 10:54:19.000000000 +0200
++++ misc/build/libvisio-0.0.16/src/lib/VisioDocument.cpp	2012-05-16 15:16:08.974375389 +0200
+@@ -45,10 +45,13 @@
+ */
+ bool libvisio::VisioDocument::isSupported(WPXInputStream *input)
+ {
++  WPXInputStream *tmpDocStream = 0;
++  try
++  {
+   input->seek(0, WPX_SEEK_SET);
+   if (!input->isOLEStream())
+     return false;
+-  WPXInputStream *tmpDocStream = input->getDocumentOLEStream("VisioDocument");
++    tmpDocStream = input->getDocumentOLEStream("VisioDocument");
+   if (!tmpDocStream)
+     return false;
+ 
+@@ -64,6 +67,13 @@
+   {
+     return true;
+   }
++  }
++  catch (...)
++  {
++    if (tmpDocStream)
++      delete tmpDocStream;
++    return false;
++  }
+ 
+   return false;
+ }
