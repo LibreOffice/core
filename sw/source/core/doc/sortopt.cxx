@@ -29,8 +29,7 @@
 
 #include <i18npool/lang.h>
 #include <sortopt.hxx>
-
-SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
+#include <boost/foreach.hpp>
 
 /*--------------------------------------------------------------------
     Description: Sort Key
@@ -77,16 +76,17 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for( sal_uInt16 i=0; i < rOpt.aKeys.Count(); ++i )
+    for( sal_uInt16 i=0; i < rOpt.aKeys.size(); ++i )
     {
         SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
-        aKeys.C40_INSERT( SwSortKey, pNew, aKeys.Count());
+        aKeys.push_back( pNew );
     }
 }
 
 SwSortOptions::~SwSortOptions()
 {
-    aKeys.DeleteAndDestroy(0, aKeys.Count());
+    BOOST_FOREACH(SwSortKey *pKey, aKeys)
+        delete pKey;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -142,7 +142,7 @@ sal_Bool SwSortElement::operator<(const SwSortElement& rCmp)
 {
 
     // The actual comparison
-    for(sal_uInt16 nKey = 0; nKey < pOptions->aKeys.Count(); ++nKey)
+    for(sal_uInt16 nKey = 0; nKey < pOptions->aKeys.size(); ++nKey)
     {
         const SwSortElement *pOrig, *pCmp;
 

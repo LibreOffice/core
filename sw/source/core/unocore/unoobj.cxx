@@ -2822,18 +2822,18 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
 
     if (pKey1->nColumnId != USHRT_MAX)
     {
-        rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey1, rSortOpt.aKeys.Count());
+        rSortOpt.aKeys.push_back(pKey1);
     }
     if (pKey2->nColumnId != USHRT_MAX)
     {
-        rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey2, rSortOpt.aKeys.Count());
+        rSortOpt.aKeys.push_back(pKey2);
     }
     if (pKey3->nColumnId != USHRT_MAX)
     {
-        rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey3, rSortOpt.aKeys.Count());
+        rSortOpt.aKeys.push_back(pKey3);
     }
 
-    return bRet && rSortOpt.aKeys.Count() > 0;
+    return bRet && !rSortOpt.aKeys.empty();
 }
 
 void SAL_CALL

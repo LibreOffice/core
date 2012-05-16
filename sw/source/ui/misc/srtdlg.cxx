@@ -345,7 +345,7 @@ void SwSortDlg::Apply()
 
         SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
                                     bAsc1 ? SRT_ASCENDING : SRT_DESCENDING );
-        aOptions.aKeys.C40_INSERT(SwSortKey, pKey, aOptions.aKeys.Count());
+        aOptions.aKeys.push_back( pKey );
     }
 
     if( bCheck2 )
@@ -359,7 +359,7 @@ void SwSortDlg::Apply()
 
         SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
                                     bAsc2 ? SRT_ASCENDING : SRT_DESCENDING );
-        aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
+        aOptions.aKeys.push_back( pKey );
     }
 
     if( bCheck3 )
@@ -373,7 +373,7 @@ void SwSortDlg::Apply()
 
         SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
                                     bAsc3 ? SRT_ASCENDING : SRT_DESCENDING );
-        aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
+        aOptions.aKeys.push_back( pKey );
     }
 
     aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;

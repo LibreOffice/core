@@ -32,6 +32,7 @@
 #include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
+#include <vector>
 
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
 enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
@@ -49,7 +50,7 @@ struct SW_DLLPUBLIC SwSortKey
     sal_Bool            bIsNumeric;
 };
 
-SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3)
+typedef std::vector<SwSortKey*> SwSortKeys;
 
 struct SW_DLLPUBLIC SwSortOptions
 {
