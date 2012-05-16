@@ -69,7 +69,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/linguprops.hxx,unoto
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/localedatawrapper.hxx,unotools/localedatawrapper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/localfilehelper.hxx,unotools/localfilehelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/localisationoptions.hxx,unotools/localisationoptions.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/loghelper.hxx,unotools/loghelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/misccfg.hxx,unotools/misccfg.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/moduleoptions.hxx,unotools/moduleoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/nativenumberwrapper.hxx,unotools/nativenumberwrapper.hxx))

@@ -49,7 +49,6 @@
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/loghelper.hxx>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -219,7 +218,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
     catch(const css::uno::Exception& ex)
     {
         m_xCfg.clear();
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -240,7 +239,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return sCompany;
@@ -257,7 +256,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sFirstName;
@@ -274,7 +273,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sLastName;
@@ -291,7 +290,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sID;
@@ -308,7 +307,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sStreet;
@@ -325,7 +324,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sCity;
@@ -342,7 +341,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sState;
@@ -359,7 +358,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sZip;
@@ -376,7 +375,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sCountry;
@@ -393,7 +392,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sPosition;
@@ -410,7 +409,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sTitle;
@@ -427,7 +426,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sTelephoneHome;
@@ -444,7 +443,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sTelephoneWork;
@@ -461,7 +460,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sFax;
@@ -478,7 +477,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sEmail;
@@ -495,7 +494,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sCustomerNumber;
@@ -512,7 +511,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sFathersName;
@@ -529,7 +528,7 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
     }
     catch ( const css::uno::Exception& ex )
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return  sApartment;
@@ -545,7 +544,7 @@ void SvtUserOptions_Impl::SetCompany( const ::rtl::OUString& sCompany )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -559,7 +558,7 @@ void SvtUserOptions_Impl::SetFirstName( const ::rtl::OUString& sFirstName )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -573,7 +572,7 @@ void SvtUserOptions_Impl::SetLastName( const ::rtl::OUString& sLastName )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 void SvtUserOptions_Impl::SetID( const ::rtl::OUString& sID )
@@ -586,7 +585,7 @@ void SvtUserOptions_Impl::SetID( const ::rtl::OUString& sID )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -600,7 +599,7 @@ void SvtUserOptions_Impl::SetStreet( const ::rtl::OUString& sStreet )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -614,7 +613,7 @@ void SvtUserOptions_Impl::SetCity( const ::rtl::OUString& sCity )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -628,7 +627,7 @@ void SvtUserOptions_Impl::SetState( const ::rtl::OUString& sState )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -642,7 +641,7 @@ void SvtUserOptions_Impl::SetZip( const ::rtl::OUString& sZip )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -656,7 +655,7 @@ void SvtUserOptions_Impl::SetCountry( const ::rtl::OUString& sCountry )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -670,7 +669,7 @@ void SvtUserOptions_Impl::SetPosition( const ::rtl::OUString& sPosition )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -684,7 +683,7 @@ void SvtUserOptions_Impl::SetTitle( const ::rtl::OUString& sTitle )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -698,7 +697,7 @@ void SvtUserOptions_Impl::SetTelephoneHome( const ::rtl::OUString& sTelephoneHom
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -712,7 +711,7 @@ void SvtUserOptions_Impl::SetTelephoneWork( const ::rtl::OUString& sTelephoneWor
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -726,7 +725,7 @@ void SvtUserOptions_Impl::SetFax( const ::rtl::OUString& sFax )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -740,7 +739,7 @@ void SvtUserOptions_Impl::SetEmail( const ::rtl::OUString& sEmail )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -754,7 +753,7 @@ void SvtUserOptions_Impl::SetCustomerNumber( const ::rtl::OUString& sCustomerNum
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -768,7 +767,7 @@ void SvtUserOptions_Impl::SetFathersName( const ::rtl::OUString& sFathersName )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -782,7 +781,7 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
     }
     catch ( const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 

@@ -52,8 +52,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <unotools/loghelper.hxx>
-
 using namespace ::std     ;
 using namespace ::utl     ;
 using namespace ::rtl     ;
@@ -167,7 +165,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
         m_xCfg.clear();
         m_xCommonXCU.clear();
 
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -213,7 +211,7 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return nSize;
@@ -273,7 +271,7 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -333,7 +331,7 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -418,7 +416,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                     // ignore such corrupted individual items here, so that at
                     // least newly added items are successfully reported back
                     // from this function:
-                    LogHelper::logIt(ex);
+                    SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
                 }
             }
             assert(nCount <= nLength);
@@ -428,7 +426,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 
     return seqReturn;
@@ -569,7 +567,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("unotools", "Caught unexpected: " << ex.Message);
     }
 }
 

@@ -50,8 +50,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <unotools/loghelper.hxx>
-
 #include <itemholder2.hxx>
 
 #include <sal/macros.h>
@@ -188,7 +186,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
     {
         m_xNode.clear();
         m_xCfg.clear();
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -206,7 +204,7 @@ sal_Bool SvtPrintOptions_Impl::IsReduceTransparency() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -226,7 +224,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedTransparencyMode() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return  nRet;
@@ -248,7 +246,7 @@ sal_Bool SvtPrintOptions_Impl::IsReduceGradients() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -270,7 +268,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientMode() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -292,7 +290,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientStepCount() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -314,7 +312,7 @@ sal_Bool SvtPrintOptions_Impl::IsReduceBitmaps() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return bRet;
@@ -336,7 +334,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapMode() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return nRet;
@@ -358,7 +356,7 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapResolution() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return  nRet;
@@ -380,7 +378,7 @@ sal_Bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return  bRet;
@@ -402,7 +400,7 @@ sal_Bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
     }
     catch (const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 
     return  bRet;
@@ -489,7 +487,7 @@ void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 }
 
@@ -517,7 +515,7 @@ void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
     }
     catch(const css::uno::Exception& ex)
     {
-        LogHelper::logIt(ex);
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
     }
 }
 
