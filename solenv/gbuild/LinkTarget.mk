@@ -253,7 +253,7 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_target,%)
+$(call gb_ObjCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
 
@@ -271,7 +271,7 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 	$(call gb_ObjCObject__command,$@,$*,$<,$(call gb_ObjCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_target,%)
+$(call gb_ObjCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*)))
 
@@ -374,7 +374,6 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_target,%) : | $(call gb_LinkTarget_get_dep_target,%)
 $(call gb_LinkTarget_get_dep_target,%) :
 	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(ASMOBJECTS),$(GENCOBJECTS),$(GENCXXOBJECTS))
 endif

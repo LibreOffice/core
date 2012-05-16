@@ -160,7 +160,7 @@ endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 
-$(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_UnoApiTarget_get_target,%)
+$(call gb_UnoApiTarget_get_dep_target,%) :
 	$(call gb_UnoApiTarget__command_dep,$@,$*,$(UNOAPI_IDLFILES))
 
 endif
@@ -197,8 +197,6 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES += $(2)/$(3).idl
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : \
 	$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
-$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
 endif
 
 endef

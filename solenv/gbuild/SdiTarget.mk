@@ -53,10 +53,9 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 			$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_SdiTarget_get_dep_target,%) : $(call gb_SdiTarget_get_target,%)
+$(call gb_SdiTarget_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_SdiTarget_get_target,$*)))
-
 endif
 
 .PHONY : $(call gb_SdiTarget_get_clean_target,%)

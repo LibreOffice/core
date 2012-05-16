@@ -100,9 +100,6 @@ $(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		echo '$(call gb_SrsPartTarget_get_target,$*) : $(gb_Helper_PHONY)' > $@)
-
-$(call gb_SrsPartTarget_get_dep_target,%) :
-	$(eval $(call gb_Output_error,Unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS)))
 endif
 
 
@@ -237,7 +234,6 @@ $(call gb_SrsTarget_get_external_headers_target,%) :
 	    mkdir -p $(dir $@) && touch $@)
 
 $(call gb_SrsTarget_get_target,%) :
-	$(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
 	$(call gb_Output_announce,$*,$(true),SRS,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -257,11 +253,7 @@ $(call gb_SrsTarget_get_target,$(1)) : PARTS :=
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsTemplateTarget_get_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : $(call gb_SrsTemplateTarget_get_clean_target,$(1))
 ifeq ($(gb_FULLDEPS),$(true))
-ifneq ($(wildcard $(call gb_SrsTarget_get_dep_target,$(1))),)
-include $(call gb_SrsTarget_get_dep_target,$(1))
-else
-$(firstword $(MAKEFILE_LIST)) : $(call gb_SrsTarget_get_dep_target,$(1))
-endif
+-include $(call gb_SrsTarget_get_dep_target,$(1))
 endif
 
 endef

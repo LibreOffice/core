@@ -16,12 +16,7 @@ $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(SOLARINC)
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE :=
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE :=
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_target,$(1)) : $(call gb_WinResTarget_get_dep_target,$(1))
-ifneq ($(wildcard $(call gb_WinResTarget_get_dep_target,$(1))),)
-include $(call gb_WinResTarget_get_dep_target,$(1))
-else
-$(firstword $(MAKEFILE_LIST)) : $(call gb_WinResTarget_get_dep_target,$(1))
-endif
+-include $(call gb_WinResTarget_get_dep_target,$(1))
 $(call gb_WinResTarget_get_dep_target,$(1)) : DEFS := $$(gb_WinResTarget_DEFAULTDEFS)
 $(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_WinResTarget_INCLUDE)
 $(call gb_WinResTarget_get_dep_target,$(1)) : RCFILE :=
