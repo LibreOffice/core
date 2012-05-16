@@ -270,11 +270,6 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
             {
                 *pNames++ = xStyle->GetApiName();
             }
-            else
-            {
-                int i = 0;
-                i++;
-            }
         }
 
         return aNames;
