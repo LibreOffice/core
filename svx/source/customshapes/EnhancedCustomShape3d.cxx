@@ -298,7 +298,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pMap = &fMap;
         }
     }
-    const rtl::OUString sExtrusion(aExtrusion);
     if ( GetBool( rGeometryItem, aExtrusion, sal_False ) )
     {
         sal_Bool bIsMirroredX = ((SdrObjCustomShape*)pCustomShape)->IsMirroredX();
@@ -648,8 +647,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 pScene->GetProperties().SetObjectItem( Svx3DLightDirection3Item( aSpotLight3 ) );
 
             const rtl::OUString sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
-            const rtl::OUString sDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
-            const rtl::OUString sShininess( RTL_CONSTASCII_USTRINGPARAM ( "Shininess" ) );
             const rtl::OUString sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
             double fSpecular = GetDouble( rGeometryItem, sSpecularity, 0, NULL ) / 100;
             sal_Bool bMetal = GetBool( rGeometryItem, sMetal, sal_False );

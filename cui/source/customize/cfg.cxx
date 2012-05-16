@@ -458,7 +458,6 @@ OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::
 
                 if ( a >>= aSeq )
                 {
-                    OUString aUIName;
                     for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                     {
                         if ( aSeq[i].Name == "ooSetupFactoryUIName" )

@@ -47,8 +47,6 @@
 #include "Handler.hxx"
 #include "ooxmlLoggers.hxx"
 
-static const ::rtl::OUString aEmptyStr;
-
 static const sal_uInt8 s0x7[] = { 0x7, 0x0 };
 static const sal_uInt8 s0xd[] = { 0xd, 0x0 };
 static const sal_uInt8 sCR[] = { 0xd, 0x0 };

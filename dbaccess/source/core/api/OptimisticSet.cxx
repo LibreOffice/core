@@ -189,9 +189,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     // list all cloumns that should be set
     static ::rtl::OUString s_sPara(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
-    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
 
     ::rtl::OUString aColumnName;
     ::rtl::OUStringBuffer sKeyCondition;
@@ -274,9 +271,6 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
-    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
 
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
@@ -379,9 +373,6 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
 
 void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& /*_xTable*/   ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
-    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
-    static const ::rtl::OUString s_sAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
     ::rtl::OUString aColumnName;
     ::rtl::OUStringBuffer sKeyCondition,sIndexCondition;
@@ -649,9 +640,6 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
-    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aColIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aColEnd = m_pColumnNames->end();

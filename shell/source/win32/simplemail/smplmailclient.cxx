@@ -66,7 +66,6 @@ const rtl::OUString CC(RTL_CONSTASCII_USTRINGPARAM("--cc"));
 const rtl::OUString BCC(RTL_CONSTASCII_USTRINGPARAM("--bcc"));
 const rtl::OUString FROM(RTL_CONSTASCII_USTRINGPARAM("--from"));
 const rtl::OUString SUBJECT(RTL_CONSTASCII_USTRINGPARAM("--subject"));
-const rtl::OUString BODY(RTL_CONSTASCII_USTRINGPARAM("--body"));
 const rtl::OUString ATTACH(RTL_CONSTASCII_USTRINGPARAM("--attach"));
 const rtl::OUString FLAG_MAPI_DIALOG(RTL_CONSTASCII_USTRINGPARAM("--mapi-dialog"));
 const rtl::OUString FLAG_MAPI_LOGON_UI(RTL_CONSTASCII_USTRINGPARAM("--mapi-logon-ui"));

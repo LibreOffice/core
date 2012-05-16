@@ -270,7 +270,6 @@ void DlgOrderCrit::EnableLines()
                         ::rtl::OUString sRealName;
                         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
                         sName = sRealName;
-                        static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
                         static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
                         if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
                             xColumn->getPropertyValue(sFunction) >>= bFunction;

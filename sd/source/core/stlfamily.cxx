@@ -264,7 +264,6 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
         OUString* pNames = aNames.getArray();
         while( iter != rStyleMap.end() )
         {
-            const OUString sName( (*iter).first );
             rtl::Reference< SdStyleSheet > xStyle( (*iter++).second );
             if( xStyle.is() )
             {

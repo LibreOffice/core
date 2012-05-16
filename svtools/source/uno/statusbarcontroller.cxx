@@ -133,12 +133,6 @@ void SAL_CALL StatusbarController::release() throw ()
 void SAL_CALL StatusbarController::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-    const rtl::OUString aServiceManagerName( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-    const rtl::OUString aParentWindow( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-    const rtl::OUString aIdentifier( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
-
     bool bInitialized( true );
 
     {

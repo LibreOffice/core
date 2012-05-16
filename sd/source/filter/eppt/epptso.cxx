@@ -3717,8 +3717,6 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 static const rtl::OUString sBottomBorder( "BottomBorder" );
                 static const rtl::OUString sLeftBorder( "LeftBorder" );
                 static const rtl::OUString sRightBorder( "RightBorder" );
-                static const rtl::OUString  sDiagonalTLBR( "DiagonalTLBR" );
-                static const rtl::OUString  sDiagonalBLTR( "DiagonalBLTR" );
 
                 // creating horz lines
                 sal_Int32 nYPos = MapPoint( rXShape->getPosition() ).Y;

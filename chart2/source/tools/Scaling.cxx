@@ -42,14 +42,6 @@ static const ::rtl::OUString lcl_aServiceName_Linear(
 static const ::rtl::OUString lcl_aServiceName_Power(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PowerScaling" ));
 
-static const ::rtl::OUString lcl_aImplementationName_Logarithmic(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.LogarithmicScaling" ));
-static const ::rtl::OUString lcl_aImplementationName_Exponential(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ExponentialScaling" ));
-static const ::rtl::OUString lcl_aImplementationName_Linear(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.LinearScaling" ));
-static const ::rtl::OUString lcl_aImplementationName_Power(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.PowerScaling" ));
 }
 
 //.............................................................................

@@ -923,9 +923,6 @@ void TPGalleryThemeProperties::FillFilterList()
     // media filters
     static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
     ::avmedia::FilterNameVector     aFilters;
-    const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    ::rtl::OUString                 aAllTypes;
-
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
     for( unsigned long l = 0; l < aFilters.size(); ++l )

@@ -39,11 +39,6 @@ static const ::rtl::OUString lcl_aServiceName_DateScaling(
 static const ::rtl::OUString lcl_aServiceName_InverseDateScaling(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.InverseDateScaling" ));
 
-static const ::rtl::OUString lcl_aImplementationName_DateScaling(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.DateScaling" ));
-static const ::rtl::OUString lcl_aImplementationName_InverseDateScaling(
-    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.InverseDateScaling" ));
-
 static const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
 }
 

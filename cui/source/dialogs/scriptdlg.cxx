@@ -1486,7 +1486,6 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
 
 ::rtl::OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
 {
-    ::rtl::OUString exType;
     if ( aException.getValueType() ==
          ::getCppuType( (const reflection::InvocationTargetException* ) NULL ) )
     {

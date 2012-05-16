@@ -1285,9 +1285,6 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aUserInterfaceLB.SelectEntryPos(0);
     try
     {
-        OUString sOfficeLocaleValue;
-        OUString sSystemLocaleValue;
-
         Reference< XMultiServiceFactory > theConfigProvider(
             com::sun::star::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));

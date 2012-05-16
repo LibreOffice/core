@@ -82,10 +82,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace {
-static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME("masterviewtoolbar");
-}
-
 namespace sd {
 
 sal_Bool DrawViewShell::mbPipette = sal_False;

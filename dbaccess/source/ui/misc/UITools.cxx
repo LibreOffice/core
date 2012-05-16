@@ -1066,7 +1066,6 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             sal_Bool bHasToInsert = sal_True;
-            static ::rtl::OUString sPattern(RTL_CONSTASCII_USTRINGPARAM("%"));
             const ::rtl::OUString* pBegin = aFilter.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
             for (;pBegin != pEnd; ++pBegin)
