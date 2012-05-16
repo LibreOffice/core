@@ -31,6 +31,7 @@
 
 #include <svl/svarray.hxx>
 #include <swdllapi.h>
+#include <set>
 
 class SwFrmFmt;
 class SwNodeIndex;
@@ -55,8 +56,7 @@ public:
     sal_uInt32 GetOrdNum() const { return nOrdNum; }
 };
 
-typedef SwPosFlyFrm* SwPosFlyFrmPtr;
-SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, SW_DLLPUBLIC )
+class SW_DLLPUBLIC SwPosFlyFrms : public std::set<SwPosFlyFrm*> {};
 
 #endif // _FLYPOS_HXX
 

@@ -312,13 +312,12 @@ void SwHTMLWriter::CollectFlyFrms()
     OSL_ENSURE( HTML_CFG_MAX+1 == MAX_BROWSERS,
             "number of browser configurations has changed" );
 
-    sal_uInt8 nSz = (sal_uInt8)Min( pDoc->GetSpzFrmFmts()->Count(), sal_uInt16(255) );
-    SwPosFlyFrms aFlyPos( nSz );
+    SwPosFlyFrms aFlyPos;
     pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, sal_True );
 
-    for( sal_uInt16 i=0; i< aFlyPos.Count(); i++ )
+    for(SwPosFlyFrms::iterator it = aFlyPos.begin(); it != aFlyPos.end(); ++it)
     {
-        const SwFrmFmt& rFrmFmt = aFlyPos[i]->GetFmt();
+        const SwFrmFmt& rFrmFmt = (*it)->GetFmt();
         const SdrObject *pSdrObj = 0;
         const SwPosition *pAPos;
         const SwCntntNode *pACNd;
@@ -369,7 +368,7 @@ void SwHTMLWriter::CollectFlyFrms()
             pHTMLPosFlyFrms = new SwHTMLPosFlyFrms;
 
         SwHTMLPosFlyFrm *pNew =
-            new SwHTMLPosFlyFrm( *aFlyPos[i], pSdrObj, nMode );
+            new SwHTMLPosFlyFrm( **it, pSdrObj, nMode );
         pHTMLPosFlyFrms->Insert( pNew );
     }
 }

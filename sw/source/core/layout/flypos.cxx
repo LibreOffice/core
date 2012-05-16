@@ -40,8 +40,6 @@
 #include "ndindex.hxx"
 #include "switerator.hxx"
 
-SV_IMPL_OP_PTRARR_SORT( SwPosFlyFrms, SwPosFlyFrmPtr )
-
 SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
                             sal_uInt16 nArrPos )
     : pFrmFmt( pFmt ), pNdIdx( (SwNodeIndex*) &rIdx )

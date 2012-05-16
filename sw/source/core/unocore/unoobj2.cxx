@@ -1891,9 +1891,9 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
             SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
             rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor(), sal_False, sal_True);
-            for(sal_uInt16 i = 0; i < aFlyFrms.Count(); i++)
+            for(SwPosFlyFrms::iterator it = aFlyFrms.begin(); it != aFlyFrms.end(); ++it)
             {
-                SwPosFlyFrm* pPosFly = aFlyFrms[i];
+                SwPosFlyFrm* pPosFly = *it;
                 SwFrmFmt *const pFrmFmt =
                     const_cast<SwFrmFmt*>(&pPosFly->GetFmt());
                 // create SwDepend for frame and insert into array

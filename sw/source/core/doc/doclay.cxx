@@ -1044,8 +1044,8 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                 if( pCmpRange &&
                     !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
                         continue;       // not a valid FlyFrame
-                pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.Count() );
-                rPosFlyFmts.Insert( pFPos );
+                pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.size() );
+                rPosFlyFmts.insert( pFPos );
             }
         }
     }
@@ -1093,12 +1093,12 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                     if ( pCntntFrm )
                     {
                         SwNodeIndex aIdx( *pCntntFrm->GetNode() );
-                        pFPos = new SwPosFlyFrm( aIdx, pFly, rPosFlyFmts.Count() );
+                        pFPos = new SwPosFlyFrm( aIdx, pFly, rPosFlyFmts.size() );
                     }
                 }
                 if ( pFPos )
                 {
-                    rPosFlyFmts.Insert( pFPos );
+                    rPosFlyFmts.insert( pFPos );
                     pFPos = 0;
                 }
             }
