@@ -235,22 +235,28 @@ Bridge::Bridge(
 }
 
 void Bridge::start() {
-    assert(threadPool_ == 0 && !writer_.is() && !reader_.is());
-    threadPool_ = uno_threadpool_create();
-    assert(threadPool_ != 0);
-    writer_.set(new Writer(this));
-    writer_->launch();
-    reader_.set(new Reader(this));
-    reader_->launch();
-        // it is important to call reader_->launch() last here; both
-        // Writer::execute and Reader::execute can call Bridge::terminate, but
-        // Writer::execute is initially blocked in unblocked_.wait() until
-        // Reader::execute has called bridge_->sendRequestChangeRequest(), so
-        // effectively only reader_->launch() can lead to an early call to
-        // Bridge::terminate
+    rtl::Reference< Reader > r(new Reader(this));
+    rtl::Reference< Writer > w(new Writer(this));
+    {
+        osl::MutexGuard g(mutex_);
+        assert(threadPool_ == 0 && !writer_.is() && !reader_.is());
+        threadPool_ = uno_threadpool_create();
+        assert(threadPool_ != 0);
+        reader_ = r;
+        writer_ = w;
+    }
+    // It is important to call reader_->launch() last here; both
+    // Writer::execute and Reader::execute can call Bridge::terminate, but
+    // Writer::execute is initially blocked in unblocked_.wait() until
+    // Reader::execute has called bridge_->sendRequestChangeRequest(), so
+    // effectively only reader_->launch() can lead to an early call to
+    // Bridge::terminate
+    w->launch();
+    r->launch();
 }
 
 void Bridge::terminate() {
+    uno_ThreadPool tp;
     rtl::Reference< Reader > r;
     rtl::Reference< Writer > w;
     Listeners ls;
@@ -259,6 +265,7 @@ void Bridge::terminate() {
         if (terminated_) {
             return;
         }
+        tp = threadPool_;
         std::swap(reader_, r);
         std::swap(writer_, w);
         ls.swap(listeners_);
@@ -273,8 +280,8 @@ void Bridge::terminate() {
     w->stop();
     joinThread(r.get());
     joinThread(w.get());
-    assert(threadPool_ != 0);
-    uno_threadpool_dispose(threadPool_);
+    assert(tp != 0);
+    uno_threadpool_dispose(tp);
     Stubs s;
     {
         osl::MutexGuard g(mutex_);
@@ -301,6 +308,7 @@ void Bridge::terminate() {
                 "binaryurp", "caught runtime exception '" << e.Message << '\'');
         }
     }
+    uno_threadpool_destroy(tp);
 }
 
 css::uno::Reference< css::connection::XConnection > Bridge::getConnection()
@@ -330,7 +338,8 @@ BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
     return out;
 }
 
-uno_ThreadPool Bridge::getThreadPool() const {
+uno_ThreadPool Bridge::getThreadPool() {
+    osl::MutexGuard g(mutex_);
     assert(threadPool_ != 0);
     return threadPool_;
 }
@@ -571,7 +580,8 @@ bool Bridge::makeCall(
 {
     std::auto_ptr< IncomingReply > resp;
     {
-        AttachThread att(threadPool_);
+        uno_ThreadPool tp = getThreadPool();
+        AttachThread att(tp);
         PopOutgoingRequest pop(
             outgoingRequests_, att.getTid(),
             OutgoingRequest(OutgoingRequest::KIND_NORMAL, member, setter));
@@ -582,7 +592,7 @@ bool Bridge::makeCall(
         incrementCalls(true);
         incrementActiveCalls();
         void * job;
-        uno_threadpool_enter(threadPool_, &job);
+        uno_threadpool_enter(tp, &job);
         resp.reset(static_cast< IncomingReply * >(job));
         decrementActiveCalls();
         decrementCalls();
@@ -812,8 +822,8 @@ bool Bridge::isCurrentContextMode() {
 }
 
 Bridge::~Bridge() {
-    if (threadPool_ != 0) {
-        uno_threadpool_destroy(threadPool_);
+    if (getThreadPool() != 0) {
+        terminate();
     }
 }
 
@@ -940,7 +950,7 @@ void Bridge::sendProtPropRequest(
 void Bridge::makeReleaseCall(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
-    AttachThread att(threadPool_);
+    AttachThread att(getThreadPool());
     sendRequest(
         att.getTid(), oid, type,
         css::uno::TypeDescription(
