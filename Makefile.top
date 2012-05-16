@@ -243,7 +243,7 @@ xpdf\
 xsltml\
 zlib\
 
-gb_TAILBUILDMODULES := $(shell make -f $(SRCDIR)/tail_build/Makefile showmodules)
+gb_TAILBUILDMODULES := $(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
@@ -389,7 +389,7 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 endif
 	cd packimages && unset MAKEFLAGS && \
 		$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM) && \
-		make
+		$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
 
 build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
