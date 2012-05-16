@@ -102,7 +102,7 @@ endef
 # In the dep file rule just touch it so it's newer than the object.
 
 # The gb_Object__command_dep generates an "always rebuild" dep file;
-# It is _only_ used in case the user deletes the object dep file.
+# It is used on first build and in case the user deletes the object dep file.
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_Object__command_dep
 mkdir -p $(dir $(1)) && \
@@ -374,8 +374,8 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
-$(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
+$(call gb_LinkTarget_get_target,%) : | $(call gb_LinkTarget_get_dep_target,%)
+$(call gb_LinkTarget_get_dep_target,%) :
 	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(ASMOBJECTS),$(GENCOBJECTS),$(GENCXXOBJECTS))
 endif
 
