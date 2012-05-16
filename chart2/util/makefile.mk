@@ -40,7 +40,7 @@ TARGET=chart_db
 
 .INCLUDE :  target.mk
 
-.IF "$(L10N_framewor)"==""
+.IF "$(L10N_framework)"==""
 ALLTAR : \
     $(BIN)$/$(PRJNAME).rdb \
     $(MISC)$/$(TARGET).don
@@ -52,5 +52,5 @@ $(MISC)$/$(TARGET).don : $(UCR)$/$(PRJNAME).db
     $(CPPUMAKER) -O$(OUT)$/inc -BUCR $(UCR)$/$(PRJNAME).db -X$(SOLARBINDIR)$/types.rdb && echo > $@
     echo $@
 
-.ENDIF			# "$(L10N_framewor)"==""
+.ENDIF # "$(L10N_framework)"==""
 
