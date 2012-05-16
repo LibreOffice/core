@@ -1029,10 +1029,6 @@ OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeExcept
     }
 }
 
-    HeaderFooterDeclMap         maHeaderDeclsMap;
-    HeaderFooterDeclMap         maFooterDeclsMap;
-    DateTimeDeclMap             maDateTimeDeclsMap;
-
 void SdXMLImport::AddHeaderDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
 {
     if( !rName.isEmpty() && !rText.isEmpty() )
