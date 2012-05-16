@@ -1948,7 +1948,7 @@ SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnly
         {
             if ( !pNodes  )
                 pNodes = new SwOLENodes;
-            pNodes->Insert( pONd, pNodes->Count() );
+            pNodes->push_back( pONd );
         }
     }
 

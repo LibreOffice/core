@@ -691,10 +691,10 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
         if ( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
-                             0, pNodes->Count(), GetDocShell());
+                             0, pNodes->size(), GetDocShell());
             GetCurrentLayout()->StartAllAction();
 
-            for( sal_uInt16 i = 0; i < pNodes->Count(); ++i )
+            for( sal_uInt16 i = 0; i < pNodes->size(); ++i )
             {
                 ::SetProgressState( i, GetDocShell() );
 
@@ -751,11 +751,11 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
         if( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
-                             0, pNodes->Count(), GetDocShell());
+                             0, pNodes->size(), GetDocShell());
             GetCurrentLayout()->StartAllAction();
             SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
 
-            for( sal_uInt16 i = 0; i < pNodes->Count(); ++i )
+            for( sal_uInt16 i = 0; i < pNodes->size(); ++i )
             {
                 ::SetProgressState( i, GetDocShell() );
 

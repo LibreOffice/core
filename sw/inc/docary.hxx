@@ -29,6 +29,7 @@
 #define _DOCARY_HXX
 
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <vector>
 
 class SwFieldType;
 class SwFrmFmt;
@@ -115,8 +116,7 @@ public:
 typedef SwUnoCrsr* SwUnoCrsrPtr;
 SV_DECL_PTRARR_DEL( SwUnoCrsrTbl, SwUnoCrsrPtr, 0 )
 
-typedef SwOLENode* SwOLENodePtr;
-SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16)
+class SwOLENodes : public std::vector<SwOLENode*> {};
 
 
 #endif  //_DOCARY_HXX
