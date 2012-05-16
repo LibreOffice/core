@@ -28,7 +28,6 @@
 #ifndef INCLUDED_I18NUTIL_TRANSLITERATION_ONETOONEMAPPING_HXX
 #define INCLUDED_I18NUTIL_TRANSLITERATION_ONETOONEMAPPING_HXX
 
-#include <utility>
 #include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>
 #include "i18nutildllapi.h"
@@ -37,24 +36,22 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class widthfolding;
 
-typedef std::pair< sal_Unicode, sal_Unicode > OneToOneMappingTable_t;
-
-#define MAKE_PAIR(item1,item2) std::make_pair< sal_Unicode, sal_Unicode >((sal_Unicode)item1,(sal_Unicode)item2)
+struct OneToOneMappingTable_t
+{
+    sal_Unicode first;
+    sal_Unicode second;
+};
 
 typedef sal_Int8 UnicodePairFlag;
-typedef struct _UnicodePairWithFlag
+struct UnicodePairWithFlag
 {
-    sal_Unicode     first;
-    sal_Unicode     second;
+    sal_Unicode first;
+    sal_Unicode second;
     UnicodePairFlag flag;
-} UnicodePairWithFlag;
+};
 
-class I18NUTIL_DLLPUBLIC oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMapping : private boost::noncopyable
 {
-private:
-    // no copy, no substitution
-    I18NUTIL_DLLPRIVATE oneToOneMapping( const oneToOneMapping& );
-    I18NUTIL_DLLPRIVATE oneToOneMapping& operator=( const oneToOneMapping& );
 public:
     oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
     virtual ~oneToOneMapping();
@@ -70,7 +67,7 @@ protected:
     size_t                  mnSize;
 };
 
-class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : private boost::noncopyable, public oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : public oneToOneMapping
 {
     friend class widthfolding;
 

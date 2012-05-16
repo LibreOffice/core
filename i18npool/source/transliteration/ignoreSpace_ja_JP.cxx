@@ -36,21 +36,21 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 OneToOneMappingTable_t ignoreSpace_ja_JP_mappingTable[] = {
-    MAKE_PAIR( 0x0020, 0xffff ),  // SPACE
-    MAKE_PAIR( 0x00A0, 0xffff ),  // NO-BREAK SPACE
-    MAKE_PAIR( 0x2002, 0xffff ),  // EN SPACE
-    MAKE_PAIR( 0x2003, 0xffff ),  // EM SPACE
-    MAKE_PAIR( 0x2004, 0xffff ),  // THREE-PER-EM SPACE
-    MAKE_PAIR( 0x2005, 0xffff ),  // FOUR-PER-EM SPACE
-    MAKE_PAIR( 0x2006, 0xffff ),  // SIX-PER-EM SPACE
-    MAKE_PAIR( 0x2007, 0xffff ),  // FIGURE SPACE
-    MAKE_PAIR( 0x2008, 0xffff ),  // PUNCTUATION SPACE
-    MAKE_PAIR( 0x2009, 0xffff ),  // THIN SPACE
-    MAKE_PAIR( 0x200A, 0xffff ),  // HAIR SPACE
-    MAKE_PAIR( 0x200B, 0xffff ),  // ZERO WIDTH SPACE
-    MAKE_PAIR( 0x202F, 0xffff ),  // NARROW NO-BREAK SPACE
-    MAKE_PAIR( 0x3000, 0xffff ),  // IDEOGRAPHIC SPACE
-    MAKE_PAIR( 0x303F, 0xffff )   // IDEOGRAPHIC HALF FILL SPACE
+    { 0x0020, 0xffff },  // SPACE
+    { 0x00A0, 0xffff },  // NO-BREAK SPACE
+    { 0x2002, 0xffff },  // EN SPACE
+    { 0x2003, 0xffff },  // EM SPACE
+    { 0x2004, 0xffff },  // THREE-PER-EM SPACE
+    { 0x2005, 0xffff },  // FOUR-PER-EM SPACE
+    { 0x2006, 0xffff },  // SIX-PER-EM SPACE
+    { 0x2007, 0xffff },  // FIGURE SPACE
+    { 0x2008, 0xffff },  // PUNCTUATION SPACE
+    { 0x2009, 0xffff },  // THIN SPACE
+    { 0x200A, 0xffff },  // HAIR SPACE
+    { 0x200B, 0xffff },  // ZERO WIDTH SPACE
+    { 0x202F, 0xffff },  // NARROW NO-BREAK SPACE
+    { 0x3000, 0xffff },  // IDEOGRAPHIC SPACE
+    { 0x303F, 0xffff }   // IDEOGRAPHIC HALF FILL SPACE
 };
 
 
