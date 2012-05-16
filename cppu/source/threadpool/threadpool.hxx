@@ -90,7 +90,7 @@ namespace cppu_threadpool {
         static DisposedCallerAdminHolder getInstance();
 
         void dispose( sal_Int64 nDisposeId );
-        void stopDisposing( sal_Int64 nDisposeId );
+        void destroy( sal_Int64 nDisposeId );
         sal_Bool isDisposed( sal_Int64 nDisposeId );
 
     private:
@@ -109,7 +109,7 @@ namespace cppu_threadpool {
         static ThreadPoolHolder getInstance();
 
         void dispose( sal_Int64 nDisposeId );
-        void stopDisposing( sal_Int64 nDisposeId );
+        void destroy( sal_Int64 nDisposeId );
 
         void addJob( const ByteSequence &aThreadId,
                      sal_Bool bAsynchron,

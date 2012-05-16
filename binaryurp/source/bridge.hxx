@@ -106,7 +106,7 @@ public:
 
     BinaryAny mapCppToBinaryAny(com::sun::star::uno::Any const & cppAny);
 
-    uno_ThreadPool getThreadPool() const;
+    uno_ThreadPool getThreadPool();
 
     rtl::Reference< Writer > getWriter();
 
@@ -258,11 +258,11 @@ private:
     com::sun::star::uno::TypeDescription protPropType_;
     com::sun::star::uno::TypeDescription protPropRequest_;
     com::sun::star::uno::TypeDescription protPropCommit_;
-    uno_ThreadPool threadPool_;
     OutgoingRequests outgoingRequests_;
 
     osl::Mutex mutex_;
     Listeners listeners_;
+    uno_ThreadPool threadPool_;
     rtl::Reference< Writer > writer_;
     rtl::Reference< Reader > reader_;
     bool currentContextMode_;

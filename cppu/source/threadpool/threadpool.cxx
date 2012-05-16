@@ -26,7 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include <boost/unordered_map.hpp>
+#include <cassert>
 #include <stdio.h>
 
 #include <osl/diagnose.h>
@@ -73,7 +76,7 @@ namespace cppu_threadpool
         m_lst.push_back( nDisposeId );
     }
 
-    void DisposedCallerAdmin::stopDisposing( sal_Int64 nDisposeId )
+    void DisposedCallerAdmin::destroy( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
         for( DisposedCallerList::iterator ii = m_lst.begin() ;
@@ -172,9 +175,9 @@ namespace cppu_threadpool
         }
     }
 
-    void ThreadPool::stopDisposing( sal_Int64 nDisposeId )
+    void ThreadPool::destroy( sal_Int64 nDisposeId )
     {
-        m_DisposedCallerAdmin->stopDisposing( nDisposeId );
+        m_DisposedCallerAdmin->destroy( nDisposeId );
     }
 
     /******************
@@ -480,13 +483,14 @@ uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 extern "C" void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->stopDisposing(
+    assert(hPool != 0);
+
+    ThreadPool::getInstance()->destroy(
         sal::static_int_cast< sal_Int64 >(
             reinterpret_cast< sal_IntPtr >(hPool)) );
 
-    if( hPool )
+    bool empty;
     {
-        // special treatment for 0 !
         OSL_ASSERT( g_pThreadpoolHashSet );
 
         MutexGuard guard( Mutex::getGlobalMutex() );
@@ -496,11 +500,17 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
         g_pThreadpoolHashSet->erase( ii );
         delete hPool;
 
-        if( g_pThreadpoolHashSet->empty() )
+        empty = g_pThreadpoolHashSet->empty();
+        if( empty )
         {
             delete g_pThreadpoolHashSet;
             g_pThreadpoolHashSet = 0;
         }
+    }
+
+    if( empty )
+    {
+        uno_threadpool_dispose( 0 );
     }
 }
 
