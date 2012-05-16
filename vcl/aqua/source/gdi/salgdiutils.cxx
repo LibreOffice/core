@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <boost/bind.hpp>
-
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/color.hxx"
 

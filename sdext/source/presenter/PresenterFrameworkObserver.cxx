@@ -28,7 +28,6 @@
 
 #include "PresenterFrameworkObserver.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

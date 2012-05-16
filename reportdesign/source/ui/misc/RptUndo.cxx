@@ -39,7 +39,6 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <svx/unoshape.hxx>
-#include <boost/bind.hpp>
 #include <functional>
 
 namespace rptui

@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 #include <algorithm>
 // =============================================================================
 namespace reportdesign

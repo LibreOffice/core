@@ -46,8 +46,8 @@
 #include "continuousactivitybase.hxx"
 #include "continuouskeytimeactivitybase.hxx"
 
-#include <boost/bind.hpp>
 #include <boost/optional.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <cmath> // for modf
 #include <vector>

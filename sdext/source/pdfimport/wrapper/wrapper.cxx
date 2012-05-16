@@ -62,10 +62,7 @@
 #include "basegfx/tools/canvastools.hxx"
 #include "basegfx/tools/unopolypolygon.hxx"
 
-#include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
-
 #include <boost/unordered_map.hpp>
 #include <string.h>
 #ifdef WNT

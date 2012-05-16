@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 #include "pagemanager.hxx"
 
 namespace canvas

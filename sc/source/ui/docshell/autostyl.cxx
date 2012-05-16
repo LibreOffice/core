@@ -29,8 +29,6 @@
 
 #include <time.h>
 
-#include <boost/bind.hpp>
-
 #include "attrib.hxx"
 #include "autostyl.hxx"
 #include "docsh.hxx"

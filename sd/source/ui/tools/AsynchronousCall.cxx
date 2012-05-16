@@ -29,7 +29,6 @@
 
 #include "tools/AsynchronousCall.hxx"
 
-#include <boost/bind.hpp>
 #include "DrawViewShell.hxx"
 
 namespace sd { namespace tools {

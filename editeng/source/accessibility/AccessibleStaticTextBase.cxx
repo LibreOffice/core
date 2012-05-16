@@ -36,7 +36,7 @@
 #include <limits.h>
 #include <vector>
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <boost/ref.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

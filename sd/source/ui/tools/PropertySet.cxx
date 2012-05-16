@@ -28,7 +28,6 @@
 
 
 #include "tools/PropertySet.hxx"
-#include <boost/bind.hpp>
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 

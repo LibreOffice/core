@@ -45,9 +45,6 @@
 #include "animationfactory.hxx"
 #include "clippingfunctor.hxx"
 
-#include <boost/bind.hpp>
-
-
 using namespace ::com::sun::star;
 
 namespace slideshow {

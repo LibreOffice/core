@@ -53,7 +53,7 @@
 #include <svx/xtable.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <boost/bind.hpp>
+#include <boost/ref.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;

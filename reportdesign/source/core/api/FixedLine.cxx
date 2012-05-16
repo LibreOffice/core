@@ -37,7 +37,6 @@
 #include "FormatCondition.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-#include <boost/bind.hpp>
 #include "ReportHelperImpl.hxx"
 
 #define MIN_WIDTH   80

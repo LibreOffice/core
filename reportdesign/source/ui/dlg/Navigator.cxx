@@ -55,7 +55,6 @@
 #include "ModuleHelper.hxx"
 #include <rtl/ref.hxx>
 
-#include <boost/bind.hpp>
 #include <memory>
 #include <algorithm>
 

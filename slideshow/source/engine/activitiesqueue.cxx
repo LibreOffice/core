@@ -38,7 +38,8 @@
 #include "activity.hxx"
 #include "activitiesqueue.hxx"
 
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
+#include <boost/shared_ptr.hpp>
 #include <algorithm>
 
 

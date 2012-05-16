@@ -39,7 +39,6 @@
 #include <vcl/splitwin.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/wintypes.hxx>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

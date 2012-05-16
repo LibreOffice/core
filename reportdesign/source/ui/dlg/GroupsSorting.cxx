@@ -53,7 +53,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
 #include <algorithm>
-#include <boost/bind.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
 

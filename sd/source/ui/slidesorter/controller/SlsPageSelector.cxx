@@ -47,7 +47,7 @@
 #include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
 
 
 using namespace ::com::sun::star;

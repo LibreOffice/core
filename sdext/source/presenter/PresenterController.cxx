@@ -63,7 +63,6 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

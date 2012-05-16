@@ -41,7 +41,7 @@
 #include <tools/diagnose_ex.h>
 #include <svx/svdundo.hxx>
 
-#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
 #include <algorithm>
 
 using namespace ::com::sun::star;

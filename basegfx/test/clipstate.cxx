@@ -43,8 +43,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <boost/bind.hpp>
-
 using namespace ::basegfx;
 
 

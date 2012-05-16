@@ -59,8 +59,6 @@
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <boost/bind.hpp>
-#include <boost/bind/protect.hpp>
 #include <math.h>
 
 using namespace ::com::sun::star;

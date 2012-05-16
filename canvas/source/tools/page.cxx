@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-
-#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 #include "page.hxx"
 
 namespace canvas

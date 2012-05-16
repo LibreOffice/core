@@ -35,7 +35,6 @@
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <boost/bind.hpp>
 #include <svx/unoshape.hxx>
 
 #include "corestrings.hrc"

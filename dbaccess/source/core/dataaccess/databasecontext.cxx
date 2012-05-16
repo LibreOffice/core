@@ -76,7 +76,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <list>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;

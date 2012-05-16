@@ -31,8 +31,6 @@
 #include "SlsRequestFactory.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "model/SlideSorterModel.hxx"
-#include <boost/bind.hpp>
-#include <boost/bind/protect.hpp>
 
 using namespace ::com::sun::star;
 

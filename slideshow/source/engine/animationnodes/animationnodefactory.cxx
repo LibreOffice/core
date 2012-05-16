@@ -64,7 +64,7 @@
 #include "nodetools.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star;
 

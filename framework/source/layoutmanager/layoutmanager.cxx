@@ -88,7 +88,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <boost/utility.hpp>
 
 //      using namespace
 using namespace ::com::sun::star;

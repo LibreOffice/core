@@ -29,7 +29,6 @@
 
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <boost/bind.hpp>
 
 #include "cell.hxx"
 #include "cellrange.hxx"

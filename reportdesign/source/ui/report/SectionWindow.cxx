@@ -42,7 +42,6 @@
 #include "ViewsWindow.hxx"
 
 #include <svtools/colorcfg.hxx>
-#include <boost/bind.hpp>
 #include <functional>
 #include <algorithm>
 #include <vcl/svapp.hxx>

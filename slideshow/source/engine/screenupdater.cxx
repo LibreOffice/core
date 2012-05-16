@@ -29,7 +29,8 @@
 #include "screenupdater.hxx"
 #include "listenercontainer.hxx"
 
-#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/mem_fn.hpp>
 #include <vector>
 #include <algorithm>
 

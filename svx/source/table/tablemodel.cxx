@@ -30,7 +30,6 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <algorithm>
-#include <boost/bind.hpp>
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
