@@ -67,6 +67,8 @@
 
 #define ROUND_DOWN(ptr,multiple) (void *)(((unsigned) (ptr)) & ~((multiple)-1))
 
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+
 struct engine {
     int dummy;
 };
@@ -1629,6 +1631,212 @@ Java_org_libreoffice_android_Bootstrap_initUCBHelper(JNIEnv* env,
         return;
     }
     (*InitUCBHelper)();
+}
+
+/* Code for reading lines from the pipe based on the (Apache-licensed) Android
+ * logwrapper.c
+ */
+
+static int
+read_from(int fd, const char *tag, char *buffer, int *sz, int *a, int *b, size_t sizeof_buffer)
+{
+    int nread;
+
+    nread = read(fd, buffer+*b, sizeof_buffer - 1 - *b);
+    *sz = nread;
+
+    if (nread == -1) {
+        LOGE("redirect_thread: Reading from %d failed: %s", fd, strerror(errno));
+        close(fd);
+        return -1;
+    }
+
+    if (nread == 0) {
+        LOGI("redirect_thread: EOF from fd %d", fd);
+        close(fd);
+        return 0;
+    }
+
+    *sz += *b;
+
+    for (*b = 0; *b < *sz; (*b)++) {
+        if (buffer[*b] == '\n') {
+            buffer[*b] = '\0';
+            __android_log_print(ANDROID_LOG_INFO, tag, "%s", &buffer[*a]);
+            *a = *b + 1;
+        }
+    }
+
+    if (*a == 0 && *b == (int) sizeof_buffer - 1) {
+        // buffer is full, flush
+        buffer[*b] = '\0';
+        __android_log_print(ANDROID_LOG_INFO, tag, "%s", &buffer[*a]);
+        *b = 0;
+    } else if (*a != *b) {
+        // Keep left-overs
+        *b -= *a;
+        memmove(buffer, &buffer[*a], *b);
+        *a = 0;
+    } else {
+        *a = 0;
+        *b = 0;
+    }
+
+    return nread;
+}
+
+static int stdout_pipe[2], stderr_pipe[2];
+
+static void *
+redirect_thread(void *arg)
+{
+    char buffer[2][4096];
+    int a[2] = { 0, 0 };
+    int b[2] = { 0, 0 };
+    int sz[2];
+
+    (void) arg;
+
+    while (1) {
+        fd_set readfds;
+        int nfds = 0;
+
+        FD_ZERO(&readfds);
+        if (stdout_pipe[0] != -1) {
+            FD_SET(stdout_pipe[0], &readfds);
+            nfds = MAX(nfds, stdout_pipe[0] + 1);
+        }
+        if (stderr_pipe[0] != -1) {
+            FD_SET(stderr_pipe[0], &readfds);
+            nfds = MAX(nfds, stderr_pipe[0] + 1);
+        }
+        if (nfds == 0) {
+            LOGI("redirect_thread: Nothing to read any more, thread exiting");
+            return NULL;
+        }
+
+        if (select(nfds, &readfds, NULL, NULL, NULL) == -1) {
+            LOGE("redirect_thread: select failed: %s, thread exiting", strerror(errno));
+            close(stdout_pipe[0]);
+            stdout_pipe[0] = -1;
+            close(stderr_pipe[0]);
+            stderr_pipe[0] = -1;
+            return NULL;
+        }
+
+        if (stdout_pipe[0] != -1 &&
+            FD_ISSET(stdout_pipe[0], &readfds)) {
+            if (read_from(stdout_pipe[0], "stdout", buffer[0], &sz[0], &a[0], &b[0], sizeof(buffer[0])) <= 0) {
+                stdout_pipe[0] = -1;
+            }
+        }
+
+        if (stderr_pipe[0] != -1 &&
+            FD_ISSET(stderr_pipe[0], &readfds)) {
+            if (read_from(stderr_pipe[0], "stderr", buffer[1], &sz[1], &a[1], &b[1], sizeof(buffer[1])) <= 0) {
+                stderr_pipe[0] = -1;
+            }
+        }
+    }
+}
+
+static int
+redirect_to_null(void)
+{
+    int null = open("/dev/null", O_WRONLY);
+    if (null == -1) {
+        LOGE("redirect_stdio: Could not open /dev/null: %s", strerror(errno));
+        /* If we can't redirect stdout or stderr to /dev/null, just close them
+         * then instead. Huh?
+         */
+        close(1);
+        close(2);
+        return 0;
+    }
+    if (dup2(null, 1) == -1) {
+        LOGE("redirect_stdio: Could not dup2 %d to 1: %s", null, strerror(errno));
+        close(null);
+        close(1);
+        close(2);
+        return 0;
+    }
+    if (dup2(null, 2) == -1) {
+        LOGE("redirect_stdio: Could not dup2 %d to 2: %s", null, strerror(errno));
+        close(null);
+        close(1);
+        close(2);
+        return 0;
+    }
+    close(null);
+    return 1;
+}
+
+__attribute__ ((visibility("default")))
+jboolean
+Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
+                                                       jobject clazz,
+                                                       jboolean state)
+{
+    static jboolean current = JNI_FALSE;
+    pthread_t thread;
+
+    (void) env;
+    (void) clazz;
+
+   if (state == current)
+        return current;
+
+    if (state == JNI_FALSE) {
+        if (!redirect_to_null())
+            return current;
+    } else {
+        if (pipe(stdout_pipe) == -1) {
+            LOGE("redirect_stdio: Could not create pipes: %s", strerror(errno));
+            return current;
+        }
+        if (pipe(stderr_pipe) == -1) {
+            LOGE("redirect_stdio: Could not create pipes: %s", strerror(errno));
+            close(stdout_pipe[0]);
+            close(stdout_pipe[1]);
+            return current;
+        }
+        LOGI("redirect_stdio: stdout pipe: [%d,%d], stderr pipe: [%d,%d]",
+             stdout_pipe[0], stdout_pipe[1], stderr_pipe[0], stderr_pipe[1]);
+
+        if (dup2(stdout_pipe[1], 1) == -1) {
+            LOGE("redirect_stdio: Could not dup2 %d to 1: %s", stdout_pipe[1], strerror(errno));
+            close(stdout_pipe[0]);
+            close(stdout_pipe[1]);
+            close(stderr_pipe[0]);
+            close(stderr_pipe[1]);
+            return current;
+        }
+
+        if (dup2(stderr_pipe[1], 2) == -1) {
+            LOGE("redirect_stdio: Could not dup2 %d to 2: %s", stdout_pipe[1], strerror(errno));
+            /* stdout has already been redirected to its pipe, so redirect
+             * it back to /dev/null
+             */
+            redirect_to_null();
+            close(stdout_pipe[0]);
+            close(stdout_pipe[1]);
+            close(stderr_pipe[0]);
+            close(stderr_pipe[1]);
+            return current;
+        }
+        close(stdout_pipe[1]);
+        close(stderr_pipe[1]);
+
+        if (pthread_create(&thread, NULL, redirect_thread, NULL) != 0) {
+            LOGE("redirect_stdio: Could not create thread: %s", strerror(errno));
+            redirect_to_null();
+            close(stdout_pipe[0]);
+            close(stderr_pipe[0]);
+            return current;
+        }
+    }
+    current = state;
+    return current;
 }
 
 __attribute__ ((visibility("default")))
