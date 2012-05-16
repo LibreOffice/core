@@ -2206,7 +2206,12 @@ if test -n "${with_solver_and_workdir_root}"; then
       AC_MSG_ERROR([directory does not exist: ${with_solver_and_workdir_root}])
     fi
     PathFormat "${with_solver_and_workdir_root}"
-    SOLARVER=${formatted_path}/solver
+    # IsValidFilePath in /sal/osl/w32/file_url.cxx rejects "X:\\" breaking idlc
+    if echo ${formatted_path} | $GREP -q '/$'; then
+        SOLARVER=${formatted_path}solver
+    else
+        SOLARVER=${formatted_path}/solver
+    fi
 else
     SOLARVER=${SRC_ROOT}/solver
 fi
@@ -3396,7 +3401,12 @@ fi
 INPATH="${OUTPATH}${PROEXT}"
 if test -n "${with_solver_and_workdir_root}"; then
     PathFormat "${with_solver_and_workdir_root}"
-    WORKDIR=${formatted_path}/workdir/${INPATH}
+    # IsValidFilePath in /sal/osl/w32/file_url.cxx rejects "X:\\" breaking idlc
+    if echo ${formatted_path} | $GREP -q '/$'; then
+        WORKDIR=${formatted_path}workdir/${INPATH}
+    else
+        WORKDIR=${formatted_path}/workdir/${INPATH}
+    fi
 else
     WORKDIR=${SRC_ROOT}/workdir/${INPATH}
 fi
