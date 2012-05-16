@@ -144,6 +144,7 @@ ifneq ($(OS),SOLARIS)
 # not Solaris
 $(eval $(call gb_Library_set_defs,vclplug_gen,\
     $$(DEFS) \
+    -DUSE_XINERAMA \
     -DUSE_XINERAMA_XORG \
 ))
 ifeq ($(XINERAMA_LINK),dynamic)
@@ -161,6 +162,7 @@ else
 # Solaris
 $(eval $(call gb_Library_set_defs,vclplug_gen,\
     $$(DEFS) \
+    -DUSE_XINERAMA \
     -DUSE_XINERAMA_XSUN \
 ))
 ifeq ($(USE_XINERAMA_VERSION),Xorg)
