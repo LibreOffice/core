@@ -101,6 +101,10 @@ public class Bootstrap extends NativeActivity
     // (contentbroker.cxx), also this called indirectly through the lo-bootstrap library
     public static native void initUCBHelper();
 
+    // A method that starts a thread to redirect stdout and stderr writes to
+    // the Android logging mechanism, or stops the redirection.
+    public static native boolean redirect_stdio(boolean state);
+
     // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
     // and 2) should be called from other kinds of LO code using apps.
     public static void setup(Activity activity)
@@ -110,6 +114,8 @@ public class Bootstrap extends NativeActivity
         ApplicationInfo ai = activity.getApplicationInfo();
         dataDir = ai.dataDir;
         Log.i(TAG, String.format("dataDir=%s\n", dataDir));
+
+        redirect_stdio(true);
 
         String llp = System.getenv("LD_LIBRARY_PATH");
         if (llp == null)
