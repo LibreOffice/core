@@ -32,18 +32,16 @@ $(eval $(call gb_Module_add_targets,testtools,\
 	Library_bridgetest \
 	Library_constructors \
 	StaticLibrary_bridgetest \
-	CustomTarget_uno_services \
-	Rdb_cppobj \
 ))
 
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest_javamaker \
+	Jar_testComponent \
 ))
 endif
 
-#	Jar_testComponent \
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,testtools,\

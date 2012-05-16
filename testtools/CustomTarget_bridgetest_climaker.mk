@@ -26,14 +26,14 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest_climaker))
 
-TTBC := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_climaker)
+climaker_DIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_climaker)
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest_climaker) : \
-	$(TTBC)/cli_types_bridgetest.dll
+	$(climaker_DIR)/cli_types_bridgetest.dll
 
 $(UICM)/cli_types_bridgetest.dll : $(OUTDIR)/bin/bridgetest.rdb \
 		$(OUTDIR)/bin/types.rdb $(OUTDIR)/bin/cli_uretypes.dll \
-		$(call gb_Executable_get_target_for_build,climaker) | $(TTBC)/.dir
+		$(call gb_Executable_get_target_for_build,climaker) | $(climaker_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,climaker \
@@ -42,24 +42,5 @@ $(UICM)/cli_types_bridgetest.dll : $(OUTDIR)/bin/bridgetest.rdb \
 		-X $(OUTDIR)/bin/types.rdb \
 		-r $(OUTDIR)/bin/cli_uretypes.dll \
 		$< > /dev/null)
-
-#
-# shamelessly stolen in unoil module
-# do we need this here?
-# 
-#$(UICM)/cli_oootypes.config : $(SRCDIR)/unoil/climaker/cli_oootypes_config \
-#		$(SRCDIR)/unoil/climaker/version.txt | $(UICM)/.dir
-#	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-#	$(call gb_Helper_abbreviate_dirs_native, \
-#	perl $(SRCDIR)/solenv/bin/clipatchconfig.pl $^ $@)
-#
-#$(UICM)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : $(UICM)/cli_oootypes.config \
-#		$(UICM)/cli_oootypes.dll $(OUTDIR)/bin/cliuno.snk
-#	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AL ,1)
-#	$(call gb_Helper_abbreviate_dirs_native, \
-#	al -out:$@ \
-#		-version:$(CLI_OOOTYPES_POLICY_VERSION) \
-#		-keyfile:$(OUTDIR)/bin/cliuno.snk \
-#		-link:$<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -32,9 +32,21 @@ $(eval $(call gb_Jar_use_jars,testComponent,\
     $(OUTDIR)/bin/juh.jar \
 ))
 
+$(eval $(call gb_Jar_use_customtargets,testComponent,\
+    testtools/bridgetest_javamaker \
+))
+
+$(eval $(call gb_Jar_use_jars,testComponent,\
+    $(WORKDIR)/CustomTarget/testtools/bridgetest_javamaker/class \
+))
+
 $(eval $(call gb_Jar_set_packageroot,testComponent,com))
 
-$(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star/comp/bridge/Manifest.mf))
+$(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star/comp/bridge/manifest))
+
+$(eval $(call gb_Jar_add_packagedirs,testComponent,\
+    $(WORKDIR)/CustomTarget/testtools/bridgetest_javamaker/class/test \
+))
 
 $(eval $(call gb_Jar_add_sourcefiles,testComponent,\
 	testtools/com/sun/star/comp/bridge/TestComponent \
