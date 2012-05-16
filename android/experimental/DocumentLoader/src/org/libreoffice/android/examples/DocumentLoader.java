@@ -59,14 +59,14 @@ public class DocumentLoader
             Bootstrap.dlopen("libswdlo.so");
             Bootstrap.dlopen("libswlo.so");
             
+            Log.i(TAG, "Sleeping NOW");
+            Thread.sleep(20000);
+
             com.sun.star.uno.XComponentContext xContext = null;
 
             xContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
             Log.i(TAG, "xContext is" + (xContext!=null ? " not" : "") + " null");
-
-            Log.i(TAG, "Sleeping NOW");
-            Thread.sleep(20000);
 
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
