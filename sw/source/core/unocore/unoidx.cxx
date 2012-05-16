@@ -930,7 +930,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     SwSections aSectArr;
                     pSectionFmt->GetChildSections(aSectArr,
                             SORTSECT_NOT, sal_False);
-                    for(sal_uInt16 i = 0; i < aSectArr.Count(); i++)
+                    for(sal_uInt16 i = 0; i < aSectArr.size(); i++)
                     {
                         SwSection* pSect = aSectArr[i];
                         if(pSect->GetType() == TOX_HEADER_SECTION)

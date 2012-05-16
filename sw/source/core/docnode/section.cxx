@@ -66,6 +66,7 @@
 #include <unosection.hxx>
 #include <switerator.hxx>
 #include <svl/smplhint.hxx>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 
@@ -104,7 +105,6 @@ TYPEINIT1(SwSection,SwClient );
 
 typedef SwSection* SwSectionPtr;
 
-SV_IMPL_PTRARR( SwSections, SwSection*)
 SV_IMPL_PTRARR(SwSectionFmts,SwSectionFmt*)
 
 
@@ -902,30 +902,24 @@ sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
     return SwModify::GetInfo( rInfo );
 }
 
-extern "C" {
+static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond)
+{
+    const SwSectionFmt* pFSectFmt = pFirst->GetFmt();
+    const SwSectionFmt* pSSectFmt = pSecond->GetFmt();
+    OSL_ENSURE( pFSectFmt && pSSectFmt &&
+            pFSectFmt->GetCntnt(sal_False).GetCntntIdx() &&
+            pSSectFmt->GetCntnt(sal_False).GetCntntIdx(),
+                "ungueltige Sections" );
+    return pFSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex() <
+                  pSSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex();
+}
 
-    int SAL_CALL lcl_SectionCmpPos( const void *pFirst, const void *pSecond)
-    {
-        const SwSectionFmt* pFSectFmt = (*(SwSectionPtr*)pFirst)->GetFmt();
-        const SwSectionFmt* pSSectFmt = (*(SwSectionPtr*)pSecond)->GetFmt();
-        OSL_ENSURE( pFSectFmt && pSSectFmt &&
-                pFSectFmt->GetCntnt(sal_False).GetCntntIdx() &&
-                pSSectFmt->GetCntnt(sal_False).GetCntntIdx(),
-                    "ungueltige Sections" );
-        return (int)((long)pFSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex()) -
-                      pSSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex();
-    }
-
-    int SAL_CALL lcl_SectionCmpNm( const void *pFirst, const void *pSecond)
-    {
-        const SwSectionPtr pFSect = *(SwSectionPtr*)pFirst;
-        const SwSectionPtr pSSect = *(SwSectionPtr*)pSecond;
-        OSL_ENSURE( pFSect && pSSect, "ungueltige Sections" );
-        StringCompare const eCmp =
-            pFSect->GetSectionName().CompareTo( pSSect->GetSectionName() );
-        return eCmp == COMPARE_EQUAL ? 0
-                            : eCmp == COMPARE_LESS ? 1 : -1;
-    }
+static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
+{
+    OSL_ENSURE( pFSect && pSSect, "ungueltige Sections" );
+    StringCompare const eCmp =
+        pFSect->GetSectionName().CompareTo( pSSect->GetSectionName() );
+    return eCmp == COMPARE_LESS;
 }
 
     // alle Sections, die von dieser abgeleitet sind
@@ -933,7 +927,7 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
                                         sal_Bool bAllSections ) const
 {
-    rArr.Remove( 0, rArr.Count() );
+    rArr.clear();
 
     if( GetDepends() )
     {
@@ -944,33 +938,25 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                 ( 0 != ( pIdx = pLast->GetCntnt(sal_False).
                 GetCntntIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
             {
-                const SwSection* Dummy = pLast->GetSection();
-                rArr.C40_INSERT( SwSection,
-                    Dummy,
-                    rArr.Count() );
+                SwSection* pDummy = pLast->GetSection();
+                rArr.push_back( pDummy );
             }
 
         // noch eine Sortierung erwuenscht ?
-        if( 1 < rArr.Count() )
+        if( 1 < rArr.size() )
             switch( eSort )
             {
             case SORTSECT_NAME:
-                qsort( (void*)rArr.GetData(),
-                        rArr.Count(),
-                        sizeof( SwSectionPtr ),
-                        lcl_SectionCmpNm );
+                std::sort( rArr.begin(), rArr.end(), lcl_SectionCmpNm );
                 break;
 
             case SORTSECT_POS:
-                qsort( (void*)rArr.GetData(),
-                        rArr.Count(),
-                        sizeof( SwSectionPtr ),
-                        lcl_SectionCmpPos );
+                std::sort( rArr.begin(), rArr.end(), lcl_SectionCmpPos );
                 break;
             case SORTSECT_NOT: break;
             }
     }
-    return rArr.Count();
+    return rArr.size();
 }
 
     // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array

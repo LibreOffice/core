@@ -41,6 +41,7 @@
 #include <sfx2/Metadatable.hxx>
 
 #include <frmfmt.hxx>
+#include <vector>
 
 
 namespace com { namespace sun { namespace star {
@@ -59,7 +60,7 @@ class SwTOXBase;
 SV_DECL_REF( SwServerObject )
 #endif
 
-SV_DECL_PTRARR( SwSections, SwSection*, 0 )
+typedef std::vector<SwSection*> SwSections;
 
 enum SectionType { CONTENT_SECTION,
                     TOX_HEADER_SECTION,

@@ -255,11 +255,11 @@ SwXTextSection::getChildSections() throw (uno::RuntimeException)
 
     SwSections aChildren;
     rSectionFmt.GetChildSections(aChildren, SORTSECT_NOT, sal_False);
-    uno::Sequence<uno::Reference<text::XTextSection> > aSeq(aChildren.Count());
+    uno::Sequence<uno::Reference<text::XTextSection> > aSeq(aChildren.size());
     uno::Reference< text::XTextSection > * pArray = aSeq.getArray();
-    for (sal_uInt16 i = 0; i < aChildren.Count(); i++)
+    for (sal_uInt16 i = 0; i < aChildren.size(); i++)
     {
-        SwSectionFmt *const pChild = aChildren.GetObject(i)->GetFmt();
+        SwSectionFmt *const pChild = aChildren[i]->GetFmt();
         pArray[i] = CreateXTextSection(pChild);
     }
     return aSeq;
@@ -325,7 +325,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 GetChildSections(aSectionsArr);
 
             // and search for current header section
-            const sal_uInt16 nCount = aSectionsArr.Count();
+            const sal_uInt16 nCount = aSectionsArr.size();
             sal_Bool bHeaderPresent = sal_False;
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
