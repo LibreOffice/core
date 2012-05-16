@@ -77,13 +77,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 endif
 
-ifeq ($(GUIBASE),headless)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_svp \
-    StaticLibrary_headless \
-))
-endif
-
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Module_add_targets,vcl,\
     Zip_osxres \
