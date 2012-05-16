@@ -31,6 +31,7 @@
 #include <svl/svarray.hxx>
 #include <swtypes.hxx>
 #include <fmtruby.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwRubyListEntry
 {
@@ -48,8 +49,7 @@ public:
     void SetRubyAttr( const SwFmtRuby& rAttr )  { aRubyAttr = rAttr; }
 };
 
-typedef SwRubyListEntry* SwRubyListEntryPtr;
-SV_DECL_PTRARR_DEL( SwRubyList, SwRubyListEntryPtr, 0 )
+class SwRubyList : public boost::ptr_vector<SwRubyListEntry> {};
 
 
 #endif  //_RUBYLIST_HXX

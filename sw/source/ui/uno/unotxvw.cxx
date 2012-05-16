@@ -720,7 +720,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     String aString;
     for(sal_uInt16 n = 0; n < nCount; n++)
     {
-        const SwRubyListEntryPtr pEntry = aList[n];
+        const SwRubyListEntry* pEntry = &aList[n];
 
         const String& rEntryText = pEntry->GetText();
         const SwFmtRuby& rAttr = pEntry->GetRubyAttr();
@@ -764,7 +764,7 @@ void SAL_CALL SwXTextView::setRubyList(
     const Sequence<PropertyValue>* pRubyList = rRubyList.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rRubyList.getLength(); nPos++)
     {
-        SwRubyListEntryPtr pEntry = new SwRubyListEntry;
+        SwRubyListEntry* pEntry = new SwRubyListEntry;
         const PropertyValue* pProperties = pRubyList[nPos].getConstArray();
         OUString sTmp;
         for(sal_Int32 nProp = 0; nProp < pRubyList[nPos].getLength(); nProp++)
@@ -810,7 +810,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }
-        aList.Insert(pEntry, (sal_uInt16)nPos);
+        aList.insert(aList.begin() + nPos, pEntry);
     }
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     pDoc->SetRubyList( *rSh.GetCrsr(), aList, 0 );

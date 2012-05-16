@@ -47,8 +47,6 @@
 #include <breakit.hxx>
 #include <crsskip.hxx>
 
-SV_IMPL_PTRARR( SwRubyList, SwRubyListEntryPtr )
-
 using namespace ::com::sun::star::i18n;
 
 
@@ -82,7 +80,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                 }
                 if( _SelectNextRubyChars( aPam, *pNew, nMode ))
                 {
-                    rList.Insert( pNew, rList.Count() );
+                    rList.push_back( pNew );
                     aPam.DeleteMark();
                 }
                 else
@@ -97,12 +95,12 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                      else
                         break;
                 }
-            } while( 30 > rList.Count() && *aPam.GetPoint() < *pEnd );
+            } while( 30 > rList.size() && *aPam.GetPoint() < *pEnd );
         }
-    } while( 30 > rList.Count() &&
+    } while( 30 > rList.size() &&
         (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
 
-    return rList.Count();
+    return rList.size();
 }
 
 sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
@@ -135,7 +133,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                 }
                 if( _SelectNextRubyChars( aPam, aCheckEntry, nMode ))
                 {
-                    const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
+                    const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
                     if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
                     {
                         // set/reset the attribut
@@ -167,7 +165,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                      }
                      else
                     {
-                        const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
+                        const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
 
                         // set/reset the attribut
                         if( pEntry->GetRubyAttr().GetText().Len() &&
@@ -184,9 +182,9 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         aPam.DeleteMark();
                     }
                 }
-            } while( nListEntry < rList.Count() && *aPam.GetPoint() < *pEnd );
+            } while( nListEntry < rList.size() && *aPam.GetPoint() < *pEnd );
         }
-    } while( 30 > rList.Count() &&
+    } while( 30 > rList.size() &&
         (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
 
     GetIDocumentUndoRedo().EndUndo( UNDO_SETRUBYATTR, NULL );
