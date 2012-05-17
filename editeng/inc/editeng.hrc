@@ -35,6 +35,7 @@
 #define MN_AUTOCORR         4
 #define MN_WORDLANGUAGE     5
 #define MN_PARALANGUAGE     6
+#define MN_INSERT_SINGLE    7
 
 #define MN_ALTSTART     1000
 #define MN_AUTOSTART    2000

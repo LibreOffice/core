@@ -82,6 +82,7 @@ public: // Needed for Undo
 
 private:
     ImpEditView*    pImpEditView;
+    String          aDicNameSingle;
 
                     EDITENG_DLLPRIVATE EditView( const EditView& );
     EDITENG_DLLPRIVATE EditView&        operator=( const EditView& );

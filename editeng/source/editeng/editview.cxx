@@ -1037,6 +1037,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                     // linguistic entry above
                     sal_uInt16 nPos = MN_DICTSTART + i;
                     pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
+                    aDicNameSingle = xDicTmp->getName();
 
                     uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
                     if (xSvcInfo.is())
@@ -1052,8 +1053,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 }
             }
         }
-
-        if ( !pInsertMenu->GetItemCount() )
+        if ( pInsertMenu->GetItemCount() != 1)
+            aPopupMenu.EnableItem( MN_INSERT_SINGLE, sal_False );
+        if ( pInsertMenu->GetItemCount() < 2 )
             aPopupMenu.EnableItem( MN_INSERT, sal_False );
 
         aPopupMenu.RemoveDisabledEntries( sal_True, sal_True );
@@ -1121,9 +1123,13 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 pCallBack->Call( &aInf );
             }
         }
-        else if ( nId >= MN_DICTSTART )
+        else if ( nId >= MN_DICTSTART || nId == MN_INSERT_SINGLE )
         {
-            String aDicName ( pInsertMenu->GetItemText(nId) );
+            String aDicName;
+            if (nId >= MN_DICTSTART)
+                aDicName = pInsertMenu->GetItemText(nId);
+            else
+                aDicName = aDicNameSingle;
 
             uno::Reference< linguistic2::XDictionary >      xDic;
             if (xDicList.is())

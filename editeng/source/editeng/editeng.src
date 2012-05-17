@@ -95,6 +95,12 @@ Menu RID_MENU_SPELL
         };
         MenuItem
         {
+            Identifier = MN_INSERT_SINGLE ;
+            HelpId = HID_EDITENG_SPELLER_ADDWORD;
+            Text [ en-US ] = "~Add" ;
+        };
+        MenuItem
+        {
             Identifier = MN_IGNORE ;
             HelpId = HID_EDITENG_SPELLER_IGNORE;
             Text [ en-US ] = "Ignore All" ;
