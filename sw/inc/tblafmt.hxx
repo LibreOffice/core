@@ -309,7 +309,7 @@ public:
 
 class SW_DLLPUBLIC SwTableAutoFmtTbl
 {
-    class Impl;
+    struct Impl;
     ::boost::scoped_ptr<Impl> m_pImpl;
 
     SW_DLLPRIVATE sal_Bool Load( SvStream& rStream );
