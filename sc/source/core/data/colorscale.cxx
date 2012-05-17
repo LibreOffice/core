@@ -120,14 +120,28 @@ const Color& ScColorScaleEntry::GetColor() const
     return maColor;
 }
 
-ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
+ScColorFormat::ScColorFormat(ScDocument* pDoc):
     mpDoc(pDoc)
 {
 }
 
-ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat):
+ScColorFormat::ScColorFormat(ScDocument* pDoc, const ScColorFormat& rFormat):
     maRanges(rFormat.maRanges),
     mpDoc(pDoc)
+{
+}
+
+ScColorFormat::~ScColorFormat()
+{
+}
+
+ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
+    ScColorFormat(pDoc)
+{
+}
+
+ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat):
+    ScColorFormat(pDoc, rFormat)
 {
     for(const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
     {
@@ -135,6 +149,14 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleForma
     }
 }
 
+ScColorFormat* ScColorScaleFormat::Clone(ScDocument* pDoc) const
+{
+    return new ScColorScaleFormat(pDoc, *this);
+}
+
+ScColorScaleFormat::~ScColorScaleFormat()
+{
+}
 
 void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
 {
@@ -292,12 +314,12 @@ void ScColorScaleFormat::calcMinMax(double& rMin, double& rMax) const
     rMax = GetMaxValue();
 }
 
-void ScColorScaleFormat::SetRange(const ScRangeList& rList)
+void ScColorFormat::SetRange(const ScRangeList& rList)
 {
     maRanges = rList;
 }
 
-const ScRangeList& ScColorScaleFormat::GetRange() const
+const ScRangeList& ScColorFormat::GetRange() const
 {
     return maRanges;
 }
@@ -485,6 +507,11 @@ void ScColorScaleFormat::DataChanged(const ScRange& rRange)
     }
 }
 
+ScColorFormatType ScColorScaleFormat::GetType() const
+{
+    return COLORSCALE;
+}
+
 ScColorScaleFormat::iterator ScColorScaleFormat::begin()
 {
     return maColorScales.begin();
@@ -505,21 +532,21 @@ ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
     return maColorScales.end();
 }
 
-ScColorScaleFormatList::ScColorScaleFormatList(ScDocument* pDoc, const ScColorScaleFormatList& rList)
+ScColorFormatList::ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList)
 {
     for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
     {
-        maColorScaleFormats.push_back(new ScColorScaleFormat(pDoc, *itr));
+        maColorScaleFormats.push_back(itr->Clone(pDoc));
     }
 }
 
-void ScColorScaleFormatList::AddFormat( ScColorScaleFormat* pFormat )
+void ScColorFormatList::AddFormat( ScColorFormat* pFormat )
 {
     maColorScaleFormats.push_back( pFormat );
 }
 
 // attention nFormat is 1 based, 0 is reserved for no format
-ScColorScaleFormat* ScColorScaleFormatList::GetFormat(sal_uInt32 nFormat)
+ScColorFormat* ScColorFormatList::GetFormat(sal_uInt32 nFormat)
 {
     if( nFormat > size() || !nFormat )
         return NULL;
@@ -527,32 +554,32 @@ ScColorScaleFormat* ScColorScaleFormatList::GetFormat(sal_uInt32 nFormat)
     return &maColorScaleFormats[nFormat-1];
 }
 
-ScColorScaleFormatList::iterator ScColorScaleFormatList::begin()
+ScColorFormatList::iterator ScColorFormatList::begin()
 {
     return maColorScaleFormats.begin();
 }
 
-ScColorScaleFormatList::const_iterator ScColorScaleFormatList::begin() const
+ScColorFormatList::const_iterator ScColorFormatList::begin() const
 {
     return maColorScaleFormats.begin();
 }
 
-ScColorScaleFormatList::iterator ScColorScaleFormatList::end()
+ScColorFormatList::iterator ScColorFormatList::end()
 {
     return maColorScaleFormats.end();
 }
 
-ScColorScaleFormatList::const_iterator ScColorScaleFormatList::end() const
+ScColorFormatList::const_iterator ScColorFormatList::end() const
 {
     return maColorScaleFormats.end();
 }
 
-size_t ScColorScaleFormatList::size() const
+size_t ScColorFormatList::size() const
 {
     return maColorScaleFormats.size();
 }
 
-void ScColorScaleFormatList::DataChanged(const ScRange& rRange)
+void ScColorFormatList::DataChanged(const ScRange& rRange)
 {
     for(iterator itr = begin(); itr != end(); ++itr)
     {
@@ -560,7 +587,7 @@ void ScColorScaleFormatList::DataChanged(const ScRange& rRange)
     }
 }
 
-void ScColorScaleFormatList::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+void ScColorFormatList::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 {
     for(iterator itr = begin(); itr != end(); ++itr)
     {
@@ -568,7 +595,7 @@ void ScColorScaleFormatList::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
     }
 }
 
-void ScColorScaleFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
+void ScColorFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     for(iterator itr = begin(); itr != end(); ++itr)

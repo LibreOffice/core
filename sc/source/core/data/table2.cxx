@@ -702,8 +702,8 @@ void ScTable::CopyColorScales( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     std::map<sal_Int32, sal_Int32> aOldIdToNewId;
     std::map<sal_Int32, ScRangeList> aIdToRange;
 
-    ScColorScaleFormatList* pColorScaleList = pDocument->GetColorScaleList();
-    ScColorScaleFormatList* pOldColorScaleList = pTable->pDocument->GetColorScaleList();
+    ScColorFormatList* pColorScaleList = pDocument->GetColorScaleList();
+    ScColorFormatList* pOldColorScaleList = pTable->pDocument->GetColorScaleList();
     for(SCCOL i = nCol1; i <= nCol2; ++i)
     {
         ScAttrIterator* pIter = aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
@@ -714,8 +714,8 @@ void ScTable::CopyColorScales( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
         {
             if (aOldIdToNewId.find(nId) == aOldIdToNewId.end())
             {
-                ScColorScaleFormat* pFormat = pOldColorScaleList->GetFormat(nId);
-                ScColorScaleFormat* pNewFormat = new ScColorScaleFormat(pDocument, *pFormat);
+                ScColorFormat* pFormat = pOldColorScaleList->GetFormat(nId);
+                ScColorFormat* pNewFormat = pFormat->Clone(pDocument);
                 sal_Int32 nNewId = pColorScaleList->size() + 1;
                 //not in list => create entries in both maps and new format
                 pColorScaleList->AddFormat(pNewFormat);
@@ -731,7 +731,7 @@ void ScTable::CopyColorScales( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             itr != aIdToRange.end(); ++itr)
     {
         sal_uInt32 nNewKey = aOldIdToNewId.find(itr->first)->second;
-        ScColorScaleFormat* pFormat = pColorScaleList->GetFormat( nNewKey );
+        ScColorFormat* pFormat = pColorScaleList->GetFormat( nNewKey );
         pFormat->UpdateReference(URM_MOVE, ScRange(nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab),
                 nDx, nDy, pTable->nTab - nTab);
         pFormat->SetRange(itr->second);

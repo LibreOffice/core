@@ -628,12 +628,12 @@ sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
     return nNewKey;
 }
 
-const ScColorScaleFormatList* ScDocument::GetColorScaleList() const
+const ScColorFormatList* ScDocument::GetColorScaleList() const
 {
     return mpColorScaleList.get();
 }
 
-ScColorScaleFormatList* ScDocument::GetColorScaleList()
+ScColorFormatList* ScDocument::GetColorScaleList()
 {
     return mpColorScaleList.get();
 }
@@ -646,7 +646,7 @@ sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )
         return 0;
 
     if(!mpColorScaleList)
-        mpColorScaleList.reset(new ScColorScaleFormatList());
+        mpColorScaleList.reset(new ScColorFormatList());
 
     mpColorScaleList->AddFormat( pNew );
 

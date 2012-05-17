@@ -489,7 +489,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                         const ScColorScaleFormat* pColorScale = NULL;
                         if ( nColorScale && mpColorScaleList )
-                            pColorScale = mpColorScaleList->GetFormat( nColorScale );
+                        {
+                            ScColorFormat* pFormat = mpColorScaleList->GetFormat( nColorScale );
+                            if(pFormat->GetType() == COLORSCALE)
+                                pColorScale = static_cast<ScColorScaleFormat*>(pFormat);
+                        }
 
                         do
                         {

@@ -1084,16 +1084,19 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }
     }
-    if( const ScColorScaleFormatList* pColorScaleList = GetDoc().GetColorScaleList() )
+    if( const ScColorFormatList* pColorScaleList = GetDoc().GetColorScaleList() )
     {
-        for( ScColorScaleFormatList::const_iterator itr = pColorScaleList->begin();
+        for( ScColorFormatList::const_iterator itr = pColorScaleList->begin();
                 itr != pColorScaleList->end(); ++itr)
         {
             const ScRangeList& rList = itr->GetRange();
             if (rList.front()->aStart.Tab() == GetCurrScTab())
             {
-                XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), *itr ) );
-                maColorScaleList.AppendRecord( xColorScaleRec );
+                if(itr->GetType() == COLORSCALE)
+                {
+                    XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*itr) ) );
+                    maColorScaleList.AppendRecord( xColorScaleRec );
+                }
             }
         }
     }

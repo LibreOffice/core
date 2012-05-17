@@ -476,9 +476,9 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     if ( pSourceCond )
         pCondFormList = new ScConditionalFormatList(this, *pSourceCond);
 
-    const ScColorScaleFormatList* pSourceColorScaleList = pSourceDoc->mpColorScaleList.get();
+    const ScColorFormatList* pSourceColorScaleList = pSourceDoc->mpColorScaleList.get();
     if ( pSourceColorScaleList )
-        mpColorScaleList.reset(new ScColorScaleFormatList(this, *pSourceColorScaleList));
+        mpColorScaleList.reset(new ScColorFormatList(this, *pSourceColorScaleList));
 
     const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList;
     if ( pSourceValid )

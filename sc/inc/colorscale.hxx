@@ -37,6 +37,13 @@
 class ScDocument;
 class ScFormulaCell;
 class ScTokenArray;
+class ScDataBarInfo;
+
+struct ScDataBarFormatData
+{
+    Color maPositiveColor;
+    bool mbGradient;
+};
 
 class SC_DLLPUBLIC ScColorScaleEntry
 {
@@ -71,11 +78,39 @@ public:
     void SetPercent(bool bPercent);
 };
 
-class SC_DLLPUBLIC ScColorScaleFormat
+enum ScColorFormatType
 {
-private:
+    COLORSCALE,
+    DATABAR
+};
+
+class SC_DLLPUBLIC ScColorFormat
+{
+public:
+    ScColorFormat(ScDocument* pDoc);
+    ScColorFormat(ScDocument* pDoc, const ScColorFormat& rFormat);
+    virtual ~ScColorFormat();
+
+    void SetRange(const ScRangeList& rList);
+    const ScRangeList& GetRange() const;
+
+    virtual void DataChanged(const ScRange& rRange) = 0;
+    virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab) = 0;
+    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz ) = 0;
+
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const = 0;
+
+    virtual ScColorFormatType GetType() const = 0;
+
+protected:
     ScRangeList maRanges;
     ScDocument* mpDoc;
+};
+
+class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat
+{
+private:
     typedef boost::ptr_vector<ScColorScaleEntry> ColorScaleEntries;
     ColorScaleEntries maColorScales;
 
@@ -87,17 +122,18 @@ private:
 public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
+    virtual ~ScColorScaleFormat();
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const;
 
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
-    void SetRange(const ScRangeList& rList);
-    const ScRangeList& GetRange() const;
 
-    void DataChanged(const ScRange& rRange);
-    void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
-    void UpdateReference( UpdateRefMode eUpdateRefMode,
+    virtual void DataChanged(const ScRange& rRange);
+    virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
+    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
+    virtual ScColorFormatType GetType() const;
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
     iterator begin();
@@ -106,20 +142,38 @@ public:
     const_iterator end() const;
 };
 
-class SC_DLLPUBLIC ScColorScaleFormatList
+class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
+{
+public:
+    ScDataBarFormat(ScDocument* pDoc);
+    ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
+
+    ScDataBarInfo* GetDataBarInfo(const ScAddress& rAddr) const;
+
+    virtual void DataChanged(const ScRange& rRange);
+    virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
+    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
+    virtual ScColorFormatType GetType() const;
+private:
+    ScDataBarFormatData maFormatData;
+};
+
+class SC_DLLPUBLIC ScColorFormatList
 {
 private:
-    typedef boost::ptr_vector<ScColorScaleFormat> ColorScaleFormatContainer;
-    boost::ptr_vector<ScColorScaleFormat> maColorScaleFormats;
+    typedef boost::ptr_vector<ScColorFormat> ColorFormatContainer;
+    ColorFormatContainer maColorScaleFormats;
 public:
-    ScColorScaleFormatList() {};
-    ScColorScaleFormatList(ScDocument* pDoc, const ScColorScaleFormatList& rList);
+    ScColorFormatList() {};
+    ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList);
 
-    typedef ColorScaleFormatContainer::iterator iterator;
-    typedef ColorScaleFormatContainer::const_iterator const_iterator;
+    typedef ColorFormatContainer::iterator iterator;
+    typedef ColorFormatContainer::const_iterator const_iterator;
 
-    ScColorScaleFormat* GetFormat(sal_uInt32 nFormat);
-    void AddFormat( ScColorScaleFormat* pFormat );
+    ScColorFormat* GetFormat(sal_uInt32 nFormat);
+    void AddFormat( ScColorFormat* pFormat );
 
     void DataChanged(const ScRange& rRange);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);

@@ -97,7 +97,7 @@ class ScChartListenerCollection;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScColorScaleFormat;
-class ScColorScaleFormatList;
+class ScColorFormatList;
 class ScDBCollection;
 class ScDBData;
 class ScDetOpData;
@@ -246,7 +246,7 @@ private:
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScConditionalFormatList* pCondFormList;             // conditional formats
-    boost::scoped_ptr<ScColorScaleFormatList> mpColorScaleList; //color scales
+    boost::scoped_ptr<ScColorFormatList> mpColorScaleList; //color scales
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
@@ -1212,8 +1212,8 @@ public:
                     { return pCondFormList; }
     void            SetCondFormList(ScConditionalFormatList* pNew);
 
-    SC_DLLPUBLIC const ScColorScaleFormatList* GetColorScaleList() const;
-    SC_DLLPUBLIC ScColorScaleFormatList* GetColorScaleList();
+    SC_DLLPUBLIC const ScColorFormatList* GetColorScaleList() const;
+    SC_DLLPUBLIC ScColorFormatList* GetColorScaleList();
 
     ScValidationDataList* GetValidationList() const
                     { return pValidationList; }
