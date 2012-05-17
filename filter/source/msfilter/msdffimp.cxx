@@ -1099,12 +1099,13 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
+static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
     const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
     sal_Int32& rnArrowWidth, sal_Bool& rbArrowCenter,
     rtl::OUString& rsArrowName, sal_Bool bScaleArrow )
 {
-    basegfx::B2DPolygon aRetval;
+    basegfx::B2DPolyPolygon aRetPolyPoly;
+
     double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
     double      fLenghtMul, fWidthMul;
     sal_Int32   nLineNumber;
@@ -1140,7 +1141,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth, fLenghtMul * fLineWidth ));
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
             aTriangle.setClosed(true);
-            aRetval = aTriangle;
+            aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
             aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowEnd "));
         }
         break;
@@ -1169,7 +1170,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.15, fLenghtMul * fLineWidth ));
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth * 0.91 ));
             aTriangle.setClosed(true);
-            aRetval = aTriangle;
+            aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
             aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowOpenEnd "));
         }
         break;
@@ -1181,7 +1182,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , fLenghtMul * fLineWidth * 0.60 ));
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
             aTriangle.setClosed(true);
-            aRetval = aTriangle;
+            aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
             aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowStealthEnd "));
         }
         break;
@@ -1193,16 +1194,16 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , fLenghtMul * fLineWidth ));
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth * 0.50 ));
             aTriangle.setClosed(true);
-            aRetval = aTriangle;
+            aRetPolyPoly = basegfx::B2DPolyPolygon(aTriangle);
             rbArrowCenter = sal_True;
             aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowDiamondEnd "));
         }
         break;
         case mso_lineArrowOvalEnd :
         {
-            aRetval = XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
+            aRetPolyPoly = basegfx::B2DPolyPolygon( XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
                                 (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
-                                    (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon();
+                                    (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon() );
             rbArrowCenter = sal_True;
             aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowOvalEnd "));
         }
@@ -1213,7 +1214,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
     rsArrowName = aArrowName.makeStringAndClear();
     rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
 
-    return aRetval;
+    return aRetPolyPoly;
 }
 
 void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const // #i28269#
@@ -1335,10 +1336,10 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
                 rtl::OUString aArrowName;
-                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
+                basegfx::B2DPolyPolygon aPolyPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineStartWidthItem( nArrowWidth ) );
-                rSet.Put( XLineStartItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
+                rSet.Put( XLineStartItem( aArrowName, aPolyPoly) );
                 rSet.Put( XLineStartCenterItem( bArrowCenter ) );
             }
             /////////////
@@ -1353,10 +1354,10 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
                 rtl::OUString aArrowName;
-                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
+                basegfx::B2DPolyPolygon aPolyPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineEndWidthItem( nArrowWidth ) );
-                rSet.Put( XLineEndItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
+                rSet.Put( XLineEndItem( aArrowName, aPolyPoly ) );
                 rSet.Put( XLineEndCenterItem( bArrowCenter ) );
             }
             if ( IsProperty( DFF_Prop_lineEndCapStyle ) )
