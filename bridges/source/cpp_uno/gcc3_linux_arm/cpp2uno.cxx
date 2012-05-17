@@ -140,8 +140,6 @@ namespace
 #endif
 
 // For armhf we get the floating point arguments from a different area of the stack
-// TODO: deal with functions with more than 8 floating point args that need to overflow
-// to the stack. Find such an UNO API to try on.
 #ifdef __ARM_PCS_VFP
                 if (pParamTypeDescr->eTypeClass == typelib_TypeClass_FLOAT)
                 {
