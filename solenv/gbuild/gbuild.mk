@@ -285,7 +285,6 @@ include $(SOLARENV)/inc/minor.mk
 # For example:
 # $(OUTDIR)/bin/% for executables collides
 #	with $(OUTDIR)/bin/%.res for resources on unix
-#	with $(OUTDIR)/bin/%.rdb for UnoApi
 # $(OUTDIR)/lib/%.lib collides
 #	on windows (static and dynamic libs)
 # $(OUTDIR)/xml/% for packageparts collides
@@ -304,7 +303,6 @@ include $(foreach class, \
 	StaticLibrary \
 	Executable \
 	SdiTarget \
-	UnoApi \
 	Package \
 	CustomTarget \
 	ExternalLib \
@@ -317,6 +315,7 @@ include $(foreach class, \
 	JunitTest \
 	Module \
 	UnoApiTarget \
+	UnoApi \
 	UnoApiMerge \
 	InternalUnoApi \
 	Zip \
