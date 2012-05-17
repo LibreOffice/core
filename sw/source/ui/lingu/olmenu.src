@@ -53,6 +53,12 @@ Menu MN_SPELL_POPUP
         };
         MenuItem
         {
+            Identifier = MN_ADD_TO_DIC_SINGLE ;
+            HelpID = HID_LINGU_ADD_WORD ;
+            Text [ en-US ] = "~Add" ;
+        };
+        MenuItem
+        {
             Identifier = MN_AUTOCORR ;
             HelpID = HID_LINGU_AUTOCORR ;
             SubMenu = Menu

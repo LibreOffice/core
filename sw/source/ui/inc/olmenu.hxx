@@ -62,6 +62,7 @@ class SwSpellPopup : public PopupMenu
     std::map< sal_Int16, ::rtl::OUString > aLangTable_Paragraph;
 //    std::map< sal_Int16, ::rtl::OUString > aLangTable_Document;
 
+    String  aDicNameSingle;
     bool    bGrammarResults;    // show grammar results? Or show spellcheck results?
 
     Image   aInfo16;

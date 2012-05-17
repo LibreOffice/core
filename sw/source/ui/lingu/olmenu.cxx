@@ -460,8 +460,8 @@ SwSpellPopup::SwSpellPopup(
 
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);     //! necessary to retrieve the correct dictionary name in 'Execute' below
-    bEnable = sal_False;    // enable MN_ADD_TO_DIC?
     uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
+    sal_uInt16 nItemId = MN_DICTIONARIES_START;
     if (xDicList.is())
     {
         // add the default positive dictionary to dic-list (if not already done).
@@ -475,7 +475,6 @@ SwSpellPopup::SwSpellPopup(
         const uno::Reference< linguistic2::XDictionary >  *pDic = aDics.getConstArray();
         sal_uInt16 nDicCount = static_cast< sal_uInt16 >(aDics.getLength());
 
-        sal_uInt16 nItemId = MN_DICTIONARIES_START;
         for( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
@@ -492,7 +491,7 @@ SwSpellPopup::SwSpellPopup(
                 // the extra 1 is because of the (possible) external
                 // linguistic entry above
                 pMenu->InsertItem( nItemId, xDicTmp->getName() );
-                bEnable = sal_True;
+                aDicNameSingle = xDicTmp->getName();
 
                 uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
                 if (xSvcInfo.is())
@@ -510,7 +509,8 @@ SwSpellPopup::SwSpellPopup(
             }
         }
     }
-    EnableItem( MN_ADD_TO_DIC, bEnable );
+    EnableItem( MN_ADD_TO_DIC, ((nItemId - MN_DICTIONARIES_START) > 1)?sal_True:sal_False );
+    EnableItem( MN_ADD_TO_DIC_SINGLE, ((nItemId - MN_DICTIONARIES_START) == 1)?sal_True:sal_False );
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
@@ -656,6 +656,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     EnableItem( MN_IGNORE_WORD, false );
     EnableItem( MN_ADD_TO_DIC, false );
+    EnableItem( MN_ADD_TO_DIC_SINGLE, false );
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
@@ -807,12 +808,18 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         linguistic::AddEntryToDic( xDictionary,
                 xSpellAlt->getWord(), sal_False, aEmptyStr, LANGUAGE_NONE );
     }
-    else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
+    else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == MN_ADD_TO_DIC_SINGLE)
     {
             OUString aWord( xSpellAlt->getWord() );
+            String aDicName;
 
-            PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
-            String aDicName ( pMenu->GetItemText(nId) );
+            if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
+            {
+                PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
+                aDicName = pMenu->GetItemText(nId);
+            }
+            else
+                aDicName = aDicNameSingle;
 
             uno::Reference< linguistic2::XDictionary >      xDic;
             uno::Reference< linguistic2::XDictionaryList >  xDicList( SvxGetDictionaryList() );
