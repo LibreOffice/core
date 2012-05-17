@@ -4,9 +4,17 @@
 #!/usr/bin/perl
 
 use strict;
+use LWP::UserAgent;
 
 my $main_repo="core";
 my @pieces=("binfilter", "dictionaries", "help", "translations");
+
+my %bugzillas = (
+    fdo  => "https://bugs.freedesktop.org/",
+    bnc  => "https://bugzilla.novell.com/",
+    rhbz => "https://bugzilla.redhat.com/",
+    i    => "https://issues.apache.org/ooo/",
+);
 
 sub search_bugs($$$$)
 {
@@ -214,9 +222,9 @@ sub open_log_file($$$$$)
     return $log;
 }
 
-sub print_summary_in_stat($$$$$$$$$)
+sub print_summary_in_stat($$$$$$$$)
 {
-    my ($summary, $pprint_filters, $print_mode, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix, $log) = @_;
+    my ($summary, $pprint_filters, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix, $log) = @_;
 
     return if ( $summary eq "" );
 
@@ -232,7 +240,7 @@ sub print_summary_in_stat($$$$$$$$$)
     return unless (defined $print);
 
     # print piece title if not done yet
-    if ( defined ${$ppiece_title} && $print_mode ne "bugnumbers" ) {
+    if ( defined ${$ppiece_title} ) {
         printf $log "${$ppiece_title}\n";
         ${$ppiece_title} = undef;
     }
@@ -240,11 +248,7 @@ sub print_summary_in_stat($$$$$$$$$)
     # finally print the summary line
     my $bugs = "";
     if ( %{$pbugs} ) {
-        if ( $print_mode eq "bugnumbers" ) {
-            $bugs = join ("\n", keys %{$pbugs}) . "\n";
-        } else {
-            $bugs = " (" . join (", ", keys %{$pbugs}) . ")";
-        }
+        $bugs = " (" . join (", ", keys %{$pbugs}) . ")";
     }
 
     my $authors = "";
@@ -252,16 +256,12 @@ sub print_summary_in_stat($$$$$$$$$)
         $authors = " [" . join (", ", keys %{$pauthors}) . "]";
     }
 
-    if ( $print_mode eq "bugnumbers" ) {
-        printf $log $bugs;
-    } else {
-        printf $log $prefix . $summary . $bugs . $authors . "\n";
-    }
+    printf $log $prefix . $summary . $bugs . $authors . "\n";
 }
 
-sub print_stat($$$$)
+sub print_stat($$$)
 {
-    my ($pdata, $pprint_filters, $print_mode, $log) = @_;
+    my ($pdata, $pprint_filters, $log) = @_;
 
     foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
         # check if this piece has any entries at all
@@ -274,7 +274,7 @@ sub print_stat($$$$)
             foreach my $id ( sort { $pdata->{$piece}{$a}{'summary'} cmp $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
                 my $summary = $pdata->{$piece}{$id}{'summary'};
                 if ($summary ne $old_summary) {
-                    print_summary_in_stat($old_summary, $pprint_filters, $print_mode, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
+                    print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
                     $old_summary = $summary;
                     %authors = ();
                     %bugs = ();
@@ -294,9 +294,87 @@ sub print_stat($$$$)
                     $flags{$flag} = 1;
                 }
             }
-            print_summary_in_stat($old_summary, $pprint_filters, $print_mode, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
+            print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
         }
     }
+}
+
+sub get_bug_name($$)
+{
+    my ($bug, $summary) = @_;
+    print "$bug\n";
+
+    $bug =~ m/(?:(\w*)\#+(\d+))/; # fdo#12345
+    my $bugzilla = $1;            # fdo
+    my $bug_number = $2;          # 12345
+
+    if ( $bugzillas{$bugzilla} ) {
+        my $url = $bugzillas{$bugzilla} . "show_bug.cgi?id=" . $bug_number;
+        my $ua = LWP::UserAgent->new;
+        $ua->timeout(10);
+        $ua->env_proxy;
+        my $response = $ua->get($url);
+        if ($response->is_success) {
+            my $title = $response->title();
+            if ( $title =~ s/^Bug \d+ – // ) {
+                return $title;
+            }
+        }
+    }
+
+    return $summary;
+}
+
+sub print_bugs($$)
+{
+    my ($pdata, $log) = @_;
+
+    # associate bugs with their summaries and fixers
+    my %bugs = ();
+    foreach my $piece ( keys %{$pdata}) {
+        foreach my $id ( keys %{$pdata->{$piece}}) {
+            foreach my $bug (keys %{$pdata->{$piece}{$id}{'bugs'}}) {
+                my $author = $pdata->{$piece}{$id}{'author'}{'name'};
+                my $summary = $pdata->{$piece}{$id}{'summary'};
+                $bugs{$bug}{'summary'} = $summary;
+                $bugs{$bug}{'author'}{$author} = 1;
+            }
+        }
+    }
+
+    # try to replace summaries with bug names from bugzilla
+    foreach my $bug ( keys %bugs) {
+        $bugs{$bug}{'summary'} = get_bug_name($bug, $bugs{$bug}{'summary'});
+    }
+
+    # print
+    foreach my $bug ( sort { $a cmp $b } keys %bugs) {
+        my $summary = $bugs{$bug}{'summary'};
+
+        my $authors = "";
+        if ( %{$bugs{$bug}{'author'}} ) {
+            $authors = " [" . join (", ", keys %{$bugs{$bug}{'author'}}) . "]";
+        }
+
+        printf $log $bug . " " . $summary . $authors . "\n";
+    }
+}
+
+sub print_bugnumbers($$)
+{
+    my ($pdata, $log) = @_;
+
+    # just collect bugs
+    my %bugs = ();
+    foreach my $piece ( keys %{$pdata}) {
+        foreach my $id ( keys %{$pdata->{$piece}}) {
+            foreach my $bug (keys %{$pdata->{$piece}{$id}{'bugs'}}) {
+                $bugs{$bug} = 1;
+            }
+        }
+    }
+
+    printf $log join ("\n", keys %bugs) . "\n";
 }
 
 ########################################################################
@@ -365,7 +443,8 @@ foreach my $arg (@ARGV) {
 	$log_dir = "$1";
     } elsif ($arg eq '--bugs') {
         $print_filters{'bug'} = 1;
-        $log_prefix = "bugfixes"
+        $log_prefix = "bugfixes";
+        $print_mode = "bugs";
     } elsif ($arg eq '--bug-numbers') {
         $print_filters{'bug'} = 1;
         $log_prefix = "bugnumbers";
@@ -396,5 +475,11 @@ $branch_name = get_branch_name($top_dir);
 load_data(\%data, $top_dir, $piece, $branch_name, $git_command);
 
 $log = open_log_file($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name);
-print_stat(\%data, \%print_filters, $print_mode, $log);
+if ( $print_mode eq "bugs" ) {
+    print_bugs(\%data, $log);
+} elsif ( $print_mode eq "bugnumbers" ) {
+    print_bugnumbers(\%data, $log);
+} else {
+    print_stat(\%data, \%print_filters,  $log);
+}
 close $log;
