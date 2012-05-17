@@ -43,6 +43,7 @@ END {
     print "GLIBCXX_3.4 {"
     print "global:"
     print "_ZGVNSt7num_put*; _ZNSt7num_put*;"
+    print "_ZNSs4_Rep20_S_empty_rep_storageE;"
     print "};"
 }
 state == 2 {

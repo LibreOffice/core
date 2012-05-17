@@ -411,5 +411,6 @@ global:
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:
-    _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZNSs4_Rep20_S_empty_rep_storageE;
 };

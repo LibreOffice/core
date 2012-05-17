@@ -667,4 +667,5 @@ PRIVATE_file.1 { # LibreOffice 3.6
 GLIBCXX_3.4 {
     global:
         _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZNSs4_Rep20_S_empty_rep_storageE;
 };
