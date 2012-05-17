@@ -51,3 +51,4 @@
 #define LINK_EXPLAIN                  55
 #define FT_EXPLAIN                  56
 #define PB_IGNORERULE               59
+#define PB_ADDTODICT    60

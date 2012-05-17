@@ -129,6 +129,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore All" ;
     };
+
     PushButton PB_IGNORERULE
     {
         HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNORERULE";
@@ -137,7 +138,16 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Text [ en-US ] = "I~gnore Rule" ;
         Hide = TRUE;
     };
+
     MenuButton MB_ADDTODICT
+    {
+        HelpID = "cui:MenuButton:RID_SVXDLG_SPELLCHECK:MB_ADDTODICT";
+        Pos = MAP_APPFONT( 209, 91 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [ en-US ] = "~Add" ;
+    };
+
+    PushButton PB_ADDTODICT
     {
         HelpID = "cui:MenuButton:RID_SVXDLG_SPELLCHECK:MB_ADDTODICT";
         Pos = MAP_APPFONT( 209, 91 );

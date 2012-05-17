@@ -165,6 +165,7 @@ private:
     PushButton      aIgnoreAllPB;
     PushButton      aIgnoreRulePB;
     MenuButton      aAddToDictMB;
+    PushButton      aAddToDictPB;
 
     PushButton      aChangePB;
     PushButton      aChangeAllPB;
@@ -222,7 +223,7 @@ private:
 
     int             AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
     void            StartSpellOptDlg_Impl();
-    void            InitUserDicts();
+    int             InitUserDicts();
     void            UpdateBoxes_Impl();
     void            Init_Impl();
     void            SpellContinue_Impl(bool UseSavedSentence = false, bool bIgnoreCurrentError = false );

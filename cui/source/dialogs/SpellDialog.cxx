@@ -235,6 +235,7 @@ SpellDialog::SpellDialog(
     aIgnoreAllPB    ( this, CUI_RES( PB_IGNOREALL ) ),
     aIgnoreRulePB   ( this, CUI_RES( PB_IGNORERULE ) ),
     aAddToDictMB    ( this, CUI_RES( MB_ADDTODICT ) ),
+    aAddToDictPB    ( this, CUI_RES( PB_ADDTODICT ) ),
 
     aChangePB       ( this, CUI_RES( PB_CHANGE ) ),
     aChangeAllPB    ( this, CUI_RES( PB_CHANGEALL ) ),
@@ -324,9 +325,9 @@ void SpellDialog::Init_Impl()
 
     aSentenceED.SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
 
-    aAddToDictMB.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     aAddToDictMB.SetSelectHdl(LINK ( this, SpellDialog, AddToDictSelectHdl ) );
-    aAddToDictMB.SetClickHdl(LINK ( this, SpellDialog, AddToDictClickHdl ) );
+    aAddToDictPB.SetClickHdl(LINK ( this, SpellDialog, AddToDictClickHdl ) );
+
     aLanguageLB.SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
     aExplainLink.SetClickHdl( LINK( this, SpellDialog, HandleHyperlink ) );
@@ -368,7 +369,7 @@ void SpellDialog::UpdateBoxes_Impl()
     else
         SetTitle_Impl( nAltLanguage );
     SetSelectedLang_Impl( nAltLanguage );
-    InitUserDicts();
+    int nDicts = InitUserDicts();
 
     // enter alternatives
     const ::rtl::OUString *pNewWords = aNewWords.getConstArray();
@@ -399,7 +400,9 @@ void SpellDialog::UpdateBoxes_Impl()
     aExplainFT.Show( !bShowChangeAll );
     aLanguageLB.Enable( bShowChangeAll );
     aIgnoreAllPB.Show( bShowChangeAll );
-    aAddToDictMB.Show( bShowChangeAll );
+
+    aAddToDictMB.Show( bShowChangeAll && nDicts > 1);
+    aAddToDictPB.Show( bShowChangeAll && nDicts <= 1);
     aIgnoreRulePB.Show( !bShowChangeAll );
     aIgnoreRulePB.Enable(pSpellErrorDescription && !pSpellErrorDescription->sRuleId.isEmpty());
     aAutoCorrPB.Show( bShowChangeAll && rParent.HasAutoCorrection() );
@@ -465,6 +468,7 @@ void SpellDialog::UpdateBoxes_Impl()
                 &aIgnoreAllPB,
                 &aIgnoreRulePB,
                 &aAddToDictMB,
+                &aAddToDictPB,
                 &aChangePB,
                 &aChangeAllPB,
                 &aAutoCorrPB,
@@ -939,7 +943,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
     SetText( sTitle );
 }
 
-void SpellDialog::InitUserDicts()
+int SpellDialog::InitUserDicts()
 {
     const LanguageType nLang = aLanguageLB.GetSelectLanguage();
 
@@ -1002,6 +1006,14 @@ void SpellDialog::InitUserDicts()
     }
     aAddToDictMB.SetPopupMenu(pMenu);
     aAddToDictMB.Enable( bEnable );
+    aAddToDictPB.Enable( bEnable );
+
+    int nDicts = nItemId-1;
+
+    aAddToDictMB.Show( nDicts > 1 );
+    aAddToDictPB.Show( nDicts <= 1 );
+
+    return nDicts;
 }
 
 //-----------------------------------------------------------------------
@@ -1154,6 +1166,7 @@ void SpellDialog::InvalidateDialog()
                 &aIgnoreAllPB,
                 &aIgnoreRulePB,
                 &aAddToDictMB,
+                &aAddToDictPB,
                 &aChangePB,
                 &aChangeAllPB,
                 &aAutoCorrPB,
@@ -1753,6 +1766,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
     pSpellDialog->aIgnoreAllPB.Enable(bRet);
     pSpellDialog->aAutoCorrPB.Enable(bRet);
     pSpellDialog->aAddToDictMB.Enable(bRet);
+    pSpellDialog->aAddToDictPB.Enable(bRet);
     return bRet;
 }
 
@@ -2118,6 +2132,7 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
         &pSpellDialog->aLanguageFT,
         &pSpellDialog->aLanguageLB,
         &pSpellDialog->aAddToDictMB,
+        &pSpellDialog->aAddToDictPB,
         &pSpellDialog->aAutoCorrPB,
         0
     };
