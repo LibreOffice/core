@@ -49,7 +49,6 @@ sub search_bugs($$$$)
         # save the bug number
         %{$pdata->{$piece}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$piece}{$commit_id}{'bugs'}});
         $pdata->{$piece}{$commit_id}{'bugs'}{$bug} = 1;
-        $pdata->{$piece}{$commit_id}{'flags'}{'bug'} = 1;
     }
 
     return $line;
@@ -99,7 +98,6 @@ sub load_git_log($$$$$)
             $commit_id = "$1";
             $summary=undef;
             %{$pdata->{$piece}{"$commit_id"}} = ();
-            %{$pdata->{$piece}{"$commit_id"}{'flags'}} = ();
             next;
         }
 
@@ -222,22 +220,11 @@ sub open_log_file($$$$$)
     return $log;
 }
 
-sub print_summary_in_stat($$$$$$$$)
+sub print_summary_in_stat($$$$$$)
 {
-    my ($summary, $pprint_filters, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix, $log) = @_;
+    my ($summary, $ppiece_title, $pbugs, $pauthors, $prefix, $log) = @_;
 
     return if ( $summary eq "" );
-
-    # do we want to print this summary at all?
-    my $print;
-    if (%{$pprint_filters}) {
-        foreach my $flag (keys %{$pprint_filters}) {
-            $print = 1 if (defined $pflags->{$flag});
-        }
-    } else {
-        $print = 1;
-    }
-    return unless (defined $print);
 
     # print piece title if not done yet
     if ( defined ${$ppiece_title} ) {
@@ -259,9 +246,9 @@ sub print_summary_in_stat($$$$$$$$)
     printf $log $prefix . $summary . $bugs . $authors . "\n";
 }
 
-sub print_stat($$$)
+sub print_stat($$)
 {
-    my ($pdata, $pprint_filters, $log) = @_;
+    my ($pdata, $log) = @_;
 
     foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
         # check if this piece has any entries at all
@@ -270,15 +257,13 @@ sub print_stat($$$)
             my $old_summary="";
             my %authors = ();
             my %bugs = ();
-            my %flags = ();
             foreach my $id ( sort { $pdata->{$piece}{$a}{'summary'} cmp $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
                 my $summary = $pdata->{$piece}{$id}{'summary'};
                 if ($summary ne $old_summary) {
-                    print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
+                    print_summary_in_stat($old_summary, \$piece_title, \%bugs, \%authors, "    + ", $log);
                     $old_summary = $summary;
                     %authors = ();
                     %bugs = ();
-                    %flags = ();
                 }
                 # collect bug numbers
                 if (defined $pdata->{$piece}{$id}{'bugs'}) {
@@ -289,12 +274,8 @@ sub print_stat($$$)
                 # collect author names
                 my $author = $pdata->{$piece}{$id}{'author'}{'name'};
                 $authors{$author} = 1;
-                # collect flags
-                foreach my $flag ( keys %{$pdata->{$piece}{$id}{'flags'}} ) {
-                    $flags{$flag} = 1;
-                }
             }
-            print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
+            print_summary_in_stat($old_summary, \$piece_title, \%bugs, \%authors, "    + ", $log);
         }
     }
 }
@@ -426,7 +407,6 @@ my $git_command = "git log";
 my $branch_name;
 my @git_args;
 my %data;
-my %print_filters = ();
 my $print_mode = "normal";
 
 foreach my $arg (@ARGV) {
@@ -442,11 +422,9 @@ foreach my $arg (@ARGV) {
     } elsif ($arg =~ m/--log-dir=(.*)/) {
 	$log_dir = "$1";
     } elsif ($arg eq '--bugs') {
-        $print_filters{'bug'} = 1;
         $log_prefix = "bugfixes";
         $print_mode = "bugs";
     } elsif ($arg eq '--bug-numbers') {
-        $print_filters{'bug'} = 1;
         $log_prefix = "bugnumbers";
         $print_mode = "bugnumbers";
     } elsif ($arg eq '--rev-list') {
@@ -480,6 +458,6 @@ if ( $print_mode eq "bugs" ) {
 } elsif ( $print_mode eq "bugnumbers" ) {
     print_bugnumbers(\%data, $log);
 } else {
-    print_stat(\%data, \%print_filters,  $log);
+    print_stat(\%data, $log);
 }
 close $log;
