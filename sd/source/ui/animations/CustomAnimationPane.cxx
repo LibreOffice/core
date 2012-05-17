@@ -780,8 +780,6 @@ void CustomAnimationPane::updateControls()
             UStringList aProperties( pDescriptor->getProperties() );
             if( aProperties.size() >= 1 )
             {
-                OUString aProperty( aProperties.front() );
-
                 mnPropertyType = getPropertyType( aProperties.front() );
 
                 mpFTProperty->SetText( getPropertyName( mnPropertyType )  );

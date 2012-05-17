@@ -1114,7 +1114,6 @@ sal_Bool ConfigItem::ReplaceSetProperties(
 
 sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, ::rtl::OUString& _rName)
 {
-    ::rtl::OUString sNewElementName;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     sal_Bool bRet = sal_False;
     if(xHierarchyAccess.is())

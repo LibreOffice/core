@@ -580,8 +580,6 @@ DBG_NAME(OConnectionHelper)
 
     sal_Bool OConnectionHelper::createDirectoryDeep(const String& _rPathURL)
     {
-        ::rtl::OUString sPath(_rPathURL);
-
         // get an URL object analyzing the URL for us ...
         INetURLObject aParser;
         aParser.SetURL(_rPathURL);

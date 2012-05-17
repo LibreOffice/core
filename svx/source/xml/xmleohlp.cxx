@@ -733,7 +733,6 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                aEmbDescr[0].Value <<= (sal_Bool)(!bOasisFormat);
                             if ( !bOasisFormat )
                             {
-                                ::rtl::OUString aMimeType;
                                 uno::Reference< io::XInputStream > xGrInStream = ImplGetReplacementImage( xObj );
                                 if ( xGrInStream.is() )
                                 {

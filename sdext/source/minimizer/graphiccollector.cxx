@@ -146,7 +146,6 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
         {
             if ( eFillStyle == FillStyle_BITMAP )
             {
-                rtl::OUString aFillBitmapURL;
                 Reference< XBitmap > xFillBitmap;
                 if ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmap ) ) >>= xFillBitmap )
                 {

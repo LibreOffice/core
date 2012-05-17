@@ -198,7 +198,6 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
     SEQUENCE < PROPERTYVALUE > aProperties;
     if ( aEventData >>= aProperties )
     {
-        rtl::OUString aPrefix = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
         rtl::OUString aType;
         rtl::OUString aScript;
         rtl::OUString aLibrary;

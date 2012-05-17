@@ -634,7 +634,6 @@ bool ObjectIdentifier::parsePieSegmentDragParameterString(
         , awt::Point& rMinimumPosition
         , awt::Point& rMaximumPosition )
 {
-    OUString aValue;
     sal_Int32 nCharacterIndex = 0;
 
     OUString aValueString( rDragParameterString.getToken( 0, ',', nCharacterIndex ) );

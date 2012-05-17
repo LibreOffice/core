@@ -732,7 +732,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
     if(err != 0)
     {
-        rtl::OUString message;
         if( err < 0)
         {
             fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION

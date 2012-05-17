@@ -598,7 +598,6 @@ DECLARE_STL_SET( PropertyValue, PropertyValueLess, PropertyValueSet);
 //........................................................................
 void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPropertySet >& _rxSource, SfxItemSet& _rDest)
 {
-    ::rtl::OUString sNewConnectURL, sName, sUid, sPwd;
     Sequence< ::rtl::OUString > aTableFitler;
 
     if (_rxSource.is())

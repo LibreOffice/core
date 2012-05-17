@@ -185,7 +185,6 @@ void OUserAdmin::FillUserNames()
                 m_aUserNames = m_xUsers->getElementNames();
                 const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
                 const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
-                ::rtl::OUString sUserName = m_UserName;
                 for(;pBegin != pEnd;++pBegin)
                     m_LB_USER.InsertEntry(*pBegin);
 

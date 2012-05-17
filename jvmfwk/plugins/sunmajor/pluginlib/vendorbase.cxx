@@ -82,7 +82,6 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     //get java.vendor, java.version, java.home,
     //javax.accessibility.assistive_technologies from system properties
 
-    OUString sVendor;
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     OUString sVendorProperty(
         RTL_CONSTASCII_USTRINGPARAM("java.vendor"));

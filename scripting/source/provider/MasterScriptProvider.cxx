@@ -230,7 +230,6 @@ void MasterScriptProvider::createPkgProvider()
 {
     try
     {
-        ::rtl::OUString loc = m_sCtxString;
         Any location;
         ::rtl::OUString sPkgCtx =  m_sCtxString.concat( OUSTR(":uno_packages") );
         location <<= sPkgCtx;

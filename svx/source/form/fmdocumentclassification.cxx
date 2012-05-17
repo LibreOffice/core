@@ -131,7 +131,6 @@ namespace svxform
         try
         {
             // first, check whether the document has a ModuleIdentifier which we know
-            ::rtl::OUString sModuleIdentifier;
             Reference< XModule > xModule( _rxDocumentModel, UNO_QUERY );
             if ( xModule.is() )
                 eType = getDocumentTypeForModuleIdentifier( xModule->getIdentifier() );

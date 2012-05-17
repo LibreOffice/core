@@ -173,7 +173,6 @@ ButtonSetImpl::ButtonSetImpl()
 
 void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
 {
-    OUString aSystemPath;
     osl::Directory aDirectory( rPath );
     if( aDirectory.open() == osl::FileBase::E_None )
     {

@@ -581,7 +581,6 @@ namespace svxform
             Reference< XIndexContainer >  xComponents( GetFormComponents(pFormData));
             if( !xComponents.is() ) return;
 
-            ::rtl::OUString aControlName;
             Reference< XInterface >  xInterface;
             Reference< XPropertySet >  xSet;
             FmControlData* pNewControlData;

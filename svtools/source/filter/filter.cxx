@@ -123,7 +123,6 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 
     try
     {
-        ::rtl::OUString aTitle;
         ::ucbhelper::Content    aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 

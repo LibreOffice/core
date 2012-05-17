@@ -944,8 +944,6 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
 
     if (pTxt)
     {
-        ::rtl::OUString sT1(*pTxt);
-
         Point aPnt(aPos);
         aPnt.X() += pList->m_aGreenCheckImg.GetSizePixel().Width();
         aPnt.X() += 10;

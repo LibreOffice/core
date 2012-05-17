@@ -223,7 +223,6 @@ void GalApp::Init()
 
 void GalApp::InitUCB()
 {
-    rtl::OUString aEmpty;
     Sequence< Any > aArgs(2);
     aArgs[0]
         <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));

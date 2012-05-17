@@ -1411,7 +1411,6 @@ void OTableController::dropPrimaryKey()
 // -----------------------------------------------------------------------------
 void OTableController::assignTable()
 {
-    ::rtl::OUString sComposedName;
     // get the table
     if(!m_sName.isEmpty())
     {

@@ -623,8 +623,6 @@ IMPL_LINK_NOARG(FontWorkCharacterSpacingWindow, SelectHdl)
     }
     else if ( nSelection == 6 ) // KernCharacterPairs
     {
-        rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkKernCharacterPairs" ));
-
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkKernCharacterPairs.copy(5);
         aArgs[0].Value <<= (sal_Bool) sal_True;

@@ -2010,7 +2010,6 @@ namespace
                 }
 
                 ::rtl::OUString sComposedName;
-                ::rtl::OUString aQualifierName;
                 ::rtl::OUString sAlias;
 
                 OQueryTableView* pTableView = static_cast<OQueryTableView*>(_pView->getTableView());

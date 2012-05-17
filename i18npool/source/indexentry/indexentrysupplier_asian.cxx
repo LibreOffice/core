@@ -190,7 +190,6 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         OUStringBuffer candidate;
         sal_Int16 max_index;
         sal_uInt16** idx=func(&max_index);
-        OUString aIndexEntry=rIndexEntry;
         for (sal_Int32 i=0,j=0; i < rIndexEntry.getLength(); i=j) {
             sal_uInt32 ch = rIndexEntry.iterateCodePoints(&j, 1);
             if (((sal_Int16)(ch>>8)) <= max_index) {

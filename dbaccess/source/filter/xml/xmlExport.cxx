@@ -673,7 +673,6 @@ template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     ::std::vector< TypedPropertyValue >::iterator const & in)
 {
     OSequenceIterator< T > i( in->Value );
-    ::rtl::OUString sCurrent;
     while (i.hasMoreElements())
     {
         SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);

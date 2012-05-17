@@ -125,7 +125,6 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     // Try to recover the Exception type in the any and
     // react accordingly.
     sal_uInt16      nResult = RET_CANCEL;
-    ::rtl::OUString    aParameter;
 
     if ( anyExc >>= e1 )
     {

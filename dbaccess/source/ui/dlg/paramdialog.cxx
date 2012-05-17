@@ -270,7 +270,6 @@ DBG_NAME(OParameterDialog)
                 // write the parameters
                 try
                 {
-                    ::rtl::OUString sError;
                     PropertyValue* pValues = m_aFinalValues.getArray();
                     for (sal_Int32 i = 0, nCount = m_xParams->getCount(); i<nCount; ++i, ++pValues)
                     {

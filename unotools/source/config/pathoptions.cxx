@@ -372,7 +372,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     while ( ( nPosition != STRPOS_NOTFOUND ) && ( nLength > 0 ) )
     {
         // YES; Get the next variable for replace.
-        OUString aReplacement;
         OUString aSubString = aWorkText.copy( nPosition, nLength );
         aSubString = aSubString.toAsciiLowerCase();
 

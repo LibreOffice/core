@@ -621,7 +621,6 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
                 if ( !m_rImpl.aName.isEmpty() )
                 {
                     // if this is not the global FilterMatcher: check if filter matches the document type
-                    ::rtl::OUString aService;
                     if ( pFilter->GetServiceName() != String(m_rImpl.aName) )
                     {
                         // preferred filter belongs to another document type; now we must search the filter
