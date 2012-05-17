@@ -1,0 +1,12 @@
+--- misc/build/Python-2.6.1/Makefile.pre.in	2012-05-17 22:05:39.445274789 +0200
++++ misc/build.new/Python-2.6.1/Makefile.pre.in	2012-05-17 22:05:15.214276225 +0200
+@@ -34,7 +34,8 @@
+ LINKCC=		@LINKCC@
+ AR=		@AR@
+ RANLIB=		@RANLIB@
+-SVNVERSION=	@SVNVERSION@
++# svnversion 1.7 changed its output from "exported" to "Unversioned directory"
++SVNVERSION="echo exported"
+ 
+ # Shell used by make (some versions default to the login shell, which is bad)
+ SHELL=		/bin/sh
