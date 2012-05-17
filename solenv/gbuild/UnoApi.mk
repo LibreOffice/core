@@ -40,9 +40,8 @@ $(call gb_UnoApiTarget_set_root,$(1),UCR)
 
 $(call gb_UnoApi_get_target,$(1)) :| $(dir $(call gb_UnoApi_get_target,$(1))).dir
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_Package_get_target,$(1)_inc)
+$(call gb_UnoApi_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_idl)
+$(call gb_UnoApi_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_inc)
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_idl)
