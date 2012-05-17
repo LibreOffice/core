@@ -486,11 +486,14 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 
 void ScViewData::DeleteTab( SCTAB nTab )
 {
-    delete maTabData.at(nTab);
+    if ( nTab < maTabData.size() )
+    {
+        delete maTabData.at(nTab);
 
-    maTabData.erase(maTabData.begin() + nTab);
-    UpdateCurrentTab();
-    mpMarkData->DeleteTab( nTab );
+        maTabData.erase(maTabData.begin() + nTab);
+        UpdateCurrentTab();
+        mpMarkData->DeleteTab( nTab );
+    }
 }
 
 void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
