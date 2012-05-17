@@ -991,6 +991,9 @@ AC_ARG_WITH(gnu-patch,
         [Specify location of GNU patch on Solaris or FreeBSD.]),
 ,)
 
+AC_ARG_WITH(build-platform-configure-options,
+        [Specify options for the configure script run for the *build* platform in a cross-compilation])
+
 AC_ARG_WITH(gnu-cp,
     AS_HELP_STRING([--with-gnu-cp],
         [Specify location of GNU cp on Solaris or FreeBSD.]),
@@ -2021,6 +2024,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
 
 dnl ===================================================================
 dnl options for stuff used during cross-compilation build
+dnl These are superseded by --with-build-platform-configure-options
 dnl ===================================================================
 
 AC_ARG_WITH(system-boost-for-build,
@@ -3472,6 +3476,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
+    sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     ./configure \
         --disable-mozilla \
         --disable-build-mozilla \
