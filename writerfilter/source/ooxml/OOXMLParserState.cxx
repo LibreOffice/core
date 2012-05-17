@@ -46,7 +46,12 @@ OOXMLParserState::OOXMLParserState() :
     mbForwardEvents(true),
     mnContexts(0),
     mnHandle(0),
-    mpDocument(NULL)
+    mpDocument(NULL),
+    inTxbxContent(false),
+    savedInSectionGroup(false),
+    savedInParagraphGroup(false),
+    savedInCharacterGroup(false),
+    savedLastParagraphInSection(false)
 {
 }
 
@@ -273,6 +278,36 @@ void OOXMLParserState::endTable()
 void OOXMLParserState::incContextCount()
 {
     mnContexts++;
+}
+
+void OOXMLParserState::startTxbxContent()
+{
+    if( inTxbxContent )
+        SAL_WARN( "writerfilter", "Nested w:txbxContent" );
+    inTxbxContent = true;
+    // Do not save and reset section group state, it'd cause a new page.
+//    savedInSectionGroup = mbInSectionGroup;
+    savedInParagraphGroup = mbInParagraphGroup;
+    savedInCharacterGroup = mbInCharacterGroup;
+    savedLastParagraphInSection = mbLastParagraphInSection;
+//    mbInSectionGroup = false;
+    mbInParagraphGroup = false;
+    mbInCharacterGroup = false;
+    mbLastParagraphInSection = false;
+}
+
+void OOXMLParserState::endTxbxContent()
+{
+    if( !inTxbxContent )
+    {
+        SAL_WARN( "writerfilter", "Non-matching closing w:txbxContent" );
+        return;
+    }
+//    mbInSectionGroup = savedInSectionGroup;
+    mbInParagraphGroup = savedInParagraphGroup;
+    mbInCharacterGroup = savedInCharacterGroup;
+    mbLastParagraphInSection = savedLastParagraphInSection;
+    inTxbxContent = false;
 }
 
 #if OSL_DEBUG_LEVEL > 1

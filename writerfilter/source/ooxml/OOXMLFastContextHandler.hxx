@@ -211,6 +211,8 @@ public:
     void positionOffset(const ::rtl::OUString & sText);
     void alignH(const ::rtl::OUString & sText);
     void alignV(const ::rtl::OUString & sText);
+    void startTxbxContent();
+    void endTxbxContent();
     virtual void propagateCharacterProperties();
     virtual void propagateCharacterPropertiesAsSet(const Id & rId);
     virtual void propagateTableProperties();
