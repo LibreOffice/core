@@ -578,8 +578,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     // attributes of the symbol and apply it to the numbering level
                     OUString sStyle = rDMapper.getOrCreateCharStyle( aStyleProps );
                     aLvlProps.realloc( aLvlProps.getLength() + 1);
-                    aLvlProps[aLvlProps.getLength() - 1].Name = aPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
-                    aLvlProps[aLvlProps.getLength() - 1].Value <<= sStyle;
+                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1].Name = aPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
+                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1].Value <<= sStyle;
                 }
 
                 // Get the prefix / suffix / Parent numbering
@@ -596,18 +596,18 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                        sText, nLevel, rPrefix, rSuffix );
 
                 aLvlProps.realloc( aLvlProps.getLength( ) + 4 );
-                aLvlProps[ aLvlProps.getLength( ) - 4 ] = MAKE_PROPVAL( PROP_PREFIX, rPrefix );
-                aLvlProps[ aLvlProps.getLength( ) - 3 ] = MAKE_PROPVAL( PROP_SUFFIX, rSuffix );
-                aLvlProps[ aLvlProps.getLength( ) - 2 ] = MAKE_PROPVAL( PROP_PARENT_NUMBERING, nParentNum );
+                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 4] = MAKE_PROPVAL( PROP_PREFIX, rPrefix );
+                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 3] = MAKE_PROPVAL( PROP_SUFFIX, rSuffix );
+                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 2] = MAKE_PROPVAL( PROP_PARENT_NUMBERING, nParentNum );
 
-                aLvlProps[ aLvlProps.getLength( ) - 1 ] = MAKE_PROPVAL( PROP_POSITION_AND_SPACE_MODE,
+                aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_POSITION_AND_SPACE_MODE,
                             sal_Int16( text::PositionAndSpaceMode::LABEL_ALIGNMENT ) );
 
                 StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
                 if( pParaStyle.get())
                 {
                     aLvlProps.realloc( aLvlProps.getLength() + 1 );
-                    aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_PARAGRAPH_STYLE_NAME,
+                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_PARAGRAPH_STYLE_NAME,
                         pParaStyle->sConvertedStyleName );
                 }
 
@@ -623,7 +623,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         xOutlines->getChapterNumberingRules( );
 
                     aLvlProps.realloc( aLvlProps.getLength() + 1 );
-                    aLvlProps[aLvlProps.getLength( ) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
+                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
                         pParaStyle->sConvertedStyleName );
 
                     xOutlineRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
