@@ -1,29 +1,15 @@
 Cross-compiling LibreOffice
 ===========================
 
-The cross-compilation experimentation is going on for four platforms:
-Windows, iOS, Android and PowerPC Mac OS X. It happens in the master
-branch of LibreOffice. Some people have talked about setting up a
-separate branch for Android work, or even separate clones at github,
-but that is not necessary.
-
-Cross-compilation of LibreOffice completely is not possible yet. Much
-work has been done, "baby steps" for some platforms, much more for
-others, but a lot remains. For iOS and Android this work is highly
-experimental, originally done in spare time just for the hacking
-pleasure. No promise, explicit or implied, is given that it will ever
-be finished.
-
-Searching for information about cross-compilation of OpenOffice.org
-(the predecessor of LibreOffice) you will find information about what
-actually was not cross-compilation, but using QEMU.
+Cross-compilation work has been done, to various degrees, for four
+platforms: Windows, iOS, Android and PowerPC Mac OS X.
 
 
 General
 -------
 
 In GNU Autoconf terminology, "build" is the platform on which you are
-running a build on some software and "host" is the platform on which
+running a build of some software and "host" is the platform on which
 the software you are building will run. Only in the specific case of
 building compilers and other programming tools is the term "target"
 used to indicate the platform for which the tools your are building
@@ -180,7 +166,8 @@ CXX_FOR_BUILD=ccache g++
 --without-helppack-integration
 --without-myspell-dicts
 
-Once you have compiled it, you may want to try to run it:
+Once you have compiled it, you may want to try to run it, for instance
+using Wine:
 
 $ cd /tmp
 $ tar xf <your-build-dir>/instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US/LibO-Dev_3.6.0alpha0_Win_x86_install-arc_en-US.tar.gz
@@ -277,7 +264,8 @@ thought yet.
 The Apple tool-chain for iOS cross-building is available only for
 Mac OS X.
 
-Here is an autogen.lastrun for iOS (device) using Xcode 4.3 and clang:
+Here is an autogen.lastrun for iOS (device) using Xcode 4.3 and clang,
+and Xcode 3 for the build platform parts:
 CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
 CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
@@ -288,31 +276,18 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --without-helppack-integration
 --without-myspell-dicts
 
-And here for the iOS simulator, using Xcode 4.2 and gcc:
-CXX=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
-CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
-CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
-CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
---with-distro=LibreOfficeiOS
---with-system-nss
---enable-debug
---without-help
---without-helppack-integration
---without-myspell-dicts
-
-It seems that with the latest iOS SDK one has to do:
-sudo ln -s i686-apple-darwin10 /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk/usr/include/c++/4.2.1/i686-apple-darwin11
-or g++ won't find its headers like <bits/c++config.h>
-
 The --with-system-nss doesn't mean that any Mozilla NSS would be used,
 it's just a trick to bypass some tests in the configure script.
 
-For the iOS simulator, using Xcode 4.3 and gcc (should switch to clang here, too):
-CXX=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
-CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk
-CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
-CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
+For the iOS simulator, using Xcode 4.3 and clang both for the host and
+build platform:
+
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk
+CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk
+CC_FOR_BUILD=ccache clang -arch i386 -mmacosx-version-min=10.6
+CXX_FOR_BUILD=ccache clang++ -arch i386 -mmacosx-version-min=10.6
 --enable-werror
+--with-build-platform-configure-options=--with-macosx-version-min-required=10.6 --with-macosx-sdk=10.6
 --with-distro=LibreOfficeiOS
 --with-system-nss
 --without-help
@@ -330,15 +305,18 @@ Android
 From a technical point of view the core Android OS is Linux, but
 everything else is different. Unlike iOS, an Android app can use
 shared objects just fine, so that aspect of UNO doesn't need special
-handling.
+handling. Except that there is a silly low limit in the Android
+dynamic linker on the number of libraries you can dlopen. Note that
+this is a limitation of user-level code, not the kernel. Here are
+various ways around this problem that are being examined.
 
 As for the GUI, the same holds as said above for iOS.
 
 Android cross-compilation work has been done on Linux (openSUSE in
 particular) and Mac OS X. The Android cross-buld tool-chain (the
-"Native Development Kit", or NDK) is available for Linux, Mac OS X and
-Windows. (Trying to cross-compile from Windows will probably drive you
-insane.)
+"Native Development Kit", or NDK) is available for Linux and Mac OS
+X. Sure, for Windows, too, but trying to cross-compile LO from Windows
+will probably drive you insane.
 
 Here is an autogen.lastrun for Android, when cross-compiling from Mac OS X:
 
