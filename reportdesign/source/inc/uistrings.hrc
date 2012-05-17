@@ -27,9 +27,9 @@
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #define REPORTDESIGN_SHARED_UISTRINGS_HRC
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
+#include <comphelper/string.hxx>
+using comphelper::string::ConstAsciiString;
 
 namespace rptui
 {

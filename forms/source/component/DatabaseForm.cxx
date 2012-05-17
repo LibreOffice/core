@@ -2372,7 +2372,7 @@ void ODatabaseForm::invlidateParameters()
 //------------------------------------------------------------------------------
 void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    if ((0 == evt.PropertyName.compareToAscii(PROPERTY_ACTIVE_CONNECTION)) && !m_bForwardingConnection)
+    if ((evt.PropertyName.equalsAsciiL(PROPERTY_ACTIVE_CONNECTION.ascii, PROPERTY_ACTIVE_CONNECTION.length)) && !m_bForwardingConnection)
     {
         // the rowset changed its active connection itself (without interaction from our side), so
         // we need to fire this event, too

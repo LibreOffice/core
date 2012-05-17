@@ -29,67 +29,18 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #define _XMLOFF_FORMS_STRINGS_HXX_
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
+#include <comphelper/string.hxx>
 
 //.........................................................................
 namespace xmloff
 {
+    using comphelper::string::ConstAsciiString;
 //.........................................................................
-
-    //============================================================
-    //= a helper for static ascii pseudo-unicode strings
-    //============================================================
-    struct ConstAsciiString
-    {
-        const sal_Char* ascii;
-        sal_Int32       length;
-
-        inline  operator const ConstAsciiString* () const { return this; }
-        inline const ::rtl::OUString* operator& () const;
-        inline  operator const ::rtl::OUString& () const { return *(&(*this)); }
-        inline  operator const sal_Char* () const { return ascii; }
-
-        inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
-        inline ~ConstAsciiString();
-
-    private:
-        mutable ::rtl::OUString*    m_pString;
-
-    private:
-        ConstAsciiString(); // never implemented
-    };
-
-    //------------------------------------------------------------
-    inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength)
-        :ascii( _pAsciiZeroTerminated )
-        ,length( _nLength )
-        ,m_pString( NULL )
-    {
-    }
-
-    //------------------------------------------------------------
-    inline ConstAsciiString::~ConstAsciiString()
-    {
-        if ( m_pString )
-        {
-            delete m_pString;
-            m_pString = NULL;
-        }
-    }
-
-    //------------------------------------------------------------
-    inline const ::rtl::OUString* ConstAsciiString::operator& () const
-    {
-        if ( !m_pString )
-            m_pString = new ::rtl::OUString( ascii, length, RTL_TEXTENCODING_ASCII_US );
-        return m_pString;
-    }
 
 #ifndef XMLFORM_IMPLEMENT_STRINGS
     #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident
 #else
-    #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident(string, sizeof(string)-1)
+    #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident = {RTL_CONSTASCII_STRINGPARAM(string)}
 #endif
 
     //============================================================

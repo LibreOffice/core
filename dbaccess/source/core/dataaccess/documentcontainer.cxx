@@ -320,11 +320,11 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         for(;pBegin != pEnd;++pBegin)
         {
             *pBegin >>= aValue;
-            if ( aValue.Name.equalsAscii(PROPERTY_NAME) )
+            if ( aValue.Name.equalsAsciiL(PROPERTY_NAME.ascii, PROPERTY_NAME.length) )
             {
                 aValue.Value >>= sName;
             }
-            else if ( aValue.Name.equalsAscii(PROPERTY_EMBEDDEDOBJECT) )
+            else if ( aValue.Name.equalsAsciiL(PROPERTY_EMBEDDEDOBJECT.ascii, PROPERTY_EMBEDDEDOBJECT.length) )
             {
                 xCopyFrom.set(aValue.Value,UNO_QUERY);
             }

@@ -80,7 +80,7 @@ DBG_NAME(ODirectSQLDialog)
     IMPLEMENT_IMPLEMENTATION_ID( ODirectSQLDialog )
 
     //---------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC( ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog", SERVICE_SDB_DIRECTSQLDIALOG )
+    IMPLEMENT_SERVICE_INFO1_STATIC( ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog", SERVICE_SDB_DIRECTSQLDIALOG.ascii )
 
     //---------------------------------------------------------------------
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )

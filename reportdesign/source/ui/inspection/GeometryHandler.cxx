@@ -1387,7 +1387,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
 {
     if ( !_rxInspectorUI.is() )
         throw lang::NullPointerException();
-    if ( PropertyName.equalsAscii(PROPERTY_FILTER) )
+    if (PropertyName.equalsAsciiL(PROPERTY_FILTER.ascii, PROPERTY_FILTER.length))
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1400,7 +1400,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if ( PropertyName.equalsAscii(PROPERTY_FONT) )
+    else if (PropertyName.equalsAsciiL(PROPERTY_FONT.ascii, PROPERTY_FONT.length))
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1417,10 +1417,10 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if (      PropertyName.equalsAscii(PROPERTY_FORMULA)
-                || PropertyName.equalsAscii(PROPERTY_INITIALFORMULA)
-                || PropertyName.equalsAscii(PROPERTY_DATAFIELD)
-                || PropertyName.equalsAscii(PROPERTY_CONDITIONALPRINTEXPRESSION))
+    else if (      PropertyName.equalsAsciiL(PROPERTY_FORMULA.ascii, PROPERTY_FORMULA.length)
+                || PropertyName.equalsAsciiL(PROPERTY_INITIALFORMULA.ascii, PROPERTY_INITIALFORMULA.length)
+                || PropertyName.equalsAsciiL(PROPERTY_DATAFIELD.ascii, PROPERTY_INITIALFORMULA.length)
+                || PropertyName.equalsAsciiL(PROPERTY_CONDITIONALPRINTEXPRESSION.ascii, PROPERTY_CONDITIONALPRINTEXPRESSION.length))
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1440,7 +1440,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if ( PropertyName.equalsAscii(PROPERTY_AREA) )
+    else if (PropertyName.equalsAsciiL(PROPERTY_AREA.ascii, PROPERTY_AREA.length))
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 

@@ -52,7 +52,7 @@ OColumnControl::OColumnControl(const Reference<XMultiServiceFactory>& _rxFactory
 {
 }
 // -----------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControl,SERVICE_CONTROLDEFAULT,"com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
+IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControl,SERVICE_CONTROLDEFAULT.ascii,"com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
 // -----------------------------------------------------------------------------
 ::rtl::OUString OColumnControl::GetComponentServiceName()
 {

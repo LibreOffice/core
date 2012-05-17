@@ -326,11 +326,11 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
         {
             m_xParentContainer.set(aValue.Value,UNO_QUERY);
         }
-        else if ( aValue.Name.equalsAscii(PROPERTY_NAME) )
+        else if ( aValue.Name.equalsAsciiL(PROPERTY_NAME.ascii, PROPERTY_NAME.length) )
         {
             aValue.Value >>= m_pImpl->m_aProps.aTitle;
         }
-        else if ( aValue.Name.equalsAscii(PROPERTY_PERSISTENT_NAME) )
+        else if ( aValue.Name.equalsAsciiL(PROPERTY_PERSISTENT_NAME.ascii, PROPERTY_PERSISTENT_NAME.length) )
         {
             aValue.Value >>= m_pImpl->m_aProps.sPersistentName;
         }

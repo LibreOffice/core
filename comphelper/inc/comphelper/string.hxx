@@ -439,6 +439,20 @@ COMPHELPER_DLLPUBLIC inline bool isalnumAscii(sal_Unicode c)
     return isalphaAscii(c) || isdigitAscii(c);
 }
 
+//============================================================
+//= a helper for static ascii pseudo-unicode strings
+//============================================================
+struct COMPHELPER_DLLPUBLIC ConstAsciiString
+{
+    const sal_Char* ascii;
+    sal_Int32       length;
+
+    operator rtl::OUString() const
+    {
+        return rtl::OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
+    }
+};
+
 } }
 
 #endif

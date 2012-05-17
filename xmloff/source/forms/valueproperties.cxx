@@ -52,50 +52,50 @@ namespace xmloff
             case FormComponentType::TEXTFIELD:
                 if (OControlElement::FORMATTED_TEXT == _eType)
                 {
-                    _rpCurrentValuePropertyName = PROPERTY_EFFECTIVE_VALUE;
-                    _rpValuePropertyName = PROPERTY_EFFECTIVE_DEFAULT;
+                    _rpCurrentValuePropertyName = PROPERTY_EFFECTIVE_VALUE.ascii;
+                    _rpValuePropertyName = PROPERTY_EFFECTIVE_DEFAULT.ascii;
                 }
                 else
                 {
                     if (OControlElement::PASSWORD != _eType)
                         // no CurrentValue" for passwords
-                        _rpCurrentValuePropertyName = PROPERTY_TEXT;
-                    _rpValuePropertyName = PROPERTY_DEFAULT_TEXT;
+                        _rpCurrentValuePropertyName = PROPERTY_TEXT.ascii;
+                    _rpValuePropertyName = PROPERTY_DEFAULT_TEXT.ascii;
                 }
                 break;
 
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
-                _rpCurrentValuePropertyName = PROPERTY_VALUE;
-                _rpValuePropertyName = PROPERTY_DEFAULT_VALUE;
+                _rpCurrentValuePropertyName = PROPERTY_VALUE.ascii;
+                _rpValuePropertyName = PROPERTY_DEFAULT_VALUE.ascii;
                 break;
 
             case FormComponentType::PATTERNFIELD:
             case FormComponentType::FILECONTROL:
             case FormComponentType::COMBOBOX:
-                _rpValuePropertyName = PROPERTY_DEFAULT_TEXT;
+                _rpValuePropertyName = PROPERTY_DEFAULT_TEXT.ascii;
                 // NO BREAK!!
             case FormComponentType::COMMANDBUTTON:
-                _rpCurrentValuePropertyName = PROPERTY_TEXT;
+                _rpCurrentValuePropertyName = PROPERTY_TEXT.ascii;
                 break;
 
             case FormComponentType::CHECKBOX:
             case FormComponentType::RADIOBUTTON:
-                _rpValuePropertyName = PROPERTY_REFVALUE;
+                _rpValuePropertyName = PROPERTY_REFVALUE.ascii;
                 break;
 
             case FormComponentType::HIDDENCONTROL:
-                _rpValuePropertyName = PROPERTY_HIDDEN_VALUE;
+                _rpValuePropertyName = PROPERTY_HIDDEN_VALUE.ascii;
                 break;
 
             case FormComponentType::SCROLLBAR:
-                _rpCurrentValuePropertyName = PROPERTY_SCROLLVALUE;
-                _rpValuePropertyName = PROPERTY_SCROLLVALUE_DEFAULT;
+                _rpCurrentValuePropertyName = PROPERTY_SCROLLVALUE.ascii;
+                _rpValuePropertyName = PROPERTY_SCROLLVALUE_DEFAULT.ascii;
                 break;
 
             case FormComponentType::SPINBUTTON:
-                _rpCurrentValuePropertyName = PROPERTY_SPINVALUE;
-                _rpValuePropertyName = PROPERTY_DEFAULT_SPINVALUE;
+                _rpCurrentValuePropertyName = PROPERTY_SPINVALUE.ascii;
+                _rpValuePropertyName = PROPERTY_DEFAULT_SPINVALUE.ascii;
                 break;
 
             default:
@@ -114,23 +114,23 @@ namespace xmloff
         {
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
-                _rpMinValuePropertyName = PROPERTY_VALUE_MIN;
-                _rpMaxValuePropertyName = PROPERTY_VALUE_MAX;
+                _rpMinValuePropertyName = PROPERTY_VALUE_MIN.ascii;
+                _rpMaxValuePropertyName = PROPERTY_VALUE_MAX.ascii;
                 break;
 
             case FormComponentType::TEXTFIELD:
-                _rpMinValuePropertyName = PROPERTY_EFFECTIVE_MIN;
-                _rpMaxValuePropertyName = PROPERTY_EFFECTIVE_MAX;
+                _rpMinValuePropertyName = PROPERTY_EFFECTIVE_MIN.ascii;
+                _rpMaxValuePropertyName = PROPERTY_EFFECTIVE_MAX.ascii;
                 break;
 
             case FormComponentType::SCROLLBAR:
-                _rpMinValuePropertyName = PROPERTY_SCROLLVALUE_MIN;
-                _rpMaxValuePropertyName = PROPERTY_SCROLLVALUE_MAX;
+                _rpMinValuePropertyName = PROPERTY_SCROLLVALUE_MIN.ascii;
+                _rpMaxValuePropertyName = PROPERTY_SCROLLVALUE_MAX.ascii;
                 break;
 
             case FormComponentType::SPINBUTTON:
-                _rpMinValuePropertyName = PROPERTY_SPINVALUE_MIN;
-                _rpMaxValuePropertyName = PROPERTY_SPINVALUE_MAX;
+                _rpMinValuePropertyName = PROPERTY_SPINVALUE_MIN.ascii;
+                _rpMaxValuePropertyName = PROPERTY_SPINVALUE_MAX.ascii;
                 break;
 
             default:
@@ -151,24 +151,24 @@ namespace xmloff
             case FormComponentType::TEXTFIELD:
                 if (OControlElement::FORMATTED_TEXT == _eType)
                 {
-                    _rpValuePropertyName = PROPERTY_EFFECTIVE_VALUE;
-                    _rpDefaultValuePropertyName = PROPERTY_EFFECTIVE_DEFAULT;
+                    _rpValuePropertyName = PROPERTY_EFFECTIVE_VALUE.ascii;
+                    _rpDefaultValuePropertyName = PROPERTY_EFFECTIVE_DEFAULT.ascii;
                 }
                 else
                 {
-                    _rpValuePropertyName = PROPERTY_TEXT;
-                    _rpDefaultValuePropertyName = PROPERTY_DEFAULT_TEXT;
+                    _rpValuePropertyName = PROPERTY_TEXT.ascii;
+                    _rpDefaultValuePropertyName = PROPERTY_DEFAULT_TEXT.ascii;
                 }
                 break;
 
             case FormComponentType::DATEFIELD:
-                _rpValuePropertyName = PROPERTY_DATE;
-                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_DATE;
+                _rpValuePropertyName = PROPERTY_DATE.ascii;
+                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_DATE.ascii;
                 break;
 
             case FormComponentType::TIMEFIELD:
-                _rpValuePropertyName = PROPERTY_TIME;
-                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_TIME;
+                _rpValuePropertyName = PROPERTY_TIME.ascii;
+                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_TIME.ascii;
                 break;
 
             case FormComponentType::NUMERICFIELD:
@@ -185,8 +185,8 @@ namespace xmloff
 
             case FormComponentType::CHECKBOX:
             case FormComponentType::RADIOBUTTON:
-                _rpValuePropertyName = PROPERTY_STATE;
-                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_STATE;
+                _rpValuePropertyName = PROPERTY_STATE.ascii;
+                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_STATE.ascii;
                 break;
         }
     }

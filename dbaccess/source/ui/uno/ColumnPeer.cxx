@@ -126,12 +126,12 @@ void OColumnPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any&
 {
     SolarMutexGuard aGuard;
 
-    if ( 0 == _rPropertyName.compareToAscii( PROPERTY_COLUMN ) )
+    if (_rPropertyName.equalsAsciiL(PROPERTY_COLUMN.ascii, PROPERTY_COLUMN.length) )
     {
         Reference<XPropertySet> xProp(Value,UNO_QUERY);
         setColumn(xProp);
     }
-    else if ( 0 == _rPropertyName.compareToAscii( PROPERTY_ACTIVE_CONNECTION ) )
+    else if (_rPropertyName.equalsAsciiL(PROPERTY_ACTIVE_CONNECTION.ascii, PROPERTY_ACTIVE_CONNECTION.length) )
     {
         Reference<XConnection> xCon(Value,UNO_QUERY);
         setConnection(xCon);
@@ -144,11 +144,11 @@ Any OColumnPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( Run
 {
     Any aProp;
     OFieldDescControl* pFieldControl = static_cast<OFieldDescControl*>( GetWindow() );
-    if ( pFieldControl && 0 == _rPropertyName.compareToAscii( PROPERTY_COLUMN ) )
+    if (pFieldControl && _rPropertyName.equalsAsciiL(PROPERTY_COLUMN.ascii, PROPERTY_COLUMN.length))
     {
         aProp <<= m_xColumn;
     }
-    else if ( pFieldControl && 0 == _rPropertyName.compareToAscii( PROPERTY_ACTIVE_CONNECTION ) )
+    else if (pFieldControl && _rPropertyName.equalsAsciiL(PROPERTY_ACTIVE_CONNECTION.ascii, PROPERTY_ACTIVE_CONNECTION.length))
     {
         aProp <<= pFieldControl->getConnection();
     }

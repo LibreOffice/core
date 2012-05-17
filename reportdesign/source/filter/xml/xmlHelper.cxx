@@ -122,7 +122,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 #define MAP_CONST_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1,  XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TEXT,       context, SvtSaveOptions::ODFVER_010 }
 #define GMAP( name, prefix, token, type, context )  { name.ascii, name.length,          XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_GRAPHIC,    context, SvtSaveOptions::ODFVER_010 }
 #define MAP_CONST_C_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST_C( name, prefix, token, type, context )  { name, name.length,         XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_C( name, prefix, token, type, context )  { name.ascii, name.length,         XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010 }
 #define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 ,0, SvtSaveOptions::ODFVER_010}
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat)
@@ -275,22 +275,22 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
         ::com::sun::star::awt::FontDescriptor aFont;
         static comphelper::PropertyMapEntry pMap[] =
         {
-            {PROPERTY_FONTNAME,         static_cast<sal_uInt16>(PROPERTY_FONTNAME.length),          PROPERTY_ID_FONTNAME,           &::getCppuType(&aFont.Name)         ,PropertyAttribute::BOUND,0},
-            {PROPERTY_CHARFONTHEIGHT,   static_cast<sal_uInt16>(PROPERTY_CHARFONTHEIGHT.length),    PROPERTY_ID_FONTHEIGHT,         &::getCppuType(&aFont.Height)       ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTWIDTH,        static_cast<sal_uInt16>(PROPERTY_FONTWIDTH.length),         PROPERTY_ID_FONTWIDTH,          &::getCppuType(&aFont.Width)        ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTSTYLENAME,    static_cast<sal_uInt16>(PROPERTY_FONTSTYLENAME.length),     PROPERTY_ID_FONTSTYLENAME,      &::getCppuType(&aFont.StyleName)    ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTFAMILY,       static_cast<sal_uInt16>(PROPERTY_FONTFAMILY.length),        PROPERTY_ID_FONTFAMILY,         &::getCppuType(&aFont.Family)       ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTCHARSET,      static_cast<sal_uInt16>(PROPERTY_FONTCHARSET.length),       PROPERTY_ID_FONTCHARSET,        &::getCppuType(&aFont.CharSet)      ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTPITCH,        static_cast<sal_uInt16>(PROPERTY_FONTPITCH.length),         PROPERTY_ID_FONTPITCH,          &::getCppuType(&aFont.Pitch)        ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTCHARWIDTH,    static_cast<sal_uInt16>(PROPERTY_FONTCHARWIDTH.length),     PROPERTY_ID_FONTCHARWIDTH,      &::getCppuType(&aFont.CharacterWidth),PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTWEIGHT,       static_cast<sal_uInt16>(PROPERTY_FONTWEIGHT.length),        PROPERTY_ID_FONTWEIGHT,         &::getCppuType(&aFont.Weight)       ,PropertyAttribute::BOUND,0},
-            {PROPERTY_CHARPOSTURE,      static_cast<sal_uInt16>(PROPERTY_CHARPOSTURE.length),       PROPERTY_ID_FONTSLANT,          &::getCppuType(&aFont.Slant)        ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTUNDERLINE,    static_cast<sal_uInt16>(PROPERTY_FONTUNDERLINE.length),     PROPERTY_ID_FONTUNDERLINE,      &::getCppuType(&aFont.Underline)    ,PropertyAttribute::BOUND,0},
-            {PROPERTY_CHARSTRIKEOUT,    static_cast<sal_uInt16>(PROPERTY_CHARSTRIKEOUT.length),     PROPERTY_ID_FONTSTRIKEOUT,      &::getCppuType(&aFont.Strikeout)    ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTORIENTATION,  static_cast<sal_uInt16>(PROPERTY_FONTORIENTATION.length),   PROPERTY_ID_FONTORIENTATION,    &::getCppuType(&aFont.Orientation)  ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTKERNING,      static_cast<sal_uInt16>(PROPERTY_FONTKERNING.length),       PROPERTY_ID_FONTKERNING,        &::getCppuType(&aFont.Kerning)      ,PropertyAttribute::BOUND,0},
-            {PROPERTY_CHARWORDMODE,     static_cast<sal_uInt16>(PROPERTY_CHARWORDMODE.length),      PROPERTY_ID_FONTWORDLINEMODE,   &::getCppuType(&aFont.WordLineMode) ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTTYPE,         static_cast<sal_uInt16>(PROPERTY_FONTTYPE.length),          PROPERTY_ID_FONTTYPE,           &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTNAME.ascii,         static_cast<sal_uInt16>(PROPERTY_FONTNAME.length),          PROPERTY_ID_FONTNAME,           &::getCppuType(&aFont.Name)         ,PropertyAttribute::BOUND,0},
+            {PROPERTY_CHARFONTHEIGHT.ascii,   static_cast<sal_uInt16>(PROPERTY_CHARFONTHEIGHT.length),    PROPERTY_ID_FONTHEIGHT,         &::getCppuType(&aFont.Height)       ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTWIDTH.ascii,        static_cast<sal_uInt16>(PROPERTY_FONTWIDTH.length),         PROPERTY_ID_FONTWIDTH,          &::getCppuType(&aFont.Width)        ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTSTYLENAME.ascii,    static_cast<sal_uInt16>(PROPERTY_FONTSTYLENAME.length),     PROPERTY_ID_FONTSTYLENAME,      &::getCppuType(&aFont.StyleName)    ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTFAMILY.ascii,       static_cast<sal_uInt16>(PROPERTY_FONTFAMILY.length),        PROPERTY_ID_FONTFAMILY,         &::getCppuType(&aFont.Family)       ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTCHARSET.ascii,      static_cast<sal_uInt16>(PROPERTY_FONTCHARSET.length),       PROPERTY_ID_FONTCHARSET,        &::getCppuType(&aFont.CharSet)      ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTPITCH.ascii,        static_cast<sal_uInt16>(PROPERTY_FONTPITCH.length),         PROPERTY_ID_FONTPITCH,          &::getCppuType(&aFont.Pitch)        ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTCHARWIDTH.ascii,    static_cast<sal_uInt16>(PROPERTY_FONTCHARWIDTH.length),     PROPERTY_ID_FONTCHARWIDTH,      &::getCppuType(&aFont.CharacterWidth),PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTWEIGHT.ascii,       static_cast<sal_uInt16>(PROPERTY_FONTWEIGHT.length),        PROPERTY_ID_FONTWEIGHT,         &::getCppuType(&aFont.Weight)       ,PropertyAttribute::BOUND,0},
+            {PROPERTY_CHARPOSTURE.ascii,      static_cast<sal_uInt16>(PROPERTY_CHARPOSTURE.length),       PROPERTY_ID_FONTSLANT,          &::getCppuType(&aFont.Slant)        ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTUNDERLINE.ascii,    static_cast<sal_uInt16>(PROPERTY_FONTUNDERLINE.length),     PROPERTY_ID_FONTUNDERLINE,      &::getCppuType(&aFont.Underline)    ,PropertyAttribute::BOUND,0},
+            {PROPERTY_CHARSTRIKEOUT.ascii,    static_cast<sal_uInt16>(PROPERTY_CHARSTRIKEOUT.length),     PROPERTY_ID_FONTSTRIKEOUT,      &::getCppuType(&aFont.Strikeout)    ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTORIENTATION.ascii,  static_cast<sal_uInt16>(PROPERTY_FONTORIENTATION.length),   PROPERTY_ID_FONTORIENTATION,    &::getCppuType(&aFont.Orientation)  ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTKERNING.ascii,      static_cast<sal_uInt16>(PROPERTY_FONTKERNING.length),       PROPERTY_ID_FONTKERNING,        &::getCppuType(&aFont.Kerning)      ,PropertyAttribute::BOUND,0},
+            {PROPERTY_CHARWORDMODE.ascii,     static_cast<sal_uInt16>(PROPERTY_CHARWORDMODE.length),      PROPERTY_ID_FONTWORDLINEMODE,   &::getCppuType(&aFont.WordLineMode) ,PropertyAttribute::BOUND,0},
+            {PROPERTY_FONTTYPE.ascii,         static_cast<sal_uInt16>(PROPERTY_FONTTYPE.length),          PROPERTY_ID_FONTTYPE,           &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},
             { NULL, 0, 0, NULL, 0, 0 }
         };
         try
@@ -338,10 +338,10 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 {
     static comphelper::PropertyMapEntry pMap[] =
     {
-        {PROPERTY_BORDERLEFT,   static_cast<sal_uInt16>(PROPERTY_BORDERLEFT.length),        0,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
-        {PROPERTY_BORDERRIGHT,  static_cast<sal_uInt16>(PROPERTY_BORDERRIGHT.length),       1,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
-        {PROPERTY_BORDERTOP,    static_cast<sal_uInt16>(PROPERTY_BORDERTOP.length),         2,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
-        {PROPERTY_BORDERBOTTOM, static_cast<sal_uInt16>(PROPERTY_BORDERBOTTOM.length),      3,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERLEFT.ascii,   static_cast<sal_uInt16>(PROPERTY_BORDERLEFT.length),        0,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERRIGHT.ascii,  static_cast<sal_uInt16>(PROPERTY_BORDERRIGHT.length),       1,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERTOP.ascii,    static_cast<sal_uInt16>(PROPERTY_BORDERTOP.length),         2,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
+        {PROPERTY_BORDERBOTTOM.ascii, static_cast<sal_uInt16>(PROPERTY_BORDERBOTTOM.length),      3,          &::getCppuType((const table::BorderLine*)0)         ,PropertyAttribute::BOUND,0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));

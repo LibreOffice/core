@@ -665,7 +665,7 @@ namespace
     {
         const sal_Int32 nPrefixLen = URL_CONTROLLER_PREFIX.length;
         return  ( _rURL.getLength() > nPrefixLen )
-            &&  ( _rURL.compareToAscii( URL_CONTROLLER_PREFIX, nPrefixLen ) == 0 );
+            &&  ( _rURL.compareToAscii( URL_CONTROLLER_PREFIX.ascii, nPrefixLen ) == 0 );
     }
 }
 

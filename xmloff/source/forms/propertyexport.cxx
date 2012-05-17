@@ -377,13 +377,12 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName, const SvXMLEnumMapEntry* _pValueMap,
+            const rtl::OUString &rPropertyName, const SvXMLEnumMapEntry* _pValueMap,
             const sal_Int32 _nDefault, const sal_Bool _bVoidDefault)
     {
         // get the value
         sal_Int32 nCurrentValue(_nDefault);
-        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
-        Any aValue = m_xProps->getPropertyValue(sPropertyName);
+        Any aValue = m_xProps->getPropertyValue(rPropertyName);
 
         if (aValue.hasValue())
         {   // we have a non-void current value
@@ -407,7 +406,7 @@ namespace xmloff
         }
 
         // the property does not need to be handled anymore
-        exportedProperty(sPropertyName);
+        exportedProperty(rPropertyName);
     }
 
     //---------------------------------------------------------------------

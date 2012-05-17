@@ -352,17 +352,17 @@ void ODBTableDecorator::construct()
     Property* pEnd = pIter + aTableProps.getLength();
     for (;pIter != pEnd ; ++pIter)
     {
-        if (0 == pIter->Name.compareToAscii(PROPERTY_CATALOGNAME))
+        if (pIter->Name.equalsAsciiL(PROPERTY_CATALOGNAME.ascii, PROPERTY_CATALOGNAME.length))
             pIter->Handle = PROPERTY_ID_CATALOGNAME;
-        else if (0 ==pIter->Name.compareToAscii(PROPERTY_SCHEMANAME))
+        else if (pIter->Name.equalsAsciiL(PROPERTY_SCHEMANAME.ascii, PROPERTY_SCHEMANAME.length))
             pIter->Handle = PROPERTY_ID_SCHEMANAME;
-        else if (0 ==pIter->Name.compareToAscii(PROPERTY_NAME))
+        else if (pIter->Name.equalsAsciiL(PROPERTY_NAME.ascii, PROPERTY_NAME.length))
             pIter->Handle = PROPERTY_ID_NAME;
-        else if (0 ==pIter->Name.compareToAscii(PROPERTY_DESCRIPTION))
+        else if (pIter->Name.equalsAsciiL(PROPERTY_DESCRIPTION.ascii, PROPERTY_DESCRIPTION.length))
             pIter->Handle = PROPERTY_ID_DESCRIPTION;
-        else if (0 ==pIter->Name.compareToAscii(PROPERTY_TYPE))
+        else if (pIter->Name.equalsAsciiL(PROPERTY_TYPE.ascii, PROPERTY_TYPE.length))
             pIter->Handle = PROPERTY_ID_TYPE;
-        else if (0 ==pIter->Name.compareToAscii(PROPERTY_PRIVILEGES))
+        else if (pIter->Name.equalsAsciiL(PROPERTY_PRIVILEGES.ascii, PROPERTY_PRIVILEGES.length))
             pIter->Handle = PROPERTY_ID_PRIVILEGES;
     }
 
@@ -390,7 +390,7 @@ void ODBTableDecorator::construct()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO1(ODBTableDecorator, "com.sun.star.sdb.dbaccess.ODBTableDecorator", SERVICE_SDBCX_TABLE)
+IMPLEMENT_SERVICE_INFO1(ODBTableDecorator, "com.sun.star.sdb.dbaccess.ODBTableDecorator", SERVICE_SDBCX_TABLE.ascii)
 
 Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(RuntimeException)
 {

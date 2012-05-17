@@ -80,18 +80,18 @@ namespace xmloff
             pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
-                if ((0 == pEventDescription->Name.compareToAscii(EVENT_LOCALMACRONAME)) ||
-                    (0 == pEventDescription->Name.compareToAscii(EVENT_SCRIPTURL)))
+                if ((pEventDescription->Name.equalsAsciiL(EVENT_LOCALMACRONAME.ascii, EVENT_LOCALMACRONAME.length)) ||
+                    (pEventDescription->Name.equalsAsciiL(EVENT_SCRIPTURL.ascii, EVENT_SCRIPTURL.length)))
                     pEventDescription->Value >>= pTranslated->ScriptCode;
-                else if (0 == pEventDescription->Name.compareToAscii(EVENT_TYPE))
+                else if (pEventDescription->Name.equalsAsciiL(EVENT_TYPE.ascii, EVENT_TYPE.length))
                     pEventDescription->Value >>= pTranslated->ScriptType;
-                else if ( 0 == pEventDescription->Name.compareToAscii( EVENT_LIBRARY ) )
+                else if (pEventDescription->Name.equalsAsciiL(EVENT_LIBRARY.ascii, EVENT_LIBRARY.length))
                     pEventDescription->Value >>= sLibrary;
             }
 
-            if ( 0 == pTranslated->ScriptType.compareToAscii( EVENT_STARBASIC ) )
+            if (pTranslated->ScriptType.equalsAsciiL(EVENT_STARBASIC.ascii, EVENT_STARBASIC.length))
             {
-                if ( 0 == sLibrary.compareToAscii( EVENT_STAROFFICE ) )
+                if (sLibrary.equalsAsciiL(EVENT_STAROFFICE.ascii, EVENT_STAROFFICE.length))
                     sLibrary = EVENT_APPLICATION;
 
                 if ( !sLibrary.isEmpty() )

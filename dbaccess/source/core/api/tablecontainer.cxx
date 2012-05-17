@@ -151,7 +151,7 @@ void OTableContainer::removeMasterContainerListener()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
+IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER.ascii, SERVICE_SDBCX_TABLES.ascii)
 
 namespace
 {

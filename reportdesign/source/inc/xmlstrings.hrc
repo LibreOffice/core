@@ -27,9 +27,9 @@
 #ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #define REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
+#include <comphelper/string.hxx>
+using comphelper::string::ConstAsciiString;
 
 namespace rptxml
 {

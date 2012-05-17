@@ -31,56 +31,19 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <comphelper/string.hxx>
 
 //..............................................................................
 namespace frm
 {
-//..............................................................................
-
-    struct ConstAsciiString
-    {
-        const sal_Char* ascii;
-        sal_Int32       length;
-
-        inline  operator       ::rtl::OUString () const;
-        inline  operator const sal_Char*       () const { return ascii; }
-
-        inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
-        inline ~ConstAsciiString();
-
-    private:
-        mutable ::rtl::OUString*    ustring;
-    };
-
-    //------------------------------------------------------------
-    inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength)
-        :ascii(_pAsciiZeroTerminated)
-        ,length(_nLength)
-        ,ustring(NULL)
-    {
-    }
-
-    //------------------------------------------------------------
-    inline ConstAsciiString::~ConstAsciiString()
-    {
-        delete ustring;
-        ustring = NULL;
-    }
-
-    //------------------------------------------------------------
-    inline ConstAsciiString::operator ::rtl::OUString () const
-    {
-        if ( !ustring )
-            ustring = new ::rtl::OUString( ascii, length, RTL_TEXTENCODING_ASCII_US );
-        return *ustring;
-    }
+    using comphelper::string::ConstAsciiString;
 
     #ifndef FORMS_IMPLEMENT_STRINGS
         #define FORMS_CONSTASCII_STRING( ident, string )    \
             extern const ConstAsciiString ident
     #else
         #define FORMS_CONSTASCII_STRING( ident, string )    \
-            extern const ConstAsciiString ident( string, sizeof( string )-1 )
+            extern const ConstAsciiString ident = {RTL_CONSTASCII_STRINGPARAM(string)}
     #endif
 
 //..............................................................................

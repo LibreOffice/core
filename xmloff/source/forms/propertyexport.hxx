@@ -215,7 +215,7 @@ namespace xmloff
         void exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName,
+            const rtl::OUString& _rPropertyName,
             const SvXMLEnumMapEntry* _pValueMap,
             const sal_Int32 _nDefault,
             const sal_Bool _bVoidDefault = sal_False);

@@ -65,7 +65,7 @@ namespace xmloff
 
             sLocalMacroName = pEvents->ScriptCode;
             sLibrary = ::rtl::OUString();
-            if ( 0 == pEvents->ScriptType.compareToAscii( EVENT_STARBASIC ) )
+            if (pEvents->ScriptType.equalsAsciiL(EVENT_STARBASIC.ascii, EVENT_STARBASIC.length))
             {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
                 DBG_ASSERT( 0 <= nPrefixLen, "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
@@ -73,7 +73,7 @@ namespace xmloff
                 {
                     // the export handler for StarBasic expects "StarOffice", not "application" for application modules ...
                     sLibrary = sLocalMacroName.copy( 0, nPrefixLen );
-                    if ( sLibrary.equalsAscii( EVENT_APPLICATION ) )
+                    if (sLibrary.equalsAsciiL(EVENT_APPLICATION.ascii, EVENT_APPLICATION.length))
                         sLibrary = EVENT_STAROFFICE;
 
                     sLocalMacroName = sLocalMacroName.copy( nPrefixLen + 1 );

@@ -27,9 +27,9 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #define DBACCESS_SHARED_DBASTRINGS_HRC
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
+#include <comphelper/string.hxx>
+using comphelper::string::ConstAsciiString;
 
 namespace dbaccess
 {
