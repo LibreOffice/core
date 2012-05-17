@@ -166,16 +166,6 @@ String SCSTR_NONE
     Text [ en-US ] = "- none -" ;
 };
 
-String SCSTR_EMPTY
-{
-    Text [ en-US ] = "- empty -" ;
-};
-
-String SCSTR_NOTEMPTY
-{
-    Text [ en-US ] = "- not empty -" ;
-};
-
 String SCSTR_NEWTABLE
 {
     Text [ en-US ] = "- new sheet -" ;
@@ -194,6 +184,16 @@ String SCSTR_STDFILTER
 String SCSTR_TOP10FILTER
 {
     Text [ en-US ] = "Top 10" ;
+};
+
+String SCSTR_FILTER_EMPTY
+{
+    Text [ en-US ] = "Empty" ;
+};
+
+String SCSTR_FILTER_NOTEMPTY
+{
+    Text [ en-US ] = "Not Empty" ;
 };
 
 String SCSTR_NONAME

@@ -707,11 +707,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->addMenuItem(
         SC_RESSTR(SCSTR_TOP10FILTER), true, new AutoFilterAction(this, Top10));
     mpAutoFilterPopup->addMenuItem(
+        SC_RESSTR(SCSTR_FILTER_EMPTY), true, new AutoFilterAction(this, Empty));
+    mpAutoFilterPopup->addMenuItem(
+        SC_RESSTR(SCSTR_FILTER_NOTEMPTY), true, new AutoFilterAction(this, NonEmpty));
+    mpAutoFilterPopup->addMenuItem(
         SC_RESSTR(SCSTR_STDFILTER), true, new AutoFilterAction(this, Custom));
-    mpAutoFilterPopup->addMenuItem(
-        SC_RESSTR(SCSTR_EMPTY), true, new AutoFilterAction(this, Empty));
-    mpAutoFilterPopup->addMenuItem(
-        SC_RESSTR(SCSTR_NOTEMPTY), true, new AutoFilterAction(this, NonEmpty));
 
     ScCheckListMenuWindow::Config aConfig;
     aConfig.mbAllowEmptySet = false;
@@ -1181,7 +1181,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         long nMaxText = 0;
 
         //  default entries
-        static const sal_uInt16 nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_EMPTY, SCSTR_NOTEMPTY };
+        static const sal_uInt16 nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_FILTER_EMPTY, SCSTR_FILTER_NOTEMPTY };
         const size_t nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
