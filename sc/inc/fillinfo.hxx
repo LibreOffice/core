@@ -62,6 +62,14 @@ enum ScShadowPart
     SC_SHADOW_CORNER
 };
 
+struct ScDataBarInfo
+{
+    double mnZero; // 0 to 100
+    Color maColor;
+    double mnLength; // -100 to 100
+    bool mbGradient;
+};
+
 struct CellInfo
 {
     ScBaseCell*                 pCell;
@@ -69,6 +77,7 @@ struct CellInfo
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
     const Color*                pColorScale;
+    const ScDataBarInfo*        pDataBar;
 
     const SvxBrushItem*         pBackground;
 
@@ -104,11 +113,13 @@ struct CellInfo
     sal_Bool                        bEditEngine : 1;            // output-internal
 
     CellInfo():
-        pColorScale(NULL) {}
+        pColorScale(NULL),
+        pDataBar(NULL) {}
 
     ~CellInfo()
     {
         delete pColorScale;
+        delete pDataBar;
     }
 };
 

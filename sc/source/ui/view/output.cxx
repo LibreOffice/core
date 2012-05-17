@@ -769,6 +769,15 @@ sal_Bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
 
         if (pCol1 && (*pCol1 != *pCol2))
             return false;
+
+        const ScDataBarInfo* pInfo1 = rFirst.pCellInfo[nX+1].pDataBar;
+        const ScDataBarInfo* pInfo2 = rOther.pCellInfo[nX+1].pDataBar;
+
+        if( (pInfo1 && !pInfo2) || (!pInfo1 && pInfo2) )
+            return false;
+
+        if (pInfo1 && (*pInfo1 != *pInfo2))
+            return false;
     }
 
     return sal_True;
@@ -790,26 +799,62 @@ void ScOutputData::DrawDocumentBackground()
 
 namespace {
 
+void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, const Rectangle& rRect)
+{
+    long nPosZero = 0;
+    if(pOldDataBarInfo->mnZero)
+    {
+        //need to calculate null point in cell
+        long nLength = rRect.Right() - rRect.Left();
+        nPosZero = static_cast<long>(rRect.Left() + nLength*pOldDataBarInfo->mnZero/100.0);
+    }
+    else
+    {
+        nPosZero = rRect.Left();
+    }
+    Rectangle aPaintRect = rRect;
+
+    if(pOldDataBarInfo->mnLength < 0)
+    {
+        aPaintRect.Right() = nPosZero;
+        long nLength = nPosZero - aPaintRect.Left();
+        aPaintRect.Left() = nPosZero + static_cast<long>(nLength * pOldDataBarInfo->mnLength/100.0);
+    }
+    else if(pOldDataBarInfo->mnLength > 0)
+    {
+        aPaintRect.Left() = nPosZero;
+        long nLength = aPaintRect.Right() - nPosZero;
+        aPaintRect.Right() = nPosZero + static_cast<long>(nLength * pOldDataBarInfo->mnLength/100.0);
+    }
+    else
+        return;
+
+    //TODO: improve this for gradient fill
+    pDev->SetFillColor(pOldDataBarInfo->maColor);
+    pDev->DrawRect(aPaintRect);
+}
+
 void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
-        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev)
+        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo)
 {
 
     // need to paint if old color scale has been used and now
     // we have a different color or a style based background
     // we can here fall back to pointer comparison
-    if (pOldColor && (pBackground || pOldColor != pColor))
+    if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo))
     {
-
         rRect.Right() = nPosX-nSignedOneX;
         if( !pOldColor->GetTransparency() )
         {
             pDev->SetFillColor( *pOldColor );
             pDev->DrawRect( rRect );
         }
+        if( pOldDataBarInfo )
+            drawDataBars( pOldDataBarInfo, pDev, rRect );
         rRect.Left() = nPosX - nSignedOneX;
     }
 
-    if ( pOldBackground && (pColor ||pBackground != pOldBackground) )
+    if ( pOldBackground && (pColor ||pBackground != pOldBackground || pOldDataBarInfo || pDataBarInfo) )
     {
         rRect.Right() = nPosX-nSignedOneX;
         if (pOldBackground)             // ==0 if hidden
@@ -821,6 +866,14 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
                 pDev->DrawRect( rRect );
             }
         }
+        if( pOldDataBarInfo )
+            drawDataBars( pOldDataBarInfo, pDev, rRect );
+        rRect.Left() = nPosX - nSignedOneX;
+    }
+
+    if (!pOldBackground && !pOldColor && pDataBarInfo)
+    {
+        rRect.Right() = nPosX -nSignedOneX;
         rRect.Left() = nPosX - nSignedOneX;
     }
 
@@ -837,6 +890,11 @@ void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color
         pOldBackground = pBackground;
         pOldColor = NULL;
     }
+
+    if(pDataBarInfo)
+        pOldDataBarInfo = pDataBarInfo;
+    else
+        pOldDataBarInfo = NULL;
 }
 
 }
@@ -897,6 +955,7 @@ void ScOutputData::DrawBackground()
                 const SvxBrushItem* pBackground;
                 const Color* pOldColor = NULL;
                 const Color* pColor = NULL;
+                const ScDataBarInfo* pOldDataBarInfo = NULL;
                 for (SCCOL nX=nX1; nX<=nX2; nX++)
                 {
                     CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
@@ -936,11 +995,12 @@ void ScOutputData::DrawBackground()
                     }
 
                     pColor = pInfo->pColorScale;
-                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDev );
+                    const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar;
+                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDev, pDataBarInfo, pOldDataBarInfo );
 
                     nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
                 }
-                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDev );
+                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, pDev, NULL, pOldDataBarInfo );
 
                 nArrY += nSkip;
             }
