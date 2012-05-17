@@ -814,6 +814,32 @@ void OOXMLFastContextHandler::endOfParagraph()
         mpStream->utext((const sal_uInt8*)sCR, 1);
 }
 
+void OOXMLFastContextHandler::startTxbxContent()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.startTxbxContent");
+#endif
+/*
+    This usually means there are recursive <w:p> elements, and the ones
+    inside and outside of w:txbxContent should not interfere (e.g.
+    the lastParagraphInSection setting). So save the whole state
+    and possibly start new groups for the nested content (not section
+    group though, as that'd cause the txbxContent to be moved onto
+    another page, I'm not sure how that should work exactly).
+*/
+    mpParserState->startTxbxContent();
+    startParagraphGroup();
+}
+
+void OOXMLFastContextHandler::endTxbxContent()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.endTxbxContent");
+#endif
+    endParagraphGroup();
+    mpParserState->endTxbxContent();
+}
+
 void OOXMLFastContextHandler::text(const ::rtl::OUString & sText)
 {
 #ifdef DEBUG_CONTEXT_HANDLER

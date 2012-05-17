@@ -59,6 +59,12 @@ class OOXMLParserState
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
+    bool inTxbxContent;
+    // these 4 save when inTxbxContent
+    bool savedInSectionGroup;
+    bool savedInParagraphGroup;
+    bool savedInCharacterGroup;
+    bool savedLastParagraphInSection;
 #if OSL_DEBUG_LEVEL > 1
     XPathLogger m_xPathLogger;
 #endif
@@ -108,6 +114,9 @@ public:
     void endTable();
 
     void incContextCount();
+
+    void startTxbxContent();
+    void endTxbxContent();
 
 #if OSL_DEBUG_LEVEL > 1
 public:
