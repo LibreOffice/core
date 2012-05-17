@@ -24,31 +24,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_CustomTarget_CustomTarget,testtools/uno_test))
+gb_UNO := $(OUTDIR)/bin/uno
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-	StaticLibrary_bridgetest \
-	Library_cppobj \
-	Library_bridgetest \
-	Library_constructors \
-	Rdb_uno_services \
-	CustomTarget_uno_test \
-))
+# this target is phony to run it every time
+.PHONY : $(call gb_CustomTarget_get_target,testtools/uno_test)
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,testtools,\
-	Jar_testComponent \
-	CustomTarget_bridgetest_javamaker \
-	CustomTarget_bridgetest_testComponent \
-))
-endif
+$(call gb_CustomTarget_get_target,testtools/uno_test) : $(call gb_Rdb_get_target,uno_services) \
+	$(call gb_InternalUnoApi_get_target,bridgetest)
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_UNO) \
+		-ro $(OUTDIR)/xml/uno_services.rdb \
+		-ro $(OUTDIR)/bin/udkapi.rdb \
+		-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb \
+		-s com.sun.star.test.bridge.BridgeTest \
+		-- com.sun.star.test.bridge.CppTestObject)
 
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_climaker \
-))
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:

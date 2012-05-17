@@ -26,18 +26,10 @@
 
 $(eval $(call gb_Rdb_Rdb,uno_services))
 
-$(eval $(call gb_Rdb_use_custom_headers,uno_services,testtools/bridgetest_testComponent))
-
 $(eval $(call gb_Rdb_add_components,uno_services,\
     testtools/source/bridgetest/cppobj \
     testtools/source/bridgetest/constructors \
     testtools/source/bridgetest/bridgetest \
 ))
-
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,uno_services,\
-    testtools/source/bridgetest/testComponent \
-))
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
