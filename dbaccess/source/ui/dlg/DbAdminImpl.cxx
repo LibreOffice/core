@@ -386,9 +386,9 @@ void ODbDataSourceAdministrationHelper::clearPassword()
             aRet.first = getDriver()->connect(getConnectionURL(), aConnectionParams);
             aRet.second = sal_True;
         }
-        catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-        catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-        catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (const SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (const SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (const SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
 
         showError(aErrorInfo,m_pParent,getORB());
     }
@@ -415,7 +415,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
         xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
         OSL_ENSURE(xDriverManager.is(), "ODbDataSourceAdministrationHelper::getDriver: could not instantiate the driver manager, or it does not provide the necessary interface!");
     }
-    catch (Exception& e)
+    catch (const Exception& e)
     {
         // wrap the exception into an SQLException
         SQLException aSQLWrapper(e.Message, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());

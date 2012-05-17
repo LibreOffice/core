@@ -277,7 +277,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
         }
         FillUserNames();
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,m_xORB);
         return 0;
@@ -340,7 +340,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
         }
         FillUserNames();
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,m_xORB);
     }

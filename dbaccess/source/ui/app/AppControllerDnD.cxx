@@ -283,7 +283,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                 {
                     showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
                 }
-                catch(WrappedTargetException& e)
+                catch(const WrappedTargetException& e)
                 {
                     SQLException aSql;
                     if ( e.TargetException >>= aSql )
