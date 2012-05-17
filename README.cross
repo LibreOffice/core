@@ -386,12 +386,13 @@ them...
 The activity used for these apps is in android/Bootstrap. See
 README.Android.
 
-To build the complex unit test (for Calc functionality; invokes the
-"ucalc" unit test code from sc) setup your environment (make cmd cmd=bash)
-and cd to android/qa/sc and run a "make". The Makefile here is
-completely manually written, this stuff is so experimental it doesn't
-make sense yet to try to integrate with the normal gbuild
-mechanism.
+To build the complex unit test for Calc functionality which invokes the
+"ucalc" unit test code from sc, cd to android/qa/sc and run a "make". The
+Makefile here is completely manually written, this stuff is so experimental it
+doesn't make sense yet to try to integrate with the normal gbuild mechanism.
+
+Note that lately (as of May 2012) the android/qa/sc test has not been
+maintained, and might not build cleanly.
 
 Then to run the unit test, do "make install" followed by "make
 run". You most likely want to have an "adb logcat" running in another
@@ -407,6 +408,9 @@ Running strace on the unit test in progress is often useful to find
 out what is going wrong. Pass something like -e lo-strace '-tt -f -e
 trace=file,process,network -o /system/sc/strace.out' to the am start
 command line.
+
+The Android test app which has been exercised lately is in
+android/experimental/DocumentLoader.
 
 
 PowerPC Mac OS X
