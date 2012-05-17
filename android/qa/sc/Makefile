@@ -191,10 +191,6 @@ run: run_ucalc run_filters_test
 stop-start-cycle:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
-# Too hard to remember this stuff;)
-redirect-stdio:
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell setprop log.redirect-stdio true && $(ANDROID_SDK_HOME)/platform-tools/adb shell start
-
 clean: properties
 	$(ANT) clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)

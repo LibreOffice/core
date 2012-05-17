@@ -395,14 +395,12 @@ mechanism.
 
 Then to run the unit test, do "make install" followed by "make
 run". You most likely want to have an "adb logcat" running in another
-window, and you probably also want to have set the stdout and stderr
-of app processes to be redirected to logcat ("adb shell stop; adb
-shell setprop log.redirect-stdio true; adb shell start").
+window.
 
-To debug, do manually what "make run" would do, adding args "-e
-lo-main-delay 20" to the command line, and when the app has started,
-run ndk-gdb. Unfortunately the gdb in NDK r7 is broken, use the one in
-the NDK build with newer versions of gcc and gdb from
+To debug, do manually what "make run" would do, adding args "-e lo-main-delay
+20" to the command line, and when the app has started, run
+ndk-gdb. Unfortunately the gdb in NDK r7 and r8 is a bit broken, you can use
+the one in a NDK build with newer versions of gcc and gdb from
 http://code.google.com/p/mingw-and-ndk/ instead.
 
 Running strace on the unit test in progress is often useful to find
