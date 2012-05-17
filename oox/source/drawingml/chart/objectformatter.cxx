@@ -208,7 +208,7 @@ static const AutoFormatEntry spPlotArea2dFills[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spFloorLines[] =
+static const AutoFormatEntry spWallFloorLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),
     AUTOFORMAT_COLORMOD( 33, 40, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 75000 ),
@@ -548,8 +548,8 @@ static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
     TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA3D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_WALL,           &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spWallFloorFills,      0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FLOOR,          &saCommonPropInfo, 0,                 spFloorLines,        spWallFloorFills,      0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_WALL,           &saCommonPropInfo, 0,                 spWallFloorLines,    spWallFloorFills,      0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FLOOR,          &saCommonPropInfo, 0,                 spWallFloorLines,    spWallFloorFills,      0 /* eq to Ch2 */ ),
     TYPEFORMAT_LINE(  OBJECTTYPE_AXIS,           &saCommonPropInfo, spOtherTexts,      spAxisLines ),
     TYPEFORMAT_FRAME( OBJECTTYPE_AXISTITLE,      &saCommonPropInfo, spAxisTitleTexts,  0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_AXISUNIT,       &saCommonPropInfo, spAxisTitleTexts,  0 /* eq in Ch2 */,   0 /* eq in Ch2 */,     0 /* eq in Ch2 */ ),
