@@ -24,30 +24,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_Rdb_Rdb,uno_services))
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-	Library_cppobj \
-	Library_bridgetest \
-	Library_constructors \
-	StaticLibrary_bridgetest \
-	Rdb_uno_services \
+$(eval $(call gb_Rdb_use_custom_headers,uno_services,testtools/bridgetest_testComponent))
+
+$(eval $(call gb_Rdb_add_components,uno_services,\
+    testtools/source/bridgetest/cppobj \
+    testtools/source/bridgetest/constructors \
+    testtools/source/bridgetest/bridgetest \
 ))
-
 
 ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,testtools,\
-	Jar_testComponent \
-	CustomTarget_bridgetest_javamaker \
-	CustomTarget_bridgetest_testComponent \
-))
-endif
-
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_climaker \
+$(eval $(call gb_Rdb_add_components,uno_services,\
+    testtools/source/bridgetest/testComponent \
 ))
 endif
 

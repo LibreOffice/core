@@ -24,31 +24,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,testtools))
+$(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest_testComponent))
 
-$(eval $(call gb_Module_add_targets,testtools,\
-	InternalUnoApi_bridgetest \
-	Library_cppobj \
-	Library_bridgetest \
-	Library_constructors \
-	StaticLibrary_bridgetest \
-	Rdb_uno_services \
-))
+testComponent_DIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_testComponent)
 
+$(call gb_CustomTarget_get_target,testtools/bridgetest_testComponent) : $(testComponent_DIR)/done
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,testtools,\
-	Jar_testComponent \
-	CustomTarget_bridgetest_javamaker \
-	CustomTarget_bridgetest_testComponent \
-))
-endif
+$(testComponent_DIR)/done : $(gb_XSLTPROCTARGET) \
+	$(SRCDIR)/testtools/source/bridgetest/testComponent.component | $(testComponent_DIR)/.dir 
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CMP,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+		$(gb_XSLTPROC) --nonet --stringparam uri \
+		'vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/testComponent.jar' \
+			-o $(OUTDIR)/xml/component/testtools/source/bridgetest/testComponent.component \
+			$(gb_ComponentTarget_XSLTCOMMANDFILE) $(SRCDIR)/testtools/source/bridgetest/testComponent.component && touch $@)
 
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,testtools,\
-	CustomTarget_bridgetest_climaker \
-))
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
