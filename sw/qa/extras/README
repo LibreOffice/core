@@ -1,0 +1,102 @@
+= How to add a new Writer filter test
+
+The `sw/qa/extras/` subdirectory has multiple import and export filter unit
+tests. This file documents how to add new testcases to this framework.
+
+== Import tests
+
+Import tests are the easier ones. All start with a `load()` method that loads a
+file to `mxComponent`, which represents the UNO model of the document.
+
+The rest of the testcase is about asserting this document model: use the UNO
+API to retrieve properties, then use `CPPUNIT_ASSERT_EQUAL()` to test against
+an expected value.
+
+Ideally this alone is enough, but figuring out the UNO API just by reading the
+idl files under `offapi/` is not that productive. Xray can help in this case.
+Download it from:
+
+http://bernard.marcelly.perso.sfr.fr/index2.html
+
+It's an SXW file, start Writer, Tools -> Options -> LibreOffice -> Security,
+Macro Security, and there choose Low. Then open the SXW, and click `Install
+Xray`. Now you can close the SXW. Open your testcase, which is imported
+correctly (from a fixed bugs's point of view). Then open the basic editor
+(Tools -> Macros -> LibreOffice Basic -> Organize Macros, Edit), and start to
+write your testcase as `Sub Main`. You don't have to know much about basic, for
+a typical testcase you need no `if`, `for`, or anything like that.
+
+NOTE: Once you restart Writer, xray will no longer be loaded automatically. For
+subsequent starts, place the following line in `Main` before you do anything
+else:
+
+----
+GlobalScope.BasicLibraries.LoadLibrary("XrayTool")
+----
+
+The above `mxComponent` is available as `ThisComponent` in basic, and if you
+want to inspect a variable here, you can use the `xray` command to inspect
+properties, methods, interfaces, etc.
+
+Let's take for example fdo#49501. The problem there was the page was not
+landscape (and a few more, let's ignore that).
+
+You can start with:
+
+----
+xray ThisComponent
+----
+
+and navigate around. The good thing is that once you write the code, you can
+just start F5 without restarting LibreOffice to see the result, so you can
+develop quickly.
+
+With some experimenting, you'll end up with something like this:
+
+----
+oStyle = ThisComponent.StyleFamilies.PageStyles.Default
+xray oStyle.IsLandscape
+----
+
+Now all left is to rewrite that in cpp, where it'll be much easier to debug
+when later this test fails for some reason. In cpp, you typically need to be
+more verbose, so the code will look like:
+
+----
+uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
+uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+
+sal_Bool bIsLandscape = sal_False;
+xStyle->getPropertyValue("IsLandscape") >>= bIsLandscape;
+CPPUNIT_ASSERT_EQUAL(sal_True, bIsLandscape);
+----
+
+== Export tests
+
+Export tests are similar. Given that test documents are easier to provide in
+some format (instead of writing code to build the documents from scratch) in
+most cases, we will do an import, then do an export (to invoke the code we want
+to test) and then do an import again, so we can do the testing by asserting the
+document model, just like we did for import tests.
+
+Yes, this means that you can test the export code (using this framework) if the
+importer is working correctly. (But that's not so bad, users usually expect a
+feature to work in both the importer and the exporter.)
+
+The only difference is that instead of `load()`, you call `roundtrip()` to load
+the test document, then you can assert it as discussed above.
+
+== Helper methods
+
+When two or more tests do the same (for example determine the number of
+characters in the document), helper methods are introduced to avoid code
+duplication. When you need something more complex, check if there is already a
+helper method, they are also good examples.
+
+Helper methods which are used by more than one testsuite are in the
+`SwModelTestBase` class. For example the `getLength()` method uses the trick
+that you can simply enumerate over the document model, getting the paragraphs
+of it; and inside those, you can enumerate over their runs. That alone is
+enough if you want to test a paragraph or character property.
