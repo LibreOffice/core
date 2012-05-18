@@ -32,4 +32,10 @@ $(eval $(call gb_Rdb_add_components,uno_services,\
     testtools/source/bridgetest/bridgetest \
 ))
 
+ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Rdb_add_components,uno_services,\
+    testtools/source/bridgetest/testComponent \
+))
+endif
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

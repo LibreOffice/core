@@ -27,7 +27,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest))
 
 workdir_SERVER := $(call gb_CustomTarget_get_workdir,testtools/bridgetest)
-gb_UNO := $(OUTDIR)/bin/uno
+UNO_EXE := $(OUTDIR)/bin/uno
 
 ifeq ($(OS),WNT)
 BATCH_SUFFIX := .bat
@@ -39,14 +39,16 @@ endif
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest) : \
 	$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) \
-	$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX)
+	$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) \
+	$(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX) \
+	$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) \
 
 # which other prerequisits do we need here?
 $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
 	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs_native,\
-		echo "$(gb_UNO)" \
+		echo "$(UNO_EXE)" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \
 		"-ro $(OUTDIR)/bin/udkapi.rdb" \
 		"-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb" \
@@ -56,11 +58,39 @@ $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
 	$(GIVE_EXEC_RIGHTS) $@
 
 # which other prerequisits do we need here?
+$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) : \
+	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		echo "java" \
+		"-classpath $(OUTDIR)/bin/testComponent.jar" \
+		"com.sun.star.comp.bridge.TestComponentMain" \
+		\""uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test"\" \
+		"singleaccept"> $@)
+	$(GIVE_EXEC_RIGHTS) $@
+
+# which other prerequisites do we need here?
+$(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX) : \
+	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		echo "JAVA_HOME=$(JAVA_HOME) $(UNO_EXE)" \
+		"-ro $(OUTDIR)/xml/uno_services.rdb" \
+		"-ro $(OUTDIR)/bin/udkapi.rdb" \
+		"-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb" \
+		"-s com.sun.star.test.bridge.BridgeTest" \
+		"-env:URE_INTERNAL_JAVA_DIR=$(OUTDIR)/bin" \
+		"-env:URE_INTERNAL_LIB_DIR=$(OUTDIR)/lib" \
+		"-- com.sun.star.test.bridge.JavaTestObject noCurrentContext" \
+		> $@)
+	$(GIVE_EXEC_RIGHTS) $@
+
+# which other prerequisits do we need here?
 $(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) : \
 	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs_native,\
-		echo "$(gb_UNO)" \
+		echo "$(UNO_EXE)" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \
 		"-ro $(OUTDIR)/bin/udkapi.rdb" \
 		"-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb" \
