@@ -1751,8 +1751,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntryVirtOutDev( SvxIconChoiceCtrlEntry* pEntr
     aPaper.SetRect( aRect );
     pEntryPaintDev->SetBackground( aPaper );
     pEntryPaintDev->SetFont( pView->GetFont() );
-    Rectangle aPix ( pEntryPaintDev->LogicToPixel(aRect) );
-
 
     Size aSize( rRect.GetSize() );
     pEntryPaintDev->SetOutputSizePixel( aSize );
