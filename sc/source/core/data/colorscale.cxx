@@ -416,15 +416,17 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     return new Color(aColor);
 }
 
-void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+namespace {
+
+SCTAB UpdateMoveTabRangeList( ScRangeList& rList, SCTAB nOldTab, SCTAB nNewTab )
 {
-    size_t n = maRanges.size();
+    size_t n = rList.size();
     SCTAB nMinTab = std::min<SCTAB>(nOldTab, nNewTab);
     SCTAB nMaxTab = std::max<SCTAB>(nOldTab, nNewTab);
     SCTAB nThisTab = -1;
     for(size_t i = 0; i < n; ++i)
     {
-        ScRange* pRange = maRanges[i];
+        ScRange* pRange = rList[i];
         SCTAB nTab = pRange->aStart.Tab();
         if(nTab < nMinTab || nTab > nMaxTab)
         {
@@ -456,6 +458,15 @@ void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 
     if(nThisTab == -1)
         nThisTab = 0;
+
+    return nThisTab;
+}
+
+}
+
+void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+{
+    SCTAB nThisTab = UpdateMoveTabRangeList(maRanges, nOldTab, nNewTab);
     for(iterator itr = begin(); itr != end(); ++itr)
     {
         itr->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
@@ -558,18 +569,58 @@ ScColorFormatType ScDataBarFormat::GetType() const
     return DATABAR;
 }
 
-void ScDataBarFormat::UpdateReference( UpdateRefMode ,
-            const ScRange& , SCsCOL , SCsROW , SCsTAB  )
+void ScDataBarFormat::UpdateReference( UpdateRefMode eRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
+    maRanges.UpdateReference( eRefMode, mpDoc, rRange, nDx, nDy, nDz );
+
+    mpFormatData->mpUpperLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
+    mpFormatData->mpLowerLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
 }
 
-void ScDataBarFormat::DataChanged(const ScRange& )
+namespace {
+
+bool NeedUpdate(ScColorScaleEntry* pEntry)
 {
+    if(pEntry->GetMin())
+        return true;
+
+    if(pEntry->GetMax())
+        return true;
+
+    if(pEntry->GetFormula())
+        return true;
+
+    return false;
+}
 
 }
 
-void ScDataBarFormat::UpdateMoveTab(SCTAB , SCTAB )
+void ScDataBarFormat::DataChanged(const ScRange& rRange)
 {
+    bool bNeedUpdate = false;
+
+    bNeedUpdate = NeedUpdate(mpFormatData->mpUpperLimit.get());
+    bNeedUpdate &= NeedUpdate(mpFormatData->mpLowerLimit.get());
+
+    bNeedUpdate &= maRanges.Intersects(rRange);
+
+    if(bNeedUpdate)
+    {
+        size_t n = maRanges.size();
+        for(size_t i = 0; i < n; ++i)
+        {
+            ScRange* pRange = maRanges[i];
+            mpDoc->RepaintRange(*pRange);
+        }
+    }
+}
+
+void ScDataBarFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+{
+    SCTAB nThisTab = UpdateMoveTabRangeList(maRanges, nOldTab, nNewTab);
+    mpFormatData->mpUpperLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
+    mpFormatData->mpLowerLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
 }
 
 ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
