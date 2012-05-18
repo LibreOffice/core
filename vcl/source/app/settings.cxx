@@ -302,7 +302,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
     maGroupFont( rData.maGroupFont ),
-    maWorkspaceGradient( rData.maWorkspaceGradient )
+    maWorkspaceGradient( rData.maWorkspaceGradient ),
+    maDialogStyle( rData.maDialogStyle ),
+    maFrameStyle( rData.maFrameStyle )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;

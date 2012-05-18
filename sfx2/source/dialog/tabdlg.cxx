@@ -511,12 +511,8 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
-    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
 
     vbox.setChildProperty(sFill, true);
-    //TO-DO, when vcontent_area belongs to dialog via builder, this becomes
-    //content-area-border on the dialog
-    vbox.setChildProperty(sBorderWidth, sal_Int32(7));
 
     action_area.setChildProperty(sFill, true);
 

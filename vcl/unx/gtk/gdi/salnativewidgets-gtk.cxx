@@ -111,6 +111,8 @@ struct NWFWidgetData
     GtkWidget *  gHScale;
     GtkWidget *  gVScale;
     GtkWidget *  gSeparator;
+    GtkWidget *  gDialog;
+    GtkWidget *  gFrame;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -150,6 +152,8 @@ struct NWFWidgetData
         gHScale( NULL ),
         gVScale( NULL ),
         gSeparator( NULL ),
+        gDialog( NULL ),
+        gFrame( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -192,6 +196,8 @@ static void NWEnsureGTKToolbar           ( SalX11Screen nScreen );
 static void NWEnsureGTKMenubar           ( SalX11Screen nScreen );
 static void NWEnsureGTKMenu              ( SalX11Screen nScreen );
 static void NWEnsureGTKTooltip           ( SalX11Screen nScreen );
+static void NWEnsureGTKDialog            ( SalX11Screen nScreen );
+static void NWEnsureGTKFrame             ( SalX11Screen nScreen );
 static void NWEnsureGTKProgressBar       ( SalX11Screen nScreen );
 static void NWEnsureGTKTreeView          ( SalX11Screen nScreen );
 static void NWEnsureGTKSlider            ( SalX11Screen nScreen );
@@ -490,6 +496,8 @@ void GtkData::deInitNWF( void )
             gtk_widget_destroy( gWidgetData[i].gMenuWidget );
         if( gWidgetData[i].gTooltipPopup )
             gtk_widget_destroy( gWidgetData[i].gTooltipPopup );
+        if( gWidgetData[i].gDialog )
+            gtk_widget_destroy( gWidgetData[i].gDialog );
         delete gWidgetData[i].gCacheTabPages;
         gWidgetData[i].gCacheTabPages = NULL;
         delete gWidgetData[i].gCacheTabItems;
@@ -3716,6 +3724,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     NWEnsureGTKScrollbars( m_nXScreen );
     NWEnsureGTKEditBox( m_nXScreen );
     NWEnsureGTKTooltip( m_nXScreen );
+    NWEnsureGTKDialog( m_nXScreen );
+    NWEnsureGTKFrame( m_nXScreen );
 
 #if OSL_DEBUG_LEVEL > 2
     printStyleColors( pStyle );
@@ -3736,6 +3746,22 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gTooltipPopup );
     aTextColor = getColor( pTooltipStyle->fg[ GTK_STATE_NORMAL ] );
     aStyleSet.SetHelpTextColor( aTextColor );
+
+    DialogStyle aDialogStyle(aStyleSet.GetDialogStyle());
+    gtk_widget_style_get (gWidgetData[m_nXScreen].gDialog,
+        "content-area-border", &aDialogStyle.content_area_border,
+        "content-area-spacing", &aDialogStyle.content_area_spacing,
+        "button-spacing", &aDialogStyle.button_spacing,
+        "action-area-border", &aDialogStyle.action_area_border,
+        NULL);
+    aStyleSet.SetDialogStyle(aDialogStyle);
+
+    FrameStyle aFrameStyle(aStyleSet.GetFrameStyle());
+    aFrameStyle.left = aFrameStyle.right =
+        gWidgetData[m_nXScreen].gFrame->style->xthickness;
+    aFrameStyle.top = aFrameStyle.bottom =
+        gWidgetData[m_nXScreen].gFrame->style->ythickness;
+    aStyleSet.SetFrameStyle(aFrameStyle);
 
     // mouse over text colors
     aTextColor = getColor( pStyle->fg[ GTK_STATE_PRELIGHT ] );
@@ -4408,6 +4434,29 @@ static void NWEnsureGTKTooltip( SalX11Screen nScreen )
         gtk_widget_set_name( gWidgetData[nScreen].gTooltipPopup, "gtk-tooltips");
         gtk_widget_realize( gWidgetData[nScreen].gTooltipPopup );
         gtk_widget_ensure_style( gWidgetData[nScreen].gTooltipPopup );
+    }
+}
+
+static void NWEnsureGTKDialog( SalX11Screen nScreen )
+{
+    if( !gWidgetData[nScreen].gDialog )
+    {
+        gWidgetData[nScreen].gDialog = gtk_dialog_new();
+        GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(),
+                                                     nScreen.getXScreen() );
+        if( pScreen )
+            gtk_window_set_screen( GTK_WINDOW(gWidgetData[nScreen].gDialog), pScreen );
+        gtk_widget_realize(gWidgetData[nScreen].gDialog);
+        gtk_widget_ensure_style(gWidgetData[nScreen].gDialog);
+    }
+}
+
+static void NWEnsureGTKFrame( SalX11Screen nScreen )
+{
+    if( !gWidgetData[nScreen].gFrame )
+    {
+        gWidgetData[nScreen].gFrame = gtk_frame_new(NULL);
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gFrame, nScreen );
     }
 }
 

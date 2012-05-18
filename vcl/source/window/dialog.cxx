@@ -194,19 +194,30 @@ void ImplWindowAutoMnemonic( Window* pWindow )
     }
 }
 
-static Window* getActionAreaButtonList(Dialog *pDialog)
+static VclButtonBox* getActionArea(Dialog *pDialog)
 {
-    Window* pChild;
+    VclButtonBox *pButtonBox = NULL;
     if (pDialog->isLayoutEnabled())
     {
-        VclBox *pBox = dynamic_cast<VclBox*>(pDialog->GetWindow(WINDOW_FIRSTCHILD));
-        VclButtonBox *pButtonBox = pBox ?
-            dynamic_cast<VclButtonBox*>(pBox->GetWindow(WINDOW_LASTCHILD)) : 0;
-        pChild = pButtonBox ? pButtonBox->GetWindow(WINDOW_FIRSTCHILD) : 0;
+        Window *pBox = pDialog->GetWindow(WINDOW_FIRSTCHILD);
+        Window *pChild = pBox->GetWindow(WINDOW_LASTCHILD);
+        while (pChild)
+        {
+            pButtonBox = dynamic_cast<VclButtonBox*>(pChild);
+            if (pButtonBox)
+                break;
+            pChild = pChild->GetWindow(WINDOW_PREV);
+        }
     }
-    else
-        pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
-    return pChild;
+    return pButtonBox;
+}
+
+static Window* getActionAreaButtonList(Dialog *pDialog)
+{
+    VclButtonBox* pButtonBox = getActionArea(pDialog);
+    if (pButtonBox)
+        return pButtonBox->GetWindow(WINDOW_FIRSTCHILD);
+    return pDialog->GetWindow(WINDOW_FIRSTCHILD);
 }
 
 // =======================================================================
@@ -309,6 +320,7 @@ void Dialog::ImplInitDialogData()
     mbInClose               = sal_False;
     mbModalMode             = sal_False;
     mnMousePositioned       = 0;
+    m_nBorderWidth          = 0;
     mpDialogImpl            = new DialogImpl;
 
     //To-Do, reuse maResizeTimer
@@ -417,7 +429,6 @@ void Dialog::ImplInitSettings()
     // fallback to settings color
     else
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
-
 }
 
 // -----------------------------------------------------------------------
@@ -518,6 +529,8 @@ void Dialog::StateChanged( StateChangedType nType )
             //resize dialog to fit requisition on initial show
             const Window *pContainer = GetWindow(WINDOW_FIRSTCHILD);
             Size aSize = pContainer->get_preferred_size();
+            aSize.Height() += 2*m_nBorderWidth;
+            aSize.Width() += 2*m_nBorderWidth;
 
             Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
             aSize.Width() = std::min(aMax.Width(), aSize.Width());
@@ -1019,17 +1032,35 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
         return SystemWindow::GetOptimalSize(eType);
 
     Size aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
+    aSize.Height() += 2*m_nBorderWidth;
+    aSize.Width() += 2*m_nBorderWidth;
     return Window::CalcWindowSize(aSize);
 }
 
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
-    assert(isLayoutEnabled());
+    VclBox *pBox = dynamic_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
     Size aSize = GetSizePixel();
-    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder;
-    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder;
-    Point aPos(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder);
-    GetWindow(WINDOW_FIRSTCHILD)->SetPosSizePixel(aPos, aSize);
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2 * m_nBorderWidth;
+    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2 * m_nBorderWidth;
+    Point aPos(mpWindowImpl->mnLeftBorder + m_nBorderWidth,
+        mpWindowImpl->mnTopBorder + m_nBorderWidth);
+
+    const DialogStyle& rDialogStyle =
+        GetSettings().GetStyleSettings().GetDialogStyle();
+    pBox->set_border_width(rDialogStyle.content_area_border);
+    pBox->set_spacing(rDialogStyle.content_area_spacing);
+
+    VclButtonBox *pActionArea = getActionArea(this);
+    if (pActionArea)
+    {
+        pActionArea->set_border_width(rDialogStyle.action_area_border);
+        pActionArea->set_spacing(rDialogStyle.button_spacing);
+    }
+
+    pBox->SetPosSizePixel(aPos, aSize);
     return 0;
 }
 
@@ -1042,6 +1073,15 @@ void Dialog::Resize()
     if (!isLayoutEnabled())
         return;
     maLayoutTimer.Start();
+}
+
+bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
+        set_border_width(rValue.toInt32());
+    else
+        return SystemWindow::set_property(rKey, rValue);
+    return true;
 }
 
 // -----------------------------------------------------------------------

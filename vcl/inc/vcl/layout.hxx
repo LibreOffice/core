@@ -35,13 +35,25 @@
 class VCL_DLLPUBLIC VclContainer : public Window
 {
 public:
-    VclContainer(Window *pParent) : Window(pParent) {}
+    VclContainer(Window *pParent) : Window(pParent), m_nBorderWidth(0) {}
     virtual Size GetOptimalSize(WindowSizeType eType) const;
     using Window::SetPosSizePixel;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    void set_border_width(int nBorderWidth)
+    {
+        m_nBorderWidth = nBorderWidth;
+    }
+    int get_border_width() const
+    {
+        return m_nBorderWidth;
+    }
 protected:
     virtual Size calculateRequisition() const = 0;
     virtual void setAllocation(const Size &rAllocation) = 0;
+private:
+    int m_nBorderWidth;
 };
 
 enum VclPackType

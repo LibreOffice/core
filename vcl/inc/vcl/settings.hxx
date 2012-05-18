@@ -211,6 +211,34 @@ public:
                                         { return !(*this == rSet); }
 };
 
+struct DialogStyle
+{
+    int content_area_border;
+    int content_area_spacing;
+    int button_spacing;
+    int action_area_border;
+    DialogStyle()
+        : content_area_border(2)
+        , content_area_spacing(0)
+        , button_spacing(6)
+        , action_area_border(5)
+    {}
+};
+
+struct FrameStyle
+{
+    int left;
+    int right;
+    int top;
+    int bottom;
+    FrameStyle()
+        : left(2)
+        , right(2)
+        , top(2)
+        , bottom(2)
+    {}
+};
+
 // -----------------
 // - ImplStyleData -
 // -----------------
@@ -322,6 +350,8 @@ private:
     sal_Bool                            mbHideDisabledMenuItems;
     sal_Bool                            mnAcceleratorsInContextMenus;
     Wallpaper                       maWorkspaceGradient;
+    DialogStyle                     maDialogStyle;
+    FrameStyle                      maFrameStyle;
     const void*                     mpFontOptions;
 };
 
@@ -821,6 +851,16 @@ public:
                                         { return mpData->maWorkspaceGradient; }
     void                            SetWorkspaceGradient( const Wallpaper& rWall )
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
+
+    const DialogStyle&              GetDialogStyle() const
+                                        { return mpData->maDialogStyle; }
+    void                            SetDialogStyle( const DialogStyle& rStyle )
+                                        { CopyData(); mpData->maDialogStyle = rStyle; }
+
+    const FrameStyle&               GetFrameStyle() const
+                                        { return mpData->maFrameStyle; }
+    void                            SetFrameStyle( const FrameStyle& rStyle )
+                                        { CopyData(); mpData->maFrameStyle = rStyle; }
 
     void                            SetStandardStyles();
 

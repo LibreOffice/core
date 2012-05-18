@@ -85,12 +85,8 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
-    rtl::OString sBorderWidth(RTL_CONSTASCII_STRINGPARAM("border-width"));
 
     vbox.setChildProperty(sFill, true);
-    //TO-DO, when vcontent_area belongs to dialog via builder, this becomes
-    //content-area-border on the dialog
-    vbox.setChildProperty(sBorderWidth, sal_Int32(7));
 
     action_area.setChildProperty(sFill, true);
 
@@ -103,7 +99,7 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     aCurrentSelectionLine.setChildProperty(sExpand, true);
 
     aSelectionBox.setChildProperty(sFill, true);
-    aSelectionBox.setChildProperty(sBorderWidth, sal_Int32(7));
+    aSelectionBox.set_border_width(7);
 
     aSelectionRow1.setChildProperty(sFill, true);
     aSelectionRow1.setChildProperty(sExpand, true);
@@ -128,7 +124,7 @@ SwWordCountDialog::SwWordCountDialog(Dialog* pParent)
     aDocLine.setChildProperty(sExpand, true);
 
     aDocBox.setChildProperty(sFill, true);
-    aDocBox.setChildProperty(sBorderWidth, sal_Int32(7));
+    aDocBox.set_border_width(7);
 
     aDocRow1.setChildProperty(sFill, true);
     aDocRow1.setChildProperty(sExpand, true);
