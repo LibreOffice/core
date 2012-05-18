@@ -198,6 +198,9 @@ public:
 
     virtual ScColorFormatType GetType() const;
 private:
+    double getMin(double nMin, double nMax) const;
+    double getMax(double nMin, double nMax) const;
+
     boost::scoped_ptr<ScDataBarFormatData> mpFormatData;
 };
 

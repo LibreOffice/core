@@ -263,50 +263,61 @@ double getMaxValue(const ScRange& rRange, ScDocument* pDoc)
     return aMaxValue;
 }
 
+double getMinValue(const ScRangeList& rList, ScDocument* pDoc)
+{
+    double aMinValue = std::numeric_limits<double>::max();
+
+    size_t n = rList.size();
+    for(size_t i = 0; i < n; ++i)
+    {
+        const ScRange* pRange = rList[i];
+        double aVal = getMinValue(*pRange, pDoc);
+        if( aVal < aMinValue )
+            aMinValue = aVal;
+    }
+    return aMinValue;
+}
+
+double getMaxValue(const ScRangeList& rList, ScDocument* pDoc)
+{
+    double aMaxVal = std::numeric_limits<double>::min();
+
+    size_t n = rList.size();
+    for(size_t i = 0; i < n; ++i)
+    {
+        const ScRange* pRange = rList[i];
+        double aVal = getMaxValue(*pRange, pDoc);
+        if( aVal > aMaxVal )
+            aMaxVal = aVal;
+    }
+
+    return aMaxVal;
+}
+
 }
 
 double ScColorScaleFormat::GetMinValue() const
 {
     const_iterator itr = maColorScales.begin();
 
-    double aMinValue = std::numeric_limits<double>::max();
     if(!itr->GetMin())
         return itr->GetValue();
     else
     {
-        size_t n = maRanges.size();
-        for(size_t i = 0; i < n; ++i)
-        {
-            const ScRange* pRange = maRanges[i];
-            double aVal = getMinValue(*pRange, mpDoc);
-            if( aVal < aMinValue )
-                aMinValue = aVal;
-        }
+        return getMinValue(maRanges, mpDoc);
     }
-
-    return aMinValue;
 }
 
 double ScColorScaleFormat::GetMaxValue() const
 {
     ColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
 
-    double aMaxVal = std::numeric_limits<double>::min();
     if(!itr->GetMax())
         return itr->GetValue();
     else
     {
-        size_t n = maRanges.size();
-        for(size_t i = 0; i < n; ++i)
-        {
-            const ScRange* pRange = maRanges[i];
-            double aVal = getMaxValue(*pRange, mpDoc);
-            if( aVal > aMaxVal )
-                aMaxVal = aVal;
-        }
+        return getMaxValue(maRanges, mpDoc);
     }
-
-    return aMaxVal;;
 }
 
 void ScColorScaleFormat::calcMinMax(double& rMin, double& rMax) const
@@ -623,6 +634,32 @@ void ScDataBarFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
     mpFormatData->mpLowerLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
 }
 
+double ScDataBarFormat::getMin(double nMin, double nMax) const
+{
+    if(mpFormatData->mpLowerLimit->GetMin())
+        return nMin;
+
+    if(mpFormatData->mpLowerLimit->GetPercent())
+    {
+        return nMin + (nMax-nMin)/100*mpFormatData->mpLowerLimit->GetValue();
+    }
+
+    return mpFormatData->mpLowerLimit->GetValue();
+}
+
+double ScDataBarFormat::getMax(double nMin, double nMax) const
+{
+    if(mpFormatData->mpUpperLimit->GetMax())
+        return nMax;
+
+    if(mpFormatData->mpUpperLimit->GetPercent())
+    {
+        return nMin + (nMax-nMin)/100*mpFormatData->mpLowerLimit->GetValue();
+    }
+
+    return mpFormatData->mpLowerLimit->GetValue();
+}
+
 ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 {
     CellType eCellType = mpDoc->GetCellType(rAddr);
@@ -637,8 +674,10 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     // now we have for sure a value
     //
-    double nMin = -2;
-    double nMax = 10;
+    double nValMin = getMinValue(maRanges, mpDoc);
+    double nValMax = getMaxValue(maRanges, mpDoc);
+    double nMin = getMin(nValMin, nValMax);
+    double nMax = getMax(nValMin, nValMax);
 
     double nValue = mpDoc->GetValue(rAddr);
 
