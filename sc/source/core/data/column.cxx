@@ -1668,72 +1668,102 @@ void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 }
 
 
-void ScColumn::UpdateInsertTab( SCTAB nTable, SCTAB nNewSheets )
+void ScColumn::UpdateInsertTab(SCTAB nInsPos, SCTAB nNewSheets)
 {
-    if (nTab >= nTable)
+    if (nTab >= nInsPos)
     {
         nTab += nNewSheets;
         pAttrArray->SetTab(nTab);
     }
-    if ( !maItems.empty() )
-        UpdateInsertTabOnlyCells( nTable, nNewSheets );
+
+    UpdateInsertTabOnlyCells(nInsPos, nNewSheets);
 }
 
-
-void ScColumn::UpdateInsertTabOnlyCells( SCTAB nTable, SCTAB nNewSheets )
+void ScColumn::UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets)
 {
-    if ( !maItems.empty() )
-        for (SCSIZE i = 0; i < maItems.size(); i++)
+    if (maItems.empty())
+        return;
+
+    for (size_t i = 0; i < maItems.size(); ++i)
+    {
+        switch (maItems[i].pCell->GetCellType())
         {
-            ScFormulaCell* pCell = (ScFormulaCell*) maItems[i].pCell;
-            if( pCell->GetCellType() == CELLTYPE_FORMULA)
+            case CELLTYPE_FORMULA:
             {
                 SCROW nRow = maItems[i].nRow;
-                pCell->UpdateInsertTab(nTable, nNewSheets);
-                if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                ScFormulaCell* p = static_cast<ScFormulaCell*>(maItems[i].pCell);
+                p->UpdateInsertTab(nInsPos, nNewSheets);
+                if (nRow != maItems[i].nRow)
+                    Search(nRow, i);      // Listener deleted/inserted?
             }
+            break;
+            case CELLTYPE_EDIT:
+            {
+                ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
+                p->UpdateFields(nTab);
+            }
+            break;
+            default:
+                ;
         }
+    }
 }
 
-
-void ScColumn::UpdateInsertTabAbs(SCTAB nTable)
+void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
 {
-    if ( !maItems.empty() )
-        for (SCSIZE i = 0; i < maItems.size(); i++)
+    if (maItems.empty())
+        return;
+
+    for (size_t i = 0; i < maItems.size(); ++i)
+    {
+        switch (maItems[i].pCell->GetCellType())
         {
-            ScFormulaCell* pCell = (ScFormulaCell*) maItems[i].pCell;
-            if( pCell->GetCellType() == CELLTYPE_FORMULA)
+            case CELLTYPE_FORMULA:
             {
                 SCROW nRow = maItems[i].nRow;
-                pCell->UpdateInsertTabAbs(nTable);
-                if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                ScFormulaCell* p = static_cast<ScFormulaCell*>(maItems[i].pCell);
+                p->UpdateInsertTabAbs(nNewPos);
+                if (nRow != maItems[i].nRow)
+                    Search(nRow, i);      // Listener deleted/inserted?
             }
+            break;
+            case CELLTYPE_EDIT:
+            {
+                ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
+                p->UpdateFields(nTab);
+            }
+            break;
+            default:
+                ;
         }
+    }
 }
 
-
-void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo, SCTAB nSheets )
+void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* pRefUndo, SCTAB nSheets)
 {
-    if (nTab > nTable)
+    if (nTab > nDelPos)
     {
         nTab -= nSheets;
         pAttrArray->SetTab(nTab);
     }
 
-    if ( !maItems.empty() )
-        for (SCSIZE i = 0; i < maItems.size(); i++)
-            if ( maItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
+    if (maItems.empty())
+        return;
+
+    for (size_t i = 0; i < maItems.size(); ++i)
+    {
+        switch (maItems[i].pCell->GetCellType())
+        {
+            case CELLTYPE_FORMULA:
             {
                 SCROW nRow = maItems[i].nRow;
-                ScFormulaCell* pOld = (ScFormulaCell*)maItems[i].pCell;
+                ScFormulaCell* pOld = static_cast<ScFormulaCell*>(maItems[i].pCell);
 
                 /*  Do not copy cell note to the undo document. Undo will copy
                     back the formula cell while keeping the original note. */
                 ScBaseCell* pSave = pRefUndo ? pOld->Clone( *pDocument ) : 0;
 
-                bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove, nSheets);
+                bool bChanged = pOld->UpdateDeleteTab(nDelPos, bIsMove, nSheets);
                 if ( nRow != maItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
 
@@ -1745,25 +1775,49 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo, 
                         pSave->Delete();
                 }
             }
+            break;
+            case CELLTYPE_EDIT:
+            {
+                ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
+                p->UpdateFields(nTab);
+            }
+            break;
+            default:
+                ;
+        }
+    }
 }
-
 
 void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
 {
     nTab = nTabNo;
     pAttrArray->SetTab( nTabNo );
-    if ( !maItems.empty() )
-        for (SCSIZE i = 0; i < maItems.size(); i++)
+    if (maItems.empty())
+        return;
+
+    for (size_t i = 0; i < maItems.size(); ++i)
+    {
+        switch (maItems[i].pCell->GetCellType())
         {
-            ScFormulaCell* pCell = (ScFormulaCell*) maItems[i].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+            case CELLTYPE_FORMULA:
             {
+                ScFormulaCell* p = static_cast<ScFormulaCell*>(maItems[i].pCell);
                 SCROW nRow = maItems[i].nRow;
-                pCell->UpdateMoveTab( nOldPos, nNewPos, nTabNo );
-                if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                p->UpdateMoveTab(nOldPos, nNewPos, nTabNo);
+                if (nRow != maItems[i].nRow)
+                    Search(nRow, i);      // Listener deleted/inserted?
             }
+            break;
+            case CELLTYPE_EDIT:
+            {
+                ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
+                p->UpdateFields(nTab);
+            }
+            break;
+            default:
+                ;
         }
+    }
 }
 
 

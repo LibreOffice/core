@@ -78,9 +78,7 @@ ScEditCell::ScEditCell(const ScEditCell& rCell, ScDocument& rDoc, const ScAddres
     ScBaseCell(rCell), pString(NULL), pDoc(&rDoc)
 {
     SetTextObject( rCell.pData, rCell.pDoc->GetEditPool() );
-
-    editeng::FieldUpdater aUpdater = pData->GetFieldUpdater();
-    aUpdater.updateTableFields(rDestPos.Tab());
+    UpdateFields(rDestPos.Tab());
 }
 
 ScEditCell::ScEditCell( const rtl::OUString& rString, ScDocument* pDocP )  :
@@ -164,6 +162,12 @@ void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
         if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SFX_ITEM_SET )
             pData->RemoveCharAttribs(AttrTypeMap[i].nCharType);
     }
+}
+
+void ScEditCell::UpdateFields(SCTAB nTab)
+{
+    editeng::FieldUpdater aUpdater = pData->GetFieldUpdater();
+    aUpdater.updateTableFields(nTab);
 }
 
 void ScEditCell::SetTextObject( const EditTextObject* pObject,

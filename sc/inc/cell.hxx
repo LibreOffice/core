@@ -258,6 +258,9 @@ public:
 
     /** Removes character attribute based on new pattern attributes. */
     void            RemoveCharAttribs( const ScPatternAttr& rAttr );
+
+    /** Update field items if any. */
+    void UpdateFields(SCTAB nTab);
 };
 
 class ScEditDataArray

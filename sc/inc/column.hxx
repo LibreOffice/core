@@ -281,9 +281,9 @@ public:
                                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                      ScDocument* pUndoDoc = NULL );
-    void        UpdateInsertTab( SCTAB nTable, SCTAB nNewSheets = 1);
-    void        UpdateInsertTabOnlyCells( SCTAB nTable, SCTAB nNewSheets = 1);
-    void        UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo = NULL, SCTAB nSheets = 1 );
+    void UpdateInsertTab(SCTAB nInsPos, SCTAB nNewSheets = 1);
+    void UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets = 1);
+    void UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* pRefUndo = NULL, SCTAB nSheets = 1);
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -373,7 +373,7 @@ public:
     void GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
     bool GetDataEntries(SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
-    void        UpdateInsertTabAbs(SCTAB nNewPos);
+    void UpdateInsertTabAbs(SCTAB nNewPos);
     bool    TestTabRefAbs(SCTAB nTable);
     bool    GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const;
 
