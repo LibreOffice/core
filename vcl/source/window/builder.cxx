@@ -201,7 +201,7 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
         pCurrentChild = m_pParent;
         //toplevels default to resizable
         if (pCurrentChild->IsDialog())
-            pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE);
+            pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE | WB_3DLOOK);
     }
     else
     {
