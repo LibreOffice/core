@@ -45,11 +45,9 @@ $(eval $(call gb_Library_use_libraries,writerfilter_uno,\
     comphelper \
     cppu \
     cppuhelper \
-    doctok \
-    ooxml \
-    resourcemodel \
     sal \
     ucbhelper \
+    writerfilter \
     $(gb_STDLIBS) \
 ))
 

@@ -139,7 +139,7 @@ protected:
 #include "OOXMLFactory.hxx"
 #include "OOXMLFactory_generated.hxx"
 #include "OOXMLnamespaceids.hxx"
-#include "resourceids.hxx"
+#include "ooxml/resourceids.hxx"
 
 namespace writerfilter {
 namespace ooxml {

@@ -222,7 +222,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     odbc \
     odbcbase \
     oox \
-    ooxml \
     sdbc \
     AppleRemote \
     avmedia \
@@ -243,7 +242,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbu \
     deploymentmisc \
     desktop_detector \
-    doctok \
     drawinglayer \
     editeng \
     egi \
@@ -300,11 +298,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     protocolhandler \
     qstart_gtk \
     res \
-    resourcemodel \
     rpt \
     rptui \
     rptxml \
-    rtftok \
     sax \
     sb \
     sc \

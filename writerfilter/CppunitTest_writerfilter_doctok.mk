@@ -35,8 +35,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_doctok, \
 $(eval $(call gb_CppunitTest_use_libraries,writerfilter_doctok, \
 	cppu \
 	cppuhelper \
-	doctok \
-	resourcemodel \
 	sal \
 	ucbhelper \
 	writerfilter \

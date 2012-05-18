@@ -63,8 +63,8 @@ $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 
 $(eval $(call gb_CppunitTest_use_configuration,writerfilter_rtftok))
 
-# we need to explicitly depend on library rtftok and writerfilter because it is not implied
+# we need to explicitly depend on library writerfilter because it is not implied
 # by a link relation
-$(call gb_CppunitTest_get_target,writerfilter_rtftok) : $(call gb_Library_get_target,rtftok) $(call gb_Library_get_target,writerfilter)
+$(call gb_CppunitTest_get_target,writerfilter_rtftok) : $(call gb_Library_get_target,writerfilter)
 
 # vim: set noet sw=4 ts=4:
