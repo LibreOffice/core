@@ -710,6 +710,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         SC_RESSTR(SCSTR_FILTER_EMPTY), true, new AutoFilterAction(this, Empty));
     mpAutoFilterPopup->addMenuItem(
         SC_RESSTR(SCSTR_FILTER_NOTEMPTY), true, new AutoFilterAction(this, NonEmpty));
+    mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
         SC_RESSTR(SCSTR_STDFILTER), true, new AutoFilterAction(this, Custom));
 

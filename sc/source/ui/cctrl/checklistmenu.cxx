@@ -49,7 +49,7 @@ using ::boost::unordered_map;
 using ::std::auto_ptr;
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
-    mbEnabled(true),
+    mbEnabled(true), mbSeparator(false),
     mpAction(static_cast<ScCheckListMenuWindow::Action*>(NULL)),
     mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(NULL))
 {
@@ -141,6 +141,12 @@ void ScMenuFloatingWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
 {
+    if (maMenuItems.empty())
+    {
+        Window::KeyInput(rKEvt);
+        return;
+    }
+
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     bool bHandled = true;
     size_t nSelectedMenu = mnSelectedMenu;
@@ -148,18 +154,64 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
     switch (rKeyCode.GetCode())
     {
         case KEY_UP:
+        {
+            if (nLastMenuPos == 0)
+                // There is only one menu item.  Do nothing.
+                break;
+
+            size_t nOldPos = nSelectedMenu;
+
             if (nSelectedMenu == MENU_NOT_SELECTED || nSelectedMenu == 0)
                 nSelectedMenu = nLastMenuPos;
             else
                 --nSelectedMenu;
+
+            // Loop until a non-separator menu item is found.
+            while (nSelectedMenu != nOldPos)
+            {
+                if (maMenuItems[nSelectedMenu].mbSeparator)
+                {
+                    if (nSelectedMenu)
+                        --nSelectedMenu;
+                    else
+                        nSelectedMenu = nLastMenuPos;
+                }
+                else
+                    break;
+            }
+
             setSelectedMenuItem(nSelectedMenu, false, false);
+        }
         break;
         case KEY_DOWN:
+        {
+            if (nLastMenuPos == 0)
+                // There is only one menu item.  Do nothing.
+                break;
+
+            size_t nOldPos = nSelectedMenu;
+
             if (nSelectedMenu == MENU_NOT_SELECTED || nSelectedMenu == nLastMenuPos)
                 nSelectedMenu = 0;
             else
                 ++nSelectedMenu;
+
+            // Loop until a non-separator menu item is found.
+            while (nSelectedMenu != nOldPos)
+            {
+                if (maMenuItems[nSelectedMenu].mbSeparator)
+                {
+                    if (nSelectedMenu == nLastMenuPos)
+                        nSelectedMenu = 0;
+                    else
+                        ++nSelectedMenu;
+                }
+                else
+                    break;
+            }
+
             setSelectedMenuItem(nSelectedMenu, false, false);
+        }
         break;
         case KEY_LEFT:
             if (mpParentMenu)
@@ -237,6 +289,10 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
         for (itr = itrBeg; itr != itrEnd; ++itr)
         {
+            if (itr->mbSeparator)
+                // TODO: Handle this correctly.
+                continue;
+
             size_t nPos = ::std::distance(itrBeg, itr);
             p->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
         }
@@ -251,6 +307,13 @@ void ScMenuFloatingWindow::addMenuItem(const OUString& rText, bool bEnabled, Act
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
     aItem.mpAction.reset(pAction);
+    maMenuItems.push_back(aItem);
+}
+
+void ScMenuFloatingWindow::addSeparator()
+{
+    MenuItemData aItem;
+    aItem.mbSeparator = true;
     maMenuItems.push_back(aItem);
 }
 
@@ -278,7 +341,12 @@ Size ScMenuFloatingWindow::getMenuSize() const
     vector<MenuItemData>::const_iterator itr = maMenuItems.begin(), itrEnd = maMenuItems.end();
     long nTextWidth = 0;
     for (; itr != itrEnd; ++itr)
+    {
+        if (itr->mbSeparator)
+            continue;
+
         nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);
+    }
 
     size_t nLastPos = maMenuItems.size()-1;
     Point aPos;
@@ -316,11 +384,64 @@ void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
     }
 }
 
+void ScMenuFloatingWindow::drawSeparator(size_t nPos)
+{
+    Point aPos;
+    Size aSize;
+    getMenuItemPosSize(nPos, aPos, aSize);
+    Rectangle aRegion(aPos,aSize);
+
+    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    {
+        Push(PUSH_CLIPREGION);
+        IntersectClipRegion(aRegion);
+        Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
+        DrawNativeControl(
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
+            ImplControlValue(), OUString());
+
+        Pop();
+    }
+
+    bool bNativeDrawn = false;
+    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
+    {
+        ControlState nState = 0;
+        const MenuItemData& rData = maMenuItems[nPos];
+        if (rData.mbEnabled)
+            nState |= CTRL_STATE_ENABLED;
+
+        bNativeDrawn = DrawNativeControl(
+            CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
+            aRegion, nState, ImplControlValue(), OUString());
+    }
+
+    if (!bNativeDrawn)
+    {
+        const StyleSettings& rStyle = GetSettings().GetStyleSettings();
+        Point aTmpPos = aPos;
+        aTmpPos.Y() += aSize.Height()/2;
+        SetLineColor(rStyle.GetShadowColor());
+        DrawLine(aTmpPos, Point(aSize.Width()+aTmpPos.X(), aTmpPos.Y()));
+        ++aTmpPos.Y();
+        SetLineColor(rStyle.GetLightColor());
+        DrawLine(aTmpPos, Point(aSize.Width()+aTmpPos.X(), aTmpPos.Y()));
+        SetLineColor();
+    }
+}
+
 void ScMenuFloatingWindow::drawAllMenuItems()
 {
     size_t n = maMenuItems.size();
     for (size_t i = 0; i < n; ++i)
-        highlightMenuItem(i, i == mnSelectedMenu);
+    {
+        if (maMenuItems[i].mbSeparator)
+            // Separator
+            drawSeparator(i);
+        else
+            // Normal menu item
+            highlightMenuItem(i, i == mnSelectedMenu);
+    }
 }
 
 const Font& ScMenuFloatingWindow::getLabelFont() const
@@ -622,18 +743,23 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
 
 void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const
 {
+    size_t nCount = maMenuItems.size();
+    if (nPos >= nCount)
+        return;
+
     const sal_uInt16 nLeftMargin = 5;
     const sal_uInt16 nTopMargin = 5;
-    const sal_uInt16 nMenuItemHeight = static_cast< sal_uInt16 >( maLabelFont.GetHeight()*1.8 );
-
-    Size aWndSize = GetSizePixel();
+    const sal_uInt16 nMenuItemHeight = static_cast<sal_uInt16>(maLabelFont.GetHeight()*1.8);
+    const sal_uInt16 nSepHeight = static_cast<sal_uInt16>(maLabelFont.GetHeight()*0.8);
 
     Point aPos1(nLeftMargin, nTopMargin);
-    Size aSize1(aWndSize.Width() - nLeftMargin*2, nMenuItemHeight);
-
     rPos = aPos1;
-    rPos.Y() += aSize1.Height()*nPos;
-    rSize = aSize1;
+    for (size_t i = 0; i < nPos; ++i)
+        rPos.Y() += maMenuItems[i].mbSeparator ? nSepHeight : nMenuItemHeight;
+
+    Size aWndSize = GetSizePixel();
+    sal_uInt16 nH = maMenuItems[nPos].mbSeparator ? nSepHeight : nMenuItemHeight;
+    rSize = Size(aWndSize.Width() - nLeftMargin*2, nH);
 }
 
 ScMenuFloatingWindow* ScMenuFloatingWindow::getParentMenuWindow() const
@@ -651,7 +777,7 @@ size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
         getMenuItemPosSize(i, aPos, aSize);
         Rectangle aRect(aPos, aSize);
         if (aRect.IsInside(rPos))
-            return i;
+            return maMenuItems[i].mbSeparator ? MENU_NOT_SELECTED : i;
     }
     return MENU_NOT_SELECTED;
 }

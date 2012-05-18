@@ -76,6 +76,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void addMenuItem(const ::rtl::OUString& rText, bool bEnabled, Action* pAction);
+    void addSeparator();
+
     ScMenuFloatingWindow* addSubMenuItem(const ::rtl::OUString& rText, bool bEnabled);
     void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu);
     void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer);
@@ -96,6 +98,7 @@ protected:
 
     Size getMenuSize() const;
     void drawMenuItem(size_t nPos);
+    void drawSeparator(size_t nPos);
     void drawAllMenuItems();
     const Font& getLabelFont() const;
 
@@ -159,7 +162,8 @@ private:
     struct MenuItemData
     {
         ::rtl::OUString maText;
-        bool            mbEnabled;
+        bool            mbEnabled:1;
+        bool            mbSeparator:1;
 
         ::boost::shared_ptr<Action> mpAction;
         ::boost::shared_ptr<ScMenuFloatingWindow> mpSubMenuWin;
