@@ -54,6 +54,7 @@ public:
     void testN750935();
     void testN757890();
     void testFdo49940();
+    void testN751077();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testN750935);
     CPPUNIT_TEST(testN757890);
     CPPUNIT_TEST(testFdo49940);
+    CPPUNIT_TEST(testN751077);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -204,6 +206,36 @@ void Test::testFdo49940()
     OUString aValue;
     xPara->getPropertyValue("PageStyleName") >>= aValue;
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
+}
+
+void Test::testN751077()
+{
+    load( "n751077.docx" );
+
+/*
+enum = ThisComponent.Text.createEnumeration
+enum.NextElement
+para = enum.NextElement
+xray para.String
+xray para.PageStyleName
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    // go to 1st paragraph
+    (void) paraEnum->nextElement();
+    // get the 2nd paragraph
+    uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
+    OUString value;
+    // text of the paragraph
+    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "TEXT1" ), text->getString());
+    // we want to test the paragraph is on the first page (it was put onto another page without the fix),
+    // use a small trick and instead of checking the page layout, check the page style
+    uno::Reference<beans::XPropertySet> paragraphProperties(paragraph, uno::UNO_QUERY);
+    paragraphProperties->getPropertyValue( "PageStyleName" ) >>= value;
+    CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), value );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
