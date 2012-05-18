@@ -105,16 +105,8 @@ ifeq ($(HAVE_CXX0X),TRUE)
 #a template for SAL_N_ELEMENTS to detect at compiler time its misuse
 gb_CXXFLAGS += -std=c++0x
 
-#We have so many std::auto_ptr uses that we need to be able to disable
-#warnings for those so that -Werror continues to be useful, seeing as moving
-#to unique_ptr isn't an option when we must support different compilers
-
-#When we are using 4.6.0 we can use gcc pragmas to selectively silence auto_ptr
-#warnings in isolation, but for <= 4.5.X we need to globally disable
-#deprecation
-ifeq ($(gb_GccLess460),1)
-gb_CXXFLAGS += -Wno-deprecated-declarations
-endif
+# Does anybody care if deprecated stuff is used on a release branch?
+gb_CXXFLAGS += -Wno-deprecated-declarations -Wno-deprecated
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)

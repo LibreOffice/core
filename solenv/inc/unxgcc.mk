@@ -89,9 +89,7 @@ CFLAGSCXX+=-fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 .IF "$(HAVE_CXX0X)" == "TRUE"
 CFLAGSCXX+=-std=c++0x
-.IF "$(GCCNUMVER)" <= "000400059999"
-CFLAGSCXX+=-Wno-deprecated-declarations
-.ENDIF
+CFLAGSCXX+=-Wno-deprecated-declarations -Wno-deprecated
 .ENDIF # "$(HAVE_CXX0X)" == "TRUE"
 
 .IF "$(PRODUCT)"!="full"
