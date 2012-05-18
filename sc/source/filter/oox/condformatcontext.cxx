@@ -79,14 +79,45 @@ void ColorScaleContext::onCharacters( const OUString&  )
 
 }
 
-ContextHandlerRef ColorScaleContext::onCreateRecordContext( sal_Int32, SequenceInputStream& )
+// ============================================================================
+
+DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+    WorksheetContextBase( rFragment ),
+    mxRule( xRule )
 {
+}
+
+ContextHandlerRef DataBarContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( cfRule ):
+            return (nElement == XLS_TOKEN( colorScale )) ? this : 0;
+        case XLS_TOKEN( dataBar ):
+            if (nElement == XLS_TOKEN( cfvo ))
+                return this;
+            else if (nElement == XLS_TOKEN( color ))
+                return this;
+            else
+                return 0;
+    }
     return 0;
 }
 
-void ColorScaleContext::onStartRecord( SequenceInputStream& )
+void DataBarContext::onStartElement( const AttributeList& rAttribs )
 {
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( cfvo ):
+            mxRule->getDataBar()->importCfvo( rAttribs );
+        break;
+        case XLS_TOKEN( color ):
+            mxRule->getDataBar()->importColor( rAttribs );
+        break;
+    }
 }
+
+// ============================================================================
 
 CondFormatContext::CondFormatContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
@@ -104,6 +135,8 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
                 return this;
             else if (nElement == XLS_TOKEN( colorScale ) )
                 return new ColorScaleContext( *this, mxRule );
+            else if (nElement == XLS_TOKEN( dataBar ) )
+                return new DataBarContext( *this, mxRule );
             else
                 return 0;
     }

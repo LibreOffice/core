@@ -48,8 +48,17 @@ public:
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+private:
+    CondFormatRuleRef mxRule;
+};
+
+class DataBarContext : public WorksheetContextBase
+{
+public:
+    explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
 
 private:
     CondFormatRuleRef mxRule;

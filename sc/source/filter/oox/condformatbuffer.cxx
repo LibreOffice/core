@@ -224,12 +224,11 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
     ++mnCol;
 }
 
-void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
+namespace {
+
+ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDocument* pDoc, const ScAddress& rAddr )
 {
-    for(size_t i = 0; i < maColorScaleRuleEntries.size(); ++i)
-    {
-        ScColorScaleEntry* pEntry = new ScColorScaleEntry(maColorScaleRuleEntries[i].mnVal, maColorScaleRuleEntries[i].maColor);
-        const ColorScaleRuleModelEntry& rEntry = maColorScaleRuleEntries[i];
+        ScColorScaleEntry* pEntry = new ScColorScaleEntry(rEntry.mnVal, rEntry.maColor);
 
         if(rEntry.mbMin)
             pEntry->SetMin(true);
@@ -241,8 +240,102 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
         if(!rEntry.maFormula.isEmpty())
             pEntry->SetFormula(rEntry.maFormula, pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
+        return pEntry;
+}
+
+}
+
+void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
+{
+    for(size_t i = 0; i < maColorScaleRuleEntries.size(); ++i)
+    {
+        const ColorScaleRuleModelEntry& rEntry = maColorScaleRuleEntries[i];
+
+        ScColorScaleEntry* pEntry = ConvertToModel( rEntry, pDoc, rAddr );
+
         pFormat->AddEntry( pEntry );
     }
+}
+
+// ============================================================================
+//
+DataBarRule::DataBarRule( const CondFormat& rFormat ):
+    WorksheetHelper( rFormat ),
+    mrCondFormat( rFormat ),
+    mpFormat(new ScDataBarFormatData)
+{
+}
+
+void DataBarRule::importColor( const AttributeList& rAttribs )
+{
+    sal_Int32 nColor = 0;
+    if( rAttribs.hasAttribute( XML_rgb ) )
+        nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+    else if( rAttribs.hasAttribute( XML_theme ) )
+    {
+        sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
+        nColor = getTheme().getColorByToken( nThemeIndex );
+    }
+
+    ::Color aColor = RgbToRgbComponents( nColor );
+
+    mpFormat->maPositiveColor = aColor;
+}
+
+void DataBarRule::importCfvo( const AttributeList& rAttribs )
+{
+    ColorScaleRuleModelEntry* pEntry;
+    if(!mpLowerLimit)
+    {
+        mpLowerLimit.reset(new ColorScaleRuleModelEntry);
+        pEntry = mpLowerLimit.get();
+    }
+    else
+    {
+        mpUpperLimit.reset(new ColorScaleRuleModelEntry);
+        pEntry = mpUpperLimit.get();
+    }
+    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
+
+    double nVal = rAttribs.getDouble( XML_val, 0.0 );
+    pEntry->mnVal = nVal;
+    if (aType == "num")
+    {
+        // nothing to do
+    }
+    else if( aType == "min" )
+    {
+        pEntry->mbMin = true;
+    }
+    else if( aType == "max" )
+    {
+        pEntry->mbMax = true;
+    }
+    else if( aType == "percent" )
+    {
+        pEntry->mbPercent = true;
+    }
+    else if( aType == "percentile" )
+    {
+        // this is most likely wrong but I have no idea what the difference
+        // between percent and percentile should be when calculating colors
+        pEntry->mbPercent = true;
+    }
+    else if( aType == "formula" )
+    {
+        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
+        pEntry->maFormula = aFormula;
+    }
+}
+
+void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
+{
+    ScColorScaleEntry* pUpperEntry = ConvertToModel( *mpUpperLimit.get(), pDoc, rAddr);
+    ScColorScaleEntry* pLowerEntry = ConvertToModel( *mpLowerLimit.get(), pDoc, rAddr);
+
+    mpFormat->mpUpperLimit.reset( pUpperEntry );
+    mpFormat->mpLowerLimit.reset( pLowerEntry );
+    pFormat->SetDataBarData(mpFormat);
 }
 
 // ============================================================================
@@ -712,7 +805,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         ScDocument& rDoc = getScDocument();
         ScColorScaleFormat* pFormat = new ScColorScaleFormat(&rDoc);
 
-        sal_Int32 nIndex = rDoc.AddColorScaleFormat(pFormat);
+        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat);
 
         ScRangeList aList;
         // apply attributes to cells
@@ -736,13 +829,50 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         else
             mpColor->AddEntries( pFormat, &rDoc, ScAddress() );
     }
+    else if (mpDataBar)
+    {
+        ScRangeList aList;
+
+        ScDocument& rDoc = getScDocument();
+        ScDataBarFormat* pFormat = new ScDataBarFormat(&rDoc);
+
+        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat);
+
+        // apply attributes to cells
+        //
+        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
+        for( ApiCellRangeList::const_iterator itr = rRanges.begin(); itr != rRanges.end(); ++itr)
+        {
+            ScRange aRange;
+            ScUnoConversion::FillScRange(aRange, *itr);
+            ScPatternAttr aPattern( rDoc.GetPool() );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
+            ScMarkData aMarkData;
+            aMarkData.SetMarkArea(aRange);
+            rDoc.ApplySelectionPattern( aPattern , aMarkData);
+
+            aList.Append(aRange);
+        }
+        pFormat->SetRange(aList);
+
+        mpDataBar->SetData( pFormat, &rDoc, aList.front()->aStart );
+    }
 }
 
 ColorScaleRule* CondFormatRule::getColorScale()
 {
     if(!mpColor)
         mpColor.reset( new ColorScaleRule(mrCondFormat) );
+
     return mpColor.get();
+}
+
+DataBarRule* CondFormatRule::getDataBar()
+{
+    if(!mpDataBar)
+        mpDataBar.reset( new DataBarRule(mrCondFormat) );
+
+    return mpDataBar.get();
 }
 
 // ============================================================================

@@ -39,6 +39,8 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSheetConditionalEntries; }
 } } }
 class ScColorScaleFormat;
+class ScDataBarFormat;
+struct ScDataBarFormatData;
 
 namespace oox {
 namespace xls {
@@ -112,6 +114,23 @@ private:
     sal_uInt32 mnCol;
 };
 
+class DataBarRule : public WorksheetHelper
+{
+public:
+    DataBarRule( const CondFormat& rFormat );
+    void importCfvo( const AttributeList& rAttribs );
+    void importColor( const AttributeList& rAttribs );
+
+    void SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
+
+private:
+    const CondFormat& mrCondFormat;
+    ScDataBarFormatData* mpFormat;
+
+    boost::scoped_ptr<ColorScaleRuleModelEntry> mpUpperLimit;
+    boost::scoped_ptr<ColorScaleRuleModelEntry> mpLowerLimit;
+};
+
 
 // ============================================================================
 
@@ -138,11 +157,13 @@ public:
     inline sal_Int32    getPriority() const { return maModel.mnPriority; }
 
     ColorScaleRule*     getColorScale();
+    DataBarRule*        getDataBar();
 
 private:
     const CondFormat&   mrCondFormat;
     CondFormatRuleModel maModel;
     boost::scoped_ptr<ColorScaleRule> mpColor;
+    boost::scoped_ptr<DataBarRule> mpDataBar;
 };
 
 typedef ::boost::shared_ptr< CondFormatRule > CondFormatRuleRef;
