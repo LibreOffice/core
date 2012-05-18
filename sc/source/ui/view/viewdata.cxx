@@ -2744,6 +2744,9 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
     sal_Bool bPageMode(false);
+
+    EnsureTabDataSize(GetDocument()->GetTableCount()-1);
+
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         // SC_VIEWID has to parse and use by mba
