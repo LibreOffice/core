@@ -130,7 +130,6 @@ static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = RTL_CONSTASCII_LENGTH(I
 static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_WIDTH);
 static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_STYLE);
 
-static const char   HELPID_PREFIX[]                 = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
 static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
@@ -1209,7 +1208,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         return;
 
     sal_uInt16    nId( 1 );
-    ::rtl::OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     Reference< XModuleManager > xModuleManager( Reference< XModuleManager >(
                                                     m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ));

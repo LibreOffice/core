@@ -125,7 +125,6 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
     if (xDataSource.is())
     {
         // need user/pwd for this
-        ::rtl::OUString sUser, sPwd;
         Reference< XPropertySet >  xDataSourceProps(xDataSource, UNO_QUERY);
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
         try
@@ -1079,7 +1078,6 @@ void BibDataManager::startQueryWith(const ::rtl::OUString& rQuery)
 
 void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
 {
-    ::rtl::OUString uTable;
     ::rtl::OUString sTmp(aDataSourceURL);
     aDataSourceURL = rURL;
 

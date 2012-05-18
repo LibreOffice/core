@@ -54,7 +54,6 @@ using namespace ::svgi;
 sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    rtl::OUString aURL;
     uno::Reference< io::XInputStream > xInputStream;
     uno::Reference< task::XStatusIndicator > xStatus;
     const sal_Int32 nLength = rDescriptor.getLength();

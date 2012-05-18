@@ -1143,7 +1143,6 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         sSibling = it->m_sCommandURL;
     }
 
-    ::rtl::OUString sNewSibling;
     uno::Reference< container::XIndexContainer > xPopup;
     for (it = vNewItems.begin(); it!=vNewItems.end(); ++it)
     {

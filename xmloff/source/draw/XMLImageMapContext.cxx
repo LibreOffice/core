@@ -123,8 +123,6 @@ protected:
     const ::rtl::OUString sTarget;
     const ::rtl::OUString sURL;
 
-    ::rtl::OUString sServiceName;
-
     Reference<XIndexContainer> xImageMap;   /// the image map
     Reference<XPropertySet> xMapEntry;      /// one map-entry (one area)
 

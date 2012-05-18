@@ -141,11 +141,9 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
 {
     ::rtl::OUString sTypeName;
     ::rtl::OUString sUrl;
-    ::rtl::OUString originalTypeName;
     Sequence<PropertyValue > lProps ;
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
-    ::rtl::OUString temp;
     const PropertyValue * pValue = aArguments.getConstArray();
     sal_Int32 nLength;
     ::rtl::OString resultString;

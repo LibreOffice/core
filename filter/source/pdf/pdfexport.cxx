@@ -387,7 +387,6 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
 sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData )
 {
     INetURLObject   aURL( rFile );
-    OUString        aFile;
     sal_Bool        bRet = sal_False;
 
     std::set< PDFWriter::ErrorCode > aErrors;

@@ -258,8 +258,6 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
     for ( sal_uInt32 n = 0; n < (sal_uInt32)rAddonToolbar.getLength(); n++ )
     {
-        rtl::OUString   aValueName;
-
         rtl::OUString   aURL;
         rtl::OUString   aTitle;
         rtl::OUString   aImageId;

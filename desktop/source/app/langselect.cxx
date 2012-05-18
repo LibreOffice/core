@@ -435,7 +435,6 @@ sal_Bool LanguageSelection::isInstalledLanguage(OUString& usLocale, sal_Bool bEx
     if (!bInstalled && !bExact)
     {
         // no exact match was found, well try to find a substitute
-        OUString aInstalledLocale;
         for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
         {
             if (usLocale.indexOf(seqLanguages[i]) == 0)

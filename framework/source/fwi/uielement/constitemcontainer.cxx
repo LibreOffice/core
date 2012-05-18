@@ -163,7 +163,6 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
         Reference< XPropertySet > xPropSet( rSourceContainer, UNO_QUERY );
         if ( xPropSet.is() )
         {
-            rtl::OUString aUIName;
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= m_aUIName;
         }
     }

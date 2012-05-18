@@ -258,7 +258,6 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
 
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue * pValue = aDescriptor.getConstArray();
-    OUString sURL;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name == "InputStream" )

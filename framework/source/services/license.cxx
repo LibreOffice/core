@@ -209,9 +209,6 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aDateTimeSep(RTL_CONSTASCII_USTRINGPARAM("T"));
-    ::rtl::OUString aDateSep(RTL_CONSTASCII_USTRINGPARAM("-"));
-    ::rtl::OUString aTimeSep(RTL_CONSTASCII_USTRINGPARAM(":"));
     ::rtl::OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
 
     ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
@@ -296,7 +293,6 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
         ::rtl::OUString sConfigSrvc = SERVICENAME_CFGPROVIDER;
         ::rtl::OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
-        ::rtl::OUString sReadSrvc   = SERVICENAME_CFGREADACCESS;
 
         // get configuration provider
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(

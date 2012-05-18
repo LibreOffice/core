@@ -256,7 +256,6 @@ void    BibConfig::Commit()
     }
     PutProperties(aPropertyNames, aValues);
     ClearNodeSet( C2U(cDataSourceHistory));
-    OUString sEmpty;
     Sequence< PropertyValue > aNodeValues(pMappingsArr->Count() * 3);
     PropertyValue* pNodeValues = aNodeValues.getArray();
 

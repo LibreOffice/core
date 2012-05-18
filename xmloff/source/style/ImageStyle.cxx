@@ -81,9 +81,6 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
     {
         if( rValue >>= sImageURL )
         {
-            OUString aStrValue;
-            OUStringBuffer aOut;
-
             // Name
             sal_Bool bEncoded = sal_False;
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,

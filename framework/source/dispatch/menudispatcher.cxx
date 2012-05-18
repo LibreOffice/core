@@ -330,8 +330,6 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 sal_uInt16 nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
                 if ( nPos != MENU_ITEM_NOTFOUND )
                 {
-                    OUString aNoContext;
-
                     uno::Reference< XModel >            xModel;
                     uno::Reference< XController >   xController( xFrame->getController(), UNO_QUERY );
 

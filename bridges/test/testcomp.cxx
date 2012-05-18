@@ -552,8 +552,6 @@ void testOnewayPerformanceOnTwoInterfaces(
 void testPerformance( const Reference < XCallMe > &rRemote,
                       const Reference < XCallMe > &rLocal )
 {
-    OUString aTestString;
-
     sal_Int32 nDoSomething = 1;
     sal_Int32 nCalls = 80000;
     double dRemote, dLocal,dAfterExecution;

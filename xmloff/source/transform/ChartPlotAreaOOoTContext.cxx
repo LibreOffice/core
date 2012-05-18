@@ -73,7 +73,6 @@ XMLAxisOOoContext::~XMLAxisOOoContext()
 void XMLAxisOOoContext::StartElement(
     const Reference< xml::sax::XAttributeList >& rAttrList )
 {
-    OUString aLocation, aMacroName;
     Reference< xml::sax::XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = 0;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

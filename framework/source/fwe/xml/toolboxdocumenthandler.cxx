@@ -307,7 +307,6 @@ throw(  SAXException, RuntimeException )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                ::rtl::OUString aAttribute;
                 sal_Bool bAttributeURL  = sal_False;
 
                 m_bToolBarItemStartFound = sal_True;

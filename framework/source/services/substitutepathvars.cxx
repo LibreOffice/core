@@ -1173,10 +1173,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
     Any             aAny;
-    ::rtl::OUString aOfficePath;
-    ::rtl::OUString aUserPath;
     ::rtl::OUString aTmp;
-    ::rtl::OUString aTmp2;
     String          aResult;
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL

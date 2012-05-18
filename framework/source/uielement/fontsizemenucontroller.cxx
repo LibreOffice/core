@@ -192,7 +192,6 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         // first insert font size names (for simplified/traditional chinese)
         float           fPoint;
-        rtl::OUString   aHeightString;
         FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguage() );
         m_pHeightArray = new long[nSizeCount+aFontSizeNames.Count()];
         rtl::OUString   aCommand;

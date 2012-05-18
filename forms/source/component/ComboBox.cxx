@@ -418,7 +418,6 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     // ListSource
     if (nVersion < 0x0003)
     {
-        ::rtl::OUString sListSource;
         _rxInStream >> m_aListSource;
     }
     else // nVersion == 4

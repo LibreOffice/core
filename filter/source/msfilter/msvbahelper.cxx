@@ -763,8 +763,6 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
     rtl::OUString MacroName( rMacroName );
     if ( !MacroName.isEmpty() )
     {
-        ::rtl::OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
-        ::rtl::OUString sMacroSeparator(RTL_CONSTASCII_USTRINGPARAM("!"));
         ::rtl::OUString aMacroName = MacroName.trim();
         if (0 == aMacroName.indexOf('!'))
             MacroName = aMacroName.copy(1).trim();

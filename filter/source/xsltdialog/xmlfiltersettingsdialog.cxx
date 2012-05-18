@@ -744,7 +744,6 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     sal_Int32 nIndex;
                     for( nIndex = 0; nIndex < nCount; nIndex++ )
                     {
-                        OUString aName( aSequence[nIndex].Name );
                         if ( aSequence[nIndex].Name == "Types" )
                         {
                             Sequence< OUString > aTypes;

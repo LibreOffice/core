@@ -134,7 +134,6 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     m_bShowMenu = sal_True;
     m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
 
-    OUString               aStrValue;
     Sequence< OUString > aSeq;
 
     if ( Event.State >>= aSeq )

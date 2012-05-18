@@ -91,7 +91,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue * pValue = aDescriptor.getConstArray();
-    OUString sFileName, sURL;
+    OUString sURL;
     Reference < XInterface > xInteractionHandler;
     Reference < XOutputStream > xOutputStream;
     Reference < XStatusIndicator > xStatusIndicator;

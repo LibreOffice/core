@@ -71,8 +71,6 @@
 using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
 
-static const char HELPID_PREFIX[] = "helpid:";
-
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
@@ -463,7 +461,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         return;
 
     sal_uInt16         nId( 1 );
-    rtl::OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     RemoveControllers();
 

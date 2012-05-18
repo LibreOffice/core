@@ -206,7 +206,6 @@ void Desktop::RegisterServices()
         RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
 
         // read command line parameters
-        ::rtl::OUString aClientDisplay;
         sal_Bool        bHeadlessMode = sal_False;
 
         // interpret command line arguments

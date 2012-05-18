@@ -132,7 +132,6 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::impl_ts_fillCache" );
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    ::rtl::OUString sModule = m_sModule;
     m_sModuleCFG = m_sModule;
     aReadLock.unlock();
     // <- SAFE ----------------------------------

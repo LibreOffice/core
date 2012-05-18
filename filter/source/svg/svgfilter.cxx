@@ -267,7 +267,6 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
 rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
 {
     uno::Reference< io::XInputStream > xInput;
-    rtl::OUString aURL;
 
     const beans::PropertyValue* pAttribs = io_rDescriptor.getConstArray();
     const sal_Int32 nAttribs = io_rDescriptor.getLength();
