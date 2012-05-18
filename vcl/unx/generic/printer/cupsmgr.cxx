@@ -43,8 +43,6 @@
 #include "rtl/ustrbuf.hxx"
 
 #include <algorithm>
-#include <setjmp.h>
-#include <signal.h>
 
 #define CUPS_LIB_NAME "libcups.so.2"
 
@@ -442,17 +440,6 @@ void CUPSManager::runDestThread( void* pThis )
     ((CUPSManager*)pThis)->runDests();
 }
 
-static sigjmp_buf aViolationBuffer;
-
-extern "C"
-{
-    static void lcl_signal_action(int nSignal)
-    {
-        fprintf( stderr, "Signal %d during cups initialization called, ignoring cups\n", nSignal );
-        siglongjmp( aViolationBuffer, 1 );
-    }
-}
-
 void CUPSManager::runDests()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -460,62 +447,29 @@ void CUPSManager::runDests()
 #endif
     cups_dest_t* pDests = NULL;
 
-    // #i86306# prepare against really broken CUPS installations / missing servers
-
-    // install signal handler for SEGV, BUS and ABRT
-    struct sigaction act;
-    struct sigaction oact[3];
-
-    act.sa_handler = lcl_signal_action;
-    act.sa_flags   = 0;
-    sigemptyset(&(act.sa_mask));
-
-    int nSegvSignalInstalled = sigaction(SIGSEGV, &act, &oact[0]);
-    int nBusSignalInstalled = sigaction(SIGBUS, &act, &oact[1]);
-    int nAbortSignalInstalled = sigaction(SIGABRT, &act, &oact[2]);
-
-    // prepare against a signal during FcInit or FcConfigGetCurrent
-    if( sigsetjmp( aViolationBuffer, ~0 ) == 0 )
+    // n#722902 - do a fast-failing check for cups working *at all* first
+    http_t* p_http;
+    if( (p_http=m_pCUPSWrapper->httpConnectEncrypt(
+             m_pCUPSWrapper->cupsServer(),
+             m_pCUPSWrapper->ippPort(),
+             m_pCUPSWrapper->cupsEncryption())) != NULL )
     {
-        // n#722902 - do a fast-failing check for cups working *at
-        // all* first
-        http_t* p_http;
-        if( (p_http=m_pCUPSWrapper->httpConnectEncrypt(
-                 m_pCUPSWrapper->cupsServer(),
-                 m_pCUPSWrapper->ippPort(),
-                 m_pCUPSWrapper->cupsEncryption())) != NULL )
-        {
-            // neat, cups is up, clean up the canary
-            m_pCUPSWrapper->httpClose(p_http);
+        // neat, cups is up, clean up the canary
+        m_pCUPSWrapper->httpClose(p_http);
 
-            int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+        int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "came out of cupsGetDests\n" );
+        fprintf( stderr, "came out of cupsGetDests\n" );
 #endif
 
-            osl::MutexGuard aGuard( m_aCUPSMutex );
-            m_nDests = nDests;
-            m_pDests = pDests;
-            m_bNewDests = true;
+        osl::MutexGuard aGuard( m_aCUPSMutex );
+        m_nDests = nDests;
+        m_pDests = pDests;
+        m_bNewDests = true;
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "finished cupsGetDests\n" );
+        fprintf( stderr, "finished cupsGetDests\n" );
 #endif
-        }
     }
-    else
-    {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "cupsGetDests crashed, not using CUPS\n" );
-        #endif
-    }
-
-    // restore old signal handlers
-    if( nSegvSignalInstalled == 0 )
-        sigaction( SIGSEGV, &oact[0], NULL );
-    if( nBusSignalInstalled == 0 )
-        sigaction( SIGBUS, &oact[1], NULL );
-    if( nAbortSignalInstalled == 0 )
-        sigaction( SIGABRT, &oact[2], NULL );
 }
 
 void CUPSManager::initialize()
