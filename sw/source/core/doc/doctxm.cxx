@@ -986,7 +986,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // Generate: Evaluate Form and insert the place holder for the
         // page number. If it is a TOX_INDEX and the SwForm IsCommaSeparated()
         // then a range of entries must be generated into one paragraph
-        sal_uInt16 nRange = 1;
+        size_t nRange = 1;
         if(TOX_INDEX == SwTOXBase::GetType() &&
                 GetTOXForm().IsCommaSeparated() &&
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
@@ -1878,7 +1878,7 @@ void SwTOXBaseSection::UpdatePageNum()
                               GetOptions() : 0,
                               GetSortAlgorithm() );
 
-    for( sal_uInt16 nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
+    for( size_t nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         // Loop over all SourceNodes
         std::vector<sal_uInt16> aNums; // the PageNumber

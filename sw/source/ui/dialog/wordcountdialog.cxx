@@ -104,7 +104,13 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          Window *pParent,
                                          SfxChildWinInfo* pInfo)
     : SfxModelessDialog(_pBindings, pChild, pParent, SW_RES(DLG_WORDCOUNT)),
+#if defined _MSC_VER
+#pragma warning (disable : 4355)
+#endif
       aDlg(this)
+#if defined _MSC_VER
+#pragma warning (default : 4355)
+#endif
 {
     FreeResource();
     Initialize(pInfo);
