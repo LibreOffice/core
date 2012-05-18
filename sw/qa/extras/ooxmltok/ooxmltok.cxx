@@ -259,8 +259,8 @@ xray graphic.Size
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( 120, bitmap->getSize().Width );
-    CPPUNIT_ASSERT_EQUAL( 106, bitmap->getSize().Height );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(120), bitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(106), bitmap->getSize().Height );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
