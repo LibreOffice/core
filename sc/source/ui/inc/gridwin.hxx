@@ -304,7 +304,7 @@ protected:
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 public:
-    enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty };
+    enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
 
     ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     ~ScGridWindow();

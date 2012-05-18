@@ -129,6 +129,8 @@
 #include "cliputil.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+#include "checklistmenu.hrc"
+#include "strload.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -705,6 +707,13 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the menu.
     mpAutoFilterPopup->addMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_ASC).GetString(),
+        true, new AutoFilterAction(this, SortAscending));
+    mpAutoFilterPopup->addMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_DESC).GetString(),
+        true, new AutoFilterAction(this, SortDescending));
+    mpAutoFilterPopup->addSeparator();
+    mpAutoFilterPopup->addMenuItem(
         SC_RESSTR(SCSTR_TOP10FILTER), true, new AutoFilterAction(this, Top10));
     mpAutoFilterPopup->addMenuItem(
         SC_RESSTR(SCSTR_FILTER_EMPTY), true, new AutoFilterAction(this, Empty));
@@ -745,6 +754,43 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     ScDBData* pDBData = pData->mpData;
     if (!pDBData)
         return;
+
+    switch (eMode)
+    {
+        case SortAscending:
+        case SortDescending:
+        {
+            ScDocument* pDoc = pViewData->GetDocument();
+            SCTAB nTab = pViewData->GetTabNo();
+            SCCOL nCol = rPos.Col();
+            ScSortParam aSortParam;
+            pDBData->GetSortParam(aSortParam);
+            if (nCol < aSortParam.nCol1 || nCol > aSortParam.nCol2)
+                // out of bound
+                return;
+
+            bool bHasHeader = pDoc->HasColHeader(
+                aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab);
+
+            aSortParam.bHasHeader = bHasHeader;
+            aSortParam.bByRow = true;
+            aSortParam.bCaseSens = false;
+            aSortParam.bNaturalSort = false;
+            aSortParam.bIncludePattern = true;
+            aSortParam.bInplace = true;
+            aSortParam.maKeyState[0].bDoSort = true;
+            aSortParam.maKeyState[0].nField = nCol;
+            aSortParam.maKeyState[0].bAscending = (eMode == SortAscending);
+
+            for (size_t i = 1; i < aSortParam.GetSortKeyCount(); ++i)
+                aSortParam.maKeyState[i].bDoSort = false;
+
+            pViewData->GetViewShell()->UISort(aSortParam);
+            return;
+        }
+        default:
+            ;
+    }
 
     if (eMode == Custom)
     {
