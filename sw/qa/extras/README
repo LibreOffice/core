@@ -198,3 +198,23 @@ uno::Reference<container::XIndexAccess> bookmarks(bookmarksSupplier->getBookmark
 uno::Reference<uno::XInterface> bookmark;
 // get the bookmark by index
 bookmarks->getByIndex(0) >>= bookmark;
+
+=== Images
+
+Embedded images seem to be accessed like this:
+
+Basic:
+
+image = ThisComponent.DrawPage.getByIndex(0)
+graphic = image.Graphic
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
+uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+uno::Reference<drawing::XShape> image;
+drawPage->getByIndex(0) >>= image;
+uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+uno::Reference<graphic::XGraphic> graphic;
+imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
