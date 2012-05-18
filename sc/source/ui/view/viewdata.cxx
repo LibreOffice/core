@@ -486,14 +486,11 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 
 void ScViewData::DeleteTab( SCTAB nTab )
 {
-    if ( nTab < static_cast<SCTAB>(maTabData.size()) )
-    {
-        delete maTabData.at(nTab);
-        if ( nTab == static_cast<SCTAB>(maTabData.size()) - 1 )
-            maTabData.erase(maTabData.begin() + nTab);
-        UpdateCurrentTab();
-        mpMarkData->DeleteTab( nTab );
-    }
+    delete maTabData.at(nTab);
+
+    maTabData.erase(maTabData.begin() + nTab);
+    UpdateCurrentTab();
+    mpMarkData->DeleteTab( nTab );
 }
 
 void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
@@ -503,8 +500,8 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
         mpMarkData->DeleteTab( nTab + i );
         delete maTabData.at(nTab + i);
     }
-    if ( ( nTab + nSheets ) == static_cast<SCTAB>( maTabData.size() - 1 ) )
-        maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
+
+    maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
     UpdateCurrentTab();
 }
 
@@ -541,8 +538,7 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     if (nSrcTab < static_cast<SCTAB>(maTabData.size()))
     {
         pTab = maTabData[nSrcTab];
-        if ( nSrcTab == static_cast<SCTAB>( maTabData.size() - 1 ) )
-            maTabData.erase( maTabData.begin() + nSrcTab );
+        maTabData.erase( maTabData.begin() + nSrcTab );
     }
 
     if (nDestTab < static_cast<SCTAB>(maTabData.size()))
@@ -663,18 +659,15 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
             SCTAB i = *it;
             if ( i < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
             {
-                if ( maTabData[i] )
+                if ( bPagebreak )
                 {
-                    if ( bPagebreak )
-                    {
-                        maTabData[i]->aPageZoomX = aValidX;
-                        maTabData[i]->aPageZoomY = aValidY;
-                    }
-                    else
-                    {
-                        maTabData[i]->aZoomX = aValidX;
-                        maTabData[i]->aZoomY = aValidY;
-                    }
+                    maTabData[i]->aPageZoomX = aValidX;
+                    maTabData[i]->aPageZoomY = aValidY;
+                }
+                else
+                {
+                    maTabData[i]->aZoomX = aValidX;
+                    maTabData[i]->aZoomY = aValidY;
                 }
             }
         }
@@ -696,8 +689,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool
 void ScViewData::SetShowGrid( bool bShow )
 {
     CreateSelectedTabData();
-    if ( maTabData[nTabNo] )
-        maTabData[nTabNo]->bShowGrid = bShow;
+    maTabData[nTabNo]->bShowGrid = bShow;
 }
 
 void ScViewData::RefreshZoom()
@@ -2954,7 +2946,7 @@ sal_Bool ScViewData::UpdateFixX( SCTAB nTab )               // sal_True = Wert g
     if (!ValidTab(nTab))        // Default
         nTab=nTabNo;        // akuelle Tabelle
 
-    if (!maTabData[nTab] || !pView || maTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
+    if (!pView || maTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
         return false;
 
     ScDocument* pLocalDoc = GetDocument();
@@ -2989,7 +2981,7 @@ sal_Bool ScViewData::UpdateFixY( SCTAB nTab )               // sal_True = Wert g
     if (!ValidTab(nTab))        // Default
         nTab=nTabNo;        // akuelle Tabelle
 
-    if (!maTabData[nTab] || !pView || maTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
+    if (!pView || maTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
         return false;
 
     ScDocument* pLocalDoc = GetDocument();
