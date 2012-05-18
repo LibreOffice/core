@@ -209,6 +209,7 @@ private:
 public:
     ScColorFormatList() {};
     ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList);
+    ScColorFormatList(const ScColorFormatList& rList);
 
     typedef ColorFormatContainer::iterator iterator;
     typedef ColorFormatContainer::const_iterator const_iterator;
