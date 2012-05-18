@@ -12,9 +12,40 @@ The rest of the testcase is about asserting this document model: use the UNO
 API to retrieve properties, then use `CPPUNIT_ASSERT_EQUAL()` to test against
 an expected value.
 
-Ideally this alone is enough, but figuring out the UNO API just by reading the
-idl files under `offapi/` is not that productive. Xray can help in this case.
-Download it from:
+See below for more details on writing the UNO code see below.
+
+== Export tests
+
+Export tests are similar. Given that test documents are easier to provide in
+some format (instead of writing code to build the documents from scratch) in
+most cases, we will do an import, then do an export (to invoke the code we want
+to test) and then do an import again, so we can do the testing by asserting the
+document model, just like we did for import tests.
+
+Yes, this means that you can test the export code (using this framework) if the
+importer is working correctly. (But that's not so bad, users usually expect a
+feature to work in both the importer and the exporter.)
+
+The only difference is that instead of `load()`, you call `roundtrip()` to load
+the test document, then you can assert it as discussed above.
+
+== Helper methods
+
+When two or more tests do the same (for example determine the number of
+characters in the document), helper methods are introduced to avoid code
+duplication. When you need something more complex, check if there is already a
+helper method, they are also good examples.
+
+Helper methods which are used by more than one testsuite are in the
+`SwModelTestBase` class. For example the `getLength()` method uses the trick
+that you can simply enumerate over the document model, getting the paragraphs
+of it; and inside those, you can enumerate over their runs. That alone is
+enough if you want to test a paragraph or character property.
+
+== Using UNO for tests
+
+Figuring out the UNO API just by reading the idl files under `offapi/` is not
+that productive. Xray can help in this case. Download it from:
 
 http://bernard.marcelly.perso.sfr.fr/index2.html
 
@@ -47,7 +78,8 @@ You can start with:
 xray ThisComponent
 ----
 
-and navigate around. The good thing is that once you write the code, you can
+and navigate around (it is a good idea to click Configuration and enable
+alphabetical sorting). The good thing is that once you write the code, you can
 just start F5 without restarting LibreOffice to see the result, so you can
 develop quickly.
 
@@ -73,30 +105,96 @@ xStyle->getPropertyValue("IsLandscape") >>= bIsLandscape;
 CPPUNIT_ASSERT_EQUAL(sal_True, bIsLandscape);
 ----
 
-== Export tests
+== UNO, in more details, various tips:
 
-Export tests are similar. Given that test documents are easier to provide in
-some format (instead of writing code to build the documents from scratch) in
-most cases, we will do an import, then do an export (to invoke the code we want
-to test) and then do an import again, so we can do the testing by asserting the
-document model, just like we did for import tests.
+=== writing code based xray inspection:
 
-Yes, this means that you can test the export code (using this framework) if the
-importer is working correctly. (But that's not so bad, users usually expect a
-feature to work in both the importer and the exporter.)
+In general, if you want to access a property, in Basic it's enough to write 'object.property',
+such as printing character count that 'xray ThisComponent' prints as 'CharacterCount':
 
-The only difference is that instead of `load()`, you call `roundtrip()` to load
-the test document, then you can assert it as discussed above.
+count = ThisComponent.CharacterCount
+text = paragraph.String
 
-== Helper methods
+In C++, this can get more complicated, as you need to use the right interface for access. Xray
+prints the internal name of the object (e.g. 'SwXTextDocument' for 'xray ThisComponent')
+above the list of its properties. Inspect this class/interface in the code (that is,
+under offapi/, udkapi/, or wherever it is implemented) and search for a function named
+similarly to the property you want (getXYZ()). If there is none, it is most
+probably a property that can be read using XPropertySet:
 
-When two or more tests do the same (for example determine the number of
-characters in the document), helper methods are introduced to avoid code
-duplication. When you need something more complex, check if there is already a
-helper method, they are also good examples.
+uno::Reference<beans::XPropertySet> properties(textDocument, uno::UNO_QUERY);
+sal_Int32 value; // the right type for the property
+properties->getPropertyValue("CharacterCount") >>= val;
 
-Helper methods which are used by more than one testsuite are in the
-`SwModelTestBase` class. For example the `getLength()` method uses the trick
-that you can simply enumerate over the document model, getting the paragraphs
-of it; and inside those, you can enumerate over their runs. That alone is
-enough if you want to test a paragraph or character property.
+If there is a function to obtain the property, you need access it using the right interface.
+If the class itself is not the right interface, then it is one of the classes it inherits
+from, usually the block of functions that are implemented for this interface starts with
+stating the name. For example see sw/inc/unoparagraph.hxx for class SwXParagraph, it has
+function getString() in a block introduced with 'XTextRange', so XTextRange is the interface
+it inherits from:
+
+// text of the paragraph
+uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+OUString value = text->getString();
+
+Some properties may be more complicated to access, such as using XEnumerationAccess, XIndexAccess
+or XNamedAccess to enumerate items, index them by number of name (clicking 'Dbg_SupportedInterfaces'
+in xray gives a list of interfaces the object implements, and 'Count' shows the number of items).
+
+=== XEnumerationAccess (e.g. get the 2nd paragraph of the document):
+
+Basic:
+
+enum = ThisComponent.Text.createEnumeration
+para = enum.NextElement
+para = enum.NextElement
+xray para
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+// list of paragraphs
+uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+// go to 1st paragraph
+(void) paraEnum->nextElement();
+// get the 2nd paragraph
+uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
+
+=== XNamedAccess (e.g. get a bookmark named 'position1'):
+
+Basic:
+
+bookmark = ThisComponent.Bookmarks.getByName("position1")
+
+or even simpler
+
+bookmark = ThisComponent.Bookmarks.position1
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+// XBookmarksSupplier interface will be needed to access the bookmarks
+uno::Reference<text::XBookmarksSupplier> bookmarksSupplier(textDocument, uno::UNO_QUERY);
+// get the bookmarks
+uno::Reference<container::XNameAccess> bookmarks(bookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+uno::Reference<uno::XInterface> bookmark;
+// get the bookmark by name
+bookmarks->getByName("position1") >>= bookmark;
+
+=== XIndexAccess (e.g. get the first bookmark):
+
+Basic:
+
+bookmark = ThisComponent.Bookmarks.getByIndex(0)
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+// XBookmarksSupplier interface will be needed to access the bookmarks
+uno::Reference<text::XBookmarksSupplier> bookmarksSupplier(textDocument, uno::UNO_QUERY);
+// get the bookmarks
+uno::Reference<container::XIndexAccess> bookmarks(bookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+uno::Reference<uno::XInterface> bookmark;
+// get the bookmark by index
+bookmarks->getByIndex(0) >>= bookmark;
