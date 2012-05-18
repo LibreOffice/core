@@ -840,7 +840,9 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
         Point aPoint1(nPosZero, rRect.Top());
         Point aPoint2(nPosZero, rRect.Bottom());
         LineInfo aLineInfo(LINE_DASH, 1);
-        aLineInfo.SetDashCount( 5 );
+        aLineInfo.SetDashCount( 4 );
+        aLineInfo.SetDistance( 3 );
+        aLineInfo.SetDashLen( 3 );
         pDev->SetFillColor(COL_BLACK);
         pDev->SetLineColor(COL_BLACK);
         pDev->DrawLine(aPoint1, aPoint2, aLineInfo);
