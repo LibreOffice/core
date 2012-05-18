@@ -68,6 +68,25 @@ struct ScDataBarInfo
     Color maColor;
     double mnLength; // -100 to 100
     bool mbGradient;
+
+    bool operator==(const ScDataBarInfo& r) const
+    {
+        if( mnZero != r.mnZero )
+            return false;
+        if( maColor != r.maColor )
+            return false;
+        if(mnLength != r.mnLength)
+            return false;
+        if (mbGradient != r.mbGradient)
+            return false;
+
+        return true;
+    }
+
+    bool operator!=(const ScDataBarInfo& r) const
+    {
+        return !(*this == r);
+    }
 };
 
 struct CellInfo

@@ -96,7 +96,7 @@ class ScChartCollection;
 class ScChartListenerCollection;
 class ScConditionalFormat;
 class ScConditionalFormatList;
-class ScColorScaleFormat;
+class ScColorFormat;
 class ScColorFormatList;
 class ScDBCollection;
 class ScDBData;
@@ -1199,7 +1199,7 @@ public:
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
     SC_DLLPUBLIC sal_uLong          AddCondFormat( const ScConditionalFormat& rNew );
-    SC_DLLPUBLIC sal_uLong          AddColorScaleFormat( ScColorScaleFormat* pNew );
+    SC_DLLPUBLIC sal_uLong          AddColorFormat( ScColorFormat* pNew );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( sal_uLong nKey );

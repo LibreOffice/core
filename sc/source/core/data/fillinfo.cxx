@@ -488,11 +488,14 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             pCondForm = pCondFormList->GetFormat( nConditional );
 
                         const ScColorScaleFormat* pColorScale = NULL;
+                        const ScDataBarFormat* pDataBar = NULL;
                         if ( nColorScale && mpColorScaleList )
                         {
                             ScColorFormat* pFormat = mpColorScaleList->GetFormat( nColorScale );
                             if(pFormat->GetType() == COLORSCALE)
                                 pColorScale = static_cast<ScColorScaleFormat*>(pFormat);
+                            else if(pFormat->GetType() == DATABAR)
+                                pDataBar = static_cast<ScDataBarFormat*>(pFormat);
                         }
 
                         do
@@ -573,6 +576,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 {
                                     Color* pColor = pColorScale->GetColor( ScAddress( nX, nCurRow, nTab ) );
                                     pInfo->pColorScale = pColor;
+                                }
+                                if( pDataBar )
+                                {
+                                    ScDataBarInfo* pDataBarInfo = pDataBar->GetDataBarInfo( ScAddress( nX, nCurRow, nTab ) );
+                                    pInfo->pDataBar = pDataBarInfo;
                                 }
 
                                 ++nArrY;

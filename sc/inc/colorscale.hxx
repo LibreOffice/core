@@ -39,12 +39,6 @@ class ScFormulaCell;
 class ScTokenArray;
 class ScDataBarInfo;
 
-struct ScDataBarFormatData
-{
-    Color maPositiveColor;
-    bool mbGradient;
-};
-
 class SC_DLLPUBLIC ScColorScaleEntry
 {
 private:
@@ -76,6 +70,50 @@ public:
     void SetMin(bool bMin);
     void SetMax(bool bMax);
     void SetPercent(bool bPercent);
+};
+
+struct ScDataBarFormatData
+{
+    ScDataBarFormatData():
+        mbGradient(true),
+        mbNeg(true),
+        mbSameDirection(false) {}
+
+    /**
+     * Color for all Positive Values and if mbNeg == false also for negative ones
+     */
+    Color maPositiveColor;
+    /**
+     * Specifies the color for negative values. This is optional and depends on mbNeg.
+     *
+     * Default color is 0xFF0000, this value is not set
+     */
+    boost::scoped_ptr<Color> mpNegativeColor;
+    /**
+     * Paint the bars with gradient. If this is used the default is to draw with
+     * borders.
+     *
+     * Default is true
+     */
+    bool mbGradient;
+    /**
+     * Use different color for negative values. Color is specified in
+     * mpNegativeColor and defaults to 0xFF0000
+     *
+     * Default is true
+     */
+    bool mbNeg; //differentiate between negative values
+    /**
+     * Paint negative values into the same direction as positive values
+     * If false we will set the mid point according to the upper and lower limit and negative
+     * values are painted to the left and positive to the right
+     *
+     * Default is false
+     */
+    bool mbSameDirection;
+
+    boost::scoped_ptr<ScColorScaleEntry> mpUpperLimit;
+    boost::scoped_ptr<ScColorScaleEntry> mpLowerLimit;
 };
 
 enum ScColorFormatType
@@ -147,8 +185,11 @@ class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
 public:
     ScDataBarFormat(ScDocument* pDoc);
     ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const;
 
     ScDataBarInfo* GetDataBarInfo(const ScAddress& rAddr) const;
+
+    void SetDataBarData( ScDataBarFormatData* pData );
 
     virtual void DataChanged(const ScRange& rRange);
     virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
@@ -157,7 +198,7 @@ public:
 
     virtual ScColorFormatType GetType() const;
 private:
-    ScDataBarFormatData maFormatData;
+    boost::scoped_ptr<ScDataBarFormatData> mpFormatData;
 };
 
 class SC_DLLPUBLIC ScColorFormatList

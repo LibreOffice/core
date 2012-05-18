@@ -29,6 +29,7 @@
 #include "colorscale.hxx"
 #include "document.hxx"
 #include "cell.hxx"
+#include "fillinfo.hxx"
 
 ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
     mnVal(nVal),
@@ -531,6 +532,135 @@ ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
 {
     return maColorScales.end();
 }
+
+ScDataBarFormat::ScDataBarFormat(ScDocument* pDoc):
+    ScColorFormat(pDoc)
+{
+}
+
+ScDataBarFormat::ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat):
+    ScColorFormat(pDoc, rFormat)
+{
+}
+
+void ScDataBarFormat::SetDataBarData( ScDataBarFormatData* pData )
+{
+    mpFormatData.reset(pData);
+}
+
+ScColorFormat* ScDataBarFormat::Clone(ScDocument* pDoc) const
+{
+    return new ScDataBarFormat(pDoc, *this);
+}
+
+ScColorFormatType ScDataBarFormat::GetType() const
+{
+    return DATABAR;
+}
+
+void ScDataBarFormat::UpdateReference( UpdateRefMode ,
+            const ScRange& , SCsCOL , SCsROW , SCsTAB  )
+{
+}
+
+void ScDataBarFormat::DataChanged(const ScRange& )
+{
+
+}
+
+void ScDataBarFormat::UpdateMoveTab(SCTAB , SCTAB )
+{
+}
+
+ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
+{
+    CellType eCellType = mpDoc->GetCellType(rAddr);
+    if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+        return NULL;
+
+    if (eCellType == CELLTYPE_FORMULA)
+    {
+        if(!static_cast<ScFormulaCell*>(mpDoc->GetCell(rAddr))->IsValue())
+            return NULL;
+    }
+
+    // now we have for sure a value
+    //
+    double nMin = -2;
+    double nMax = 10;
+
+    double nValue = mpDoc->GetValue(rAddr);
+
+    ScDataBarInfo* pInfo = new ScDataBarInfo();
+    if(mpFormatData->mbSameDirection || nMin > 0)
+    {
+        if(nValue <= nMin)
+        {
+            pInfo->mnLength = 0;
+        }
+        else if(nValue >= nMax)
+        {
+            pInfo->mnLength = 100;
+        }
+        else
+        {
+            double nDiff = nMax - nMin;
+            pInfo->mnLength = (nValue - nMin)/nDiff*100.0;
+        }
+        pInfo->mnZero = 0;
+    }
+    else
+    {
+        //calculate the zero position first
+        if(nMin < 0)
+        {
+            if(nMax < 0)
+                pInfo->mnZero = 100;
+            else
+            {
+                pInfo->mnZero = -100*nMin/(nMax-nMin);
+            }
+        }
+
+        //calculate the length
+        if(nValue < 0)
+        {
+            if (nValue < nMin)
+                pInfo->mnLength = -100;
+            else
+                pInfo->mnLength = -100 * nValue/nMin;
+        }
+        else
+        {
+            if ( nValue > nMax )
+                pInfo->mnLength = 100;
+            else
+                pInfo->mnLength = nValue/nMax*100;
+        }
+    }
+
+
+    // set color
+    if(mpFormatData->mbNeg && nValue < 0)
+    {
+        if(mpFormatData->mpNegativeColor)
+        {
+            pInfo->maColor = *mpFormatData->mpNegativeColor.get();
+        }
+        else
+        {
+            // default negative color is red
+            pInfo->maColor = COL_RED;
+        }
+
+    }
+    else
+        pInfo->maColor = mpFormatData->maPositiveColor;
+
+    return pInfo;
+}
+
+//-----------------------------------------------------------------
 
 ScColorFormatList::ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList)
 {

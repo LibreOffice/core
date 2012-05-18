@@ -640,7 +640,7 @@ ScColorFormatList* ScDocument::GetColorScaleList()
 
 //takes ownership
 // returns a 1-based index, 0 is reserved for no entry
-sal_uLong ScDocument::AddColorScaleFormat( ScColorScaleFormat* pNew )
+sal_uLong ScDocument::AddColorFormat( ScColorFormat* pNew )
 {
     if(!pNew)
         return 0;
