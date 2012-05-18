@@ -489,7 +489,7 @@ void ScViewData::DeleteTab( SCTAB nTab )
     if ( nTab < static_cast<SCTAB>(maTabData.size()) )
     {
         delete maTabData.at(nTab);
-        if ( nTab == maTabData.size() - 1 )
+        if ( nTab == static_cast<SCTAB>(maTabData.size()) - 1 )
             maTabData.erase(maTabData.begin() + nTab);
         UpdateCurrentTab();
         mpMarkData->DeleteTab( nTab );
