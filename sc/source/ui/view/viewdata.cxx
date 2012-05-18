@@ -503,7 +503,7 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
         mpMarkData->DeleteTab( nTab + i );
         delete maTabData.at(nTab + i);
     }
-    if ( ( nTab + nSheets ) == maTabData.size() - 1 )
+    if ( ( nTab + nSheets ) == static_cast<SCTAB>( maTabData.size() - 1 ) )
         maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
     UpdateCurrentTab();
 }
