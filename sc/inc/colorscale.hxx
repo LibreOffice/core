@@ -230,4 +230,11 @@ public:
     size_t size() const;
 };
 
+// see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability
+//for MSVC we need:
+inline ScColorFormat* new_clone( const ScColorFormat& rFormat )
+{
+    return rFormat.Clone();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
