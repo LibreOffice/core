@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_targets,testtools,\
 	Library_constructors \
 	Rdb_uno_services \
 	CustomTarget_uno_test \
+	CustomTarget_bridgetest \
 ))
 
 ifneq ($(SOLAR_JAVA),)

@@ -1,0 +1,72 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# Major Contributor(s):
+# Copyright (C) 2012 David Ostrovsky <d.ostrovsky@gmx.de> (initial developer)
+#
+# All Rights Reserved.
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+
+$(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest))
+
+workdir_SERVER := $(call gb_CustomTarget_get_workdir,testtools/bridgetest)
+gb_UNO := $(OUTDIR)/bin/uno
+
+ifeq ($(OS),WNT)
+BATCH_SUFFIX := .bat
+GIVE_EXEC_RIGHTS=@echo
+else
+BATCH_SUFFIX :=
+GIVE_EXEC_RIGHTS=chmod +x
+endif
+
+$(call gb_CustomTarget_get_target,testtools/bridgetest) : \
+	$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) \
+	$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX)
+
+# which other prerequisits do we need here?
+$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
+	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		echo "$(gb_UNO)" \
+		"-ro $(OUTDIR)/xml/uno_services.rdb" \
+		"-ro $(OUTDIR)/bin/udkapi.rdb" \
+		"-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb" \
+		"-s com.sun.star.test.bridge.BridgeTest" \
+		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
+		"--singleaccept" > $@)
+	$(GIVE_EXEC_RIGHTS) $@
+
+# which other prerequisits do we need here?
+$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) : \
+	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		echo "$(gb_UNO)" \
+		"-ro $(OUTDIR)/xml/uno_services.rdb" \
+		"-ro $(OUTDIR)/bin/udkapi.rdb" \
+		"-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb" \
+		"-s com.sun.star.test.bridge.BridgeTest" \
+		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
+		> $@)
+	$(GIVE_EXEC_RIGHTS) $@
+
+# vim: set noet sw=4 ts=4:
