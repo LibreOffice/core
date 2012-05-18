@@ -122,6 +122,6 @@ $(if $(strip $(1)),\
 $(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
-$(eval $(call tailbuild_serialize,scfilt sc sw sd dbu ooxml oox svxcore vcl xo))
+$(eval $(call tailbuild_serialize,scfilt sc sw sd $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) ooxml oox svxcore vcl xo))
 
 # vim: set noet sw=4 ts=4:
