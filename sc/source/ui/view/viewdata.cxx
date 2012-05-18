@@ -541,7 +541,7 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     if (nSrcTab < static_cast<SCTAB>(maTabData.size()))
     {
         pTab = maTabData[nSrcTab];
-        if ( nSrcTab == maTabData.size() - 1 )
+        if ( nSrcTab == static_cast<SCTAB>( maTabData.size() - 1 ) )
             maTabData.erase( maTabData.begin() + nSrcTab );
     }
 
