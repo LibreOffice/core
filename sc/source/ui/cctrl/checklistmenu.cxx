@@ -1035,6 +1035,13 @@ void ScCheckListMenuWindow::packWindow()
         // Widen the window to fit the menu items.
         maWndSize.Width() = maMenuSize.Width();
 
+    // Set proper window height based on the number of menu items.
+    if (maWndSize.Height() < maMenuSize.Height()*2.8)
+        maWndSize.Height() = maMenuSize.Height()*2.8;
+
+    // TODO: Make sure the window height never exceeds the height of the
+    // screen. Also do adjustment based on the number of check box items.
+
     SetOutputSizePixel(maWndSize);
 
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
