@@ -38,7 +38,7 @@
 // of MSVCR structures. http://code.google.com/p/ontl/
 
 // Geoff Chappell's pages:
-// http://members.ozemail.com.au/~geoffch/samples/programming/msvc/language/index.html
+// http://www.geoffchappell.com/studies/msvc/language/index.htm
 
 // The below is from ONTL's ntl/nt/exception.hxx, cleaned up to keep just the _M_X64 parts:
 
