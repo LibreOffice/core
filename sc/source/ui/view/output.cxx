@@ -49,6 +49,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
+#include <vcl/lineinfo.hxx>
 #include <svx/unoapi.hxx>
 
 #include "output.hxx"
@@ -832,6 +833,19 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
     //TODO: improve this for gradient fill
     pDev->SetFillColor(pOldDataBarInfo->maColor);
     pDev->DrawRect(aPaintRect);
+
+    //draw axis
+    if(pOldDataBarInfo->mnZero)
+    {
+        Point aPoint1(nPosZero, rRect.Top());
+        Point aPoint2(nPosZero, rRect.Bottom());
+        LineInfo aLineInfo(LINE_DASH, 1);
+        aLineInfo.SetDashCount( 5 );
+        pDev->SetFillColor(COL_BLACK);
+        pDev->SetLineColor(COL_BLACK);
+        pDev->DrawLine(aPoint1, aPoint2, aLineInfo);
+        pDev->SetLineColor();
+    }
 }
 
 void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
