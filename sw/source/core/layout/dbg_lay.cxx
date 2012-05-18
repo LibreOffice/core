@@ -196,6 +196,7 @@ protected:
 public:
     SwImplEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : pFrm( pF ), nFunction( nFunct ), nAction( nAct ), pParam( pPar ) {}
+    virtual ~SwImplEnterLeave() {}
     virtual void Enter();           // Ausgabe beim Eintritt
     virtual void Leave();           // Ausgabe beim Verlassen
 };
