@@ -283,7 +283,7 @@ sub print_stat($$)
 sub get_bug_name($$)
 {
     my ($bug, $summary) = @_;
-    print "$bug\n";
+    print "$bug: ";
 
     $bug =~ m/(?:(\w*)\#+(\d+))/; # fdo#12345
     my $bugzilla = $1;            # fdo
@@ -296,9 +296,12 @@ sub get_bug_name($$)
         $ua->env_proxy;
         my $response = $ua->get($url);
         if ($response->is_success) {
-            my $title = $response->title();
-            if ( $title =~ s/^Bug \d+ – // ) {
+            my $title = $response->title;
+            if ( $title =~ s/^Bug \d+ . // ) {
+                print "$title\n";
                 return $title;
+            } else {
+                print "warning: not found; using commit message\n";
             }
         }
     }
@@ -324,7 +327,8 @@ sub print_bugs($$)
     }
 
     # try to replace summaries with bug names from bugzilla
-    foreach my $bug ( keys %bugs) {
+    print "Getting bug titles:\n";
+    foreach my $bug ( sort { $a cmp $b } keys %bugs) {
         $bugs{$bug}{'summary'} = get_bug_name($bug, $bugs{$bug}{'summary'});
     }
 
@@ -355,7 +359,7 @@ sub print_bugnumbers($$)
         }
     }
 
-    printf $log join ("\n", keys %bugs) . "\n";
+    printf $log join ("\n", sort { $a cmp $b } keys %bugs) . "\n";
 }
 
 ########################################################################
