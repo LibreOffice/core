@@ -27,6 +27,7 @@
 
 #include "../swmodeltestbase.hxx"
 
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -55,6 +56,7 @@ public:
     void testN757890();
     void testFdo49940();
     void testN751077();
+    void testN705956();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -65,6 +67,7 @@ public:
     CPPUNIT_TEST(testN757890);
     CPPUNIT_TEST(testFdo49940);
     CPPUNIT_TEST(testN751077);
+    CPPUNIT_TEST(testN705956);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -236,6 +239,28 @@ xray para.PageStyleName
     uno::Reference<beans::XPropertySet> paragraphProperties(paragraph, uno::UNO_QUERY);
     paragraphProperties->getPropertyValue( "PageStyleName" ) >>= value;
     CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), value );
+}
+
+void Test::testN705956()
+{
+    load( "n705956-1.docx" );
+/*
+Get the first image in the document and check it's the one image in the document.
+image = ThisComponent.DrawPage.getByIndex(0)
+graphic = image.Graphic
+xray graphic.Size
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> image;
+    drawPage->getByIndex(0) >>= image;
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> graphic;
+    imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+    uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( 120, bitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( 106, bitmap->getSize().Height );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
