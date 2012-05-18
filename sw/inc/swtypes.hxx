@@ -88,7 +88,7 @@ const SwTwips lMinBorder = 1134;
 
 // Margin left and above document.
 // Half of it is gap between the pages.
-#define DOCUMENTBORDER  568L
+#define DOCUMENTBORDER  284L
 #define GAPBETWEENPAGES 284L
 
 #define UNDO_ACTION_COUNT 20
