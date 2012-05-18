@@ -529,7 +529,7 @@ const Window *VclBin::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    return pWindowImpl->mpLastChild;
+    return pWindowImpl->mpFirstChild;
 }
 
 Window *VclBin::get_child()
@@ -546,7 +546,7 @@ Size VclFrame::calculateRequisition() const
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     const Window *pChild = get_child();
-    const Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
+    const Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
     if (pChild && pChild->IsVisible())
         aRet = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
@@ -578,7 +578,7 @@ void VclFrame::setAllocation(const Size &rAllocation)
 
     //The label widget is the last (of two) children
     Window *pChild = get_child();
-    Window *pLabel = pChild != pWindowImpl->mpFirstChild ? pWindowImpl->mpFirstChild : NULL;
+    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
     if (pLabel && pLabel->IsVisible())
     {

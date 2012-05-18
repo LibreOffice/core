@@ -263,7 +263,9 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                     for (size_t i = 0; i < aChilds.size(); ++i)
                     {
-                        sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition);
+                        sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
+                        if (nPosition == 0xFFFF)
+                            continue;
                         aChilds[i]->reorderWithinParent(nPosition);
                     }
                 }
