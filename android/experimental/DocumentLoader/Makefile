@@ -65,7 +65,6 @@ copy-stuff:
 		   evtattlo \
 		   expwrap.uno \
 		   fastsax.uno \
-		   fileacc \
 		   forlo \
 		   foruilo \
 		   frmlo \

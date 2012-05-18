@@ -40,8 +40,6 @@ gb_MERGEDLIBS := \
 	fwe \
 	fwi \
 	fwk \
-	fwl \
-	fwm \
 	lng \
 	package2 \
 	sb \
@@ -59,6 +57,14 @@ gb_MERGEDLIBS := \
 	xo \
 
 gb_MERGEDLIBS += $(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes)
+
+ifeq ($(OS),ANDROID)
+gb_MERGEDLIBS += \
+	fileacc \
+	fwl \
+	fwm \
+
+endif
 
 endif
 

@@ -99,7 +99,6 @@ copy-stuff: buildrcs
 		  cppcanvaslo \
 		  embobj \
 		  expwrap.uno \
-		  fileacc \
 		  forlo \
 		  foruilo \
 		  fsstorage.uno \
