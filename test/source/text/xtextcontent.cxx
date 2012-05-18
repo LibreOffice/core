@@ -39,7 +39,7 @@ namespace apitest {
 void XTextContent::testGetAnchor()
 {
     uno::Reference< text::XTextContent > xTextContent(init(), UNO_QUERY_THROW);
-    uno::Reference< uno::XInterface > xAnchor = xTextContent->getAnchor();
+    uno::Reference< uno::XInterface > xAnchor(xTextContent->getAnchor());
     CPPUNIT_ASSERT(xAnchor.is());
 }
 
@@ -58,13 +58,13 @@ void XTextContent::testAttach()
         else
             xTextContent->attach(xRange);
     }
-    catch (const lang::IllegalArgumentException& e)
+    catch (const lang::IllegalArgumentException&)
     {
         bool bAttachSupported = isAttachSupported();
         if (bAttachSupported)
             CPPUNIT_ASSERT(false);
     }
-    catch (const RuntimeException& e)
+    catch (const RuntimeException&)
     {
         bool bAttachSupported = isAttachSupported();
         if (bAttachSupported)
