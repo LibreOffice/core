@@ -414,6 +414,7 @@ Window* getLegacyNonLayoutParent(Window *pParent);
 //in a flat hierarchy where dialogs only have one layer
 //of children
 Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild);
 
 #endif
 

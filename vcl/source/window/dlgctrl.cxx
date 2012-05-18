@@ -804,7 +804,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
             WinBits nStyle = pSWindow->GetStyle();
             if ( !(nStyle & WB_GROUP) )
             {
-                pWindow = pWindow->GetWindow( WINDOW_PREV );
+                pWindow = prevLogicalChildOfParent(this, pWindow);
                 while ( pWindow )
                 {
                     pWindow = pWindow->ImplGetWindow();
@@ -821,20 +821,18 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                     if ( nStyle & WB_GROUP )
                         break;
 
-                    pWindow = pWindow->GetWindow( WINDOW_PREV );
+                    pWindow = prevLogicalChildOfParent(this, pWindow);
                 }
             }
         }
         else if ( (nKeyCode == KEY_RIGHT) || (nKeyCode == KEY_DOWN) )
         {
-            Window* pWindow;
-            WinBits nStyle;
-            pWindow = nextLogicalChildOfParent(this, pSWindow);
+            Window* pWindow = nextLogicalChildOfParent(this, pSWindow);
             while ( pWindow )
             {
                 pWindow = pWindow->ImplGetWindow();
 
-                nStyle = pWindow->GetStyle();
+                WinBits nStyle = pWindow->GetStyle();
 
                 if ( nStyle & WB_GROUP )
                     break;

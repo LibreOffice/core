@@ -139,6 +139,35 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
         pChild = pParent->GetWindow(WINDOW_NEXT);
     }
 
+    if (dynamic_cast<VclContainer*>(pChild))
+        pChild = nextLogicalChildOfParent(pTopLevel, pChild);
+
+    return pChild;
+}
+
+Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
+{
+    Window *pLastChild = pChild;
+
+    if (dynamic_cast<VclContainer*>(pChild))
+        pChild = pChild->GetWindow(WINDOW_LASTCHILD);
+    else
+        pChild = pChild->GetWindow(WINDOW_PREV);
+
+    while (!pChild)
+    {
+        Window *pParent = pLastChild->GetParent();
+        if (!pParent)
+            return NULL;
+        if (pParent == pTopLevel)
+            return NULL;
+        pLastChild = pParent;
+        pChild = pParent->GetWindow(WINDOW_PREV);
+    }
+
+    if (dynamic_cast<VclContainer*>(pChild))
+        pChild = prevLogicalChildOfParent(pTopLevel, pChild);
+
     return pChild;
 }
 
