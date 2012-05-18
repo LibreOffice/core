@@ -740,7 +740,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         else
         {
             // default negative color is red
-            pInfo->maColor = COL_RED;
+            pInfo->maColor = COL_LIGHTRED;
         }
 
     }
