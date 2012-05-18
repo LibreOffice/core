@@ -100,6 +100,9 @@ namespace svt
         // class, but not at the OutputDevice. This makes the API somewhat weird, as we're now mixing operations on the
         // target device, done in a normalized geometry, with operations on the window, done in a transformed geometry.
         // So, we should get rid of postRenderItem completely.
+
+    public:
+        virtual ~ITabBarRenderer() {}
     };
     typedef ::boost::shared_ptr< ITabBarRenderer >  PTabBarRenderer;
 
@@ -262,6 +265,8 @@ namespace svt
             :m_rTargetDevice( i_rTargetDevice )
         {
         }
+
+        virtual ~NWFTabItemRenderer() {}
 
         // ITabBarRenderer
         virtual void        renderBackground() const;
