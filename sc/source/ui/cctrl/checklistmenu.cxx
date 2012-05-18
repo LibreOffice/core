@@ -289,10 +289,6 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
         for (itr = itrBeg; itr != itrEnd; ++itr)
         {
-            if (itr->mbSeparator)
-                // TODO: Handle this correctly.
-                continue;
-
             size_t nPos = ::std::distance(itrBeg, itr);
             p->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
         }
