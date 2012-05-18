@@ -50,6 +50,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/gradient.hxx>
 #include <svx/unoapi.hxx>
 
 #include "output.hxx"
@@ -830,9 +831,25 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
     else
         return;
 
-    //TODO: improve this for gradient fill
-    pDev->SetFillColor(pOldDataBarInfo->maColor);
-    pDev->DrawRect(aPaintRect);
+    if(pOldDataBarInfo->mbGradient)
+    {
+        pDev->SetLineColor(pOldDataBarInfo->maColor);
+        Gradient aGradient(GRADIENT_LINEAR, pOldDataBarInfo->maColor, COL_TRANSPARENT);
+
+        if(pOldDataBarInfo->mnLength < 0)
+            aGradient.SetAngle(2700);
+        else
+            aGradient.SetAngle(900);
+
+        pDev->DrawGradient(aPaintRect, aGradient);
+
+        pDev->SetLineColor();
+    }
+    else
+    {
+        pDev->SetFillColor(pOldDataBarInfo->maColor);
+        pDev->DrawRect(aPaintRect);
+    }
 
     //draw axis
     if(pOldDataBarInfo->mnZero)

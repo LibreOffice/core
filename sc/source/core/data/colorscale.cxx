@@ -657,6 +657,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     else
         pInfo->maColor = mpFormatData->maPositiveColor;
 
+    pInfo->mbGradient = mpFormatData->mbGradient;
+
     return pInfo;
 }
 
