@@ -3520,11 +3520,6 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
         if( rValue >>= mbAnimationAllowed )
             return;
     }
-    else if ( rProperty == "AllowAnimations" )
-    {
-        if( rValue >>= mbAnimationAllowed )
-            return;
-    }
     else if ( rProperty == "FirstPage" )
     {
         OUString aPresPage;
