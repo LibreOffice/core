@@ -31,6 +31,7 @@ UNO_EXE := $(OUTDIR)/bin/uno
 .PHONY : $(call gb_CustomTarget_get_target,testtools/uno_test)
 
 $(call gb_CustomTarget_get_target,testtools/uno_test) : $(call gb_Rdb_get_target,uno_services) \
+	$(UNO_EXE) \
 	$(call gb_InternalUnoApi_get_target,bridgetest)
 	$(call gb_Helper_abbreviate_dirs_native, $(UNO_EXE) \
 		-ro $(OUTDIR)/xml/uno_services.rdb \
