@@ -44,6 +44,8 @@ $(eval $(call gb_Jar_set_packageroot,testComponent,com))
 
 $(eval $(call gb_Jar_set_manifest,testComponent,$(SRCDIR)/testtools/com/sun/star/comp/bridge/manifest))
 
+$(eval $(call gb_Jar_set_componentfile,testComponent,testtools/source/bridgetest/testComponent,URE))
+
 $(eval $(call gb_Jar_add_packagedirs,testComponent,\
     $(WORKDIR)/CustomTarget/testtools/bridgetest_javamaker/class/test \
 ))

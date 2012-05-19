@@ -40,7 +40,6 @@ ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,testtools,\
 	Jar_testComponent \
 	CustomTarget_bridgetest_javamaker \
-	CustomTarget_bridgetest_testComponent \
 ))
 endif
 
