@@ -56,7 +56,7 @@ private:
 #endif
 
 public:
-                        Config( const XubString& rFileName );
+                        Config( const rtl::OUString& rFileName );
                         ~Config();
 
     const rtl::OUString& GetPathName() const { return maFileName; }

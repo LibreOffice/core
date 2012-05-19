@@ -68,7 +68,7 @@ struct ImplGroupData
 struct ImplConfigData
 {
     ImplGroupData*  mpFirstGroup;
-    XubString       maFileName;
+    rtl::OUString   maFileName;
     sal_uIntPtr         mnDataUpdateId;
     sal_uIntPtr         mnTimeStamp;
     LineEnd         meLineEnd;
@@ -93,7 +93,7 @@ static String toUncPath( const String& rPath )
     return aFileURL;
 }
 
-static sal_uIntPtr ImplSysGetConfigTimeStamp( const XubString& rFileName )
+static sal_uIntPtr ImplSysGetConfigTimeStamp( const rtl::OUString& rFileName )
 {
     sal_uIntPtr nTimeStamp = 0;
     ::osl::DirectoryItem aItem;
@@ -110,7 +110,7 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const XubString& rFileName )
 
 // -----------------------------------------------------------------------
 
-static sal_uInt8* ImplSysReadConfig( const XubString& rFileName,
+static sal_uInt8* ImplSysReadConfig( const rtl::OUString& rFileName,
                                 sal_uInt64& rRead, sal_Bool& rbRead, sal_Bool& rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
     sal_uInt8*          pBuf = NULL;
@@ -156,7 +156,7 @@ static sal_uInt8* ImplSysReadConfig( const XubString& rFileName,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplSysWriteConfig( const XubString& rFileName,
+static sal_Bool ImplSysWriteConfig( const rtl::OUString& rFileName,
                                 const sal_uInt8* pBuf, sal_uIntPtr nBufLen, sal_Bool rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
     sal_Bool bSuccess = sal_False;
@@ -626,7 +626,7 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
 
 // =======================================================================
 
-static ImplConfigData* ImplGetConfigData( const XubString& rFileName )
+static ImplConfigData* ImplGetConfigData( const rtl::OUString& rFileName )
 {
     ImplConfigData* pData;
 
@@ -710,7 +710,7 @@ ImplGroupData* Config::ImplGetGroup() const
 
 // =======================================================================
 
-Config::Config( const XubString& rFileName )
+Config::Config( const rtl::OUString& rFileName )
 {
     // Daten initialisieren und einlesen
     maFileName      = toUncPath( rFileName );

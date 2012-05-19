@@ -1946,7 +1946,7 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
 }
 
 // -----------------------------------------------------------------------
-UniString SimpleResMgr::ReadString( sal_uInt32 nId )
+rtl::OUString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
     osl::MutexGuard aGuard(m_aAccessSafety);
 
