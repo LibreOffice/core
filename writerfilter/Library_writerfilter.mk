@@ -30,6 +30,10 @@ include $(SRCDIR)/writerfilter/source/generated.mk
 
 $(eval $(call gb_Library_Library,writerfilter))
 
+$(eval $(call gb_Library_use_custom_headers,writerfilter,\
+	writerfilter/source \
+))
+
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
     -I$(SRCDIR)/writerfilter/inc \
@@ -37,7 +41,6 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     -I$(SRCDIR)/writerfilter/source/dmapper \
     -I$(SRCDIR)/writerfilter/source/doctok \
     -I$(SRCDIR)/writerfilter/source/ooxml \
-    -I$(WORKDIR)/CustomTarget/writerfilter/source \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
 ))
