@@ -1,0 +1,18 @@
+without this patch, the jpeg_decompress_struct will be padded, this in turn
+results in a mismatch when the jpeg filter in svtools is built, where no
+padding is assumed. Only affects Mac/PPC apparenlty, see fdo#47035
+--- misc/jpeg-8c/jpeglib.h	2010-11-17 22:01:56.000000000 +0100
++++ misc/build/jpeg-8c/jpeglib.h	2012-05-19 03:38:44.000000000 +0200
+@@ -583,11 +583,11 @@
+   /* Data copied from JFIF marker; only valid if saw_JFIF_marker is TRUE: */
+   UINT8 JFIF_major_version;	/* JFIF version number */
+   UINT8 JFIF_minor_version;
++  UINT8 Adobe_transform;	/* Color transform code from Adobe marker */
+   UINT8 density_unit;		/* JFIF code for pixel size units */
+   UINT16 X_density;		/* Horizontal pixel density */
+   UINT16 Y_density;		/* Vertical pixel density */
+   boolean saw_Adobe_marker;	/* TRUE iff an Adobe APP14 marker was found */
+-  UINT8 Adobe_transform;	/* Color transform code from Adobe marker */
+ 
+   boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
+ 

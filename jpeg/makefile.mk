@@ -36,8 +36,8 @@ TARGET=jpeg
 
 .IF "$(SYSTEM_JPEG)" == "YES"
 all:
-    @echo "An already available installation of libjpeg should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of libjpeg should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -47,6 +47,9 @@ TARFILE_NAME=jpeg-8c
 TARFILE_MD5=a2c10c04f396a9ce72894beb18b4e1f9
 
 PATCH_FILES=jpeg-8c.patch
+.IF "$(OS)$(CPU)"=="MACOSXP"
+PATCH_FILES+=struct_alignment.patch
+.ENDIF
 
 ADDITIONAL_FILES=makefile.mk jconfig.h	
 
@@ -55,7 +58,7 @@ ADDITIONAL_FILES=makefile.mk jconfig.h
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-OUT2INC=	jconfig.h	\
+OUT2INC=    jconfig.h	\
             jerror.h	\
             jmorecfg.h	\
             jpegint.h	\
