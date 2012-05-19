@@ -27,14 +27,13 @@
 $(eval $(call gb_Module_Module,testtools))
 
 $(eval $(call gb_Module_add_targets,testtools,\
+	CustomTarget_bridgetest \
 	InternalUnoApi_bridgetest \
 	StaticLibrary_bridgetest \
 	Library_cppobj \
 	Library_bridgetest \
 	Library_constructors \
 	Rdb_uno_services \
-	CustomTarget_uno_test \
-	CustomTarget_bridgetest \
 ))
 
 ifneq ($(SOLAR_JAVA),)
@@ -51,5 +50,9 @@ $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest_climaker \
 ))
 endif
+
+$(eval $(call gb_Module_add_check_targets,testtools,\
+	CustomTarget_uno_test \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
