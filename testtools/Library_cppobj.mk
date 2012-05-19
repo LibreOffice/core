@@ -24,34 +24,34 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,cppobj))
+$(eval $(call gb_Library_Library,testtools_cppobj))
 
-$(eval $(call gb_Library_set_componentfile,cppobj,testtools/source/bridgetest/cppobj))
+$(eval $(call gb_Library_set_componentfile,testtools_cppobj,testtools/source/bridgetest/cppobj))
 
-$(eval $(call gb_Executable_set_include,cppobj,\
+$(eval $(call gb_Executable_set_include,testtools_cppobj,\
     -I$(SRCDIR)/testtools/source/bridgetest \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_internal_api,cppobj,\
+$(eval $(call gb_Library_use_internal_api,testtools_cppobj,\
     bridgetest \
 ))
 
-$(eval $(call gb_Library_use_api,cppobj,\
+$(eval $(call gb_Library_use_api,testtools_cppobj,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,cppobj,\
-    testtools_bridgetest \
+$(eval $(call gb_Library_use_static_libraries,testtools_cppobj,\
+    testtools_bridgetest_s \
 ))
 
-$(eval $(call gb_Library_use_libraries,cppobj,\
+$(eval $(call gb_Library_use_libraries,testtools_cppobj,\
     cppu \
     cppuhelper \
     sal \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,cppobj,\
+$(eval $(call gb_Library_add_exception_objects,testtools_cppobj,\
     testtools/source/bridgetest/cppobj \
 ))
 

@@ -24,34 +24,34 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,bridgetest))
+$(eval $(call gb_Library_Library,testtools_bridgetest))
 
-$(eval $(call gb_Library_set_componentfile,bridgetest,testtools/source/bridgetest/bridgetest))
+$(eval $(call gb_Library_set_componentfile,testtools_bridgetest,testtools/source/bridgetest/bridgetest))
 
-$(eval $(call gb_Executable_set_include,bridgetest,\
+$(eval $(call gb_Executable_set_include,testtools_bridgetest,\
     -I$(SRCDIR)/testtools/source/bridgetest \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_internal_api,bridgetest,\
+$(eval $(call gb_Library_use_internal_api,testtools_bridgetest,\
     bridgetest \
 ))
 
-$(eval $(call gb_Library_use_api,bridgetest,\
+$(eval $(call gb_Library_use_api,testtools_bridgetest,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,bridgetest,\
-    testtools_bridgetest \
+$(eval $(call gb_Library_use_static_libraries,testtools_bridgetest,\
+    testtools_bridgetest_s \
 ))
 
-$(eval $(call gb_Library_use_libraries,bridgetest,\
+$(eval $(call gb_Library_use_libraries,testtools_bridgetest,\
     cppu \
     cppuhelper \
     sal \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,bridgetest,\
+$(eval $(call gb_Library_add_exception_objects,testtools_bridgetest,\
     testtools/source/bridgetest/bridgetest \
 ))
 

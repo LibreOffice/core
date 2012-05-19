@@ -24,30 +24,30 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,constructors))
+$(eval $(call gb_Library_Library,testtools_constructors))
 
-$(eval $(call gb_Library_set_componentfile,constructors,testtools/source/bridgetest/constructors))
+$(eval $(call gb_Library_set_componentfile,testtools_constructors,testtools/source/bridgetest/constructors))
 
-$(eval $(call gb_Executable_set_include,constructors,\
+$(eval $(call gb_Executable_set_include,testtools_constructors,\
     -I$(SRCDIR)/testtools/source/bridgetest \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_internal_api,constructors,\
+$(eval $(call gb_Library_use_internal_api,testtools_constructors,\
     bridgetest \
 ))
 
-$(eval $(call gb_Library_use_api,constructors,\
+$(eval $(call gb_Library_use_api,testtools_constructors,\
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_libraries,constructors,\
+$(eval $(call gb_Library_use_libraries,testtools_constructors,\
     cppu \
     cppuhelper \
     sal \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,constructors,\
+$(eval $(call gb_Library_add_exception_objects,testtools_constructors,\
     testtools/source/bridgetest/constructors \
 ))
 

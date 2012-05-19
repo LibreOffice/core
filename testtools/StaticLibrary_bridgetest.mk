@@ -25,22 +25,17 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,testtools_bridgetest))
+$(eval $(call gb_StaticLibrary_StaticLibrary,testtools_bridgetest_s))
 
-$(eval $(call gb_StaticLibrary_set_include,cppobj,\
-    -I$(SRCDIR)/testtools/source/bridgetest \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_StaticLibrary_use_internal_api,testtools_bridgetest,\
+$(eval $(call gb_StaticLibrary_use_internal_api,testtools_bridgetest_s,\
     bridgetest \
 ))
 
-$(eval $(call gb_StaticLibrary_use_api,testtools_bridgetest,\
+$(eval $(call gb_StaticLibrary_use_api,testtools_bridgetest_s,\
     udkapi \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,testtools_bridgetest,\
+$(eval $(call gb_StaticLibrary_add_exception_objects,testtools_bridgetest_s,\
     testtools/source/bridgetest/currentcontextchecker \
     testtools/source/bridgetest/multi \
 ))

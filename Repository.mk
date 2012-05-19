@@ -590,9 +590,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
-    cppobj \
-    bridgetest \
-    constructors \
     acceptor \
     binaryurp \
     bootstrap \
@@ -607,6 +604,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     reflection \
     stocservices \
     streams \
+    testtools_cppobj \
+    testtools_bridgetest \
+    testtools_constructors \
     textinstream \
     textoutstream \
     uuresolver \
@@ -647,7 +647,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     shlxthandler_common \
     shlxthandler_common_x64 \
     salcpprt \
-    testtools_bridgetest \
+    testtools_bridgetest_s \
     transex \
     ulingu \
     vclmain \
