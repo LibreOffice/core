@@ -3248,6 +3248,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
         XSetInputFocus( pThis->getDisplay()->GetDisplay(),
                         widget_get_xid(pWidget),
                         RevertToParent, CurrentTime );
+        XSync( pThis->getDisplay()->GetDisplay(), False );
         GetGenericData()->ErrorTrapPop();
     }
 #else
