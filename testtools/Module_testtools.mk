@@ -50,8 +50,10 @@ $(eval $(call gb_Module_add_targets,testtools,\
 ))
 endif
 
+ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_Module_add_check_targets,testtools,\
 	CustomTarget_uno_test \
 ))
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
