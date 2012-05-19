@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_internal_api,bridgetest,\
 ))
 
 $(eval $(call gb_Library_use_api,bridgetest,\
-    offapi \
     udkapi \
 ))
 

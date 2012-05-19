@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_internal_api,cppobj,\
 ))
 
 $(eval $(call gb_Library_use_api,cppobj,\
-    offapi \
     udkapi \
 ))
 

@@ -37,7 +37,6 @@ $(eval $(call gb_StaticLibrary_use_internal_api,testtools_bridgetest,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_api,testtools_bridgetest,\
-    offapi \
     udkapi \
 ))
 

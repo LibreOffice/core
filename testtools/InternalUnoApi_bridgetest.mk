@@ -27,11 +27,6 @@
 $(eval $(call gb_InternalUnoApi_InternalUnoApi,bridgetest))
 
 $(eval $(call gb_InternalUnoApi_use_api,bridgetest,\
-    offapi \
-    udkapi \
-))
-
-$(eval $(call gb_InternalUnoApi_define_api_dependencies,bridgetest,offapi,\
     udkapi \
 ))
 

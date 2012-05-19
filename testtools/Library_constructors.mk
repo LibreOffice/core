@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_internal_api,constructors,\
 ))
 
 $(eval $(call gb_Library_use_api,constructors,\
-    offapi \
     udkapi \
 ))
 
