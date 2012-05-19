@@ -221,7 +221,7 @@ sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
         if(*aIt == &rDoc)
         {
             aSourceDocs.erase(aIt);
-            return !aSourceDocs.size();
+            return aSourceDocs.empty();
         }
     }
     return sal_False;

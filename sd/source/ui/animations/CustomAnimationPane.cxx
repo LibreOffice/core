@@ -892,7 +892,7 @@ void CustomAnimationPane::updateControls()
         {
             do
             {
-                aIter++;
+                ++aIter;
             }
             while( (aIter != mpMainSequence->getEnd()) && !(mpCustomAnimationList->isExpanded((*aIter)) ) );
 

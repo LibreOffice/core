@@ -185,7 +185,7 @@ rtl::OUString ScDPSaveGroupDimension::CreateGroupName(const rtl::OUString& rPref
 
         // look for existing groups
         for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin());
-                                    aIter != aGroups.end() && !bExists; aIter++ )
+                                    aIter != aGroups.end() && !bExists; ++aIter )
             if (aIter->GetGroupName().equals(aGroupName))         //! ignore case
                 bExists = true;
 

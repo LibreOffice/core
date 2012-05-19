@@ -806,7 +806,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
         if (mbKeepMainViewShellOnTop && ! aDescriptor.IsMainViewShell())
         {
             if (maActiveViewShells.back().IsMainViewShell())
-                aInsertPosition++;
+                ++aInsertPosition;
         }
 
         maActiveViewShells.insert(aInsertPosition, aDescriptor);

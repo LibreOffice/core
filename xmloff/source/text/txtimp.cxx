@@ -2603,7 +2603,7 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
         Impl::BookmarkVector_t::iterator it(m_pImpl->m_BookmarkVector.begin());
         while (it != m_pImpl->m_BookmarkVector.end() && it->compareTo(sName)!=0)
         {
-            it++;
+            ++it;
         }
         if (it!=m_pImpl->m_BookmarkVector.end()) {
             m_pImpl->m_BookmarkVector.erase(it);

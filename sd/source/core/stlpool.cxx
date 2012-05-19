@@ -1205,7 +1205,7 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchEl
     if( msTableFamilyName == aName )
         return Any( mxTableFamily );
 
-    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); iter++ )
+    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
     {
         if( (*iter).second->getName() == aName )
             return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
@@ -1227,7 +1227,7 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeE
     *pNames++ = mxCellFamily->getName();
     *pNames++ = msTableFamilyName;
 
-    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); iter++ )
+    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
     {
         *pNames++ = (*iter).second->getName();
     }
@@ -1250,7 +1250,7 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(Run
     if( msTableFamilyName == aName )
         return sal_True;
 
-    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); iter++ )
+    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
     {
         if( (*iter).second->getName() == aName )
             return sal_True;
@@ -1310,7 +1310,7 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBou
                 throw IndexOutOfBoundsException();
             SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() );
             while( Index-- )
-                iter++;
+                ++iter;
 
             return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
         }

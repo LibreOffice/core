@@ -52,7 +52,7 @@ namespace sdr
         {
             OverlayObjectVector::iterator aStart(maVector.begin());
 
-            for(; aStart != maVector.end(); aStart++)
+            for(; aStart != maVector.end(); ++aStart)
             {
                 ::sdr::overlay::OverlayObject* pCandidate = *aStart;
 
@@ -92,7 +92,7 @@ namespace sdr
                         fLogicTolerance,
                         false);
 
-                    for(; aStart != maVector.end(); aStart++)
+                    for(; aStart != maVector.end(); ++aStart)
                     {
                         sdr::overlay::OverlayObject* pCandidate = *aStart;
                         OSL_ENSURE(pCandidate, "Corrupt OverlayObjectList (!)");
@@ -154,7 +154,7 @@ namespace sdr
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
 
-                for(; aStart != maVector.end(); aStart++)
+                for(; aStart != maVector.end(); ++aStart)
                 {
                     ::sdr::overlay::OverlayObject* pCandidate = *aStart;
                     aRetval.expand(pCandidate->getBaseRange());

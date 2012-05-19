@@ -99,7 +99,7 @@ bool SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( c
         if( xListener.is() )
         {
             xListener->modified( _rEvent );
-            aIter++;
+            ++aIter;
         }
         else
         {

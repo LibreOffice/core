@@ -115,7 +115,7 @@ SdrObject* ShapeList::getNextShape(SdrObject* pObj) const
         ListImpl::const_iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), pObj ) );
         if( aIter != maShapeList.end() )
         {
-            aIter++;
+            ++aIter;
             if( aIter != maShapeList.end() )
             {
                 return (*aIter);

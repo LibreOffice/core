@@ -386,7 +386,7 @@ void CustomAnimationPresets::importEffects()
                         maEffectDiscriptorMap[aPresetId] = pDescriptor;
                     }
 
-                    aIter++;
+                    ++aIter;
                 }
             }
         }

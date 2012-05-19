@@ -2284,7 +2284,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::sta
     CustomAnimationEffectPtr pEffect;
 
     EffectSequence::const_iterator aIter( maEffects.begin() );
-    for( ; aIter != maEffects.end(); aIter++ )
+    for( ; aIter != maEffects.end(); ++aIter )
     {
         if( (*aIter)->getNode() == xNode )
         {
@@ -2303,7 +2303,7 @@ sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffect
     sal_Int32 nOffset = 0;
 
     EffectSequence::const_iterator aIter( maEffects.begin() );
-    for( ; aIter != maEffects.end(); aIter++, nOffset++ )
+    for( ; aIter != maEffects.end(); ++aIter, nOffset++ )
     {
         if( (*aIter) == xEffect )
             return nOffset;
@@ -2318,7 +2318,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nO
 {
     EffectSequence::const_iterator aIter( maEffects.begin() );
     while( nOffset-- && aIter != maEffects.end() )
-        aIter++;
+        ++aIter;
 
     CustomAnimationEffectPtr pEffect;
     if( aIter != maEffects.end() )
@@ -2344,7 +2344,7 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
         }
         else
         {
-            aIter++;
+            ++aIter;
         }
     }
 
@@ -2360,7 +2360,7 @@ bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com:
     {
         if( (*aIter)->getTargetShape() == xShape )
             return true;
-        aIter++;
+        ++aIter;
     }
 
     return false;
@@ -2381,7 +2381,7 @@ void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTar
     {
         if( (*aIter)->getTargetShape() == aParaTarget.Shape )
             bChanges |= (*aIter)->checkForText();
-        aIter++;
+        ++aIter;
     }
 
     if( bChanges )
@@ -2435,7 +2435,7 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
         if( bErased )
             bErased = false;
         else
-            aIter++;
+            ++aIter;
     }
 
     if( bChanges )
@@ -2587,7 +2587,7 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimati
         }
         else
         {
-            aIter++;
+            ++aIter;
         }
     }
 
@@ -3623,7 +3623,7 @@ void MainSequence::implRebuild()
         else
         {
             pIS->implRebuild();
-            aIter++;
+            ++aIter;
         }
     }
 

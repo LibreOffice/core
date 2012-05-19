@@ -298,7 +298,7 @@ void ScDPGroupItem::AddElement( const ScDPItemData& rName )
 
 bool ScDPGroupItem::HasElement( const ScDPItemData& rData ) const
 {
-    for ( ScDPItemDataVec::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
+    for ( ScDPItemDataVec::const_iterator aIter(aElements.begin()); aIter != aElements.end(); ++aIter )
         if ( aIter->IsCaseInsEqual( rData ) )
             return true;
 
@@ -307,7 +307,7 @@ bool ScDPGroupItem::HasElement( const ScDPItemData& rData ) const
 
 bool ScDPGroupItem::HasCommonElement( const ScDPGroupItem& rOther ) const
 {
-    for ( ScDPItemDataVec::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
+    for ( ScDPItemDataVec::const_iterator aIter(aElements.begin()); aIter != aElements.end(); ++aIter )
         if ( rOther.HasElement( *aIter ) )
             return true;
 
@@ -388,7 +388,7 @@ const ScDPGroupItem* ScDPGroupDimension::GetGroupForData( const ScDPItemData& rD
 
 const ScDPGroupItem* ScDPGroupDimension::GetGroupForName( const ScDPItemData& rName ) const
 {
-    for ( ScDPGroupItemVec::const_iterator aIter(aItems.begin()); aIter != aItems.end(); aIter++ )
+    for ( ScDPGroupItemVec::const_iterator aIter(aItems.begin()); aIter != aItems.end(); ++aIter )
         if ( aIter->GetName().IsCaseInsEqual( rName ) )
             return &*aIter;
 
@@ -609,7 +609,7 @@ sal_uLong ScDPGroupTableData::GetNumberFormat(long nDim)
 
 void ScDPGroupTableData::DisposeData()
 {
-    for ( ScDPGroupDimensionVec::iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
+    for ( ScDPGroupDimensionVec::iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
         aIter->DisposeData();
 
     for ( long i=0; i<nSourceCount; i++ )
@@ -862,7 +862,7 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
 
 sal_Bool ScDPGroupTableData::IsBaseForGroup(long nDim) const
 {
-    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
+    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetSourceDim() == nDim )
@@ -874,7 +874,7 @@ sal_Bool ScDPGroupTableData::IsBaseForGroup(long nDim) const
 
 long ScDPGroupTableData::GetGroupBase(long nGroupDim) const
 {
-    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
+    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetGroupDim() == nGroupDim )
@@ -894,7 +894,7 @@ sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
                pNumGroups[nDimension].IsDateDimension();
     }
 
-    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
+    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetGroupDim() == nDimension )
@@ -907,7 +907,7 @@ sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
 sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
-    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
+    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetGroupDim() == nGroupIndex && rDim.GetSourceDim() == nBaseIndex )
@@ -937,7 +937,7 @@ sal_Bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, l
 {
     const ScDPGroupDimension* pFirstDim = NULL;
     const ScDPGroupDimension* pSecondDim = NULL;
-    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
+    for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter )
     {
         const ScDPGroupDimension* pDim = &(*aIter);
         if ( pDim->GetGroupDim() == nFirstIndex )

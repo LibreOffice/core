@@ -269,14 +269,14 @@ void XMLTableImport::finishStyles()
 
         Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
 
-        for( XMLTableTemplateMap::iterator aTemplateIter( maTableTemplates.begin() ); aTemplateIter != maTableTemplates.end(); aTemplateIter++ ) try
+        for( XMLTableTemplateMap::iterator aTemplateIter( maTableTemplates.begin() ); aTemplateIter != maTableTemplates.end(); ++aTemplateIter ) try
         {
             const OUString sTemplateName( (*aTemplateIter).first );
             Reference< XNameReplace > xTemplate( xFactory->createInstance(), UNO_QUERY_THROW );
 
             boost::shared_ptr< XMLTableTemplate > xT( (*aTemplateIter).second );
 
-            for( XMLTableTemplate::iterator aStyleIter( xT->begin() ); aStyleIter != xT->end(); aStyleIter++ ) try
+            for( XMLTableTemplate::iterator aStyleIter( xT->begin() ); aStyleIter != xT->end(); ++aStyleIter ) try
             {
                 const OUString sPropName( (*aStyleIter).first );
                 const OUString sStyleName( (*aStyleIter).second );

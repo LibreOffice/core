@@ -1765,7 +1765,7 @@ void SchXMLExportHelper_Impl::exportTable()
         sal_Int32 nC = 0;
         for( tStringVector::const_iterator aIt( aData.aColumnDescriptions.begin())
              ; (aIt != aData.aColumnDescriptions.end())
-             ; aIt++, nC++ )
+             ; ++aIt, nC++ )
         {
             bool bExportString = true;
             if( nC < nComplexCount )

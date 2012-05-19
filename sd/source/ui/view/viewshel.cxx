@@ -1521,7 +1521,7 @@ ViewShellObjectBarFactory::~ViewShellObjectBarFactory (void)
 {
     for (ShellCache::iterator aI(maShellCache.begin());
          aI!=maShellCache.end();
-         aI++)
+         ++aI)
     {
         delete aI->second;
     }

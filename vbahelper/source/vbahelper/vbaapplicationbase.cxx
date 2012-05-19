@@ -172,7 +172,7 @@ struct VbaApplicationBase_Impl
         // remove the remaining timers
         for ( VbaTimerHashMap::iterator aIter = m_aTimerHash.begin();
               aIter != m_aTimerHash.end();
-              aIter++ )
+              ++aIter )
         {
             delete aIter->second;
             aIter->second = NULL;
