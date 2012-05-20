@@ -69,11 +69,11 @@ void ExtCfRuleContext::importDataBar( const AttributeList& rAttribs )
 
     rtl::OUString aAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
     if( aAxisPosition == "none" )
-        pDataBar->mbSameDirection = true;
+        pDataBar->meAxisPosition = databar::NONE;
     else if( aAxisPosition == "middle" )
-        pDataBar->mbSameDirection = false;
+        pDataBar->meAxisPosition = databar::MIDDLE;
     else
-        pDataBar->mbSameDirection = false;
+        pDataBar->meAxisPosition = databar::AUTOMATIC;
 
     pDataBar->mbNeg = !rAttribs.getBool( XML_negativeBarColorSameAsPositive, false );
 }

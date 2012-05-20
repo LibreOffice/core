@@ -72,12 +72,24 @@ public:
     void SetPercent(bool bPercent);
 };
 
+namespace databar
+{
+
+enum ScAxisPostion
+{
+    NONE,
+    AUTOMATIC,
+    MIDDLE
+};
+
+}
+
 struct ScDataBarFormatData
 {
     ScDataBarFormatData():
         mbGradient(true),
         mbNeg(true),
-        mbSameDirection(false) {}
+        meAxisPosition(databar::AUTOMATIC) {}
 
     /**
      * Color for all Positive Values and if mbNeg == false also for negative ones
@@ -110,7 +122,7 @@ struct ScDataBarFormatData
      *
      * Default is false
      */
-    bool mbSameDirection;
+    databar::ScAxisPostion meAxisPosition;
 
     boost::scoped_ptr<ScColorScaleEntry> mpUpperLimit;
     boost::scoped_ptr<ScColorScaleEntry> mpLowerLimit;

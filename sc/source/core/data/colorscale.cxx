@@ -679,10 +679,11 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     double nMin = getMin(nValMin, nValMax);
     double nMax = getMax(nValMin, nValMax);
 
+
     double nValue = mpDoc->GetValue(rAddr);
 
     ScDataBarInfo* pInfo = new ScDataBarInfo();
-    if(mpFormatData->mbSameDirection || nMin > 0)
+    if(mpFormatData->meAxisPosition == databar::NONE)
     {
         if(nValue <= nMin)
         {
@@ -701,16 +702,32 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     }
     else
     {
+        double nMinPositive = 0;
+        double nMaxNegative = 0;
         //calculate the zero position first
-        if(nMin < 0)
+        if(mpFormatData->meAxisPosition == databar::AUTOMATIC)
         {
-            if(nMax < 0)
-                pInfo->mnZero = 100;
-            else
+            if(nMin < 0)
             {
-                pInfo->mnZero = -100*nMin/(nMax-nMin);
+                if(nMax < 0)
+                    pInfo->mnZero = 100;
+                else
+                {
+                    pInfo->mnZero = -100*nMin/(nMax-nMin);
+                }
             }
+            else
+                pInfo->mnZero = 0;
+
+            // if max or min is used we may need to adjust it
+            // for the length calculation
+            if (mpFormatData->mpLowerLimit->GetMin() && nMin > 0)
+                nMinPositive = nMin;
+            if (mpFormatData->mpUpperLimit->GetMax() && nMax < 0)
+                nMaxNegative = nMax;
         }
+        else if( mpFormatData->meAxisPosition == databar::MIDDLE)
+            pInfo->mnZero = 50;
 
         //calculate the length
         if(nValue < 0)
@@ -718,14 +735,14 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
             if (nValue < nMin)
                 pInfo->mnLength = -100;
             else
-                pInfo->mnLength = -100 * nValue/nMin;
+                pInfo->mnLength = -100 * (nValue-nMaxNegative)/(nMin-nMaxNegative);
         }
         else
         {
             if ( nValue > nMax )
                 pInfo->mnLength = 100;
             else
-                pInfo->mnLength = nValue/nMax*100;
+                pInfo->mnLength = (nValue-nMinPositive)/(nMax-nMinPositive)*100;
         }
     }
 
