@@ -41,7 +41,7 @@ $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DSYSTEM_PYTHON \
 ))
 else
-include $(OUTDIR)/inc/pyversion.mk
+include $(OUTDIR)/inc/pyversion.Makefile
 
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DPYVERSION=$(PYVERSION) \

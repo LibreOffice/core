@@ -172,6 +172,7 @@ BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "$(CONF)|$(ARCH)"
 .ENDIF
 
 PYVERSIONFILE=$(MISC)$/pyversion.mk
+PYVERSIONGFILE=$(MISC)$/pyversion.Makefile
 
 # --- Targets ------------------------------------------------------
 
@@ -207,7 +208,7 @@ $(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
 .ENDIF
 .ENDIF
 
-ALLTAR : $(PYVERSIONFILE)
+ALLTAR : $(PYVERSIONFILE) $(PYVERSIONGFILE)
 .ENDIF          # "$(L10N_framework)"==""
 
 # rule to allow relocating the whole framework, removing reference to buildinstallation directory
@@ -251,5 +252,9 @@ $(MISC)/OOoPython.framework.zip: $(PACKAGE_DIR)/fixinstallnames $(PACKAGE_DIR)/f
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 	@-rm -f $@
 	$(COMMAND_ECHO)$(COPY) pyversion.mk $@
+
+$(PYVERSIONGFILE) : pyversion.Makefile $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+	@-rm -f $@
+	$(COMMAND_ECHO)$(COPY) pyversion.Makefile $@
 
 .ENDIF # DISABLE_PYTHON != TRUE

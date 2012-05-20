@@ -8,6 +8,7 @@ mkdir: %_DEST%\lib\OOoPython.framework\Versions\2.6\include\python2.6
 # MACOSX - end
 
 ..\%__SRC%\misc\pyversion.mk %_DEST%\inc\pyversion.mk
+..\%__SRC%\misc\pyversion.Makefile %_DEST%\inc\pyversion.Makefile
 
 mkdir: %_DEST%\lib\python
 mkdir: %_DEST%\lib\python\lib-old
