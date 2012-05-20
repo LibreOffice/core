@@ -92,6 +92,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     wizards \
     writerfilter \
     writerperfect \
+	$(if $(filter X11_EXTENSIONS,$(BUILD_TYPE)), \
+		x11_extensions \
+	) \
     xmerge \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
 	    xmlhelp) \
