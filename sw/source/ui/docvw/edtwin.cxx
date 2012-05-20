@@ -5717,7 +5717,7 @@ void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
     bUseInputLanguage = bNew;
 }
 
-XubString SwEditWin::GetSurroundingText() const
+rtl::OUString SwEditWin::GetSurroundingText() const
 {
     String sReturn;
     SwWrtShell& rSh = rView.GetWrtShell();

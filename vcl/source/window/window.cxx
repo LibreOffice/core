@@ -9579,9 +9579,9 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
         SetParent( pRealParent );
 }
 
-XubString Window::GetSurroundingText() const
+rtl::OUString Window::GetSurroundingText() const
 {
-  return XubString::EmptyString();
+  return rtl::OUString();
 }
 
 Selection Window::GetSurroundingTextSelection() const

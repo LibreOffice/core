@@ -1179,21 +1179,16 @@ void Window::DropScroll(const Point& rMousePos)
     }
 }
 
-XubString Window::GetSurroundingText() const
+rtl::OUString Window::GetSurroundingText() const
 {
     if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
-    {
-        return XubString();
-    }
+        return rtl::OUString();
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
         OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
         return pOLV->GetEditView().GetSurroundingText();
     }
-    else
-    {
-        return XubString();
-    }
+    return rtl::OUString();
 }
 
 Selection Window::GetSurroundingTextSelection() const

@@ -1089,7 +1089,7 @@ public:
 
     void SimulateKeyPress( sal_uInt16 nKeyCode ) const;
 
-    virtual XubString GetSurroundingText() const;
+    virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
     // ExtImpl

@@ -242,7 +242,7 @@ void AnnotationTextWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-XubString AnnotationTextWindow::GetSurroundingText() const
+rtl::OUString AnnotationTextWindow::GetSurroundingText() const
 {
     if( mpOutlinerView )
     {
@@ -252,12 +252,10 @@ XubString AnnotationTextWindow::GetSurroundingText() const
         else
         {
             ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            XubString aStr = aEditEngine->GetText(aSelection.nStartPara);
-            return aStr;
+            return aEditEngine->GetText(aSelection.nStartPara);
         }
     }
-    else
-        return XubString::EmptyString();
+    return rtl::OUString();
 }
 
 Selection AnnotationTextWindow::GetSurroundingTextSelection() const

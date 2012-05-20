@@ -3147,11 +3147,10 @@ void ImplSubEdit::Modify()
     GetParent()->Modify();
 }
 
-XubString Edit::GetSurroundingText() const
+rtl::OUString Edit::GetSurroundingText() const
 {
-  if ( mpSubEdit )
-    return mpSubEdit->GetSurroundingText();
-  else
+    if (mpSubEdit)
+        return mpSubEdit->GetSurroundingText();
     return maText;
 }
 

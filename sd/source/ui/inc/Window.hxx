@@ -209,7 +209,7 @@ protected:
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void);
 
-    XubString GetSurroundingText() const;
+    rtl::OUString GetSurroundingText() const;
     Selection GetSurroundingTextSelection() const;
 };
 

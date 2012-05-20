@@ -246,7 +246,7 @@ public:
     static PopupMenu*   CreatePopupMenu();
     static void         DeletePopupMenu( PopupMenu* pMenu );
 
-    virtual XubString GetSurroundingText() const;
+    virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
     // returns the minimum size a bordered Edit should have given the current
