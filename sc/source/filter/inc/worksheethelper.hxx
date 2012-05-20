@@ -68,6 +68,7 @@ class SheetViewSettings;
 class VmlDrawing;
 class WorksheetSettings;
 
+typedef ::std::map< rtl::OUString, void* >  ExtLst;
 // ============================================================================
 // ============================================================================
 
@@ -248,6 +249,8 @@ public:
     SheetViewSettings&  getSheetViewSettings() const;
     /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     VmlDrawing&         getVmlDrawing() const;
+
+    ExtLst&             getExtLst() const;
 
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );

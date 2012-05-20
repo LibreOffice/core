@@ -48,6 +48,7 @@
 #include "sheetdatabuffer.hxx"
 #include "sheetdatacontext.hxx"
 #include "tablefragment.hxx"
+#include "extlstcontext.hxx"
 #include "viewsettings.hxx"
 #include "workbooksettings.hxx"
 #include "worksheetsettings.hxx"
@@ -253,6 +254,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( dataValidations ):          return new DataValidationsContext( *this );
                 case XLS_TOKEN( autoFilter ):               return new AutoFilterContext( *this, getAutoFilters().createAutoFilter() );
                 case XLS_TOKEN( scenarios ):                return new ScenariosContext( *this );
+                case XLS_TOKEN( extLst ):                   return new ExtLstGlobalContext( *this );
 
                 case XLS_TOKEN( sheetViews ):
                 case XLS_TOKEN( cols ):

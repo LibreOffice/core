@@ -123,6 +123,8 @@ public:
 
     void SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 
+    ScDataBarFormatData* getDataBarFormatData() { return mpFormat; }
+
 private:
     const CondFormat& mrCondFormat;
     ScDataBarFormatData* mpFormat;

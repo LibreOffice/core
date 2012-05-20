@@ -714,6 +714,7 @@ axPos
 axis
 axisCol
 axisPage
+axisPosition
 axisRow
 axisValues
 azure
@@ -1296,6 +1297,7 @@ condense
 conditionalFormat
 conditionalFormats
 conditionalFormatting
+conditionalFormattings
 cone
 coneToMax
 confetti
@@ -3420,6 +3422,7 @@ nd
 ndxf
 neCell
 negativeInteger
+negativeFillColor
 neq
 never
 new

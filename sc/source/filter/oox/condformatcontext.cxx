@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "condformatcontext.hxx"
+#include "extlstcontext.hxx"
 
 namespace oox {
 namespace xls {
@@ -137,6 +138,8 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
                 return new ColorScaleContext( *this, mxRule );
             else if (nElement == XLS_TOKEN( dataBar ) )
                 return new DataBarContext( *this, mxRule );
+            else if (nElement == XLS_TOKEN( extLst ) )
+                return new ExtLstLocalContext( *this, mxRule->getDataBar()->getDataBarFormatData() );
             else
                 return 0;
     }

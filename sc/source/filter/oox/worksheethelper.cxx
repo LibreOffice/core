@@ -297,6 +297,9 @@ public:
     inline SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
     /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     inline VmlDrawing&  getVmlDrawing() { return *mxVmlDrawing; }
+    /** returns the ExtLst entries that need to be filled */
+    inline ExtLst&      getExtLst() { return maExtLst; }
+
     /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
     inline BiffSheetDrawing& getBiffDrawing() const { return *mxBiffDrawing; }
 
@@ -408,6 +411,7 @@ private:
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
     VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
+    ExtLst              maExtLst;           /// List of extended elements
     BiffSheetDrawingPtr mxBiffDrawing;      /// Collection of all BIFF/DFF shapes.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
@@ -1475,6 +1479,11 @@ SheetViewSettings& WorksheetHelper::getSheetViewSettings() const
 VmlDrawing& WorksheetHelper::getVmlDrawing() const
 {
     return mrSheetGlob.getVmlDrawing();
+}
+
+ExtLst& WorksheetHelper::getExtLst() const
+{
+    return mrSheetGlob.getExtLst();
 }
 
 void WorksheetHelper::setPageBreak( const PageBreakModel& rModel, bool bRowBreak )
