@@ -94,7 +94,7 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
             nLast--;
 
         // skip leading blanks
-        while( sal_Unicode(' ') == rStrImpValue[nFirst] && nFirst <= nLast )
+        while(nFirst <= nLast && sal_Unicode(' ') == rStrImpValue[nFirst])
             nFirst++;
 
         // remove quotes
@@ -158,11 +158,11 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
             nLast--;
 
             // skip trailing blanks
-            while( sal_Unicode(' ') == aStrFamilyName[nLast] && nLast > nFirst )
+            while(  nLast > nFirst && sal_Unicode(' ') == aStrFamilyName[nLast] )
                 nLast--;
 
             // skip leading blanks
-            while( sal_Unicode(' ') == aStrFamilyName[nFirst] && nFirst <= nLast )
+            while( nFirst <= nLast && sal_Unicode(' ') == aStrFamilyName[nFirst] )
                 nFirst++;
 
             if( nFirst <= nLast )

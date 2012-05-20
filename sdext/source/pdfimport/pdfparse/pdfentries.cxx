@@ -180,7 +180,7 @@ OUString PDFName::getFilteredName() const
     unsigned int nLen = m_aName.getLength();
     for( unsigned int i = 0; i < nLen; i++ )
     {
-        if( pStr[i] == '#' && i < nLen - 3 )
+        if( (i < nLen - 3) && pStr[i] == '#' )
         {
             sal_Char rResult = 0;
             i++;

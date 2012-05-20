@@ -1327,8 +1327,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
     {
         nLastVisible++;
         //skip gaps where no controls exist for the related ColorConfigEntry
-        while(!aScrollWindow.aCheckBoxes[nLastVisible] && !aScrollWindow.aColorBoxes[nLastVisible] &&
-                nLastVisible < nCount - 1 )
+        while((nLastVisible < (nCount - 1)) && !aScrollWindow.aCheckBoxes[nLastVisible] && !aScrollWindow.aColorBoxes[nLastVisible])
             nLastVisible++;
         if ( nLastVisible < nCount )
         {

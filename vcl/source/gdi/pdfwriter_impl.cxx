@@ -3297,7 +3297,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
             std::list< int > aSections;
             std::list< int >::const_iterator it;
             int nIndex = 0;
-            while( pFontData[nIndex] == 0x80 && nIndex < nFontLen-1 )
+            while( (nIndex < nFontLen-1) && pFontData[nIndex] == 0x80 )
             {
                 aSections.push_back( nIndex );
                 if( pFontData[nIndex+1] == 0x03 )

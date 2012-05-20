@@ -807,7 +807,7 @@ void SplineCalculater::CalculateBSplines(
         {
             // search for first non-zero downwards
             r = c;
-            while ( aMatN[r][c-aShift[r]] == 0 &&  r < n)
+            while ( r < n && aMatN[r][c-aShift[r]] == 0 )
             {
                 ++r;
             }
@@ -847,7 +847,7 @@ void SplineCalculater::CalculateBSplines(
                 // eliminate forward, examine row c+1 to n-1 (worst case)
                 // stop if first non-zero element in row has an higher column as c
                 // look at nShift for that, elements in nShift are equal or increasing
-                for ( r = c+1; aShift[r]<=c && r < n; ++r)
+                for ( r = c+1; r < n && aShift[r]<=c ; ++r)
                 {
                     fEliminate = aMatN[r][0];
                     if (fEliminate != 0.0) // else accidentally zero, nothing to do

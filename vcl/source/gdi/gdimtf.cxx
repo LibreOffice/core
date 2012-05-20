@@ -392,7 +392,6 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
     {
         MetaAction* pAction = GetCurAction();
         const size_t nObjCount = aList.size();
-        size_t  i  = 0;
         size_t  nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
 
         if( nPos > nObjCount )
@@ -409,6 +408,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         OSL_TRACE("GDIMetaFile::Play on device of size: %d x %d", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
 
         if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSizePixel() ) ) {
+            size_t  i  = 0;
             for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
                 if( !Hook() )

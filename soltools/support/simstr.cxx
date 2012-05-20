@@ -651,7 +651,7 @@ Simstr::is_no_text() const
       return true;
 
    int i;
-   for (i = 0; sz[i] <= 32 && i < len; i++) ;
+   for (i = 0; i < len && sz[i] <= 32 ; i++) ;
    if (i < len)
         return false;
     return true;

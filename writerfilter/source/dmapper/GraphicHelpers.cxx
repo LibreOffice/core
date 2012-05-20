@@ -208,7 +208,6 @@ sal_Int32 WrapHandler::getWrapMode( )
                 }
             }
             break;
-            break;
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_topAndBottom:
             nMode = com::sun::star::text::WrapTextMode_NONE;
             break;
