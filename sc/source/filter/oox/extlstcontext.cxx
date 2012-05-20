@@ -67,14 +67,15 @@ void ExtCfRuleContext::importDataBar( const AttributeList& rAttribs )
     ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
     pDataBar->mbGradient = rAttribs.getBool( XML_gradient, true );
 
-    if(rAttribs.hasAttribute(XML_axisPosition))
-    {
-        rtl::OUString aAxisPosition = rAttribs.getString( XML_axisPosition, rtl::OUString() );
-        if( aAxisPosition == "none" )
-        {
-            pDataBar->mbSameDirection = true;
-        }
-    }
+    rtl::OUString aAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
+    if( aAxisPosition == "none" )
+        pDataBar->mbSameDirection = true;
+    else if( aAxisPosition == "middle" )
+        pDataBar->mbSameDirection = false;
+    else
+        pDataBar->mbSameDirection = false;
+
+    pDataBar->mbNeg = !rAttribs.getBool( XML_negativeBarColorSameAsPositive, false );
 }
 
 namespace {

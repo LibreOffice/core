@@ -3423,6 +3423,7 @@ ndxf
 neCell
 negativeInteger
 negativeFillColor
+negativeBarColorSameAsPositive
 neq
 never
 new
