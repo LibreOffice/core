@@ -12,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2012 David Ostrovsky <d.ostrovsky@gmx.de> (initial developer)
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -24,29 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,l10ntools))
+$(eval $(call gb_Executable_Executable,idxdict))
 
-$(eval $(call gb_Module_add_targets,l10ntools,\
-    Executable_helpex \
-    Executable_idxdict \
-    Executable_ulfex \
-    Executable_gsicheck \
-    Executable_cfgex \
-    Executable_xrmex \
-    Executable_localize \
-    Executable_transex3 \
-    Executable_helpindexer \
-    Executable_helplinker \
-    StaticLibrary_transex \
-    Library_helplinker \
-    Package_inc \
-    Package_scripts \
+$(eval $(call gb_Executable_add_exception_objects,idxdict,\
+	l10ntools/source/idxdict/idxdict \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,l10ntools,\
-    Jar_FCFGMerge \
-))
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 tabstop=4 noexpandtab:

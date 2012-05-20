@@ -40,6 +40,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     genindex_data \
     gsicheck \
     helpex \
+    idxdict \
     localize \
     mkunroll \
     osl_process_child \
