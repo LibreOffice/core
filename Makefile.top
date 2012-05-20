@@ -110,6 +110,7 @@ sdext\
 sfx2\
 slideshow\
 smoketest\
+solenv\
 sot\
 starmath\
 stoc\
@@ -230,7 +231,6 @@ saxon\
 scp2\
 setup_native\
 shell\
-solenv\
 soltools\
 stax\
 stlport\

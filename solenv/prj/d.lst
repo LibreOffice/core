@@ -1,5 +1,0 @@
-mkdir: %_DEST%\bin
-mkdir: %_DEST%\inc
-mkdir: %_DEST%\lib
-..\%__SRC%\inc\versionlist.hrc %_DEST%\inc\versionlist.hrc
-..\%__SRC%\misc\*-gdb.py %_DEST%\lib\*-gdb.py

@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,16 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-PRJ=..
-PRJNAME=solenv
-TARGET=gdb
+$(eval $(call gb_Package_Package,solenv_inc,$(call gb_CustomTarget_get_workdir,solenv/versionlist)))
 
-.INCLUDE : settings.mk
-.INCLUDE : target.mk
+$(eval $(call gb_Package_add_file,solenv_inc,inc/versionlist.hrc,versionlist.hrc))
 
-ALLTAR : $(MISC)/autoloaders.flag
-
-$(MISC)/autoloaders.flag : autoload.template
-    install-gdb-printers -a $(MISC) -f && touch $@
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 tabstop=4 noexpandtab:
