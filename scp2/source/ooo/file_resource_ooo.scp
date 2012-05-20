@@ -123,7 +123,9 @@ STD_RES_FILE( gid_File_Res_XMLSecurity, xmlsec )
 
 STD_RES_FILE( gid_File_Res_UpdChk, updchk )
 
+#if defined(ENABLE_ONLINE_UPDATE)
 STD_RES_FILE( gid_File_Res_Upd, upd )
+#endif
 
 STD_RES_FILE( gid_File_Res_T602Filter, t602filter )
 
