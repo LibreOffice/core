@@ -177,6 +177,10 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 ))
 endif
 
+ifneq ($(SYSTEM_ICU),YES)
+include $(OUTDIR)/inc/icuversion.mk
+endif
+
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DICU_MAJOR=$(ICU_MAJOR) \
 	-DICU_MINOR=$(ICU_MINOR) \
