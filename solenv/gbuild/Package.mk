@@ -83,4 +83,30 @@ $(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3),$(call
 
 endef
 
+# Adds several files at once.
+#
+# Files are copied directly into the specified directory.
+#
+# Example:
+# $(eval $(call gb_Package_Package,foo_inc,$(SRCDIR)/foo/inc))
+# $(eval $(call gb_Package_add_files,foo_inc,inc/foo,foo/bar/foo.hxx))
+# # -> inc/foo/foo.hxx
+define gb_Package_add_files
+$(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
+
+endef
+
+# Adds several files at once.
+#
+# Files are copied including subdirectories.
+#
+# Example:
+# $(eval $(call gb_Package_Package,foo_inc,$(SRCDIR)/foo/inc))
+# $(eval $(call gb_Package_add_files,foo_inc,inc,foo/bar/foo.hxx))
+# # -> inc/foo/bar/foo.hxx
+define gb_Package_add_files_with_dir
+$(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(file),$(file)))
+
+endef
+
 # vim: set noet sw=4:
