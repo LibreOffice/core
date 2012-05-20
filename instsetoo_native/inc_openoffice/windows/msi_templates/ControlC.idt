@@ -3,10 +3,8 @@ s72	s50	s50	s255
 ControlCondition	Dialog_	Control_	Action	Condition
 CustomerInformation	DlgRadioGroupText	Hide	NOT Privileged
 CustomerInformation	DlgRadioGroupText	Hide	ProductState > 0
-CustomerInformation	DlgRadioGroupText	Hide	Version9X
 CustomerInformation	RadioGroup	Hide	NOT Privileged
 CustomerInformation	RadioGroup	Hide	ProductState > 0
-CustomerInformation	RadioGroup	Hide	Version9X
 CustomSetup	ChangeFolder	Hide	Installed
 CustomSetup	Details	Hide	Installed
 CustomSetup	InstallLabel	Hide	Installed
