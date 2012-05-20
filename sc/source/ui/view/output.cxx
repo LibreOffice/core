@@ -804,17 +804,21 @@ namespace {
 void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, const Rectangle& rRect)
 {
     long nPosZero = 0;
+    Rectangle aPaintRect = rRect;
+    //aPaintRect.Top() += 2;
+    //aPaintRect.Bottom() -= 2;
+    //aPaintRect.Left() += 2;
+    //aPaintRect.Right() -= 2;
     if(pOldDataBarInfo->mnZero)
     {
         //need to calculate null point in cell
-        long nLength = rRect.Right() - rRect.Left();
-        nPosZero = static_cast<long>(rRect.Left() + nLength*pOldDataBarInfo->mnZero/100.0);
+        long nLength = aPaintRect.Right() - aPaintRect.Left();
+        nPosZero = static_cast<long>(aPaintRect.Left() + nLength*pOldDataBarInfo->mnZero/100.0);
     }
     else
     {
-        nPosZero = rRect.Left();
+        nPosZero = aPaintRect.Left();
     }
-    Rectangle aPaintRect = rRect;
 
     if(pOldDataBarInfo->mnLength < 0)
     {
@@ -852,7 +856,7 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
     }
 
     //draw axis
-    if(pOldDataBarInfo->mnZero)
+    if(pOldDataBarInfo->mnZero && pOldDataBarInfo->mnZero != 100)
     {
         Point aPoint1(nPosZero, rRect.Top());
         Point aPoint2(nPosZero, rRect.Bottom());
