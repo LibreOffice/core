@@ -141,6 +141,7 @@ vcl\
 wizards\
 writerfilter\
 writerperfect\
+x11_extensions\
 xmerge\
 xml2cmp\
 xmlhelp\
@@ -238,7 +239,6 @@ testtools\
 tomcat\
 udm\
 vigra\
-x11_extensions\
 xpdf\
 xsltml\
 zlib\

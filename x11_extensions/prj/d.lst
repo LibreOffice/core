@@ -1,5 +1,0 @@
-mkdir: %_DEST%\inc\X11
-mkdir: %_DEST%\inc\X11\extensions
-
-..\inc\*.h %_DEST%\inc\X11\extensions\*.h
-
