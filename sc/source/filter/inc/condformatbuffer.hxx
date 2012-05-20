@@ -120,6 +120,7 @@ public:
     DataBarRule( const CondFormat& rFormat );
     void importCfvo( const AttributeList& rAttribs );
     void importColor( const AttributeList& rAttribs );
+    void importAttribs( const AttributeList& rAttribs );
 
     void SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 

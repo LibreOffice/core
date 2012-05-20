@@ -328,6 +328,11 @@ void DataBarRule::importCfvo( const AttributeList& rAttribs )
     }
 }
 
+void DataBarRule::importAttribs( const AttributeList& rAttribs )
+{
+    mpFormat->mbOnlyBar = !rAttribs.getBool( XML_showValue, true );
+}
+
 void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
 {
     ScColorScaleEntry* pUpperEntry = ConvertToModel( *mpUpperLimit.get(), pDoc, rAddr);

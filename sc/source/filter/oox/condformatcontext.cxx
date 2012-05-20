@@ -109,6 +109,9 @@ void DataBarContext::onStartElement( const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
+        case XLS_TOKEN( dataBar ):
+            mxRule->getDataBar()->importAttribs( rAttribs );
+        break;
         case XLS_TOKEN( cfvo ):
             mxRule->getDataBar()->importCfvo( rAttribs );
         break;

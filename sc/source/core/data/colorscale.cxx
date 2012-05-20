@@ -765,6 +765,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         pInfo->maColor = mpFormatData->maPositiveColor;
 
     pInfo->mbGradient = mpFormatData->mbGradient;
+    pInfo->mbShowValue = !mpFormatData->mbOnlyBar;
 
     return pInfo;
 }

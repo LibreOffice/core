@@ -68,6 +68,7 @@ struct ScDataBarInfo
     Color maColor;
     double mnLength; // -100 to 100
     bool mbGradient;
+    bool mbShowValue;
 
     bool operator==(const ScDataBarInfo& r) const
     {

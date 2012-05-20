@@ -1537,6 +1537,13 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 if ( bDoCell && bEditMode && nCellX == nEditCol && nCellY == nEditRow )
                     bDoCell = false;
 
+                // skip text in cell if data bar is set and only value selected
+                if ( bDoCell )
+                {
+                    if(pInfo->pDataBar && !pInfo->pDataBar->mbShowValue)
+                        bDoCell = false;
+                }
+
                 //
                 //  output the cell text
                 //

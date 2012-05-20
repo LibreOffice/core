@@ -89,7 +89,8 @@ struct ScDataBarFormatData
     ScDataBarFormatData():
         mbGradient(true),
         mbNeg(true),
-        meAxisPosition(databar::AUTOMATIC) {}
+        meAxisPosition(databar::AUTOMATIC),
+        mbOnlyBar(false){}
 
     /**
      * Color for all Positive Values and if mbNeg == false also for negative ones
@@ -123,6 +124,11 @@ struct ScDataBarFormatData
      * Default is false
      */
     databar::ScAxisPostion meAxisPosition;
+
+    /**
+     * If TRUE we only show the bar and not the value
+     */
+    bool mbOnlyBar;
 
     boost::scoped_ptr<ScColorScaleEntry> mpUpperLimit;
     boost::scoped_ptr<ScColorScaleEntry> mpLowerLimit;
