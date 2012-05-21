@@ -47,7 +47,7 @@ using ::rtl::OUString;
 sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->size();
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( !xMgr.is() )
         return sal_False;

@@ -847,8 +847,10 @@ void SwDoc::ClearDoc()
 
     xForbiddenCharsTable.clear();
 
-    pFldTypes->DeleteAndDestroy( INIT_FLDTYPES,
-                                pFldTypes->Count() - INIT_FLDTYPES );
+    for(SwFldTypes::const_iterator it = pFldTypes->begin() + INIT_FLDTYPES;
+        it != pFldTypes->end(); ++it)
+        delete *it;
+    pFldTypes->erase( pFldTypes->begin() + INIT_FLDTYPES, pFldTypes->end() );
 
     delete pNumberFormatter, pNumberFormatter = 0;
 

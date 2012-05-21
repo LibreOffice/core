@@ -144,8 +144,6 @@ using ::rtl::OUString;
 
 // Page descriptors
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
-// Field types
-SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
 /* IInterface */
 sal_Int32 SwDoc::acquire()
@@ -2380,11 +2378,11 @@ sal_Bool SwDoc::ConvertFieldsToText()
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
 
     const SwFldTypes* pMyFldTypes = GetFldTypes();
-    sal_uInt16 nCount = pMyFldTypes->Count();
+    sal_uInt16 nCount = pMyFldTypes->size();
     //go backward, field types are removed
     for(sal_uInt16 nType = nCount;  nType > 0;  --nType)
     {
-        const SwFieldType *pCurType = pMyFldTypes->GetObject(nType - 1);
+        const SwFieldType *pCurType = (*pMyFldTypes)[nType - 1];
 
         if ( RES_POSTITFLD == pCurType->Which() )
             continue;

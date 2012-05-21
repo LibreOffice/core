@@ -664,7 +664,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
         {
             // es gibt noch versteckte InputFelder in den SetExp. Feldern
             const SwFldTypes& rFldTypes = *pDoc->GetFldTypes();
-            const sal_uInt16 nSize = rFldTypes.Count();
+            const sal_uInt16 nSize = rFldTypes.size();
 
             // Alle Typen abklappern
             for( sal_uInt16 i=0; i < nSize; ++i )
@@ -676,7 +676,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
     else
     {
         const SwFldTypes& rFldTypes = *pDoc->GetFldTypes();
-        const sal_uInt16 nSize = rFldTypes.Count();
+        const sal_uInt16 nSize = rFldTypes.size();
 
         // Alle Typen abklappern
         for( sal_uInt16 i=0; i < nSize; ++i )

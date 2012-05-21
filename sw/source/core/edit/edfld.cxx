@@ -55,7 +55,7 @@
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->size();
 
     if(nResId == USHRT_MAX)
     {
@@ -91,7 +91,7 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) cons
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->size();
 
     if(nResId == USHRT_MAX && nFld < nSize)
     {
@@ -150,7 +150,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
     }
 
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->size();
     sal_uInt16 nIdx = 0;
     for( sal_uInt16 i = 0; i < nSize; ++i )
         // Gleiche ResId -> Index erhoehen
@@ -168,7 +168,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->size();
     const CharClass& rCC = GetAppCharClass();
 
     String aTmp( rCC.lowercase( rStr ));
@@ -509,7 +509,7 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->size();
     for(sal_uInt16 i = 0; i < nSize; ++i)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);

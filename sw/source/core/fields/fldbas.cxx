@@ -49,6 +49,7 @@
 #include <shellres.hxx>
 #include <calc.hxx>
 #include <comcore.hrc>
+#include <docary.hxx>
 
 #include <math.h>
 
@@ -761,6 +762,18 @@ String SwFormulaField::GetExpandedFormula() const
 String SwField::GetDescription() const
 {
     return SW_RES(STR_FIELD);
+}
+
+sal_uInt16 SwFldTypes::GetPos(const SwFieldType* pFieldType) const
+{
+    const_iterator it = std::find(begin(), end(), pFieldType);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+SwFldTypes::~SwFldTypes()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

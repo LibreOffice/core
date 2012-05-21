@@ -911,7 +911,7 @@ void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
     {
         sal_uInt16 nTypeIdx = USHRT_MAX;
         const SwFldTypes* pTypes = GetDoc()->GetFldTypes();
-        for( sal_uInt16 i = 0; i < pTypes->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pTypes->size(); i++ )
         {
             if((*pTypes)[i] == pFldType)
                 nTypeIdx = i;
@@ -2534,7 +2534,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
         throw uno::RuntimeException();
 
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
-    sal_uInt16 nCount = pFldTypes->Count();
+    sal_uInt16 nCount = pFldTypes->size();
 
     std::vector<String*> aFldNames;
     String* pString = new String();
@@ -2714,10 +2714,10 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
     sal_Int32 nFillPos = 0;
     //
     const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
-    sal_uInt16 nCount = pFldTypes->Count();
+    sal_uInt16 nCount = pFldTypes->size();
     for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
     {
-        const SwFieldType *pCurType = pFldTypes->GetObject(nType);
+        const SwFieldType *pCurType = (*pFldTypes)[nType];
         SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
         const SwFmtFld* pCurFldFmt = aIter.First();
         while (pCurFldFmt)

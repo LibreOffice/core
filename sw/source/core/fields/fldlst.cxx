@@ -51,7 +51,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
     pSrtLst = new _SetGetExpFlds();
 
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = rFldTypes.Count();
+    const sal_uInt16 nSize = rFldTypes.size();
 
     // Alle Typen abklappern
 
@@ -147,7 +147,7 @@ void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
 sal_uInt16 SwInputFieldList::BuildSortLst()
 {
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
-    sal_uInt16 nSize = rFldTypes.Count();
+    sal_uInt16 nSize = rFldTypes.size();
 
     // Alle Typen abklappern
 

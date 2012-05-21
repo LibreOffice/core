@@ -1167,7 +1167,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     sal_Bool bTable = sal_False;    // To save some code.
 
     // Get the field first, beause we retrieve the TxtColl via the field's name
-    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
+    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->size(),
             "FldType index out of bounds." );
     SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.GetFldTypes())[nId] : NULL;
     OSL_ENSURE(!pType || pType->Which() == RES_SETEXPFLD, "wrong Id for Label");
@@ -1523,7 +1523,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     ::sw::DrawUndoGuard const drawUndoGuard(rDoc.GetIDocumentUndoRedo());
 
     // Because we get by the TxtColl's name, we need to create the field first.
-    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
+    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->size(),
             "FldType index out of bounds" );
     SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.GetFldTypes())[nId] : 0;
     OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );

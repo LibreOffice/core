@@ -50,8 +50,6 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <swtypes.hxx>
 #include <svl/svarray.hxx>
 
-typedef SwFieldType* SwFldTypePtr;
-
 // PageDescriptor-interface
 // typedef SwPageDesc * SwPageDescPtr;
 // SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1);
@@ -65,7 +63,12 @@ SV_DECL_PTRARR_DEL(SwSpzFrmFmts,SwFrmFmtPtr,0)
 typedef SwCharFmt* SwCharFmtPtr;
 SV_DECL_PTRARR_DEL(SwCharFmts,SwCharFmtPtr,4)
 
-SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES )
+class SwFldTypes : public std::vector<SwFieldType*> {
+public:
+    // the destructor will free all objects still in the vector
+    ~SwFldTypes();
+    sal_uInt16 GetPos(const SwFieldType* pFieldType) const;
+};
 
 class SwTOXTypes : public std::vector<SwTOXType*> {
 public:
