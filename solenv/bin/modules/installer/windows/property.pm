@@ -333,9 +333,6 @@ sub set_important_properties
     {
         my $onepropertyline = "ISPATCH" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
-
-        $onepropertyline = "SETUP_USED" . "\t" . "0" . "\n";
-        push(@{$propertyfile}, $onepropertyline);
     }
 
     if ( $installer::globals::languagepack )
