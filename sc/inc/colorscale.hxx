@@ -32,6 +32,8 @@
 #include <tools/color.hxx>
 #include <rangelst.hxx>
 
+#include <vector>
+
 //TODO: merge this with conditio.hxx
 
 class ScDocument;
@@ -49,6 +51,7 @@ private:
     bool mbMin;
     bool mbMax;
     bool mbPercent;
+    bool mbPercentile;
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
@@ -65,11 +68,13 @@ public:
     bool GetMin() const;
     bool GetMax() const;
     bool GetPercent() const;
+    bool GetPercentile() const;
     bool HasFormula() const;
     const ScTokenArray* GetFormula() const;
     void SetMin(bool bMin);
     void SetMax(bool bMax);
     void SetPercent(bool bPercent);
+    void SetPercentile(bool bPercentile);
 };
 
 namespace databar
@@ -160,6 +165,8 @@ public:
     virtual ScColorFormatType GetType() const = 0;
 
 protected:
+    void getValues( std::vector<double>& rValues ) const;
+
     ScRangeList maRanges;
     ScDocument* mpDoc;
 };
@@ -175,6 +182,7 @@ private:
 
     void calcMinMax(double& nMin, double& nMax) const;
     bool CheckEntriesForRel(const ScRange& rRange) const;
+    double CalcValue(double nMin, double nMax, ColorScaleEntries::const_iterator& rItr) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);

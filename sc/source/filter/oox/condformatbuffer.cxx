@@ -178,9 +178,7 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
     }
     else if( aType == "percentile" )
     {
-        // this is most likely wrong but I have no idea what the difference
-        // between percent and percentile should be when calculating colors
-        maColorScaleRuleEntries[mnCfvo].mbPercent = true;
+        maColorScaleRuleEntries[mnCfvo].mbPercentile = true;
     }
     else if( aType == "formula" )
     {
@@ -236,6 +234,8 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
             pEntry->SetMax(true);
         if(rEntry.mbPercent)
             pEntry->SetPercent(true);
+        if(rEntry.mbPercentile)
+            pEntry->SetPercentile(true);
 
         if(!rEntry.maFormula.isEmpty())
             pEntry->SetFormula(rEntry.maFormula, pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
@@ -318,9 +318,7 @@ void DataBarRule::importCfvo( const AttributeList& rAttribs )
     }
     else if( aType == "percentile" )
     {
-        // this is most likely wrong but I have no idea what the difference
-        // between percent and percentile should be when calculating colors
-        pEntry->mbPercent = true;
+        pEntry->mbPercentile = true;
     }
     else if( aType == "formula" )
     {

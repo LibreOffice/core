@@ -86,6 +86,7 @@ struct ColorScaleRuleModelEntry
     bool mbMin;
     bool mbMax;
     bool mbPercent;
+    bool mbPercentile;
     rtl::OUString maFormula;
 
     ColorScaleRuleModelEntry():
@@ -93,7 +94,8 @@ struct ColorScaleRuleModelEntry
         mnVal(0),
         mbMin(false),
         mbMax(false),
-        mbPercent(false) {}
+        mbPercent(false),
+        mbPercentile(false) {}
 };
 
 class ColorScaleRule : public WorksheetHelper
