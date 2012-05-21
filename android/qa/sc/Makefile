@@ -66,14 +66,11 @@ copy-stuff:
 		  expwrap.uno \
 		  fastsax.uno \
 		  fileacc \
-		  fontconfig \
 		  forlo \
 		  foruilo \
-		  freetype \
 		  frmlo \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
-		  i18npaperlo \
 		  i18npool.uno \
 		  i18nutilgcc3 \
 		  icudatalo \
