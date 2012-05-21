@@ -139,15 +139,9 @@
 #define PPT_COLSCHEME_A_H_GESICHERT         (0x08000007)
 
 #define ANSI_CHARSET            0
-#define DEFAULT_CHARSET         1
 #define SYMBOL_CHARSET          2
-#define SHIFTJIS_CHARSET        128
-#define HANGEUL_CHARSET         129
-#define CHINESEBIG5_CHARSET     136
-#define OEM_CHARSET             255
 
 /* Font Families */
-#define FF_DONTCARE             0x00
 #define FF_ROMAN                0x10
 #define FF_SWISS                0x20
 #define FF_MODERN               0x30

@@ -31,8 +31,6 @@
 #include <rtl/ustring.hxx>
 
 
-#define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-
 using ::rtl::OUString;
 namespace stoc_javavm {
 

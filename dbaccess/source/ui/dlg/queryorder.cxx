@@ -153,11 +153,6 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
 }
 
 //------------------------------------------------------------------------------
-
-#define LbText(x)       ((x).GetSelectEntry())
-#define LbPos(x)        ((x).GetSelectEntryPos())
-
-//------------------------------------------------------------------------------
 DlgOrderCrit::~DlgOrderCrit()
 {
     DBG_DTOR(DlgOrderCrit,NULL);

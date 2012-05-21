@@ -2010,12 +2010,8 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         }
 
 #if defined(WNT)
-#define CHKFILE "crashdat.chk"
-#define STKFILE "crashdat.stk"
 #define PRVFILE "crashdat.prv"
 #else
-#define CHKFILE ".crash_report_checksum"
-#define STKFILE ".crash_report_frames"
 #define PRVFILE ".crash_report_preview"
 #endif
 

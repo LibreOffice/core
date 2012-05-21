@@ -94,12 +94,7 @@ using namespace ::com::sun::star;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define ANSI_CHARSET            0
-#define DEFAULT_CHARSET         1
 #define SYMBOL_CHARSET          2
-#define SHIFTJIS_CHARSET        128
-#define HANGEUL_CHARSET         129
-#define CHINESEBIG5_CHARSET     136
-#define OEM_CHARSET             255
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
