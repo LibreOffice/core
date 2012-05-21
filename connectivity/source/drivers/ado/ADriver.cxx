@@ -273,8 +273,6 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
     pErrors->get_Count(&nLen);
     if (nLen)
     {
-        ::rtl::OUString sError;
-        ::rtl::OUString aSQLState;
         SQLException aException;
         aException.ErrorCode = 1000;
         for (sal_Int32 i = nLen-1; i>=0; --i)

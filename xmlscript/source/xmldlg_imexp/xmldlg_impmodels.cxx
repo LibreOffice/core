@@ -128,7 +128,6 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-rtl::OUString _label(RTL_CONSTASCII_USTRINGPARAM("foo"));
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement(

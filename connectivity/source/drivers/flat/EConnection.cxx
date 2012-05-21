@@ -72,7 +72,6 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
 {
     osl_incrementInterlockedCount( &m_refCount );
 
-    ::rtl::OUString aExt;
     const PropertyValue *pBegin  = info.getConstArray();
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)

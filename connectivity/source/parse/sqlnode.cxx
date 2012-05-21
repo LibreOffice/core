@@ -574,7 +574,6 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUStringBuffer
         // avoid recursion (e.g. "foo" defined as "SELECT * FROM bar" and "bar" defined as "SELECT * FROM foo".
         if ( rParam.pSubQueryHistory->find( sTableOrQueryName ) != rParam.pSubQueryHistory->end() )
         {
-            ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cyclic sub queries" ) ) );
             OSL_ENSURE( rParam.pParser, "OSQLParseNode::impl_parseTableNameNodeToString_throw: no parser?" );
             if ( rParam.pParser )
             {
@@ -1057,7 +1056,6 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
         if (m_nFormatKey)
         {
             sal_Int16 nScale = 0;
-            ::rtl::OUString aDec;
             try
             {
                 Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Decimals")) );

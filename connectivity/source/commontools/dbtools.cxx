@@ -1412,10 +1412,6 @@ namespace
         if (    xInfo.is()
             &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
         {
-
-            ::rtl::OUString aCatalog;
-            ::rtl::OUString aSchema;
-            ::rtl::OUString aTable;
             if (    xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
                 &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) )
             {

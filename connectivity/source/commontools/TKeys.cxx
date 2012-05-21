@@ -169,7 +169,6 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
         ::rtl::OUStringBuffer aSql;
         aSql.appendAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
 
         aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true ));
         aSql.appendAscii(" ADD ");

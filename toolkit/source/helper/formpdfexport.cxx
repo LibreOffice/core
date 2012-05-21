@@ -498,7 +498,6 @@ namespace toolkitform
                     const bool bDocumentLocalTarget = !sURL.isEmpty() && ( sURL.getStr()[0] == '#' );
                     if ( bDocumentLocalTarget )
                     {
-                        const ::rtl::OUString sDestinationName( sURL.copy(1) );
                         // Register the destination for for future handling ...
                         pButtonWidget->Dest = i_pdfExportData.RegisterDest();
 
