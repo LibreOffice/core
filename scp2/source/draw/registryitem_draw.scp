@@ -286,6 +286,14 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Defaulticon
     Value = "<progpath>\program\soffice.bin,5";
 End
 
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
+End
+
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -381,6 +389,14 @@ RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Defaulticon
     Subkey = "soffice.StarDrawTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "<progpath>\program\soffice.bin,6";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawTemplate.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell
@@ -671,6 +687,14 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,5";
 End
 
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odg_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -878,6 +902,14 @@ RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Defaulticon
     Subkey = "opendocument.DrawTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Value = "<progpath>\program\soffice.bin,6";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawTemplate.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
 #ifdef _MSC_VER

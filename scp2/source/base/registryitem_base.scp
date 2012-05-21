@@ -94,6 +94,14 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,11";
 End
 
+RegistryItem gid_Regitem_Openoffice_Databasedocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Base_Bin;
+    Subkey = "opendocument.DatabaseDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Base";
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odb_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

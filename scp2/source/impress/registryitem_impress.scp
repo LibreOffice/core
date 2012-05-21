@@ -286,6 +286,14 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Defaulticon
     Value = "<progpath>\program\soffice.bin,7";
 End
 
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
+End
+
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
@@ -395,6 +403,14 @@ RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Defaulticon
     Subkey = "soffice.StarImpressTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "<progpath>\program\soffice.bin,8";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressTemplate.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell
@@ -686,6 +702,14 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,7";
 End
 
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odp_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -907,6 +931,14 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Defaulticon
     Subkey = "opendocument.ImpressTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "<progpath>\program\soffice.bin,8";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressTemplate.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
 #ifdef _MSC_VER

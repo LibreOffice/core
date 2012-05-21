@@ -285,6 +285,14 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Defaulticon
     Value = "<progpath>\program\soffice.bin,12";
 End
 
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Math";
+End
+
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
@@ -543,6 +551,14 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Defaulticon
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "opendocument.MathDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.bin,12";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Math";
 End
 
 #ifdef _MSC_VER

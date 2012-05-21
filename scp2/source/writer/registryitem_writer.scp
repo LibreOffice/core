@@ -286,6 +286,14 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Defaulticon
     Value = "<progpath>\program\soffice.bin,1";
 End
 
+RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "soffice.StarWriterDocument.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -390,6 +398,14 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_Defaulticon
     Value = "<progpath>\program\soffice.bin,9";
 End
 
+RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "soffice.StarWriterGlobalDocument.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarWriterGlobalDocument.6\shell";
@@ -458,6 +474,14 @@ RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_Defaulticon
     Subkey = "soffice.StarWriterTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "<progpath>\program\soffice.bin,2";
+End
+
+RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "soffice.StarWriterTemplate.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_Shell
@@ -803,6 +827,14 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,1";
 End
 
+RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -1035,6 +1067,14 @@ RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,2";
 End
 
+RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterTemplate.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ott_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1169,6 +1209,14 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,9";
 End
 
+RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterGlobalDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odm_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1301,6 +1349,14 @@ RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Defaulticon
     Subkey = "opendocument.WriterWebTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "<progpath>\program\soffice.bin,10";
+End
+
+RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterWebTemplate.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell

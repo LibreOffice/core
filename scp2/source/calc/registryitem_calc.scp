@@ -286,6 +286,14 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Defaulticon
     Value = "<progpath>\program\soffice.bin,3";
 End
 
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
+End
+
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
@@ -381,6 +389,14 @@ RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Defaulticon
     Subkey = "soffice.StarCalcTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "<progpath>\program\soffice.bin,4";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcTemplate.6";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell
@@ -672,6 +688,14 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
     Value = "<progpath>\program\soffice.bin,3";
 End
 
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ods_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -879,6 +903,14 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Defaulticon
     Subkey = "opendocument.CalcTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "<progpath>\program\soffice.bin,4";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcTemplate.1";
+    Name = "AppUserModelID";
+    Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
 #ifdef _MSC_VER
