@@ -264,6 +264,7 @@ DataBarRule::DataBarRule( const CondFormat& rFormat ):
     mrCondFormat( rFormat ),
     mpFormat(new ScDataBarFormatData)
 {
+    mpFormat->meAxisPosition = databar::NONE;
 }
 
 void DataBarRule::importColor( const AttributeList& rAttribs )

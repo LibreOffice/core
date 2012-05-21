@@ -31,6 +31,8 @@
 #include <oox/core/contexthandler.hxx>
 #include "colorscale.hxx"
 
+#include <iostream>
+
 using ::oox::core::ContextHandlerRef;
 
 namespace oox {
