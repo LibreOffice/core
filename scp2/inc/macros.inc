@@ -459,6 +459,16 @@ End
         Value = STRING(CONCAT2(LibreOffice.,name)); \
         Styles = (); \
     End
+    
+#define REGISTRY_ENTRY_KINDMAP(name, modid, key) \
+    RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Explorer_KindMap_,name) \
+        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
+        ModuleID = modid; \
+        ComponentCondition = "VersionNT >= 600"; \
+        Subkey = STRING(SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap); \
+        Name = STRING(CONCAT2(.,key)); \
+        Value = "document"; \
+    End
 
 #define CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
     CONDITIONAL_MODULE_ENTRY(name,modid) \
@@ -472,6 +482,7 @@ End
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
+    REGISTRY_ENTRY_KINDMAP(name, modid, key) \
 
 #define CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
     CONDITIONAL_MODULE_ENTRY(name,modid) \
@@ -485,6 +496,7 @@ End
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
+    REGISTRY_ENTRY_KINDMAP(name, modid, key) \
 
 // ---------------------------------------
 

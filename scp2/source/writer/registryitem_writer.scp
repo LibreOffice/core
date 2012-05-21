@@ -548,6 +548,14 @@ RegistryItem gid_Regitem_stw_FullDetails
 End
 #endif
 
+RegistryItem gid_Regitem_stw_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".stw";
+    Value = "Document";
+End
+
 RegistryItem gid_Regitem_Sxg_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -601,6 +609,14 @@ RegistryItem gid_Regitem_sxg_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_sxg_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sxg";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Sxw_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -671,6 +687,14 @@ RegistryItem gid_Regitem_sxw_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_sxw_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sxw";
+    Value = "Document";
+End
 
 // new odt file extension 
 
@@ -794,6 +818,14 @@ RegistryItem gid_Regitem_odt_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_odt_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".odt";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -936,6 +968,14 @@ RegistryItem gid_Regitem_Fodt_Contenttype
     Value = "application/vnd.oasis.opendocument.text";
 End
 
+RegistryItem gid_Regitem_fodt_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".fodt";
+    Value = "Document";
+End
+
 // new ott file extension 
 
 RegistryItem gid_Regitem_Ott_PersistentHandler
@@ -1004,6 +1044,14 @@ RegistryItem gid_Regitem_ott_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_ott_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".ott";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1130,6 +1178,14 @@ RegistryItem gid_Regitem_odm_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_odm_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".odm";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1298,6 +1354,14 @@ RegistryItem gid_Regitem_oth_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_oth_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".oth";
+    Value = "Document";
+End
 
 // "OpenWith" Windows Registry keys for extensions supported by Writer
 

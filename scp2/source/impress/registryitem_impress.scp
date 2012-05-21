@@ -492,6 +492,14 @@ RegistryItem gid_Regitem_sti_FullDetails
 End
 #endif
 
+RegistryItem gid_Regitem_sti_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sti";
+    Value = "Document";
+End
+
 RegistryItem gid_Regitem_Sxi_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
@@ -561,6 +569,14 @@ RegistryItem gid_Regitem_sxi_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_sxi_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sxi";
+    Value = "Document";
+End
 
 // new odp file extension
 
@@ -679,6 +695,14 @@ RegistryItem gid_Regitem_odp_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_odp_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".odp";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -818,6 +842,14 @@ RegistryItem gid_Regitem_Fodp_Contenttype
     Value = "application/vnd.oasis.opendocument.presentation";
 End
 
+RegistryItem gid_Regitem_fodp_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".fodp";
+    Value = "Document";
+End
+
 // new otp file extension
 
 RegistryItem gid_Regitem_Otp_PersistentHandler
@@ -886,6 +918,14 @@ RegistryItem gid_Regitem_otp_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_otp_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".otp";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

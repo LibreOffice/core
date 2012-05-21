@@ -506,6 +506,14 @@ RegistryItem gid_Regitem_stc_FullDetails
 End
 #endif
 
+RegistryItem gid_Regitem_stc_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".stc";
+    Value = "Document";
+End
+
 RegistryItem gid_Regitem_Sxc_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
@@ -548,6 +556,14 @@ RegistryItem gid_Regitem_sxc_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_sxc_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sxc";
+    Value = "Document";
+End
 
 // new ods file extension 
 
@@ -665,6 +681,14 @@ RegistryItem gid_Regitem_ods_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_ods_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".ods";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -790,6 +814,14 @@ RegistryItem gid_Regitem_Fods_Contenttype
     Value = "application/vnd.oasis.opendocument.spreadsheet";
 End
 
+RegistryItem gid_Regitem_fods_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".fods";
+    Value = "Document";
+End
+
 // new ots file extension 
 
 RegistryItem gid_Regitem_Ots_PersistentHandler
@@ -858,6 +890,14 @@ RegistryItem gid_Regitem_ots_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_ots_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".ots";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

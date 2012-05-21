@@ -478,6 +478,14 @@ RegistryItem gid_Regitem_std_FullDetails
 End
 #endif
 
+RegistryItem gid_Regitem_std_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".std";
+    Value = "Document";
+End
+
 RegistryItem gid_Regitem_Sxd_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -547,6 +555,14 @@ RegistryItem gid_Regitem_sxd_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_sxd_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sxd";
+    Value = "Document";
+End
 
 // new odg file extension 
 
@@ -664,6 +680,14 @@ RegistryItem gid_Regitem_odg_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_odg_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".odg";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -789,6 +813,14 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Styles = (PATCH);
 End
 
+RegistryItem gid_Regitem_fodg_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".fodg";
+    Value = "Document";
+End
+
 // new otg file extension 
 
 RegistryItem gid_Regitem_Otg_PersistentHandler
@@ -857,6 +889,14 @@ RegistryItem gid_Regitem_otg_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_otg_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".otg";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

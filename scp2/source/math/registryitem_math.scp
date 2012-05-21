@@ -438,6 +438,14 @@ RegistryItem gid_Regitem_sxm_FullDetails
 End
 #endif
 
+RegistryItem gid_Regitem_sxm_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".sxm";
+    Value = "Document";
+End
+
 // new odf file extension
 
 RegistryItem gid_Regitem_Odf_PersistentHandler
@@ -546,6 +554,14 @@ RegistryItem gid_Regitem_odf_FullDetails
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
 #endif
+
+RegistryItem gid_Regitem_odf_KindMap
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
+    Name = ".odf";
+    Value = "Document";
+End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
