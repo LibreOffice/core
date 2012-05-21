@@ -2064,7 +2064,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             catch (const uno::Exception&) {}
 
             aNew >>= aSeq;
-            if ( aSeq.getLength() == 4 )
+            if (aSeq.getLength() >= 4 && aSeq.getLength() <= 6)
             {
                 sal_Int32 nVal = 0;
                 if ( aSeq[0] >>= nVal )
@@ -2075,6 +2075,20 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     aBorderLine.OuterLineWidth = (sal_Int16) nVal;
                 if ( aSeq[3] >>= nVal )
                     aBorderLine.LineDistance = (sal_Int16) nVal;
+                if (aSeq.getLength() >= 5) // fdo#40874 added fields
+                {
+                    if (aSeq[4] >>= nVal)
+                    {
+                        aBorderLine.LineStyle = nVal;
+                    }
+                    if (aSeq.getLength() >= 6)
+                    {
+                        if (aSeq[5] >>= nVal)
+                        {
+                            aBorderLine.LineWidth = nVal;
+                        }
+                    }
+                }
             }
             else
                 return sal_False;
@@ -2854,7 +2868,8 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
                 catch (const uno::Exception&) {}
 
-                if( (aNew >>= aSeq) && aSeq.getLength() == 4 )
+                if ((aNew >>= aSeq) &&
+                    aSeq.getLength() >= 4  && aSeq.getLength() <= 6)
                 {
                     sal_Int32 nVal = 0;
                     if ( aSeq[0] >>= nVal )
@@ -2865,6 +2880,20 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         aBorderLine.OuterLineWidth = (sal_Int16) nVal;
                     if ( aSeq[3] >>= nVal )
                         aBorderLine.LineDistance = (sal_Int16) nVal;
+                    if (aSeq.getLength() >= 5) // fdo#40874 added fields
+                    {
+                        if (aSeq[4] >>= nVal)
+                        {
+                            aBorderLine.LineStyle = nVal;
+                        }
+                        if (aSeq.getLength() >= 6)
+                        {
+                            if (aSeq[5] >>= nVal)
+                            {
+                                aBorderLine.LineWidth = nVal;
+                            }
+                        }
+                    }
                 }
                 else
                     return sal_False;
@@ -2874,12 +2903,20 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 // serialization for basic macro recording
                 ::com::sun::star::uno::Sequence < sal_Int16 > aSeq;
                 rVal >>= aSeq;
-                if ( aSeq.getLength() == 4 )
+                if (aSeq.getLength() >= 4 && aSeq.getLength() <= 6)
                 {
                     aBorderLine.Color = aSeq[0];
                     aBorderLine.InnerLineWidth = aSeq[1];
                     aBorderLine.OuterLineWidth = aSeq[2];
                     aBorderLine.LineDistance = aSeq[3];
+                    if (aSeq.getLength() >= 5) // fdo#40874 added fields
+                    {
+                        aBorderLine.LineStyle = aSeq[4];
+                        if (aSeq.getLength() >= 6)
+                        {
+                            aBorderLine.LineWidth = aSeq[5];
+                        }
+                    }
                 }
                 else
                     return sal_False;
