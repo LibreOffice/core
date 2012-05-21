@@ -286,6 +286,26 @@ void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
     printer.print(pCaption);
 }
 
+template<size_t _Size>
+ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
+{
+    for (size_t i = 0; i < _Size; ++i)
+    {
+        for (size_t j = 0; j < nRowCount; ++j)
+        {
+            SCCOL nCol = i + rPos.Col();
+            SCROW nRow = j + rPos.Row();
+            pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    ScRange aRange(rPos);
+    aRange.aEnd.SetCol(rPos.Col()+_Size-1);
+    aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
+    printRange(pDoc, aRange, "Range data content");
+    return aRange;
+}
+
 Test::Test()
     : m_pDoc(0)
 {
@@ -773,6 +793,42 @@ void testFuncCELL(ScDocument* pDoc)
     }
 }
 
+/** See also test case document fdo#44456 sheet cpearson */
+void testFuncDATEDIF( ScDocument* pDoc )
+{
+    const char* aData[][5] = {
+        { "2007-01-01", "2007-01-10",  "d",   "9", "=DATEDIF(A1;B1;C1)" } ,
+        { "2007-01-01", "2007-01-31",  "m",   "0", "=DATEDIF(A2;B2;C2)" } ,
+        { "2007-01-01", "2007-02-01",  "m",   "1", "=DATEDIF(A3;B3;C3)" } ,
+        { "2007-01-01", "2007-02-28",  "m",   "1", "=DATEDIF(A4;B4;C4)" } ,
+        { "2007-01-01", "2007-12-31",  "d", "364", "=DATEDIF(A5;B5;C5)" } ,
+        { "2007-01-01", "2007-01-31",  "y",   "0", "=DATEDIF(A6;B6;C6)" } ,
+        { "2007-01-01", "2008-07-01",  "d", "547", "=DATEDIF(A7;B7;C7)" } ,
+        { "2007-01-01", "2008-07-01",  "m",  "18", "=DATEDIF(A8;B8;C8)" } ,
+        { "2007-01-01", "2008-07-01", "ym",   "6", "=DATEDIF(A9;B9;C9)" } ,
+        { "2007-01-01", "2008-07-01", "yd", "182", "=DATEDIF(A10;B10;C10)" } ,
+        { "2008-01-01", "2009-07-01", "yd", "181", "=DATEDIF(A11;B11;C11)" } ,
+        { "2007-01-01", "2007-01-31", "md",  "30", "=DATEDIF(A12;B12;C12)" } ,
+        { "2007-02-01", "2009-03-01", "md",   "0", "=DATEDIF(A13;B13;C13)" } ,
+        { "2008-02-01", "2009-03-01", "md",   "0", "=DATEDIF(A14;B14;C14)" } ,
+        { "2007-01-02", "2007-01-01", "md", "Err:502", "=DATEDIF(A15;B15;C15)" }    // fail date1 > date2
+    };
+
+    clearRange( pDoc, ScRange(0, 0, 0, 4, SAL_N_ELEMENTS(aData), 0));
+    ScAddress aPos(0,0,0);
+    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    pDoc->CalcAll();
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
+    {
+        rtl::OUString aVal = pDoc->GetString( 4, i, 0);
+        //std::cout << "row "<< i << ": " << rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr() << ", expected " << aData[i][3] << std::endl;
+        CPPUNIT_ASSERT_MESSAGE("Unexpected result for DATEDIF", aVal.equalsAscii( aData[i][3]));
+    }
+}
+
 void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
@@ -786,6 +842,7 @@ void Test::testCellFunctions()
     testFuncVLOOKUP(m_pDoc);
     testFuncMATCH(m_pDoc);
     testFuncCELL(m_pDoc);
+    testFuncDATEDIF(m_pDoc);
 
     m_pDoc->DeleteTab(0);
 }
@@ -1139,26 +1196,6 @@ struct DPFieldDef
      */
     int eFunc;
 };
-
-template<size_t _Size>
-ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
-{
-    for (size_t i = 0; i < _Size; ++i)
-    {
-        for (size_t j = 0; j < nRowCount; ++j)
-        {
-            SCCOL nCol = i + rPos.Col();
-            SCROW nRow = j + rPos.Row();
-            pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
-        }
-    }
-
-    ScRange aRange(rPos);
-    aRange.aEnd.SetCol(rPos.Col()+_Size-1);
-    aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
-    printRange(pDoc, aRange, "Range data content");
-    return aRange;
-}
 
 template<size_t _Size>
 ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
