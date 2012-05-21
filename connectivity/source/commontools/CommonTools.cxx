@@ -147,7 +147,7 @@ namespace connectivity
     //------------------------------------------------------------------
     rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime)
     {
-        sal_Char s[21];
+        sal_Char s[20];
         snprintf(s,
                 sizeof(s),
                 "%04d-%02d-%02d %02d:%02d:%02d",
@@ -157,7 +157,7 @@ namespace connectivity
                 (int)rDateTime.Hours,
                 (int)rDateTime.Minutes,
                 (int)rDateTime.Seconds);
-        s[20] = 0;
+        s[19] = 0;
         return rtl::OUString::createFromAscii(s);
     }
 
