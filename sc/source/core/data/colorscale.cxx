@@ -654,10 +654,10 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
 
     if(mpFormatData->mpUpperLimit->GetPercent())
     {
-        return nMin + (nMax-nMin)/100*mpFormatData->mpLowerLimit->GetValue();
+        return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
     }
 
-    return mpFormatData->mpLowerLimit->GetValue();
+    return mpFormatData->mpUpperLimit->GetValue();
 }
 
 ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
