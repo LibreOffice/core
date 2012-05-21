@@ -1030,7 +1030,7 @@ void SAL_CALL ScVbaApplication::setSheetsInNewWorkbook( sal_Int32 SheetsInNewWor
     if ( SheetsInNewWorkbook < MININITTAB
       || SheetsInNewWorkbook > MAXINITTAB )
     {
-        DebugHelper::exception( OUString(RTL_CONSTASCII_USTRINGPARAM("The number must be between 1 and 10000")),
+        DebugHelper::exception( OUString(RTL_CONSTASCII_USTRINGPARAM("The number must be between 1 and 1024")),
             uno::Exception(), SbERR_METHOD_FAILED, OUString() );
     }
     else
