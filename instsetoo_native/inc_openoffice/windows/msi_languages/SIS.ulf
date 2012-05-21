@@ -1,14 +1,8 @@
 [OOO_SIS_TITLE]
 en-US = "Installation database"
 
-[OOO_SIS_AUTHOR]
-en-US = "Author"
-
-[OOO_SIS_SUBJECT]
-en-US = "Subject"
-
 [OOO_SIS_COMMENT]
-en-US = "Comment"
+en-US = "This installer database contains the logic and data required to install LibreOffice."
 
 [OOO_SIS_KEYWORDS]
 en-US = "Install,MSI"
