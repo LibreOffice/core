@@ -52,6 +52,10 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLTARGET)
 			-fM$(call gb_SdiTarget_get_dep_target,$*) \
 			$<)
 
+# rule necessary to rebuild cxx files that include the header
+$(call gb_SdiTarget_get_target,%.hxx) : $(call gb_SdiTarget_get_target,%)
+	@true
+
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SdiTarget_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
