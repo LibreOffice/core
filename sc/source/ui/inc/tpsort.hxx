@@ -38,6 +38,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svx/langbox.hxx>
 
+#include "sortkeydlg.hxx"
 
 #include "global.hxx"
 #include "address.hxx"
@@ -76,21 +77,6 @@ protected:
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
-    FixedLine       aFlSort1;
-    ListBox         aLbSort1;
-    RadioButton     aBtnUp1;
-    RadioButton     aBtnDown1;
-
-    FixedLine       aFlSort2;
-    ListBox         aLbSort2;
-    RadioButton     aBtnUp2;
-    RadioButton     aBtnDown2;
-
-    FixedLine       aFlSort3;
-    ListBox         aLbSort3;
-    RadioButton     aBtnUp3;
-    RadioButton     aBtnDown3;
-
     String          aStrUndefined;
     String          aStrColumn;
     String          aStrRow;
@@ -98,7 +84,7 @@ private:
     const sal_uInt16    nWhichSort;
     ScSortDlg*          pDlg;
     ScViewData*         pViewData;
-    const ScSortParam&  rSortData;
+    ScSortParam         aSortData;
     std::vector<SCCOLROW>  nFieldArr;
     sal_uInt16          nFieldCount;
     sal_uInt16          nSortKeyCount;
@@ -109,16 +95,12 @@ private:
     sal_Bool            bHasHeader;
     sal_Bool            bSortByRows;
 
-    std::vector<ListBox*>      aLbSortArr;
-    std::vector<RadioButton*>  aBtnUp;
-    std::vector<RadioButton*>  aBtnDown;
-    std::vector<FixedLine*>    aFlArr;
+    ScSortKeyItems      maSortKeyItems;
+    ScSortKeyCtrl       maSortKeyCtrl;
 
 #ifdef _TPSORT_CXX
 private:
     void    Init            ();
-    void    DisableField    ( sal_uInt16 nField );
-    void    EnableField     ( sal_uInt16 nField );
     void    FillFieldLists  ( sal_uInt16 nStartField );
     sal_uInt16  GetFieldSelPos  ( SCCOLROW nField );
 
@@ -186,7 +168,7 @@ private:
     String              aStrAreaLabel;
 
     const sal_uInt16    nWhichSort;
-    const ScSortParam&  rSortData;
+    ScSortParam         aSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
     ScSortDlg*          pDlg;

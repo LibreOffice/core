@@ -72,6 +72,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/dbgui/scuiasciiopt \
     sc/source/ui/dbgui/scuiimoptdlg \
     sc/source/ui/dbgui/sortdlg \
+    sc/source/ui/dbgui/sortkeydlg \
     sc/source/ui/dbgui/subtdlg \
     sc/source/ui/dbgui/textimportoptions \
     sc/source/ui/dbgui/tpsort \

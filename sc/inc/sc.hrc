@@ -1229,8 +1229,9 @@
 #define RID_POPUP_FILTER                (SC_DIALOGS_START + 153)
 #define RID_SCDLG_TAB_BG_COLOR          (SC_DIALOGS_START + 154)
 #define RID_SCDLG_FORMULA_CALCOPTIONS   (SC_DIALOGS_START + 155)
-
-#define SC_DIALOGS_END                  (SC_DIALOGS_START + 156)
+#define RID_SCPAGE_SORTKEY_FIELDS       (SC_DIALOGS_START + 156)
+#define RID_SCDLG_SORTKEY               (SC_DIALOGS_START + 157)
+#define SC_DIALOGS_END                  (SC_DIALOGS_START + 158)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

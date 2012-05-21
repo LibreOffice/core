@@ -88,6 +88,7 @@
 #define HID_SC_FORM_ARGS                                        "SC_HID_SC_FORM_ARGS"
 #define HID_SCPAGE_SORT_FIELDS                                  "SC_HID_SCPAGE_SORT_FIELDS"
 #define HID_SCPAGE_SORT_OPTIONS                                 "SC_HID_SCPAGE_SORT_OPTIONS"
+#define HID_SCPAGE_SORTKEY_FIELDS                               "SC_HID_SCPAGE_SORTKEY_FIELDS"
 #define HID_SCPAGE_SUBT_OPTIONS                                 "SC_HID_SCPAGE_SUBT_OPTIONS"
 #define HID_SCPAGE_SUBT_GROUP                                   "SC_HID_SCPAGE_SUBT_GROUP"
 #define HID_SCPAGE_PROTECTION                                   "SC_HID_SCPAGE_PROTECTION"

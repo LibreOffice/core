@@ -38,18 +38,15 @@
 #define TP_OPTIONS          2
 
 // TP_SORT_FIELDS:
-#define FL_SORT1            1
-#define FL_SORT2            2
-#define FL_SORT3            3
-#define LB_SORT1            4
-#define LB_SORT2            5
-#define LB_SORT3            6
-#define BTN_UP1             7
-#define BTN_UP2             8
-#define BTN_UP3             9
-#define BTN_DOWN1           10
-#define BTN_DOWN2           11
-#define BTN_DOWN3           12
+#define CTRL_MANAGESORTKEY  1
+#define WIN_MANAGESORTKEY   2
+#define SB_SORT             3
+
+// SORT_KEY_FIELDS:
+#define FL_SORT             278
+#define LB_SORT             279
+#define BTN_UP              280
+#define BTN_DOWN            281
 
 // TP_SORT_OPTIONS:
 #define FL_DIRECTION        1
