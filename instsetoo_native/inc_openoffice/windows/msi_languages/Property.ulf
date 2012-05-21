@@ -1,8 +1,8 @@
 [OOO_ARPCONTACTTEMPLATE]
-en-US = "Department for technical support"
+en-US = "LibreOffice Community"
 
 [OOO_ARPHELPLINKTEMPLATE]
-en-US = "http://www.documentfoundation.org"
+en-US = "http://www.libreoffice.org/get-help"
 
 [OOO_ARPHELPTELEPHONETEMPLATE]
 en-US = "x-xxx-xxx-xxx"
@@ -11,7 +11,7 @@ en-US = "x-xxx-xxx-xxx"
 en-US = "http://www.documentfoundation.org"
 
 [OOO_ARPURLUPDATEINFOTEMPLATE]
-en-US = "http://www.documentfoundation.org"
+en-US = "http://www.libreoffice.org/download"
 
 [OOO_STR_NEW_DISPLAY_NAME]
 en-US = "~New"
