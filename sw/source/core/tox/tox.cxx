@@ -551,7 +551,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
         // type not in pDoc, so create it now
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
         sal_Bool bFound = sal_False;
-        for( sal_uInt16 n = rTypes.Count(); n; )
+        for( sal_uInt16 n = rTypes.size(); n; )
         {
             const SwTOXType* pCmp = rTypes[ --n ];
             if( pCmp->GetType() == pType->GetType() &&
@@ -931,4 +931,15 @@ const SwFormTokens& SwForm::GetPattern(sal_uInt16 nLevel) const
     return aPattern[nLevel];
 }
 
+sal_uInt16 SwTOXTypes::GetPos(const SwTOXType* pTOXType) const
+{
+    const_iterator it = std::find(begin(), end(), pTOXType);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+SwTOXTypes::~SwTOXTypes()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

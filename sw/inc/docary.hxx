@@ -67,8 +67,12 @@ SV_DECL_PTRARR_DEL(SwCharFmts,SwCharFmtPtr,4)
 
 SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES )
 
-typedef SwTOXType* SwTOXTypePtr;
-SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0 )
+class SwTOXTypes : public std::vector<SwTOXType*> {
+public:
+    // the destructor will free all objects still in the vector
+    ~SwTOXTypes();
+    sal_uInt16 GetPos(const SwTOXType* pTOXType) const;
+};
 
 // Array of Undo-history.
 typedef SwSectionFmt* SwSectionFmtPtr;

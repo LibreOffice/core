@@ -545,12 +545,12 @@ SwDoc::~SwDoc()
     // Old - deletion without a Flag is expensive, because we send a Modify
     // aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
     {
-        for( sal_uInt16 n = pTOXTypes->Count(); n; )
+        for( sal_uInt16 n = pTOXTypes->size(); n; )
         {
             (*pTOXTypes)[ --n ]->SetInDocDTOR();
             delete (*pTOXTypes)[ n ];
         }
-        pTOXTypes->Remove( 0, pTOXTypes->Count() );
+        pTOXTypes->clear();
     }
     delete pDefTOXBases;
 
@@ -1038,19 +1038,19 @@ void SwDoc::InitTOXTypes()
 {
    ShellResource* pShellRes = ViewShell::GetShellRes();
    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
-   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pTOXTypes->push_back( pNew );
 }
 
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)

@@ -604,28 +604,26 @@ sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
  --------------------------------------------------------------------*/
 sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
-    const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
     sal_uInt16 nCnt = 0;
-    for( sal_uInt16 n = 0; n < pTOXTypes->Count(); ++n, ++ppTTypes )
-        if( eTyp == (*ppTTypes)->GetType() )
+    for( sal_uInt16 n = 0; n < pTOXTypes->size(); ++n )
+        if( eTyp == (*pTOXTypes)[n]->GetType() )
             ++nCnt;
     return nCnt;
 }
 
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
 {
-    const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
     sal_uInt16 nCnt = 0;
-    for( sal_uInt16 n = 0; n < pTOXTypes->Count(); ++n, ++ppTTypes )
-        if( eTyp == (*ppTTypes)->GetType() && nCnt++ == nId )
-            return (*ppTTypes);
+    for( sal_uInt16 n = 0; n < pTOXTypes->size(); ++n )
+        if( eTyp == (*pTOXTypes)[n]->GetType() && nCnt++ == nId )
+            return (*pTOXTypes)[n];
     return 0;
 }
 
 const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 {
     SwTOXType * pNew = new SwTOXType( rTyp );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+    pTOXTypes->push_back( pNew );
     return pNew;
 }
 

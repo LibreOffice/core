@@ -144,8 +144,6 @@ using ::rtl::OUString;
 
 // Page descriptors
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
-// Table Of ...
-SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // Field types
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
