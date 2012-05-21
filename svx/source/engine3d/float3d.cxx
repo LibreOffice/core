@@ -453,8 +453,7 @@ Svx3DWin::~Svx3DWin()
     delete pConvertTo3DItem;
     delete pConvertTo3DLatheItem;
 
-    if(mpRemember2DAttributes)
-        delete mpRemember2DAttributes;
+    delete mpRemember2DAttributes;
 
     delete mpImpl;
 }
@@ -3116,8 +3115,7 @@ void Svx3DWin::UpdatePreview()
 // document is to be reloaded, destroy remembered ItemSet
 void Svx3DWin::DocumentReload()
 {
-    if(mpRemember2DAttributes)
-        delete mpRemember2DAttributes;
+    delete mpRemember2DAttributes;
     mpRemember2DAttributes = 0L;
 }
 
