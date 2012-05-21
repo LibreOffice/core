@@ -5,6 +5,7 @@
 
 use strict;
 use LWP::UserAgent;
+use utf8;
 
 my $main_repo="core";
 my @pieces=("binfilter", "dictionaries", "help", "translations");
@@ -297,7 +298,7 @@ sub get_bug_name($$)
         my $response = $ua->get($url);
         if ($response->is_success) {
             my $title = $response->title;
-            if ( $title =~ s/^Bug \d+ . // ) {
+            if ( $title =~ s/^Bug \d+ – // ) {
                 print "$title\n";
                 return $title;
             } else {
