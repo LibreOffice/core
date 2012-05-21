@@ -30,7 +30,6 @@ PRJNAME=instsetoo_native
 TARGET=util
 
 .INCLUDE:  settings.mk
-.INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk
 
 # PERL:=@echo
 

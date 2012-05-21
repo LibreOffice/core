@@ -42,8 +42,6 @@ force_dmake_to_error
 
 .INCLUDE : minor.mk
 
-.INCLUDE .IGNORE : rtlbootstrap.mk
-
 PLATFORMID = $(RTL_OS:l)_$(RTL_ARCH:l)
 EXTNAME*=$(EXTENSIONNAME)_in
 

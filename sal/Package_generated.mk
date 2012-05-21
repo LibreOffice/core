@@ -27,7 +27,6 @@
 
 $(eval $(call gb_Package_Package,sal_generated,$(call gb_CustomTarget_get_workdir,sal/generated)))
 
-$(eval $(call gb_Package_add_file,sal_generated,inc/rtlbootstrap.mk,rtlbootstrap.mk))
 $(eval $(call gb_Package_add_file,sal_generated,inc/sal/udkversion.h,sal/udkversion.h))
 
 ifneq ($(COM),MSC)

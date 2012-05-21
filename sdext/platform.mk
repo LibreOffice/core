@@ -25,10 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# TODO: the variables from rtlbootstrap.mk could (and should) be set by
-# configure
-# TODO: there should be their lowercase variants, too
-include $(OUTDIR)/inc/rtlbootstrap.mk
+# TODO
+# https://bugs.freedesktop.org/show_bug.cgi?id=50163
+# move definition of PLATFORMID into configure.in
+#
 
 sdext__LOWERCASE_TABLE := A-a B-b C-c D-d E-e F-f G-g H-h I-i J-j K-k L-l M-m N-n O-o P-p R-r S-s T-t U-u V-v W-w X-x Y-y Z-z
 

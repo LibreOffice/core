@@ -47,8 +47,6 @@
 #include <rtl/uri.hxx>
 #include "rtl/allocator.hxx"
 
-#include "macro.hxx"
-
 #include <algorithm>
 #include <map>
 #include <memory>
@@ -477,12 +475,12 @@ bool Bootstrap_Impl::getValue(
     }
     if ( key == "_OS" ) {
         rtl_uString_assign(
-            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(THIS_OS)).pData);
+            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(RTL_OS)).pData);
         return true;
     }
     if ( key == "_ARCH" ) {
         rtl_uString_assign(
-            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(THIS_ARCH)).pData);
+            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(RTL_ARCH)).pData);
         return true;
     }
     if ( key == "_CPPU_ENV" ) {

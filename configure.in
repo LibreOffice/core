@@ -2992,6 +2992,8 @@ aix*)
     GUI=UNX
     GUIBASE=unx
     OS=AIX
+    RTL_OS=AIX
+    RTL_ARCH=PowerPC
     OUTPATH=unxaigppc
     P_SEP=:
     SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
@@ -3004,6 +3006,7 @@ cygwin*)
     GUI=WNT
     GUIBASE=WIN
     OS=WNT
+    RTL_OS=Windows
     P_SEP=";"
 
     case "$host_cpu" in
@@ -3011,11 +3014,13 @@ cygwin*)
         if test "$CL_X64" != ""; then
             CPU=X
             CPUNAME=X86_64
+            RTL_ARCH=X86_64
             LIB64="lib/x64"
             OUTPATH=wntmscx$COMEX
         else
             CPU=I
             CPUNAME=INTEL
+            RTL_ARCH=x86
             OUTPATH=wntmsci$COMEX
         fi
         ;;
@@ -3034,12 +3039,14 @@ darwin*)
     # Not sure if "Aqua" is the right term to use?
     GUIBASE="aqua"
     OS=MACOSX
+    RTL_OS=MacOSX
     P_SEP=:
 
     case "$host_cpu" in
     arm*)
         CPU=R
         CPUNAME=ARM
+        RTL_ARCH=ARM_EABI
         GUIBASE=cocoatouch
         OUTPATH=unxiosr
         OS=IOS;
@@ -3047,11 +3054,13 @@ darwin*)
     powerpc*)
         CPU=P
         CPUNAME=POWERPC
+        RTL_ARCH=PowerPC
         OUTPATH=unxmacxp
         ;;
     i*86|x86_64)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         OUTPATH=unxmacxi
         ;;
     *)
@@ -3066,6 +3075,7 @@ dragonfly*)
     GUI=UNX
     GUIBASE=unx
     OS=DRAGONFLY
+    RTL_OS=DragonFly
     OUTPATH=unxdfly
     P_SEP=:
 
@@ -3073,10 +3083,12 @@ dragonfly*)
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         ;;
     x86_64)
         CPU=X
         CPUNAME=X86_64
+        RTL_ARCH=X86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -3091,6 +3103,7 @@ freebsd*)
     COM=GCC
     GUI=UNX
     GUIBASE=unx
+    RTL_OS=FreeBSD
     OS=FREEBSD
     OUTPATH=unxfbsd
     P_SEP=:
@@ -3099,11 +3112,13 @@ freebsd*)
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         OUTPATH=unxfbsdi
         ;;
     x86_64)
         CPU=X
         CPUNAME=X86_64
+        RTL_ARCH=X86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -3119,17 +3134,19 @@ kfreebsd*)
     GUI=UNX
     GUIBASE=unx
     OS=LINUX
-
+    RTL_OS=kFreeBSD
     case "$host_cpu" in
 
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         OUTPATH=unxkfgi6
         ;;
     x86_64)
         CPU=X
         CPUNAME=X86_64
+        RTL_ARCH=X86_64
         LIB64="lib64"
         OUTPATH=unxkfgx6
         ;;
@@ -3147,6 +3164,7 @@ linux-gnu*)
     GUI=UNX
     GUIBASE=unx
     OS=LINUX
+    RTL_OS=Linux
     P_SEP=:
 
     case "$host_cpu" in
@@ -3154,6 +3172,7 @@ linux-gnu*)
     alpha)
         CPU=L
         CPUNAME=AXP
+        RTL_ARCH=ALPHA
         OUTPATH=unxlngaxp
         ;;
     arm*)
@@ -3161,82 +3180,102 @@ linux-gnu*)
         CPUNAME=ARM
         EPM_FLAGS="-a arm"
         OUTPATH=unxlngr
+        RTL_ARCH=ARM_EABI
+        case "$host_cpu" in
+        arm*-linux)
+            RTL_ARCH=ARM_OABI
+            ;;
+        esac
         ;;
     hppa)
         CPU=H
         CPUNAME=HPPA
+        RTL_ARCH=HPPA
         EPM_FLAGS="-a hppa"
         OUTPATH=unxlnghppa
         ;;
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         OUTPATH=unxlngi6
         ;;
     ia64)
         CPU=A
         CPUNAME=IA64
+        RTL_ARCH=IA64
         OUTPATH=unxlnga
         ;;
     mips)
         CPU=M
         CPUNAME=GODSON
+        RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips"
         OUTPATH=unxlngmips
         ;;
     mips64)
         CPU=M
         CPUNAME=GODSON
+        RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips64"
         OUTPATH=unxlngmips
         ;;
     mips64el)
         CPU=M
         CPUNAME=GODSON
+        RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mips64el"
         OUTPATH=unxlngmips
         ;;
     mipsel)
         CPU=M
         CPUNAME=GODSON
+        RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mipsel"
         OUTPATH=unxlngmips
         ;;
     m68k)
         CPU=6
         CPUNAME=M68K
+        RTL_ARCH=M68K
         OUTPATH=unxlngm68k
         ;;
     powerpc)
         CPU=P
         CPUNAME=POWERPC
+        RTL_ARCH=PowerPC
         OUTPATH=unxlngppc
         ;;
     powerpc64)
         CPU=P
         CPUNAME=POWERPC64
+        RTL_ARCH=PowerPC_64
         LIB64="lib64"
         OUTPATH=unxlngppc64
         ;;
     sparc)
         CPU=S
         CPUNAME=SPARC
+        RTL_ARCH=SPARC
         OUTPATH=unxlngs
         ;;
     s390)
         CPU=3
         CPUNAME=S390
+        RTL_ARCH=S390
         OUTPATH=unxlngs390
         ;;
     s390x)
         CPU=3
         CPUNAME=S390x
+        RTL_ARCH=S390x
         LIB64="lib64"
         OUTPATH=unxlngs390x
         ;;
     x86_64)
         CPU=X
         CPUNAME=X86_64
+        RTL_ARCH=X86_64
         LIB64="lib64"
         OUTPATH=unxlngx6
         ;;
@@ -3254,6 +3293,7 @@ linux-androideabi*)
     GUI=UNX
     GUIBASE=android
     OS=ANDROID
+    RTL_OS=Android
     P_SEP=:
 
     case "$host_cpu" in
@@ -3261,6 +3301,7 @@ linux-androideabi*)
     arm|armel)
         CPU=R
         CPUNAME=ARM
+        RTL_ARCH=ARM_EABI
         OUTPATH=unxandr
         ;;
     *)
@@ -3276,6 +3317,7 @@ mingw*)
     GUI=WNT
     GUIBASE=WIN
     OS=WNT
+    RTL_OS=Windows
     P_SEP=:
 
     case "$host_cpu" in
@@ -3283,10 +3325,12 @@ mingw*)
         if test "$CL_X64" != ""; then
             CPU=X
             CPUNAME=X86_64
+            RTL_ARCH=X86_84
             OUTPATH=wntgccx$COMEX
         else
             CPU=I
             CPUNAME=INTEL
+            RTL_ARCH=x86
             OUTPATH=wntgcci$COMEX
         fi
         ;;
@@ -3305,6 +3349,7 @@ mingw*)
     GUI=UNX
     GUIBASE=unx
     OS=NETBSD
+    RTL_OS=NetBSD
     OUTPATH=unxnbsd
     P_SEP=:
 
@@ -3312,18 +3357,22 @@ mingw*)
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         ;;
     powerpc)
         CPU=P
         CPUNAME=POWERPC
+        RTL_ARCH=PowerPC
         ;;
     sparc)
         CPU=S
         CPUNAME=SPARC
+        RTL_ARCH=SPARC
         ;;
     x86_64)
         CPU=X
         CPUNAME=X86_64
+        RTL_ARCH=X86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -3339,6 +3388,7 @@ openbsd*)
     GUI=UNX
     GUIBASE=unx
     OS=OPENBSD
+    RTL_OS=OpenBSD
     OUTPATH=unxobsd
     P_SEP=:
 
@@ -3346,10 +3396,12 @@ openbsd*)
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         ;;
     x86_64)
         CPU=X
         CPUNAME=X86_64
+        RTL_ARCH=X86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -3369,17 +3421,20 @@ solaris*)
     GUI=UNX
     GUIBASE=unx
     OS=SOLARIS
+    RTL_OS=Solaris
     P_SEP=:
 
     case "$host_cpu" in
     i*86)
         CPU=I
         CPUNAME=INTEL
+        RTL_ARCH=x86
         OUTPATH=unxsogi
         ;;
     sparc)
         CPU=S
         CPUNAME=SPARC
+        RTL_ARCH=SPARC
         OUTPATH=unxsogs
         ;;
     *)
@@ -3420,6 +3475,8 @@ SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SR
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
+AC_SUBST(RTL_OS)
+AC_SUBST(RTL_ARCH)
 AC_SUBST(EPM_FLAGS)
 AC_SUBST(GUI)
 AC_SUBST(GUIBASE)

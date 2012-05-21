@@ -30,27 +30,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,sal/generated))
 sal_DIR := $(call gb_CustomTarget_get_workdir,sal/generated)
 
 $(call gb_CustomTarget_get_target,sal/generated) : \
-	$(sal_DIR)/rtlbootstrap.mk $(sal_DIR)/sal/udkversion.h \
+	$(sal_DIR)/sal/udkversion.h \
 	$(if $(filter-out $(COM),MSC),$(sal_DIR)/sal/typesizes.h)
-
-ifeq ($(COM),MSC)
-$(sal_DIR)/rtlbootstrap.mk :| $(sal_DIR)/.dir
-	echo RTL_OS:=Windows > $@
-ifeq ($(CPUNAME),INTEL)
-	echo RTL_ARCH:=x86 >> $@
-else
-	echo RTL_ARCH:=X86_64 >> $@
-endif
-else
-$(sal_DIR)/rtlbootstrap.mk : $(sal_DIR)/sal/typesizes.h | $(sal_DIR)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CXX,1)
-	$(call gb_Helper_abbreviate_dirs, \
-	(echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) > $(sal_DIR)/bootstrap.cxx && \
-	$(CXX) -E $(gb_OSDEFS) $(gb_CXXFLAGS) -D$(CPUNAME) -I$(sal_DIR) -I$(SRCDIR)/sal/rtl/source \
-		-I$(SRCDIR)/sal/inc $(sal_DIR)/bootstrap.cxx > $@.tmp && \
-	cat $@.tmp | grep '^RTL_' | sed -e 's/"//g' > $@ && \
-	rm $(sal_DIR)/bootstrap.cxx $@.tmp)
-endif
 
 $(sal_DIR)/sal/typesizes.h :| $(sal_DIR)/sal/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
