@@ -707,6 +707,24 @@ sal_Bool SVGFilter::implExportDocument()
     if( mpSVGExport->IsUseTinyProfile() )
          mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "baseProfile", B2UCONST( "tiny" ) );
 
+    // enabling _SVG_WRITE_EXTENTS means that the slide size is not adapted
+    // to the size of the browser window, moreover the slide is top left aligned
+    // instead of centered.
+    #define _SVG_WRITE_EXTENTS
+    #ifdef _SVG_WRITE_EXTENTS
+    if( mbSinglePage )
+    {
+        aAttr = OUString::valueOf( nDocWidth * 0.01 );
+        aAttr += B2UCONST( "mm" );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
+
+        aAttr = OUString::valueOf( nDocHeight * 0.01 );
+        aAttr += B2UCONST( "mm" );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
+    }
+    #endif
+
+
     aAttr = B2UCONST( "0 0 " );
     aAttr += OUString::valueOf( nDocWidth );
     aAttr += B2UCONST( " " );
