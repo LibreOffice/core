@@ -112,9 +112,6 @@ namespace vcl
     class RenderGraphic;
 }
 
-#define OUTDEV_BUFFER_SIZE  128
-
-
 // ---------------------
 // - OutputDevice-Data -
 // ---------------------
