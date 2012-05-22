@@ -554,7 +554,7 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
     //now put this at the end of the window list
     rOrig.ImplInsertWindow(pParent);
 #endif
-    fprintf(stderr, "swapped %p for %p (%d)\n", &rReplacement, &rOrig);
+    fprintf(stderr, "swapped %p for %p\n", &rReplacement, &rOrig);
 }
 
 bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)

@@ -2312,14 +2312,17 @@ void RadioButton::group(RadioButton &rOther)
     }
 
     if (rOther.m_xGroup)
-    {
-        for (std::set<RadioButton*>::iterator aI = rOther.m_xGroup->begin(), aEnd = rOther.m_xGroup->end(); aI != aEnd; ++aI)
-            m_xGroup->insert(*aI);
-    }
+        m_xGroup->insert(rOther.m_xGroup->begin(), rOther.m_xGroup->end());
 
     m_xGroup->insert(&rOther);
 
-    rOther.m_xGroup = m_xGroup;
+    //make all members of the group share the same button group
+    for (std::set<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end();
+        aI != aEnd; ++aI)
+    {
+        RadioButton* pButton = *aI;
+        pButton->m_xGroup = m_xGroup;
+    }
 
     //if this one is checked, uncheck all the others
     if (mbChecked)
