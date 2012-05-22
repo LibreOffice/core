@@ -644,6 +644,11 @@ void ScDataBarFormat::SetDataBarData( ScDataBarFormatData* pData )
     mpFormatData.reset(pData);
 }
 
+const ScDataBarFormatData* ScDataBarFormat::GetDataBarData() const
+{
+    return mpFormatData.get();
+}
+
 ScColorFormat* ScDataBarFormat::Clone(ScDocument* pDoc) const
 {
     return new ScDataBarFormat(pDoc, *this);

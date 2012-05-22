@@ -216,6 +216,7 @@ public:
     ScDataBarInfo* GetDataBarInfo(const ScAddress& rAddr) const;
 
     void SetDataBarData( ScDataBarFormatData* pData );
+    const ScDataBarFormatData* GetDataBarData() const;
 
     virtual void DataChanged(const ScRange& rRange);
     virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);

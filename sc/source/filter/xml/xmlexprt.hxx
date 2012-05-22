@@ -205,6 +205,7 @@ class ScXMLExport : public SvXMLExport
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, bool bColumn );
     void WriteNamedExpressions();
     void WriteNamedRange(ScRangeName* pRangeName);
+    void ExportConditionalFormat();
     void WriteExternalRefCaches();
     void WriteConsolidation();  // core implementation
 

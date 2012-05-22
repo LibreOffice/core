@@ -68,6 +68,8 @@
 #include "editutil.hxx"
 #include "tabprotection.hxx"
 #include "cachedattraccess.hxx"
+#include "colorscale.hxx"
+#include "conditio.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -2849,6 +2851,9 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
             WriteNamedRange(pRangeName);
         }
 
+        //export new conditional format information
+        ExportConditionalFormat();
+
     }
 }
 
@@ -3785,6 +3790,97 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sTempSymbol);
             SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, true, true);
+        }
+    }
+}
+
+namespace {
+
+rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
+{
+    if(rEntry.GetMin())
+        return rtl::OUString("minimum");
+    else if(rEntry.GetMax())
+        return rtl::OUString("maximum");
+    else if(rEntry.GetPercent())
+        return rtl::OUString("percent");
+    else if(rEntry.GetPercentile())
+        return rtl::OUString("percentile");
+    else if(rEntry.GetFormula())
+        return rtl::OUString("formula");
+    else
+        return rtl::OUString("number");
+}
+
+}
+
+void ScXMLExport::ExportConditionalFormat()
+{
+    ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList();
+    ScColorFormatList* pColorFormatList = pDoc->GetColorScaleList();
+    if(pCondFormatList || pColorFormatList)
+    {
+        SvXMLElementExport aElementCondFormats(*this, XML_NP_TABLE_EXT, XML_CONDITIONAL_FORMATS, true, true);
+
+        if(pCondFormatList)
+        {
+            for(ScConditionalFormatList::const_iterator itr = pCondFormatList->begin();
+                    itr != pCondFormatList->end(); ++itr)
+            {
+                SvXMLElementExport aElementCondFormat(*this, XML_NP_TABLE_EXT, XML_CONDITIONAL_FORMAT, true, true);
+                rtl::OUString sRangeList;
+                //ScRangeStringConverter::GetStringFromRangeList( sRanges, rRangeList, pDoc, FormulaGrammar::CONV_OOO );
+                AddAttribute(XML_NP_TABLE_EXT, XML_TARGET_RANGE_ADDRESS, sRangeList);
+            }
+        }
+
+        if(pColorFormatList)
+        {
+            for(ScColorFormatList::const_iterator itr = pColorFormatList->begin();
+                    itr != pColorFormatList->end(); ++itr)
+            {
+                rtl::OUString sRangeList;
+                const ScRangeList& rRangeList = itr->GetRange();
+                ScRangeStringConverter::GetStringFromRangeList( sRangeList, &rRangeList, pDoc, FormulaGrammar::CONV_OOO );
+                AddAttribute(XML_NP_TABLE_EXT, XML_TARGET_RANGE_ADDRESS, sRangeList);
+                SvXMLElementExport aElementColFormat(*this, XML_NP_TABLE_EXT, XML_CONDITIONAL_FORMAT, true, true);
+
+                if(itr->GetType() == COLORSCALE)
+                {
+                    SvXMLElementExport aElementColorScale(*this, XML_NP_TABLE_EXT, XML_COLOR_SCALE, true, true);
+
+                }
+                else if(itr->GetType() == DATABAR)
+                {
+                    const ScDataBarFormatData* pFormatData = static_cast<const ScDataBarFormat&>(*itr).GetDataBarData();
+                    if(!pFormatData->mbGradient)
+                        AddAttribute(XML_NP_TABLE_EXT, XML_GRADIENT, XML_FALSE);
+                    rtl::OUStringBuffer aBuffer;
+                    ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor.GetColor());
+                    AddAttribute(XML_NP_TABLE_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
+                    SvXMLElementExport aElementDataBar(*this, XML_NP_TABLE_EXT, XML_DATA_BAR, true, true);
+
+                    if(pFormatData->mpLowerLimit->GetFormula())
+                    {
+                        rtl::OUString sFormula;
+                        AddAttribute(XML_NP_TABLE_EXT, XML_VALUE, sFormula);
+                    }
+                    else
+                        AddAttribute(XML_NP_TABLE_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpLowerLimit->GetValue()));
+                    AddAttribute(XML_NP_TABLE_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
+                    SvXMLElementExport aElementDataBarEntryLower(*this, XML_NP_TABLE_EXT, XML_DATA_BAR_ENTRY, true, true);
+
+                    if(pFormatData->mpUpperLimit->GetFormula())
+                    {
+                        rtl::OUString sFormula;
+                        AddAttribute(XML_NP_TABLE_EXT, XML_VALUE, sFormula);
+                    }
+                    else
+                        AddAttribute(XML_NP_TABLE_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpUpperLimit->GetValue()));
+                    AddAttribute(XML_NP_TABLE_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit));
+                    SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NP_TABLE_EXT, XML_DATA_BAR_ENTRY, true, true);
+                }
+            }
         }
     }
 }
