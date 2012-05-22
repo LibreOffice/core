@@ -2348,15 +2348,10 @@ Size ImplBorderWindow::GetOptimalSize(WindowSizeType eType) const
         return Size(mnMaxWidth, mnMaxHeight);
     if (eType == WINDOWSIZE_MINIMUM)
         return Size(mnMinWidth, mnMinHeight);
-    Size aRet(0, 0);
     Window* pClientWindow = ImplGetClientWindow();
     if (pClientWindow)
-        aRet = pClientWindow->GetOptimalSize(eType);
-    sal_Int32 nLeftBorder, nTopBorder, nRightBorder, nBottomBorder;
-    GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
-    aRet.Width() += nLeftBorder+nRightBorder;
-    aRet.Height() += nTopBorder+nBottomBorder;
-    return aRet;
+        return pClientWindow->GetOptimalSize(eType);
+    return Size(0, 0);
 }
 
 void ImplBorderWindow::setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue)
