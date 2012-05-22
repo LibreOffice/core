@@ -56,7 +56,8 @@ public:
     void testN757890();
     void testFdo49940();
     void testN751077();
-    void testN705956();
+    void testN705956_1();
+    void testN705956_2();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -67,7 +68,8 @@ public:
     CPPUNIT_TEST(testN757890);
     CPPUNIT_TEST(testFdo49940);
     CPPUNIT_TEST(testN751077);
-    CPPUNIT_TEST(testN705956);
+    CPPUNIT_TEST(testN705956_1);
+    CPPUNIT_TEST(testN705956_2);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -241,7 +243,7 @@ xray para.PageStyleName
     CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), value );
 }
 
-void Test::testN705956()
+void Test::testN705956_1()
 {
     load( "n705956-1.docx" );
 /*
@@ -261,6 +263,25 @@ xray graphic.Size
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(120), bitmap->getSize().Width );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(106), bitmap->getSize().Height );
+}
+
+void Test::testN705956_2()
+{
+    load( "n705956-2.docx" );
+/*
+<v:shapetype> must be global, reachable even from <v:shape> inside another <w:pict>
+image = ThisComponent.DrawPage.getByIndex(0)
+xray image.FillColor
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> image;
+    drawPage->getByIndex(0) >>= image;
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    sal_Int32 fillColor;
+    imageProperties->getPropertyValue( "FillColor" ) >>= fillColor;
+    CPPUNIT_ASSERT_EQUAL( 0xc0504d, fillColor );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

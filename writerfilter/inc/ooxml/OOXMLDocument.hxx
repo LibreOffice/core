@@ -246,6 +246,8 @@ public:
     virtual void setXNoteType(const Id & nId) = 0;
     virtual const Id & getXNoteType() const = 0;
     virtual const ::rtl::OUString & getTarget() const = 0;
+    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
+    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) = 0;
 };
 
 
