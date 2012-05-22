@@ -289,6 +289,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "soffice.StarCalcDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -394,6 +395,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -525,6 +527,7 @@ End
 RegistryItem gid_Regitem_stc_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".stc";
     Value = "Document";
@@ -691,6 +694,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "opendocument.CalcDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -709,6 +713,7 @@ End
 RegistryItem gid_Regitem_ods_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".ods";
     Value = "Document";
@@ -841,6 +846,7 @@ End
 RegistryItem gid_Regitem_fods_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fods";
     Value = "Document";
@@ -908,6 +914,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "opendocument.CalcTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -926,6 +933,7 @@ End
 RegistryItem gid_Regitem_ots_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Calc_Bin;
+    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".ots";
     Value = "Document";
