@@ -1961,6 +1961,7 @@ css::uno::Reference< css::registry::XSimpleRegistry > createTypeRegistry(
             css::uno::Reference< css::registry::XRegistryKey >()),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::registry::XSimpleRegistry > reg;
+    std::vector<rtl::OUString> loaded;
     for (sal_Int32 i = 0; i != -1;) {
         rtl::OUString uri(uris.getToken(0, ' ', i));
         if (uri.isEmpty()) {
@@ -1969,9 +1970,13 @@ css::uno::Reference< css::registry::XSimpleRegistry > createTypeRegistry(
         bool optional;
         bool directory;
         decodeRdbUri(&uri, &optional, &directory);
-        reg = directory
-            ? readTypeRdbDirectory(uri, optional, reg, simpleRegs, nestedRegs)
-            : readTypeRdbFile(uri, optional, reg, simpleRegs, nestedRegs);
+        if (::std::find (loaded.begin(), loaded.end(), uri) == loaded.end())
+        {
+            reg = directory
+                ? readTypeRdbDirectory(uri, optional, reg, simpleRegs, nestedRegs)
+                : readTypeRdbFile(uri, optional, reg, simpleRegs, nestedRegs);
+            loaded.push_back(uri);
+        }
     }
     return reg;
 }
