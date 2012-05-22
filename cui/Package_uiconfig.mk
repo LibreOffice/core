@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., Caolán McNamara <caolanm@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,12 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,cui))
+$(eval $(call gb_Package_Package,cui_uiconfig,$(SRCDIR)/cui/uiconfig))
 
-$(eval $(call gb_Module_add_targets,cui,\
-	AllLangResTarget_cui \
-	Library_cui \
-	Package_uiconfig \
-))
+$(eval $(call gb_Package_add_file,cui_uiconfig,xml/uiconfig/ui/10000.ui,ui/10000.ui))
 
 # vim: set noet sw=4 ts=4:
