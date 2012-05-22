@@ -999,7 +999,7 @@ namespace sfx2
         std::vector< ExportFilter >         aFilterGroup;
         Reference< XFilterGroupManager >    xFilterGroupManager( _rxFilterManager, UNO_QUERY );
         ::rtl::OUString                     sTypeName;
-        const ::rtl::OUString               sWriterHTMLType( DEFINE_CONST_OUSTRING("writer_web_HTML") );
+        const ::rtl::OUString               sWriterHTMLType( DEFINE_CONST_OUSTRING("generic_HTML") );
         const ::rtl::OUString               sGraphicHTMLType( DEFINE_CONST_OUSTRING("graphic_HTML") );
         const ::rtl::OUString               sXHTMLType( DEFINE_CONST_OUSTRING("XHTML_File") );
         const ::rtl::OUString               sPDFType( DEFINE_CONST_OUSTRING("pdf_Portable_Document_Format") );

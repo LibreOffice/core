@@ -153,13 +153,10 @@ class CGDocument(ConfigGroup):
     def getDocType(self, media):
         if media == "":
             return NO_TYPE
-
-        if media.startswith("writer"):
-            if media.startswith("writer_web_HTML"):
-                return HTML_DOC
-            else:
-                return WRITER_DOC
-
+        elif media.startswith("generic_HTML"):
+            return HTML_DOC
+        elif media.startswith("writer"):
+            return WRITER_DOC
         elif media.startswith("calc"):
             return CALC_DOC
         elif media.startswith("draw"):

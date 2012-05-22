@@ -607,7 +607,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WEBHTML:
         {
-            static const char HTML_DOCUMENT_TYPE[] = "writer_web_HTML";
+            static const char HTML_DOCUMENT_TYPE[] = "generic_HTML";
             static const char HTML_GRAPHIC_TYPE[]  = "graphic_HTML";
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 

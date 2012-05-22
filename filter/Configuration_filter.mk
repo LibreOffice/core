@@ -310,7 +310,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 
 # fcfg_writer
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
-	writer_web_HTML \
+	generic_HTML \
 	writer_Lotus_1_2_3_10_DOS_StarWriter \
 	writer_Lotus_1_2_3_10_WIN_StarWriter \
 	calc_MS_Excel_40 \
@@ -396,7 +396,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 
 # fcfg_web
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
-	writer_web_HTML \
+	generic_HTML \
 	writer_Text \
 	writer_web_HTML_help \
 	writer_StarOffice_XML_Writer \
@@ -457,7 +457,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 # fcfg_calc
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
 	calc_DIF \
-	writer_web_HTML \
+	generic_HTML \
 	calc_Lotus \
 	calc_QPro \
 	calc_MS_Excel_40 \

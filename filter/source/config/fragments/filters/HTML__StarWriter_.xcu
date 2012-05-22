@@ -4,7 +4,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>HTML</value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="Type"><value>writer_web_HTML</value></prop>
+        <prop oor:name="Type"><value>generic_HTML</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
     </node>

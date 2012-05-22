@@ -264,16 +264,13 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         {
             return TypeDetection.NO_TYPE;
         }
+        if (media.startsWith("generic_HTML"))
+        {
+            return TypeDetection.HTML_DOC;
+        }
         if (media.startsWith("writer"))
         {
-            if (media.startsWith("writer_web_HTML"))
-            {
-                return TypeDetection.HTML_DOC;
-            }
-            else
-            {
-                return TypeDetection.WRITER_DOC;
-            }
+            return TypeDetection.WRITER_DOC;
         }
         else if (media.startsWith("calc"))
         {
