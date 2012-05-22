@@ -145,7 +145,7 @@ public:
 
             o << "<line>";
 
-            snprintf(sBuffer, 255, "%08lx: ", n);
+            snprintf(sBuffer, 255, "%08lx: ", static_cast<unsigned long>(n));
 
             o << sBuffer;
 
