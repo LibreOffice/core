@@ -317,6 +317,11 @@ interface BaseTextEditView
         ExecMethod = ExecuteStatusLine ;
         StateMethod = StateStatusLine ;
     ]
+    FN_STAT_WORDCOUNT // status()
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
     FN_STAT_BOOKMARK // status()
     [
         ExecMethod = ExecuteStatusLine ;

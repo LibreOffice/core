@@ -8027,6 +8027,31 @@ SfxStringItem StateZoom FN_STAT_ZOOM
 ]
 
 //--------------------------------------------------------------------------
+SfxStringItem StateWordCount FN_STAT_WORDCOUNT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxBoolItem SubScript FN_SET_SUB_SCRIPT
 
 [

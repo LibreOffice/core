@@ -275,8 +275,8 @@ interface TextPrintPreview
     [
         StateMethod = StateUndo ;
     ]
-     //---------------------------------------------------------------------
-     //Ab hier Statusleiste
+    //---------------------------------------------------------------------
+    // Begin StatusBar
     FN_STAT_ZOOM // status()
     [
         ExecMethod = Execute ;
@@ -307,13 +307,18 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-        SID_ATTR_ZOOMSLIDER // status()
-        [
-                ExecMethod = Execute ;
-                StateMethod = GetState ;
-        ]
-     //----------------------------------------------
-     //End mit Statusleiste
+    SID_ATTR_ZOOMSLIDER // status()
+    [
+            ExecMethod = Execute ;
+            StateMethod = GetState ;
+    ]
+    FN_STAT_WORDCOUNT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    //----------------------------------------------
+    // End StatusBar
 }
 
  //=========================================================================

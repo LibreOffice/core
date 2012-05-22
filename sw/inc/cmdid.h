@@ -1165,6 +1165,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_STAT_SELMODE             (FN_STAT + 5)
 #define FN_STAT_CONTEXT             (FN_STAT + 7)
 #define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* For Popup Bookmarks*/
+#define FN_STAT_WORDCOUNT           (FN_STAT + 9)
 
 /*--------------------------------------------------------------------
     Region: Page preview

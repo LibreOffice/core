@@ -708,6 +708,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/utlui/uitool \
     sw/source/ui/utlui/unotools \
     sw/source/ui/utlui/viewlayoutctrl \
+    sw/source/ui/utlui/wordcountctrl \
     sw/source/ui/utlui/zoomctrl \
     sw/source/ui/web/wdocsh \
     sw/source/ui/web/wformsh \

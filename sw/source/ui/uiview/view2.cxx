@@ -140,6 +140,7 @@
 #include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
+#include <docstat.hxx>
 
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
@@ -1197,6 +1198,25 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 }
             }
             break;
+
+            case FN_STAT_WORDCOUNT:
+            {
+                SwDocStat selectionStats;
+                SwDocStat documentStats;
+                {
+                    SwWait aWait( *GetDocShell(), sal_True );
+                    rShell.StartAction();
+                    rShell.CountWords(selectionStats);
+                    documentStats = rShell.GetUpdatedDocStat();
+                    rShell.EndAction();
+                }
+                rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, rtl::OUStringBuffer("Words: ")
+                                                            .append(rtl::OUString::valueOf(static_cast<sal_Int64>(selectionStats.nWord)))
+                                                            .append('/')
+                                                            .append(rtl::OUString::valueOf(static_cast<sal_Int64>(documentStats.nWord))).makeStringAndClear()));
+            }
+            break;
+
             case FN_STAT_TEMPLATE:
             {
                 rSet.Put(SfxStringItem( FN_STAT_TEMPLATE,
@@ -1467,6 +1487,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case FN_STAT_PAGE:
         {
             GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR,
+                                      SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
+        }
+        break;
+
+        case FN_STAT_WORDCOUNT:
+        {
+            GetViewFrame()->GetDispatcher()->Execute(FN_WORDCOUNT_DIALOG,
                                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
         }
         break;
