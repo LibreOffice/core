@@ -2831,6 +2831,22 @@ void RadioButton::SetState( sal_Bool bCheck )
     }
 }
 
+void RadioButton::take_properties(Window &rOther)
+{
+    RadioButton &rOtherRadio = static_cast<RadioButton&>(rOther);
+    if (rOtherRadio.m_xGroup.get())
+    {
+        rOtherRadio.m_xGroup->erase(&rOtherRadio);
+        rOtherRadio.m_xGroup->insert(this);
+    }
+    std::swap(m_xGroup, rOtherRadio.m_xGroup);
+    mbChecked = rOtherRadio.mbChecked;
+    mbSaveValue = rOtherRadio.mbSaveValue;
+    mbRadioCheck = rOtherRadio.mbRadioCheck;
+    mbStateChanged = rOtherRadio.mbStateChanged;
+    Button::take_properties(rOther);
+}
+
 bool RadioButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
@@ -3785,6 +3801,15 @@ void CheckBox::SetState( TriState eState )
         StateChanged( STATE_CHANGE_STATE );
         Toggle();
     }
+}
+
+void CheckBox::take_properties(Window &rOther)
+{
+    CheckBox &rOtherCheck = static_cast<CheckBox&>(rOther);
+    meState = rOtherCheck.meState;
+    meSaveValue = rOtherCheck.meSaveValue;
+    mbTriState = rOtherCheck.mbTriState;
+    Button::take_properties(rOther);
 }
 
 bool CheckBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)

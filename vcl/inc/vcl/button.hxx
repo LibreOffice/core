@@ -285,6 +285,7 @@ public:
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
+    boost::shared_ptr< std::set<RadioButton*> > m_xGroup;
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
@@ -317,12 +318,12 @@ private:
     SAL_DLLPRIVATE          RadioButton& operator= (const RadioButton &);
 
 protected:
-    boost::shared_ptr< std::set<RadioButton*> > m_xGroup;
-
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
+
+    virtual void take_properties(Window &rOther);
 
 public:
     SAL_DLLPRIVATE void     ImplCallClick( sal_Bool bGrabFocus = sal_False, sal_uInt16 nFocusFlags = 0 );
@@ -458,6 +459,8 @@ protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
+
+    virtual void take_properties(Window &rOther);
 public:
     SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();

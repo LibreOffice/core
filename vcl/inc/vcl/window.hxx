@@ -598,6 +598,11 @@ protected:
      */
     SAL_DLLPRIVATE void queue_resize();
 
+    /*
+     * Takes ownership of the rOther properties
+     */
+    virtual void take_properties(Window &rOther);
+
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 public:
@@ -1104,11 +1109,6 @@ public:
      * @return false if property is unknown
      */
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
-
-    /*
-     * Takes ownership of the rOther properties
-     */
-    void take_properties(Window &rOther);
 
     virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);
     virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;
