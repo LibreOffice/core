@@ -41,11 +41,11 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
-const long nImageWidthSingle = 15;
-const long nImageWidthAuto = 25;
-const long nImageWidthBook = 23;
-const long nImageWidthSum = 63;
-const long nImageHeight = 11;
+const long nImageWidthSingle = 22;
+const long nImageWidthAuto = 22;
+const long nImageWidthBook = 22;
+const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
+const long nImageHeight = 10;
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
@@ -111,12 +111,14 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
 
+    const Rectangle aControlRect = getControlRect();
+
     const bool bSingleColumn    = 0 == mpImpl->mnState;
     const bool bAutomatic       = 1 == mpImpl->mnState;
     const bool bBookMode        = 2 == mpImpl->mnState;
 
     const long nXOffset = (aRect.GetWidth()  - nImageWidthSum)/2;
-    const long nYOffset = (aRect.GetHeight() - nImageHeight)/2;
+    const long nYOffset = (aControlRect.GetHeight() - nImageHeight)/2;
 
     aRect.Left() = aRect.Left() + nXOffset;
     aRect.Top()  = aRect.Top() + nYOffset;
