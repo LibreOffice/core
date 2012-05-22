@@ -122,6 +122,18 @@ public class DocumentLoader
                     xCompLoader.loadComponentFromURL
                     (sUrl, "_blank", 0, propertyValues);
                 Log.i(TAG, "oDoc is " + (oDoc!=null ? oDoc.toString() : "null"));
+
+                com.sun.star.lang.XTypeProvider typeProvider = (com.sun.star.lang.XTypeProvider) UnoRuntime.queryInterface(com.sun.star.lang.XTypeProvider.class, oDoc);
+                Log.i(TAG, "typeProvider is " + (typeProvider!=null ? typeProvider.toString() : "null"));
+
+                if (typeProvider != null) {
+                    com.sun.star.uno.Type[] types = typeProvider.getTypes();
+                    if (types != null) {
+                        for (com.sun.star.uno.Type t : types) {
+                            Log.i(TAG, "  " + t.getTypeName());
+                        }
+                    }
+                }
             }
         }
         catch (Exception e) {
