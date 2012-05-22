@@ -255,6 +255,7 @@ xray graphic.Size
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL( 1, drawPage->getCount());
     uno::Reference<drawing::XShape> image;
     drawPage->getByIndex(0) >>= image;
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
