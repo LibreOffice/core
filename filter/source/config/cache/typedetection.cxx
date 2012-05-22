@@ -143,9 +143,18 @@ TypeDetection::~TypeDetection()
     css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICE_URLTRANSFORMER), css::uno::UNO_QUERY);
     xParser->parseStrict(aURL);
 
-    //*******************************************
-    // preselected filter, type or document service?
-    // use it as first "flat" detected type later!
+    rtl::OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(
+        comphelper::MediaDescriptor::PROP_FILTERNAME(), rtl::OUString());
+    if (!aSelectedFilter.isEmpty())
+    {
+        // Caller specified the filter type.  Honor it.  Just get the default
+        // type for that filter, and bail out.
+        if (impl_validateAndSetFilterOnDescriptor(stlDescriptor, aSelectedFilter))
+            return stlDescriptor[comphelper::MediaDescriptor::PROP_TYPENAME()].get<rtl::OUString>();
+    }
+
+    // preselected type or document service? use it as first "flat" detected
+    // type later!
     FlatDetection lFlatTypes;
     impl_getPreselection(aURL, stlDescriptor, lFlatTypes);
 
@@ -689,10 +698,6 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     ::rtl::OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
     if (sSelectedType.getLength())
         impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes);
-
-    ::rtl::OUString sSelectedFilter = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
-    if (sSelectedFilter.getLength())
-        impl_getPreselectionForFilter(sSelectedFilter, aParsedURL, rFlatTypes);
 
     ::rtl::OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), ::rtl::OUString());
     if (sSelectedDoc.getLength())
