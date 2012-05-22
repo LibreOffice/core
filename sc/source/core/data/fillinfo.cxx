@@ -483,15 +483,17 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         sal_uLong nColorScale = ((const SfxUInt32Item&)pPattern->
                                                 GetItem(ATTR_COLORSCALE)).GetValue();
 
+                        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
                         const ScConditionalFormat* pCondForm = NULL;
                         if ( nConditional && pCondFormList )
                             pCondForm = pCondFormList->GetFormat( nConditional );
 
+                        ScColorFormatList* pColorFormatList = GetColorScaleList(nTab);
                         const ScColorScaleFormat* pColorScale = NULL;
                         const ScDataBarFormat* pDataBar = NULL;
-                        if ( nColorScale && mpColorScaleList )
+                        if ( nColorScale && pColorFormatList )
                         {
-                            ScColorFormat* pFormat = mpColorScaleList->GetFormat( nColorScale );
+                            ScColorFormat* pFormat = pColorFormatList->GetFormat( nColorScale );
                             if(pFormat->GetType() == COLORSCALE)
                                 pColorScale = static_cast<ScColorScaleFormat*>(pFormat);
                             else if(pFormat->GetType() == DATABAR)

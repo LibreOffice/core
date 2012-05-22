@@ -1073,7 +1073,7 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
-    if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList() )
+    if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList(GetCurrScTab()) )
     {
         for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
                         itr != pCondFmtList->end(); ++itr)
@@ -1083,19 +1083,15 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }
     }
-    if( const ScColorFormatList* pColorScaleList = GetDoc().GetColorScaleList() )
+    if( const ScColorFormatList* pColorScaleList = GetDoc().GetColorScaleList(GetCurrScTab()) )
     {
         for( ScColorFormatList::const_iterator itr = pColorScaleList->begin();
                 itr != pColorScaleList->end(); ++itr)
         {
-            const ScRangeList& rList = itr->GetRange();
-            if (rList.front()->aStart.Tab() == GetCurrScTab())
+            if(itr->GetType() == COLORSCALE)
             {
-                if(itr->GetType() == COLORSCALE)
-                {
-                    XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*itr) ) );
-                    maColorScaleList.AppendRecord( xColorScaleRec );
-                }
+                XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*itr) ) );
+                maColorScaleList.AppendRecord( xColorScaleRec );
             }
         }
     }

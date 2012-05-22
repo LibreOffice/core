@@ -809,7 +809,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         ScDocument& rDoc = getScDocument();
         ScColorScaleFormat* pFormat = new ScColorScaleFormat(&rDoc);
 
-        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat);
+        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat, getSheetIndex());
 
         ScRangeList aList;
         // apply attributes to cells
@@ -840,7 +840,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         ScDocument& rDoc = getScDocument();
         ScDataBarFormat* pFormat = new ScDataBarFormat(&rDoc);
 
-        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat);
+        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat, getSheetIndex());
 
         // apply attributes to cells
         //

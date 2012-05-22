@@ -37,7 +37,6 @@ class ScRangeName;
 class ScPrintRangeSaver;
 class ScDPCollection;
 class ScChartCollection;
-class ScConditionalFormatList;
 class ScDetOpList;
 class ScChartListenerCollection;
 class ScAreaLinkSaveCollection;
@@ -50,7 +49,6 @@ private:
     ScRangeName*                pRangeName;
     ScPrintRangeSaver*          pPrintRanges;
     ScDPCollection*             pDPCollection;
-    ScConditionalFormatList*    pCondFormList;
     ScDetOpList*                pDetOpList;
     ScChartListenerCollection*  pChartListenerCollection;
     ScAreaLinkSaveCollection*   pAreaLinks;

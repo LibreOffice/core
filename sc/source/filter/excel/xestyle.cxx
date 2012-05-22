@@ -2851,77 +2851,81 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     (*mpKeywordTable)[ NF_KEY_THAI_T ] = String( RTL_CONSTASCII_USTRINGPARAM( "T" ) );
     sal_Int32 nNumFmtIndex = 0;
 
-    ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList();
-    if (pList)
+    SCTAB nTables = rRoot.GetDoc().GetTableCount();
+    for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
-        sal_Int32 nIndex = 0;
-        for (ScConditionalFormatList::const_iterator itr = pList->begin();
-                                itr != pList->end(); ++itr)
+        ScConditionalFormatList* pList = rRoot.GetDoc().GetCondFormList(nTab);
+        if (pList)
         {
-            sal_Int32 nEntryCount = itr->Count();
-            for (sal_Int32 nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
+            sal_Int32 nIndex = 0;
+            for (ScConditionalFormatList::const_iterator itr = pList->begin();
+                    itr != pList->end(); ++itr)
             {
-                const ScCondFormatEntry* pEntry = itr->GetEntry(nFormatEntry);
-                if (!pEntry)
-                    continue;
-
-                rtl::OUString aStyleName = pEntry->GetStyle();
-                if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())
+                sal_Int32 nEntryCount = itr->Count();
+                for (sal_Int32 nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
-                    maStyleNameToDxfId.insert(std::pair<rtl::OUString, sal_Int32>(aStyleName, nIndex));
+                    const ScCondFormatEntry* pEntry = itr->GetEntry(nFormatEntry);
+                    if (!pEntry)
+                        continue;
 
-                    SfxItemSet& rSet = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName)->GetItemSet();
-
-                    XclExpCellBorder* pBorder = new XclExpCellBorder;
-                    if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
+                    rtl::OUString aStyleName = pEntry->GetStyle();
+                    if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())
                     {
-                        delete pBorder;
-                        pBorder = NULL;
+                        maStyleNameToDxfId.insert(std::pair<rtl::OUString, sal_Int32>(aStyleName, nIndex));
+
+                        SfxItemSet& rSet = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName)->GetItemSet();
+
+                        XclExpCellBorder* pBorder = new XclExpCellBorder;
+                        if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
+                        {
+                            delete pBorder;
+                            pBorder = NULL;
+                        }
+
+                        XclExpCellAlign* pAlign = new XclExpCellAlign;
+                        if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
+                        {
+                            delete pAlign;
+                            pAlign = NULL;
+                        }
+
+                        XclExpCellProt* pCellProt = new XclExpCellProt;
+                        if (!pCellProt->FillFromItemSet( rSet ))
+                        {
+                            delete pCellProt;
+                            pCellProt = NULL;
+                        }
+
+                        XclExpCellArea* pCellArea = new XclExpCellArea;
+                        if(!pCellArea->FillFromItemSet( rSet, GetPalette(), GetBiff() ))
+                        {
+                            delete pCellArea;
+                            pCellArea = NULL;
+                        }
+
+                        XclExpFont* pFont = NULL;
+                        // check if non default font is set and only export then
+                        if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ))>SFX_ITEM_DEFAULT )
+                        {
+                            Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
+                            pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
+                        }
+
+                        XclExpNumFmt* pNumFormat = NULL;
+                        const SfxPoolItem *pPoolItem = NULL;
+                        if( rSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+                        {
+                            sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
+                            sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( EXC_FORMAT_OFFSET8 + nIndex );
+                            pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
+                            ++nNumFmtIndex;
+                        }
+
+                        maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pCellArea ));
+                        ++nIndex;
                     }
 
-                    XclExpCellAlign* pAlign = new XclExpCellAlign;
-                    if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
-                    {
-                        delete pAlign;
-                        pAlign = NULL;
-                    }
-
-                    XclExpCellProt* pCellProt = new XclExpCellProt;
-                    if (!pCellProt->FillFromItemSet( rSet ))
-                    {
-                        delete pCellProt;
-                        pCellProt = NULL;
-                    }
-
-                    XclExpCellArea* pCellArea = new XclExpCellArea;
-                    if(!pCellArea->FillFromItemSet( rSet, GetPalette(), GetBiff() ))
-                    {
-                        delete pCellArea;
-                        pCellArea = NULL;
-                    }
-
-                    XclExpFont* pFont = NULL;
-                    // check if non default font is set and only export then
-                    if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ))>SFX_ITEM_DEFAULT )
-                    {
-                        Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
-                        pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
-                    }
-
-                    XclExpNumFmt* pNumFormat = NULL;
-                    const SfxPoolItem *pPoolItem = NULL;
-                    if( rSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
-                        sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( EXC_FORMAT_OFFSET8 + nIndex );
-                        pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
-                        ++nNumFmtIndex;
-                    }
-
-                    maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pCellArea ));
-                    ++nIndex;
                 }
-
             }
         }
     }

@@ -1026,39 +1026,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         {
             SfxPoolItem* pNewItem = NULL;
 
-            if ( nAttrId == ATTR_CONDITIONAL )
-            {
-                //  Bedingte Formate ins neue Dokument kopieren
-
-                sal_uLong nNewIndex = 0;
-                ScConditionalFormatList* pSrcList = pSrcDoc->GetCondFormList();
-                if ( pSrcList )
-                {
-                    sal_uLong nOldIndex = ((const SfxUInt32Item*)pSrcItem)->GetValue();
-                    const ScConditionalFormat* pOldData = pSrcList->GetFormat( nOldIndex );
-                    if ( pOldData )
-                    {
-                        nNewIndex = pDestDoc->AddCondFormat( *pOldData );
-
-                        //  zugehoerige Styles auch mitkopieren
-                        //! nur wenn Format bei Add neu angelegt
-
-                        ScStyleSheetPool* pSrcSPool = pSrcDoc->GetStyleSheetPool();
-                        ScStyleSheetPool* pDestSPool = pDestDoc->GetStyleSheetPool();
-                        const SvNumberFormatterIndexTable* pFormatExchangeList = pDestDoc->GetFormatExchangeList();
-                        sal_uInt16 nStlCnt = pOldData->Count();
-                        for (sal_uInt16 i=0; i<nStlCnt; i++)
-                        {
-                            String aName = pOldData->GetEntry(i)->GetStyle();
-                            SfxStyleSheetBase* pSrcStl =
-                                pSrcDoc->GetStyleSheetPool()->Find(aName, SFX_STYLE_FAMILY_PARA);
-                            lcl_CopyStyleToPool( pSrcStl, pSrcSPool, pDestSPool, pFormatExchangeList );
-                        }
-                    }
-                }
-                pNewItem = new SfxUInt32Item( ATTR_CONDITIONAL, nNewIndex );
-            }
-            else if ( nAttrId == ATTR_VALIDDATA )
+            if ( nAttrId == ATTR_VALIDDATA )
             {
                 //  Gueltigkeit ins neue Dokument kopieren
 

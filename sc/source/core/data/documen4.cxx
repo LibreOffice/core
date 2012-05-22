@@ -433,9 +433,6 @@ void ScDocument::CompileDBFormula( bool bCreateFormulaString )
 
 void ScDocument::CompileNameFormula( bool bCreateFormulaString )
 {
-    if ( pCondFormList )
-        pCondFormList->CompileAll();    // nach ScNameDlg noetig
-
     TableContainer::iterator it = maTabs.begin();
     for (;it != maTabs.end(); ++it)
     {
@@ -600,57 +597,44 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uLong nFormat )
 //          bedingte Formate und Gueltigkeitsbereiche
 //
 
-sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
+sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew, SCTAB nTab )
 {
     if (rNew.IsEmpty())
         return 0;                   // leer ist immer 0
 
-    if (!pCondFormList)
-        pCondFormList = new ScConditionalFormatList;
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->AddCondFormat( rNew );
 
-    sal_uLong nMax = 0;
-    for (ScConditionalFormatList::const_iterator itr = pCondFormList->begin();
-            itr != pCondFormList->end(); ++itr)
-    {
-        sal_uLong nKey = itr->GetKey();
-        if ( itr->EqualEntries( rNew ) )
-            return nKey;
-        if ( nKey > nMax )
-            nMax = nKey;
-    }
-
-    // Der Aufruf kann aus ScPatternAttr::PutInPool kommen, darum Clone (echte Kopie)
-
-    sal_uLong nNewKey = nMax + 1;
-    ScConditionalFormat* pInsert = rNew.Clone(this);
-    pInsert->SetKey( nNewKey );
-    pCondFormList->InsertNew( pInsert );
-    return nNewKey;
+    return 0;
 }
 
-const ScColorFormatList* ScDocument::GetColorScaleList() const
+const ScColorFormatList* ScDocument::GetColorScaleList(SCTAB nTab) const
 {
-    return mpColorScaleList.get();
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetColorFormatList();
+
+    return NULL;
 }
 
-ScColorFormatList* ScDocument::GetColorScaleList()
+ScColorFormatList* ScDocument::GetColorScaleList( SCTAB nTab )
 {
-    return mpColorScaleList.get();
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetColorFormatList();
+
+    return NULL;
 }
 
 //takes ownership
 // returns a 1-based index, 0 is reserved for no entry
-sal_uLong ScDocument::AddColorFormat( ScColorFormat* pNew )
+sal_uLong ScDocument::AddColorFormat( ScColorFormat* pNew, SCTAB nTab )
 {
     if(!pNew)
         return 0;
 
-    if(!mpColorScaleList)
-        mpColorScaleList.reset(new ScColorFormatList());
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->AddColorFormat(pNew);
 
-    mpColorScaleList->AddFormat( pNew );
-
-    return mpColorScaleList->size();
+    return 0;
 }
 
 sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
@@ -693,6 +677,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
         if ( rSet.GetItemState( ATTR_CONDITIONAL, true, &pItem ) == SFX_ITEM_SET )
         {
             sal_uLong nIndex = ((const SfxUInt32Item*)pItem)->GetValue();
+            ScConditionalFormatList* pCondFormList = GetCondFormList( nTab );
             if (nIndex && pCondFormList)
             {
                 const ScConditionalFormat* pForm = pCondFormList->GetFormat( nIndex );
@@ -741,6 +726,7 @@ const ScConditionalFormat* ScDocument::GetCondFormat(
     sal_uLong nIndex = ((const SfxUInt32Item*)GetAttr(nCol,nRow,nTab,ATTR_CONDITIONAL))->GetValue();
     if (nIndex)
     {
+        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
         if (pCondFormList)
             return pCondFormList->GetFormat( nIndex );
         else
@@ -752,6 +738,15 @@ const ScConditionalFormat* ScDocument::GetCondFormat(
     return NULL;
 }
 
+ScConditionalFormatList* ScDocument::GetCondFormList(SCTAB nTab) const
+{
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetCondFormList();
+
+    return NULL;
+}
+
+
 const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 {
     if ( pValidationList )
@@ -760,10 +755,10 @@ const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
         return NULL;
 }
 
-void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges )
+void ScDocument::FindConditionalFormat( sal_uLong nKey, SCTAB nTab, ScRangeList& rRanges )
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()) && maTabs[i]; i++)
-        maTabs[i]->FindConditionalFormat( nKey, rRanges );
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->FindConditionalFormat( nKey, rRanges );
 }
 
 void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab )
@@ -772,8 +767,9 @@ void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SC
         maTabs[nTab]->FindConditionalFormat( nKey, rRanges );
 }
 
-void ScDocument::ConditionalChanged( sal_uLong nKey )
+void ScDocument::ConditionalChanged( sal_uLong nKey, SCTAB nTab )
 {
+    ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
     if ( nKey && pCondFormList && !bIsClip && !bIsUndo )        // nKey==0 -> noop
     {
         ScConditionalFormat* pForm = pCondFormList->GetFormat( nKey );
@@ -782,14 +778,10 @@ void ScDocument::ConditionalChanged( sal_uLong nKey )
     }
 }
 
-void ScDocument::SetCondFormList(ScConditionalFormatList* pNew)
+void ScDocument::SetCondFormList(ScConditionalFormatList* pNew, SCTAB nTab)
 {
-    if (pCondFormList)
-    {
-        delete pCondFormList;
-    }
-
-    pCondFormList = pNew;
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetCondFormList(pNew);
 }
 
 //------------------------------------------------------------------------

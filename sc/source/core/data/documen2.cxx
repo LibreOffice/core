@@ -135,7 +135,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pPrinter( NULL ),
         pVirtualDevice_100th_mm( NULL ),
         pDrawLayer( NULL ),
-        pCondFormList( NULL ),
         pValidationList( NULL ),
         pFormatExchangeList( NULL ),
         pRangeName(NULL),
@@ -409,10 +408,6 @@ ScDocument::~ScDocument()
 
     Clear( true );              // true = from destructor (needed for SdrModel::ClearModel)
 
-    if (pCondFormList)
-    {
-        DELETEZ(pCondFormList);
-    }
     if (pValidationList)
     {
         pValidationList->DeleteAndDestroy( 0, pValidationList->Count() );
@@ -456,10 +451,6 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 {
     OSL_ENSURE(bIsClip, "InitClipPtrs und nicht bIsClip");
 
-    if (pCondFormList)
-    {
-        DELETEZ(pCondFormList);
-    }
     if (pValidationList)
     {
         pValidationList->DeleteAndDestroy( 0, pValidationList->Count() );
@@ -472,14 +463,6 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     //  bedingte Formate / Gueltigkeiten
     //! Vorlagen kopieren?
-    const ScConditionalFormatList* pSourceCond = pSourceDoc->pCondFormList;
-    if ( pSourceCond )
-        pCondFormList = new ScConditionalFormatList(this, *pSourceCond);
-
-    const ScColorFormatList* pSourceColorScaleList = pSourceDoc->mpColorScaleList.get();
-    if ( pSourceColorScaleList )
-        mpColorScaleList.reset(new ScColorFormatList(this, *pSourceColorScaleList));
-
     const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList;
     if ( pSourceValid )
         pValidationList = new ScValidationDataList(this, *pSourceValid);
@@ -756,10 +739,6 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 UpdateChartRef( URM_REORDER,
                                     0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
                 UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
-                if ( pCondFormList )
-                    pCondFormList->UpdateMoveTab( nOldPos, nNewPos );
-                if ( mpColorScaleList )
-                    mpColorScaleList->UpdateMoveTab( nOldPos, nNewPos );
                 if ( pValidationList )
                     pValidationList->UpdateMoveTab( nOldPos, nNewPos );
                 if ( pUnoBroadcaster )
@@ -868,11 +847,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin()+nNewPos)
                         (*it)->StartAllListeners();
 
-                //  update conditional formats after table is inserted
-                if ( pCondFormList )
-                    pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
-                if ( mpColorScaleList )
-                    mpColorScaleList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 // sheet names of references may not be valid until sheet is copied

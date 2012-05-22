@@ -2116,7 +2116,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                             aAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
-                                    new ScTableConditionalFormat( pDoc, 0, eGrammar ));
+                                    new ScTableConditionalFormat( pDoc, 0, aRanges[0]->aStart.Tab(), eGrammar ));
                         }
                         break;
                     case SC_WID_UNO_VALIDAT:
@@ -2418,7 +2418,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 pFormat->FillFormat( aNew, pDoc, eGrammar );
                                 ScRangeListRef pRanges = new ScRangeList( aRanges );
                                 aNew.AddRangeInfo( pRanges );
-                                sal_uLong nIndex = pDoc->AddCondFormat( aNew );
+                                sal_uLong nIndex = pDoc->AddCondFormat( aNew, aRanges.front()->aStart.Tab() );
 
                                 ScPatternAttr aPattern( pDoc->GetPool() );
                                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
@@ -2581,7 +2581,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             sal_uLong nIndex = ((const SfxUInt32Item&)
                                     pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
                             rAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
-                                    new ScTableConditionalFormat( pDoc, nIndex, eGrammar ));
+                                    new ScTableConditionalFormat( pDoc, nIndex, aRanges.front()->aStart.Tab(), eGrammar ));
                         }
                     }
                     break;

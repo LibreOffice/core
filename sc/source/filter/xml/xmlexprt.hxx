@@ -36,6 +36,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+#include "address.hxx"
+
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
@@ -205,7 +207,7 @@ class ScXMLExport : public SvXMLExport
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, bool bColumn );
     void WriteNamedExpressions();
     void WriteNamedRange(ScRangeName* pRangeName);
-    void ExportConditionalFormat();
+    void ExportConditionalFormat(SCTAB nTab);
     void WriteExternalRefCaches();
     void WriteConsolidation();  // core implementation
 

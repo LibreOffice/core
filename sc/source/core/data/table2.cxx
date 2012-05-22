@@ -653,8 +653,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     std::map<sal_Int32, sal_Int32> aOldIdToNewId;
     std::map<sal_Int32, ScRangeList> aIdToRange;
 
-    ScConditionalFormatList* pCondFormatList = pDocument->GetCondFormList();
-    ScConditionalFormatList* pOldCondFormatList = pTable->pDocument->GetCondFormList();
+    ScConditionalFormatList* pOldCondFormatList = pTable->mpCondFormatList.get();
     for(SCCOL i = nCol1; i <= nCol2; ++i)
     {
         ScAttrIterator* pIter = aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
@@ -667,9 +666,9 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             {
                 ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(nId);
                 ScConditionalFormat* pNewFormat = pFormat->Clone(pDocument);
-                pNewFormat->SetKey(pCondFormatList->size()+1);
+                pNewFormat->SetKey(mpCondFormatList->size()+1);
                 //not in list => create entries in both maps and new format
-                pCondFormatList->InsertNew(pNewFormat);
+                mpCondFormatList->InsertNew(pNewFormat);
                 sal_Int32 nNewId = pNewFormat->GetKey();
                 aOldIdToNewId.insert( std::pair<sal_Int32, sal_Int32>( nId, nNewId ) );
                 aIdToRange.insert( std::pair<sal_Int32, ScRangeList>( nId, ScRangeList() ) );
@@ -683,7 +682,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             itr != aIdToRange.end(); ++itr)
     {
         sal_uInt32 nNewKey = aOldIdToNewId.find(itr->first)->second;
-        ScConditionalFormat* pFormat = pCondFormatList->GetFormat( nNewKey );
+        ScConditionalFormat* pFormat = mpCondFormatList->GetFormat( nNewKey );
         pFormat->UpdateReference(URM_MOVE, ScRange(nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab),
                 nDx, nDy, pTable->nTab - nTab);
         pFormat->AddRangeInfo(new ScRangeList(itr->second));
@@ -702,8 +701,8 @@ void ScTable::CopyColorScales( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     std::map<sal_Int32, sal_Int32> aOldIdToNewId;
     std::map<sal_Int32, ScRangeList> aIdToRange;
 
-    ScColorFormatList* pColorScaleList = pDocument->GetColorScaleList();
-    ScColorFormatList* pOldColorScaleList = pTable->pDocument->GetColorScaleList();
+    ScColorFormatList* pColorScaleList = mpColorFormatList.get();
+    ScColorFormatList* pOldColorScaleList = pTable->mpColorFormatList.get();
     for(SCCOL i = nCol1; i <= nCol2; ++i)
     {
         ScAttrIterator* pIter = aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
@@ -1542,6 +1541,9 @@ void ScTable::CalcAll()
 void ScTable::CompileAll()
 {
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].CompileAll();
+
+    if(mpCondFormatList)
+        mpCondFormatList->CompileAll();
 }
 
 
@@ -1554,6 +1556,9 @@ void ScTable::CompileXML( ScProgress& rProgress )
     {
         aCol[i].CompileXML( rProgress );
     }
+
+    if(mpCondFormatList)
+        mpCondFormatList->CompileXML();
 }
 
 void ScTable::CalcAfterLoad()
@@ -1785,11 +1790,10 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                     //  angeschaut werden muessen
 
                     sal_uLong nIndex = ((const SfxUInt32Item*)pCondItem)->GetValue();
-                    ScConditionalFormatList* pList = pDocument->GetCondFormList();
                     ScStyleSheetPool* pStylePool = pDocument->GetStyleSheetPool();
-                    if (pList && pStylePool && nIndex)
+                    if (mpCondFormatList && pStylePool && nIndex)
                     {
-                        const ScConditionalFormat* pFormat = pList->GetFormat(nIndex);
+                        const ScConditionalFormat* pFormat = mpCondFormatList->GetFormat(nIndex);
                         if ( pFormat )
                         {
                             sal_uInt16 nEntryCount = pFormat->Count();

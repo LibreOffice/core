@@ -245,8 +245,6 @@ private:
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;
-    ScConditionalFormatList* pCondFormList;             // conditional formats
-    boost::scoped_ptr<ScColorFormatList> mpColorScaleList; //color scales
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
@@ -1198,22 +1196,21 @@ public:
     void            ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    SC_DLLPUBLIC sal_uLong          AddCondFormat( const ScConditionalFormat& rNew );
-    SC_DLLPUBLIC sal_uLong          AddColorFormat( ScColorFormat* pNew );
-    SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges );
+    SC_DLLPUBLIC sal_uLong          AddCondFormat( const ScConditionalFormat& rNew, SCTAB nTab );
+    SC_DLLPUBLIC sal_uLong          AddColorFormat( ScColorFormat* pNew, SCTAB nTab );
+    SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, SCTAB nTab, ScRangeList& rRanges );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
-    void            ConditionalChanged( sal_uLong nKey );
+    void            ConditionalChanged( sal_uLong nKey, SCTAB nTab );
 
     SC_DLLPUBLIC sal_uLong          AddValidationEntry( const ScValidationData& rNew );
 
     SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uLong nIndex ) const;
 
-    ScConditionalFormatList* GetCondFormList() const        // Ref-Undo
-                    { return pCondFormList; }
-    void            SetCondFormList(ScConditionalFormatList* pNew);
+    SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
+    void            SetCondFormList(ScConditionalFormatList* pNew, SCTAB nTab);
 
-    SC_DLLPUBLIC const ScColorFormatList* GetColorScaleList() const;
-    SC_DLLPUBLIC ScColorFormatList* GetColorScaleList();
+    SC_DLLPUBLIC const ScColorFormatList* GetColorScaleList(SCTAB nTab) const;
+    SC_DLLPUBLIC ScColorFormatList* GetColorScaleList(SCTAB nTab);
 
     ScValidationDataList* GetValidationList() const
                     { return pValidationList; }

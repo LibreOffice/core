@@ -2852,7 +2852,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         }
 
         //export new conditional format information
-        ExportConditionalFormat();
+        ExportConditionalFormat(nTable);
 
     }
 }
@@ -3814,10 +3814,10 @@ rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
 
 }
 
-void ScXMLExport::ExportConditionalFormat()
+void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 {
-    ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList();
-    ScColorFormatList* pColorFormatList = pDoc->GetColorScaleList();
+    ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);
+    ScColorFormatList* pColorFormatList = pDoc->GetColorScaleList(nTab);
     if(pCondFormatList || pColorFormatList)
     {
         SvXMLElementExport aElementCondFormats(*this, XML_NP_TABLE_EXT, XML_CONDITIONAL_FORMATS, true, true);

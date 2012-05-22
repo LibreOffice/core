@@ -41,7 +41,6 @@
 #include "pivot.hxx"
 #include "chartarr.hxx"
 #include "stlpool.hxx"
-#include "conditio.hxx"
 #include "detdata.hxx"
 #include "prnsave.hxx"
 #include "chartlis.hxx"
@@ -67,9 +66,6 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
     pDPCollection = pOldDP ? new ScDPCollection(*pOldDP) : NULL;
 
-    ScConditionalFormatList* pOldCond = pDoc->GetCondFormList();
-    pCondFormList = pOldCond ? new ScConditionalFormatList(*pOldCond) : NULL;
-
     ScDetOpList* pOldDetOp = pDoc->GetDetOpList();
     pDetOpList = pOldDetOp ? new ScDetOpList(*pOldDetOp) : 0;
 
@@ -89,7 +85,6 @@ ScRefUndoData::~ScRefUndoData()
     delete pRangeName;
     delete pPrintRanges;
     delete pDPCollection;
-    delete pCondFormList;
     delete pDetOpList;
     delete pChartListenerCollection;
     delete pAreaLinks;
@@ -124,13 +119,6 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
         ScDPCollection* pNewDP = ((ScDocument*)pDoc)->GetDPCollection();    //! const
         if ( pNewDP && pDPCollection->RefsEqual(*pNewDP) )
             DELETEZ(pDPCollection);
-    }
-
-    if (pCondFormList)
-    {
-        ScConditionalFormatList* pNewCond = pDoc->GetCondFormList();
-        if ( pNewCond && *pCondFormList == *pNewCond )
-            DELETEZ(pCondFormList);
     }
 
     if (pDetOpList)
@@ -182,8 +170,6 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
             pDPCollection->WriteRefsTo( *pDocDP );
     }
 
-    if (pCondFormList)
-        pDoc->SetCondFormList( new ScConditionalFormatList(*pCondFormList) );
     if (pDetOpList)
         pDoc->SetDetOpList( new ScDetOpList(*pDetOpList) );
 

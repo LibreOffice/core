@@ -1363,9 +1363,12 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
             if ( aNewName != aOldName )
             {
-                ScConditionalFormatList* pList = aDocument.GetCondFormList();
-                if (pList)
-                    pList->RenameCellStyle( aOldName,aNewName );
+                for(SCTAB i = 0; i < aDocument.GetTableCount(); ++i)
+                {
+                    ScConditionalFormatList* pList = aDocument.GetCondFormList(i);
+                    if (pList)
+                        pList->RenameCellStyle( aOldName,aNewName );
+                }
             }
         }
     }

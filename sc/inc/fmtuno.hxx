@@ -94,7 +94,7 @@ private:
     ScTableConditionalFormat(); // disable
 public:
                             ScTableConditionalFormat(ScDocument* pDoc, sal_uLong nKey,
-                                formula::FormulaGrammar::Grammar eGrammar);
+                                    SCTAB nTab, formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
 
     void                    FillFormat( ScConditionalFormat& rFormat, ScDocument* pDoc,

@@ -181,13 +181,13 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 //------------------------------------------------------------------------
 
 ScTableConditionalFormat::ScTableConditionalFormat(
-        ScDocument* pDoc, sal_uLong nKey, FormulaGrammar::Grammar eGrammar)
+        ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
 {
     //  Eintrag aus dem Dokument lesen...
 
     if ( pDoc && nKey )
     {
-        ScConditionalFormatList* pList = pDoc->GetCondFormList();
+        ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
         if (pList)
         {
             const ScConditionalFormat* pFormat = pList->GetFormat( nKey );

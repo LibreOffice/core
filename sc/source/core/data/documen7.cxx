@@ -109,11 +109,19 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
-    if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-        pCondFormList->SourceChanged( rHint.GetAddress() );
+    for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
+    {
+        if(!maTabs[nTab])
+            continue;
 
-    if( mpColorScaleList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-        mpColorScaleList->DataChanged( rHint.GetAddress() );
+        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
+        if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+            pCondFormList->SourceChanged( rHint.GetAddress() );
+
+        ScColorFormatList* pColorFormatList = GetColorScaleList(nTab);
+        if( pColorFormatList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+            pColorFormatList->DataChanged( rHint.GetAddress() );
+    }
 
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
     {
@@ -135,12 +143,19 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    //  Repaint fuer bedingte Formate mit relativen Referenzen:
-    if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-        pCondFormList->SourceChanged( rHint.GetAddress() );
+    for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
+    {
+        if(!maTabs[nTab])
+            continue;
 
-    if( mpColorScaleList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-        mpColorScaleList->DataChanged( rHint.GetAddress() );
+        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
+        if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+            pCondFormList->SourceChanged( rHint.GetAddress() );
+
+        ScColorFormatList* pColorFormatList = GetColorScaleList(nTab);
+        if( pColorFormatList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+            pColorFormatList->DataChanged( rHint.GetAddress() );
+    }
 }
 
 
@@ -157,37 +172,44 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
 
     // Repaint for conditional formats containing relative references.
     //! This is _THE_ bottle neck!
-    if ( pCondFormList )
+    TableContainer::iterator itr = maTabs.begin();
+    for(; itr != maTabs.end(); ++itr)
     {
-        SCCOL nCol;
-        SCROW nRow;
-        SCTAB nTab;
-        SCCOL nCol1;
-        SCROW nRow1;
-        SCTAB nTab1;
-        SCCOL nCol2;
-        SCROW nRow2;
-        SCTAB nTab2;
-        rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        ScAddress aAddress( rRange.aStart );
-        for ( nTab = nTab1; nTab <= nTab2; ++nTab )
+        if(!*itr)
+            continue;
+
+        ScConditionalFormatList* pCondFormList = (*itr)->GetCondFormList();
+
+        if ( pCondFormList )
         {
-            aAddress.SetTab( nTab );
-            for ( nCol = nCol1; nCol <= nCol2; ++nCol )
+            SCCOL nCol1;
+            SCROW nRow1;
+            SCTAB nTab1;
+            SCCOL nCol2;
+            SCROW nRow2;
+            SCTAB nTab2;
+            rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            ScAddress aAddress( rRange.aStart );
+            for ( SCTAB nTab = nTab1; nTab <= nTab2; ++nTab )
             {
-                aAddress.SetCol( nCol );
-                for ( nRow = nRow1; nRow <= nRow2; ++nRow )
+                aAddress.SetTab( nTab );
+                for ( SCCOL nCol = nCol1; nCol <= nCol2; ++nCol )
                 {
-                    aAddress.SetRow( nRow );
-                    pCondFormList->SourceChanged( aAddress );
+                    aAddress.SetCol( nCol );
+                    for ( SCROW nRow = nRow1; nRow <= nRow2; ++nRow )
+                    {
+                        aAddress.SetRow( nRow );
+                        pCondFormList->SourceChanged( aAddress );
+                    }
                 }
             }
         }
-    }
 
-    if(mpColorScaleList)
-    {
-        mpColorScaleList->DataChanged(rRange);
+        ScColorFormatList* pColorFormatList = (*itr)->GetColorFormatList();
+        if(pColorFormatList)
+        {
+            pColorFormatList->DataChanged(rRange);
+        }
     }
 }
 
@@ -464,8 +486,19 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
             //  Repaint fuer bedingte Formate mit relativen Referenzen:
-            if ( pCondFormList )
-                pCondFormList->SourceChanged( pTrack->aPos );
+            TableContainer::iterator itr = maTabs.begin();
+            for(; itr != maTabs.end(); ++itr)
+            {
+                if(!*itr)
+                    continue;
+                ScConditionalFormatList* pCondFormList = (*itr)->GetCondFormList();
+                if ( pCondFormList )
+                    pCondFormList->SourceChanged( pTrack->aPos );
+
+                ScColorFormatList* pColorFormatList = (*itr)->GetColorFormatList();
+                if( pColorFormatList )
+                    pColorFormatList->DataChanged( pTrack->aPos );
+            }
             // for "calculate" event, keep track of which sheets are affected by tracked formulas
             if ( bCalcEvent )
                 SetCalcNotification( pTrack->aPos.Tab() );

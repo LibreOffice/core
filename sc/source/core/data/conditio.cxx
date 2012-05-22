@@ -1446,7 +1446,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
         if (!pAreas)        //  RangeList ggf. holen
         {
             pAreas = new ScRangeList;
-            pDoc->FindConditionalFormat( nKey, *pAreas );
+            pDoc->FindConditionalFormat( nKey, pRanges->front()->aStart.Tab(), *pAreas );
         }
         for (size_t i = 0, nCount = pAreas->size(); i < nCount; i++ )
         {

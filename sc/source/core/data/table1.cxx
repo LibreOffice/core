@@ -54,6 +54,8 @@
 #include "sheetevents.hxx"
 #include "segmenttree.hxx"
 #include "dbdata.hxx"
+#include "colorscale.hxx"
+#include "conditio.hxx"
 
 #include <vector>
 
@@ -267,6 +269,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName
     nScenarioFlags( 0 ),
     pDBDataNoName(NULL),
     mpRangeName(NULL),
+    mpCondFormatList( new ScConditionalFormatList() ),
     maNotes(pDoc),
     bScenario(false),
     bLayoutRTL(false),
@@ -1466,6 +1469,9 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
 
     if (bUpdated && IsStreamValid())
         SetStreamValid(false);
+
+    if(mpCondFormatList)
+        mpCondFormatList->UpdateReference( eUpdateRefMode, ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2), nDx, nDy, nDz);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -1499,6 +1505,11 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    if(mpCondFormatList)
+        mpCondFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nNewSheets-1),0,0, nNewSheets);
+    if(mpColorFormatList)
+        mpColorFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nNewSheets-1),0,0, nNewSheets);
 }
 
 void ScTable::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo, SCTAB nSheets )
@@ -1531,6 +1542,11 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo, SC
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    if(mpCondFormatList)
+        mpCondFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nSheets-1),0,0, -1*nSheets);
+    if(mpColorFormatList)
+        mpColorFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nSheets-1),0,0, -1*nSheets);
 }
 
 void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
@@ -1551,6 +1567,11 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
         SetStreamValid(false);
    if (pDBDataNoName)
         pDBDataNoName->UpdateMoveTab(nOldPos, nNewPos);
+
+    if(mpCondFormatList)
+        mpCondFormatList->UpdateMoveTab(nOldPos, nNewPos);
+    if(mpColorFormatList)
+        mpColorFormatList->UpdateMoveTab(nOldPos, nNewPos);
 }
 
 void ScTable::UpdateCompile( bool bForceIfNameInUse )
@@ -1982,6 +2003,64 @@ void ScTable::SetAnonymousDBData(ScDBData* pDBData)
 ScDBData* ScTable::GetAnonymousDBData()
 {
     return pDBDataNoName;
+}
+
+sal_uLong ScTable::AddCondFormat( const ScConditionalFormat& rNew )
+{
+    if(!mpCondFormatList)
+        mpCondFormatList.reset(new ScConditionalFormatList());
+
+    sal_uLong nMax = 0;
+    for(ScConditionalFormatList::const_iterator itr = mpCondFormatList->begin();
+            itr != mpCondFormatList->end(); ++itr)
+    {
+        sal_uLong nKey = itr->GetKey();
+        if(nKey > nMax)
+            nMax = nKey;
+    }
+
+    ScConditionalFormat* pNewFormat = rNew.Clone(pDocument);
+    pNewFormat->SetKey(nMax+1);
+    mpCondFormatList->InsertNew(pNewFormat);
+
+    return nMax + 1;
+}
+
+ScColorFormatList* ScTable::GetColorFormatList()
+{
+    return mpColorFormatList.get();
+}
+
+const ScColorFormatList* ScTable::GetColorFormatList() const
+{
+    return mpColorFormatList.get();
+}
+
+void ScTable::SetCondFormList( ScConditionalFormatList* pNew )
+{
+    mpCondFormatList.reset( pNew );
+}
+
+ScConditionalFormatList* ScTable::GetCondFormList()
+{
+    if(!mpCondFormatList)
+        mpCondFormatList.reset( new ScConditionalFormatList() );
+
+    return mpCondFormatList.get();
+}
+
+const ScConditionalFormatList* ScTable::GetCondFormList() const
+{
+    return mpCondFormatList.get();
+}
+
+sal_uLong ScTable::AddColorFormat( ScColorFormat* pNew )
+{
+    if(!mpColorFormatList)
+        mpColorFormatList.reset(new ScColorFormatList());
+
+    mpColorFormatList->AddFormat( pNew );
+    return mpColorFormatList->size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

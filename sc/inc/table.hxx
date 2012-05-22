@@ -73,6 +73,10 @@ class ScProgress;
 class ScRangeList;
 class ScSheetEvents;
 class ScSortInfoArray;
+class ScColorFormatList;
+class ScColorFormat;
+class ScConditionalFormat;
+class ScConditionalFormatList;
 class ScStyleSheet;
 class ScTableLink;
 class ScTableProtection;
@@ -168,6 +172,9 @@ private:
     sal_uInt16          nScenarioFlags;
     ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
+
+    boost::scoped_ptr<ScConditionalFormatList> mpCondFormatList;
+    boost::scoped_ptr<ScColorFormatList> mpColorFormatList;
 
     ScNotes         maNotes;
 
@@ -791,6 +798,16 @@ public:
     void SetRangeName(ScRangeName* pNew);
     ScRangeName* GetRangeName() const;
     void        UpdateMoveTab(SCTAB nOldPos,SCTAB nNewPos);
+
+    ScConditionalFormatList* GetCondFormList();
+    const ScConditionalFormatList* GetCondFormList() const;
+    void SetCondFormList(ScConditionalFormatList* pNew);
+
+    sal_uLong          AddCondFormat( const ScConditionalFormat& rNew );
+    sal_uLong          AddColorFormat( ScColorFormat* pNew );
+    ScColorFormatList* GetColorFormatList();
+    const ScColorFormatList* GetColorFormatList() const;
+
 
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

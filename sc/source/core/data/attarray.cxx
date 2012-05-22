@@ -151,9 +151,9 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, bool bAlloc )
             if ( &pPattern->GetItem(ATTR_CONDITIONAL) != &pOldPattern->GetItem(ATTR_CONDITIONAL) )
             {
                 pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                pOldPattern->GetItem(ATTR_CONDITIONAL)).GetValue() );
+                                pOldPattern->GetItem(ATTR_CONDITIONAL)).GetValue(), nTab );
                 pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() );
+                                pPattern->GetItem(ATTR_CONDITIONAL)).GetValue(), nTab );
             }
             pDocPool->Remove(*pOldPattern);
         }
@@ -376,9 +376,9 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
                 {
                     pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                    rOldSet.Get(ATTR_CONDITIONAL)).GetValue() );
+                                    rOldSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
                     pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                    rNewSet.Get(ATTR_CONDITIONAL)).GetValue() );
+                                    rNewSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
                 }
                 ns = pData[nx].nRow + 1;
                 nx++;
@@ -781,9 +781,9 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                     if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
                     {
                         pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                        rOldSet.Get(ATTR_CONDITIONAL)).GetValue() );
+                                        rOldSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
                         pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                        rNewSet.Get(ATTR_CONDITIONAL)).GetValue() );
+                                        rNewSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
                     }
 
                     pDocument->GetPool()->Remove(*pData[nPos].pPattern);
