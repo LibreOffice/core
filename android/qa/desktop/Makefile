@@ -51,7 +51,7 @@ buildrcs:
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry user:$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
 	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
-	echo 'URE_MORE_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
+	echo 'URE_MORE_SERVICES=file:///assets/program/services/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/share/extensions' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS_PREREG=$$BRAND_BASE_DIR/share/prereg/bundled' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/bundled' >> assets/program/fundamentalrc
@@ -69,7 +69,7 @@ buildrcs:
 	echo "[Bootstrap]" > assets/program/unorc
 	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
 	echo 'UNO_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb $${URE_MORE_TYPES}' >> assets/program/unorc
-	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
+	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb $${URE_MORE_SERVICES}' >> assets/program/unorc
 # bootstraprc ini ...
 	echo "[Bootstrap]" > assets/program/bootstraprc
 	echo "InstallMode=<installmode>" >> assets/program/bootstraprc
