@@ -254,15 +254,17 @@ public:
 };
 
 
-class ScDocFuncRecv : public ScDocFunc
+class ScDocFuncRecv
 {
     boost::shared_ptr<ScDocFuncDirect>  mpChain;
     boost::shared_ptr<ScCollaboration>  mpCollab;
+
+protected:
+    ScDocFuncRecv() {}
 public:
     // FIXME: really ScDocFunc should be an abstract base
-    ScDocFuncRecv( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncDirect>& pChain )
-        : ScDocFunc( rDocSh ),
-          mpChain( pChain )
+    ScDocFuncRecv( boost::shared_ptr<ScDocFuncDirect>& pChain )
+        : mpChain( pChain )
     {
         fprintf( stderr, "Receiver created !\n" );
     }
@@ -274,9 +276,9 @@ public:
     }
 
     void packetReceived( TeleConference* pConference, const rtl::OString & );
-    void fileReceived( rtl::OUString *rStr );
 
-    void RecvMessage( const rtl::OString &rString )
+    virtual void fileReceived( const rtl::OUString &rStr );
+    virtual void RecvMessage( const rtl::OString &rString )
     {
         try {
             ScChangeOpReader aReader( rtl::OUString( rString.getStr(),
@@ -318,15 +320,15 @@ void ScDocFuncRecv::packetReceived( TeleConference*, const rtl::OString &rStr)
     RecvMessage( rStr);
 }
 
-void ScDocFuncRecv::fileReceived( rtl::OUString *pStr )
+void ScDocFuncRecv::fileReceived( const rtl::OUString &rStr )
 {
     fprintf( stderr, "incoming file '%s'\n",
-             rtl::OUStringToOString( *pStr, RTL_TEXTENCODING_UTF8 ).getStr() );
+             rtl::OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     // using the frame::XLoadable interface fails with a DoubleInitializationException
 /*    css::uno::Sequence < css::beans::PropertyValue > aLoadArgs(5);
     aLoadArgs[0].Name = rtl::OUString( "URL" );
-    aLoadArgs[0].Value <<= (*pStr);
+    aLoadArgs[0].Value <<= rpStr;
     aLoadArgs[1].Name = rtl::OUString( "FilterName" );
     aLoadArgs[1].Value <<= rtl::OUString( "calc8" );
     aLoadArgs[2].Name = rtl::OUString( "Referer" );
@@ -366,7 +368,7 @@ void ScDocFuncRecv::fileReceived( rtl::OUString *pStr )
                         "com.sun.star.frame.Desktop" ),
                         css::uno::UNO_QUERY_THROW );
         css::uno::Reference < css::util::XCloseable > xDoc(
-                xLoader->loadComponentFromURL( *pStr, "_blank", 0, args ),
+                xLoader->loadComponentFromURL( rStr, "_blank", 0, args ),
                 css::uno::UNO_QUERY_THROW );
     }
     catch ( css::uno::Exception& e )
@@ -376,9 +378,49 @@ void ScDocFuncRecv::fileReceived( rtl::OUString *pStr )
     }
 }
 
+/*
+ * Provides a local bus that doesn't require an IM channel for
+ * quick demoing, export INTERCEPT=demo # to enable.
+ */
+class ScDocFuncDemo : public ScDocFuncRecv
+{
+    std::vector< boost::shared_ptr<ScDocFuncRecv> > maClients;
+  public:
+    // FIXME: really ScDocFuncRecv should be an abstract base
+    ScDocFuncDemo()
+        : ScDocFuncRecv()
+    {
+        fprintf( stderr, "Receiver created !\n" );
+    }
+    virtual ~ScDocFuncDemo() {}
+
+    void add_client (const boost::shared_ptr<ScDocFuncRecv> &aClient)
+    {
+        maClients.push_back( aClient );
+    }
+
+    virtual void RecvMessage( const rtl::OString &rString )
+    {
+        // FIXME: Lifecycle nightmare
+        std::vector< boost::shared_ptr<ScDocFuncRecv> > aCopy( maClients );
+        for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
+                 = aCopy.begin(); i != aCopy.end(); i++)
+            (*i)->RecvMessage(rString);
+    }
+
+    virtual void fileReceived( const rtl::OUString &rStr )
+    {
+        // FIXME: Lifecycle nightmare
+        std::vector< boost::shared_ptr<ScDocFuncRecv> > aCopy( maClients );
+        for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
+                 = aCopy.begin(); i != aCopy.end(); i++)
+            (*i)->fileReceived( rStr );
+    }
+};
+
 class ScDocFuncSend : public ScDocFunc
 {
-    boost::shared_ptr<ScDocFuncRecv>    mpChain;
+    boost::shared_ptr<ScDocFuncRecv>    mpDirect;
     boost::shared_ptr<ScCollaboration>  mpCollab;
 
     void SendMessage( ScChangeOpWriter &rOp )
@@ -386,8 +428,8 @@ class ScDocFuncSend : public ScDocFunc
         fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
         if (mpCollab)
             mpCollab->sendPacket( rOp.toString());
-        else
-            mpChain->RecvMessage( rOp.toString() );
+        else // local demo mode
+            mpDirect->RecvMessage( rOp.toString() );
     }
 
     void SendFile( const rtl::OUString &rURL )
@@ -417,14 +459,18 @@ class ScDocFuncSend : public ScDocFunc
 
         if ( mpCollab )
             mpCollab->sendFile( aFileURL );
+        else
+            mpDirect->fileReceived( aFileURL );
+
+        // FIXME: unlink the file after send ...
     }
 
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
-    ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv>& pChain )
+    ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv> pDirect )
             : ScDocFunc( rDocSh ),
-            mpChain( pChain )
+            mpDirect( pDirect )
     {
         fprintf( stderr, "Sender created !\n" );
     }
@@ -488,7 +534,7 @@ public:
                               sal_Bool bInterpret, sal_Bool bApi )
     {
         fprintf( stderr, "put data\n" );
-        return mpChain->PutData( rPos, rEngine, bInterpret, bApi );
+        return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
     }
 
     virtual sal_Bool SetCellText( const ScAddress& rPos, const String& rText,
@@ -498,7 +544,7 @@ public:
     {
         fprintf( stderr, "set cell text '%s'\n",
                  rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return mpChain->SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
+        return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
     }
 
     virtual bool ShowNote( const ScAddress& rPos, bool bShow = true )
@@ -536,7 +582,7 @@ public:
                                       sal_Bool bRecord, sal_Bool bApi )
     {
         fprintf( stderr, "Apply Attributes\n" );
-        return mpChain->ApplyAttributes( rMark, rPattern, bRecord, bApi );
+        return ScDocFunc::ApplyAttributes( rMark, rPattern, bRecord, bApi );
     }
 
     virtual sal_Bool ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
@@ -544,14 +590,14 @@ public:
     {
         fprintf( stderr, "Apply Style '%s'\n",
                  rtl::OUStringToOString( rStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return mpChain->ApplyStyle( rMark, rStyleName, bRecord, bApi );
+        return ScDocFunc::ApplyStyle( rMark, rStyleName, bRecord, bApi );
     }
 
     virtual sal_Bool MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
                                  sal_Bool bRecord, sal_Bool bApi )
     {
         fprintf( stderr, "Merge cells\n" );
-        return mpChain->MergeCells( rOption, bContents, bRecord, bApi );
+        return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );
     }
 };
 
@@ -567,13 +613,17 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
     if (getenv ("INTERCEPT"))
     {
         boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
-        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( *this, pDirect ) );
-        return new ScDocFuncSend( *this, pReceiver );
+        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
+
+        static boost::shared_ptr<ScDocFuncDemo> aDemoBus( new ScDocFuncDemo() );
+        aDemoBus->add_client( pReceiver ); // a lifecycle horror no doubt.
+
+        return new ScDocFuncSend( *this, boost::shared_ptr<ScDocFuncRecv>( aDemoBus.get() ) );
     }
     else if (isCollabMode( bIsMaster ))
     {
         boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
-        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( *this, pDirect ) );
+        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
         boost::shared_ptr<ScCollaboration> pCollab( new ScCollaboration );
         pCollab->sigPacketReceived.connect(

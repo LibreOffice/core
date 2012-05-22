@@ -53,17 +53,16 @@ public:
     bool                    sendPacket( const rtl::OString& rString );
     /** Emitted when a packet is received
      */
-    boost::signals2::signal<void (TeleConference*, rtl::OString& rString )> sigPacketReceived;
-    bool                    recvPacket( rtl::OString& rString, TeleConference* pConference );
+    boost::signals2::signal<void (TeleConference*, const rtl::OString& rString )> sigPacketReceived;
 
     void                    sendFile( rtl::OUString &rFileURL );
     /** Emitted when a file is received
      */
-    boost::signals2::signal<void ( rtl::OUString *pFileURL )> sigFileReceived;
+    boost::signals2::signal<void ( const rtl::OUString &pFileURL )> sigFileReceived;
 
     /* Internal callbacks */
     void                    packetReceivedCallback( TeleConference *pConference, TelePacket &rPacket );
-    void                    receivedFile( rtl::OUString &rFileURL );
+    void                    receivedFile( const rtl::OUString &rFileURL );
 
 private:
 

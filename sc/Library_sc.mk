@@ -48,8 +48,23 @@ $(eval $(call gb_Library_add_linked_libs,sc,\
 	tubes \
 ))
 
+$(eval $(call gb_Library_add_cxxflags,sc,\
+	$$(TELEPATHY_CFLAGS) \
+	-DENABLE_TELEPATHY \
+))
+
+$(eval $(call gb_Library_add_libs,sc,\
+	$$(TELEPATHY_LIBS) \
+))
+
 $(eval $(call gb_Library_use_externals,sc,\
 	telepathy \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+	sc/source/ui/collab/collab \
+	sc/source/ui/collab/contacts \
+	sc/source/ui/collab/sendfunc \
 ))
 
 endif
@@ -328,9 +343,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/cctrl/popmenu \
 	sc/source/ui/cctrl/tbinsert \
 	sc/source/ui/cctrl/tbzoomsliderctrl \
-	sc/source/ui/collab/collab \
-	sc/source/ui/collab/contacts \
-	sc/source/ui/collab/sendfunc \
 	sc/source/ui/dbgui/asciiopt \
 	sc/source/ui/dbgui/consdlg \
 	sc/source/ui/dbgui/csvcontrol \

@@ -52,11 +52,11 @@ ScCollaboration::~ScCollaboration()
 }
 
 
-void ScCollaboration::receivedFile( rtl::OUString &rFileURL )
+void ScCollaboration::receivedFile( const rtl::OUString &rFileURL )
 {
     fprintf( stderr, "file recieved '%s'\n",
              rtl::OUStringToOString( rFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-    sigFileReceived( &rFileURL );
+    sigFileReceived( rFileURL );
 }
 
 void ScCollaboration::packetReceivedCallback( TeleConference *pConference, TelePacket &rPacket )

@@ -158,7 +158,7 @@ public:
 
     void                    sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData);
 
-    boost::signals2::signal<void ( rtl::OUString &localUri )> sigFileReceived;
+    boost::signals2::signal<void ( const rtl::OUString &localUri )> sigFileReceived;
 
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;
