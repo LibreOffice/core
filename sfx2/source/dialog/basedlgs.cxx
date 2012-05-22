@@ -201,7 +201,7 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
     sal_Int32 nUIid = static_cast<sal_Int32>(nUniqId);
     rtl::OUString sPath = rtl::OUStringBuffer(getUIRootDir()).
         append(rResId.GetResMgr()->getPrefixName()).
-        append('/').
+        append("/ui/").
         append(nUIid).
         appendAscii(".ui").
         makeStringAndClear();

@@ -27,6 +27,6 @@
 
 $(eval $(call gb_Package_Package,cui_uiconfig,$(SRCDIR)/cui/uiconfig))
 
-$(eval $(call gb_Package_add_file,cui_uiconfig,xml/uiconfig/ui/10000.ui,ui/10000.ui))
+$(eval $(call gb_Package_add_file,cui_uiconfig,xml/uiconfig/cui/ui/10000.ui,ui/10000.ui))
 
 # vim: set noet sw=4 ts=4:
