@@ -78,7 +78,7 @@
       <FormatCode>[$NT$-404]#,##0;-[$NT$-404]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$NT$-404]#,##0.00;-[$NT$-404]##0.00</FormatCode>
+      <FormatCode>[$NT$-404]#,##0.00;-[$NT$-404]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
       <FormatCode>[$NT$-404]#,##0;[RED]-[$NT$-404]#,##0</FormatCode>

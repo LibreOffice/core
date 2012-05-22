@@ -51,7 +51,7 @@
       <FormatCode>[$HK$-C04]#,##0;-[$HK$-C04]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$HK$-C04]#,##0.00;-[$HK$-C04]##0.00</FormatCode>
+      <FormatCode>[$HK$-C04]#,##0.00;-[$HK$-C04]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
       <FormatCode>[$HK$-C04]#,##0;[RED]-[$HK$-C04]#,##0</FormatCode>

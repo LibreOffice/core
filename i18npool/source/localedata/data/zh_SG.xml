@@ -51,7 +51,7 @@
       <FormatCode>[$S$-1004]#,##0;-[$S$-1004]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$S$-1004]#,##0.00;-[$S$-1004]##0.00</FormatCode>
+      <FormatCode>[$S$-1004]#,##0.00;-[$S$-1004]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
       <FormatCode>[$S$-1004]#,##0;[RED]-[$S$-1004]#,##0</FormatCode>
