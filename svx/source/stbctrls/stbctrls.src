@@ -269,7 +269,7 @@ Image RID_SVXBMP_SLIDERBUTTON
 {
     ImageBitmap = Bitmap
     {
-        File = "navigationball_10.png" ;
+        File = "slidezoombutton_10.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };
@@ -277,7 +277,7 @@ Image RID_SVXBMP_SLIDERDECREASE
 {
     ImageBitmap = Bitmap
     {
-        File = "slidezoomout_11.png" ;
+        File = "slidezoomout_10.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };
@@ -285,7 +285,7 @@ Image RID_SVXBMP_SLIDERINCREASE
 {
     ImageBitmap = Bitmap
     {
-        File = "slidezoomin_11.png" ;
+        File = "slidezoomin_10.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };

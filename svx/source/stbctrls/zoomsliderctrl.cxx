@@ -32,6 +32,7 @@
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -78,8 +79,8 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
 
 const long nButtonWidth   = 10;
 const long nButtonHeight  = 10;
-const long nIncDecWidth   = 11;
-const long nIncDecHeight  = 11;
+const long nIncDecWidth   = 10;
+const long nIncDecHeight  = 10;
 const long nSliderHeight  = 2;
 const long nSnappingHeight = 4;
 const long nSliderXOffset = 20;
@@ -268,16 +269,17 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     Rectangle           aRect = rUsrEvt.GetRect();
     Rectangle           aSlider = aRect;
 
-    aSlider.Top()   += (aControlRect.GetHeight() - nSliderHeight)/2 - 1;
-    aSlider.Bottom() = aSlider.Top() + nSliderHeight;
+    aSlider.Top()   += (aControlRect.GetHeight() - nSliderHeight)/2;
+    aSlider.Bottom() = aSlider.Top() + nSliderHeight - 1;
     aSlider.Left()  += nSliderXOffset;
     aSlider.Right() -= nSliderXOffset;
 
     Color               aOldLineColor = pDev->GetLineColor();
     Color               aOldFillColor = pDev->GetFillColor();
 
-    pDev->SetLineColor( Color( COL_GRAY ) );
-    pDev->SetFillColor( Color( COL_GRAY ) );
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    pDev->SetLineColor( rStyleSettings.GetShadowColor() );
+    pDev->SetFillColor( rStyleSettings.GetShadowColor() );
 
     // draw snapping points:
     std::vector< long >::iterator aSnappingPointIter;
@@ -285,40 +287,14 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
           aSnappingPointIter != mpImpl->maSnappingPointOffsets.end();
           ++aSnappingPointIter )
     {
-        Rectangle aSnapping( aRect );
-        aSnapping.Bottom()   = aSlider.Top();
-        aSnapping.Top() = aSnapping.Bottom() - nSnappingHeight;
-        aSnapping.Left() += *aSnappingPointIter;
-        aSnapping.Right() = aSnapping.Left();
-        pDev->DrawRect( aSnapping );
+        long nSnapPosX = aRect.Left() + *aSnappingPointIter;
 
-        aSnapping.Top() += nSnappingHeight + nSliderHeight;
-        aSnapping.Bottom() += nSnappingHeight + nSliderHeight;
-        pDev->DrawRect( aSnapping );
+        pDev->DrawRect( Rectangle( nSnapPosX - 1, aSlider.Top() - nSnappingHeight,
+                    nSnapPosX, aSlider.Bottom() + nSnappingHeight ) );
     }
 
     // draw slider
-    Rectangle aFirstLine( aSlider );
-    aFirstLine.Bottom() = aFirstLine.Top();
-
-    Rectangle aSecondLine( aSlider );
-    aSecondLine.Top() = aSecondLine.Bottom();
-
-    Rectangle aLeft( aSlider );
-    aLeft.Right() = aLeft.Left();
-
-    Rectangle aRight( aSlider );
-    aRight.Left() = aRight.Right();
-
-    pDev->SetLineColor( Color ( COL_WHITE ) );
-    pDev->SetFillColor( Color ( COL_WHITE ) );
-    pDev->DrawRect( aSecondLine );
-    pDev->DrawRect( aRight );
-
-    pDev->SetLineColor( Color( COL_GRAY ) );
-    pDev->SetFillColor( Color( COL_GRAY ) );
-    pDev->DrawRect( aFirstLine );
-    pDev->DrawRect( aLeft );
+    pDev->DrawRect( aSlider );
 
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
