@@ -92,15 +92,13 @@ public:
     template< typename Functor >
     const ShapeBase*    findShape( const Functor& rFunctor ) const;
 
-    /** Returns the first shape in the collection (Word only). */
-    const ShapeBase*    getFirstShape() const;
+    /** Returns and removes the last shape in the collection (Word only). */
+    const ShapeBase*    takeLastShape();
 
     /** Creates and inserts all UNO shapes into the passed container. */
     void                convertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
-
-    inline void                clearShapes( ) { maShapes.clear( ); }
 
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;
