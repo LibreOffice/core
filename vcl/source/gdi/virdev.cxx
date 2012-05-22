@@ -372,9 +372,6 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
     case REFDEV_MODE06:
         nDPIX = nDPIY = 600;
         break;
-    case REFDEV_MODE48:
-        nDPIX = nDPIY = 4800;
-        break;
     case REFDEV_MODE_MSO1:
         nDPIX = nDPIY = 6*1440;
         break;

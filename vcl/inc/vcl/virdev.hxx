@@ -110,7 +110,6 @@ public:
     // reference device modes for different compatibility levels
     enum RefDevMode {   REFDEV_NONE = 0,
                         REFDEV_MODE06 = 1,      // 600 dpi
-                        REFDEV_MODE48 = 2,      // 4800 dpi
                         REFDEV_MODE_MSO1 = 3,
                         REFDEV_MODE_PDF1 = 4,
                         REFDEV_CUSTOM = 5
