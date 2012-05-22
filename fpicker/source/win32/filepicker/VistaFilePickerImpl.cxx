@@ -920,7 +920,6 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 HRESULT hResult = iCustom->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
                 if ( bValue )
                 {
-                    ::rtl::OUString aExt;
                     UINT nFileType;
                     hResult = iDialog->GetFileTypeIndex(&nFileType);
                     if ( SUCCEEDED(hResult) )

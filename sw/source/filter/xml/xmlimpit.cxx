@@ -902,7 +902,6 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nPos = rValue.indexOf( (sal_Unicode)'*' );
                     if( -1L != nPos )
                     {
-                        OUString sNum( rValue.copy( 0L, nPos ) );
                         sal_Int32 nValue = rValue.toInt32();
                         if( nValue < MINLAY )
                             nValue = MINLAY;

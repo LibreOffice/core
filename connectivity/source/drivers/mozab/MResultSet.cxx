@@ -766,7 +766,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         ::rtl::Reference<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
         if(xColumns.is())
         {
-            ::rtl::OUString aTabName,aColName,aParameterName,aParameterValue;
+            ::rtl::OUString aColName, aParameterValue;
             OSQLColumns::Vector::iterator aIter = xColumns->get().begin();
             sal_Int32 i = 1;
             for(;aIter != xColumns->get().end();++aIter)

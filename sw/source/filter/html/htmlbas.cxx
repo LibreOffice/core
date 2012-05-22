@@ -259,8 +259,6 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
     if( EXTENDED_STYPE == eScrType )
         sScriptType = rScrType;
 
-    rtl::OUString aEventName;
-
     SfxEventConfiguration::ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
                            pDocSh );
 }

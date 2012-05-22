@@ -734,7 +734,6 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
                     {
-                        OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                         sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
                         OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
                         if (aCommand.isEmpty() )

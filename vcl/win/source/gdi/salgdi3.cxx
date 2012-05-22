@@ -2216,7 +2216,6 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         // only the font path of the user installation is needed
         ::rtl::OUString aPath;
         osl_getExecutableFile( &aPath.pData );
-        ::rtl::OUString aExecutableFile( aPath );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
         aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/Basis/share/fonts/truetype") );

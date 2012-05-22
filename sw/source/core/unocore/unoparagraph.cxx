@@ -567,7 +567,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     const SfxItemPropertyMap &rPropMap =
         m_pImpl->m_rPropSet.getPropertyMap();
 
-    OUString sTmp;
     SwPosition aPos( rTxtNode );
     SwCursor aCursor( aPos, 0, false );
     SwParaSelection aParaSel( aCursor );

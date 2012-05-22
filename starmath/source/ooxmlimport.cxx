@@ -385,7 +385,6 @@ OUString SmOoxmlImport::handleF()
 {
     stream.ensureOpeningTag( M_TOKEN( f ));
     enum operation_t { bar, lin, noBar } operation = bar;
-    OUString oper = "over";
     if( stream.checkOpeningTag( M_TOKEN( fPr )))
     {
         if( XmlStream::Tag type = stream.checkOpeningTag( M_TOKEN( type )))

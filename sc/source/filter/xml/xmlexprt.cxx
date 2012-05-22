@@ -661,8 +661,6 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
     if (!HasDrawPages(xSpreadDoc))
         return;
 
-    rtl::OUString sCaptionPoint(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"));
-
     for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);

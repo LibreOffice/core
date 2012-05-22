@@ -1043,7 +1043,6 @@ XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleF
 
 void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 {
-    rtl::OUString sSeqRef;
     const ScRangeList& rRanges = mrFormat.GetRange();
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();

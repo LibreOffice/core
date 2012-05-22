@@ -560,7 +560,6 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             tc->convertTo (a, ::getCppuType (&s)) >>= s;
             PyRef tuple( PyTuple_New (s.getLength()), SAL_NO_ACQUIRE);
             int i=0;
-            OUString errMsg;
             try
             {
                 for ( i = 0; i < s.getLength (); i++)

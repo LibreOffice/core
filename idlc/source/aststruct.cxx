@@ -134,7 +134,6 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
         DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         AstMember*  pMember = NULL;
-        OUString    docu;
         sal_uInt16  index = 0;
         while ( iter != end )
         {

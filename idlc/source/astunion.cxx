@@ -303,7 +303,6 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
         AstUnionLabel*  pLabel = NULL;
         AstExprValue*   pExprValue = NULL;
         RTConstValue    aConst;
-        OUString    docu;
         sal_uInt16  index = 0;
         if ( pDefault )
             index = 1;

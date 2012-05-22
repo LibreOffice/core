@@ -122,7 +122,6 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     String aColumnName;
-    ::rtl::OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(bCase);
     ::std::vector<String> aColumnNames,m_aTypeNames;
     m_aTypeNames.resize(nFieldCount);

@@ -136,7 +136,6 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         maScName = maXclName;
         ScfTools::ConvertToScDefinedName( maScName );
     }
-    rtl::OUString aRealOrigName = maScName;
 
     // add index for local names
     if( mnXclTab != EXC_NAME_GLOBAL )

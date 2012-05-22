@@ -364,7 +364,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             arguments.getConstArray()[2] >>= m_xBitmapConverter;
     }
 
-    OUString aParam;
     if( ! m_pDisplay )
     {
         OUString aUDisplay;

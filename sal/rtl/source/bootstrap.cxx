@@ -195,11 +195,6 @@ CommandLineParameterMap::CommandLineParameterMap() {
         static char const PREFIX[] = "-env:";
         if (s.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(PREFIX))) {
             sal_Int32 j = s.indexOf('=', RTL_CONSTASCII_LENGTH(PREFIX));
-            rtl::OUString k(
-                s.copy(
-                    RTL_CONSTASCII_LENGTH(PREFIX),
-                    ((j < 0 ? s.getLength() : j) -
-                     RTL_CONSTASCII_LENGTH(PREFIX))));
             if (j < 0) {
                 map_.erase(s.copy(RTL_CONSTASCII_LENGTH(PREFIX)));
             } else {

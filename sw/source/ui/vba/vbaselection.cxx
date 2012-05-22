@@ -821,7 +821,6 @@ SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException)
     if ( pTTCursor )
     {
         SwFrmFmt* pFmt = pTTCursor->GetFrmFmt();
-        rtl::OUString sTableName;
         if ( pFmt )
         {
             uno::Reference< text::XTextTable > xTbl = SwXTextTables::GetObject(*pFmt);

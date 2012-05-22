@@ -340,7 +340,6 @@ handleFilterOptionsRequest_(
             sal_Int32 nPropCount = rRequest.rProperties.getLength();
             for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
             {
-                rtl::OUString tmp = rRequest.rProperties[ind].Name;
                 if( rRequest.rProperties[ind].Name.equals(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"))) )
                 {

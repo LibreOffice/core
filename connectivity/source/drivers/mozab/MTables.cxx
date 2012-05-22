@@ -67,7 +67,6 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
     //  aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE"));
     //  aTypes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYSTEMTABLE"));
-    ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 

@@ -543,7 +543,6 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
 
     const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 
-    OUString sTmp;
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
         try
