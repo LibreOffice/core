@@ -612,17 +612,15 @@ sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 {
     rtl::OUString const & env = Application::GetDesktopEnvironment();
-    sal_uLong nRet =
-        ( env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("gnome")) ||
-          env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("windows")) )
-        ? STYLE_SYMBOLS_TANGO
-        : env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde"))
-        ? STYLE_SYMBOLS_CRYSTAL
-        : env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde"))
-        ? STYLE_SYMBOLS_CRYSTAL
-        : env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4"))
-        ? STYLE_SYMBOLS_OXYGEN
-        : STYLE_SYMBOLS_DEFAULT;
+
+    sal_uLong nRet;
+    if ( env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")) ||
+         env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
+        nRet = STYLE_SYMBOLS_CRYSTAL;
+    else if ( env.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")) )
+        nRet = STYLE_SYMBOLS_OXYGEN;
+    else
+        nRet = STYLE_SYMBOLS_TANGO;
 
     // falback to any existing style
     if ( ! CheckSymbolStyle (nRet) )
