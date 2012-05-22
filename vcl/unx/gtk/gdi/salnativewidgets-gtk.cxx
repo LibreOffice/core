@@ -1131,12 +1131,14 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         NWEnsureGTKRadio( m_nXScreen );
         NWEnsureGTKCheck( m_nXScreen );
         GtkWidget* widget = (nType == CTRL_RADIOBUTTON) ? gWidgetData[m_nXScreen].gRadioWidget : gWidgetData[m_nXScreen].gCheckWidget;
-        gint indicator_size, indicator_spacing;
+        gint indicator_size, indicator_spacing, focusPad, focusWidth;
         gtk_widget_style_get( widget,
                               "indicator_size", &indicator_size,
                               "indicator_spacing", &indicator_spacing,
+                              "focus-line-width", &focusWidth,
+                              "focus-padding", &focusPad,
                               (char *)NULL);
-        indicator_size += 2*indicator_spacing; // guess overpaint of theme
+        indicator_size += 2*indicator_spacing + 2*(focusWidth + focusWidth);
         rNativeBoundingRegion = rControlRegion;
         Rectangle aIndicatorRect( Point( 0,
                                          (rControlRegion.GetHeight()-indicator_size)/2),
