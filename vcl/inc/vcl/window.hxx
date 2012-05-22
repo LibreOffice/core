@@ -346,6 +346,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 class BitmapEx; // FIXME: really the SetBackgroundBitmap belongs in a toplevel 'window'
 class Dialog;
 class WindowImpl;
+class VclBuilder;
 
 class VCL_DLLPUBLIC Window : public OutputDevice
 {
@@ -363,6 +364,7 @@ class VCL_DLLPUBLIC Window : public OutputDevice
     friend class RadioButton;
     friend class SystemChildWindow;
     friend class ImplBorderWindow;
+    friend class VclBuilder;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
@@ -1102,6 +1104,11 @@ public:
      * @return false if property is unknown
      */
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    /*
+     * Takes ownership of the rOther properties
+     */
+    void take_properties(Window &rOther);
 
     virtual void setChildAnyProperty(const rtl::OString &rString, const ::com::sun::star::uno::Any &rValue);
     virtual ::com::sun::star::uno::Any getWidgetAnyProperty(const rtl::OString &rString) const;

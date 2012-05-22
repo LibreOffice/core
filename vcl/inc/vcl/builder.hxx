@@ -42,9 +42,11 @@ private:
     {
         rtl::OString m_sID;
         Window *m_pWindow;
+        bool m_bOwned;
         WinAndId(const rtl::OString &rId, Window *pWindow)
             : m_sID(rId)
             , m_pWindow(pWindow)
+            , m_bOwned(true)
         {
         }
     };
@@ -69,6 +71,11 @@ public:
     ~VclBuilder();
     Window *get_widget_root();
     Window *get_by_name(rtl::OString sID);
+    //for the purposes of retrofitting this to the existing code
+    //look up sID, clone its properties into replacement and
+    //splice replacement into the tree instead of it, without
+    //taking ownership of it
+    bool replace(rtl::OString sID, Window &rReplacement);
 
     typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
@@ -81,6 +88,10 @@ private:
     void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
+
+    //Helpers to retrofit all the existing code the the builder
+    static void swapGuts(Window &rOrig, Window &rReplacement);
+    static sal_uInt16 getPositionWithinParent(Window &rWindow);
 };
 
 #endif

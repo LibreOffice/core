@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
@@ -150,34 +151,11 @@ void SfxModalDialog::init()
     GetDialogData_Impl();
 }
 
-// -----------------------------------------------------------------------
-
-SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
-
-/*  [Description]
-
-    Constructor of the general base class for modal Dialoge;
-    ResId is used as ID in ini-file. The saved position from there is set.
-*/
-
-:   ModalDialog(pParent, rResId),
-    nUniqId(rResId.GetId()),
-    pInputSet(0),
-    pOutputSet(0),
-    m_pUIBuilder(0)
-{
-    init();
-}
-
 #define BASEPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIConfig"))
 #define RELPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice.cfg"))
 #define SERVICENAME_PATHSETTINGS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings"))
 
-SfxModalDialog::SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
-:   ModalDialog(pParent, 0), //todo
-    nUniqId(0), //todo
-    pInputSet(0),
-    pOutputSet(0)
+rtl::OUString getUIRootDir()
 {
     namespace css = ::com::sun::star;
 
@@ -202,8 +180,47 @@ SfxModalDialog::SfxModalDialog(Window *pParent, const rtl::OString& rID, const r
     sShareLayer += RELPATH_SHARE_LAYER; // folder
     sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
+    return sShareLayer;
+}
 
-    m_pUIBuilder = new VclBuilder(this, sShareLayer + rUIXMLDescription, rID);
+// -----------------------------------------------------------------------
+
+SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
+
+/*  [Description]
+
+    Constructor of the general base class for modal Dialoge;
+    ResId is used as ID in ini-file. The saved position from there is set.
+*/
+
+:   ModalDialog(pParent, rResId),
+    nUniqId(rResId.GetId()),
+    pInputSet(0),
+    pOutputSet(0)
+{
+    sal_Int32 nUIid = static_cast<sal_Int32>(nUniqId);
+    rtl::OUString sPath = rtl::OUStringBuffer(getUIRootDir()).
+        append(rResId.GetResMgr()->getPrefixName()).
+        append('/').
+        append(nUIid).
+        appendAscii(".ui").
+        makeStringAndClear();
+    fprintf(stderr, "path %s id %d\n", rtl::OUStringToOString(sPath, RTL_TEXTENCODING_UTF8).getStr(), nUniqId);
+
+    osl::File aUIFile(sPath);
+    osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
+    if (error == osl::File::E_None)
+        m_pUIBuilder = new VclBuilder(this, sPath, rtl::OString::valueOf(nUIid));
+    init();
+}
+
+SfxModalDialog::SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
+:   ModalDialog(pParent, 0), //todo
+    nUniqId(0), //todo
+    pInputSet(0),
+    pOutputSet(0)
+{
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir() + rUIXMLDescription, rID);
     init();
 }
 
@@ -222,8 +239,7 @@ SfxModalDialog::SfxModalDialog(Window* pParent,
     ModalDialog(pParent, nWinStyle),
     nUniqId(nUniqueId),
     pInputSet(0),
-    pOutputSet(0),
-    m_pUIBuilder(0)
+    pOutputSet(0)
 {
     init();
 }
@@ -240,7 +256,6 @@ SfxModalDialog::~SfxModalDialog()
 {
     SetDialogData_Impl();
     delete pOutputSet;
-    delete m_pUIBuilder;
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )

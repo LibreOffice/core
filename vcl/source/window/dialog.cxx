@@ -36,6 +36,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -351,6 +352,7 @@ void Dialog::ImplInitDialogData()
     mnMousePositioned       = 0;
     m_nBorderWidth          = 0;
     mpDialogImpl            = new DialogImpl;
+    m_pUIBuilder            = NULL;
 
     //To-Do, reuse maResizeTimer
     maLayoutTimer.SetTimeout(50);
@@ -1052,7 +1054,9 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 bool Dialog::isLayoutEnabled() const
 {
     //Child is a container => we're layout enabled
-    return dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
+    bool bRet = dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
+    fprintf(stderr, "isLayoutEnabled is %d\n", bRet);
+    return bRet;
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
@@ -1069,6 +1073,11 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
     VclBox *pBox = dynamic_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    if (!pBox)
+    {
+        fprintf(stderr, "WTF!\n");
+        return 0;
+    }
     Size aSize = GetSizePixel();
     aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
         + 2 * m_nBorderWidth;
@@ -1110,6 +1119,30 @@ bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         set_border_width(rValue.toInt32());
     else
         return SystemWindow::set_property(rKey, rValue);
+    return true;
+}
+
+bool Dialog::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement)
+{
+    if (!pParent)
+        return false;
+    if (!pParent->IsDialog())
+        return false;
+    Dialog *pDialog = static_cast<Dialog*>(pParent);
+    VclBuilder *pUIBuilder = pDialog->m_pUIBuilder;
+    if (!pUIBuilder)
+        return false;
+    bool bFound = pUIBuilder->replace(rtl::OString::valueOf(nID), rReplacement);
+    if (!bFound)
+    {
+        fprintf(stderr, "%d %p not found, hiding\n", nID, &rReplacement);
+        //move "missing" elements into the action area (just to have
+        //a known container as an owner) and hide it
+        VclButtonBox* pActionArea = getActionArea(pDialog);
+        rReplacement.ImplInit(pActionArea, 0, NULL);
+        rReplacement.Hide();
+    }
+    assert(rReplacement.mpWindowImpl);
     return true;
 }
 

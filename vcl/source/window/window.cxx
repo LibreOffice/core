@@ -6455,6 +6455,12 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 
 Size Window::GetSizePixel() const
 {
+    if (!mpWindowImpl)
+    {
+        fprintf(stderr, "WTF\n");
+        return Size(0,0);
+    }
+
     // #i43257# trigger pending resize handler to assure correct window sizes
     if( mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
     {
@@ -9652,6 +9658,124 @@ Size Window::get_preferred_size() const
             aRet.Height() = aOptimal.Height();
     }
     return aRet;
+}
+
+void Window::take_properties(Window &rOther)
+{
+    WindowImpl *pWindowImpl = rOther.mpWindowImpl;
+    std::swap(mpWindowImpl->mpUserData, pWindowImpl->mpUserData);
+    std::swap(mpWindowImpl->mpExtImpl, pWindowImpl->mpExtImpl);
+    std::swap(mpWindowImpl->mpCursor, pWindowImpl->mpCursor);
+    std::swap(mpWindowImpl->maPointer, pWindowImpl->maPointer);
+    mpWindowImpl->maZoom = pWindowImpl->maZoom;
+    mpWindowImpl->maText = pWindowImpl->maText;
+    std::swap(mpWindowImpl->mpControlFont, pWindowImpl->mpControlFont);
+    mpWindowImpl->maControlForeground = pWindowImpl->maControlForeground;
+    mpWindowImpl->maControlBackground = pWindowImpl->maControlBackground;
+    mpWindowImpl->mnLeftBorder = pWindowImpl->mnLeftBorder;
+    mpWindowImpl->mnTopBorder = pWindowImpl->mnTopBorder;
+    mpWindowImpl->mnRightBorder = pWindowImpl->mnRightBorder;
+    mpWindowImpl->mnBottomBorder = pWindowImpl->mnBottomBorder;
+    mpWindowImpl->mnX = pWindowImpl->mnX;
+    mpWindowImpl->mnY = pWindowImpl->mnY;
+    mpWindowImpl->mnAbsScreenX = pWindowImpl->mnAbsScreenX;
+    mpWindowImpl->maPos = pWindowImpl->maPos;
+    mpWindowImpl->maHelpId = pWindowImpl->maHelpId;
+    mpWindowImpl->maUniqId = pWindowImpl->maUniqId;
+    mpWindowImpl->maHelpText = pWindowImpl->maHelpText;
+    mpWindowImpl->maQuickHelpText = pWindowImpl->maQuickHelpText;
+    std::swap(mpWindowImpl->maInputContext, pWindowImpl->maInputContext);
+    mpWindowImpl->mnStyle = pWindowImpl->mnStyle;
+    mpWindowImpl->mnPrevStyle = pWindowImpl->mnPrevStyle;
+    mpWindowImpl->mnExtendedStyle = pWindowImpl->mnExtendedStyle;
+    mpWindowImpl->mnPrevExtendedStyle = pWindowImpl->mnPrevExtendedStyle;
+    mpWindowImpl->mnType = pWindowImpl->mnType;
+    mpWindowImpl->mnNativeBackground = pWindowImpl->mnNativeBackground;
+    mpWindowImpl->mnWaitCount = pWindowImpl->mnWaitCount;
+    mpWindowImpl->mnPaintFlags = pWindowImpl->mnPaintFlags;
+    mpWindowImpl->mnGetFocusFlags = pWindowImpl->mnGetFocusFlags;
+    mpWindowImpl->mnParentClipMode = pWindowImpl->mnParentClipMode;
+    mpWindowImpl->mnActivateMode = pWindowImpl->mnActivateMode;
+    mpWindowImpl->mnDlgCtrlFlags = pWindowImpl->mnDlgCtrlFlags;
+    mpWindowImpl->mnLockCount = pWindowImpl->mnLockCount;
+    mpWindowImpl->meAlwaysInputMode = pWindowImpl->meAlwaysInputMode;
+    mpWindowImpl->mbFrame = pWindowImpl->mbFrame;
+    mpWindowImpl->mbBorderWin = pWindowImpl->mbBorderWin;
+    mpWindowImpl->mbOverlapWin = pWindowImpl->mbOverlapWin;
+    mpWindowImpl->mbSysWin = pWindowImpl->mbSysWin;
+    mpWindowImpl->mbDialog = pWindowImpl->mbDialog;
+    mpWindowImpl->mbDockWin = pWindowImpl->mbDockWin;
+    mpWindowImpl->mbFloatWin = pWindowImpl->mbFloatWin;
+    mpWindowImpl->mbPushButton = pWindowImpl->mbPushButton;
+    mpWindowImpl->mbVisible = pWindowImpl->mbVisible;
+    mpWindowImpl->mbDisabled = pWindowImpl->mbDisabled;
+    mpWindowImpl->mbInputDisabled = pWindowImpl->mbInputDisabled;
+    mpWindowImpl->mbDropDisabled = pWindowImpl->mbDropDisabled;
+    mpWindowImpl->mbNoUpdate = pWindowImpl->mbNoUpdate;
+    mpWindowImpl->mbNoParentUpdate = pWindowImpl->mbNoParentUpdate;
+    mpWindowImpl->mbActive = pWindowImpl->mbActive;
+    mpWindowImpl->mbParentActive = pWindowImpl->mbParentActive;
+    mpWindowImpl->mbReallyVisible = pWindowImpl->mbReallyVisible;
+    mpWindowImpl->mbReallyShown = pWindowImpl->mbReallyShown;
+    mpWindowImpl->mbInInitShow = pWindowImpl->mbInInitShow;
+    mpWindowImpl->mbChildNotify = pWindowImpl->mbChildNotify;
+    mpWindowImpl->mbChildPtrOverwrite = pWindowImpl->mbChildPtrOverwrite;
+    mpWindowImpl->mbNoPtrVisible = pWindowImpl->mbNoPtrVisible;
+    mpWindowImpl->mbPaintFrame = pWindowImpl->mbPaintFrame;
+    mpWindowImpl->mbInPaint = pWindowImpl->mbInPaint;
+    mpWindowImpl->mbMouseMove = pWindowImpl->mbMouseMove;
+    mpWindowImpl->mbMouseButtonDown = pWindowImpl->mbMouseButtonDown;
+    mpWindowImpl->mbMouseButtonUp = pWindowImpl->mbMouseButtonUp;
+    mpWindowImpl->mbKeyInput = pWindowImpl->mbKeyInput;
+    mpWindowImpl->mbKeyUp = pWindowImpl->mbKeyUp;
+    mpWindowImpl->mbCommand = pWindowImpl->mbCommand;
+    mpWindowImpl->mbDefPos = pWindowImpl->mbDefPos;
+    mpWindowImpl->mbDefSize = pWindowImpl->mbDefSize;
+    mpWindowImpl->mbCallMove = pWindowImpl->mbCallMove;
+    mpWindowImpl->mbCallResize = pWindowImpl->mbCallResize;
+    mpWindowImpl->mbWaitSystemResize = pWindowImpl->mbWaitSystemResize;
+    mpWindowImpl->mbInitWinClipRegion = pWindowImpl->mbInitWinClipRegion;
+    mpWindowImpl->mbInitChildRegion = pWindowImpl->mbInitChildRegion;
+    mpWindowImpl->mbWinRegion = pWindowImpl->mbWinRegion;
+    mpWindowImpl->mbClipChildren = pWindowImpl->mbClipChildren;
+    mpWindowImpl->mbClipSiblings = pWindowImpl->mbClipSiblings;
+    mpWindowImpl->mbChildTransparent = pWindowImpl->mbChildTransparent;
+    mpWindowImpl->mbPaintTransparent = pWindowImpl->mbPaintTransparent;
+    mpWindowImpl->mbMouseTransparent = pWindowImpl->mbMouseTransparent;
+    mpWindowImpl->mbDlgCtrlStart = pWindowImpl->mbDlgCtrlStart;
+    mpWindowImpl->mbFocusVisible = pWindowImpl->mbFocusVisible;
+    mpWindowImpl->mbTrackVisible = pWindowImpl->mbTrackVisible;
+    mpWindowImpl->mbUseNativeFocus = pWindowImpl->mbUseNativeFocus;
+    mpWindowImpl->mbNativeFocusVisible = pWindowImpl->mbNativeFocusVisible;
+    mpWindowImpl->mbInShowFocus = pWindowImpl->mbInShowFocus;
+    mpWindowImpl->mbInHideFocus = pWindowImpl->mbInHideFocus;
+    mpWindowImpl->mbControlForeground = pWindowImpl->mbControlForeground;
+    mpWindowImpl->mbControlBackground = pWindowImpl->mbControlBackground;
+    mpWindowImpl->mbAlwaysOnTop = pWindowImpl->mbAlwaysOnTop;
+    mpWindowImpl->mbCompoundControl = pWindowImpl->mbCompoundControl;
+    mpWindowImpl->mbCompoundControlHasFocus = pWindowImpl->mbCompoundControlHasFocus;
+    mpWindowImpl->mbPaintDisabled = pWindowImpl->mbPaintDisabled;
+    mpWindowImpl->mbAllResize = pWindowImpl->mbAllResize;
+    mpWindowImpl->mbInDtor = pWindowImpl->mbInDtor;
+    mpWindowImpl->mbExtTextInput = pWindowImpl->mbExtTextInput;
+    mpWindowImpl->mbInFocusHdl = pWindowImpl->mbInFocusHdl;
+    mpWindowImpl->mbOverlapVisible = pWindowImpl->mbOverlapVisible;
+    mpWindowImpl->mbCreatedWithToolkit = pWindowImpl->mbCreatedWithToolkit;
+    mpWindowImpl->mbToolBox = pWindowImpl->mbToolBox;
+    mpWindowImpl->mbSplitter = pWindowImpl->mbSplitter;
+    mpWindowImpl->mbSuppressAccessibilityEvents = pWindowImpl->mbSuppressAccessibilityEvents;
+    mpWindowImpl->mbMenuFloatingWindow = pWindowImpl->mbMenuFloatingWindow;
+    mpWindowImpl->mbDrawSelectionBackground = pWindowImpl->mbDrawSelectionBackground;
+    mpWindowImpl->mbIsInTaskPaneList = pWindowImpl->mbIsInTaskPaneList;
+    mpWindowImpl->mbToolbarFloatingWindow = pWindowImpl->mbToolbarFloatingWindow;
+    mpWindowImpl->mbCallHandlersDuringInputDisabled = pWindowImpl->mbCallHandlersDuringInputDisabled;
+    mpWindowImpl->mbDisableAccessibleLabelForRelation = pWindowImpl->mbDisableAccessibleLabelForRelation;
+    mpWindowImpl->mbDisableAccessibleLabeledByRelation = pWindowImpl->mbDisableAccessibleLabeledByRelation;
+    mpWindowImpl->mbHelpTextDynamic = pWindowImpl->mbHelpTextDynamic;
+    mpWindowImpl->mbFakeFocusSet = pWindowImpl->mbFakeFocusSet;
+    mpWindowImpl->mbInterceptChildWindowKeyDown = pWindowImpl->mbInterceptChildWindowKeyDown;
+
+    std::swap(m_aWidgetProperties, rOther.m_aWidgetProperties);
 }
 
 bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)

@@ -205,6 +205,9 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
 Edit::Edit( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     ImplInitEditData();
     rResId.SetRT( RSC_EDIT );
     WinBits nStyle = ImplInitRes( rResId );

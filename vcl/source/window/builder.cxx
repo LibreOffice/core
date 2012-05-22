@@ -34,6 +34,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <window.h>
 
 VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
     : m_sID(sID)
@@ -73,8 +74,8 @@ VclBuilder::~VclBuilder()
     for (std::vector<WinAndId>::reverse_iterator aI = m_aChildren.rbegin(),
          aEnd = m_aChildren.rend(); aI != aEnd; ++aI)
     {
-        Window *pWindow = aI->m_pWindow;
-        delete pWindow;
+        if (aI->m_bOwned)
+            delete aI->m_pWindow;
     }
 }
 
@@ -268,6 +269,20 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             continue;
                         aChilds[i]->reorderWithinParent(nPosition);
                     }
+
+#if TODO
+//sort by ltr ttb
+                    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
+                    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
+                    for (size_t i = 0; i < aChilds.size(); ++i)
+                    {
+                        sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
+                        if (nPosition == 0xFFFF)
+                            continue;
+                        aChilds[i]->reorderWithinParent(nPosition);
+                    }
+#endif
+
                 }
             }
             else if (name.equals(RTL_CONSTASCII_STRINGPARAM("packing")))
@@ -481,6 +496,85 @@ Window *VclBuilder::get_by_name(rtl::OString sID)
     }
 
     return NULL;
+}
+
+sal_uInt16 VclBuilder::getPositionWithinParent(Window &rWindow)
+{
+    sal_uInt16 nPosition = 0;
+    Window* pChild = rWindow.GetParent()->mpWindowImpl->mpFirstChild;
+    while (pChild)
+    {
+        if (pChild == &rWindow)
+            break;
+        pChild = pChild->mpWindowImpl->mpNext;
+        ++nPosition;
+    }
+    return nPosition;
+}
+
+void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
+{
+#if 1
+    sal_uInt16 nPosition = getPositionWithinParent(rOrig);
+
+    rReplacement.ImplInit(rOrig.GetParent(), rOrig.GetStyle(), NULL);
+
+    rReplacement.take_properties(rOrig);
+
+    rReplacement.reorderWithinParent(nPosition);
+
+    assert(nPosition == getPositionWithinParent(rReplacement));
+#else
+    //rReplacement is intended to be not inserted into
+    //anything yet
+    assert(!rReplacement.mpWindowImpl->mpParent);
+
+    rReplacement.ImplInit(rOrig.GetParent(), rOrig.GetStyle(), NULL);
+    assert(rReplacement.GetParent() == rOrig.GetParent());
+
+    rReplacement.ImplRemoveWindow(false);
+
+    Window *pParent = rOrig.mpWindowImpl->mpParent;
+    Window *pOrigsNext = rOrig.mpWindowImpl->mpNext;
+    Window *pOrigsPrev = rOrig.mpWindowImpl->mpPrev;
+    std::swap(rOrig.mpWindowImpl, rReplacement.mpWindowImpl);
+    std::swap(rOrig.m_aWidgetProperties, rReplacement.m_aWidgetProperties);
+    assert(rReplacement.mpWindowImpl->mpPrev == pOrigsPrev);
+    assert(rReplacement.mpWindowImpl->mpNext == pOrigsNext);
+    if (pOrigsNext)
+        pOrigsNext->mpWindowImpl->mpPrev = &rReplacement;
+    else
+        pParent->mpWindowImpl->mpLastChild = &rReplacement;
+    if (pOrigsPrev)
+        pOrigsPrev->mpWindowImpl->mpNext = &rReplacement;
+    else
+        pParent->mpWindowImpl->mpFirstChild = &rReplacement;
+    assert(!rOrig.mpWindowImpl->mpNext && !rOrig.mpWindowImpl->mpPrev);
+
+    //now put this at the end of the window list
+    rOrig.ImplInsertWindow(pParent);
+#endif
+    fprintf(stderr, "swapped %p for %p (%d)\n", &rReplacement, &rOrig);
+}
+
+bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+        {
+            Window *pOrig = aI->m_pWindow;
+            swapGuts(*pOrig, rReplacement);
+            delete pOrig;
+
+            aI->m_pWindow = &rReplacement;
+            aI->m_bOwned = false;
+            return true;
+        }
+    }
+    fprintf(stderr, "no sign of %s\n", sID.getStr());
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

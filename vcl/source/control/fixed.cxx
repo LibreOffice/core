@@ -30,6 +30,7 @@
 #include "tools/rc.h"
 
 #include "vcl/decoview.hxx"
+#include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/fixed.hxx"
 
@@ -164,6 +165,9 @@ FixedText::FixedText( Window* pParent, WinBits nStyle ) :
 FixedText::FixedText( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDTEXT )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -580,6 +584,9 @@ FixedLine::FixedLine( Window* pParent, WinBits nStyle ) :
 FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDLINE )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_FIXEDLINE );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );

@@ -1601,6 +1601,11 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
     return pImp ? new ResMgr( pImp ) : NULL;
 }
 
+rtl::OUString ResMgr::getPrefixName() const
+{
+    return pImpRes->aPrefix;
+}
+
 ResMgr* ResMgr::SearchCreateResMgr(
     const sal_Char* pPrefixName,
     com::sun::star::lang::Locale& rLocale )

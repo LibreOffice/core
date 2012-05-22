@@ -32,6 +32,7 @@
 
 
 #include "vcl/decoview.hxx"
+#include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/button.hxx"
@@ -66,6 +67,9 @@ ListBox::ListBox( Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
 ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_LISTBOX )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     ImplInitListBoxData();
     rResId.SetRT( RSC_LISTBOX );
     WinBits nStyle = ImplInitRes( rResId );

@@ -403,6 +403,10 @@ public:
     std::vector<RadioButton*> GetRadioButtonGroup(bool bIncludeThis = true) const;
 
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    /*
+     * Group this RadioButton with another
+     */
     void group(RadioButton &rOther);
 };
 

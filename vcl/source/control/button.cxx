@@ -1207,6 +1207,9 @@ PushButton::PushButton( Window* pParent, WinBits nStyle ) :
 PushButton::PushButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_PUSHBUTTON )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     ImplInitPushButtonData();
     rResId.SetRT( RSC_PUSHBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
@@ -1748,6 +1751,9 @@ OKButton::OKButton( Window* pParent, WinBits nStyle ) :
 OKButton::OKButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_OKBUTTON )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_OKBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -1815,6 +1821,9 @@ CancelButton::CancelButton( Window* pParent, WinBits nStyle ) :
 CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_CANCELBUTTON )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_CANCELBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -1882,6 +1891,9 @@ HelpButton::HelpButton( Window* pParent, WinBits nStyle ) :
 HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_HELPBUTTON )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_HELPBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
@@ -2428,6 +2440,9 @@ RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
 RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     ImplInitRadioButtonData();
     rResId.SetRT( RSC_RADIOBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
@@ -3372,6 +3387,9 @@ CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
 CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     ImplInitCheckBoxData();
     rResId.SetRT( RSC_CHECKBOX );
     WinBits nStyle = ImplInitRes( rResId );

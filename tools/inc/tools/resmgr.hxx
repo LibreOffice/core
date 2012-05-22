@@ -186,7 +186,8 @@ public:
 
     sal_uInt32          GetRemainSize();
 
-    const rtl::OUString&GetFileName() const;
+    const rtl::OUString& GetFileName() const;
+    rtl::OUString       getPrefixName() const;
 
     sal_Int16           ReadShort();
     sal_Int32           ReadLong();

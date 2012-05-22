@@ -33,6 +33,7 @@
 
 #include "tools/rc.h"
 
+#include "vcl/dialog.hxx"
 #include "vcl/field.hxx"
 #include "vcl/event.hxx"
 #include "vcl/svapp.hxx"
@@ -785,6 +786,9 @@ NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
 NumericField::NumericField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_NUMERICFIELD )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_NUMERICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
     SpinField::ImplInit( pParent, nStyle );
@@ -1651,6 +1655,9 @@ MetricField::MetricField( Window* pParent, WinBits nWinStyle ) :
 MetricField::MetricField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_METRICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
     SpinField::ImplInit( pParent, nStyle );
