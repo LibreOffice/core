@@ -502,7 +502,7 @@ RegistryItem gid_Regitem_std_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".std";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Sxd_PersistentHandler
@@ -581,7 +581,7 @@ RegistryItem gid_Regitem_sxd_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxd";
-    Value = "Document";
+    Value = "document";
 End
 
 // new odg file extension 
@@ -716,7 +716,7 @@ RegistryItem gid_Regitem_odg_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odg";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell
@@ -849,7 +849,7 @@ RegistryItem gid_Regitem_fodg_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fodg";
-    Value = "Document";
+    Value = "document";
 End
 
 // new otg file extension 
@@ -936,7 +936,7 @@ RegistryItem gid_Regitem_otg_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".otg";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell

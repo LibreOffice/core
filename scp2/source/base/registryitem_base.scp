@@ -119,7 +119,7 @@ RegistryItem gid_Regitem_odb_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odb";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell

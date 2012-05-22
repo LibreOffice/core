@@ -516,7 +516,7 @@ RegistryItem gid_Regitem_sti_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sti";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Sxi_PersistentHandler
@@ -595,7 +595,7 @@ RegistryItem gid_Regitem_sxi_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxi";
-    Value = "Document";
+    Value = "document";
 End
 
 // new odp file extension
@@ -731,7 +731,7 @@ RegistryItem gid_Regitem_odp_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odp";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Insertable
@@ -878,7 +878,7 @@ RegistryItem gid_Regitem_fodp_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fodp";
-    Value = "Document";
+    Value = "document";
 End
 
 // new otp file extension
@@ -965,7 +965,7 @@ RegistryItem gid_Regitem_otp_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".otp";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell

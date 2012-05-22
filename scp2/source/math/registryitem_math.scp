@@ -453,7 +453,7 @@ RegistryItem gid_Regitem_sxm_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxm";
-    Value = "Document";
+    Value = "document";
 End
 
 // new odf file extension
@@ -580,7 +580,7 @@ RegistryItem gid_Regitem_odf_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odf";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Insertable

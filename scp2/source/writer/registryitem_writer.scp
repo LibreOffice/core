@@ -581,7 +581,7 @@ RegistryItem gid_Regitem_stw_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".stw";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Sxg_PersistentHandler
@@ -644,7 +644,7 @@ RegistryItem gid_Regitem_sxg_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxg";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Sxw_PersistentHandler
@@ -723,7 +723,7 @@ RegistryItem gid_Regitem_sxw_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxw";
-    Value = "Document";
+    Value = "document";
 End
 
 // new odt file extension 
@@ -864,7 +864,7 @@ RegistryItem gid_Regitem_odt_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odt";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Server
@@ -1014,7 +1014,7 @@ RegistryItem gid_Regitem_fodt_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fodt";
-    Value = "Document";
+    Value = "document";
 End
 
 // new ott file extension 
@@ -1101,7 +1101,7 @@ RegistryItem gid_Regitem_ott_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".ott";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell
@@ -1245,7 +1245,7 @@ RegistryItem gid_Regitem_odm_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odm";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell
@@ -1431,7 +1431,7 @@ RegistryItem gid_Regitem_oth_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".oth";
-    Value = "Document";
+    Value = "document";
 End
 
 // "OpenWith" Windows Registry keys for extensions supported by Writer

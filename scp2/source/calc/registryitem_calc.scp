@@ -530,7 +530,7 @@ RegistryItem gid_Regitem_stc_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".stc";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Sxc_Contenttype
@@ -581,7 +581,7 @@ RegistryItem gid_Regitem_sxc_KindMap
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxc";
-    Value = "Document";
+    Value = "document";
 End
 
 // new ods file extension 
@@ -716,7 +716,7 @@ RegistryItem gid_Regitem_ods_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".ods";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Insertable
@@ -849,7 +849,7 @@ RegistryItem gid_Regitem_fods_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fods";
-    Value = "Document";
+    Value = "document";
 End
 
 // new ots file extension 
@@ -936,7 +936,7 @@ RegistryItem gid_Regitem_ots_KindMap
     ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".ots";
-    Value = "Document";
+    Value = "document";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell
