@@ -44,11 +44,11 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize();
 #if defined IOS || defined ANDROID
 
 #ifdef __cplusplus
-extern "C" __attribute__ ((visibility("default"))) void lo_main(int argc, char **argv);
+extern "C" SAL_DLLPUBLIC_EXPORT void lo_main(int argc, char **argv);
 #endif
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
-__attribute__ ((visibility("default"))) void lo_main(int argc, char **argv) \
+SAL_DLLPUBLIC_EXPORT void lo_main(int argc, char **argv) \
 { \
     sal_detail_initialize(argc, argv); \
     sal_main_with_args(argc, argv); \
@@ -56,7 +56,7 @@ __attribute__ ((visibility("default"))) void lo_main(int argc, char **argv) \
 }
 
 #define SAL_MAIN_IMPL \
-__attribute__ ((visibility("default"))) void lo_main(int argc, char **argv) \
+SAL_DLLPUBLIC_EXPORT void lo_main(int argc, char **argv) \
 { \
     sal_detail_initialize(argc, argv); \
     sal_main(); \
