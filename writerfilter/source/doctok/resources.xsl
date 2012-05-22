@@ -80,19 +80,19 @@
 #endif
 
 #ifndef INCLUDED_WW8_STRUCT_BASE_HXX
-#include &lt;WW8StructBase.hxx&gt;
+#include &lt;doctok/WW8StructBase.hxx&gt;
 #endif
 
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_IMPL_HXX
-#include &lt;WW8ResourceModelImpl.hxx&gt;
+#include &lt;doctok/WW8ResourceModelImpl.hxx&gt;
 #endif
 
 #ifndef INCLUDED_WW8_PROPERTY_SET_IMPL_HXX
-#include &lt;WW8PropertySetImpl.hxx&gt;
+#include &lt;doctok/WW8PropertySetImpl.hxx&gt;
 #endif
 
 #ifndef INCLUDED_DFF_HXX
-#include &lt;Dff.hxx&gt;
+#include &lt;doctok/Dff.hxx&gt;
 #endif
 
 namespace writerfilter {

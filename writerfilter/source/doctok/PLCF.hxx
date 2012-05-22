@@ -30,7 +30,7 @@
 #define INCLUDED_PLCF_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <WW8StructBase.hxx>
+#include "WW8StructBase.hxx"
 
 namespace writerfilter {
 namespace doctok

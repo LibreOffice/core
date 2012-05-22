@@ -32,7 +32,7 @@
 #include <set>
 #include <WW8PieceTable.hxx>
 #include <WW8BinTable.hxx>
-#include <resources.hxx>
+#include <doctok/resources.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <PLCF.hxx>
 #include <WW8Sttbf.hxx>

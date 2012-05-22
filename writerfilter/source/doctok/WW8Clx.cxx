@@ -28,7 +28,7 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <WW8Clx.hxx>
-#include <resources.hxx>
+#include <doctok/resources.hxx>
 
 namespace writerfilter {
 namespace doctok

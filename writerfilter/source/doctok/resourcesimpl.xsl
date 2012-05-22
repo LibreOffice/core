@@ -36,14 +36,14 @@
 <xsl:template match="/">
   <xsl:call-template name="licenseheader"/>
   <xsl:text>
-#include &lt;resources.hxx&gt;
+#include &lt;doctok/resources.hxx&gt;
 
 #ifndef WW8_OUTPUT_WITH_DEPTH
-#include &lt;WW8OutputWithDepth.hxx&gt;
+#include &lt;doctok/WW8OutputWithDepth.hxx&gt;
 #endif
 
 #ifndef INCLUDED_SPRMIDS_HXX
-#include &lt;sprmids.hxx&gt;
+#include &lt;doctok/sprmids.hxx&gt;
 #endif
 
 namespace writerfilter {

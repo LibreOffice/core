@@ -136,9 +136,9 @@ protected:
 #define </xsl:text>
     <xsl:value-of select="$incguard"/>
     <xsl:text>
-#include "OOXMLFactory.hxx"
+#include "ooxml/OOXMLFactory.hxx"
 #include "OOXMLFactory_generated.hxx"
-#include "OOXMLnamespaceids.hxx"
+#include "ooxml/OOXMLnamespaceids.hxx"
 #include "ooxml/resourceids.hxx"
 
 namespace writerfilter {

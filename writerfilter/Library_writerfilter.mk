@@ -38,11 +38,6 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
     -I$(SRCDIR)/writerfilter/inc \
     -I$(SRCDIR)/writerfilter/source \
-    -I$(SRCDIR)/writerfilter/source/dmapper \
-    -I$(SRCDIR)/writerfilter/source/doctok \
-    -I$(SRCDIR)/writerfilter/source/ooxml \
-    -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
-    -I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
 ))
 
 $(eval $(call gb_Library_use_api,writerfilter,\

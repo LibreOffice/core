@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "resources.hxx"
+#include "doctok/resources.hxx"
 #include "WW8DocumentImpl.hxx"
 
 namespace writerfilter {

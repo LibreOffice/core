@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <PropertyIds.hxx>
+#include "PropertyIds.hxx"
 #include <rtl/ustring.hxx>
 #include <map>
 

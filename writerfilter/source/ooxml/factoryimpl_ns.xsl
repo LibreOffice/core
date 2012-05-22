@@ -923,7 +923,7 @@ string </xsl:text>
 #include "OOXMLFactory_</xsl:text>
     <xsl:value-of select="$ns"/>
     <xsl:text>.hxx"
-#include "OOXMLFastHelper.hxx"
+#include "ooxml/OOXMLFastHelper.hxx"
     
 #ifdef _MSC_VER
 #pragma warning(disable:4065) // switch statement contains 'default' but no 'case' labels

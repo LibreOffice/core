@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
-#include <WW8ResourceModelImpl.hxx>
-#include <resources.hxx>
-#include <WW8OutputWithDepth.hxx>
+#include "WW8ResourceModelImpl.hxx"
+#include <doctok/resources.hxx>
+#include "WW8OutputWithDepth.hxx"
 #include <resourcemodel/TableManager.hxx>
 #include <rtl/string.hxx>
 #include <resourcemodel/QNameToString.hxx>

@@ -360,9 +360,9 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
 
   <xsl:template match="/">
     <xsl:text>    
-#include "OOXMLFactory.hxx"
-#include "OOXMLFastHelper.hxx"
-#include "OOXMLStreamImpl.hxx"
+#include "ooxml/OOXMLFactory.hxx"
+#include "ooxml/OOXMLFastHelper.hxx"
+#include "ooxml/OOXMLStreamImpl.hxx"
 #include "doctok/sprmids.hxx"
 #include "doctok/resourceids.hxx"
 </xsl:text>

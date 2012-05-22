@@ -29,9 +29,9 @@
 #ifndef INCLUDED_WW8_CLX_HXX
 #define INCLUDED_WW8_CLX_HXX
 
-#include <resources.hxx>
+#include <doctok/resources.hxx>
 
-#include <WW8OutputWithDepth.hxx>
+#include "WW8OutputWithDepth.hxx"
 
 namespace writerfilter {
 namespace doctok

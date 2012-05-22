@@ -38,7 +38,7 @@
 #include <doctok/sprmids.hxx>
 #include <ooxml/OOXMLnamespaceids.hxx>
 #include <dmapper/DomainMapper.hxx>
-#include <GraphicHelpers.hxx>
+#include <dmapper/GraphicHelpers.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>

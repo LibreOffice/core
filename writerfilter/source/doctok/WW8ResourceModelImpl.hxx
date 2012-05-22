@@ -32,7 +32,7 @@
 #include <doctok/WW8Document.hxx>
 
 #include <resourcemodel/WW8ResourceModel.hxx>
-#include <WW8StructBase.hxx>
+#include "WW8StructBase.hxx"
 
 #include <resourcemodel/OutputWithDepth.hxx>
 

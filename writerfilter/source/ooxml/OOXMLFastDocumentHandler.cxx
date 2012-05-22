@@ -34,7 +34,7 @@
 #endif
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
-#include "OOXMLFastTokens.hxx"
+#include "ooxml/OOXMLFastTokens.hxx"
 #include "OOXMLFactory.hxx"
 
 namespace writerfilter {

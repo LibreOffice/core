@@ -71,7 +71,7 @@
   <xsl:template name="gperfinputfasttokenhandler">
     <xsl:text>
 %{
-#include "OOXMLFastTokens.hxx"
+#include "ooxml/OOXMLFastTokens.hxx"
 
 namespace writerfilter { namespace ooxml { namespace tokenmap {
 %}

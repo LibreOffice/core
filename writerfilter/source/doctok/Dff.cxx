@@ -30,7 +30,7 @@
 #include "Dff.hxx"
 #include <doctok/resourceids.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
-#include "resources.hxx"
+#include "doctok/resources.hxx"
 
 namespace writerfilter {
 namespace doctok {

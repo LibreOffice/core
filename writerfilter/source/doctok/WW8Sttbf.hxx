@@ -29,8 +29,8 @@
 #ifndef INCLUDED_WW8_STTBF_HXX
 #define INCLUDED_WW8_STTBF_HXX
 
-#include <WW8StructBase.hxx>
-#include <WW8ResourceModelImpl.hxx>
+#include "WW8StructBase.hxx"
+#include "WW8ResourceModelImpl.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <vector>

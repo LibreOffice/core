@@ -65,7 +65,7 @@
 
   <xsl:template match="/">
     <xsl:text>    
-#include "OOXMLFactory.hxx"</xsl:text>
+#include "ooxml/OOXMLFactory.hxx"</xsl:text>
     <xsl:call-template name="factoryincludes"/>
     <xsl:text>
 namespace writerfilter {

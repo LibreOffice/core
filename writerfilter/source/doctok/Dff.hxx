@@ -30,8 +30,8 @@
 #define INCLUDED_DFF_HXX
 
 #include <vector>
-#include <WW8StructBase.hxx>
-#include <WW8ResourceModelImpl.hxx>
+#include "WW8StructBase.hxx"
+#include "WW8ResourceModelImpl.hxx"
 
 namespace writerfilter {
 namespace doctok
