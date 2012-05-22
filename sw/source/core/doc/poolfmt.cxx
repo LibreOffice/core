@@ -1436,7 +1436,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     SwPageDesc *pNewPgDsc;
     sal_uInt16 n;
 
-    for( n = 0; n < aPageDescs.Count(); ++n )
+    for( n = 0; n < aPageDescs.size(); ++n )
         if( nId == ( pNewPgDsc = aPageDescs[ n ] )->GetPoolFmtId() )
         {
             return pNewPgDsc;
@@ -2274,7 +2274,7 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
             "Wrong AutoFormat Id" );
     SwPageDesc *pNewPgDsc = 0;
     sal_Bool bFnd = sal_False;
-    for( sal_uInt16 n = 0; !bFnd && n < aPageDescs.Count(); ++n )
+    for( sal_uInt16 n = 0; !bFnd && n < aPageDescs.size(); ++n )
     {
         pNewPgDsc = aPageDescs[ n ];
         if( nId == pNewPgDsc->GetPoolFmtId() )

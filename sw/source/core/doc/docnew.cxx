@@ -98,6 +98,7 @@
 #include <MarkManager.hxx>
 #include <UndoManager.hxx>
 #include <unochart.hxx>
+#include <fldbas.hxx>
 
 #include <cmdid.h>              // for the default printer in SetJob
 
@@ -385,7 +386,7 @@ SwDoc::SwDoc()
     pGrfFmtCollTbl->Insert(pDfltGrfFmtColl, 0 );
 
     // Create PageDesc, EmptyPageFmt and ColumnFmt
-    if ( !aPageDescs.Count() )
+    if ( aPageDescs.empty() )
         GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
     // Set to "Empty Page"
@@ -566,7 +567,9 @@ SwDoc::~SwDoc()
     // there are still Flys registered at that point, we have a problem.
     // (This comment might have been translated incorrectly. Blame the bad
     // German original)
-    aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
+    BOOST_FOREACH(SwPageDesc *pPageDesc, aPageDescs)
+        delete pPageDesc;
+    aPageDescs.clear();
 
     // Delete content selections.
     // Don't wait for the SwNodes dtor to destroy them; so that Formats
@@ -818,8 +821,10 @@ void SwDoc::ClearDoc()
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
 
     // remove the dummy pagedec from the array and delete all the old ones
-    aPageDescs.Remove( nDummyPgDsc );
-    aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
+    aPageDescs.erase( aPageDescs.begin() + nDummyPgDsc );
+    BOOST_FOREACH(SwPageDesc *pPageDesc, aPageDescs)
+        delete pPageDesc;
+    aPageDescs.clear();
 
     // Delete for Collections
     // So that we get rid of the dependencies
@@ -856,8 +861,8 @@ void SwDoc::ClearDoc()
 
     GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFmtColl( GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-    nDummyPgDsc = aPageDescs.Count();
-    aPageDescs.Insert( pDummyPgDsc, nDummyPgDsc );
+    nDummyPgDsc = aPageDescs.size();
+    aPageDescs.push_back( pDummyPgDsc );
     // set the layout back to the new standard pagedesc
     pFirstNd->ResetAllAttr();
     // delete now the dummy pagedesc

@@ -142,9 +142,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-// Page descriptors
-SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
-
 /* IInterface */
 sal_Int32 SwDoc::acquire()
 {

@@ -187,7 +187,7 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
 
 void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
-    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs is out of range." );
+    OSL_ENSURE( i < aPageDescs.size(), "PageDescs is out of range." );
 
     SwPageDesc *pDesc = aPageDescs[i];
     SwRootFrm* pTmpRoot = GetCurrentLayout();
@@ -452,7 +452,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         }
     }
 
-    for ( sal_uInt16 j = 0; j < aPageDescs.Count(); ++j )
+    for ( sal_uInt16 j = 0; j < aPageDescs.size(); ++j )
     {
         if ( aPageDescs[j]->GetFollow() == pDel )
         {
@@ -486,7 +486,7 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
 
 void SwDoc::DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast )
 {
-    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs is out of range." );
+    OSL_ENSURE( i < aPageDescs.size(), "PageDescs is out of range." );
     OSL_ENSURE( i != 0, "You cannot delete the default Pagedesc.");
     if ( i == 0 )
         return;
@@ -505,7 +505,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast )
 
     PreDelPageDesc(pDel); // #i7983#
 
-    aPageDescs.Remove( i );
+    aPageDescs.erase( aPageDescs.begin() + i );
     delete pDel;
     SetModified();
 }
@@ -546,7 +546,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
         pNew->GetMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
         pNew->GetLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
-    aPageDescs.Insert( pNew, aPageDescs.Count() );
+    aPageDescs.push_back( pNew );
 
     if (bBroadcast)
         BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
@@ -558,7 +558,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     }
 
     SetModified();
-    return (aPageDescs.Count()-1);
+    return (aPageDescs.size()-1);
 }
 
 SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) const
@@ -566,7 +566,7 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) c
     SwPageDesc* pRet = 0;
     if( pPos ) *pPos = USHRT_MAX;
 
-    for( sal_uInt16 n = 0, nEnd = aPageDescs.Count(); n < nEnd; ++n )
+    for( sal_uInt16 n = 0, nEnd = aPageDescs.size(); n < nEnd; ++n )
         if( aPageDescs[ n ]->GetName() == rName )
         {
             pRet = aPageDescs[ n ];
@@ -781,7 +781,7 @@ sal_Bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
 {
     sal_Bool bResult = sal_False;
     sal_uInt16 nI;
-    for (nI = 0; nI < aPageDescs.Count(); nI++)
+    for (nI = 0; nI < aPageDescs.size(); nI++)
     {
         if (aPageDescs[nI]->GetName() == rName)
         {

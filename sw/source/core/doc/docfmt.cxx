@@ -1888,7 +1888,7 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
 
 SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const String& rName )
 {
-    for( sal_uInt16 n = rArr.Count(); n; )
+    for( sal_uInt16 n = rArr.size(); n; )
     {
         SwPageDesc* pDesc = rArr[ --n ];
         if( pDesc->GetName() == rName )
@@ -2157,7 +2157,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     if (bIncludePageStyles)
     {
         // and now the page templates
-        nCnt = rSource.aPageDescs.Count();
+        nCnt = rSource.aPageDescs.size();
         if( nCnt )
         {
             // a different Doc -> Number formatter needs to be merged
@@ -2172,7 +2172,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             }
 
             // 2nd step: Copy all attributes, set the right parents
-            for( nCnt = rSource.aPageDescs.Count(); nCnt; )
+            for( nCnt = rSource.aPageDescs.size(); nCnt; )
             {
                 SwPageDesc *pSrc = rSource.aPageDescs[ --nCnt ];
                 CopyPageDesc( *pSrc, *::lcl_FindPageDesc( aPageDescs, pSrc->GetName() ));

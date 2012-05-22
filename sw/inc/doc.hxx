@@ -240,8 +240,12 @@ namespace sfx2 {
 }
 
 // PageDescriptor-interface, Array because of inlines.
-typedef SwPageDesc* SwPageDescPtr;
-SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4 )
+class SwPageDescs : public std::vector<SwPageDesc*>
+{
+public:
+    // the destructor will free all objects still in the vector
+    ~SwPageDescs();
+};
 
 // forward declaration
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
@@ -1332,7 +1336,7 @@ public:
             sal_Int32 nDocPageCount );
 
     // PageDescriptor interface.
-    sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }
+    sal_uInt16 GetPageDescCnt() const { return aPageDescs.size(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *aPageDescs[i]; }
     SwPageDesc* FindPageDescByName( const String& rName,
                                     sal_uInt16* pPos = 0 ) const;
