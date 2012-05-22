@@ -214,7 +214,7 @@ private:
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
     DECL_LINK(UndoHdl, void *);
     DECL_LINK( AddToDictSelectHdl, MenuButton* );
-    DECL_LINK( AddToDictClickHdl, MenuButton* );
+    DECL_LINK( AddToDictClickHdl, PushButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
     DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );

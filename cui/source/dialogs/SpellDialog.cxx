@@ -1017,9 +1017,9 @@ int SpellDialog::InitUserDicts()
 }
 
 //-----------------------------------------------------------------------
-IMPL_LINK(SpellDialog, AddToDictClickHdl, MenuButton*, pButton )
+IMPL_LINK(SpellDialog, AddToDictClickHdl, PushButton*, EMPTYARG )
 {
-    return AddToDictionaryExecute(1, pButton->GetPopupMenu());
+    return AddToDictionaryExecute(1, aAddToDictMB.GetPopupMenu());
 }
 
 //-----------------------------------------------------------------------
