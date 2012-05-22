@@ -1098,7 +1098,7 @@ namespace drawinglayer
                         if(!mxBreakIterator.is())
                         {
                             uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))), uno::UNO_QUERY);
+                            mxBreakIterator.set(xMSF->createInstance("com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY);
                         }
 
                         if(mxBreakIterator.is())
