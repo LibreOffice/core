@@ -292,6 +292,7 @@ typedef sal_uInt16 StateChangedType;
 #define WINDOW_BORDER_ACTIVE            ((sal_uInt16)0x0004)
 #define WINDOW_BORDER_DOUBLEOUT         ((sal_uInt16)0x0008)
 #define WINDOW_BORDER_MENU              ((sal_uInt16)0x0010)
+#define WINDOW_BORDER_TOPBOTTOM         ((sal_uInt16)0x0020)
 #define WINDOW_BORDER_NOBORDER          ((sal_uInt16)0x1000)
 #define WINDOW_BORDER_REMOVEBORDER      ((sal_uInt16)0x2000)
 

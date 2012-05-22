@@ -87,6 +87,7 @@ public:
                             bActive( sal_False ),
                             pFrame( p )
                         {
+                            SetBorderStyle( WINDOW_BORDER_TOPBOTTOM );
                             p->GetFrame().GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
                         }
 
