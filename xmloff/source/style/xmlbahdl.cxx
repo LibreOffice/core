@@ -235,6 +235,26 @@ sal_Bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// class XMLBoolFalsePropHdl
+//
+
+XMLBoolFalsePropHdl::~XMLBoolFalsePropHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLBoolFalsePropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
+{
+    return sal_False;
+}
+
+sal_Bool XMLBoolFalsePropHdl::exportXML( OUString& rStrExpValue, const Any& /*rValue*/, const SvXMLUnitConverter& rCnv) const
+{
+    return XMLBoolPropHdl::exportXML( rStrExpValue, makeAny( sal_False ), rCnv );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // class XMLBoolPropHdl
 //
 

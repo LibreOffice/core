@@ -89,6 +89,8 @@ public:
     void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
                     const UniReference< SvXMLExportPropertyMapper >& rMapper,
                     const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
+    void SetFamilyPropSetMapper( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
+                    const UniReference< SvXMLExportPropertyMapper >& rMapper );
 
     /// Register a name that must not be used as a generated name.
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );

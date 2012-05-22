@@ -41,6 +41,7 @@
 extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
+extern const XMLPropertyMapEntry aXMLScFromXLSRowStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesImportProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesImportProperties[];

@@ -171,6 +171,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_BOOL :
             pPropHdl = new XMLBoolPropHdl;
             break;
+        case XML_TYPE_BOOL_FALSE :
+            pPropHdl = new XMLBoolFalsePropHdl;
+            break;
         case XML_TYPE_MEASURE :
             pPropHdl = new XMLMeasurePropHdl( 4 );
             break;

@@ -104,6 +104,22 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         delete pFamily;
 }
 
+void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
+        sal_Int32 nFamily,
+        const OUString& rStrName,
+        const UniReference < SvXMLExportPropertyMapper > & rMapper )
+{
+
+    XMLFamilyData_Impl aTemporary( nFamily );
+    sal_uLong nPos;
+
+    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
+    {
+        XMLFamilyData_Impl* pFamily = maFamilyList.GetObject( nPos );
+        if ( pFamily )
+            pFamily-> mxMapper = rMapper;
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Adds a name to list

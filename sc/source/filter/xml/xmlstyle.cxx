@@ -153,6 +153,14 @@ const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
     MAP_END()
 };
 
+const XMLPropertyMapEntry aXMLScFromXLSRowStylesProperties[] =
+{
+    MAP( "Height", XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT),
+    MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_ROW|XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE),
+    MAP( "OptimalHeight", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_BOOL_FALSE, CTF_SC_ROWOPTIMALHEIGHT),
+    MAP_END()
+};
+
 const XMLPropertyMapEntry aXMLScTableStylesImportProperties[] =
 {
     // #i57869# Include background color (CellBackColor/IsCellBackgroundTransparent) for import only.

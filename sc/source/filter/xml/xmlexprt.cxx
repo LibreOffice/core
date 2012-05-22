@@ -137,6 +137,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <vector>
+#include <vbahelper/vbaaccesshelper.hxx>
 
 //! not found in unonames.hxx
 #define SC_LAYERID "LayerID"
@@ -4269,6 +4270,20 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
     {
         if (GetDocument())
         {
+            // if source doc was Excel then
+            uno::Reference< frame::XModel > xModel = GetModel();
+            if ( xModel.is() )
+            {
+                uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY );
+                SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel.is() ? xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()) : NULL );
+                if ( pFoundShell && ooo::vba::isAlienExcelDoc( *pFoundShell ) )
+                {
+                    xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScFromXLSRowStylesProperties, xScPropHdlFactory);
+                    xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
+                    GetAutoStylePool()->SetFamilyPropSetMapper( XML_STYLE_FAMILY_TABLE_ROW, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
+                        xRowStylesExportPropertySetMapper );
+                }
+            }
             CollectUserDefinedNamespaces(GetDocument()->GetPool(), ATTR_USERDEF);
             CollectUserDefinedNamespaces(GetDocument()->GetEditPool(), EE_PARA_XMLATTRIBS);
             CollectUserDefinedNamespaces(GetDocument()->GetEditPool(), EE_CHAR_XMLATTRIBS);

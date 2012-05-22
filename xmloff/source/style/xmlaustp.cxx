@@ -312,6 +312,14 @@ void SvXMLAutoStylePoolP::AddFamily(
     pImpl->AddFamily( nFamily, rStrName, rMapper, rStrPrefix, bAsFamily );
 }
 
+void  SvXMLAutoStylePoolP::SetFamilyPropSetMapper(
+        sal_Int32 nFamily,
+        const OUString& rStrName,
+        const UniReference < SvXMLExportPropertyMapper > & rMapper )
+{
+    pImpl->SetFamilyPropSetMapper( nFamily, rStrName, rMapper );
+}
+
 void SvXMLAutoStylePoolP::RegisterName( sal_Int32 nFamily,
                                          const OUString& rName )
 {
