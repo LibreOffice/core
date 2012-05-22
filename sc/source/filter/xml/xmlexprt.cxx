@@ -4280,7 +4280,7 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 {
                     xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScFromXLSRowStylesProperties, xScPropHdlFactory);
                     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
-                    GetAutoStylePool()->SetFamilyPropSetMapper( XML_STYLE_FAMILY_TABLE_ROW, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
+                    GetAutoStylePool()->SetFamilyPropSetMapper( XML_STYLE_FAMILY_TABLE_ROW,
                         xRowStylesExportPropertySetMapper );
                 }
             }

@@ -185,7 +185,7 @@ public:
     void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
         const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
-    void SetFamilyPropSetMapper( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
+    void SetFamilyPropSetMapper( sal_Int32 nFamily,
         const UniReference < SvXMLExportPropertyMapper > & rMapper );
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
     void GetRegisteredNames(
