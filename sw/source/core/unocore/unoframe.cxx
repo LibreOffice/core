@@ -1598,7 +1598,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_Z_ORDER == pEntry->nWID)
         {
-            const SdrObject* pObj = pFmt->FindSdrObject();
+            const SdrObject* pObj = pFmt->FindRealSdrObject();
+            if( pObj == NULL )
+                pObj = pFmt->FindSdrObject();
             if( pObj )
             {
                 aAny <<= (sal_Int32)pObj->GetOrdNum();
