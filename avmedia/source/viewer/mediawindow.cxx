@@ -366,14 +366,17 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                         "AU Audio", "au",
                                         "AVI", "avi",
                                         "CD Audio", "cda",
+                                        "FLAC Audio", "flac",
+                                        "Flash Video", "flv",
                                         "Matroska Media", "mkv",
                                         "MIDI Audio", "mid;midi",
                                         "MPEG Audio", "mp2;mp3;mpa",
                                         "MPEG Video", "mpg;mpeg;mpv;mp4",
-                                        "Ogg bitstream", "ogg",
+                                        "Ogg bitstream", "ogg;oga;ogv",
                                         "Quicktime Video", "mov",
                                         "Vivo Video", "viv",
-                                        "WAVE Audio", "wav" };
+                                        "WAVE Audio", "wav",
+                                        "Windows Media Video", "wmv" };
 
     unsigned int i;
     for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
