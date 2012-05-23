@@ -36,7 +36,7 @@ sub DetectRevisionIdFromGit ($)
             # Not in a GIT repository.
             last;
         }
-        elsif (/^\s*git-svn-id:.*?trunk@([0-9]+)\s+/)
+        elsif (/^\s*git-svn-id:.*?@([0-9]+)\s+/)
         {
             $id = $1;
             last;
