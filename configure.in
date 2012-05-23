@@ -3375,7 +3375,7 @@ solaris*)
     i*86)
         CPU=I
         CPUNAME=INTEL
-        OUTPATH=unxsoli
+        OUTPATH=unxsogi
         ;;
     sparc)
         CPU=S
