@@ -4607,7 +4607,7 @@ static ::rtl::OUString delComment( const ::rtl::OUString& rQuery )
     bool bComment2 = false;     // /* comment */
     bool bComment  = false;     // -- or // comment
     ::rtl::OUStringBuffer aBuf(nQueryLen);
-    for (size_t i=0; i < nQueryLen; ++i)
+    for (sal_Int32 i=0; i < nQueryLen; ++i)
     {
         if (bComment2)
         {
