@@ -212,7 +212,7 @@ void Shape::addShape(
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, aMatrix ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, sal_False, aMatrix ) );
 
             if( pShapeMap && !msId.isEmpty() )
             {
@@ -327,6 +327,7 @@ Reference< XShape > Shape::createAndInsert(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
         const awt::Rectangle* /* pShapeRect */,
         sal_Bool bClearText,
+        sal_Bool bDoNotInsertEmptyTextBody,
         basegfx::B2DHomMatrix& aParentTransformation )
 {
     bool bIsEmbMedia = false;
@@ -567,7 +568,7 @@ Reference< XShape > Shape::createAndInsert(
             getTextBody()->getTextProperties().pushVertSimulation();
 
         // in some cases, we don't have any text body.
-        if( getTextBody() )
+        if( getTextBody() && ( !bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty() ) )
         {
             Reference < XText > xText( mxShape, UNO_QUERY );
             if ( xText.is() )   // not every shape is supporting an XText interface (e.g. GroupShape)

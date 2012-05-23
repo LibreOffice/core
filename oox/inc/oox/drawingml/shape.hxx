@@ -189,6 +189,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
                             sal_Bool bClearText,
+                            sal_Bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation );
 
     void                addChildren(

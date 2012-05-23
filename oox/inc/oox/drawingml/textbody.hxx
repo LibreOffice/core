@@ -68,6 +68,7 @@ public:
                             const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > & xAt,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStyle ) const;
+    bool isEmpty();
 protected:
     TextParagraphVector maParagraphs;
     TextBodyProperties  maTextProperties;

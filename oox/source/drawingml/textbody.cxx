@@ -77,6 +77,21 @@ void TextBody::insertAt(
         (*aIt)->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, aIt == aBeg );
 }
 
+bool TextBody::isEmpty()
+{
+    if ( maParagraphs.size() <= 0 )
+        return true;
+    if ( maParagraphs.size() > 1 )
+        return false;
+
+    const TextRunVector aRuns = maParagraphs[0]->getRuns();
+    if ( aRuns.size() <= 0 )
+        return true;
+    if ( aRuns.size() > 1 )
+        return false;
+
+    return aRuns[0]->getText().getLength() <= 0;
+}
 
 } }
 
