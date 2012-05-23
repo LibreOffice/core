@@ -200,7 +200,29 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+void Edit::take_properties(Window &rOther)
+{
+    Edit &rOtherEdit = static_cast<Edit&>(rOther);
+    maText = rOtherEdit.maText;
+    maSaveValue = rOtherEdit.maSaveValue;
+    maUndoText = rOtherEdit.maUndoText;
+    maRedoText = rOtherEdit.maRedoText;
+    mnXOffset = rOtherEdit.mnXOffset;
+    maSelection = rOtherEdit.maSelection;
+    mnAlign = rOtherEdit.mnAlign;
+    mnMaxTextLen = rOtherEdit.mnMaxTextLen;
+    meAutocompleteAction = rOtherEdit.meAutocompleteAction;
+    mcEchoChar = rOtherEdit.mcEchoChar;
+    mbModified = rOtherEdit.mbModified;
+    mbInternModified = rOtherEdit.mbInternModified;
+    mbReadOnly = rOtherEdit.mbReadOnly;
+    mbInsertMode = rOtherEdit.mbInsertMode;
+    mbClickedInSelection = rOtherEdit.mbClickedInSelection;
+    mbIsSubEdit = rOtherEdit.mbIsSubEdit;
+    mbInMBDown = rOtherEdit.mbInMBDown;
+    mbActivePopup = rOtherEdit.mbActivePopup;
+    Control::take_properties(rOther);
+}
 
 Edit::Edit( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )

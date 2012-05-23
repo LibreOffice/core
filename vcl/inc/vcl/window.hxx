@@ -598,11 +598,6 @@ protected:
      */
     SAL_DLLPRIVATE void queue_resize();
 
-    /*
-     * Takes ownership of the rOther properties
-     */
-    virtual void take_properties(Window &rOther);
-
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 public:
@@ -1144,6 +1139,11 @@ public:
     }
 
     void reorderWithinParent(sal_uInt16 nNewPosition);
+
+    /*
+     * Takes ownership of the rOther properties
+     */
+    virtual void take_properties(Window &rOther);
 
     //-------------------------------------
     //  Native Widget Rendering functions

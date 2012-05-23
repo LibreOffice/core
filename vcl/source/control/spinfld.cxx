@@ -352,7 +352,30 @@ SpinField::SpinField( Window* pParent, WinBits nWinStyle ) :
     ImplInit( pParent, nWinStyle );
 }
 
-// --------------------------------------------------------------------
+void SpinField::take_properties(Window &rOther)
+{
+    fprintf(stderr, "SpinField::take_properties\n");
+    SpinField &rOtherField = static_cast<SpinField&>(rOther);
+    assert(!mpEdit && rOther.mpEdit);
+    mpEdit = new Edit(this, WB_NOBORDER);
+    SetSubEdit(mpEdit);
+    mpEdit->take_properties(*rOtherField.mpEdit);
+    maUpperRect = rOtherField.maUpperRect;
+    maLowerRect = rOtherField.maLowerRect;
+    maDropDownRect = rOtherField.maDropDownRect;
+    mbRepeat = rOtherField.mbRepeat;
+    mbSpin = rOtherField.mbSpin;
+    mbInitialUp = rOtherField.mbInitialUp;
+    mbInitialDown = rOtherField.mbInitialDown;
+    mbNoSelect = rOtherField.mbNoSelect;
+    mbUpperIn = rOtherField.mbUpperIn;
+    mbLowerIn = rOtherField.mbLowerIn;
+    mbInDropDown = rOtherField.mbInDropDown;
+
+    Edit::take_properties(rOther);
+
+    fprintf(stderr, "SpinField::take_properties %p %d\n", this, IsVisible());
+}
 
 SpinField::SpinField( Window* pParent, const ResId& rResId ) :
     Edit( WINDOW_SPINFIELD )

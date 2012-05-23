@@ -92,6 +92,7 @@ private:
     //Helpers to retrofit all the existing code the the builder
     static void swapGuts(Window &rOrig, Window &rReplacement);
     static sal_uInt16 getPositionWithinParent(Window &rWindow);
+    static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 };
 
 #endif

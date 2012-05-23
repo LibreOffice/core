@@ -1650,8 +1650,6 @@ MetricField::MetricField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 MetricField::MetricField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {

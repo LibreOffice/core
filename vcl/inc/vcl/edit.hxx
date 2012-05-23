@@ -148,7 +148,6 @@ protected:
 
     protected:
     virtual void FillLayoutData() const;
-
                         Edit( WindowType nType );
 
 public:
@@ -248,6 +247,7 @@ public:
 
     virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
+    virtual void take_properties(Window &rOther);
 
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)

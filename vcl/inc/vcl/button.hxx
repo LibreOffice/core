@@ -323,8 +323,6 @@ protected:
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
-    virtual void take_properties(Window &rOther);
-
 public:
     SAL_DLLPRIVATE void     ImplCallClick( sal_Bool bGrabFocus = sal_False, sal_uInt16 nFocusFlags = 0 );
     SAL_DLLPRIVATE void     ImplSetMinimumNWFSize();
@@ -409,6 +407,7 @@ public:
      * Group this RadioButton with another
      */
     void group(RadioButton &rOther);
+    virtual void take_properties(Window &rOther);
 };
 
 // ------------

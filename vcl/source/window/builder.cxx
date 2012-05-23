@@ -189,7 +189,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK );
     else
         fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
-    fprintf(stderr, "for %s, created %p child of %p\n", name.getStr(), pWindow, pParent);
+    fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p)\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow);
     return pWindow;
 }
 
@@ -233,6 +233,45 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
     return pCurrentChild;
 }
 
+sal_uInt16 VclBuilder::getPositionWithinParent(Window &rWindow)
+{
+    if (rWindow.mpWindowImpl->mpParent != rWindow.mpWindowImpl->mpRealParent)
+    {
+        assert(rWindow.mpWindowImpl->mpBorderWindow ==
+            rWindow.mpWindowImpl->mpParent);
+        assert(rWindow.mpWindowImpl->mpBorderWindow->mpParent ==
+            rWindow.mpWindowImpl->mpRealParent);
+        return getPositionWithinParent(*rWindow.mpWindowImpl->mpBorderWindow);
+    }
+
+    assert(rWindow.GetParent() == rWindow.GetRealParent());
+
+    sal_uInt16 nPosition = 0;
+    Window* pChild = rWindow.GetParent()->mpWindowImpl->mpFirstChild;
+    while (pChild)
+    {
+        if (pChild == &rWindow)
+            break;
+        pChild = pChild->mpWindowImpl->mpNext;
+        ++nPosition;
+    }
+    return nPosition;
+}
+
+void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
+{
+    if (rWindow.mpWindowImpl->mpParent != rWindow.mpWindowImpl->mpRealParent)
+    {
+        assert(rWindow.mpWindowImpl->mpBorderWindow ==
+            rWindow.mpWindowImpl->mpParent);
+        assert(rWindow.mpWindowImpl->mpBorderWindow->mpParent ==
+            rWindow.mpWindowImpl->mpRealParent);
+        reorderWithinParent(*rWindow.mpWindowImpl->mpBorderWindow, nNewPosition);
+        return;
+    }
+    rWindow.reorderWithinParent(nNewPosition);
+}
+
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 {
     int nLevel = 1;
@@ -267,7 +306,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                         sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
                         if (nPosition == 0xFFFF)
                             continue;
-                        aChilds[i]->reorderWithinParent(nPosition);
+                        reorderWithinParent(*aChilds[i], nPosition);
                     }
 
 #if TODO
@@ -279,7 +318,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                         sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
                         if (nPosition == 0xFFFF)
                             continue;
-                        aChilds[i]->reorderWithinParent(nPosition);
+                        reorderWithinParent(*aChilds[i], nPosition);
                     }
 #endif
 
@@ -498,30 +537,22 @@ Window *VclBuilder::get_by_name(rtl::OString sID)
     return NULL;
 }
 
-sal_uInt16 VclBuilder::getPositionWithinParent(Window &rWindow)
-{
-    sal_uInt16 nPosition = 0;
-    Window* pChild = rWindow.GetParent()->mpWindowImpl->mpFirstChild;
-    while (pChild)
-    {
-        if (pChild == &rWindow)
-            break;
-        pChild = pChild->mpWindowImpl->mpNext;
-        ++nPosition;
-    }
-    return nPosition;
-}
-
 void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
 {
 #if 1
+    if (rOrig.mpWindowImpl->mpBorderWindow)
+        fprintf(stderr, "problem one\n");
+
     sal_uInt16 nPosition = getPositionWithinParent(rOrig);
 
-    rReplacement.ImplInit(rOrig.GetParent(), rOrig.GetStyle(), NULL);
+    rReplacement.ImplInit(rOrig.mpWindowImpl->mpRealParent, rOrig.GetStyle(), NULL);
+
+    if (rReplacement.mpWindowImpl->mpBorderWindow)
+        fprintf(stderr, "problem two\n");
 
     rReplacement.take_properties(rOrig);
 
-    rReplacement.reorderWithinParent(nPosition);
+    reorderWithinParent(rReplacement, nPosition);
 
     assert(nPosition == getPositionWithinParent(rReplacement));
 #else
@@ -554,7 +585,7 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
     //now put this at the end of the window list
     rOrig.ImplInsertWindow(pParent);
 #endif
-    fprintf(stderr, "swapped %p for %p\n", &rReplacement, &rOrig);
+    fprintf(stderr, "swapped %p for %p %p/%p/%p\n", &rReplacement, &rOrig, rReplacement.mpWindowImpl->mpParent, rReplacement.mpWindowImpl->mpRealParent, rReplacement.mpWindowImpl->mpBorderWindow);
 }
 
 bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)

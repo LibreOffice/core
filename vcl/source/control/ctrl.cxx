@@ -68,7 +68,13 @@ Control::Control( Window* pParent, WinBits nStyle ) :
     Window::ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+void Control::take_properties(Window &rOther)
+{
+    Control &rOtherControl = static_cast<Control&>(rOther);
+    std::swap(mpControlData, rOtherControl.mpControlData);
+    mbHasFocus = rOtherControl.mbHasFocus;
+    Window::take_properties(rOther);
+}
 
 Control::Control( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_CONTROL )

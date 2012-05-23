@@ -9776,6 +9776,14 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mbInterceptChildWindowKeyDown = pWindowImpl->mbInterceptChildWindowKeyDown;
 
     std::swap(m_aWidgetProperties, rOther.m_aWidgetProperties);
+
+    bool bHasBorderWindow = mpWindowImpl->mpBorderWindow;
+    bool bOtherHasBorderWindow = pWindowImpl->mpBorderWindow;
+
+    assert(bHasBorderWindow == bOtherHasBorderWindow);
+
+    if (bHasBorderWindow && bOtherHasBorderWindow)
+        mpWindowImpl->mpBorderWindow->take_properties(*pWindowImpl->mpBorderWindow);
 }
 
 bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
