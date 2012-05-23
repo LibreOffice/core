@@ -247,7 +247,7 @@ my_components += component/ucb/source/ucp/gvfs/ucpgvfs
 .END
 
 .IF "$(ENABLE_TDEAB)" != ""
-my_components += tdeab1
+my_components += component/connectivity/source/drivers/kab/tdeab1
 .END
 
 .IF "$(ENABLE_TDE)" != ""

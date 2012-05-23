@@ -340,7 +340,7 @@ MY_FILES_main += \
 MY_DRIVERS += hsqldb jdbc
 .END
 .IF "$(ENABLE_TDEAB)" == "TRUE"
-MY_FILES_main += $(MY_MOD)/DataAccess/tdeab.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 .END
 .IF "$(ENABLE_KAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu

@@ -73,6 +73,14 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(ENABLE_TAB),TRUE)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_tdeab \
+	Library_tdeab1 \
+	Library_tdeabdrv1 \
+))
+endif
+
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_macab \

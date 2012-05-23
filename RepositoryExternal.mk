@@ -1122,6 +1122,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 endef
 
+ifeq ($(ENABLE_TDE),YES)
+
+define gb_LinkTarget__use_tde
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(TDE_LIBS) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(TDE_CFLAGS) \
+)
+endef
+
+endif # ENABLE_TDE
+
 define gb_LinkTarget__use_gobject
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(GOBJECT_LIBS) \
