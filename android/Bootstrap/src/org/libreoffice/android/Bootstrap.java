@@ -169,7 +169,6 @@ public class Bootstrap extends NativeActivity
 
         if (cmdLine == null) {
             String indirectFile = getIntent().getStringExtra("lo-main-indirect-cmdline");
-
             if (indirectFile != null) {
                 try {
                     // Somewhat stupid but short way to read a file into a string
@@ -181,7 +180,7 @@ public class Bootstrap extends NativeActivity
             }
 
             if (cmdLine == null)
-                cmdLine = "/data/data/org.libreoffice.android/lib/libqa_sal_types.so";
+                cmdLine = "";
         }
 
         Log.i(TAG, String.format("cmdLine=%s", cmdLine));
@@ -192,7 +191,6 @@ public class Bootstrap extends NativeActivity
         while (argv.length > 0 &&
                argv[0].matches("[A-Z_]+=.*")) {
             putenv(argv[0]);
-            argv = Arrays.copyOfRange(argv, 1, argv.length-1);
         }
 
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
@@ -206,8 +204,13 @@ public class Bootstrap extends NativeActivity
         int loLib = dlopen(mainLibrary);
 
         if (loLib == 0) {
-            Log.i(TAG, String.format("Could not load %s", mainLibrary));
-            return;
+            Log.i(TAG, String.format("Error: could not load %s", mainLibrary));
+            mainLibrary = "libmergedlo.so";
+            loLib = dlopen(mainLibrary);
+            if (loLib == 0) {
+                Log.i(TAG, String.format("Error: could not load fallback %s", mainLibrary));
+                return;
+            }
         }
 
         int lo_main = dlsym(loLib, "lo_main");

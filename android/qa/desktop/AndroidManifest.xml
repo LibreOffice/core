@@ -17,6 +17,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+		<extra android:name="lo-main-library" android:value="libmergedlo" />
             </intent-filter>
         </activity>
     </application>

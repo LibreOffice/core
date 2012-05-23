@@ -223,6 +223,9 @@ copy-stuff: buildrcs
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
+# A sample file for fun ...
+	mkdir -p assets/demo
+	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/demo; fi
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
@@ -244,8 +247,8 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-strace yes -e lo-main-cmdline "FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf -env:INIFILENAME=file:///assets/program/sofficerc"
-# add -e lo-strace yes # if you want that
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo
+# add -e lo-strace yes # if you want some stracing action
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
