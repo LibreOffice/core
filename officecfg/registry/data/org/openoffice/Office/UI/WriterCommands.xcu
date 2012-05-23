@@ -2212,6 +2212,11 @@
                     <value>8</value>
                 </prop>
             </node>
+            <node oor:name=".uno:OpenFromWriter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Open...</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:TableMenu" oor:op="replace">

@@ -1427,6 +1427,22 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pDoc->GetNumberFormatter(sal_True)->SetYear2000(nYear2K);
             }
         break;
+        case FN_OPEN_FILE:
+        {
+            SfxViewShell* pViewShell = GetView();
+            if (!pViewShell)
+                pViewShell = SfxViewShell::Current();
+
+            if (!pViewShell)
+                // Ok.  I did my best.
+                break;
+
+            SfxStringItem aApp(SID_DOC_SERVICE, rtl::OUString("com.sun.star.text.TextDocument"));
+            SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
+            pViewShell->GetDispatcher()->Execute(
+                SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aApp, &aTarget, 0L);
+        }
+        break;
 
         default: OSL_FAIL("wrong Dispatcher");
     }

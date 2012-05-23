@@ -10417,3 +10417,28 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
     ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATION;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem OpenFromWriter FN_OPEN_FILE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]

@@ -63,6 +63,11 @@ interface TextDocument : BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    FN_OPEN_FILE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
 }
 
 shell SwDocShell

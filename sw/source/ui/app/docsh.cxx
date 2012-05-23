@@ -1035,6 +1035,11 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.DisableItem( nWhich );
             break;
 
+        case FN_OPEN_FILE:
+            if( ISA( SwWebDocShell ) )
+                rSet.DisableItem( nWhich );
+            break;
+
         case SID_ATTR_YEAR2000:
             {
                 const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(sal_False);
