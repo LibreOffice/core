@@ -61,10 +61,10 @@
 
 class SwCacheObj;
 
-SV_DECL_PTRARR_DEL(SwCacheObjArr,SwCacheObj*,1)
-
-class SwCache : public SwCacheObjArr
+typedef std::vector<SwCacheObj*> SwCacheObjArr;
+class SwCache
 {
+    SwCacheObjArr m_aCacheObjects;
     std::vector<sal_uInt16> aFreePositions; //Freie Positionen fuer das Insert wenn
                                     //die Maximalgrenze nicht erreicht ist.
                                     //Immer wenn ein Objekt ausgetragen wird,
@@ -106,6 +106,7 @@ public:
     //nur sal_uInt8 hineinstecken!!!
 #ifdef DBG_UTIL
     SwCache( const sal_uInt16 nInitSize, const rtl::OString &rNm );
+    // the destructor will free all objects still in the vector
     ~SwCache();
 #else
     SwCache( const sal_uInt16 nInitSize );
@@ -133,6 +134,8 @@ public:
     inline SwCacheObj *First() { return pRealFirst; }
     inline SwCacheObj *Last()  { return pLast; }
     inline SwCacheObj *Next( SwCacheObj *pCacheObj);
+    inline SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
+    inline sal_uInt16 size() { return m_aCacheObjects.size(); }
 };
 
 //Cache-Manipulation auf die sichere Art.

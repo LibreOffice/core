@@ -30,8 +30,6 @@
 #include <swcache.hxx>
 #include <rtl/strbuf.hxx>
 
-SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
-
 #ifdef DBG_UTIL
 #define INCREMENT( nVar )   ++nVar
 #else
@@ -95,7 +93,7 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     , const rtl::OString &rNm
 #endif
     ) :
-    SwCacheObjArr( (sal_uInt8)nInitSize ),
+    m_aCacheObjects(),
     pRealFirst( 0 ),
     pFirst( 0 ),
     pLast( 0 ),
@@ -118,6 +116,7 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     , m_nDecreaseMax( 0 )
 #endif
 {
+    m_aCacheObjects.reserve( (sal_uInt8)nInitSize );
 }
 
 #ifdef DBG_UTIL
@@ -183,6 +182,9 @@ SwCache::~SwCache()
         OSL_TRACE(sOut.getStr());
     }
     Check();
+
+    for(SwCacheObjArr::const_iterator it = m_aCacheObjects.begin(); it != m_aCacheObjects.end(); ++it)
+        delete *it;
 }
 #endif
 
@@ -225,7 +227,7 @@ void SwCache::Flush( const sal_uInt8 )
             pTmp = (SwCacheObj*)pObj;
             pObj = pTmp->GetNext();
             aFreePositions.push_back( pTmp->GetCachePos() );
-            *(pData + pTmp->GetCachePos()) = (void*)0;
+            m_aCacheObjects[pTmp->GetCachePos()] = NULL;
             delete pTmp;
             INCREMENT( m_nFlushedObjects );
         }
@@ -306,7 +308,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
                           const sal_Bool bToTop )
 {
     SwCacheObj *pRet;
-    if ( 0 != (pRet = nIndex < Count() ? operator[]( nIndex ) : 0) )
+    if ( 0 != (pRet = nIndex < m_aCacheObjects.size() ? m_aCacheObjects[ nIndex ] : 0) )
     {
         if ( !pRet->IsOwner( pOwner ) )
             pRet = 0;
@@ -377,23 +379,23 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         pObj->GetNext()->SetPrev( pObj->GetPrev() );
 
     aFreePositions.push_back( pObj->GetCachePos() );
-    *(pData + pObj->GetCachePos()) = (void*)0;
+    m_aCacheObjects[pObj->GetCachePos()] = NULL;
     delete pObj;
 
     CHECK;
-    if ( Count() > nCurMax &&
-         (nCurMax <= (Count() - aFreePositions.size())) )
+    if ( m_aCacheObjects.size() > nCurMax &&
+         (nCurMax <= (m_aCacheObjects.size() - aFreePositions.size())) )
     {
         //Falls moeglich wieder verkleinern, dazu muessen allerdings ausreichend
         //Freie Positionen bereitstehen.
         //Unangenehmer Nebeneffekt ist, das die Positionen verschoben werden
         //muessen, und die Eigentuemer der Objekte diese wahrscheinlich nicht
         //wiederfinden werden.
-        for ( sal_uInt16 i = 0; i < Count(); ++i )
+        for ( sal_uInt16 i = 0; i < m_aCacheObjects.size(); ++i )
         {
-            SwCacheObj *pTmpObj = operator[](i);
+            SwCacheObj *pTmpObj = m_aCacheObjects[i];
             if ( !pTmpObj )
-            {   SwCacheObjArr::Remove( i, 1 );
+            {   m_aCacheObjects.erase( m_aCacheObjects.begin() + i );
                 --i;
             }
             else
@@ -424,12 +426,12 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
     OSL_ENSURE( !pNew->GetPrev() && !pNew->GetNext(), "New but not new." );
 
     sal_uInt16 nPos;//Wird hinter den if's zum setzen am Obj benutzt.
-    if ( Count() < nCurMax )
+    if ( m_aCacheObjects.size() < nCurMax )
     {
         //Es ist noch Platz frei, also einfach einfuegen.
         INCREMENT( m_nAppend );
-        nPos = Count();
-        SwCacheObjArr::C40_INSERT( SwCacheObj, pNew, nPos );
+        nPos = m_aCacheObjects.size();
+        m_aCacheObjects.push_back(pNew);
     }
     else if ( !aFreePositions.empty() )
     {
@@ -437,7 +439,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
         INCREMENT( m_nInsertFree );
         const sal_uInt16 nFreePos = aFreePositions.size() - 1;
         nPos = aFreePositions[ nFreePos ];
-        *(pData + nPos) = pNew;
+        m_aCacheObjects[nPos] = pNew;
         aFreePositions.erase( aFreePositions.begin() + nFreePos );
     }
     else
@@ -468,7 +470,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
                 pObj->GetNext()->SetPrev( pObj->GetPrev() );
         }
         delete pObj;
-        *(pData + nPos) = pNew;
+        m_aCacheObjects[nPos] = pNew;
     }
     pNew->SetCachePos( nPos );
 
@@ -502,12 +504,12 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
 
 void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
 {
-    if ( !pRealFirst || ((Count() - aFreePositions.size()) < nOfst) )
+    if ( !pRealFirst || ((m_aCacheObjects.size() - aFreePositions.size()) < nOfst) )
         return;
 
     CHECK;
     pFirst = pRealFirst;
-    for ( sal_uInt16 i = 0; i < Count() && i < nOfst; ++i )
+    for ( sal_uInt16 i = 0; i < m_aCacheObjects.size() && i < nOfst; ++i )
     {
         if ( pFirst->GetNext() && pFirst->GetNext()->GetNext() )
             pFirst = pFirst->GetNext();
