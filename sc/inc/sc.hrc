@@ -296,6 +296,7 @@
 #define FID_DOC_MANAGER         (SC_FUNCTION_START + 1)
 #define FID_CURSOR_ENTER        (SC_FUNCTION_START + 2)
 #define SID_MAIL                (SC_FUNCTION_START + 3)
+#define SID_OPEN_CALC           (SC_FUNCTION_START + 4)
 #define FILE_MENU_END           (SC_FUNCTION_START + 20)
 
 #define EDIT_MENU_START         (FILE_MENU_END)

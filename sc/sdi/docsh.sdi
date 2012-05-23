@@ -73,6 +73,7 @@ interface TableDocument
     uuid = "BA338A42-064E-11d0-89CB-008029E4B0B1" ;
 ]
 {
+    SID_OPEN_CALC   [ ExecMethod = Execute; ]
     SID_SBA_IMPORT  [ ExecMethod = Execute; ]
     SID_SC_CELLS    [ ExecMethod = Execute; ]
     SID_SC_CELLTEXT [ ExecMethod = Execute; ]

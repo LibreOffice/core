@@ -30,7 +30,7 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
- 
+
 
 using namespace ::com::sun::star;
 
@@ -67,6 +67,7 @@ using namespace ::com::sun::star;
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docinsert.hxx>
+#include "sfx2/dispatch.hxx"
 #include <svl/PasswordHelper.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
@@ -1096,6 +1097,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        case SID_OPEN_CALC:
+        {
+            SfxStringItem aApp(SID_DOC_SERVICE, rtl::OUString("com.sun.star.sheet.SpreadsheetDocument"));
+            SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
+            GetViewData()->GetDispatcher().Execute(
+                SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aApp, &aTarget, 0L);
+        }
+        break;
         default:
         {
             // kleiner (?) Hack -> forward der Slots an TabViewShell

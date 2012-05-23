@@ -334,6 +334,7 @@
 #define CMD_FID_TAB_EVENTS                          ".uno:TableEvents"
 #define CMD_FID_TAB_MENU_SET_TAB_BG_COLOR           ".uno:SetTabBgColor"
 #define CMD_FID_TAB_SET_TAB_BG_COLOR                ".uno:TabBgColor"
+#define CMD_SID_OPEN_CALC                           ".uno:OpenFromCalc"
 
 #endif
 

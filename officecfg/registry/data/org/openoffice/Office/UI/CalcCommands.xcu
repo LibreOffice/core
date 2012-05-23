@@ -1529,6 +1529,11 @@
                     <value xml:lang="en-US">Insert Date Field (variable)</value>
                 </prop>
             </node>
+            <node oor:name=".uno:OpenFromCalc" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Open...</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:AuditMenu" oor:op="replace">

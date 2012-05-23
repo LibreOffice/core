@@ -8072,3 +8072,28 @@ SfxVoidItem InsertFieldDateVariable SID_INSERT_FIELD_DATE_VAR
     ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
+
+
+SfxVoidItem OpenFromCalc SID_OPEN_CALC
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
