@@ -4755,7 +4755,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 	static sal_uInt32 nLen = SAL_N_ELEMENTS(yytname);
 	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
 	{
-		if (yytname && rValue == yytname[i])
+		if (rValue == yytname[i])
 			return i;
 	}
 
