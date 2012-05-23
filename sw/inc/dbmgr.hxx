@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
@@ -144,8 +145,7 @@ struct SwDSParam : public SwDBData
                 bAfterSelection = sal_True;
         }
 };
-typedef SwDSParam* SwDSParamPtr;
-SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0)
+typedef boost::ptr_vector<SwDSParam> SwDSParamArr;
 
 struct SwMergeDescriptor
 {

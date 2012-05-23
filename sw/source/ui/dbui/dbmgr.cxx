@@ -152,7 +152,6 @@ using namespace ::com::sun::star::ui::dialogs;
 #define DB_SEP_RETURN   2
 #define DB_SEP_NEWLINE  3
 
-SV_IMPL_PTRARR(SwDSParamArr, SwDSParamPtr);
 const sal_Char cCursor[] = "Cursor";
 const sal_Char cCommand[] = "Command";
 const sal_Char cCommandType[] = "CommandType";
@@ -367,7 +366,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         else
         {
             SwDSParam* pInsert = new SwDSParam(*pImpl->pMergeData);
-            aDataSourceParams.Insert(pInsert, aDataSourceParams.Count());
+            aDataSourceParams.push_back(pInsert);
             try
             {
                 uno::Reference<XComponent> xComponent(pInsert->xConnection, UNO_QUERY);
@@ -730,9 +729,9 @@ SwNewDBMgr::SwNewDBMgr() :
 
 SwNewDBMgr::~SwNewDBMgr()
 {
-    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
-        SwDSParam* pParam = aDataSourceParams[nPos];
+        SwDSParam* pParam = &aDataSourceParams[nPos];
         if(pParam->xConnection.is())
         {
             try
@@ -2070,9 +2069,9 @@ void    SwNewDBMgr::CloseAll(sal_Bool bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
     //all connections stay open
-    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
-        SwDSParam* pParam = aDataSourceParams[nPos];
+        SwDSParam* pParam = &aDataSourceParams[nPos];
         if(bIncludingMerge || pParam != pImpl->pMergeData)
         {
             pParam->nSelectionIndex = 0;
@@ -2101,9 +2100,9 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
     }
 
     SwDSParam* pFound = 0;
-    for(sal_uInt16 nPos = aDataSourceParams.Count(); nPos; nPos--)
+    for(sal_uInt16 nPos = aDataSourceParams.size(); nPos; nPos--)
     {
-        SwDSParam* pParam = aDataSourceParams[nPos - 1];
+        SwDSParam* pParam = &aDataSourceParams[nPos - 1];
         if(rData.sDataSource == pParam->sDataSource &&
             rData.sCommand == pParam->sCommand &&
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
@@ -2123,7 +2122,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
         if(!pFound)
         {
             pFound = new SwDSParam(rData);
-            aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
+            aDataSourceParams.push_back(pFound);
             try
             {
                 uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
@@ -2146,9 +2145,9 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, sal_B
          return pImpl->pMergeData;
     }
     SwDSParam* pFound = 0;
-    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
-        SwDSParam* pParam = aDataSourceParams[nPos];
+        SwDSParam* pParam = &aDataSourceParams[nPos];
         if(rDataSource == pParam->sDataSource)
         {
             pFound = pParam;
@@ -2160,7 +2159,7 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, sal_B
         SwDBData aData;
         aData.sDataSource = rDataSource;
         pFound = new SwDSParam(aData);
-        aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
+        aDataSourceParams.push_back(pFound);
         try
         {
             uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
@@ -2524,9 +2523,9 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     }
     if(pFound)
     {
-        for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+        for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
         {
-            SwDSParam* pParam = aDataSourceParams[nPos];
+            SwDSParam* pParam = &aDataSourceParams[nPos];
             if(pParam == pFound)
             {
                 try
@@ -2968,13 +2967,13 @@ void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
 {
     ::SolarMutexGuard aGuard;
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
-    for(sal_uInt16 nPos = rDBMgr.aDataSourceParams.Count(); nPos; nPos--)
+    for(sal_uInt16 nPos = rDBMgr.aDataSourceParams.size(); nPos; nPos--)
     {
-        SwDSParam* pParam = rDBMgr.aDataSourceParams[nPos - 1];
+        SwDSParam* pParam = &rDBMgr.aDataSourceParams[nPos - 1];
         if(pParam->xConnection.is() &&
                 (xSource == pParam->xConnection))
         {
-            rDBMgr.aDataSourceParams.DeleteAndDestroy(nPos - 1);
+            rDBMgr.aDataSourceParams.erase(rDBMgr.aDataSourceParams.begin() + nPos - 1);
         }
     }
 }

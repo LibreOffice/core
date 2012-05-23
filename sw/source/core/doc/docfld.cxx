@@ -1759,9 +1759,9 @@ void SwDoc::GetAllDBNames( std::vector<String>& rAllDBNames )
     SwNewDBMgr* pMgr = GetNewDBMgr();
 
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
-    for(sal_uInt16 i = 0; i < rArr.Count(); i++)
+    for(sal_uInt16 i = 0; i < rArr.size(); i++)
     {
-        SwDSParam* pParam = rArr[i];
+        const SwDSParam* pParam = &rArr[i];
         String* pStr = new String( pParam->sDataSource );
         (*pStr) += DB_DELIM;
         (*pStr) += (String)pParam->sCommand;
