@@ -34,21 +34,6 @@
 #include <tools/string.hxx>
 #include <tools/resid.hxx>
 
-// ---------------------
-// - ImplResStringItem -
-// ---------------------
-
-struct ImplResStringItem
-{
-    XubString   maStr;
-    long        mnValue;
-
-#ifdef _TOOLS_RESARY_CXX
-                ImplResStringItem( const XubString& rStr ) :
-                    maStr( rStr ) {}
-#endif
-};
-
 // ------------------
 // - ResStringArray -
 // ------------------
