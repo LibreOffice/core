@@ -50,7 +50,7 @@ buildrcs:
 	echo "BRAND_BASE_DIR=file:///assets" >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry user:$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
-	echo 'URE_MORE_TYPES=' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES= <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/share/extensions' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS_PREREG=$$BRAND_BASE_DIR/share/prereg/bundled' >> assets/program/fundamentalrc
@@ -227,9 +227,8 @@ copy-stuff: buildrcs
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
 # A sample file for fun ...
-	mkdir -p assets/unpack/files
-	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/unpack/files; fi
-	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/unpack/etc; fi
+	mkdir -p assets/demo
+	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/demo; fi
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
@@ -251,15 +250,11 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-<<<<<<< HEAD
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP)
-# add -e lo-strace "-f -o /somewhere/the/app/can/write.log" if you want
-=======
-	echo "FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf -env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
+	echo "-env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
+#	echo "file:///assets/demo/writer.odt" > cmdline
 	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
->>>>>>> android: remove duplicate services.rdb from config, and static bits
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
