@@ -372,7 +372,7 @@ String STR_QUICKSTART_PRELAUNCH
 };
 String STR_QUICKSTART_PRELAUNCH_UNX
 {
-    Text[ en-US ] = "Disable systray Quickstarter";
+    Text[ en-US ] = "Disable Quickstarter";
 };
 String STR_QUICKSTART_LNKNAME
 {
