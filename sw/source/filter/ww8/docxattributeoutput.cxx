@@ -2102,14 +2102,15 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
                 break;
         }
     }
-    // picture description
-    ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
-    attrList->add( XML_id, OString::valueOf( sal_Int32( m_anchorId++ )).getStr());
-    attrList->add( XML_name, "Picture" );
-    attrList->add( XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
+    // picture description (used for pic:cNvPr later too)
+    ::sax_fastparser::FastAttributeList* docPrattrList = m_pSerializer->createAttrList();
+    docPrattrList->add( XML_id, OString::valueOf( sal_Int32( m_anchorId++ )).getStr());
+    docPrattrList->add( XML_name, "Picture" );
+    docPrattrList->add( XML_descr, OUStringToOString( rGrfNode.GetDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
-        attrList->add( XML_title, OUStringToOString( rGrfNode.GetTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
-    m_pSerializer->startElementNS( XML_wp, XML_docPr, XFastAttributeListRef( attrList ));
+        docPrattrList->add( XML_title, OUStringToOString( rGrfNode.GetTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
+    XFastAttributeListRef docPrAttrListRef( docPrattrList );
+    m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
     // TODO hyperlink
     // m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
     //         FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -2139,12 +2140,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     m_pSerializer->startElementNS( XML_pic, XML_nvPicPr,
             FSEND );
-    // TODO the right image description
-    m_pSerializer->startElementNS( XML_pic, XML_cNvPr,
-            XML_id, "0",
-            XML_name, "Picture",
-            XML_descr, "A description...",
-            FSEND );
+    // It seems pic:cNvpr and wp:docPr are pretty much the same thing with the same attributes
+    m_pSerializer->startElementNS( XML_pic, XML_cNvPr, docPrAttrListRef );
+
     // TODO hyperlink
     // m_pSerializer->singleElementNS( XML_a, XML_hlinkClick,
     //     FSNS( XML_r, XML_id ), "rId4",
