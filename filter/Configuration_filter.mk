@@ -347,9 +347,6 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	HTML__StarWriter_ \
 	Lotus_1_2_3_1_0__DOS___StarWriter_ \
 	Lotus_1_2_3_1_0__WIN___StarWriter_ \
-	MS_Excel_4_0__StarWriter_ \
-	MS_Excel_5_0__StarWriter_ \
-	MS_Excel_95__StarWriter_ \
 	MS_WinWord_5 \
 	MS_WinWord_6_0 \
 	MS_Word_95 \
