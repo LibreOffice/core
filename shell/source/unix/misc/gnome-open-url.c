@@ -87,7 +87,7 @@ int main(int argc, char *argv[] )
 {
     GError *error = NULL;
     char *fallback;
-    char *index;
+    char *idx;
     int retcode = -1;
 
     if( argc != 2 )
@@ -108,11 +108,11 @@ int main(int argc, char *argv[] )
      */
 
     fallback = strdup(argv[0]);
-    index = strstr(fallback, "gnome-open-url");
-    if ( NULL != index )
+    idx = strstr(fallback, "gnome-open-url");
+    if ( NULL != idx )
     {
         char *args[3];
-        strncpy(index, "open-url", 9);
+        strncpy(idx, "open-url", 9);
         args[0] = fallback;
         args[1] = argv[1];
         args[2] = NULL;
