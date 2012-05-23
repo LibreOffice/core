@@ -28,6 +28,7 @@
 #ifndef _TOOLS_RESARY_HXX
 #define _TOOLS_RESARY_HXX
 
+#include "boost/noncopyable.hpp"
 #include <vector>
 #include "tools/toolsdllapi.h"
 #include <tools/string.hxx>
@@ -54,7 +55,7 @@ struct ImplResStringItem
 
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)
 
-class TOOLS_DLLPUBLIC ResStringArray
+class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
 {
     private:
     // ---------------------
@@ -84,10 +85,6 @@ class TOOLS_DLLPUBLIC ResStringArray
     sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }
 
     sal_uInt32          FindIndex( long nValue ) const;
-
-    private:
-    ResStringArray( const ResStringArray& );
-    ResStringArray&     operator=( const ResStringArray& );
 };
 
 #endif  // _TOOLS_RESARY_HXX
