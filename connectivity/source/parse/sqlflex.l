@@ -705,13 +705,6 @@ sal_Int32 gatherNamePre(const sal_Char* text)
 
 using namespace connectivity;
 
-static sal_uInt32 Intl_TokenID[] =
-{
-	SQL_TOKEN_LIKE, SQL_TOKEN_NOT, SQL_TOKEN_NULL, SQL_TOKEN_TRUE,
-	SQL_TOKEN_FALSE, SQL_TOKEN_IS, SQL_TOKEN_BETWEEN, SQL_TOKEN_OR,
-	SQL_TOKEN_AND, SQL_TOKEN_AVG, SQL_TOKEN_COUNT, SQL_TOKEN_MAX,
-	SQL_TOKEN_MIN, SQL_TOKEN_SUM
-};
 static bool IN_SQLyyerror;
 //------------------------------------------------------------------------------
 OSQLScanner::OSQLScanner()
