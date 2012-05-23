@@ -247,8 +247,10 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libmergedlo
-# add -e lo-strace yes # if you want some stracing action
+#	echo "file:///assets/demo/writer.odt" > cmdline
+#	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+# add -e lo-strace yes # if you want that
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
