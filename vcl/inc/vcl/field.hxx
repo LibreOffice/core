@@ -592,6 +592,9 @@ public:
     static double           ConvertDoubleValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
+
+    virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual void            take_properties(Window &rOther);
 };
 
 

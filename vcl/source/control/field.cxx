@@ -1672,7 +1672,29 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("format")))
+    {
+        maCustomUnitText = rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
+        meUnit = FUNIT_CUSTOM;
+    }
+    else
+        return SpinField::set_property(rKey, rValue);
+    return true;
+}
+
+void MetricField::take_properties(Window &rOther)
+{
+    MetricField &rOtherField = static_cast<MetricField&>(rOther);
+
+    maCustomUnitText = rOtherField.maCustomUnitText;
+    maCurUnitText = rOtherField.maCurUnitText;
+    mnBaseValue = rOtherField.mnBaseValue;
+    meUnit = rOtherField.meUnit;
+
+    SpinField::take_properties(rOther);
+}
 
 void MetricField::ImplLoadRes( const ResId& rResId )
 {
