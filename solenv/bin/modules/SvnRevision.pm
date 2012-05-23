@@ -59,7 +59,7 @@ sub DetectRevisionId ($)
     open my $proc, "cd $path && svn info 2>\&1 |";
     while (<$proc>)
     {
-        if (/svn: E155007:/)
+        if (/svn: E155007:/ || /svn: '.' is not a working copy/)
         {
             # Not in an SVN repository.
             $id = DetectRevisionIdFromGit($path);
