@@ -23,57 +23,36 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
 #include <uielement/recentfilesmenucontroller.hxx>
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
-#include "services.h"
-
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/fwkresid.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
-#include <vcl/menu.hxx>
-#endif
-#include <vcl/svapp.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <tools/urlobj.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <unotools/historyoptions.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <osl/file.hxx>
-//#include <tools/solar.hrc>
 #include <dispatch/uieventloghelper.hxx>
+#include <osl/file.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/historyoptions.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-using namespace com::sun::star::container;
+
+#define MAX_STR_WIDTH   46
+#define MAX_MENU_ITEMS  99
 
 static const char SFX_REFERER_USER[] = "private:user";
+static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
+static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
+static const char MENU_SHOTCUT[]     = "~N: ";
 
 namespace framework
 {
@@ -113,8 +92,8 @@ RecentFilesMenuController::~RecentFilesMenuController()
 // private function
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
-    PopupMenu*                                         pVCLPopupMenu     = 0;
+    VCLXPopupMenu* pPopupMenu    = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+    PopupMenu*     pVCLPopupMenu = 0;
 
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
@@ -127,10 +106,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XStringWidth > xStringLength( new RecentFilesStringLength );
 
-        int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
-
-        // New vnd.sun.star.popup: command URL to support direct dispatches
-        const rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:RecentFileList?entry=" ));
+        int nPickListMenuItems = ( aHistoryList.getLength() > MAX_MENU_ITEMS ) ? MAX_MENU_ITEMS : aHistoryList.getLength();
 
         m_aRecentFilesItems.clear();
         if (( nPickListMenuItems > 0 ) && !m_bDisabled )
@@ -160,32 +136,32 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
         if ( !m_aRecentFilesItems.empty() )
         {
-            URL aTargetURL;
-
             const sal_uInt32 nCount = m_aRecentFilesItems.size();
             for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
-                char menuShortCut[5] = "~n: ";
-
-                ::rtl::OUString aMenuShortCut;
+                rtl::OUStringBuffer aMenuShortCut;
                 if ( i <= 9 )
                 {
                     if ( i == 9 )
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1~0: " ));
+                        aMenuShortCut.appendAscii( RTL_CONSTASCII_STRINGPARAM( "1~0: " ) );
                     else
                     {
-                        menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
+                        aMenuShortCut.appendAscii( RTL_CONSTASCII_STRINGPARAM( MENU_SHOTCUT ) );
+                        aMenuShortCut.setCharAt( 1, sal_Unicode( i + '1' ) );
                     }
                 }
                 else
                 {
-                    aMenuShortCut = rtl::OUString::valueOf((sal_Int32)( i + 1 ));
-                    aMenuShortCut += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ));
+                    aMenuShortCut.append( sal_Int32( i + 1 ) );
+                    aMenuShortCut.appendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
                 }
 
+                rtl::OUStringBuffer aStrBuffer;
+                aStrBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( CMD_PREFIX ) );
+                aStrBuffer.append( sal_Int32( i ) );
+                rtl::OUString  aURLString( aStrBuffer.makeStringAndClear() );
+
                 // Abbreviate URL
-                rtl::OUString   aURLString( aCmdPrefix + rtl::OUString::valueOf( sal_Int32( i )));
                 rtl::OUString   aTipHelpText;
                 rtl::OUString   aMenuTitle;
                 INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
@@ -194,39 +170,42 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 {
                     // Do handle file URL differently => convert it to a system
                     // path and abbreviate it with a special function:
-                    String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-                    ::rtl::OUString aSystemPath( aFileSystemPath );
-                    ::rtl::OUString aCompactedSystemPath;
-
+                    rtl::OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
                     aTipHelpText = aSystemPath;
-                    oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
-                    if ( !nError )
-                        aMenuTitle = String( aCompactedSystemPath );
+
+                    ::rtl::OUString aCompactedSystemPath;
+                    if ( osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, MAX_STR_WIDTH, NULL ) == osl_File_E_None )
+                        aMenuTitle = aCompactedSystemPath;
                     else
                         aMenuTitle = aSystemPath;
                 }
                 else
                 {
                     // Use INetURLObject to abbreviate all other URLs
-                    String  aShortURL;
-                    aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
-                    aMenuTitle += aShortURL;
+                    aMenuTitle   = aURL.getAbbreviated( xStringLength, MAX_STR_WIDTH, INetURLObject::DECODE_UNAMBIGUOUS );
                     aTipHelpText = aURLString;
                 }
 
-                ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
+                aMenuShortCut.append( aMenuTitle );
 
-                pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aTitle );
+                pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
                 pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
                 pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
             }
+
+            pVCLPopupMenu->InsertSeparator();
+            // Clear List menu entry
+            pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
+                                       String( FwkResId( STR_CLEAR_RECENT_FILES ) ) );
+            pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_CLEAR_LIST ) ) );
+            pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
+                                        String( FwkResId( STR_CLEAR_RECENT_FILES_HELP ) ) );
         }
         else
         {
             // No recent documents => insert "no document" string
-            String aNoDocumentStr = String( FwkResId( STR_NODOCUMENT ));
-            pVCLPopupMenu->InsertItem( 1, aNoDocumentStr );
+            pVCLPopupMenu->InsertItem( 1, String( FwkResId( STR_NODOCUMENT ) ) );
             pVCLPopupMenu->EnableItem( 1, sal_False );
         }
     }
@@ -236,19 +215,14 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 {
     static int NUM_OF_PICKLIST_ARGS = 3;
 
-    Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XDispatch >            xDispatch;
     Reference< XDispatchProvider >    xDispatchProvider;
-    Reference< XMultiServiceFactory > xServiceManager;
+    css::util::URL                    aTargetURL;
+    Sequence< PropertyValue >         aArgsList;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
-    xPopupMenu          = m_xPopupMenu;
-    xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
-    xServiceManager     = m_xServiceManager;
+    xDispatchProvider = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
     aLock.clear();
-
-    css::util::URL            aTargetURL;
-    Sequence< PropertyValue > aArgsList;
 
     if (( nIndex >= 0 ) &&
         ( nIndex < sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
@@ -260,7 +234,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+        aArgsList[0].Value = makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
@@ -285,7 +259,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), 0 );
     }
 
     if ( xDispatch.is() )
@@ -297,8 +271,10 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->xDispatch  = xDispatch;
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
+
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("RecentFilesMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecentFilesMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
+
         Application::PostUserEvent( STATIC_LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }
@@ -327,24 +303,23 @@ void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent&
 
 void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
-    Reference< css::awt::XPopupMenu > xPopupMenu;
-    Reference< XDispatch >            xDispatch;
-    Reference< XDispatchProvider >    xDispatchProvider;
-    Reference< XMultiServiceFactory > xServiceManager;
+    Reference< css::awt::XPopupMenu >    xPopupMenu;
+    Reference< css::awt::XMenuExtended > xMenuExt;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu          = m_xPopupMenu;
-    xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
-    xServiceManager     = m_xServiceManager;
+    xMenuExt            = Reference< css::awt::XMenuExtended >( m_xPopupMenu, UNO_QUERY );
     aLock.clear();
 
-    css::util::URL aTargetURL;
-    Sequence< PropertyValue > aArgsList;
-
-    if ( xPopupMenu.is() && xDispatchProvider.is() )
+    if ( xMenuExt.is() )
     {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
+        const rtl::OUString aCommand( xMenuExt->getCommand( rEvent.MenuId ) );
+        OSL_TRACE( "RecentFilesMenuController::select() - Command : %s",
+                   rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+        if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMD_CLEAR_LIST ) ) )
+            SvtHistoryOptions().Clear( ePICKLIST );
+        else
             executeEntry( rEvent.MenuId-1 );
     }
 }
@@ -360,27 +335,6 @@ void RecentFilesMenuController::impl_setPopupMenu()
 {
     if ( m_xPopupMenu.is() )
         fillPopupMenu( m_xPopupMenu );
-}
-
-void SAL_CALL RecentFilesMenuController::updatePopupMenu() throw (RuntimeException)
-{
-    osl::ClearableMutexGuard aLock( m_aMutex );
-
-    throwIfDisposed();
-
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XDispatch > xDispatch( m_xDispatch );
-    com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = m_aCommandURL;
-    m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.clear();
-
-    // Add/remove status listener to get a status update once
-    if ( xDispatch.is() )
-    {
-        xDispatch->addStatusListener( xStatusListener, aTargetURL );
-        xDispatch->removeStatusListener( xStatusListener, aTargetURL );
-    }
 }
 
 // XDispatchProvider
@@ -434,26 +388,6 @@ throw( RuntimeException )
             }
         }
     }
-}
-
-void SAL_CALL RecentFilesMenuController::addStatusListener(
-    const Reference< XStatusListener >& xControl,
-    const URL& aURL )
-throw( RuntimeException )
-{
-    osl::MutexGuard aLock( m_aMutex );
-
-    throwIfDisposed();
-
-    svt::PopupMenuControllerBase::addStatusListener( xControl, aURL );
-}
-
-void SAL_CALL RecentFilesMenuController::removeStatusListener(
-    const Reference< XStatusListener >& xControl,
-    const URL& aURL )
-throw( RuntimeException )
-{
-    svt::PopupMenuControllerBase::removeStatusListener( xControl, aURL );
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )

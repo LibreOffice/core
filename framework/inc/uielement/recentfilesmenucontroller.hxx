@@ -24,34 +24,8 @@
 #ifndef __FRAMEWORK_UIELEMENT_RECENTFILESMENUCONTROLLER_HXX_
 #define __FRAMEWORK_UIELEMENT_RECENTFILESMENUCONTROLLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
-#include <macros/xserviceinfo.hxx>
-#include <stdtypes.h>
-
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
+#include <macros/xserviceinfo.hxx>
 
 namespace framework
 {
@@ -73,9 +47,6 @@ namespace framework
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
-            // XPopupMenuController
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
-
             // XStatusListener
             virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -88,8 +59,6 @@ namespace framework
 
             // XDispatch
             virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& seqProperties ) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
 
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
