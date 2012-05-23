@@ -121,7 +121,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
                      USHRT_MAX != aMovedList.GetPos(pSource) );
 
             // schon Verschobenen in der Liste merken
-            aMovedList.Insert(pTarget, aMovedList.Count() );
+            aMovedList.push_back(pTarget);
         }
 
         // Restore table frames:
@@ -197,7 +197,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             MoveCell(&rDoc, pSource, pTarget,
                      USHRT_MAX != aMovedList.GetPos( pTarget ) );
             // schon Verschobenen in der Liste merken
-            aMovedList.Insert( pSource, aMovedList.Count() );
+            aMovedList.push_back( pSource );
         }
 
         if( pUndoTblAttr )

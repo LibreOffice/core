@@ -2826,5 +2826,4 @@ void SwTableBox::ForgetFrmFmt()
         GetRegisteredInNonConst()->Remove(this);
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

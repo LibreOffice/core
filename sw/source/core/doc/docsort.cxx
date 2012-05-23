@@ -633,7 +633,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
         // and move it
         MoveCell(pDoc, pS, pT, bMoved, pUD);
 
-        rMovedList.Insert(pS, rMovedList.Count() );
+        rMovedList.push_back(pS);
 
         if( pS != pT )
         {
@@ -679,7 +679,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
         sal_Bool bMoved = rMovedList.GetPos(pT) != USHRT_MAX;
         MoveCell(pDoc, pS, pT, bMoved, pUD);
 
-        rMovedList.Insert(pS, rMovedList.Count() );
+        rMovedList.push_back(pS);
 
         if( pS != pT )
         {
@@ -975,6 +975,12 @@ const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) con
     OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "invalid array access");
 
     return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
+}
+
+sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const
+{
+    const_iterator it = std::find(begin(), end(), pTableBox);
+    return it == end() ? USHRT_MAX : it - begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

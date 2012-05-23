@@ -31,6 +31,7 @@
 
 #include <svl/svarray.hxx>
 #include <ndindex.hxx>
+#include <vector>
 
 
 class SwDoc;
@@ -54,10 +55,15 @@ namespace com { namespace sun { namespace star { namespace lang {
  --------------------------------------------------------------------*/
 typedef const _FndBox*      _FndBoxPtr;
 typedef SwSortElement*      SwSortElementPtr;
-typedef const SwTableBox*   SwMovedBoxPtr;
 
 SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0)
-SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10)
+
+class SwMovedBoxes : public std::vector<const SwTableBox*>
+{
+public:
+    sal_uInt16 GetPos(const SwTableBox* pTableBox) const;
+};
+
 
 /*--------------------------------------------------------------------
     Beschreibung: Funktionen zum Moven von Boxen
