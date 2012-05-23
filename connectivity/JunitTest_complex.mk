@@ -33,7 +33,7 @@ $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 ))
 
 # TODO: add use_externals to JunitTest
-$(eval $(call gb_JunitTest_add_jars,connectivity_complex,\
+$(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
 	$(OUTDIR)/bin/jurt.jar \
 	$(OUTDIR)/bin/OOoRunner.jar \
 	$(OUTDIR)/bin/ridl.jar \

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,evoab2))
 
-$(eval $(call gb_Library_add_package_headers,calc,\
+$(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
@@ -43,12 +43,12 @@ $(eval $(call gb_Library_use_externals,evoab2,\
 
 $(eval $(call gb_Library_set_componentfile,evoab2,connectivity/source/drivers/evoab2/evoab))
 
-$(eval $(call gb_Library_add_api,evoab2,\
+$(eval $(call gb_Library_use_api,evoab2,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,evoab2,\
+$(eval $(call gb_Library_use_libraries,evoab2,\
 	comphelper \
 	cppu \
 	cppuhelper \

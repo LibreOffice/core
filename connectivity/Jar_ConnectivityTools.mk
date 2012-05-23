@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Jar_Jar,ConnectivityTools))
 
-$(eval $(call gb_Jar_add_jars,ConnectivityTools,\
+$(eval $(call gb_Jar_use_jars,ConnectivityTools,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/jurt.jar \

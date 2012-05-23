@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,macabdrv1))
 
-$(eval $(call gb_Library_add_api,macabdrv1,\
+$(eval $(call gb_Library_use_api,macabdrv1,\
 	offapi \
 	udkapi \
 ))
@@ -37,7 +37,7 @@ $(eval $(call gb_Library_add_libs,macabdrv1,\
 	-framework AddressBook \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,macabdrv1,\
+$(eval $(call gb_Library_use_libraries,macabdrv1,\
 	comphelper \
 	cppu \
 	cppuhelper \

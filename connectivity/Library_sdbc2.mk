@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,sdbc2))
 $(eval $(call gb_Library_set_componentfile,sdbc2,connectivity/source/manager/sdbc2))
 
 
-$(eval $(call gb_Library_add_api,sdbc2,\
+$(eval $(call gb_Library_use_api,sdbc2,\
 	offapi \
 	udkapi \
 ))
@@ -40,7 +40,7 @@ $(eval $(call gb_Library_set_include,sdbc2,\
 	-I$(SRCDIR)/connectivity/inc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sdbc2,\
+$(eval $(call gb_Library_use_libraries,sdbc2,\
 	cppu \
 	cppuhelper \
 	comphelper \

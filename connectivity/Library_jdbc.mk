@@ -27,13 +27,13 @@
 
 $(eval $(call gb_Library_Library,jdbc))
 
-$(eval $(call gb_Library_add_package_headers,calc,\
+$(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
 $(eval $(call gb_Library_set_componentfile,jdbc,connectivity/source/drivers/jdbc/jdbc))
 
-$(eval $(call gb_Library_add_api,jdbc,\
+$(eval $(call gb_Library_use_api,jdbc,\
 	offapi \
 	udkapi \
 ))
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_set_include,jdbc,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,jdbc,\
+$(eval $(call gb_Library_use_libraries,jdbc,\
 	cppu \
 	cppuhelper \
 	sal \

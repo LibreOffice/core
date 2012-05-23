@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,file))
 
-$(eval $(call gb_Library_add_package_headers,calc,\
+$(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
@@ -41,12 +41,12 @@ $(eval $(call gb_Library_set_include,file,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,file,\
+$(eval $(call gb_Library_use_api,file,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,file,\
+$(eval $(call gb_Library_use_libraries,file,\
 	cppu \
 	cppuhelper \
 	svl \

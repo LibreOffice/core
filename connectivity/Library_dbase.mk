@@ -27,13 +27,13 @@
 
 $(eval $(call gb_Library_Library,dbase))
 
-$(eval $(call gb_Library_add_package_headers,calc,\
+$(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
 $(eval $(call gb_Library_set_componentfile,dbase,connectivity/source/drivers/dbase/dbase))
 
-$(eval $(call gb_Library_add_api,dbase,\
+$(eval $(call gb_Library_use_api,dbase,\
 	offapi \
 	udkapi \
 ))
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_set_include,dbase,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dbase,\
+$(eval $(call gb_Library_use_libraries,dbase,\
 	cppu \
 	cppuhelper \
 	svl \

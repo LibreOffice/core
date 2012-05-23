@@ -27,11 +27,11 @@
 
 $(eval $(call gb_Library_Library,odbcbase))
 
-$(eval $(call gb_Library_add_package_headers,calc,\
+$(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
-$(eval $(call gb_Library_add_api,odbcbase,\
+$(eval $(call gb_Library_use_api,odbcbase,\
 	offapi \
 	udkapi \
 ))
@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_defs,odbcbase,\
 
 $(eval $(call gb_Library_use_external,odbcbase,odbc_headers))
 
-$(eval $(call gb_Library_add_linked_libs,odbcbase,\
+$(eval $(call gb_Library_use_libraries,odbcbase,\
 	cppu \
 	cppuhelper \
 	sal \

@@ -38,12 +38,12 @@ $(eval $(call gb_Library_set_include,mozbootstrap,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,mozbootstrap,\
+$(eval $(call gb_Library_use_api,mozbootstrap,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,mozbootstrap,\
+$(eval $(call gb_Library_use_libraries,mozbootstrap,\
 	comphelper \
 	cppu \
 	cppuhelper \

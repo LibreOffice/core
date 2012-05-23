@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,kabdrv1))
 
-$(eval $(call gb_Library_add_api,kabdrv1,\
+$(eval $(call gb_Library_use_api,kabdrv1,\
 	offapi \
 	udkapi \
 ))
@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_libs,kabdrv1,\
 	-lkabc \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,kabdrv1,\
+$(eval $(call gb_Library_use_libraries,kabdrv1,\
 	cppu \
 	cppuhelper \
 	sal \

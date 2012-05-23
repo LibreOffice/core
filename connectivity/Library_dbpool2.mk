@@ -35,12 +35,12 @@ $(eval $(call gb_Library_set_include,dbpool2,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_Library_add_api,dbpool2,\
+$(eval $(call gb_Library_use_api,dbpool2,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dbpool2,\
+$(eval $(call gb_Library_use_libraries,dbpool2,\
 	comphelper \
 	cppu \
 	cppuhelper \

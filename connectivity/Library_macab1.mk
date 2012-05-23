@@ -29,12 +29,12 @@ $(eval $(call gb_Library_Library,macab1))
 
 $(eval $(call gb_Library_set_componentfile,macab1,connectivity/source/drivers/macab/macab1))
 
-$(eval $(call gb_Library_add_api,macab1,\
+$(eval $(call gb_Library_use_api,macab1,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,macab1,\
+$(eval $(call gb_Library_use_libraries,macab1,\
 	cppu \
 	cppuhelper \
 	dbtools \

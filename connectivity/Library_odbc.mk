@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,odbc))
 
 $(eval $(call gb_Library_set_componentfile,odbc,connectivity/source/drivers/odbc/odbc))
 
-$(eval $(call gb_Library_add_api,odbc,\
+$(eval $(call gb_Library_use_api,odbc,\
 	offapi \
 	udkapi \
 ))
@@ -42,7 +42,7 @@ $(eval $(call gb_Library_set_include,odbc,\
 
 $(eval $(call gb_Library_use_external,odbc,odbc_headers))
 
-$(eval $(call gb_Library_add_linked_libs,odbc,\
+$(eval $(call gb_Library_use_libraries,odbc,\
 	odbcbase \
 	cppu \
 	cppuhelper \

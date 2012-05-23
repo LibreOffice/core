@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,mozabdrv))
 
-$(eval $(call gb_Library_add_package_headers,calc,\
+$(eval $(call gb_Library_use_packages,calc,\
 	connectivity_generated \
 ))
 
@@ -39,12 +39,12 @@ $(eval $(call gb_Library_set_include,mozabdrv,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,mozabdrv,\
+$(eval $(call gb_Library_use_api,mozabdrv,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,mozabdrv,\
+$(eval $(call gb_Library_use_libraries,mozabdrv,\
 	comphelper \
 	cppu \
 	cppuhelper \

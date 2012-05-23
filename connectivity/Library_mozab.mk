@@ -34,12 +34,12 @@ $(eval $(call gb_Library_set_include,mozab2,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,mozab2,\
+$(eval $(call gb_Library_use_api,mozab2,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,mozab2,\
+$(eval $(call gb_Library_use_libraries,mozab2,\
 	cppu \
 	cppuhelper \
 	dbtools \

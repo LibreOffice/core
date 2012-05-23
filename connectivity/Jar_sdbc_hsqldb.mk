@@ -28,11 +28,11 @@
 $(eval $(call gb_Jar_Jar,sdbc_hsqldb))
 
 ifeq ($(SYSTEM_HSQLDB),YES)
-$(eval $(call gb_Jar_add_jars,sdbc_hsqldb,\
+$(eval $(call gb_Jar_use_jars,sdbc_hsqldb,\
 	$(HSQLDB_JAR) \
 ))
 else
-$(eval $(call gb_Jar_add_jars,sdbc_hsqldb,\
+$(eval $(call gb_Jar_use_jars,sdbc_hsqldb,\
 	$(OUTDIR)/bin/hsqldb.jar \
 ))
 endif

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,dbtools))
 
-$(eval $(call gb_Library_add_package_headers,dbtools,\
+$(eval $(call gb_Library_use_packages,dbtools,\
 	connectivity_inc \
 ))
 
@@ -45,12 +45,12 @@ $(eval $(call gb_Library_set_include,dbtools,\
 	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 ))
 
-$(eval $(call gb_Library_add_api,dbtools,\
+$(eval $(call gb_Library_use_api,dbtools,\
 	offapi \
 	udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,dbtools,\
+$(eval $(call gb_Library_use_libraries,dbtools,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -64,7 +64,7 @@ $(eval $(call gb_Library_add_linked_libs,dbtools,\
 ))
 
 ifeq ($(filter-out NETBSD MACOSX,$(OS)),)
-$(eval $(call gb_Library_add_linked_libs,dbtools,\
+$(eval $(call gb_Library_use_libraries,dbtools,\
 	ucbhelper \
 ))
 endif

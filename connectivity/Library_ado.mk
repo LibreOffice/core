@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_include,ado,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_api,ado,\
+$(eval $(call gb_Library_use_api,ado,\
 	offapi \
 	udkapi \
 ))
@@ -45,7 +45,7 @@ $(eval $(call gb_Library_add_cxxflags,ado,\
 ))
 endif
 
-$(eval $(call gb_Library_add_linked_libs,ado,\
+$(eval $(call gb_Library_use_libraries,ado,\
 	cppu \
 	cppuhelper \
 	sal \
