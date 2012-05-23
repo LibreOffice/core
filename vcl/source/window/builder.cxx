@@ -189,7 +189,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK );
     else
         fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
-    fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p)\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow);
+    if (pWindow)
+    {
+        fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p)\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow);
+    }
     return pWindow;
 }
 

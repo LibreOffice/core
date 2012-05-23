@@ -787,7 +787,10 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_NUMERICFIELD )
 {
     if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+    {
+        SetField( this );
         return;
+    }
 
     rResId.SetRT( RSC_NUMERICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
@@ -1654,7 +1657,10 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {
     if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+    {
+        SetField( this );
         return;
+    }
 
     rResId.SetRT( RSC_METRICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
