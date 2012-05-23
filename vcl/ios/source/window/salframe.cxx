@@ -735,7 +735,6 @@ void IosSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetDialogColor( aBackgroundColor );
     aStyleSettings.SetLightBorderColor( aBackgroundColor );
     Color aShadowColor( aStyleSettings.GetShadowColor() );
-    aStyleSettings.SetDarkShadowColor( aShadowColor );
     aShadowColor.IncreaseLuminance( 32 );
     aStyleSettings.SetShadowColor( aShadowColor );
 
