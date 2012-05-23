@@ -56,6 +56,7 @@
 #if defined __GNUC__
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
 # pragma GCC diagnostic ignored "-Wwrite-strings"
+# pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 #elif defined __SUNPRO_CC
 #pragma disable_warn
