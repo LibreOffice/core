@@ -30,15 +30,18 @@
 #include "stbctrls.h"
 
  // Strings ---------------------------------------------------------------
-String RID_SVXSTR_INSERT_TEXT
+String RID_SVXSTR_INSERT_HELPTEXT
 {
-     //  'Insert' shortened to a maximum of 5 characters
-    Text [ en-US ] = "INSRT" ;
+    Text [ en-US ] = "Insert mode." ;
+};
+String RID_SVXSTR_OVERWRITE_HELPTEXT
+{
+    Text [ en-US ] = "Overwrite mode, text will be overwritten when typing." ;
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
-     // 'Overwrite' shortened to a maximum of 5 characters
-    Text [ en-US ] = "OVER" ;
+    Text [ x-comment ] = "To be shown in the status bar when in overwrite mode, please try to make it not longer than the word 'Overwrite'." ;
+    Text [ en-US ] = "Overwrite" ;
 };
 String RID_SVXSTR_SELMODE_STD
 {

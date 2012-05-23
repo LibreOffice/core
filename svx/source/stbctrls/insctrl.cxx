@@ -72,6 +72,12 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
         DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
         SfxBoolItem* pItem = (SfxBoolItem*)pState;
         bInsert = pItem->GetValue();
+
+        if ( bInsert )
+            GetStatusBar().SetQuickHelpText( GetId(), SVX_RESSTR( RID_SVXSTR_INSERT_HELPTEXT ) );
+        else
+            GetStatusBar().SetQuickHelpText( GetId(), SVX_RESSTR( RID_SVXSTR_OVERWRITE_HELPTEXT ) );
+
         DrawItemText_Impl();
     }
 }
@@ -105,11 +111,11 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    sal_uInt16 _nId = RID_SVXSTR_OVERWRITE_TEXT;
+    String aText;
+    if ( !bInsert )
+        aText = SVX_RESSTR( RID_SVXSTR_OVERWRITE_TEXT );
 
-    if ( bInsert )
-        _nId = RID_SVXSTR_INSERT_TEXT;
-    GetStatusBar().SetItemText( GetId(), SVX_RESSTR( _nId ) );
+    GetStatusBar().SetItemText( GetId(), aText );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

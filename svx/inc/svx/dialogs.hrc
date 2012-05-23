@@ -405,14 +405,15 @@
 #define RID_SVXSTR_ACTION                   (RID_SVX_START + 202)
 #define RID_SVXSTR_ACTIONS                  (RID_SVX_START + 203)
 
-// Strings for insert/overwrite
-#define RID_SVXSTR_INSERT_TEXT              (RID_SVX_START + 210)
-#define RID_SVXSTR_OVERWRITE_TEXT           (RID_SVX_START + 211)
+// Strings for insert/overwrite mode
+#define RID_SVXSTR_INSERT_HELPTEXT          (RID_SVX_START + 210)
+#define RID_SVXSTR_OVERWRITE_HELPTEXT       (RID_SVX_START + 211)
+#define RID_SVXSTR_OVERWRITE_TEXT           (RID_SVX_START + 212)
 
 // Strings for the selection mode
-#define RID_SVXSTR_SELMODE_STD              (RID_SVX_START + 212)
-#define RID_SVXSTR_SELMODE_ER               (RID_SVX_START + 213)
-#define RID_SVXSTR_SELMODE_ERG              (RID_SVX_START + 214)
+#define RID_SVXSTR_SELMODE_STD              (RID_SVX_START + 213)
+#define RID_SVXSTR_SELMODE_ER               (RID_SVX_START + 214)
+#define RID_SVXSTR_SELMODE_ERG              (RID_SVX_START + 215)
 
 #define RID_SVXSTR_XMLSEC_SIG_OK            (RID_SVX_START + 222)
 #define RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY  (RID_SVX_START + 223)
