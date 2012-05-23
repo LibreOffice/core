@@ -350,6 +350,11 @@
     </node>
    </node>
    <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
+    <node oor:name="O_MOD1" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:OpenFromCalc</value>
+     </prop>
+    </node>
     <node oor:name="1_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:FormatCellDialog</value>
@@ -4330,6 +4335,11 @@
     </node>
    </node>
    <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
+    <node oor:name="O_MOD1" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:OpenFromWriter</value>
+     </prop>
+    </node>
     <node oor:name="0_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles</value>
