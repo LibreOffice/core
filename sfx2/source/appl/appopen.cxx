@@ -689,6 +689,11 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
 
 void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 {
+    rtl::OUString aDocService;
+    SFX_REQUEST_ARG(rReq, pDocSrvItem, SfxStringItem, SID_DOC_SERVICE, false);
+    if (pDocSrvItem)
+        aDocService = pDocSrvItem->GetValue();
+
     sal_uInt16 nSID = rReq.GetSlot();
     SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
     if ( pFileNameItem )
@@ -797,6 +802,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             css::uno::Type                                            aInteraction = ::getCppuType(static_cast< css::task::ErrorCodeRequest* >(0));
             ::framework::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
             pHandler->addInteractionRule(aRule);
+
+            if (!aDocService.isEmpty())
+            {
+                rReq.RemoveItem(SID_DOC_SERVICE);
+                rReq.AppendItem(SfxStringItem(SID_DOC_SERVICE, aDocService));
+            }
 
             for(std::vector<rtl::OUString>::const_iterator i = pURLList.begin(); i != pURLList.end(); ++i)
             {

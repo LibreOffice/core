@@ -185,6 +185,7 @@ static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
 static char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
 static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
 static char const sEncryptionData[] = "EncryptionData";
+static char const sDocumentService[] = "DocumentService";
 
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
@@ -871,6 +872,13 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
                 }
+                else if (aName == sDocumentService)
+                {
+                    rtl::OUString aVal;
+                    bool bOK = ((rProp.Value >>= aVal) && !aVal.isEmpty());
+                    if (bOK)
+                        rSet.Put(SfxStringItem(SID_DOC_SERVICE, aVal));
+                }
 #ifdef DBG_UTIL
                 else
                     --nFoundArgs;
@@ -1094,6 +1102,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_DOC_SERVICE ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1229,7 +1239,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_NOAUTOSAVE )
                         continue;
-                     if ( nId == SID_ENCRYPTIONDATA )
+                    if ( nId == SID_ENCRYPTIONDATA )
+                        continue;
+                    if ( nId == SID_DOC_SERVICE )
                         continue;
 
                     // used only internally
@@ -1628,6 +1640,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsName));
                 pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_DOC_SERVICE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(sDocumentService);
+                pValue[nActProp++].Value <<= rtl::OUString(static_cast<const SfxStringItem*>(pItem)->GetValue());
             }
         }
     }
