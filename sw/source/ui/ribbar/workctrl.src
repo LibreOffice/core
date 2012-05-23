@@ -389,7 +389,7 @@ ImageButton BTN_NAVI
     SmallStyle = TRUE ;
     Image IMG_BTN
     {
-        ImageBitmap = Bitmap { File = "punkt.bmp" ; };
+        ImageBitmap = Bitmap { File = "navigation.png" ; };
         MaskColor = IMAGE_MASK_COLOR ;
     };
     String ST_QUICK
