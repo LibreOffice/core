@@ -88,7 +88,7 @@ namespace framework
     private:
         class FactoryManagerMap : public std::hash_map< rtl::OUString,
                                                      rtl::OUString,
-                                                     OUStringHashCode,
+                                                     rtl::OUStringHash,
                                                      ::std::equal_to< ::rtl::OUString > >
         {
             inline void free()

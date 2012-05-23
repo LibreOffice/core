@@ -171,7 +171,7 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
     private:
         typedef ::std::hash_map< ::rtl::OUString,
                                  CmdToInfoMap,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > CommandToInfoCache;
 
         sal_Bool initializeConfigAccess();

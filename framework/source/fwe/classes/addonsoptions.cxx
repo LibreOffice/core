@@ -275,13 +275,6 @@ class AddonsOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-        struct OUStringHashCode
-        {
-            size_t operator()( const ::rtl::OUString& sString ) const
-            {
-                return sString.hashCode();
-            }
-        };
 
         struct ImageEntry
         {
@@ -296,10 +289,10 @@ class AddonsOptions_Impl : public ConfigItem
             Image   aImageBigHCNoScale;
         };
 
-        typedef std::hash_map< ::rtl::OUString, ImageEntry, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ImageManager;
-        typedef std::hash_map< ::rtl::OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > StringToIndexMap;
+        typedef std::hash_map< ::rtl::OUString, ImageEntry, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ImageManager;
+        typedef std::hash_map< ::rtl::OUString, sal_uInt32, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
-        typedef ::std::hash_map< ::rtl::OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarMergingInstructions;
+        typedef ::std::hash_map< ::rtl::OUString, MergeToolbarInstructionContainer, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ToolbarMergingInstructions;
 
         enum ImageSize
         {

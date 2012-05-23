@@ -41,11 +41,11 @@ enum ImageType
 
 typedef std::hash_map< rtl::OUString,
                        rtl::OUString,
-                       OUStringHashCode,
+                       rtl::OUStringHash,
                        ::std::equal_to< ::rtl::OUString > > CommandToImageNameMap;
 typedef std::hash_map< rtl::OUString,
                        bool,
-                       OUStringHashCode,
+                       rtl::OUStringHash,
                        ::std::equal_to< ::rtl::OUString > > CommandMap;
 
 }

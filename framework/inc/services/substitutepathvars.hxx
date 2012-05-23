@@ -108,7 +108,7 @@ struct SubstitutePathNotify
 
 class SubstituteVariables : public ::std::hash_map< ::rtl::OUString,
                                                     SubstituteRule,
-                                                    OUStringHashCode,
+                                                    rtl::OUStringHash,
                                                     ::std::equal_to< ::rtl::OUString > >
 {
     public:
@@ -276,7 +276,7 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
         private:
             class VarNameToIndexMap : public std::hash_map< ::rtl::OUString,
                                                             PreDefVariable,
-                                                            OUStringHashCode,
+                                                            rtl::OUStringHash,
                                                             ::std::equal_to< ::rtl::OUString > >
             {
                 inline void free()

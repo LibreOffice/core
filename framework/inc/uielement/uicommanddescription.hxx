@@ -87,12 +87,12 @@ private:
 public:
         typedef ::std::hash_map< ::rtl::OUString,
                                  ::rtl::OUString,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToCommandFileMap;
 
         typedef ::std::hash_map< ::rtl::OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > UICommandsHashMap;
 
     protected:

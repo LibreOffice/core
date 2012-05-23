@@ -127,7 +127,7 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
 
         class ImageHashMap : public ::std::hash_map< ::rtl::OUString        ,
                                                      Image_XML_Entry        ,
-                                                     OUStringHashCode       ,
+                                                     rtl::OUStringHash,
                                                      ::std::equal_to< ::rtl::OUString > >
         {
             public:

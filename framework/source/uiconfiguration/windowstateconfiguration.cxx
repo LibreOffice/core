@@ -252,7 +252,7 @@ class ConfigurationAccess_WindowState : // interfaces
     private:
         typedef ::std::hash_map< ::rtl::OUString,
                                  WindowStateInfo,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;
 
         rtl::OUString                     m_aConfigWindowAccess;

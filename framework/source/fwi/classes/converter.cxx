@@ -147,12 +147,12 @@ css::uno::Sequence< ::rtl::OUString > Converter::convert_OUStringList2seqOUStrin
 /**
  * converts an unicode string hash to a sequence<PropertyValue>, where names and values match to key and values.
  */
-css::uno::Sequence< css::beans::PropertyValue > Converter::convert_OUStringHash2seqProp( const OUStringHash& lSource )
+css::uno::Sequence< css::beans::PropertyValue > Converter::convert_OUStringHash2seqProp( const OUStringHashMap& lSource )
 {
     css::uno::Sequence< css::beans::PropertyValue > lDestination (lSource.size());
     css::beans::PropertyValue*                      pDestination = lDestination.getArray();
     sal_Int32 nItem = 0;
-    for (OUStringHash::const_iterator pItem=lSource.begin(); pItem!=lSource.end(); ++pItem)
+    for (OUStringHashMap::const_iterator pItem=lSource.begin(); pItem!=lSource.end(); ++pItem)
     {
         pDestination[nItem].Name  =   pItem->first ;
         pDestination[nItem].Value <<= pItem->second;
@@ -165,9 +165,9 @@ css::uno::Sequence< css::beans::PropertyValue > Converter::convert_OUStringHash2
 /**
  * converts a sequence<PropertyValue> to an unicode string hash, where keys and values match to names and values.
  */
-OUStringHash Converter::convert_seqProp2OUStringHash( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
+OUStringHashMap Converter::convert_seqProp2OUStringHash( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
 {
-    OUStringHash lDestination;
+    OUStringHashMap lDestination;
     sal_Int32                        nCount  = lSource.getLength();
     const css::beans::PropertyValue* pSource = lSource.getConstArray();
     for (sal_Int32 nItem=0; nItem<nCount; ++nItem)

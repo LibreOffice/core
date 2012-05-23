@@ -127,7 +127,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
 
         class ToolBoxHashMap : public ::std::hash_map<  ::rtl::OUString                 ,
                                                         ToolBox_XML_Entry               ,
-                                                        OUStringHashCode                ,
+                                                        rtl::OUStringHash,
                                                         ::std::equal_to< ::rtl::OUString >  >
         {
             public:

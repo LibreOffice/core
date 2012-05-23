@@ -94,7 +94,7 @@ namespace framework{
 *//*-*************************************************************************************************************/
 
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         ,
-                                                        OUStringHashCode        ,
+                                                        rtl::OUStringHash,
                                                         std::equal_to< ::rtl::OUString > > IMPL_ListenerHashContainer;
 
 

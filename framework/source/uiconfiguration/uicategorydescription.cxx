@@ -136,7 +136,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
     private:
         typedef ::std::hash_map< ::rtl::OUString,
                                  ::rtl::OUString,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > IdToInfoCache;
 
         sal_Bool initializeConfigAccess();

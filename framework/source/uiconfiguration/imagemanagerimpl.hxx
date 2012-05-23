@@ -159,7 +159,7 @@ namespace framework
 
             typedef std::hash_map< rtl::OUString,
                                    sal_Bool,
-                                   OUStringHashCode,
+                                   rtl::OUStringHash,
                                    ::std::equal_to< ::rtl::OUString > > ImageNameMap;
 
             enum Layer

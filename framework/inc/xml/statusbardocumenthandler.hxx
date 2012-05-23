@@ -127,7 +127,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // S
 
         class StatusBarHashMap : public ::std::hash_map< ::rtl::OUString                ,
                                                          StatusBar_XML_Entry            ,
-                                                         OUStringHashCode               ,
+                                                         rtl::OUStringHash,
                                                          ::std::equal_to< ::rtl::OUString > >
         {
             public:

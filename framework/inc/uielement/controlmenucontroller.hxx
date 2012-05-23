@@ -88,7 +88,7 @@ namespace framework
 
             class UrlToDispatchMap : public ::std::hash_map< ::rtl::OUString,
                                                              com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                                             OUStringHashCode,
+                                                             rtl::OUStringHash,
                                                              ::std::equal_to< ::rtl::OUString > >
             {
                 public:

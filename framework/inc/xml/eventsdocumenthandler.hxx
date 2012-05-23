@@ -128,7 +128,7 @@ class FWE_DLLPUBLIC OReadEventsDocumentHandler :    private ThreadHelpBase, // S
 
         class EventsHashMap : public ::std::hash_map<   ::rtl::OUString                 ,
                                                         Events_XML_Entry                ,
-                                                        OUStringHashCode                ,
+                                                        rtl::OUStringHash,
                                                         ::std::equal_to< ::rtl::OUString >  >
         {
             public:
