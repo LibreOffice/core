@@ -39,7 +39,7 @@
 class ScDocument;
 class ScFormulaCell;
 class ScTokenArray;
-class ScDataBarInfo;
+struct ScDataBarInfo;
 
 class SC_DLLPUBLIC ScColorScaleEntry
 {
