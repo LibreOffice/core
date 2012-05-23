@@ -75,8 +75,6 @@ using namespace ::com::sun::star;
 // steht in shellio.hxx
 extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, sal_Bool bChk );
 
-SV_IMPL_PTRARR( SwFlySaveArr, SwFlySave* )
-
 inline const SwFmtFrmSize GetFrmSize(const SfxItemSet& rSet, sal_Bool bInP=sal_True)
 {
     return (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE,bInP);
@@ -226,7 +224,7 @@ void SwRTFParser::SetFlysInDoc()
     rtfFmtMap aPrevFmts;
 
     SwFrmFmt* pParent = pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME );
-    for( sal_uInt16 n = 0; n < aFlyArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aFlyArr.size(); ++n )
     {
         SwFlySave* pFlySave = aFlyArr[ n ];
 
@@ -276,7 +274,7 @@ void SwRTFParser::SetFlysInDoc()
 
         // liegt Ende und Start vom Naechsten im gleichen Node, dann muss
         // gesplittet werden
-        if( n + 1 < aFlyArr.Count() && pFlySave->nEndCnt &&
+        if( n + 1 < (sal_uInt16)aFlyArr.size() && pFlySave->nEndCnt &&
             pFlySave->nEndNd == aFlyArr[ n + 1 ]->nSttNd )
         {
             SwCntntNode *const pCNd = pFlySave->nEndNd.GetNode().GetCntntNode();
@@ -523,7 +521,7 @@ void SwRTFParser::SetFlysInDoc()
         }
     }
 
-    aFlyArr.Remove(0, aFlyArr.Count());
+    aFlyArr.clear();
 }
 
 // clips the text box to the min or max position if it is outside our min or max boundry
@@ -979,7 +977,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     // ein neues FlyFormat anlegen oder das alte benutzen ?
     // (teste ob es die selben Attribute besitzt!)
     SwFlySave* pFlySave = 0;
-    sal_uInt16 nFlyArrCnt = aFlyArr.Count();
+    sal_uInt16 nFlyArrCnt = aFlyArr.size();
     /*
     #i5263#
     There were not enough frame properties found to actually justify creating
@@ -1007,7 +1005,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                      pFlySavePrev->nEndNd=pFlySave->nSttNd;
                 }
             }
-            aFlyArr.Insert(  pFlySave, nFlyArrCnt++ );
+            aFlyArr.push_back( pFlySave );
+            nFlyArrCnt++;
             // #i83368# - reset
             mbReadCellWhileReadSwFly = false;
         }
@@ -1090,7 +1089,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         !pPam->GetPoint()->nContent.GetIndex() )
     {
         // dann zerstoere den FlySave wieder.
-        aFlyArr.DeleteAndDestroy( --nFlyArrCnt );
+        delete aFlyArr[ --nFlyArrCnt ];
+        aFlyArr.erase( aFlyArr.begin() + nFlyArrCnt );
 
         // Remove the properties that have been parsed before in the paragraph
         GetAttrStack().pop_back();
@@ -1237,12 +1237,12 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
         if( pGrfAttrSet )
             pGrfNd->SetAttr( *pGrfAttrSet );
 
-        SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
+        SwFlySave* pFlySave = aFlyArr[ aFlyArr.size()-1 ];
         pFlySave->nSttNd = rIdx.GetIndex() - 1;
 
-        if( 1 < aFlyArr.Count() )
+        if( 1 < aFlyArr.size() )
         {
-            pFlySave = aFlyArr[ aFlyArr.Count() - 2 ];
+            pFlySave = aFlyArr[ aFlyArr.size() - 2 ];
             if( pFlySave->nEndNd == rIdx )
                 pFlySave->nEndNd = rIdx.GetIndex() - 1;
         }

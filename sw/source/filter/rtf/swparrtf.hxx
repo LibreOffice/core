@@ -146,8 +146,19 @@ struct SwListEntry
                     bRuleUsed = sal_False; }
 };
 
-typedef SwFlySave* SwFlySavePtr;
-SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0 )
+class SwFlySaveArr : public std::vector<SwFlySave*>
+{
+public:
+    SwFlySaveArr() : vector() {}
+    SwFlySaveArr(const SwFlySaveArr& other) : vector(other) {}
+
+    ~SwFlySaveArr()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+};
+
 typedef std::deque< SwListEntry > SwListArr;
 
 struct DocPageInformation

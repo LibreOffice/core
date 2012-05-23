@@ -398,7 +398,7 @@ void SwRTFParser::Continue( int nToken )
         // ein am 1. Absatz verankerter Fly falsch eingefuegt
         if( SVPAR_ACCEPTED == eState )
         {
-            if( aFlyArr.Count() )
+            if( !aFlyArr.empty() )
                 SetFlysInDoc();
             pRelNumRule->SetOultineRelSpaces( *pSttNdIdx, pPam->GetPoint()->nNode );
         }
@@ -475,7 +475,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
 
-        if( aFlyArr.Count() )
+        if( !aFlyArr.empty() )
             SetFlysInDoc();
 
         // jetzt noch den letzten ueberfluessigen Absatz loeschen
@@ -1144,9 +1144,6 @@ SwRTFParser::~SwRTFParser()
     delete pRegionEndIdx;
     delete pPam;
     delete pRelNumRule;
-
-    if (aFlyArr.Count())
-        aFlyArr.DeleteAndDestroy( 0, aFlyArr.Count() );
 
     if (pGrfAttrSet)
         DELETEZ( pGrfAttrSet );
@@ -3546,9 +3543,9 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     // save the fly array - after read, all flys may be set into
     // the header/footer
-    SwFlySaveArr aSaveArray( 255 < aFlyArr.Count() ? aFlyArr.Count() : 255 );
-    aSaveArray.Insert( &aFlyArr, 0 );
-    aFlyArr.Remove( 0, aFlyArr.Count() );
+    SwFlySaveArr aSaveArray(aFlyArr);
+    aSaveArray.reserve(255);
+    aFlyArr.clear();
     sal_Bool bSetFlyInDoc = sal_True;
 
     const SwNodeIndex* pSttIdx = 0;
@@ -3665,7 +3662,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         break;
     }
 
-    sal_uInt16 nOldFlyArrCnt = aFlyArr.Count();
+    sal_uInt16 nOldFlyArrCnt = aFlyArr.size();
     if( !pSttIdx )
         SkipGroup();
     else
@@ -3718,7 +3715,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         }
 
         SetAllAttrOfStk();
-        if( aFlyArr.Count() && bSetFlyInDoc )
+        if( !aFlyArr.empty() && bSetFlyInDoc )
             SetFlysInDoc();
 
         // sollte der letze Node leer sein, dann loesche ihn
@@ -3730,12 +3727,13 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     if( pTxtAttr && RES_TXTATR_FLYCNT == pTxtAttr->Which() )
     {
         // is add a new fly ?
-        if( nOldFlyArrCnt < aFlyArr.Count() )
+        if( nOldFlyArrCnt < aFlyArr.size() )
         {
-            SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
+            SwFlySave* pFlySave = aFlyArr.back();
             pFlySave->aFlySet.ClearItem( RES_ANCHOR );
             pHdFtFmt->SetFmtAttr( pFlySave->aFlySet );
-            aFlyArr.DeleteAndDestroy( aFlyArr.Count() - 1 );
+            delete aFlyArr.back();
+            aFlyArr.pop_back();
         }
         else
         {
@@ -3758,8 +3756,8 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     mbIsFootnote = bOldIsFootnote;
     GetAttrStack() = aSaveStack;
 
-    aFlyArr.Insert( &aSaveArray, 0 );
-    aSaveArray.Remove( 0, aSaveArray.Count() );
+    std::copy(aSaveArray.begin(), aSaveArray.end(), aFlyArr.begin() );
+    aSaveArray.clear();
     bContainsPara = bContainsParaCache;
 }
 
