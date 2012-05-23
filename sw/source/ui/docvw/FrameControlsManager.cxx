@@ -37,21 +37,6 @@
 
 using namespace std;
 
-namespace
-{
-    class FramePredicate
-    {
-        const SwFrm* m_pToMatch;
-
-        public:
-            FramePredicate( const SwFrm* pFrm ) : m_pToMatch( pFrm ) { };
-            virtual ~FramePredicate() {};
-
-            virtual bool operator()( SwFrameControlPtr pToCheck )
-                { return m_pToMatch == pToCheck->GetFrame(); };
-    };
-}
-
 SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :
     m_pEditWin( pEditWin ),
     m_aControls( )
@@ -60,14 +45,6 @@ SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :
 
 SwFrameControlsManager::~SwFrameControlsManager()
 {
-    map< FrameControlType, vector< SwFrameControlPtr > >::iterator pIt = m_aControls.begin();
-
-    while ( pIt != m_aControls.end() )
-    {
-        pIt->second.clear( );
-        ++pIt;
-    }
-    m_aControls.clear();
 }
 
 SwFrameControlsManager::SwFrameControlsManager( const SwFrameControlsManager& rCopy ) :
@@ -85,68 +62,60 @@ const SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameCo
 
 SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrm* pFrm )
 {
-    SwFrameControlPtr pControl;
+    SwFrameControlPtrMap& rControls = m_aControls[eType];
 
-    vector< SwFrameControlPtr >& aControls = m_aControls[eType];
+    SwFrameControlPtrMap::iterator aIt = rControls.find(pFrm);
 
-    vector< SwFrameControlPtr >::iterator pIt = find_if(
-            aControls.begin(), aControls.end( ), FramePredicate( pFrm ) );
+    if (aIt != rControls.end())
+        return aIt->second;
 
-    if ( pIt != aControls.end() )
-        pControl = *pIt;
-
-    return pControl;
+    return SwFrameControlPtr();
 }
 
 void SwFrameControlsManager::AddControl( FrameControlType eType, SwFrameControlPtr pControl )
 {
-    m_aControls[eType].push_back( pControl );
+    m_aControls[eType].insert(make_pair(pControl->GetFrame(), pControl));
 }
 
 void SwFrameControlsManager::RemoveControls( const SwFrm* pFrm )
 {
-    map< FrameControlType, vector< SwFrameControlPtr > >::iterator pIt = m_aControls.begin();
+    map< FrameControlType, SwFrameControlPtrMap >::iterator pIt = m_aControls.begin();
 
     while ( pIt != m_aControls.end() )
     {
-        vector< SwFrameControlPtr >& aVect = pIt->second;
-        aVect.erase( remove_if( aVect.begin(),
-                                aVect.end(),
-                                FramePredicate( pFrm ) ), aVect.end() );
+        SwFrameControlPtrMap& rMap = pIt->second;
+        rMap.erase(pFrm);
         ++pIt;
     }
 }
 
 void SwFrameControlsManager::RemoveControlsByType( FrameControlType eType, const SwFrm* pFrm )
 {
-    vector< SwFrameControlPtr >& aVect = m_aControls[eType];
-    aVect.erase( remove_if( aVect.begin(),
-                            aVect.end(),
-                            FramePredicate( pFrm ) ), aVect.end() );
+    SwFrameControlPtrMap& rMap = m_aControls[eType];
+    rMap.erase(pFrm);
 }
-
 
 void SwFrameControlsManager::HideControls( FrameControlType eType )
 {
-    vector< SwFrameControlPtr >::iterator pIt = m_aControls[eType].begin();
+    SwFrameControlPtrMap::iterator pIt = m_aControls[eType].begin();
     while ( pIt != m_aControls[eType].end() )
     {
-        ( *pIt )->ShowAll( false );
+        pIt->second->ShowAll( false );
         ++pIt;
     }
 }
 
 void SwFrameControlsManager::SetReadonlyControls( bool bReadonly )
 {
-    map< FrameControlType, vector< SwFrameControlPtr > >::iterator pIt = m_aControls.begin();
+    map< FrameControlType, SwFrameControlPtrMap >::iterator pIt = m_aControls.begin();
 
     while ( pIt != m_aControls.end() )
     {
-        vector< SwFrameControlPtr >::iterator pVectIt = pIt->second.begin();
-        while ( pVectIt != pIt->second.end() )
+        SwFrameControlPtrMap::iterator aCtrlIt = pIt->second.begin();
+        while ( aCtrlIt != pIt->second.end() )
         {
-            ( *pVectIt )->SetReadonly( bReadonly );
-            ++pVectIt;
+            aCtrlIt->second->SetReadonly( bReadonly );
+            ++aCtrlIt;
         }
         ++pIt;
     }
@@ -160,26 +129,21 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
     SwFrameControlPtr pControl;
     const bool bHeader = ( eType == Header );
 
-    vector< SwFrameControlPtr >& aControls = m_aControls[eType];
+    SwFrameControlPtrMap& rControls = m_aControls[eType];
 
-    vector< SwFrameControlPtr >::iterator pIt = aControls.begin();
-    while ( pIt != aControls.end() && !pControl.get() )
-    {
-        SwHeaderFooterWin* pToTest = dynamic_cast< SwHeaderFooterWin* >( pIt->get() );
-        if ( pToTest->GetPageFrame( ) == pPageFrm &&
-             pToTest->IsHeader( ) == bHeader )
-            pControl = *pIt;
-        ++pIt;
-    }
-
-    if ( !pControl.get() )
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrm);
+    if (lb != rControls.end() && !(rControls.key_comp()(pPageFrm, lb->first)))
+        pControl = lb->second;
+    else
     {
         SwFrameControlPtr pNewControl( new SwHeaderFooterWin( m_pEditWin, pPageFrm, bHeader ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
-        AddControl( eType, pNewControl );
+        rControls.insert(lb, make_pair(pPageFrm, pNewControl));
         pControl.swap( pNewControl );
     }
+
+    assert(pControl->IsHeader() == bHeader);
 
     Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrm->Frm().SVRect() );
 
@@ -195,23 +159,19 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
-    vector< SwFrameControlPtr >& aControls = m_aControls[PageBreak];
+    SwFrameControlPtrMap& rControls = m_aControls[PageBreak];
 
-    vector< SwFrameControlPtr >::iterator pIt = aControls.begin();
-    while ( pIt != aControls.end() && !pControl.get() )
-    {
-        SwPageBreakWin* pToTest = dynamic_cast< SwPageBreakWin* >( pIt->get() );
-        if ( pToTest->GetPageFrame( ) == pPageFrm )
-            pControl = *pIt;
-        ++pIt;
-    }
-
-    if ( !pControl.get() )
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrm);
+    if (lb != rControls.end() && !(rControls.key_comp()(pPageFrm, lb->first)))
+        pControl = lb->second;
+    else
     {
         SwFrameControlPtr pNewControl( new SwPageBreakWin( m_pEditWin, pPageFrm ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
-        AddControl( PageBreak, pNewControl );
+
+        rControls.insert(lb, make_pair(pPageFrm, pNewControl));
+
         pControl.swap( pNewControl );
     }
 
