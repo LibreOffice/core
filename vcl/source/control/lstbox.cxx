@@ -41,7 +41,6 @@
 
 #include "svdata.hxx"
 #include "controldata.hxx"
-#include "subedit.hxx"
 #include "ilstbox.hxx"
 #include "dndevdis.hxx"
 

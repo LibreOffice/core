@@ -38,7 +38,6 @@
 #include <vcl/combobox.hxx>
 
 #include <svdata.hxx>
-#include <subedit.hxx>
 #include <ilstbox.hxx>
 #include <controldata.hxx>
 

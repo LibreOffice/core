@@ -41,7 +41,6 @@
 #include <window.h>
 #include <svdata.hxx>
 #include <svids.hrc>
-#include <subedit.hxx>
 #include <controldata.hxx>
 
 #include <osl/mutex.hxx>
@@ -3132,19 +3131,6 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
         }
         rDTDE.Context->acceptDrag( rDTDE.DropAction );
     }
-}
-
-ImplSubEdit::ImplSubEdit( Edit* pParent, WinBits nStyle ) :
-    Edit( pParent, nStyle )
-{
-    pParent->SetSubEdit( this );
-}
-
-// -----------------------------------------------------------------------
-
-void ImplSubEdit::Modify()
-{
-    GetParent()->Modify();
 }
 
 rtl::OUString Edit::GetSurroundingText() const

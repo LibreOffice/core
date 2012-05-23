@@ -45,7 +45,6 @@ namespace i18n {
     class XExtendedInputSequenceChecker;
 }}}}
 
-class ImplSubEdit;
 struct DDInfo;
 struct Impl_IMEInfos;
 
