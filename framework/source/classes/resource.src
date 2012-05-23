@@ -104,6 +104,16 @@ String STR_NODOCUMENT
     Text [ en-US ] = "No Documents";
 };
 
+String STR_CLEAR_RECENT_FILES
+{
+    Text [ en-US ] = "Clear List";
+};
+
+String STR_CLEAR_RECENT_FILES_HELP
+{
+    Text [ en-US ] = "Clears the list with the most recently opened files. This action can not be undone.";
+};
+
 String STR_TOOLBAR_TITLE_ADDON
 {
     Text [ en-US ] = "Add-On %num%";
