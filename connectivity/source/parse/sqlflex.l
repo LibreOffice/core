@@ -708,9 +708,9 @@ using namespace connectivity;
 static bool IN_SQLyyerror;
 //------------------------------------------------------------------------------
 OSQLScanner::OSQLScanner()
-			: m_nCurrentPos(0)
+			: m_pContext(NULL)
+			, m_nCurrentPos(0)
 		    , m_bInternational(sal_False)
-			, m_pContext(NULL)
 			, m_nRule(0) // 0 is INITIAL
 {
 	IN_SQLyyerror = false;
