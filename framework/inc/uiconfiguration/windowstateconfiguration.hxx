@@ -92,12 +92,12 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
 
         typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateFileMap;
 
         typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateConfigHashMap;
 
     private:

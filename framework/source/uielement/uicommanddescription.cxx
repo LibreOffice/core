@@ -155,7 +155,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
     private:
         typedef ::boost::unordered_map< ::rtl::OUString,
                                  CmdToInfoMap,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > CommandToInfoCache;
 
         sal_Bool initializeConfigAccess();

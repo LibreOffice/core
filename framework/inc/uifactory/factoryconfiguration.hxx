@@ -81,7 +81,7 @@ private:
     };
     class MenuControllerMap : public boost::unordered_map< rtl::OUString,
                                                          ControllerInfo,
-                                                         OUStringHashCode,
+                                                         rtl::OUStringHash,
                                                          ::std::equal_to< ::rtl::OUString > >
     {
         inline void free()

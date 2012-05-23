@@ -39,13 +39,6 @@ namespace framework{
 /**
     Own hash functions used for stl-structures ... e.g. hash tables/maps ...
 */
-struct OUStringHashCode
-{
-    size_t operator()( const ::rtl::OUString& sString ) const
-    {
-        return sString.hashCode();
-    }
-};
 
 struct ShortHashCode
 {
@@ -142,7 +135,7 @@ typedef ::std::queue< ::rtl::OUString > OUStringQueue;
 template< class TType >
 class BaseHash : public ::boost::unordered_map< ::rtl::OUString                    ,
                                          TType                              ,
-                                         OUStringHashCode                   ,
+                                         rtl::OUStringHash                  ,
                                          ::std::equal_to< ::rtl::OUString > >
 {
     public:
@@ -160,7 +153,7 @@ class BaseHash : public ::boost::unordered_map< ::rtl::OUString                 
     Basic OUString hash.
     Key and values are OUStrings.
 */
-typedef BaseHash< ::rtl::OUString > OUStringHash;
+typedef BaseHash< ::rtl::OUString > OUStringHashMap;
 
 //_________________________________________________________________________________________________________________
 
@@ -179,7 +172,7 @@ typedef BaseHash< sal_Int32 > NameToHandleHash;
     So it's better to declare it one times only!
 */
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString                    ,
-                                                        OUStringHashCode                   ,
+                                                        rtl::OUStringHash,
                                                         ::std::equal_to< ::rtl::OUString > >    ListenerHash;
 
 }       // namespace framework

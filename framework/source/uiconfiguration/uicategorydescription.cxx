@@ -115,7 +115,7 @@ class ConfigurationAccess_UICategory : // Order is necessary for right initializ
     private:
         typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > IdToInfoCache;
 
         sal_Bool initializeConfigAccess();

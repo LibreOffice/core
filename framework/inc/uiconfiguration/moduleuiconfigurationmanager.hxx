@@ -151,7 +151,7 @@ namespace framework
 
             struct UIElementType;
             friend struct UIElementType;
-            typedef ::boost::unordered_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
+            typedef ::boost::unordered_map< rtl::OUString, UIElementData, rtl::OUStringHash, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
 
             struct UIElementType
             {
@@ -171,7 +171,7 @@ namespace framework
 
             typedef ::std::vector< UIElementType > UIElementTypesVector;
             typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-            typedef ::boost::unordered_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
+            typedef ::boost::unordered_map< rtl::OUString, UIElementInfo, rtl::OUStringHash, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
 
             // private methods
             void            impl_Initialize();

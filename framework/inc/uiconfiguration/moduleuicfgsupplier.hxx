@@ -80,7 +80,7 @@ namespace framework
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef ::boost::unordered_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
+            typedef ::boost::unordered_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, rtl::OUStringHash, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 

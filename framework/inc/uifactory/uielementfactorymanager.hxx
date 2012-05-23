@@ -74,7 +74,7 @@ namespace framework
     private:
         class FactoryManagerMap : public boost::unordered_map< rtl::OUString,
                                                      rtl::OUString,
-                                                     OUStringHashCode,
+                                                     rtl::OUStringHash,
                                                      ::std::equal_to< ::rtl::OUString > >
         {
             inline void free()

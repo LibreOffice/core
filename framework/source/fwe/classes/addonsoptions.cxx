@@ -256,13 +256,6 @@ class AddonsOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-        struct OUStringHashCode
-        {
-            size_t operator()( const OUString& sString ) const
-            {
-                return sString.hashCode();
-            }
-        };
 
         struct ImageEntry
         {
@@ -273,10 +266,10 @@ class AddonsOptions_Impl : public ConfigItem
             Image   aImageBigNoScale;
         };
 
-        typedef boost::unordered_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
-        typedef boost::unordered_map< OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< OUString > > StringToIndexMap;
+        typedef boost::unordered_map< OUString, ImageEntry, OUStringHash, ::std::equal_to< OUString > > ImageManager;
+        typedef boost::unordered_map< OUString, sal_uInt32, OUStringHash, ::std::equal_to< OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
-        typedef ::boost::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< OUString > > ToolbarMergingInstructions;
+        typedef ::boost::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash, ::std::equal_to< OUString > > ToolbarMergingInstructions;
 
         enum ImageSize
         {

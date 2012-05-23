@@ -74,7 +74,7 @@ namespace framework
 
             class UrlToDispatchMap : public ::boost::unordered_map< ::rtl::OUString,
                                                              com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                                             OUStringHashCode,
+                                                             rtl::OUStringHash,
                                                              ::std::equal_to< ::rtl::OUString > >
             {
                 public:

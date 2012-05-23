@@ -239,7 +239,7 @@ class ConfigurationAccess_WindowState : // interfaces
     private:
         typedef ::boost::unordered_map< ::rtl::OUString,
                                  WindowStateInfo,
-                                 OUStringHashCode,
+                                 rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;
 
         rtl::OUString                     m_aConfigWindowAccess;

@@ -123,7 +123,7 @@ struct FileType
 
         sal_Bool            bPreferred          ;
         ::rtl::OUString     sName               ;
-        OUStringHash        lUINames            ;
+        OUStringHashMap     lUINames            ;
         ::rtl::OUString     sMediaType          ;
         ::rtl::OUString     sClipboardFormat    ;
         sal_Int32           nDocumentIconID     ;
@@ -194,7 +194,7 @@ struct Filter
         sal_Int32           nOrder              ;
         ::rtl::OUString     sName               ;
         ::rtl::OUString     sType               ;
-        OUStringHash        lUINames            ;
+        OUStringHashMap     lUINames            ;
         ::rtl::OUString     sDocumentService    ;
         ::rtl::OUString     sFilterService      ;
         ::rtl::OUString     sUIComponent        ;
@@ -293,7 +293,7 @@ struct Loader
     public:
 
         ::rtl::OUString sName       ;
-        OUStringHash    lUINames    ;
+        OUStringHashMap lUINames    ;
         OUStringList    lTypes      ;
 };
 
@@ -349,7 +349,7 @@ struct ContentHandler
 template< class HashType >
 class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString                    ,
                                             HashType                           ,
-                                            OUStringHashCode                   ,
+                                            rtl::OUStringHash                  ,
                                             ::std::equal_to< ::rtl::OUString > >
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -390,7 +390,7 @@ class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString              
 //*****************************************************************************************************************
 class PerformanceHash   :   public  ::boost::unordered_map<    ::rtl::OUString                     ,
                                                         OUStringList                        ,
-                                                        OUStringHashCode                    ,
+                                                        rtl::OUStringHash                    ,
                                                         ::std::equal_to< ::rtl::OUString >  >
 {
     public:
@@ -445,7 +445,7 @@ typedef SetNodeHash< Filter >                                       FilterHash  
 typedef SetNodeHash< Detector >                                     DetectorHash                ;
 typedef SetNodeHash< Loader >                                       LoaderHash                  ;
 typedef SetNodeHash< ContentHandler >                               ContentHandlerHash          ;
-typedef OUStringHash                                                PreferredHash               ;
+typedef OUStringHashMap                                             PreferredHash               ;
 typedef OUStringList                                                OrderList                   ;
 
 typedef CheckedIterator< OUStringList >                             CheckedStringListIterator   ;
@@ -555,14 +555,14 @@ class DataContainer : private ThreadHelpBase
                                                                              const ::rtl::OUString&                                    sCurrentLocale  );
         static void             extractLocalizedStrings                    ( const ::rtl::OUString&                                    sCurrentLocale  ,
                                                                              const css::uno::Any&                                      aCFGValue       ,
-                                                                                   OUStringHash&                                       lLocales        );
+                                                                                   OUStringHashMap&                                       lLocales        );
         static void             packLocalizedStrings                       (       sal_Int16                                           nMode           ,
                                                                              const ::rtl::OUString&                                    sCurrentLocale  ,
                                                                                    css::uno::Any&                                      aCFGValue       ,
-                                                                             const OUStringHash&                                       lLocales        );
-        static ::rtl::OUString  getLocalelizedString                       ( const OUStringHash&                                       lLocales        ,
+                                                                             const OUStringHashMap&                                       lLocales        );
+        static ::rtl::OUString  getLocalelizedString                       ( const OUStringHashMap&                                       lLocales        ,
                                                                              const ::rtl::OUString&                                    sLocale         );
-        static void             setLocalelizedString                       (       OUStringHash&                                       lLocales        ,
+        static void             setLocalelizedString                       (       OUStringHashMap&                                       lLocales        ,
                                                                              const ::rtl::OUString&                                    sLocale         ,
                                                                              const ::rtl::OUString&                                    sValue          );
         static void             correctExtensions                          (       OUStringList&                                       lExtensions     );
@@ -627,8 +627,8 @@ class FilterCFGAccess : public ::utl::ConfigItem
         static   ::rtl::OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formated string of OUStringList
         static   OUStringList       decodeStringList( const ::rtl::OUString& sValue                                 );
 
-        void             setProductName                             (       OUStringHash&                                       lUINames        );
-        void             resetProductName                           (       OUStringHash&                                       lUINames        );
+        void             setProductName                             (       OUStringHashMap&                                       lUINames        );
+        void             resetProductName                           (       OUStringHashMap&                                       lUINames        );
 
     //-------------------------------------------------------------------------------------------------------------
     //  internal helper
