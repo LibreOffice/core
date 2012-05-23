@@ -104,9 +104,12 @@ openoffice_$(defaultlangiso) : $$@.archive
 
 .IF "$(VERBOSE)"=="TRUE"
 VERBOSESWITCH=-verbose
-.ENDIF
-.IF "$(VERBOSE)"=="FALSE"
+.ELIF "$(VERBOSE)"=="FALSE"
 VERBOSESWITCH=-quiet
+.ENDIF
+
+.IF "$(VERBOSE_INSTALLER)"=="TRUE"
+VERBOSESWITCH+=-log
 .ENDIF
 
 # New target to prepare a source release
