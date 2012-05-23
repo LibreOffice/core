@@ -28,63 +28,49 @@
 #ifndef _CPPU_THREADPOOL_THREAD_HXX
 #define _CPPU_THREADPOOL_THREAD_HXX
 
-#include <list>
+#include <osl/thread.hxx>
 #include <sal/types.h>
-
-#include <osl/thread.h>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include "jobqueue.hxx"
+#include "threadpool.hxx"
 
 namespace cppu_threadpool {
 
     class JobQueue;
-    class ThreadAdmin;
-    typedef boost::shared_ptr<ThreadAdmin> ThreadAdminHolder;
 
     //-----------------------------------------
     // private thread class for the threadpool
     // independent from vos
     //-----------------------------------------
-    class ORequestThread
+    class ORequestThread:
+        public salhelper::SimpleReferenceObject, public osl::Thread
     {
     public:
-        ORequestThread( JobQueue * ,
+        ORequestThread( ThreadPoolHolder const &aThreadPool,
+                        JobQueue * ,
                         const ::rtl::ByteSequence &aThreadId,
                         sal_Bool bAsynchron );
-        ~ORequestThread();
+        virtual ~ORequestThread();
 
         void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , sal_Bool bAsynchron );
 
-        sal_Bool create();
-        void join();
-        void onTerminated();
-        void run();
-        inline void setDeleteSelf( sal_Bool b )
-            { m_bDeleteSelf = b; }
+        void launch();
+
+        static inline void * operator new(std::size_t size)
+        { return SimpleReferenceObject::operator new(size); }
+
+        static inline void operator delete(void * pointer)
+        { SimpleReferenceObject::operator delete(pointer); }
 
     private:
-        oslThread m_thread;
-        ThreadAdminHolder m_aThreadAdmin;
+        virtual void SAL_CALL run();
+        virtual void SAL_CALL onTerminated();
+
+        ThreadPoolHolder m_aThreadPool;
         JobQueue *m_pQueue;
         ::rtl::ByteSequence m_aThreadId;
         sal_Bool m_bAsynchron;
-        sal_Bool m_bDeleteSelf;
-    };
-
-    class ThreadAdmin
-    {
-    public:
-        ThreadAdmin();
-        ~ThreadAdmin ();
-        static ThreadAdminHolder &getInstance();
-        void add( ORequestThread * );
-        void remove( ORequestThread * );
-        void join();
-
-    private:
-        ::osl::Mutex m_mutex;
-        ::std::list< ORequestThread * > m_lst;
-        bool m_disposed;
     };
 
 } // end cppu_threadpool

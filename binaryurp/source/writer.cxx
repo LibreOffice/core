@@ -196,7 +196,7 @@ void Writer::run() {
     } catch (const std::exception & e) {
         OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
     }
-    bridge_->terminate();
+    bridge_->terminate(false);
 }
 
 void Writer::onTerminated() {

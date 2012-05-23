@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <rtl/instance.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
@@ -48,17 +47,6 @@ namespace css = com::sun::star;
 }
 
 using namespace osl;
-extern "C" {
-
-void SAL_CALL cppu_requestThreadWorker( void *pVoid )
-{
-    ::cppu_threadpool::ORequestThread *pThread = ( ::cppu_threadpool::ORequestThread * ) pVoid;
-
-    pThread->run();
-    pThread->onTerminated();
-}
-
-}
 
 namespace cppu_threadpool {
 
@@ -75,7 +63,7 @@ namespace cppu_threadpool {
 #endif
     }
 
-    void ThreadAdmin::add( ORequestThread *p )
+    void ThreadAdmin::add( rtl::Reference< ORequestThread > const & p )
     {
         MutexGuard aGuard( m_mutex );
         if( m_disposed )
@@ -90,12 +78,19 @@ namespace cppu_threadpool {
         m_lst.push_back( p );
     }
 
-    void ThreadAdmin::remove( ORequestThread * p )
+    void ThreadAdmin::remove_locked( rtl::Reference< ORequestThread > const & p )
+    {
+        ::std::list< rtl::Reference< ORequestThread > >::iterator ii = ::std::find( m_lst.begin(), m_lst.end(), p );
+        if( ii != m_lst.end() )
+        {
+            m_lst.erase( ii );
+        }
+    }
+
+    void ThreadAdmin::remove( rtl::Reference< ORequestThread > const & p )
     {
         MutexGuard aGuard( m_mutex );
-        ::std::list< ORequestThread * >::iterator ii = ::std::find( m_lst.begin(), m_lst.end(), p );
-        OSL_ASSERT( ii != m_lst.end() );
-        m_lst.erase( ii );
+        remove_locked( p );
     }
 
     void ThreadAdmin::join()
@@ -104,62 +99,34 @@ namespace cppu_threadpool {
             MutexGuard aGuard( m_mutex );
             m_disposed = true;
         }
-        ORequestThread *pCurrent;
-        do
+        for (;;)
         {
-            pCurrent = 0;
+            rtl::Reference< ORequestThread > pCurrent;
             {
                 MutexGuard aGuard( m_mutex );
-                if( ! m_lst.empty() )
+                if( m_lst.empty() )
                 {
-                    pCurrent = m_lst.front();
-                    pCurrent->setDeleteSelf( sal_False );
+                    break;
                 }
+                pCurrent = m_lst.front();
+                m_lst.pop_front();
             }
-            if ( pCurrent )
-            {
-                pCurrent->join();
-                delete pCurrent;
-            }
-        } while( pCurrent );
-    }
-
-    struct theThreadAdmin : public rtl::StaticWithInit< ThreadAdminHolder, theThreadAdmin >
-    {
-        ThreadAdminHolder operator () () {
-            ThreadAdminHolder aRet(new ThreadAdmin());
-            return aRet;
+            pCurrent->join();
         }
-    };
-
-    ThreadAdminHolder& ThreadAdmin::getInstance()
-    {
-        return theThreadAdmin::get();
     }
 
 // ----------------------------------------------------------------------------------
-    ORequestThread::ORequestThread( JobQueue *pQueue,
+    ORequestThread::ORequestThread( ThreadPoolHolder const &aThreadPool,
+                                    JobQueue *pQueue,
                                     const ByteSequence &aThreadId,
                                     sal_Bool bAsynchron )
-        : m_thread( 0 )
-        , m_aThreadAdmin( ThreadAdmin::getInstance() )
+        : m_aThreadPool( aThreadPool )
         , m_pQueue( pQueue )
         , m_aThreadId( aThreadId )
         , m_bAsynchron( bAsynchron )
-        , m_bDeleteSelf( sal_True )
-    {
-        m_aThreadAdmin->add( this );
-    }
+    {}
 
-
-    ORequestThread::~ORequestThread()
-    {
-        if (m_thread != 0)
-        {
-            osl_destroyThread(m_thread);
-        }
-    }
-
+    ORequestThread::~ORequestThread() {}
 
     void ORequestThread::setTask( JobQueue *pQueue,
                                   const ByteSequence &aThreadId,
@@ -170,74 +137,81 @@ namespace cppu_threadpool {
         m_bAsynchron = bAsynchron;
     }
 
-    sal_Bool ORequestThread::create()
+    void ORequestThread::launch()
     {
-        OSL_ASSERT(m_thread == 0);  // only one running thread per instance
-
-        m_thread = osl_createSuspendedThread( cppu_requestThreadWorker, (void*)this);
-        if ( m_thread )
-        {
-            osl_resumeThread( m_thread );
+        // Assumption is that osl::Thread::create returns normally with a true
+        // return value iff it causes osl::Thread::run to start executing:
+        acquire();
+        ThreadAdmin & rThreadAdmin = m_aThreadPool->getThreadAdmin();
+        osl::ClearableMutexGuard g(rThreadAdmin.m_mutex);
+        rThreadAdmin.add( this );
+        try {
+            if (!create()) {
+                throw std::runtime_error("osl::Thread::create failed");
+            }
+        } catch (...) {
+            rThreadAdmin.remove_locked( this );
+            g.clear();
+            release();
+            throw;
         }
-
-        return m_thread != 0;
-    }
-
-    void ORequestThread::join()
-    {
-        osl_joinWithThread( m_thread );
     }
 
     void ORequestThread::onTerminated()
     {
-        m_aThreadAdmin->remove( this );
-        if( m_bDeleteSelf )
-        {
-            delete this;
-        }
+        m_aThreadPool->getThreadAdmin().remove( this );
+        release();
     }
 
     void ORequestThread::run()
     {
-        ThreadPoolHolder theThreadPool = cppu_threadpool::ThreadPool::getInstance();
-
-        while ( m_pQueue )
+        try
         {
-            if( ! m_bAsynchron )
+            while ( m_pQueue )
             {
-                if ( !uno_bindIdToCurrentThread( m_aThreadId.getHandle() ) )
+                if( ! m_bAsynchron )
                 {
-                    OSL_ASSERT( false );
+                    if ( !uno_bindIdToCurrentThread( m_aThreadId.getHandle() ) )
+                    {
+                        OSL_ASSERT( false );
+                    }
                 }
-            }
 
-            while( ! m_pQueue->isEmpty() )
-            {
-                // Note : Oneways should not get a disposable disposeid,
-                //        It does not make sense to dispose a call in this state.
-                //        That's way we put it an disposeid, that can't be used otherwise.
-                m_pQueue->enter(
-                    sal::static_int_cast< sal_Int64 >(
-                        reinterpret_cast< sal_IntPtr >(this)),
-                    sal_True );
-
-                if( m_pQueue->isEmpty() )
+                while( ! m_pQueue->isEmpty() )
                 {
-                    theThreadPool->revokeQueue( m_aThreadId , m_bAsynchron );
-                    // Note : revokeQueue might have failed because m_pQueue.isEmpty()
-                    //        may be false (race).
+                    // Note : Oneways should not get a disposable disposeid,
+                    //        It does not make sense to dispose a call in this state.
+                    //        That's way we put it an disposeid, that can't be used otherwise.
+                    m_pQueue->enter(
+                        sal::static_int_cast< sal_Int64 >(
+                            reinterpret_cast< sal_IntPtr >(this)),
+                        sal_True );
+
+                    if( m_pQueue->isEmpty() )
+                    {
+                        m_aThreadPool->revokeQueue( m_aThreadId , m_bAsynchron );
+                        // Note : revokeQueue might have failed because m_pQueue.isEmpty()
+                        //        may be false (race).
+                    }
                 }
+
+                delete m_pQueue;
+                m_pQueue = 0;
+
+                if( ! m_bAsynchron )
+                {
+                    uno_releaseIdFromCurrentThread();
+                }
+
+                m_aThreadPool->waitInPool( this );
             }
-
-            delete m_pQueue;
-            m_pQueue = 0;
-
-            if( ! m_bAsynchron )
-            {
-                uno_releaseIdFromCurrentThread();
-            }
-
-            theThreadPool->waitInPool( this );
+        }
+        catch (...)
+        {
+            // Work around the problem that onTerminated is not called if run
+            // throws an exception:
+            onTerminated();
+            throw;
         }
     }
 }

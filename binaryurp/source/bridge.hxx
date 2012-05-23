@@ -93,8 +93,11 @@ public:
     void start();
 
     // Internally waits for all incoming and outgoing remote calls to terminate,
-    // so must not be called from within such a call:
-    void terminate();
+    // so must not be called from within such a call; when final is true, also
+    // joins all remaining threads (reader, writer, and worker threads from the
+    // thread pool), so must not be called with final set to true from such a
+    // thread:
+    void terminate(bool final);
 
     com::sun::star::uno::Reference< com::sun::star::connection::XConnection >
     getConnection() const;
@@ -228,6 +231,9 @@ private:
 
     void terminateWhenUnused(bool unused);
 
+    // Must only be called with mutex_ locked:
+    void checkDisposed();
+
     typedef
         std::list<
             com::sun::star::uno::Reference<
@@ -239,6 +245,8 @@ private:
     typedef std::map< com::sun::star::uno::TypeDescription, SubStub > Stub;
 
     typedef std::map< rtl::OUString, Stub > Stubs;
+
+    enum State { STATE_INITIAL, STATE_STARTED, STATE_TERMINATED, STATE_FINAL };
 
     enum Mode {
         MODE_REQUESTED, MODE_REPLY_MINUS1, MODE_REPLY_0, MODE_REPLY_1,
@@ -259,8 +267,15 @@ private:
     com::sun::star::uno::TypeDescription protPropRequest_;
     com::sun::star::uno::TypeDescription protPropCommit_;
     OutgoingRequests outgoingRequests_;
+    osl::Condition passive_;
+        // to guarantee that passive_ is eventually set (to avoid deadlock, see
+        // dispose), activeCalls_ only counts those calls for which it can be
+        // guaranteed that incrementActiveCalls is indeed followed by
+        // decrementActiveCalls, without an intervening exception
+    osl::Condition terminated_;
 
     osl::Mutex mutex_;
+    State state_;
     Listeners listeners_;
     uno_ThreadPool threadPool_;
     rtl::Reference< Writer > writer_;
@@ -271,12 +286,6 @@ private:
     std::size_t calls_;
     bool normalCall_;
     std::size_t activeCalls_;
-    osl::Condition passive_;
-        // to guarantee that passive_ is eventually set (to avoid deadlock, see
-        // dispose), activeCalls_ only counts those calls for which it can be
-        // guaranteed that incrementActiveCalls is indeed followed by
-        // decrementActiveCalls, without an intervening exception
-    bool terminated_;
 
     // Only accessed from reader_ thread:
     Mode mode_;

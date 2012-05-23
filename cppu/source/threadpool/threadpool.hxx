@@ -25,11 +25,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
+#define INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
+
+#include <list>
+
 #include <boost/unordered_map.hpp>
 
 #include <osl/conditn.h>
 
 #include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -74,7 +82,7 @@ namespace cppu_threadpool {
     struct WaitingThread
     {
         oslCondition condition;
-        ORequestThread *thread;
+        rtl::Reference< ORequestThread > thread;
     };
 
     typedef ::std::list < struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;
@@ -98,15 +106,32 @@ namespace cppu_threadpool {
         DisposedCallerList m_lst;
     };
 
-    class ThreadPool;
-    typedef boost::shared_ptr<ThreadPool> ThreadPoolHolder;
+    class ThreadAdmin
+    {
+    public:
+        ThreadAdmin();
+        ~ThreadAdmin ();
 
-    class ThreadPool
+        void add( rtl::Reference< ORequestThread > const & );
+        void remove( rtl::Reference< ORequestThread > const & );
+        void join();
+
+        void remove_locked( rtl::Reference< ORequestThread > const & );
+        ::osl::Mutex m_mutex;
+
+    private:
+        ::std::list< rtl::Reference< ORequestThread > > m_lst;
+        bool m_disposed;
+    };
+
+    class ThreadPool;
+    typedef rtl::Reference<ThreadPool> ThreadPoolHolder;
+
+    class ThreadPool: public salhelper::SimpleReferenceObject
     {
     public:
         ThreadPool();
         ~ThreadPool();
-        static ThreadPoolHolder getInstance();
 
         void dispose( sal_Int64 nDisposeId );
         void destroy( sal_Int64 nDisposeId );
@@ -124,7 +149,12 @@ namespace cppu_threadpool {
          ********/
         sal_Bool revokeQueue( const ByteSequence & aThreadId , sal_Bool bAsynchron );
 
-        void waitInPool( ORequestThread *pThread );
+        void waitInPool( rtl::Reference< ORequestThread > const & pThread );
+
+        void joinWorkers();
+
+        ThreadAdmin & getThreadAdmin() { return m_aThreadAdmin; }
+
     private:
         void createThread( JobQueue *pQueue, const ByteSequence &aThreadId, sal_Bool bAsynchron);
 
@@ -136,8 +166,11 @@ namespace cppu_threadpool {
         WaitingThreadList m_lstThreads;
 
         DisposedCallerAdminHolder m_DisposedCallerAdmin;
+        ThreadAdmin m_aThreadAdmin;
     };
 
 } // end namespace cppu_threadpool
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

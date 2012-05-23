@@ -150,7 +150,7 @@ void Reader::run() {
     } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
-    bridge_->terminate();
+    bridge_->terminate(false);
 }
 
 void Reader::onTerminated() {
