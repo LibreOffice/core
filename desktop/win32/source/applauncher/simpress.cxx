@@ -32,4 +32,6 @@
 
 _TCHAR APPLICATION_SWITCH[] = _T( "--impress" );
 
+LPCWSTR APPUSERMODELID = L"TheDocumentFoundation.LibreOffice.Impress";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

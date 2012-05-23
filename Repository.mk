@@ -121,6 +121,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	directxcanvas \
 	winextendloaderenv \
 	winlauncher \
+	appusermodelid \
 ))
 
 else

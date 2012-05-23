@@ -37,6 +37,10 @@ $(eval $(call gb_Executable_use_libraries,sbase,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Executable_use_static_libraries,sbase,\
+   appusermodelid \
+))
+
 $(eval $(call gb_Executable_add_libs,sbase,\
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
 ))

@@ -32,4 +32,6 @@
 
 _TCHAR APPLICATION_SWITCH[] = _T( "--draw" );
 
+LPCWSTR APPUSERMODELID = L"TheDocumentFoundation.LibreOffice.Draw";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

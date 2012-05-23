@@ -4,6 +4,8 @@
 #error Need C++ to compile
 #endif
 
+#include <Windows.h>
+
 #ifndef _INC_TCHAR
 #   ifdef UNICODE
 #       define _UNICODE
@@ -20,5 +22,6 @@
 #define OFFICE_IMAGE_NAME   _T("soffice")
 
 extern _TCHAR APPLICATION_SWITCH[];
+extern LPCWSTR APPUSERMODELID;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

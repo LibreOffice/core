@@ -32,4 +32,6 @@
 
 _TCHAR APPLICATION_SWITCH[] = _T( "--calc" );
 
+LPCWSTR APPUSERMODELID = L"TheDocumentFoundation.LibreOffice.Calc";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

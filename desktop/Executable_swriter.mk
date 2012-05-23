@@ -37,6 +37,10 @@ $(eval $(call gb_Executable_use_libraries,swriter,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Executable_use_static_libraries,swriter,\
+   appusermodelid \
+))
+
 $(eval $(call gb_Executable_add_libs,swriter,\
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
 ))

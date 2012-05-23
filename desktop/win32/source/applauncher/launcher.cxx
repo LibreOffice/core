@@ -28,6 +28,7 @@
 
 
 #include "launcher.hxx"
+#include "appusermodelid.hxx"
 
 
 #ifndef _WINDOWS_
@@ -53,6 +54,10 @@ extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
+	// Set an explicit Application User Model ID for the process
+
+	SetExplicitAppUserModelID(APPUSERMODELID);
+
     // Retreive startup info
 
     STARTUPINFO aStartupInfo;
@@ -85,6 +90,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     GetModuleFileName( NULL, szApplicationName, MAX_PATH );
     _tsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     _tmakepath( szApplicationName, szDrive, szDir, OFFICE_IMAGE_NAME, _T(".exe") );
+
 
     PROCESS_INFORMATION aProcessInfo;
 

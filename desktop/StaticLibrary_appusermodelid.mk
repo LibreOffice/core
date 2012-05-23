@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,8 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
-#  (initial developer)
+# Copyright (C) 2012 Jesús Corrius <jesus@softcatala.org> (initial developer)
 #
 # All Rights Reserved.
 #
@@ -25,33 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,simpress))
+$(eval $(call gb_StaticLibrary_StaticLibrary,appusermodelid))
 
-$(eval $(call gb_Executable_set_targettype_gui,simpress,YES))
-
-$(eval $(call gb_Executable_add_defs,simpress,\
+$(eval $(call gb_StaticLibrary_add_defs,appusermodelid,\
     -DUNICODE \
 ))
 
-$(eval $(call gb_Executable_use_libraries,simpress,\
-    $(gb_STDLIBS) \
+$(eval $(call gb_StaticLibrary_add_noexception_objects,appusermodelid,\
+    desktop/win32/source/applauncher/appusermodelid \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,simpress,\
-   appusermodelid \
-))
-
-$(eval $(call gb_Executable_add_libs,simpress,\
-    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
-))
-
-$(call gb_Executable_get_target,simpress) : \
-    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
-
-$(eval $(call gb_Executable_add_noexception_objects,simpress,\
-    desktop/win32/source/applauncher/simpress \
-))
-
-$(eval $(call gb_Executable_add_nativeres,simpress,simpress/src))
-
-# vim: set ts=4 sw=4 et:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
