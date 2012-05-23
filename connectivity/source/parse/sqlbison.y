@@ -94,9 +94,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 
-#if defined __GNUC__
-    #pragma GCC system_header
-#elif defined __SUNPRO_CC
+#if defined __SUNPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
