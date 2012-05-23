@@ -51,17 +51,6 @@ namespace filter{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
-
-// Use this switch to change the behaviour of preselection DocumentService ... (see using for further informations)
-#define IGNORE_NON_URLMATCHING_TYPES_FOR_PRESELECTION_DOCUMENTSERVICE
-
-// enable/disable special handling for CSV/TXT problem
-#define WORKAROUND_CSV_TXT_BUG_i60158
-
-
-
 TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                         ,
@@ -252,25 +241,6 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
         try
         {
             ::rtl::OUString sRealType = sType;
-
-            #ifdef WORKAROUND_CSV_TXT_BUG_i60158
-            // Workaround for #i60158#
-            // We do not have right filter for Text_Ascii in calc nor a suitable filter for CSV in writer.
-            // So we must overrule our detection and make the right things. Normaly we should have
-            // one type TextAscii and two filters registered for these one type.
-            // But then we loose automatic opening of CSV files in calc instead of opening these files
-            // inside writer.
-            if ( sDocumentService == "com.sun.star.sheet.SpreadsheetDocument"
-                && ( sRealType == "writer_Text" || sRealType == "writer_Text_encoded" ) )
-            {
-                sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_Text_txt_csv_StarCalc" ));
-            }
-            else
-            if ( sDocumentService == "com.sun.star.text.TextDocument" && sRealType == "calc_Text_txt_csv_StarCalc" )
-            {
-                sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_Text" ));
-            }
-            #endif // WORKAROUND_CSV_TXT_BUG_i60158
 
             // SAFE ->
             ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -637,22 +607,6 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
          ++pIt                          )
     {
         FlatDetectionInfo& rInfo = *pIt;
-
-        /*
-            #i60158#
-            Preselection by DocumentService ...
-            How many filters (and corresponding types) must be checked ?
-            All or only the list of filters/types, which match to the given URL too ?
-            There is no final decision about this currently. So we make it "configurable" .-)
-        */
-        #ifdef IGNORE_NON_URLMATCHING_TYPES_FOR_PRESELECTION_DOCUMENTSERVICE
-        if (
-            (!rInfo.bMatchByExtension) &&
-            (!rInfo.bMatchByPattern  )
-           )
-           continue;
-        #endif
-
         rInfo.bPreselectedAsType            = sal_False;
         rInfo.bPreselectedByFilter          = sal_False;
         rInfo.bPreselectedByDocumentService = sal_True ;
