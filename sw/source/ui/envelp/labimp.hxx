@@ -83,6 +83,7 @@
 #include <svtools/svtreebx.hxx>
 #include <label.hxx>
 #include <labimg.hxx>
+#include <vector>
 
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
@@ -113,7 +114,14 @@ public:
 };
 
 
-SV_DECL_PTRARR_DEL( SwLabRecs, SwLabRec*, 110 )
+class SwLabRecs : public std::vector<SwLabRec*> {
+public:
+    ~SwLabRecs()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+};
 
 #endif
 

@@ -52,8 +52,6 @@
 extern SW_DLLPUBLIC String MakeSender();
 
 
-SV_IMPL_PTRARR( SwLabRecs, SwLabRec* );
-
 void SwLabRec::SetFromItem( const SwLabItem& rItem )
 {
     lHDist  = rItem.lHDist;
@@ -86,7 +84,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
 void SwLabDlg::_ReplaceGroup( const String &rMake )
 {
     // Remove old entries
-    pRecs->Remove( 1, pRecs->Count() - 1 );
+    pRecs->erase( pRecs->begin() + 1, pRecs->begin() + pRecs->size() - 1 );
     aLabelsCfg.FillLabels(rtl::OUString(rMake), *pRecs);
     aLstGroup = rMake;
 }
@@ -154,10 +152,10 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     sal_Bool bDouble = sal_False;
 
-    for (sal_uInt16 nRecPos = 0; nRecPos < pRecs->Count(); nRecPos++)
+    for (sal_uInt16 nRecPos = 0; nRecPos < pRecs->size(); nRecPos++)
     {
-        if (pRec->aMake == pRecs->GetObject(nRecPos)->aMake &&
-            pRec->aType == pRecs->GetObject(nRecPos)->aType)
+        if (pRec->aMake == (*pRecs)[nRecPos]->aMake &&
+            pRec->aType == (*pRecs)[nRecPos]->aType)
         {
             bDouble = sal_True;
             break;
@@ -165,7 +163,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     }
 
     if (!bDouble)
-        pRecs->C40_INSERT( SwLabRec, pRec, 0 );
+        pRecs->insert( pRecs->begin(), pRec );
 
     sal_uInt16 nLstGroup = 0;
     const ::com::sun::star::uno::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
@@ -216,7 +214,7 @@ SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
     sal_Bool bFound = sal_False;
     String sCustom(SW_RES(STR_CUSTOM));
 
-    const sal_uInt16 nCount = Recs().Count();
+    const sal_uInt16 nCount = Recs().size();
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
         pRec = Recs()[i];
@@ -418,7 +416,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     aItem.aLstMake = aMake;
 
     const sal_Bool   bCont    = aContButton.IsChecked();
-    const sal_uInt16 nCount   = GetParent()->Recs().Count();
+    const sal_uInt16 nCount   = GetParent()->Recs().size();
           sal_uInt16 nLstType = 0;
 
     const String sCustom(SW_RES(STR_CUSTOM));

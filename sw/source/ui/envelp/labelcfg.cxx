@@ -177,7 +177,7 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
         Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
         Sequence<Any>   aValues = GetProperties(aPropNames);
         SwLabRec* pNewRec = lcl_CreateSwLabRec(aValues, rManufacturer);
-        rLabArr.C40_INSERT( SwLabRec, pNewRec, rLabArr.Count() );
+        rLabArr.push_back( pNewRec );
     }
 }
 
