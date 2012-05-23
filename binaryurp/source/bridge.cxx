@@ -106,11 +106,9 @@ extern "C" void SAL_CALL freeProxyCallback(
     static_cast< Proxy * >(pProxy)->do_free();
 }
 
-void joinThread(salhelper::Thread * thread) {
+bool isThread(salhelper::Thread * thread) {
     assert(thread != 0);
-    if (thread->getIdentifier() != osl::Thread::getCurrentIdentifier()) {
-        thread->join();
-    }
+    return osl::Thread::getCurrentIdentifier() == thread->getIdentifier();
 }
 
 class AttachThread: private boost::noncopyable {
@@ -214,8 +212,8 @@ Bridge::Bridge(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.bridge.XProtocolProperties::commitChange"))),
-    threadPool_(0), currentContextMode_(false), proxies_(0), calls_(0),
-    normalCall_(false), activeCalls_(0), terminated_(false),
+    state_(STATE_INITIAL), threadPool_(0), currentContextMode_(false),
+    proxies_(0), calls_(0), normalCall_(false), activeCalls_(0),
     mode_(MODE_REQUESTED)
 {
     assert(factory.is() && connection.is());
@@ -239,11 +237,14 @@ void Bridge::start() {
     rtl::Reference< Writer > w(new Writer(this));
     {
         osl::MutexGuard g(mutex_);
-        assert(threadPool_ == 0 && !writer_.is() && !reader_.is());
+        assert(
+            state_ == STATE_INITIAL && threadPool_ == 0 && !writer_.is() &&
+            !reader_.is());
         threadPool_ = uno_threadpool_create();
         assert(threadPool_ != 0);
         reader_ = r;
         writer_ = w;
+        state_ = STATE_STARTED;
     }
     // It is important to call reader_->launch() last here; both
     // Writer::execute and Reader::execute can call Bridge::terminate, but
@@ -255,60 +256,117 @@ void Bridge::start() {
     r->launch();
 }
 
-void Bridge::terminate() {
+void Bridge::terminate(bool final) {
     uno_ThreadPool tp;
-    rtl::Reference< Reader > r;
-    rtl::Reference< Writer > w;
-    Listeners ls;
+    // Make sure function-local variables (Stubs s, etc.) are destroyed before
+    // the final uno_threadpool_destroy/threadPool_ = 0:
     {
-        osl::MutexGuard g(mutex_);
-        if (terminated_) {
-            return;
+        rtl::Reference< Reader > r;
+        rtl::Reference< Writer > w;
+        bool joinW;
+        Listeners ls;
+        {
+            osl::ClearableMutexGuard g(mutex_);
+            switch (state_) {
+            case STATE_INITIAL: // via ~Bridge -> dispose -> terminate
+            case STATE_FINAL:
+                return;
+            case STATE_STARTED:
+                break;
+            case STATE_TERMINATED:
+                if (final) {
+                    g.clear();
+                    terminated_.wait();
+                    {
+                        osl::MutexGuard g2(mutex_);
+                        tp = threadPool_;
+                        threadPool_ = 0;
+                        assert(!(reader_.is() && isThread(reader_.get())));
+                        std::swap(reader_, r);
+                        assert(!(writer_.is() && isThread(writer_.get())));
+                        std::swap(writer_, w);
+                        state_ = STATE_FINAL;
+                    }
+                    assert(!(r.is() && w.is()));
+                    if (r.is()) {
+                        r->join();
+                    } else if (w.is()) {
+                        w->join();
+                    }
+                    if (tp != 0) {
+                        uno_threadpool_destroy(tp);
+                    }
+                }
+                return;
+            }
+            tp = threadPool_;
+            assert(!(final && isThread(reader_.get())));
+            if (!isThread(reader_.get())) {
+                std::swap(reader_, r);
+            }
+            w = writer_;
+            joinW = !isThread(writer_.get());
+            assert(!final || joinW);
+            if (joinW) {
+                writer_.clear();
+            }
+            ls.swap(listeners_);
+            state_ = final ? STATE_FINAL : STATE_TERMINATED;
         }
-        tp = threadPool_;
-        std::swap(reader_, r);
-        std::swap(writer_, w);
-        ls.swap(listeners_);
-        terminated_ = true;
-    }
-    try {
-        connection_->close();
-    } catch (const css::io::IOException & e) {
-        SAL_INFO("binaryurp", "caught IO exception '" << e.Message << '\'');
-    }
-    assert(w.is());
-    w->stop();
-    joinThread(r.get());
-    joinThread(w.get());
-    assert(tp != 0);
-    uno_threadpool_dispose(tp);
-    Stubs s;
-    {
-        osl::MutexGuard g(mutex_);
-        s.swap(stubs_);
-    }
-    for (Stubs::iterator i(s.begin()); i != s.end(); ++i) {
-        for (Stub::iterator j(i->second.begin()); j != i->second.end(); ++j) {
-            SAL_INFO(
-                "binaryurp",
-                "stub '" << i->first << "', '" << toString(j->first)
-                    << "' still mapped at Bridge::terminate");
-            binaryUno_.get()->pExtEnv->revokeInterface(
-                binaryUno_.get()->pExtEnv, j->second.object.get());
-        }
-    }
-    factory_->removeBridge(this);
-    for (Listeners::iterator i(ls.begin()); i != ls.end(); ++i) {
         try {
-            (*i)->disposing(
-                css::lang::EventObject(
-                    static_cast< cppu::OWeakObject * >(this)));
-        } catch (const css::uno::RuntimeException & e) {
-            SAL_WARN(
-                "binaryurp", "caught runtime exception '" << e.Message << '\'');
+            connection_->close();
+        } catch (const css::io::IOException & e) {
+            SAL_INFO("binaryurp", "caught IO exception '" << e.Message << '\'');
+        }
+        assert(w.is());
+        w->stop();
+        if (r.is()) {
+            r->join();
+        }
+        if (joinW) {
+            w->join();
+        }
+        assert(tp != 0);
+        uno_threadpool_dispose(tp);
+        Stubs s;
+        {
+            osl::MutexGuard g(mutex_);
+            s.swap(stubs_);
+        }
+        for (Stubs::iterator i(s.begin()); i != s.end(); ++i) {
+            for (Stub::iterator j(i->second.begin()); j != i->second.end(); ++j)
+            {
+                SAL_INFO(
+                    "binaryurp",
+                    "stub '" << i->first << "', '" << toString(j->first)
+                        << "' still mapped at Bridge::terminate");
+                binaryUno_.get()->pExtEnv->revokeInterface(
+                    binaryUno_.get()->pExtEnv, j->second.object.get());
+            }
+        }
+        factory_->removeBridge(this);
+        for (Listeners::iterator i(ls.begin()); i != ls.end(); ++i) {
+            try {
+                (*i)->disposing(
+                    css::lang::EventObject(
+                        static_cast< cppu::OWeakObject * >(this)));
+            } catch (const css::uno::RuntimeException & e) {
+                SAL_WARN(
+                    "binaryurp",
+                    "caught runtime exception '" << e.Message << '\'');
+            }
         }
     }
-    uno_threadpool_destroy(tp);
+    if (final) {
+        uno_threadpool_destroy(tp);
+    }
+    {
+        osl::MutexGuard g(mutex_);
+        if (final) {
+            threadPool_ = 0;
+        }
+    }
+    terminated_.set();
 }
 
 css::uno::Reference< css::connection::XConnection > Bridge::getConnection()
@@ -340,19 +398,14 @@ BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
 
 uno_ThreadPool Bridge::getThreadPool() {
     osl::MutexGuard g(mutex_);
+    checkDisposed();
     assert(threadPool_ != 0);
     return threadPool_;
 }
 
 rtl::Reference< Writer > Bridge::getWriter() {
     osl::MutexGuard g(mutex_);
-    if (terminated_) {
-        throw css::lang::DisposedException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "Binary URP bridge already disposed")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
+    checkDisposed();
     assert(writer_.is());
     return writer_;
 }
@@ -822,9 +875,15 @@ bool Bridge::isCurrentContextMode() {
 }
 
 Bridge::~Bridge() {
-    if (getThreadPool() != 0) {
-        terminate();
+#if OSL_DEBUG_LEVEL > 0
+    {
+        osl::MutexGuard g(mutex_);
+        SAL_WARN_IF(
+            state_ == STATE_STARTED || state_ == STATE_TERMINATED, "binaryurp",
+            "undisposed bridge, potential deadlock ahead");
     }
+#endif
+    dispose();
 }
 
 css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
@@ -885,7 +944,11 @@ rtl::OUString Bridge::getDescription() throw (css::uno::RuntimeException) {
 }
 
 void Bridge::dispose() throw (css::uno::RuntimeException) {
-    terminate();
+    // For terminate(true) not to deadlock, an external protocol must ensure
+    // that dispose is not called from a thread pool worker thread (that dispose
+    // is never called from the reader or writer thread is already ensured
+    // internally):
+    terminate(true);
     // OOo expects dispose to not return while there are still remote calls in
     // progress; an external protocol must ensure that dispose is not called
     // from within an incoming or outgoing remote call, as passive_.wait() would
@@ -900,7 +963,8 @@ void Bridge::addEventListener(
     assert(xListener.is());
     {
         osl::MutexGuard g(mutex_);
-        if (!terminated_) {
+        assert(state_ != STATE_INITIAL);
+        if (state_ == STATE_STARTED) {
             listeners_.push_back(xListener);
             return;
         }
@@ -995,7 +1059,18 @@ void Bridge::terminateWhenUnused(bool unused) {
         // That the current thread considers the bridge unused implies that it
         // is not within an incoming or outgoing remote call (so calling
         // terminate cannot lead to deadlock):
-        terminate();
+        terminate(false);
+    }
+}
+
+void Bridge::checkDisposed() {
+    assert(state_ != STATE_INITIAL);
+    if (state_ != STATE_STARTED) {
+        throw css::lang::DisposedException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "Binary URP bridge already disposed")),
+            static_cast< cppu::OWeakObject * >(this));
     }
 }
 

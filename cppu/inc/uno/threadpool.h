@@ -166,10 +166,6 @@ uno_threadpool_putJob(
   return immeadiatly with *ppJob == 0.
 
   @param hPool The handle to be disposed.
-  In case, hPool is 0, this function joins on all threads created
-  by the threadpool administration. This may e.g. used to ensure, that
-  no threads are inside the cppu library anymore, in case it needs to get
-  unloaded.
 
   This function is called i.e. by a bridge, that is forced to dispose itself.
  */
@@ -180,6 +176,10 @@ uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 /** Releases the previously with uno_threadpool_create() created handle.
     The handle thus becomes invalid. It is an error to use the handle after
     uno_threadpool_destroy().
+
+    A call to uno_threadpool_destroy can synchronously join on spawned worker
+    threads, so this function must never be called from such a worker thread.
+
     @see uno_threadpool_create()
  */
 CPPU_DLLPUBLIC void SAL_CALL

@@ -845,6 +845,10 @@ SAL_IMPLEMENT_MAIN()
                     if (! xComp.is())
                         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" ) ), Reference< XInterface >() );
                     ODisposingListener::waitFor( xComp );
+                    xComp->dispose();
+                        // explicitly dispose the remote bridge so that it joins
+                        // on all spawned threads before process exit (see
+                        // binaryurp/source/bridge.cxx for details)
                     break;
                 }
             }

@@ -109,15 +109,6 @@ namespace cppu_threadpool
 
     //-------------------------------------------------------------------------------
 
-    struct theThreadPool :
-        public rtl::StaticWithInit< ThreadPoolHolder, theThreadPool >
-    {
-        ThreadPoolHolder operator () () {
-            ThreadPoolHolder aRet(new ThreadPool());
-            return aRet;
-        }
-    };
-
     ThreadPool::ThreadPool()
     {
         m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
@@ -132,46 +123,24 @@ namespace cppu_threadpool
         }
 #endif
     }
-    ThreadPoolHolder ThreadPool::getInstance()
-    {
-        return theThreadPool::get();
-    }
-
 
     void ThreadPool::dispose( sal_Int64 nDisposeId )
     {
-        if( nDisposeId )
-        {
-            m_DisposedCallerAdmin->dispose( nDisposeId );
+        m_DisposedCallerAdmin->dispose( nDisposeId );
 
-            MutexGuard guard( m_mutex );
-            for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
-                 ii != m_mapQueue.end();
-                 ++ii)
-            {
-                if( (*ii).second.first )
-                {
-                    (*ii).second.first->dispose( nDisposeId );
-                }
-                if( (*ii).second.second )
-                {
-                    (*ii).second.second->dispose( nDisposeId );
-                }
-            }
-        }
-        else
+        MutexGuard guard( m_mutex );
+        for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
+             ii != m_mapQueue.end();
+             ++ii)
         {
+            if( (*ii).second.first )
             {
-                MutexGuard guard( m_mutexWaitingThreadList );
-                for( WaitingThreadList::iterator ii = m_lstThreads.begin() ;
-                     ii != m_lstThreads.end() ;
-                     ++ ii )
-                {
-                    // wake the threads up
-                    osl_setCondition( (*ii)->condition );
-                }
+                (*ii).second.first->dispose( nDisposeId );
             }
-            ThreadAdmin::getInstance()->join();
+            if( (*ii).second.second )
+            {
+                (*ii).second.second->dispose( nDisposeId );
+            }
         }
     }
 
@@ -185,7 +154,7 @@ namespace cppu_threadpool
      * a new request comes in, this thread is reused. This is done only to improve performance,
      * it is not required for threadpool functionality.
      ******************/
-    void ThreadPool::waitInPool( ORequestThread * pThread )
+    void ThreadPool::waitInPool( rtl::Reference< ORequestThread > const & pThread )
     {
         struct WaitingThread waitingThread;
         waitingThread.condition = osl_createCondition();
@@ -201,7 +170,7 @@ namespace cppu_threadpool
 
         {
             MutexGuard guard ( m_mutexWaitingThreadList );
-            if( waitingThread.thread )
+            if( waitingThread.thread.is() )
             {
                 // thread wasn't reused, remove it from the list
                 WaitingThreadList::iterator ii = find(
@@ -212,6 +181,21 @@ namespace cppu_threadpool
         }
 
         osl_destroyCondition( waitingThread.condition );
+    }
+
+    void ThreadPool::joinWorkers()
+    {
+        {
+            MutexGuard guard( m_mutexWaitingThreadList );
+            for( WaitingThreadList::iterator ii = m_lstThreads.begin() ;
+                 ii != m_lstThreads.end() ;
+                 ++ ii )
+            {
+                // wake the threads up
+                osl_setCondition( (*ii)->condition );
+            }
+        }
+        m_aThreadAdmin.join();
     }
 
     void ThreadPool::createThread( JobQueue *pQueue ,
@@ -240,10 +224,9 @@ namespace cppu_threadpool
 
         if( bCreate )
         {
-            ORequestThread *pThread =
-                new ORequestThread( pQueue , aThreadId, bAsynchron);
-            // deletes itself !
-            pThread->create();
+            rtl::Reference< ORequestThread > pThread(
+                new ORequestThread( this, pQueue , aThreadId, bAsynchron) );
+            pThread->launch();
         }
     }
 
@@ -385,6 +368,12 @@ namespace cppu_threadpool
     }
 }
 
+// All uno_ThreadPool handles in g_pThreadpoolHashSet with overlapping life
+// spans share one ThreadPool instance.  When g_pThreadpoolHashSet becomes empty
+// (within the last uno_threadpool_destroy) all worker threads spawned by that
+// ThreadPool instance are joined (which implies that uno_threadpool_destroy
+// must never be called from a worker thread); afterwards, the next call to
+// uno_threadpool_create (if any) will lead to a new ThreadPool instance.
 
 using namespace cppu_threadpool;
 
@@ -415,27 +404,47 @@ struct _uno_ThreadPool
     sal_Int32 dummy;
 };
 
+namespace {
+
+ThreadPoolHolder getThreadPool( uno_ThreadPool hPool )
+{
+    MutexGuard guard( Mutex::getGlobalMutex() );
+    assert( g_pThreadpoolHashSet != 0 );
+    ThreadpoolHashSet::iterator i( g_pThreadpoolHashSet->find(hPool) );
+    assert( i != g_pThreadpoolHashSet->end() );
+    return i->second;
+}
+
+}
+
 extern "C" uno_ThreadPool SAL_CALL
 uno_threadpool_create() SAL_THROW_EXTERN_C()
 {
     MutexGuard guard( Mutex::getGlobalMutex() );
+    ThreadPoolHolder p;
     if( ! g_pThreadpoolHashSet )
     {
         g_pThreadpoolHashSet = new ThreadpoolHashSet();
+        p = new ThreadPool;
+    }
+    else
+    {
+        assert( !g_pThreadpoolHashSet->empty() );
+        p = g_pThreadpoolHashSet->begin()->second;
     }
 
     // Just ensure that the handle is unique in the process (via heap)
     uno_ThreadPool h = new struct _uno_ThreadPool;
-    g_pThreadpoolHashSet->insert( ThreadpoolHashSet::value_type(h, ThreadPool::getInstance()) );
+    g_pThreadpoolHashSet->insert( ThreadpoolHashSet::value_type(h, p) );
     return h;
 }
 
 extern "C" void SAL_CALL
-uno_threadpool_attach(SAL_UNUSED_PARAMETER uno_ThreadPool) SAL_THROW_EXTERN_C()
+uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
-    ThreadPool::getInstance()->prepare( pThreadId );
+    getThreadPool( hPool )->prepare( pThreadId );
     rtl_byte_sequence_release( pThreadId );
     uno_releaseIdFromCurrentThread();
 }
@@ -447,7 +456,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
     *ppJob =
-        ThreadPool::getInstance()->enter(
+        getThreadPool( hPool )->enter(
             pThreadId,
             sal::static_int_cast< sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(hPool)) );
@@ -463,19 +472,19 @@ uno_threadpool_detach(SAL_UNUSED_PARAMETER uno_ThreadPool) SAL_THROW_EXTERN_C()
 
 extern "C" void SAL_CALL
 uno_threadpool_putJob(
-    SAL_UNUSED_PARAMETER uno_ThreadPool,
+    uno_ThreadPool hPool,
     sal_Sequence *pThreadId,
     void *pJob,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
     sal_Bool bIsOneway ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pJob ,doRequest );
+    getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest );
 }
 
 extern "C" void SAL_CALL
 uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->dispose(
+    getThreadPool(hPool)->dispose(
         sal::static_int_cast< sal_Int64 >(
             reinterpret_cast< sal_IntPtr >(hPool)) );
 }
@@ -483,9 +492,8 @@ uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 extern "C" void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    assert(hPool != 0);
-
-    ThreadPool::getInstance()->destroy(
+    ThreadPoolHolder p( getThreadPool(hPool) );
+    p->destroy(
         sal::static_int_cast< sal_Int64 >(
             reinterpret_cast< sal_IntPtr >(hPool)) );
 
@@ -510,7 +518,7 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 
     if( empty )
     {
-        uno_threadpool_dispose( 0 );
+        p->joinWorkers();
     }
 }
 
