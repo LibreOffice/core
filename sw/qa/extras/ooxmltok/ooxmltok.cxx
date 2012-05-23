@@ -58,6 +58,7 @@ public:
     void testN751077();
     void testN705956_1();
     void testN705956_2();
+    void testN747461();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testN751077);
     CPPUNIT_TEST(testN705956_1);
     CPPUNIT_TEST(testN705956_2);
+    CPPUNIT_TEST(testN747461);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -283,6 +285,40 @@ xray image.FillColor
     sal_Int32 fillColor;
     imageProperties->getPropertyValue( "FillColor" ) >>= fillColor;
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xc0504d ), fillColor );
+}
+
+void Test::testN747461()
+{
+    load( "n747461.docx" );
+/*
+The document contains 3 images (Red, Black, Green, in this order), with explicit
+w:relativeHeight (300, 0, 225763766). Check that they are in the right ZOrder
+after they are loaded.
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> image1, image2, image3;
+    drawPage->getByIndex( 0 ) >>= image1;
+    drawPage->getByIndex( 1 ) >>= image2;
+    drawPage->getByIndex( 2 ) >>= image3;
+    sal_Int32 zOrder1, zOrder2, zOrder3;
+    OUString descr1, descr2, descr3;
+    uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
+    imageProperties1->getPropertyValue( "ZOrder" ) >>= zOrder1;
+    imageProperties1->getPropertyValue( "Description" ) >>= descr1;
+    uno::Reference<beans::XPropertySet> imageProperties2(image2, uno::UNO_QUERY);
+    imageProperties2->getPropertyValue( "ZOrder" ) >>= zOrder2;
+    imageProperties2->getPropertyValue( "Description" ) >>= descr2;
+    uno::Reference<beans::XPropertySet> imageProperties3(image3, uno::UNO_QUERY);
+    imageProperties3->getPropertyValue( "ZOrder" ) >>= zOrder3;
+    imageProperties3->getPropertyValue( "Description" ) >>= descr3;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), zOrder1 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), zOrder2 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2 ), zOrder3 );
+    CPPUNIT_ASSERT_EQUAL( OUString( "Black" ), descr1 );
+    CPPUNIT_ASSERT_EQUAL( OUString( "Red" ), descr2 );
+    CPPUNIT_ASSERT_EQUAL( OUString( "Green" ), descr3 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
