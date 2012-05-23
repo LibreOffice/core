@@ -29,6 +29,9 @@
 #include "doc.hxx"
 #include "ndtxt.hxx"
 
+#include <libxml/encoding.h>
+#include <libxml/xmlwriter.h>
+
 namespace
 {
 

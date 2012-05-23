@@ -41,9 +41,6 @@
 #include <bparr.hxx>
 #include <ndtyp.hxx>
 
-#include <libxml/encoding.h>
-#include <libxml/xmlwriter.h>
-
 class Graphic;
 class GraphicObject;
 class String;
@@ -83,6 +80,7 @@ struct SwPosition;
 
 typedef SwNode * SwNodePtr;
 typedef sal_Bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
+typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
 SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0 )
 

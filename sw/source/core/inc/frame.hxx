@@ -39,9 +39,6 @@
 #include <svl/brdcst.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 
-#include <libxml/encoding.h>
-#include <libxml/xmlwriter.h>
-
 class SwLayoutFrm;
 class SwRootFrm;
 class SwPageFrm;
@@ -68,6 +65,7 @@ class SwFmt;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
+typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
