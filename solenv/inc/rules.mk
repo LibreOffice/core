@@ -32,7 +32,7 @@ $(OBJ)/%.obj : %.cxx
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
 .IF "$(noadjust)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(noadjust)"==""
@@ -56,7 +56,7 @@ $(OBJ)/%.obj : %.cpp
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cpp
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -78,7 +78,7 @@ $(OBJ)/%.obj : %.cc
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cc
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @+$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -99,7 +99,7 @@ $(SLO)/%.obj : %.cxx
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CAPTURE_COMMAND) $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx $(CAPTURE_OUTPUT)
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"=="" && "$(CAPTURE_COMMAND)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"=="" && "$(CAPTURE_COMMAND)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -126,7 +126,7 @@ $(SLO)/%.obj : %.cpp
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cpp
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -152,7 +152,7 @@ $(SLO)/%.obj : $(MISC)/%.cxx
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(CFLAGSINCXX)$(MISC)/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -177,7 +177,7 @@ $(SLO)/%.obj : $(MISC)/%.cc
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(CFLAGSINCXX)$(MISC)/$*.cc
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @+$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -194,7 +194,7 @@ $(OBJ)/%.obj : $(MISC)/%.cxx
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(MISC)/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -219,7 +219,7 @@ $(OBJ)/%.obj : %.c
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $*.c
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
 .IF "$(noadjust)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF			# "$(noadjust)"==""
@@ -246,7 +246,7 @@ $(OBJ)/%.obj : $(MISC)/%.c
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(MISC)/$*.c
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -268,7 +268,7 @@ $(SLO)/%.obj : $(MISC)/%.c
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $(MISC)/$*.c
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
@@ -291,7 +291,7 @@ $(SLO)/%.obj : %.c
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(COMMAND_ECHO)$(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)/$*.o $*.c
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
+.IF "$(OS)$(COM)"=="SOLARISC52" && "$(product)"=="full" && "$(debug)"==""
     $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
     @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
