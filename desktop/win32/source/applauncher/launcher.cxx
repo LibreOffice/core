@@ -56,7 +56,8 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 {
 	// Set an explicit Application User Model ID for the process
 
-	SetExplicitAppUserModelID(APPUSERMODELID);
+    // FIXME: Comment this out until I find a fix for minGW.
+    // SetExplicitAppUserModelID(APPUSERMODELID);
 
     // Retreive startup info
 
