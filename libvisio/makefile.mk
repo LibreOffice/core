@@ -59,6 +59,7 @@ TARFILE_MD5=2fa6028324347860e684e75310818d43
 
 PATCH_FILES=\
     $(TARFILE_NAME)-nothrow.patch \
+    $(TARFILE_NAME)-fdo50178.patch \
     $(TARFILE_NAME).patch
 
 
