@@ -1066,8 +1066,10 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
         Type _tElem(pTdElem->pWeakRef);
         for (int i = 0; i < val->nElements; i++)
         {
+            sal_Int8 *pValBuf = (sal_Int8 *)(&val->elements + i * pTdElem->nSize);
+
             uno_Sequence* seq = cloneSequence(
-                *(uno_Sequence**) (&val->elements + i * pTdElem->nSize),
+                *(uno_Sequence**) (pValBuf),
                 _tElem);
             *((uno_Sequence**) pBufCur) = seq;
             pBufCur += pTdElem->nSize;
