@@ -171,7 +171,7 @@ public:
         { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
-    const ScAddress                     GetRealScCellPos() const;
+    ScAddress                           GetRealScCellPos() const;
     void                                AddColCount(sal_Int32 nTempColCount);
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }

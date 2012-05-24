@@ -685,8 +685,7 @@ table::CellAddress ScMyTables::GetRealCellPos()
     return aRealCellPos;
 }
 
-//placeholder; needs more work
-const ScAddress ScMyTables::GetRealScCellPos() const
+ScAddress ScMyTables::GetRealScCellPos() const
 {
     sal_Int32 nRow = 0;
     sal_Int32 nCol = 0;
