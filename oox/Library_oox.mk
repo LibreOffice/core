@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,oox))
 $(eval $(call gb_Library_use_packages,oox,\
     oox_inc \
     oox_generated \
-    oox_source \
     oox_tokens \
 ))
 
@@ -306,7 +305,7 @@ oox_GENHEADERPATH := $(oox_INC)/oox/token
 $(call gb_Package_get_target,oox_inc) : $(oox_GENHEADERPATH)/namespaces.hxx
 $(call gb_Package_get_target,oox_inc) : $(oox_GENHEADERPATH)/properties.hxx
 $(call gb_Package_get_target,oox_inc) : $(oox_GENHEADERPATH)/tokens.hxx
-$(call gb_Package_get_target,oox_inc) : $(call gb_Package_get_target,oox_source)
+$(call gb_Package_get_target,oox_inc) : $(call gb_Package_get_target,oox_tokens)
 $(call gb_Package_get_target,oox_inc) : $(call gb_Package_get_target,oox_generated)
 
 
