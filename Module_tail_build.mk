@@ -91,6 +91,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     swext \
     test \
     toolkit \
+	tools \
     ucb \
     unixODBC \
     UnoControls \
