@@ -2851,8 +2851,11 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
             WriteNamedRange(pRangeName);
         }
 
-        //export new conditional format information
-        ExportConditionalFormat(nTable);
+        if(getDefaultVersion() > ODFVER_012)
+        {
+            //export new conditional format information
+            ExportConditionalFormat(nTable);
+        }
 
     }
 }
