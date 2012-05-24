@@ -125,7 +125,11 @@
 #define STR_FDLG_STYLE                  (RC_APP_BEGIN + 106)
 //<-end,zhaojianwei
 
-#define APP_ACT_END                     STR_FDLG_STYLE
+// Status bar strings
+#define STR_STATUSBAR_WORDCOUNT_NO_SELECTION (RC_APP_BEGIN + 110)
+#define STR_STATUSBAR_WORDCOUNT              (RC_APP_BEGIN + 111)
+
+#define APP_ACT_END                     STR_STATUSBAR_WORDCOUNT
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line

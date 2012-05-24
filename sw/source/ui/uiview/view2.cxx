@@ -1210,10 +1210,15 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     documentStats = rShell.GetUpdatedDocStat();
                     rShell.EndAction();
                 }
-                rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, rtl::OUStringBuffer("Words: ")
-                                                            .append(rtl::OUString::valueOf(static_cast<sal_Int64>(selectionStats.nWord)))
-                                                            .append('/')
-                                                            .append(rtl::OUString::valueOf(static_cast<sal_Int64>(documentStats.nWord))).makeStringAndClear()));
+
+                const sal_uInt32 stringId = selectionStats.nWord? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION;
+                rtl::OUString wordCount(SW_RES(stringId));
+                wordCount = wordCount.replaceAll("$1", rtl::OUString::valueOf(static_cast<sal_Int64>(documentStats.nWord)));
+                if (selectionStats.nWord)
+                {
+                    wordCount = wordCount.replaceAll("$2", rtl::OUString::valueOf(static_cast<sal_Int64>(selectionStats.nWord)));
+                }
+                rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
             }
             break;
 
