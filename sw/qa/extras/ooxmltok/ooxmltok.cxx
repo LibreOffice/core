@@ -234,15 +234,15 @@ xray para.PageStyleName
     (void) paraEnum->nextElement();
     // get the 2nd paragraph
     uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
-    OUString value;
     // text of the paragraph
     uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( OUString( "TEXT1" ), text->getString());
     // we want to test the paragraph is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
     uno::Reference<beans::XPropertySet> paragraphProperties(paragraph, uno::UNO_QUERY);
-    paragraphProperties->getPropertyValue( "PageStyleName" ) >>= value;
-    CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), value );
+    OUString pageStyle;
+    paragraphProperties->getPropertyValue( "PageStyleName" ) >>= pageStyle;
+    CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), pageStyle );
 }
 
 void Test::testN705956_1()

@@ -44,11 +44,15 @@ class Test : public SwModelTestBase
 public:
     void testN757910();
     void testN760294();
+    void testN750255();
+    void testN652364();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN757910);
     CPPUNIT_TEST(testN760294);
+    CPPUNIT_TEST(testN750255);
+    CPPUNIT_TEST(testN652364);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -91,6 +95,84 @@ void Test::testN760294()
     xTable->getPropertyValue("TableBorder") >>= aTableBorder;
     CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.OuterLineWidth);
     CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.LineDistance);
+}
+
+void Test::testN750255()
+{
+    load( "n750255.doc" );
+
+/*
+Column break without columns on the page is a page break, so check those paragraphs
+are on page 2 (page style 'Convert 1') and page 3 (page style 'Convert 2')
+enum = ThisComponent.Text.createEnumeration
+enum.nextElement
+para1 = enum.nextElement
+xray para1.String
+xray para1.PageStyleName
+para2 = enum.nextElement
+xray para2.String
+xray para2.PageStyleName
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    // go to 1st paragraph
+    (void) paraEnum->nextElement();
+    // get the 2nd and 3rd paragraph
+    uno::Reference<uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "one" ), text1->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "two" ), text2->getString());
+    uno::Reference<beans::XPropertySet> paragraphProperties1(paragraph1, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> paragraphProperties2(paragraph2, uno::UNO_QUERY);
+    OUString pageStyle1, pageStyle2;
+    paragraphProperties1->getPropertyValue( "PageStyleName" ) >>= pageStyle1;
+    paragraphProperties2->getPropertyValue( "PageStyleName" ) >>= pageStyle2;
+    CPPUNIT_ASSERT_EQUAL( OUString( "Convert 1" ), pageStyle1 );
+    CPPUNIT_ASSERT_EQUAL( OUString( "Convert 2" ), pageStyle2 );
+
+}
+
+void Test::testN652364()
+{
+    load( "n652364.doc" );
+
+/*
+Related to 750255 above, column break with columns on the page however should be a column break.
+enum = ThisComponent.Text.createEnumeration
+enum.nextElement
+para1 = enum.nextElement
+xray para1.String
+xray para1.PageStyleName
+enum.nextElement
+para2 = enum.nextElement
+xray para2.String
+xray para2.PageStyleName
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    // get the 2nd and 4th paragraph
+    (void) paraEnum->nextElement();
+    uno::Reference<uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
+    (void) paraEnum->nextElement();
+    uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "text1" ), text1->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "text2" ), text2->getString());
+    uno::Reference<beans::XPropertySet> paragraphProperties1(paragraph1, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> paragraphProperties2(paragraph2, uno::UNO_QUERY);
+    OUString pageStyle1, pageStyle2;
+    paragraphProperties1->getPropertyValue( "PageStyleName" ) >>= pageStyle1;
+    paragraphProperties2->getPropertyValue( "PageStyleName" ) >>= pageStyle2;
+    // "Standard" is the style for the first page (2nd is "Convert 1").
+    CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle1 );
+    CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
