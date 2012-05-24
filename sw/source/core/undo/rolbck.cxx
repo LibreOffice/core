@@ -69,8 +69,6 @@
 #include <undo.hrc>
 #include <bookmrk.hxx>
 
-SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)
-
 String SwHistoryHint::GetDescription() const
 {
     return String();
@@ -1015,9 +1013,11 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 
 
 SwHistory::SwHistory( sal_uInt16 nInitSz )
-    : m_SwpHstry( (sal_uInt8)nInitSz )
+    : m_SwpHstry()
     , m_nEndDiff( 0 )
-{}
+{
+    m_SwpHstry.reserve( (sal_uInt8)nInitSz );
+}
 
 
 SwHistory::~SwHistory()
@@ -1053,7 +1053,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
     {
         pHt = new SwHistoryResetFmt( pNewValue, nNodeIdx );
     }
-    m_SwpHstry.Insert( pHt, Count() );
+    m_SwpHstry.push_back( pHt );
 }
 
 
@@ -1098,7 +1098,7 @@ void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
         pHt = new SwHistoryResetTxt( pHint->Which(), *pHint->GetStart(),
                                     *pHint->GetAnyEnd(), nNodeIdx );
     }
-    m_SwpHstry.Insert( pHt, Count() );
+    m_SwpHstry.push_back( pHt );
 }
 
 
@@ -1108,7 +1108,7 @@ void SwHistory::Add( SwFmtColl* pColl, sal_uLong nNodeIdx, sal_uInt8 nWhichNd )
 
     SwHistoryHint * pHt =
         new SwHistoryChangeFmtColl( pColl, nNodeIdx, nWhichNd );
-    m_SwpHstry.Insert( pHt, Count() );
+    m_SwpHstry.push_back( pHt );
 }
 
 
@@ -1117,14 +1117,14 @@ void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOth
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHt = new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos);
-    m_SwpHstry.Insert( pHt, Count() );
+    m_SwpHstry.push_back( pHt );
 }
 
 
 void SwHistory::Add( SwFrmFmt& rFmt )
 {
     SwHistoryHint * pHt = new SwHistoryChangeFlyAnchor( rFmt );
-    m_SwpHstry.Insert( pHt, Count() );
+    m_SwpHstry.push_back( pHt );
 }
 
 void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
@@ -1136,7 +1136,7 @@ void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
     if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
     {
         pHint = new SwHistoryTxtFlyCnt( &rFmt );
-        m_SwpHstry.Insert( pHint, Count() );
+        m_SwpHstry.push_back( pHint );
 
         const SwFmtChain* pChainItem;
         if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, sal_False,
@@ -1146,7 +1146,7 @@ void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
             {
                 SwHistoryHint * pHt =
                     new SwHistoryChangeFlyChain( rFmt, *pChainItem );
-                m_SwpHstry.Insert( pHt, rSetPos++ );
+                m_SwpHstry.insert( m_SwpHstry.begin() + rSetPos++, pHt );
                 if ( pChainItem->GetNext() )
                 {
                     SwFmtChain aTmp( pChainItem->GetNext()->GetChain() );
@@ -1168,14 +1168,14 @@ void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
 void SwHistory::Add( const SwTxtFtn& rFtn )
 {
     SwHistoryHint *pHt = new SwHistorySetFootnote( rFtn );
-    m_SwpHstry.Insert( pHt, Count() );
+    m_SwpHstry.push_back( pHt );
 }
 
 // #i27615#
 void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 {
     SwHistoryHint * pHt = new SwHistoryChangeCharFmt(rSet, rFmt.GetName());
-    m_SwpHstry.Insert(pHt, Count());
+    m_SwpHstry.push_back( pHt );
 }
 
 /*************************************************************************
@@ -1200,7 +1200,7 @@ bool SwHistory::Rollback( SwDoc* pDoc, sal_uInt16 nStart )
         pHHt->SetInDoc( pDoc, false );
         delete pHHt;
     }
-    m_SwpHstry.Remove( nStart, Count() - nStart );
+    m_SwpHstry.erase( m_SwpHstry.begin() + nStart, m_SwpHstry.end() );
     m_nEndDiff = 0;
     return true;
 }
@@ -1238,7 +1238,8 @@ void SwHistory::Delete( sal_uInt16 nStart )
 {
     for ( sal_uInt16 n = Count(); n > nStart; )
     {
-        m_SwpHstry.DeleteAndDestroy( --n, 1 );
+        delete m_SwpHstry[ --n ];
+        m_SwpHstry.erase( m_SwpHstry.begin() + n );
     }
     m_nEndDiff = 0;
 }
@@ -1404,7 +1405,7 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     pNewHstr = new SwHistoryResetFmt( pItem, m_nNodeIndex );
                 }
             }
-            m_pHistory->m_SwpHstry.Insert( pNewHstr, m_pHistory->Count() );
+            m_pHistory->m_SwpHstry.push_back( pNewHstr );
         }
     }
 }
@@ -1452,7 +1453,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
                                     pTxtNode->GetIndex(), nStart, nEnd );
         // der NodeIndex kann verschoben sein !!
 
-        m_pHistory->m_SwpHstry.Insert( pNewHstr, m_pHistory->Count() );
+        m_pHistory->m_SwpHstry.push_back( pNewHstr );
     }
 
     return bInserted;
@@ -1504,6 +1505,12 @@ void SwRegHistory::_MakeSetWhichIds()
             }
         }
     }
+}
+
+SwpHstry::~SwpHstry()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

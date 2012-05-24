@@ -353,8 +353,11 @@ public:
 
 #endif
 
-typedef SwHistoryHint* SwHistoryHintPtr;
-SV_DECL_PTRARR_DEL( SwpHstry, SwHistoryHintPtr, 0 )
+class SwpHstry : public std::vector<SwHistoryHint*> {
+public:
+    // the destructor will free all objects still in the vector
+    ~SwpHstry();
+};
 
 class SwHistory
 {
@@ -386,8 +389,8 @@ public:
     void Add( const SwTxtFtn& );
     void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt);
 
-    sal_uInt16 Count() const { return m_SwpHstry.Count(); }
-    sal_uInt16 GetTmpEnd() const { return m_SwpHstry.Count() - m_nEndDiff; }
+    sal_uInt16 Count() const { return m_SwpHstry.size(); }
+    sal_uInt16 GetTmpEnd() const { return m_SwpHstry.size() - m_nEndDiff; }
     sal_uInt16 SetTmpEnd( sal_uInt16 nTmpEnd );        // return previous value
     SwHistoryHint      * operator[]( sal_uInt16 nPos ) { return m_SwpHstry[nPos]; }
     SwHistoryHint const* operator[]( sal_uInt16 nPos ) const
@@ -397,10 +400,10 @@ public:
     void Move( sal_uInt16 nPos, SwHistory *pIns,
                sal_uInt16 nStart = 0, sal_uInt16 nEnd = USHRT_MAX )
     {
-        m_SwpHstry.Insert( &pIns->m_SwpHstry, nPos, nStart, nEnd );
-        pIns->m_SwpHstry.Remove( nStart, (nEnd == USHRT_MAX)
-                                            ? pIns->Count() - nStart
-                                            : nEnd );
+        SwpHstry::iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
+        SwpHstry::iterator itSourceEnd = nEnd == USHRT_MAX ? pIns->m_SwpHstry.end() : pIns->m_SwpHstry.begin() + nEnd;
+        std::copy( itSourceBegin, itSourceEnd, m_SwpHstry.begin() + nPos );
+        pIns->m_SwpHstry.erase( itSourceBegin, itSourceEnd );
     }
 
     // helper methods for recording attribute in History
