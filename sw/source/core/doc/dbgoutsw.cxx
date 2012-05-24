@@ -924,7 +924,7 @@ String lcl_dbg_out(const SwNumRuleTbl & rTbl)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
-    for (sal_uInt16 n = 0; n < rTbl.Count(); n++)
+    for (size_t n = 0; n < rTbl.size(); n++)
     {
         if (n > 0)
             aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
