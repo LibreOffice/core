@@ -105,14 +105,14 @@ public class DocumentLoader
             // Load the wanted document(s)
             String[] inputs = input.split(":");
             for (int i = 0; i < inputs.length; i++) {
-                com.sun.star.beans.PropertyValue propertyValues[] =
+                com.sun.star.beans.PropertyValue loadProps[] =
                     new com.sun.star.beans.PropertyValue[2];
-                propertyValues[0] = new com.sun.star.beans.PropertyValue();
-                propertyValues[0].Name = "Hidden";
-                propertyValues[0].Value = new Boolean(true);
-                propertyValues[1] = new com.sun.star.beans.PropertyValue();
-                propertyValues[1].Name = "ReadOnly";
-                propertyValues[1].Value = new Boolean(true);
+                loadProps[0] = new com.sun.star.beans.PropertyValue();
+                loadProps[0].Name = "Hidden";
+                loadProps[0].Value = new Boolean(true);
+                loadProps[1] = new com.sun.star.beans.PropertyValue();
+                loadProps[1].Name = "ReadOnly";
+                loadProps[1].Value = new Boolean(true);
 
                 String sUrl = "file://" + inputs[i];
 
@@ -120,7 +120,7 @@ public class DocumentLoader
 
                 Object oDoc =
                     xCompLoader.loadComponentFromURL
-                    (sUrl, "_blank", 0, propertyValues);
+                    (sUrl, "_blank", 0, loadProps);
                 Log.i(TAG, "oDoc is " + (oDoc!=null ? oDoc.toString() : "null"));
 
                 com.sun.star.lang.XTypeProvider typeProvider = (com.sun.star.lang.XTypeProvider) UnoRuntime.queryInterface(com.sun.star.lang.XTypeProvider.class, oDoc);
@@ -134,6 +134,22 @@ public class DocumentLoader
                         }
                     }
                 }
+
+                com.sun.star.view.XRenderable renderBabe = (com.sun.star.view.XRenderable) UnoRuntime.queryInterface(com.sun.star.view.XRenderable.class, oDoc);
+                Log.i(TAG, "renderBabe is " + (renderBabe!=null ? renderBabe.toString() : "null"));
+
+                com.sun.star.beans.PropertyValue renderProps[] =
+                    new com.sun.star.beans.PropertyValue[1];
+                renderProps[0] = new com.sun.star.beans.PropertyValue();
+                renderProps[0].Name = "IsPrinter";
+                renderProps[0].Value = new Boolean(true);
+//                renderProps[1] = new com.sun.star.beans.PropertyValue();
+//                renderProps[1].Name = "View";
+//                renderProps[1].Value = no idea where to get an XController...
+
+                Log.i(TAG, "getRendererCount: " + renderBabe.getRendererCount(oDoc, renderProps));
+
+                renderBabe.render(0, oDoc, renderProps);
             }
         }
         catch (Exception e) {
