@@ -519,7 +519,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     aWrapTransparentCB.Enable( bEnable && !bHtmlMode && nSur == SURROUND_THROUGHT );
     if(bHtmlMode)
     {
-        sal_Bool bSomeAbsPos = 0 != (nHtmlMode & HTMLMODE_SOME_ABS_POS);
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         sal_Int16 eHOrient = rHori.GetHoriOrient();
         sal_Int16 eHRelOrient = rHori.GetRelationOrient();
@@ -551,7 +550,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                     || (   (FLY_AT_CHAR == nAnchorId)
                         && (eHRelOrient != text::RelOrientation::PRINT_AREA))
                     || (FLY_AT_PARA == nAnchorId))
-                && bSomeAbsPos
                 && (eHOrient != text::HoriOrientation::RIGHT));
         if(aNoWrapRB.IsChecked() && !aNoWrapRB.IsEnabled())
         {

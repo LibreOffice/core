@@ -109,8 +109,6 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         switch( m_nDlgType )
         {
         case DLG_FRM_STD:
-                if(0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
-                    RemoveTabPage(TP_BORDER);
                 RemoveTabPage(TP_COLUMN);
             // no break
         case DLG_FRM_OLE:
@@ -121,8 +119,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                 RemoveTabPage(RID_SVXPAGE_GRFCROP);
             break;
         }
-        if( 0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS) ||
-            m_nDlgType != DLG_FRM_STD )
+        if( m_nDlgType != DLG_FRM_STD )
             RemoveTabPage(TP_BACKGROUND);
     }
 
