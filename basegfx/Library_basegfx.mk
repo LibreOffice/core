@@ -28,7 +28,10 @@
 
 $(eval $(call gb_Library_Library,basegfx))
 
-$(eval $(call gb_Library_use_package,basegfx,basegfx_inc))
+$(eval $(call gb_Library_use_packages,basegfx,\
+	basegfx_inc \
+	o3tl_inc \
+))
 
 $(eval $(call gb_Library_set_include,basegfx,\
 	-I$(SRCDIR)/basegfx/inc \
