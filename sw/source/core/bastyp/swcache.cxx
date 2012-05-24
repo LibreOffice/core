@@ -70,9 +70,9 @@ void SwCache::Check()
         SAL_WARN_IF( pObj == pRekursive, "sw", "Recursion in SwCache." );
     }
     SAL_WARN_IF( !bFirstFound, "sw", "First not Found." );
-    SAL_WARN_IF( nCnt + aFreePositions.size() != Count(), "sw", "Lost Chain." );
+    SAL_WARN_IF( nCnt + aFreePositions.size() != size(), "sw", "Lost Chain." );
     SAL_WARN_IF(
-        Count() == nCurMax && nCurMax != aFreePositions.size() + nCnt, "sw",
+        size() == nCurMax && nCurMax != aFreePositions.size() + nCnt, "sw",
         "Lost FreePositions." );
 }
 #endif
@@ -119,9 +119,9 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     m_aCacheObjects.reserve( (sal_uInt8)nInitSize );
 }
 
-#ifdef DBG_UTIL
 SwCache::~SwCache()
 {
+#ifdef DBG_UTIL
     {
         rtl::OStringBuffer sOut(m_aName);
 
@@ -182,11 +182,11 @@ SwCache::~SwCache()
         OSL_TRACE(sOut.getStr());
     }
     Check();
+#endif
 
     for(SwCacheObjArr::const_iterator it = m_aCacheObjects.begin(); it != m_aCacheObjects.end(); ++it)
         delete *it;
 }
-#endif
 
 /*************************************************************************
 |*  SwCache::Flush()

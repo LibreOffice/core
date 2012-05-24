@@ -106,11 +106,11 @@ public:
     //nur sal_uInt8 hineinstecken!!!
 #ifdef DBG_UTIL
     SwCache( const sal_uInt16 nInitSize, const rtl::OString &rNm );
-    // the destructor will free all objects still in the vector
-    ~SwCache();
 #else
     SwCache( const sal_uInt16 nInitSize );
 #endif
+    // the destructor will free all objects still in the vector
+    ~SwCache();
 
     void Flush( const sal_uInt8 nPercent = 100 );
 
