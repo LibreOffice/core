@@ -67,6 +67,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     lotuswordpro \
     MathMLDTD \
     Mesa \
+	$(if $(filter NLPSOLVER,$(BUILD_TYPE)),\
+		nlpsolver \
+	) \
     np_sdk \
 	o3tl \
     oovbaapi \
