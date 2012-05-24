@@ -59,6 +59,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	i18npool \
 	i18nutil \
     idl \
+	io \
     lingucomponent \
     linguistic \
     lotuswordpro \
