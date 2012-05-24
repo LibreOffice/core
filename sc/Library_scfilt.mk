@@ -29,7 +29,6 @@ $(eval $(call gb_Library_set_include,scfilt,\
 	-I$(SRCDIR)/sc/source/filter/inc \
 	-I$(SRCDIR)/sc/source/ui/inc \
 	-I$(SRCDIR)/sc/inc \
-	-I$(WORKDIR)/oox/inc \
 	$$(INCLUDE) \
 ))
 
