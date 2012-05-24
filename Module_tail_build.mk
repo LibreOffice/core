@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	basegfx \
     basic \
     bean \
+	binaryurp \
     canvas \
     chart2 \
     configmgr \
