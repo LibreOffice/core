@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,oox_generated,$(WORKDIR)/oox))
+$(eval $(call gb_Package_Package,oox_generated,$(call gb_CustomTarget_get_workdir,oox/generated)))
 
 $(eval $(call gb_Package_add_file,oox_generated,inc/oox/token/tokens.hxx,inc/oox/token/tokens.hxx))
 $(eval $(call gb_Package_add_file,oox_generated,inc/oox/token/namespaces.hxx,inc/oox/token/namespaces.hxx))

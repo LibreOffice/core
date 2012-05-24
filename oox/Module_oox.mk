@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,oox))
 
 $(eval $(call gb_Module_add_targets,oox,\
+	CustomTarget_generated \
     Library_oox \
     Package_inc \
     Package_generated \

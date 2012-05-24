@@ -33,9 +33,12 @@ $(eval $(call gb_Library_use_packages,oox,\
     oox_tokens \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,oox,oox/generated))
+
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
     -I$(SRCDIR)/oox/inc \
+    -I$(call gb_CustomTarget_get_workdir,oox/generated)/inc \
 ))
 
 ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)
@@ -290,46 +293,5 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 $(eval $(call gb_Library_add_generated_exception_objects,oox,\
     oox/source/export/vmlexport-shape-types \
 ))
-
-$(call gb_GenCxxObject_get_source,oox/source/export/vmlexport-shape-types) : $(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl $(SRCDIR)/oox/source/export/presetShapeDefinitions.xml $(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml
-	mkdir -p $(dir $@)
-	perl $^ > $@.in_progress 2> $@.log && mv $@.in_progress $@
-
-oox_SRC := $(SRCDIR)/oox/source/token
-oox_MISC := $(WORKDIR)/oox/misc
-oox_INC := $(WORKDIR)/oox/inc
-oox_GENHEADERPATH := $(oox_INC)/oox/token
-
-$(call gb_CxxObject_get_target,oox/source/token/tokenmap) : $(oox_INC)/tokenhash.inc
-
-$(eval $(call gb_Library_set_include,oox,\
-    $$(INCLUDE) \
-    -I$(oox_INC) \
-))
-
-$(oox_INC)/tokenhash.inc : $(oox_MISC)/tokenhash.gperf
-	$(GPERF) --compare-strncmp $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
-
-oox_GenTarget_get_target = $(oox_MISC)/$(1)
-
-define oox_GenTarget_GenTarget
-$(oox_GENHEADERPATH)/$(1).hxx $(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) : $(call oox_GenTarget_get_target,$(1))
-	@touch $$@
-$(call oox_GenTarget_get_target,$(1)) : $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt $(oox_SRC)/$(1).hxx.head $(oox_SRC)/$(1).hxx.tail
-	mkdir -p $(oox_MISC) $(oox_INC) $(oox_GENHEADERPATH)
-	perl $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt $(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) \
-		&& cat $(oox_SRC)/$(1).hxx.head $(oox_MISC)/$(2)ids.inc $(oox_SRC)/$(1).hxx.tail > $(oox_GENHEADERPATH)/$(1).hxx \
-		&& touch $$@
-endef
-
-$(eval $(call oox_GenTarget_GenTarget,namespaces,namespace,namespaces.txt))
-$(eval $(call oox_GenTarget_GenTarget,properties,property,))
-$(eval $(call oox_GenTarget_GenTarget,tokens,token,tokenhash.gperf))
-
-$(call gb_Library_get_clean_target,oox) : oox_clean
-
-oox_clean :
-	rm -rf $(WORKDIR)/oox
-.PHONY: oox_clean
 
 # vim: set noet sw=4 ts=4:
