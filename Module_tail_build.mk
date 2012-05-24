@@ -69,6 +69,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     package \
     padmin \
     psprint_config \
+	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
+		qadevOOo \
+	) \
     reportbuilder \
     reportdesign \
     rsc \
