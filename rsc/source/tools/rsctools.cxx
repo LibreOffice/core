@@ -145,20 +145,20 @@ sal_Bool Append(FILE * fDest, const rtl::OString &rTmpFile)
             fclose( fSource );
         return sal_False;
     }
-    else
+
+    bool bSuccess = true;
+    char szBuf[ MAX_BUF ];
+    size_t nItems;
+
+    do //appemd
     {
-        char szBuf[ MAX_BUF ];
-        int nItems;
+        nItems = fread( szBuf, 1, MAX_BUF, fSource );
+        bSuccess = (nItems == fwrite(szBuf, 1, nItems, fDest));
+        SAL_WARN_IF(!bSuccess, "rsc", "short write");
+    } while (MAX_BUF == nItems && bSuccess);
 
-        do //appemd
-        {
-            nItems = fread( szBuf, sizeof( char ), MAX_BUF, fSource );
-            fwrite( szBuf, sizeof( char ), nItems, fDest );
-        } while( MAX_BUF == nItems );
-
-        fclose( fSource );
-    };
-    return sal_True;
+    fclose( fSource );
+    return bSuccess;
 }
 
 sal_Bool Append(const rtl::OString &rOutputSrs, const rtl::OString &rTmpFile)
