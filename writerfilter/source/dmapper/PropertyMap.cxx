@@ -850,6 +850,24 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
         xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
     }
+    // If the section is of type "New column" (0x01), then simply insert a column break.
+    // But only if there actually are columns on the page, otherwise a column break
+    // seems to be handled like a page break by MSO.
+    else if(m_nBreakType == 1 && m_nColumnCount > 0 )
+    {
+        uno::Reference< beans::XPropertySet > xRangeProperties;
+        if( m_xStartingRange.is() )
+        {
+            xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
+        }
+        else
+        {
+            //set the start value at the beginning of the document
+            xRangeProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
+        }
+        xRangeProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_BREAK_TYPE ),
+            uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE));
+    }
     else
     {
         //get the properties and create appropriate page styles
