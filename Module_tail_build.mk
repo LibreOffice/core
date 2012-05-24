@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     avmedia \
     basctl \
     basebmp \
+	basegfx \
     basic \
     bean \
     canvas \
@@ -62,6 +63,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     MathMLDTD \
     Mesa \
     np_sdk \
+	o3tl \
     oovbaapi \
     oox \
     package \
