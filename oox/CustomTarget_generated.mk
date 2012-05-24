@@ -13,6 +13,7 @@ $(call gb_GenCxxObject_get_source,oox/source/export/vmlexport-shape-types) : \
 		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \
 		$(SRCDIR)/oox/source/export/presetShapeDefinitions.xml \
 		$(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml
+	$(call gb_Output_announce,$@,build,PRL,1)
 	mkdir -p $(dir $@)
 	perl $^ > $@.in_progress 2> $@.log && mv $@.in_progress $@
 
@@ -22,6 +23,7 @@ oox_INC := $(call gb_CustomTarget_get_workdir,oox/generated)/inc
 oox_GENHEADERPATH := $(oox_INC)/oox/token
 
 $(oox_INC)/tokenhash.inc : $(oox_MISC)/tokenhash.gperf
+	$(call gb_Output_announce,$@,build,GPF,1)
 	$(GPERF) --compare-strncmp $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
 
 oox_GenTarget_get_target = $(oox_MISC)/$(1)
@@ -33,6 +35,7 @@ $(oox_GENHEADERPATH)/$(1).hxx $(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc \
 
 $(call oox_GenTarget_get_target,$(1)) : $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt \
 		$(oox_SRC)/$(1).hxx.head $(oox_SRC)/$(1).hxx.tail
+	$$(call gb_Output_announce,$$@,build,PRL,1)
 	mkdir -p $(oox_MISC) $(oox_INC) $(oox_GENHEADERPATH)
 	perl $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt $(oox_MISC)/$(2)ids.inc \
 			$(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) \
