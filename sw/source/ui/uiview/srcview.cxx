@@ -288,7 +288,7 @@ SwDocShell*     SwSrcView::GetDocShell()
 
 void SwSrcView::SaveContent(const String& rTmpFile)
 {
-    SfxMedium aMedium( rTmpFile,    STREAM_WRITE, sal_True);
+    SfxMedium aMedium( rTmpFile,    STREAM_WRITE);
     SvStream* pOutStream = aMedium.GetOutStream();
     pOutStream->SetStreamCharSet( lcl_GetStreamCharSet(eLoadEncoding) );
     aEditWin.Write(*pOutStream);
@@ -334,8 +334,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
                 SfxMedium aMedium( xFP->getFiles().getConstArray()[0],
-                                    STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                    sal_False );
+                                    STREAM_WRITE | STREAM_SHARE_DENYNONE );
                 SvStream* pOutStream = aMedium.GetOutStream();
                 pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
                 aEditWin.Write( *pOutStream );
@@ -829,7 +828,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         SvtSaveOptions aOpt;
 
         {
-            SfxMedium aMedium( sFileURL,STREAM_READWRITE, sal_True );
+            SfxMedium aMedium( sFileURL,STREAM_READWRITE );
             SwWriter aWriter( aMedium, *pDocShell->GetDoc() );
             WriterRef xWriter;
             ::GetHTMLWriter(aEmptyStr, aMedium.GetBaseURL( true ), xWriter);

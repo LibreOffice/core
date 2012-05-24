@@ -704,8 +704,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
     {
         // Ueberpruefen, ob es eine gueltige Draw-Datei ist
         SfxMedium aMedium( aFile,
-                    STREAM_READ | STREAM_NOCREATE,
-                    sal_True );               // Download
+                    STREAM_READ | STREAM_NOCREATE );
 
         if( aMedium.IsStorage() )
         {

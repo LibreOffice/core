@@ -442,7 +442,7 @@ void SfxObjectShell::SetReadOnly()
         if ( !pMedium->HasStorage_Impl() && IsLoadingFinished() )
             pMedium->CloseInStream();
 
-        pMedium->SetOpenMode( SFX_STREAM_READONLY, pMedium->IsDirect(), sal_True );
+        pMedium->SetOpenMode( SFX_STREAM_READONLY, sal_True );
         pMedium->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
 
         if ( !bWasROUI )
@@ -1402,7 +1402,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
         // templates are never readonly
         pTmpMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
-        pTmpMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
+        pTmpMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True );
 
         // notifications about possible changes in readonly state and document info
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );

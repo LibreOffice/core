@@ -2221,7 +2221,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     pSet->Put( SfxBoolItem(SID_HIDDEN, true) );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, false, pFilter, pSet));
+    auto_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, pFilter, pSet));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if (pMedium->GetError() != ERRCODE_NONE)
         return NULL;

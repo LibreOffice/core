@@ -472,7 +472,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     pMed->CloseAndRelease();
                     pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
-                    pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
+                    pMed->SetOpenMode( nOpenMode );
 
                     pMed->CompleteReOpen();
                     if ( nOpenMode & STREAM_WRITE )
@@ -493,7 +493,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     else
                     {
                         pMed->ResetError();
-                        pMed->SetOpenMode( SFX_STREAM_READONLY, pMed->IsDirect() );
+                        pMed->SetOpenMode( SFX_STREAM_READONLY );
                         pMed->ReOpen();
                         pSh->DoSaveCompleted( pMed );
                     }

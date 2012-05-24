@@ -4205,7 +4205,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
         aEntriesBB.RowInserted(0, 1, sal_True);
     else
     {
-        SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ, sal_False );
+        SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ );
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
             aEntriesBB.ReadEntries( *aMed.GetInStream() );
         else
@@ -4227,8 +4227,7 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
     {
         SfxMedium aMed( sAutoMarkURL,
                         bCreateMode ? STREAM_WRITE
-                                    : STREAM_WRITE| STREAM_TRUNC,
-                        sal_False );
+                                    : STREAM_WRITE| STREAM_TRUNC );
         SvStream* pStrm = aMed.GetOutStream();
         pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
         if( !pStrm->GetError() )

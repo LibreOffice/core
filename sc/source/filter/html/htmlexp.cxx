@@ -1328,8 +1328,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
         }
         else
         {
-            SfxMedium aMedium( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                false );
+            SfxMedium aMedium( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE );
 
             {
                 SvFileStream aCpy( aMedium.GetPhysicalName(), STREAM_WRITE );

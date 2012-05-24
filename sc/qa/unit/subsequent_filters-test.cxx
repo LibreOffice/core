@@ -178,7 +178,7 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(aFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
     {
@@ -720,7 +720,7 @@ void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocSh = new ScDocShell;
-    SfxMedium* pMedium = new SfxMedium(aFileName, STREAM_STD_READWRITE, true);
+    SfxMedium* pMedium = new SfxMedium(aFileName, STREAM_STD_READWRITE);
     SfxItemSet* pSet = pMedium->GetItemSet();
     pSet->Put(SfxStringItem(SID_PASSWORD, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
     pMedium->SetFilter(aFilter);

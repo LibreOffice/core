@@ -98,7 +98,7 @@ SfxMedium* DocumentInserter::CreateMedium()
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
         String sURL(m_pURLList[0]);
         pMedium = new SfxMedium(
-                sURL, SFX_STREAM_READONLY, sal_False,
+                sURL, SFX_STREAM_READONLY,
                 SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
         pMedium->UseInteractionHandler( sal_True );
         SfxFilterMatcher* pMatcher = NULL;
@@ -131,7 +131,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
         for(std::vector<rtl::OUString>::const_iterator i = m_pURLList.begin(); i != m_pURLList.end(); ++i)
         {
             SfxMedium* pMedium = new SfxMedium(
-                    *i, SFX_STREAM_READONLY, sal_False,
+                    *i, SFX_STREAM_READONLY,
                     SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
 
             pMedium->UseInteractionHandler( sal_True );

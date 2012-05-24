@@ -85,7 +85,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     {// versuchen *.FM3-File zu laden
         INetURLObject aURL( rMedium.GetURLObject() );
         aURL.setExtension( CREATE_STRING( "FM3" ) );
-        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ, sal_True );
+        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ );
         pStream = aMedium.GetInStream();
         if ( pStream )
         {

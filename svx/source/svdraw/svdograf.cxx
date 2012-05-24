@@ -92,7 +92,7 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
 {
     Graphic aGraphic;
 
-    SfxMedium xMed( aFileName, STREAM_STD_READ, true );
+    SfxMedium xMed( aFileName, STREAM_STD_READ );
     xMed.DownLoad();
 
     SvStream* pInStrm = xMed.GetInStream();

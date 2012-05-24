@@ -340,8 +340,8 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
     String aDest = aTargetUrl.GetPartBeforeLastName();
     aDest += String(aFileUrl.GetName());
 
-    SfxMedium aSrcFile( aSrc, STREAM_READ, sal_False );
-    SfxMedium aDstFile( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, sal_False );
+    SfxMedium aSrcFile( aSrc, STREAM_READ );
+    SfxMedium aDstFile( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE );
 
     *aDstFile.GetOutStream() << *aSrcFile.GetInStream();
 

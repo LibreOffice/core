@@ -338,7 +338,7 @@ void SwEditShell::ApplyAutoMark()
         }
 
         //2.
-        SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ, sal_True );
+        SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ );
         SvStream& rStrm = *aMedium.GetInStream();
         const String sZero('0');
         Push();

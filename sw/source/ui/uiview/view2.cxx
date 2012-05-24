@@ -1938,7 +1938,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const String& rFileName, const Strin
         const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
         if ( !pFilter )
         {
-            pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, 0, 0 );
+            pMed = new SfxMedium(rFileName, STREAM_READ, 0, 0 );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( sal_True );
             ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, sal_False );
@@ -1948,7 +1948,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const String& rFileName, const Strin
                 pMed->SetFilter( pFilter );
         }
         else
-            pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, pFilter, 0);
+            pMed = new SfxMedium(rFileName, STREAM_READ, pFilter, 0);
     }
     else
     {

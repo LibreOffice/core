@@ -454,7 +454,7 @@ sal_Bool IsWordProStr(const sal_Int8 *pBuf)
 sal_Bool IsWordproFile(rtl::OUString file)
 {
     sal_Bool bRet = sal_False;
-    SfxMedium aMedium( file, STREAM_STD_READ, sal_False);
+    SfxMedium aMedium( file, STREAM_STD_READ);
     SvStream* pStm = aMedium.GetInStream();
 
     if(pStm)

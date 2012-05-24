@@ -94,7 +94,7 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
 {
     String aFilter;
     SfxMedium* pMedium = new SfxMedium( aUrl,
-                                        STREAM_STD_READ, sal_False );
+                                        STREAM_STD_READ );
 
     const SfxFilter *pSfxFilter = NULL;
     if( nFlags == SFX_FILTER_EXPORT )

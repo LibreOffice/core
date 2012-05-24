@@ -89,7 +89,7 @@ SwBaseNumRules::~SwBaseNumRules()
         INetURLObject aTempObj(sNm);
         sNm = aTempObj.GetFull();
         SfxMedium aStrm( sNm, STREAM_WRITE | STREAM_TRUNC |
-                                        STREAM_SHARE_DENYALL, sal_True );
+                                        STREAM_SHARE_DENYALL );
         Store( *aStrm.GetOutStream() );
     }
 
@@ -106,7 +106,7 @@ void  SwBaseNumRules::Init()
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
-        SfxMedium aStrm( sNm, STREAM_STD_READ, sal_True );
+        SfxMedium aStrm( sNm, STREAM_STD_READ );
         Load( *aStrm.GetInStream() );
     }
 }

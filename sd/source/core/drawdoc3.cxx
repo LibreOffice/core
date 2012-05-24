@@ -275,7 +275,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 
     if (maBookmarkFile != rBookmarkFile && rBookmarkFile.Len())
     {
-        SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ, sal_False );
+        SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ );
         pBookmarkDoc = OpenBookmarkDoc(*pMedium);
     }
     else if (mxBookmarkDocShRef.Is())

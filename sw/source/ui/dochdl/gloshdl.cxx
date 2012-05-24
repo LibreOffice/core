@@ -775,7 +775,7 @@ sal_Bool SwGlossaryHdl::ImportGlossaries( const String& rName )
     if( rName.Len() )
     {
         const SfxFilter* pFilter = 0;
-        SfxMedium* pMed = new SfxMedium( rName, STREAM_READ, sal_True, 0, 0 );
+        SfxMedium* pMed = new SfxMedium( rName, STREAM_READ, 0, 0 );
         SfxFilterMatcher aMatcher( String::CreateFromAscii("swriter") );
         pMed->UseInteractionHandler( sal_True );
         if( !aMatcher.GuessFilter( *pMed, &pFilter, sal_False ) )

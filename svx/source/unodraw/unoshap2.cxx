@@ -1542,7 +1542,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                 // normal link
                 String              aFilterName;
                 const SfxFilter*    pSfxFilter = NULL;
-                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, sal_False );
+                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE );
 
                 SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 

@@ -1744,7 +1744,7 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
     ViewShell *pOldVSh = CallEndAction();
 
     // Ein Medium anlegen
-    SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE, sal_False );
+    SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
 
     // Medium registrieren, damit abgebrochen werden kann
     if( pDoc->GetDocShell() )

@@ -326,7 +326,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                     utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
                     sFileName = aTempFile2.GetURL();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
-                                                STREAM_STD_READWRITE, sal_True );
+                                                STREAM_STD_READWRITE );
                     pTmpMed->SetFilter( pFilter );
 
                     // We need to have a Layout for the HTMLFilter, so that

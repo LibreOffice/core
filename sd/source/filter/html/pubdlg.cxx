@@ -1620,7 +1620,7 @@ sal_Bool SdPublishingDlg::Load()
             return sal_False;
     }
 
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, sal_True );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE );
 
     SvStream* pStream = aMedium.GetInStream();
 
@@ -1658,7 +1658,7 @@ sal_Bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( OUString( "designs.sod" ) );
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, sal_False );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

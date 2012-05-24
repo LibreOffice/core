@@ -471,12 +471,10 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
                  nDfltFilter == rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter()))
             {
                 // try to save the original graphic
-                SfxMedium aIn( rGrfName, STREAM_READ | STREAM_NOCREATE,
-                                sal_True );
+                SfxMedium aIn( rGrfName, STREAM_READ | STREAM_NOCREATE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
                 {
-                    SfxMedium aOut( sPath, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                            sal_False);
+                    SfxMedium aOut( sPath, STREAM_WRITE | STREAM_SHARE_DENYNONE);
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
                         *aOut.GetOutStream() << *aIn.GetInStream();

@@ -398,7 +398,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     if(m_sURL.Len())
     {
         //file exists, has to be loaded here
-        SfxMedium aMedium( m_sURL, STREAM_READ, sal_True );
+        SfxMedium aMedium( m_sURL, STREAM_READ );
         SvStream* pStream = aMedium.GetInStream();
         if(pStream)
         {
@@ -585,7 +585,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
     }
     if(m_sURL.Len())
     {
-        SfxMedium aMedium( m_sURL, STREAM_READWRITE|STREAM_TRUNC, sal_True );
+        SfxMedium aMedium( m_sURL, STREAM_READWRITE|STREAM_TRUNC );
         SvStream* pStream = aMedium.GetOutStream();
         pStream->SetLineDelimiter( LINEEND_LF );
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);

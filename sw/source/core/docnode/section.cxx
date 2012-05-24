@@ -1276,7 +1276,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 
     // 2. selbst die Date oeffnen
     SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
-                             INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
+                             INetURLObject::NO_DECODE ), STREAM_READ );
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
         pMed->DownLoad();     // nur mal das Medium anfassen (DownLoaden)
 

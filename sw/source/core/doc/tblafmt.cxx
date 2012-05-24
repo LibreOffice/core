@@ -1133,7 +1133,7 @@ sal_Bool SwTableAutoFmtTbl::Load()
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
-        SfxMedium aStream( sNm, STREAM_STD_READ, sal_True );
+        SfxMedium aStream( sNm, STREAM_STD_READ );
         bRet = Load( *aStream.GetInStream() );
     }
     else
@@ -1147,7 +1147,7 @@ sal_Bool SwTableAutoFmtTbl::Save() const
     String sNm( aPathOpt.GetUserConfigPath() );
     sNm += INET_PATH_TOKEN;
     sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName ));
-    SfxMedium aStream(sNm, STREAM_STD_WRITE, sal_True );
+    SfxMedium aStream(sNm, STREAM_STD_WRITE );
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }
 

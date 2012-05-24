@@ -738,7 +738,7 @@ namespace frm
             if (m_pMedium)
                 delete m_pMedium;
 
-            m_pMedium = new SfxMedium(rURL, STREAM_STD_READ, sal_False);
+            m_pMedium = new SfxMedium(rURL, STREAM_STD_READ);
             m_pMedium->SetDataAvailableLink(
                     STATIC_LINK(this, OClickableImageBaseModel, DataAvailableLink));
 

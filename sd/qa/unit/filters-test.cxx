@@ -117,7 +117,7 @@ FileFormat aFileFormats[] = {
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(aFilter);
     if ( !xDocShRef->DoLoad(pSrcMed) )
     {
@@ -167,7 +167,7 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
         rUserData, rtl::OUString() );
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(&aFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     xDocShRef->DoClose();

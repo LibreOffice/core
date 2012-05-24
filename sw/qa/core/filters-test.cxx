@@ -81,7 +81,7 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
         rUserData, rtl::OUString() );
 
     SwDocShellRef xDocShRef = new SwDocShell;
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(pFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     if (xDocShRef.Is())

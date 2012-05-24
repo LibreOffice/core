@@ -124,7 +124,7 @@ void SwDocTest::testFileNameFields()
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
     String sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
-    SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE, true);
+    SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE);
 
     SfxFilter aFilter(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")),

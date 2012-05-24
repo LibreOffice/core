@@ -610,7 +610,7 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
 
         if (aFileName != maDropFileName)
         {
-            SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False);
+            SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE));
             SfxFilterMatcher aMatch( String::CreateFromAscii("simpress") );
             aMed.UseInteractionHandler( sal_True );
             nErr = aMatch.GuessFilter(aMed, &pFilter);
@@ -621,8 +621,7 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
             // Das Medium muss ggf. mit READ/WRITE geoeffnet werden, daher wird
             // ersteinmal nachgeschaut, ob es einen Storage enthaelt
             SfxMedium* pMedium = new SfxMedium( aFileName,
-                                                STREAM_READ | STREAM_NOCREATE,
-                                                sal_True);                // Download
+                                                STREAM_READ | STREAM_NOCREATE);
 
             if (pMedium->IsStorage())
             {

@@ -242,7 +242,7 @@ void SfxHTMLParser::StartFileDownload( const String& rURL,
     if( pDLMedium )
         return;
 
-    pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY, sal_False );
+    pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY );
     if( pSh )
     {
         // Register the medium, so that it can be stopped.

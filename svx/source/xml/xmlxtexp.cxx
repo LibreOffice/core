@@ -263,7 +263,7 @@ bool SvxXMLXTableExportComponent::save(
                 xSubStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rURL, eCreate );
             else
             {
-                pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC, sal_True );
+                pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC );
                 pMedium->IsRemote();
 
                 SvStream* pStream = pMedium->GetOutStream();

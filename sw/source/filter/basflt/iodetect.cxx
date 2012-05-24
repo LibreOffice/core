@@ -310,7 +310,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
             INetURLObject aObj;
             aObj.SetSmartProtocol( INET_PROT_FILE );
             aObj.SetSmartURL( rFileName );
-            pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ, sal_False );
+            pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         }
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)

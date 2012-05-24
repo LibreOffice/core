@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
             if( !bOK )
             {
                 const SfxFilter*        pFoundFilter = NULL;
-                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_False );
+                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE );
                 ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
                 if( pFoundFilter && !nErr )

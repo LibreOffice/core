@@ -138,7 +138,7 @@ short SvxOpenGraphicDialog::Execute()
             // non-local?
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
-                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
+                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
                 aMed.DownLoad();
                 SvStream* pStream = aMed.GetInStream();
 

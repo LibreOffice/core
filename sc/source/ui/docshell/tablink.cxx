@@ -215,7 +215,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     if (!aOptions.isEmpty())
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, false, pFilter, pSet);
+    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, pFilter, pSet);
 
     if ( bInEdit )                              // only if using the edit dialog,
         pMed->UseInteractionHandler(true);    // enable the filter options dialog
@@ -494,7 +494,7 @@ bool ScDocumentLoader::GetFilterName( const String& rFileName,
     //  Filter-Detection
 
     const SfxFilter* pSfxFilter = NULL;
-    SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ, false );
+    SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
         if ( bWithInteraction )
@@ -558,7 +558,7 @@ ScDocumentLoader::ScDocumentLoader( const rtl::OUString& rFileName,
     if ( !rOptions.isEmpty() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
 
-    pMedium = new SfxMedium( rFileName, STREAM_STD_READ, false, pFilter, pSet );
+    pMedium = new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
     if ( pMedium->GetError() != ERRCODE_NONE )
         return ;
 

@@ -1043,7 +1043,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         // Create and save new document
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
                         SfxObjectShellLock xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
-                        SfxMedium* pWorkMed = new SfxMedium( sSourceDocumentURL, STREAM_STD_READ, sal_True );
+                        SfxMedium* pWorkMed = new SfxMedium( sSourceDocumentURL, STREAM_STD_READ );
                         pWorkMed->SetFilter( pSfxFlt );
 
                         if (xWorkDocSh->DoLoad(pWorkMed))
@@ -1141,7 +1141,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 String sFileURL =  aTempFileURL.GetMainURL( INetURLObject::NO_DECODE );
                                 SfxMedium* pDstMed = new SfxMedium(
                                     sFileURL,
-                                    STREAM_STD_READWRITE, sal_True );
+                                    STREAM_STD_READWRITE );
                                 pDstMed->SetFilter( pStoreToFilter );
                                 if(pDstMed->GetItemSet())
                                 {
@@ -1198,7 +1198,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                         {
                                             {
                                                 //read in the temporary file and use it as mail body
-                                                SfxMedium aMedium( sFileURL, STREAM_READ, sal_True);
+                                                SfxMedium aMedium( sFileURL, STREAM_READ);
                                                 SvStream* pInStream = aMedium.GetInStream();
                                                 OSL_ENSURE(pInStream, "no output file created?");
                                                 if(pInStream)
@@ -1263,7 +1263,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
                     SfxMedium* pDstMed = new SfxMedium(
                         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
-                        STREAM_STD_READWRITE, sal_True );
+                        STREAM_STD_READWRITE );
                     pDstMed->SetFilter( pStoreToFilter );
                     if(pDstMed->GetItemSet())
                     {
@@ -2473,7 +2473,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 // the shell will be explicitly closed, but it is more safe to use SfxObjectShellLock here
                 // especially for the case that the loading has failed
                 SfxObjectShellLock xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
-                SfxMedium* pWorkMed = new SfxMedium( sTempURL, STREAM_STD_READ, sal_True );
+                SfxMedium* pWorkMed = new SfxMedium( sTempURL, STREAM_STD_READ );
                 pWorkMed->SetFilter( pSfxFlt );
                 if( xWorkDocSh->DoLoad(pWorkMed) )
                 {

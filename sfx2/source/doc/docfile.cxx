@@ -360,7 +360,6 @@ SfxMedium_Impl::~SfxMedium_Impl()
 #define IMPL_CTOR(rootVal,URLVal)           \
      eError( SVSTREAM_OK ),                 \
                                             \
-     bDirect( sal_False ),                  \
      bRoot( rootVal ),                      \
      bSetFilter( sal_False ),               \
      bTriedStorage( sal_False ),            \
@@ -1480,7 +1479,6 @@ sal_Bool SfxMedium::WillDisposeStorageOnClose_Impl()
 
 //------------------------------------------------------------------
 void SfxMedium::SetOpenMode( StreamMode nStorOpen,
-                             sal_Bool bDirectP,
                              sal_Bool bDontClose )
 {
     if ( nStorOpenMode != nStorOpen )
@@ -1496,7 +1494,6 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
         }
     }
 
-    bDirect     = bDirectP;
     bSetFilter  = sal_False;
 }
 
@@ -2821,7 +2818,7 @@ void SfxMedium::CompleteReOpen()
 //------------------------------------------------------------------
 SfxMedium::SfxMedium
 (
-    const String &rName, StreamMode nOpenMode,  sal_Bool bDirectP,
+    const String &rName, StreamMode nOpenMode,
     const SfxFilter *pFlt, SfxItemSet *pInSet
 )
 :   IMPL_CTOR( sal_False, 0 ),  // bRoot, pURLObj
@@ -2831,7 +2828,6 @@ SfxMedium::SfxMedium
 {
     aLogicName = rName;
     nStorOpenMode = nOpenMode;
-    bDirect = bDirectP;
     Init_Impl();
 }
 
@@ -2887,7 +2883,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
     if (!pFileNameItem) throw uno::RuntimeException();
     aLogicName = pFileNameItem->GetValue();
     nStorOpenMode = bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
-    bDirect = sal_False;
     Init_Impl();
 }
 

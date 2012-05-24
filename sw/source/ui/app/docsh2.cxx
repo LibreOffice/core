@@ -1668,7 +1668,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 
     SubInitNew();
 
-    SfxMedium aMed( rStreamName, STREAM_READ, sal_False );
+    SfxMedium aMed( rStreamName, STREAM_READ );
     // #i48748# - use class <SwReloadFromHtmlReader>, because
     // the base URL has to be set to the filename of the document <rMedname>
     // and not to the base URL of the temporary file <aMed> in order to get
@@ -1713,7 +1713,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     SfxFilterMatcher aMatcher( sFactory );
 
     // search for filter in WebDocShell, too
-    SfxMedium aMed( rURL, STREAM_STD_READ, sal_False );
+    SfxMedium aMed( rURL, STREAM_STD_READ );
     const SfxFilter* pFlt = 0;
     aMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     if(!pFlt)

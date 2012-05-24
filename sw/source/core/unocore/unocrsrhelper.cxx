@@ -832,7 +832,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
         else
             pMed = xReadStorage.is() ?
                 new SfxMedium(xReadStorage, sBaseURL, 0 ) :
-                new SfxMedium(sFileName, STREAM_READ, sal_True, 0, 0 );
+                new SfxMedium(sFileName, STREAM_READ, 0, 0 );
         if( !sBaseURL.isEmpty() )
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
@@ -861,7 +861,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
                     pMed->SetFilter( pFilter );
                 }
                 else
-                    pMed = new SfxMedium(sFileName, STREAM_READ, sal_True, pFilter, 0);
+                    pMed = new SfxMedium(sFileName, STREAM_READ, pFilter, 0);
             }
         }
         if(!sFilterOptions.isEmpty())

@@ -404,7 +404,7 @@ sal_uInt32 CheckPasswd_Impl
 sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFileName, sal_Bool bCopy, SfxItemSet* pSet )
 {
     const SfxFilter* pFilter = NULL;
-    SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ), sal_False );
+    SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ) );
 
     if ( !aMedium.GetStorage( sal_True ).is() )
         aMedium.GetInStream();
@@ -460,7 +460,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
         if ( !xDoc.Is() )
             xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
-        SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, sal_False, pFilter, pSet );
+        SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
         if(!xDoc->DoLoad(pMedium))
         {
             ErrCode nErrCode = xDoc->GetErrorCode();

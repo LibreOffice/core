@@ -447,7 +447,7 @@ sal_Bool ModulWindow::LoadBasic()
     {
         Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
-        SfxMedium aMedium( aCurPath, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE, sal_True );
+        SfxMedium aMedium( aCurPath, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
         SvStream* pStream = aMedium.GetInStream();
         if ( pStream )
         {
@@ -507,7 +507,7 @@ sal_Bool ModulWindow::SaveBasicSource()
     {
         Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
-        SfxMedium aMedium( aCurPath, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, sal_True, sal_False );
+        SfxMedium aMedium( aCurPath, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
         SvStream* pStream = aMedium.GetOutStream();
         if ( pStream )
         {

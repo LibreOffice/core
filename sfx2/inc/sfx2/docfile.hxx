@@ -77,8 +77,7 @@ class DateTime;
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     sal_uInt32          eError;
-    sal_Bool            bDirect:1,
-                        bRoot:1,
+    sal_Bool            bRoot:1,
                         bSetFilter:1,
                         bTriedStorage;
     StreamMode          nStorOpenMode;
@@ -113,9 +112,19 @@ public:
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
-                                   sal_Bool bDirect=sal_False,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
+                        //TODO: the next, non-defined overload is only there to
+                        // detect uses of the above (String, StreamMode, etc.)
+                        // overload from when it still had an additional third
+                        // parameter sal_Bool bDirect, where now a leftover
+                        // "false" or "sal_False" could be mistaken for a null
+                        // pointer argument for the pFilter parameter; it can be
+                        // removed once we are confident all old uses of the
+                        // original overload have been adapted (in platform
+                        // specific code etc.):
+                        SfxMedium(String const &, StreamMode, void *)
+                            /* = delete */;
 
                         SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const String& rBaseURL,
@@ -178,8 +187,7 @@ public:
     void                CloseStorage();
 
     StreamMode          GetOpenMode() const { return nStorOpenMode; }
-    void                SetOpenMode( StreamMode nStorOpen, sal_Bool bDirect, sal_Bool bDontClose = sal_False );
-    sal_Bool            IsDirect() const { return bDirect? sal_True: sal_False; }
+    void                SetOpenMode( StreamMode nStorOpen, sal_Bool bDontClose = sal_False );
 
     SvStream*           GetInStream();
     SvStream*           GetOutStream();

@@ -341,7 +341,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             pFilter = aMatcher.GetFilter4EA( aTypeName );
 
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, false, NULL, pSet );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( sal_True );
 
         sal_Bool bIsStorage = aMedium.IsStorage();
