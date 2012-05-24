@@ -65,7 +65,8 @@ static long GlobalConnectionLostHdl( void* /*pInst*/, void* /*pArg*/ )
 {
     medDebug( 1, "pluginapp exiting due to connection lost\n" );
 
-    write( wakeup_fd[1], "xxxx", 4 );
+    bool bSuccess = (4 == write(wakeup_fd[1], "xxxx", 4 ));
+    SAL_WARN_IF( !bSuccess, "extensions", "short write");
     return 0;
 }
 
@@ -111,7 +112,8 @@ extern "C"
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
     medDebug( 1, "new message handler\n" );
-    write( wakeup_fd[1], "cccc", 4 );
+    bool bSuccess = (4 == write(wakeup_fd[1], "cccc", 4));
+    SAL_WARN_IF( !bSuccess, "extensions", "short write");
     return 0;
 
 }

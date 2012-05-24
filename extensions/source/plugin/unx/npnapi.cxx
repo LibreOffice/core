@@ -871,7 +871,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_Shutdown:
             {
-                write( wakeup_fd[1], "xxxx", 4 );
+                bool bSuccess = (4 == write(wakeup_fd[1], "xxxx", 4));
+                SAL_WARN_IF( !bSuccess, "extensions", "short write");
             }
             break;
             default:
