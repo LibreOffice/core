@@ -72,8 +72,6 @@ public:
     HelpButton          m_aPB_HELP;
     String              m_aQryLabel;
     String              m_sTblLabel;
-    rtl::OUString       m_sCatalog;
-    rtl::OUString       m_sSchema;
     String              m_aName;
     const IObjectNameCheck&
                         m_rObjectNameCheck;
