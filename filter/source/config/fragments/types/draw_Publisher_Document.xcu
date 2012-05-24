@@ -1,0 +1,12 @@
+        <node oor:name="draw_Publisher_Document" oor:op="replace" >
+            <prop oor:name="DetectService"><value>com.sun.star.comp.Draw.MSPUBImportFilter</value></prop>
+            <prop oor:name="URLPattern"/>
+            <prop oor:name="Extensions"><value>pub</value></prop>
+            <prop oor:name="MediaType"><value>application/x-mspublisher</value></prop>
+            <prop oor:name="Preferred"><value>true</value></prop>
+            <prop oor:name="PreferredFilter"><value>Publisher Document</value></prop>
+            <prop oor:name="UIName">
+                <value>Microsoft Publisher 2003</value>
+            </prop>
+            <prop oor:name="ClipboardFormat"/>
+        </node>

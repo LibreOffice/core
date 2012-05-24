@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	wpg \
 	visio \
 	cdr \
+    mspub \
 	lcms2 \
 	zlib \
 ))
@@ -68,6 +69,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/CDRImportFilter \
 	writerperfect/source/draw/CMXImportFilter \
+	writerperfect/source/draw/MSPUBImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \
 	writerperfect/source/draw/wpftdraw_genericfilter \

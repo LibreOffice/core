@@ -1215,6 +1215,11 @@ AC_ARG_WITH(system-libcdr,
         [Use libcdr already on system.]),,
     [with_system_libcdr="$with_system_libs"])
 
+AC_ARG_WITH(system-libmspub,
+    AS_HELP_STRING([--with-system-libmspub],
+        [Use libmspub already on system.]),,
+    [with_system_libmspub="$with_system_libs"])
+
 AC_ARG_WITH(system-libvisio,
     AS_HELP_STRING([--with-system-libvisio],
         [Use libvisio already on system.]),,
@@ -6245,6 +6250,26 @@ fi
 AC_SUBST(SYSTEM_LIBCDR)
 AC_SUBST(CDR_CFLAGS)
 AC_SUBST(CDR_LIBS)
+
+dnl ===================================================================
+dnl Check for system libmspub
+dnl ===================================================================
+AC_MSG_CHECKING([which libmspub to use])
+if test "$with_system_libmspub" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBMSPUB=YES
+    PKG_CHECK_MODULES( MSPUB, libmspub-0.0 )
+elif test $_os = iOS; then
+    # libmspub depends on libwpd and libwpg and those are LGPL
+    AC_MSG_RESULT([none])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBMSPUB=NO
+    BUILD_TYPE="$BUILD_TYPE LIBMSPUB"
+fi
+AC_SUBST(SYSTEM_LIBMSPUB)
+AC_SUBST(MSPUB_CFLAGS)
+AC_SUBST(MSPUB_LIBS)
 
 dnl ===================================================================
 dnl Check for system libvisio

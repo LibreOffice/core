@@ -537,6 +537,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw8_template \
 	draw_WordPerfect_Graphics \
 	draw_Visio_Document \
+    draw_Publisher_Document \
 	draw_CorelDraw_Document \
 	draw_Corel_Presentation_Exchange \
 )
@@ -549,6 +550,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	draw8_template \
 	WordPerfectGraphics \
 	VisioDocument \
+    PublisherDocument \
 	CorelDrawDocument \
 	CorelPresentationExchange \
 )

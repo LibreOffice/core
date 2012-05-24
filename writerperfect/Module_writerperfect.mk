@@ -40,9 +40,11 @@ ifneq (,$(filter YES,$(SYSTEM_LIBWPD))$(filter LIBWPD,$(BUILD_TYPE)))
 ifneq (,$(filter YES,$(SYSTEM_LIBWPG))$(filter LIBWPG,$(BUILD_TYPE)))
 ifneq (,$(filter YES,$(SYSTEM_LIBVISIO))$(filter LIBVISIO,$(BUILD_TYPE)))
 ifneq (,$(filter YES,$(SYSTEM_LIBCDR))$(filter LIBCDR,$(BUILD_TYPE)))
+ifneq (,$(filter YES,$(SYSTEM_LIBMSPUB))$(filter LIBMSPUB,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
 ))
+endif
 endif
 endif
 endif

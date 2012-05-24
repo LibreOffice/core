@@ -198,6 +198,7 @@ libcmis\
 libcroco\
 libexttextcat\
 libgsf\
+libmspub\
 libpng\
 librsvg\
 libvisio\
@@ -465,6 +466,7 @@ findunusedcode:
               | grep -v ^jvmaccess:: \
               | grep -v ^libcdr:: \
               | grep -v ^libcmis:: \
+              | grep -v ^libmspub:: \
               | grep -v ^libvisio:: \
               | grep -v ^libwpg:: \
               | grep -v ^libwps_tools_win:: \

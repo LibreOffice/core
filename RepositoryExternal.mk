@@ -809,6 +809,33 @@ endef
 endif # SYSTEM_LIBCDR
 
 
+ifeq ($(SYSTEM_LIBMSPUB),YES)
+
+define gb_LinkTarget__use_mspub
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(MSPUB_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MSPUB_LIBS))
+
+endef
+
+else # !SYSTEM_LIBMSPUB
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	mspublib \
+))
+
+define gb_LinkTarget__use_mspub
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	mspublib \
+)
+
+endef
+
+endif # SYSTEM_LIBMSPUB
+
+
 ifeq ($(SYSTEM_LIBVISIO),YES)
 
 define gb_LinkTarget__use_visio
