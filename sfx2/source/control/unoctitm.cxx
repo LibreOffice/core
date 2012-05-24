@@ -67,6 +67,8 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -725,16 +727,20 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     }
 
                     eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
-                    SfxAllItemSet aSet( pShell->GetPool() );
-                    TransformParameters( GetId(), lNewArgs, aSet, pSlot );
-                    if ( aSet.Count() )
+                    boost::scoped_ptr<SfxAllItemSet> xSet(new SfxAllItemSet(pShell->GetPool()));
+                    TransformParameters(GetId(), lNewArgs, *xSet, pSlot);
+                    if (xSet->Count())
                     {
                         // execute with arguments - call directly
-                        pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
+                        pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
                         bSuccess = (pItem != NULL);
                     }
                     else
                     {
+                        // Be sure to delete this before we send a dispatch
+                        // request, which will destroy the current shell.
+                        xSet.reset();
+
                         // execute using bindings, enables support for toggle/enum etc.
                         SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
                         aReq.SetModifier( nModifier );
