@@ -594,7 +594,7 @@ SvtDocInfoTable_Impl::SvtDocInfoTable_Impl() :
 }
 // -----------------------------------------------------------------------
 
-const String& SvtDocInfoTable_Impl::GetString( long nId ) const
+rtl::OUString SvtDocInfoTable_Impl::GetString( long nId ) const
 {
     sal_uInt32 nPos( FindIndex( nId ) );
 

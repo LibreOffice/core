@@ -173,7 +173,7 @@ private:
 public:
     SvtDocInfoTable_Impl();
 
-    const String&   GetString( long nId ) const;
+    rtl::OUString GetString( long nId ) const;
 };
 
 class SvtFrameWindow_Impl : public Window
