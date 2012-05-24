@@ -37,7 +37,7 @@ void SetExplicitAppUserModelID(PCWSTR AppID)
 {
 	WCHAR szShell32[MAX_PATH];
 	GetSystemDirectoryW(szShell32, MAX_PATH);
-	wcscat_s(szShell32, MAX_PATH, L"\\Shell32.dll");
+	wcscat(szShell32, L"\\Shell32.dll");
 
 	HINSTANCE hinstDll = LoadLibraryW(szShell32);
 
