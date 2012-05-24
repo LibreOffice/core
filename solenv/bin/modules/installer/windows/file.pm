@@ -1018,7 +1018,7 @@ sub create_files_table
             if ( ! exists($installer::globals::languageproperties{$property}) ) { $installer::globals::languageproperties{$property} = $value; }
         }
 
-        if ( $installer::globals::prepare_winpatch )
+        unless ( $file{'Version'} )
         {
             my $path = $onefile->{'sourcepath'};
             if ( $^O =~ /cygwin/i ) { $path = $onefile->{'cyg_sourcepath'}; }
