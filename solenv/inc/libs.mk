@@ -26,7 +26,6 @@
 #*************************************************************************
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
-.INCLUDE .IGNORE : i18npool/version.mk
 .INCLUDE .IGNORE : comphelper/version.mk
 .INCLUDE .IGNORE : ucbhelper/version.mk
 .INCLUDE .IGNORE : connectivity/version.mk
@@ -67,7 +66,7 @@ ICUUCLIB=-licuuc
 ICUDATALIB=-licudata
 .ENDIF
 I18NUTILLIB=-li18nutil$(COMID)
-I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
+I18NISOLANGLIB=-li18nisolang1$(COMID)
 I18NREGEXPLIB=-li18nregexp$(DLLPOSTFIX)
 SALHELPERLIB=-luno_salhelper$(COMID_WITH_VERSION)
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)

@@ -134,10 +134,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_ZLIB_DLL \
 ))
 
-include $(OUTDIR)/inc/i18npool/version.mk
-
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DISOLANG_MAJOR=$(ISOLANG_MAJOR) \
 	$(if $(filter MACOSX,$(OS)),\
 		-DENABLE_CAIROCANVAS \
 	) \
