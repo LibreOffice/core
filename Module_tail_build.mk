@@ -72,6 +72,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
 		qadevOOo \
 	) \
+	regexp \
     reportbuilder \
     reportdesign \
     rsc \
