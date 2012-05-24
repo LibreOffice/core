@@ -8757,6 +8757,11 @@ AC_SUBST(ENABLE_GTK)
 
 ENABLE_TDE=""
 if test "x$enable_tde" = "xyes"; then
+    # Libs kab and tdeab in connectivity and kdeab and tdeab in shell
+    # are built from the same sources. So we only allow one of them.
+    if test "x$enable_kde" = "xyes"; then
+        AC_MSG_ERROR([enabling both KDE and TDE is not supported])
+    fi
     ENABLE_TDE="TRUE"
     R="$R tde"
 fi
