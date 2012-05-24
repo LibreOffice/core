@@ -2851,7 +2851,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
             WriteNamedRange(pRangeName);
         }
 
-        if(getDefaultVersion() > ODFVER_012)
+        if(getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
             //export new conditional format information
             ExportConditionalFormat(nTable);
@@ -3823,6 +3823,16 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
     ScColorFormatList* pColorFormatList = pDoc->GetColorScaleList(nTab);
     if(pCondFormatList || pColorFormatList)
     {
+        bool bExport = false;
+        if(pCondFormatList && pCondFormatList->size())
+            bExport = true;
+
+        if(pColorFormatList && pColorFormatList->size())
+            bExport = true;
+
+        if(!bExport)
+            return;
+
         SvXMLElementExport aElementCondFormats(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, true, true);
 
         if(pCondFormatList)
