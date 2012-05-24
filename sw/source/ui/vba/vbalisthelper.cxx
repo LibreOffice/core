@@ -41,22 +41,12 @@ static const char WORD_BULLET_GALLERY[] = "WdBullet";
 static const char WORD_NUMBER_GALLERY[] = "WdNumber";
 static const char WORD_OUTLINE_NUMBER_GALLERY[] = "WdOutlineNumber";
 
-static const char UNO_NAME_ADJUST[] = "Adjust";
 static const char UNO_NAME_PARENT_NUMBERING[] = "ParentNumbering";
 static const char UNO_NAME_PREFIX[] = "Prefix";
 static const char UNO_NAME_SUFFIX[] = "Suffix";
 static const char UNO_NAME_CHAR_STYLE_NAME[] = "CharStyleName";
-static const char UNO_NAME_START_WITH[] = "StartWith";
-static const char UNO_NAME_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
-static const char UNO_NAME_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
-static const char UNO_NAME_LIST_TAB_STOP_POSITION[] = "ListtabStopPosition";
-static const char UNO_NAME_FIRST_LINE_INDENT[] = "FirstLineIndent";
-static const char UNO_NAME_INDENT_AT[] = "IndentAt";
 static const char UNO_NAME_NUMBERING_TYPE[] = "NumberingType";
-static const char UNO_NAME_BULLET_ID[] = "BulletId";
 static const char UNO_NAME_BULLET_CHAR[] = "BulletChar";
-static const char UNO_NAME_BULLET_FONT_NAME[] = "BulletFontName";
-static const char UNO_NAME_BULLET_FONT[] = "BulletFont";
 
 static const sal_Int16 CHAR_CLOSED_DOT = 8226;
 static const sal_Int16 CHAR_EMPTY_DOT = 111;

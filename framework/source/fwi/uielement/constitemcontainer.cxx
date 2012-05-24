@@ -42,8 +42,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-const char WRONG_TYPE_EXCEPTION[] = "Type must be com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >";
-
 const int PROPHANDLE_UINAME     = 1;
 const int PROPCOUNT             = 1;
 const char PROPNAME_UINAME[]    = "UIName";

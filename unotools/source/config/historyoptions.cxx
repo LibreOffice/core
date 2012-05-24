@@ -78,7 +78,6 @@ namespace {
     const char s_sItemList[] = "ItemList";
     const char s_sOrderList[] = "OrderList";
     const char s_sHistoryItemRef[] = "HistoryItemRef";
-    const char s_sURL[] = "URL";
     const char s_sFilter[] = "Filter";
     const char s_sTitle[] = "Title";
     const char s_sPassword[] = "Password";

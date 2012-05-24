@@ -112,18 +112,6 @@ const intt C_nNamesArrayOffset = intt(ary::idl::Module::class_id);
 const int C_nIxField = 9;
 
 
-
-
-const char C_cAlphabet[] =
-"<a class=\"inverse\" href=\"index-1.html\"><B>A</B></a> <a class=\"inverse\" href=\"index-2.html\"><B>B</B></a> <a class=\"inverse\" href=\"index-3.html\"><B>C</B></a> <a class=\"inverse\" href=\"index-4.html\"><B>D</B></a> <a class=\"inverse\" href=\"index-5.html\"><B>E</B></a> "
-"<a class=\"inverse\" href=\"index-6.html\"><B>F</B></a> <a class=\"inverse\" href=\"index-7.html\"><B>G</B></a> <a class=\"inverse\" href=\"index-8.html\"><B>H</B></a> <a class=\"inverse\" href=\"index-9.html\"><B>I</B></a> <a class=\"inverse\" href=\"index-10.html\"><B>J</B></a> "
-"<a class=\"inverse\" href=\"index-11.html\"><B>K</B></a> <a class=\"inverse\" href=\"index-12.html\"><B>L</B></a> <a class=\"inverse\" href=\"index-13.html\"><B>M</B></a> <a class=\"inverse\" href=\"index-14.html\"><B>N</B></a> <a class=\"inverse\" href=\"index-15.html\"><B>O</B></a> "
-"<a class=\"inverse\" href=\"index-16.html\"><B>P</B></a> <a class=\"inverse\" href=\"index-17.html\"><B>Q</B></a> <a class=\"inverse\" href=\"index-18.html\"><B>R</B></a> <a class=\"inverse\" href=\"index-19.html\"><B>S</B></a> <a class=\"inverse\" href=\"index-20.html\"><B>T</B></a> "
-"<a class=\"inverse\" href=\"index-21.html\"><B>U</B></a> <a class=\"inverse\" href=\"index-22.html\"><B>V</B></a> <a class=\"inverse\" href=\"index-23.html\"><B>W</B></a> <a class=\"inverse\" href=\"index-24.html\"><B>X</B></a> <a class=\"inverse\" href=\"index-25.html\"><B>Y</B></a> "
-"<a class=\"inverse\" href=\"index-26.html\"><B>Z</B></a>";
-
-
-
 HF_IdlGlobalIndex::PageData     G_PageData;
 
 }   // end anonymous namespace

@@ -79,8 +79,6 @@ struct ModuleToCommands
     const char* pCommands;
 };
 
-static const char GENERIC_UICOMMANDS[]                  = "generic";
-static const char COMMANDS[]                            = "Commands";
 static const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_CMD_ELEMENT_ACCESS[]    = "/UserInterface/Commands";
 static const char CONFIGURATION_POP_ELEMENT_ACCESS[]    = "/UserInterface/Popups";
