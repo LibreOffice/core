@@ -291,7 +291,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,oox,\
-    oox/source/export/vmlexport-shape-types \
+    CustomTarget/oox/generated/misc/vmlexport-shape-types \
 ))
 
 # vim: set noet sw=4 ts=4:
