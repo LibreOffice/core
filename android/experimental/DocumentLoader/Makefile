@@ -261,7 +261,7 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt:/assets/border.xls:/assets/test.odt:/assets/testVba.doc
+	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
 
 clean: properties
 	$(ANT) clean
