@@ -497,28 +497,6 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
         }
     }
 
-    if ( GetAnchor() )
-    {
-        ScDrawObjData* pAnchor = ScDrawLayer::GetObjData( &rSdrObj, sal_True);
-        if ( pAnchor )
-        {
-            // Temporarily get start position of shape.
-            // At the end of the import we do some post processing
-            // to adjust the shape position to take into account
-            // errors between the drawing layer and the view/grid
-            pAnchor->maStart.SetRow( GetAnchor()->maFirst.mnRow );
-            pAnchor->maStart.SetCol( GetAnchor()->maFirst.mnCol );
-            pAnchor->maStart.SetTab( GetTab() );
-            XclObjAnchor tmpAnchor( *GetAnchor() );
-
-            // Calculate the start offset ( from the cell postion )
-            Rectangle withOffset = tmpAnchor.GetRect( GetRoot(), GetTab(), MAP_100TH_MM );
-            tmpAnchor.mnLX = tmpAnchor.mnTY = tmpAnchor.mnRX = tmpAnchor.mnBY = 0;
-            Rectangle noOffset =  tmpAnchor.GetRect( GetRoot(), GetTab(), MAP_100TH_MM );
-            pAnchor->maStartOffset.X() = withOffset.Left() - noOffset.Left();
-            pAnchor->maStartOffset.Y() = withOffset.Top() - noOffset.Top();
-        }
-    }
     // call virtual function for object type specific processing
     DoPreProcessSdrObj( rDffConv, rSdrObj );
 }
