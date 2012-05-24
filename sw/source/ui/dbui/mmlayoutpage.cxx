@@ -370,7 +370,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                         nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                     ++nColumn)
                 {
-                    if(rHeaders.GetString(nColumn) == aItem.sText &&
+                    if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
                         !pAssignment[nColumn].isEmpty())
                     {
                         sConvertedColumn = pAssignment[nColumn];
@@ -627,7 +627,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                                 ++nColumn)
                             {
-                                if(rHeaders.GetString(nColumn) == aItem.sText &&
+                                if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
                                     !pAssignment[nColumn].isEmpty())
                                 {
                                     sConvertedColumn = pAssignment[nColumn];

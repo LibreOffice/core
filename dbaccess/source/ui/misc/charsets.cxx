@@ -63,7 +63,7 @@ namespace dbaui
         if ( RTL_TEXTENCODING_DONTKNOW == _eEncoding )
             return sal_True;
 
-        return 0 != GetTextString( _eEncoding ).Len();
+        return !GetTextString(_eEncoding).isEmpty();
     }
 
     //-------------------------------------------------------------------------

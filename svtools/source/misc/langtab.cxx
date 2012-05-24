@@ -135,7 +135,7 @@ SvtLanguageTable::~SvtLanguageTable()
 
 //------------------------------------------------------------------------
 
-const String& SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
+const rtl::OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
 {
     LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType, bUserInterfaceSelection);
     sal_uInt32 nPos = FindIndex( eLang );
@@ -154,8 +154,7 @@ const String& SvtLanguageTable::GetString( const LanguageType eType, bool bUserI
         if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
             return ResStringArray::GetString( nPos );
     }
-    static String aEmptyStr;
-    return aEmptyStr;
+    return rtl::OUString();
 }
 
 String SvtLanguageTable::GetLanguageString( const LanguageType eType )
@@ -173,7 +172,7 @@ LanguageType SvtLanguageTable::GetType( const String& rStr ) const
 
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
-        if ( rStr == ResStringArray::GetString( i ) )
+        if (ResStringArray::GetString( i ).equals(rStr))
         {
             eType = LanguageType( GetValue( i ) );
             break;

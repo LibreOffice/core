@@ -100,7 +100,7 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
     for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
-        if (rExportName == rExportNames.GetString(i))
+        if (rExportNames.GetString(i).equals(rExportName))
         {
             aRes = rUiNames.GetString(i);
             break;
@@ -121,7 +121,7 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
     for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
-        if (rUiName == rUiNames.GetString(i))
+        if (rUiNames.GetString(i).equals(rUiName))
         {
             aRes = rExportNames.GetString(i);
             break;
@@ -142,7 +142,7 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
     for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
-        if (rExportName == rExportNames.GetString(i))
+        if (rExportNames.GetString(i).equals(rExportName))
         {
             aRes = rUiNames.GetString(i);
             break;
@@ -163,7 +163,7 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
     for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
-        if (rUiName == rUiNames.GetString(i))
+        if (rUiNames.GetString(i).equals(rUiName))
         {
             aRes = rExportNames.GetString(i);
             break;

@@ -505,7 +505,7 @@ String SwAddressPreview::FillData(
                     nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
-                if(rDefHeaders.GetString(nColumn) == aItem.sText &&
+                if (rDefHeaders.GetString(nColumn).equals(aItem.sText) &&
                     !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];

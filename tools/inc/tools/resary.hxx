@@ -48,10 +48,10 @@ class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
     // ---------------------
     struct ImplResStringItem
     {
-        XubString   m_aStr;
+        rtl::OUString m_aStr;
         long        m_nValue;
 
-        ImplResStringItem( const XubString& rStr, long nValue = 0 ) :
+        ImplResStringItem( const rtl::OUString& rStr, long nValue = 0 ) :
         m_aStr( rStr ),
         m_nValue( nValue )
         {}
@@ -63,8 +63,8 @@ class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
     ResStringArray( const ResId& rResId );
     ~ResStringArray();
 
-    const XubString&    GetString( sal_uInt32 nIndex ) const
-    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : String::EmptyString(); }
+    const rtl::OUString GetString( sal_uInt32 nIndex ) const
+    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : rtl::OUString(); }
     long                GetValue( sal_uInt32 nIndex ) const
     { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_nValue : -1; }
     sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }

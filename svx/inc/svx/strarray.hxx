@@ -42,7 +42,7 @@ public:
     SvxStringArray( const ResId& rResId );
     ~SvxStringArray();
 
-    const String&   GetStringByPos( sal_uInt32 nPos ) const;
+    const rtl::OUString GetStringByPos( sal_uInt32 nPos ) const;
 };
 
 

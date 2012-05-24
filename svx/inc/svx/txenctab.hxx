@@ -45,7 +45,7 @@ public:
     SvxTextEncodingTable();
     ~SvxTextEncodingTable();
 
-    const String&       GetTextString( const rtl_TextEncoding nEnc ) const;
+    const rtl::OUString GetTextString( const rtl_TextEncoding nEnc ) const;
     rtl_TextEncoding    GetTextEncoding( const String& rStr ) const;
 };
 

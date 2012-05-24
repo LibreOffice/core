@@ -49,7 +49,7 @@ public:
                      Tools->Options->LanguageSettings->UserInterface listbox.
             If FALSE, do replace.
      */
-    const String&   GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
+    const rtl::OUString GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
     LanguageType    GetType( const String& rStr ) const;
 
     sal_uInt32      GetEntryCount() const;

@@ -48,15 +48,14 @@ SvxTextEncodingTable::~SvxTextEncodingTable()
 
 //------------------------------------------------------------------------
 
-const String& SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
+const rtl::OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
 {
     sal_uInt32 nPos = FindIndex( (long)nEnc );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
 
-    static String aEmptyString;
-    return aEmptyString;
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------
@@ -67,7 +66,7 @@ rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding( const String& rStr ) con
 
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
-        if ( rStr == ResStringArray::GetString( i ) )
+        if (ResStringArray::GetString( i ).equals(rStr))
             return rtl_TextEncoding( GetValue( i ) );
     }
     return RTL_TEXTENCODING_DONTKNOW;

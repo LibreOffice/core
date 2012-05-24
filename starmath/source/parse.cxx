@@ -2376,7 +2376,7 @@ void SmParser::Special()
             sal_uInt16 nCount = sal::static_int_cast< sal_uInt16 >(pFrom->Count());
             for (sal_uInt16 i = 0;  i < nCount;  ++i)
             {
-                if (pFrom->GetString(i) == rName)
+                if (pFrom->GetString(i).equals(rName))
                 {
                     aNewName = pTo->GetString(i);
                     bReplace = true;
