@@ -79,6 +79,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sd \
     sdext \
     sfx2 \
+    shell \
     slideshow \
     smoketest \
     sot \
