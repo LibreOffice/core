@@ -48,6 +48,7 @@
 #include "rangeutl.hxx"
 #include "externalrefmgr.hxx"
 #include "sheetdata.hxx"
+#include "xmlcondformat.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -355,6 +356,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
             uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
             pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
         }
+        break;
+    case XML_TOK_TABLE_CONDFORMATS:
+        pContext = new ScXMLConditionalFormatsContext( GetScImport(), nPrefix, rLName );
         break;
     default:
         ;

@@ -254,6 +254,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/filter/xml/xmlbodyi \
 	sc/source/filter/xml/xmlcelli \
 	sc/source/filter/xml/xmlcoli \
+	sc/source/filter/xml/xmlcondformat \
 	sc/source/filter/xml/xmlconti \
 	sc/source/filter/xml/xmlcvali \
 	sc/source/filter/xml/xmldpimp \

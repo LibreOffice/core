@@ -151,6 +151,53 @@ enum ScXMLContentValidationErrorMacroAttrTokens
     XML_TOK_ERROR_MACRO_ATTR_EXECUTE
 };
 
+enum ScXMLCondFormatsTokens
+{
+    XML_TOK_CONDFORMATS_CONDFORMAT
+};
+
+enum ScXMLCondFormatTokens
+{
+    XML_TOK_CONDFORMAT_COLORSCALE,
+    XML_TOK_CONDFORMAT_DATABAR
+};
+
+enum ScXMLCondFormatAttrTokens
+{
+    XML_TOK_CONDFORMAT_TARGET_RANGE
+};
+
+enum ScXMLColorScaleFormatTokens
+{
+    XML_TOK_COLORSCALE_COLORSCALEENTRY
+};
+
+enum ScXMLColorScaleEntryAttrTokens
+{
+    XML_TOK_COLORSCALEENTRY_TYPE,
+    XML_TOK_COLORSCALEENTRY_VALUE,
+    XML_TOK_COLORSCALEENTRY_COLOR
+};
+
+enum ScXMLDataBarFormatTokens
+{
+    XML_TOK_DATABAR_DATABARENTRY
+};
+
+enum ScXMLDataBarAttrTokens
+{
+    XML_TOK_DATABAR_POSITIVE_COLOR,
+    XML_TOK_DATABAR_NEGATIVE_COLOR,
+    XML_TOK_DATABAR_GRADIENT,
+    XML_TOK_DATABAR_AXISPOSITION
+};
+
+enum ScXMLDataBarEntryAttrTokens
+{
+    XML_TOK_DATABARENTRY_TYPE,
+    XML_TOK_DATABARENTRY_VALUE
+};
+
 enum ScXMLLabelRangesElemTokens
 {
     XML_TOK_LABEL_RANGE_ELEM
@@ -180,7 +227,8 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_SHAPES,
     XML_TOK_TABLE_FORMS,
     XML_TOK_TABLE_EVENT_LISTENERS,
-    XML_TOK_TABLE_EVENT_LISTENERS_EXT
+    XML_TOK_TABLE_EVENT_LISTENERS_EXT,
+    XML_TOK_TABLE_CONDFORMATS
 };
 
 enum ScXMLTokenProtectionTokens
@@ -717,6 +765,14 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pContentValidationHelpMessageAttrTokenMap;
     SvXMLTokenMap           *pContentValidationErrorMessageAttrTokenMap;
     SvXMLTokenMap           *pContentValidationErrorMacroAttrTokenMap;
+    SvXMLTokenMap           *pCondFormatsTokenMap;
+    SvXMLTokenMap           *pCondFormatTokenMap;
+    SvXMLTokenMap           *pCondFormatAttrMap;
+    SvXMLTokenMap           *pColorScaleTokenMap;
+    SvXMLTokenMap           *pColorScaleEntryAttrTokenMap;
+    SvXMLTokenMap           *pDataBarTokenMap;
+    SvXMLTokenMap           *pDataBarAttrMap;
+    SvXMLTokenMap           *pDataBarEntryAttrMap;
     SvXMLTokenMap           *pLabelRangesElemTokenMap;
     SvXMLTokenMap           *pLabelRangeAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
@@ -870,6 +926,14 @@ public:
     const SvXMLTokenMap& GetContentValidationHelpMessageAttrTokenMap();
     const SvXMLTokenMap& GetContentValidationErrorMessageAttrTokenMap();
     const SvXMLTokenMap& GetContentValidationErrorMacroAttrTokenMap();
+    const SvXMLTokenMap& GetCondFormatsTokenMap();
+    const SvXMLTokenMap& GetCondFormatTokenMap();
+    const SvXMLTokenMap& GetCondFormatAttrMap();
+    const SvXMLTokenMap& GetColorScaleTokenMap();
+    const SvXMLTokenMap& GetColorScaleEntryAttrMap();
+    const SvXMLTokenMap& GetDataBarTokenMap();
+    const SvXMLTokenMap& GetDataBarAttrMap();
+    const SvXMLTokenMap& GetDataBarEntryAttrMap();
     const SvXMLTokenMap& GetLabelRangesElemTokenMap();
     const SvXMLTokenMap& GetLabelRangeAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();

@@ -71,6 +71,7 @@ public:
     bool GetPercentile() const;
     bool HasFormula() const;
     const ScTokenArray* GetFormula() const;
+    rtl::OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
     void SetMin(bool bMin);
     void SetMax(bool bMax);
     void SetPercent(bool bPercent);

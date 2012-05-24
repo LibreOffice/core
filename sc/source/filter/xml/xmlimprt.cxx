@@ -597,6 +597,141 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMacroAttrTokenMap()
     return *pContentValidationErrorMacroAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetCondFormatsTokenMap()
+{
+    if( !pCondFormatsTokenMap )
+    {
+        static SvXMLTokenMapEntry aCondFormatsElemTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, XML_TOK_CONDFORMATS_CONDFORMAT },
+            XML_TOKEN_MAP_END
+        };
+
+        pCondFormatsTokenMap = new SvXMLTokenMap( aCondFormatsElemTokenMap );
+    }
+
+    return *pCondFormatsTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetCondFormatTokenMap()
+{
+    if( !pCondFormatTokenMap )
+    {
+        static SvXMLTokenMapEntry aCondFormatElemTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, XML_TOK_CONDFORMAT_COLORSCALE },
+            { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, XML_TOK_CONDFORMAT_DATABAR },
+            XML_TOKEN_MAP_END
+        };
+
+        pCondFormatTokenMap = new SvXMLTokenMap( aCondFormatElemTokenMap );
+    }
+
+    return *pCondFormatTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetCondFormatAttrMap()
+{
+    if( !pCondFormatAttrMap )
+    {
+        static SvXMLTokenMapEntry aCondFormatAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, XML_TOK_CONDFORMAT_TARGET_RANGE },
+            XML_TOKEN_MAP_END
+        };
+
+        pCondFormatAttrMap = new SvXMLTokenMap( aCondFormatAttrTokenMap );
+    }
+
+    return *pCondFormatAttrMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetColorScaleTokenMap()
+{
+    if( !pColorScaleTokenMap )
+    {
+        static SvXMLTokenMapEntry aColorScaleElemTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, XML_TOK_COLORSCALE_COLORSCALEENTRY },
+            XML_TOKEN_MAP_END
+        };
+
+        pColorScaleTokenMap = new SvXMLTokenMap( aColorScaleElemTokenMap );
+    }
+
+    return *pColorScaleTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetColorScaleEntryAttrMap()
+{
+    if( !pColorScaleEntryAttrTokenMap )
+    {
+        static SvXMLTokenMapEntry aColorScaleAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_COLORSCALEENTRY_TYPE },
+            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_COLORSCALEENTRY_VALUE },
+            { XML_NAMESPACE_CALC_EXT, XML_COLOR, XML_TOK_COLORSCALEENTRY_COLOR },
+            XML_TOKEN_MAP_END
+        };
+
+        pColorScaleEntryAttrTokenMap = new SvXMLTokenMap( aColorScaleAttrTokenMap );
+    }
+
+    return *pColorScaleEntryAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDataBarTokenMap()
+{
+    if( !pDataBarTokenMap )
+    {
+        static SvXMLTokenMapEntry aDataBarElemTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, XML_TOK_DATABAR_DATABARENTRY },
+            XML_TOKEN_MAP_END
+        };
+
+        pDataBarTokenMap = new SvXMLTokenMap( aDataBarElemTokenMap );
+    }
+
+    return *pDataBarTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDataBarAttrMap()
+{
+    if( !pDataBarAttrMap )
+    {
+        static SvXMLTokenMapEntry aDataBarAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, XML_TOK_DATABAR_POSITIVE_COLOR },
+            //{ XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, XML_TOK_DATABAR_NEGATIVE_COLOR },
+            { XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_TOK_DATABAR_GRADIENT },
+            //{ XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, XML_TOK_DATABAR_AXISPOSITION },
+            XML_TOKEN_MAP_END
+        };
+
+        pDataBarAttrMap = new SvXMLTokenMap( aDataBarAttrTokenMap );
+    }
+
+    return *pDataBarAttrMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
+{
+    if( !pDataBarEntryAttrMap )
+    {
+        static SvXMLTokenMapEntry aDataBarAttrEntryTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_DATABARENTRY_TYPE },
+            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_DATABARENTRY_VALUE },
+            XML_TOKEN_MAP_END
+        };
+
+        pDataBarEntryAttrMap = new SvXMLTokenMap( aDataBarAttrEntryTokenMap );
+    }
+
+    return *pDataBarEntryAttrMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetLabelRangesElemTokenMap()
 {
     if( !pLabelRangesElemTokenMap )
@@ -653,6 +788,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
             { XML_NAMESPACE_OFFICE, XML_FORMS,                XML_TOK_TABLE_FORMS           },
             { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,      XML_TOK_TABLE_EVENT_LISTENERS },
             { XML_NAMESPACE_OFFICE_EXT, XML_EVENT_LISTENERS,  XML_TOK_TABLE_EVENT_LISTENERS_EXT },
+            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, XML_TOK_TABLE_CONDFORMATS },
             XML_TOKEN_MAP_END
         };
 
@@ -1716,6 +1852,14 @@ ScXMLImport::ScXMLImport(
     pContentValidationHelpMessageAttrTokenMap( 0 ),
     pContentValidationErrorMessageAttrTokenMap( 0 ),
     pContentValidationErrorMacroAttrTokenMap( 0 ),
+    pCondFormatsTokenMap( 0 ),
+    pCondFormatTokenMap( 0 ),
+    pCondFormatAttrMap( 0 ),
+    pColorScaleTokenMap( 0 ),
+    pColorScaleEntryAttrTokenMap( 0 ),
+    pDataBarTokenMap( 0 ),
+    pDataBarAttrMap( 0 ),
+    pDataBarEntryAttrMap( 0 ),
     pLabelRangesElemTokenMap( 0 ),
     pLabelRangeAttrTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
@@ -1843,6 +1987,14 @@ ScXMLImport::~ScXMLImport() throw()
     delete pContentValidationHelpMessageAttrTokenMap;
     delete pContentValidationErrorMessageAttrTokenMap;
     delete pContentValidationErrorMacroAttrTokenMap;
+    delete pCondFormatsTokenMap;
+    delete pCondFormatTokenMap;
+    delete pCondFormatAttrMap;
+    delete pColorScaleTokenMap;
+    delete pColorScaleEntryAttrTokenMap;
+    delete pDataBarTokenMap;
+    delete pDataBarAttrMap;
+    delete pDataBarEntryAttrMap;
     delete pLabelRangesElemTokenMap;
     delete pLabelRangeAttrTokenMap;
     delete pTableElemTokenMap;

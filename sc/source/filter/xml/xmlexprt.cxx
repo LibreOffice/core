@@ -1169,7 +1169,7 @@ void ScXMLExport::WriteRowContent()
                 if (nCols > 1)
                 {
                     rtl::OUStringBuffer aBuf;
-            ::sax::Converter::convertNumber(aBuf, nCols);
+                    ::sax::Converter::convertNumber(aBuf, nCols);
                     AddAttribute(sAttrColumnsRepeated, aBuf.makeStringAndClear());
                 }
                 SvXMLElementExport aElemC(*this, sElemCell, true, true);
@@ -1193,7 +1193,7 @@ void ScXMLExport::WriteRowContent()
         if (nCols > 1)
         {
             rtl::OUStringBuffer aBuf;
-                    ::sax::Converter::convertNumber(aBuf, nCols);
+            ::sax::Converter::convertNumber(aBuf, nCols);
             AddAttribute(sAttrColumnsRepeated, aBuf.makeStringAndClear());
         }
         SvXMLElementExport aElemC(*this, sElemCell, true, true);
@@ -3865,9 +3865,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     for(ScColorScaleFormat::const_iterator it = mrColorScale.begin();
                             it != mrColorScale.end(); ++it)
                     {
-                        if(it->GetFormula())
+                        if(it->HasFormula())
                         {
-                            rtl::OUString sFormula;
+                            rtl::OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                         }
                         else
@@ -3891,9 +3891,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
 
                     {
-                        if(pFormatData->mpLowerLimit->GetFormula())
+                        if(pFormatData->mpLowerLimit->HasFormula())
                         {
-                            rtl::OUString sFormula;
+                            rtl::OUString sFormula = pFormatData->mpLowerLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                         }
                         else
@@ -3903,9 +3903,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     }
 
                     {
-                        if(pFormatData->mpUpperLimit->GetFormula())
+                        if(pFormatData->mpUpperLimit->HasFormula())
                         {
-                            rtl::OUString sFormula;
+                            rtl::OUString sFormula = pFormatData->mpUpperLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                         }
                         else

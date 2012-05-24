@@ -88,6 +88,17 @@ const ScTokenArray* ScColorScaleEntry::GetFormula() const
     return NULL;
 }
 
+rtl::OUString ScColorScaleEntry::GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const
+{
+    rtl::OUString aFormula;
+    if(mpCell)
+    {
+        mpCell->GetFormula(aFormula, eGrammar);
+    }
+
+    return aFormula;
+}
+
 double ScColorScaleEntry::GetValue() const
 {
     if(mpCell)
