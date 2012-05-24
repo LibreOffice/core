@@ -1800,12 +1800,11 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
     while ( nPos < nCount )
     {
         // find range of visually equal formats
-        SCSIZE nStartPos = nPos;
-        SCSIZE nEndPos = nStartPos + 1;
+        SCSIZE nEndPos = nPos;
         while ( nEndPos < nCount-1 &&
                 pData[nEndPos].pPattern->IsVisibleEqual( *pData[nEndPos+1].pPattern))
             ++nEndPos;
-        SCROW nAttrStartRow = ( nStartPos > 0 ) ? ( pData[nStartPos-1].nRow + 1 ) : 0;
+        SCROW nAttrStartRow = ( nPos > 0 ) ? ( pData[nPos-1].nRow + 1 ) : 0;
         if ( nAttrStartRow <= nLastData )
             nAttrStartRow = nLastData + 1;
         SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
@@ -1816,7 +1815,7 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
             rLastRow = pData[nEndPos].nRow;
             bFound = true;
         }
-        nPos = nEndPos;
+        nPos = nEndPos + 1;
     }
 
     return bFound;
