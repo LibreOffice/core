@@ -56,6 +56,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     framework \
     hwpfilter \
 	i18npool \
+	i18nutil \
     idl \
     lingucomponent \
     linguistic \
