@@ -4,7 +4,7 @@
 #error Need C++ to compile
 #endif
 
-#include <Windows.h>
+#include <windows.h>
 
 #ifndef _INC_TCHAR
 #   ifdef UNICODE
