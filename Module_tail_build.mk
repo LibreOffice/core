@@ -75,6 +75,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     reportbuilder \
     reportdesign \
     rsc \
+	sax \
     sc \
     scaddins \
     sccomp \
