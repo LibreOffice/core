@@ -1283,11 +1283,13 @@ void ScGlobal::ApplyShapeOrientationInfo( std::vector< OrientationInfo >& infos,
             for ( int i = 0; i < it->maAddress.Column; ++i )
             {
                 long nTwip =  aViewData.GetDocument()->GetColWidth(  i, it->maAddress.Sheet );
+                Point aTmpPos =  pDevice->LogicToPixel( Point( nTwip, nTwip ), aTmpMode );
                 nWidth += ( nTwip * aViewData.GetPPTX() );
             }
             for ( int i = 0; i < it->maAddress.Row; ++i )
             {
                 long nTwip =  aViewData.GetDocument()->GetRowHeight(  i, it->maAddress.Sheet );
+                Point aTmpPos =  pDevice->LogicToPixel( Point( nTwip, nTwip ), aTmpMode );
                 nHeight += ( nTwip * aViewData.GetPPTY() );
             }
 
