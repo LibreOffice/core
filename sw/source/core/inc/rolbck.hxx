@@ -398,10 +398,10 @@ public:
 
     // for SwUndoDelete::Undo/Redo
     void Move( sal_uInt16 nPos, SwHistory *pIns,
-               sal_uInt16 nStart = 0, sal_uInt16 nEnd = USHRT_MAX )
+               sal_uInt16 const nStart = 0)
     {
         SwpHstry::iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
-        SwpHstry::iterator itSourceEnd = nEnd == USHRT_MAX ? pIns->m_SwpHstry.end() : pIns->m_SwpHstry.begin() + nEnd;
+        SwpHstry::iterator itSourceEnd = pIns->m_SwpHstry.end();
         std::copy( itSourceBegin, itSourceEnd, m_SwpHstry.begin() + nPos );
         pIns->m_SwpHstry.erase( itSourceBegin, itSourceEnd );
     }
