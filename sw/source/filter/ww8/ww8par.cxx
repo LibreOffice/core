@@ -3886,8 +3886,10 @@ void wwSectionManager::InsertSegments()
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
     {
-        // If the section is of type "New column" (0x01), then simply insert a column break
-        if ( aIter->maSep.bkc == 1 )
+        // If the section is of type "New column" (0x01), then simply insert a column break.
+        // But only if there actually are columns on the page, otherwise a column break
+        // seems to be handled like a page break by MSO.
+        if ( aIter->maSep.bkc == 1 && aIter->maSep.ccolM1 > 0 )
         {
             SwPaM start( aIter->maStart );
             mrReader.rDoc.InsertPoolItem( start, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
