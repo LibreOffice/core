@@ -82,11 +82,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
-    bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
-                const sal_Int32 nCol, const sal_Int32 nRow,
-                com::sun::star::table::CellRangeAddress& aCellAddress) const;
-    void DoMerge(const com::sun::star::table::CellAddress& aCellPos,
-                 const sal_Int32 nCols, const sal_Int32 nRows);
+    bool IsMerged(const ScRange& rScRange, const ScAddress& rScCell, ScRange& rScCellAddress) const;
+    void DoMerge(const ScAddress& rScCellPos, const sal_Int32 nCols, const sal_Int32 nRows);
 
     void SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,

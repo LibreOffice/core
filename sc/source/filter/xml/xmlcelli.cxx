@@ -41,6 +41,9 @@
 #include "unonames.hxx"
 #include "postit.hxx"
 #include "sheetdata.hxx"
+#include "cellmergeoption.hxx"
+#include "docsh.hxx"
+#include "docfunc.hxx"
 
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLTextPContext.hxx"
@@ -450,68 +453,109 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
     return pContext;
 }
 
-bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
-                            table::CellRangeAddress& aCellAddress) const
+namespace
 {
-    table::CellAddress aCell; // don't need to set the sheet, because every sheet can contain the same count of cells.
-    aCell.Column = nCol;
-    aCell.Row = nRow;
-    if (CellExists(aCell))
+    static bool lcl_ScCellExists( const ScAddress& rScAddress )
     {
-        uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
-        uno::Reference<sheet::XSpreadsheet> xTable (xMergeSheetCellRange->getSpreadsheet());
-        uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor (xTable->createCursorByRange(xMergeSheetCellRange));
-        if (xMergeSheetCursor.is())
+        return( rScAddress.Col() <= MAXCOL && rScAddress.Row() <= MAXROW );
+    }
+
+    static ScRange lcl_ScGetCellRangeByPosition( const ScRange& rScRange, const SCCOL nLeft, const SCROW nTop, const SCCOL nRight, const SCROW nBottom )
+        throw( lang::IndexOutOfBoundsException )
+    {
+        if( nLeft >= 0 && nTop >= 0 && nRight >= 0 && nBottom >= 0 )
         {
-            xMergeSheetCursor->collapseToMergedArea();
-            uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
-            if (xMergeCellAddress.is())
+            SCCOL nStartX = rScRange.aStart.Col() + nLeft;
+            SCROW nStartY = rScRange.aStart.Row() + nTop;
+            SCCOL nEndX = rScRange.aStart.Col() + nRight;
+            SCROW nEndY = rScRange.aStart.Row() + nBottom;
+
+            if( nStartX <= nEndX && nEndX <= rScRange.aEnd.Col() &&
+                nStartY <= nEndY && nEndY <= rScRange.aEnd.Row() )
             {
-                aCellAddress = xMergeCellAddress->getRangeAddress();
-                if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
-                    aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
-                    return false;
-                else
-                    return true;
+                return ScRange( nStartX, nStartY, rScRange.aStart.Tab(), nEndX, nEndY, rScRange.aEnd.Tab() );
             }
         }
+        throw lang::IndexOutOfBoundsException();
+    }
+
+    static ScRange lcl_ScGetCellRangeByPosition( const ScRange& rScRange, const ScAddress& rScCell ) throw( lang::IndexOutOfBoundsException )
+    {
+        try
+        {
+            return lcl_ScGetCellRangeByPosition( rScRange, rScCell.Col(), rScCell.Row(), rScCell.Col(), rScCell.Row() );
+        }
+        catch( lang::IndexOutOfBoundsException & ) { throw; }
+    }
+
+    static void lcl_ScMerge( ScDocShell* pDocSh, const ScRange& rScRange, const bool bMerge )
+    {
+        if( pDocSh )
+        {
+            ScCellMergeOption aMergeOption(
+                rScRange.aStart.Col(), rScRange.aStart.Row(),
+                rScRange.aEnd.Col(), rScRange.aEnd.Row(), false
+            );
+            aMergeOption.maTabs.insert( rScRange.aStart.Tab() );
+            if ( bMerge )
+                pDocSh->GetDocFunc().MergeCells( aMergeOption, false, true, true );
+            else
+                pDocSh->GetDocFunc().UnmergeCells( aMergeOption, true, true );
+        }
+    }
+}
+
+bool ScXMLTableRowCellContext::IsMerged( const ScRange& rScRange, const ScAddress& rScCell, ScRange& rScCellRange ) const
+{
+    if( lcl_ScCellExists(rScCell) )
+    {
+        ScDocument* pDoc = rXMLImport.GetDocument();
+        rScCellRange = lcl_ScGetCellRangeByPosition( rScRange, rScCell );
+        pDoc->ExtendOverlapped( rScCellRange );
+        pDoc->ExtendMerge( rScCellRange );
+        rScCellRange.Justify();
+        if( rScCellRange.aStart.Col() == rScCell.Col() && rScCellRange.aEnd.Col() == rScCell.Col() &&
+            rScCellRange.aStart.Row() == rScCell.Row() && rScCellRange.aEnd.Row() == rScCell.Row() )
+            return false;
+        else
+            return true;
     }
     return false;
 }
 
-void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress& aCellPos,
-                 const sal_Int32 nCols, const sal_Int32 nRows)
+void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScCellPos, const sal_Int32 nCols, const sal_Int32 nRows )
 {
-    if (CellExists(aCellPos))
+    if( lcl_ScCellExists(rScCellPos) )
     {
-        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
-        if ( xCellRange.is() )
+        ScRange aScCellRange;
+        SCTAB nCurrentSheet = GetScImport().GetTables().GetCurrentSheet();
+        ScRange aScRange( 0, 0, nCurrentSheet, MAXCOL, MAXROW, nCurrentSheet );  //the whole sheet
+        ScDocShell* pDocSh = static_cast< ScDocShell* >( rXMLImport.GetDocument()->GetDocumentShell() );
+        // Stored merge range may actually be of a larger extend than what
+        // we support, in which case getCellRangeByPosition() throws
+        // IndexOutOfBoundsException. Do nothing then.        ???
+        try
         {
-            // Stored merge range may actually be of a larger extend than what
-            // we support, in which case getCellRangeByPosition() throws
-            // IndexOutOfBoundsException. Do nothing then.
-            try
+            if( IsMerged(aScRange, rScCellPos, aScCellRange) )
             {
-                table::CellRangeAddress aCellAddress;
-                if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
-                {
-                    //unmerge
-                    uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-                    if (xMergeable.is())
-                        xMergeable->merge(false);
-                }
+                //unmerge
+                ScRange aScMergeRange(
+                    lcl_ScGetCellRangeByPosition( aScRange, aScCellRange.aStart.Col(), aScCellRange.aStart.Row(),
+                        aScCellRange.aEnd.Col(), aScCellRange.aEnd.Row() )
+                );
+                lcl_ScMerge( pDocSh, aScMergeRange, false );
+            }
 
-                //merge
-                uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                            aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
-                if (xMergeable.is())
-                    xMergeable->merge(true);
-            }
-            catch ( lang::IndexOutOfBoundsException & )
-            {
-                OSL_FAIL("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
-            }
+            //merge
+            ScRange aScMergeRange(
+                lcl_ScGetCellRangeByPosition( aScRange, aScCellRange.aStart.Col(), aScCellRange.aStart.Row(),
+                    aScCellRange.aEnd.Col() + nCols,  aScCellRange.aEnd.Row() + nRows )
+            );
+            lcl_ScMerge( pDocSh, aScMergeRange, true );
+        }
+        catch( lang::IndexOutOfBoundsException & )
+        {
+            OSL_FAIL("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
         }
     }
 }
@@ -783,11 +827,17 @@ void ScXMLTableRowCellContext::EndElement()
         table::CellAddress aCellPos = rTables.GetRealCellPos();
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
             aCellPos.Row -= (nRepeatedRows - 1);
+
+        //duplicated for now
+        ScAddress aScCellPos = rTables.GetRealScCellPos();
+        if (aScCellPos.Col() > 0 && nRepeatedRows > 1)
+            aScCellPos.SetRow( aScCellPos.Row() - (nRepeatedRows - 1) );
+
         uno::Reference<table::XCellRange> xCellRange(rTables.GetCurrentXCellRange());
         if (xCellRange.is())
         {
             if (bIsMerged)
-                DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
+                DoMerge(aScCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !pOUFormula )
             {
                 ::boost::optional< rtl::OUString > pOUText;

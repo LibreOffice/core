@@ -40,6 +40,7 @@
 #include "XMLStylesImportHelper.hxx"
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
+#include "convuno.hxx"
 #include <svx/svdpage.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -682,6 +683,21 @@ table::CellAddress ScMyTables::GetRealCellPos()
     aRealCellPos.Column = nCol;
     aRealCellPos.Sheet = nCurrentSheet;
     return aRealCellPos;
+}
+
+//placeholder; needs more work
+const ScAddress ScMyTables::GetRealScCellPos() const
+{
+    sal_Int32 nRow = 0;
+    sal_Int32 nCol = 0;
+    size_t n = maTables.size();
+    for (size_t i = 0; i < n; ++i)
+    {
+        const ScMyTableData& rTab = maTables[i];
+        nCol += rTab.GetRealCols(rTab.GetColumn());
+        nRow += rTab.GetRealRows(rTab.GetRow());
+    }
+    return ScAddress( static_cast<SCCOL>(nCol), static_cast<SCCOL>(nRow), nCurrentSheet );
 }
 
 void ScMyTables::AddColCount(sal_Int32 nTempColCount)
