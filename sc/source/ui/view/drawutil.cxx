@@ -80,18 +80,6 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
         nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }
 
-    // #i116848# To get a large-enough number for PixelToLogic, multiply the integer values
-    // instead of using a larger number of rows
-    if ( nTwipsY )
-    {
-        long nMultiply = 2000000 / nTwipsY;
-        if ( nMultiply > 1 )
-        {
-            nTwipsY *= nMultiply;
-            nPixelY *= nMultiply;
-        }
-    }
- 
     MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
     Point aPixelLog = pDev->PixelToLogic( Point( nPixelX,nPixelY ), aHMMMode );
 
