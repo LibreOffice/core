@@ -42,13 +42,15 @@ class SwEditWin;
 
 typedef boost::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
+typedef std::map<const SwFrm*, SwFrameControlPtr> SwFrameControlPtrMap;
+
 /** A container for the Header/Footer, or PageBreak controls.
 */
 class SwFrameControlsManager
 {
     private:
         SwEditWin* m_pEditWin;
-        std::map< FrameControlType, std::vector< SwFrameControlPtr > > m_aControls;
+        std::map< FrameControlType, SwFrameControlPtrMap > m_aControls;
 
     public:
         SwFrameControlsManager( SwEditWin* pEditWin );
@@ -58,7 +60,7 @@ class SwFrameControlsManager
         const SwFrameControlsManager& operator=( const SwFrameControlsManager& rCopy );
 
         SwFrameControlPtr GetControl( FrameControlType eType, const SwFrm* pFrm );
-        std::vector< SwFrameControlPtr >& GetControls( FrameControlType eType );
+        SwFrameControlPtrMap& GetControls( FrameControlType eType );
         void AddControl( FrameControlType eType, SwFrameControlPtr pControl );
         void RemoveControls( const SwFrm* pFrm );
         void RemoveControlsByType( FrameControlType eType, const SwFrm* pFrm );
