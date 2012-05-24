@@ -180,7 +180,7 @@ void Tables::refresh()
         }
         m_name2index.swap( map );
     }
-    catch ( com::sun::star::sdbc::SQLException & e )
+    catch ( const com::sun::star::sdbc::SQLException & e )
     {
         throw RuntimeException( e.Message , e.Context );
     }
