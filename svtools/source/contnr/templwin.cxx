@@ -600,8 +600,8 @@ rtl::OUString SvtDocInfoTable_Impl::GetString( long nId ) const
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos )
         return ResStringArray::GetString( nPos );
-    else
-        return aEmptyString;
+
+    return rtl::OUString();
 }
 
 // class SvtFrameWindow_Impl ---------------------------------------------

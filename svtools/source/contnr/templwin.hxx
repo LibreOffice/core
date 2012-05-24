@@ -167,9 +167,6 @@ public:
 
 class SvtDocInfoTable_Impl : public ResStringArray
 {
-private:
-    String          aEmptyString;
-
 public:
     SvtDocInfoTable_Impl();
 
