@@ -160,6 +160,10 @@ namespace xmloff { namespace token {
         XML_NP_CSS3TEXT,
         XML_N_CSS3TEXT,
 
+        // calc extensions
+        XML_NP_CALC_EXT,
+        XML_N_CALC_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,
@@ -426,6 +430,7 @@ namespace xmloff { namespace token {
         XML_COLOR_INVERSION,
         XML_COLOR_MODE,
         XML_COLOR_SCALE,
+        XML_COLOR_SCALE_ENTRY,
         XML_COLUMN,
         XML_COLUMN_COUNT,
         XML_COLUMN_GAP,

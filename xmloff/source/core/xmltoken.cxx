@@ -164,6 +164,10 @@ namespace xmloff { namespace token {
         TOKEN( "css3t",                        XML_NP_CSS3TEXT ),
         TOKEN( "http://www.w3.org/TR/css3-text/", XML_N_CSS3TEXT ),
 
+        // extension namespace for calc extensions
+        TOKEN( "calcext",                         XML_NP_CALC_EXT ),
+        TOKEN( "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0", XML_N_CALC_EXT ),
+
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),
@@ -430,6 +434,7 @@ namespace xmloff { namespace token {
         TOKEN( "color-inversion",                 XML_COLOR_INVERSION ),
         TOKEN( "color-mode",                      XML_COLOR_MODE ),
         TOKEN( "color-scale",                     XML_COLOR_SCALE ),
+        TOKEN( "color-scale-entry",               XML_COLOR_SCALE_ENTRY ),
         TOKEN( "column",                          XML_COLUMN ),
         TOKEN( "column-count",                    XML_COLUMN_COUNT ),
         TOKEN( "column-gap",                      XML_COLUMN_GAP ),
