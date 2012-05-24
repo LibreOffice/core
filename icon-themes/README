@@ -62,3 +62,31 @@ How to add a new image set:
   vcl/source/app/settings.cxx
 
 - The fallback for particular icons is defined in CUSTOM_PREFERRED_FALLBACK_1
+
+
+How to add a new icon for a new command:
+----------------------------------------
+
+- Assume you defined a dispatch command in officecfg like the following:
+
+  in officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu
+
+    <node oor:name=".uno:OpenFromCalc" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+            <value xml:lang="en-US">~Open...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+    </node>
+
+  Here, you need to define a property named "Properties", with its value set
+  to 1.  (TODO: Check if this step is still necessary.)
+
+- Now, you need to add 2 new icon images under icon-themes/galaxy/cmd/, one
+  for the large size and one for the smaller size.  The name of each image
+  must be lc_<command name>.png and sc_<command name>.png.  Here, the command
+  name is the name given in the above .xcu file without the ".uno:" prefix and
+  all its letters lower-cased.  In this example, the file names will be
+  lc_openfromcalc.png and sc_openfromcalc.png.  Note that you need to add new
+  images to the galaxy theme for them to show up in any themes at all.
