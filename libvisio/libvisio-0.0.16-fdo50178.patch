@@ -1,0 +1,29 @@
+--- misc/build/libvisio-0.0.16/src/lib/VSDXContentCollector.cpp	2012-04-14 17:29:03.000000000 +0200
++++ misc/libvisio-0.0.16/src/lib/VSDXContentCollector.cpp	2012-05-23 22:30:44.542099908 +0200
+@@ -1470,7 +1470,8 @@
+ /* NURBS with incomplete data */
+ void libvisio::VSDXContentCollector::collectNURBSTo(unsigned id, unsigned level, double x2, double y2, double knot, double knotPrev, double weight, double weightPrev, unsigned dataID)
+ {
+-  std::map<unsigned, NURBSData>::const_iterator iter;
++  std::map<unsigned, NURBSData>::const_iterator iter;
++  std::map<unsigned, NURBSData>::const_iterator iterEnd;
+   NURBSData data;
+   if (dataID == 0xFFFFFFFE) // Use stencil NURBS data
+   {
+@@ -1490,13 +1491,15 @@
+     }
+     dataID = tmpElement->m_dataID;
+     iter = m_stencilShape->m_nurbsData.find(dataID);
++    iterEnd =  m_stencilShape->m_nurbsData.end();
+   }
+   else // No stencils involved, directly get dataID and fill in missing parts
+   {
+     iter = m_NURBSData.find(dataID);
++    iterEnd = m_NURBSData.end();
+   }
+ 
+-  if (iter != m_NURBSData.end())
++  if (iter != iterEnd)
+   {
+     data = iter->second;
+     data.knots.push_back(knot);
