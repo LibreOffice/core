@@ -26,10 +26,6 @@
 #*************************************************************************
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
-.INCLUDE .IGNORE : comphelper/version.mk
-.INCLUDE .IGNORE : ucbhelper/version.mk
-.INCLUDE .IGNORE : connectivity/version.mk
-
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 # workaround for MinGW to get the same DLL names as with MSC
