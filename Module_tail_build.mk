@@ -115,6 +115,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     unixODBC \
     UnoControls \
     unodevtools \
+	unoil \
 	unotest \
     unotools \
     unoxml \
