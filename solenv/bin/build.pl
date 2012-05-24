@@ -188,6 +188,12 @@
     my $new_line = "\n";
     my $incompatible = 0;
     my $local_host_ip = 'localhost';
+    my $tail_build_modules_mk = "$ENV{SOLARENV}/gbuild/tail_build_modules.mk";
+    my $tail_build_module_dir = $ENV{"SRCDIR"};
+    my $tail_build_prj = "tail_build";
+    my $cross_tail_build_prj = "cross_tail_build";
+    my $total_modules = 0;
+
 ### main ###
 
     get_options();
@@ -545,6 +551,76 @@ sub expand_dependencies {
 };
 
 #
+# Gets list of tail_build modules.
+#
+sub get_tail_build_modules {
+    my $tail_build_prj = shift;
+    my $make = $ENV{'GNUMAKE'};
+
+    my $tail_build_mk = "$tail_build_module_dir/Module_$tail_build_prj.mk";
+    my $modules_str = `$make --no-print-directory -r -f $tail_build_modules_mk get_modules TAIL_BUILD_MK=$tail_build_mk`;
+    chomp $modules_str;
+
+    my %modules = ();
+    foreach my $module (split /\s+/, $modules_str) {
+        $modules{$module} = 1;
+    }
+    return %modules;
+}
+
+sub _filter_tail_build_dependencies {
+    my $deps_hash = shift;
+    my $tail_build_prj = shift;
+
+    if (!defined $$deps_hash{$tail_build_prj}) {
+        # nothing to do
+        return;
+    }
+
+    my %tail_build_modules = get_tail_build_modules($tail_build_prj);
+
+    # first remove tail_build modules from deps.
+    foreach my $prj (keys %tail_build_modules) {
+        if (defined $$deps_hash{$prj}) {
+            delete $$deps_hash{$prj};
+        }
+    }
+
+    # do the actual replacement
+    foreach my $prj (keys %$deps_hash) {
+        my @tail_build_deps = ();
+        my $deps = $$deps_hash{$prj};
+
+        # remove deps. that are in tail_build
+        foreach my $dep (keys %$deps) {
+            if (defined $tail_build_modules{$dep}) {
+                print "$prj depends on $tail_build_prj\[$dep\]\n";
+                push @tail_build_deps, $dep;
+                delete $$deps{$dep};
+            }
+        }
+
+        # insert dep. on tail_build, if necessary
+        if (@tail_build_deps && !defined $$deps{$tail_build_prj}) {
+            $$deps{$tail_build_prj} = 1;
+        }
+    }
+}
+
+#
+# Replaces all deps on modules from tail_build by dep on tail_build
+# itself. I.e., if a module foo depends on (sal, sfx2, svx) and (sfx2,
+# svx) are in tail_build, foo will be depending on (sal, tail_build).
+#
+# Works on cross_tail_build too, in case of cross-compilation.
+#
+sub filter_tail_build_dependencies {
+    my $deps_hash = shift;
+    _filter_tail_build_dependencies($deps_hash, $tail_build_prj);
+    _filter_tail_build_dependencies($deps_hash, $cross_tail_build_prj);
+}
+
+#
 # This procedure fills the second hash with reversed dependencies,
 # ie, with info about modules "waiting" for the module
 #
@@ -569,6 +645,7 @@ sub build_all {
     if ($build_all_parents) {
         my ($prj, $prj_dir, $orig_prj);
         get_parent_deps( $initial_module, \%global_deps_hash);
+        filter_tail_build_dependencies(\%global_deps_hash);
         if (scalar keys %active_modules) {
             $active_modules{$initial_module}++;
             $modules_types{$initial_module} = 'mod';
@@ -1916,7 +1993,9 @@ sub print_announce {
         $text = "Building module $prj\n";
     };
 
-    my $total_modules = scalar(keys %build_lists_hash);
+    if (!$total_modules) {
+        $total_modules = scalar(keys %global_deps_hash) + 1;
+    }
     my $modules_started = scalar(keys %module_announced) + 1;
     $text = "($modules_started/$total_modules) $text";
 
