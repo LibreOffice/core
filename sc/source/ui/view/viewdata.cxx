@@ -2486,8 +2486,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     /*  Width of the tabbar, relative to frame window width. We do not have the
         correct width of the frame window here -> store in ScTabView, which sets
         the size in the next resize. */
-    if ( pView )
-        pView->SetPendingRelTabBarWidth( rDocSett.mfTabBarWidth );
+    pView->SetPendingRelTabBarWidth( rDocSett.mfTabBarWidth );
 
     // sheet settings
     for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
@@ -2790,12 +2789,12 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                     nTabNo = nTab;
             }
         }
-        else if (pView && sName.compareToAscii(SC_HORIZONTALSCROLLBARWIDTH) == 0)
+        else if (sName.compareToAscii(SC_HORIZONTALSCROLLBARWIDTH) == 0)
         {
             if (rSettings[i].Value >>= nTemp32)
                 pView->SetTabBarWidth(nTemp32);
         }
-        else if (pView && sName.compareToAscii(SC_RELHORIZONTALTABBARWIDTH) == 0 )
+        else if (sName.compareToAscii(SC_RELHORIZONTALTABBARWIDTH) == 0)
         {
             double fWidth = 0.0;
             if (rSettings[i].Value >>= fWidth)

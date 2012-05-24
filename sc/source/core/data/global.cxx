@@ -63,15 +63,6 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/document/XViewDataSupplier.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -96,15 +87,11 @@
 #include "sc.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
-#include "unonames.hxx"
-#include "drawview.hxx"
-#include "drawutil.hxx"
-#include "viewdata.hxx"
+
 // -----------------------------------------------------------------------
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using namespace ::com::sun::star;
 
 ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
@@ -1187,140 +1174,6 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
         pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
     }
     return pLocale;
-}
-void ScGlobal::CaptureShapeOrientationInfo( std::vector< OrientationInfo >& infos, const uno::Reference<frame::XModel >& rxModel )
-{
-    rtl::OUString sHori( SC_UNONAME_HORIPOS );
-    rtl::OUString sVert( SC_UNONAME_VERTPOS );
-    uno::Reference<drawing::XDrawPagesSupplier> xDrwSupp( rxModel, uno::UNO_QUERY );
-    uno::Reference<container::XIndexAccess> xPages( xDrwSupp.is() ? xDrwSupp->getDrawPages() : NULL, uno::UNO_QUERY );
-    if ( xPages.is() )
-    {
-        for ( sal_Int32 nIndex = 0, nPages = xPages->getCount(); nIndex < nPages; ++nIndex )
-        {
-            uno::Reference<container::XIndexAccess> xShapes( xPages->getByIndex( nIndex ), uno::UNO_QUERY );
-            for ( sal_Int32 nShapeIndex = 0, nShapes = xShapes->getCount(); nShapeIndex < nShapes; ++nShapeIndex )
-            {
-                uno::Reference< beans::XPropertySet > xShape( xShapes->getByIndex( nShapeIndex ), uno::UNO_QUERY );
-                uno::Reference< table::XCell > xCell( xShape->getPropertyValue( rtl::OUString(  SC_UNONAME_ANCHOR  ) ), uno::UNO_QUERY );
-                uno::Reference< sheet::XSpreadsheetDocument > xSpreadSheet( rxModel, uno::UNO_QUERY );
-                uno::Reference< container::XIndexAccess > xSheets( xSpreadSheet.is() ? xSpreadSheet->getSheets() : NULL, uno::UNO_QUERY );
-                uno::Reference< sheet::XSpreadsheet > xSheet;
-                uno::Reference< sheet::XCellAddressable > xAddressable( xCell, uno::UNO_QUERY );
-                if ( xSheets.is() && xAddressable.is() && xSpreadSheet.is() )
-                    xSheet.set( xSheets->getByIndex( xAddressable->getCellAddress().Sheet ), uno::UNO_QUERY );
-                // only capture orientation if the shape is anchored to cell
-                if ( xShape.is() && xCell.is() && xAddressable.is() && xSheet.is() )
-                {
-                    uno::Reference< beans::XPropertySetInfo > xShapePropInfo = xShape->getPropertySetInfo();
-                    if ( xShapePropInfo.is() && xShapePropInfo->hasPropertyByName( sHori ) && xShapePropInfo->hasPropertyByName( sVert ) )
-                    {
-                        OrientationInfo aShape;
-                        aShape.mxShape.set( xShape, uno::UNO_QUERY );
-                        xShape->getPropertyValue( sHori ) >>= aShape.mnHori;
-                        xShape->getPropertyValue( sVert ) >>= aShape.mnVert;
-                        aShape.maAddress = xAddressable->getCellAddress();
-                        infos.push_back( aShape );
-                        // Remove temporary cell anchor. Ideally we should
-                        // preserve the cell anchoring but the drawing layer
-                        // and the ScGridWindow don't calcuate positions in the
-                        // same way. This means unfortunately ( especially if
-                        // row heights above the shape are not uniform ) that
-                        // the shape anchor position and the shape position
-                        // can be quite skewed. The only alterative
-                        // unfortunately is to position the shape absolutely
-                        // rather than relative to a cell address :-(
-                        xShape->setPropertyValue( rtl::OUString(  SC_UNONAME_ANCHOR  ), uno::makeAny( xSheet ) );
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Note: this method is only expected to be called when importing an alien
-// document.
-void ScGlobal::ApplyShapeOrientationInfo( std::vector< OrientationInfo >& infos, const uno::Reference< frame::XModel >& rxModel, ScDocument& rDoc )
-{
-    // For each shape previously anchored to a cell calculate the shape
-    // position ( as the view would ) based on the available zoom and scaling.
-    // This prevents the shape being being drawn in an unexpected postion due to
-    // a) differences in the calculation of shape position by drawinglayer and
-    //    the postion of the actual rows drawn by ScGridwin
-    // b) affect of UpdateAllRowHeights
-    for ( std::vector< OrientationInfo >::iterator it = infos.begin(), it_end = infos.end(); it != it_end; ++it )
-    {
-        OutputDevice* pDevice = Application::GetDefaultDevice();
-        if ( pDevice )
-        {
-            uno::Reference< document::XViewDataSupplier > xViewSup( rxModel, uno::UNO_QUERY );
-            uno::Reference< container::XIndexAccess > xIndexAccess;
-            if ( xViewSup.is() )
-                xIndexAccess = xViewSup->getViewData();
-            uno::Sequence< beans::PropertyValue > aSeq;
-            // set up partial view data to calculate zoom, pptx & ppty values
-            ScViewData aViewData( NULL, NULL );
-            aViewData.InitData( &rDoc );
-            // support initialising view data from binary import
-            if ( ScExtDocOptions* pDocOptions = rDoc.GetExtDocOptions() )
-            {
-                aViewData.ReadExtOptions( *pDocOptions );
-            }
-            else // or from the view data from the model ( oox import )
-            {
-                if ( xIndexAccess.is() && xIndexAccess->getCount() )
-                    xIndexAccess->getByIndex(0) >>= aSeq;
-                aViewData.ReadUserDataSequence( aSeq );
-            }
-
-            aViewData.SetTabNo( it->maAddress.Sheet );
-
-            long nHeight = 0;
-            long nWidth = 0;
-
-            MapMode aTmpMode( MAP_TWIP );
-            // get postion of shape based on the start anchor
-            for ( int i = 0; i < it->maAddress.Column; ++i )
-            {
-                long nTwip =  aViewData.GetDocument()->GetColWidth(  i, it->maAddress.Sheet );
-                Point aTmpPos =  pDevice->LogicToPixel( Point( nTwip, nTwip ), aTmpMode );
-                nWidth += ( nTwip * aViewData.GetPPTX() );
-            }
-            for ( int i = 0; i < it->maAddress.Row; ++i )
-            {
-                long nTwip =  aViewData.GetDocument()->GetRowHeight(  i, it->maAddress.Sheet );
-                Point aTmpPos =  pDevice->LogicToPixel( Point( nTwip, nTwip ), aTmpMode );
-                nHeight += ( nTwip * aViewData.GetPPTY() );
-            }
-
-            // determine the scale that will be used by the view
-            Fraction aScaleX;
-            Fraction aScaleY;
-            SCROW nEndRow = it->maAddress.Row;
-            SCCOL nEndCol = it->maAddress.Column;
-            aViewData.GetDocument()->GetTableArea( aViewData.GetTabNo(), nEndCol, nEndRow );
-            if (nEndCol<20)
-                nEndCol = 20;
-           if (nEndRow<20)
-                nEndRow = 20;
-
-            ScDrawUtil::CalcScale( aViewData.GetDocument(), aViewData.GetTabNo(), 0,0, nEndCol,nEndRow, pDevice,aViewData.GetZoomX(),aViewData.GetZoomY(),aViewData.GetPPTX(),aViewData.GetPPTY(), aScaleX,aScaleY );
-
-            // finally calculate and apply the position of shape ( including
-            // any vertical and horizontal offsets )
-            Point aTmpPos( nWidth, nHeight);
-            aTmpMode = MapMode ( MAP_100TH_MM );
-            aTmpMode.SetScaleX(aScaleX);
-            aTmpMode.SetScaleY(aScaleY);
-
-            aTmpPos = pDevice->PixelToLogic( aTmpPos, aTmpMode );
-            if ( it->mxShape.is() )
-            {
-                com::sun::star::awt::Point aUnoPos( aTmpPos.X() + it->mnHori, aTmpPos.Y() +  it->mnVert );
-                it->mxShape->setPosition( aUnoPos );
-            }
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

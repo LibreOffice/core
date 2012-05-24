@@ -614,12 +614,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                     getBaseFilter().getVbaProject().registerMacroAttacher( xAttacher );
                 }
             }
-            if ( !pClientData->maAnchor.isEmpty() )
-            {
-                ShapeAnchor aAnchor( *this );
-                aAnchor.importVmlAnchor( pClientData->maAnchor );
-                aAnchor.applyToXShape( xShape );
-            }
+
             return xShape;
         }
     }
