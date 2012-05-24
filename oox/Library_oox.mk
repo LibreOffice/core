@@ -300,16 +300,6 @@ oox_MISC := $(WORKDIR)/oox/misc
 oox_INC := $(WORKDIR)/oox/inc
 oox_GENHEADERPATH := $(oox_INC)/oox/token
 
-# these three generated headers are included from just about everywhere--might
-# just as well make them before everything else...
-$(call gb_Package_get_target,oox_inc) : $(oox_GENHEADERPATH)/namespaces.hxx
-$(call gb_Package_get_target,oox_inc) : $(oox_GENHEADERPATH)/properties.hxx
-$(call gb_Package_get_target,oox_inc) : $(oox_GENHEADERPATH)/tokens.hxx
-$(call gb_Package_get_target,oox_inc) : $(call gb_Package_get_target,oox_tokens)
-$(call gb_Package_get_target,oox_inc) : $(call gb_Package_get_target,oox_generated)
-
-
-
 $(call gb_CxxObject_get_target,oox/source/token/tokenmap) : $(oox_INC)/tokenhash.inc
 
 $(eval $(call gb_Library_set_include,oox,\
