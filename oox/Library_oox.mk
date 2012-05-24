@@ -314,6 +314,7 @@ oox_GenTarget_get_target = $(oox_MISC)/$(1)
 
 define oox_GenTarget_GenTarget
 $(oox_GENHEADERPATH)/$(1).hxx $(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) : $(call oox_GenTarget_get_target,$(1))
+	@touch $$@
 $(call oox_GenTarget_get_target,$(1)) : $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt $(oox_SRC)/$(1).hxx.head $(oox_SRC)/$(1).hxx.tail
 	mkdir -p $(oox_MISC) $(oox_INC) $(oox_GENHEADERPATH)
 	perl $(oox_SRC)/$(1).pl $(oox_SRC)/$(1).txt $(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) \
