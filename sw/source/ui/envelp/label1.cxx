@@ -84,7 +84,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
 void SwLabDlg::_ReplaceGroup( const String &rMake )
 {
     // Remove old entries
-    pRecs->erase( pRecs->begin() + 1, pRecs->begin() + pRecs->size() - 1 );
+    pRecs->erase(pRecs->begin() + 1, pRecs->end());
     aLabelsCfg.FillLabels(rtl::OUString(rMake), *pRecs);
     aLstGroup = rMake;
 }
