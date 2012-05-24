@@ -48,6 +48,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     drawinglayer \
     editeng \
     embeddedobj \
+	embedserv \
     eventattacher \
     extensions \
     fileaccess \
