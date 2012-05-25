@@ -27,49 +27,98 @@
  */
 
 #include "filterdetect.hxx"
+
+#include "tools/urlobj.hxx"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#define WRITER_TEXT_FILTER "Text"
+#define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
+
 using namespace ::com::sun::star;
+
+namespace {
+
+void setFilter(uno::Sequence<beans::PropertyValue>& rProps, sal_Int32 nPos, const rtl::OUString& rFilter)
+{
+    if (nPos >= 0)
+        rProps[nPos].Value <<= rFilter;
+    else
+    {
+        sal_Int32 n = rProps.getLength();
+        rProps.realloc(n+1);
+        rProps[n].Name = "FilterName";
+        rProps[n].Value <<= rFilter;
+    }
+}
+
+}
 
 PlainTextFilterDetect::PlainTextFilterDetect(const uno::Reference<lang::XMultiServiceFactory> &xMSF) :
     mxMSF(xMSF) {}
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
-rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& aArguments) throw (uno::RuntimeException)
+rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException)
 {
+    rtl::OUString aType;
+    rtl::OUString aDocService;
+    rtl::OUString aExt;
+
+    sal_Int32 nFilter = -1;
+
+    for (sal_Int32 i = 0, n = lDescriptor.getLength(); i < n; ++i)
+    {
+        if (lDescriptor[i].Name == "TypeName")
+            lDescriptor[i].Value >>= aType;
+        else if (lDescriptor[i].Name == "FilterName")
+            nFilter = i;
+        else if (lDescriptor[i].Name == "DocumentService")
+            lDescriptor[i].Value >>= aDocService;
+        else if (lDescriptor[i].Name == "URL")
+        {
+            rtl::OUString aURL;
+            lDescriptor[i].Value >>= aURL;
+
+            // Get the file name extension.
+            INetURLObject aParser(aURL);
+            aExt = aParser.getExtension(
+                INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+            aExt = aExt.toAsciiLowerCase();
+        }
+    }
+
+    if (aType == "calc_Text_txt_csv_StarCalc")
+    {
+        // Generic text type.  Decide which filter to use based on the
+        // document service first, then on extension if that's not available.
+
+        if (aDocService == "com.sun.star.sheet.SpreadsheetDocument")
+            // Open it in Calc.
+            setFilter(lDescriptor, nFilter, CALC_TEXT_FILTER);
+        else if (aDocService == "com.sun.star.text.TextDocument")
+            // Open it in Writer.
+            setFilter(lDescriptor, nFilter, WRITER_TEXT_FILTER);
+        else if (aExt == "csv")
+            setFilter(lDescriptor, nFilter, CALC_TEXT_FILTER);
+        else if (aExt == "txt")
+            setFilter(lDescriptor, nFilter, WRITER_TEXT_FILTER);
+        else
+            // No clue.  Open it in Writer by default.
+            setFilter(lDescriptor, nFilter, WRITER_TEXT_FILTER);
+
+        return aType;
+    }
+
+    // failed!
     return rtl::OUString();
 }
 
 // XInitialization
 
-void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& aArguments)
+void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
     throw (uno::Exception, uno::RuntimeException)
 {
-    uno::Sequence<beans::PropertyValue> aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if (nLength && (aArguments[0] >>= aAnySeq))
-    {
-        const beans::PropertyValue * pValue = aAnySeq.getConstArray();
-        for (sal_Int32 i = 0, n = aAnySeq.getLength(); i < n; ++i)
-        {
-            if (pValue[i].Name == "Type")
-            {
-                fprintf(stdout, "PlainTextFilterDetect::initialize:   type = '%s'\n",
-                        rtl::OUStringToOString(pValue[i].Value.get<rtl::OUString>(), RTL_TEXTENCODING_UTF8).getStr());
-            }
-            else if (pValue[i].Name == "UserData")
-            {
-                fprintf(stdout, "PlainTextFilterDetect::initialize:   user data = '%s'\n",
-                        rtl::OUStringToOString(pValue[i].Value.get<rtl::OUString>(), RTL_TEXTENCODING_UTF8).getStr());
-            }
-            else if (pValue[i].Name == "TemplateName")
-            {
-                fprintf(stdout, "PlainTextFilterDetect::initialize:   template name = '%s'\n",
-                        rtl::OUStringToOString(pValue[i].Value.get<rtl::OUString>(), RTL_TEXTENCODING_UTF8).getStr());
-            }
-        }
-    }
 }
 
 rtl::OUString PlainTextFilterDetect_getImplementationName()
