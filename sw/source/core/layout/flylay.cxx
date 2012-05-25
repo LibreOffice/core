@@ -1027,6 +1027,12 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
             if ( !bFollowTextFlow || bConsiderWrapOnObjPos )
             {
                 const SwLayoutFrm* pClipFrm = pVertPosOrientFrm->FindPageFrm();
+                if (!pClipFrm)
+                {
+                    OSL_FAIL("!pClipFrm: "
+                            "if you can reproduce this please file a bug");
+                    return false;
+                }
                 rRect = bMove ? pClipFrm->GetUpper()->Frm()
                               : pClipFrm->Frm();
                 // #i26945# - consider that a table, during
