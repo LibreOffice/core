@@ -57,6 +57,7 @@ my_components = \
     component/filter/source/placeware/placeware \
     component/filter/source/svg/svgfilter \
     component/filter/source/t602/t602filter \
+    component/filter/source/textfilterdetect/textfd \
     component/filter/source/xmlfilteradaptor/xmlfa \
     component/filter/source/xmlfilterdetect/xmlfd \
     component/filter/source/xsltdialog/xsltdlg \
