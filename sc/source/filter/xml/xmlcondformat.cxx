@@ -180,6 +180,8 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     rtl::OUString sPositiveColor;
     rtl::OUString sNegativeColor;
     rtl::OUString sGradient;
+    rtl::OUString sAxisPosition;
+    rtl::OUString sShowValue;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataBarAttrMap();
@@ -199,6 +201,15 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
             case XML_TOK_DATABAR_GRADIENT:
                 sGradient = sValue;
                 break;
+            case XML_TOK_DATABAR_NEGATIVE_COLOR:
+                sNegativeColor = sValue;
+                break;
+            case XML_TOK_DATABAR_AXISPOSITION:
+                sAxisPosition = sValue;
+                break;
+            case XML_TOK_DATABAR_SHOWVALUE:
+                sShowValue = sValue;
+                break;
             default:
                 break;
         }
@@ -213,17 +224,29 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
         sax::Converter::convertBool( bGradient, sGradient);
         mpFormatData->mbGradient = bGradient;
     }
+
     if(!sPositiveColor.isEmpty())
     {
         sal_Int32 nColor = 0;
         sax::Converter::convertColor( nColor, sPositiveColor );
         mpFormatData->maPositiveColor = Color(nColor);
     }
+
     if(!sNegativeColor.isEmpty())
     {
+        // we might check here for 0xff0000 and don't write it
         sal_Int32 nColor = 0;
-        sax::Converter::convertColor( nColor, sPositiveColor );
+        sax::Converter::convertColor( nColor, sNegativeColor );
         mpFormatData->mpNegativeColor.reset(new Color(nColor));
+    }
+    else
+        mpFormatData->mbNeg = false;
+
+    if(!sShowValue.isEmpty())
+    {
+        bool bShowValue = true;
+        sax::Converter::convertBool( bShowValue, sShowValue );
+        mpFormatData->mbOnlyBar = !bShowValue;
     }
 
     mpDataBarFormat->SetRange(rRange);
@@ -264,7 +287,8 @@ void ScXMLDataBarFormatContext::EndElement()
 
 namespace {
 
-void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry)
+void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, const rtl::OUString rFormula,
+        ScXMLImport& rImport)
 {
     if(rType == "minimum")
         pEntry->SetMin(true);
@@ -274,6 +298,11 @@ void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry)
         pEntry->SetPercentile(true);
     else if(rType == "percent")
         pEntry->SetPercent(true);
+    else if(rType == "formula")
+    {
+        //position does not matter, only table is important
+        pEntry->SetFormula(rFormula, rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
+    }
 
     //TODO: add formulas
 }
@@ -324,12 +353,11 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
     sax::Converter::convertColor(nColor, sColor);
     aColor = Color(nColor);
 
-    //TODO: formulas
     if(!sVal.isEmpty())
         sax::Converter::convertDouble(nVal, sVal);
 
     mpFormatEntry = new ScColorScaleEntry(nVal, aColor);
-    setColorEntryType(sType, mpFormatEntry);
+    setColorEntryType(sType, mpFormatEntry, sVal, GetScImport());
     pFormat->AddEntry(mpFormatEntry);
 }
 
@@ -373,7 +401,7 @@ ScXMLDataBarFormatEntryContext::ScXMLDataBarFormatEntryContext( ScXMLImport& rIm
         sax::Converter::convertDouble(nVal, sVal);
 
     ScColorScaleEntry* pEntry = new ScColorScaleEntry(nVal, Color());
-    setColorEntryType(sType, pEntry);
+    setColorEntryType(sType, pEntry, sVal, GetScImport());
     if(pData->mpLowerLimit)
     {
         pData->mpUpperLimit.reset(pEntry);
