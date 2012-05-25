@@ -56,7 +56,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_hsqldb \
 	Configuration_hsqldb \
 	Configuration_jdbc \
-	Jar_ConnectivityTools \
 	Jar_sdbc_hsqldb \
 	Library_hsqldb \
 	Library_jdbc \
@@ -138,9 +137,13 @@ endif
 
 endif
 
+ifneq ($(filter QADEVOOO,$(BUILD_TYPE)),)
+$(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
+	Jar_ConnectivityTools \
+))
 # FIXME: Does not work. Convert to JUnit.
-# $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	# JunitTest_complex \
-# ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
