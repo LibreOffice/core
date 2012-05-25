@@ -426,6 +426,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 
 # fcfg_global
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
+	generic_Text \
 	writer_Text \
 	writer_StarOffice_XML_Writer \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
@@ -468,7 +469,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	writer_Rich_Text_Format \
 	calc_SYLK \
 	calc_StarOffice_XML_Calc \
-	calc_Text_txt_csv_StarCalc \
 	calc_StarOffice_XML_Calc_Template \
 	pdf_Portable_Document_Format \
 	calc_dBase\

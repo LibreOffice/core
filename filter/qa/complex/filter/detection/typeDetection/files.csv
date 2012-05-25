@@ -46,7 +46,7 @@ csv2;Writer/Text_CSV.txt;writer_Text_encoded:writer_Text;writer_Text_encoded:wri
 ###################################
 # C A L C   D O C U M E N T S
 ##################################
-csv1;Calc/Text_CSV.csv;calc_Text_txt_csv_StarCalc;writer_Text_encoded:writer_Text
+csv1;Calc/Text_CSV.csv;generic_Text;writer_Text_encoded:writer_Text
 Calc1;Calc/Calc1.SDC;calc_StarCalc_10;calc_StarCalc_10
 Calc2_document;Calc/Calc3.SDC;calc_StarCalc_30_VorlageTemplate;calc_StarCalc_30
 Calc2_template;Calc/Calc3.vor;calc_StarCalc_30;calc_StarCalc_30

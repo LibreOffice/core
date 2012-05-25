@@ -72,7 +72,7 @@ FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
     { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
-    { "csv" , "Text - txt - csv (StarCalc)", "calc_Text_txt_csv_StarCalc", CSV_FORMAT_TYPE }
+    { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE }
 };
 
 }

@@ -1,0 +1,135 @@
+diff --git a/filter/source/config/cache/typedetection.cxx b/filter/source/config/cache/typedetection.cxx
+index cac9b14..f24198b 100644
+--- a/filter/source/config/cache/typedetection.cxx
++++ b/filter/source/config/cache/typedetection.cxx
+@@ -43,6 +43,49 @@
+ #include <tools/urlobj.hxx>
+ #include <unotools/localfilehelper.hxx>
+ 
++
++#include <stdio.h>
++#include <string>
++#include <sys/time.h>
++
++namespace {
++
++class stack_printer
++{
++public:
++    explicit stack_printer(const char* msg) :
++        msMsg(msg)
++    {
++        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
++        mfStartTime = getTime();
++    }
++
++    ~stack_printer()
++    {
++        double fEndTime = getTime();
++        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
++    }
++
++    void printTime(int line) const
++    {
++        double fEndTime = getTime();
++        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
++    }
++
++private:
++    double getTime() const
++    {
++        timeval tv;
++        gettimeofday(&tv, NULL);
++        return tv.tv_sec + tv.tv_usec / 1000000.0;
++    }
++
++    ::std::string msMsg;
++    double mfStartTime;
++};
++
++}
++
+ //_______________________________________________
+ // namespace
+ 
+@@ -108,6 +151,21 @@ TypeDetection::~TypeDetection()
+ 
+ namespace {
+ 
++void print(const FlatDetection& rFD, const char* msg)
++{
++    fprintf(stdout, "--- %s\n", msg);
++    FlatDetection::const_iterator i = rFD.begin(), iend = rFD.end();
++    for (; i != iend; ++i)
++    {
++        const FlatDetectionInfo& r = *i;
++        fprintf(stdout, "  * type = '%s'  match by extension = %d  match by pattern = %d  pre-selected as type = %d  pre-selected as filter = %d  pre-selected as doc service = %d\n",
++                rtl::OUStringToOString(r.sType, RTL_TEXTENCODING_UTF8).getStr(),
++                r.bMatchByExtension, r.bMatchByPattern, r.bPreselectedAsType,
++                r.bPreselectedByFilter, r.bPreselectedByDocumentService);
++    }
++    fprintf(stdout, "---\n");
++}
++
+ /**
+  * Types with matching extension come first, then types that are supported
+  * by the document service come next.
+@@ -129,6 +187,7 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
+                                                               sal_Bool                                         bAllowDeep )
+     throw (css::uno::RuntimeException)
+ {
++    stack_printer __stack_printer__("filter/config/TypeDetection::queryTypeByDescriptor");
+     // make the descriptor more useable :-)
+     ::comphelper::MediaDescriptor stlDescriptor(lDescriptor);
+ 
+@@ -164,16 +223,21 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
+     FlatDetection lFlatTypes;
+     impl_getPreselection(aURL, stlDescriptor, lFlatTypes);
+ 
++    print(lFlatTypes, "pre-selection");
++
+     //*******************************************
+     // get all types, which match to the given descriptor
+     // That can be true by: extensions/url pattern/mime type etcpp.
+     m_rCache->detectFlatForURL(aURL, lFlatTypes);
+ 
++    print(lFlatTypes, "flat by url");
++
+     aLock.clear();
+     // <- SAFE ----------------------------------
+ 
+     // Properly prioritize all candidate types.
+     lFlatTypes.sort(SortByPriority());
++    print(lFlatTypes, "sorted by priority");
+ 
+     ::rtl::OUString sType      ;
+     ::rtl::OUString sLastChance;
+@@ -190,8 +254,16 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
+         // stream failed by e.g. an IO exception ...
+         OUStringList lUsedDetectors;
+         if (lFlatTypes.size()>0)
++        {
+             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
+ 
++            {
++                rtl::OUString aFilter = stlDescriptor.getUnpackedValueOrDefault(comphelper::MediaDescriptor::PROP_FILTERNAME(), rtl::OUString());
++                fprintf(stdout, "TypeDetection::queryTypeByDescriptor:   filter = '%s'  type = '%s' (flat and deep)\n",
++                        rtl::OUStringToOString(aFilter, RTL_TEXTENCODING_UTF8).getStr(), rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
++            }
++        }
++
+         //*******************************************
+         // if no flat detected (nor preselected!) type could be
+         // verified and no error occurred during creation of
+@@ -203,6 +275,11 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
+            )
+         {
+             sType = impl_detectTypeDeepOnly(stlDescriptor, lUsedDetectors);
++            {
++                rtl::OUString aFilter = stlDescriptor.getUnpackedValueOrDefault(comphelper::MediaDescriptor::PROP_FILTERNAME(), rtl::OUString());
++                fprintf(stdout, "TypeDetection::queryTypeByDescriptor:   filter = '%s'  type = '%s' (deep only)\n",
++                        rtl::OUStringToOString(aFilter, RTL_TEXTENCODING_UTF8).getStr(), rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
++            }
+         }
+ 
+         //*******************************************

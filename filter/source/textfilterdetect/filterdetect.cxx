@@ -88,7 +88,7 @@ rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::Proper
         }
     }
 
-    if (aType == "calc_Text_txt_csv_StarCalc")
+    if (aType == "generic_Text")
     {
         // Generic text type.  Decide which filter to use based on the
         // document service first, then on extension if that's not available.
