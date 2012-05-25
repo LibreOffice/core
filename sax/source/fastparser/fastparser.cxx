@@ -130,6 +130,16 @@ static void call_callbackCharacters( void *userData , const XML_Char *s , int nL
     pFastParser->callbackCharacters( s, nLen );
 }
 
+static void call_callbackEntityDecl(void *userData, const XML_Char *entityName,
+        int is_parameter_entity, const XML_Char *value, int value_length,
+        const XML_Char *base, const XML_Char *systemId,
+        const XML_Char *publicId, const XML_Char *notationName)
+{
+    FastSaxParser* pFastParser = reinterpret_cast<FastSaxParser*>(userData);
+    pFastParser->callbackEntityDecl(entityName, is_parameter_entity, value,
+            value_length, base, systemId, publicId, notationName);
+}
+
 static int call_callbackExternalEntityRef( XML_Parser parser,
         const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId )
 {
@@ -458,6 +468,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     XML_SetUserData( entity.mpParser, this );
     XML_SetElementHandler( entity.mpParser, call_callbackStartElement, call_callbackEndElement );
     XML_SetCharacterDataHandler( entity.mpParser, call_callbackCharacters );
+    XML_SetEntityDeclHandler(entity.mpParser, call_callbackEntityDecl);
     XML_SetExternalEntityRefHandler( entity.mpParser, call_callbackExternalEntityRef );
 
     pushEntity( entity );
@@ -884,6 +895,31 @@ void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
     catch (const Exception& e)
     {
         rEntity.maSavedException <<= e;
+    }
+}
+
+void FastSaxParser::callbackEntityDecl(
+    SAL_UNUSED_PARAMETER const XML_Char * /*entityName*/,
+    SAL_UNUSED_PARAMETER int /*is_parameter_entity*/,
+    const XML_Char *value, SAL_UNUSED_PARAMETER int /*value_length*/,
+    SAL_UNUSED_PARAMETER const XML_Char * /*base*/,
+    SAL_UNUSED_PARAMETER const XML_Char * /*systemId*/,
+    SAL_UNUSED_PARAMETER const XML_Char * /*publicId*/,
+    SAL_UNUSED_PARAMETER const XML_Char * /*notationName*/)
+{
+    if (value) { // value != 0 means internal entity
+        OSL_TRACE("FastSaxParser: internal entity declaration, stopping");
+        XML_StopParser(getEntity().mpParser, XML_FALSE);
+        getEntity().maSavedException <<= SAXParseException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "FastSaxParser: internal entity declaration, stopping")),
+            static_cast<OWeakObject*>(this), Any(),
+            mxDocumentLocator->getPublicId(),
+            mxDocumentLocator->getSystemId(),
+            mxDocumentLocator->getLineNumber(),
+            mxDocumentLocator->getColumnNumber() );
+    } else {
+        OSL_TRACE("FastSaxParser: ignoring external entity declaration");
     }
 }
 

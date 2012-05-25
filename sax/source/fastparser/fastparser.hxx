@@ -127,6 +127,10 @@ public:
     void callbackEndElement( const XML_Char* name );
     void callbackCharacters( const XML_Char* s, int nLen );
     int callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
+    void callbackEntityDecl(const XML_Char *entityName, int is_parameter_entity,
+            const XML_Char *value, int value_length, const XML_Char *base,
+            const XML_Char *systemId, const XML_Char *publicId,
+            const XML_Char *notationName);
 
     inline void pushEntity( const Entity& rEntity ) { maEntities.push( rEntity ); }
     inline void popEntity()                         { maEntities.pop(); }
