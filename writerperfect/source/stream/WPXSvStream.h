@@ -18,6 +18,16 @@
 #pragma warning( pop )
 #endif
 
+typedef struct
+{
+    SotStorageRef ref;
+} SotStorageRefWrapper;
+
+typedef struct
+{
+    SotStorageStreamRef ref;
+} SotStorageStreamRefWrapper;
+
 class WPXSvInputStream : public WPXInputStream
 {
 public:
@@ -34,8 +44,8 @@ public:
     virtual bool atEOS();
 
 private:
-    std::vector< SotStorageRef > mxChildrenStorages;
-    std::vector< SotStorageStreamRef > mxChildrenStreams;
+    std::vector< SotStorageRefWrapper > mxChildrenStorages;
+    std::vector< SotStorageStreamRefWrapper > mxChildrenStreams;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XInputStream > mxStream;
     ::com::sun::star::uno::Reference<

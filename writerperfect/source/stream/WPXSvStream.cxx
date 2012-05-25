@@ -163,17 +163,20 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
         return 0;
     }
 
-    mxChildrenStorages.push_back(new SotStorage( pStream, sal_True ));
+    SotStorageRefWrapper storageRefWrapper;
+    storageRefWrapper.ref = new SotStorage( pStream, sal_True );
+    mxChildrenStorages.push_back( storageRefWrapper );
 
     unsigned i = 0;
     while (i < aElems.size())
     {
-        if( mxChildrenStorages.back()->IsStream(aElems[i]))
+        if( mxChildrenStorages.back().ref->IsStream(aElems[i]))
             break;
-        else if (mxChildrenStorages.back()->IsStorage(aElems[i]))
+        else if (mxChildrenStorages.back().ref->IsStorage(aElems[i]))
         {
-            SotStorageRef &tmpParent(mxChildrenStorages.back());
-            mxChildrenStorages.push_back(tmpParent->OpenSotStorage(aElems[i++], STREAM_STD_READ));
+            SotStorageRef tmpParent(mxChildrenStorages.back().ref);
+            storageRefWrapper.ref = tmpParent->OpenSotStorage(aElems[i++], STREAM_STD_READ);
+            mxChildrenStorages.push_back(storageRefWrapper);
         }
         else
             // should not happen
@@ -186,18 +189,19 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
     if (i >= aElems.size())
         return 0;
 
-    mxChildrenStreams.push_back( mxChildrenStorages.back()->OpenSotStream(
-                                     aElems[i], STREAM_STD_READ ));
+    SotStorageStreamRefWrapper storageStreamRefWrapper;
+    storageStreamRefWrapper.ref = mxChildrenStorages.back().ref->OpenSotStream( aElems[i], STREAM_STD_READ );
+    mxChildrenStreams.push_back( storageStreamRefWrapper );
 
     mxSeekable->seek(tmpPosition);
 
-    if ( !mxChildrenStreams.back().Is() || mxChildrenStreams.back()->GetError() )
+    if ( !mxChildrenStreams.back().ref.Is() || mxChildrenStreams.back().ref->GetError() )
     {
         mxSeekable->seek(tmpPosition);
         return 0;
     }
 
-    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( mxChildrenStreams.back() ));
+    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( mxChildrenStreams.back().ref ));
     mxSeekable->seek(tmpPosition);
     if (xContents.is())
         return new WPXSvInputStream( xContents );
