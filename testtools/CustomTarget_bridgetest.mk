@@ -47,7 +47,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest) : \
 $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
 	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		echo "$(UNO_EXE)" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \
 		"-ro $(OUTDIR)/bin/udkapi.rdb" \
@@ -60,13 +60,13 @@ $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
 ifneq ($(SOLAR_JAVA),)
 
 # how to do it more elegantly?
-MY_CLASSPATH := $(call gb_Helper_native_path,$(OUTDIR)/bin/ridl.jar)$(gb_CLASSPATHSEP)$(call gb_Helper_native_path,$(OUTDIR)/bin/java_uno.jar)$(gb_CLASSPATHSEP)$(call gb_Helper_native_path,$(OUTDIR)/bin/jurt.jar)$(gb_CLASSPATHSEP)$(call gb_Helper_native_path,$(OUTDIR)/bin/juh.jar)
+MY_CLASSPATH := $(OUTDIR)/bin/ridl.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/java_uno.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/jurt.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/juh.jar
 
 # which other prerequisites do we need here?
 $(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) : \
 	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		echo "java" \
 		"-classpath $(MY_CLASSPATH)$(gb_CLASSPATHSEP)$(OUTDIR)/bin/testComponent.jar" \
 		"com.sun.star.comp.bridge.TestComponentMain" \
@@ -78,7 +78,7 @@ $(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) : \
 $(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX) : \
 	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		echo "JAVA_HOME=$(JAVA_HOME)" \
 		"LD_LIBRARY_PATH=$(OUTDIR)/lib" \
 		"$(UNO_EXE)" \
@@ -98,7 +98,7 @@ endif
 $(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) : \
 	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		echo "$(UNO_EXE)" \
 		"-ro $(OUTDIR)/xml/ure/services.rdb" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \

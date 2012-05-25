@@ -33,7 +33,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(javamaker_
 $(javamaker_DIR)/done : $(call gb_UnoApiTarget_get_target,bridgetest) \
 	$(call gb_Executable_get_target_for_build,javamaker) | $(javamaker_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,javamaker -BUCR -nD -O$(javamaker_DIR)/class -X$(OUTDIR)/bin/types.rdb $<) && touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
