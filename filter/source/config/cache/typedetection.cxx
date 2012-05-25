@@ -109,13 +109,16 @@ TypeDetection::~TypeDetection()
 namespace {
 
 /**
- * Types with matching extension come first, then types that are supported
- * by the document service come next.
+ * Types with matching pattern first, then extension, then types that are
+ * supported by the document service come next.
  */
 struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
 {
     bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
     {
+        if (r1.bMatchByPattern != r2.bMatchByPattern)
+            return r1.bMatchByPattern;
+
         if (r1.bMatchByExtension != r2.bMatchByExtension)
             return r1.bMatchByExtension;
 
