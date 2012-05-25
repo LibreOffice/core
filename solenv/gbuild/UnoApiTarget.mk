@@ -58,7 +58,7 @@ define gb_UnoApiPartTarget__command
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
 		$(INCLUDE) \
 		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
-		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose -C \
+		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose \
 		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3)))) && \
 	$(gb_UnoApiPartTarget_IDLCCOMMAND) @$${RESPONSEFILE} > /dev/null && \
 	rm -f $${RESPONSEFILE} && \
