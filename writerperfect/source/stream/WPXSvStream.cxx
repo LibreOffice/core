@@ -180,6 +180,12 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
             return 0;
     }
 
+    // For the while don't return stream in this situation.
+    // Later, given how libcdr's zip stream implementation behaves,
+    // return the first stream in the storage if there is one.
+    if (i >= aElems.size())
+        return 0;
+
     mxChildrenStreams.push_back( mxChildrenStorages.back()->OpenSotStream(
                                      aElems[i], STREAM_STD_READ ));
 
