@@ -143,7 +143,7 @@ public class TypeDetection extends TestCase {
         NamedValue[] querySequenze = new NamedValue[1];
         NamedValue query = new NamedValue();
         query.Name = "Name";
-        query.Value = "writer_Text";
+        query.Value = "generic_Text";
         querySequenze[0] = query;
 
 

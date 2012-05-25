@@ -328,7 +328,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_MS_Works_Document \
 	writer_T602_Document \
 	writer_LotusWordPro_Document \
-	writer_Text \
+	generic_Text \
 	writer_Text_encoded \
 	writer_MIZI_Hwp_97 \
 	writer_StarOffice_XML_Writer_Template \
@@ -394,7 +394,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 # fcfg_web
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \
-	writer_Text \
+	generic_Text \
 	writer_web_HTML_help \
 	writer_StarOffice_XML_Writer \
 	writer_web_StarOffice_XML_Writer_Web_Template \
@@ -427,7 +427,6 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 # fcfg_global
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
 	generic_Text \
-	writer_Text \
 	writer_StarOffice_XML_Writer \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
 	pdf_Portable_Document_Format \
@@ -456,6 +455,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
 	calc_DIF \
 	generic_HTML \
+	generic_Text \
 	calc_Lotus \
 	calc_QPro \
 	calc_MS_Excel_40 \
