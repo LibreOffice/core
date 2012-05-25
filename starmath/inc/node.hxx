@@ -30,8 +30,7 @@
 #define NODE_HXX
 
 #include <vector>
-#include <fstream>
-#include <iostream>
+#include <ostream>
 #include <stdio.h>
 
 #include "parse.hxx"
