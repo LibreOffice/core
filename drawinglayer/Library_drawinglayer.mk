@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_package,drawinglayer,drawinglayer_inc))
 
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/drawinglayer/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,drawinglayer,\
@@ -171,6 +172,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor3d/zbufferprocessor3d \
     drawinglayer/source/texture/texture3d \
     drawinglayer/source/texture/texture \
+    drawinglayer/source/dumper/ChartViewDumper \
 ))
 
 # vim: set noet sw=4 ts=4:

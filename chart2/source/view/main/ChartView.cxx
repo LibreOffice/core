@@ -3023,6 +3023,9 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
     return aServiceNames;
 }
 
+/* ----------------------
+    goes to drawinglayer/
+    ----------------------
 namespace {
 
 #define DEBUG_DUMPER 0
@@ -3118,7 +3121,7 @@ void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr x
 }
 
 }
-
+*/
 rtl::OUString ChartView::dump() throw (uno::RuntimeException)
 {
     impl_updateView();
