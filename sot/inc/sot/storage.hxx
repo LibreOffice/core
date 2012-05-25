@@ -71,13 +71,13 @@ protected:
     virtual sal_uLong       PutData( const void* pData, sal_uLong nSize );
     virtual sal_uLong       SeekPos( sal_uLong nPos );
     virtual void        FlushData();
-                        ~SotStorageStream();
 public:
                         SotStorageStream( const String &,
                                      StreamMode = STREAM_STD_READWRITE,
                                      StorageMode = 0 );
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
+                        ~SotStorageStream();
                         SO2_DECL_BASIC_CLASS_DLL(SotStorageStream,SOTDATA())
 
     using SvStream::SyncSvStream;
@@ -128,9 +128,9 @@ friend class ::binfilter::SvStorage;
     long        m_nVersion;
 
 protected:
-                        ~SotStorage();
    void                 CreateStorage( sal_Bool bUCBStorage, StreamMode, StorageMode );
 public:
+                        ~SotStorage();
                         SotStorage( const String &,
                                    StreamMode = STREAM_STD_READWRITE,
                                    StorageMode = 0 );
