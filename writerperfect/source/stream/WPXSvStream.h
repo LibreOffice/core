@@ -34,8 +34,8 @@ public:
     virtual bool atEOS();
 
 private:
-    SotStorageRef       mxChildStorage;
-    SotStorageStreamRef mxChildStream;
+    std::vector< SotStorageRef > mxChildrenStorages;
+    std::vector< SotStorageStreamRef > mxChildrenStreams;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XInputStream > mxStream;
     ::com::sun::star::uno::Reference<

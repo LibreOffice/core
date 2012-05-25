@@ -9,10 +9,20 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
+namespace
+{
+static void splitPath( std::vector<rtl::OUString> &rElems, const ::rtl::OUString &rPath )
+{
+    for (sal_Int32 i = 0; i >= 0;)
+        rElems.push_back( rPath.getToken( 0, '/', i ) );
+}
+
+} // anonymous namespace
+
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
     WPXInputStream(),
-    mxChildStorage(),
-    mxChildStream(),
+    mxChildrenStorages(),
+    mxChildrenStreams(),
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
     maData(0)
@@ -133,6 +143,12 @@ bool WPXSvInputStream::isOLEStream()
 
 WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
 {
+    if (!name)
+        return 0;
+    rtl::OUString rPath(name,strlen(name),RTL_TEXTENCODING_UTF8);
+    std::vector<rtl::OUString> aElems;
+    splitPath( aElems, rPath );
+
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return 0;
 
@@ -147,21 +163,35 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
         return 0;
     }
 
-    mxChildStorage = new SotStorage( pStream, sal_True );
+    mxChildrenStorages.push_back(new SotStorage( pStream, sal_True ));
 
-    mxChildStream = mxChildStorage->OpenSotStream(
-                        rtl::OUString::createFromAscii( name ),
-                        STREAM_STD_READ );
+    unsigned i = 0;
+    while (i < aElems.size())
+    {
+        if( mxChildrenStorages.back()->IsStream(aElems[i]))
+            break;
+        else if (mxChildrenStorages.back()->IsStorage(aElems[i]))
+        {
+            SotStorageRef &tmpParent(mxChildrenStorages.back());
+            mxChildrenStorages.push_back(tmpParent->OpenSotStorage(aElems[i++], STREAM_STD_READ));
+        }
+        else
+            // should not happen
+            return 0;
+    }
+
+    mxChildrenStreams.push_back( mxChildrenStorages.back()->OpenSotStream(
+                                     aElems[i], STREAM_STD_READ ));
 
     mxSeekable->seek(tmpPosition);
 
-    if ( !mxChildStream.Is() || mxChildStream->GetError() )
+    if ( !mxChildrenStreams.back().Is() || mxChildrenStreams.back()->GetError() )
     {
         mxSeekable->seek(tmpPosition);
         return 0;
     }
 
-    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( mxChildStream ));
+    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( mxChildrenStreams.back() ));
     mxSeekable->seek(tmpPosition);
     if (xContents.is())
         return new WPXSvInputStream( xContents );
