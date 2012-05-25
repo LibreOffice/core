@@ -434,10 +434,15 @@ void GtkData::initNWF( void )
     // small extra border around menu items
     NWEnsureGTKMenu( SalX11Screen( 0 ) );
     gint horizontal_padding = 1;
-    gtk_widget_style_get( gWidgetData[0].gMenuItemMenuWidget,
-            "horizontal_padding", &horizontal_padding,
+    gint vertical_padding = 1;
+    gtk_widget_style_get( gWidgetData[0].gMenuWidget,
+            "horizontal-padding", &horizontal_padding,
             (char *)NULL);
-    pSVData->maNWFData.mnMenuFormatExtraBorder = horizontal_padding;
+    gtk_widget_style_get( gWidgetData[0].gMenuWidget,
+            "vertical-padding", &vertical_padding,
+            (char *)NULL);
+    pSVData->maNWFData.mnMenuFormatBorderX = horizontal_padding;
+    pSVData->maNWFData.mnMenuFormatBorderY = vertical_padding;
 
     if( SalGetDesktopEnvironment() == "KDE" )
     {

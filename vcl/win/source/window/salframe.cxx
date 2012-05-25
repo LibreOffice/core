@@ -2766,7 +2766,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetHighlightTextColor() );
 
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maNWFData.mnMenuFormatExtraBorder = 0;
+    pSVData->maNWFData.mnMenuFormatBorderX = 0;
+    pSVData->maNWFData.mnMenuFormatBorderY = 0;
     pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
     GetSalData()->mbThemeMenuSupport = FALSE;
     aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );

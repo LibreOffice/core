@@ -2522,9 +2522,8 @@ Size Menu::ImplCalcSize( Window* pWin )
         aSz.Width() = nTextPos + nMaxWidth + nExtra;
         aSz.Width() += 4*nExtra;   // a _little_ more ...
 
-        int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
-        aSz.Width() += 2*nOuterSpace;
-        aSz.Height() += 2*nOuterSpace;
+        aSz.Width() += 2*ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
+        aSz.Height() += 2*ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
     }
     else
     {
@@ -2629,12 +2628,12 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
     if ( pLogo )
         aTopLeft.X() = pLogo->aBitmap.GetSizePixel().Width();
 
-    int nOuterSpace = 0;
+    int nOuterSpaceX = 0;
     if( !bIsMenuBar )
     {
-        nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
-        aTopLeft.X() += nOuterSpace;
-        aTopLeft.Y() += nOuterSpace;
+        nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
+        aTopLeft.X() += nOuterSpaceX;
+        aTopLeft.Y() += ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
     }
 
     Size aOutSz = pWin->GetOutputSizePixel();
@@ -2710,7 +2709,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                         if ( bHighlighted )
                             nState |= CTRL_STATE_SELECTED;
                         Size aSz( pData->aSz );
-                        aSz.Width() = aOutSz.Width() - 2*nOuterSpace;
+                        aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX;
                         Rectangle aItemRect( aPos, aSz );
                         MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
                         bNativeOk = pWin->DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
@@ -2722,12 +2721,12 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     if( ! bNativeOk )
                     {
                         aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
-                        aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
+                        aTmpPos.X() = aPos.X() + 2 + nOuterSpaceX;
                         pWin->SetLineColor( rSettings.GetShadowColor() );
-                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpaceX, aTmpPos.Y() ) );
                         aTmpPos.Y()++;
                         pWin->SetLineColor( rSettings.GetLightColor() );
-                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpaceX, aTmpPos.Y() ) );
                         pWin->SetLineColor();
                     }
                 }
@@ -2775,7 +2774,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
                             Size aSz( pData->aSz );
-                            aSz.Width() = aOutSz.Width() - 2*nOuterSpace;
+                            aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX;
                             Rectangle aItemRect( aPos, aSz );
                             MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
                             pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
@@ -2854,7 +2853,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                         pWin->SetBackground( Wallpaper( aBg ) );
                     }
                     // how much space is there for the text ?
-                    long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpace;
+                    long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpaceX;
                     if( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
                     {
                         XubString aAccText = pData->aAccelKey.GetName();
@@ -2877,7 +2876,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     aTmpPos.X() = aOutSz.Width() - pWin->GetTextWidth( aAccText );
                     aTmpPos.X() -= 4*nExtra;
 
-                    aTmpPos.X() -= nOuterSpace;
+                    aTmpPos.X() -= nOuterSpaceX;
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     pWin->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.Len(), nTextStyle );
@@ -2898,7 +2897,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                                                             aTmpSz, aSpacing ) )
                         {
                             aTmpSz = Size( nFontHeight, nFontHeight );
-                            aSpacing = nOuterSpace;
+                            aSpacing = nOuterSpaceX;
                         }
 
                         if ( pData->bEnabled )
@@ -2906,7 +2905,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                         if ( bHighlighted )
                             nState |= CTRL_STATE_SELECTED;
 
-                        aTmpPos.X() = aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpace;
+                        aTmpPos.X() = aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpaceX;
                         aTmpPos.Y() = aPos.Y() + ( pData->aSz.Height() - aTmpSz.Height() ) / 2;
                         aTmpPos.Y() += nExtra/2;
 
@@ -2921,7 +2920,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     }
                     if( ! bNativeOk )
                     {
-                        aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
+                        aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpaceX;
                         aTmpPos.Y() = aPos.Y();
                         aTmpPos.Y() += nExtra/2;
                         aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
@@ -4090,7 +4089,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, sal_Bool bM
     if( ! pMenu )
         return;
 
-    long nY = nScrollerHeight;
+    long nY = nScrollerHeight + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= nY ) && ( nMouseY < ( aOutSz.Height() - nY ) ) )
@@ -4675,14 +4674,13 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
 
     Size    aSz = GetOutputSizePixel();
     long    nStartY = ImplGetStartY();
-    long    nY = nScrollerHeight+nStartY;
+    long    nY = nScrollerHeight + nStartY + ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
     long    nX = 0;
 
     if ( pMenu->pLogo )
         nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
-    int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
-    nY += nOuterSpace;
+    int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
 
     size_t nCount = pMenu->pItemList->size();
     for ( size_t n = 0; n < nCount; n++ )
@@ -4697,7 +4695,7 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                 Color oldLineColor;
                 bool bDrawItemRect = true;
 
-                Rectangle aItemRect( Point( nX+nOuterSpace, nY ), Size( aSz.Width()-2*nOuterSpace, pData->aSz.Height() ) );
+                Rectangle aItemRect( Point( nX+nOuterSpaceX, nY ), Size( aSz.Width()-2*nOuterSpaceX, pData->aSz.Height() ) );
                 if ( pData->nBits & MIB_POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
