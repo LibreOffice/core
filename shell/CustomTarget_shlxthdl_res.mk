@@ -40,7 +40,7 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 
 $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl_impl.rc :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LCX,1)
-	$(call gb_Helper_abbreviate_dirs_native,\
+	$(call gb_Helper_abbreviate_dirs,\
 		cd $(SRCDIR)/shell/source/win32/shlxthandler/res && \
 		$(call gb_Executable_get_target_for_build,lngconvex) \
 			-ulf shlxthdl.ulf \
