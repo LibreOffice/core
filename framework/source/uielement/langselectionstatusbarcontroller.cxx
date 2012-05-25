@@ -224,8 +224,11 @@ throw (::com::sun::star::uno::RuntimeException)
         }
     }
     xPopupMenu->insertItem( MID_LANG_SEL_NONE,  String( FwkResId( STR_LANGSTATUS_NONE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_SEL_NONE );
-    xPopupMenu->insertItem( MID_LANG_SEL_RESET, String( FwkResId( STR_RESET_TO_DEFAULT_LANGUAGE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_SEL_RESET );
-    xPopupMenu->insertItem( MID_LANG_SEL_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_SEL_MORE );
+    if ( aLanguageTable.GetString( LANGUAGE_NONE ) == m_aCurLang )
+        xPopupMenu->checkItem( MID_LANG_SEL_NONE, sal_True );
+
+    xPopupMenu->insertItem( MID_LANG_SEL_RESET, String( FwkResId( STR_RESET_TO_DEFAULT_LANGUAGE )), 0, MID_LANG_SEL_RESET );
+    xPopupMenu->insertItem( MID_LANG_SEL_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), 0, MID_LANG_SEL_MORE );
 
     // add entries to submenu ('set language for paragraph')
     nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
@@ -238,18 +241,18 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             DBG_ASSERT( MID_LANG_PARA_1 <= nItemId && nItemId <= MID_LANG_PARA_9,
                     "nItemId outside of expected range!" );
-            subPopupMenu->insertItem( nItemId, rStr, css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+            subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
             aLangMap[nItemId] = rStr;
             ++nItemId;
         }
     }
-    subPopupMenu->insertItem( MID_LANG_PARA_NONE,  String( FwkResId( STR_LANGSTATUS_NONE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_NONE );
-    subPopupMenu->insertItem( MID_LANG_PARA_RESET, String( FwkResId( STR_RESET_TO_DEFAULT_LANGUAGE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_RESET );
-    subPopupMenu->insertItem( MID_LANG_PARA_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_MORE );
+    subPopupMenu->insertItem( MID_LANG_PARA_NONE,  String( FwkResId( STR_LANGSTATUS_NONE )), 0, MID_LANG_PARA_NONE );
+    subPopupMenu->insertItem( MID_LANG_PARA_RESET, String( FwkResId( STR_RESET_TO_DEFAULT_LANGUAGE )), 0, MID_LANG_PARA_RESET );
+    subPopupMenu->insertItem( MID_LANG_PARA_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), 0, MID_LANG_PARA_MORE );
 
     // add last two entries to main menu
     xPopupMenu->insertSeparator( MID_LANG_PARA_SEPERATOR );
-    xPopupMenu->insertItem( MID_LANG_PARA_STRING, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_STRING );
+    xPopupMenu->insertItem( MID_LANG_PARA_STRING, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), 0, MID_LANG_PARA_STRING );
     xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
 
 

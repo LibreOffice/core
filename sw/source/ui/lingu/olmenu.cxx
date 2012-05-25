@@ -314,8 +314,11 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  String(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, String(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), MIB_RADIOCHECK );
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  String(SW_RES( STR_LANGSTATUS_MORE )), MIB_RADIOCHECK );
+    if ( aLanguageTable.GetString( LANGUAGE_NONE ) == aCurLang )
+        pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, sal_True );
+
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, String(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), 0 );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  String(SW_RES( STR_LANGSTATUS_MORE )), 0 );
 }
 
 
