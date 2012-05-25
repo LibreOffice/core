@@ -67,7 +67,6 @@ Excel97_document;Calc/Excel97_2000_XP.xls;calc_MS_Excel_97;calc_MS_Excel_97
 #Excel97_1dummy;Calc/Excel97_2000_XP.dummy;calc_MS_Excel_97;calc_MS_Excel_97
 Excel97_template;Calc/Excel97_2000_XP.xlt;calc_MS_Excel_97;calc_MS_Excel_97
 Calc_html;Calc/HTML_Calc.html;generic_HTML;generic_HTML
-Lotus;Calc/Lotus.WK1;writer_Lotus_1_2_3_10_DOS_StarWriter;writer_Lotus_1_2_3_10_DOS_StarWriter
 Calc_rtf;Calc/RTF_StarOffice_Calc.rtf;writer_Rich_Text_Format;writer_Rich_Text_Format
 slk;Calc/SYLK.SLK;calc_SYLK;generic_Text
 Webpagequery;Calc/Webpagequery.html;generic_HTML;generic_HTML

@@ -311,8 +311,6 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 # fcfg_writer
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \
-	writer_Lotus_1_2_3_10_DOS_StarWriter \
-	writer_Lotus_1_2_3_10_WIN_StarWriter \
 	calc_MS_Excel_40 \
 	calc_MS_Excel_5095 \
 	calc_MS_Excel_95 \
@@ -344,8 +342,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
 	HTML__StarWriter_ \
-	Lotus_1_2_3_1_0__DOS___StarWriter_ \
-	Lotus_1_2_3_1_0__WIN___StarWriter_ \
 	MS_WinWord_5 \
 	MS_WinWord_6_0 \
 	MS_Word_95 \
