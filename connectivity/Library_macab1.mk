@@ -43,6 +43,12 @@ $(eval $(call gb_Library_use_libraries,macab1,\
 	$(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_set_include,macab1,\
+        $$(INCLUDE) \
+        -I$(SRCDIR)/connectivity/inc \
+        -I$(SRCDIR)/connectivity/source/inc \
+))
+
 $(eval $(call gb_Library_add_exception_objects,macab1,\
 	connectivity/source/drivers/macab/MacabDriver \
 	connectivity/source/drivers/macab/MacabServices \
