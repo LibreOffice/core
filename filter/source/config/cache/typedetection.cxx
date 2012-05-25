@@ -109,8 +109,101 @@ TypeDetection::~TypeDetection()
 namespace {
 
 /**
- * Types with matching pattern first, then extension, then types that are
- * supported by the document service come next.
+ * Rank format types in order of complexity.  More complex formats are
+ * ranked higher so that they get tested sooner over simpler formats.
+ *
+ * Guidelines to determine how complex a format is (subject to change):
+ *
+ * 1) compressed text (XML, HTML, etc)
+ * 2) binary
+ * 3) non-compressed text
+ *   3.1) structured text
+ *     3.1.1) dialect of a structured text (e.g. docbook XML)
+ *     3.1.2) generic structured text (e.g. generic XML)
+ *   3.2) non-structured text
+ *
+ * In each category, rank them from strictly-structured to
+ * loosely-structured.
+ */
+int getFlatTypeRank(const rtl::OUString& rType)
+{
+    // List formats from more complex to less complex.
+    // TODO: Add more.
+    static const char* ranks[] = {
+        // Compressed XML
+        "writer8_template",
+        "writer8",
+        "calc8_template",
+        "calc8",
+        "writer_OOXML_Text_Template",
+        "writer_OOXML",
+        "writer_MS_Word_2007_Template",
+        "writer_MS_Word_2007",
+        "Office Open XML Spreadsheet Template",
+        "Office Open XML Spreadsheet",
+        "MS Excel 2007 XML Template",
+        "MS Excel 2007 XML",
+
+        // Compressed text
+        "pdf_Portable_Document_Format",
+
+        // Binary
+        "writer_T602_Document",
+        "writer_WordPerfect_Document",
+        "writer_MS_Works_Document",
+        "writer_MS_Word_97_Vorlage",
+        "writer_MS_Word_97",
+        "writer_MS_Word_95_Vorlage",
+        "writer_MS_Word_95",
+        "writer_MS_WinWord_60",
+        "writer_MS_WinWord_5",
+        "MS Excel 2007 Binary",
+        "calc_MS_Excel_97_VorlageTemplate",
+        "calc_MS_Excel_97",
+        "calc_MS_Excel_95_VorlageTemplate",
+        "calc_MS_Excel_95",
+        "calc_MS_Excel_5095_VorlageTemplate",
+        "calc_MS_Excel_5095",
+        "calc_MS_Excel_40_VorlageTemplate",
+        "calc_MS_Excel_40",
+        "calc_Pocket_Excel_File",
+        "calc_Lotus",
+        "calc_QPro",
+        "calc_SYLK",
+        "calc_DIF",
+        "calc_dBase",
+
+
+        // Non-compressed XML
+        "writer_ODT_FlatXML",
+        "calc_ODS_FlatXML",
+        "calc_MS_Excel_2003_XML",
+        "writer_MS_Word_2003_XML",
+        "writer_DocBook_File",
+        "XHTML_File",
+
+        // Non-compressed text
+        "writer_Rich_Text_Format",
+        "generic_HTML",
+        "generic_Text"
+    };
+
+    size_t n = SAL_N_ELEMENTS(ranks);
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        if (rType.equalsAscii(ranks[i]))
+            return n - i - 1;
+    }
+
+    // Not ranked.  Treat them equally.
+    return -1;
+}
+
+/**
+ * Types with matching pattern first, then extension, then custom ranks by
+ * types, then types that are supported by the document service come next.
+ * Lastly, sort them alphabetically.
  */
 struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
 {
@@ -122,7 +215,25 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
         if (r1.bMatchByExtension != r2.bMatchByExtension)
             return r1.bMatchByExtension;
 
-        return r1.bPreselectedByDocumentService;
+        int rank1 = getFlatTypeRank(r1.sType);
+        int rank2 = getFlatTypeRank(r2.sType);
+
+        if (rank1 != rank2)
+            return rank1 > rank2;
+
+        if (r1.bPreselectedByDocumentService != r2.bPreselectedByDocumentService)
+            return r1.bPreselectedByDocumentService;
+
+        // All things being equal, sort them alphabetically.
+        return r1.sType > r2.sType;
+    }
+};
+
+struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+{
+    bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
+    {
+        return r1.sType == r2.sType;
     }
 };
 
@@ -177,6 +288,7 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
 
     // Properly prioritize all candidate types.
     lFlatTypes.sort(SortByPriority());
+    lFlatTypes.unique(EqualByName());
 
     ::rtl::OUString sType      ;
     ::rtl::OUString sLastChance;
