@@ -26,6 +26,7 @@
 
 #include "strings.hrc"
 #include "sdresid.hxx"
+#include "svtools/slidesorterbaropt.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -54,11 +55,18 @@ SlideSorterModule::SlideSorterModule (
     {
         UpdateViewTabBar(NULL);
 
-        AddActiveMainView(FrameworkHelper::msImpressViewURL);
-        AddActiveMainView(FrameworkHelper::msOutlineViewURL);
-        AddActiveMainView(FrameworkHelper::msNotesViewURL);
-
-        AddActiveMainView(FrameworkHelper::msDrawViewURL);
+        if (SvtSlideSorterBarOptions().GetVisibleImpressView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msImpressViewURL);
+        if (SvtSlideSorterBarOptions().GetVisibleOutlineView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msOutlineViewURL);
+        if (SvtSlideSorterBarOptions().GetVisibleNotesView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msNotesViewURL);
+        if (SvtSlideSorterBarOptions().GetVisibleHandoutView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msHandoutViewURL);
+        if (SvtSlideSorterBarOptions().GetVisibleSlideSorterView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msSlideSorterURL);
+        if (SvtSlideSorterBarOptions().GetVisibleDrawView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msDrawViewURL);
 
         mxConfigurationController->addConfigurationChangeListener(
             this,
@@ -74,7 +82,15 @@ SlideSorterModule::~SlideSorterModule (void)
 {
 }
 
-
+void SlideSorterModule::SaveResourceState (void)
+{
+    SvtSlideSorterBarOptions().SetVisibleImpressView(IsResourceActive(FrameworkHelper::msImpressViewURL));
+    SvtSlideSorterBarOptions().SetVisibleOutlineView(IsResourceActive(FrameworkHelper::msOutlineViewURL));
+    SvtSlideSorterBarOptions().SetVisibleNotesView(IsResourceActive(FrameworkHelper::msNotesViewURL));
+    SvtSlideSorterBarOptions().SetVisibleHandoutView(IsResourceActive(FrameworkHelper::msHandoutViewURL));
+    SvtSlideSorterBarOptions().SetVisibleSlideSorterView(IsResourceActive(FrameworkHelper::msSlideSorterURL));
+    SvtSlideSorterBarOptions().SetVisibleDrawView(IsResourceActive(FrameworkHelper::msDrawViewURL));
+}
 
 
 void SAL_CALL SlideSorterModule::notifyConfigurationChange (
@@ -105,9 +121,6 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
         ResourceManager::notifyConfigurationChange(rEvent);
     }
 }
-
-
-
 
 void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
 {

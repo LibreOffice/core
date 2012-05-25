@@ -154,6 +154,12 @@ interface XConfigurationController
     interface XConfigurationControllerBroadcaster;
     interface XResourceFactoryManager;
 
+    /** Check if the ConfigurationController is disposing
+        @return
+            When the ConfigurationController is disposing then true else false
+    */
+    boolean IsDisposing ();
+
     /** Request the activation of a resource.
         <p>The request is processed asynchronously.  Notifications about
         configuration changes are sent after this call returns.</p>

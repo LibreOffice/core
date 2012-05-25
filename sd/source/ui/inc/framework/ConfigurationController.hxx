@@ -71,6 +71,8 @@ public:
     ConfigurationController (void) throw();
     virtual ~ConfigurationController (void) throw();
 
+    sal_Bool IsDisposing (void) throw (com::sun::star::uno::RuntimeException);
+
     virtual void SAL_CALL disposing (void);
 
     void ProcessEvent (void);
@@ -204,6 +206,7 @@ private:
     class Implementation;
     ::boost::scoped_ptr<Implementation> mpImplementation;
     bool mbIsDisposed;
+    bool mbIsDisposing;
 
     /** When the called object has already been disposed this method throws
         an exception and does not return.
