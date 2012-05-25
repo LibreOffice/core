@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <sfx2/tabpage.hrc>
+
 #include <svtools/controldims.hrc>
 
 #define PB_OK                   1
@@ -55,8 +57,8 @@
 
 // metrics
 
-#define WIDTH_PAGEFRAME         263
-#define HEIGHT_PAGEFRAME        191
+#define WIDTH_PAGEFRAME         (TP_WIDTH + 3)
+#define HEIGHT_PAGEFRAME        (TP_HEIGHT + 6)
 
 #define COL_1                   (RSC_SP_DLG_INNERBORDER_LEFT)
 #define COL_2                   (COL_1+0)
