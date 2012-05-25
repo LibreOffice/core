@@ -42,8 +42,6 @@ mkdir: %_DEST%\inc\external\unicode
 ..\%__SRC%\lib\libicuuc.a       %_DEST%\lib\
 ..\%__SRC%\lib\libicutu.a       %_DEST%\lib\
 
-..\icuversion.mk %_DEST%\inc\icuversion.mk
-
 linklib: libicudata.*.*.*
 linklib: libicui18n.*.*.*
 linklib: libicule.*.*.*

@@ -35,8 +35,6 @@ TARGET=so_icu
 
 # --- Files --------------------------------------------------------
 
-.INCLUDE :	icuversion.mk
-
 TARFILE_NAME=icu4c-49_1_1-src
 TARFILE_MD5=7c53f83e0327343f4060c0eb83842daf
 TARFILE_ROOTDIR=icu

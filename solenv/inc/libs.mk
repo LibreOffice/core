@@ -26,7 +26,6 @@
 #*************************************************************************
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
-.INCLUDE .IGNORE : icuversion.mk
 .INCLUDE .IGNORE : i18npool/version.mk
 .INCLUDE .IGNORE : comphelper/version.mk
 .INCLUDE .IGNORE : ucbhelper/version.mk
