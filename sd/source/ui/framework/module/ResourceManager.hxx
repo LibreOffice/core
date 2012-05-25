@@ -62,6 +62,8 @@ public:
         activate the resource managed by the called object.
     */
     void AddActiveMainView (const ::rtl::OUString& rsMainViewURL);
+    sal_Bool IsResourceActive (const ::rtl::OUString& rsMainViewURL);
+    virtual void SaveResourceState (void);
 
     virtual void SAL_CALL disposing (void);
 
@@ -107,6 +109,7 @@ private:
 
     ::rtl::OUString msCurrentMainViewURL;
     bool mbIsEnabled;
+    bool mbConfigurationControllerIsDisposing;
 
     void HandleMainViewSwitch (
         const ::rtl::OUString& rsViewURL,

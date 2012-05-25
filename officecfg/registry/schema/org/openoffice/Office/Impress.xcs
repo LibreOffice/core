@@ -1402,11 +1402,53 @@
           </info>
         </set>
       </group>
-      <group oor:name="SlideSorter">
+      <group oor:name="SlideSorterBar">
         <info>
           <desc>Values related to the slide sorter.</desc>
           <label>Slide Sorter Options</label>
         </info>
+        <group oor:name="Visible">
+          <info>
+            <desc>Options that control the visibility of the slide sorter.</desc>
+            <label>Slide Sorter Visibility</label>
+          </info>
+          <prop oor:name="ImpressView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the Slide Sorter in the Impress view.</desc>
+              <label>Slide Sorter Visibility ImpressView</label>
+            </info>
+          </prop>
+          <prop oor:name="OutlineView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the Slide Sorter in the Outline view.</desc>
+              <label>Slide Sorter Visibility OutlineView</label>
+            </info>
+          </prop>
+          <prop oor:name="NotesView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the Slide Sorter in the Notes view.</desc>
+              <label>Slide Sorter Visibility NotesView</label>
+            </info>
+          </prop>
+          <prop oor:name="HandoutView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the Slide Sorter in the HandOut view.</desc>
+              <label>Slide Sorter Visibility HandOutView</label>
+            </info>
+          </prop>
+          <prop oor:name="SlideSorterView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the Slide Sorter in the SlideSorter view.</desc>
+              <label>Slide Sorter Visibility SlideSorterView</label>
+            </info>
+          </prop>
+          <prop oor:name="DrawView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the Slide Sorter in the Draw view.</desc>
+              <label>Slide Sorter Visibility DrawView</label>
+            </info>
+          </prop>
+        </group>
         <group oor:name="PreviewCache">
           <info>
             <desc>Values for tuning the preview cache of the slide sorter.</desc>

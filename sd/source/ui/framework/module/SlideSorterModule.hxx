@@ -41,7 +41,7 @@ public:
         const ::rtl::OUString& rsLeftPaneURL);
     virtual ~SlideSorterModule (void);
 
-
+    virtual void SaveResourceState (void);
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (

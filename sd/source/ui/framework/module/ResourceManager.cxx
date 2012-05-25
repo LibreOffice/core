@@ -66,7 +66,8 @@ ResourceManager::ResourceManager (
       mxMainViewAnchorId(FrameworkHelper::Instance(rxController)->CreateResourceId(
           FrameworkHelper::msCenterPaneURL)),
       msCurrentMainViewURL(),
-      mbIsEnabled(true)
+      mbIsEnabled(true),
+      mbConfigurationControllerIsDisposing(false)
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
     if (xControllerManager.is())
@@ -103,8 +104,15 @@ void ResourceManager::AddActiveMainView (
     mpActiveMainViewContainer->insert(rsMainViewURL);
 }
 
+sal_Bool ResourceManager::IsResourceActive (
+    const OUString& rsMainViewURL)
+{
+    return (mpActiveMainViewContainer->find(rsMainViewURL) != mpActiveMainViewContainer->end());
+}
 
-
+void ResourceManager::SaveResourceState (void)
+{
+}
 
 void SAL_CALL ResourceManager::disposing (void)
 {
@@ -144,6 +152,8 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
 
     sal_Int32 nEventType = 0;
     rEvent.UserData >>= nEventType;
+    if (!mxConfigurationController->IsDisposing())
+        mbConfigurationControllerIsDisposing = false;
     switch (nEventType)
     {
         case ResourceActivationRequestEvent:
@@ -176,6 +186,11 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
         case ResourceDeactivationRequestEvent:
             if (rEvent.ResourceId->compareTo(mxMainViewAnchorId) == 0)
             {
+                if (mxConfigurationController->IsDisposing() && !mbConfigurationControllerIsDisposing)
+                {
+                    mbConfigurationControllerIsDisposing = true;
+                    SaveResourceState();
+                }
                 HandleMainViewSwitch(
                     OUString(),
                     rEvent.Configuration,
@@ -183,6 +198,11 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
             }
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
             {
+                if (mxConfigurationController->IsDisposing() && !mbConfigurationControllerIsDisposing)
+                {
+                    mbConfigurationControllerIsDisposing = true;
+                    SaveResourceState();
+                }
                 // The resource managed by this ResourceManager has been
                 // explicitly been requested to be hidden (maybe by us).
                 // Remember this setting.

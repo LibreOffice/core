@@ -155,7 +155,8 @@ ConfigurationController::Lock::~Lock (void)
 ConfigurationController::ConfigurationController (void) throw()
     : ConfigurationControllerInterfaceBase(MutexOwner::maMutex),
       mpImplementation(),
-      mbIsDisposed(false)
+      mbIsDisposed(false),
+      mbIsDisposing(false)
 {
 }
 
@@ -166,7 +167,10 @@ ConfigurationController::~ConfigurationController (void) throw()
 {
 }
 
-
+sal_Bool ConfigurationController::IsDisposing (void) throw (com::sun::star::uno::RuntimeException)
+{
+    return mbIsDisposing;
+}
 
 
 void SAL_CALL ConfigurationController::disposing (void)
@@ -174,6 +178,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     if (mpImplementation.get() == NULL)
         return;
 
+    mbIsDisposing = true;
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::disposing");
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     requesting empty configuration");
     // To destroy all resources an empty configuration is requested and then,
@@ -186,6 +191,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     // Now that all resources have been deactivated, mark the controller as
     // disposed.
     mbIsDisposed = true;
+    mbIsDisposing = false;
 
     // Release the listeners.
     lang::EventObject aEvent;

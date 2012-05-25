@@ -107,6 +107,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/langtab.hxx,svtools/la
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/localresaccess.hxx,svtools/localresaccess.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/menuoptions.hxx,svtools/menuoptions.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/miscopt.hxx,svtools/miscopt.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/slidesorterbaropt.hxx,svtools/slidesorterbaropt.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/optionsdrawinglayer.hxx,svtools/optionsdrawinglayer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/parhtml.hxx,svtools/parhtml.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/parrtf.hxx,svtools/parrtf.hxx))
