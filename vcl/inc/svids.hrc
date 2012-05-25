@@ -251,6 +251,9 @@
 #define SV_ICON_ID_MACRO                       17
 #define SV_ICON_ID_PRINTERADMIN               501
 
+#define SV_RESID_BITMAP_THROBBER_START       3000
+#define SV_RESID_BITMAP_THROBBER_END         3060
+
 #define HID_PRINTDLG                        HID_VCL_START
 
 #endif  // _SV_SVIDS_HRC

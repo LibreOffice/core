@@ -112,27 +112,6 @@ namespace toolkit
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
-        ::rtl::OUString lcl_getHighContrastURL( ::rtl::OUString const& i_imageURL )
-        {
-            INetURLObject aURL( i_imageURL );
-            if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
-            {
-                OSL_VERIFY( aURL.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hicontrast" ) ), false, 0 ) );
-                return aURL.GetMainURL( INetURLObject::NO_DECODE );
-            }
-            // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
-            // segment
-            const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
-            ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
-
-            ::rtl::OUStringBuffer composer;
-            composer.append( i_imageURL.copy( 0, separatorPos ) );
-            composer.appendAscii( "/hicontrast" );
-            composer.append( i_imageURL.copy( separatorPos ) );
-            return composer.makeStringAndClear();
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
         bool lcl_ensureImage_throw( Reference< XGraphicProvider > const& i_graphicProvider, const bool i_isHighContrast, const CachedImage& i_cachedImage )
         {
             if ( !i_cachedImage.xGraphic.is() )
@@ -141,8 +120,22 @@ namespace toolkit
                 if ( i_isHighContrast )
                 {
                     // try (to find) the high-contrast version of the graphic first
-                    aMediaProperties.put( "URL", lcl_getHighContrastURL( i_cachedImage.sImageURL ) );
-                    i_cachedImage.xGraphic.set( i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+                    INetURLObject aURL( i_cachedImage.sImageURL );
+                    if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
+                    {
+                        rtl::OUString sURL( i_cachedImage.sImageURL );
+                        const sal_Int32 separatorPos = sURL.lastIndexOf( '/' );
+                        if ( separatorPos != -1 )
+                        {
+                            ::rtl::OUStringBuffer composer;
+                            composer.append( sURL.copy( 0, separatorPos ) );
+                            composer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/hicontrast" ) );
+                            composer.append( sURL.copy( separatorPos ) );
+
+                            aMediaProperties.put( "URL", composer.makeStringAndClear() );
+                            i_cachedImage.xGraphic.set( i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+                        }
+                    }
                 }
                 if ( !i_cachedImage.xGraphic.is() )
                 {

@@ -88,28 +88,6 @@ Throbber::~Throbber()
 //----------------------------------------------------------------------------------------------------------------------
 namespace
 {
-    //..................................................................................................................
-    ::rtl::OUString lcl_getHighContrastURL( ::rtl::OUString const& i_imageURL )
-    {
-        INetURLObject aURL( i_imageURL );
-        if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
-        {
-            OSL_VERIFY( aURL.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hicontrast" ) ), false, 0 ) );
-            return aURL.GetMainURL( INetURLObject::NO_DECODE );
-        }
-        // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
-        // segment
-        const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
-        ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
-
-        ::rtl::OUStringBuffer composer;
-        composer.append( i_imageURL.copy( 0, separatorPos ) );
-        composer.appendAscii( "/hicontrast" );
-        composer.append( i_imageURL.copy( separatorPos ) );
-        return composer.makeStringAndClear();
-    }
-
-    //..................................................................................................................
     ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet, const bool i_isHiContrast )
     {
         ::std::vector< Image > aImages;
@@ -130,8 +108,21 @@ namespace
             Reference< XGraphic > xGraphic;
             if ( i_isHiContrast )
             {
-                aMediaProperties.put( "URL", lcl_getHighContrastURL( *imageURL ) );
-                xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+                INetURLObject aURL( *imageURL );
+                if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
+                {
+                    const sal_Int32 separatorPos = imageURL->lastIndexOf( '/' );
+                    if ( separatorPos != -1 )
+                    {
+                        ::rtl::OUStringBuffer composer;
+                        composer.append( imageURL->copy( 0, separatorPos ) );
+                        composer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/hicontrast" ) );
+                        composer.append( imageURL->copy( separatorPos ) );
+
+                        aMediaProperties.put( "URL", composer.makeStringAndClear() );
+                        xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+                    }
+                }
             }
             if ( !xGraphic.is() )
             {
@@ -279,7 +270,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
         ::rtl::OUStringBuffer aURL;
-        aURL.appendAscii( "private:graphicrepository/shared/spinner-" );
+        aURL.appendAscii( "private:graphicrepository/vcl/res/spinner-" );
         aURL.appendAscii( pResolutions[index] );
         aURL.appendAscii( "-" );
         if ( i < 9 )
