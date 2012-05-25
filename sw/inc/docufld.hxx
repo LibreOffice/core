@@ -684,7 +684,7 @@ class SwRefPageGetFieldType : public SwFieldType
 
     void UpdateField( SwTxtFld* pTxtFld, _SetGetExpFlds& rSetList );
 protected:
-    // ueberlagert, um alle RefPageGet-Felder zu updaten
+    // overwritten to update all RefPageGet fields
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
