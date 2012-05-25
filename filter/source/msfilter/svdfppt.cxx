@@ -1250,8 +1250,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             if ( rPersistEntry.nDrawingDgId != 0xffffffff )
             {
                 sal_uInt32 nSec = ( rObjData.nShapeId >> 10 ) - 1;
-                if ( mpFidcls && ( nSec < mnIdClusters ) )
-                    mpFidcls[ nSec ].dgid = rPersistEntry.nDrawingDgId; // insert the correct drawing id;
+                if ( !maFidcls.empty() && ( nSec < mnIdClusters ) )
+                    maFidcls[ nSec ].dgid = rPersistEntry.nDrawingDgId; // insert the correct drawing id;
             }
         }
         if ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )

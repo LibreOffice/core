@@ -478,7 +478,7 @@ typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
     sal_uInt32      mnCurMaxShapeId;    // we need this information to
     sal_uInt32      mnDrawingsSaved;    // access the right drawing
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
-    FIDCL*          mpFidcls;
+    std::vector<FIDCL> maFidcls;
     OffsetMap       maDgOffsetTable;    // array of fileoffsets
 
     friend class DffPropertyReader;

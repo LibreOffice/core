@@ -3316,13 +3316,13 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
 sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_uInt32 nId ) const
 {
     sal_Bool bRet = sal_False;
-    if ( mpFidcls )
+    if ( !maFidcls.empty() )
     {
         sal_uInt32 nMerk = rSt.Tell();
         sal_uInt32 nShapeId, nSec = ( nId >> 10 ) - 1;
         if ( nSec < mnIdClusters )
         {
-            OffsetMap::const_iterator it = maDgOffsetTable.find( mpFidcls[ nSec ].dgid );
+            OffsetMap::const_iterator it = maDgOffsetTable.find( maFidcls[ nSec ].dgid );
             if ( it != maDgOffsetTable.end() )
             {
                 sal_IntPtr nOfs = it->second;
@@ -5747,7 +5747,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nGroupShapeFlags(0),                   //ensure initialization here, as some corrupted
                                             //files may yield to this being unitialized
      maBaseURL( rBaseURL ),
-     mpFidcls( NULL ),
      rStCtrl(  rStCtrl_  ),
      pStData(  pStData_  ),
      pStData2( pStData2_ ),
@@ -5792,7 +5791,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
      nBLIPCount(  USHRT_MAX ),              // mit Error initialisieren, da wir erst pruefen,
      nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
      maBaseURL( rBaseURL ),
-     mpFidcls( NULL ),
      rStCtrl(  rStCtrl_  ),
      pStData( 0 ),
      pStData2( 0 ),
@@ -5810,7 +5808,6 @@ SvxMSDffManager::~SvxMSDffManager()
     delete pShapeInfos;
     delete pShapeOrders;
     delete pFormModel;
-    delete[] mpFidcls;
 }
 
 void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )
@@ -5884,17 +5881,11 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
                         "escher", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
                     mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_Size>(mnIdClusters));
 
-                    sal_Size nMaxEntriesAllocatable = SAL_MAX_UINT32 / sizeof(FIDCL);
-                    SAL_WARN_IF(nMaxEntriesAllocatable < mnIdClusters,
-                        "escher", "FIDCL list longer than can be allocated");
-                    mnIdClusters = std::min(nMaxEntriesAllocatable, static_cast<sal_Size>(mnIdClusters));
-
-                    mpFidcls = new FIDCL[ mnIdClusters ];
-                    memset(mpFidcls, 0, mnIdClusters * sizeof(FIDCL));
+                    maFidcls.resize(mnIdClusters);
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
                     {
-                        rStCtrl >> mpFidcls[ i ].dgid
-                                >> mpFidcls[ i ].cspidCur;
+                        rStCtrl >> maFidcls[ i ].dgid
+                                >> maFidcls[ i ].cspidCur;
                     }
                 }
             }
