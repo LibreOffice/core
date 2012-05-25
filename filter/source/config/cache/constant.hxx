@@ -30,15 +30,6 @@
 
 #include "macros.hxx"
 
-namespace filter { namespace config {
-extern rtl::OUString pFilterStrings[];
-} }
-#ifndef PROPNAME_IMPL_DECL
-#  define PROPNAME_DECL(index, str) (pFilterStrings[(index)])
-#else
-#  define PROPNAME_DECL(index, str) pFilterStrings[(index)] = _FILTER_CONFIG_FROM_ASCII_(str)
-#endif
-
 /*  disable impl_loadOnDemand function of BaseContainer for certain
     functions, where it the feature "impl_loadItemOnDemand() of class FilterCache
     can be used instead of loadAll()!*/
@@ -50,40 +41,40 @@ extern rtl::OUString pFilterStrings[];
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_NAME  PROPNAME_DECL(0, "Name")
+#define  PROPNAME_NAME  "Name"
 
 /** @short  used to identify a type item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_UINAME            PROPNAME_DECL(1, "UIName"          )
-#define  PROPNAME_UINAMES           PROPNAME_DECL(2, "UINames"         )
-#define  PROPNAME_PREFERRED         PROPNAME_DECL(3, "Preferred"       )
-#define  PROPNAME_PREFERREDFILTER   PROPNAME_DECL(4, "PreferredFilter" )
-#define  PROPNAME_DETECTSERVICE     PROPNAME_DECL(5, "DetectService"   )
-#define  PROPNAME_MEDIATYPE         PROPNAME_DECL(6, "MediaType"       )
-#define  PROPNAME_CLIPBOARDFORMAT   PROPNAME_DECL(7, "ClipboardFormat" )
-#define  PROPNAME_URLPATTERN        PROPNAME_DECL(8, "URLPattern"      )
-#define  PROPNAME_EXTENSIONS        PROPNAME_DECL(9, "Extensions"      )
+#define  PROPNAME_UINAME            "UIName"
+#define  PROPNAME_UINAMES           "UINames"
+#define  PROPNAME_PREFERRED         "Preferred"
+#define  PROPNAME_PREFERREDFILTER   "PreferredFilter"
+#define  PROPNAME_DETECTSERVICE     "DetectService"
+#define  PROPNAME_MEDIATYPE         "MediaType"
+#define  PROPNAME_CLIPBOARDFORMAT   "ClipboardFormat"
+#define  PROPNAME_URLPATTERN        "URLPattern"
+#define  PROPNAME_EXTENSIONS        "Extensions"
 
 /** @short  used to identify a filter item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-#define  PROPNAME_TYPE              PROPNAME_DECL(10, "Type"             )
-#define  PROPNAME_DOCUMENTSERVICE   PROPNAME_DECL(11, "DocumentService"  )
-#define  PROPNAME_FILTERSERVICE     PROPNAME_DECL(12, "FilterService"    )
-#define  PROPNAME_UICOMPONENT       PROPNAME_DECL(13, "UIComponent"      )
-#define  PROPNAME_FLAGS             PROPNAME_DECL(14, "Flags"            )
-#define  PROPNAME_USERDATA          PROPNAME_DECL(15, "UserData"         )
-#define  PROPNAME_TEMPLATENAME      PROPNAME_DECL(16, "TemplateName"     )
-#define  PROPNAME_FILEFORMATVERSION PROPNAME_DECL(17, "FileFormatVersion")
+#define  PROPNAME_TYPE              "Type"
+#define  PROPNAME_DOCUMENTSERVICE   "DocumentService"
+#define  PROPNAME_FILTERSERVICE     "FilterService"
+#define  PROPNAME_UICOMPONENT       "UIComponent"
+#define  PROPNAME_FLAGS             "Flags"
+#define  PROPNAME_USERDATA          "UserData"
+#define  PROPNAME_TEMPLATENAME      "TemplateName"
+#define  PROPNAME_FILEFORMATVERSION "FileFormatVersion"
 
 /** @short  used to identify a frame loader or detect service item
             property against the configuration API and can be used
             at all name containers (based on this filtercache) too.
  */
-#define  PROPNAME_TYPES     PROPNAME_DECL(18, "Types")
+#define  PROPNAME_TYPES     "Types"
 
 /** @short  used to identify the list of sorted filters for a specific
             office module

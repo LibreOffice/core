@@ -30,12 +30,6 @@
 #include <cppuhelper/factory.hxx>
 #include <rtl/instance.hxx>
 
-#ifdef _FILTER_CONFIG_CONSTANT_HXX_
-#  error "Already included constant.hxx"
-#else
-#  define PROPNAME_IMPL_DECL
-#  include "constant.hxx"
-#endif
 #include "typedetection.hxx"
 #include "filterfactory.hxx"
 #include "contenthandlerfactory.hxx"
@@ -53,45 +47,6 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-rtl::OUString pFilterStrings[19];
-
-namespace
-{
-    class doInitConstants
-    {
-    public:
-        doInitConstants()
-        {
-            PROPNAME_NAME;
-            PROPNAME_UINAME;
-            PROPNAME_UINAMES;
-            PROPNAME_PREFERRED;
-            PROPNAME_PREFERREDFILTER;
-            PROPNAME_DETECTSERVICE;
-            PROPNAME_MEDIATYPE;
-            PROPNAME_CLIPBOARDFORMAT;
-            PROPNAME_URLPATTERN;
-            PROPNAME_EXTENSIONS;
-            PROPNAME_TYPE;
-            PROPNAME_DOCUMENTSERVICE;
-            PROPNAME_FILTERSERVICE;
-            PROPNAME_UICOMPONENT;
-            PROPNAME_FLAGS;
-            PROPNAME_USERDATA;
-            PROPNAME_TEMPLATENAME;
-            PROPNAME_FILEFORMATVERSION;
-            PROPNAME_TYPES;
-        }
-    };
-
-    struct theConstantsInitializer : public rtl::Static< doInitConstants, theConstantsInitializer > {};
-}
-
-static void InitConstants()
-{
-    theConstantsInitializer::get();
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
     filterconfig1_component_getFactory( const sal_Char* pImplementationName,
                                         void* pServiceManager,
@@ -99,8 +54,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
 {
     if ((!pImplementationName) || (!pServiceManager ))
         return NULL;
-
-    InitConstants();
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xSMGR = reinterpret_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
