@@ -79,22 +79,14 @@ $(eval $(call gb_Library_add_noexception_objects,dbtools,\
 $(eval $(call gb_Library_add_grammars,dbtools,\
 	connectivity/source/parse/sqlbison \
 ))
- 
-$(SRCDIR)/connectivity/source/parse/sqlflex.l: $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)
 
-$(WORKDIR)/CustomTarget/connectivity/sqlflex.cxx: $(SRCDIR)/connectivity/source/parse/sqlflex.l
-	mkdir -p $(dir $@)
-	flex -i -8 -PSQLyy -L -o$@ $<
-
-$(call gb_Library_get_clean_target,dbtools): dbtools_flex_clean
-
-.PHONY: dbtools_flex_clean
-dbtools_flex_clean:
-	rm -rf $(WORKDIR)/CustomTarget/connectivity
-
-$(eval $(call gb_Library_add_generated_exception_objects,dbtools,\
-	CustomTarget/connectivity/sqlflex \
+$(eval $(call gb_Library_add_scanners,dbtools,\
+connectivity/source/parse/sqlflex \
 ))
+
+$(call gb_LexTarget_get_scanner_target,connectivity/source/parse/sqlflex) : T_LEXFLAGS := -i -8 -PSQLyy -L
+
+
 
 $(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/commontools/predicateinput \
