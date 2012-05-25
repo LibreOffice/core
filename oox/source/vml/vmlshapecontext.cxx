@@ -267,6 +267,15 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );
     mrTypeModel.moCoordSize = lclDecodeInt32Pair( rAttribs, XML_coordsize );
     setStyle( rAttribs.getString( XML_style, OUString() ) );
+    if( lclDecodeBool( rAttribs, O_TOKEN( hr )).get( false ))
+    {   // MSO's handling of o:hr width is nowhere near what the spec says:
+        // - o:hrpct is not in % but in 0.1%
+        // - if o:hrpct is not given, 100% width is assumed
+        // - given width is used only if explicit o:hrpct="0" is given
+        OUString hrpct = rAttribs.getString( O_TOKEN( hrpct ), "1000" );
+        if( hrpct != "0" )
+            mrTypeModel.maWidth = OUString::valueOf( hrpct.toInt32() / 10 ) + "%";
+    }
 
     // stroke settings (may be overridden by v:stroke element later)
     mrTypeModel.maStrokeModel.moStroked = lclDecodeBool( rAttribs, XML_stroked );
