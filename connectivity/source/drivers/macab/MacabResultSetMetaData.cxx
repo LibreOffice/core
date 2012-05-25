@@ -79,7 +79,7 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 /* column */) throw(SQLException, RuntimeException)
 {
     // For now, all columns are the same size.
     return 50;
