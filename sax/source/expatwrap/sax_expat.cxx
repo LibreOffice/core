@@ -271,12 +271,15 @@ public:
                                                 const XML_Char *sTarget ,
                                                 const XML_Char *sData );
 
-    void static callbackUnparsedEntityDecl( void *userData ,
-                                              const XML_Char *entityName,
-                                              const XML_Char *base,
-                                              const XML_Char *systemId,
-                                              const XML_Char *publicId,
-                                              const XML_Char *notationName);
+    void static callbackEntityDecl( void *userData ,
+                                    const XML_Char *entityName,
+                                    int is_parameter_entity,
+                                    const XML_Char *value,
+                                    int value_length,
+                                    const XML_Char *base,
+                                    const XML_Char *systemId,
+                                    const XML_Char *publicId,
+                                    const XML_Char *notationName);
 
     void static callbackNotationDecl(   void *userData,
                                         const XML_Char *notationName,
@@ -323,14 +326,19 @@ extern "C"
     {
         SaxExpatParser_Impl::callbackProcessingInstruction(userData,sTarget,sData );
     }
-    static void call_callbackUnparsedEntityDecl(void *userData ,
-                                                  const XML_Char *entityName,
-                                                const XML_Char *base,
-                                                const XML_Char *systemId,
-                                                const XML_Char *publicId,
-                                                const XML_Char *notationName)
+    static void call_callbackEntityDecl(void *userData ,
+                                        const XML_Char *entityName,
+                                        int is_parameter_entity,
+                                        const XML_Char *value,
+                                        int value_length,
+                                        const XML_Char *base,
+                                        const XML_Char *systemId,
+                                        const XML_Char *publicId,
+                                        const XML_Char *notationName)
     {
-        SaxExpatParser_Impl::callbackUnparsedEntityDecl(userData,entityName,base,systemId,publicId,notationName);
+        SaxExpatParser_Impl::callbackEntityDecl(userData, entityName,
+                is_parameter_entity, value, value_length,
+                base, systemId, publicId, notationName);
     }
     static void call_callbackNotationDecl(void *userData,
                                           const XML_Char *notationName,
@@ -495,8 +503,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     XML_SetCharacterDataHandler( entity.pParser , call_callbackCharacters );
     XML_SetProcessingInstructionHandler(entity.pParser ,
                                         call_callbackProcessingInstruction );
-    XML_SetUnparsedEntityDeclHandler(   entity.pParser,
-                                        call_callbackUnparsedEntityDecl );
+    XML_SetEntityDeclHandler(entity.pParser, call_callbackEntityDecl);
     XML_SetNotationDeclHandler( entity.pParser, call_callbackNotationDecl );
     XML_SetExternalEntityRefHandler(    entity.pParser,
                                         call_callbackExternalEntityRef);
@@ -844,20 +851,36 @@ void SaxExpatParser_Impl::callbackProcessingInstruction(    void *pvThis,
 }
 
 
-void SaxExpatParser_Impl::callbackUnparsedEntityDecl(
+void SaxExpatParser_Impl::callbackEntityDecl(
     void *pvThis, const XML_Char *entityName,
+    SAL_UNUSED_PARAMETER int /*is_parameter_entity*/,
+    const XML_Char *value, SAL_UNUSED_PARAMETER int /*value_length*/,
     SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
     const XML_Char *publicId, const XML_Char *notationName)
 {
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
-    if( pImpl->rDTDHandler.is() ) {
-        CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
-            pImpl ,
-            rDTDHandler->unparsedEntityDecl(
-                XML_CHAR_TO_OUSTRING( entityName ),
-                XML_CHAR_TO_OUSTRING( publicId ) ,
-                XML_CHAR_TO_OUSTRING( systemId ) ,
-                XML_CHAR_TO_OUSTRING( notationName ) ) );
+    if (value) { // value != 0 means internal entity
+        OSL_TRACE("SaxExpatParser: internal entity declaration, stopping");
+        XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
+        pImpl->exception = SAXParseException(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "SaxExpatParser: internal entity declaration, stopping")),
+            0, Any(),
+            pImpl->rDocumentLocator->getPublicId(),
+            pImpl->rDocumentLocator->getSystemId(),
+            pImpl->rDocumentLocator->getLineNumber(),
+            pImpl->rDocumentLocator->getColumnNumber() );
+        pImpl->bExceptionWasThrown = sal_True;
+    } else {
+        if( pImpl->rDTDHandler.is() ) {
+            CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
+                pImpl ,
+                rDTDHandler->unparsedEntityDecl(
+                    XML_CHAR_TO_OUSTRING( entityName ),
+                    XML_CHAR_TO_OUSTRING( publicId ) ,
+                    XML_CHAR_TO_OUSTRING( systemId ) ,
+                    XML_CHAR_TO_OUSTRING( notationName ) ) );
+        }
     }
 }
 
