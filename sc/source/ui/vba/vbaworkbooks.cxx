@@ -195,8 +195,7 @@ ScVbaWorkbooks::isTextFile( const rtl::OUString& sType )
     // c) unknown
     // returning true basically means treat this like a csv file
     const static rtl::OUString txtType("generic_Text");
-    const static rtl::OUString encodedTxtType( RTL_CONSTASCII_USTRINGPARAM("writer_Text_encoded" ) );
-    return sType.equals( txtType ) || sType.isEmpty() || sType.equals( encodedTxtType );
+    return sType.equals( txtType ) || sType.isEmpty();
 }
 
 bool

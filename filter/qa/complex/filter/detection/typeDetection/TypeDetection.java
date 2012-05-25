@@ -100,7 +100,7 @@ import util.utils;
  * Example:
  *
  * Writer6_1;Writer/Writer6.sxw;writer_StarOffice_XML_Writer;writer_StarOffice_XML_Writer
- * text1;Writer/Text.txt;writer_Text_encoded:generic_Text;writer_Text_encoded:generic_Text
+ * text1;Writer/Text.txt:generic_Text:generic_Text
  *
  * The first example shows you the following:
  * <code>Writer6_1</code> is a free chosen name
@@ -109,10 +109,10 @@ import util.utils;
  * <code>writer_StarOffice_XML_Writer</code>: this is the default file type of
  * this file
  *
- * The second example displays two document types for <code>XInputStream</CODE>
- * (<code>writer_Text_encoded</CODE> and <code>generic_Text</CODE>. This two
- * document types are listed by a colon ':' as separator. This is needed because
- * XInputStream can detect a text file as writer_Text_encoded as well as
+ * The second example displays two document types for
+ * <code>XInputStream</CODE> (<code>generic_Text</CODE>). This
+ * two document types are listed by a colon ':' as separator.
+ * This is needed because XInputStream can detect a text file as
  * generic_Text.
  * <p>
  *

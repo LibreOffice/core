@@ -329,7 +329,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_T602_Document \
 	writer_LotusWordPro_Document \
 	generic_Text \
-	writer_Text_encoded \
 	writer_MIZI_Hwp_97 \
 	writer_StarOffice_XML_Writer_Template \
 	pdf_Portable_Document_Format \
