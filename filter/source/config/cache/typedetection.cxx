@@ -106,7 +106,24 @@ TypeDetection::~TypeDetection()
     // <- SAFE
 }
 
+namespace {
 
+/**
+ * Types with matching extension come first, then types that are supported
+ * by the document service come next.
+ */
+struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+{
+    bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
+    {
+        if (r1.bMatchByExtension != r2.bMatchByExtension)
+            return r1.bMatchByExtension;
+
+        return r1.bPreselectedByDocumentService;
+    }
+};
+
+}
 
 ::rtl::OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               sal_Bool                                         bAllowDeep )
@@ -154,6 +171,9 @@ TypeDetection::~TypeDetection()
 
     aLock.clear();
     // <- SAFE ----------------------------------
+
+    // Properly prioritize all candidate types.
+    lFlatTypes.sort(SortByPriority());
 
     ::rtl::OUString sType      ;
     ::rtl::OUString sLastChance;
