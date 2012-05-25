@@ -943,19 +943,7 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
     const Reference< XComponentContext > & xContext )
     throw (Exception)
 {
-    Reference< XInterface > rRet;
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        static WeakReference < XInterface > rwInstance;
-        rRet = rwInstance;
-
-        if( ! rRet.is() )
-        {
-            rRet = (::cppu::OWeakObject *)new FactoryImpl( xContext );
-            rwInstance = rRet;
-        }
-    }
-    return rRet;
+    return (::cppu::OWeakObject *)new FactoryImpl( xContext );
 }
 
 }
@@ -971,7 +959,7 @@ static struct ::cppu::ImplementationEntry g_entries[] =
         ::stoc_invadp::FactoryImpl_create,
         ::stoc_invadp::invadp_getImplementationName,
         ::stoc_invadp::invadp_getSupportedServiceNames,
-        ::cppu::createSingleComponentFactory,
+        ::cppu::createOneInstanceComponentFactory,
         &::stoc_invadp::g_moduleCount.modCnt , 0
     },
     { 0, 0, 0, 0, 0, 0 }
