@@ -35,8 +35,8 @@ class SwTxtNode;
 
 /*************************************************************************
  *                class SwScanner
- * Hilfsklasse, die beim Spellen die Worte im gewuenschten Bereich
- * nacheinander zur Verfuegung stellt.
+ * Helper class that provides consecutively the words of a selected area
+ * during spell check
  *************************************************************************/
 
 class SwScanner
