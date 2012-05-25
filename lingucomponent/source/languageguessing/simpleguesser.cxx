@@ -117,8 +117,7 @@ vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
     if (!h)
         return guesses;
 
-    //calculate le number of unicode charcters (symbols)
-    int len = utfstrlen(text);
+    int len = strlen(text);
 
     if (len > MAX_STRING_LENGTH_TO_ANALYSE)
         len = MAX_STRING_LENGTH_TO_ANALYSE;
