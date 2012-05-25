@@ -270,7 +270,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 ))
 else
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	exttextcat \
+	exttextcat-1.0 \
 ))
 endif
 
@@ -281,7 +281,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 )
 else
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	exttextcat \
+	exttextcat-1.0 \
 )
 endif
 

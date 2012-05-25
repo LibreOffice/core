@@ -44,10 +44,10 @@ all:
 
 # See http://cgit.freedesktop.org/libreoffice/libexttextcat/ for upstream
 # sources, far better to commit your changes in there
-TARFILE_NAME=libexttextcat-3.2.0
-TARFILE_MD5=e1c178b18f130b40494561f02bc1a948
-TARFILE_ROOTDIR=libexttextcat-3.2.0
-PATCH_FILES=libexttextcat-3.2.0-visibility.patch android.patch
+TARFILE_NAME=libexttextcat-3.3.0
+TARFILE_MD5=dc8fc13710a987edd59f0bcae004fec2
+TARFILE_ROOTDIR=libexttextcat-3.3.0
+PATCH_FILES=libexttextcat-visibility.patch android.patch
 
 .IF "$(GUI)"=="UNX"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -68,7 +68,7 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=make $(eq,$(VERBOSE),TRUE V=1)
 
-OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libexttextcat.a
+OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libexttextcat-1.0.a
 
 .ENDIF # "$(GUI)"=="UNX"
 
