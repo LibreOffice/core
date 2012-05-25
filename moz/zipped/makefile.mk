@@ -72,7 +72,8 @@ $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
 .ENDIF
 
 $(BIN)$/mozruntime%zip : $(OS)$(COM)$(CPU)runtime.zip
-    $(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
+    $(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip && \
+    chmod u+w $(BIN)$/mozruntime.zip
 
 # add alternative rules for universal binary moz-zips
 .IF "$(GUIBASE)" == "aqua"
