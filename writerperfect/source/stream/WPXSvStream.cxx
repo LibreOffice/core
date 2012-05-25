@@ -173,7 +173,7 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
         else if (mxChildrenStorages.back()->IsStorage(aElems[i]))
         {
             SotStorageRef &tmpParent(mxChildrenStorages.back());
-            mxChildrenStorages.push_back(static_cast<SotStorageRef>(tmpParent->OpenSotStorage(aElems[i++], STREAM_STD_READ)));
+            mxChildrenStorages.push_back(tmpParent->OpenSotStorage(aElems[i++], STREAM_STD_READ));
         }
         else
             // should not happen
@@ -186,8 +186,8 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
     if (i >= aElems.size())
         return 0;
 
-    mxChildrenStreams.push_back( static_cast<SotStorageStreamRef>(mxChildrenStorages.back()->OpenSotStream(
-                                     aElems[i], STREAM_STD_READ )));
+    mxChildrenStreams.push_back( mxChildrenStorages.back()->OpenSotStream(
+                                     aElems[i], STREAM_STD_READ ));
 
     mxSeekable->seek(tmpPosition);
 
