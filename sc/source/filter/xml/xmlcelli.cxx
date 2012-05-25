@@ -460,29 +460,6 @@ static bool ScCellExists( const ScAddress& rScAddress )
     return( rScAddress.Col() <= MAXCOL && rScAddress.Row() <= MAXROW );
 }
 
-ScRange getCellRangeByPosition( const ScRange& rScRange, const SCCOL nLeft, const SCROW nTop, const SCCOL nRight, const SCROW nBottom )
-{
-    if( nLeft >= 0 && nTop >= 0 && nRight >= 0 && nBottom >= 0 )
-    {
-        SCCOL nStartX = rScRange.aStart.Col() + nLeft;
-        SCROW nStartY = rScRange.aStart.Row() + nTop;
-        SCCOL nEndX = rScRange.aStart.Col() + nRight;
-        SCROW nEndY = rScRange.aStart.Row() + nBottom;
-
-        if( nStartX <= nEndX && nEndX <= rScRange.aEnd.Col() &&
-            nStartY <= nEndY && nEndY <= rScRange.aEnd.Row() )
-        {
-            return ScRange( nStartX, nStartY, rScRange.aStart.Tab(), nEndX, nEndY, rScRange.aEnd.Tab() );
-        }
-    }
-    return ScRange( ScAddress::INITIALIZE_INVALID );
-}
-
-ScRange getCellRangeByPosition( const ScRange& rScRange, const ScAddress& rScCell )
-{
-    return getCellRangeByPosition( rScRange, rScCell.Col(), rScCell.Row(), rScCell.Col(), rScCell.Row() );
-}
-
 void merge( ScDocShell* pDocSh, const ScRange& rScRange, const bool bMerge )
 {
     if( pDocSh )
@@ -501,18 +478,16 @@ void merge( ScDocShell* pDocSh, const ScRange& rScRange, const bool bMerge )
 
 } //anonymous namespace
 
-bool ScXMLTableRowCellContext::IsMerged( const ScRange& rScRange, const ScAddress& rScCell, ScRange& rScCellRange ) const
+bool ScXMLTableRowCellContext::IsMerged( ScRange& rScRange, const ScAddress& rScCell ) const
 {
     if( ScCellExists(rScCell) )
     {
         ScDocument* pDoc = rXMLImport.GetDocument();
-        rScCellRange = getCellRangeByPosition( rScRange, rScCell );
-        if( !rScRange.IsValid() ) return false;
-        pDoc->ExtendOverlapped( rScCellRange );
-        pDoc->ExtendMerge( rScCellRange );
-        rScCellRange.Justify();
-        if( rScCellRange.aStart.Col() == rScCell.Col() && rScCellRange.aEnd.Col() == rScCell.Col() &&
-            rScCellRange.aStart.Row() == rScCell.Row() && rScCellRange.aEnd.Row() == rScCell.Row() )
+        pDoc->ExtendOverlapped( rScRange );
+        pDoc->ExtendMerge( rScRange );
+        rScRange.Justify();
+        if( rScRange.aStart.Col() == rScCell.Col() && rScRange.aEnd.Col() == rScCell.Col() &&
+            rScRange.aStart.Row() == rScCell.Row() && rScRange.aEnd.Row() == rScCell.Row() )
             return false;
         else
             return true;
@@ -520,32 +495,27 @@ bool ScXMLTableRowCellContext::IsMerged( const ScRange& rScRange, const ScAddres
     return false;
 }
 
-void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScCellPos, const sal_Int32 nCols, const sal_Int32 nRows )
+void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScCellPos, const SCCOL nCols, const SCROW nRows )
 {
     if( ScCellExists(rScCellPos) )
     {
-        ScRange aScCellRange;
         SCTAB nCurrentSheet = GetScImport().GetTables().GetCurrentSheet();
-        ScRange aScRange( 0, 0, nCurrentSheet, MAXCOL, MAXROW, nCurrentSheet );  //the whole sheet
+        ScRange aScRange(
+            rScCellPos.Col(), rScCellPos.Row(), nCurrentSheet,
+            rScCellPos.Col(), rScCellPos.Row(), nCurrentSheet
+        );
         ScDocShell* pDocSh = static_cast< ScDocShell* >( rXMLImport.GetDocument()->GetDocumentShell() );
-        if( IsMerged(aScRange, rScCellPos, aScCellRange) )
+        if( IsMerged(aScRange, rScCellPos) )
         {
             //unmerge
-            ScRange aScMergeRange(
-                getCellRangeByPosition( aScRange, aScCellRange.aStart.Col(), aScCellRange.aStart.Row(),
-                    aScCellRange.aEnd.Col(), aScCellRange.aEnd.Row() )
-            );
-            if( aScMergeRange.IsValid() )
-                merge( pDocSh, aScMergeRange, false );
+            merge( pDocSh, aScRange, false );
         }
-
         //merge
-        ScRange aScMergeRange(
-            getCellRangeByPosition( aScRange, aScCellRange.aStart.Col(), aScCellRange.aStart.Row(),
-                aScCellRange.aEnd.Col() + nCols,  aScCellRange.aEnd.Row() + nRows )
-        );
-        if( aScMergeRange.IsValid() )
-            merge( pDocSh, aScMergeRange, true );
+        SCCOL newEndCol = aScRange.aStart.Col() + nCols;
+        SCROW newEndRow = aScRange.aStart.Row() + nRows;
+        aScRange.aEnd.SetCol( newEndCol );
+        aScRange.aEnd.SetRow( newEndRow );
+        merge( pDocSh, aScRange, true );
     }
 }
 
@@ -826,7 +796,7 @@ void ScXMLTableRowCellContext::EndElement()
         if (xCellRange.is())
         {
             if (bIsMerged)
-                DoMerge(aScCellPos, nMergedCols - 1, nMergedRows - 1);
+                DoMerge(aScCellPos, static_cast<SCCOL>(nMergedCols - 1), static_cast<SCROW>(nMergedRows - 1));
             if ( !pOUFormula )
             {
                 ::boost::optional< rtl::OUString > pOUText;

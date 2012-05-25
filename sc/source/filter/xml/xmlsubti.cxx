@@ -804,44 +804,18 @@ bool ScMyTables::IsPartOfMatrix(const SCCOL nColumn, const SCROW nRow)
     return bResult;
 }
 
-namespace {
-
-ScRange getCellRangeByPosition( const ScRange& rScRange, const SCCOL nLeft, const SCROW nTop, const SCCOL nRight, const SCROW nBottom )
-{
-    if( nLeft >= 0 && nTop >= 0 && nRight >= 0 && nBottom >= 0 )
-    {
-        SCCOL nStartX = rScRange.aStart.Col() + nLeft;
-        SCROW nStartY = rScRange.aStart.Row() + nTop;
-        SCCOL nEndX = rScRange.aStart.Col() + nRight;
-        SCROW nEndY = rScRange.aStart.Row() + nBottom;
-
-        if( nStartX <= nEndX && nEndX <= rScRange.aEnd.Col() &&
-            nStartY <= nEndY && nEndY <= rScRange.aEnd.Row() )
-        {
-            return ScRange( nStartX, nStartY, rScRange.aStart.Tab(), nEndX, nEndY, rScRange.aEnd.Tab() );
-        }
-    }
-    return ScRange( ScAddress::INITIALIZE_INVALID );
-}
-
-} //anonymous namespace
-
 void ScMyTables::SetMatrix(const ScRange& rScRange, const rtl::OUString& rFormula,
         const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
-    ScRange aWholeSheetRange( 0, 0, nCurrentSheet, MAXCOL, MAXROW, nCurrentSheet );  //the whole sheet
-    ScRange aMatrixRange(
-        getCellRangeByPosition( aWholeSheetRange, rScRange.aStart.Col(), rScRange.aStart.Row(), rScRange.aEnd.Col(), rScRange.aEnd.Row() )
-    );
     ScDocShell* pDocSh = static_cast< ScDocShell* >( rImport.GetDocument()->GetDocumentShell() );
     if ( !rFormula.isEmpty() )
-        pDocSh->GetDocFunc().EnterMatrix( aMatrixRange, NULL, NULL, rFormula, sal_True, sal_True, rFormulaNmsp, eGrammar );
+        pDocSh->GetDocFunc().EnterMatrix( rScRange, NULL, NULL, rFormula, sal_True, sal_True, rFormulaNmsp, eGrammar );
     else
     {
         //  empty string -> erase array formula
         ScMarkData aMark;
-        aMark.SetMarkArea( aMatrixRange );
-        aMark.SelectTable( aMatrixRange.aStart.Tab(), sal_True );
+        aMark.SetMarkArea( rScRange );
+        aMark.SelectTable( rScRange.aStart.Tab(), sal_True );
         pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, sal_True, sal_True );
     }
 }
