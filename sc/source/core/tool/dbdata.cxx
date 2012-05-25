@@ -808,13 +808,6 @@ const ScDBData* ScDBCollection::AnonDBs::findByRange(const ScRange& rRange) cons
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 
-const ScDBData* ScDBCollection::AnonDBs::findByTable(SCTAB nTab) const
-{
-    DBsType::const_iterator itr = find_if(
-        maDBs.begin(), maDBs.end(), FindFilterDBByTable(nTab));
-    return itr == maDBs.end() ? NULL : &(*itr);
-}
-
 ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
 {
     const ScDBData* pData = findByRange(rRange);
