@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_placeware \
 	Library_svgfilter \
 	Library_t602filter \
+	Library_textfd \
 	Library_xmlfa \
 	Library_xmlfd \
 	Library_xsltdlg \

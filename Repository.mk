@@ -335,6 +335,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     swui \
     t602filter \
     textconversiondlgs \
+    textfd \
     tk \
     tl \
     unordf \
