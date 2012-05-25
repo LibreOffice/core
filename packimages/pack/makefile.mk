@@ -30,6 +30,15 @@ TARGET=packimages
 RSCCUSTOMIMG*=$(PRJ)
 .INCLUDE: target.mk
 
+
+.IF "$(VERBOSE_PACKIMG)"=="TRUE"
+VERBOSESWITCH=-vv
+.ELIF "$(VERBOSE)"=="TRUE"
+VERBOSESWITCH=-v
+.ELSE
+VERBOSESWITCH=
+.ENDIF
+
 IMAGES := $(COMMONBIN)$/images.zip
 SORTED_LIST=$(RES)$/img$/sorted.lst
 # Custom sets, at 24x24 & 16x16 fall-back to industrial preferentially
@@ -54,10 +63,10 @@ $(RES)$/img$/commandimagelist.ilst .PHONY : $(SORTED_LIST)
     $(PERL) $(SOLARENV)$/bin$/diffmv.pl $@.$(INPATH) $@
 
 $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
-    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(SOLARCOMMONRESDIR)$/img -s $(SORTED_LIST) -l $(RES)$/img -o $@
+    $(PERL) $(SOLARENV)$/bin$/packimages.pl $(VERBOSESWITCH) -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(SOLARCOMMONRESDIR)$/img -s $(SORTED_LIST) -l $(RES)$/img -o $@
 
 images_% : $(RES)$/img$/commandimagelist.ilst
-    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
+    $(PERL) $(SOLARENV)$/bin$/packimages.pl $(VERBOSESWITCH) -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
 
 # make sure to have one to keep packing happy
 $(COMMONBIN)$/images_brand.zip:
