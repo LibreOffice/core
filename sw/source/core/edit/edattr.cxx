@@ -379,8 +379,7 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 }
 
 
-// linken Rand ueber Objectleiste einstellen (aenhlich dem Stufen von
-// Numerierungen)
+// Adjust left margin via object bar (similar to adjustment of numerations).
 sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) const
 {
     sal_Bool bRet = sal_True;

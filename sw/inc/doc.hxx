@@ -1818,10 +1818,9 @@ public:
                         sal_Bool bChkPtr = sal_False, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
-    // Adjust left margin via object bar.
-    // linken Rand ueber Objectleiste einstellen (aenhlich dem Stufen von
-    // Numerierungen), optional kann man "um" den Offset stufen oder "auf"
-    // die Position gestuft werden (bModulus = sal_True).
+    // Adjust left margin via object bar (similar to adjustment of numerations).
+    // One can either change the margin "by" adding or substracting a given
+    // offset or set it "to" this position (bModulus = sal_True).
     void MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight = sal_True,
                         sal_Bool bModulus = sal_True );
 
