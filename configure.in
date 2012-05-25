@@ -10479,7 +10479,7 @@ AC_SUBST(ENABLE_SILENT_MSI)
 dnl ===================================================================
 dnl Test whether to enable ActiveX embedding
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to enable ActiveX embedding of LibreOffice components])
     if test "$enable_activex_component" = "yes" -o "$enable_activex_component" = "TRUE" -o "$enable_activex_component" = ""; then
         ENABLE_ACTIVEX_COMPONENT="TRUE"
