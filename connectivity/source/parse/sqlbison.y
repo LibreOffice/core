@@ -1,5 +1,5 @@
-%file-prefix "sql"
-%name-prefix "SQLyy"
+%file-prefix="sql"
+%name-prefix="SQLyy"
 %no-lines
 %defines
 
