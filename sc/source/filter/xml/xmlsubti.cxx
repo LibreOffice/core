@@ -41,6 +41,8 @@
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
 #include "convuno.hxx"
+#include "docsh.hxx"
+#include "docfunc.hxx"
 #include <svx/svdpage.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -645,7 +647,7 @@ void ScMyTables::DeleteTable()
         ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
         while(aItr != aEndItr)
         {
-            SetMatrix(aItr->aRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
+            SetMatrix(aItr->aScRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
             ++aItr;
         }
         aMatrixRangeList.clear();
@@ -754,22 +756,20 @@ void ScMyTables::AddOLE(uno::Reference <drawing::XShape>& rShape,
 }
 
 void ScMyTables::AddMatrixRange(
-        sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow,
+        const SCCOL nStartColumn, const SCROW nStartRow, const SCCOL nEndColumn, const SCROW nEndRow,
         const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
     OSL_ENSURE(nEndRow >= nStartRow, "wrong row order");
     OSL_ENSURE(nEndColumn >= nStartColumn, "wrong column order");
-    table::CellRangeAddress aRange;
-    aRange.StartColumn = nStartColumn;
-    aRange.StartRow = nStartRow;
-    aRange.EndColumn = nEndColumn;
-    aRange.EndRow = nEndRow;
-    aRange.Sheet = nCurrentSheet;
-    ScMatrixRange aMRange(aRange, rFormula, rFormulaNmsp, eGrammar);
+    ScRange aScRange(
+        nStartColumn, nStartRow, nCurrentSheet,
+        nEndColumn, nEndRow, nCurrentSheet
+    );
+    ScMatrixRange aMRange(aScRange, rFormula, rFormulaNmsp, eGrammar);
     aMatrixRangeList.push_back(aMRange);
 }
 
-bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
+bool ScMyTables::IsPartOfMatrix(const SCCOL nColumn, const SCROW nRow)
 {
     bool bResult(false);
     if (!aMatrixRangeList.empty())
@@ -779,19 +779,20 @@ bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
         bool bReady(false);
         while(!bReady && aItr != aEndItr)
         {
-            if (nCurrentSheet > aItr->aRange.Sheet)
+            if (nCurrentSheet > aItr->aScRange.aStart.Tab())
             {
                 OSL_FAIL("should never hapen, because the list should be cleared in DeleteTable");
                 aItr = aMatrixRangeList.erase(aItr);
             }
-            else if ((nRow > aItr->aRange.EndRow) && (nColumn > aItr->aRange.EndColumn))
+            else if ((nRow > aItr->aScRange.aEnd.Row()) && (nColumn > aItr->aScRange.aEnd.Col()))
             {
-                SetMatrix(aItr->aRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
+                SetMatrix(aItr->aScRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
                 aItr = aMatrixRangeList.erase(aItr);
             }
-            else if (nColumn < aItr->aRange.StartColumn)
+            else if (nColumn < aItr->aScRange.aStart.Col())
                 bReady = true;
-            else if (nColumn >= aItr->aRange.StartColumn && nColumn <= aItr->aRange.EndColumn && nRow >= aItr->aRange.StartRow && nRow <= aItr->aRange.EndRow)
+            else if ( nColumn >= aItr->aScRange.aStart.Col() && nColumn <= aItr->aScRange.aEnd.Col() &&
+                      nRow >= aItr->aScRange.aStart.Row() && nRow <= aItr->aScRange.aEnd.Row() )
             {
                 bReady = true;
                 bResult = true;
@@ -803,23 +804,45 @@ bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
     return bResult;
 }
 
-void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula,
+namespace {
+
+ScRange getCellRangeByPosition( const ScRange& rScRange, const SCCOL nLeft, const SCROW nTop, const SCCOL nRight, const SCROW nBottom )
+{
+    if( nLeft >= 0 && nTop >= 0 && nRight >= 0 && nBottom >= 0 )
+    {
+        SCCOL nStartX = rScRange.aStart.Col() + nLeft;
+        SCROW nStartY = rScRange.aStart.Row() + nTop;
+        SCCOL nEndX = rScRange.aStart.Col() + nRight;
+        SCROW nEndY = rScRange.aStart.Row() + nBottom;
+
+        if( nStartX <= nEndX && nEndX <= rScRange.aEnd.Col() &&
+            nStartY <= nEndY && nEndY <= rScRange.aEnd.Row() )
+        {
+            return ScRange( nStartX, nStartY, rScRange.aStart.Tab(), nEndX, nEndY, rScRange.aEnd.Tab() );
+        }
+    }
+    return ScRange( ScAddress::INITIALIZE_INVALID );
+}
+
+} //anonymous namespace
+
+void ScMyTables::SetMatrix(const ScRange& rScRange, const rtl::OUString& rFormula,
         const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
-    uno::Reference <table::XCellRange> xMatrixCellRange(
-        GetCurrentXCellRange()->getCellRangeByPosition(rRange.StartColumn, rRange.StartRow,
-                    rRange.EndColumn, rRange.EndRow));
-    if (xMatrixCellRange.is())
+    ScRange aWholeSheetRange( 0, 0, nCurrentSheet, MAXCOL, MAXROW, nCurrentSheet );  //the whole sheet
+    ScRange aMatrixRange(
+        getCellRangeByPosition( aWholeSheetRange, rScRange.aStart.Col(), rScRange.aStart.Row(), rScRange.aEnd.Col(), rScRange.aEnd.Row() )
+    );
+    ScDocShell* pDocSh = static_cast< ScDocShell* >( rImport.GetDocument()->GetDocumentShell() );
+    if ( !rFormula.isEmpty() )
+        pDocSh->GetDocFunc().EnterMatrix( aMatrixRange, NULL, NULL, rFormula, sal_True, sal_True, rFormulaNmsp, eGrammar );
+    else
     {
-        uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
-        if (xArrayFormulaRange.is())
-        {
-            ScCellRangeObj* pCellRangeObj =
-                static_cast<ScCellRangeObj*>(ScCellRangesBase::getImplementation(
-                            xMatrixCellRange));
-            if (pCellRangeObj)
-                pCellRangeObj->SetArrayFormulaWithGrammar( rFormula, rFormulaNmsp, eGrammar);
-        }
+        //  empty string -> erase array formula
+        ScMarkData aMark;
+        aMark.SetMarkArea( aMatrixRange );
+        aMark.SelectTable( aMatrixRange.aStart.Tab(), sal_True );
+        pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, sal_True, sal_True );
     }
 }
 

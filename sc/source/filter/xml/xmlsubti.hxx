@@ -99,12 +99,12 @@ struct ScMatrixRange
     rtl::OUString sFormula;
     rtl::OUString sFormulaNmsp;
     formula::FormulaGrammar::Grammar eGrammar;
-    com::sun::star::table::CellRangeAddress aRange;
-    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammarP) :
+    ScRange aScRange;
+    ScMatrixRange(const ScRange& rScRange, const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammarP) :
         sFormula(rFormula),
         sFormulaNmsp(rFormulaNmsp),
         eGrammar(eGrammarP),
-        aRange(rRange)
+        aScRange(rScRange)
     {
     }
 };
@@ -192,16 +192,16 @@ public:
     void                                AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                                                const rtl::OUString &rRangeList);
 
-    void                                AddMatrixRange( sal_Int32 nStartColumn,
-                                                sal_Int32 nStartRow,
-                                                sal_Int32 nEndColumn,
-                                                sal_Int32 nEndRow,
+    void                                AddMatrixRange( const SCCOL nStartColumn,
+                                                const SCROW nStartRow,
+                                                const SCCOL nEndColumn,
+                                                const SCROW nEndRow,
                                                 const rtl::OUString& rFormula,
                                                 const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );
 
-    bool                                IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
-    void                                SetMatrix( const com::sun::star::table::CellRangeAddress& rRange,
+    bool                                IsPartOfMatrix( const SCCOL nColumn, const SCROW nRow);
+    void                                SetMatrix( const ScRange& rScRange,
                                                 const rtl::OUString& rFormula,
                                                 const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );

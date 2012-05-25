@@ -332,8 +332,8 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             bIsEmpty = false;
             bTextP = true;
             com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
-            if (((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
-                !rXMLImport.GetTables().IsPartOfMatrix(aCellPos.Column, aCellPos.Row))
+            if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
+                !rXMLImport.GetTables().IsPartOfMatrix(static_cast<SCCOL>(aCellPos.Column), static_cast<SCROW>(aCellPos.Row)) )
             {
                 if (!bHasTextImport)
                 {
@@ -909,7 +909,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::TEXT:
                                         {
                                             bool bDoIncrement = true;
-                                            if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            if (rTables.IsPartOfMatrix(static_cast<SCCOL>(aCurrentPos.Column), static_cast<SCROW>(aCurrentPos.Row)))
                                             {
                                                 LockSolarMutex();
                                                 // test - bypass the API
@@ -996,7 +996,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::DATETIME:
                                     case util::NumberFormat::LOGICAL:
                                         {
-                                            if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            if( rTables.IsPartOfMatrix(static_cast<SCCOL>(aCurrentPos.Column), static_cast<SCROW>(aCurrentPos.Row)) )
                                             {
                                                 LockSolarMutex();
                                                 // test - bypass the API
@@ -1182,9 +1182,10 @@ void ScXMLTableRowCellContext::EndElement()
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
                                 rTables.AddMatrixRange(
-                                        aCellPos.Column, aCellPos.Row,
-                                        aCellPos.Column + nMatrixCols - 1,
-                                        aCellPos.Row + nMatrixRows - 1,
+                                        static_cast<SCCOL>(aCellPos.Column),
+                                        static_cast<SCROW>(aCellPos.Row),
+                                        static_cast<SCCOL>(aCellPos.Column + nMatrixCols - 1),
+                                        static_cast<SCROW>(aCellPos.Row + nMatrixRows - 1),
                                         pOUFormula->first, pOUFormula->second, eGrammar);
                             }
                         }
