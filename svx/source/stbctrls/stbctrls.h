@@ -52,6 +52,11 @@
 
 #define XMLSEC_CALL         1
 
+#define SELECTION_STANDARD  1
+#define SELECTION_EXTENDED  2
+#define SELECTION_ADDED     3
+#define SELECTION_BLOCK     4
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

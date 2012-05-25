@@ -411,9 +411,8 @@
 #define RID_SVXSTR_OVERWRITE_TEXT           (RID_SVX_START + 212)
 
 // Strings for the selection mode
-#define RID_SVXSTR_SELMODE_STD              (RID_SVX_START + 213)
-#define RID_SVXSTR_SELMODE_ER               (RID_SVX_START + 214)
-#define RID_SVXSTR_SELMODE_ERG              (RID_SVX_START + 215)
+#define RID_SVXMENU_SELECTION               (RID_SVX_START + 213)
+#define RID_SVXBMP_SELECTION                (RID_SVX_START + 215)
 
 #define RID_SVXSTR_XMLSEC_SIG_OK            (RID_SVX_START + 222)
 #define RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY  (RID_SVX_START + 223)
@@ -1050,7 +1049,6 @@
 #define RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE             (RID_SVX_START + 1133)
 #define RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR               (RID_SVX_START + 1134)
 
-#define RID_SVXSTR_SELMODE_BLK                              (RID_SVX_START + 1167)
 #define RID_SVXSTR_STYLEFAMILY_TABLEDESIGN                  (RID_SVX_START + 1168)
     // if you add here, remember to adjust RID_SVXSTR_NEXTFREE
 

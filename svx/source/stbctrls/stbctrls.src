@@ -43,26 +43,49 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ x-comment ] = "To be shown in the status bar when in overwrite mode, please try to make it not longer than the word 'Overwrite'." ;
     Text [ en-US ] = "Overwrite" ;
 };
-String RID_SVXSTR_SELMODE_STD
+
+// Selection type menu
+Menu RID_SVXMENU_SELECTION
 {
-     // 'Standard' shortened to a maximum of 3 characters
-    Text [ en-US ] = "STD" ;
-};
-String RID_SVXSTR_SELMODE_ER
-{
-     // 'Extended' shortened to a maximum of 3 characters
-    Text [ en-US ] = "EXT" ;
-};
-String RID_SVXSTR_SELMODE_ERG
-{
-     // 'Added' shortened to a maximum of 3 characters
-    Text [ en-US ] = "ADD" ;
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SELECTION_STANDARD ;
+            //HelpId = ;
+            RadioCheck = TRUE ;
+            Text [ en-US ] = "Standard selection" ;
+        };
+        MenuItem
+        {
+            Identifier = SELECTION_EXTENDED ;
+            //HelpId = ;
+            RadioCheck = TRUE ;
+            Text [ en-US ] = "Extending selection" ;
+        };
+        MenuItem
+        {
+            Identifier = SELECTION_ADDED ;
+            //HelpId = ;
+            RadioCheck = TRUE ;
+            Text [ en-US ] = "Adding selection" ;
+        };
+        MenuItem
+        {
+            Identifier = SELECTION_BLOCK ;
+            //HelpId = ;
+            RadioCheck = TRUE ;
+            Text [ en-US ] = "Block selection" ;
+        };
+    };
 };
 
-String RID_SVXSTR_SELMODE_BLK
+Image RID_SVXBMP_SELECTION
 {
-     // 'Block' shortened to max. 3 chararcters
-    Text [ en-US ] = "BLK" ;
+    ImageBitmap = Bitmap
+    {
+        File = "selection_10x22.png" ;
+    };
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK

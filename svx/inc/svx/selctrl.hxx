@@ -28,33 +28,27 @@
 #ifndef _SVX_SELCTRL_HXX
 #define _SVX_SELCTRL_HXX
 
-// include ---------------------------------------------------------------
-
+#include <vcl/image.hxx>
 #include <sfx2/stbitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
-// class SvxSelModeControl -----------------------------------------------
-
+/// Status bar control that indicates or changes the selection mode (standard / block / etc.)
 class SVX_DLLPUBLIC SvxSelectionModeControl : public SfxStatusBarControl
 {
 public:
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-    virtual void    Click();
-    virtual void    Paint( const UserDrawEvent& rEvt );
-
     SFX_DECL_STATUSBAR_CONTROL();
 
     SvxSelectionModeControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
 
+    virtual void     StateChanged( sal_uInt16 nSID, SfxItemState eState,
+                                   const SfxPoolItem* pState );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rEvt );
+    virtual void     Paint( const UserDrawEvent& rEvt );
+
 private:
-    sal_uInt16  nState;
-
-#ifdef _SVX_SELCTRL_CXX
-    SVX_DLLPRIVATE void DrawItemText_Impl();
-#endif
+    sal_uInt16  mnState;
+    Image       maImage;
 };
-
 
 #endif
 
