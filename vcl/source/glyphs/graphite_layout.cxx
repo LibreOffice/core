@@ -849,7 +849,11 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
                     nOffset = static_cast<int>(fExtraPerCluster * nCluster);
                     int nCharIndex = mvGlyph2Char[i];
                     assert(nCharIndex > -1);
-                    mvCharDxs[nCharIndex-mnMinCharPos] += nOffset;
+                    if (static_cast<size_t>(nCharIndex-mnMinCharPos)
+                            < mvCharDxs.size())
+                    {
+                        mvCharDxs[nCharIndex-mnMinCharPos] += nOffset;
+                    }
                     // adjust char dxs for rest of characters in cluster
                     while (++nCharIndex - mnMinCharPos < static_cast<int>(mvChar2BaseGlyph.size()))
                     {
