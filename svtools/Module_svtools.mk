@@ -41,6 +41,13 @@ $(eval $(call gb_Module_add_targets,svtools,\
     Executable_bmpsum \
     Executable_g2g \
 ))
+
+ifeq ($(GUI),UNX)
+$(eval $(call gb_Module_add_targets,svtools,\
+    Executable_langsupport \
+))
+endif
+
 endif
 
 $(eval $(call gb_Module_add_check_targets,svtools,\

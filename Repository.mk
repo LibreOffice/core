@@ -98,6 +98,7 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	gengal \
 	guiloader \
 	guistdio \
+	langsupport \
 	odbcconfig \
 	officeloader \
 	quickstart \
@@ -127,6 +128,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 else
 
 $(eval $(call gb_Helper_register_executables,OOO,\
+    langsupport \
     soffice.bin \
     unopkg.bin \
     gengal.bin \
