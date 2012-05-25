@@ -235,12 +235,6 @@ struct  FlatDetectionInfo
     // this type was found by a matching URL Pattern
     sal_Bool bMatchByPattern;
 
-    // the user selected this type explicitly
-    sal_Bool bPreselectedAsType;
-
-    // the user selected this type implicit by selecting a corresponding filter
-    sal_Bool bPreselectedByFilter;
-
     // the user selected this type implicit by selecting a corresponding office module
     sal_Bool bPreselectedByDocumentService;
 
@@ -248,8 +242,6 @@ struct  FlatDetectionInfo
         : sType                        (::rtl::OUString())
         , bMatchByExtension            (sal_False        )
         , bMatchByPattern              (sal_False        )
-        , bPreselectedAsType           (sal_False        )
-        , bPreselectedByFilter         (sal_False        )
         , bPreselectedByDocumentService(sal_False        )
     {}
 };

@@ -505,7 +505,6 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
         aInfo.sType              = sType;
         aInfo.bMatchByExtension  = bMatchByExtension;
         aInfo.bMatchByPattern    = bMatchByPattern;
-        aInfo.bPreselectedAsType = sal_True;
 
         if (bPreferredPreselection)
             rFlatTypes.push_front(aInfo);
@@ -559,17 +558,6 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
         // not a valid type? -> not a valid filter!
         if (!bBreakDetection)
             sFilter = ::rtl::OUString();
-    }
-
-    // We have to mark all retrieved preselection items as "preselected by filter"!
-    FlatDetection::iterator pIt;
-    for (  pIt  = rFlatTypes.begin();
-           pIt != rFlatTypes.end()  ;
-         ++pIt                      )
-    {
-        FlatDetectionInfo& rInfo = *pIt;
-        rInfo.bPreselectedAsType   = sal_False;
-        rInfo.bPreselectedByFilter = sal_True;
     }
 
     if (!sFilter.isEmpty())
@@ -630,8 +618,6 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
          ++pIt                          )
     {
         FlatDetectionInfo& rInfo = *pIt;
-        rInfo.bPreselectedAsType            = sal_False;
-        rInfo.bPreselectedByFilter          = sal_False;
         rInfo.bPreselectedByDocumentService = sal_True ;
         rFlatTypes.push_back(rInfo);
     }
@@ -733,21 +719,6 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
             // c)
             if (sDetectService.isEmpty())
             {
-                // accept or not accept flat types without deep detection: that's the question :-)
-                // May be there exists some states, where we have to use our LastChance feature instead
-                // of using the flat type directly.
-                // Here the list of task ID's, which wasrelated to these lines of code:
-                // #i47159#, #i43404#, #i46494#
-
-                // a flat detected type without the chance for a deep detection ... but preselected by the user
-                // explicitly (means preselected as type or filter ... not as documentservice!)
-                // should be accepted. So the user can overrule our detection.
-                if (
-                    (aFlatTypeInfo.bPreselectedAsType  ) ||
-                    (aFlatTypeInfo.bPreselectedByFilter)
-                   )
-                    return sFlatType;
-
                 // flat detected types without any registered deep detection service and not
                 // preselected by the user can be used as LAST CHANCE in case no other type could
                 // be detected. Of course only the first type without deep detector can be used.
