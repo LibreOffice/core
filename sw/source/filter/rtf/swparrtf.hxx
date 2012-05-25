@@ -149,8 +149,10 @@ struct SwListEntry
 class SwFlySaveArr : public std::vector<SwFlySave*>
 {
 public:
-    SwFlySaveArr() : vector() {}
-    SwFlySaveArr(const SwFlySaveArr& other) : vector(other) {}
+    SwFlySaveArr() : ::std::vector<SwFlySave*>() {}
+    SwFlySaveArr(const SwFlySaveArr& rOther)
+        : ::std::vector<SwFlySave*>(rOther)
+    {}
 
     ~SwFlySaveArr()
     {
