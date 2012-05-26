@@ -41,7 +41,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -92,7 +92,7 @@ String * SwUndoInsert::GetTxtFromDoc() const
 
 void SwUndoInsert::Init(const SwNodeIndex & rNd)
 {
-    // Redline beachten
+    // consider Redline
     pDoc = rNd.GetNode().GetDoc();
     if( pDoc->IsRedlineOn() )
     {
@@ -129,9 +129,9 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     Init(rNd);
 }
 
-// stelle fest, ob das naechste Insert mit dem aktuellen zusammengefasst
-// werden kann. Wenn ja, dann aender die Laenge und die InsPos.
-// Dann wird von SwDoc::Insert kein neues Object in die Undoliste gestellt.
+// Check if the next Insert can be combined with the current one. If so
+// change the length and InsPos. As a result, SwDoc::Inser will not add a
+// new object into the Undo list.
 
 sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
@@ -155,17 +155,16 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
     if( nNode == rPos.nNode.GetIndex() &&
         nCntnt == rPos.nContent.GetIndex() )
     {
-        // Redline beachten
+        // consider Redline
         SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
         if( ( ~nsRedlineMode_t::REDLINE_SHOW_MASK & rDoc.GetRedlineMode() ) ==
             ( ~nsRedlineMode_t::REDLINE_SHOW_MASK & GetRedlineMode() ) )
         {
             bRet = sal_True;
 
-            // dann war oder ist noch Redline an:
-            // pruefe, ob an der InsPosition ein anderer Redline
-            // rumsteht. Wenn der gleiche nur einmalig vorhanden ist,
-            // kann zusammen gefasst werden.
+            // than there is or was still an active Redline:
+            // Check if there is another Redline at the InsPosition. If the
+            // same exists only once, it can be combined.
             const SwRedlineTbl& rTbl = rDoc.GetRedlineTbl();
             if( rTbl.Count() )
             {
@@ -194,14 +193,14 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 
 SwUndoInsert::~SwUndoInsert()
 {
-    if( pPos )      // loesche noch den Bereich aus dem UndoNodes Array
+    if( pPos )      // delete the section from UndoNodes array
     {
-        // Insert speichert den Inhalt in der IconSection
+        // Insert saves the content in IconSection
         SwNodes& rUNds = pPos->nNode.GetNode().GetNodes();
-        if( pPos->nContent.GetIndex() )         // nicht den gesamten Node loeschen
+        if( pPos->nContent.GetIndex() )         // do not delete the whole node
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            OSL_ENSURE( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
+            OSL_ENSURE( pTxtNd, "no TextNode to delete from" );
             pTxtNd->EraseText( pPos->nContent );
             pPos->nNode++;
         }
@@ -210,7 +209,7 @@ SwUndoInsert::~SwUndoInsert()
                                     pPos->nNode.GetIndex() );
         delete pPos;
     }
-    else if( pTxt )     // der eingefuegte Text
+    else if( pTxt )     // the inserted text
         delete pTxt;
     delete pRedlData;
     delete pUndoTxt;
@@ -261,7 +260,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 pTxt = new String( pTxtNode->GetTxt().Copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
-            else                // ansonsten Grafik/OLE/Text/...
+            else                // otherwise Graphics/OLE/Text/...
             {
                 aPaM.Move(fnMoveBackward);
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
@@ -342,7 +341,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             }
             else
             {
-                // Inhalt wieder einfuegen. (erst pPos abmelden !!)
+                // re-insert content (log out pPos before!)
                 sal_uLong nMvNd = pPos->nNode.GetIndex();
                 xub_StrLen nMvCnt = pPos->nContent.GetIndex();
                 DELETEZ( pPos );
@@ -380,7 +379,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     SwNodeIndex aNd( rDoc.GetNodes(), nNode );
     SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();
 
-    if( !bIsAppend && 1 == nLen )       // >1 dann immer nur Text, ansonsten Grafik/OLE/Text/...
+    if( !bIsAppend && 1 == nLen )       // >1 than always Text, otherwise Graphics/OLE/Text/...
     {
         SwPaM aPaM( *pCNd, nCntnt );
         aPaM.SetMark();
@@ -388,7 +387,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         pCNd = aPaM.GetCntntNode();
     }
 
-// Was passiert mit dem evt. selektierten Bereich ???
+// What happens with the possible selected range ???
 
     switch( pCNd->GetNodeType() )
     {
@@ -414,13 +413,13 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 
             rDoc.Insert( rContext.GetRepeatPaM(), sFile, sFilter,
                                 &pGrfNd->GetGrf(),
-                                0/* Grafik-Collection*/, NULL, NULL );
+                                0/* Graphics collection*/, NULL, NULL );
         }
         break;
 
     case ND_OLENODE:
         {
-            // StarView bietet noch nicht die Moeglichkeit ein StarOBJ zu kopieren
+            // StarView does not yet provide an option to copy a StarOBJ
             SvStorageRef aRef = new SvStorage( aEmptyStr );
             SwOLEObj& rSwOLE = (SwOLEObj&)((SwOLENode*)pCNd)->GetOLEObj();
 
@@ -712,10 +711,10 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->TmpRollback( pDoc, m_nSetPos, false );
         if ( m_nSetPos ) // there were footnotes/FlyFrames
         {
-            // gibts ausser diesen noch andere ?
+            // are there others than these?
             if( m_nSetPos < pHistory->Count() )
             {
-                // dann sicher die Attribute anderen Attribute
+                // than save those attributes as well
                 SwHistory aHstr;
                 aHstr.Move( 0, pHistory, m_nSetPos );
                 pHistory->Rollback( pDoc );
@@ -813,7 +812,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     if( !pGrfNd )
         return ;
 
-        // die alten Werte zwischen speichern
+    // cache the old values
     Graphic* pOldGrf = pGrf;
     String* pOldNm = pNm;
     String* pOldFltr = pFltr;
@@ -911,7 +910,7 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
-        OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer nicht initialisiert" );
+        OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer not initialized" );
         SwFrmFmt* pFmt;
         SdrObject *pSdrObj = 0;
         if( OBJECT.pUndoAttr &&
@@ -951,7 +950,7 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
-        OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer nicht initialisiert" );
+        OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer not initialized" );
         SwFrmFmt* pFmt;
         SdrObject *pSdrObj = 0;
         if( OBJECT.pUndoAttr &&
