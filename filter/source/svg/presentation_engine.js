@@ -332,6 +332,8 @@ function getDefaultMouseHandlerDictionary()
     // index mode
     mouseHandlerDict[INDEX_MODE][MOUSE_DOWN]
         = function( aEvt ) { return toggleSlideIndex(); };
+//    mouseHandlerDict[INDEX_MODE][MOUSE_MOVE]
+//        = function( aEvt ) { return theSlideIndexPage.updateSelection( aEvt ); };
 
     return mouseHandlerDict;
 }
@@ -646,7 +648,8 @@ var aOOOAttrDateTimeFormat = 'date-time-format';
 
 var aOOOAttrTextAdjust = 'text-adjust';
 
-// Placeholder class names
+// element class names
+var aPageClassName = 'Page';
 var aSlideNumberClassName = 'Slide_Number';
 var aDateTimeClassName = 'Date/Time';
 var aFooterClassName = 'Footer';
@@ -801,6 +804,13 @@ function log( message )
     }
 }
 
+function warning( bCondition, sMessage )
+{
+    if( bCondition )
+        log( sMessage );
+    return bCondition;
+}
+
 function getNSAttribute( sNSPrefix, aElem, sAttrName )
 {
     if( !aElem ) return null;
@@ -910,6 +920,105 @@ function getSafeIndex( nIndex, nMin, nMax )
         return nIndex;
 }
 
+function isTextFieldElement( aElement )
+{
+    var sClassName = aElement.getAttribute( 'class' );
+    return ( sClassName === aSlideNumberClassName ) ||
+           ( sClassName === aFooterClassName ) ||
+           ( sClassName === aHeaderClassName ) ||
+           ( sClassName === aDateTimeClassName );
+}
+
+
+
+function tempWrapMasterPages()
+{
+    var aSlideGroupElement = document.createElementNS( NSS['svg'], 'g' );
+    aSlideGroupElement.setAttribute( 'class', 'SlideGroup' );
+    //aSlideGroupElement.onmousedown = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_DOWN ); };
+    //aSlideGroupElement.setAttribute( 'visibility', 'hidden' );
+
+
+    var aDrawPageSet = getElementsByClassName(ROOT_NODE, 'Slide');
+    ROOT_NODE.insertBefore( aSlideGroupElement, aDrawPageSet[0] );
+
+    var aMasterPageSet = getElementsByClassName(ROOT_NODE, 'Master_Slide');
+    if( aMasterPageSet )
+    {
+        var aDefsElement = document.createElementNS( NSS['svg'], 'defs' );
+
+        ROOT_NODE.insertBefore( aDefsElement, aMasterPageSet[0] );
+        var i;
+        for( i = 0; i < aMasterPageSet.length; ++i)
+        {
+            var aMasterPage = ROOT_NODE.removeChild( aMasterPageSet[i] );
+            aDefsElement.appendChild( aMasterPage );
+        }
+    }
+}
+
+function tempCreateSlideView( aPageElement )
+{
+    if( !aPageElement )
+        return;
+
+    var aSlideGroupElement = getElementByClassName( ROOT_NODE, 'SlideGroup' );
+
+    var sId = aPageElement.getAttribute( 'id' );
+    var sName = aPageElement.getAttributeNS( NSS['ooo'], 'name' );
+    var sClipPath = aPageElement.getAttribute( 'clip-path' );
+
+    aPageElement.removeAttribute( 'id' );
+    aPageElement.removeAttributeNS( NSS['ooo'], 'name' );
+    aPageElement.removeAttribute( 'visibility' );
+    aPageElement.removeAttribute( 'clip-path' );
+    aPageElement.setAttribute( 'class', aPageClassName );
+
+    var aVisibilityStatusElement = document.createElementNS( NSS['svg'], 'g' );
+    aVisibilityStatusElement.setAttribute( 'visibility', 'hidden' );
+
+    var aSlideElement = document.createElementNS( NSS['svg'], 'g' );
+    aSlideElement.setAttribute( 'id', sId );
+    aSlideElement.setAttributeNS( NSS['ooo'], 'name', sName );
+    aSlideElement.setAttribute( 'clip-path', sClipPath );
+    aSlideElement.setAttribute( 'class', 'Slide' );
+    aVisibilityStatusElement.appendChild( aSlideElement );
+
+    aPageElement.parentNode.removeChild( aPageElement );
+    aSlideElement.appendChild( aPageElement );
+    aSlideGroupElement.appendChild( aVisibilityStatusElement );
+}
+
+function tempModMasterPage( aMasterPageElement, sId )
+{
+    if( !aMasterPageElement )
+        return;
+
+
+    var aBackgroundObjectsElement =
+        getElementByClassName( aMasterPageElement, 'BackgroundObjects' );
+
+    var aBackgroundShapesElement = document.createElementNS( NSS['svg'], 'g' );
+    aBackgroundShapesElement.setAttribute( 'id', 'bs-' + sId );
+    aBackgroundShapesElement.setAttribute( 'class', 'BackgroundShapes' );
+
+
+    if( aBackgroundObjectsElement.hasChildNodes() )
+    {
+        var aChildNode = aBackgroundObjectsElement.firstElementChild;
+        while( aChildNode )
+        {
+            var aNextChildNode= aChildNode.nextElementSibling;
+            if( !isTextFieldElement( aChildNode ) )
+            {
+                aBackgroundObjectsElement.removeChild( aChildNode );
+                aBackgroundShapesElement.appendChild( aChildNode );
+            }
+            aChildNode = aNextChildNode;
+        }
+    }
+    aBackgroundObjectsElement.appendChild( aBackgroundShapesElement );
+}
 
 
 // ------------------------------------------------------------------------------------------ //
@@ -978,31 +1087,59 @@ aAnimatedElementDebugPrinter.off();
 
 
 // ------------------------------------------------------------------------------------------ //
-/******************
- ** Core Classes **
- ******************/
+/************************
+ ***   Core Classes   ***
+ ************************/
 
-/** Class MetaDocument **
- *  This class provides a pool of properties related to the whole presentation and
- *  it is responsible for initializing the set of MetaSlide objects that handle
- *  the meta information for each slide.
+/** Class MetaDocument
+ *  This class provides a pool of properties related to the whole presentation.
+ *  Moreover it is responsible for:
+ *  - initializing the set of MetaSlide objects that handle the meta information
+ *    for each slide;
+ *  - creating a map with key an id and value the svg element containing
+ *    the animations performed on the slide with such an id.
+ *
  */
-function MetaDocument( aMetaDocElem )
+function MetaDocument()
 {
+    // TODO to be implemented in C++
+    tempWrapMasterPages();
+
+    // We look for the svg element that provides the following presentation
+    // properties:
+    // - the number of slides in the presentation;
+    // - the type of numbering used in the presentation.
+    // Moreover it wraps svg elements providing meta information on each slide
+    // and svg elements providing content and properties of each text field.
+    var aMetaDocElem = document.getElementById( aOOOElemMetaSlides );
+    assert( aMetaDocElem, 'MetaDocument: the svg element with id:' + aOOOElemMetaSlides + 'is not valid.');
+
+    // We initialize general presentation properties:
+    // - the number of slides in the presentation;
     this.nNumberOfSlides = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberOfSlides ) );
     assert( typeof this.nNumberOfSlides == 'number' && this.nNumberOfSlides > 0,
             'MetaDocument: number of slides is zero or undefined.' );
-    this.startSlideNumber = 0;
+    // - the index of the slide to show when the presentation starts;
+    this.nStartSlideNumber = 0;
+    // - the numbering type used in the presentation, default type is arabic.
     this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';
+
+    // The collections for handling properties of each slide, svg elements
+    // related to master pages and content and properties of text fields.
     this.aMetaSlideSet = new Array();
     this.aMasterPageSet = new Object();
-    this.aTextFieldSet = new Array();
-    this.slideNumberField =  new SlideNumberField( this.startSlideNumber + 1, this.sPageNumberingType );
+    this.aTextFieldHandlerSet = new Object();
+    this.aTextFieldContentProviderSet = new Array();
+    this.aSlideNumberProvider =  new SlideNumberProvider( this.nStartSlideNumber + 1, this.sPageNumberingType );
 
+    // We create a map with key an id and value the svg element containing
+    // the animations performed on the slide with such an id.
+    this.bIsAnimated = false;
     this.aSlideAnimationsMap = new Object();
     this.initSlideAnimationsMap();
 
-
+    // We initialize the set of MetaSlide objects that handle the meta
+    // information for each slide.
     for( var i = 0; i < this.nNumberOfSlides; ++i )
     {
         var sMetaSlideId = aOOOElemMetaSlide + '_' + i;
@@ -1010,20 +1147,54 @@ function MetaDocument( aMetaDocElem )
     }
     assert( this.aMetaSlideSet.length == this.nNumberOfSlides,
             'MetaDocument: aMetaSlideSet.length != nNumberOfSlides.' );
-    //this.aMetaSlideSet[ this.startSlideNumber ].show();
 }
 
-MetaDocument.prototype.initPlaceholderShapes = function()
+MetaDocument.prototype =
 {
-    this.aMetaSlideSet[0].initPlaceholderShapes();
-};
+/*** public methods ***/
 
-MetaDocument.prototype.initSlideAnimationsMap = function()
+/** getCurrentSlide
+ *
+ *  @return
+ *      The MetaSlide object handling the current slide.
+ */
+getCurrentSlide : function()
+{
+    return this.aMetaSlideSet[nCurSlide];
+},
+
+/** setCurrentSlide
+ *
+ *  @param nSlideIndex
+ *      The index of the slide to show.
+ */
+setCurrentSlide : function( nSlideIndex )
+{
+    if( nSlideIndex >= 0 &&  nSlideIndex < this.nNumberOfSlides )
+    {
+        if( nCurSlide !== undefined )
+            this.aMetaSlideSet[nCurSlide].hide();
+        this.aMetaSlideSet[nSlideIndex].show();
+        nCurSlide = nSlideIndex;
+    }
+    else
+    {
+        log('MetaDocument.setCurrentSlide: slide index out of range: ' + nSlideIndex );
+    }
+},
+
+/*** private methods ***/
+
+initSlideAnimationsMap : function()
 {
     var aAnimationsSection = document.getElementById( 'presentation-animations' );
     if( aAnimationsSection )
     {
         var aAnimationsDefSet = aAnimationsSection.getElementsByTagName( 'defs' );
+
+        // we have at least one slide with animations ?
+        this.bIsAnimated = ( typeof aAnimationsDefSet.length =='number' &&
+                             aAnimationsDefSet.length > 0 );
 
         for( var i = 0; i < aAnimationsDefSet.length; ++i )
         {
@@ -1035,433 +1206,880 @@ MetaDocument.prototype.initSlideAnimationsMap = function()
             }
         }
     }
-};
+}
 
+}; // end MetaDocument prototype
 
-
-/** Class MetaSlide **
- *  This class is responsible for managing the visibility of all master page shapes
- *  and background related to a given slide element; it performs the creation and
- *  the initialization of each Text Field object.
+/** Class MetaSlide
+ *  This class is responsible for:
+ *  - parsing and initializing slide properties;
+ *  - creating a MasterSlide object that provides direct access to the target
+ *    master slide and its sub-elements;
+ *  - initializing text field content providers;
+ *  - initializing the slide animation handler.
+ *
+ *  @param sMetaSlideId
+ *      The string representing the id attribute of the meta-slide element.
+ *  @param aMetaDoc
+ *      The MetaDocument global object.
  */
 function MetaSlide( sMetaSlideId, aMetaDoc )
 {
     this.theDocument = document;
     this.id = sMetaSlideId;
     this.theMetaDoc = aMetaDoc;
+
+    // We get a reference to the meta-slide element.
     this.element = this.theDocument.getElementById( this.id );
-    assert( this.element, 'MetaSlide: meta_slide element <' + this.id + '> not found.' );
-    // - Initialize the Slide Element -
+    assert( this.element,
+            'MetaSlide: meta_slide element <' + this.id + '> not found.' );
+
+    // We get a reference to the slide element.
     this.slideId = this.element.getAttributeNS( NSS['ooo'], aOOOAttrSlide );
     this.slideElement = this.theDocument.getElementById( this.slideId );
+    assert( this.slideElement,
+            'MetaSlide: slide element <' + this.slideId + '> not found.' );
+    this.nSlideNumber = parseInt( this.slideId.substr(2) );
+
+    // ------------------------------
+    // TODO: to be implemented in C++
+    tempCreateSlideView(this.slideElement);
+    this.slideElement = this.theDocument.getElementById( this.slideId );
     assert( this.slideElement, 'MetaSlide: slide element <' + this.slideId + '> not found.' );
-    // - Initialize the Target Master Page Element -
+    // ------------------------------
+
+    // Each slide element is wrapped by a <g> element that is responsible for
+    // the slide element visibility. In fact the visibility attribute has
+    // to be set on the parent of the slide element and not directly on
+    // the slide element. The reason is that in index mode each slide
+    // rendered in a thumbnail view is targeted by a <use> element, however
+    // when the visibility attribute is set directly on the referred slide
+    // element its visibility is not overridden by the visibility attribute
+    // defined by the targeting <use> element. The previous solution was,
+    // when the user switched to index mode, to set up the visibility attribute
+    // of all slides rendered in a thumbnail to 'visible'.
+    // Obviously the slides were not really visible because the grid of
+    // thumbnails was above them, anyway Firefox performance was really bad.
+    // The workaround of setting up the visibility attribute on the slide
+    // parent element let us to make visible a slide in a <use> element
+    // even if the slide parent element visibility is set to 'hidden'.
+    this.aVisibilityStatusElement = this.slideElement.parentNode;
+
+    // We get a reference to the draw page element, where all shapes specific
+    // of this slide live.
+    this.pageElement = getElementByClassName( this.slideElement, aPageClassName );
+    assert( this.pageElement,
+            'MetaSlide: page element <' + this.slideId + '> not found.' );
+
+    // We initialize the MasterPage object that provides direct access to
+    // the target master page element.
     this.masterPage = this.initMasterPage();
-    // - Initialize Background -
-    //this.aBackground                 = getElementByClassName( this.aSlide, 'Background' );
-    // - Initialize Visibility Properties -
+
+    // We initialize visibility properties of the target master page elements.
     this.nAreMasterObjectsVisible     = this.initVisibilityProperty( aOOOAttrMasterObjectsVisibility,  VISIBLE );
     this.nIsBackgroundVisible         = this.initVisibilityProperty( aOOOAttrBackgroundVisibility,     VISIBLE );
     this.nIsPageNumberVisible         = this.initVisibilityProperty( aOOOAttrPageNumberVisibility,     HIDDEN );
     this.nIsDateTimeVisible           = this.initVisibilityProperty( aOOOAttrDateTimeVisibility,       VISIBLE );
     this.nIsFooterVisible             = this.initVisibilityProperty( aOOOAttrFooterVisibility,         VISIBLE );
     this.nIsHeaderVisible             = this.initVisibilityProperty( aOOOAttrHeaderVisibility,         VISIBLE );
-    // - Initialize Master Page Text Fields (Placeholders)-
-    this.aMPTextFieldSet = new Object();
-    this.aMPTextFieldSet[aSlideNumberClassName]   = this.initSlideNumberField();
-    this.aMPTextFieldSet[aDateTimeClassName]      = this.initDateTimeField( aOOOAttrDateTimeField );
-    this.aMPTextFieldSet[aFooterClassName]        = this.initFixedTextField( aOOOAttrFooterField );
-    this.aMPTextFieldSet[aHeaderClassName]        = this.initFixedTextField( aOOOAttrHeaderField );
 
-    // - Initialize Slide Animations Handler
+    // This property tell us if the date/time field need to be updated
+    // each time the slide is shown. It is initialized in
+    // the initDateTimeFieldContentProvider method.
+    this.bIsDateTimeVariable = undefined;
+
+    // We initialize the objects responsible to provide the content to text field.
+    this.aTextFieldContentProviderSet = new Object();
+    this.aTextFieldContentProviderSet[aSlideNumberClassName]   = this.initSlideNumberFieldContentProvider();
+    this.aTextFieldContentProviderSet[aDateTimeClassName]      = this.initDateTimeFieldContentProvider( aOOOAttrDateTimeField );
+    this.aTextFieldContentProviderSet[aFooterClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrFooterField );
+    this.aTextFieldContentProviderSet[aHeaderClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrHeaderField );
+
+    // We initialize the SlideAnimationsHandler object
     this.aSlideAnimationsHandler = new SlideAnimations( aSlideShow.getContext() );
     this.aSlideAnimationsHandler.importAnimations( this.getSlideAnimationsRoot() );
     this.aSlideAnimationsHandler.parseElements();
+
+    // this statement is used only for debugging
     if( false && this.aSlideAnimationsHandler.aRootNode )
         log( this.aSlideAnimationsHandler.aRootNode.info( true ) );
+
 }
 
-/*** MetaSlide methods ***/
 MetaSlide.prototype =
 {
-    /*** public methods ***/
-    hide : function()
+/*** public methods ***/
+
+/** show
+ *  Set the visibility property of the slide to 'inherit'.
+ */
+show : function()
+{
+    this.updateMasterPageView();
+    this.aVisibilityStatusElement.setAttribute( 'visibility', 'inherit' );
+},
+
+/** hide
+ *  Set the visibility property of the slide to 'hidden'.
+ */
+hide : function()
+{
+    this.aVisibilityStatusElement.setAttribute( 'visibility', 'hidden' );
+},
+
+/** updateMasterPageView
+ *  On first call it creates a master page view element and insert it at
+ *  the begin of the slide element. Moreover it updates the text fields
+ *  included in the master page view.
+ */
+updateMasterPageView : function()
+{
+    // The master page view element is generated and attached on first time
+    // the slide is shown.
+    if( !this.aMasterPageView )
     {
-        checkElemAndSetAttribute( this.slideElement, 'visibility', 'hidden' );
-
-        this.masterPage.hide();
-        this.masterPage.hideBackground();
-
-        var aFieldSet = this.aMPTextFieldSet;
-        var aShapeSet = this.masterPage.aPlaceholderShapeSet;
-        if( aFieldSet[aSlideNumberClassName] )         aFieldSet[aSlideNumberClassName].hide( aShapeSet[aSlideNumberClassName] );
-        if( aFieldSet[aDateTimeClassName] )            aFieldSet[aDateTimeClassName].hide( aShapeSet[aDateTimeClassName] );
-        if( aFieldSet[aFooterClassName] )              aFieldSet[aFooterClassName].hide( aShapeSet[aFooterClassName] );
-        if( aFieldSet[aHeaderClassName] )              aFieldSet[aHeaderClassName].hide( aShapeSet[aHeaderClassName] );
-    },
-
-    hideExceptMaster : function()
-    {
-        checkElemAndSetAttribute( this.slideElement, 'visibility', 'hidden' );
-    },
-
-    show : function()
-    {
-        checkElemAndSetAttribute( this.slideElement, 'visibility', 'visible' );
-
-        this.masterPage.setVisibility( this.nAreMasterObjectsVisible );
-        this.masterPage.setVisibilityBackground( this.nIsBackgroundVisible );
-
-
-        this.setTextFieldVisibility( aSlideNumberClassName, this.nIsPageNumberVisible );
-        this.setTextFieldVisibility( aDateTimeClassName, this.nIsDateTimeVisible );
-        this.setTextFieldVisibility( aFooterClassName, this.nIsFooterVisible );
-        this.setTextFieldVisibility( aHeaderClassName, this.nIsHeaderVisible );
-    },
-
-    getMasterPageId : function()
-    {
-        return this.masterPage.id;
-    },
-
-    getMasterPageElement : function()
-    {
-        return this.masterPage.element;
-    },
-
-    getBackground : function()
-    {
-        return getElementByClassName( this.slideElement, 'Background' );
-    },
-
-    getMasterPageBackground : function()
-    {
-        return this.masterPage.background;
-    },
-
-    /*** private methods ***/
-    initMasterPage : function()
-    {
-        var sMasterPageId = this.element.getAttributeNS( NSS['ooo'], aOOOAttrMaster );
-        if( !this.theMetaDoc.aMasterPageSet.hasOwnProperty( sMasterPageId ) )
-            this.theMetaDoc.aMasterPageSet[ sMasterPageId ] = new MasterPage( sMasterPageId );
-        return this.theMetaDoc.aMasterPageSet[ sMasterPageId ];
-    },
-
-    initVisibilityProperty : function( aVisibilityAttribute, nDefaultValue )
-    {
-        var nVisibility = nDefaultValue;
-        var sVisibility = getOOOAttribute( this.element, aVisibilityAttribute );
-        if( sVisibility )
-            nVisibility = aVisibilityValue[ sVisibility ];
-        return nVisibility;
-    },
-
-    initSlideNumberField : function()
-    {
-        return this.theMetaDoc.slideNumberField;
-    },
-
-    initDateTimeField : function( aOOOAttrDateTimeField )
-    {
-        var sTextFieldId = getOOOAttribute( this.element, aOOOAttrDateTimeField );
-        if( !sTextFieldId )  return null;
-
-        var nLength = aOOOElemTextField.length + 1;
-        var nIndex = parseInt(sTextFieldId.substring( nLength ) );
-        if( typeof nIndex != 'number') return null;
-
-        if( !this.theMetaDoc.aTextFieldSet[ nIndex ] )
-        {
-            var aTextField;
-            var aTextFieldElem = document.getElementById( sTextFieldId );
-            var sClassName = getClassAttribute( aTextFieldElem );
-            if( sClassName == 'FixedDateTimeField' )
-            {
-                aTextField = new FixedTextField( aTextFieldElem );
-            }
-            else if( sClassName == 'VariableDateTimeField' )
-            {
-                aTextField = new VariableDateTimeField( aTextFieldElem );
-            }
-            else
-            {
-                aTextField = null;
-            }
-            this.theMetaDoc.aTextFieldSet[ nIndex ] = aTextField;
-        }
-        return this.theMetaDoc.aTextFieldSet[ nIndex ];
-    },
-
-    initFixedTextField : function( aOOOAttribute )
-    {
-        var sTextFieldId = getOOOAttribute( this.element, aOOOAttribute );
-        if( !sTextFieldId ) return null;
-
-        var nLength = aOOOElemTextField.length + 1;
-        var nIndex = parseInt( sTextFieldId.substring( nLength ) );
-        if( typeof nIndex != 'number') return null;
-
-        if( !this.theMetaDoc.aTextFieldSet[ nIndex ] )
-        {
-            var aTextFieldElem = document.getElementById( sTextFieldId );
-            this.theMetaDoc.aTextFieldSet[ nIndex ]
-                = new FixedTextField( aTextFieldElem );
-        }
-        return this.theMetaDoc.aTextFieldSet[ nIndex ];
-    },
-
-    setTextFieldVisibility : function( sClassName, nVisible )
-    {
-        var aTextField = this.aMPTextFieldSet[ sClassName ];
-        var aPlaceholderShape = this.masterPage.aPlaceholderShapeSet[ sClassName ];
-        if( !aTextField ) return;
-        aTextField.setVisibility( this.nAreMasterObjectsVisible & nVisible, aPlaceholderShape );
-    },
-
-    getSlideAnimationsRoot : function()
-    {
-        return this.theMetaDoc.aSlideAnimationsMap[ this.slideId ];
+        this.aMasterPageView = new MasterPageView( this );
+        this.aMasterPageView.attachToSlide();
     }
+    this.aMasterPageView.update();
+},
 
-};
+/*** private methods ***/
+initMasterPage : function()
+{
+    var sMasterPageId = this.element.getAttributeNS( NSS['ooo'], aOOOAttrMaster );
+
+    // Check that the master page handler object has not already been
+    // created by an other slide that target the same master page.
+    if( !this.theMetaDoc.aMasterPageSet.hasOwnProperty( sMasterPageId ) )
+    {
+        this.theMetaDoc.aMasterPageSet[ sMasterPageId ] = new MasterPage( sMasterPageId );
+
+        // We initialize aTextFieldHandlerSet[ sMasterPageId ] to an empty
+        // collection.
+        this.theMetaDoc.aTextFieldHandlerSet[ sMasterPageId ] = new Object();
+    }
+    return this.theMetaDoc.aMasterPageSet[ sMasterPageId ];
+},
+
+initVisibilityProperty : function( aVisibilityAttribute, nDefaultValue )
+{
+    var nVisibility = nDefaultValue;
+    var sVisibility = getOOOAttribute( this.element, aVisibilityAttribute );
+    if( sVisibility )
+        nVisibility = aVisibilityValue[ sVisibility ];
+    return nVisibility;
+},
+
+initSlideNumberFieldContentProvider : function()
+{
+    return this.theMetaDoc.aSlideNumberProvider;
+},
+
+initDateTimeFieldContentProvider : function( aOOOAttrDateTimeField )
+{
+    var sTextFieldId = getOOOAttribute( this.element, aOOOAttrDateTimeField );
+    if( !sTextFieldId )  return null;
+
+    var nLength = aOOOElemTextField.length + 1;
+    var nIndex = parseInt(sTextFieldId.substring( nLength ) );
+    if( typeof nIndex != 'number') return null;
+
+    if( !this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ] )
+    {
+        var aTextField;
+        var aTextFieldElem = document.getElementById( sTextFieldId );
+        var sClassName = getClassAttribute( aTextFieldElem );
+        if( sClassName == 'FixedDateTimeField' )
+        {
+            aTextField = new FixedTextProvider( aTextFieldElem );
+            this.bIsDateTimeVariable = false;
+        }
+        else if( sClassName == 'VariableDateTimeField' )
+        {
+            aTextField = new CurrentDateTimeProvider( aTextFieldElem );
+            this.bIsDateTimeVariable = true;
+        }
+        else
+        {
+            aTextField = null;
+        }
+        this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ] = aTextField;
+    }
+    return this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ];
+},
+
+initFixedTextFieldContentProvider : function( aOOOAttribute )
+{
+    var sTextFieldId = getOOOAttribute( this.element, aOOOAttribute );
+    if( !sTextFieldId ) return null;
+
+    var nLength = aOOOElemTextField.length + 1;
+    var nIndex = parseInt( sTextFieldId.substring( nLength ) );
+    if( typeof nIndex != 'number') return null;
+
+    if( !this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ] )
+    {
+        var aTextFieldElem = document.getElementById( sTextFieldId );
+        this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ]
+            = new FixedTextProvider( aTextFieldElem );
+    }
+    return this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ];
+},
+
+getSlideAnimationsRoot : function()
+{
+    return this.theMetaDoc.aSlideAnimationsMap[ this.slideId ];
+}
+
+}; // end MetaSlide prototype
 
 /** Class MasterPage **
- *  This class gives access to a master page element, its background and
- *  each placeholder shape present in the master page element.
+ *  This class gives direct access to a master page element and to the following
+ *  elements included in the master page:
+ *  - the background element,
+ *  - the background objects group element,
+ *  - the background shapes group element.
+ *  Moreover for each text field element a Placeholder object is created which
+ *  manages the text field element itself.
+ *
+ *  The master page element structure is the following:
+ *  <g class='Master_Slide'>
+ *      <g class='Background'>
+ *          background image
+ *      </g>
+ *      <g class='BackgroundObjects'>
+ *          <g class='BackgroundFields'>
+ *              <g class='Date/Time'>
+ *                  date/time placeholder
+ *              </g>
+ *              <g class='Header'>
+ *                  header placeholder
+ *              </g>
+ *              <g class='Footer'>
+ *                  footer placeholder
+ *              </g>
+ *              <g class='Slide_Number'>
+ *                  slide number placeholder
+ *              </g>
+ *          </g>
+ *          <g class='BackgroundShapes'>
+ *              shapes
+ *          </g>
+ *      </g>
+ *  </g>
+ *
+ *  @param sMasterPageId
+ *      A string representing the value of the id attribute of the master page
+ *      element to be handled.
  */
 function MasterPage( sMasterPageId )
 {
     this.id = sMasterPageId;
+
+    // The master page element to be handled.
+    this.element = document.getElementById( this.id );
+    assert( this.element,
+            'MasterPage: master page element <' + this.id + '> not found.' );
+
+    // ------------------------------
+    // TODO: to be implemented in C++
+    tempModMasterPage( this.element, this.id );
     this.element = document.getElementById( this.id );
     assert( this.element, 'MasterPage: master page element <' + this.id + '> not found.' );
+    // ------------------------------
+
+    // The master page background element and its id attribute.
     this.background = getElementByClassName( this.element, 'Background' );
-    this.backgroundId = this.background.getAttribute( 'id' );
-    this.backgroundVisibility = initVisibilityProperty( this.background );
+    if( this.background )
+    {
+        this.backgroundId = this.background.getAttribute( 'id' );
+//      this.backgroundVisibility = initVisibilityProperty( this.background );
+    }
+    else
+    {
+        this.backgroundId = '';
+        log( 'MasterPage: the background element is not valid.' );
+    }
+
+    // The background objects group element that contains every element presents
+    // on the master page except the background element.
     this.backgroundObjects = getElementByClassName( this.element, 'BackgroundObjects' );
-    this.backgroundObjectsId = this.backgroundObjects.getAttribute( 'id' );
-    this.backgroundObjectsVisibility = initVisibilityProperty( this.backgroundObjects );
+    if( this.backgroundObjects )
+    {
+        this.backgroundObjectsId = this.backgroundObjects.getAttribute( 'id' );
+//      this.backgroundObjectsVisibility = initVisibilityProperty( this.backgroundObjects );
+    }
+    else
+    {
+        this.backgroundObjectsId = '';
+        log( 'MasterPage: the background objects element is not valid.' );
+    }
+
+    // The background shapes group element that contains all the shape of
+    // the master page that are not text fields.
+    this.backgroundShapes = getElementByClassName( this.backgroundObjects, 'BackgroundShapes' );
+    if( this.backgroundShapes )
+    {
+        this.backgroundShapesId = this.backgroundShapes.getAttribute( 'id' );
+    }
+    else
+    {
+        this.backgroundShapesId = '';
+        log( 'MasterPage: the background shapes element is not valid.' );
+    }
+
+    // We populate the collection of placeholders.
     this.aPlaceholderShapeSet = new Object();
     this.initPlaceholderShapes();
+
+    this.removeVisibilityAttributes();
 }
 
-/*** MasterPage methods ***/
 MasterPage.prototype =
 {
-    /*** public method ***/
-    setVisibility : function( nVisibility )
-    {
-        this.backgroundObjectsVisibility = setElementVisibility( this.backgroundObjects, this.backgroundObjectsVisibility, nVisibility );
-    },
+/*** private methods ***/
 
-    setVisibilityBackground : function( nVisibility )
-    {
-        this.backgroundVisibility = setElementVisibility( this.background, this.backgroundVisibility, nVisibility );
-    },
+initPlaceholderShapes : function()
+{
+    this.aPlaceholderShapeSet[ aSlideNumberClassName ] = new PlaceholderShape( this, aSlideNumberClassName );
+    this.aPlaceholderShapeSet[ aDateTimeClassName ] = new PlaceholderShape( this, aDateTimeClassName );
+    this.aPlaceholderShapeSet[ aFooterClassName ] = new PlaceholderShape( this, aFooterClassName );
+    this.aPlaceholderShapeSet[ aHeaderClassName ] = new PlaceholderShape( this, aHeaderClassName );
+},
 
-    hide : function()
-    {
-        this.setVisibility( HIDDEN );
-    },
+removeVisibilityAttributes : function()
+{
+    this.element.removeAttribute( 'visibility' );
+    this.background.removeAttribute( 'visibility' );
+    this.backgroundObjects.removeAttribute( 'visibility' );
+}
 
-    show : function()
-    {
-        this.setVisibility( VISIBLE );
-    },
+}; // end MasterPage prototype
 
-    hideBackground : function()
-    {
-        this.setVisibilityBackground( HIDDEN );
-    },
-
-    showBackground : function()
-    {
-        this.setVisibilityBackground( VISIBLE );
-    },
-
-    /*** private method ***/
-    initPlaceholderShapes : function()
-    {
-        this.aPlaceholderShapeSet[ aSlideNumberClassName ] = new PlaceholderShape( this, aSlideNumberClassName );
-        this.aPlaceholderShapeSet[ aDateTimeClassName ] = new PlaceholderShape( this, aDateTimeClassName );
-        this.aPlaceholderShapeSet[ aFooterClassName ] = new PlaceholderShape( this, aFooterClassName );
-        this.aPlaceholderShapeSet[ aHeaderClassName ] = new PlaceholderShape( this, aHeaderClassName );
-    }
-};
-
-/** Class PlaceholderShape **
- *  This class manages the visibility and the text content of a placeholder shape.
+/** Class PlaceholderShape
+ *  This class provides direct access to a text field element and
+ *  to the embedded placeholder element.
+ *  Moreover it set up the text adjustment and position for the placeholder
+ *  element.
+ *  Note: the text field element included in a master page is used only as
+ *  a template element, it is cloned for each specific text content
+ *  (see the TextFieldContentProvider class and its derived classes).
+ *
+ *  @param aMasterPage
+ *      The master page object to which the text field to be handled belongs.
+ *  @param sClassName
+ *      A string representing the value of the class attribute of the text
+ *      field element to be handled.
  */
 function PlaceholderShape( aMasterPage, sClassName )
 {
     this.masterPage = aMasterPage;
     this.className = sClassName;
+
     this.element = null;
     this.textElement = null;
-
     this.init();
 }
 
 /* public methods */
-PlaceholderShape.prototype.setTextContent = function( sText )
+PlaceholderShape.prototype.isValid = function()
 {
-    if( !this.textElement )
-    {
-        log( 'error: PlaceholderShape.setTextContent: text element is not valid in placeholder of type '
-                + this.className + ' that belongs to master slide ' + this.masterPage.id );
-        return;
-    }
-    this.textElement.textContent = sText;
-};
-
-PlaceholderShape.prototype.setVisibility = function( nVisibility )
-{
-    if( !this.element )
-    {
-        return;
-    }
-    this.element.setAttribute( 'visibility', aVisibilityAttributeValue[nVisibility] );
-};
-
-PlaceholderShape.prototype.show = function()
-{
-    this.setVisibility( VISIBLE );
-};
-
-PlaceholderShape.prototype.hide = function()
-{
-    this.setVisibility( HIDDEN );
+    return ( this.element && this.textElement );
 };
 
 /* private methods */
+
+/** init
+ *  In case a text field element of class type 'className' exists and such
+ *  an element embeds a placeholder element, the text adjustment and position
+ *  of the placeholder element is set up.
+ */
 PlaceholderShape.prototype.init = function()
 {
-    var aShapeElem = getElementByClassName( this.masterPage.backgroundObjects, this.className );
-    if( !aShapeElem ) return;
 
-    this.element = aShapeElem;
-    this.element.setAttribute( 'visibility', 'hidden' );
-
-    this.textElement = getElementByClassName( this.element , 'PlaceholderText' );
-    if( !this.textElement )  return;
-
-
-    var aSVGRectElemSet = this.element.getElementsByTagName( 'rect' );
-    if( aSVGRectElemSet.length != 1) return;
-
-    var aRect = new Rectangle( aSVGRectElemSet[0] );
-
-    var sTextAdjust = getOOOAttribute( this.element, aOOOAttrTextAdjust ) || 'left';
-    var sTextAnchor, sX;
-    if( sTextAdjust == 'left' )
+    var aTextFieldElement = getElementByClassName( this.masterPage.backgroundObjects, this.className );
+    if( aTextFieldElement )
     {
-        sTextAnchor = 'start';
-        sX = String( aRect.left );
-    }
-    else if( sTextAdjust == 'right' )
-    {
-        sTextAnchor = 'end';
-        sX = String( aRect.right );
-    }
-    else if( sTextAdjust == 'center' )
-    {
-        sTextAnchor = 'middle';
-        var nMiddle = ( aRect.left + aRect.right ) / 2;
-        sX = String( parseInt( String( nMiddle ) ) );
-    }
+        aTextFieldElement.removeAttribute( 'visibility' ); // TODO to be handled in C++ ?
 
-
-    this.textElement.setAttribute( 'text-anchor', sTextAnchor );
-    this.textElement.setAttribute( 'x', sX );
-};
-
-
-// ------------------------------------------------------------------------------------------ //
-/********************************
- ** Text Field Class Hierarchy **
- ********************************/
-
-/** Class TextField **
- *  This class is the root abstract class of the hierarchy.
- *  The 'shapeElement' property is the shape element to which
- *  this TextField object provides the text content.
- */
-function TextField( aTextFieldElem )
-{
-    this.bIsUpdated = false;
-}
-
-/*** TextField public methods ***/
-TextField.prototype.getShapeElement = function()
-{
-    return this.shapeElement;
-};
-
-TextField.prototype.setVisibility = function( nVisibility, aPlaceholderShape )
-{
-    if( !this.bIsUpdated )
-    {
-        if( nVisibility )
+        var aPlaceholderElement = getElementByClassName( aTextFieldElement, 'PlaceholderText' );
+        if( aPlaceholderElement )
         {
-            this.update( aPlaceholderShape );
-            this.bIsUpdated = true;
+            // Each text field element has an invisible rectangle that can be
+            // regarded as the text field bounding box.
+            // We exploit such a feature and the exported text adjust attribute
+            // value in order to set up correctly the position and text
+            // adjustment for the placeholder element.
+            var aSVGRectElemSet = aTextFieldElement.getElementsByTagName( 'rect' );
+            // As far as text field element exporting is implemented it should
+            // be only one <rect> element!
+            if( aSVGRectElemSet.length === 1)
+            {
+                var aRect = new Rectangle( aSVGRectElemSet[0] );
+                var sTextAdjust = getOOOAttribute( aTextFieldElement, aOOOAttrTextAdjust ) || 'left';
+                var sTextAnchor, sX;
+                if( sTextAdjust == 'left' )
+                {
+                    sTextAnchor = 'start';
+                    sX = String( aRect.left );
+                }
+                else if( sTextAdjust == 'right' )
+                {
+                    sTextAnchor = 'end';
+                    sX = String( aRect.right );
+                }
+                else if( sTextAdjust == 'center' )
+                {
+                    sTextAnchor = 'middle';
+                    var nMiddle = ( aRect.left + aRect.right ) / 2;
+                    sX = String( parseInt( String( nMiddle ) ) );
+                }
+                if( sTextAnchor )
+                    aPlaceholderElement.setAttribute( 'text-anchor', sTextAnchor );
+                if( sX )
+                    aPlaceholderElement.setAttribute( 'x', sX );
+
+                this.element = aTextFieldElement;
+                this.textElement = aPlaceholderElement;
+            }
         }
-        aPlaceholderShape.setVisibility( nVisibility );
-    }
-    else if( !nVisibility )
-    {
-        aPlaceholderShape.hide();
-        this.bIsUpdated = false;
     }
 };
 
-TextField.prototype.show = function( aPlaceholderShape )
-{
-    this.setVisibility( VISIBLE, aPlaceholderShape );
-};
-
-TextField.prototype.hide = function( aPlaceholderShape )
-{
-    this.setVisibility( HIDDEN, aPlaceholderShape );
-};
-
-
-/** Class FixedTextField **
- *  This class handles text field with a fixed text.
- *  The text content is provided by the 'text' property.
+/** Class MasterPageView
+ *  This class is used to creates a svg element of class MasterPageView and its
+ *  sub-elements.
+ *  It is also responsible for updating the content of the included text fields.
+ *
+ *  MasterPageView element structure:
+ *
+ *  <g class='MasterPageView'>
+ *      <use class='Background'>               // reference to master page background element
+ *      <g class='BackgroundObjects'>
+ *          <g class='BackgroundFields'>
+ *              <g class='Slide_Number'>       // a cloned element
+ *                  ...
+ *              </g>
+ *              <use class='Date/Time'>        // reference to a clone
+ *              <use class='Footer'>
+ *              <use class='Header'>
+ *          </g>
+ *          <use class='BackgroundShapes'>     // reference to the group of shapes on the master page
+ *      </g>
+ *  </g>
+ *
+ *  Sub-elements are present only if they are visible.
+ *
+ *  @param aMetaSlide
+ *      The MetaSlide object managing the slide element that targets
+ *      the master page view element created by an instance of MasterPageView.
  */
-function FixedTextField( aTextFieldElem )
+function MasterPageView( aMetaSlide )
 {
-    TextField.call( this, aTextFieldElem );
-    this.text = aTextFieldElem.textContent;
+    this.aMetaSlide = aMetaSlide;
+    this.aSlideElement = aMetaSlide.slideElement;
+    this.aPageElement = aMetaSlide.pageElement;
+    this.aMasterPage = aMetaSlide.masterPage;
+    this.aMPVElement = this.createElement();
+    this.bIsAttached = false;
 }
-extend( FixedTextField, TextField );
-
-FixedTextField.prototype.update = function( aPlaceholderShape )
-{
-    aPlaceholderShape.setTextContent( this.text );
-};
-
-
-/** Class VariableDateTimeField **
- *  Provide the text content for the related shape by generating the current
- *  date/time in the format specified by the 'dateTimeFormat' property.
- */
-function VariableDateTimeField( aTextFieldElem )
-{
-    VariableDateTimeField.superclass.constructor.call( this, aTextFieldElem );
-    this.dateTimeFormat = getOOOAttribute( aTextFieldElem, aOOOAttrDateTimeFormat );
-}
-extend( VariableDateTimeField, TextField );
 
 /*** public methods ***/
-VariableDateTimeField.prototype.update = function( aPlaceholderShape )
+
+/** attachToSlide
+ *  Prepend the master slide view element to the slide element.
+ */
+MasterPageView.prototype.attachToSlide = function()
 {
-    var sText = this.createDateTimeText( this.dateTimeFormat );
-    aPlaceholderShape.setTextContent( sText );
+    if( !this.bIsAttached )
+    {
+        var aInsertedElement = this.aSlideElement.insertBefore( this.aMPVElement, this.aPageElement );
+        assert( aInsertedElement === this.aMPVElement,
+                'MasterPageView.attachToSlide: aInsertedElement != this.aMPVElement' );
+
+        this.bIsAttached = true;
+    }
 };
 
-VariableDateTimeField.prototype.createDateTimeText = function( sDateTimeFormat )
+/** detachFromSlide
+ *  Remove the master slide view element from the slide element.
+ */
+MasterPageView.prototype.detachFromSlide = function()
+{
+    if( this.bIsAttached )
+    {
+        this.aSlideElement.removeChild( this.aMPVElement );
+        this.bIsAttached = false;
+    }
+};
+
+/** update
+ *  Update the content of text fields placed on the master page.
+ */
+MasterPageView.prototype.update = function()
+{
+    if( this.aDateTimeFieldHandler && this.aMetaSlide.bIsDateTimeVariable )
+        this.aDateTimeFieldHandler.update();
+};
+
+/*** private methods ***/
+
+MasterPageView.prototype.createElement = function()
+{
+    var theDocument = document;
+    var aMasterPageViewElement = theDocument.createElementNS( NSS['svg'], 'g' );
+    assert( aMasterPageViewElement,
+            'MasterPageView.createElement: failed to create a master page view element.' );
+    aMasterPageViewElement.setAttribute( 'class', 'MasterPageView' );
+
+    // init the Background element
+    if( this.aMetaSlide.nIsBackgroundVisible )
+    {
+        this.aBackgroundElement = theDocument.createElementNS( NSS['svg'], 'use' );
+        this.aBackgroundElement.setAttribute( 'class', 'Background' );
+        setNSAttribute( 'xlink', this.aBackgroundElement,
+                        'href', '#' + this.aMasterPage.backgroundId );
+
+        // node linking
+        aMasterPageViewElement.appendChild( this.aBackgroundElement );
+    }
+
+    // init the BackgroundObjects element
+    if( this.aMetaSlide.nAreMasterObjectsVisible )
+    {
+        this.aBackgroundObjectsElement = theDocument.createElementNS( NSS['svg'], 'g' );
+        this.aBackgroundObjectsElement.setAttribute( 'class', 'BackgroundObjects' );
+
+        // create background fields group
+        this.aBackgroundFieldsElement = theDocument.createElementNS( NSS['svg'], 'g' );
+        this.aBackgroundFieldsElement.setAttribute( 'class', 'BackgroundFields' );
+
+        // clone and initialize text field elements
+        var aPlaceholderShapeSet = this.aMasterPage.aPlaceholderShapeSet;
+        var aTextFieldContentProviderSet = this.aMetaSlide.aTextFieldContentProviderSet;
+        // where cloned elements are appended
+        var aDefsElement = this.aMetaSlide.element.parentNode;
+        var aTextFieldHandlerSet = this.aMetaSlide.theMetaDoc.aTextFieldHandlerSet;
+        var sMasterSlideId = this.aMasterPage.id;
+
+        // Slide Number Field
+        // The cloned element is appended directly to the field group element
+        // since there is no slide number field content shared between two slide
+        // (because the slide number of two slide is always different).
+        if( aPlaceholderShapeSet[aSlideNumberClassName] &&
+            aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
+            this.aMetaSlide.nIsPageNumberVisible )
+        {
+            this.aSlideNumberFieldHandler =
+            new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
+                                         aTextFieldContentProviderSet[aSlideNumberClassName] );
+            this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
+            this.aSlideNumberFieldHandler.appendTo( this.aBackgroundFieldsElement );
+        }
+
+        // Date/Time field
+        if( this.aMetaSlide.nIsDateTimeVisible )
+        {
+            this.aDateTimeFieldHandler =
+            this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
+                                       aTextFieldContentProviderSet, aDefsElement,
+                                       aTextFieldHandlerSet, sMasterSlideId );
+        }
+
+        // Footer Field
+        if( this.aMetaSlide.nIsFooterVisible )
+        {
+            this.aFooterFieldHandler =
+            this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
+                                       aTextFieldContentProviderSet, aDefsElement,
+                                       aTextFieldHandlerSet, sMasterSlideId );
+        }
+
+        // Header Field
+        if( this.aMetaSlide.nIsHeaderVisible )
+        {
+            this.aHeaderFieldHandler =
+            this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
+                                       aTextFieldContentProviderSet, aDefsElement,
+                                       aTextFieldHandlerSet, sMasterSlideId );
+        }
+
+        // init BackgroundShapes element
+        this.aBackgroundShapesElement = theDocument.createElementNS( NSS['svg'], 'use' );
+        this.aBackgroundShapesElement.setAttribute( 'class', 'BackgroundShapes' );
+        setNSAttribute( 'xlink', this.aBackgroundShapesElement,
+                        'href', '#' + this.aMasterPage.backgroundShapesId );
+
+        // node linking
+        this.aBackgroundObjectsElement.appendChild( this.aBackgroundFieldsElement );
+        this.aBackgroundObjectsElement.appendChild( this.aBackgroundShapesElement );
+        aMasterPageViewElement.appendChild( this.aBackgroundObjectsElement );
+    }
+
+    return aMasterPageViewElement;
+};
+
+MasterPageView.prototype.initTextFieldHandler =
+function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
+          aDefsElement, aTextFieldHandlerSet, sMasterSlideId )
+{
+    var aTextFieldHandler = null;
+    if( aPlaceholderShapeSet[sClassName] &&
+        aPlaceholderShapeSet[sClassName].isValid() )
+    {
+        var sTextFieldContentProviderId = aTextFieldContentProviderSet[sClassName].sId;
+        // We create only one single TextFieldHandler object (and so one only
+        // text field clone) per master slide and text content.
+        if ( !aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] )
+        {
+            aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] =
+            new TextFieldHandler( aPlaceholderShapeSet[sClassName],
+                                  aTextFieldContentProviderSet[sClassName] );
+            aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
+            aTextFieldHandler.update();
+            aTextFieldHandler.appendTo( aDefsElement );
+        }
+        else
+        {
+            aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
+        }
+
+        // We create a <use> element referring to the cloned text field and
+        // append it to the field group element.
+        var aTextFieldElement = document.createElementNS( NSS['svg'], 'use' );
+        aTextFieldElement.setAttribute( 'class', sClassName );
+        setNSAttribute( 'xlink', aTextFieldElement,
+                        'href', '#' + aTextFieldHandler.sId );
+        // node linking
+        this.aBackgroundFieldsElement.appendChild( aTextFieldElement );
+    }
+    return aTextFieldHandler;
+};
+
+/** Class TextFieldHandler
+ *  This class clone a text field field of a master page and set up
+ *  the content of the cloned element on demand.
+ *
+ *  @param aPlaceholderShape
+ *      A PlaceholderShape object that provides the text field to be cloned.
+ *  @param aTextContentProvider
+ *      A TextContentProvider object to which the actual content updating is
+ *      demanded.
+ */
+function TextFieldHandler( aPlaceholderShape, aTextContentProvider )
+{
+    this.aPlaceHolderShape = aPlaceholderShape;
+    this.aTextContentProvider = aTextContentProvider;
+    assert( this.aTextContentProvider,
+            'TextFieldHandler: text content provider not defined.' );
+    this.sId = 'tf' + String( TextFieldHandler.getUniqueId() );
+    // The cloned text field element to be handled.
+    this.aTextFieldElement = null;
+    // The actual <text> element where the field content has to be placed.
+    this.aTextPlaceholderElement = null;
+    this.cloneElement();
+}
+
+/*** private methods ***/
+
+TextFieldHandler.CURR_UNIQUE_ID = 0;
+
+TextFieldHandler.getUniqueId = function()
+{
+    ++TextFieldHandler.CURR_UNIQUE_ID;
+    return TextFieldHandler.CURR_UNIQUE_ID;
+};
+
+TextFieldHandler.prototype.cloneElement = function()
+{
+    assert( this.aPlaceHolderShape && this.aPlaceHolderShape.isValid(),
+            'TextFieldHandler.cloneElement: placeholder shape is not valid.' );
+    // The cloned text field element.
+    this.aTextFieldElement = this.aPlaceHolderShape.element.cloneNode( true /* deep clone */ );
+    assert( this.aTextFieldElement,
+            'TextFieldHandler.cloneElement: aTextFieldElement is not defined' );
+    this.aTextFieldElement.setAttribute( 'id', this.sId );
+    // The actual <text> element where the field content has to be placed.
+    this.aTextPlaceholderElement = getElementByClassName( this.aTextFieldElement, 'PlaceholderText' );
+    assert( this.aTextPlaceholderElement,
+            'TextFieldHandler.cloneElement: aTextPlaceholderElement is not defined' );
+};
+
+/*** public methods ***/
+
+/** appendTo
+ *  Append the cloned text field element to a svg element.
+ *
+ *  @param aParentNode
+ *      The svg element to which the cloned text field has to be appended.
+ */
+TextFieldHandler.prototype.appendTo = function( aParentNode )
+{
+    if( !this.aTextFieldElement )
+    {
+        log( 'TextFieldHandler.appendTo: aTextFieldElement is not defined' );
+        return;
+    }
+    if( !aParentNode )
+    {
+        log( 'TextFieldHandler.appendTo: parent node is not defined' );
+        return;
+    }
+
+    aParentNode.appendChild( this.aTextFieldElement );
+};
+
+/** setTextContent
+ *  Modify the content of the cloned text field.
+ *
+ *  @param sText
+ *      A string representing the new content of the cloned text field.
+ */
+TextFieldHandler.prototype.setTextContent = function( sText )
+{
+    if( !this.aTextPlaceholderElement )
+    {
+        log( 'TextFieldHandler.setTextContent: text element is not valid in placeholder of type '
+                + this.className + ' that belongs to master slide ' + this.masterPage.id );
+        return;
+    }
+    this.aTextPlaceholderElement.textContent = sText;
+};
+
+/** update
+ *  Update the content of the handled text field. The new content is provided
+ *  directly from the TextContentProvider data member.
+ */
+TextFieldHandler.prototype.update = function()
+{
+    if( !this.aTextContentProvider )
+        log('TextFieldHandler.update: text content provider not defined.');
+    else
+        this.aTextContentProvider.update( this );
+};
+
+/** SlideNumberFieldHandler
+ *  This class clone the slide number field of a master page and set up
+ *  the content of the cloned element on demand.
+ *
+ *  @param aPlaceholderShape
+ *      A PlaceholderShape object that provides the slide number field
+ *      to be cloned.
+ *  @param aTextContentProvider
+ *      A SlideNumberProvider object to which the actual content updating is
+ *      demanded.
+ */
+function SlideNumberFieldHandler( aPlaceholderShape, aTextContentProvider )
+{
+    SlideNumberFieldHandler.superclass.constructor.call( this, aPlaceholderShape, aTextContentProvider );
+}
+extend( SlideNumberFieldHandler, TextFieldHandler );
+
+/*** public methods ***/
+
+/** update
+ *  Update the content of the handled slide number field with the passed number.
+ *
+ * @param nPageNumber
+ *      The number representing the new content of the slide number field.
+ */
+SlideNumberFieldHandler.prototype.update = function( nPageNumber )
+{
+    // The actual content updating is demanded to the related
+    // SlideNumberProvider instance that have the needed info on
+    // the numbering type.
+    if( !this.aTextContentProvider )
+        log('TextFieldHandler.update: text content provider not defined.');
+    else
+        this.aTextContentProvider.update( this, nPageNumber );
+};
+
+// ------------------------------------------------------------------------------------------ //
+/******************************************************************************
+ * Text Field Content Provider Class Hierarchy
+ *
+ * The following classes are responsible to format and set the text content
+ * of text fields.
+ *
+ ******************************************************************************/
+
+/** Class TextFieldContentProvider
+ *  This class is the root abstract class of the hierarchy.
+ *
+ *  @param aTextFieldContentElement
+ *      The svg element that contains the text content for one or more
+ *      master slide text field.
+ */
+function TextFieldContentProvider( aTextFieldContentElement )
+{
+    // This id is used as key for the theMetaDoc.aTextFieldHandlerSet object.
+    if( aTextFieldContentElement )
+        this.sId = aTextFieldContentElement.getAttribute( 'id' );
+}
+
+/** Class FixedTextProvider
+ *  This class handles text field with a fixed text.
+ *  The text content is provided by the 'text' property.
+ *
+ *  @param aTextFieldContentElement
+ *      The svg element that contains the text content for one or more
+ *      master slide text field.
+ */
+function FixedTextProvider( aTextFieldContentElement )
+{
+    FixedTextProvider.superclass.constructor.call( this, aTextFieldContentElement );
+    this.text = aTextFieldContentElement.textContent;
+}
+extend( FixedTextProvider, TextFieldContentProvider );
+
+/*** public methods ***/
+
+/** update
+ *  Set up the content of a fixed text field.
+ *
+ *  @param aFixedTextField
+ *      An object that implement a setTextContent( String ) method in order
+ *      to set the content of a given text field.
+ */
+FixedTextProvider.prototype.update = function( aFixedTextField )
+{
+    aFixedTextField.setTextContent( this.text );
+};
+
+/** Class CurrentDateTimeProvider
+ *  Provide the text content to a date/time field by generating the current
+ *  date/time in the format specified by the 'dateTimeFormat' property.
+ *
+ *  @param aTextFieldContentElement
+ *      The svg element that contains the date/time format for one or more
+ *      master slide date/time field.
+ */
+function CurrentDateTimeProvider( aTextFieldContentElement )
+{
+    CurrentDateTimeProvider.superclass.constructor.call( this, aTextFieldContentElement );
+    this.dateTimeFormat = getOOOAttribute( aTextFieldContentElement, aOOOAttrDateTimeFormat );
+}
+extend( CurrentDateTimeProvider, TextFieldContentProvider );
+
+/*** public methods ***/
+
+/** update
+ *  Set up the content of a variable date/time field.
+ *
+ *  @param aDateTimeField
+ *      An object that implement a setTextContent( String ) method in order
+ *      to set the content of a given text field.
+ */
+CurrentDateTimeProvider.prototype.update = function( aDateTimeField )
+{
+    var sText = this.createDateTimeText( this.dateTimeFormat );
+    aDateTimeField.setTextContent( sText );
+};
+
+/*** private methods ***/
+
+CurrentDateTimeProvider.prototype.createDateTimeText = function( sDateTimeFormat )
 {
     // TODO handle date/time format
     var aDate = new Date();
@@ -1469,37 +2087,57 @@ VariableDateTimeField.prototype.createDateTimeText = function( sDateTimeFormat )
     return sDate;
 };
 
-/** Class SlideNumberField **
- *  Provides the text content to the related shape by generating
+/** Class SlideNumberProvider
+ *  Provides the text content to the related text field by generating
  *  the current page number in the given page numbering type.
  */
-function SlideNumberField( nInitialSlideNumber, sPageNumberingType )
+function SlideNumberProvider( nInitialSlideNumber, sPageNumberingType )
 {
-    SlideNumberField.superclass.constructor.call( this, null );
+    SlideNumberProvider.superclass.constructor.call( this, null );
     this.nInitialSlideNumber = nInitialSlideNumber;
     this.pageNumberingType = sPageNumberingType;
 
 }
-extend( SlideNumberField, TextField );
+extend( SlideNumberProvider, TextFieldContentProvider );
 
 /*** public methods ***/
-SlideNumberField.prototype.getNumberingType = function()
+
+/** getNumberingType
+ *
+ *  @return
+ *      The page numbering type.
+ */
+SlideNumberProvider.prototype.getNumberingType = function()
 {
     return this.pageNumberingType;
 };
 
-SlideNumberField.prototype.update = function( aPlaceholderShape )
+/** update
+ *  Set up the content of a slide number field.
+ *
+ *  @param aSlideNumberField
+ *      An object that implement a setTextContent( String ) method in order
+ *      to set the content of a given text field.
+ *  @param nSlideNumber
+ *      An integer representing the slide number.
+ */
+
+SlideNumberProvider.prototype.update = function( aSlideNumberField, nSlideNumber )
 {
-    var nSlideNumber;
-    if( nCurSlide === undefined )
-        nSlideNumber = this.nInitialSlideNumber;
-    else
-        nSlideNumber = nCurSlide + 1;
+    if( nSlideNumber === undefined )
+    {
+        if( nCurSlide === undefined )
+            nSlideNumber = this.nInitialSlideNumber;
+        else
+            nSlideNumber = nCurSlide + 1;
+    }
     var sText = this.createSlideNumberText( nSlideNumber, this.getNumberingType() );
-    aPlaceholderShape.setTextContent( sText );
+    aSlideNumberField.setTextContent( sText );
 };
 
-SlideNumberField.prototype.createSlideNumberText = function( nSlideNumber, sNumberingType )
+/*** private methods ***/
+
+SlideNumberProvider.prototype.createSlideNumberText = function( nSlideNumber, sNumberingType )
 {
     // TODO handle page numbering type
     return String( nSlideNumber );
@@ -1601,6 +2239,7 @@ SlideIndexPage.prototype.createPageElement = function()
     var aPageElement = document.createElementNS( NSS['svg'], 'g' );
     aPageElement.setAttribute( 'id', this.pageElementId );
     aPageElement.setAttribute( 'display', 'none' );
+    aPageElement.setAttribute( 'visibility', 'visible' );
 
     // the slide index page background
     var sPageBgColor = this.pageBgColor + ';';
@@ -1747,9 +2386,10 @@ function Thumbnail( aSlideIndexPage, nIndex )
     this.thumbnailId = 'thumbnail' + this.index;
     this.thumbnailElement = this.createThumbnailElement();
     this.slideElement = getElementByClassName( this.thumbnailElement, 'Slide' );
-    this.backgroundElement = getElementByClassName( this.thumbnailElement, 'Background' );
-    this.backgroundObjectsElement = getElementByClassName( this.thumbnailElement, 'BackgroundObjects' );
     this.borderElement = getElementByClassName( this.thumbnailElement, 'Border' );
+    this.mouseAreaElement = getElementByClassName( this.thumbnailElement, 'MouseArea' );
+    //this.mouseAreaElement.setAttribute( 'onmouseover', 'theSlideIndexPage.aThumbnailSet[' + this.index  + '].onMouseOver()' );
+    //this.mouseAreaElement.onmousedown = mouseHandlerDictionary[INDEX_MODE][MOUSE_DOWN];
     this.aTransformSet = new Array( 3 );
     this.visibility = VISIBLE;
     this.isSelected = false;
@@ -1821,7 +2461,7 @@ Thumbnail.prototype.updateView = function()
     this.aTransformSet[1] = 'scale(' + this.container.scaleFactor + ')';
     var sTransformAttrValue = this.computeTransform();
     this.thumbnailElement.setAttribute( 'transform', sTransformAttrValue );
-    this.thumbnailElement.setAttribute( 'onmouseover', 'theSlideIndexPage.aThumbnailSet[' + this.index  + '].onMouseOver()' );
+    this.mouseAreaElement.setAttribute( 'onmouseover', 'theSlideIndexPage.aThumbnailSet[' + this.index  + '].onMouseOver()' );
 };
 
 /** update
@@ -1835,33 +2475,14 @@ Thumbnail.prototype.update = function( nIndex )
     if( this.slideIndex == nIndex )  return;
 
     var aMetaSlide = theMetaDoc.aMetaSlideSet[nIndex];
+    aMetaSlide.updateMasterPageView();
     setNSAttribute( 'xlink', this.slideElement, 'href', '#' + aMetaSlide.slideId );
-    if( aMetaSlide.nIsBackgroundVisible )
-    {
-        setNSAttribute( 'xlink', this.backgroundElement, 'href', '#' + aMetaSlide.masterPage.backgroundId );
-        this.backgroundElement.setAttribute( 'visibility', 'inherit' );
-    }
-    else
-    {
-        this.backgroundElement.setAttribute( 'visibility', 'hidden' );
-    }
-    if( aMetaSlide.nAreMasterObjectsVisible )
-    {
-        setNSAttribute( 'xlink',  this.backgroundObjectsElement, 'href', '#' + aMetaSlide.masterPage.backgroundObjectsId );
-        this.backgroundObjectsElement.setAttribute( 'visibility', 'inherit' );
-    }
-    else
-    {
-        this.backgroundObjectsElement.setAttribute( 'visibility', 'hidden' );
-    }
     this.slideIndex = nIndex;
 };
 
 Thumbnail.prototype.clear = function( nIndex )
 {
     setNSAttribute( 'xlink', this.slideElement, 'href', '' );
-    setNSAttribute( 'xlink', this.backgroundElement, 'href', '' );
-    setNSAttribute( 'xlink', this.backgroundObjectsElement, 'href', '' );
 };
 
 /* private methods */
@@ -1871,27 +2492,16 @@ Thumbnail.prototype.createThumbnailElement = function()
     aThumbnailElement.setAttribute( 'id', this.thumbnailId );
     aThumbnailElement.setAttribute( 'display', 'inherit' );
 
-    var aMouseAreaElement = document.createElementNS( NSS['svg'], 'use' );
-    setNSAttribute( 'xlink', aMouseAreaElement, 'href', '#' + this.container.thumbnailMouseAreaTemplateId );
-    aMouseAreaElement.setAttribute( 'class', 'MouseArea' );
-    aThumbnailElement.appendChild( aMouseAreaElement );
-
-    var aBackgroundElement = document.createElementNS( NSS['svg'], 'use' );
-    setNSAttribute( 'xlink', aBackgroundElement, 'href', '' );
-    aBackgroundElement.setAttribute( 'visibility', 'inherit');
-    aBackgroundElement.setAttribute( 'class', 'Background' );
-    aThumbnailElement.appendChild( aBackgroundElement );
-
-    var aBackgroundObjectsElement = document.createElementNS( NSS['svg'], 'use' );
-    setNSAttribute( 'xlink', aBackgroundObjectsElement, 'href', '' );
-    aBackgroundObjectsElement.setAttribute( 'visibility', 'inherit');
-    aBackgroundObjectsElement.setAttribute( 'class', 'BackgroundObjects' );
-    aThumbnailElement.appendChild( aBackgroundObjectsElement );
-
     var aSlideElement = document.createElementNS( NSS['svg'], 'use' );
     setNSAttribute( 'xlink', aSlideElement, 'href', '' );
     aSlideElement.setAttribute( 'class', 'Slide' );
     aThumbnailElement.appendChild( aSlideElement );
+
+    var aMouseAreaElement = document.createElementNS( NSS['svg'], 'use' );
+    setNSAttribute( 'xlink', aMouseAreaElement, 'href', '#' + this.container.thumbnailMouseAreaTemplateId );
+    aMouseAreaElement.setAttribute( 'class', 'MouseArea' );
+    aMouseAreaElement.setAttribute( 'opacity', 0.0 );
+    aThumbnailElement.appendChild( aMouseAreaElement );
 
     var aBorderElement = document.createElementNS( NSS['svg'], 'use' );
     setNSAttribute( 'xlink', aBorderElement, 'href', '#' + this.container.thumbnailBorderTemplateId );
@@ -1943,12 +2553,11 @@ function init()
         HEIGHT = ROOT_NODE.viewBox.animVal.height;
     }
 
-    var aMetaDocElem = document.getElementById( aOOOElemMetaSlides );
-    assert( aMetaDocElem, 'init: meta document element not found' );
     aSlideShow = new SlideShow();
-    theMetaDoc =  new MetaDocument( aMetaDocElem );
+    theMetaDoc =  new MetaDocument();
+    aSlideShow.bIsEnabled = theMetaDoc.bIsAnimated;
     theSlideIndexPage = new SlideIndexPage();
-    aSlideShow.displaySlide( theMetaDoc.startSlideNumber );
+    aSlideShow.displaySlide( theMetaDoc.nStartSlideNumber, false );
 
     //=====================================//
     //      ===== timing test =====        //
@@ -2005,12 +2614,12 @@ function dispatchEffects(dir)
 
         if( !bRet )
         {
-            switchSlide( 1 );
+            switchSlide( 1, false );
         }
     }
     else
     {
-        switchSlide( dir );
+        switchSlide( dir, false );
     }
 }
 
@@ -2059,19 +2668,12 @@ function displayIndex( offsetNumber )
  */
 function toggleSlideIndex()
 {
-    var suspendHandle = ROOT_NODE.suspendRedraw(500);
-    var aMetaSlideSet = theMetaDoc.aMetaSlideSet;
+    //var suspendHandle = ROOT_NODE.suspendRedraw(500);
 
     if( currentMode == SLIDE_MODE )
     {
-        aMetaSlideSet[nCurSlide].hide();
-        var counter;
-        for( counter = 0; counter < aMetaSlideSet.length; ++counter )
-        {
-            checkElemAndSetAttribute( aMetaSlideSet[counter].slideElement, 'visibility', 'inherit' );
-            aMetaSlideSet[counter].masterPage.setVisibilityBackground( INHERIT );
-            aMetaSlideSet[counter].masterPage.setVisibility( INHERIT );
-        }
+
+        theMetaDoc.getCurrentSlide().hide();
         INDEX_OFFSET = -1;
         indexSetPageSlide( nCurSlide );
         theSlideIndexPage.show();
@@ -2082,20 +2684,12 @@ function toggleSlideIndex()
         theSlideIndexPage.hide();
         var nNewSlide = theSlideIndexPage.selectedSlideIndex;
 
-        for( counter = 0; counter < aMetaSlideSet.length; ++counter )
-        {
-            var aMetaSlide = aMetaSlideSet[counter];
-            aMetaSlide.slideElement.setAttribute( 'visibility', 'hidden' );
-            aMetaSlide.masterPage.setVisibilityBackground( HIDDEN );
-            aMetaSlide.masterPage.setVisibility( HIDDEN );
-        }
-
         aSlideShow.displaySlide( nNewSlide, true );
         currentMode = SLIDE_MODE;
     }
 
-    ROOT_NODE.unsuspendRedraw(suspendHandle);
-    ROOT_NODE.forceRedraw();
+    //ROOT_NODE.unsuspendRedraw(suspendHandle);
+    //ROOT_NODE.forceRedraw();
 }
 
 /** Function that exit from the index mode without changing the shown slide
@@ -7716,11 +8310,9 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
     else if( nNewSlide >= nSlides )
         nNewSlide = 0;
 
-    var newMetaSlide = null;
     if( ( currentMode === INDEX_MODE ) && ( nNewSlide === nCurSlide ) )
     {
-        newMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
-        newMetaSlide.show();
+        aMetaDoc.getCurrentSlide().show();
         return;
     }
 
@@ -7731,8 +8323,6 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
         var oldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
         if( this.isEnabled() )
         {
-            // hide current slide
-            oldMetaSlide.hide();
             if( oldMetaSlide.aSlideAnimationsHandler.isAnimated() )
             {
                 // force end animations
@@ -7742,36 +8332,27 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
                 this.dispose();
             }
         }
-        else
-        {
-            oldMetaSlide.hide();
-        }
     }
 
-    // handle new slide
-    nCurSlide = nNewSlide;
-    newMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
-    if( this.isEnabled() )
+    if( !bSkipSlideTransition )
     {
-        // prepare to show a new slide
-        this.notifySlideStart( nNewSlide );
-
-        if( !bSkipSlideTransition )
-        {
-            // create slide transition and add to activity queue
-            // to be implemented
-        }
-
-        // show next slide and start animations
-        newMetaSlide.show();
-        newMetaSlide.aSlideAnimationsHandler.start();
-        this.update();
+        // create slide transition and add to activity queue
+        // to be implemented
+        aMetaDoc.setCurrentSlide( nNewSlide );
     }
     else
     {
-        newMetaSlide.show();
+        aMetaDoc.setCurrentSlide( nNewSlide );
     }
 
+    // handle new slide
+    if( this.isEnabled() )
+    {
+        this.notifySlideStart( nNewSlide );
+
+        aMetaDoc.getCurrentSlide().aSlideAnimationsHandler.start();
+        this.update();
+    }
 
 
     /*
@@ -7987,7 +8568,7 @@ TimerEventQueue.prototype.addEvent = function( aEvent )
     this.DBG( 'TimerEventQueue.addEvent invoked' );
     if( !aEvent )
     {
-        log( 'error: TimerEventQueue.addEvent: null event' );
+        log( 'TimerEventQueue.addEvent: null event' );
         return false;
     }
 
