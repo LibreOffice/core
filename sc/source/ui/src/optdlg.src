@@ -195,14 +195,14 @@ TabPage RID_SCPAGE_FORMULA
 
     FixedLine FL_FORMULA_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 9 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Formula options";
     };
 
     FixedText FT_FORMULA_SYNTAX
     {
-        Pos = MAP_APPFONT ( 21, 16 ) ;
+        Pos = MAP_APPFONT ( 21, 22 ) ;
         Size = MAP_APPFONT ( 80, 8 ) ;
         Text [ en-US ] = "Formula ~syntax" ;
     };
@@ -210,7 +210,7 @@ TabPage RID_SCPAGE_FORMULA
     ListBox LB_FORMULA_SYNTAX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 105, 14 ) ;
+        Pos = MAP_APPFONT ( 105, 20 ) ;
         Size = MAP_APPFONT ( 60, 46 ) ;
         DropDown = TRUE ;
         StringList [ en-US ] =
@@ -223,21 +223,21 @@ TabPage RID_SCPAGE_FORMULA
 
     CheckBox CB_ENGLISH_FUNC_NAME
     {
-        Pos = MAP_APPFONT ( 12, 31 ) ;
+        Pos = MAP_APPFONT ( 12, 37 ) ;
         Size = MAP_APPFONT ( 120, 8 ) ;
         Text [ en-US ] = "Use English function names" ;
     };
 
     FixedLine FL_FORMULA_SEPS
     {
-        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Separators";
     };
 
     FixedText FT_FORMULA_SEP_ARG
     {
-        Pos = MAP_APPFONT ( 21, 59 );
+        Pos = MAP_APPFONT ( 21, 65 );
         Size = MAP_APPFONT ( 60, 8 );
         Text [ en-US ] = "~Function";
     };
@@ -245,13 +245,13 @@ TabPage RID_SCPAGE_FORMULA
     Edit ED_FORMULA_SEP_ARG
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 85, 57 );
+        Pos = MAP_APPFONT ( 85, 63 );
         Size = MAP_APPFONT ( 10, 12 );
     };
 
     FixedText FT_FORMULA_SEP_ARRAY_C
     {
-        Pos = MAP_APPFONT ( 21, 77 );
+        Pos = MAP_APPFONT ( 21, 83 );
         Size = MAP_APPFONT ( 60, 8 );
         Text [ en-US ] = "Array co~lumn";
     };
@@ -259,13 +259,13 @@ TabPage RID_SCPAGE_FORMULA
     Edit ED_FORMULA_SEP_ARRAY_C
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 85, 75 );
+        Pos = MAP_APPFONT ( 85, 81 );
         Size = MAP_APPFONT ( 10, 12 );
     };
 
     FixedText FT_FORMULA_SEP_ARRAY_R
     {
-        Pos = MAP_APPFONT ( 21, 95 );
+        Pos = MAP_APPFONT ( 21, 101 );
         Size = MAP_APPFONT ( 60, 8 );
         Text [ en-US ] = "Array ~row";
     };
@@ -273,13 +273,13 @@ TabPage RID_SCPAGE_FORMULA
     Edit ED_FORMULA_SEP_ARRAY_R
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 85, 93 );
+        Pos = MAP_APPFONT ( 85, 99 );
         Size = MAP_APPFONT ( 10, 12 );
     };
 
     PushButton BTN_FORMULA_SEP_RESET
     {
-        Pos = MAP_APPFONT ( 21, 113 );
+        Pos = MAP_APPFONT ( 21, 119 );
         Size = MAP_APPFONT ( 50, 14 );
         Text [ en-US ] = "Rese~t";
     };
