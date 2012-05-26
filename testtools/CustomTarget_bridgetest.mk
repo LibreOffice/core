@@ -37,11 +37,16 @@ BATCH_SUFFIX :=
 GIVE_EXEC_RIGHTS=chmod +x
 endif
 
-$(call gb_CustomTarget_get_target,testtools/bridgetest) : \
-	$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) \
+bridgetest_TARGET := $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) \
+	$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX)
+
+ifneq ($(SOLAR_JAVA),)
+bridgetest_TARGET := $(bridgetest_TARGET) \
 	$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) \
-	$(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX) \
-	$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) \
+	$(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX)
+endif
+
+$(call gb_CustomTarget_get_target,testtools/bridgetest) : $(bridgetest_TARGET)
 
 # which other prerequisites do we need here?
 $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
