@@ -31,7 +31,7 @@ climaker_DIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_climaker
 $(call gb_CustomTarget_get_target,testtools/bridgetest_climaker) : \
 	$(climaker_DIR)/cli_types_bridgetest.dll
 
-$(climaker_DIR)/cli_types_bridgetest.dll : $(OUTDIR)/bin/bridgetest.rdb \
+$(climaker_DIR)/cli_types_bridgetest.dll : \
 		$(OUTDIR)/bin/types.rdb $(OUTDIR)/bin/cli_uretypes.dll \
 		$(call gb_Executable_get_target_for_build,climaker) | $(climaker_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
