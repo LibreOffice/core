@@ -1285,8 +1285,9 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 ifeq ($(GUI)$(COM),WNTMSC)
+$(call gb_LinkTarget_use_external,$(1),openssl)
+
 $(call gb_LinkTarget_use_libraries,$(1),\
-	openssl \
 	secur32 \
 	ws2_32 \
 	$(if $(filter YES,$(WITH_LDAP)),ldap) \

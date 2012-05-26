@@ -407,7 +407,6 @@ gb_Library_PLAINLIBS_NONE += \
 	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
-	openssl \
 	propsys \
 	secur32 \
 	shell32 \
