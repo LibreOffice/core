@@ -36,7 +36,7 @@
 #include <doc.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -71,10 +71,7 @@ SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
 
 //------------------------------------------------------------
-
-// Diese Klasse speichert den Pam als sal_uInt16's und kann diese wieder zu
-
-// einem PaM zusammensetzen
+// This class saves the Pam as sal_uInt16s and can recompose those into a PaM
 SwUndRng::SwUndRng()
     : nSttNode( 0 ), nEndNode( 0 ), nSttCntnt( 0 ), nEndCntnt( 0 )
 {
@@ -97,7 +94,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
         nEndCntnt = pEnd->nContent.GetIndex();
     }
     else
-        // keine Selektion !!
+        // no selection !!
         nEndNode = 0, nEndCntnt = STRING_MAXLEN;
 
     nSttNode = pStt->nNode.GetIndex();
@@ -116,12 +113,12 @@ void SwUndRng::SetPaM( SwPaM & rPam, sal_Bool bCorrToCntnt ) const
     else
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 
-    if( !nEndNode && STRING_MAXLEN == nEndCntnt )       // keine Selection
+    if( !nEndNode && STRING_MAXLEN == nEndCntnt )       // no selection
         return ;
 
     rPam.SetMark();
     if( nSttNode == nEndNode && nSttCntnt == nEndCntnt )
-        return;                             // nichts mehr zu tun
+        return;                             // nothing left to do
 
     rPam.GetPoint()->nNode = nEndNode;
     if( (pNd = rPam.GetNode())->IsCntntNode() )
@@ -183,8 +180,7 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext )
 
 void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 {
-    // nur die Crsr verschieben; die Bookmarks/TOXMarks/.. werden vom
-    // entsp. JoinNext/JoinPrev erledigt!
+    // Move only the Crsr. Bookmarks/TOXMarks/etc. are done by the corresponding JoinNext/JoinPrev
     SwNodeIndex aIdx( rPos.nNode.GetNode().GetNodes(), nIdx );
     ::PaMCorrRel( aIdx, rPos );
 }
@@ -338,15 +334,14 @@ SwUndoSaveCntnt::~SwUndoSaveCntnt()
     delete pHistory;
 }
 
-    // wird fuer das Loeschen von Inhalt benoetigt. Fuer das ReDo werden
-    // Inhalte in das UndoNodesArray verschoben. Diese Methoden fuegen
-    // am Ende eines TextNodes fuer die Attribute einen Trenner ein.
-    // Dadurch werden die Attribute nicht expandiert.
-    // MoveTo..     verschiebt aus dem NodesArray in das UndoNodesArray
-    // MoveFrom..   verschiebt aus dem UndoNodesArray in das NodesArray
+    // This is needed when deleting content. For REDO all contents will be moved into the
+    // UndoNodesArray. These methods add a seperator for the attributes to the end of TextNodes.
+    // As a result, the attributes will not be expanded.
+    // - MoveTo   moves from NodesArray into UndoNodesArray
+    // - MoveFrom moves from UndoNodesArray into NodesArray
 
-    // 2.8.93:  ist pEndNdIdx angebenen, wird vom Undo/Redo -Ins/DelFly
-    //          aufgerufen. Dann soll die gesamte Section verschoben werden.
+    // 2.8.93:  If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly.
+    //          In that case the whole section should be moved.
 
 void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     SwIndex* pCntIdx, sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
@@ -356,7 +351,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
     SwNoTxtNode* pCpyNd = rPaM.GetNode()->GetNoTxtNode();
 
-    // jetzt kommt das eigentliche Loeschen(Verschieben)
+    // here comes the actual delete (move)
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     SwPosition aPos( pEndNdIdx ? rNds.GetEndOfPostIts()
                                : rNds.GetEndOfExtras() );
@@ -376,7 +371,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     else
         aPos.nNode.GetNode().GetCntntNode()->MakeEndIndex( &aPos.nContent );
 
-    // als sal_uInt16 merken; die Indizies verschieben sich !!
+    // keep as sal_uInt16; the indices shift!
     sal_uLong nTmpMvNode = aPos.nNode.GetIndex();
     xub_StrLen nTmpMvCntnt = aPos.nContent.GetIndex();
 
@@ -392,17 +387,15 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         rDoc.GetNodes().MoveRange( rPaM, aPos, rNds );
 
         SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-        if( pTxtNd )        // fuege einen Trenner fuer die Attribute ein !
+        if( pTxtNd )        // add a seperator for the attributes
         {
-            // weil aber beim Insert die Attribute angefasst/sprich
-            // aus dem Array geloescht und wieder eingefuegt werden, koennen
-            // dadurch Attribute verschwinden (z.B "Fett aus" von 10-20,
-            // "Fett an" von 12-15, dann wird durchs Insert/Delete das
-            // "Fett an" geloescht !! Ist hier aber nicht erwuenscht !!)
-            // DARUM: nicht die Hints anfassen, direct den String manipulieren
+            // But since all attributes will be touched at an insert (meaning deleted from the
+            // array and re-added again), attributes might disappear (e.g. "no bold" for 10-20,
+            // "bold" for 12-15 -> when inserting/deleting, the "bold" will be deleted, which is
+            // not wanted here!)! Thus do not touch the hints but manipulate the string directly.
 
             String& rStr = (String&)pTxtNd->GetTxt();
-            // Zur Sicherheit lieber nur wenn wirklich am Ende steht
+            // For security reasons better only if positioned at the end
             if( rStr.Len() == aPos.nContent.GetIndex() )
             {
                 rStr.Insert( ' ' );
@@ -420,7 +413,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     if( pEndCntIdx )
         *pEndCntIdx = aPos.nContent.GetIndex();
 
-    // alte Position
+    // old position
     aPos.nNode = nTmpMvNode;
     if( pNodeIdx )
         *pNodeIdx = aPos.nNode;
@@ -439,15 +432,15 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                             xub_StrLen nCntIdx, SwPosition& rInsPos,
                             sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
-    // jetzt kommt das wiederherstellen
+    // here comes the recovery
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     if( nNodeIdx == rNds.GetEndOfPostIts().GetIndex() )
-        return;     // nichts gespeichert
+        return;     // nothing saved
 
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwPaM aPaM( rInsPos );
-    if( pEndNdIdx )         // dann hole aus diesem den Bereich
+    if( pEndNdIdx )         // than get the section from it
         aPaM.GetPoint()->nNode.Assign( rNds, *pEndNdIdx );
     else
     {
@@ -456,7 +449,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
     }
 
     SwTxtNode* pTxtNd = aPaM.GetNode()->GetTxtNode();
-    if( !pEndNdIdx && pTxtNd )  // loesche den Trenner wieder
+    if( !pEndNdIdx && pTxtNd )  // delete the seperator again
     {
         if( pEndCntIdx )
             aPaM.GetPoint()->nContent.Assign( pTxtNd, *pEndCntIdx );
@@ -474,9 +467,9 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 
         rNds.MoveRange( aPaM, rInsPos, rDoc.GetNodes() );
 
-        // noch den letzen Node loeschen.
+        // delete the last Node as well
         if( !aPaM.GetPoint()->nContent.GetIndex() ||
-            ( aPaM.GetPoint()->nNode++ &&       // noch leere Nodes am Ende ??
+            ( aPaM.GetPoint()->nNode++ &&       // still empty Nodes at the end?
             &rNds.GetEndOfExtras() != &aPaM.GetPoint()->nNode.GetNode() ))
         {
             aPaM.GetPoint()->nContent.Assign( 0, 0 );
@@ -497,14 +490,13 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 
     }
     else {
-        OSL_FAIL( "was ist es denn nun?" );
+        OSL_FAIL( "What happened now?" );
     }
 }
 
-// diese beiden Methoden bewegen den Point vom Pam zurueck/vor. Damit
-// kann fuer ein Undo/Redo ein Bereich aufgespannt werden. (Der
-// Point liegt dann vor dem manipuliertem Bereich !!)
-// Das Flag gibt an, ob noch vorm Point Inhalt steht.
+// These two methods move the Point of Pam backwards/forwards. With that, one can span an area for
+// a Undo/Redo. (The Point is then positioned in front of the area to manipulate!!)
+// The flag indicates if there is still content in front of Point.
 
 sal_Bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
 {
@@ -512,9 +504,8 @@ sal_Bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
     if( rPam.Move( fnMoveBackward ))
         return sal_True;
 
-    // gibt es nach vorne keinen Inhalt mehr, so setze den Point einfach
-    // auf die vorherige Position (Node und Content, damit der Content
-    // abgemeldet wird !!)
+    // If there is no content onwards, set Point simply to the previous position
+    // (Node and Content, so that Content will be detached!)
     rPam.GetPoint()->nNode--;
     rPam.GetPoint()->nContent.Assign( 0, 0 );
     return sal_False;
@@ -522,11 +513,11 @@ sal_Bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
 
 void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
 {
-    // gab es noch Inhalt vor der Position ?
+    // Was there content before this position?
     if( bMvBkwrd )
         rPam.Move( fnMoveForward );
     else
-    {                       // setzen Point auf die naechste Position
+    {                       // set Point to the next position
         rPam.GetPoint()->nNode++;
         SwCntntNode* pCNd = rPam.GetCntntNode();
         if( pCNd )
@@ -538,13 +529,12 @@ void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
 
 
 /*
-   JP 21.03.94: loesche alle Objecte, die ContentIndizies auf den ang.
-                Bereich besitzen.
-                Zur Zeit gibts folgende Objecte
-                    - Fussnoten
+   JP 21.03.94: Delete all objects that have ContentIndices to the given area.
+                Currently these exist:
+                    - Footnotes
                     - Flys
                     - Bookmarks
-                    - Verzeichnisse
+                    - Directories
 */
 // #i81002# - extending method
 // delete certain (not all) cross-reference bookmarks at text node of <rMark>
@@ -560,7 +550,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    // 1. Fussnoten
+    // 1. Footnotes
     if( nsDelCntntType::DELCNT_FTN & nDelCntntType )
     {
         SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
@@ -571,7 +561,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             rFtnArr.SeekEntry( pStt->nNode, &nPos );
             SwTxtFtn* pSrch;
 
-            // loesche erstmal alle, die dahinter stehen
+            // for now delete all that come afterwards
             while( nPos < rFtnArr.Count() && ( pFtnNd =
                 &( pSrch = rFtnArr[ nPos ] )->GetTxtNode())->GetIndex()
                         <= pEnd->nNode.GetIndex() )
@@ -584,12 +574,12 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     ( &pEnd->nNode.GetNode() == pFtnNd &&
                     nFtnSttIdx >= pEnd->nContent.GetIndex() )) )
                 {
-                    ++nPos;     // weiter suchen
+                    ++nPos;     // continue searching
                     continue;
                 }
 
-                // es muss leider ein Index angelegt werden. Sonst knallts im
-                // TextNode, weil im DTOR der SwFtn dieser geloescht wird !!
+                // Unfortunately an index needs to be created. Otherwise there will be problems
+                // with TextNode because the index will be deleted in the DTOR of SwFtn!
                 SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
                 if( !pHistory )
                     pHistory = new SwHistory;
@@ -610,10 +600,10 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     pStt->nContent.GetIndex() > nFtnSttIdx ) ||
                     ( &pEnd->nNode.GetNode() == pFtnNd &&
                     nFtnSttIdx >= pEnd->nContent.GetIndex() )))
-                    continue;               // weiter suchen
+                    continue;               // continue searching
 
-                // es muss leider ein Index angelegt werden. Sonst knallts im
-                // TextNode, weil im DTOR der SwFtn dieser geloescht wird !!
+                // Unfortunately an index needs to be created. Otherwise there will be problems
+                // with TextNode because the index will be deleted in the DTOR of SwFtn!
                 SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
                 if( !pHistory )
                     pHistory = new SwHistory;
@@ -661,7 +651,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             pAPos->nContent.GetIndex());
                         assert(pFlyHnt);
                         pHistory->Add( pFlyHnt, 0, false );
-                        // n wieder zurueck, damit nicht ein Format uebesprungen wird !
+                        // reset n so that no Format is skipped
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                     }
                     break;
@@ -705,8 +695,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                 else
                                 {
                                     pHistory->Add( *pFmt, nChainInsPos );
-                                    // n wieder zurueck, damit nicht ein
-                                    // Format uebesprungen wird !
+                                    // reset n so that no Format is skipped
                                     n = n >= rSpzArr.Count() ?
                                         rSpzArr.Count() : n+1;
                                 }
@@ -754,7 +743,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
                         pHistory->Add( *pFmt, nChainInsPos );
 
-                        // n wieder zurueck, damit nicht ein Format uebesprungen wird !
+                        // reset n so that no Format is skipped
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                     }
                     break;
@@ -871,7 +860,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 }
 
 
-// sicher eine vollstaendige Section im Undo-Nodes-Array
+// save a complete section into UndoNodes array
 
 SwUndoSaveSection::SwUndoSaveSection()
     : pMvStt( 0 ), pRedlSaveData( 0 ), nMvLen( 0 ), nStartPos( ULONG_MAX )
@@ -880,9 +869,9 @@ SwUndoSaveSection::SwUndoSaveSection()
 
 SwUndoSaveSection::~SwUndoSaveSection()
 {
-    if( pMvStt )        // loesche noch den Bereich aus dem UndoNodes Array
+    if( pMvStt )        // delete also the section from UndoNodes array
     {
-        // SaveSection speichert den Inhalt in der PostIt-Section
+        // SaveSection saves the content in the PostIt section.
         SwNodes& rUNds = pMvStt->GetNode().GetNodes();
         rUNds.Delete( *pMvStt, nMvLen );
 
@@ -902,7 +891,7 @@ void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
 
-    // loesche alle Fussnoten / FlyFrames / Bookmarks / Verzeichnisse
+    // delete all Footnotes / FlyFrames / Bookmarks / Directories
     DelCntntIndex( *aPam.GetMark(), *aPam.GetPoint() );
 
     pRedlSaveData = new SwRedlineSaveDatas;
@@ -920,8 +909,7 @@ void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
     if( 0 != ( pCNd = aPam.GetCntntNode( sal_True )) )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-    // Positionen als SwIndex merken, damit im DTOR dieser Bereich
-    // entfernt werden kann !!
+    // Keep positions as SwIndex so that this section can be deleted in DTOR
     sal_uLong nEnd;
     pMvStt = new SwNodeIndex( rRange.aStart );
     MoveToUndoNds( aPam, pMvStt, 0, &nEnd, 0 );
@@ -931,14 +919,14 @@ void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
                                         sal_uInt16 nSectType )
 {
-    if( ULONG_MAX != nStartPos )        // gab es ueberhaupt Inhalt ?
+    if( ULONG_MAX != nStartPos )        // was there any content?
     {
-        // ueberpruefe, ob der Inhalt an der alten Position steht
+        // check if the content is at the old position
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
 //        OSL_ENSURE( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
 //                "RestoreSection(): Position on content node");
 
-        // move den Inhalt aus dem UndoNodes-Array in den Fly
+        // move the content from UndoNodes array into Fly
         SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection( aSttIdx,
                                                 (SwStartNodeType)nSectType );
 
@@ -951,14 +939,13 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
 
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos )
 {
-    if( ULONG_MAX != nStartPos )        // gab es ueberhaupt Inhalt ?
+    if( ULONG_MAX != nStartPos )        // was there any content?
     {
         SwPosition aInsPos( rInsPos );
         sal_uLong nEnd = pMvStt->GetIndex() + nMvLen - 1;
         MoveFromUndoNds( *pDoc, pMvStt->GetIndex(), 0, aInsPos, &nEnd, 0 );
 
-        // Indizies wieder zerstoren, Inhalt ist aus dem UndoNodes-Array
-        // entfernt worden.
+        // destroy indices again, content was deleted from UndoNodes array
         DELETEZ( pMvStt );
         nMvLen = 0;
 
@@ -970,7 +957,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     }
 }
 
-        // sicher und setze die RedlineDaten
+        // save and set the RedlineData
 
 SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
                                         const SwPosition& rSttPos,
@@ -985,32 +972,32 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
 
     switch( eCmpPos )
     {
-    case POS_OVERLAP_BEFORE:        // Pos1 ueberlappt Pos2 am Anfang
+    case POS_OVERLAP_BEFORE:        // Pos1 overlaps Pos2 at the beginning
         nEndNode = rEndPos.nNode.GetIndex();
         nEndCntnt = rEndPos.nContent.GetIndex();
         break;
-    case POS_OVERLAP_BEHIND:        // Pos1 ueberlappt Pos2 am Ende
+    case POS_OVERLAP_BEHIND:        // Pos1 overlaps Pos2 at the end
         nSttNode = rSttPos.nNode.GetIndex();
         nSttCntnt = rSttPos.nContent.GetIndex();
         break;
 
-    case POS_INSIDE:                // Pos1 liegt vollstaendig in Pos2
+    case POS_INSIDE:                // Pos1 lays completely in Pos2
         nSttNode = rSttPos.nNode.GetIndex();
         nSttCntnt = rSttPos.nContent.GetIndex();
         nEndNode = rEndPos.nNode.GetIndex();
         nEndCntnt = rEndPos.nContent.GetIndex();
         break;
 
-    case POS_OUTSIDE:               // Pos2 liegt vollstaendig in Pos1
+    case POS_OUTSIDE:               // Pos2 lays completely in Pos1
         if( rRedl.GetContentIdx() )
         {
-            // dann den Bereich ins UndoArray verschieben und merken
+            // than move section into UndoArray and memorize it
             SaveSection( rRedl.GetDoc(), *rRedl.GetContentIdx() );
             rRedl.SetContentIdx( 0 );
         }
         break;
 
-    case POS_EQUAL:                 // Pos1 ist genauso gross wie Pos2
+    case POS_EQUAL:                 // Pos1 ist exactly as big as Pos2
         break;
 
     default:
@@ -1040,9 +1027,9 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
         pRedl->SetContentIdx( &aIdx );
     }
     SetPaM( *pRedl );
-    // erstmal die "alten" entfernen, damit im Append keine unerwarteten
-    // Dinge passieren, wie z.B. eine Delete in eigenen Insert. Dann wird
-    // naehmlich das gerade restaurierte wieder geloescht - nicht das gewollte
+    // First, delete the "old" so that in an Append no unexpected things will happen, e.g. a delete
+    // in an insert. In the latter case the just restored content will be deleted and not the one
+    // you originally wanted.
     rDoc.DeleteRedline( *pRedl, false, USHRT_MAX );
 
     RedlineMode_t eOld = rDoc.GetRedlineMode();
