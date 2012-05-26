@@ -307,8 +307,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lnth \
     log \
     lwpft \
-	macab1 \
-	macabdrv1 \
 	MacOSXSpell \
     merged \
     mozab2 \
@@ -436,6 +434,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_es \
     localedata_euro \
     localedata_others \
+    macab1 \
+    macabdrv1 \
     mcnttype \
     mozbootstrap \
     officebean \
