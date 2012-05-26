@@ -32,7 +32,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
@@ -48,7 +48,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 {
     bMoveRange = bJoinNext = bJoinPrev = sal_False;
 
-    // StartNode vorm loeschen von Fussnoten besorgen!
+    // get StartNode from footnotes before delete!
     SwDoc* pDoc = rRange.GetDoc();
     SwTxtNode* pTxtNd = pDoc->GetNodes()[ nSttNode ]->GetTxtNode();
     SwTxtNode* pEndTxtNd = pDoc->GetNodes()[ nEndNode ]->GetTxtNode();
@@ -116,11 +116,11 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
 
 //  DelFtn( rRange );
 
-    // wird aus dem CntntBereich in den Sonderbereich verschoben ?
+    // is the current move from CntntArea into the special section?
     sal_uLong nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
     if( nMvDestNode < nCntntStt && rRg.aStart.GetIndex() > nCntntStt )
     {
-        // loesche alle Fussnoten. Diese sind dort nicht erwuenscht.
+        // delete all footnotes since they are undesired there
         SwPosition aPtPos( rRg.aEnd );
         SwCntntNode* pCNd = rRg.aEnd.GetNode().GetCntntNode();
         if( pCNd )
@@ -191,14 +191,14 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
 
-    // Block, damit aus diesem gesprungen werden kann
+    // Block so that we can jump out of it
     do {
-        // erzeuge aus den Werten die Insert-Position und den Bereich
+        // create index position and section based on the existing values
         SwNodeIndex aIdx( pDoc->GetNodes(), nDestSttNode );
 
         if( bMoveRange )
         {
-            // nur ein Move mit SwRange
+            // only a move with SwRange
             SwNodeRange aRg( aIdx, aIdx );
             aRg.aEnd = nDestEndNode;
             aIdx = nInsPosNode;
@@ -227,7 +227,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pCNd->IsTxtNode() && ((SwTxtNode*)pCNd)->GetpSwpHints() )
                 ((SwTxtNode*)pCNd)->ClearSwpHintsArr( false );
 
-            // an der InsertPos erstmal alle Attribute entfernen,
+            // first delete all attributes at InsertPos
             const bool bSuccess = pDoc->MoveRange( aPam, aPos, (bMoveRedlines)
                         ? IDocumentContentOperations::DOC_MOVEREDLINES
                         : IDocumentContentOperations::DOC_MOVEDEFAULT );
@@ -239,7 +239,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 //          pDoc->ResetAttr( aPam, sal_False );
             if( aPam.GetNode()->IsCntntNode() )
                 aPam.GetNode()->GetCntntNode()->ResetAllAttr();
-            // der Pam wird jetzt aufgegeben.
+            // the Pam will be dropped now
         }
 
         SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
@@ -249,13 +249,13 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
                 RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
                         SwIndex( pTxtNd, pTxtNd->GetTxt().Len() ) ) );
             }
-            // sind keine Pams mehr im naechsten TextNode
+            // Are there any Pams in the next TextNode?
             pTxtNd->JoinNext();
         }
 
         if( bJoinPrev && pTxtNd->CanJoinPrev( &aIdx ) )
         {
-            // ?? sind keine Pams mehr im naechsten TextNode ??
+            // Are there any Pams in the next TextNode?
             pTxtNd = aIdx.GetNode().GetTxtNode();
             {
                 RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
@@ -274,7 +274,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->SetTmpEnd( pHistory->Count() );
     }
 
-    // setze noch den Cursor auf den Undo-Bereich
+    // set the cursor onto Undo area
     if( !bMoveRange )
     {
         AddUndoRedoPaM(rContext);
@@ -292,7 +292,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( bMoveRange )
     {
-        // nur ein Move mit SwRange
+        // only a move with SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
         rDoc.MoveNodeRange( aRg, aIdx, (bMoveRedlines)
                 ? IDocumentContentOperations::DOC_MOVEREDLINES
@@ -337,13 +337,13 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoMove::DelFtn( const SwPaM& rRange )
 {
-    // wird aus dem CntntBereich in den Sonderbereich verschoben ?
+    // is the current move from CntntArea into the special section?
     SwDoc* pDoc = rRange.GetDoc();
     sal_uLong nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
     if( nMvDestNode < nCntntStt &&
         rRange.GetPoint()->nNode.GetIndex() >= nCntntStt )
     {
-        // loesche alle Fussnoten. Diese sind dort nicht erwuenscht.
+        // delete all footnotes since they are undesired there
         DelCntntIndex( *rRange.GetMark(), *rRange.GetPoint(),
                             nsDelCntntType::DELCNT_FTN );
 
