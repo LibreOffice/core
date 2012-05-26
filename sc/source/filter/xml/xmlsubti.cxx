@@ -43,6 +43,7 @@
 #include "convuno.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
+#include "tokenarray.hxx"
 #include <svx/svdpage.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -807,17 +808,20 @@ bool ScMyTables::IsPartOfMatrix(const SCCOL nColumn, const SCROW nRow)
 void ScMyTables::SetMatrix(const ScRange& rScRange, const rtl::OUString& rFormula,
         const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
-    ScDocShell* pDocSh = static_cast< ScDocShell* >( rImport.GetDocument()->GetDocumentShell() );
-    if ( !rFormula.isEmpty() )
-        pDocSh->GetDocFunc().EnterMatrix( rScRange, NULL, NULL, rFormula, sal_True, sal_True, rFormulaNmsp, eGrammar );
-    else
-    {
-        //  empty string -> erase array formula
-        ScMarkData aMark;
-        aMark.SetMarkArea( rScRange );
-        aMark.SelectTable( rScRange.aStart.Tab(), sal_True );
-        pDocSh->GetDocFunc().DeleteContents( aMark, IDF_CONTENTS, sal_True, sal_True );
-    }
+    ScDocument* pDoc = rImport.GetDocument();
+    ScMarkData aMark;
+    aMark.SetMarkArea( rScRange );
+    aMark.SelectTable( rScRange.aStart.Tab(), sal_True );
+    ScTokenArray* pCode = new ScTokenArray;
+    pCode->AddStringXML( rFormula );
+    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (rFormulaNmsp.getLength() > 0) )
+        pCode->AddStringXML( rFormulaNmsp );
+    pDoc->InsertMatrixFormula(
+        rScRange.aStart.Col(), rScRange.aStart.Row(),
+        rScRange.aEnd.Col(), rScRange.aEnd.Row(),
+        aMark, EMPTY_STRING, pCode, eGrammar );
+    delete pCode;
+    pDoc->IncXMLImportedFormulaCount( rFormula.getLength() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
