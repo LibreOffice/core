@@ -41,9 +41,7 @@
 #include "unonames.hxx"
 #include "postit.hxx"
 #include "sheetdata.hxx"
-#include "cellmergeoption.hxx"
 #include "docsh.hxx"
-#include "docfunc.hxx"
 
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLTextPContext.hxx"
@@ -453,69 +451,16 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
     return pContext;
 }
 
-namespace {
-
-static bool ScCellExists( const ScAddress& rScAddress )
+void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScAddress, const SCCOL nCols, const SCROW nRows )
 {
-    return( rScAddress.Col() <= MAXCOL && rScAddress.Row() <= MAXROW );
-}
-
-void merge( ScDocShell* pDocSh, const ScRange& rScRange, const bool bMerge )
-{
-    if( pDocSh )
+    SCCOL mergeToCol = rScAddress.Col() + nCols;
+    SCROW mergeToRow = rScAddress.Row() + nRows;
+    bool bInBounds = rScAddress.Col() <= MAXCOL && rScAddress.Row() <= MAXROW &&
+                       mergeToCol <= MAXCOL && mergeToRow <= MAXROW;
+    if( bInBounds )
     {
-        ScCellMergeOption aMergeOption(
-            rScRange.aStart.Col(), rScRange.aStart.Row(),
-            rScRange.aEnd.Col(), rScRange.aEnd.Row(), false
-        );
-        aMergeOption.maTabs.insert( rScRange.aStart.Tab() );
-        if ( bMerge )
-            pDocSh->GetDocFunc().MergeCells( aMergeOption, false, true, true );
-        else
-            pDocSh->GetDocFunc().UnmergeCells( aMergeOption, true, true );
-    }
-}
-
-} //anonymous namespace
-
-bool ScXMLTableRowCellContext::IsMerged( ScRange& rScRange, const ScAddress& rScCell ) const
-{
-    if( ScCellExists(rScCell) )
-    {
-        ScDocument* pDoc = rXMLImport.GetDocument();
-        pDoc->ExtendOverlapped( rScRange );
-        pDoc->ExtendMerge( rScRange );
-        rScRange.Justify();
-        if( rScRange.aStart.Col() == rScCell.Col() && rScRange.aEnd.Col() == rScCell.Col() &&
-            rScRange.aStart.Row() == rScCell.Row() && rScRange.aEnd.Row() == rScCell.Row() )
-            return false;
-        else
-            return true;
-    }
-    return false;
-}
-
-void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScCellPos, const SCCOL nCols, const SCROW nRows )
-{
-    if( ScCellExists(rScCellPos) )
-    {
-        SCTAB nCurrentSheet = GetScImport().GetTables().GetCurrentSheet();
-        ScRange aScRange(
-            rScCellPos.Col(), rScCellPos.Row(), nCurrentSheet,
-            rScCellPos.Col(), rScCellPos.Row(), nCurrentSheet
-        );
-        ScDocShell* pDocSh = static_cast< ScDocShell* >( rXMLImport.GetDocument()->GetDocumentShell() );
-        if( IsMerged(aScRange, rScCellPos) )
-        {
-            //unmerge
-            merge( pDocSh, aScRange, false );
-        }
-        //merge
-        SCCOL newEndCol = aScRange.aStart.Col() + nCols;
-        SCROW newEndRow = aScRange.aStart.Row() + nRows;
-        aScRange.aEnd.SetCol( newEndCol );
-        aScRange.aEnd.SetRow( newEndRow );
-        merge( pDocSh, aScRange, true );
+        rXMLImport.GetDocument()->DoMerge( rScAddress.Tab(),
+            rScAddress.Col(), rScAddress.Row(), mergeToCol, mergeToRow );
     }
 }
 
