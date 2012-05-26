@@ -805,10 +805,10 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
 {
     long nPosZero = 0;
     Rectangle aPaintRect = rRect;
-    //aPaintRect.Top() += 2;
-    //aPaintRect.Bottom() -= 2;
-    //aPaintRect.Left() += 2;
-    //aPaintRect.Right() -= 2;
+    aPaintRect.Top() += 2;
+    aPaintRect.Bottom() -= 2;
+    aPaintRect.Left() += 2;
+    aPaintRect.Right() -= 2;
     if(pOldDataBarInfo->mnZero)
     {
         //need to calculate null point in cell
