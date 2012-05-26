@@ -75,6 +75,11 @@ private:
     Edit       maEdSepArrayRow;
     PushButton maBtnSepReset;
 
+    FixedLine  maFlCustomCalcOpt;
+    RadioButton maBtnCustomCalcDefault;
+    RadioButton maBtnCustomCalcCustom;
+    PushButton maBtnCustomCalcDetails;
+
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
     ::rtl::OUString maOldSepValue;

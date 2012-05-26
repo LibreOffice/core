@@ -66,6 +66,10 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maFtSepArrayRow(this, ScResId(FT_FORMULA_SEP_ARRAY_R)),
     maEdSepArrayRow(this, ScResId(ED_FORMULA_SEP_ARRAY_R)),
     maBtnSepReset(this, ScResId(BTN_FORMULA_SEP_RESET)),
+    maFlCustomCalcOpt(this, ScResId(FL_CUSTOM_CALC_OPTIONS)),
+    maBtnCustomCalcDefault(this, ScResId(BTN_CUSTOM_CALC_DEFAULT)),
+    maBtnCustomCalcCustom(this, ScResId(BTN_CUSTOM_CALC_CUSTOM)),
+    maBtnCustomCalcDetails(this, ScResId(BTN_CUSTOM_CALC_DETAILS)),
 
     mnDecSep(0)
 {

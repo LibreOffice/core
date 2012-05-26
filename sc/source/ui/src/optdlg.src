@@ -283,6 +283,34 @@ TabPage RID_SCPAGE_FORMULA
         Size = MAP_APPFONT ( 50, 14 );
         Text [ en-US ] = "Rese~t";
     };
+
+    FixedLine FL_CUSTOM_CALC_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 138 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Detailed calculation settings";
+    };
+
+    RadioButton BTN_CUSTOM_CALC_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 21 , 153 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ en-US ] = "Default";
+    };
+
+    RadioButton BTN_CUSTOM_CALC_CUSTOM
+    {
+        Pos = MAP_APPFONT ( 21 , 167 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ en-US ] = "Custom";
+    };
+
+    PushButton BTN_CUSTOM_CALC_DETAILS
+    {
+        Pos = MAP_APPFONT ( 85 , 165 ) ;
+        Size = MAP_APPFONT ( 60, 14 ) ;
+        Text [ en-US ] = "Details...";
+    };
 };
 
 TabPage RID_SCPAGE_COMPATIBILITY
