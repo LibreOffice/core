@@ -37,7 +37,7 @@
 #include <doc.hxx>
 #include <UndoManager.hxx>
 #include <swtable.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -126,7 +126,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
     if( !pHistory )
         pHistory = new SwHistory;
 
-    // loesche erstmal alle Fussnoten
+    // delete all footnotes for now
     const SwPosition *pStt = rPam.Start(),
                     *pEnd = rPam.GetPoint() == pStt
                         ? rPam.GetMark()
@@ -147,7 +147,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
 
     nSetPos = pHistory ? pHistory->Count() : 0;
 
-    // wurde schon was geloescht ??
+    // Is already anything deleted?
     nNdDiff = nSttNode - pStt->nNode.GetIndex();
 
     bJoinNext = !bFullPara && pEnd == rPam.GetPoint();
@@ -162,23 +162,21 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                     : pEnd->nNode.GetNode().GetTxtNode();
     }
 
-    sal_Bool bMoveNds = *pStt == *pEnd      // noch ein Bereich vorhanden ??
+    sal_Bool bMoveNds = *pStt == *pEnd      // any area still existent?
                 ? sal_False
                 : ( SaveCntnt( pStt, pEnd, pSttTxtNd, pEndTxtNd ) || bFromTableCopy );
 
     if( pSttTxtNd && pEndTxtNd && pSttTxtNd != pEndTxtNd )
     {
-        // zwei unterschiedliche TextNodes, also speicher noch die
-        // TextFormatCollection fuers
+        // two different TextNodes, thus save also the TextFormatCollection
         pHistory->Add( pSttTxtNd->GetTxtColl(),pStt->nNode.GetIndex(), ND_TEXTNODE );
         pHistory->Add( pEndTxtNd->GetTxtColl(),pEnd->nNode.GetIndex(), ND_TEXTNODE );
 
-        if( !bJoinNext )        // Selection von Unten nach Oben
+        if( !bJoinNext )        // Selection from bottom to top
         {
-            // Beim JoinPrev() werden die AUTO-PageBreak's richtig
-            // kopiert. Um diese beim Undo wieder herzustellen, muss das
-            // Auto-PageBreak aus dem EndNode zurueckgesetzt werden.
-            // - fuer die PageDesc, ColBreak dito !
+            // When using JoinPrev() all AUTO-PageBreak's will be copied correctly. To restore them
+            // with UNDO, Auto-PageBreak of the EndNode needs to be reset. Same for PageDesc and
+            // ColBreak.
             if( pEndTxtNd->HasSwAttrSet() )
             {
                 SwRegHistory aRegHist( *pEndTxtNd, pHistory );
@@ -194,21 +192,20 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
     }
 
 
-    // verschiebe jetzt noch den PaM !!!
-    // der SPoint steht am Anfang der SSelection
+    // Move now also the PaM. The SPoint is at the beginning of a SSelection.
     if( pEnd == rPam.GetPoint() && ( !bFullPara || pSttTxtNd || pEndTxtNd ) )
         rPam.Exchange();
 
     if( !pSttTxtNd && !pEndTxtNd )
         rPam.GetPoint()->nNode--;
-    rPam.DeleteMark();          // der SPoint ist aus dem Bereich
+    rPam.DeleteMark();          // the SPoint is in the selection
 
     if( !pEndTxtNd )
         nEndCntnt = 0;
     if( !pSttTxtNd )
         nSttCntnt = 0;
 
-    if( bMoveNds )      // sind noch Nodes zu verschieben ?
+    if( bMoveNds )      // Do Nodes exist that need to be moved?
     {
         SwNodes& rNds = pDoc->GetUndoManager().GetUndoNodes();
         SwNodes& rDocNds = pDoc->GetNodes();
@@ -225,8 +222,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
         // Step 2: Expand selection if necessary
         if( bJoinNext || bFullPara )
         {
-            // If all content of a section will be moved into Undo,
-            // the section itself should be moved complete.
+            // If all content of a section will be moved into Undo, the section itself should be
+            // moved completely.
             while( aRg.aEnd.GetIndex() + 2  < rDocNds.Count() &&
                 ( (pTmpNd = rDocNds[ aRg.aEnd.GetIndex()+1 ])->IsEndNode() &&
                 pTmpNd->StartOfSectionNode()->IsSectionNode() &&
@@ -254,8 +251,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
         }
         if( bBackSp || bFullPara )
         {
-            //See above, the selection has to expanded if there are "nearly empty" sections
-            // and a replacement dummy has to be set if needed.
+            // See above, the selection has to be expanded if there are "nearly
+            // empty" sections and a replacement dummy has to be set if needed.
             while( 1 < aRg.aStart.GetIndex() &&
                 ( (pTmpNd = rDocNds[ aRg.aStart.GetIndex()-1 ])->IsSectionNode() &&
                 pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex() ) )
@@ -292,7 +289,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
         nNode = rNds.GetEndOfContent().GetIndex();
         rDocNds._MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
         pMvStt = new SwNodeIndex( rNds, nNode );
-        nNode = rNds.GetEndOfContent().GetIndex() - nNode;      // Differenz merken !
+        nNode = rNds.GetEndOfContent().GetIndex() - nNode;      // remember difference!
         if( pSttTxtNd && pEndTxtNd )
         {
             //Step 4: Moving around sections
@@ -319,9 +316,9 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                 bJoinNext ? pEndTxtNd->GetIndex() : pSttTxtNd->GetIndex() );
     }
     else
-        nNode = 0;      // kein Node verschoben -> keine Differenz zum Ende
+        nNode = 0;      // moved no node -> no difference at the end
 
-    // wurden davor noch Nodes geloescht ?? (FootNotes haben ContentNodes!)
+    // Are there any Nodes that got deleted before that (FootNotes have ContentNodes)?
     if( !pSttTxtNd && !pEndTxtNd )
     {
         nNdDiff = nSttNode - rPam.GetPoint()->nNode.GetIndex() - (bFullPara ? 0 : 1);
@@ -338,7 +335,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
     if( !rPam.GetNode()->IsCntntNode() )
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 
-    // wird die History ueberhaupt benoetigt ??
+    // is a history necessary here at all?
     if( pHistory && !pHistory->Count() )
         DELETEZ( pHistory );
 }
@@ -347,7 +344,7 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd )
 {
     sal_uLong nNdIdx = pStt->nNode.GetIndex();
-    // 1 - kopiere den Anfang in den Start-String
+    // 1 - copy start in Start-String
     if( pSttTxtNd )
     {
         sal_Bool bOneNode = nSttNode == nEndNode;
@@ -361,13 +358,12 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
         if( !bOneNode && pSttTxtNd->HasSwAttrSet() )
                 pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
 
-        // die Laenge kann sich veraendert haben (!!Felder!!)
+        // the length might have changed (!!Fields!!)
         nLen = ( bOneNode ? pEnd->nContent.GetIndex() : pSttTxtNd->GetTxt().Len() )
                 - pStt->nContent.GetIndex();
 
 
-        // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
-        // die Undo-History
+        // delete now also the text (all attribute changes are added to UNDO history)
         pSttStr = (String*)new String( pSttTxtNd->GetTxt().Copy( nSttCntnt, nLen ));
         pSttTxtNd->EraseText( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
@@ -383,19 +379,18 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
         }
 
         if( bOneNode )
-            return sal_False;           // keine Nodes mehr verschieben
+            return sal_False;           // stop moving more nodes
     }
 
 
-    // 2 - kopiere das Ende in den End-String
+    // 2 - copy end into End-String
     if( pEndTxtNd )
     {
         SwIndex aEndIdx( pEndTxtNd );
         nNdIdx = pEnd->nNode.GetIndex();
         SwRegHistory aRHst( *pEndTxtNd, pHistory );
 
-        // always save all text atttibutes because of possibly overlapping
-        // areas of on/off
+        // always save all text atttibutes because of possibly overlapping areas of on/off
         pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nNdIdx, 0,
                             pEndTxtNd->GetTxt().Len(), true );
 
@@ -403,8 +398,7 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
 
 
-        // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
-        // die Undo-History
+        // delete now also the text (all attribute changes are added to UNDO history)
         pEndStr = (String*)new String( pEndTxtNd->GetTxt().Copy( 0,
                                     pEnd->nContent.GetIndex() ));
         pEndTxtNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
@@ -419,21 +413,21 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
             : pEndTxtNd->CreateUndo();
     }
 
-    // sind es nur zwei Nodes, dann ist schon alles erledigt.
+    // if there are only two Nodes than we're done
     if( ( pSttTxtNd || pEndTxtNd ) && nSttNode + 1 == nEndNode )
-        return sal_False;           // keine Nodes mehr verschieben
+        return sal_False;           // do not move any Node
 
-    return sal_True;                // verschiebe die dazwischen liegenden Nodes
+    return sal_True;                // move Nodes lying in between
 }
 
 
 sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 {
-    // ist das Undo groesser als 1 Node ? (sprich: Start und EndString)
+    // Is Undo greater than one Node (that is Start and EndString)?
     if( pSttStr ? !pSttStr->Len() || pEndStr : sal_True )
         return sal_False;
 
-    // es kann nur das Loeschen von einzelnen char's zusammengefasst werden
+    // only the deletion of single char's can be condensed
     if( nSttNode != nEndNode || ( !bGroup && nSttCntnt+1 != nEndCntnt ))
         return sal_False;
 
@@ -447,8 +441,8 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         pEnd->nNode != nSttNode )
         return sal_False;
 
-    // untercheide zwischen BackSpace und Delete. Es muss dann das
-    // Undo-Array unterschiedlich aufgebaut werden !!
+    // Distinguish between BackSpace and Delete because the Undo array needs to be constructed
+    // differently!
     if( pEnd->nContent == nSttCntnt )
     {
         if( bGroup && !bBackSp ) return sal_False;
@@ -462,7 +456,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     else
         return sal_False;
 
-    // sind die beiden Nodes (Nodes-/Undo-Array) ueberhaupt TextNodes?
+    // are both Nodes (Node/Undo array) TextNodes at all?
     SwTxtNode * pDelTxtNd = pStt->nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ) return sal_False;
 
@@ -489,13 +483,12 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         pDoc->DeleteRedline( rDelPam, false, USHRT_MAX );
     }
 
-    // Ok, die beiden 'Deletes' koennen zusammen gefasst werden, also
-    // 'verschiebe' das enstprechende Zeichen
+    // Both 'deletes' can be consolidated, so 'move' the related character
     if( bBackSp )
-        nSttCntnt--;    // BackSpace: Zeichen in Array einfuegen !!
+        nSttCntnt--;    // BackSpace: add char to array!
     else
     {
-        nEndCntnt++;    // Delete: Zeichen am Ende anhaengen
+        nEndCntnt++;    // Delete: attach char at the end
         nUChrPos++;
     }
     pSttStr->Insert( cDelChar, nUChrPos );
@@ -511,9 +504,9 @@ SwUndoDelete::~SwUndoDelete()
 {
     delete pSttStr;
     delete pEndStr;
-    if( pMvStt )        // loesche noch den Bereich aus dem UndoNodes Array
+    if( pMvStt )        // Delete also the selection from UndoNodes array
     {
-        // Insert speichert den Inhalt in der IconSection
+        // Insert saves content in IconSection
         pMvStt->GetNode().GetNodes().Delete( *pMvStt, nNode );
         delete pMvStt;
     }
@@ -754,8 +747,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( pDoc->GetNodes(), nCalcStt );
     SwNode* pInsNd = &aIdx.GetNode();
 
-    {       // Block, damit der SwPosition beim loeschen vom Node
-            // abgemeldet ist
+        // code block so that SwPosition is detached when deleting a Node
         SwPosition aPos( aIdx );
         if( !bDelFullPara )
         {
@@ -772,17 +764,17 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 if( pInsNd->IsCntntNode() )
                     aPos.nContent.Assign( (SwCntntNode*)pInsNd, nSttCntnt );
                 if( !bTblDelLastNd )
-                    pInsNd = 0;         // Node nicht loeschen !!
+                    pInsNd = 0;         // do not delete Node!
             }
         }
         else
-            pInsNd = 0;         // Node nicht loeschen !!
+            pInsNd = 0;         // do not delete Node!
 
         sal_Bool bNodeMove = 0 != nNode;
 
         if( pEndStr )
         {
-            // alle Attribute verwerfen, wurden alle gespeichert!
+            // discard attributes since they all saved!
             SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
 
             if( pTxtNd && pTxtNd->HasSwAttrSet() )
@@ -884,8 +876,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             aPos.nNode = nSttNode - nNdDiff + ( bJoinNext ? 0 : nReplaceDummy );
             SwTxtNode * pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-            // wenn mehr als ein Node geloescht wurde, dann wurden auch
-            // alle "Node"-Attribute gespeichert
+            // If more than a single Node got deleted, also all "Node" attributes were saved
 
             if (pTxtNd != NULL)
             {
@@ -895,8 +886,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 if( pTxtNd->GetpSwpHints() )
                     pTxtNd->ClearSwpHintsArr( true );
 
-                // SectionNode-Modus und von oben nach unten selektiert:
-                //  -> im StartNode steht noch der Rest vom Join => loeschen
+                // SectionNode mode and selection from top to bottom:
+                //  -> in StartNode is still the rest of the Join => delete
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
                 pTxtNd->InsertText( *pSttStr, aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND );
@@ -908,12 +899,12 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pHistory )
         {
             pHistory->TmpRollback( pDoc, nSetPos, false );
-            if( nSetPos )       // es gab Fussnoten/FlyFrames
+            if( nSetPos )       // there were Footnodes/FlyFrames
             {
-                // gibts ausser diesen noch andere ?
+                // are there others than these ones?
                 if( nSetPos < pHistory->Count() )
                 {
-                    // dann sicher die Attribute anderen Attribute
+                    // if so save the attributes of the others
                     SwHistory aHstr;
                     aHstr.Move( 0, pHistory, nSetPos );
                     pHistory->Rollback( pDoc );
@@ -939,7 +930,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetFmtAttr( nStt, nEnd );
         }
     }
-    // den temp. eingefuegten Node noch loeschen !!
+    // delete the temporarily added Node
     if( pInsNd )
         pDoc->GetNodes().Delete( aIdx, 1 );
     if( pRedlSaveData )
@@ -970,11 +961,11 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         RemoveIdxFromRange( rPam, sal_False );
         aTmpRng.SetPaM( rPam );
 
-        if( !bJoinNext )            // Dann Selektion von unten nach oben
-            rPam.Exchange();        // wieder herstellen!
+        if( !bJoinNext )           // then restore selection from bottom to top
+            rPam.Exchange();
     }
 
-    if( pHistory )      // wurden Attribute gesichert ?
+    if( pHistory )      // are the attributes saved?
     {
         pHistory->SetTmpEnd( pHistory->Count() );
         SwHistory aHstr;
@@ -982,7 +973,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( bDelFullPara )
         {
-            OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
+            OSL_ENSURE( rPam.HasMark(), "PaM without Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -998,7 +989,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         if( bDelFullPara )
         {
-            OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
+            OSL_ENSURE( rPam.HasMark(), "PaM without Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -1019,7 +1010,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             if( bTblDelLastNd )
             {
-                // dann am Ende wieder einen Node einfuegen
+                // than add again a Node at the end
                 const SwNodeIndex aTmpIdx( *pTblNd->EndOfSectionNode(), 1 );
                 rDoc.GetNodes().MakeTxtNode( aTmpIdx,
                         rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
@@ -1048,16 +1039,15 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
         rDoc.GetNodes().Delete( aSttIdx, nEndNode - nSttNode );
 
-        // setze den Cursor immer in einen ContentNode !!
+        // always set the cursor into a ContentNode!
         if( !rPam.Move( fnMoveBackward, fnGoCntnt ) &&
             !rPam.Move( fnMoveForward, fnGoCntnt ) )
             rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
     }
     else if( bDelFullPara )
     {
-        // der Pam wurde am Point( == Ende) um eins erhoeht, um einen
-        // Bereich fuers Undo zu haben. Der muss jetzt aber wieder entfernt
-        // werden!!!
+        // The Pam was incremented by one at Point (== end) to provide space
+        // for UNDO. This now needs to be reverted!
         rPam.End()->nNode--;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
             *rPam.GetMark() = *rPam.GetPoint();
