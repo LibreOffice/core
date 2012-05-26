@@ -58,12 +58,12 @@
 #include <ndtxt.hxx>            // SwTxtNode
 #include <paratr.hxx>           //
 #include <cellatr.hxx>          //
-#include <fldbas.hxx>           // fuer Felder
-#include <pam.hxx>              // fuer SwPaM
+#include <fldbas.hxx>
+#include <pam.hxx>
 #include <swtable.hxx>
 #include <ndgrf.hxx>            // SwGrfNode
 #include <UndoCore.hxx>
-#include <IMark.hxx>            // fuer SwBookmark
+#include <IMark.hxx>
 #include <charfmt.hxx> // #i27615#
 #include <comcore.hrc>
 #include <undo.hrc>
@@ -90,7 +90,7 @@ SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
             break;
         case RES_BOXATR_FORMULA:
         {
-            //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
+            //JP 30.07.98: Bug 54295 - save formulas always in plain text
             SwTblBoxFormula& rNew = static_cast<SwTblBoxFormula&>(*m_pAttr);
             if ( rNew.IsIntrnlName() )
             {
@@ -214,12 +214,12 @@ SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     , m_nStart( *pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
-    // !! Achtung: folgende Attribute erzeugen keine FormatAttribute:
+    // Caution: the following attributes generate no format attributes:
     //  - NoLineBreak, NoHypen, Inserted, Deleted
-    // Dafuer muessen Sonderbehandlungen gemacht werden !!!
+    // These cases must be handled separately !!!
 
-    // ein bisschen kompliziert, aber ist Ok so: erst vom default
-    // eine Kopie und dann die Werte aus dem Text Attribut zuweisen
+    // a little bit complicated but works: first assign a copy of the
+    // default value and afterwards the values from text attribute
     sal_uInt16 nWhich = pTxtHt->Which();
     if ( RES_TXTATR_CHARFMT == nWhich )
     {
@@ -442,13 +442,13 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePo
     OSL_ENSURE( pTxtFtn->GetStartNode(),
             "SwHistorySetFootnote: Footnote without Section" );
 
-    // merke die alte NodePos, denn wer weiss was alles in der SaveSection
-    // gespeichert (geloescht) wird
+    // keep the old NodePos (because who knows what later will be saved/deleted
+    // in SaveSection)
     SwDoc* pDoc = const_cast<SwDoc*>(pTxtFtn->GetTxtNode().GetDoc());
     SwNode* pSaveNd = pDoc->GetNodes()[ m_nNodeIndex ];
 
-    //Pointer auf StartNode der FtnSection merken und erstmal den Pointer im
-    //Attribut zuruecksetzen -> Damit werden automatisch die Frms vernichtet.
+    // keep pointer to StartNode of FtnSection and reset its attribute for now
+    // (as a result, its/all Frms will be deleted automatically)
     SwNodeIndex aSttIdx( *pTxtFtn->GetStartNode() );
     pTxtFtn->SetStartNode( 0, sal_False );
 
@@ -744,10 +744,10 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
 
                 case RES_BOXATR_FORMULA:
                     {
-                    //JP 20.04.98: Bug 49502 - wenn eine Formel gesetzt ist, nie den
-                    //              Value mit sichern. Der muss gegebenfalls neu
-                    //              errechnet werden!
-                    //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
+                    //JP 20.04.98: Bug 49502 - When a formula is set, never save
+                    //             the value. It possibly must be recalculated!
+                    //JP 30.07.98: Bug 54295 - Save formulas always in plain
+                    //             text
                         m_OldSet.ClearItem( RES_BOXATR_VALUE );
 
                         SwTblBoxFormula& rNew =
@@ -1030,7 +1030,6 @@ SwHistory::~SwHistory()
 |*
 |*    void SwHistory::Add()
 |*
-|*    Beschreibung      Dokument 1.0
 |*
 *************************************************************************/
 
@@ -1043,7 +1042,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
     if( (nWhich >= POOLATTR_END) || (nWhich == RES_TXTATR_FIELD) )
         return;
 
-    // no default Attribute?
+    // no default attribute?
     SwHistoryHint * pHt;
     if ( pOldValue && pOldValue != GetDfltAttr( pOldValue->Which() ) )
     {
@@ -1182,7 +1181,6 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 |*
 |*    sal_Bool SwHistory::Rollback()
 |*
-|*    Beschreibung      Dokument 1.0
 |*
 *************************************************************************/
 
@@ -1296,20 +1294,20 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
     const xub_StrLen * pEndIdx;
     for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
     {
-        // BP: nAttrStt muss auch bei !pEndIdx gesetzt werden
+        // BP: nAttrStt must even be set when !pEndIdx
         pHt = pHts->GetTextHint(n);
         nAttrStt = *pHt->GetStart();
-// JP: ???? wieso nAttrStt >= nEnd
+// JP: ???? why nAttrStt >= nEnd
 //      if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt >= nEnd )
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 
-        // Flys und Ftn nie kopieren !!
+        // never copy Flys and Ftn !!
         sal_Bool bNextAttr = sal_False;
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
-            // keine Felder, .. kopieren ??
+            // no fields, ... copy ??
             if( !bFields )
                 bNextAttr = sal_True;
             break;
@@ -1326,7 +1324,7 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
         if ( nStart <= nAttrStt )
         {
             if ( nEnd > nAttrStt
-// JP: ???? wieso nAttrStt >= nEnd
+// JP: ???? why nAttrStt >= nEnd
 //              || (nEnd == nAttrStt && (!pEndIdx || nEnd == pEndIdx->GetIndex()))
             )
             {
@@ -1343,7 +1341,7 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
 
 /*************************************************************************/
 
-// Klasse zum Registrieren der History am Node, Format, HintsArray, ...
+// Class to register the history at a Node, Format, HintsArray, ...
 
 SwRegHistory::SwRegHistory( SwHistory* pHst )
     : SwClient( 0 )
@@ -1438,10 +1436,11 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
 
     const bool bInserted = pTxtNode->SetAttr( rSet, nStart, nEnd, nFlags );
 
-        // Achtung: Durch das Einfuegen eines Attributs kann das Array
-        // geloescht werden!!! Wenn das einzufuegende zunaechst ein vorhandenes
-        // loescht, selbst aber nicht eingefuegt werden braucht, weil die
-        // Absatzattribute identisch sind( -> bForgetAttr in SwpHints::Insert )
+        // Caution: The array can be deleted when inserting an attribute!
+        // This can happen when the value that should be added first deletes
+        // an existing attribute but does not need to be added itself because
+        // the paragraph attributes are identical
+        // ( -> bForgetAttr in SwpHints::Insert )
     if ( pTxtNode->GetpSwpHints() && m_pHistory )
     {
         pTxtNode->GetpSwpHints()->DeRegister();
@@ -1451,7 +1450,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     {
         SwHistoryHint* pNewHstr = new SwHistoryResetAttrSet( rSet,
                                     pTxtNode->GetIndex(), nStart, nEnd );
-        // der NodeIndex kann verschoben sein !!
+        // the NodeIndex might be moved!
 
         m_pHistory->m_SwpHstry.push_back( pNewHstr );
     }
