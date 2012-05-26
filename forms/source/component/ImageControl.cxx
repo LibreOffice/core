@@ -37,6 +37,7 @@
 #include <svtools/imageresourceaccess.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -911,7 +912,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     // is this a request for a context menu?
     if ( e.PopupTrigger )
     {
-        Reference< XPopupMenu > xMenu( m_aContext.createComponent( "com.sun.star.awt.PopupMenu" ), UNO_QUERY );
+        Reference< XPopupMenu > xMenu( awt::PopupMenu::create( m_aContext.getUNOContext() ) );
         DBG_ASSERT( xMenu.is(), "OImageControlControl::mousePressed: could not create a popup menu!" );
 
         Reference< XWindowPeer > xWindowPeer = getPeer();

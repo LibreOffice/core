@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -112,15 +113,12 @@ ImageHelper::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
 
     try
     {
-        uno::Reference< graphic::XGraphicProvider > xProvider;
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-        {
-            uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
-            aMediaProperties[0].Value <<= _rURL;
-            xGraphic = xProvider->queryGraphic( aMediaProperties );
-        }
+        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
+        uno::Sequence< beans::PropertyValue > aMediaProperties(1);
+        aMediaProperties[0].Name = ::rtl::OUString( "URL" );
+        aMediaProperties[0].Value <<= _rURL;
+        xGraphic = xProvider->queryGraphic( aMediaProperties );
     }
     catch (const Exception&)
     {

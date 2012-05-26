@@ -54,6 +54,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -176,17 +177,13 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aIconCtrl.Show();
 
     // detect the root URL of templates
-    Reference< XDocumentTemplates > xTemplates( ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.frame.DocumentTemplates") ), UNO_QUERY );
+    Reference< XDocumentTemplates > xTemplates( frame::DocumentTemplates::create(::comphelper::getProcessComponentContext()) );
 
-    if ( xTemplates.is() )
-    {
-        Reference < XContent > aRootContent = xTemplates->getContent();
-        Reference < XCommandEnvironment > aCmdEnv;
+    Reference < XContent > aRootContent = xTemplates->getContent();
+    Reference < XCommandEnvironment > aCmdEnv;
 
-        if ( aRootContent.is() )
-            aTemplateRootURL = aRootContent->getIdentifier()->getContentIdentifier();
-    }
+    if ( aRootContent.is() )
+        aTemplateRootURL = aRootContent->getIdentifier()->getContentIdentifier();
 
     // insert the categories
     // "New Document"
@@ -1644,35 +1641,31 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 {
     pImpl->pWin->SetFocus( sal_False );
-    Reference< XDocumentTemplates > xTemplates( ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.frame.DocumentTemplates") ), UNO_QUERY );
-    if ( xTemplates.is() )
-    {
-        if ( _pEventSource )
-        {   // it was no direct call, which means it was triggered by the timer, which means we alread checked the necessity
-            WaitObject aWaitCursor( this );
-            xTemplates->update();
-            if ( pImpl->pWin->IsTemplateFolderOpen() )
-            {
-                pImpl->pWin->ClearHistory();
-                pImpl->pWin->OpenTemplateRoot();
-            }
-        }
-        else
+    Reference< XDocumentTemplates > xTemplates( frame::DocumentTemplates::create(::comphelper::getProcessComponentContext()) );
+    if ( _pEventSource )
+    {   // it was no direct call, which means it was triggered by the timer, which means we alread checked the necessity
+        WaitObject aWaitCursor( this );
+        xTemplates->update();
+        if ( pImpl->pWin->IsTemplateFolderOpen() )
         {
-            // check if we really need to do the update
-            ::svt::TemplateFolderCache aCache;
-            if ( aCache.needsUpdate() )
-            {   // yes -> do it asynchronous (it will take a noticeable time)
+            pImpl->pWin->ClearHistory();
+            pImpl->pWin->OpenTemplateRoot();
+        }
+    }
+    else
+    {
+        // check if we really need to do the update
+        ::svt::TemplateFolderCache aCache;
+        if ( aCache.needsUpdate() )
+        {   // yes -> do it asynchronous (it will take a noticeable time)
 
-                // (but first store the current state)
-                aCache.storeState();
+            // (but first store the current state)
+            aCache.storeState();
 
-                // start the timer for the async update
-                pImpl->aUpdateTimer.SetTimeout( 300 );
-                pImpl->aUpdateTimer.SetTimeoutHdl( LINK( this, SvtDocumentTemplateDialog, UpdateHdl_Impl ) );
-                pImpl->aUpdateTimer.Start();
-            }
+            // start the timer for the async update
+            pImpl->aUpdateTimer.SetTimeout( 300 );
+            pImpl->aUpdateTimer.SetTimeoutHdl( LINK( this, SvtDocumentTemplateDialog, UpdateHdl_Impl ) );
+            pImpl->aUpdateTimer.Start();
         }
     }
     return 0;

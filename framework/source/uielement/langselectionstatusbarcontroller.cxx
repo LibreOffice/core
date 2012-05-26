@@ -40,6 +40,7 @@
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <svtools/langtab.hxx>
 #include "sal/types.h"
@@ -58,6 +59,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <toolkit/unohlp.hxx>
 #include <tools/gen.hxx>
@@ -186,10 +188,9 @@ throw (::com::sun::star::uno::RuntimeException)
         return;
 
     //add context menu
-    const static OUString s_sPopupMenu(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.PopupMenu"));
-    Reference< awt::XPopupMenu > xPopupMenu( m_xServiceManager->createInstance( s_sPopupMenu ), UNO_QUERY );
+    Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
-    Reference< awt::XPopupMenu > subPopupMenu(m_xServiceManager->createInstance( s_sPopupMenu ), UNO_QUERY );
+    Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
 
     SvtLanguageTable    aLanguageTable;
 

@@ -99,6 +99,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     sd/util/sdfilt \
     sfx2/util/sfx \
     sot/util/sot \
+    svtools/util/svt \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

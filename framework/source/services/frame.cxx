@@ -49,6 +49,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -72,6 +73,7 @@
 
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -2396,11 +2398,9 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
 
         if (bMustBeTriggered)
         {
-            css::uno::Reference< css::task::XJobExecutor > xExecutor( xFactory->createInstance( SERVICENAME_JOBEXECUTOR ), css::uno::UNO_QUERY );
-            if (xExecutor.is())
-            {
-                xExecutor->trigger( DECLARE_ASCII("onFirstVisibleTask") );
-            }
+            css::uno::Reference< css::task::XJobExecutor > xExecutor
+                = css::task::JobExecutor::create( comphelper::ComponentContext(xFactory).getUNOContext() );
+            xExecutor->trigger( DECLARE_ASCII("onFirstVisibleTask") );
         }
     }
 }

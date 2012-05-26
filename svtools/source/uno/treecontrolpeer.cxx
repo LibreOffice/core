@@ -28,6 +28,7 @@
 
 
 #define _SVTREEBX_CXX
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
@@ -1477,14 +1478,10 @@ bool TreeControlPeer::loadImage( const ::rtl::OUString& rURL, Image& rImage )
 {
     if( !mxGraphicProvider.is() )
     {
-        static const OUString aSN( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) );
-        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-        if( xORB.is() )
-        {
-            Reference< XInterface > x( xORB->createInstance( aSN ) );
-            mxGraphicProvider.query( x );
-            mxGraphicProvider = Reference< XGraphicProvider >( x, UNO_QUERY );
-        }
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        Reference< XInterface > x( graphic::GraphicProvider::create(xContext) );
+        mxGraphicProvider.query( x );
+        mxGraphicProvider = Reference< XGraphicProvider >( x, UNO_QUERY );
     }
 
     if( mxGraphicProvider.is() ) try

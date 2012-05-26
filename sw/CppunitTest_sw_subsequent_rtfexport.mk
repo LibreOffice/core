@@ -61,6 +61,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfexport,\
     package/util/package2 \
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
+    svtools/util/svt \
     sw/util/msword \
     sw/util/sw \
     sw/util/swd \

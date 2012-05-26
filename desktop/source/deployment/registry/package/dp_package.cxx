@@ -47,6 +47,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/graphic/XGraphic.hpp"
+#include "com/sun/star/graphic/GraphicProvider.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
@@ -835,18 +836,13 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
         OUString aFullIconURL = m_url_expanded + OUSTR("/") + aIconURL;
 
         uno::Reference< XComponentContext > xContext( getMyBackend()->getComponentContext() );
-        uno::Reference< graphic::XGraphicProvider > xGraphProvider(
-                        xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.graphic.GraphicProvider" ), xContext ),
-                        uno::UNO_QUERY );
+        uno::Reference< graphic::XGraphicProvider > xGraphProvider( graphic::GraphicProvider::create(xContext) );
 
-        if ( xGraphProvider.is() )
-        {
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
             aMediaProps[0].Name = OUSTR( "URL" );
             aMediaProps[0].Value <<= aFullIconURL;
 
-            xGraphic = xGraphProvider->queryGraphic( aMediaProps );
-        }
+        xGraphic = xGraphProvider->queryGraphic( aMediaProps );
     }
 
     return xGraphic;

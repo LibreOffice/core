@@ -42,7 +42,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <com/sun/star/plugin/PluginManager.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <plugin/impl.hxx>
 #include <tools/fsys.hxx>
 #include <ucbhelper/content.hxx>
@@ -137,8 +139,8 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->addPropertyChangeListener( OUString(), this );
 
-    Guard< Mutex > aGuard( PluginManager::get().getPluginMutex() );
-    PluginManager::get().getPlugins().push_back( this );
+    Guard< Mutex > aGuard( ::PluginManager::get().getPluginMutex() );
+    ::PluginManager::get().getPlugins().push_back( this );
 }
 
 void XPlugin_Impl::destroyInstance()
@@ -198,11 +200,11 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
 
     // may have become undisposable between PostUserEvent and here
     // or may have disposed and receive a second UserEvent
-    std::list<XPlugin_Impl*>& rList = PluginManager::get().getPlugins();
+    std::list<XPlugin_Impl*>& rList = ::PluginManager::get().getPlugins();
     std::list<XPlugin_Impl*>::iterator iter;
 
     {
-        Guard< Mutex > aPluginGuard( PluginManager::get().getPluginMutex() );
+        Guard< Mutex > aPluginGuard( ::PluginManager::get().getPluginMutex() );
         for( iter = rList.begin(); iter != rList.end(); ++iter )
         {
             if( *iter == this )
@@ -222,7 +224,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->removePropertyChangeListener( OUString(), this );
     {
-        Guard< Mutex > aPluginGuard( PluginManager::get().getPluginMutex() );
+        Guard< Mutex > aPluginGuard( ::PluginManager::get().getPluginMutex() );
         rList.remove( this );
     }
     m_aNPWindow.window = NULL;
@@ -512,8 +514,8 @@ void XPlugin_Impl::loadPlugin()
     Guard< Mutex > aGuard( m_aMutex );
 
     std::list<PluginComm*>::iterator iter;
-    for( iter = PluginManager::get().getPluginComms().begin();
-         iter != PluginManager::get().getPluginComms().end(); ++iter )
+    for( iter = ::PluginManager::get().getPluginComms().begin();
+         iter != ::PluginManager::get().getPluginComms().end(); ++iter )
     {
         if( OStringToOUString( (*iter)->getLibName(), m_aEncoding ) == m_aDescription.PluginName )
         {
@@ -893,12 +895,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
 PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
 {
-    uno::Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString("com.sun.star.plugin.PluginManager") ), UNO_QUERY );
-    if( !xPMgr.is() )
-    {
-        m_nProvidingState = PROVIDING_NONE;
-        return PluginDescription();
-    }
+    uno::Reference< XPluginManager >  xPMgr( plugin::PluginManager::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()) );
 
     Sequence< PluginDescription > aDescrs = xPMgr->getPluginDescriptions();
     const PluginDescription* pDescrs = aDescrs.getConstArray();

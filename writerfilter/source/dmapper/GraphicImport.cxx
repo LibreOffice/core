@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -1281,12 +1282,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     uno::Reference< text::XTextContent > xGraphicObject;
     try
     {
-        uno::Reference< graphic::XGraphicProvider > xGraphicProvider(
-                            m_xComponentContext->getServiceManager()->createInstanceWithContext(
-                                ::rtl::OUString("com.sun.star.graphic.GraphicProvider"),
-                                m_xComponentContext),
-                            uno::UNO_QUERY_THROW );
-
+        uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(m_xComponentContext) );
         uno::Reference< graphic::XGraphic > xGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
 
         if(xGraphic.is())

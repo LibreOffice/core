@@ -30,6 +30,7 @@
 #include <misc.hrc>
 #include <cnttab.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
@@ -50,11 +51,8 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
     ListBox(pWin, rResId),
     pImpl(new SwNumberingTypeListBox_Impl)
 {
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference < uno::XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DefaultNumberingProvider")) );
-    uno::Reference<text::XDefaultNumberingProvider> xDefNum(xI, uno::UNO_QUERY);
-    OSL_ENSURE(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
+    uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
 
     pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
     Reload(nTypeFlags);

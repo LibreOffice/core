@@ -42,6 +42,7 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -69,6 +70,7 @@ namespace sfx2
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -188,8 +190,8 @@ namespace sfx2
                     }
 
                     // otherwise, delegate to the GraphicProvider
-                    const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                    const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
+                    const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(xContext) );
 
                     const Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_SET_THROW );
                     return Image( xGraphic );

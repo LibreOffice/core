@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -1757,11 +1758,8 @@ Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
 {
     if(!xNumberingInfo.is())
     {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance(
-            ::rtl::OUString( "com.sun.star.text.DefaultNumberingProvider" ));
-        Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
-        OSL_ENSURE(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
+        Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+        Reference<XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
         ((SwFldMgr*)this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
     }
     return xNumberingInfo;

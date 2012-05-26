@@ -42,9 +42,11 @@
 #include "unotools/streamwrap.hxx"
 
 #include "comphelper/processfactory.hxx"
+#include "comphelper/componentcontext.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/io/XSeekable.hpp"
+#include "com/sun/star/graphic/GraphicProvider.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
 
 #include "cppuhelper/implbase1.hxx"
@@ -194,47 +196,42 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 {
                     uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
                     uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                    uno::Reference< graphic::XGraphicProvider > xGraphicProvider( ImplGetSVData()->maAppData.mxMSF->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ), UNO_QUERY );
-                    if ( xGraphicProvider.is() )
+                    uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(ImplGetSVData()->maAppData.mxMSF).getUNOContext() );
+                    uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
+                    uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
+                    uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
+                    rtl::OUString aMimeType(RTL_CONSTASCII_USTRINGPARAM("image/jpeg"));
+                    uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
+                    aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
+                    aOutMediaProperties[0].Value <<= xOut;
+                    aOutMediaProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MimeType"));
+                    aOutMediaProperties[1].Value <<= aMimeType;
+                    aOutMediaProperties[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterData"));
+                    aOutMediaProperties[2].Value <<= aFilterData;
+                    xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
+                    xOut->flush();
+                    if ( xSeekable->getLength() > nZippedFileSize )
                     {
-                        uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
-                        uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-                        rtl::OUString aMimeType(RTL_CONSTASCII_USTRINGPARAM("image/jpeg"));
-                        uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
-                        aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
-                        aOutMediaProperties[0].Value <<= xOut;
-                        aOutMediaProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MimeType"));
-                        aOutMediaProperties[1].Value <<= aMimeType;
-                        aOutMediaProperties[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterData"));
-                        aOutMediaProperties[2].Value <<= aFilterData;
-                        xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
-                        xOut->flush();
-                        if ( xSeekable->getLength() > nZippedFileSize )
-                        {
-                            bUseJPGCompression = sal_False;
-                        }
-                        else
-                        {
-                            aStrm.Seek( STREAM_SEEK_TO_END );
+                        bUseJPGCompression = sal_False;
+                    }
+                    else
+                    {
+                        aStrm.Seek( STREAM_SEEK_TO_END );
 
-                            xSeekable->seek( 0 );
-                            Sequence< PropertyValue > aArgs( 1 );
-                            aArgs[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
-                            aArgs[ 0 ].Value <<= xStream;
-                            uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
-                            if ( xPropSet.is() )
+                        xSeekable->seek( 0 );
+                        Sequence< PropertyValue > aArgs( 1 );
+                        aArgs[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+                        aArgs[ 0 ].Value <<= xStream;
+                        uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
+                        if ( xPropSet.is() )
+                        {
+                            sal_Int16 nBitsPerPixel = 24;
+                            if ( xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BitsPerPixel")) ) >>= nBitsPerPixel )
                             {
-                                sal_Int16 nBitsPerPixel = 24;
-                                if ( xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BitsPerPixel")) ) >>= nBitsPerPixel )
-                                {
-                                    bTrueColorJPG = nBitsPerPixel != 8;
-                                }
+                                bTrueColorJPG = nBitsPerPixel != 8;
                             }
                         }
                     }
-                    else
-                        bUseJPGCompression = sal_False;
                 }
                 catch( uno::Exception& )
                 {

@@ -42,6 +42,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -859,10 +860,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             try
             {
                 uno::Reference< frame::XStorable > xStorable( GetModel(), uno::UNO_QUERY_THROW );
-                ::rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DocumentTemplates" ) );
                 uno::Reference< frame::XDocumentTemplates > xTemplates(
-                                comphelper::getProcessServiceFactory()->createInstance( aService ),
-                                uno::UNO_QUERY_THROW );
+                                frame::DocumentTemplates::create(comphelper::getProcessComponentContext()) );
 
                 bOk = xTemplates->storeTemplate( aTemplateGroup, aTemplateName, xStorable );
             }

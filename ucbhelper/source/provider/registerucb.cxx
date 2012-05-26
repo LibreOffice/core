@@ -27,10 +27,13 @@
  ************************************************************************/
 
 #include <ucbhelper/registerucb.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
+#include <com/sun/star/ucb/ContentProviderProxyFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "osl/diagnose.h"
@@ -74,14 +77,13 @@ registerAtUcb(
         uno::Reference< ucb::XContentProviderFactory > xProxyFactory;
         try
         {
+            uno::Reference< beans::XPropertySet > xFactoryProperties( rServiceFactory, uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext = uno::Reference< uno::XComponentContext >(
+                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+                uno::UNO_QUERY );
             xProxyFactory
                 = uno::Reference< ucb::XContentProviderFactory >(
-                      rServiceFactory->
-                          createInstance(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.ucb.ContentProviderProxyFactory"))),
-                      uno::UNO_QUERY);
+                      ucb::ContentProviderProxyFactory::create( xContext ) );
         }
         catch (uno::Exception const &) {}
         OSL_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");

@@ -30,6 +30,8 @@
 #include "vcl/throbber.hxx"
 #include "vcl/svapp.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
@@ -119,8 +121,8 @@ namespace
         ::std::vector< Image > aImages;
         ENSURE_OR_RETURN( i_imageSet != Throbber::IMAGES_NONE, "lcl_loadImageSet: illegal image set", aImages );
 
-        const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
+        const Reference< com::sun::star::uno::XComponentContext > aContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(aContext) );
 
         ::std::vector< ::rtl::OUString > aImageURLs( Throbber::getDefaultImageURLs( i_imageSet ) );
         aImages.reserve( aImageURLs.size() );

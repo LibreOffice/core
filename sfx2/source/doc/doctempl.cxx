@@ -51,6 +51,7 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XPersist.hpp>
@@ -113,7 +114,6 @@ using ::std::advance;
 #define COMMAND_TRANSFER        "transfer"
 
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
-#define SERVICENAME_DOCTEMPLATES        "com.sun.star.frame.DocumentTemplates"
 #define SERVICENAME_DESKTOP             "com.sun.star.frame.Desktop"
 
 //========================================================================
@@ -2053,31 +2053,25 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     if ( mbConstructed )
         return sal_True;
 
-    uno::Reference< XMultiServiceFactory >   xFactory;
-    xFactory = ::comphelper::getProcessServiceFactory();
+    uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    uno::Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     OUString aService( SERVICENAME_DOCINFO  );
     uno::Reference< XPersist > xInfo( xFactory->createInstance( aService ), UNO_QUERY );
     mxInfo = xInfo;
 
-    aService = OUString( SERVICENAME_DOCTEMPLATES  );
-    uno::Reference< XDocumentTemplates > xTemplates( xFactory->createInstance( aService ), UNO_QUERY );
+    mxTemplates = frame::DocumentTemplates::create(xContext);
 
-    if ( xTemplates.is() )
-        mxTemplates = xTemplates;
-    else
-        return sal_False;
-
-    uno::Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
+    uno::Reference< XLocalizable > xLocalizable( mxTemplates, UNO_QUERY );
 
     Sequence< Any > aCompareArg(1);
-    *(aCompareArg.getArray()) <<= xLocalizable->getLocale();;
+    *(aCompareArg.getArray()) <<= xLocalizable->getLocale();
     m_rCompareFactory = uno::Reference< XAnyCompareFactory >(
                     xFactory->createInstanceWithArguments( OUString("com.sun.star.ucb.AnyCompareFactory"),
                                                            aCompareArg ),
                     UNO_QUERY );
 
-    uno::Reference < XContent > aRootContent = xTemplates->getContent();
+    uno::Reference < XContent > aRootContent = mxTemplates->getContent();
     uno::Reference < XCommandEnvironment > aCmdEnv;
 
     if ( ! aRootContent.is() )

@@ -43,11 +43,14 @@
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -95,10 +98,10 @@ void SvXMLUnitConverter::Impl::createNumTypeInfo() const
 {
     if (m_xServiceFactory.is())
     {
+        Reference<XComponentContext>         xContext( comphelper::ComponentContext(m_xServiceFactory).getUNOContext() );
+        Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create(xContext);
         const_cast<Impl*>(this)->m_xNumTypeInfo =
-            Reference < XNumberingTypeInfo > (
-                m_xServiceFactory->createInstance(
-                    OUString("com.sun.star.text.DefaultNumberingProvider" ) ), UNO_QUERY );
+            Reference<XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
     }
 }
 

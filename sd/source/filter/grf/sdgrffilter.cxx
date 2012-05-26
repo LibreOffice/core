@@ -30,8 +30,10 @@
 #ifdef _MSC_VER
 #pragma warning (disable:4190)
 #endif
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <unotools/localfilehelper.hxx>
@@ -381,9 +383,9 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 {
     try
     {
-        Reference< XMultiServiceFactory > xSM( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-        Reference< XGraphicProvider > xProvider( xSM->createInstance( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
+        Reference< XGraphicProvider > xProvider( GraphicProvider::create(xContext) );
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
         // detect mime type of graphic
@@ -523,7 +525,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
             if( xGraphStream.is() )
             {
-                Reference< XSimpleFileAccess2 > xFileAccess( xSM->createInstance("com.sun.star.ucb.SimpleFileAccess" ), UNO_QUERY_THROW );
+                Reference< XSimpleFileAccess2 > xFileAccess( SimpleFileAccess::create(xContext) );
                 xFileAccess->writeFile( sPath, xGraphStream );
             }
             else

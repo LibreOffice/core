@@ -56,6 +56,7 @@ $(eval $(call gb_CppunitTest_use_ure,writerfilter_rtftok))
 
 $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 	configmgr/source/configmgr \
+	svtools/util/svt \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
 	writerfilter/util/writerfilter \

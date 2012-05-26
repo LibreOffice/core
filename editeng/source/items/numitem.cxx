@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -75,15 +76,13 @@ void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumb
        {
         try
         {
-            Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference < XInterface > xI = xMSF->createInstance(
-                ::rtl::OUString( "com.sun.star.text.DefaultNumberingProvider" ) );
-            Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-            DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
+            Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+            Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
             _xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
         }
         catch(const Exception&)
         {
+            SAL_WARN("editeng", "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
         }
     }
 }

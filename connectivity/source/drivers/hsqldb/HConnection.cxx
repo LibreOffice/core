@@ -39,6 +39,7 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -75,6 +76,7 @@ using ::com::sun::star::lang::ServiceNotRegisteredException;
 using ::com::sun::star::sdbc::XDriver;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::graphic::GraphicProvider;
 using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::IllegalArgumentException;
@@ -353,7 +355,7 @@ namespace connectivity { namespace hsqldb
             // create a graphic provider
             Reference< XGraphicProvider > xProvider;
             if ( m_xORB.is() )
-                xProvider.set( m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ), UNO_QUERY_THROW );
+                xProvider.set( GraphicProvider::create(::comphelper::ComponentContext(m_xORB).getUNOContext()) );
 
             // assemble the image URL
             ::rtl::OUStringBuffer aImageURL;

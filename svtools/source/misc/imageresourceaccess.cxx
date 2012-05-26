@@ -32,6 +32,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
 /** === end UNO includes === **/
@@ -39,6 +40,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //........................................................................
 namespace svt
@@ -154,13 +156,7 @@ namespace svt
         try
         {
             // get a GraphicProvider
-            Reference< XGraphicProvider > xProvider;
-            if ( _rxORB.is() )
-                xProvider = xProvider.query( _rxORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ) );
-            OSL_ENSURE( xProvider.is(), "GraphicAccess::getImageStream: could not create a graphic provider!" );
-
-            if ( !xProvider.is() )
-                return pReturn;
+            Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(comphelper::ComponentContext(_rxORB).getUNOContext());
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );

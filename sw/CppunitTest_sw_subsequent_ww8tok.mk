@@ -64,6 +64,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8tok,\
     sw/util/swd \
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
+    svtools/util/svt \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

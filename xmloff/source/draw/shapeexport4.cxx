@@ -28,6 +28,7 @@
 
 
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -69,6 +70,7 @@
 
 #include "xmloff/xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
+#include <comphelper/componentcontext.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -1220,7 +1222,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     xPictureStream.set( xPictureStorage->openStreamElement( sPictureName, ::embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
                 }
 
-                Reference< graphic::XGraphicProvider > xProvider( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ), UNO_QUERY_THROW );
+                Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(comphelper::ComponentContext(xSM).getUNOContext()) );
                 Sequence< beans::PropertyValue > aArgs( 2 );
                 aArgs[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) );
                 aArgs[ 0 ].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "image/x-vclgraphic" ) );

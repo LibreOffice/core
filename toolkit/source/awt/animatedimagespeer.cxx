@@ -32,6 +32,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -55,6 +56,7 @@ namespace toolkit
 //......................................................................................................................
 
     /** === begin UNO using === **/
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -198,8 +200,8 @@ namespace toolkit
             try
             {
                 // collect the image sizes of the different image sets
-                const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
+                const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(xContext) );
 
                 const bool isHighContrast = pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode();
 

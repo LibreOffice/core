@@ -56,6 +56,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -455,41 +456,32 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
     sal_Bool bResult = sal_False;
     if ( nResID && xStream.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        if ( xServiceManager.is() )
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        try
         {
-            try
+            uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
+            ::rtl::OUString aURL("private:resource/sfx/bitmapex/");
+            aURL += ::rtl::OUString::valueOf( nResID );
+
+            uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
+            aMediaProps[0].Name = "URL";
+            aMediaProps[0].Value <<= aURL;
+
+            uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
+            if ( xGraphic.is() )
             {
-                uno::Reference< graphic::XGraphicProvider > xGraphProvider(
-                    xServiceManager->createInstance(
-                        "com.sun.star.graphic.GraphicProvider") ,
-                    uno::UNO_QUERY );
-                if ( xGraphProvider.is() )
-                {
-                    ::rtl::OUString aURL("private:resource/sfx/bitmapex/");
-                    aURL += ::rtl::OUString::valueOf( nResID );
+                uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
+                aStoreProps[0].Name = "OutputStream";
+                aStoreProps[0].Value <<= xStream;
+                aStoreProps[1].Name = "MimeType";
+                aStoreProps[1].Value <<= ::rtl::OUString("image/png");
 
-                    uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                    aMediaProps[0].Name = "URL";
-                    aMediaProps[0].Value <<= aURL;
-
-                    uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
-                    if ( xGraphic.is() )
-                    {
-                        uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
-                        aStoreProps[0].Name = "OutputStream";
-                        aStoreProps[0].Value <<= xStream;
-                        aStoreProps[1].Name = "MimeType";
-                        aStoreProps[1].Value <<= ::rtl::OUString("image/png");
-
-                        xGraphProvider->storeGraphic( xGraphic, aStoreProps );
-                        bResult = sal_True;
-                    }
-                }
+                xGraphProvider->storeGraphic( xGraphic, aStoreProps );
+                bResult = sal_True;
             }
-            catch(const uno::Exception&)
-            {
-            }
+        }
+        catch(const uno::Exception&)
+        {
         }
     }
 

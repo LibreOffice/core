@@ -30,12 +30,14 @@
 #include "informationdialog.hxx"
 #include "optimizationstats.hxx"
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
+#include <comphelper/componentcontext.hxx>
 
 #define DIALOG_WIDTH    240
 #define DIALOG_HEIGHT   80
@@ -218,8 +220,7 @@ OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
         Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
         if ( xOutputStream.is() && xPropSet.is() )
         {
-            Reference< graphic::XGraphicProvider > xGraphicProvider( mxMSF->getServiceManager()->createInstanceWithContext(
-                        OUString("com.sun.star.graphic.GraphicProvider"), mxMSF ), UNO_QUERY_THROW );
+            Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create( ::comphelper::ComponentContext(mxMSF).getUNOContext() ) );
             Sequence< PropertyValue > aArgs( 1 );
             aArgs[ 0 ].Name = OUString("URL");
             aArgs[ 0 ].Value <<= sPrivateURL;

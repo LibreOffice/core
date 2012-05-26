@@ -28,10 +28,12 @@
 
 
 #include "plugin.hxx"
+#include <com/sun/star/plugin/PluginManager.hpp>
 #include <com/sun/star/plugin/XPluginManager.hpp>
 #include <com/sun/star/plugin/PluginMode.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <rtl/ustring.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
@@ -101,9 +103,7 @@ sal_Bool SAL_CALL PluginObject::load(
     const uno::Reference < frame::XFrame >& xFrame )
 throw( uno::RuntimeException )
 {
-    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
-    if (!xPMgr.is() )
-        return sal_False;
+    uno::Reference< plugin::XPluginManager > xPMgr( plugin::PluginManager::create(comphelper::ComponentContext(mxFact).getUNOContext()) );
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {

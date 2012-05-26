@@ -36,6 +36,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/task/XJob.hpp>
 
@@ -323,30 +324,24 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
 
     if ( !maBubbleImageURL.isEmpty() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-        if( !xServiceManager.is() )
+        if( !xContext.is() )
             throw uno::RuntimeException(
                 UNISTRING( "UpdateCheckUI: unable to obtain service manager from component context" ),
                     uno::Reference< uno::XInterface >() );
 
         try
         {
-            uno::Reference< graphic::XGraphicProvider > xGraphProvider(
-                    xServiceManager->createInstance(
-                            ::rtl::OUString("com.sun.star.graphic.GraphicProvider") ),
-                    uno::UNO_QUERY );
-            if ( xGraphProvider.is() )
-            {
-                uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                aMediaProps[0].Name = ::rtl::OUString("URL");
-                aMediaProps[0].Value <<= rURL;
+            uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
+            uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
+            aMediaProps[0].Name = ::rtl::OUString("URL");
+            aMediaProps[0].Value <<= rURL;
 
-                uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
-                if ( xGraphic.is() )
-                {
-                    aImage = Image( xGraphic );
-                }
+            uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
+            if ( xGraphic.is() )
+            {
+                aImage = Image( xGraphic );
             }
         }
         catch( const uno::Exception& )

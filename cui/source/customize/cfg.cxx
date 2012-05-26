@@ -85,7 +85,9 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 
 #include "dlgname.hxx"
 
@@ -5052,19 +5054,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     uno::Reference< lang::XMultiServiceFactory > xServiceManager =
         ::comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xComponentContext =
+        ::comphelper::getProcessComponentContext();
 
-    if ( xServiceManager.is() )
-    {
-        m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
-            xServiceManager->createInstance(
-                ::rtl::OUString("com.sun.star.graphic.GraphicProvider"  ) ),
-            uno::UNO_QUERY );
-    }
-
-    if ( !m_xGraphProvider.is() )
-    {
-        aBtnImport.Enable( sal_False );
-    }
+    m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
+        graphic::GraphicProvider::create( xComponentContext ) );
 
     uno::Reference< beans::XPropertySet > xPropSet(
         xServiceManager->createInstance( ::rtl::OUString("com.sun.star.util.PathSettings"  ) ),
@@ -5094,9 +5088,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     aDirectory += ::rtl::OUString( "soffice.cfg/import"  );
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-        xServiceManager->createInstance(
-        ::rtl::OUString("com.sun.star.embed.FileSystemStorageFactory"  ) ),
-        uno::UNO_QUERY );
+          ::com::sun::star::embed::FileSystemStorageFactory::create( xComponentContext ) );
 
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= aDirectory;

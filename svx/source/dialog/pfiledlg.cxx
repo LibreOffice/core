@@ -30,6 +30,7 @@
 // include ---------------------------------------------------------------
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/plugin/PluginDescription.hpp>
+#include <com/sun/star/plugin/PluginManager.hpp>
 #include <com/sun/star/plugin/XPluginManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -78,109 +79,102 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
     }
 
     // fill the filterlist of the filedialog with data of installed plugins
-    uno::Reference< lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext >  xContext = comphelper::getProcessComponentContext();
+    uno::Reference< plugin::XPluginManager >  rPluginManager( plugin::PluginManager::create(xContext) );
 
-    if( xMgr.is() )
+    const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
+    const plugin::PluginDescription* pDescription = aSeq.getConstArray();
+    sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
+
+    std::list< String > aPlugNames;
+    std::list< String > aPlugExtensions;
+    std::list< String >::iterator j;
+    std::list< String >::iterator k;
+    std::list< String >::const_iterator end;
+
+    for ( int i = 0; i < nAnzahlPlugins; i++ )
     {
-        uno::Reference< plugin::XPluginManager > rPluginManager( xMgr->createInstance(
-            OUString("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
-        if ( rPluginManager.is() )
+        String aStrPlugMIMEType( pDescription[i].Mimetype );
+        String aStrPlugName( pDescription[i].Description );
+        String aStrPlugExtension( pDescription[i].Extension );
+
+        aStrPlugMIMEType.ToLowerAscii();
+        aStrPlugExtension.ToLowerAscii();
+
+        if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.SearchAscii ( sAudio ) == 0 ) ||
+             ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.SearchAscii ( sVideo ) == 0 ) )
         {
-            const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
-            const plugin::PluginDescription* pDescription = aSeq.getConstArray();
-            sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
-
-            std::list< String > aPlugNames;
-            std::list< String > aPlugExtensions;
-            std::list< String >::iterator j;
-            std::list< String >::iterator k;
-            std::list< String >::const_iterator end;
-
-            for ( int i = 0; i < nAnzahlPlugins; i++ )
+            // extension already in the filterlist of the filedlg ?
+            sal_Bool bAlreadyExist = sal_False;
+            for ( j = aPlugExtensions.begin(), end = aPlugExtensions.end(); j != end && !bAlreadyExist; ++j )
             {
-                String aStrPlugMIMEType( pDescription[i].Mimetype );
-                String aStrPlugName( pDescription[i].Description );
-                String aStrPlugExtension( pDescription[i].Extension );
+                bAlreadyExist = (j->Search( aStrPlugExtension ) != STRING_NOTFOUND );
+            }
 
-                aStrPlugMIMEType.ToLowerAscii();
-                aStrPlugExtension.ToLowerAscii();
-
-                if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.SearchAscii ( sAudio ) == 0 ) ||
-                     ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.SearchAscii ( sVideo ) == 0 ) )
+            if ( !bAlreadyExist )
+            {
+                // filterdescription already there?
+                // (then append the new extension to the existing filter)
+                int nfound = -1;
+                 for ( j = aPlugNames.begin(),
+                          k = aPlugExtensions.begin(),
+                          end = aPlugNames.end();
+                      j != end && nfound != 0;  )
                 {
-                    // extension already in the filterlist of the filedlg ?
-                    sal_Bool bAlreadyExist = sal_False;
-                    for ( j = aPlugExtensions.begin(), end = aPlugExtensions.end(); j != end && !bAlreadyExist; ++j )
+                    if ( ( nfound = j->Search( aStrPlugName ) ) == 0 )
                     {
-                        bAlreadyExist = (j->Search( aStrPlugExtension ) != STRING_NOTFOUND );
+                        if ( aStrPlugExtension.Len() > 0 )
+                            aStrPlugExtension.Insert( sal_Unicode( ';' ) );
+                        aStrPlugExtension.Insert( *k );
+
+                        // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
+                        aPlugNames.erase(j++); aPlugExtensions.erase(k++);
+
+                        // update end iterator (which may be invalid, too!)
+                        end = aPlugNames.end();
                     }
-
-                    if ( !bAlreadyExist )
+                    else
                     {
-                        // filterdescription already there?
-                        // (then append the new extension to the existing filter)
-                        int nfound = -1;
-                         for ( j = aPlugNames.begin(),
-                                  k = aPlugExtensions.begin(),
-                                  end = aPlugNames.end();
-                              j != end && nfound != 0;  )
-                        {
-                            if ( ( nfound = j->Search( aStrPlugName ) ) == 0 )
-                            {
-                                if ( aStrPlugExtension.Len() > 0 )
-                                    aStrPlugExtension.Insert( sal_Unicode( ';' ) );
-                                aStrPlugExtension.Insert( *k );
-
-                                // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
-                                aPlugNames.erase(j++); aPlugExtensions.erase(k++);
-
-                                // update end iterator (which may be invalid, too!)
-                                end = aPlugNames.end();
-                            }
-                            else
-                            {
-                                // next element
-                                ++j; ++k;
-                            }
-                        }
-
-                        // build filterdescription
-                        aStrPlugName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  (" ) );
-                        aStrPlugName.Append( aStrPlugExtension );
-                        aStrPlugName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
-
-                        // use a own description for the video-formate avi, mov and mpeg
-                        // the descriptions of these MIME-types are not very meaningful
-                        const sal_Char sAVI[] = "*.avi";
-                        const sal_Char sMOV[] = "*.mov";
-                        const sal_Char sMPG[] = "*.mpg";
-                        const sal_Char sMPE[] = "*.mpe";
-                        const sal_Char sMPEG[] = "*.mpeg";
-
-                        if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sAVI ) )
-                            aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_AVI );
-                        else if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sMOV ) )
-                            aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_MOV );
-                        else if ( aStrPlugExtension.SearchAscii( sMPG ) != STRING_NOTFOUND ||
-                                  aStrPlugExtension.SearchAscii( sMPE ) != STRING_NOTFOUND ||
-                                  aStrPlugExtension.SearchAscii( sMPEG ) != STRING_NOTFOUND )
-                            aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_MPEG);
-
-                        aPlugNames.push_back( aStrPlugName );
-                        aPlugExtensions.push_back( aStrPlugExtension );
+                        // next element
+                        ++j; ++k;
                     }
                 }
-            }
 
-            // add filter to dialog
-            for ( j = aPlugNames.begin(),
-                      k = aPlugExtensions.begin(),
-                      end = aPlugNames.end();
-                  j != end; ++j, ++k )
-            {
-                maFileDlg.AddFilter( *j, *k );
+                // build filterdescription
+                aStrPlugName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "  (" ) );
+                aStrPlugName.Append( aStrPlugExtension );
+                aStrPlugName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+
+                // use a own description for the video-formate avi, mov and mpeg
+                // the descriptions of these MIME-types are not very meaningful
+                const sal_Char sAVI[] = "*.avi";
+                const sal_Char sMOV[] = "*.mov";
+                const sal_Char sMPG[] = "*.mpg";
+                const sal_Char sMPE[] = "*.mpe";
+                const sal_Char sMPEG[] = "*.mpeg";
+
+                if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sAVI ) )
+                    aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_AVI );
+                else if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sMOV ) )
+                    aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_MOV );
+                else if ( aStrPlugExtension.SearchAscii( sMPG ) != STRING_NOTFOUND ||
+                          aStrPlugExtension.SearchAscii( sMPE ) != STRING_NOTFOUND ||
+                          aStrPlugExtension.SearchAscii( sMPEG ) != STRING_NOTFOUND )
+                    aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_MPEG);
+
+                aPlugNames.push_back( aStrPlugName );
+                aPlugExtensions.push_back( aStrPlugExtension );
             }
         }
+    }
+
+    // add filter to dialog
+    for ( j = aPlugNames.begin(),
+              k = aPlugExtensions.begin(),
+              end = aPlugNames.end();
+          j != end; ++j, ++k )
+    {
+        maFileDlg.AddFilter( *j, *k );
     }
 
     // add the All-Filter

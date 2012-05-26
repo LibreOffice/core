@@ -30,6 +30,7 @@
 #include "TemplateScanner.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 
@@ -38,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/templatelocnames.hrc>
+#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -219,22 +221,9 @@ TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
 {
     State eNextState (INITIALIZE_FOLDER_SCANNING);
 
-    Reference<lang::XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory ();
-    DBG_ASSERT (xFactory.is(), "TemplateScanner::GetTemplateRoot: xFactory is NULL");
-
-    if (xFactory.is())
-    {
-        Reference<frame::XDocumentTemplates> xTemplates (
-            xFactory->createInstance (rtl::OUString(DOCTEMPLATES)), UNO_QUERY);
-        DBG_ASSERT (xTemplates.is(), "TemplateScanner::GetTemplateRoot: xTemplates is NULL");
-
-        if (xTemplates.is())
-            mxTemplateRoot = xTemplates->getContent();
-        else
-            eNextState = ERROR;
-    }
-    else
-        eNextState = ERROR;
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference<frame::XDocumentTemplates> xTemplates = frame::DocumentTemplates::create(xContext);
+    mxTemplateRoot = xTemplates->getContent();
 
     return eNextState;
 }

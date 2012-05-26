@@ -59,6 +59,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -66,6 +67,7 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <comphelper/componentcontext.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -112,12 +114,8 @@ static const sal_Char cBulletFontName[] = "BulletFontName";
 
 Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.DefaultNumberingProvider" )) );
-    Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-    DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
-
+    Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+    Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
     return xRet;
 }
 

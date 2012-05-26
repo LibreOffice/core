@@ -39,6 +39,7 @@
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 // for UNO_NAME_GRAPHOBJ_URLPREFIX
@@ -389,9 +390,8 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
             try
             {
                 // @todo: get factory from some context?
-                Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-                Reference< graphic::XGraphicProvider > xGraphProv(
-                    xFact->createInstance( "com.sun.star.graphic.GraphicProvider"), uno::UNO_QUERY_THROW );
+                Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                Reference< graphic::XGraphicProvider > xGraphProv( graphic::GraphicProvider::create(xContext) );
                 Sequence< beans::PropertyValue > aArgs(1);
                 aArgs[0] = beans::PropertyValue( "URL", -1, uno::makeAny( aNewGraphicURL ),
                     beans::PropertyState_DIRECT_VALUE );

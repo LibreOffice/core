@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <tools/resmgr.hxx>
 #include <tools/diagnose_ex.h>
@@ -107,15 +108,12 @@ Image TkResMgr::getImageFromURL( const ::rtl::OUString& i_rImageURL )
 
     try
     {
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        Reference< XGraphicProvider > xProvider;
-        if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-        {
-            ::comphelper::NamedValueCollection aMediaProperties;
-            aMediaProperties.put( "URL", i_rImageURL );
-            Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
-            return Image( xGraphic );
-        }
+        Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        Reference< XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
+        ::comphelper::NamedValueCollection aMediaProperties;
+        aMediaProperties.put( "URL", i_rImageURL );
+        Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+        return Image( xGraphic );
     }
     catch( const uno::Exception& )
     {

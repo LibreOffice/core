@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/seqstream.hxx>
@@ -82,7 +83,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY );
     OSL_ENSURE( xFactory.is(), "GraphicHelper::GraphicHelper - missing service factory" );
     if( xFactory.is() )
-        mxGraphicProvider.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
+        mxGraphicProvider.set( graphic::GraphicProvider::create( mxContext ) );
 
     //! TODO: get colors from system
     maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;

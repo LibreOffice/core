@@ -36,6 +36,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -492,25 +493,16 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
 
     if( GetType() != GRAPHIC_NONE )
     {
-        uno::Reference < lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference< graphic::XGraphicProvider > xProv( graphic::GraphicProvider::create( xContext ) );
 
-        if( xMSF.is() )
-        {
-            uno::Reference< graphic::XGraphicProvider > xProv( xMSF->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ),
-                uno::UNO_QUERY );
+        uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
+        ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
 
-            if( xProv.is() )
-            {
-                uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
-                ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
+        aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+        aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
 
-                aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
-
-                xRet = xProv->queryGraphic( aLoadProps );
-            }
-        }
+        xRet = xProv->queryGraphic( aLoadProps );
     }
 
     return xRet;

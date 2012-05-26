@@ -28,6 +28,7 @@
 
 
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 #include <osl/file.hxx>
@@ -261,19 +262,8 @@ Reference< XGraphicProvider > ButtonSetImpl::getGraphicProvider()
 {
     if( !mxGraphicProvider.is() )
     {
-        Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory() );
-        if( xServiceManager.is() ) try
-        {
-            Reference< XGraphicProvider > xGraphProvider(
-                xServiceManager->createInstance(
-                    ::rtl::OUString( "com.sun.star.graphic.GraphicProvider"  ) ), UNO_QUERY_THROW );
-
-            mxGraphicProvider = xGraphProvider;
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL("sd::ButtonSetImpl::getGraphicProvider(), could not get graphic provider!");
-        }
+        Reference< XComponentContext > xComponentContext = ::comphelper::getProcessComponentContext();
+        mxGraphicProvider = GraphicProvider::create(xComponentContext);
     }
     return mxGraphicProvider;
 }

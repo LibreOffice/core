@@ -28,6 +28,7 @@
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -2065,15 +2066,12 @@ namespace
 
         try
         {
-             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-             Reference< XGraphicProvider > xProvider;
-             if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-             {
-                 ::comphelper::NamedValueCollection aMediaProperties;
-                 aMediaProperties.put( "URL", i_rImageURL );
-                 Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
-                return Image( xGraphic );
-             }
+             Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+             Reference< XGraphicProvider > xProvider(graphic::GraphicProvider::create(xContext));
+             ::comphelper::NamedValueCollection aMediaProperties;
+             aMediaProperties.put( "URL", i_rImageURL );
+             Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+             return Image( xGraphic );
          }
          catch( const uno::Exception& )
          {
