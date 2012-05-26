@@ -111,6 +111,7 @@ scripting\
 sd\
 sdext\
 sfx2\
+shell\
 slideshow\
 smoketest\
 solenv\
@@ -231,7 +232,6 @@ remotebridges\
 rhino\
 saxon\
 setup_native\
-shell\
 soltools\
 stax\
 stlport\
