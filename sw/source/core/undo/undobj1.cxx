@@ -39,11 +39,11 @@
 #include <flyfrm.hxx>
 #include <UndoCore.hxx>
 #include <UndoDraw.hxx>
-#include <rolbck.hxx>       // fuer die Attribut History
+#include <rolbck.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 // OD 26.06.2003 #108784#
@@ -61,7 +61,7 @@ SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
 
 SwUndoFlyBase::~SwUndoFlyBase()
 {
-    if( bDelFmt )       // loeschen waehrend eines Undo's ??
+    if( bDelFmt )       // delete during an Undo?
         delete pFrmFmt;
 }
 
@@ -69,7 +69,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
 
-    // ins Array wieder eintragen
+    // add again into array
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Insert( pFrmFmt, rFlyFmts.Count() );
 
@@ -105,23 +105,23 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         aAnchor.SetAnchor( &aNewPos );
     }
 
-    pFrmFmt->SetFmtAttr( aAnchor );     // Anker neu setzen
+    pFrmFmt->SetFmtAttr( aAnchor );     // reset anchor
 
     if( RES_DRAWFRMFMT != pFrmFmt->Which() )
     {
-        // Content holen und -Attribut neu setzen
+        // get Content and reset ContentAttribute
         SwNodeIndex aIdx( pDoc->GetNodes() );
         RestoreSection( pDoc, &aIdx, SwFlyStartNode );
         pFrmFmt->SetFmtAttr( SwFmtCntnt( aIdx.GetNode().GetStartNode() ));
     }
 
-    //JP 18.12.98: Bug 60505 - InCntntAttribut erst setzen, wenn der Inhalt
-    //              vorhanden ist! Sonst wuerde das Layout den Fly vorher
-    //              formatieren, aber keine Inhalt finden; so geschene bei
-    //              Grafiken aus dem Internet
+    //JP 18.12.98: Bug 60505 - set InCntntAttribute not until there is content!
+    //              Otherwise the layout would format the Fly beforehand but
+    //              would not find content; this happend with graphics from the
+    //              internet
     if (FLY_AS_CHAR == nRndId)
     {
-        // es muss mindestens das Attribut im TextNode stehen
+        // there must be at least the attribute in a TextNode
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
         OSL_ENSURE( pCNd->IsTxtNode(), "no Text Node at position." );
         SwFmtFlyCnt aFmt( pFrmFmt );
@@ -163,10 +163,10 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
-    bDelFmt = sal_True;                     // im DTOR das Format loeschen
-    pFrmFmt->DelFrms();                 // Frms vernichten.
+    bDelFmt = sal_True;                 // delete Format in DTOR
+    pFrmFmt->DelFrms();                 // destroy Frms
 
-    // alle Uno-Objecte sollten sich jetzt abmelden
+    // all Uno objects should now log themselves off
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFrmFmt );
         pFrmFmt->ModifyNotification( &aMsgHint, &aMsgHint );
@@ -174,7 +174,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     if ( RES_DRAWFRMFMT != pFrmFmt->Which() )
     {
-        // gibt es ueberhaupt Inhalt, dann sicher diesen
+        // if there is content than save it
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
         OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
 
@@ -194,7 +194,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     const SwPosition* pPos = rAnchor.GetCntntAnchor();
-    // die Positionen im Nodes-Array haben sich verschoben
+    // The positions in Nodes array got shifted.
     nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
     if (FLY_AS_CHAR == nRndId)
     {
@@ -204,10 +204,10 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         OSL_ENSURE( pTxtNd, "Kein Textnode gefunden" );
         SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
             pTxtNd->GetTxtAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
-        // Attribut steht noch im TextNode, loeschen
+        // attribute is still in TextNode, delete
         if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFrmFmt )
         {
-            // Pointer auf 0, nicht loeschen
+            // Pointer to 0, do not delete
             ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
             SwIndex aIdx( pPos->nContent );
             pTxtNd->EraseText( aIdx, 1 );
@@ -227,10 +227,10 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         nNdPgPos = rAnchor.GetPageNum();
     }
 
-    pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // Anchor loeschen
+    pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // delete anchor
 
 
-    // aus dem Array austragen
+    // delete from array
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFrmFmt ));
 }
@@ -263,7 +263,7 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_Str
         }
         break;
     default:
-        OSL_FAIL( "Was denn fuer ein FlyFrame?" );
+        OSL_FAIL( "Which FlyFrame?" );
     }
 }
 
@@ -275,7 +275,7 @@ void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc(rContext.GetDoc());
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // kein Inhalt
+    if( rCntnt.GetCntntIdx() )  // no content
     {
         bool bRemoveIdx = true;
         if( mnCrsrSaveIndexPara > 0 )
@@ -310,7 +310,7 @@ void SwUndoInsLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    // erfrage und setze den Anker neu
+    // get anchor and reset it
     SwFmtAnchor aAnchor( pFrmFmt->GetAnchor() );
     if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
         (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
@@ -342,7 +342,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
         aAnchor.SetPageNum( pDoc->GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
     }
     else {
-        OSL_FAIL( "was fuer ein Anker ist es denn nun?" );
+        OSL_FAIL( "What kind of anchor is this?" );
     }
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
@@ -455,7 +455,7 @@ void SwUndoDelLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc(rContext.GetDoc());
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // kein Inhalt
+    if( rCntnt.GetCntntIdx() )  // no content
     {
         RemoveIdxFromSection(rDoc, rCntnt.GetCntntIdx()->GetIndex());
     }
@@ -466,7 +466,7 @@ void SwUndoDelLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoDelLayFmt::RedoForRollback()
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // kein Inhalt
+    if( rCntnt.GetCntntIdx() )  // no content
         RemoveIdxFromSection( *pFrmFmt->GetDoc(),
                                 rCntnt.GetCntntIdx()->GetIndex() );
 
@@ -545,7 +545,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
 
         if( !pNd )
         {
-            // ungueltige Position - setze auf 1. Seite
+            // invalid position - assign first page
             rAnchor.SetType( FLY_AT_PAGE );
             rAnchor.SetPageNum( 1 );
         }
@@ -558,7 +558,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    // ist das neue Format noch vorhanden ??
+    // Is the new Format still existent?
     if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmtPtr)pOldFmt ) )
     {
         if( bAnchorChgd )
@@ -587,11 +587,10 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
             const SwFmtAnchor& rOldAnch = pFrmFmt->GetAnchor();
             if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
             {
-                // Bei InCntnt's wird es spannend: Das TxtAttribut muss
-                // vernichtet werden. Leider reisst dies neben den Frms
-                // auch noch das Format mit in sein Grab. Um dass zu
-                // unterbinden loesen wir vorher die Verbindung zwischen
-                // Attribut und Format.
+                // With InCntnts it's tricky: the text attribute needs to be
+                // deleted. Unfortunately, this not only destroys the Frms but
+                // also the format. To prevent that, first detach the
+                // connection between attribute and format.
                 const SwPosition *pPos = rOldAnch.GetCntntAnchor();
                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                 OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
@@ -604,12 +603,12 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
                             "Wrong TxtFlyCnt-Hint." );
                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-                // Die Verbindung ist geloest, jetzt muss noch das Attribut
-                // vernichtet werden.
+                // Connection is now detached, therefore the attribute can be
+                // deleted
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
 
-            // Anker umsetzen
+            // reposition anchor
             SwFmtAnchor aNewAnchor( (RndStdIds) nOldAnchorTyp );
             GetAnchor( aNewAnchor, nOldNode, nOldCntnt );
             pFrmFmt->SetFmtAttr( aNewAnchor );
@@ -632,7 +631,7 @@ void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    // ist das neue Format noch vorhanden ??
+    // Is the new Format still existent?
     if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmtPtr)pNewFmt ) )
     {
 
@@ -655,11 +654,11 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 {
     if( pItem && pItem != GetDfltAttr( nWhich ) )
     {
-        // Sonderbehandlung fuer den Anchor
+        // Special treatment for this anchor
         if( RES_ANCHOR == nWhich )
         {
-            // nur den 1. Ankerwechsel vermerken
-            OSL_ENSURE( !bAnchorChgd, "mehrfacher Ankerwechsel nicht erlaubt!" );
+            // only keep the first change
+            OSL_ENSURE( !bAnchorChgd, "multiple changes of an anchor are not allowed!" );
 
             bAnchorChgd = sal_True;
 
