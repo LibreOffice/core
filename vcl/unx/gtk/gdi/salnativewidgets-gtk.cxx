@@ -1183,8 +1183,31 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
 
     NWEnsureGTKButton( m_nXScreen );
     NWEnsureGTKToolbar( m_nXScreen );
-    NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
-    NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
+
+    // Flat toolbutton has a bit bigger variety of states than normal buttons, so handle it differently
+    if(GTK_IS_TOGGLE_BUTTON(button))
+    {
+       if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
+           shadowType=GTK_SHADOW_IN;
+       else
+           shadowType=GTK_SHADOW_OUT;
+
+       if(nState & CTRL_STATE_ROLLOVER)
+           stateType=GTK_STATE_PRELIGHT;
+       else
+           stateType=GTK_STATE_NORMAL;
+
+       if(nState & CTRL_STATE_PRESSED)
+       {
+           stateType=GTK_STATE_ACTIVE;
+           shadowType=GTK_SHADOW_IN;
+       }
+    }
+    else
+    {
+        NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
+        NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
+    }
 
     x = rControlRectangle.Left();
     y = rControlRectangle.Top();
@@ -1266,8 +1289,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
         /* don't draw "button", because it can be a tool_button, and
          * it causes some weird things, so, the default button is
          * just fine */
-        gtk_paint_box( gWidgetData[m_nXScreen].gBtnWidget->style, gdkDrawable, stateType, shadowType,
-                       &clipRect, gWidgetData[m_nXScreen].gBtnWidget, "button", xi, yi, wi, hi );
+        if(GTK_IS_BUTTON(button))
+        {
+            gtk_paint_box( button->style, gdkDrawable, stateType, shadowType,
+                               &clipRect, button, "button", xi, yi, wi, hi );
+        }
     }
 
     return( sal_True );
@@ -2617,12 +2643,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
             || (nState & CTRL_STATE_ROLLOVER);
         if( aValue.getTristateVal() == BUTTONVALUE_ON )
         {
-                if(!(nState & CTRL_STATE_ROLLOVER))
-            nState |= CTRL_STATE_PRESSED;
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pButtonWidget),TRUE);
             bPaintButton = true;
         }
         else
-            stateType = GTK_STATE_PRELIGHT; // only for bPaintButton = true, in which case always rollver is meant
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pButtonWidget),FALSE);
 
         NWSetWidgetState( pButtonWidget, nState, stateType );
         gtk_widget_ensure_style( pButtonWidget );
@@ -4020,7 +4045,7 @@ static void NWEnsureGTKToolbar( SalX11Screen nScreen )
     {
         gWidgetData[nScreen].gToolbarWidget = gtk_toolbar_new();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarWidget, nScreen );
-        gWidgetData[nScreen].gToolbarButtonWidget = GTK_WIDGET(gtk_button_new());
+        gWidgetData[nScreen].gToolbarButtonWidget = GTK_WIDGET(gtk_toggle_button_new());
         gWidgetData[nScreen].gSeparator = GTK_WIDGET(gtk_separator_tool_item_new());
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gSeparator, nScreen );
 
