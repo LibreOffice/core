@@ -33,7 +33,7 @@
 #include <editeng/lrspitem.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -63,7 +63,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     nSttSet( ULONG_MAX ), pOldNumRule( 0 ),
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
-    // keine Selektion !!
+    // No selection!
     nEndNode = 0, nEndCntnt = USHRT_MAX;
     nSttNode = rPos.nNode.GetIndex();
     nSttCntnt = rPos.nContent.GetIndex();
@@ -102,9 +102,8 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( nLRSavePos )
         {
-            // sofort Updaten, damit eventuell "alte" LRSpaces wieder
-            // gueltig werden.
-            // !!! Dafuer suche aber erstmal den richtigen NumRule - Namen!
+            // Update immediately so that potential "old" LRSpaces will be valid again.
+            // For that search firstly the correct NumRule names!
             if( !pNd && nSttNode )
                 pNd = rDoc.GetNodes()[ nSttNode ]->GetTxtNode();
 
@@ -233,33 +232,29 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, sal_Bool )
     }
 }
 
-
-/*  */
-
-
 SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, sal_Bool bIsOutlMv )
     : SwUndo( bIsOutlMv ? UNDO_OUTLINE_UD : UNDO_MOVENUM ),
     SwUndRng( rPam ),
     nNewStt( 0 ), nOffset( nOff )
 {
-    // nOffset: nach unten  =>  1
-    //          nach oben   => -1
+    // nOffset: Down    =>  1
+    //          Up      => -1
 }
 
 void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     sal_uLong nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
-    if( nEndNode || USHRT_MAX != nEndCntnt )        // Bereich ?
+    if( nEndNode || USHRT_MAX != nEndCntnt )        // section?
     {
-        if( nNewStt < nSttNode )        // nach vorne verschoben
+        if( nNewStt < nSttNode )        // moved forwards
             nEndNode = nEndNode - ( nSttNode - nNewStt );
         else
             nEndNode = nEndNode + ( nNewStt - nSttNode );
     }
     nSttNode = nNewStt;
 
-//JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
+// We want to keep the Bookmarks/Directories, don't we?
 //  SetPaM( rUndoIter );
 //  RemoveIdxFromRange( *rUndoIter.pAktPam, sal_True );
 
@@ -272,7 +267,7 @@ void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoMoveNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-//JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
+// We want to keep the Bookmarks/Directories, don't we?
 //  SetPaM( rUndoIter );
 //  RemoveIdxFromRange( *rUndoIter.pAktPam, sal_True );
 
