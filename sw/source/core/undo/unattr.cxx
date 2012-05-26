@@ -49,7 +49,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -322,7 +322,7 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
     return 0 != m_pFmt;
 }
 
-// prueft, ob es noch im Doc ist!
+// Check if it is still in Doc
 SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 {
     return m_pFmt && IsFmtInDoc( &rDoc ) ? m_pFmt : 0;
@@ -365,21 +365,19 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
             }
         }
         break;
-
 //  case RES_CHRFMT:
 //  case RES_FRMFMT:
 
     case RES_FLYFRMFMT:
         {
-            // erstal pruefen, ob der Cursor ueberhaupt in einem fliegenden
-            // Rahmen steht. Der Weg ist: suche in allen FlyFrmFormaten
-            // nach dem FlyCntnt-Attribut und teste ob der Cursor in der
-            // entsprechenden Section liegt.
+            // Check if the cursor is in a flying frame
+            // Steps: search in all FlyFrmFormats for the FlyCntnt attribute
+            // and validate if the cursor is in the respective section
             SwFrmFmt *const pFly =
                 rContext.GetRepeatPaM().GetNode()->GetFlyFmt();
             if( pFly )
             {
-                // Bug 43672: es duerfen nicht alle Attribute gesetzt werden!
+                // Bug 43672: do not set all attributes!
                 if (SFX_ITEM_SET ==
                         m_pFmt->GetAttrSet().GetItemState( RES_CNTNT ))
                 {
@@ -423,7 +421,7 @@ void SwUndoFmtAttr::PutAttr( const SfxPoolItem& rItem )
 
 void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
 {
-    // das Format ist gueltig, sonst wuerde man gar bis hier kommen
+    // Format is valid, otherwise you would not reach this point here
     if( bSvDrwPt )
     {
         if ( RES_DRAWFRMFMT == m_pFmt->Which() )
@@ -512,16 +510,16 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     {
         if( RES_DRAWFRMFMT == pFrmFmt->Which() )
         {
-            // den alten zwischengespeicherten Wert herausholen.
+            // get the old cached value
             const SwFmtFrmSize& rOldSize = static_cast<const SwFmtFrmSize&>(
                     m_pOldSet->Get( RES_FRM_SIZE ) );
             aDrawSavePt.X() = rOldSize.GetWidth();
             aDrawSavePt.Y() = rOldSize.GetHeight();
             m_pOldSet->ClearItem( RES_FRM_SIZE );
 
-            // den akt. wieder zwischenspeichern
+            // write the current value into cache
             aDrawOldPt = pFrmFmt->FindSdrObject()->GetRelativePos();
-//JP 08.10.97: ist laut AMA/MA nicht mehr noetig
+// According to AMA/MA not needed anymore
 //          pCont->DisconnectFromLayout();
         }
         else
@@ -535,10 +533,10 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     // Consider case, that as-character anchored object has moved its anchor position.
     if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
     {
-        //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
-        //werden. Leider reisst dies neben den Frms auch noch das Format mit
-        //in sein Grab. Um dass zu unterbinden loesen wir vorher die
-        //Verbindung zwischen Attribut und Format.
+        // With InCntnts it's tricky: the text attribute needs to be deleted.
+        // Unfortunately, this not only destroys the Frms but also the format.
+        // To prevent that, first detach the connection between attribute and
+        // format.
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
@@ -551,8 +549,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
                     "Wrong TxtFlyCnt-Hint." );
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-        //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
-        //werden.
+        // Connection is now detached, therefore the attribute can be deleted
         pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
     }
 
@@ -576,10 +573,9 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     {
         SwDrawContact *pCont =
             static_cast<SwDrawContact*>(pFrmFmt->FindContactObj());
-        // das Draw-Model hat auch noch ein Undo-Object fuer die
-        // richtige Position vorbereitet; dieses ist aber relativ.
-        // Darum verhinder hier, das durch setzen des Ankers das
-        // Contact-Object seine Position aendert.
+        // The Draw model also prepared an Undo object for its right positioning
+        // which unfortunately is relative. Therefore block here a position
+        // change of the Contact object by setting the anchor.
 //JP 08.10.97: ist laut AMA/MA nicht mehr noetig
 //          pCont->ConnectToLayout();
         SdrObject* pObj = pCont->GetMaster();
@@ -591,7 +587,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         }
         pObj->SetRelativePos( aDrawSavePt );
 
-        // den alten Wert wieder zwischenspeichern.
+        // cache the old value again
         m_pOldSet->Put(
             SwFmtFrmSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
     }
@@ -740,7 +736,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
                     else
                         nCnt = 0;
                 }
-                // gefunden, also loeschen
+                // found one, thus delete it
                 if( nCnt-- )
                 {
                     rDoc.DeleteTOXMark( aArr[ nCnt ] );
@@ -855,7 +851,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         else
         {
-            // alle Format-Redlines entfernen, werden ggfs. neu gesetzt
+            // remove all format redlines, will be recreated if needed
             SetPaM(aPam);
             pDoc->DeleteRedline(aPam, false, nsRedlineType_t::REDLINE_FORMAT);
             if ( m_pRedlineSaveData.get() )
@@ -990,7 +986,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     pTxtNd->GetTxtAttrForCharAt(nCntnt, RES_TXTATR_FTN);
                 if( pTxtHt )
                 {
-                    // ok, dann hole mal die Werte
+                    // ok, so get values
                     SwTxtFtn* pFtn = static_cast<SwTxtFtn*>(pTxtHt);
                     RemoveIdxFromSection( rDoc, pFtn->GetStartNode()->GetIndex() );
                     return ;
