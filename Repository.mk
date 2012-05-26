@@ -561,6 +561,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     streams \
     textinstream \
     textoutstream \
+    uuresolver \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \

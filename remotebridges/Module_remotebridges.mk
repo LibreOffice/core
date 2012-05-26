@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,33 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
+$(eval $(call gb_Module_Module,remotebridges))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-	$(if $(filter IOS,$(OS)),, \
-        io/source/acceptor/acceptor \
-        io/source/connector/connector) \
-    binaryurp/source/binaryurp \
-    stoc/util/bootstrap \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    io/source/stm/streams \
-    io/source/TextInputStream/textinstream \
-    io/source/TextOutputStream/textoutstream \
-    remotebridges/source/unourl_resolver/uuresolver \
+$(eval $(call gb_Module_add_targets,remotebridges,\
+	InternalUnoApi_uuresolver \
+	Library_uuresolver \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    javaunohelper/util/juh \
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-))
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set shiftwidth=4 tabstop=4 noexpandtab:
