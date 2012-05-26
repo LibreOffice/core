@@ -73,15 +73,12 @@ endef
 
 # ScpPreprocessTarget class
 
-gb_ScpPreprocessTarget_TARGET := $(call gb_Executable_get_target_for_build,cpp.lcc)
-gb_ScpPreprocessTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpPreprocessTarget_TARGET)
-
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
 
 define gb_ScpPreprocessTarget__command
 $(call gb_Output_announce,$(2),$(true),SPP,2)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpPreprocessTarget_COMMAND) \
+	$(call gb_Helper_execute,cpp.lcc) \
 		-+ -P \
 		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
