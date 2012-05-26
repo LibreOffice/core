@@ -396,6 +396,7 @@ gb_Library_PLAINLIBS_NONE += \
 	imm32\
 	kernel32 \
 	jawt \
+	ldap \
 	libcmt \
 	libcmtd \
 	mpr \
@@ -406,7 +407,9 @@ gb_Library_PLAINLIBS_NONE += \
 	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
+	openssl \
 	propsys \
+	secur32 \
 	shell32 \
 	shlwapi \
 	urlmon \
