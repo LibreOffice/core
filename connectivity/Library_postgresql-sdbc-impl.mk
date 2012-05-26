@@ -58,6 +58,7 @@ include $(OUTDIR_FOR_BUILD)/inc/postgresql/libpq-flags.mk
 $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\
 	$(if $(filter-out MACOSX,$(OS)),-Wl,--as-needed) \
 	$(LIBPQ_DEP_LIBS) \
+	$(if $(filter-out MACOSX,$(OS)),-ldl) \
 	$(if $(filter-out MACOSX,$(OS)),-Wl,--no-as-needed) \
 ))
 
