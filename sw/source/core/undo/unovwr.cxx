@@ -39,7 +39,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IShellCursorSupplier.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -78,11 +78,11 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     nSttCntnt = rPos.nContent.GetIndex();
 
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
 
     bInsChar = sal_True;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
-    if( nSttCntnt < nTxtNdLen )     // kein reines Einfuegen ?
+    if( nSttCntnt < nTxtNdLen )     // no pure insert?
     {
         aDelStr.Insert( pTxtNd->GetTxt().GetChar( nSttCntnt ) );
         if( !pHistory )
@@ -119,14 +119,14 @@ SwUndoOverwrite::~SwUndoOverwrite()
 sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
 {
-///  ?? was ist mit nur eingefuegten Charaktern ???
+// What is with only inserted characters?
 
-    // es kann nur das Loeschen von einzelnen char's zusammengefasst werden
+    // Only deletion of single chars can be combined.
     if( rPos.nNode != nSttNode || !aInsStr.Len()  ||
         ( !bGroup && aInsStr.Len() != 1 ))
         return sal_False;
 
-    // ist der Node ueberhaupt ein TextNode?
+    // Is the node a TextNode at all?
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
         ( pDelTxtNd->GetTxt().Len() != rPos.nContent.GetIndex() &&
@@ -135,7 +135,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
     CharClass& rCC = GetAppCharClass();
 
-    // befrage das einzufuegende Charakter
+    // ask the char that should be inserted
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( String( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
@@ -160,8 +160,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         pDoc->DeleteRedline( aPam, false, USHRT_MAX );
     }
 
-    // Ok, die beiden 'Overwrites' koennen zusammen gefasst werden, also
-    // 'verschiebe' das enstprechende Zeichen
+    // both 'overwrites' can be combined so 'move' the corresponding character
     if( !bInsChar )
     {
         if( rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().Len() )
@@ -203,7 +202,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
-    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
     rIdx.Assign( pTxtNd, nSttCntnt );
 
@@ -215,8 +214,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    // wurde nicht nur ueberschieben sondern auch geinsertet, so loesche
-    // den Ueberhang
+    // If there was not only a overwrite but also an insert, delete the surplus
     if( aInsStr.Len() > aDelStr.Len() )
     {
         rIdx += aDelStr.Len();
@@ -235,7 +233,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         rIdx++;
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
         {
-            // einzeln, damit die Attribute stehen bleiben !!!
+            // do it individually, to keep the attributes!
             *pTmpStr = aDelStr.GetChar( n );
             pTxtNd->InsertText( aTmpStr, rIdx /*???, SETATTR_NOTXTATRCHR*/ );
             rIdx -= 2;
@@ -304,7 +302,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
-        // einzeln, damit die Attribute stehen bleiben !!!
+        // do it individually, to keep the attributes!
         pTxtNd->InsertText( aInsStr.GetChar( n ), rIdx,
                 IDocumentContentOperations::INS_EMPTYEXPAND );
         if( n < aDelStr.Len() )
@@ -316,7 +314,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
-    // alte Anfangs-Position vom UndoNodes-Array zurueckholen
+    // get back old start position from UndoNodes array
     if( pHistory )
         pHistory->SetTmpEnd( pHistory->Count() );
     if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
