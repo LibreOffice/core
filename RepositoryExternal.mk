@@ -1281,7 +1281,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	pq \
+	$(if $(filter MSC,$(COM)),lib)pq \
 )
 
 ifeq ($(GUI)$(COM),WNTMSC)
@@ -1296,7 +1296,7 @@ endif
 endef
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	pq \
+	$(if $(filter MSC,$(COM)),lib)pq \
 ))
 
 endif # SYSTEM_POSTGRESQL
