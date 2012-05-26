@@ -83,6 +83,7 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/cctrl/checklistmenu.src \
     sc/source/ui/navipi/navipi.src \
     sc/source/ui/docshell/tpstat.src \
+    sc/source/ui/optdlg/calcoptionsdlg.src \
     sc/source/ui/pagedlg/pagedlg.src \
     sc/source/ui/pagedlg/tphf.src \
     sc/source/ui/pagedlg/hfedtdlg.src \

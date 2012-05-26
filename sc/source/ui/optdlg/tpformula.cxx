@@ -41,6 +41,8 @@
 #include "optdlg.hrc"
 #include "scresid.hxx"
 #include "formula/grammar.hxx"
+#include "calcoptionsdlg.hxx"
+#include "vcl/msgbox.hxx"
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -77,6 +79,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
 
     Link aLink = LINK( this, ScTpFormulaOptions, ButtonHdl );
     maBtnSepReset.SetClickHdl(aLink);
+    maBtnCustomCalcDetails.SetClickHdl(aLink);
 
     aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
     maEdSepFuncArg.SetModifyHdl(aLink);
@@ -122,6 +125,15 @@ void ScTpFormulaOptions::OnFocusSeparatorInput(Edit* pEdit)
     Selection aSel(0, nLen);
     pEdit->SetSelection(aSel);
     maOldSepValue = pEdit->GetText();
+}
+
+void ScTpFormulaOptions::LaunchCustomCalcSettings()
+{
+    ScCalcOptionsDialog aDlg(this);
+    if (aDlg.Execute() == RET_OK)
+    {
+
+    }
 }
 
 bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
@@ -177,6 +189,8 @@ IMPL_LINK( ScTpFormulaOptions, ButtonHdl, PushButton*, pBtn )
 {
     if (pBtn == &maBtnSepReset)
         ResetSeparators();
+    else if (pBtn == &maBtnCustomCalcDetails)
+        LaunchCustomCalcSettings();
 
     return 0;
 }

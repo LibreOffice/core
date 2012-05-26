@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/miscdlgs/tabbgcolordlg \
     sc/source/ui/miscdlgs/textdlgs \
     sc/source/ui/namedlg/namepast \
+    sc/source/ui/optdlg/calcoptionsdlg \
     sc/source/ui/optdlg/opredlin \
     sc/source/ui/optdlg/tpcalc \
     sc/source/ui/optdlg/tpcompatibility \

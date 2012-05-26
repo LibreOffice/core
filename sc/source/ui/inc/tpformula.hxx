@@ -52,6 +52,7 @@ private:
 
     void ResetSeparators();
     void OnFocusSeparatorInput(Edit* pEdit);
+    void LaunchCustomCalcSettings();
 
     bool IsValidSeparator(const ::rtl::OUString& rSep) const;
     bool IsValidSeparatorSet() const;
