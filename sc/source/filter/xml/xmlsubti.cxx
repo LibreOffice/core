@@ -40,9 +40,6 @@
 #include "XMLStylesImportHelper.hxx"
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
-#include "convuno.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
 #include "tokenarray.hxx"
 #include <svx/svdpage.hxx>
 
