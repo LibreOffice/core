@@ -36,7 +36,7 @@ $(climaker_DIR)/cli_types_bridgetest.dll : $(OUTDIR)/bin/bridgetest.rdb \
 		$(call gb_Executable_get_target_for_build,climaker) | $(climaker_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_Helper_execute,climaker \
+	$(call gb_Helper_execute,climaker) \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ \
 		-X $(OUTDIR)/bin/types.rdb \

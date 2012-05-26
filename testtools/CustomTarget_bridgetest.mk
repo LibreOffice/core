@@ -43,14 +43,12 @@ bridgetest_TARGET := $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) \
 ifneq ($(SOLAR_JAVA),)
 bridgetest_TARGET := $(bridgetest_TARGET) \
 	$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) \
-	$(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX)
+	$(workdir_SERVER)/bridgetest_inprocess_java$(BATCH_SUFFIX)
 endif
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest) : $(bridgetest_TARGET)
 
-# which other prerequisites do we need here?
-$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
-	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "$(UNO_EXE)" \
@@ -62,26 +60,20 @@ $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) : \
 		"--singleaccept" > $@)
 	$(GIVE_EXEC_RIGHTS) $@
 
-ifneq ($(SOLAR_JAVA),)
 
-# how to do it more elegantly?
-MY_CLASSPATH := $(OUTDIR)/bin/ridl.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/java_uno.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/jurt.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/juh.jar
+testtools_MY_CLASSPATH := $(OUTDIR)/bin/ridl.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/java_uno.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/jurt.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/juh.jar
 
-# which other prerequisites do we need here?
-$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) : \
-	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "java" \
-		"-classpath $(MY_CLASSPATH)$(gb_CLASSPATHSEP)$(OUTDIR)/bin/testComponent.jar" \
+		"-classpath $(testtools_MY_CLASSPATH)$(gb_CLASSPATHSEP)$(OUTDIR)/bin/testComponent.jar" \
 		"com.sun.star.comp.bridge.TestComponentMain" \
 		\""uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test"\" \
 		"singleaccept"> $@)
 	$(GIVE_EXEC_RIGHTS) $@
 
-# which other prerequisites do we need here?
-$(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX) : \
-	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+$(workdir_SERVER)/bridgetest_inprocess_java$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "JAVA_HOME=$(JAVA_HOME)" \
@@ -97,11 +89,8 @@ $(workdir_SERVER)/bridgetest_inprocess_java(BATCH_SUFFIX) : \
 		"-- com.sun.star.test.bridge.JavaTestObject noCurrentContext" \
 		> $@)
 	$(GIVE_EXEC_RIGHTS) $@
-endif
 
-# which other prerequisites do we need here?
-$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) : \
-	$(SRCDIR)/testtools/source/bridgetest/*.component | $(workdir_SERVER)/.dir
+$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "$(UNO_EXE)" \
