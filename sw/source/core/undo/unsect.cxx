@@ -33,7 +33,7 @@
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -50,9 +50,9 @@
 
 SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
-    // Attribute des Formate sichern (Spalten, Farbe, ... )
-    // Cntnt- und Protect- Items interessieren nicht (stehen schon in der
-    // Section), muessen also entfernen werden
+    // save attributes of the format (columns, color, ...)
+    // Cntnt and Protect items are not interesting since they are already
+    // stored in Section, thus delete them.
     SfxItemSet* pAttr = 0;
     if( rSect.GetFmt() )
     {
@@ -133,18 +133,18 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         rDoc.DeleteRedline( *pNd, true, USHRT_MAX );
 
-    // lag keine Selektion vor ??
+    // no selection?
     SwNodeIndex aIdx( *pNd );
     if( ( !nEndNode && STRING_MAXLEN == nEndCntnt ) ||
         ( nSttNode == nEndNode && nSttCntnt == nEndCntnt ))
-        // loesche einfach alle Nodes
+        // delete simply all nodes
         rDoc.GetNodes().Delete( aIdx, pNd->EndOfSectionIndex() -
                                         aIdx.GetIndex() );
     else
-        // einfach das Format loeschen, der Rest erfolgt automatisch
+        // just delete format, rest happens automatically
         rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 
-    // muessen wir noch zusammenfassen ?
+    // do we need to consolidate?
     if (m_bSplitAtStart)
     {
         Join( rDoc, nSttNode );
@@ -210,12 +210,12 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pUpdateTOX )
     {
-        // Formatierung anstossen
+        // initiate formatting
         SwEditShell* pESh = rDoc.GetEditShell();
         if( pESh )
             pESh->CalcLayout();
 
-        // Seitennummern eintragen
+        // insert page numbers
         ((SwTOXBaseSection*)pUpdateTOX)->UpdatePageNum();
     }
 }
@@ -239,7 +239,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
-    OSL_ENSURE( pTxtNd, "wo ist mein TextNode?" );
+    OSL_ENSURE( pTxtNd, "Where is my TextNode?" );
 
     {
         RemoveIdxRel( nNode + 1, SwPosition( aIdx,
@@ -388,8 +388,8 @@ void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
-    // einfach das Format loeschen, der Rest erfolgt automatisch
+    OSL_ENSURE( pNd, "Where is my SectionNode?" );
+    // just delete format, rest happens automatically
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
 
@@ -444,7 +444,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    OSL_ENSURE( pSectNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pSectNd, "Where is my SectionNode?" );
 
     SwSection& rNdSect = pSectNd->GetSection();
     SwFmt* pFmt = rNdSect.GetFmt();
@@ -452,7 +452,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SfxItemSet* pCur = ::lcl_GetAttrSet( rNdSect );
     if (m_pAttrSet.get())
     {
-        // das Content- und Protect-Item muss bestehen bleiben
+        // The Content and Protect items must persist
         const SfxPoolItem* pItem;
         m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, sal_True, &pItem ))
@@ -465,7 +465,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        // dann muessen die alten entfernt werden
+        // than the old ones need to be deleted
         pFmt->ResetFmtAttr( RES_FRMATR_BEGIN, RES_BREAK );
         pFmt->ResetFmtAttr( RES_HEADER, RES_OPAQUE );
         pFmt->ResetFmtAttr( RES_SURROUND, RES_FRMATR_END-1 );
