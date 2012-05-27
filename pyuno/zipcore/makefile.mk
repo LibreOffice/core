@@ -70,14 +70,14 @@ APP1OBJS=$(OBJFILES) $(SOLARLIBDIR)/pathutils-obj.obj
 APP1STDLIBS=
 APP1RPATH=OOO
 OBJFILES=$(OBJ)/python.obj
-.ENDIF
+.ENDIF # WNT
 
 
 .INCLUDE: target.mk
 
 ALLTAR: \
     $(BIN)/$(PYDIRNAME).zip
-.ENDIF
+.ENDIF #!MACOSX
 
 .IF "$(GUI)" == "UNX"
 ALLTAR : $(BIN)/python.sh
@@ -89,7 +89,7 @@ $(BIN)/python.sh : python.sh
 	$(COMMAND_ECHO)sed -e 's/%%PYVERSION%%/$(eq,$(OS),MACOSX $(PYMAJOR).$(PYMINOR) $(PYVERSION))/g' -e 's/%%OOO_LIBRARY_PATH_VAR%%/$(OOO_LIBRARY_PATH_VAR)/g' \
 		$(eq,$(OS),MACOSX $(STRIPNONMAC) $(STRIPMAC)) < $? > $@
 	@chmod +x $@
-.ENDIF
+.ENDIF # UNX
 
 $(OBJ)/python.obj: $(OUT)/inc/pyversion.hxx
 
@@ -99,6 +99,7 @@ $(OUT)/inc/pyversion.hxx: pyversion.inc
 $(BIN)/$(PYDIRNAME).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "AIX"
+	echo "am in $@"
 	cd $(DESTROOT) && find . -name '*$(DLLPOST)' | xargs strip
 .ENDIF
 .ENDIF
@@ -106,30 +107,33 @@ $(BIN)/$(PYDIRNAME).zip : $(FILES)
 	cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
 
 $(DESTROOT)/lib/% : $(SOLARLIBDIR)/python/%
+	echo "am in $@"
 	-$(MKDIRHIER) $(@:d)
 	-rm -f $@
 	cat $< > $@
 
 .IF "$(GUI)"== "UNX"
 $(BIN)/python$(EXECPOST).bin : $(SOLARBINDIR)/python$(EXECPOST)
+	echo "am in $@"
 	-$(MKDIRHIER) $(@:d)
 	-rm -f $@
 	cat $< > $@
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "AIX"
 	strip $@
-.ENDIF
+.ENDIF #  "$(OS)" != "MACOSX" && "$(OS)" != "AIX"
 	chmod +x $@
-.ELSE
+.ELSE # UNX
 .IF "$(COM)" == "GCC"
 $(DESTROOT)/bin/python.bin : $(SOLARBINDIR)/python$(EXECPOST)
-.ELSE
+.ELSE # "$(COM)" == "GCC"
 $(DESTROOT)/bin/python$(EXECPOST) : $(SOLARBINDIR)/python$(EXECPOST)
-.ENDIF
+.ENDIF 
+	echo "am in $@"
 	-$(MKDIRHIER) $(@:d)
 	-rm -f $@
 	cat $< > $@
-.ENDIF
+.ENDIF # UNX
 
-.ENDIF
+.ENDIF # SYSTEM_PYTHON
 .ELSE
 .ENDIF # L10N_framework
