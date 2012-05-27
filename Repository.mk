@@ -440,6 +440,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     mozbootstrap \
     officebean \
     package2 \
+    pyuno \
+    pyuno_wrapper \
     recentfile \
     scriptframe \
     sdbc2 \
@@ -547,6 +549,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
+    pythonloader \
     postgresql-sdbc \
     postgresql-sdbc-impl \
     simplecanvas \
