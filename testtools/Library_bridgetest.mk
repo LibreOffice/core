@@ -28,11 +28,6 @@ $(eval $(call gb_Library_Library,testtools_bridgetest))
 
 $(eval $(call gb_Library_set_componentfile,testtools_bridgetest,testtools/source/bridgetest/bridgetest))
 
-$(eval $(call gb_Executable_set_include,testtools_bridgetest,\
-    -I$(SRCDIR)/testtools/source/bridgetest \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_internal_api,testtools_bridgetest,\
     bridgetest \
 ))
