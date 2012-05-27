@@ -42,6 +42,15 @@ gb_Library_FILENAMES := $(patsubst reg:libuno_reg%,reg:libreg%,$(gb_Library_FILE
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
+
+ifeq ($(OS),MACOSX)
+# libpyuno_wrapper.so => pyuno.dyn
+gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.so,pyuno_wrapper:pyuno.dyn,$(gb_Library_FILENAMES))
+else
+# libpyuno_wrapper.so => pyuno.so
+gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.so,pyuno_wrapper:pyuno.so,$(gb_Library_FILENAMES))
+endif
+
 ifneq ($(OS),ANDROID)
 gb_Library_FILENAMES := $(patsubst unobootstrapprotector:libuno%,unobootstrapprotector:uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst unoexceptionprotector:libuno%,unoexceptionprotector:uno%,$(gb_Library_FILENAMES))
@@ -57,6 +66,9 @@ gb_Library_DLLFILENAMES := $(patsubst log_uno:log_uno%,log_uno:log_uno_uno%,$(gb
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst unsafe_uno:unsafe_uno%,unsafe_uno:unsafe_uno_uno%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
+
+# libpyuno_wrapper.dll => pyuno.pyd
+gb_Library_DLLFILENAMES := $(patsubst pyuno:pyuno.dll,pyuno:pyuno.pyd,$(gb_Library_DLLFILENAMES))
 
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))

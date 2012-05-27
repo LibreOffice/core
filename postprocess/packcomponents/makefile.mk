@@ -203,7 +203,7 @@ my_components += \
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 
 my_components += \
-    pythonloader \
+    component/pyuno/source/loader/pythonloader \
 
 .ENDIF
 
