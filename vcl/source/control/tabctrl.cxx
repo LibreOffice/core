@@ -749,7 +749,7 @@ void TabControl::ImplShowFocus()
 
 // -----------------------------------------------------------------------
 
-void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool bIsCurrentItem )
+void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
 {
     if ( pItem->maRect.IsEmpty() )
         return;
