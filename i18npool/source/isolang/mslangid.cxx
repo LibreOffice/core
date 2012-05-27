@@ -94,10 +94,7 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
     switch (simplifySystemLanguages( nLang))
     {
         case LANGUAGE_SYSTEM :
-            if (nConfiguredSystemLanguage == LANGUAGE_SYSTEM)
-                nLang = getSystemLanguage();
-            else
-                nLang = nConfiguredSystemLanguage;
+            nLang = getSystemLanguage();
             break;
         case LANGUAGE_NONE :
             if (nConfiguredSystemUILanguage == LANGUAGE_SYSTEM)
