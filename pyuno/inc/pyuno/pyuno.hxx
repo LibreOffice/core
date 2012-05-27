@@ -27,10 +27,10 @@
    to do the necessary conversions.
 */
 
-#ifdef WIN32
-#define PY_DLLEXPORT __declspec(dllexport)
+#if defined LO_DLLIMPLEMENTATION_PYUNO
+#define LO_DLLPUBLIC_PYUNO SAL_DLLPUBLIC_EXPORT
 #else
-#define PY_DLLEXPORT
+#define LO_DLLPUBLIC_PYUNO SAL_DLLPUBLIC_IMPORT
 #endif
 
 /** function called by the python runtime to initialize the
@@ -39,7 +39,8 @@
     preconditions: python has been initialized before and
                    the global interpreter lock is held
 */
-extern "C" PY_DLLEXPORT
+
+extern "C" LO_DLLPUBLIC_PYUNO
 #if PY_MAJOR_VERSION >= 3
     PyObject* SAL_CALL PyInit_pyuno();
 #else
@@ -136,7 +137,7 @@ enum ConversionMode { ACCEPT_UNO_ANY, REJECT_UNO_ANY };
     make sure to fulfill all preconditions mentioned for the specific methods.
 */
 
-class PY_DLLEXPORT Runtime
+class LO_DLLPUBLIC_PYUNO Runtime
 {
     RuntimeImpl *impl;
 public:
@@ -235,7 +236,7 @@ public:
           e.g. when you would leave them away, dtors of potential pyrefs
           may be called after the thread has detached again.
  */
-class PY_DLLEXPORT PyThreadAttach
+class LO_DLLPUBLIC_PYUNO PyThreadAttach
 {
     PyThreadState *tstate;
     PyThreadAttach ( const PyThreadAttach & ); // not implemented
@@ -262,7 +263,7 @@ public:
 
     @see PyThreadAttach
 */
-class PY_DLLEXPORT PyThreadDetach
+class LO_DLLPUBLIC_PYUNO PyThreadDetach
 {
     PyThreadState *tstate;
     PyThreadDetach ( const PyThreadDetach & ); // not implemented
