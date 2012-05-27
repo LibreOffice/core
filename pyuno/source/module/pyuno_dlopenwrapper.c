@@ -84,14 +84,14 @@ static void * load(void * address, char const * symbol) {
 
 #if PY_MAJOR_VERSION >= 3
 
-PyObject * PyInit_pyuno(void) {
+SAL_DLLPUBLIC_EXPORT PyObject * PyInit_pyuno(void) {
     return
         ((PyObject * (*)(void)) load((void *) &PyInit_pyuno, "PyInit_pyuno"))();
 }
 
 #else
 
-void initpyuno(void) {
+SAL_DLLPUBLIC_EXPORT void initpyuno(void) {
     ((void (*)(void)) load((void *) &initpyuno, "initpyuno"))();
 }
 
