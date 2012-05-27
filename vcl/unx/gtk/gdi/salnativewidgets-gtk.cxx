@@ -614,7 +614,8 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
                 (   (nPart == PART_TRACK_HORZ_AREA)
                 ||  (nPart == PART_TRACK_VERT_AREA)
                 )
-        )
+        ) ||
+        (nType == CTRL_WINDOW_BACKGROUND)
         )
         return( sal_True );
     return( sal_False );
@@ -898,6 +899,10 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     {
         returnVal = NWPaintGTKSlider( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
+    else if( nType == CTRL_WINDOW_BACKGROUND )
+    {
+        returnVal = NWPaintGTKWindowBackground( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+    }
 
     if( pixmap )
     {
@@ -1132,6 +1137,29 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 /************************************************************************
  * Individual control drawing functions
  ************************************************************************/
+sal_Bool GtkSalGraphics::NWPaintGTKWindowBackground(
+            GdkDrawable* gdkDrawable,
+            ControlType, ControlPart,
+            const Rectangle& rControlRectangle,
+            const clipList& rClipList,
+            ControlState nState, const ImplControlValue&,
+            const OUString& )
+{
+        int w,h;
+        gtk_window_get_size(GTK_WINDOW(m_pWindow),&w,&h);
+        GdkRectangle clipRect;
+        for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
+        {
+            clipRect.x = it->Left();
+            clipRect.y = it->Top();
+            clipRect.width = it->GetWidth();
+            clipRect.height = it->GetHeight();
+
+            gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_NONE,&clipRect,m_pWindow,"base",0,0,w,h);
+        }
+
+        return sal_True;
+}
 
 sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
             GtkWidget* button,

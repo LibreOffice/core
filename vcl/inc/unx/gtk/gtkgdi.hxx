@@ -165,6 +165,11 @@ protected:
     GdkPixmap* NWGetPixmapFromScreen( Rectangle srcRect );
     sal_Bool NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRect );
 
+    sal_Bool NWPaintGTKWindowBackground( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+                           const Rectangle& rControlRectangle,
+                           const clipList& rClipList,
+                           ControlState nState, const ImplControlValue& aValue,
+                           const OUString& rCaption );
     sal_Bool NWPaintGTKButtonReal( GtkWidget* button, GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                            const Rectangle& rControlRectangle,
                            const clipList& rClipList,
