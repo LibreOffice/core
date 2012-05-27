@@ -46,6 +46,12 @@ $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
 	$(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
+	shell32 \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 	postgresql \
 ))
