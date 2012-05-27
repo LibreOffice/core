@@ -833,7 +833,7 @@ struct PyMethodDef PyUNOModule_methods [] =
 
 }
 
-extern "C" PY_DLLEXPORT
+extern "C"
 #if PY_MAJOR_VERSION >= 3
 PyObject* PyInit_pyuno()
 {
