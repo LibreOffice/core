@@ -51,7 +51,6 @@ Module gid_Module_Root_Brand
     Files = (gid_Brand_File_Bin_Crashreport,
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Bin_Crashreport_Com,
-             gid_Brand_File_Bin_Python,
              gid_Brand_File_Gdb_Trace,
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,
@@ -1428,16 +1427,6 @@ ProfileItem gid_Brand_Profileitem_Setup_Install
     Inifiletablekey = "InstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
-End
-#endif
-
-//TODO: This actually belongs into a module of its own:
-#if !defined DISABLE_PYUNO && !defined SYSTEM_PYTHON
-File gid_Brand_File_Bin_Python
-    BIN_FILE_BODY;
-    Name = EXENAME(pyuno/python);
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
 End
 #endif
 

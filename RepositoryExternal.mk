@@ -1616,6 +1616,57 @@ endef
 endif # ENABLE_GCONF
 
 
+# PYTHON
+ifeq ($(SYSTEM_PYTHON),YES)
+
+define gb_LinkTarget__use_python
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I%,$(PYTHON_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(filter -I%,$(PYTHON_CFLAGS)) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(PYTHON_LIBS) \
+)
+
+endef
+
+else # !SYSTEM_PYTHON
+
+define gb_LinkTarget__use_python
+
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_libs,$(1),\
+    python26.lib \
+)
+else ifeq ($(OS),MACOSX)
+$(call gb_LinkTarget_add_libs,$(1),\
+    -F $(OUTDIR)/lib -framework OOoPython \
+)
+else
+$(call gb_LinkTarget_use_libraries,$(1),\
+    python2.6 \
+)
+endif
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/python \
+	$$(INCLUDE) \
+)
+
+endef
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	python2.6 \
+))
+
+endif # SYSTEM_PYTHON
+
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 

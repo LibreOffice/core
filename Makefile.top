@@ -91,6 +91,7 @@ package\
 packimages\
 padmin\
 psprint_config\
+pyuno\
 qadevOOo\
 regexp\
 registry\
@@ -228,7 +229,6 @@ pango\
 postgresql\
 postprocess\
 python\
-pyuno\
 readlicense_oo\
 redland\
 rhino\

@@ -73,27 +73,57 @@ File gid_File_Py_Pythonloader
 End
 
 #ifndef SYSTEM_PYTHON
+File gid_File_Py_Bin_Python
+    BIN_FILE_BODY;
+    Name = EXENAME(pyuno/python);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+End
+
+#ifndef MACOSX
+Directory gid_Dir_Py_PythonCore
+    ParentID = gid_Brand_Dir_Program;
+    HostName = STRING(CONCAT2(python-core-,PYVERSION));
+End
+
+Directory gid_Dir_Py_PythonCore_Lib
+    ParentID = gid_Dir_Py_PythonCore;
+    HostName = "lib";
+End
+#endif
+
 File gid_File_Py_Python_Core
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
   #ifdef MACOSX
+    Dir = gid_Brand_Dir_Program;
     Name = "OOoPython.framework.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
   #else
+    Dir = gid_Dir_Py_PythonCore_Lib;
     Name = STRING(CONCAT3(python-core-,PYVERSION,.zip));
     Styles = (ARCHIVE);
   #endif
 End
 
-#ifdef UNX
+#ifdef WNT
+Directory gid_Dir_Py_PythonCore_Bin
+    ParentID = gid_Dir_Py_PythonCore;
+    HostName = "bin";
+End
+#endif
+
 #ifndef MACOSX
 File gid_File_Py_Python_Bin
     BIN_FILE_BODY;
+#ifdef UNX
     Dir = gid_Brand_Dir_Program;
     Name = "python.bin";
+#else
+    Dir = gid_Dir_Py_PythonCore_Bin;
+    Name = EXENAME(python);
+#endif
     Styles = (PACKED);
 End
-#endif
 #endif
 #endif
 
