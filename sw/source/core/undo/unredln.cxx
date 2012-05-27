@@ -32,7 +32,7 @@
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
@@ -52,7 +52,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     pRedlData( 0 ), pRedlSaveData( 0 ), nUserId( nUsrId ),
     bHiddenRedlines( sal_False )
 {
-    // Redline beachten
+    // mind the Redline
     SwDoc& rDoc = *rRange.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
@@ -77,8 +77,8 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     else
     {
         bHiddenRedlines = HasHiddenRedlines( *pRedlSaveData );
-        if( bHiddenRedlines )           // dann muessen die NodeIndizies
-        {                               // vom SwUndRng korrigiert werden
+        if( bHiddenRedlines )           // then the NodeIndices of SwUndRng need to be corrected
+        {
             nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
             nSttNode -= nEndExtra;
             nEndNode -= nEndExtra;
@@ -255,15 +255,14 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
     if( 0 == ( nsRedlineMode_t::REDLINE_SHOW_DELETE & rDoc.GetRedlineMode()) )
     {
-        // die beiden Redline Objecte suchen und diese dann anzeigen lassen,
-        // damit die Nodes wieder uebereinstimmen!
-        // das Geloeschte ist versteckt, also suche das INSERT
-        // Redline Object. Dahinter steht das Geloeschte
+        // Search both Redline objects and make them visible to make the nodes
+        // consistent again. The 'delete' one is hidden, thus search for the
+        // 'insert' Redline object. The former is located directly after the latter.
         sal_uInt16 nFnd = rDoc.GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
         OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
-                    "kein Insert Object gefunden" );
+                    "could not find an Insert object" );
         ++nFnd;
         rDoc.GetRedlineTbl()[nFnd]->Show( 1 );
     }
@@ -394,7 +393,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns )
 SwUndoCompDoc::SwUndoCompDoc( const SwRedline& rRedl )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( 0 ),
     pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ),
-    // fuers MergeDoc wird aber der jeweils umgekehrte Zweig benoetigt!
+    // for MergeDoc the corresponding inverse is needed
     bInsert( nsRedlineType_t::REDLINE_DELETE == rRedl.GetType() )
 {
     SwDoc* pDoc = (SwDoc*)rRedl.GetDoc();
@@ -424,7 +423,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( !bInsert )
     {
-        // die Redlines loeschen
+        // delete Redlines
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON));
 
@@ -432,7 +431,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 
         pDoc->SetRedlineMode_intern( eOld );
 
-        //per definition Point is end (in SwUndRng!)
+        // per definition Point is end (in SwUndRng!)
         SwCntntNode* pCSttNd = pPam->GetCntntNode( sal_False );
         SwCntntNode* pCEndNd = pPam->GetCntntNode( sal_True );
 
