@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_nativeres,fps,fps/src))
 $(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps))
 
 $(eval $(call gb_Library_use_packages,fps,\
-	fpicker_inc \
+	vcl_inc \
 ))
 
 $(eval $(call gb_Library_use_api,fps,\

@@ -33,12 +33,12 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#include <fpicker/fpicker.hrc>
 #include <svtools/filedlg2.hrc>
 #include "NSString_OOoAdditions.hxx"
 

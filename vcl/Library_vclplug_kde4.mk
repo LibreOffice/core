@@ -28,10 +28,6 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde4))
 
-$(eval $(call gb_Library_use_packages,vclplug_kde4,\
-	fpicker_inc \
-))
-
 $(eval $(call gb_Library_use_custom_headers,vclplug_kde4,vcl/unx/kde4))
 
 $(eval $(call gb_Library_set_include,vclplug_kde4,\

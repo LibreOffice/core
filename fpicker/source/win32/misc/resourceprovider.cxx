@@ -34,13 +34,12 @@
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
 #include <osl/mutex.hxx>
+#include <vcl/fpicker.hrc>
 #include <vcl/svapp.hxx>
 
 #include <tools/simplerm.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-
-#include <fpicker/fpicker.hrc>
 
 //------------------------------------------------------------
 // namespace directives

@@ -39,10 +39,9 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <fpicker/fpicker.hrc>
-
 #include <osl/mutex.hxx>
 
+#include <vcl/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>
