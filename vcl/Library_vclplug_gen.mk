@@ -204,4 +204,9 @@ $(eval $(call gb_Library_add_external_libs,vclplug_gen,	\
     Xinerama Xrandr					\
 ))
 endif
+ifeq ($(OS),FREEBSD)
+$(eval $(call gb_Library_add_external_libs,vclplug_gen,	\
+    Xinerama Xrandr					\
+))
+endif
 # vim: set noet sw=4 ts=4:
