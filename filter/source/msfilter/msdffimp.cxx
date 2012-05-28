@@ -6049,6 +6049,9 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
                         "escher", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
                     mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_Size>(mnIdClusters));
 
+                    sal_Size nMaxEntriesAllocatable = SAL_MAX_INT32 / sizeof(FIDCL);
+                    mnIdClusters = std::min(nMaxEntriesAllocatable, static_cast<sal_Size>(mnIdClusters));
+
                     mpFidcls = new FIDCL[ mnIdClusters ];
                     memset(mpFidcls, 0, mnIdClusters * sizeof(FIDCL));
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
