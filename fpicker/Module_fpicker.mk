@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Module_Module,fpicker))
 
-ifneq ($(filter DESKTOP,$(BUILD_TYPE)),)
-
 $(eval $(call gb_Module_add_targets,fpicker,\
 	AllLangResTarget_fps_office \
 	Library_fpicker \
@@ -48,8 +46,6 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 	Package_xml \
 	WinResTarget_fps \
 ))
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:

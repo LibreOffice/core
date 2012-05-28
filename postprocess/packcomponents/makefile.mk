@@ -63,6 +63,8 @@ my_components = \
     component/filter/source/xsltdialog/xsltdlg \
     component/filter/source/xsltfilter/xsltfilter \
     component/formula/util/for \
+    component/fpicker/source/generic/fpicker \
+    component/fpicker/source/office/fps_office \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
@@ -169,8 +171,6 @@ my_components += \
     component/extensions/source/resource/res \
     component/extensions/source/scanner/scn \
     component/extensions/source/update/feed/updatefeed \
-    component/fpicker/source/generic/fpicker \
-    component/fpicker/source/office/fps_office \
     syssh \
     component/xmlhelp/source/treeview/tvhlp1 \
     component/xmlhelp/util/ucpchelp1 \
