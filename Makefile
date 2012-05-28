@@ -31,7 +31,7 @@ $(SRCDIR)/config_host.mk : \
 	./autogen.sh
 
 # dummy rule in case autogen.lastrun does not exist
-autogen.lastrun:
+$(SRCDIR)/autogen.lastrun:
 	@true
 
 # vim: set noet sw=4 ts=4:
