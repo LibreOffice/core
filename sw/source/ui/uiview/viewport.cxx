@@ -870,13 +870,10 @@ void ViewResizePixel( const Window &rRef,
     const sal_Bool bVLineal = pVLineal && pVLineal->IsVisible();
     const long nVLinSzWidth = bVLineal ?
                         pVLineal->GetSizePixel().Width() : 0;
-    long nHBSzHeight2= rHScrollbar.IsVisible( sal_False ) || !rHScrollbar.IsAuto() ?
-                       rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
-    long nHBSzHeight =
-                rHScrollbar.IsVisible(sal_True) ||  (rHScrollbar.IsVisible( sal_False ) && !rHScrollbar.IsAuto()) ?
-                                nHBSzHeight2:0;
-    long nVBSzWidth = rVScrollbar.IsVisible(sal_True) ||  (rVScrollbar.IsVisible( sal_False ) && !rVScrollbar.IsAuto()) ?
-                         rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
+
+    long nScrollBarSize = rRef.GetSettings().GetStyleSettings().GetScrollBarSize();
+    long nHBSzHeight = rHScrollbar.IsVisible(true) ? nScrollBarSize : 0;
+    long nVBSzWidth = rVScrollbar.IsVisible(true) ? nScrollBarSize : 0;
 
     if(pVLineal)
     {
@@ -920,7 +917,7 @@ void ViewResizePixel( const Window &rRef,
             aPos.X() += nVBSzWidth;
         }
 
-        Size  aSize( rSize.Width(), nHBSzHeight2 );
+        Size  aSize( rSize.Width(), nHBSzHeight );
         if ( nVBSzWidth )
             aSize.Width() -= nVBSzWidth;
         rHScrollbar.SetPosSizePixel( aPos, aSize );
@@ -968,15 +965,10 @@ void ViewResizePixel( const Window &rRef,
         aPos.Y() += aImgSz.Height();
         pPageDownBtn->SetPosSizePixel( aPos, aImgSz );
 
-
-        if( rHScrollbar.IsVisible( sal_False ) )
-        {
-            aScrollFillPos.X() = aPos.X();
-
-            rScrollBarBox.SetPosSizePixel( aScrollFillPos,
-                                         Size( nHBSzHeight, nVBSzWidth) );
-        }
+        aScrollFillPos.X() = aPos.X();
     }
+
+    rScrollBarBox.SetPosSizePixel( aScrollFillPos, Size( nHBSzHeight, nVBSzWidth) );
 }
 
 void SwView::ShowAtResize()
