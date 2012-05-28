@@ -61,6 +61,7 @@ namespace writerfilter {
                 RTFSprms& getAttributes();
                 RTFSprms& getSprms();
             private:
+                RTFValue& operator=(RTFValue const& rOther);
                 int m_nValue;
                 rtl::OUString m_sValue;
                 boost::shared_ptr<RTFSprms> m_pAttributes;

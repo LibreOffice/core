@@ -41,9 +41,11 @@ namespace writerfilter {
                 typedef std::vector< std::pair<Id, RTFValue::Pointer_t> >::iterator Iterator_t;
                 RTFSprms();
                 RTFSprms(const RTFSprms& rSprms);
+                RTFSprms& operator=(const RTFSprms& rOther);
                 std::vector< std::pair<Id, RTFValue::Pointer_t> >* operator->();
                 RTFValue::Pointer_t find(Id nKeyword);
                 bool erase(Id nKeyword);
+                void swap(RTFSprms& rOther);
             private:
                 std::vector< std::pair<Id, RTFValue::Pointer_t> > m_aSprms;
         };

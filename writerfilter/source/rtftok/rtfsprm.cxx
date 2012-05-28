@@ -127,9 +127,21 @@ RTFSprms::RTFSprms(const RTFSprms& rSprms)
         m_aSprms.push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
 }
 
+RTFSprms& RTFSprms::operator=(const RTFSprms& rOther)
+{
+    RTFSprms aTmp(rOther);
+    swap(aTmp);
+    return *this;
+}
+
 std::vector< std::pair<Id, RTFValue::Pointer_t> >* RTFSprms::operator->()
 {
     return &m_aSprms;
+}
+
+void RTFSprms::swap(RTFSprms& rOther)
+{
+    m_aSprms.swap(rOther.m_aSprms);
 }
 
 } // namespace rtftok
