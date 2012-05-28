@@ -157,6 +157,12 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
 
     try
     {
+        if (xEncryptionData->m_nDerivedKeySize < 0)
+        {
+            throw ZipIOException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid derived key length!") ),
+                                  uno::Reference< XInterface >() );
+        }
+
         uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
         if ( rtl_Digest_E_None != rtl_digest_PBKDF2( reinterpret_cast< sal_uInt8* >( aDerivedKey.getArray() ),
                             aDerivedKey.getLength(),
@@ -192,7 +198,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
                                   uno::Reference< XInterface >() );
         }
     }
-    catch( uno::Exception& )
+    catch( ... )
     {
         OSL_ENSURE( sal_False, "Can not create cipher context!" );
     }
@@ -699,7 +705,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
                         || rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
     }
-    catch(::std::bad_alloc &)
+    catch(...)
     {
         bBroken = sal_True;
     }
