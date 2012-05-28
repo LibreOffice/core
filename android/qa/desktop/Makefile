@@ -117,10 +117,13 @@ copy-stuff: buildrcs
 		  comphelpgcc3 \
 		  cppcanvaslo \
 		  drawinglayerlo \
+		  embobj \
 		  expwrap.uno \
 		  fileacc \
 		  forlo \
 		  foruilo \
+		  fpicker.uno \
+		  fps_office.uno \
 		  fsstorage.uno \
 		  gcc3_uno \
 		  hyphenlo \
@@ -147,8 +150,6 @@ copy-stuff: buildrcs
 		  reflection.uno \
 		  reg \
 		  saxlo \
-		  sclo \
-		  scfiltlo \
 		  sotlo \
 		  spelllo \
 		  stocservices.uno \
@@ -161,6 +162,7 @@ copy-stuff: buildrcs
 		  uno_cppuhelpergcc3 \
 		  uno_sal \
 		  uno_salhelpergcc3 \
+		  unordflo \
 		  unotest \
 		  unoxmllo \
 		  utllo \
@@ -168,17 +170,27 @@ copy-stuff: buildrcs
 		  vcllo \
 		  xml2 \
 		  xmlreader \
+		  xmlsecurity \
+		  xslt \
 		  xstor \
 		  \
 		  swlo \
 		  swuilo \
 		  swdlo \
+		  \
+		  sclo \
+		  scdlo \
+		  scnlo \
+		  scuilo \
+		  scfiltlo \
+		  \
+		  chartcontrollerlo \
+		  chartviewlo \
+		  chartmodello \
+		  charttoolslo \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
-#		  deployment \
-#		  deploymentmisclo \
-#		  unoexceptionprotector \
 
 #
 # Then the shared GNU C++ library
@@ -211,21 +223,15 @@ copy-stuff: buildrcs
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \
 	done
-# persuade Basic to be happy
-	mkdir -p assets/presets/basic/Standard
-	cp $(SRC_ROOT)/wizards/source/config/dialog.xlc assets/presets/basic/
-	cp $(SRC_ROOT)/wizards/source/config/script.xlc assets/presets/basic/
-	cp $(SRC_ROOT)/wizards/source/standard/Module1.xba assets/presets/basic/Standard/
-	cp $(SRC_ROOT)/wizards/source/standard/dialog.xlb assets/presets/basic/Standard/
-	cp $(SRC_ROOT)/wizards/source/standard/script.xlb assets/presets/basic/Standard/
 # shell / splash images
 	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
 # A sample file for fun ...
-	mkdir -p assets/demo
-	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/demo; fi
+	mkdir -p assets/unpack/files
+	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/unpack/files; fi
+	if test -f /opt/libreoffice/tmp/writer.odt; then cp /opt/libreoffice/tmp/writer.odt assets/unpack/etc; fi
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
@@ -249,7 +255,7 @@ uninstall:
 run:
 #	echo "file:///assets/demo/writer.odt" > cmdline
 #	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
 
 # If you reinstall an app several times, even if you uninstall it
