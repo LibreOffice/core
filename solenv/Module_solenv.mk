@@ -34,10 +34,12 @@ $(eval $(call gb_Module_add_targets,solenv,\
 
 ifeq ($(GUI),UNX)
 ifneq ($(OS),IOS)
+ifneq ($(OS),ANDROID)
 $(eval $(call gb_Module_add_targets,solenv,\
 	CustomTarget_gdb \
 	Package_gdb \
 ))
+endif
 endif
 endif
 
