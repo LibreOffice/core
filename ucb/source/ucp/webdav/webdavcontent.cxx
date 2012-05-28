@@ -1768,24 +1768,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
 //            OSL_FAIL( //                        "Content::setPropertyValues - PROPPATCH failed!" );
 
-#if 1
             cancelCommandExecution( e, xEnv );
             // unreachable
-#else
-            // Note: PROPPATCH either sets ALL property values OR NOTHING.
-
-            std::vector< sal_Int32 >::const_iterator it
-                = aProppatchPropsPositions.begin();
-            std::vector< sal_Int32 >::const_iterator end
-                = aProppatchPropsPositions.end();
-
-            while ( it != end )
-            {
-                // Set error.
-                aRet[ (*it) ] <<= MapDAVException( e, sal_True );
-                ++it;
-            }
-#endif
         }
     }
 
@@ -3026,7 +3010,6 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
         break;
 
     case DAVException::DAV_LOCKED:
-#if 1
         aException <<=
             ucb::InteractiveLockingLockedException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked!")),
@@ -3034,23 +3017,6 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                 task::InteractionClassification_ERROR,
                 aURL,
                 sal_False ); // not SelfOwned
-#else
-        {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= beans::PropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
-                uno::makeAny(aURL),
-                beans::PropertyState_DIRECT_VALUE);
-
-            aException <<=
-                ucb::InteractiveAugmentedIOException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked!")),
-                    static_cast< cppu::OWeakObject * >( this ),
-                    task::InteractionClassification_ERROR,
-                    ucb::IOErrorCode_LOCKING_VIOLATION,
-                    aArgs );
-        }
-#endif
         break;
 
     case DAVException::DAV_LOCKED_SELF:

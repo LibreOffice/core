@@ -70,7 +70,6 @@ struct Row
 
 static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
 {
-#if 1
     SvxBoxItem aBox((const SvxBoxItem&)rSet.Get(RES_BOX, false));
     aBox.SetDistance( static_cast< sal_uInt16 >(rRow.mbUseLeftRowPad ? rRow.mnLeftRowPad : rRow.mnBrdDist),
             BOX_LINE_LEFT);
@@ -85,26 +84,6 @@ static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
             BOX_LINE_BOTTOM);
 
     rSet.Put(aBox);
-#else
-    const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET == rSet.GetItemState(RES_BOX, sal_False, &pItem))
-    {
-        SvxBoxItem aBox( *(SvxBoxItem*)pItem );
-        aBox.SetDistance(rRow.mbUseLeftRowPad ? rRow.mnLeftRowPad : rRow.mnBrdDist,
-                BOX_LINE_LEFT);
-
-        aBox.SetDistance(rRow.mbUseRightRowPad ? rRow.mnRightRowPad : rRow.mnBrdDist,
-                BOX_LINE_RIGHT);
-
-        aBox.SetDistance(rRow.mbUseTopRowPad ? rRow.mnTopRowPad : 0,
-                BOX_LINE_TOP);
-
-        aBox.SetDistance(rRow.mbUseBottomRowPad ? rRow.mnBottomRowPad : 0,
-                BOX_LINE_BOTTOM);
-
-        rSet.Put(aBox);
-    }
-#endif
 }
 
 void rtfSections::PrependedInlineNode(const SwPosition &rPos,

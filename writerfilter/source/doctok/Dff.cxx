@@ -201,13 +201,11 @@ void DffRecord::resolve(Properties & rHandler)
 
     resolveLocal(rHandler);
 
-#if 1
     WW8BinaryObjReference::Pointer_t pBinObjRef
         (new WW8BinaryObjReference(this, 0, getCount()));
     WW8Sprm aSprm(pBinObjRef);
 
     rHandler.sprm(aSprm);
-#endif
 }
 
 sal_uInt32 DffRecord::getShapeType()

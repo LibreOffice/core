@@ -1057,64 +1057,9 @@ void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
     m_pReserved->m_bFireEvents = bEnable;
 }
 
-#ifdef xdvnsdfln
-// XPropertyState
-PropertyState OPropertySetHelper::getPropertyState( const OUString& PropertyName )
-{
-    PropertyState aState;
-    return aState;
-}
-
-// XPropertyState
-Sequence< PropertyState > OPropertySetHelper::getPropertyStates( const Sequence< OUString >& PropertyNames )
-{
-    ULONG nNames = PropertyNames.getLength();
-
-    Sequence< PropertyState > aStates( nNames );
-    return aStates;
-
-}
-
-void OPropertySetHelper::setPropertyToDefault( const OUString& aPropertyName )
-{
-    setPropertyValue( aPropertyName, Any() );
-}
-
-Any OPropertySetHelper::getPropertyDefault( const OUString& aPropertyName ) const
-{
-    return Any();
-}
-
-void OPropertySetHelper::addPropertyStateChangeListener( const OUString& aPropertyName, const XPropertyStateChangeListenerRef& Listener )
-{
-}
-
-void OPropertySetHelper::removePropertyStateChangeListener( const OUString& aPropertyName, const XPropertyStateChangeListenerRef& Listener )
-{
-}
-#endif
-
 //========================================================================
 //== OPropertyArrayHelper ================================================
 //========================================================================
-
-//========================================================================
-
-//  static OUString makeOUString( sal_Char *p )
-//  {
-//      sal_Int32 nLen = strlen(p);
-//      sal_Unicode *pw = new sal_Unicode[nLen];
-
-//      for( int i = 0 ; i < nLen ; i ++ ) {
-
-//          // Only ascii strings allowed with this helper !
-//          OSL_ASSERT( p[i] < 127 );
-//          pw[i] = p[i];
-//      }
-//      OUString ow( pw , nLen );
-//      delete pw;
-//      return ow;
-//  }
 
 extern "C" {
 
@@ -1222,18 +1167,6 @@ sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
 //========================================================================
 Sequence< Property > OPropertyArrayHelper::getProperties(void)
 {
-    /*if( aInfos.getLength() != nElements )
-    {
-        ((OPropertyArrayHelper *)this)->aInfos.realloc( nElements );
-        Property * pProps = ((OPropertyArrayHelper *)this)->aInfos.getArray();
-        for( sal_Int32 i = 0; i < nElements; i++ )
-        {
-            pProps[i].Name = pProperties[i].Name;
-            pProps[i].Handle = pProperties[i].Handle;
-            pProps[i].Type = pProperties[i].Type;
-            pProps[i].Attributes = pProperties[i].Attributes;
-        }
-    }*/
     return aInfos;
 }
 
@@ -1248,13 +1181,6 @@ Property OPropertyArrayHelper::getPropertyByName(const OUString& aPropertyName)
     if( !pR ) {
         throw UnknownPropertyException();
     }
-
-    /*Property aProp;
-    aProp.Name = pR->Name;
-    aProp.Handle = pR->Handle;
-    aProp.Type = pR->Type;
-    aProp.Attributes = pR->Attributes;
-    return aProp;*/
     return *pR;
 }
 

@@ -556,11 +556,9 @@ void WW8BinaryObjHandler::data
 (const sal_uInt8 * buf, size_t length,
  writerfilter::Reference<Properties>::Pointer_t /*pRef*/)
 {
-#if 1
     SubSequence<sal_uInt8> aSeq(buf, length);
 
     aSeq.dump(output);
-#endif
 }
 
 }

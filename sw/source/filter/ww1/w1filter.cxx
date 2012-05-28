@@ -1842,7 +1842,6 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     }
     OSL_ENSURE(padx*maxy/2==nSize, "Ww1Picture");
     sal_uInt16 j;
-#if 1
     {
         sal_uInt8* pBuf = new sal_uInt8[padx];
         for (j=0;nSize>0&&j<maxy;j++)
@@ -1868,24 +1867,6 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
         }
         delete [] pBuf;
     }
-#else
-    for (j=0;nSize>0&&j<maxy;j++)
-    {
-        for (i=0;nSize>0&&i<maxx;i+=2)
-        {
-            wByte(*p>>4);
-            wByte(*p&0xf);
-            p++;
-            nSize -= sizeof(sal_uInt8);
-        }
-        for (;i<padx;i+=2)
-        {
-            wByte(0);
-            p++;
-            nSize -= sizeof(sal_uInt8);
-        }
-    }
-#endif
     OSL_ENSURE(nSize==0, "Ww1Picture");
 #undef wLong
 #undef wShort

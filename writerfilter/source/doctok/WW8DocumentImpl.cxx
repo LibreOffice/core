@@ -1549,7 +1549,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 {
     if (! bSubDocument)
     {
-#if 1
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
         output.addItem("</substream-names>");
@@ -1563,7 +1562,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             mpSummaryInformationStream->dump(output);
         }
-#endif
 
         writerfilter::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));
