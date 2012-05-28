@@ -34,9 +34,6 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#ifdef ENABLE_INIMANAGER
-#include "inimgr.hxx"
-#endif
 #include <sfx2/shell.hxx>
 #include <sfx2/chalign.hxx>
 

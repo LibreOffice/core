@@ -1594,14 +1594,6 @@ void SfxViewFrame::HideStatusText()
 }
 
 //--------------------------------------------------------------------
-#ifdef ENABLE_INIMANAGER//MUSTINI
-SfxIniManager* SfxViewFrame::GetIniManager() const
-{
-        return SFX_APP()->GetAppIniManager();
-}
-#endif
-
-//--------------------------------------------------------------------
 void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
 (
     SfxViewShell*   pSh,

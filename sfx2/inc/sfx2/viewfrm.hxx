@@ -129,9 +129,6 @@ public:
     virtual void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
-#ifdef ENABLE_INIMANAGER//MUSTINI
-    SfxIniManager*          GetIniManager() const;
-#endif
 
     SfxObjectShell*         GetObjectShell() const
                             { return xObjSh; }
