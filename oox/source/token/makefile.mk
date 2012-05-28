@@ -43,7 +43,7 @@ SLOFILES = \
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-.IF "$(GPERF)" == "" || !DEFINED $(GPERF)
+.IF "$(GPERF)" == ""
 GPERF=gperf
 .ENDIF
 
