@@ -2031,6 +2031,35 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "You cannot insert or delete cells when the affected range intersects with pivot table.";
     };
+
+    String  STR_DPFIELD_GROUP_BY_SECONDS
+    {
+        Text [ en-US ] = "Seconds" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_MINUTES
+    {
+        Text [ en-US ] = "Minutes" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_HOURS
+    {
+        Text [ en-US ] = "Hours" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_DAYS
+    {
+        Text [ en-US ] = "Days" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_MONTHS
+    {
+        Text [ en-US ] = "Months" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_QUARTERS
+    {
+        Text [ en-US ] = "Quarters" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_YEARS
+    {
+        Text [ en-US ] = "Years" ;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

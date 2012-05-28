@@ -25,9 +25,10 @@
 
 #include "dpgroupdlg.hxx"
 #include "dpgroupdlg.hrc"
-#include <tools/resary.hxx>
 #include "scresid.hxx"
 #include "sc.hrc"
+#include "globstr.hrc"
+
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 // ============================================================================
@@ -44,6 +45,17 @@ static const sal_Int32 spnDateParts[] =
     com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS,
     com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS,
     com::sun::star::sheet::DataPilotFieldGroupBy::YEARS
+};
+
+static const sal_uInt16 nDatePartResIds[] =
+{
+    STR_DPFIELD_GROUP_BY_SECONDS,
+    STR_DPFIELD_GROUP_BY_MINUTES,
+    STR_DPFIELD_GROUP_BY_HOURS,
+    STR_DPFIELD_GROUP_BY_DAYS,
+    STR_DPFIELD_GROUP_BY_MONTHS,
+    STR_DPFIELD_GROUP_BY_QUARTERS,
+    STR_DPFIELD_GROUP_BY_YEARS
 };
 
 } // namespace
@@ -226,12 +238,13 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     maStartHelper   ( maRbAutoStart, maRbManStart, maEdStart, rNullDate ),
     maEndHelper     ( maRbAutoEnd, maRbManEnd, maEdEnd, rNullDate )
 {
-    maLbUnits.SetHelpId( HID_SC_DPDATEGROUP_LB );
-    ResStringArray aArr( ScResId( STR_UNITS ) );
-    for( sal_uInt16 nIdx = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIdx < nCount; ++nIdx )
-        maLbUnits.InsertEntry( aArr.GetString( nIdx ) );
-
     FreeResource();
+
+    maLbUnits.SetHelpId( HID_SC_DPDATEGROUP_LB );
+
+    static const size_t nCount = sizeof( nDatePartResIds ) / sizeof( nDatePartResIds[0] );
+    for( size_t nIdx = 0 ; nIdx < nCount; ++nIdx )
+        maLbUnits.InsertEntry( ScGlobal::GetRscString( nDatePartResIds[nIdx] ) );
 
     maEdStart.SetShowDateCentury( sal_True );
     maEdEnd.SetShowDateCentury( sal_True );
@@ -241,7 +254,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
 
     if( nDatePart == 0 )
         nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
-    for( sal_uLong nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
+    for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
         maLbUnits.CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
 
     if( rInfo.mbDateValues )

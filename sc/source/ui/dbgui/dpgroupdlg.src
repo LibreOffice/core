@@ -258,19 +258,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    StringArray STR_UNITS
-    {
-        ItemList [ en-US ] =
-        {
-            < "Seconds" ; Default ; > ;
-            < "Minutes" ; Default ; > ;
-            < "Hours" ; Default ; > ;
-            < "Days" ; Default ; > ;
-            < "Months" ; Default ; > ;
-            < "Quarters" ; Default ; > ;
-            < "Years" ; Default ; > ;
-        } ;
-    } ;
     Text [ en-US ] = "Grouping" ;
 } ;
 

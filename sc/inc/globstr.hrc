@@ -657,7 +657,15 @@
 #define STR_UNDO_HIDETABS           526
 #define STR_UNDO_SHOWTABS           527
 
-#define STR_COUNT                   528
+#define STR_DPFIELD_GROUP_BY_SECONDS     528
+#define STR_DPFIELD_GROUP_BY_MINUTES     529
+#define STR_DPFIELD_GROUP_BY_HOURS       530
+#define STR_DPFIELD_GROUP_BY_DAYS        531
+#define STR_DPFIELD_GROUP_BY_MONTHS      532
+#define STR_DPFIELD_GROUP_BY_QUARTERS    533
+#define STR_DPFIELD_GROUP_BY_YEARS       534
+
+#define STR_COUNT                   535
 
 #endif
 
