@@ -98,7 +98,7 @@ namespace toolkit
 
                 GridColumn* const pGridColumn = GridColumn::getImplementation( xClone );
                 if ( pGridColumn == NULL )
-                    throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "invalid clone source implementation" ) ), *this );
+                    throw RuntimeException( "invalid clone source implementation", *this );
                     // that's indeed a RuntimeException, not an IllegalArgumentException or some such:
                     // a DefaultGridColumnModel implementation whose columns are not GridColumn implementations
                     // is borked.
@@ -140,7 +140,7 @@ namespace toolkit
 
         GridColumn* const pGridColumn = GridColumn::getImplementation( i_column );
         if ( pGridColumn == NULL )
-            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "invalid column implementation" ) ), *this, 1 );
+            throw IllegalArgumentException( "invalid column implementation", *this, 1 );
 
         m_aColumns.push_back( i_column );
         sal_Int32 index = m_aColumns.size() - 1;
@@ -313,7 +313,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.DefaultGridColumnModel" ) );
+        return ::rtl::OUString( "org.openoffice.comp.toolkit.DefaultGridColumnModel" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

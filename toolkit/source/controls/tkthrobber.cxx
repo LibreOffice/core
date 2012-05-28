@@ -98,7 +98,7 @@ namespace toolkit
     ::rtl::OUString SAL_CALL UnoThrobberControlModel::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoThrobberControlModel" ) );
+        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoThrobberControlModel" );
     }
 
     //--------------------------------------------------------------------
@@ -126,7 +126,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoThrobberControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber"));
+        return ::rtl::OUString("Throbber");
     }
 
     //--------------------------------------------------------------------
@@ -153,7 +153,7 @@ namespace toolkit
     ::rtl::OUString SAL_CALL UnoThrobberControl::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoThrobberControl" ) );
+        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoThrobberControl" );
     }
 
     //--------------------------------------------------------------------

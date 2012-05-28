@@ -108,7 +108,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedCom
 
 ::rtl::OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleWindow"));
+    return ::rtl::OUString("com.sun.star.comp.toolkit.AccessibleWindow");
 }
 
 sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (uno::RuntimeException)
@@ -125,7 +125,7 @@ sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServi
 uno::Sequence< ::rtl::OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleWindow"));
+    aNames[0] = ::rtl::OUString("com.sun.star.awt.AccessibleWindow");
     return aNames;
 }
 

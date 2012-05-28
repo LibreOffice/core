@@ -119,7 +119,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
             if ( pTabs )
             {
                 // opt: String fuer TabStop als Konstante
-                static const ::rtl::OUString aTabStopName( RTL_CONSTASCII_USTRINGPARAM("Tabstop") );
+                static const ::rtl::OUString aTabStopName( "Tabstop" );
 
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();

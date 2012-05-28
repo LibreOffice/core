@@ -120,7 +120,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoSpinButtonModel" ) );
+        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSpinButtonModel" );
     }
 
     //--------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoSpinButtonControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinButton"));
+        return ::rtl::OUString("SpinButton");
     }
 
     //--------------------------------------------------------------------
@@ -183,7 +183,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoSpinButtonControl" ) );
+        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSpinButtonControl" );
     }
 
     //--------------------------------------------------------------------

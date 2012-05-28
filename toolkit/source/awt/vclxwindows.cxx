@@ -2153,10 +2153,10 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ) )
+    if ( xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) ) )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            xPropSet->getPropertyValue( ::rtl::OUString( "ResourceResolver" ) ),
             uno::UNO_QUERY
         );
     }
@@ -2415,7 +2415,7 @@ void SAL_CALL VCLXDialog::setVbaMethodParameter(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    if (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cancel")) == PropertyName)
+    if (rtl::OUString("Cancel") == PropertyName)
     {
         SolarMutexGuard aGuard;
         if ( GetWindow() )
@@ -2659,7 +2659,7 @@ sal_Int32 SAL_CALL VCLXMultiPage::insertTab() throw (uno::RuntimeException)
 {
     TabControl *pTabControl = getTabControl();
     TabPage* pTab = new TabPage( pTabControl );
-    rtl::OUString title (RTL_CONSTASCII_USTRINGPARAM( "" ) );
+    rtl::OUString title ("");
     return static_cast< sal_Int32 >( insertTab( pTab, title ) );
 }
 
@@ -2718,7 +2718,7 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
         const rtl::OUString &name = Properties[i].Name;
         const uno::Any &value = Properties[i].Value;
 
-        if ( name  == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
+        if ( name  == rtl::OUString( "Title" ) )
         {
             rtl::OUString title = value.get<rtl::OUString>();
             pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( ID ), title.getStr() );
@@ -2965,7 +2965,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), uno::UNO_QUERY );
+                        ::rtl::OUString("com.sun.star.system.SystemShellExecute")), uno::UNO_QUERY );
                 if ( !sURL.isEmpty() && xSystemShellExecute.is() )
                 {
                     try
@@ -4659,10 +4659,10 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
     // bool localize = xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ) )
+    if ( xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) ) )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            xPropSet->getPropertyValue( ::rtl::OUString( "ResourceResolver" ) ),
             uno::UNO_QUERY
         );
     }

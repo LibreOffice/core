@@ -100,7 +100,7 @@ namespace toolkit
     ::rtl::OUString SAL_CALL UnoSimpleAnimationControlModel::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoSimpleAnimationControlModel" ) );
+        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSimpleAnimationControlModel" );
     }
 
     //--------------------------------------------------------------------
@@ -128,14 +128,14 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoSimpleAnimationControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SimpleAnimation"));
+        return ::rtl::OUString("SimpleAnimation");
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL UnoSimpleAnimationControl::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoSimpleAnimationControl" ) );
+        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSimpleAnimationControl" );
     }
 
     //--------------------------------------------------------------------

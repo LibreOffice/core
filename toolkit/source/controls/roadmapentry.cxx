@@ -38,22 +38,22 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
 {
     // registerProperty or registerMayBeVoidProperty or registerPropertyNoMember
 
-    registerProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), RM_PROPERTY_ID_LABEL,
+    registerProperty( ::rtl::OUString("Label"), RM_PROPERTY_ID_LABEL,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
                       & m_sLabel, ::getCppuType( &m_sLabel ) );
     m_nID = -1;
-    registerProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")), RM_PROPERTY_ID_ID,
+    registerProperty( ::rtl::OUString("ID"), RM_PROPERTY_ID_ID,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
                       & m_nID, ::getCppuType( &m_nID ) );
     m_bEnabled = sal_True;
-    registerProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")), RM_PROPERTY_ID_ENABLED,
+    registerProperty( ::rtl::OUString("Enabled"), RM_PROPERTY_ID_ENABLED,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bEnabled, ::getCppuType( &m_bEnabled ) );
 
-    registerProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Interactive")), RM_PROPERTY_ID_INTERACTIVE,
+    registerProperty( ::rtl::OUString("Interactive"), RM_PROPERTY_ID_INTERACTIVE,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bInteractive, ::getCppuType( &m_bInteractive ) );
@@ -89,7 +89,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
 
 ::rtl::OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.RoadmapItem"));
+    ::rtl::OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
     return aStr;
 }
 
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const ::rtl::OUString& Service
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
     ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.RoadmapItem"));
+    pArray[0] = ::rtl::OUString("com.sun.star.awt.RoadmapItem");
     return aRet;
 }
 //--------------------------------------------------------------------------

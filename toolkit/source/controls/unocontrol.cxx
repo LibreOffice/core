@@ -268,7 +268,7 @@ bool UnoControl::ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable )
     {
         Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY_THROW );
         Reference< resource::XStringResourceResolver > xStringResourceResolver(
-            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            xPropSet->getPropertyValue( ::rtl::OUString( "ResourceResolver" ) ),
             UNO_QUERY
         );
         if ( xStringResourceResolver.is() )
@@ -1121,7 +1121,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     if ( !mxModel.is() )
     {
         RuntimeException aException;
-        aException.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createPeer: no model!"));
+        aException.Message = ::rtl::OUString("createPeer: no model!");
         aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }
@@ -1389,7 +1389,7 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
             Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->addPropertiesChangeListener( aNames, xListener );
 
-            mpData->bLocalizationSupport = xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) );
+            mpData->bLocalizationSupport = xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) );
         }
         catch( const Exception& )
         {
@@ -1430,7 +1430,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         disposeAccessibleContext();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("design")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alive" ));
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString("design") : ::rtl::OUString("alive" );
     }
 
     // ajust the visibility of our window
@@ -1474,7 +1474,7 @@ sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) thro
 
 Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    ::rtl::OUString sName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControl" ) );
+    ::rtl::OUString sName( "com.sun.star.awt.UnoControl" );
     return Sequence< ::rtl::OUString >( &sName, 1 );
 }
 

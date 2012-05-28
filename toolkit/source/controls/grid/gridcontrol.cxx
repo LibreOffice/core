@@ -286,7 +286,7 @@ UnoGridControl::~UnoGridControl()
 //----------------------------------------------------------------------------------------------------------------------
 OUString UnoGridControl::GetComponentServiceName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("Grid"));
+    return OUString("Grid");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@ namespace
         try
         {
             Reference< XContainer > const xColModel(
-                xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnModel" ) ) ),
+                xModelProps->getPropertyValue( ::rtl::OUString( "ColumnModel" ) ),
                 UNO_QUERY_THROW );
             if ( i_add )
                 xColModel->addContainerListener( i_listener.get() );
@@ -328,7 +328,7 @@ namespace
                 xColModel->removeContainerListener( i_listener.get() );
 
             Reference< XGridDataModel > const xDataModel(
-                xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GridDataModel" ) ) ),
+                xModelProps->getPropertyValue( ::rtl::OUString( "GridDataModel" ) ),
                 UNO_QUERY_THROW
             );
             Reference< XMutableGridDataModel > const xMutableDataModel( xDataModel, UNO_QUERY );

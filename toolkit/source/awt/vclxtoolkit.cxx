@@ -1105,7 +1105,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )
         {
-            ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
+            ::rtl::OUString aFunctionName( "CreateWindow" );
             fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
         }
     }
@@ -1368,7 +1368,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             {
                 // remember clipboard here
                 mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
-                    xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), ::com::sun::star::uno::UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), ::com::sun::star::uno::UNO_QUERY );
             }
         }
 
@@ -1386,7 +1386,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 // XServiceInfo
 ::rtl::OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.Toolkit.VCLXToolkit"));
+    return rtl::OUString("stardiv.Toolkit.VCLXToolkit");
 }
 
 sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)

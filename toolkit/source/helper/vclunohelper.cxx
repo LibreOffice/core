@@ -637,7 +637,7 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
 */
 
     default:
-        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported measure unit.")), NULL, 1 );
+        throw ::com::sun::star::lang::IllegalArgumentException("Unsupported measure unit.", NULL, 1 );
     }
     return eMode;
 }
