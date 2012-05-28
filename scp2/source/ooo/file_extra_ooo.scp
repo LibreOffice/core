@@ -225,7 +225,7 @@ End
 File gid_File_Extra_Fontunxpsprint
     Dir = gid_Dir_Psprint;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Styles = (ARCHIVE, DONT_OVERWRITE, CONFIGFILE);
     Name = "fontunxpsprint.zip";
 End
 
