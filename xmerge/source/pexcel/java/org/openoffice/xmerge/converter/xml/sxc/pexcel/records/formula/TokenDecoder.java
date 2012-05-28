@@ -47,7 +47,7 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
  * Operands     Floating point's, Cell references (absolute and relative),
  *              cell ranges<br>
  * Operators    +,-,*,/,&lt;,&gt;.&lt;=,&gt;=,&lt;&gt;<br>
- * Functions    All pexcel fixed and varaible argument functions
+ * Functions    All pexcel fixed and variable argument functions
  *
  */
 public class TokenDecoder {
