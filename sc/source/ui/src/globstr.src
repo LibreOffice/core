@@ -1734,5 +1734,33 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Pivot table needs at least two rows of data to create or refresh." ;
     };
+    String  STR_DPFIELD_GROUP_BY_SECONDS
+    {
+        Text [ en-US ] = "Seconds" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_MINUTES
+    {
+        Text [ en-US ] = "Minutes" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_HOURS
+    {
+        Text [ en-US ] = "Hours" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_DAYS
+    {
+        Text [ en-US ] = "Days" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_MONTHS
+    {
+        Text [ en-US ] = "Months" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_QUARTERS
+    {
+        Text [ en-US ] = "Quarters" ;
+    };
+    String  STR_DPFIELD_GROUP_BY_YEARS
+    {
+        Text [ en-US ] = "Years" ;
+    };
 };
 

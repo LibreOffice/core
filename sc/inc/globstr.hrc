@@ -573,7 +573,15 @@
 #define STR_UNDO_SET_TAB_BG_COLOR       438
 #define STR_UNDO_SET_MULTI_TAB_BG_COLOR 439
 
-#define STR_COUNT                       440
+#define STR_DPFIELD_GROUP_BY_SECONDS     440
+#define STR_DPFIELD_GROUP_BY_MINUTES     441
+#define STR_DPFIELD_GROUP_BY_HOURS       442
+#define STR_DPFIELD_GROUP_BY_DAYS        443
+#define STR_DPFIELD_GROUP_BY_MONTHS      444
+#define STR_DPFIELD_GROUP_BY_QUARTERS    445
+#define STR_DPFIELD_GROUP_BY_YEARS       446
+
+#define STR_COUNT                        447
 
 #endif
 
