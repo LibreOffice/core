@@ -1623,33 +1623,33 @@ void SwPagePreView::ScrollViewSzChg()
             // adjust to new preview functionality
             sal_uInt16 nVisPages = aViewWin.GetRow() * aViewWin.GetCol();
 
+            pVScrollbar->SetVisibleSize( nVisPages );
+            // set selected page as scroll bar position,
+            // if it is visible.
+            SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
+            if ( pPagePrevwLay->IsPageVisible( aViewWin.SelectedPage() ) )
+            {
+                pVScrollbar->SetThumbPos( aViewWin.SelectedPage() );
+            }
+            else
+            {
+                pVScrollbar->SetThumbPos( aViewWin.GetSttPage() );
+            }
+            pVScrollbar->SetLineSize( aViewWin.GetCol() );
+            pVScrollbar->SetPageSize( nVisPages );
+            // calculate and set scrollbar range
+            Range aScrollbarRange( 1, mnPageCount );
+            // increase range by one, because left-top-corner is left blank.
+            ++aScrollbarRange.Max();
+            // increase range in order to access all pages
+            aScrollbarRange.Max() += ( nVisPages - 1 );
+            pVScrollbar->SetRange( aScrollbarRange );
+
             if( nVisPages < mnPageCount )
             {
                 ShowVScrollbar( sal_True );
                 pPageUpBtn->Show( sal_True );
                 pPageDownBtn->Show( sal_True );
-
-                pVScrollbar->SetVisibleSize( nVisPages );
-                // set selected page as scroll bar position,
-                // if it is visible.
-                SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
-                if ( pPagePrevwLay->IsPageVisible( aViewWin.SelectedPage() ) )
-                {
-                    pVScrollbar->SetThumbPos( aViewWin.SelectedPage() );
-                }
-                else
-                {
-                    pVScrollbar->SetThumbPos( aViewWin.GetSttPage() );
-                }
-                pVScrollbar->SetLineSize( aViewWin.GetCol() );
-                pVScrollbar->SetPageSize( nVisPages );
-                // calculate and set scrollbar range
-                Range aScrollbarRange( 1, mnPageCount );
-                // increase range by one, because left-top-corner is left blank.
-                ++aScrollbarRange.Max();
-                // increase range in order to access all pages
-                aScrollbarRange.Max() += ( nVisPages - 1 );
-                pVScrollbar->SetRange( aScrollbarRange );
             }
             else
             {
