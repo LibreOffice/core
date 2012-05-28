@@ -116,6 +116,9 @@ static sal_uInt16 KeyToCode(AInputEvent *event)
     MAP(DEL, DELETE);
     MAP(PERIOD, POINT);
 
+    MAP(DPAD_UP, UP); MAP(DPAD_DOWN, DOWN);
+    MAP(DPAD_LEFT, LEFT); MAP(DPAD_RIGHT, RIGHT);
+
     case AKEYCODE_BACK: // escape ?
     case AKEYCODE_UNKNOWN:
     case AKEYCODE_SOFT_LEFT:
@@ -124,13 +127,9 @@ static sal_uInt16 KeyToCode(AInputEvent *event)
     case AKEYCODE_ENDCALL:
     case AKEYCODE_STAR:
     case AKEYCODE_POUND:
-    case AKEYCODE_DPAD_UP:
-    case AKEYCODE_DPAD_DOWN:
-    case AKEYCODE_DPAD_LEFT:
-    case AKEYCODE_DPAD_RIGHT:
-    case AKEYCODE_DPAD_CENTER:
     case AKEYCODE_VOLUME_UP:
     case AKEYCODE_VOLUME_DOWN:
+    case AKEYCODE_DPAD_CENTER:
     case AKEYCODE_POWER:
     case AKEYCODE_CAMERA:
     case AKEYCODE_CLEAR:
@@ -435,6 +434,29 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
         }
 }
 
+/*
+ * Try too hard to get a frame, in the absence of anything better to do
+ */
+SalFrame *AndroidSalInstance::getFocusFrame() const
+{
+    SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
+    if (!pFocus) {
+        fprintf (stderr, "no focus frame, re-focusing first visible frame\n");
+        const std::list< SalFrame* >& rFrames( getFrames() );
+        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+        {
+            SvpSalFrame *pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
+            if( pFrame->IsVisible() )
+            {
+                pFrame->GetFocus();
+                pFocus = pFrame;
+                break;
+            }
+        }
+    }
+    return pFocus;
+}
+
 int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* event)
 {
     bool bHandled = false;
@@ -449,11 +471,13 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
     case AINPUT_EVENT_TYPE_KEY:
     {
         int32_t nAction = AKeyEvent_getAction(event);
-        fprintf (stderr, "key event keycode %d '%s' %s\n",
+        fprintf (stderr, "key event keycode %d '%s' %s flags (0x%x) 0x%x\n",
                  AKeyEvent_getKeyCode(event),
                  nAction == AKEY_EVENT_ACTION_DOWN ? "down" :
                  nAction == AKEY_EVENT_ACTION_UP ? "up" : "multiple",
-                 KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr());
+                 KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr(),
+                 AKeyEvent_getMetaState (event),
+                 AKeyEvent_getFlags (event));
 
         // FIXME: the whole SALEVENT_KEYMODCHANGE stuff is going to be interesting
         // can we really emit that ? no input method madness required though.
@@ -483,7 +507,7 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         aEvent.mnCode = nMetaState | nCode;
         aEvent.mnRepeat = AKeyEvent_getRepeatCount(event);
 
-        SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
+        SalFrame *pFocus = getFocusFrame();
         if (pFocus)
             bHandled = pFocus->CallCallback( nEvent, &aEvent );
         else
@@ -514,13 +538,21 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         // FIXME: all this filing the nEvent and aMouseEvent has to be cleaned up
         nEvent = AMotionEvent_getAction(event)? SALEVENT_MOUSEBUTTONUP: SALEVENT_MOUSEBUTTONDOWN;
 
-        aMouseEvent.mnX = AMotionEvent_getXOffset(event);
-        aMouseEvent.mnY = AMotionEvent_getYOffset(event);
-        aMouseEvent.mnTime = 0; // FIXME
+        if (nPoints > 0)
+        {
+            aMouseEvent.mnX = AMotionEvent_getX(event, 0);
+            aMouseEvent.mnY = AMotionEvent_getY(event, 0);
+        } else {
+            aMouseEvent.mnX = AMotionEvent_getXOffset(event);
+            aMouseEvent.mnY = AMotionEvent_getYOffset(event);
+        }
+
+        int64_t nNsTime = AMotionEvent_getEventTime(event);
+        aMouseEvent.mnTime = nNsTime / (1000 * 1000);
         aMouseEvent.mnCode = 0; // FIXME
         aMouseEvent.mnButton = MOUSE_LEFT; // FIXME
 
-        SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
+        SalFrame *pFocus = getFocusFrame();
         if (pFocus)
             bHandled = pFocus->CallCallback( nEvent, &aMouseEvent );
         else
