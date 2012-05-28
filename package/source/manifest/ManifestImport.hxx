@@ -46,10 +46,12 @@ struct ManifestScopeEntry
 {
     ::rtl::OUString m_aConvertedName;
     StringHashMap   m_aNamespaces;
+    bool            m_bValid;
 
     ManifestScopeEntry( const ::rtl::OUString& aConvertedName, const StringHashMap& aNamespaces )
     : m_aConvertedName( aConvertedName )
     , m_aNamespaces( aNamespaces )
+    , m_bValid( true )
     {}
 
     ~ManifestScopeEntry()
@@ -148,6 +150,12 @@ public:
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+private:
+    void doFileEntry(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
+    void doEncryptionData(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
+    void doAlgorithm(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
+    void doKeyDerivation(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
+    void doStartKeyAlg(StringHashMap &rConvertedAttribs) throw(::com::sun::star::uno::RuntimeException);
 };
 #endif
 

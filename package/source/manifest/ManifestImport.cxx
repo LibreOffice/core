@@ -123,6 +123,169 @@ void SAL_CALL ManifestImport::endDocument(  )
 {
 }
 
+void ManifestImport::doFileEntry(StringHashMap &rConvertedAttribs)
+        throw( uno::RuntimeException )
+{
+    aSequence.realloc ( PKG_SIZE_ENCR_MNFST );
+
+    // Put full-path property first for MBA
+    aSequence[nNumProperty].Name = sFullPathProperty;
+    aSequence[nNumProperty++].Value <<= rConvertedAttribs[sFullPathAttribute];
+    aSequence[nNumProperty].Name = sMediaTypeProperty;
+    aSequence[nNumProperty++].Value <<= rConvertedAttribs[sMediaTypeAttribute];
+
+    OUString sVersion = rConvertedAttribs[sVersionAttribute];
+    if ( sVersion.getLength() )
+    {
+        aSequence[nNumProperty].Name = sVersionProperty;
+        aSequence[nNumProperty++].Value <<= sVersion;
+    }
+
+    OUString sSize = rConvertedAttribs[sSizeAttribute];
+    if ( sSize.getLength() )
+    {
+        sal_Int32 nSize;
+        nSize = sSize.toInt32();
+        aSequence[nNumProperty].Name = sSizeProperty;
+        aSequence[nNumProperty++].Value <<= nSize;
+    }
+}
+
+void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
+        throw( uno::RuntimeException )
+{
+    // If this element exists, then this stream is encrypted and we need
+    // to import the initialisation vector, salt and iteration count used
+    nDerivedKeySize = 0;
+    OUString aString = rConvertedAttribs[sChecksumTypeAttribute];
+    if ( !bIgnoreEncryptData )
+    {
+        if ( aString.equals( sSHA1_1k_Name ) || aString.equals( sSHA1_1k_URL ) )
+        {
+            aSequence[nNumProperty].Name = sDigestAlgProperty;
+            aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1_1K;
+        }
+        else if ( aString.equals( sSHA256_1k_URL ) )
+        {
+            aSequence[nNumProperty].Name = sDigestAlgProperty;
+            aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256_1K;
+        }
+        else
+            bIgnoreEncryptData = sal_True;
+
+        if ( !bIgnoreEncryptData )
+        {
+            aString = rConvertedAttribs[sChecksumAttribute];
+            uno::Sequence < sal_Int8 > aDecodeBuffer;
+            ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
+            aSequence[nNumProperty].Name = sDigestProperty;
+            aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+        }
+    }
+}
+
+void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
+        throw( uno::RuntimeException )
+{
+    if ( !bIgnoreEncryptData )
+    {
+        OUString aString = rConvertedAttribs[sAlgorithmNameAttribute];
+        if ( aString.equals( sBlowfish_Name ) || aString.equals( sBlowfish_URL ) )
+        {
+            aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+            aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
+        }
+        else if ( aString.equals( sAES256_URL ) )
+        {
+            aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+            aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+            OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 32, "Unexpected derived key length!" );
+            nDerivedKeySize = 32;
+        }
+        else if ( aString.equals( sAES192_URL ) )
+        {
+            aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+            aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+            OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 24, "Unexpected derived key length!" );
+            nDerivedKeySize = 24;
+        }
+        else if ( aString.equals( sAES128_URL ) )
+        {
+            aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+            aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+            OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 16, "Unexpected derived key length!" );
+            nDerivedKeySize = 16;
+        }
+        else
+            bIgnoreEncryptData = sal_True;
+
+        if ( !bIgnoreEncryptData )
+        {
+            aString = rConvertedAttribs[sInitialisationVectorAttribute];
+            uno::Sequence < sal_Int8 > aDecodeBuffer;
+            ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
+            aSequence[nNumProperty].Name = sInitialisationVectorProperty;
+            aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+        }
+    }
+}
+
+void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
+        throw( uno::RuntimeException )
+{
+    if ( !bIgnoreEncryptData )
+    {
+        OUString aString = rConvertedAttribs[sKeyDerivationNameAttribute];
+        if ( aString.equals( sPBKDF2_Name ) || aString.equals( sPBKDF2_URL ) )
+        {
+            aString = rConvertedAttribs[sSaltAttribute];
+            uno::Sequence < sal_Int8 > aDecodeBuffer;
+            ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
+            aSequence[nNumProperty].Name = sSaltProperty;
+            aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+
+            aString = rConvertedAttribs[sIterationCountAttribute];
+            aSequence[nNumProperty].Name = sIterationCountProperty;
+            aSequence[nNumProperty++].Value <<= aString.toInt32();
+
+            aString = rConvertedAttribs[sKeySizeAttribute];
+            if ( aString.getLength() )
+            {
+                sal_Int32 nKey = aString.toInt32();
+                OSL_ENSURE( !nDerivedKeySize || nKey == nDerivedKeySize , "Provided derived key length differs from the expected one!" );
+                nDerivedKeySize = nKey;
+            }
+            else if ( !nDerivedKeySize )
+                nDerivedKeySize = 16;
+            else if ( nDerivedKeySize != 16 )
+                OSL_ENSURE( sal_False, "Default derived key length differs from the expected one!" );
+
+            aSequence[nNumProperty].Name = sDerivedKeySizeProperty;
+            aSequence[nNumProperty++].Value <<= nDerivedKeySize;
+        }
+        else
+            bIgnoreEncryptData = sal_True;
+    }
+}
+
+void ManifestImport::doStartKeyAlg(StringHashMap &rConvertedAttribs)
+        throw( uno::RuntimeException )
+{
+    OUString aString = rConvertedAttribs[sStartKeyAlgNameAttribute];
+    if ( aString.equals( sSHA256_URL ) )
+    {
+        aSequence[nNumProperty].Name = sStartKeyAlgProperty;
+        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256;
+    }
+    else if ( aString.equals( sSHA1_Name ) || aString.equals( sSHA1_URL ) )
+    {
+        aSequence[nNumProperty].Name = sStartKeyAlgProperty;
+        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1;
+    }
+    else
+        bIgnoreEncryptData = sal_True;
+}
+
 // ---------------------------------------------------
 void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
@@ -130,170 +293,59 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     StringHashMap aConvertedAttribs;
     ::rtl::OUString aConvertedName = PushNameAndNamespaces( aName, xAttribs, aConvertedAttribs );
 
-    if ( aConvertedName == sFileEntryElement )
+    size_t nLevel = aStack.size();
+
+    assert(nLevel >= 1);
+
+    switch (nLevel)
     {
-        aSequence.realloc ( PKG_SIZE_ENCR_MNFST );
-
-        // Put full-path property first for MBA
-        aSequence[nNumProperty].Name = sFullPathProperty;
-        aSequence[nNumProperty++].Value <<= aConvertedAttribs[sFullPathAttribute];
-        aSequence[nNumProperty].Name = sMediaTypeProperty;
-        aSequence[nNumProperty++].Value <<= aConvertedAttribs[sMediaTypeAttribute];
-
-        OUString sVersion = aConvertedAttribs[sVersionAttribute];
-        if ( sVersion.getLength() )
+        case 1:
         {
-            aSequence[nNumProperty].Name = sVersionProperty;
-            aSequence[nNumProperty++].Value <<= sVersion;
+            if (!aConvertedName.equalsAscii(ELEMENT_MANIFEST)) //manifest:manifest
+                aStack.back().m_bValid = false;
+            break;
         }
-
-        OUString sSize = aConvertedAttribs[sSizeAttribute];
-        if ( sSize.getLength() )
+        case 2:
         {
-            sal_Int32 nSize;
-            nSize = sSize.toInt32();
-            aSequence[nNumProperty].Name = sSizeProperty;
-            aSequence[nNumProperty++].Value <<= nSize;
+            if (aConvertedName == sFileEntryElement) //manifest:file-entry
+                doFileEntry(aConvertedAttribs);
+            else
+                aStack.back().m_bValid = false;
+            break;
         }
-    }
-    else if ( aStack.size() > 1 )
-    {
-        ManifestStack::reverse_iterator aIter = aStack.rbegin();
-        ++aIter;
-
-        if ( aIter->m_aConvertedName.equals( sFileEntryElement ) )
+        case 3:
         {
-            if ( aConvertedName.equals( sEncryptionDataElement ) )
-            {
-                // If this element exists, then this stream is encrypted and we need
-                // to import the initialisation vector, salt and iteration count used
-                nDerivedKeySize = 0;
-                OUString aString = aConvertedAttribs[sChecksumTypeAttribute];
-                if ( !bIgnoreEncryptData )
-                {
-                    if ( aString.equals( sSHA1_1k_Name ) || aString.equals( sSHA1_1k_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sDigestAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1_1K;
-                    }
-                    else if ( aString.equals( sSHA256_1k_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sDigestAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256_1K;
-                    }
-                    else
-                        bIgnoreEncryptData = sal_True;
+            ManifestStack::reverse_iterator aIter = aStack.rbegin();
+            ++aIter;
 
-                    if ( !bIgnoreEncryptData )
-                    {
-                        aString = aConvertedAttribs[sChecksumAttribute];
-                        uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
-                        aSequence[nNumProperty].Name = sDigestProperty;
-                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
-                    }
-                }
-            }
+            if (!aIter->m_bValid)
+                aStack.back().m_bValid = false;
+            else if (aConvertedName.equals(sEncryptionDataElement))   //manifest:encryption-data
+                doEncryptionData(aConvertedAttribs);
+            else
+                aStack.back().m_bValid = false;
+            break;
         }
-        else if ( aIter->m_aConvertedName.equals( sEncryptionDataElement ) )
+        case 4:
         {
-            if ( aConvertedName == sAlgorithmElement )
-            {
-                if ( !bIgnoreEncryptData )
-                {
-                    OUString aString = aConvertedAttribs[sAlgorithmNameAttribute];
-                    if ( aString.equals( sBlowfish_Name ) || aString.equals( sBlowfish_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
-                    }
-                    else if ( aString.equals( sAES256_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
-                        OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 32, "Unexpected derived key length!" );
-                        nDerivedKeySize = 32;
-                    }
-                    else if ( aString.equals( sAES192_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
-                        OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 24, "Unexpected derived key length!" );
-                        nDerivedKeySize = 24;
-                    }
-                    else if ( aString.equals( sAES128_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
-                        OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 16, "Unexpected derived key length!" );
-                        nDerivedKeySize = 16;
-                    }
-                    else
-                        bIgnoreEncryptData = sal_True;
+            ManifestStack::reverse_iterator aIter = aStack.rbegin();
+            ++aIter;
 
-                    if ( !bIgnoreEncryptData )
-                    {
-                        aString = aConvertedAttribs[sInitialisationVectorAttribute];
-                        uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
-                        aSequence[nNumProperty].Name = sInitialisationVectorProperty;
-                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
-                    }
-                }
-            }
-            else if ( aConvertedName == sKeyDerivationElement )
-            {
-                if ( !bIgnoreEncryptData )
-                {
-                    OUString aString = aConvertedAttribs[sKeyDerivationNameAttribute];
-                    if ( aString.equals( sPBKDF2_Name ) || aString.equals( sPBKDF2_URL ) )
-                    {
-                        aString = aConvertedAttribs[sSaltAttribute];
-                        uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
-                        aSequence[nNumProperty].Name = sSaltProperty;
-                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
-
-                        aString = aConvertedAttribs[sIterationCountAttribute];
-                        aSequence[nNumProperty].Name = sIterationCountProperty;
-                        aSequence[nNumProperty++].Value <<= aString.toInt32();
-
-                        aString = aConvertedAttribs[sKeySizeAttribute];
-                        if ( aString.getLength() )
-                        {
-                            sal_Int32 nKey = aString.toInt32();
-                            OSL_ENSURE( !nDerivedKeySize || nKey == nDerivedKeySize , "Provided derived key length differs from the expected one!" );
-                            nDerivedKeySize = nKey;
-                        }
-                        else if ( !nDerivedKeySize )
-                            nDerivedKeySize = 16;
-                        else if ( nDerivedKeySize != 16 )
-                            OSL_ENSURE( sal_False, "Default derived key length differs from the expected one!" );
-
-                        aSequence[nNumProperty].Name = sDerivedKeySizeProperty;
-                        aSequence[nNumProperty++].Value <<= nDerivedKeySize;
-                    }
-                    else
-                        bIgnoreEncryptData = sal_True;
-                }
-            }
-            else if ( aConvertedName == sStartKeyAlgElement )
-            {
-                OUString aString = aConvertedAttribs[sStartKeyAlgNameAttribute];
-                if ( aString.equals( sSHA256_URL ) )
-                {
-                    aSequence[nNumProperty].Name = sStartKeyAlgProperty;
-                    aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256;
-                }
-                else if ( aString.equals( sSHA1_Name ) || aString.equals( sSHA1_URL ) )
-                {
-                    aSequence[nNumProperty].Name = sStartKeyAlgProperty;
-                    aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1;
-                }
-                else
-                    bIgnoreEncryptData = sal_True;
-            }
+            if (!aIter->m_bValid)
+                aStack.back().m_bValid = false;
+            else if (aConvertedName.equals(sAlgorithmElement))   //manifest:algorithm,
+                doAlgorithm(aConvertedAttribs);
+            else if (aConvertedName.equals(sKeyDerivationElement)) //manifest:key-derivation,
+                doKeyDerivation(aConvertedAttribs);
+            else if (aConvertedName.equals(sStartKeyAlgElement))   //manifest:start-key-generation
+                doStartKeyAlg(aConvertedAttribs);
+            else
+                aStack.back().m_bValid = false;
+            break;
         }
+        default:
+            aStack.back().m_bValid = false;
+            break;
     }
 }
 
