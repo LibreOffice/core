@@ -7424,7 +7424,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         }
                         //xInplaceObj->EnableSetModified( sal_False );
                         xObj->setVisualAreaSize( nAspect, aAwtSz );
-                        //xInplaceObj->EnableSetModified( sal_True );*/
+                        //xInplaceObj->EnableSetModified( sal_True );
                     }
                     catch( const uno::Exception& )
                     {
