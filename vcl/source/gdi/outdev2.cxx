@@ -406,6 +406,8 @@ void OutputDevice::CopyArea( const Point& rDestPt,
         aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
         aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
         aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+        aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
+        aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
 
         const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
