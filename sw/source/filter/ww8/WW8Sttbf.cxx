@@ -87,7 +87,7 @@ namespace ww8
             sal_uInt32 nAvailable = (mn_size - nStartOff)/sizeof(sal_Unicode);
             if (nCount > nAvailable)
                 nCount = nAvailable;
-#if defined OSL_LITTLEENDIAN
+#if defined OSL_LITENDIAN
             aResult = rtl::OUString(reinterpret_cast<const sal_Unicode *>(
                 mp_data.get() + nStartOff), nCount);
 #else
