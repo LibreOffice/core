@@ -33,10 +33,12 @@ $(eval $(call gb_Module_add_targets,solenv,\
 ))
 
 ifeq ($(GUI),UNX)
+ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_targets,solenv,\
 	CustomTarget_gdb \
 	Package_gdb \
 ))
+endif
 endif
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
