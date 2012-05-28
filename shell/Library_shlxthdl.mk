@@ -74,10 +74,10 @@ $(eval $(call gb_Library_use_static_libraries,shlxthdl,\
 $(eval $(call gb_Library_add_nativeres,shlxthdl,shlxthdl))
 
 $(eval $(call gb_Library_add_ldflags,shlxthdl,\
-	/EXPORT:DllCanUnloadNow,PRIVATE \
-	/EXPORT:DllGetClassObject,PRIVATE \
-	/EXPORT:DllRegisterServer,PRIVATE \
-	/EXPORT:DllUnregisterServer,PRIVATE \
+	/EXPORT:DllCanUnloadNow \
+	/EXPORT:DllGetClassObject \
+	/EXPORT:DllRegisterServer \
+	/EXPORT:DllUnregisterServer \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,shlxthdl,\

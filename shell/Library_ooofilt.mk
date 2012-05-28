@@ -76,10 +76,10 @@ $(eval $(call gb_Library_use_static_libraries,ooofilt,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,ooofilt,\
-	/EXPORT:DllCanUnloadNow,PRIVATE \
-	/EXPORT:DllGetClassObject,PRIVATE \
-	/EXPORT:DllRegisterServer,PRIVATE \
-	/EXPORT:DllUnregisterServer,PRIVATE \
+	/EXPORT:DllCanUnloadNow \
+	/EXPORT:DllGetClassObject \
+	/EXPORT:DllRegisterServer \
+	/EXPORT:DllUnregisterServer \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ooofilt,\
