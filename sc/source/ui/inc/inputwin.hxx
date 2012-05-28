@@ -54,7 +54,7 @@ class ScTabViewShell;
 class ScTextWndBase : public Window
 {
 public:
-    ScTextWndBase( Window* pParent,  WinBits nStyle ) : Window ( pParent, nStyle ) {}
+    ScTextWndBase( Window* pParent,  WinBits nStyle );
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            SetTextString( const String& rString ) = 0;
@@ -134,7 +134,6 @@ protected:
     // #102710#; this flag should be true if a key input or a command is handled
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
     sal_Bool        bInputMode;
-    sal_Int16       nTextStartPos;
 
 private:
     ScTabViewShell* mpViewShell;
@@ -242,7 +241,7 @@ public:
 private:
     void            TriggerToolboxLayout();
     ScMultiTextWnd  aMultiTextWnd;
-    PushButton      aButton;
+    ImageButton     aButton;
     ScrollBar       aScrollBar;
     long            nVertOffset;
     DECL_LINK( ClickHdl, void* );

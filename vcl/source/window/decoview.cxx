@@ -739,6 +739,14 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     ++rRect.Top();
                     --rRect.Bottom();
                     break;
+
+                case FRAME_DRAW_NWF:
+                    // enough space for the native rendering
+                    rRect.Left() += 5;
+                    rRect.Top() += 5;
+                    rRect.Right() -= 5;
+                    rRect.Bottom() -= 5;
+                    break;
             }
         }
         else
@@ -829,6 +837,14 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     // adjust target rectangle
                     ++rRect.Top();
                     --rRect.Bottom();
+                    break;
+
+                case FRAME_DRAW_NWF:
+                    // no rendering, just enough space for the native rendering
+                    rRect.Left() += 5;
+                    rRect.Top() += 5;
+                    rRect.Right() -= 5;
+                    rRect.Bottom() -= 5;
                     break;
             }
         }

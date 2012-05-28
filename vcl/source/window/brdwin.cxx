@@ -1201,6 +1201,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                 nStyle |= FRAME_DRAW_DOUBLEOUT;
             else if ( nBorderStyle & WINDOW_BORDER_TOPBOTTOM )
                 nStyle |= FRAME_DRAW_TOPBOTTOM;
+            else if ( nBorderStyle & WINDOW_BORDER_NWF )
+                nStyle |= FRAME_DRAW_NWF;
             else
                 nStyle |= FRAME_DRAW_DOUBLEIN;
             if ( nBorderStyle & WINDOW_BORDER_MONO )
@@ -1392,6 +1394,8 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
                 nStyle |= FRAME_DRAW_DOUBLEOUT;
             else if ( nBorderStyle & WINDOW_BORDER_TOPBOTTOM )
                 nStyle |= FRAME_DRAW_TOPBOTTOM;
+            else if ( nBorderStyle & WINDOW_BORDER_NWF )
+                nStyle |= FRAME_DRAW_NWF;
             else
                 nStyle |= FRAME_DRAW_DOUBLEIN;
             if ( nBorderStyle & WINDOW_BORDER_MONO )

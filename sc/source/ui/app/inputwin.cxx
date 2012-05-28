@@ -82,12 +82,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
-#define TEXT_STARTPOS       3
-#define TEXT_MULTI_STARTPOS 5
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 #define LEFT_OFFSET         5
 #define INPUTWIN_MULTILINES 6
+const long BUTTON_OFFSET = 2; // space bettween input line and the button to expand / collapse
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -113,6 +112,16 @@ enum ScNameInputType
     SC_MANAGE_NAMES
 };
 
+
+ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
+    : Window ( pParent, nStyle )
+{
+    if ( IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+    {
+        SetType( WINDOW_EDIT );
+        SetBorderStyle( WINDOW_BORDER_NWF );
+    }
+}
 
 //==================================================================
 //  class ScInputWindowWrapper
@@ -873,27 +882,24 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
         aMultiTextWnd        ( this, pViewSh ),
-        aButton              ( this, WB_TABSTOP | WB_RECTSTYLE ),
+        aButton              ( this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE ),
         aScrollBar           ( this, WB_TABSTOP | WB_VERT | WB_DRAG ),
         nVertOffset          ( 0 )
 {
       aMultiTextWnd.Show();
       aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
-      aMultiTextWnd.SetHelpId		( HID_INSWIN_INPUT );
+      aMultiTextWnd.SetHelpId( HID_INSWIN_INPUT );
 
-      // Hmm we can't seem to increase the width of the scrollbar :-/
-      // seems locked to GetSettings().GetStyleSettings().GetScrollBarSize()
-      // But... I guess if needs be we can get around this somehow, doesn't look
-      // too bad at the size from 'Settings' for me
-      // set button width to scrollbar width then for the moment
-      aButton.SetClickHdl	( LINK( this, ScInputBarGroup, ClickHdl ) );
-      // Add 2 pixels to compensate for the fact that scrollbar of the same width doesn't quite match
-      aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize() + 2, aMultiTextWnd.GetPixelHeightForLines(1)) );
+      Size aSize( GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd.GetPixelHeightForLines(1) );
+
+      aButton.SetClickHdl( LINK( this, ScInputBarGroup, ClickHdl ) );
+      aButton.SetSizePixel( aSize );
       aButton.Enable();
       aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
       aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
       aButton.Show();
-      aScrollBar.SetSizePixel( aButton.GetSizePixel() );
+
+      aScrollBar.SetSizePixel( aSize );
       aScrollBar.SetScrollHdl( LINK( this, ScInputBarGroup, Impl_ScrollHdl ) );
 }
 
@@ -943,10 +949,10 @@ void ScInputBarGroup::Resize()
     Size aSize  = GetSizePixel();
     aSize.Width() = Max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
 
-    aScrollBar.SetPosPixel(Point( aSize.Width() - aButton.GetSizePixel().Width() + 2, aButton.GetSizePixel().Height() ) );
+    aScrollBar.SetPosPixel(Point( aSize.Width() - aButton.GetSizePixel().Width(), aButton.GetSizePixel().Height() ) );
 
     Size aTmpSize( aSize );
-    aTmpSize.Width() = aTmpSize.Width() - aButton.GetSizePixel().Width();
+    aTmpSize.Width() = aTmpSize.Width() - aButton.GetSizePixel().Width() - BUTTON_OFFSET;
     aMultiTextWnd.SetSizePixel(aTmpSize);
 
     aMultiTextWnd.Resize();
@@ -983,7 +989,7 @@ void ScInputBarGroup::Resize()
         aScrollBar.Hide();
     }
 
-    aButton.SetPosPixel(Point(aSize.Width() - ( aButton.GetSizePixel().Width()  ) + 1 ,0));
+    aButton.SetPosPixel(Point(aSize.Width() - aButton.GetSizePixel().Width(), 0));
 
     Invalidate();
 }
@@ -1133,16 +1139,10 @@ ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh
         mnLastExpandedLines( INPUTWIN_MULTILINES ),
         mbInvalidate( false )
 {
-    // Calculate the text height, need to set a font for that. Probably we could set the font
-    // here ( on this Window ) and avoid the temp Window. OTOH vcl is such a mystery I prefer
-    // to minimise possible unexpected side-affects this way
-    Window aTmp(this, WB_BORDER );
-    aTmp.SetFont(aTextFont);
-    mnTextHeight = LogicToPixel(Size(0,aTmp.GetTextHeight())).Height() ;
+    mnTextHeight = GetTextHeight();
     Size aBorder;
     aBorder = CalcWindowSize( aBorder);
     mnBorderHeight = aBorder.Height();
-    nTextStartPos = TEXT_MULTI_STARTPOS;
 }
 
 ScMultiTextWnd::~ScMultiTextWnd()
@@ -1190,21 +1190,17 @@ void ScMultiTextWnd::Resize()
 {
     // Only Height is recalculated here, Width is applied from
     // parent/container window
-    Size aTextBoxSize  = GetSizePixel();
+    Size aTextBoxSize = GetSizePixel();
 
-    aTextBoxSize.Height()=( GetPixelHeightForLines( mnLines ) );
-    SetSizePixel(aTextBoxSize);
+    aTextBoxSize.Height() = GetPixelHeightForLines( mnLines );
+    SetSizePixel( aTextBoxSize );
 
     if(pEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
-        Point aPos1(TEXT_STARTPOS,0);
-        Point aPos2(aOutputSize.Width(),aOutputSize.Height());
 
-        pEditView->SetOutputArea(
-            PixelToLogic(Rectangle(aPos1, aPos2)));
-
-        pEditEngine->SetPaperSize( PixelToLogic(Size((aOutputSize.Width()-= 2 * nTextStartPos - 1), 10000 ) ));
+        pEditView->SetOutputArea( PixelToLogic( Rectangle( Point(), aOutputSize ) ) );
+        pEditEngine->SetPaperSize( PixelToLogic( Size( aOutputSize.Width(), 10000 ) ) );
     }
 
     SetScrollBarRange();
@@ -1340,7 +1336,6 @@ void ScMultiTextWnd::InitEditEngine()
     pEditEngine = pNew;
 
     Size barSize=GetSizePixel();
-    barSize.Width() -= (2*nTextStartPos-4);
     pEditEngine->SetUpdateMode( false );
     pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
     pEditEngine->SetWordDelimiters(
@@ -1437,7 +1432,6 @@ ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
         bIsInsertMode( sal_True ),
         bFormulaMode ( false ),
         bInputMode   ( false ),
-        nTextStartPos ( TEXT_STARTPOS ),
         mpViewShell(pViewSh)
 {
     EnableRTL( false );     // EditEngine can't be used with VCL EnableRTL
@@ -1492,11 +1486,11 @@ void ScTextWnd::Paint( const Rectangle& rRec )
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 //      if (nDiff<2) nDiff=2;       // mind. 1 Pixel
 
-        long nStartPos = nTextStartPos;
+        long nStartPos = 0;
         if ( bIsRTL )
         {
             //  right-align
-            nStartPos += GetOutputSizePixel().Width() - 2*nTextStartPos -
+            nStartPos += GetOutputSizePixel().Width() -
                         LogicToPixel( Size( GetTextWidth( aString ), 0 ) ).Width();
 
             //  LayoutMode isn't changed as long as ModifyRTLDefaults doesn't include SvxFrameDirectionItem
@@ -1514,10 +1508,8 @@ void ScTextWnd::Resize()
         long nDiff =  aSize.Height()
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 
-        aSize.Width() -= 2 * nTextStartPos - 1;
-
         pEditView->SetOutputArea(
-            PixelToLogic( Rectangle( Point( nTextStartPos, (nDiff > 0) ? nDiff/2 : 1 ),
+            PixelToLogic( Rectangle( Point( 0, (nDiff > 0) ? nDiff/2 : 1 ),
                                      aSize ) ) );
     }
 }
@@ -1896,7 +1888,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
                     nDifPos = 0;
 
                                                 // -1 wegen Rundung und "A"
-                Point aLogicStart = PixelToLogic(Point(nTextStartPos-1,0));
+                Point aLogicStart = PixelToLogic(Point(0,0));
                 long nStartPos = aLogicStart.X();
                 long nInvPos = nStartPos;
                 if (nDifPos)
