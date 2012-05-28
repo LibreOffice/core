@@ -63,7 +63,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_regsvrex \
@@ -77,7 +77,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_simplemapi \
 ))
 
-ifneq ($(COM),GCC)
+ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,shell,\
 	CustomTarget_shlxthdl_res \
 	Library_ooofilt \

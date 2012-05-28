@@ -59,6 +59,7 @@ $(eval $(call gb_Library_use_libraries,propertyhdl,\
 	gdi32 \
 	gdiplus \
 	kernel32 \
+	msvcprt \
 	ole32 \
 	oleaut32 \
 	propsys \
@@ -67,22 +68,14 @@ $(eval $(call gb_Library_use_libraries,propertyhdl,\
 	uuid \
 ))
 
-ifneq ($(COM),GCC)
-
-$(eval $(call gb_Library_use_libraries,propertyhdl,\
-	msvcprt \
-))
-
-ifneq ($(PRODUCT),full)
-$(eval $(call gb_Library_use_libraries,propertyhdl,\
-))
-endif
-
-endif
-
 $(eval $(call gb_Library_use_static_libraries,propertyhdl,\
 	shell_xmlparser \
 	shlxthandler_common \
+))
+
+$(eval $(call gb_Library_add_ldflags,propertyhdl,\
+	/EXPORT:DllCanUnloadNow,PRIVATE \
+	/EXPORT:DllGetClassObject,PRIVATE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,propertyhdl,\

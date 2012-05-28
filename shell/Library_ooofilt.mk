@@ -57,16 +57,11 @@ $(eval $(call gb_Library_use_libraries,ooofilt,\
 	advapi32 \
 	comctl32 \
 	kernel32 \
+	msvcprt \
 	ole32 \
 	shell32 \
 	uuid \
 	$(gb_Library_win32_OLDNAMES) \
-))
-
-ifneq ($(COM),GCC)
-
-$(eval $(call gb_Library_use_libraries,ooofilt,\
-	msvcprt \
 ))
 
 ifneq ($(PRODUCT),full)
@@ -75,18 +70,16 @@ $(eval $(call gb_Library_use_libraries,ooofilt,\
 ))
 endif
 
-$(eval $(call gb_Library_add_ldflags,ooofilt,\
-	/EXPORT:DllCanUnloadNow \
-	/EXPORT:DllGetClassObject \
-	/EXPORT:DllRegisterServer \
-	/EXPORT:DllUnregisterServer \
-))
-
-endif
-
 $(eval $(call gb_Library_use_static_libraries,ooofilt,\
 	shell_xmlparser \
 	shlxthandler_common \
+))
+
+$(eval $(call gb_Library_add_ldflags,ooofilt,\
+	/EXPORT:DllCanUnloadNow,PRIVATE \
+	/EXPORT:DllGetClassObject,PRIVATE \
+	/EXPORT:DllRegisterServer,PRIVATE \
+	/EXPORT:DllUnregisterServer,PRIVATE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ooofilt,\

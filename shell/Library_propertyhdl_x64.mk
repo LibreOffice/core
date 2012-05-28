@@ -78,6 +78,11 @@ $(eval $(call gb_Library_use_static_libraries,propertyhdl_x64,\
 	shlxthandler_common_x64 \
 ))
 
+$(eval $(call gb_Library_add_ldflags,propertyhdl_x64,\
+	/EXPORT:DllCanUnloadNow,PRIVATE \
+	/EXPORT:DllGetClassObject,PRIVATE \
+))
+
 $(eval $(call gb_Library_add_exception_objects,propertyhdl_x64,\
     shell/source/win32/shlxthandler/prophdl/propertyhdl \
 ))

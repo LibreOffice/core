@@ -73,14 +73,12 @@ $(eval $(call gb_Library_use_static_libraries,shlxthdl,\
 
 $(eval $(call gb_Library_add_nativeres,shlxthdl,shlxthdl))
 
-ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,shlxthdl,\
-	/EXPORT:DllCanUnloadNow \
-	/EXPORT:DllGetClassObject \
-	/EXPORT:DllRegisterServer \
-	/EXPORT:DllUnregisterServer \
+	/EXPORT:DllCanUnloadNow,PRIVATE \
+	/EXPORT:DllGetClassObject,PRIVATE \
+	/EXPORT:DllRegisterServer,PRIVATE \
+	/EXPORT:DllUnregisterServer,PRIVATE \
 ))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,shlxthdl,\
     shell/source/win32/shlxthandler/classfactory \
