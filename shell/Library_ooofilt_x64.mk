@@ -77,6 +77,15 @@ $(eval $(call gb_Library_use_static_libraries,ooofilt_x64,\
 	shlxthandler_common_x64 \
 ))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_ldflags,ooofilt_x64,\
+	/EXPORT:DllCanUnloadNow \
+	/EXPORT:DllGetClassObject \
+	/EXPORT:DllRegisterServer \
+	/EXPORT:DllUnregisterServer \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,ooofilt_x64,\
     CustomTarget/shell/source/win32/shlxthandler/ooofilt/ooofilt \
     CustomTarget/shell/source/win32/shlxthandler/ooofilt/propspec \

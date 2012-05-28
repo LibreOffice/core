@@ -75,6 +75,13 @@ $(eval $(call gb_Library_use_libraries,ooofilt,\
 ))
 endif
 
+$(eval $(call gb_Library_add_ldflags,ooofilt,\
+	/EXPORT:DllCanUnloadNow \
+	/EXPORT:DllGetClassObject \
+	/EXPORT:DllRegisterServer \
+	/EXPORT:DllUnregisterServer \
+))
+
 endif
 
 $(eval $(call gb_Library_use_static_libraries,ooofilt,\
