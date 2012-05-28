@@ -143,6 +143,7 @@ public class Bootstrap extends NativeActivity
         catch (java.io.IOException e) {
             i = null;
         }
+        putenv("OOO_DISABLE_RECOVERY=1");
         if (i != null)
             putenv("FONTCONFIG_FILE=" + dataDir + "/etc/fonts/fonts.conf");
 
