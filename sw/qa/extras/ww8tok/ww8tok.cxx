@@ -27,6 +27,7 @@
 
 #include "../swmodeltestbase.hxx"
 
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
@@ -46,6 +47,7 @@ public:
     void testN760294();
     void testN750255();
     void testN652364();
+    void testN757118();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -53,6 +55,7 @@ public:
     CPPUNIT_TEST(testN760294);
     CPPUNIT_TEST(testN750255);
     CPPUNIT_TEST(testN652364);
+    CPPUNIT_TEST(testN757118);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -173,6 +176,36 @@ xray para2.PageStyleName
     // "Standard" is the style for the first page (2nd is "Convert 1").
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle1 );
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
+}
+
+void Test::testN757118()
+{
+    load( "n757118.doc" );
+/*
+Two pairs of horizontal rules (one absolute width, one relative width)
+have the same width (full page width, half page width).
+xray ThisComponent.DrawPage.getByIndex(0).BoundRect
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> rule1, rule2, rule3, rule4;
+    drawPage->getByIndex(0) >>= rule1;
+    drawPage->getByIndex(1) >>= rule2;
+    drawPage->getByIndex(2) >>= rule3;
+    drawPage->getByIndex(3) >>= rule4;
+    uno::Reference<beans::XPropertySet> ruleProperties1(rule1, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> ruleProperties2(rule2, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> ruleProperties3(rule3, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> ruleProperties4(rule4, uno::UNO_QUERY);
+    awt::Rectangle boundRect1, boundRect2, boundRect3, boundRect4;
+    ruleProperties1->getPropertyValue( "BoundRect" ) >>= boundRect1;
+    ruleProperties2->getPropertyValue( "BoundRect" ) >>= boundRect2;
+    ruleProperties3->getPropertyValue( "BoundRect" ) >>= boundRect3;
+    ruleProperties4->getPropertyValue( "BoundRect" ) >>= boundRect4;
+    // compare, allow for < 5 differences because of rounding errors
+    CPPUNIT_ASSERT( abs( boundRect1.Width - boundRect3.Width ) < 5 );
+    CPPUNIT_ASSERT( abs( boundRect2.Width - boundRect4.Width ) < 5 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
