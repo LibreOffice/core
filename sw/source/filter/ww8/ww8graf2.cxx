@@ -528,15 +528,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             // verlinkte Grafik im Escher-Objekt
             SdrObject* pObject = 0;
 
-            //#i17200#, a bit of guesswork I'm afraid
-            if (aPic.dxaGoal == 1000 && aPic.mx == 1)  //100% hack ?
-            {
-                aPic.mx = msword_cast<sal_uInt16>(
-                    maSectionManager.GetPageWidth() -
-                    maSectionManager.GetPageRight() -
-                    maSectionManager.GetPageLeft());
-            }
-
             WW8PicDesc aPD( aPic );
             String aGrName;
             if (!pMSDffManager)
@@ -577,6 +568,27 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
                 if( pRecord )
                 {
+
+                    // Horizontal rule may have its width given as % of page width
+                    // (-1 is used if not given, 0 means the object has fixed width).
+                    // Additionally, if it's a horizontal rule without width given,
+                    // assume 100.0% width.
+                    int relativeWidth = pRecord->relativeHorizontalWidth;
+                    if( relativeWidth == -1 )
+                        relativeWidth = pRecord->isHorizontalRule ? 1000 : 0;
+                    if( relativeWidth != 0 )
+                    {
+                        aPic.mx = msword_cast<sal_uInt16>(
+                            maSectionManager.GetPageWidth() -
+                            maSectionManager.GetPageRight() -
+                            maSectionManager.GetPageLeft()) * relativeWidth / 1000;
+                        aPD = WW8PicDesc( aPic );
+                        // This SetSnapRect() call adjusts the size of the object itself,
+                        // no idea why it's this call (or even what the call actually does),
+                        // but that's what ImportGraf() (called by ImportObj()) uses.
+                        pObject->SetSnapRect( Rectangle( 0, 0, aPD.nWidth, aPD.nHeight ));
+                    }
+
                     //A graphic of this type in this location is always
                     //inline, and uses the pic in the same mould as ww6
                     //graphics.

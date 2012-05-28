@@ -5209,6 +5209,18 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                         *(pImpRec->pYRelTo) = nUDData;
                         break;
                     case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
+                    case 0x0393:
+                    // This seems to correspond to o:hrpct from .docx (even including
+                    // the difference that it's in 0.1% even though the .docx spec
+                    // says it's in 1%).
+                        pImpRec->relativeHorizontalWidth = nUDData;
+                        break;
+                    case 0x0394:
+                    // And this is really just a guess, but a mere presence of this
+                    // flag makes a horizontal rule be as wide as the page (unless
+                    // overriden by something), so it probably matches o:hr from .docx.
+                        pImpRec->isHorizontalRule = true;
+                        break;
                 }
                 if ( rSt.GetError() != 0 )
                     break;
@@ -7507,7 +7519,9 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       aTextId( 0, 0 ),
       nNextShapeId( 0 ),
       nShapeId( 0 ),
-      eShapeType( mso_sptNil )
+      eShapeType( mso_sptNil ),
+      relativeHorizontalWidth( -1 ),
+      isHorizontalRule( false )
 {
       eLineStyle      = mso_lineSimple; // GPF-Bug #66227#
       eLineDashing    = mso_lineSolid;
@@ -7545,7 +7559,9 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
       aTextId( rCopy.aTextId ),
       nNextShapeId( rCopy.nNextShapeId ),
       nShapeId( rCopy.nShapeId ),
-      eShapeType( rCopy.eShapeType )
+      eShapeType( rCopy.eShapeType ),
+      relativeHorizontalWidth( rCopy.relativeHorizontalWidth ),
+      isHorizontalRule( rCopy.isHorizontalRule )
 {
     if (rCopy.pXRelTo)
     {

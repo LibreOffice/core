@@ -319,6 +319,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_Bool        bVFlip :1;
     sal_Bool        bHFlip :1;
     sal_Bool        bAutoWidth      :1;
+    int             relativeHorizontalWidth; // in 0.1% or -1 for none
+    bool            isHorizontalRule;
 
     SvxMSDffImportRec();
     SvxMSDffImportRec(const SvxMSDffImportRec& rCopy);
