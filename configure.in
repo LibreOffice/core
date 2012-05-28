@@ -8068,6 +8068,8 @@ if test "$with_system_xextensions_headers" != "no"; then
     AC_MSG_RESULT([no])
 else
     AC_MSG_RESULT([yes])
+    AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
+     [#include <X11/extensions/shape.h>])
     BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
 fi
 
