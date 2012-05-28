@@ -747,7 +747,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( pDoc->GetNodes(), nCalcStt );
     SwNode* pInsNd = &aIdx.GetNode();
 
-        // code block so that SwPosition is detached when deleting a Node
+    {   // code block so that SwPosition is detached when deleting a Node
         SwPosition aPos( aIdx );
         if( !bDelFullPara )
         {
