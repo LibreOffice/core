@@ -50,12 +50,6 @@ EXTNAME*=$(EXTENSIONNAME)_in
 WRONG_SOURCEVERSION
 .ENDIF
 
-# Create $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk if needed
-%minor.mk : $(SOLARENV)/inc/minor.mk
-    @@-$(MKDIRHIER) $(SOLARVERSION)/$(INPATH)/inc
-    @@$(COPY) $(SOLARENV)/inc/minor.mk $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
-    @@$(TOUCH) $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
-
 # Force creation of $(SOLARVERSION)/$(INPATH)/inc/
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
 .INCLUDE : $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk

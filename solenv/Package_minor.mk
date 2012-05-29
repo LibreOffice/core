@@ -25,23 +25,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,solenv))
+$(eval $(call gb_Package_Package,solenv_minor_mk,$(SRCDIR)/solenv/inc))
 
-$(eval $(call gb_Module_add_targets,solenv,\
-	CustomTarget_versionlist \
-	Package_inc \
-	Package_minor \
-))
-
-ifeq ($(GUI),UNX)
-ifneq ($(OS),IOS)
-ifneq ($(OS),ANDROID)
-$(eval $(call gb_Module_add_targets,solenv,\
-	CustomTarget_gdb \
-	Package_gdb \
-))
-endif
-endif
-endif
+$(eval $(call gb_Package_add_file,solenv_minor_mk,inc/$(UPD)minor.mk,minor.mk))
+$(eval $(call gb_Package_add_file,solenv_minor_mk,inc/minormkchanged.flg,minor.mk))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
