@@ -9119,7 +9119,6 @@ AC_MSG_CHECKING([whether to build the Report Builder extension])
 if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_REPORTBUILDER=YES
-    AC_MSG_CHECKING([for reportbuilder module])
     AC_MSG_CHECKING([which jfreereport libs to use])
     if test "$with_system_jfreereport" = "yes"; then
         SYSTEM_JFREEREPORT=YES
@@ -9282,11 +9281,9 @@ if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration"
 
     else
         AC_MSG_RESULT([internal])
-        AC_MSG_CHECKING([for jfreereport module])
         SYSTEM_JFREEREPORT=NO
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
     fi
-    BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
 else
     AC_MSG_RESULT([no])
     ENABLE_REPORTBUILDER=NO

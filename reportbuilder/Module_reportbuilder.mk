@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Module_Module,reportbuilder))
 
-ifneq ($(SOLAR_JAVA),)
+ifeq ($(ENABLE_REPORTBUILDER),YES)
 $(eval $(call gb_Module_add_targets,reportbuilder,\
 	Configuration_reportbuilder \
 	Extension_reportbuilder \
