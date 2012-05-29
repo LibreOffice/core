@@ -220,6 +220,17 @@ public class Bootstrap extends NativeActivity
             return;
         }
 
+        // Get extra libraries to load early, so that it's easier to debug
+        // them even with a buggy ndk-gdb that doesn't grok debugging
+        // information from libraries loaded after it has been attached to the
+        // process.
+        String extraLibs = getIntent().getStringExtra("lo-extra-libs");
+        if (extraLibs != null) {
+            for (String lib : extraLibs.split(":")) {
+                dlopen(lib);
+            }
+        }
+
         // Start a strace on ourself if requested.
 
         // Note that the started strace will have its stdout and
