@@ -326,6 +326,7 @@ private:
 
     PropertyMapPtr                  m_pTopContext;
     PropertyMapPtr           m_pLastSectionContext;
+    PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     sal_uInt32                      m_nCurrentTabStopIndex;
