@@ -62,9 +62,24 @@ SHELL_PROPERTYHDL_FILES := \
 SHELL_XMLPARSER_FILES := \
 	all/xml_parser
 
+SHELL_HEADERS := \
+	win32/ooofilereader/autostyletag \
+	win32/ooofilereader/dummytag \
+	win32/ooofilereader/itag \
+	win32/ooofilereader/keywordstag \
+	win32/ooofilereader/simpletag \
+	win32/shlxthandler/classfactory \
+	win32/shlxthandler/ooofilt/ooofilt \
+	win32/shlxthandler/ooofilt/propspec \
+	win32/shlxthandler/propsheets/document_statistic \
+	win32/shlxthandler/propsheets/listviewbuilder \
+	win32/zipfile/zipexcptn
+
 $(call gb_CustomTarget_get_target,shell/source) : \
 	$(foreach source,$(SHELL_SHLXTHANDLER_COMMON_FILES) $(SHELL_SHLXTHDL_FILES) $(SHELL_OOOFILT_FILES) $(SHELL_PROPERTYHDL_FILES) $(SHELL_XMLPARSER_FILES),\
-		$(call gb_CustomTarget_get_workdir,shell/source)/$(source).cxx)
+		$(call gb_CustomTarget_get_workdir,shell/source)/$(source).cxx) \
+	$(foreach header,$(SHELL_HEADERS),\
+		$(call gb_CustomTarget_get_workdir,shell/source)/$(header).hxx)
 
 $(call gb_CustomTarget_get_workdir,shell/source)/% : $(SRCDIR)/shell/source/%
 	mkdir -p $(dir $@) && $(call gb_Deliver_deliver,$<,$@)
