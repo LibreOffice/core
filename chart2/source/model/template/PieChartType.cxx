@@ -54,7 +54,7 @@ enum
     PROP_PIECHARTTYPE_USE_RINGS
 };
 
-void lcl_AddPropertiesToVector(
+static void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
