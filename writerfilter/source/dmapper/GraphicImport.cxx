@@ -1165,6 +1165,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
+        case NS_ooxml::LN_dgm_relIds:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())

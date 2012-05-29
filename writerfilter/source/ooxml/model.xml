@@ -8,6 +8,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="dml"/>
   <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
@@ -5146,6 +5147,7 @@
       <define name="CT_GraphicalObjectData">
         <zeroOrMore>
           <ref name="pic"/>
+          <ref name="relIds"/>
           <element>
             <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
@@ -5171,6 +5173,7 @@
     </grammar>
     <resource name="CT_GraphicalObjectData" resource="Properties" tag="shape">
       <element name="pic" tokenid="ooxml:CT_GraphicalObjectData_pic"/>
+      <element name="relIds" tokenid="ooxml:CT_GraphicalObjectData_relIds"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
     <resource name="CT_GraphicalObject" resource="Properties" tag="shape">
@@ -8415,6 +8418,25 @@
           <ref name="CT_Picture"/>
         </element>
       </define>
+      <define xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_RelIds">
+        <attribute name="r:dm">
+          <text/>
+        </attribute>
+        <attribute name="r:lo">
+          <text/>
+        </attribute>
+        <attribute name="r:qs">
+          <text/>
+        </attribute>
+        <attribute name="r:cs">
+          <text/>
+        </attribute>
+      </define>
+      <define name="relIds">
+        <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds">
+          <ref name="CT_RelIds"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_PictureNonVisual" resource="Properties" tag="shape">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
@@ -8427,6 +8449,15 @@
     </resource>
     <resource name="pic" resource="Properties" tag="shape">
       <element name="pic" tokenid="ooxml:pic_pic"/>
+    </resource>
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_RelIds" resource="Shape" tag="shape">
+      <attribute name="r:dm" tokenid="ooxml:CT_RelIds_dm"/>
+      <attribute name="r:lo" tokenid="ooxml:CT_RelIds_lo"/>
+      <attribute name="r:qs" tokenid="ooxml:CT_RelIds_qs"/>
+      <attribute name="r:cs" tokenid="ooxml:CT_RelIds_cs"/>
+    </resource>
+    <resource name="relIds" resource="Shape" tag="shape">
+      <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds" tokenid="ooxml:dgm_relIds"/>
     </resource>
   </namespace>
   <namespace name="vml-main" file="vml-main.rng" todo="ignore">
