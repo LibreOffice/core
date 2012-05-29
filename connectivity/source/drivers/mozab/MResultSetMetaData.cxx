@@ -70,7 +70,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 /*column*/ ) thr
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
-    return (m_xColumns->get()).size();
+    return static_cast<sal_Int32>((m_xColumns->get()).size());
 }
 // -------------------------------------------------------------------------
 

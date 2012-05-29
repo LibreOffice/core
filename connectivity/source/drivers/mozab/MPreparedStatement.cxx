@@ -408,11 +408,11 @@ ORowSetValue& x)
 }
 
 //------------------------------------------------------------------
-sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
+size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     OSL_UNUSED( pParameter );
     // Count of the newly added Parameters
-    sal_uInt32 nParameter = m_xParamColumns->get().size()+1;
+    size_t nParameter = m_xParamColumns->get().size()+1;
 
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument is not a Parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: error in parse tree");

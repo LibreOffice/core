@@ -492,7 +492,7 @@ void OCommonStatement::createColumnMapping()
     ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_pSQLIterator->getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
     for (i=0; i<m_aColMapping.size(); ++i)
-        m_aColMapping[i] = i;
+        m_aColMapping[i] = static_cast<sal_Int32>(i);
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
     // now check which columns are bound

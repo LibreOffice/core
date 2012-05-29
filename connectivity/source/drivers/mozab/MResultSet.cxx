@@ -886,8 +886,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pOptEscape;
         const OSQLParseNode* pPart2 = parseTree->getChild(1);
         pColumn     = parseTree->getChild(0);                        // Match Item
-        pAtom       = pPart2->getChild(pPart2->count()-2);     // Match String
-        pOptEscape  = pPart2->getChild(pPart2->count()-1);     // Opt Escape Rule
+        pAtom       = pPart2->getChild(static_cast<sal_uInt32>(pPart2->count()-2));     // Match String
+        pOptEscape  = pPart2->getChild(static_cast<sal_uInt32>(pPart2->count()-1));     // Opt Escape Rule
         (void)pOptEscape;
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
@@ -1297,7 +1297,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     }
 
                     m_pKeySet = m_pSortIndex->CreateKeySet();
-                    m_CurrentRowCount = m_pKeySet->get().size();
+                    m_CurrentRowCount = static_cast<sal_Int32>(m_pKeySet->get().size());
 #if OSL_DEBUG_LEVEL > 0
                     for( OKeySet::Vector::size_type i = 0; i < m_pKeySet->get().size(); i++ )
                         OSL_TRACE("Sorted: %d -> %d", i, (m_pKeySet->get())[i] );
@@ -1405,7 +1405,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                 {
                     if(_bSetColumnMapping)
                     {
-                        sal_Int32 nSelectColumnPos = aIter - _rxColumns->get().begin() + 1;
+                        sal_Int32 nSelectColumnPos = static_cast<sal_Int32>(aIter - _rxColumns->get().begin() + 1);
                             // the getXXX methods are 1-based ...
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column
@@ -1490,7 +1490,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
 sal_Int32 OResultSet::deletedCount()
 {
     impl_ensureKeySet();
-    return m_CurrentRowCount - m_pKeySet->get().size();
+    return m_CurrentRowCount - static_cast<sal_Int32>(m_pKeySet->get().size());
 
 }
 // -----------------------------------------------------------------------------
@@ -1559,7 +1559,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 
     if ( nCurCard > nNumberOfRecords && m_aQuery.queryComplete()) {
         fillKeySet(nNumberOfRecords);
-        m_nRowPos = m_pKeySet->get().size() + 1;
+        m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size() + 1);
         OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
         return sal_False;
     }
@@ -1908,7 +1908,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
     else
         m_nUpdatedRow = 0;
 
-    m_nRowPos = m_pKeySet->get().size();
+    m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size());
     fetchCurrentRow();
     OSL_TRACE("moveToInsertRow out, m_nRowPos = %u", m_nRowPos );
 }

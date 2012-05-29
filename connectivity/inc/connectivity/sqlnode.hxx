@@ -272,7 +272,7 @@ namespace connectivity
 
         void setParent(OSQLParseNode* pParseNode) {m_pParent = pParseNode;};
 
-        sal_uInt32 count() const {return m_aChildren.size();};
+        size_t count() const {return m_aChildren.size();};
         inline OSQLParseNode* getChild(sal_uInt32 nPos) const;
 
         void append(OSQLParseNode* pNewSubTree);
