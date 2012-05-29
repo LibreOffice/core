@@ -401,7 +401,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
 
             if ( pGconfValue != NULL )
             {
-                bool bOk = g_strcasecmp( "manual", gconf_value_get_string( pGconfValue ) ) == 0;
+                bool bOk = g_ascii_strcasecmp( "manual", gconf_value_get_string( pGconfValue ) ) == 0;
                 gconf_value_free( pGconfValue );
                 if (bOk) return sal_True;
             }
