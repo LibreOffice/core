@@ -62,10 +62,10 @@ ifneq ($(GUI)$(COM),WNTMSC)
 include $(OUTDIR_FOR_BUILD)/inc/postgresql/libpq-flags.mk
 
 $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\
-	$(if $(filter-out MACOSX,$(OS)),-Wl,--as-needed) \
+	$(if $(filter-out MACOSX,$(OS)),-Wl$(COMMA)--as-needed) \
 	$(LIBPQ_DEP_LIBS) \
 	$(if $(filter-out MACOSX,$(OS)),-ldl) \
-	$(if $(filter-out MACOSX,$(OS)),-Wl,--no-as-needed) \
+	$(if $(filter-out MACOSX,$(OS)),-Wl$(COMMA)--no-as-needed) \
 ))
 
 endif
