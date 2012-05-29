@@ -55,10 +55,8 @@
 #include <winver.h>
 
 #include <boost/unordered_map.hpp>
-#include <set>
 
 typedef boost::unordered_map<int,int> IntMap;
-typedef std::set<int> IntSet;
 
 // Graphite headers
 #ifdef ENABLE_GRAPHITE

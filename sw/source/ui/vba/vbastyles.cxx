@@ -166,7 +166,6 @@ static const MSOStyleNameTable aMSOStyleNameTable[] =
     { 0, 0, 0 }
 };
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > StyleEnumeration_BASE;
 typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
 
 class StyleCollectionHelper : public StyleCollectionHelper_BASE

@@ -78,8 +78,6 @@ namespace accessibility
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
     typedef ::com::sun::star::awt::Point        UnoPoint;
-    typedef ::com::sun::star::awt::Size         UnoSize;
-    typedef ::com::sun::star::awt::Rectangle    UnoRectangle;
 
     //==================================================================================================================
     //= AccessibleWrapper

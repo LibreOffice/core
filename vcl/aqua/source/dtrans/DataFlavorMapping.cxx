@@ -39,7 +39,6 @@
 #include <rtl/memory.h>
 #include <osl/endian.h>
 
-#include <vector>
 #include <stdio.h>
 
 #include <premac.h>
@@ -69,8 +68,6 @@ namespace // private
     Type dtype = aFlavor.DataType;
     return ((len > 0) && ((dtype == CPPUTYPE_SEQINT8) || (dtype == CPPUTYPE_OUSTRING)));
   }
-
-  typedef vector<sal_Unicode> UnicodeBuffer;
 
   NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
   NSString* PBTYPE_SESX = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";

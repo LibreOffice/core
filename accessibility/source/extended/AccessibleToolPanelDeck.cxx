@@ -44,7 +44,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <boost/noncopyable.hpp>
-#include <vector>
 
 //......................................................................................................................
 namespace accessibility
@@ -77,7 +76,6 @@ namespace accessibility
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
-    typedef ::com::sun::star::awt::Rectangle    UnoRectangle;
     typedef ::com::sun::star::awt::Point        UnoPoint;
 
     //==================================================================================================================
@@ -115,7 +113,6 @@ namespace accessibility
         Reference< XAccessible >    m_xAccessibleParent;
         ::svt::ToolPanelDeck*       m_pPanelDeck;
 
-        typedef ::std::vector< Reference< XAccessible > > AccessibleChildren;
         Reference< XAccessible >        m_xActivePanelAccessible;
     };
 

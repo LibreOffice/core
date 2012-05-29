@@ -34,7 +34,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-typedef std::list< uno::Reference<mail::XMailMessage> > MailMessageContainer_t;
 typedef std::list< ::rtl::Reference<IMailDispatcherListener> > MailDispatcherListenerContainer_t;
 
 namespace /* private */

@@ -126,10 +126,6 @@ DBG_NAME( Window )
 
 // -----------------------------------------------------------------------
 
-typedef Window* PWINDOW;
-
-// -----------------------------------------------------------------------
-
 struct ImplCalcToTopData
 {
     ImplCalcToTopData*  mpNext;

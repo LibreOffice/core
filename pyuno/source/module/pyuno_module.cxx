@@ -91,7 +91,6 @@ namespace {
 
 class fillStructState
 {
-    typedef boost::unordered_map <const OUString, bool, OUStringHash> initialised_t;
     // Keyword arguments used
     PyObject *used;
     // Which structure members are initialised

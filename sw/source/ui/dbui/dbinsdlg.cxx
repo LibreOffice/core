@@ -172,7 +172,6 @@ struct _DB_Column
     }
 };
 
-typedef _DB_Column* _DB_ColumnPtr;
 SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
 
 
