@@ -65,6 +65,7 @@
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <rtl/process.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -273,8 +274,6 @@ private:
     sal_Bool                            mbExportAll;
     sal_Bool                            mbSinglePage;
     sal_Int32                           mnVisiblePage;
-    sal_Int32                           mnVisibleMasterPage;
-    sal_Bool                            mbIsPageVisible;
     PagePropertySet                     mVisiblePagePropSet;
     ::rtl::OUString                     msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
@@ -302,9 +301,14 @@ private:
     sal_Bool                            implExportDocument();
     sal_Bool                            implExportAnimations();
 
-    sal_Bool                            implExportPages( const XDrawPageSequence& rxPages,
-                                                         sal_Int32 nFirstPage, sal_Int32 nLastPage,
-                                                         sal_Int32 nVisiblePage, sal_Bool bMaster );
+    sal_Bool                            implExportMasterPages( const XDrawPageSequence& rxPages,
+                                                               sal_Int32 nFirstPage, sal_Int32 nLastPage );
+    sal_Bool                            implExportDrawPages( const XDrawPageSequence& rxPages,
+                                                             sal_Int32 nFirstPage, sal_Int32 nLastPage );
+    sal_Bool                            implExportPage( const ::rtl::OUString & sPageId,
+                                                        const Reference< XDrawPage > & rxPage,
+                                                        const Reference< XShapes > & xShapes,
+                                                        sal_Bool bMaster );
 
     sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implExportShape( const Reference< XShape >& rxShape );

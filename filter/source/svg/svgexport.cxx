@@ -74,6 +74,7 @@ static const char    aOOOElemTextField[] = NSPREFIX "text_field";
 
 // ooo xml attributes for meta_slides
 static const char    aOOOAttrNumberOfSlides[] = NSPREFIX "number-of-slides";
+static const char    aOOOAttrStartSlideNumber[] = NSPREFIX "start-slide-number";
 static const char    aOOOAttrNumberingType[] = NSPREFIX "page-numbering-type";
 
 // ooo xml attributes for meta_slide
@@ -648,22 +649,6 @@ sal_Bool SVGFilter::implLookForFirstVisiblePage()
                     ( ( xPropSet->getPropertyValue( B2UCONST( "Visible" ) ) >>= bVisible ) && bVisible ) )
                 {
                     mnVisiblePage = nCurPage;
-
-                    Reference< XMasterPageTarget > xMasterTarget( xDrawPage, UNO_QUERY );
-                    if( xMasterTarget.is() )
-                    {
-                        Reference< XDrawPage > xMasterPage( xMasterTarget->getMasterPage() );
-
-                        for( sal_Int32 nMaster = 0, nMasterCount = mMasterPageTargets.getLength();
-                             ( nMaster < nMasterCount ) && ( -1 == mnVisibleMasterPage );
-                             ++nMaster )
-                        {
-                            const Reference< XDrawPage > & xMasterTestPage = mMasterPageTargets[nMaster];
-
-                            if( xMasterTestPage.is() && xMasterTestPage == xMasterPage )
-                                mnVisibleMasterPage = nMaster;
-                        }
-                    }
                 }
             }
         }
@@ -686,7 +671,7 @@ sal_Bool SVGFilter::implExportDocument()
 
     mbSinglePage = (nLastPage == 0) || !bExperimentalMode;
     mnVisiblePage = -1;
-    mnVisibleMasterPage = -1;
+//    mnVisibleMasterPage = -1;
 
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
@@ -812,8 +797,8 @@ sal_Bool SVGFilter::implExportDocument()
                 mpSVGFontExport->EmbedFonts();
             }
 
-            implExportPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1, mnVisibleMasterPage, sal_True /* is a master page */ );
-            implExportPages( mSelectedPages, 0, nLastPage, mnVisiblePage, sal_False /* is not a master page */ );
+            implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1 );
+            implExportDrawPages( mSelectedPages, 0, nLastPage );
 
             if( !mbSinglePage )
             {
@@ -875,6 +860,7 @@ sal_Bool SVGFilter::implGenerateMetaData()
 
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", B2UCONST( aOOOElemMetaSlides ) );
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::valueOf( nCount ) );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrStartSlideNumber, OUString::valueOf( mnVisiblePage ) );
 
         /*
          *  Add a (global) Page Numbering Type attribute for the document
@@ -889,6 +875,9 @@ sal_Bool SVGFilter::implGenerateMetaData()
             SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
             SdrModel* pSdrModel = pSdrPage->GetModel();
             nPageNumberingType = pSdrModel->GetPageNumType();
+
+            // That is used by CalcFieldHdl method.
+            mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
         }
         if( nPageNumberingType != SVX_NUMBER_NONE )
         {
@@ -1023,20 +1012,6 @@ sal_Bool SVGFilter::implGenerateMetaData()
                         else
                         {
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, B2UCONST( "hidden" ) );
-                        }
-                        if( i == mnVisiblePage )
-                        {
-                            mVisiblePagePropSet.bIsBackgroundVisible = bBackgroundVisibility;
-                            mVisiblePagePropSet.bAreBackgroundObjectsVisible = bBackgroundObjectsVisibility;
-                            mVisiblePagePropSet.bIsPageNumberFieldVisible = bPageNumberVisibility;
-                            mVisiblePagePropSet.bIsDateTimeFieldVisible = bDateTimeVisibility;
-                            mVisiblePagePropSet.bIsFooterFieldVisible = bFooterVisibility;
-                            mVisiblePagePropSet.bIsHeaderFieldVisible = bHeaderVisibility;
-                            mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
-                            mVisiblePagePropSet.bIsDateTimeFieldFixed = bDateTimeFixed;
-                            mVisiblePagePropSet.nDateTimeFormat = aVariableDateTimeField.format;
-                            mVisiblePagePropSet.sDateTimeText = aFixedDateTimeField.text;
-                            mVisiblePagePropSet.sFooterText = aFooterField.text;
                         }
                     }
                 }
@@ -1244,17 +1219,21 @@ sal_Bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
     return bRet;
 }
 
+
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implExportPages( const SVGFilter::XDrawPageSequence & rxPages,
-                                     sal_Int32 nFirstPage, sal_Int32 nLastPage,
-                                     sal_Int32 nVisiblePage, sal_Bool bMaster )
+sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & rxPages,
+                                           sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
                 "SVGFilter::implExportPages: nFirstPage > nLastPage" );
 
-    sal_Bool bRet = sal_False;
+    // When the exported slides are more than one we wrap master page elements
+    // with a svg <defs> element.
+    OUString aContainerTag = (mbSinglePage) ? B2UCONST( "g" ) : B2UCONST( "defs" );
+    SvXMLElementExport aContainerElement( *mpSVGExport, XML_NAMESPACE_NONE, aContainerTag, sal_True, sal_True );
 
+    sal_Bool bRet = sal_False;
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
         if( rxPages[i].is() )
@@ -1267,126 +1246,167 @@ sal_Bool SVGFilter::implExportPages( const SVGFilter::XDrawPageSequence & rxPage
                 const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
-                OUString sPageName = implGetInterfaceName( rxPages[i] );
-                if( !(sPageName.isEmpty() || mbSinglePage ))
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
-
-                {
-                    {
-                        Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
-
-                        if( xExtDocHandler.is() )
-                        {
-                            OUString aDesc;
-
-                            if( bMaster )
-                                aDesc = B2UCONST( "Master_Slide" );
-                            else
-                                aDesc = B2UCONST( "Slide" );
-
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aDesc );
-                        }
-                    }
-
-                    // We don't set a visibility attribute for a master page element
-                    // as the visibility of each master page sub element (background,
-                    // placeholder shapes, background objects) is managed separately.
-                    OUString aAttrVisibilityValue;
-                    if( !bMaster )
-                    {
-                        if( i == nVisiblePage )
-                            aAttrVisibilityValue = B2UCONST( "visible" );
-                        else
-                            aAttrVisibilityValue = B2UCONST( "hidden" );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttrVisibilityValue );
-                    }
-                    else
-                    {   // when we export the shapes of a master page (implExportShape) we need
-                        // to know if it is the master page targeted by the initially visible slide
-                        mbIsPageVisible = ( i == nVisiblePage );
-                    }
-
-                    // Adding a clip path to each exported slide and master page,
-                    // so in case bitmaps or other elements exceed the slide margins
-                    // they are trimmed, even when they are shown inside a thumbnail view.
-                    OUString sClipPathAttrValue = B2UCONST( "url(#" ) + msClipPathId + B2UCONST( ")" );
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
-
-                    // insert the <g> open tag related to the Slide/Master_Slide
-                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-
-                    // In case the page has a background object we append it .
-                    if( (mpObjects->find( rxPages[i] ) != mpObjects->end()) )
-                    {
-                        const GDIMetaFile& rMtf = (*mpObjects)[ rxPages[i] ].GetRepresentation();
-                        if( rMtf.GetActionSize() )
-                        {
-                            // background id = "bg-" + page id
-                            OUString sBackgroundId = B2UCONST( "bg-" );
-                            sBackgroundId += sPageId;
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundId );
-
-                            // At present (LibreOffice 3.4.0) the 'IsBackgroundVisible' property is not handled
-                            // by Impress; anyway we handle this property as referring only to the visibility
-                            // of the master page background. So if a slide has its own background object,
-                            // the visibility of such a background object is always inherited from the visibility
-                            // of the parent slide regardless of the value of the 'IsBackgroundVisible' property.
-                            // This means that we need to set up the visibility attribute only for the background
-                            // element of a master page.
-                            if( bMaster )
-                            {
-                                if( i == nVisiblePage && mVisiblePagePropSet.bIsBackgroundVisible )
-                                    aAttrVisibilityValue = B2UCONST( "visible" );
-                                else
-                                    aAttrVisibilityValue = B2UCONST( "hidden" );
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttrVisibilityValue );
-                            }
-
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  B2UCONST( "Background" ) );
-
-                            // insert the <g> open tag related to the Background
-                            SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-
-                            // append all elements that make up the Background
-                            const Point aNullPt;
-                            mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
-                        }   // insert the </g> closing tag related to the Background
-                    }
-
-                    // In case we are dealing with a master page we need to to group all its shapes
-                    // into a group element, this group will make up the so named "background objects"
-                    if( bMaster )
-                    {
-                        // background objects id = "bo-" + page id
-                        OUString sBackgroundObjectsId = B2UCONST( "bo-" );
-                        sBackgroundObjectsId += sPageId;
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundObjectsId );
-
-                        if( i == nVisiblePage && mVisiblePagePropSet.bAreBackgroundObjectsVisible )
-                            aAttrVisibilityValue = B2UCONST( "visible" );
-                        else
-                            aAttrVisibilityValue = B2UCONST( "hidden" );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttrVisibilityValue );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  B2UCONST( "BackgroundObjects" ) );
-
-                        // insert the <g> open tag related to the Background Objects
-                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-
-                        // append all shapes that make up the Master Slide
-                        bRet = implExportShapes( xShapes ) || bRet;
-                    }   // append the </g> closing tag related to the Background Objects
-                    else
-                    {
-                        // append all shapes that make up the Slide
-                        bRet = implExportShapes( xShapes ) || bRet;
-                    }
-                }  // append the </g> closing tag related to the Slide/Master_Slide
+                bRet = implExportPage( sPageId, rxPages[i], xShapes, sal_True /* is a master page */ ) || bRet;
             }
         }
+    }
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPages,
+                                           sal_Int32 nFirstPage, sal_Int32 nLastPage )
+{
+    DBG_ASSERT( nFirstPage <= nLastPage,
+                "SVGFilter::implExportPages: nFirstPage > nLastPage" );
+
+    // We wrap all slide in a group element with class name "SlideGroup".
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "SlideGroup" ) );
+    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+    sal_Bool bRet = sal_False;
+    for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
+    {
+        Reference< XShapes > xShapes( rxPages[i], UNO_QUERY );
+
+        if( xShapes.is() )
+        {
+            // Insert the <g> open tag related to the svg element for
+            // handling a slide visibility.
+            // In case the exported slides are more than one the initial
+            // visibility of each slide is set to 'hidden'.
+            if( !mbSinglePage )
+            {
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", B2UCONST( "hidden" ) );
+            }
+            SvXMLElementExport aGElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+            {
+                // add id attribute
+                const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
+
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "Slide" ) );
+
+                // Adding a clip path to each exported slide , so in case
+                // bitmaps or other elements exceed the slide margins, they are
+                // trimmed, even when they are shown inside a thumbnail view.
+                OUString sClipPathAttrValue = B2UCONST( "url(#" ) + msClipPathId + B2UCONST( ")" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
+
+                SvXMLElementExport aSlideElement( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+                bRet = implExportPage( sPageId, rxPages[i], xShapes, sal_False /* is not a master page */ ) || bRet;
+            }
+        } // append the </g> closing tag related to the svg element handling the slide visibility
     }
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------------
+sal_Bool SVGFilter::implExportPage( const ::rtl::OUString & sPageId,
+                                    const Reference< XDrawPage > & rxPage,
+                                    const Reference< XShapes > & xShapes,
+                                    sal_Bool bMaster )
+{
+    sal_Bool bRet = sal_False;
+
+    {
+        OUString sPageName = implGetInterfaceName( rxPage );
+        if( !(sPageName.isEmpty() || mbSinglePage ))
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
+
+        {
+            Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
+
+            if( xExtDocHandler.is() )
+            {
+                OUString aDesc;
+
+                if( bMaster )
+                    aDesc = B2UCONST( "Master_Slide" );
+                else
+                    aDesc = B2UCONST( "Page" );
+
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aDesc );
+            }
+        }
+
+        // insert the <g> open tag related to the DrawPage/MasterPage
+        SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+        // In case the page has a background object we append it .
+        if( (mpObjects->find( rxPage ) != mpObjects->end()) )
+        {
+            const GDIMetaFile& rMtf = (*mpObjects)[ rxPage ].GetRepresentation();
+            if( rMtf.GetActionSize() )
+            {
+                // background id = "bg-" + page id
+                OUString sBackgroundId = B2UCONST( "bg-" );
+                sBackgroundId += sPageId;
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundId );
+
+                // At present (LibreOffice 3.4.0) the 'IsBackgroundVisible' property is not handled
+                // by Impress; anyway we handle this property as referring only to the visibility
+                // of the master page background. So if a slide has its own background object,
+                // the visibility of such a background object is always inherited from the visibility
+                // of the parent slide regardless of the value of the 'IsBackgroundVisible' property.
+                // This means that we need to set up the visibility attribute only for the background
+                // element of a master page.
+                if( mbSinglePage && bMaster )
+                {
+                    if( !mVisiblePagePropSet.bIsBackgroundVisible )
+                    {
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", B2UCONST( "hidden" ) );
+                    }
+                }
+
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  B2UCONST( "Background" ) );
+
+                // insert the <g> open tag related to the Background
+                SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+                // append all elements that make up the Background
+                const Point aNullPt;
+                mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
+            }   // insert the </g> closing tag related to the Background
+        }
+
+        // In case we are dealing with a master page we need to to group all its shapes
+        // into a group element, this group will make up the so named "background objects"
+        if( bMaster )
+        {
+            // background objects id = "bo-" + page id
+            OUString sBackgroundObjectsId = B2UCONST( "bo-" );
+            sBackgroundObjectsId += sPageId;
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundObjectsId );
+            if( mbSinglePage )
+            {
+                if( !mVisiblePagePropSet.bAreBackgroundObjectsVisible )
+                {
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", B2UCONST( "hidden" ) );
+                }
+            }
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  B2UCONST( "BackgroundObjects" ) );
+
+            // insert the <g> open tag related to the Background Objects
+            SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+            // append all shapes that make up the Master Slide
+            bRet = implExportShapes( xShapes ) || bRet;
+        }   // append the </g> closing tag related to the Background Objects
+        else
+        {
+            // append all shapes that make up the Slide
+            bRet = implExportShapes( xShapes ) || bRet;
+        }
+    }  // append the </g> closing tag related to the Slide/Master_Slide
+
+    return bRet;
+}
+
 
 // -----------------------------------------------------------------------------
 
@@ -1451,34 +1471,24 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 const Size  aSize( aBoundRect.Width, aBoundRect.Height );
 
                 if( rMtf.GetActionSize() )
-                {   // for text field shapes we set up visibility and text-adjust attributes
-                    // TODO should we set up visibility for all text field shapes to hidden at start ?
+                {   // for text field shapes we set up text-adjust attributes
+                    // and set visibility to hidden
                     OUString aShapeClass = implGetClassFromShape( rxShape );
                     if( mbPresentation )
                     {
-                        sal_Bool bIsPageNumber = aShapeClass == "Slide_Number";
-                        sal_Bool bIsFooter = aShapeClass == "Footer";
-                        sal_Bool bIsDateTime = aShapeClass == "Date/Time";
+                        sal_Bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
+                        sal_Bool bIsFooter      = ( aShapeClass == "Footer" );
+                        sal_Bool bIsDateTime    = ( aShapeClass == "Date/Time" );
                         if( bIsPageNumber || bIsDateTime || bIsFooter )
                         {
-                            // to notify to the SVGActionWriter::ImplWriteActions method
-                            // that we are dealing with a placeholder shape
-                            pElementId = &sPlaceholderTag;
-
-                            // if the text field does not belong to the visible page its svg:visibility
-                            // attribute is set to 'hidden'; else it depends on the related property of the visible page
-                            OUString aAttrVisibilityValue( B2UCONST( "hidden" ) );
-                            if(mbIsPageVisible && mVisiblePagePropSet.bAreBackgroundObjectsVisible && (
-                                    ( bIsPageNumber && mVisiblePagePropSet.bIsPageNumberFieldVisible ) ||
-                                    ( bIsDateTime && mVisiblePagePropSet.bIsDateTimeFieldVisible ) ||
-                                    ( bIsFooter && mVisiblePagePropSet.bIsFooterFieldVisible ) ) )
-                            {
-                                aAttrVisibilityValue = B2UCONST( "visible" );
-                            }
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttrVisibilityValue );
-
                             if( !mbSinglePage )
                             {
+                                // to notify to the SVGActionWriter::ImplWriteActions method
+                                // that we are dealing with a placeholder shape
+                                pElementId = &sPlaceholderTag;
+
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", B2UCONST( "hidden" ) );
+
                                 sal_uInt16 nTextAdjust = ParagraphAdjust_LEFT;
                                 OUString sTextAdjust;
                                 xShapePropSet->getPropertyValue( B2UCONST( "ParaAdjust" ) ) >>= nTextAdjust;
@@ -1498,6 +1508,16 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                                         break;
                                 }
                                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrTextAdjust, sTextAdjust );
+                            }
+                            else // single page case
+                            {
+                                if( !mVisiblePagePropSet.bAreBackgroundObjectsVisible || (
+                                    ( bIsPageNumber && !mVisiblePagePropSet.bIsPageNumberFieldVisible ) ||
+                                    ( bIsDateTime && !mVisiblePagePropSet.bIsDateTimeFieldVisible ) ||
+                                    ( bIsFooter && !mVisiblePagePropSet.bIsFooterFieldVisible ) ) )
+                                {
+                                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", B2UCONST( "hidden" ) );
+                                }
                             }
                         }
                     }
@@ -1769,12 +1789,13 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
     if( pInfo && mbPresentation )
     {
         bFieldProcessed = true;
-        // to notify to the SVGActionWriter::ImplWriteText method
-        // that we are dealing with a placeholder shape
-        OUString   aRepresentation = sPlaceholderTag;
-
+        OUString   aRepresentation = B2UCONST("");
         if( !mbSinglePage )
         {
+            // to notify to the SVGActionWriter::ImplWriteText method
+            // that we are dealing with a placeholder shape
+            aRepresentation = sPlaceholderTag;
+
             if( !mCreateOjectsCurrentMasterPage.is() )
             {
                 OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
@@ -1929,7 +1950,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             }
             pInfo->SetRepresentation( aRepresentation );
         }
-        else
+        else  // single page case
         {
             if( mVisiblePagePropSet.bAreBackgroundObjectsVisible )
             {
@@ -1973,7 +1994,6 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     }
                 }
             }
-
             pInfo->SetRepresentation( aRepresentation );
         }
     }

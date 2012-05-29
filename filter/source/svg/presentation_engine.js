@@ -630,6 +630,7 @@ var aOOOElemTextField = 'ooo:text_field';
 
 // ooo attributes
 var aOOOAttrNumberOfSlides = 'number-of-slides';
+var aOOOAttrStartSlideNumber= 'start-slide-number';
 var aOOOAttrNumberingType = 'page-numbering-type';
 
 var aOOOAttrSlide = 'slide';
@@ -929,98 +930,6 @@ function isTextFieldElement( aElement )
            ( sClassName === aDateTimeClassName );
 }
 
-
-
-function tempWrapMasterPages()
-{
-    var aSlideGroupElement = document.createElementNS( NSS['svg'], 'g' );
-    aSlideGroupElement.setAttribute( 'class', 'SlideGroup' );
-    //aSlideGroupElement.onmousedown = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_DOWN ); };
-    //aSlideGroupElement.setAttribute( 'visibility', 'hidden' );
-
-
-    var aDrawPageSet = getElementsByClassName(ROOT_NODE, 'Slide');
-    ROOT_NODE.insertBefore( aSlideGroupElement, aDrawPageSet[0] );
-
-    var aMasterPageSet = getElementsByClassName(ROOT_NODE, 'Master_Slide');
-    if( aMasterPageSet )
-    {
-        var aDefsElement = document.createElementNS( NSS['svg'], 'defs' );
-
-        ROOT_NODE.insertBefore( aDefsElement, aMasterPageSet[0] );
-        var i;
-        for( i = 0; i < aMasterPageSet.length; ++i)
-        {
-            var aMasterPage = ROOT_NODE.removeChild( aMasterPageSet[i] );
-            aDefsElement.appendChild( aMasterPage );
-        }
-    }
-}
-
-function tempCreateSlideView( aPageElement )
-{
-    if( !aPageElement )
-        return;
-
-    var aSlideGroupElement = getElementByClassName( ROOT_NODE, 'SlideGroup' );
-
-    var sId = aPageElement.getAttribute( 'id' );
-    var sName = aPageElement.getAttributeNS( NSS['ooo'], 'name' );
-    var sClipPath = aPageElement.getAttribute( 'clip-path' );
-
-    aPageElement.removeAttribute( 'id' );
-    aPageElement.removeAttributeNS( NSS['ooo'], 'name' );
-    aPageElement.removeAttribute( 'visibility' );
-    aPageElement.removeAttribute( 'clip-path' );
-    aPageElement.setAttribute( 'class', aPageClassName );
-
-    var aVisibilityStatusElement = document.createElementNS( NSS['svg'], 'g' );
-    aVisibilityStatusElement.setAttribute( 'visibility', 'hidden' );
-
-    var aSlideElement = document.createElementNS( NSS['svg'], 'g' );
-    aSlideElement.setAttribute( 'id', sId );
-    aSlideElement.setAttributeNS( NSS['ooo'], 'name', sName );
-    aSlideElement.setAttribute( 'clip-path', sClipPath );
-    aSlideElement.setAttribute( 'class', 'Slide' );
-    aVisibilityStatusElement.appendChild( aSlideElement );
-
-    aPageElement.parentNode.removeChild( aPageElement );
-    aSlideElement.appendChild( aPageElement );
-    aSlideGroupElement.appendChild( aVisibilityStatusElement );
-}
-
-function tempModMasterPage( aMasterPageElement, sId )
-{
-    if( !aMasterPageElement )
-        return;
-
-
-    var aBackgroundObjectsElement =
-        getElementByClassName( aMasterPageElement, 'BackgroundObjects' );
-
-    var aBackgroundShapesElement = document.createElementNS( NSS['svg'], 'g' );
-    aBackgroundShapesElement.setAttribute( 'id', 'bs-' + sId );
-    aBackgroundShapesElement.setAttribute( 'class', 'BackgroundShapes' );
-
-
-    if( aBackgroundObjectsElement.hasChildNodes() )
-    {
-        var aChildNode = aBackgroundObjectsElement.firstElementChild;
-        while( aChildNode )
-        {
-            var aNextChildNode= aChildNode.nextElementSibling;
-            if( !isTextFieldElement( aChildNode ) )
-            {
-                aBackgroundObjectsElement.removeChild( aChildNode );
-                aBackgroundShapesElement.appendChild( aChildNode );
-            }
-            aChildNode = aNextChildNode;
-        }
-    }
-    aBackgroundObjectsElement.appendChild( aBackgroundShapesElement );
-}
-
-
 // ------------------------------------------------------------------------------------------ //
 /*********************
  ** Debug Utilities **
@@ -1102,9 +1011,6 @@ aAnimatedElementDebugPrinter.off();
  */
 function MetaDocument()
 {
-    // TODO to be implemented in C++
-    tempWrapMasterPages();
-
     // We look for the svg element that provides the following presentation
     // properties:
     // - the number of slides in the presentation;
@@ -1120,7 +1026,7 @@ function MetaDocument()
     assert( typeof this.nNumberOfSlides == 'number' && this.nNumberOfSlides > 0,
             'MetaDocument: number of slides is zero or undefined.' );
     // - the index of the slide to show when the presentation starts;
-    this.nStartSlideNumber = 0;
+    this.nStartSlideNumber = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrStartSlideNumber ) ) || 0;
     // - the numbering type used in the presentation, default type is arabic.
     this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';
 
@@ -1240,13 +1146,6 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     assert( this.slideElement,
             'MetaSlide: slide element <' + this.slideId + '> not found.' );
     this.nSlideNumber = parseInt( this.slideId.substr(2) );
-
-    // ------------------------------
-    // TODO: to be implemented in C++
-    tempCreateSlideView(this.slideElement);
-    this.slideElement = this.theDocument.getElementById( this.slideId );
-    assert( this.slideElement, 'MetaSlide: slide element <' + this.slideId + '> not found.' );
-    // ------------------------------
 
     // Each slide element is wrapped by a <g> element that is responsible for
     // the slide element visibility. In fact the visibility attribute has
@@ -1434,12 +1333,11 @@ getSlideAnimationsRoot : function()
 
 }; // end MetaSlide prototype
 
-/** Class MasterPage **
+/** Class MasterPage
  *  This class gives direct access to a master page element and to the following
  *  elements included in the master page:
  *  - the background element,
  *  - the background objects group element,
- *  - the background shapes group element.
  *  Moreover for each text field element a Placeholder object is created which
  *  manages the text field element itself.
  *
@@ -1449,23 +1347,19 @@ getSlideAnimationsRoot : function()
  *          background image
  *      </g>
  *      <g class='BackgroundObjects'>
- *          <g class='BackgroundFields'>
- *              <g class='Date/Time'>
- *                  date/time placeholder
- *              </g>
- *              <g class='Header'>
- *                  header placeholder
- *              </g>
- *              <g class='Footer'>
- *                  footer placeholder
- *              </g>
- *              <g class='Slide_Number'>
- *                  slide number placeholder
- *              </g>
+ *          <g class='Date/Time'>
+ *              date/time placeholder
  *          </g>
- *          <g class='BackgroundShapes'>
- *              shapes
+ *          <g class='Header'>
+ *              header placeholder
  *          </g>
+ *          <g class='Footer'>
+ *              footer placeholder
+ *          </g>
+ *          <g class='Slide_Number'>
+ *              slide number placeholder
+ *          </g>
+ *          shapes
  *      </g>
  *  </g>
  *
@@ -1482,19 +1376,12 @@ function MasterPage( sMasterPageId )
     assert( this.element,
             'MasterPage: master page element <' + this.id + '> not found.' );
 
-    // ------------------------------
-    // TODO: to be implemented in C++
-    tempModMasterPage( this.element, this.id );
-    this.element = document.getElementById( this.id );
-    assert( this.element, 'MasterPage: master page element <' + this.id + '> not found.' );
-    // ------------------------------
-
     // The master page background element and its id attribute.
     this.background = getElementByClassName( this.element, 'Background' );
     if( this.background )
     {
         this.backgroundId = this.background.getAttribute( 'id' );
-//      this.backgroundVisibility = initVisibilityProperty( this.background );
+        this.backgroundVisibility = initVisibilityProperty( this.background );
     }
     else
     {
@@ -1508,7 +1395,7 @@ function MasterPage( sMasterPageId )
     if( this.backgroundObjects )
     {
         this.backgroundObjectsId = this.backgroundObjects.getAttribute( 'id' );
-//      this.backgroundObjectsVisibility = initVisibilityProperty( this.backgroundObjects );
+        this.backgroundObjectsVisibility = initVisibilityProperty( this.backgroundObjects );
     }
     else
     {
@@ -1516,24 +1403,9 @@ function MasterPage( sMasterPageId )
         log( 'MasterPage: the background objects element is not valid.' );
     }
 
-    // The background shapes group element that contains all the shape of
-    // the master page that are not text fields.
-    this.backgroundShapes = getElementByClassName( this.backgroundObjects, 'BackgroundShapes' );
-    if( this.backgroundShapes )
-    {
-        this.backgroundShapesId = this.backgroundShapes.getAttribute( 'id' );
-    }
-    else
-    {
-        this.backgroundShapesId = '';
-        log( 'MasterPage: the background shapes element is not valid.' );
-    }
-
     // We populate the collection of placeholders.
     this.aPlaceholderShapeSet = new Object();
     this.initPlaceholderShapes();
-
-    this.removeVisibilityAttributes();
 }
 
 MasterPage.prototype =
@@ -1546,13 +1418,6 @@ initPlaceholderShapes : function()
     this.aPlaceholderShapeSet[ aDateTimeClassName ] = new PlaceholderShape( this, aDateTimeClassName );
     this.aPlaceholderShapeSet[ aFooterClassName ] = new PlaceholderShape( this, aFooterClassName );
     this.aPlaceholderShapeSet[ aHeaderClassName ] = new PlaceholderShape( this, aHeaderClassName );
-},
-
-removeVisibilityAttributes : function()
-{
-    this.element.removeAttribute( 'visibility' );
-    this.background.removeAttribute( 'visibility' );
-    this.backgroundObjects.removeAttribute( 'visibility' );
 }
 
 }; // end MasterPage prototype
@@ -1601,8 +1466,6 @@ PlaceholderShape.prototype.init = function()
     var aTextFieldElement = getElementByClassName( this.masterPage.backgroundObjects, this.className );
     if( aTextFieldElement )
     {
-        aTextFieldElement.removeAttribute( 'visibility' ); // TODO to be handled in C++ ?
-
         var aPlaceholderElement = getElementByClassName( aTextFieldElement, 'PlaceholderText' );
         if( aPlaceholderElement )
         {
@@ -1809,7 +1672,7 @@ MasterPageView.prototype.createElement = function()
         this.aBackgroundShapesElement = theDocument.createElementNS( NSS['svg'], 'use' );
         this.aBackgroundShapesElement.setAttribute( 'class', 'BackgroundShapes' );
         setNSAttribute( 'xlink', this.aBackgroundShapesElement,
-                        'href', '#' + this.aMasterPage.backgroundShapesId );
+                        'href', '#' + this.aMasterPage.backgroundObjectsId );
 
         // node linking
         this.aBackgroundObjectsElement.appendChild( this.aBackgroundFieldsElement );
@@ -1900,6 +1763,8 @@ TextFieldHandler.prototype.cloneElement = function()
     assert( this.aTextFieldElement,
             'TextFieldHandler.cloneElement: aTextFieldElement is not defined' );
     this.aTextFieldElement.setAttribute( 'id', this.sId );
+    // Text field placeholder visibility is always set to 'hidden'.
+    this.aTextFieldElement.removeAttribute( 'visibility' );
     // The actual <text> element where the field content has to be placed.
     this.aTextPlaceholderElement = getElementByClassName( this.aTextFieldElement, 'PlaceholderText' );
     assert( this.aTextPlaceholderElement,
@@ -1940,7 +1805,7 @@ TextFieldHandler.prototype.setTextContent = function( sText )
 {
     if( !this.aTextPlaceholderElement )
     {
-        log( 'TextFieldHandler.setTextContent: text element is not valid in placeholder of type '
+        log( 'PlaceholderShape.setTextContent: text element is not valid in placeholder of type '
                 + this.className + ' that belongs to master slide ' + this.masterPage.id );
         return;
     }
