@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,kabdrv1))
 
+$(eval $(call gb_Library_use_packages,kabdrv1,\
+	shell_inc \
+))
+
 $(eval $(call gb_Library_use_api,kabdrv1,\
 	offapi \
 	udkapi \
@@ -34,6 +38,11 @@ $(eval $(call gb_Library_use_api,kabdrv1,\
 
 $(eval $(call gb_Library_use_externals,kabdrv1,\
 	kde \
+))
+
+$(eval $(call gb_Library_set_include,kabdrv1,\
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_libs,kabdrv1,\
