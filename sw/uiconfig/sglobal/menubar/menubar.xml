@@ -35,6 +35,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
+      <menu:menuitem menu:id=".uno:TemplateManager"/>
       <menu:menu menu:id=".uno:TemplateMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Organizer"/>
