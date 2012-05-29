@@ -514,12 +514,6 @@ namespace cmis
         }
     }
 
-    void Content::destroy( sal_Bool /*bDeletePhysical*/ ) throw ( uno::Exception )
-    {
-        SAL_INFO( "cmisucp", "TODO - Content::destroy()" );
-        // TODO Implement me
-    }
-
     const int TRANSFER_BUFFER_SIZE = 65536;
 
     void Content::copyData(
@@ -849,9 +843,25 @@ namespace cmis
         }
         else if ( aCommand.Name == "delete" )
         {
-            sal_Bool bDeletePhysical = sal_False;
-            aCommand.Argument >>= bDeletePhysical;
-            destroy( bDeletePhysical );
+            try
+            {
+                if ( !isFolder( xEnv ) )
+                {
+                    getObject( )->remove( );
+                }
+                else
+                {
+                    // TODO Removing a folder and its children needs removeTree in libcmis
+                    // the remove() function only works for empty folders or documents
+                }
+            }
+            catch ( const libcmis::Exception& e )
+            {
+                ucbhelper::cancelCommandExecution( uno::makeAny
+                    ( uno::RuntimeException( rtl::OUString::createFromAscii( e.what() ),
+                        static_cast< cppu::OWeakObject * >( this ) ) ),
+                    xEnv );
+            }
         }
         else
         {
