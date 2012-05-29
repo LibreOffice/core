@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
@@ -60,6 +61,7 @@
 
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
+#include "cmis_resultset.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( rtl::OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 
@@ -322,6 +324,21 @@ namespace cmis
         return uno::Reference< sdbc::XRow >( xRow.get() );
     }
 
+    bool Content::exists( )
+    {
+        bool bExists = true;
+        try
+        {
+            libcmis::ObjectPtr object = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+        }
+        catch ( const libcmis::Exception& )
+        {
+            bExists = false;
+        }
+
+        return bExists;
+    }
+
     void Content::queryChildren( ContentRefList& /*rChildren*/ )
     {
         SAL_INFO( "cmisucp", "TODO - Content::queryChildren()" );
@@ -334,7 +351,19 @@ namespace cmis
     {
         bool bIsFolder = isFolder( xEnv );
 
-        // TODO Handle the case of the non-existing file
+        // Handle the case of the non-existing file
+        if ( !exists( ) )
+        {
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
+            uno::Any aErr = uno::makeAny(
+                ucb::InteractiveAugmentedIOException(rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                    task::InteractionClassification_ERROR,
+                    bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
+            );
+
+            ucbhelper::cancelCommandExecution(aErr, xEnv);
+        }
 
         uno::Any aRet;
 
@@ -346,8 +375,9 @@ namespace cmis
 
         if ( bOpenFolder && bIsFolder )
         {
-            SAL_INFO( "cmisucp", "TODO - Content::open() - Folder case" );
-            // TODO Handle the folder case
+            uno::Reference< ucb::XDynamicResultSet > xSet
+                = new DynamicResultSet(m_xSMgr, this, rOpenCommand, xEnv );
+            aRet <<= xSet;
         }
         else if ( rOpenCommand.Sink.is() )
         {

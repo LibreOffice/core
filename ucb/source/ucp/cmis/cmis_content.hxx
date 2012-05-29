@@ -89,6 +89,9 @@ private:
         getPropertyValues(
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& rProperties,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+
+    bool exists( );
+
 private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
@@ -124,7 +127,6 @@ private:
     sal_Bool exchangeIdentity(const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >&  xNewId);
 
     void resetAuthProvider( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
-    libcmis::ObjectPtr getObject( );
 
 public:
     Content( const com::sun::star::uno::Reference<
@@ -186,6 +188,8 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
         queryCreatableContentsInfo( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
                 throw( com::sun::star::uno::RuntimeException );
+
+    libcmis::ObjectPtr getObject( );
 };
 
 }
