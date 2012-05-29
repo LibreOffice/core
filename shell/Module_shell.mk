@@ -89,7 +89,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 
-ifeq ($(BUILD_X64),YES)
+ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	CustomTarget_x64 \
 	Library_ooofilt_x64 \
