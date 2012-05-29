@@ -41,6 +41,29 @@ public class DocumentLoader
 
     private static String TAG = "DocumentLoader";
 
+    static void dump(String objectName, Object object)
+    {
+        Log.i(TAG, objectName + " is " + (object != null ? object.toString() : "null"));
+
+        if (object == null)
+            return;
+
+        com.sun.star.lang.XTypeProvider typeProvider = (com.sun.star.lang.XTypeProvider)
+            UnoRuntime.queryInterface(com.sun.star.lang.XTypeProvider.class, object);
+
+        Log.i(TAG, "typeProvider is " + (typeProvider != null ? typeProvider.toString() : "null"));
+
+        if (typeProvider == null)
+            return;
+
+        com.sun.star.uno.Type[] types = typeProvider.getTypes();
+        if (types == null)
+            return;
+
+        for (com.sun.star.uno.Type t : types)
+            Log.i(TAG, "  " + t.getTypeName());
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -88,17 +111,15 @@ public class DocumentLoader
 
             Bootstrap.initVCL();
 
-            Object oDesktop = xMCF.createInstanceWithContext(
-                "com.sun.star.frame.Desktop", xContext);
+            Object oDesktop = xMCF.createInstanceWithContext
+                ("com.sun.star.frame.Desktop", xContext);
 
             Log.i(TAG, "oDesktop is" + (oDesktop!=null ? " not" : "") + " null");
 
             Bootstrap.initUCBHelper();
 
-            com.sun.star.frame.XComponentLoader xCompLoader =
-                (com.sun.star.frame.XComponentLoader)
-                     UnoRuntime.queryInterface(
-                         com.sun.star.frame.XComponentLoader.class, oDesktop);
+            com.sun.star.frame.XComponentLoader xCompLoader = (com.sun.star.frame.XComponentLoader)
+                UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
 
             Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
 
@@ -121,22 +142,39 @@ public class DocumentLoader
                 Object oDoc =
                     xCompLoader.loadComponentFromURL
                     (sUrl, "_blank", 0, loadProps);
-                Log.i(TAG, "oDoc is " + (oDoc!=null ? oDoc.toString() : "null"));
 
-                com.sun.star.lang.XTypeProvider typeProvider = (com.sun.star.lang.XTypeProvider) UnoRuntime.queryInterface(com.sun.star.lang.XTypeProvider.class, oDoc);
-                Log.i(TAG, "typeProvider is " + (typeProvider!=null ? typeProvider.toString() : "null"));
+                dump("oDoc", oDoc);
 
-                if (typeProvider != null) {
-                    com.sun.star.uno.Type[] types = typeProvider.getTypes();
-                    if (types != null) {
-                        for (com.sun.star.uno.Type t : types) {
-                            Log.i(TAG, "  " + t.getTypeName());
-                        }
-                    }
-                }
+                // Test stuff, try creating various services, see what types
+                // they offer, stuff that is hard to find out by reading
+                // nonexistent useful documentation.
 
-                com.sun.star.view.XRenderable renderBabe = (com.sun.star.view.XRenderable) UnoRuntime.queryInterface(com.sun.star.view.XRenderable.class, oDoc);
-                Log.i(TAG, "renderBabe is " + (renderBabe!=null ? renderBabe.toString() : "null"));
+                Log.i(TAG, "Attempting to load private:factory/swriter");
+
+                Object swriter =
+                    xCompLoader.loadComponentFromURL
+                    ("private:factory/swriter", "_blank", 0, loadProps);
+
+                dump("swriter", swriter);
+
+                Object frameControl = xMCF.createInstanceWithContext
+                    ("com.sun.star.frame.FrameControl", xContext);
+
+                dump("frameControl", frameControl);
+
+                com.sun.star.awt.XControl control = (com.sun.star.awt.XControl)
+                    UnoRuntime.queryInterface(com.sun.star.awt.XControl.class, frameControl);
+
+                Object toolkit = xMCF.createInstanceWithContext
+                    ("com.sun.star.awt.Toolkit", xContext);
+
+                dump("toolkit", toolkit);
+
+                // I guess the XRenderable thing might be what we want to use,
+                // having the code pretend it is printing?
+
+                com.sun.star.view.XRenderable renderBabe = (com.sun.star.view.XRenderable)
+                    UnoRuntime.queryInterface(com.sun.star.view.XRenderable.class, oDoc);
 
                 com.sun.star.beans.PropertyValue renderProps[] =
                     new com.sun.star.beans.PropertyValue[1];

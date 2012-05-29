@@ -53,6 +53,7 @@ copy-stuff:
 		   basegfxlo \
 		   bootstrap.uno \
 		   comphelpgcc3 \
+		   ctllo \
 		   datelo \
 		   dbaxmllo \
 		   dbtoolslo \
