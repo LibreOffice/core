@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	shell \
 	tools \
 	unodevtools \
+	unoil \
 	unotest \
 	unotools \
 	ure \
