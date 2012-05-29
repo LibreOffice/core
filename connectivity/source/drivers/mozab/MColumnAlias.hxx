@@ -46,14 +46,14 @@ namespace connectivity
             struct AliasEntry
             {
                 ::rtl::OString  programmaticAsciiName;
-                sal_Int32       columnPosition;
+                size_t columnPosition;
 
                 AliasEntry()
                     :programmaticAsciiName()
                     ,columnPosition( 0 )
                 {
                 }
-                AliasEntry( const sal_Char* _programmaticAsciiName, sal_Int32 _columnPosition )
+                AliasEntry( const sal_Char* _programmaticAsciiName, size_t _columnPosition )
                     :programmaticAsciiName( _programmaticAsciiName )
                     ,columnPosition( _columnPosition )
                 {
