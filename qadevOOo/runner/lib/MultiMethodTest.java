@@ -222,6 +222,7 @@ public class MultiMethodTest
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             setSubStates(e.toString());
             return tRes;
         }

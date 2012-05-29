@@ -34,12 +34,6 @@ package lib;
  */
 public class StatusException extends RuntimeException {
     /**
-     * Contains an exception if the StatusException was created with
-     * StatusException(String, Throwable) constructor.
-     */
-    protected Throwable exceptionThrown;
-
-    /**
      * The Status contained in the StatusException.
      */
     protected Status status;
@@ -51,8 +45,7 @@ public class StatusException extends RuntimeException {
      * @param t the exception of the exception Status
      */
     public StatusException( String message, Throwable t ) {
-        super( message );
-        exceptionThrown = t;
+        super( message, t );
         status = Status.exception( t );
     }
 
@@ -62,14 +55,6 @@ public class StatusException extends RuntimeException {
     public StatusException( Status st ) {
         super( st.getRunStateString() );
         status = st;
-    }
-
-    /**
-     * @return an exception, if this represents an exception Status,
-     * <tt>false</tt> otherwise.
-     */
-    public Throwable getThrownException() {
-        return exceptionThrown;
     }
 
     /**
