@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	i18npool \
 	i18nutil \
 	idl \
+	io \
 	javaunohelper \
 	o3tl \
 	oovbaapi \
