@@ -57,7 +57,7 @@ SHELL_OOOFILT_FILES := \
     win32/shlxthandler/ooofilt/propspec
 
 SHELL_PROPERTYHDL_FILES := \
-    win32/shell/source/win32/shlxthandler/prophdl/propertyhdl
+    win32/shlxthandler/prophdl/propertyhdl
 
 SHELL_XMLPARSER_FILES := \
 	all/xml_parser

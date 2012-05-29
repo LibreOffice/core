@@ -61,7 +61,7 @@ $(eval $(call gb_Library_use_libraries,shlxthdl_x64,\
 	gdi32 \
 	gdiplus \
 	kernel32 \
-	mvvcprt \
+	msvcprt \
 	msvcrt \
 	ole32 \
 	oleaut32 \

@@ -83,8 +83,8 @@ $(eval $(call gb_Library_add_ldflags,propertyhdl_x64,\
 	/EXPORT:DllGetClassObject \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,propertyhdl_x64,\
-    shell/source/win32/shlxthandler/prophdl/propertyhdl \
+$(eval $(call gb_Library_add_generated_exception_objects,propertyhdl_x64,\
+    CustomTarget/shell/source/win32/shlxthandler/prophdl/propertyhdl \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
