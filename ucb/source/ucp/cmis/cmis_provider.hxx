@@ -31,12 +31,16 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <ucbhelper/providerhelper.hxx>
+#include <libcmis/session.hxx>
 
 namespace cmis
 {
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
+private:
+    std::map< rtl::OUString, libcmis::Session* > m_aSessionCache;
+
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
@@ -58,6 +62,9 @@ public:
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier )
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
                ::com::sun::star::uno::RuntimeException );
+
+    libcmis::Session* getSession( const rtl::OUString& sBindingUrl );
+    void registerSession( const rtl::OUString& sBindingUrl, libcmis::Session* pSession );
 };
 
 }

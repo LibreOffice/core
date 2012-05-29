@@ -33,6 +33,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
 #include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
@@ -1918,6 +1919,7 @@ void SfxMedium::Transfer_Impl()
                                                       Reference< ::com::sun::star::ucb::XProgressHandler >() );
 
         rtl::OUString aDestURL( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
+
         if ( ::utl::LocalFileHelper::IsLocalFile( aDestURL ) || !aDest.removeSegment() )
         {
             TransactedTransferForFS_Impl( aSource, aDest, xComEnv );
@@ -1939,8 +1941,30 @@ void SfxMedium::Transfer_Impl()
             ::ucbhelper::Content aSourceContent;
             ::ucbhelper::Content aTransferContent;
 
-            String aFileName = GetLongName();
-            if ( !aFileName.Len() )
+            // Get the parent URL from the XChild if possible: why would the URL necessarily have
+            // a hierarchical path? It's not the case for CMIS.
+            ::ucbhelper::Content aDestContent;
+            ::ucbhelper::Content::create( aDestURL, xComEnv, aDestContent );
+            Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
+            rtl::OUString sParentUrl;
+            if ( xChild.is( ) )
+            {
+                Reference< ::com::sun::star::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
+                if ( xParent.is( ) )
+                {
+                    sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
+                }
+            }
+
+            if ( !sParentUrl.isEmpty() )
+                aDest = INetURLObject( sParentUrl );
+
+            // LongName wasn't defined anywhere, only used here... get the Title instead
+            // as it's less probably empty
+            rtl::OUString aFileName;
+            Any aAny = aDestContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title" )) );
+            aAny >>= aFileName;
+            if ( aFileName.isEmpty() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
             try

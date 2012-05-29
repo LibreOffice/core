@@ -70,6 +70,8 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
 	ucbhelper/source/provider/interactionrequest \
 	ucbhelper/source/provider/providerhelper \
 	ucbhelper/source/provider/fd_inputstream \
+	ucbhelper/source/provider/std_inputstream \
+	ucbhelper/source/provider/std_outputstream \
 	ucbhelper/source/client/proxydecider \
 	ucbhelper/source/client/content \
 	ucbhelper/source/client/contentbroker \

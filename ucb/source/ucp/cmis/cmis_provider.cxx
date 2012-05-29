@@ -45,12 +45,6 @@ ContentProvider::queryContent(
     throw( com::sun::star::ucb::IllegalIdentifierException,
            uno::RuntimeException )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "QueryContent: '%s'\n",
-       rtl::OUStringToOString
-       (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
-#endif
-
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
@@ -60,7 +54,8 @@ ContentProvider::queryContent(
 
     try
     {
-        xContent = new ::cmis::Content(m_xSMgr, this, Identifier);
+        xContent = new ::cmis::Content( m_xSMgr, this, Identifier );
+        registerNewContent( xContent );
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )
     {
@@ -73,14 +68,36 @@ ContentProvider::queryContent(
     return xContent;
 }
 
+libcmis::Session* ContentProvider::getSession( const rtl::OUString& sBindingUrl )
+{
+    libcmis::Session* pSession = NULL;
+    std::map< rtl::OUString, libcmis::Session* >::iterator it = m_aSessionCache.find( sBindingUrl );
+    if ( it != m_aSessionCache.end( ) )
+    {
+        pSession = it->second;
+    }
+    return pSession;
+}
+
+void ContentProvider::registerSession( const rtl::OUString& sBindingUrl, libcmis::Session* pSession )
+{
+    m_aSessionCache.insert( std::pair< rtl::OUString, libcmis::Session* >( sBindingUrl, pSession ) );
+}
+
 ContentProvider::ContentProvider(
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 : ::ucbhelper::ContentProviderImplHelper( rSMgr )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf(stderr, "ContentProvider::ContentProvider( )\n" );
+#endif
 }
 
 ContentProvider::~ContentProvider()
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf(stderr, "ContentProvider::~ContentProvider( )\n" );
+#endif
 }
 
 XINTERFACE_IMPL_3( ContentProvider,

@@ -27,7 +27,6 @@
  */
 
 #include <libcmis/session-factory.hxx>
-#include <tools/urlobj.hxx>
 
 #include "cmis_url.hxx"
 
@@ -38,17 +37,17 @@ using namespace std;
 
 namespace cmis
 {
-    URL::URL( rtl::OUString const & urlStr )
+    URL::URL( rtl::OUString const & urlStr ) :
+        m_aUrl( urlStr )
     {
-        INetURLObject url( urlStr );
 
-        string bindingUrl( "http://" );
-        bindingUrl += OUSTR_TO_STDSTR( url.GetHostPort( ) );
-        bindingUrl += OUSTR_TO_STDSTR( url.GetURLPath( ) );
+        rtl::OUString bindingUrl( "http://" );
+        bindingUrl += m_aUrl.GetHostPort( );
+        bindingUrl += m_aUrl.GetURLPath( );
         m_sBindingUrl = bindingUrl;
 
         // Split the query into bits and locate the repo-id key
-        rtl::OUString query = url.GetParam( );
+        rtl::OUString query = m_aUrl.GetParam( );
         while ( !query.isEmpty() )
         {
             sal_Int32 nPos = query.indexOfAsciiL( "&", 1 );
@@ -65,8 +64,8 @@ namespace cmis
             }
 
             sal_Int32 nEqPos = segment.indexOfAsciiL( "=", 1 );
-            string key = OUSTR_TO_STDSTR( segment.copy( 0, nEqPos ) );
-            string value = OUSTR_TO_STDSTR( segment.copy( nEqPos +1 ) );
+            rtl::OUString key = segment.copy( 0, nEqPos );
+            rtl::OUString value = segment.copy( nEqPos +1 );
 
             if ( key == "repo-id" )
                 m_sRepositoryId = value;
@@ -79,15 +78,39 @@ namespace cmis
     map< int, string > URL::getSessionParams( )
     {
         map< int, string > params;
-        params[ATOMPUB_URL] = m_sBindingUrl;
-        params[REPOSITORY_ID] = m_sRepositoryId;
+        params[ATOMPUB_URL] = OUSTR_TO_STDSTR( m_sBindingUrl );
+        params[REPOSITORY_ID] = OUSTR_TO_STDSTR( m_sRepositoryId );
+        params[USERNAME] = OUSTR_TO_STDSTR( m_aUrl.GetUser() );
+        params[PASSWORD] = OUSTR_TO_STDSTR( m_aUrl.GetPass() );
 
         return params;
     }
 
-    string URL::getObjectId( )
+    rtl::OUString URL::getObjectId( )
     {
         return m_aQuery["id"];
+    }
+
+    rtl::OUString URL::getBindingUrl( )
+    {
+        return m_sBindingUrl;
+    }
+
+    void URL::setObjectId( rtl::OUString sId )
+    {
+        m_aQuery["id"] = sId;
+        updateUrlQuery( );
+    }
+
+    rtl::OUString URL::asString( )
+    {
+        return m_aUrl.GetMainURL( INetURLObject::NO_DECODE );
+    }
+
+    void URL::updateUrlQuery( )
+    {
+        rtl::OUString sParam =  "repo-id=" + m_sRepositoryId + "&id=" + m_aQuery["id"];
+        m_aUrl.SetParam( sParam );
     }
 }
 

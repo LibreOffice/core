@@ -29,6 +29,8 @@
 #ifndef CMIS_CONTENT_HXX
 #define CMIS_CONTENT_HXX
 
+#include "cmis_url.hxx"
+
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -68,9 +70,18 @@ class Content : public ::ucbhelper::ContentImplHelper, public com::sun::star::uc
 private:
     ContentProvider*       m_pProvider;
     libcmis::Session*      m_pSession;
-    libcmis::CmisObjectPtr m_pObject;
+    libcmis::ObjectPtr     m_pObject;
+    rtl::OUString          m_sObjectId;
+    rtl::OUString          m_sURL;
+    rtl::OUString          m_sBindingUrl;
+
+    // Members to be set for non-persistent content
+    bool                   m_bTransient;
+    libcmis::ObjectTypePtr m_pObjectType;
+    std::map< std::string, libcmis::PropertyPtr > m_pObjectProps;
 
     bool isFolder(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv);
+    void setCmisProperty( std::string sName, std::string sValue );
 
     com::sun::star::uno::Any getBadArgExcept();
 
@@ -111,6 +122,9 @@ private:
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
     sal_Bool exchangeIdentity(const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >&  xNewId);
+
+    void resetAuthProvider( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    libcmis::ObjectPtr getObject( );
 
 public:
     Content( const com::sun::star::uno::Reference<

@@ -32,22 +32,32 @@
 #include <string>
 
 #include <rtl/ustring.hxx>
+#include <tools/urlobj.hxx>
 
 namespace cmis
 {
     class URL
     {
         private:
-            std::string m_sBindingUrl;
-            std::string m_sRepositoryId;
+            INetURLObject m_aUrl;
+            rtl::OUString m_sBindingUrl;
+            rtl::OUString m_sRepositoryId;
 
-            std::map< std::string, std::string > m_aQuery;
+            std::map< rtl::OUString, rtl::OUString > m_aQuery;
 
         public:
             URL( rtl::OUString const & urlStr );
 
             std::map< int, std::string > getSessionParams( );
-            std::string getObjectId( );
+            rtl::OUString getObjectId( );
+            rtl::OUString getBindingUrl( );
+            void setObjectId( rtl::OUString sId );
+
+            rtl::OUString asString( );
+
+        private:
+
+            void updateUrlQuery( );
     };
 }
 
