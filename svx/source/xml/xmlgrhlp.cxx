@@ -543,7 +543,7 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
         const rtl::OString aExt(rtl::OUStringToOString(rFileName.Copy(rFileName.Len() - 3),
             RTL_TEXTENCODING_ASCII_US));
 
-        for( long i = 0, nCount = SAL_N_ELEMENTS( aMapper ); ( i < nCount ) && !aMimeType.Len(); i++ )
+        for( long i = 0, nCount = sizeof (aMapper) / sizeof (aMapper[0]); ( i < nCount ) && !aMimeType.Len(); i++ )
             if( aExt.getStr() == aMapper[ i ].pExt )
                 aMimeType = String( aMapper[ i ].pMimeType, RTL_TEXTENCODING_ASCII_US );
     }

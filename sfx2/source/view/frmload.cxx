@@ -438,7 +438,7 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
     };
 
     ::comphelper::NamedValueCollection aViewArgs;
-    for ( size_t i=0; i < SAL_N_ELEMENTS( pKnownViewArgs ); ++i )
+    for ( size_t i=0; i < sizeof( pKnownViewArgs ) / sizeof( pKnownViewArgs[0] ); ++i )
     {
         if ( io_rDescriptor.has( pKnownViewArgs[i] ) )
         {

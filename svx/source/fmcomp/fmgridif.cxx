@@ -1694,7 +1694,7 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
     Property aPropDesc;
     const ::rtl::OUString* pProps = aPropsListenedTo;
-    const ::rtl::OUString* pPropsEnd = pProps + SAL_N_ELEMENTS( aPropsListenedTo );
+    const ::rtl::OUString* pPropsEnd = pProps + sizeof( aPropsListenedTo ) / sizeof( aPropsListenedTo[ 0 ] );
     for (; pProps != pPropsEnd; ++pProps)
     {
         if ( xInfo->hasPropertyByName( *pProps ) )
@@ -1717,7 +1717,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
-    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(aPropsListenedTo); ++i)
+    for (sal_uInt16 i=0; i<sizeof(aPropsListenedTo)/sizeof(aPropsListenedTo[0]); ++i)
         if (xInfo->hasPropertyByName(aPropsListenedTo[i]))
             xCol->removePropertyChangeListener(aPropsListenedTo[i], this);
 }
@@ -2763,7 +2763,7 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
             DbGridControl::NavigationBar::RECORD_NEW,
             SID_FM_RECORD_UNDO
         };
-        aSupported.realloc(SAL_N_ELEMENTS(nSupported));
+        aSupported.realloc(sizeof(nSupported)/sizeof(nSupported[0]));
         sal_uInt16* pSupported = aSupported.getArray();
         for (sal_uInt16 i=0; i<aSupported.getLength(); ++i, ++pSupported)
             *pSupported = nSupported[i];
@@ -2785,7 +2785,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
             FMURL_RECORD_MOVETONEW,
             FMURL_RECORD_UNDO
         };
-        aSupported.realloc(SAL_N_ELEMENTS(sSupported));
+        aSupported.realloc(sizeof(sSupported)/sizeof(sSupported[0]));
         ::com::sun::star::util::URL* pSupported = aSupported.getArray();
         sal_uInt16 i;
 

@@ -627,7 +627,7 @@ void BackingWindow::layoutButton(
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
     nTextWidth += maButtonImageSize.Width() + 8 + i_nExtraWidth; // add some fuzz to be on the safe side
-    if( nColumn >= 0 && nColumn < static_cast<int>(SAL_N_ELEMENTS(mnColumnWidth)) )
+    if( nColumn >= 0 && nColumn < static_cast<int>(sizeof (mnColumnWidth) / sizeof (mnColumnWidth[0])) )
     {
         if( nTextWidth > mnColumnWidth[nColumn] )
             mnColumnWidth[nColumn] = nTextWidth;

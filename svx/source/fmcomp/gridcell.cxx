@@ -733,7 +733,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
 
     if ( ( _eInitWhat & InitWritingMode ) != 0 )
     {
-        for ( size_t i=0; i < SAL_N_ELEMENTS( pWindows ); ++i )
+        for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
         {
             if ( pWindows[i] )
                 pWindows[i]->EnableRTL( rParent.IsRTLEnabled() );
@@ -742,7 +742,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
 
     if ( ( _eInitWhat & InitFont ) != 0 )
     {
-        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
             if ( !pWindows[i] )
                 continue;
@@ -774,7 +774,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
         sal_Bool bTextLineColor = rParent.IsTextLineColor();
         Color aTextLineColor( rParent.GetTextLineColor() );
 
-        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
             if ( pWindows[i] )
             {
@@ -795,7 +795,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
         if (rParent.IsControlBackground())
         {
             Color aColor( rParent.GetControlBackground());
-            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
                 if ( pWindows[i] )
                 {

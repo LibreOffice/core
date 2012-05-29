@@ -66,7 +66,7 @@ FileExtensionEntry OOFileExtensionTable[] = {
     };
 
 
-size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
+size_t OOFileExtensionTableSize = sizeof(OOFileExtensionTable)/sizeof(OOFileExtensionTable[0]);
 
 //---------------------------------
 /** Return the extension of a file

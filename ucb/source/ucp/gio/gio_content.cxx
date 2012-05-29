@@ -1258,7 +1258,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
 
-    const int nProps = SAL_N_ELEMENTS(aGenericProperties);
+    const int nProps = sizeof (aGenericProperties) / sizeof (aGenericProperties[0]);
     return uno::Sequence< beans::Property > ( aGenericProperties, nProps );
 }
 
@@ -1300,7 +1300,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
-    const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
+    const int nProps = sizeof (aCommandInfoTable) / sizeof (aCommandInfoTable[0]);
     return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
 }
 

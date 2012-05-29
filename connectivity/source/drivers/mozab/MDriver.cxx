@@ -258,7 +258,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         { LDAP,             "ldap" }
     };
 
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aSchemeMap ); ++i )
+    for ( size_t i=0; i < sizeof( aSchemeMap ) / sizeof( aSchemeMap[0] ); ++i )
     {
         if ( aAddrbookScheme.compareToAscii( aSchemeMap[i].pScheme ) == 0 )
             return aSchemeMap[i].eType;

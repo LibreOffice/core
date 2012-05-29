@@ -1409,7 +1409,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" },
             { OSQLParseNode::cast_spec, "cast_spec" }
         };
-        size_t nRuleMapCount = SAL_N_ELEMENTS( aRuleDescriptions );
+        size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
 
         for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )

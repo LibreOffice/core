@@ -144,7 +144,7 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        sal_Int32   nCount = SAL_N_ELEMENTS(aLangList);
+        sal_Int32 nCount = sizeof (aLangList) / sizeof (aLangList[0]);
         for (sal_Int32 i = 0;  i < nCount;  i++)
         {
             sal_Int16 nTmpLang = aLangList[i];

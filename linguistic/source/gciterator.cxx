@@ -137,7 +137,7 @@ static sal_Unicode aWhiteSpaces[] =
     0xfffb    /* INTERLINEAR ANNOTATION TERMINATOR */
 };
 
-static int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
+static int nWhiteSpaces = sizeof( aWhiteSpaces ) / sizeof( aWhiteSpaces[0] );
 
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
 {

@@ -87,10 +87,10 @@ using namespace tdoc_ucp;
 //=========================================================================
 
 #define MAKEPROPSEQUENCE( a ) \
-    uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS( a ) )
+    uno::Sequence< beans::Property >( a, (sizeof (a) / sizeof (a[0])) )
 
 #define MAKECMDSEQUENCE( a ) \
-    uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS( a ) )
+    uno::Sequence< ucb::CommandInfo >( a, (sizeof (a) / sizeof (a[0])) )
 
 //=========================================================================
 //

@@ -200,7 +200,7 @@ const char* KnownParameter[] =
     "--mapi-logon-ui"
 };
 
-const size_t nKnownParameter = (SAL_N_ELEMENTS(KnownParameter));
+const size_t nKnownParameter = (sizeof(KnownParameter)/sizeof(KnownParameter[0]));
 
 /** @internal */
 bool isKnownParameter(const char* aParameterName)

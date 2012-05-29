@@ -226,7 +226,7 @@ void MacroWarning::InitControls()
             &maBottomSepFL, &maEnableBtn, &maDisableBtn, &maHelpBtn
         };
         Window** pCurrent = pWins;
-        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
+        for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
         {
             Point aNewPos = (*pCurrent)->GetPosPixel();
             aNewPos.Y() -= nDelta;
@@ -324,7 +324,7 @@ void MacroWarning::FitControls()
         &maDescr2FI, &maAlwaysTrustCB, &maBottomSepFL, &maEnableBtn, &maDisableBtn, &maHelpBtn
     };
     Window** pCurrent = pWins;
-    for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
+    for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
     {
         Point aNewPos = (*pCurrent)->GetPosPixel();
         aNewPos.Y() -= nDelta;

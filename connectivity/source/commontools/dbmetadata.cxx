@@ -353,7 +353,7 @@ namespace dbtools
             {
                 const ::rtl::OUString url = m_pImpl->xConnectionMetaData->getURL();
                 char pMySQL[] = "sdbc:mysql";
-                bSupport = url.matchAsciiL(pMySQL,(SAL_N_ELEMENTS(pMySQL))-1);
+                bSupport = url.matchAsciiL(pMySQL,(sizeof(pMySQL)/sizeof(pMySQL[0]))-1);
             }
         }
         catch( const Exception& )

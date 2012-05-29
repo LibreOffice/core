@@ -43,6 +43,8 @@
 static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 static sal_Bool     bOutputForPrinter = sal_True;
 
+#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
+
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SfxResId( TP_COMMONPRINTOPTIONS ), rSet ),
 
@@ -230,7 +232,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         aReduceBitmapsResolutionLB.SelectEntryPos( 0 );
     else
     {
-        for( long i = ( SAL_N_ELEMENTS(aDPIArray) - 1 ); i >= 0; i-- )
+        for( long i = ( DPI_COUNT - 1 ); i >= 0; i-- )
         {
             if( nDPI >= aDPIArray[ i ] )
             {
@@ -359,7 +361,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReducedBitmapMode( aReduceBitmapsOptimalRB.IsChecked() ? PRINTER_BITMAP_OPTIMAL :
                                            ( aReduceBitmapsNormalRB.IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
     pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ Min( (sal_uInt16) aReduceBitmapsResolutionLB.GetSelectEntryPos(),
-                                                            (sal_uInt16)( SAL_N_ELEMENTS( aDPIArray ) - 1 ) ) ] );
+                                                            (sal_uInt16)( (sizeof (aDPIArray) / sizeof (aDPIArray[0])) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( aReduceBitmapsTransparencyCB.IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( aConvertToGreyscalesCB.IsChecked() );
 }

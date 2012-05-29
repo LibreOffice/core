@@ -116,7 +116,7 @@ namespace svt
         };
 
         // ................................................................
-        static const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
+        static const sal_Int32 s_nControlCount = sizeof( aDescriptions ) / sizeof( aDescriptions[0] );
 
         static ControlDescIterator s_pControls = aDescriptions;
         static ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
@@ -162,7 +162,7 @@ namespace svt
         };
 
         // ................................................................
-        static const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
+        static const int s_nPropertyCount = sizeof( aProperties ) / sizeof( aProperties[0] );
 
         static ControlPropertyIterator s_pProperties = aProperties;
         static ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;

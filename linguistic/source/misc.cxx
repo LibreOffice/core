@@ -686,7 +686,7 @@ static const sal_uInt32 the_aDigitZeroes [] =
 
 sal_Bool HasDigits( const OUString &rText )
 {
-    static const int nNumDigitZeroes = SAL_N_ELEMENTS(the_aDigitZeroes);
+    static const int nNumDigitZeroes = sizeof(the_aDigitZeroes) / sizeof(the_aDigitZeroes[0]);
     const sal_Int32 nLen = rText.getLength();
 
     sal_Int32 i = 0;

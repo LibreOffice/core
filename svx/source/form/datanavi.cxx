@@ -2902,7 +2902,7 @@ namespace svxform
                 &m_aCalculateBtn
             };
             Window** pCurrent = pWinsForHide;
-            for ( ; i < SAL_N_ELEMENTS( pWinsForHide ); ++i, ++pCurrent )
+            for ( ; i < sizeof( pWinsForHide ) / sizeof( pWinsForHide[ 0 ] ); ++i, ++pCurrent )
                 (*pCurrent)->Hide();
 
             Window* pWinsForMove[] =
@@ -2910,7 +2910,7 @@ namespace svxform
                 &m_aButtonsFL, &m_aOKBtn, &m_aEscBtn, &m_aHelpBtn
             };
             pCurrent = pWinsForMove;
-            for ( i = 0; i < SAL_N_ELEMENTS( pWinsForMove ); ++i, ++pCurrent )
+            for ( i = 0; i < sizeof( pWinsForMove ) / sizeof( pWinsForMove[ 0 ] ); ++i, ++pCurrent )
             {
                 Point aNewPos = (*pCurrent)->GetPosPixel();
                 aNewPos.Y() -= nDelta;

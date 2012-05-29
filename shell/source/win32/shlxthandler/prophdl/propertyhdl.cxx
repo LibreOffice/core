@@ -70,7 +70,7 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
     { PKEY_Comment,        L"LibreOffice",          L"Comments" },
 };
 
-size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
+size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
 
 //----------------------------
 
