@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -584,7 +584,7 @@ Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Refere
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const ::rtl::OUString& aName,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess >& xSFI,
+                                    const Reference< XSimpleFileAccess2 >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
     : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
     , m_pParent( pParent )
@@ -595,7 +595,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const ::rtl::OUString& aName,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess >& xSFI,
+                                    const Reference< XSimpleFileAccess2 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly,

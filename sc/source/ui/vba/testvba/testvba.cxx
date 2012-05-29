@@ -12,7 +12,8 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
@@ -88,7 +89,7 @@ private:
     Reference< XComponentContext >  mxContext;
     Reference< XMultiComponentFactory > mxMCF;
     Reference< XComponentLoader > mxCompLoader;
-    Reference< XSimpleFileAccess > mxSFA;
+    Reference< XSimpleFileAccess2 > mxSFA;
     rtl::OUString msOutDirPath;
 protected:
 public:
@@ -98,7 +99,7 @@ public:
         const rtl::OUString& _outDirPath ) : mxContext( _xContext ), mxMCF( _xMCF ),
 mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
     {
-        mxSFA.set( mxMCF->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )), mxContext), uno::UNO_QUERY_THROW );
+        mxSFA.set( ucb::SimpleFileAccess::create(_xContext) );
     }
 
     rtl::OUString getLogLocation() throw (  beans::UnknownPropertyException,  lang::IllegalArgumentException, lang::WrappedTargetException,  uno::Exception )

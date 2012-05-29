@@ -34,7 +34,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
 #include <rtl/ustring.hxx>
@@ -53,7 +54,7 @@ class ScriptingFrameworkURIHelper :
 {
 private:
 
-    css::uno::Reference< css::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
+    css::uno::Reference< css::ucb::XSimpleFileAccess2 > m_xSimpleFileAccess;
     css::uno::Reference<css::uri::XUriReferenceFactory> m_xUriReferenceFactory;
 
     ::rtl::OUString m_sLanguage;

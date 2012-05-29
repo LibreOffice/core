@@ -26,12 +26,14 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "xfactory.hxx"
@@ -162,13 +164,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw lang::IllegalArgumentException(); // TODO:
         }
 
-        uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
-                m_xFactory->createInstance (
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
-                uno::UNO_QUERY );
-
-        if ( !xTempAccess.is() )
-            throw uno::RuntimeException(); // TODO:
+        uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
+            ucb::SimpleFileAccess::create(
+                comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
 
         if ( nStorageMode & embed::ElementModes::WRITE )
             xStream = xTempAccess->openFileReadWrite( aURL );

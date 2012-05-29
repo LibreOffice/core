@@ -59,7 +59,8 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -790,9 +791,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference< container::XNameAccess > xFilterFactory( xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
 
-    Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFileAccess(
-        xFactory->createInstance("com.sun.star.ucb.SimpleFileAccess"),
-        UNO_QUERY_THROW);
+    uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
 
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)

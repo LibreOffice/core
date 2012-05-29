@@ -219,10 +219,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
 
     if ( !m_xSimpleFileAccess.is() )
     {
-        m_xSimpleFileAccess = uno::Reference< ucb::XSimpleFileAccess >(
-            m_ctx->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
-                m_ctx ), uno::UNO_QUERY );
+        m_xSimpleFileAccess = ucb::SimpleFileAccess::create(m_ctx);
     }
 
     ::rtl::OUString aExtIdentifier;

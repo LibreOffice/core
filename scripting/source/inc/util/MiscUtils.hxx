@@ -39,7 +39,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -65,14 +66,10 @@ public:
         {
             return result;
         }
-        css::uno::Reference < css::lang::XMultiComponentFactory > xFac( xCtx->getServiceManager(), css::uno::UNO_QUERY );
-        if ( xFac.is() )
+        css::uno::Reference < css::ucb::XSimpleFileAccess2 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
+        if ( xSFA.is() )
         {
-            css::uno::Reference < com::sun::star::ucb::XSimpleFileAccess > xSFA( xFac->createInstanceWithContext( OUSTR("com.sun.star.ucb.SimpleFileAccess"), xCtx ), css::uno::UNO_QUERY );
-            if ( xSFA.is() )
-            {
-                result = xSFA->getFolderContents( OUSTR("vnd.sun.star.tdoc:/"), true );
-            }
+            result = xSFA->getFolderContents( OUSTR("vnd.sun.star.tdoc:/"), true );
         }
     }
     catch ( css::uno::Exception& )

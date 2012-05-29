@@ -36,7 +36,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -45,6 +46,7 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
@@ -420,10 +422,8 @@ void OwnView_Impl::CreateNative()
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess > xAccess(
-                m_xFactory->createInstance (
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) )),
-                uno::UNO_QUERY_THROW );
+        uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
+                ucb::SimpleFileAccess::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
 
         uno::Reference< io::XInputStream > xInStream = xAccess->openFileRead( m_aTempFileURL );
         if ( !xInStream.is() )

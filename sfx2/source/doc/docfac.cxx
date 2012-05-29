@@ -29,7 +29,8 @@
 #include <com/sun/star/registry/MergeConflictException.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -38,6 +39,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
 
@@ -213,7 +215,6 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
     static const int nMaxPathSize = 16000;
     static ::rtl::OUString SERVICE_FILTER_FACTORY("com.sun.star.document.FilterFactory");
     static ::rtl::OUString SERVICE_TYPE_DECTECTION("com.sun.star.document.TypeDetection");
-    static ::rtl::OUString SERVICE_SIMPLE_ACCESS("com.sun.star.ucb.SimpleFileAccess");
 
     static ::rtl::OUString CONF_ROOT("/org.openoffice.Setup");
     static ::rtl::OUString CONF_PATH  = ::rtl::OUString("Office/Factories/" ) + ::rtl::OUString( rServiceName );
@@ -263,8 +264,8 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             aUserTemplateURL += DEF_TPL_STR;
             aUserTemplateURL += aExt;
 
-            uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
-                xFactory->createInstance( SERVICE_SIMPLE_ACCESS ), uno::UNO_QUERY_THROW );
+            uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
+                ucb::SimpleFileAccess::create( ::comphelper::ComponentContext(xFactory).getUNOContext() ) );
 
             ::rtl::OUString aBackupURL;
             ::osl::Security().getConfigDir(aBackupURL);

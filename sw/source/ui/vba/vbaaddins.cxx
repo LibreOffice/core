@@ -30,7 +30,8 @@
 #include <cppuhelper/implbase3.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -41,7 +42,7 @@ uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const uno::Ref
 
     // first get the autoload addins in the directory STARTUP
     uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< ucb::XSimpleFileAccess > xSFA( xMCF->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), xContext), uno::UNO_QUERY_THROW );
+    uno::Reference<ucb::XSimpleFileAccess2> xSFA(ucb::SimpleFileAccess::create(xContext));
     SvtPathOptions aPathOpt;
     // FIXME: temporary the STARTUP path is located in $OO/basic3.1/program/addin
     String aAddinPath = aPathOpt.GetAddinPath();

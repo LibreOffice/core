@@ -38,7 +38,7 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include "filterdetect.hxx"
 
@@ -58,10 +58,10 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(FilterDetect_getImplementationName()) )
     {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+        Reference< XSingleComponentFactory > xFactory( createSingleComponentFactory(
+            FilterDetect_createInstance,
             OUString::createFromAscii( pImplName ),
-            FilterDetect_createInstance, FilterDetect_getSupportedServiceNames() ) );
+            FilterDetect_getSupportedServiceNames() ) );
 
         if (xFactory.is())
         {

@@ -166,7 +166,8 @@ using namespace nsHdFtFlags;
 #include <com/sun/star/frame/XModel.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -4303,7 +4304,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
     uno::Sequence< rtl::OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
-    uno::Reference< ucb::XSimpleFileAccess > xSFA( ::comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
+    uno::Reference<ucb::XSimpleFileAccess2> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
 
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, sal_False );

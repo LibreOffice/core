@@ -33,6 +33,8 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/AccessControlException.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
@@ -217,16 +219,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
             throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
         }
-        Reference< XInterface > xInterface(
-            m_xMultiComFac->createInstanceWithContext(
-                ::rtl::OUString(
-                    "com.sun.star.ucb.SimpleFileAccess" ),
-                m_xContext
-            ),
-            UNO_SET_THROW
-        );
-        Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
-                    ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
+        Reference < ucb::XSimpleFileAccess2 > xSimpleFileAccess = ucb::SimpleFileAccess::create(m_xContext);
 
         // do we need to encode this? hope not.
         OSL_TRACE( ">>>> About to create storage for %s",

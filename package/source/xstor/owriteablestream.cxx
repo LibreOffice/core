@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -212,25 +214,19 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
 }
 
 //-----------------------------------------------
-sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
 {
-    if ( !xFactory.is() )
+    if ( !xContext.is() )
         return sal_False;
 
     sal_Bool bRet = sal_False;
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess > xAccess(
-                xFactory->createInstance (
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess" ) ) ),
-                uno::UNO_QUERY );
+        uno::Reference < ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create( xContext ) );
 
-        if ( xAccess.is() )
-        {
-            xAccess->kill( aURL );
-            bRet = sal_True;
-        }
+        xAccess->kill( aURL );
+        bRet = sal_True;
     }
     catch( const uno::Exception& rException )
     {
@@ -325,7 +321,7 @@ OWriteStream_Impl::~OWriteStream_Impl()
 
     if ( !m_aTempURL.isEmpty() )
     {
-        KillFile( m_aTempURL, GetServiceFactory() );
+        KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
         m_aTempURL = ::rtl::OUString();
     }
 
@@ -570,13 +566,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         try {
             if ( !aTempURL.isEmpty() && xStream.is() )
             {
-                uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                                GetServiceFactory()->createInstance (
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
-                                uno::UNO_QUERY );
-
-                if ( !xTempAccess.is() )
-                    throw uno::RuntimeException(); // TODO:
+                uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
                 uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
                 if ( xTempOutStream.is() )
@@ -595,7 +585,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
             AddLog( rWrongPasswordException.Message );
             AddLog( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow") ) );
 
-            KillFile( aTempURL, GetServiceFactory() );
+            KillFile( aTempURL, comphelper::getProcessComponentContext() );
             throw;
         }
         catch( const uno::Exception& rException )
@@ -603,7 +593,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
             AddLog( rException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow") ) );
 
-            KillFile( aTempURL, GetServiceFactory() );
+            KillFile( aTempURL, comphelper::getProcessComponentContext() );
         throw;
         }
 
@@ -660,14 +650,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                 try {
                     if ( !m_aTempURL.isEmpty() )
                     {
-                        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                                        GetServiceFactory()->createInstance (
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
-                                        uno::UNO_QUERY );
-
-                        if ( !xTempAccess.is() )
-                            throw uno::RuntimeException(); // TODO:
-
+                        uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
                         uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
                         if ( xTempOutStream.is() )
@@ -686,14 +669,14 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                 }
                 catch( const packages::WrongPasswordException& )
                 {
-                    KillFile( m_aTempURL, GetServiceFactory() );
+                    KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
                     m_aTempURL = ::rtl::OUString();
 
                     throw;
                 }
                 catch( const uno::Exception& )
                 {
-                    KillFile( m_aTempURL, GetServiceFactory() );
+                    KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
                     m_aTempURL = ::rtl::OUString();
                 }
             }
@@ -716,13 +699,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
         if ( !m_aTempURL.isEmpty() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                            GetServiceFactory()->createInstance (
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
-                            uno::UNO_QUERY );
-
-            if ( !xTempAccess.is() )
-                throw uno::RuntimeException(); // TODO:
+            uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
             try
             {
@@ -761,13 +738,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
         if ( !m_aTempURL.isEmpty() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                            GetServiceFactory()->createInstance (
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
-                            uno::UNO_QUERY );
-
-            if ( !xTempAccess.is() )
-                throw uno::RuntimeException(); // TODO:
+            uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
             try
             {
@@ -1009,7 +980,7 @@ void OWriteStream_Impl::Revert()
 
     if ( !m_aTempURL.isEmpty() )
     {
-        KillFile( m_aTempURL, GetServiceFactory() );
+        KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
         m_aTempURL = ::rtl::OUString();
     }
 
@@ -1445,7 +1416,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         {
             if ( !m_aTempURL.isEmpty() )
             {
-                KillFile( m_aTempURL, GetServiceFactory() );
+                KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
                 m_aTempURL = ::rtl::OUString();
             }
             if ( m_xCacheStream.is() )

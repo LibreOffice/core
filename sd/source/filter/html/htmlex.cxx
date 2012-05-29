@@ -31,6 +31,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <rtl/uri.hxx>
 #include <comphelper/processfactory.hxx>
@@ -3107,7 +3108,7 @@ bool HtmlExport::CopyFile( const String& rSourceFile, const String& rDestPath )
 
 // =====================================================================
 
-bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess, String const & aFileName )
+bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess, String const & aFileName )
 {
     try
     {
@@ -3132,8 +3133,8 @@ bool HtmlExport::checkForExistingFiles()
 
     try
     {
-        Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-        Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFA( xMsf->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference<ucb::XSimpleFileAccess2> xFA(ucb::SimpleFileAccess::create(xContext));
 
         sal_uInt16 nSdPage;
         for( nSdPage = 0; !bFound && (nSdPage < mnSdPageCount); nSdPage++)

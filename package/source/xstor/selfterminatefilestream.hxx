@@ -31,7 +31,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 struct OWriteStream_Impl;
@@ -40,7 +40,7 @@ class OSelfTerminateFileStream : public cppu::WeakImplHelper2< ::com::sun::star:
                                                                ::com::sun::star::io::XSeekable >
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > m_xFileAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > m_xFileAccess;
 
     ::rtl::OUString m_aURL;
 

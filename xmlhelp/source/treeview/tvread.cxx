@@ -35,11 +35,11 @@
 #include <expat.h>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -966,15 +966,7 @@ ExtensionIteratorBase::ExtensionIteratorBase( const rtl::OUString& aLanguage )
 
 void ExtensionIteratorBase::init()
 {
-    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    if (xProps.is())
-    {
-        xProps->getPropertyValue(
-            ::rtl::OUString( "DefaultContext" ) ) >>= m_xContext;
-        OSL_ASSERT( m_xContext.is() );
-    }
+    m_xContext = ::comphelper::getProcessComponentContext();
     if( !m_xContext.is() )
     {
         throw RuntimeException(
@@ -982,10 +974,7 @@ void ExtensionIteratorBase::init()
             Reference< XInterface >() );
     }
 
-    Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-    m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ),
-        m_xContext ), UNO_QUERY_THROW );
+    m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
 
     m_bUserPackagesLoaded = false;
     m_bSharedPackagesLoaded = false;

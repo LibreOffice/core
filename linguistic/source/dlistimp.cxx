@@ -46,7 +46,8 @@
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include "defs.hxx"
 #include "dlistimp.hxx"
@@ -899,14 +900,13 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
         return sal_False;
 
     // get stream to be used
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // get XInputStream stream
     uno::Reference< io::XInputStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
-                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileRead( rFileURL );
     }
     catch (const uno::Exception &)

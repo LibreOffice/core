@@ -56,7 +56,8 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
@@ -857,28 +858,24 @@ void LibPage::InsertLib()
 
         if ( xMSF.is() )
         {
-            Reference< XSimpleFileAccess > xSFA( xMSF->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
+            Reference< XSimpleFileAccess2 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
-            if ( xSFA.is() )
+            ::rtl::OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            if ( xSFA->exists( aModURL ) )
             {
-                ::rtl::OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-                if ( xSFA->exists( aModURL ) )
-                {
-                    Sequence <Any> aSeqModURL(1);
-                    aSeqModURL[0] <<= aModURL;
-                    xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
-                }
+                Sequence <Any> aSeqModURL(1);
+                aSeqModURL[0] <<= aModURL;
+                xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
+            }
 
-                ::rtl::OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-                if ( xSFA->exists( aDlgURL ) )
-                {
-                    Sequence <Any> aSeqDlgURL(1);
-                    aSeqDlgURL[0] <<= aDlgURL;
-                    xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentDialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
-                }
+            ::rtl::OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            if ( xSFA->exists( aDlgURL ) )
+            {
+                Sequence <Any> aSeqDlgURL(1);
+                aSeqDlgURL[0] <<= aDlgURL;
+                xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentDialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
             }
         }
 
@@ -1264,20 +1261,14 @@ void LibPage::ExportAsPackage( const String& aLibName )
     // file open dialog
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< task::XInteractionHandler > xHandler;
-    Reference< XSimpleFileAccess > xSFA;
+    Reference< XSimpleFileAccess2 > xSFA;
     Reference < XFilePicker > xFP;
     if( xMSF.is() )
     {
         xHandler = Reference< task::XInteractionHandler >( xMSF->createInstance
             ( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), UNO_QUERY );
 
-        xSFA = Reference< XSimpleFileAccess > ( xMSF->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
-        if( !xSFA.is() )
-        {
-            OSL_FAIL( "No simpleFileAccess" );
-            return;
-        }
+        xSFA = SimpleFileAccess::create(comphelper::getProcessComponentContext());
 
         Sequence <Any> aServiceType(1);
         aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;

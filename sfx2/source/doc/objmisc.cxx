@@ -57,7 +57,8 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -2140,8 +2141,8 @@ void SfxObjectShell::StoreLog()
             aFileURL += ::rtl::OUString( "/user/temp/document_io_logring.txt"  );
             try
             {
-                uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
-                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess( xFactory->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                uno::Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(xContext));
                 uno::Reference< io::XStream > xStream( xSimpleFileAccess->openFileReadWrite( aFileURL ), uno::UNO_SET_THROW );
                 uno::Reference< io::XOutputStream > xOutStream( xStream->getOutputStream(), uno::UNO_SET_THROW );
                 uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );

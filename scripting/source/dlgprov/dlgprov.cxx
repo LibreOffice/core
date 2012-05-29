@@ -42,7 +42,8 @@
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/resource/XStringResourceWithLocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <sfx2/app.hxx>
@@ -349,9 +350,7 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
             bSingleDialog = true;
 
             // Try any other URL with SimpleFileAccess
-            Reference< ucb::XSimpleFileAccess > xSFI =
-                Reference< ucb::XSimpleFileAccess >( xSMgr->createInstanceWithContext
-                ( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess"), m_xContext ), UNO_QUERY );
+            Reference< ucb::XSimpleFileAccess2 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
             try
             {

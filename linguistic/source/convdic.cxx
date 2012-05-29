@@ -48,7 +48,8 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
@@ -90,12 +91,13 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // get xInputStream stream
     uno::Reference< io::XInputStream > xIn;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
+        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xIn = xAccess->openFileRead( rMainURL );
     }
     catch (const uno::Exception &)
@@ -261,13 +263,14 @@ void ConvDic::Save()
         return;
     DBG_ASSERT(!INetURLObject( aMainURL ).HasError(), "invalid URL");
 
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get XOutputStream stream
     uno::Reference< io::XStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
+        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileReadWrite( aMainURL );
     }
     catch (const uno::Exception &)
