@@ -3472,12 +3472,18 @@ static const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10
     { 0 MSO_I, 0 },     { 0, 1 MSO_I },     // left top alignment
     { 0, 2 MSO_I },     { 0 MSO_I, 21600 }, // left  bottom "
     { 3 MSO_I, 21600 }, { 21600, 2 MSO_I }, // right bottom "
-    { 21600, 1 MSO_I }, { 3 MSO_I, 0 }      // right top    "
+    { 21600, 1 MSO_I }, { 3 MSO_I, 0 },     // right top    "
+    { 0 MSO_I, 0 },     { 0, 1 MSO_I },     // filling area
+    { 0, 2 MSO_I },     { 0 MSO_I, 21600 },
+    { 3 MSO_I, 21600 }, { 21600, 2 MSO_I },
+    { 21600, 1 MSO_I }, { 3 MSO_I, 0 }
 };
 static const sal_uInt16 mso_sptBracketPairSegm[] =
 {
-    0x4000, 0xa701, 0x0001, 0xa801, 0x8000,
-    0x4000, 0xa701, 0x0001, 0xa801, 0x8000
+    0x4000, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
+    0x4000, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
+    0x4000, 0xa701, 0x0001, 0xa801, 0x0001,             // filling area
+    0xa701, 0x0001, 0xa801, 0x6000, 0xab00, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
 {
@@ -3551,12 +3557,18 @@ static const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
     { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           // left bracket
     { 0 MSO_I, 7 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 4 MSO_I, 21600 },
     { 8 MSO_I, 21600 }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 7 MSO_I }, { 21600, 10800 },   // right bracket
+    { 3 MSO_I, 6 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 8 MSO_I, 0 },
+    { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           // filling area
+    { 0 MSO_I, 7 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 4 MSO_I, 21600 },
+    { 8 MSO_I, 21600 }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 7 MSO_I }, { 21600, 10800 },
     { 3 MSO_I, 6 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 8 MSO_I, 0 }
 };
 static const sal_uInt16 mso_sptBracePairSegm[] =
 {
-    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x8000,
-    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x8000
+    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
+    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
+    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x0001,                     // filling area
+    0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x6000, 0xab00, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
 {
