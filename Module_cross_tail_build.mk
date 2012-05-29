@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	oovbaapi \
 	rsc \
 	shell \
+	tools \
 	unodevtools \
 	unotools \
 	xmlhelp \
