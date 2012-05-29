@@ -30,5 +30,11 @@
 
 #define BTN_OK 1
 #define BTN_CANCEL 2
+#define LB_SETTINGS 3
+#define BTN_EDIT 4
+#define FL_ANNOTATION 5
+#define FT_ANNOTATION 6
+
+#define STR_INDIRECT_SYNTAX_DESC 10
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

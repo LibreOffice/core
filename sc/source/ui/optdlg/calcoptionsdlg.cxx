@@ -30,13 +30,98 @@
 #include "calcoptionsdlg.hrc"
 #include "scresid.hxx"
 
+#include "svtools/svlbitm.hxx"
+
+namespace {
+
+class OptionString : public SvLBoxString
+{
+    rtl::OUString maDesc;
+    rtl::OUString maValue;
+public:
+    OptionString(const rtl::OUString& rDesc, const rtl::OUString& rValue) :
+        maDesc(rDesc), maValue(rValue) {}
+
+    virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+};
+
+void OptionString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/)
+{
+    Point aPos = rPos;
+    rtl::OUString aDesc = maDesc + rtl::OUString(": ");
+    rDev.DrawText(aPos, aDesc);
+
+    aPos.X() += rDev.GetTextWidth(aDesc);
+    Font aOldFont = rDev.GetFont();
+    Font aFont = aOldFont;
+    aFont.SetWeight(WEIGHT_BOLD);
+
+    rDev.SetFont(aFont);
+    rDev.DrawText(aPos, maValue);
+
+    rDev.SetFont(aOldFont);
+}
+
+}
+
 ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent) :
     ModalDialog(pParent, ScResId(RID_SCDLG_FORMULA_CALCOPTIONS)),
+    maLbSettings(this, ScResId(LB_SETTINGS)),
+    maBtnEdit(this, ScResId(BTN_EDIT)),
+    maFlAnnotation(this, ScResId(FL_ANNOTATION)),
+    maFtAnnotation(this, ScResId(FT_ANNOTATION)),
     maBtnOK(this, ScResId(BTN_OK)),
-    maBtnCancel(this, ScResId(BTN_CANCEL))
+    maBtnCancel(this, ScResId(BTN_CANCEL)),
+    maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString())
 {
+    maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
+    maLbSettings.SetHighlightRange();
+
+    maLbSettings.SetSelectHdl(LINK(this, ScCalcOptionsDialog, SettingsSelHdl));
+    maLbSettings.SetDoubleClickHdl(LINK(this, ScCalcOptionsDialog, SettingsDoubleClickHdl));
+
+    FillOptionsList();
+    FreeResource();
+    SelectionChanged();
 }
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
+
+void ScCalcOptionsDialog::FillOptionsList()
+{
+    maLbSettings.SetUpdateMode(false);
+
+    SvLBoxTreeList* pModel = maLbSettings.GetModel();
+    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
+    OptionString* pItem = new OptionString("Formula syntax INDIRECT function expects", "Calc A1");
+    pEntry->AddItem(pItem);
+
+    pModel->Insert(pEntry);
+
+    maLbSettings.SetUpdateMode(true);
+}
+
+void ScCalcOptionsDialog::SelectionChanged()
+{
+    maFtAnnotation.SetText(maDescIndirectSyntax);
+}
+
+void ScCalcOptionsDialog::EditOption()
+{
+}
+
+IMPL_LINK_NOARG(ScCalcOptionsDialog, SettingsSelHdl)
+{
+    SelectionChanged();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCalcOptionsDialog, SettingsDoubleClickHdl)
+{
+    EditOption();
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

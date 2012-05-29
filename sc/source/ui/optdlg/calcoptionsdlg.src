@@ -32,20 +32,56 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260, 200 ) ;
+    Size = MAP_APPFONT ( 230, 200 ) ;
     Text [ en-US ] = "Detailed Calculation Settings" ;
+
+    Control LB_SETTINGS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 10 ) ;
+        Size = MAP_APPFONT ( 218 , 67 ) ;
+        TabStop = TRUE ;
+    };
+
+    PushButton BTN_EDIT
+    {
+        Pos = MAP_APPFONT ( 8 , 82 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Edit...";
+    };
+
+    FixedLine FL_ANNOTATION
+    {
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Size = MAP_APPFONT ( 218 , 8 ) ;
+        TabStop = TRUE ;
+    };
+
+    FixedText FT_ANNOTATION
+    {
+        Pos = MAP_APPFONT ( 8 , 108 ) ;
+        Size = MAP_APPFONT ( 214 , 70 ) ;
+        WordBreak = TRUE ;
+        NoLabel = TRUE ;
+    };
 
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 148 , 180 ) ;
+        Pos = MAP_APPFONT ( 118 , 180 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
 
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 204 , 180 ) ;
+        Pos = MAP_APPFONT ( 174 , 180 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+    };
+
+    String STR_INDIRECT_SYNTAX_DESC
+    {
+        Text [ en-US ] = "Formula syntax that built-in function INDIRECT expects.";
     };
 };
