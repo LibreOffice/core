@@ -28,7 +28,9 @@
 $(eval $(call gb_Module_Module,cross_tail_build))
 
 $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
+	basegfx \
 	idl \
+	o3tl \
 	oovbaapi \
 	rsc \
 	shell \
