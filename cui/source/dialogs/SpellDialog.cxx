@@ -632,22 +632,39 @@ void SpellDialog::StartSpellOptDlg_Impl()
             OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
     }
     delete pDlg;
-
 }
+
+namespace
+{
+    String getDotReplacementString(const String &rErrorText, const String &rSuggestedReplacement)
+    {
+        String aString = rErrorText;
+
+        //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
+        bool bDot = aString.Len() && aString.GetChar(aString.Len() - 1 ) == '.';
+
+        aString = rSuggestedReplacement;
+
+        if(bDot && (!aString.Len() || aString.GetChar(aString.Len() - 1 ) != '.'))
+            aString += '.';
+
+        return aString;
+    }
+}
+
 
 String SpellDialog::getReplacementString() const
 {
-    String aString = aSentenceED.GetErrorText();
-    //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-    bool bDot = aString.Len() && aString.GetChar(aString.Len() - 1 ) == '.';
+    String sOrigString = aSentenceED.GetErrorText();
+
+    String sReplacement(sOrigString);
+
     if(aSuggestionLB.IsEnabled() &&
             aSuggestionLB.GetSelectEntryCount()>0 &&
             aNoSuggestionsST != aSuggestionLB.GetSelectEntry())
-        aString = aSuggestionLB.GetSelectEntry();
-    if(bDot && (!aString.Len() || aString.GetChar(aString.Len() - 1 ) != '.'))
-        aString += '.';
+        sReplacement = aSuggestionLB.GetSelectEntry();
 
-    return aString;
+    return getDotReplacementString(sOrigString, sReplacement);
 }
 
 // -----------------------------------------------------------------------
@@ -1304,20 +1321,13 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     {
         if(aStart->xAlternatives.is())
         {
-            rtl::OUString &rString = aStart->sText;
+            const rtl::OUString &rString = aStart->sText;
 
-            //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-            bool bDot = !rString.isEmpty() && rString[rString.getLength() - 1] == '.';
-
-            Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry( rString );
+            Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry(rString);
 
             if(xEntry.is())
             {
-                rString = xEntry->getReplacementText();
-
-                if(bDot && (rString.isEmpty() || rString[rString.getLength() - 1] != '.'))
-                    rString = rString + rtl::OUString(static_cast<sal_Unicode>('.'));
-
+                aStart->sText = getDotReplacementString(rString, xEntry->getReplacementText());
                 aStart->xAlternatives = 0;
                 bHasReplaced = true;
             }
@@ -1731,8 +1741,11 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
         {
             m_nErrorStart = pNextError->GetStart();
             m_nErrorEnd = pNextError->GetEnd();
-            ChangeMarkedWord(xEntry->getReplacementText(),
-                    SvxLocaleToLanguage( pSpellErrorDescription->aLocale ));
+
+            String sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
+
+            ChangeMarkedWord(sReplacement, SvxLocaleToLanguage( pSpellErrorDescription->aLocale ));
+
             aCursor.GetIndex() = aCursor.GetIndex() + (sal_uInt16)(xEntry->getReplacementText().getLength());
         }
         else
