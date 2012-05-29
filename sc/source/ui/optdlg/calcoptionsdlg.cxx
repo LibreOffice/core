@@ -67,11 +67,13 @@ void OptionString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
 ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent) :
     ModalDialog(pParent, ScResId(RID_SCDLG_FORMULA_CALCOPTIONS)),
     maLbSettings(this, ScResId(LB_SETTINGS)),
-    maBtnEdit(this, ScResId(BTN_EDIT)),
+    maFtOptionEditCaption(this, ScResId(FT_OPTION_EDIT_CAPTION)),
+    maLbOptionEdit(this, ScResId(LB_OPTION_EDIT)),
     maFlAnnotation(this, ScResId(FL_ANNOTATION)),
     maFtAnnotation(this, ScResId(FT_ANNOTATION)),
     maBtnOK(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
+    maCaptionIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_CAPTION).toString()),
     maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString())
 {
     maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -95,7 +97,7 @@ void ScCalcOptionsDialog::FillOptionsList()
     SvLBoxEntry* pEntry = new SvLBoxEntry;
     pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
     pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
-    OptionString* pItem = new OptionString("Formula syntax INDIRECT function expects", "Calc A1");
+    OptionString* pItem = new OptionString(maCaptionIndirectSyntax, "Calc A1");
     pEntry->AddItem(pItem);
 
     pModel->Insert(pEntry);
@@ -105,7 +107,16 @@ void ScCalcOptionsDialog::FillOptionsList()
 
 void ScCalcOptionsDialog::SelectionChanged()
 {
-    maFtAnnotation.SetText(maDescIndirectSyntax);
+    if (true)
+    {
+        // Formula syntax for INDIRECT function.
+        maLbOptionEdit.Clear();
+        maLbOptionEdit.InsertEntry(rtl::OUString("Calc A1"));
+        maLbOptionEdit.InsertEntry(rtl::OUString("Excel A1"));
+        maLbOptionEdit.InsertEntry(rtl::OUString("Excel R1C1"));
+        maLbOptionEdit.SelectEntryPos(0);
+        maFtAnnotation.SetText(maDescIndirectSyntax);
+    }
 }
 
 void ScCalcOptionsDialog::EditOption()

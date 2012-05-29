@@ -51,13 +51,16 @@ private:
 private:
     SvxCheckListBox maLbSettings;
 
-    PushButton maBtnEdit;
+    FixedText maFtOptionEditCaption;
+    ListBox maLbOptionEdit;
+
     FixedLine maFlAnnotation;
     FixedText maFtAnnotation;
 
     OKButton maBtnOK;
     CancelButton maBtnCancel;
 
+    rtl::OUString maCaptionIndirectSyntax;
     rtl::OUString maDescIndirectSyntax;
 };
 

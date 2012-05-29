@@ -43,12 +43,21 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
         TabStop = TRUE ;
     };
 
-    PushButton BTN_EDIT
+    FixedText FT_OPTION_EDIT_CAPTION
     {
-        Pos = MAP_APPFONT ( 8 , 82 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 8 , 84 ) ;
+        Size = MAP_APPFONT ( 40 , 14 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Edit...";
+
+        Text [ en-US ] = "Value";
+    };
+
+    ListBox LB_OPTION_EDIT
+    {
+        Pos = MAP_APPFONT ( 50 , 82 ) ;
+        Size = MAP_APPFONT ( 60, 46 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
     };
 
     FixedLine FL_ANNOTATION
@@ -78,6 +87,11 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
         Pos = MAP_APPFONT ( 174 , 180 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+    };
+
+    String STR_INDIRECT_SYNTAX_CAPTION
+    {
+        Text [ en-US ] = "Formula syntax for INDIRECT function";
     };
 
     String STR_INDIRECT_SYNTAX_DESC
