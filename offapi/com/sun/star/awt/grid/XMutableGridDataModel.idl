@@ -126,7 +126,7 @@ published interface XMutableGridDataModel : XGridDataModel
             specifies the new values of the cells.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if one of the row indexes or the column index is invalid
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the lengths of the <code>ColumnIndexes</code> and <code>Values</code> sequences are not equal.
     */
     void updateRowData( [in] sequence< long > ColumnIndexes, [in] long RowIndex, [in] sequence< any > Values )
