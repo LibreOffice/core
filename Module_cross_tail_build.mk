@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	) \
 	regexp \
 	rsc \
+	sax \
 	shell \
 	tools \
 	unodevtools \
