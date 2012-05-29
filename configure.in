@@ -778,7 +778,8 @@ AC_ARG_ENABLE(build-mozilla,
 
 AC_ARG_ENABLE(xmlsec,
     AS_HELP_STRING([--disable-xmlsec],
-        [Whether to enable XMLsec for open document signing.]),
+        [Whether to enable XMLsec for open document signing. Be warned,
+         building without XML Security will likely give you test failures.]),
 )
 
 AC_ARG_ENABLE(tde,
