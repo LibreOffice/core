@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	idl \
 	o3tl \
 	oovbaapi \
+	regexp \
 	rsc \
 	shell \
 	tools \
