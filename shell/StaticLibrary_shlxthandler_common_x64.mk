@@ -29,6 +29,10 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,shlxthandler_common_x64))
 
 $(eval $(call gb_StaticLibrary_set_x64,shlxthandler_common_x64,YES))
 
+$(eval $(call gb_StaticLibrary_use_custom_headers,shlxthandler_common_x64,\
+	shell/source \
+))
+
 $(eval $(call gb_StaticLibrary_set_include,shlxthandler_common_x64,\
 	-I$(SRCDIR)/shell/inc \
 	$$(INCLUDE) \
