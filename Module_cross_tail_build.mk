@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 		qadevOOo \
 	) \
 	regexp \
+	remotebridges \
 	rsc \
 	sax \
 	shell \
