@@ -29,6 +29,11 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,shell_xmlparser_x64))
 
 $(eval $(call gb_StaticLibrary_set_x64,shell_xmlparser_x64,YES))
 
+$(eval $(call gb_StaticLibrary_set_include,shell_xmlparser_x64,\
+	-I$(SRCDIR)/shell/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shell_xmlparser_x64,\
     CustomTarget/shell/source/all/xml_parser \
 ))
