@@ -32,6 +32,10 @@ $(eval $(call gb_Library_use_api,kabdrv1,\
 	udkapi \
 ))
 
+$(eval $(call gb_Library_use_externals,kabdrv1,\
+	kde \
+))
+
 $(eval $(call gb_Library_add_libs,kabdrv1,\
 	-lkabc \
 ))
