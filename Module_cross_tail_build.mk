@@ -34,6 +34,9 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	idl \
 	o3tl \
 	oovbaapi \
+	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
+		qadevOOo \
+	) \
 	regexp \
 	rsc \
 	shell \
