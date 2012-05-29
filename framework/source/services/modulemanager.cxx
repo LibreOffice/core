@@ -30,14 +30,10 @@
 #include "services/modulemanager.hxx"
 #include "services/frame.hxx"
 
-//_______________________________________________
-// own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -47,8 +43,6 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/enumhelper.hxx>
 
-//_______________________________________________
-// other includes
 #include <rtl/logfile.hxx>
 
 namespace framework
@@ -57,9 +51,6 @@ namespace framework
 static const char CFGPATH_FACTORIES[] = "/org.openoffice.Setup/Office/Factories";
 static const char MODULEPROP_IDENTIFIER[] = "ooSetupFactoryModuleIdentifier";
 
-/*-----------------------------------------------
-    04.12.2003 09:32
------------------------------------------------*/
 DEFINE_XINTERFACE_7(ModuleManager                                    ,
                     OWeakObject                                      ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider       ),
@@ -70,9 +61,6 @@ DEFINE_XINTERFACE_7(ModuleManager                                    ,
                     DIRECT_INTERFACE(css::container::XContainerQuery),
                     DIRECT_INTERFACE(css::frame::XModuleManager     ))
 
-/*-----------------------------------------------
-    04.12.2003 09:32
------------------------------------------------*/
 DEFINE_XTYPEPROVIDER_7(ModuleManager                  ,
                        css::lang::XTypeProvider       ,
                        css::lang::XServiceInfo        ,
@@ -82,17 +70,11 @@ DEFINE_XTYPEPROVIDER_7(ModuleManager                  ,
                        css::container::XContainerQuery,
                        css::frame::XModuleManager     )
 
-/*-----------------------------------------------
-    04.12.2003 09:35
------------------------------------------------*/
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(ModuleManager                   ,
                                        ::cppu::OWeakObject             ,
                                        SERVICENAME_MODULEMANAGER       ,
                                        IMPLEMENTATIONNAME_MODULEMANAGER)
 
-/*-----------------------------------------------
-    04.12.2003 09:35
------------------------------------------------*/
 DEFINE_INIT_SERVICE(
                     ModuleManager,
                     {
@@ -104,27 +86,18 @@ DEFINE_INIT_SERVICE(
                     }
                    )
 
-/*-----------------------------------------------
-    04.12.2003 09:30
------------------------------------------------*/
 ModuleManager::ModuleManager(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase(     )
     , m_xSMGR       (xSMGR)
 {
 }
 
-/*-----------------------------------------------
-    10.12.2003 11:59
------------------------------------------------*/
 ModuleManager::~ModuleManager()
 {
     if (m_xCFG.is())
         m_xCFG.clear();
 }
 
-/*-----------------------------------------------
-    10.12.2003 11:02
------------------------------------------------*/
 ::rtl::OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
     throw(css::lang::IllegalArgumentException,
           css::frame::UnknownModuleException,
@@ -180,9 +153,6 @@ ModuleManager::~ModuleManager()
     return sModule;
 }
 
-/*-----------------------------------------------
-    08.03.2007 09:55
------------------------------------------------*/
 void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
                                            const css::uno::Any&   aValue)
     throw (css::lang::IllegalArgumentException   ,
@@ -241,9 +211,6 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
-/*-----------------------------------------------
-    10.12.2003 12:05
------------------------------------------------*/
 css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     throw(css::container::NoSuchElementException,
           css::lang::WrappedTargetException     ,
@@ -276,9 +243,6 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     return css::uno::makeAny(lProps.getAsConstPropertyValueList());
 }
 
-/*-----------------------------------------------
-    10.12.2003 11:58
------------------------------------------------*/
 css::uno::Sequence< ::rtl::OUString > SAL_CALL ModuleManager::getElementNames()
     throw(css::uno::RuntimeException)
 {
@@ -286,9 +250,6 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ModuleManager::getElementNames()
     return xCFG->getElementNames();
 }
 
-/*-----------------------------------------------
-    10.12.2003 11:57
------------------------------------------------*/
 sal_Bool SAL_CALL ModuleManager::hasByName(const ::rtl::OUString& sName)
     throw(css::uno::RuntimeException)
 {
@@ -296,18 +257,12 @@ sal_Bool SAL_CALL ModuleManager::hasByName(const ::rtl::OUString& sName)
     return xCFG->hasByName(sName);
 }
 
-/*-----------------------------------------------
-    10.12.2003 11:35
------------------------------------------------*/
 css::uno::Type SAL_CALL ModuleManager::getElementType()
     throw(css::uno::RuntimeException)
 {
     return ::getCppuType((const css::uno::Sequence< css::beans::PropertyValue >*)0);
 }
 
-/*-----------------------------------------------
-    10.12.2003 11:56
------------------------------------------------*/
 sal_Bool SAL_CALL ModuleManager::hasElements()
     throw(css::uno::RuntimeException)
 {
@@ -315,18 +270,12 @@ sal_Bool SAL_CALL ModuleManager::hasElements()
     return xCFG->hasElements();
 }
 
-/*-----------------------------------------------
-    07.03.2007 12:55
------------------------------------------------*/
 css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const ::rtl::OUString&)
     throw(css::uno::RuntimeException)
 {
     return css::uno::Reference< css::container::XEnumeration >();
 }
 
-/*-----------------------------------------------
-    07.03.2007 12:55
------------------------------------------------*/
 css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
     throw(css::uno::RuntimeException)
 {
@@ -356,9 +305,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
     return xEnum;
 }
 
-/*-----------------------------------------------
-    14.12.2003 09:45
------------------------------------------------*/
 css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConfig()
     throw(css::uno::RuntimeException)
 {
@@ -394,9 +340,6 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    30.01.2004 07:54
------------------------------------------------*/
 ::rtl::OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
     // Search for an optional (!) interface XModule first.

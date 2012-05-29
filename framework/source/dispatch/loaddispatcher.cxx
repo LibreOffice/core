@@ -26,33 +26,16 @@
  *
  ************************************************************************/
 
-
-//_______________________________________________
-// my own includes
 #include <dispatch/loaddispatcher.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/frame/DispatchResultState.hpp>
-
-//_______________________________________________
-// includes of other projects
-
-//_______________________________________________
-// namespace
 
 namespace framework{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// declarations
-
-/*-----------------------------------------------
-    20.08.2003 09:52
------------------------------------------------*/
 LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
                                const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,
                                const ::rtl::OUString                                         sTargetName ,
@@ -66,17 +49,11 @@ LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::lang::XMultiServi
 {
 }
 
-/*-----------------------------------------------
-    20.08.2003 09:12
------------------------------------------------*/
 LoadDispatcher::~LoadDispatcher()
 {
     m_xSMGR.clear();
 }
 
-/*-----------------------------------------------
-    20.08.2003 09:58
------------------------------------------------*/
 void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
@@ -85,9 +62,6 @@ void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&    
     impl_dispatch( aURL, lArguments, xListener );
 }
 
-/*-----------------------------------------------
-    20.08.2003 09:16
------------------------------------------------*/
 void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
     throw(css::uno::RuntimeException)
@@ -95,9 +69,6 @@ void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                    
     impl_dispatch( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
-/*-----------------------------------------------
-    14.04.2008
------------------------------------------------*/
 css::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
                                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
     throw( css::uno::RuntimeException )
@@ -105,27 +76,18 @@ css::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util:
     return impl_dispatch( rURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-/*-----------------------------------------------
-    20.08.2003 10:48
------------------------------------------------*/
 void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                 const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
 
-/*-----------------------------------------------
-    20.08.2003 10:49
------------------------------------------------*/
 void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                    const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException)
 {
 }
 
-/*-----------------------------------------------
-    20.08.2003 09:58
------------------------------------------------*/
 css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                                              const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )

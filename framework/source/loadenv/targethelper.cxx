@@ -30,9 +30,6 @@
 
 namespace framework{
 
-/*-----------------------------------------------
-    05.08.2003 09:08
------------------------------------------------*/
 sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
                                                 ESpecialTarget   eSpecialTarget)
 {
@@ -69,9 +66,6 @@ sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
     }
 }
 
-/*-----------------------------------------------
-    05.08.2003 09:17
------------------------------------------------*/
 sal_Bool TargetHelper::isValidNameForFrame(const ::rtl::OUString& sName)
 {
     // some special targets are realy special ones :-)

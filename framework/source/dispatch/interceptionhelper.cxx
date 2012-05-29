@@ -56,18 +56,12 @@ sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
 //_______________________________________________
 //  declarations
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 09:02
------------------------------------------------------------------------------*/
 DEFINE_XINTERFACE_3(InterceptionHelper                                         ,
                     OWeakObject                                                ,
                     DIRECT_INTERFACE(css::frame::XDispatchProvider            ),
                     DIRECT_INTERFACE(css::frame::XDispatchProviderInterception),
                     DIRECT_INTERFACE(css::lang::XEventListener                ))
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 09:02
------------------------------------------------------------------------------*/
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                                        const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
     //  Init baseclasses first
@@ -79,16 +73,10 @@ InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XF
 {
 }
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 09:02
------------------------------------------------------------------------------*/
 InterceptionHelper::~InterceptionHelper()
 {
 }
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 09:09
------------------------------------------------------------------------------*/
 css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
                                                                                         const ::rtl::OUString& sTargetFrameName,
                                                                                               sal_Int32        nSearchFlags    )
@@ -130,9 +118,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     return xReturn;
 }
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 07:58
------------------------------------------------------------------------------*/
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
     throw(css::uno::RuntimeException)
 {
@@ -147,9 +132,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Inte
     return lDispatches;
 }
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 10:20
------------------------------------------------------------------------------*/
 void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw(css::uno::RuntimeException)
 {
@@ -230,9 +212,6 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
         xOwner->contextChanged();
 }
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 10:27
------------------------------------------------------------------------------*/
 void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw(css::uno::RuntimeException)
 {
@@ -280,9 +259,6 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
         xOwner->contextChanged();
 }
 
-/*-----------------------------------------------------------------------------
-    31.03.2003 10:31
------------------------------------------------------------------------------*/
 #define FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
 void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
