@@ -30,7 +30,7 @@ $(eval $(call gb_AllLangResTarget_AllLangResTarget,hsqldb))
 $(eval $(call gb_AllLangResTarget_set_reslocation,hsqldb,database))
 
 $(eval $(call gb_AllLangResTarget_add_srs,hsqldb,\
-	database \
+	hsqldb/res \
 ))
 
 $(eval $(call gb_SrsTarget_SrsTarget,hsqldb/res))
