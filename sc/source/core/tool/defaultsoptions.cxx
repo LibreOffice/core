@@ -61,7 +61,7 @@ ScDefaultsOptions::~ScDefaultsOptions()
 
 void ScDefaultsOptions::SetDefaults()
 {
-    nInitTabCount  = 1;
+    nInitTabCount  = 3;
     aInitTabPrefix = ScGlobal::GetRscString(STR_TABLE_DEF); // Default Prefix "Sheet"
 }
 

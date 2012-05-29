@@ -1620,7 +1620,7 @@
 				<author>Albert Thuswaldner</author>
 				<desc>Option to set initial number of sheet tabs</desc>
 			  </info>
-		  <value>1</value>
+		  <value>3</value>
 		</prop>
 		<prop oor:name="SheetPrefix" oor:type="xs:string">
 			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
