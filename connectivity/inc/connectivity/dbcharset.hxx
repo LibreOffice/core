@@ -29,6 +29,10 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #define _DBHELPER_DBCHARSET_HXX_
 
+#include "sal/config.h"
+
+#include <cstddef>
+
 #include <comphelper/stl_types.hxx>
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
@@ -84,7 +88,7 @@ namespace dbtools
         */
         CharsetIterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
 
-        sal_Int32   size() const { ensureConstructed( ); return m_aEncodings.size(); }
+        std::size_t   size() const { ensureConstructed( ); return m_aEncodings.size(); }
 
         /// get access to the first element of the charset collection
         CharsetIterator begin() const;
