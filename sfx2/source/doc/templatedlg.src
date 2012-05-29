@@ -1,0 +1,62 @@
+/*
+ * Copyright 2012 LibreOffice contributors.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "doc.hrc"
+#include "templatedlg.hrc"
+#include "helpid.hrc"
+
+ModalDialog DLG_TEMPLATE_MANAGER
+{
+    HelpId = CMD_SID_TEMPLATE_MANAGER;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Size = MAP_APPFONT ( 271 , 162 );
+    Text [en-US] = "Template Manager";
+
+    PushButton BTN_SELECT_ALL
+    {
+        Pos = MAP_APPFONT(10,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [en-US] = "All";
+    };
+
+    PushButton BTN_SELECT_DOCS
+    {
+        Pos = MAP_APPFONT(60,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Documents";
+    };
+
+    PushButton BTN_SELECT_PRESENTATIONS
+    {
+        Pos = MAP_APPFONT(110,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Presentations";
+    };
+
+    PushButton BTN_SELECT_SHEETS
+    {
+        Pos = MAP_APPFONT(160,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Spreedsheets";
+    };
+
+    PushButton BTN_SELECT_DRAWS
+    {
+        Pos = MAP_APPFONT(210,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Drawings";
+    };
+};

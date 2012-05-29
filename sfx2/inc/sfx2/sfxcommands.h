@@ -193,6 +193,7 @@
 #define CMD_SID_OPENTEMPLATE                        ".uno:OpenTemplate"
 #define CMD_SID_OPENURL                             ".uno:OpenUrl"
 #define CMD_SID_OPTIONS                             ".uno:Options"
+#define CMD_SID_TEMPLATE_MANAGER                    ".uno:TemplateManager"
 #define CMD_SID_ORGANIZER                           ".uno:Organizer"
 #define CMD_SID_STYLE_FAMILY4                       ".uno:PageStyle"
 #define CMD_SID_STYLE_FAMILY2                       ".uno:ParaStyle"

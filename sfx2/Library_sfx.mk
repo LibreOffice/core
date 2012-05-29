@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
 $(eval $(call gb_Library_use_api,sfx,\
-	udkapi \
-	offapi \
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_set_include,sfx,\
@@ -214,6 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/sfxbasemodel \
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \
+    sfx2/source/doc/templatedlg \
     sfx2/source/explorer/nochaos \
     sfx2/source/inet/inettbc \
     sfx2/source/menu/mnuitem \

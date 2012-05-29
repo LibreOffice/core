@@ -124,6 +124,7 @@
 #include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
 #include "sfx2/sfxhelp.hxx"
+#include "templatedlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -544,6 +545,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 delete pDlg;
             bDone = true;
             }
+            break;
+        }
+
+        case SID_TEMPLATE_MANAGER:
+        {
+            SfxTemplateManagerDlg dlg;
+            dlg.Execute();
+            bDone = true;
             break;
         }
 
