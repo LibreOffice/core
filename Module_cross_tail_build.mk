@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	unodevtools \
 	unotest \
 	unotools \
+	ure \
 	xmlhelp \
 ))
 
