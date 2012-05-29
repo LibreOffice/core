@@ -159,7 +159,6 @@ private:
     GraphicShapeContextPtr;
     css::uno::Reference<XFastContextHandler> mxDrawingFragmentHandler;
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
-    css::uno::Reference<XFastContextHandler> mxDiagramShapeContext;
 
     core::XmlFilterRef mxFilterBase;
     drawingml::ThemePtr mpThemePtr;
@@ -169,7 +168,6 @@ private:
 
     css::uno::Reference<XFastContextHandler> getGraphicShapeContext(::sal_Int32 Element);
     css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
-    css::uno::Reference<XFastContextHandler> getDiagramShapeContext();
     css::uno::Reference<XFastContextHandler> getContextHandler();
 };
 
