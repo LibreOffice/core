@@ -1348,6 +1348,35 @@
                     </info>
                     <value></value>
                 </prop>
+                <prop oor:name="IndirectFuncGrammar" oor:type="xs:int" oor:nillable="false">
+                    <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Grammar for INDIRECT function</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="-1">
+                            <info>
+                                <desc>same as formula grammar</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>Calc A1</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>Excel A1</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="2">
+                            <info>
+                                <desc>Excel R1C1</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                </prop>
             </group>
         </group>
 		<group oor:name="Revision">
