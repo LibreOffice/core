@@ -93,6 +93,7 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                     ::com::sun::star::uno::Any& rValue,
                     sal_Int32 nHandle) const;
+            using OPropertySetHelper::getFastPropertyValue;
 
             virtual void resetParameters() const throw(::com::sun::star::sdbc::SQLException);
             virtual void getNextParameter(::rtl::OUString &rParameter) const throw(::com::sun::star::sdbc::SQLException);

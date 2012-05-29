@@ -92,6 +92,7 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                                 ::com::sun::star::uno::Any& rValue,
                                 sal_Int32 nHandle) const;
+            using OPropertySetHelper::getFastPropertyValue;
 
             // you can't delete objects of this type
             virtual ~KabResultSet();
