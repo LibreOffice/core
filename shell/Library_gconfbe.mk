@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_api,gconfbe1,\
 
 $(eval $(call gb_Library_use_externals,gconfbe1,\
 	gconf \
+	gobject \
 ))
 
 $(eval $(call gb_Library_use_libraries,gconfbe1,\
