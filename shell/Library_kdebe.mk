@@ -31,6 +31,10 @@ $(eval $(call gb_Library_use_packages,kdebe1,\
 	shell_inc \
 ))
 
+$(eval $(call gb_Library_add_libs,kdebe1,\
+	-lkio \
+))
+
 $(eval $(call gb_Library_use_api,kdebe1,\
 	offapi \
 	udkapi \
