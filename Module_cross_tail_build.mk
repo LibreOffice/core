@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,cross_tail_build))
 $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	basegfx \
 	i18npool \
+	i18nutil \
 	idl \
 	o3tl \
 	oovbaapi \
