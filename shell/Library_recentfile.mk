@@ -32,9 +32,17 @@ $(eval $(call gb_Library_set_include,recentfile,\
 	$$(INCLUDE) \
 ))
 
+ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_use_externals,recentfile,\
 	expat_utf16 \
 ))
+
+else
+$(eval $(call gb_Library_use_externals,recentfile,\
+	expat_utf8 \
+))
+
+endif
 
 $(eval $(call gb_Library_use_libraries,recentfile,\
 	sal \
