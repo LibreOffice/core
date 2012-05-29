@@ -193,6 +193,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsInShape( false ),
         m_bRemovedLastAnchored( false ),
         m_pLastSectionContext( ),
+        m_pLastCharacterContext(),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
@@ -358,6 +359,8 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
     {
         m_pLastSectionContext = m_aPropertyStacks[eId].top( );
     }
+    else if (eId == CONTEXT_CHARACTER)
+        m_pLastCharacterContext = m_aPropertyStacks[eId].top();
 
     m_aPropertyStacks[eId].pop();
     m_aContextStack.pop();
@@ -3163,7 +3166,13 @@ void DomainMapper_Impl::PopFieldContext()
                     if( xToInsert.is() )
                     {
                         uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( xTextAppend, uno::UNO_QUERY_THROW );
-                        xTextAppendAndConvert->appendTextContent( xToInsert, uno::Sequence< beans::PropertyValue >() );
+                        uno::Sequence<beans::PropertyValue> aValues;
+                        // Character properties of the field show up here the
+                        // last (always empty) run. Inherit character
+                        // properties from there.
+                        if (m_pLastCharacterContext.get())
+                            aValues = m_pLastCharacterContext->GetPropertyValues();
+                        xTextAppendAndConvert->appendTextContent(xToInsert, aValues);
                     }
                     else
                     {

@@ -887,12 +887,28 @@ bool RTFFrame::inFrame()
         || nY > 0;
 }
 
-void RTFDocumentImpl::singleChar(sal_uInt8 nValue)
+void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
     sal_uInt8 sValue[] = { nValue };
     if (!m_pCurrentBuffer)
     {
         Mapper().startCharacterGroup();
+        // Should we send run properties?
+        if (bRunProps)
+        {
+            if (!m_pCurrentBuffer)
+            {
+                writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                        new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
+                        );
+                Mapper().props(pProperties);
+            }
+            else
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+            }
+        }
         Mapper().text(sValue, 1);
         Mapper().endCharacterGroup();
     }
@@ -1616,7 +1632,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 OUString aStr(RTL_CONSTASCII_USTRINGPARAM("PAGE"));
                 singleChar(0x13);
                 text(aStr);
-                singleChar(0x14);
+                singleChar(0x14, true);
                 singleChar(0x15);
             }
             break;
