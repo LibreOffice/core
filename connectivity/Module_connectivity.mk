@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Module_Module,connectivity))
 
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_cnr \
 	AllLangResTarget_sdbcl \
@@ -143,6 +145,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 ))
 # FIXME: Does not work. Convert to JUnit.
 	# JunitTest_complex \
+
+endif
 
 endif
 
