@@ -254,7 +254,7 @@ uninstall:
 
 run:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP)
-# add -e lo-strace yes # if you want that
+# add -e lo-strace "-f -o /somewhere/the/app/can/write.log" if you want
 
 # If you reinstall an app several times, even if you uninstall it
 # between, disk space seems to leak that won't get recycled until you
