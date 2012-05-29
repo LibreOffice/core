@@ -449,19 +449,8 @@ End
 #endif
 
 #ifdef ENABLE_KAB
-File gid_File_Lib_Kab_1
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(libkab1,UNXSUFFIX));
-End
-
-File gid_File_Lib_Kab_Drv_1
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(libkabdrv1,UNXSUFFIX));
-End
+STD_LIB_FILE(gid_File_Lib_Kab_1, kab1);
+STD_LIB_FILE(gid_File_Lib_Kab_Drv_1, kabdrv1);
 #endif
 
 #ifdef MACOSX
@@ -895,7 +884,7 @@ End
 
 #if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
                                                                 // #i91209#
-STD_LIB_FILE(gid_File_Lib_Mozab,mozab)
+STD_LIB_FILE(gid_File_Lib_Mozab,mozab2)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
 #else
