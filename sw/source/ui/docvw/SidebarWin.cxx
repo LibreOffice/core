@@ -791,10 +791,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     sal_uLong nCntrl = Engine()->GetControlWord();
     // turn off
-    if (!pVOpt->IsOnlineSpell())
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-    else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+    nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     Engine()->SetControlWord(nCntrl);
 
     //turn back on

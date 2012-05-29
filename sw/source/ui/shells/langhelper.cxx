@@ -209,10 +209,7 @@ namespace SwLangHelper
                     const SwViewOption* pVOpt = rView.GetWrtShellPtr()->GetViewOptions();
                     sal_uLong nCntrl = pEditEngine->GetControlWord();
                     // turn off
-                    if (!pVOpt->IsOnlineSpell())
-                        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-                    else
-                        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+                    nCntrl &= ~EE_CNTRL_ONLINESPELLING;
                     pEditEngine->SetControlWord(nCntrl);
 
                     //turn back on

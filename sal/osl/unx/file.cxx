@@ -1258,7 +1258,7 @@ SAL_CALL osl_mapFile (
             {
                 c^= pData[0];
                 pData += nSize;
-                nSize -= nSize;
+                nSize = 0;
             }
         }
     }
