@@ -36,6 +36,11 @@ $(eval $(call gb_Library_use_api,kab1,\
 	udkapi \
 ))
 
+$(eval $(call gb_Library_set_include,kab1,\
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_libraries,kab1,\
 	comphelper \
 	cppu \
