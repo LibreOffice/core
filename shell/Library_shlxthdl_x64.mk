@@ -29,6 +29,10 @@ $(eval $(call gb_Library_Library,shlxthdl_x64))
 
 $(eval $(call gb_Library_set_x64,shlxthdl_x64,YES))
 
+$(eval $(call gb_Library_use_custom_headers,shlxthdl_x64,\
+	shell/source \
+))
+
 $(eval $(call gb_Library_set_include,shlxthdl_x64,\
 	-I$(SRCDIR)/shell/inc \
 	$$(INCLUDE) \

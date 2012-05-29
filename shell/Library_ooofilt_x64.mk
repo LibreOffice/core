@@ -29,6 +29,10 @@ $(eval $(call gb_Library_Library,ooofilt_x64))
 
 $(eval $(call gb_Library_set_x64,ooofilt_x64,YES))
 
+$(eval $(call gb_Library_use_custom_headers,ooofilt_x64,\
+	shell/source \
+))
+
 $(eval $(call gb_Library_set_include,ooofilt_x64,\
 	-I$(SRCDIR)/shell/inc \
 	$$(INCLUDE) \
