@@ -166,10 +166,10 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
         {
             SwWrtShell& rSh = GetShell();
             SdrView*    pView = rSh.GetDrawView();
-            bool        bDisable = true;
 
             if( pView )
             {
+                bool bDisable = true;
                 SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
 
                 if( 1 == pMarkList->GetMarkCount() )
