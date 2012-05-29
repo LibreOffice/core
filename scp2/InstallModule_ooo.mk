@@ -57,6 +57,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_GETTEXT \
 	SYSTEM_GLIB \
 	SYSTEM_GRAPHITE \
+	SYSTEM_HSQLDB \
 	SYSTEM_HUNSPELL \
 	SYSTEM_HYPH \
 	SYSTEM_ICU \
