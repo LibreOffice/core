@@ -106,6 +106,7 @@ $(eval $(foreach method,\
 	set_include \
 	add_ldflags \
 	set_ldflags \
+	set_x64 \
 	add_libs \
 	set_library_path_flags \
 	add_api \
