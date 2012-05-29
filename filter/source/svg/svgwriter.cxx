@@ -484,7 +484,7 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
     for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
     {
         const Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
-        sal_uInt16          nSize = rPoly.GetSize();
+        sal_uInt16 n = 1, nSize = rPoly.GetSize();
 
         if( nSize > 1 )
         {
@@ -494,8 +494,6 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
             aPathData += ::rtl::OUString::valueOf( aPolyPoint.Y() );
 
             sal_Char nCurrentMode = 0;
-            sal_uInt16 n = 1;
-
             while( n < nSize )
             {
                 aPathData += aBlank;
@@ -1201,9 +1199,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
+                long i;
                 const double fFactor = (double) nWidth / aNormSize.Width();
 
-                for( long i = 0; i < ( nLen - 1 ); i++ )
+                for( i = 0; i < ( nLen - 1 ); i++ )
                     pDX[ i ] = FRound( pDX[ i ] * fFactor );
             }
             else
