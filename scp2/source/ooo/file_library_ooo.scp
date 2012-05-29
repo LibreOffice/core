@@ -449,8 +449,8 @@ End
 #endif
 
 #ifdef ENABLE_KAB
-STD_LIB_FILE(gid_File_Lib_Kab_1, kab1);
-STD_LIB_FILE(gid_File_Lib_Kab_Drv_1, kabdrv1);
+STD_LIB_FILE(gid_File_Lib_Kab_1, kab1)
+STD_LIB_FILE(gid_File_Lib_Kab_Drv_1, kabdrv1)
 #endif
 
 #ifdef MACOSX
