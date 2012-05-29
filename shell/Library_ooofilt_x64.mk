@@ -88,7 +88,7 @@ $(eval $(call gb_Library_add_ldflags,ooofilt_x64,\
 	/EXPORT:DllUnregisterServer \
 ))
 
-$(eval $(call gb_Library_add_generated_exception_objects,ooofilt_x64,\
+$(eval $(call gb_Library_add_x64_generated_exception_objects,ooofilt_x64,\
     CustomTarget/shell/source/win32/shlxthandler/ooofilt/ooofilt \
     CustomTarget/shell/source/win32/shlxthandler/ooofilt/propspec \
 ))

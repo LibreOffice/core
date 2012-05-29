@@ -90,7 +90,7 @@ $(eval $(call gb_Library_add_ldflags,shlxthdl_x64,\
 	/EXPORT:DllUnregisterServer \
 ))
 
-$(eval $(call gb_Library_add_generated_exception_objects,shlxthdl_x64,\
+$(eval $(call gb_Library_add_x64_generated_exception_objects,shlxthdl_x64,\
     CustomTarget/shell/source/win32/shlxthandler/classfactory \
     CustomTarget/shell/source/win32/shlxthandler/columninfo/columninfo \
     CustomTarget/shell/source/win32/shlxthandler/infotips/infotips \

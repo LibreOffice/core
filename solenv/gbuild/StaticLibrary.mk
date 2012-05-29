@@ -90,6 +90,7 @@ $(eval $(foreach method,\
 	add_asmobject \
 	add_asmobjects \
 	add_exception_objects \
+	add_x64_generated_exception_objects \
 	add_noexception_objects \
 	add_generated_cobjects \
 	add_generated_cxxobjects \
@@ -101,6 +102,7 @@ $(eval $(foreach method,\
 	add_objcflags \
 	add_objcxxflags \
 	set_objcxxflags \
+	set_x64 \
 	add_defs \
 	set_defs \
 	set_include \

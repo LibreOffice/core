@@ -87,7 +87,7 @@ $(eval $(call gb_Library_add_ldflags,propertyhdl_x64,\
 	/EXPORT:DllGetClassObject \
 ))
 
-$(eval $(call gb_Library_add_generated_exception_objects,propertyhdl_x64,\
+$(eval $(call gb_Library_add_x64_generated_exception_objects,propertyhdl_x64,\
     CustomTarget/shell/source/win32/shlxthandler/prophdl/propertyhdl \
 ))
 

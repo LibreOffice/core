@@ -58,7 +58,7 @@ $(eval $(call gb_StaticLibrary_use_externals,shlxthandler_common_x64,\
 	zlib \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,shlxthandler_common_x64,\
+$(eval $(call gb_StaticLibrary_add_x64_generated_exception_objects,shlxthandler_common_x64,\
     CustomTarget/shell/source/win32/ooofilereader/autostyletag \
     CustomTarget/shell/source/win32/ooofilereader/basereader \
     CustomTarget/shell/source/win32/ooofilereader/contentreader \
