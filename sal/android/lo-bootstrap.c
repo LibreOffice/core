@@ -1633,6 +1633,25 @@ Java_org_libreoffice_android_Bootstrap_initUCBHelper(JNIEnv* env,
     (*InitUCBHelper)();
 }
 
+__attribute__ ((visibility("default")))
+jint
+Java_org_libreoffice_android_Bootstrap_createWindowFoo(JNIEnv* env,
+                                                       jobject clazz)
+{
+    int (*createWindowFoo)(void);
+    (void) env;
+    (void) clazz;
+
+    lo_dlopen("libvcllo.so");
+    createWindowFoo = dlsym(RTLD_DEFAULT, "createWindowFoo");
+    if (createWindowFoo == NULL) {
+        LOGE("createWindowFoo: createWindowFoo not found");
+        return 0;
+    }
+    return (*createWindowFoo)();
+}
+
+
 /* Code for reading lines from the pipe based on the (Apache-licensed) Android
  * logwrapper.c
  */
