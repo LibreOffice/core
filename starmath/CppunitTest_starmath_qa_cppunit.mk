@@ -79,6 +79,7 @@ $(eval $(call gb_CppunitTest_use_ure,starmath_qa_cppunit))
 
 $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     configmgr/source/configmgr \
+    dtrans/util/mcnttype \
     framework/util/fwk \
     i18npool/util/i18npool \
     toolkit/util/tk \
@@ -86,14 +87,10 @@ $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     vcl/vcl \
 ))
 
-$(eval $(call gb_CppunitTest_use_old_components,starmath_qa_cppunit,\
-    mcnttype \
-))
-
 ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_CppunitTest_use_old_components,starmath_qa_cppunit,\
-    ftransl \
-    sysdtrans \
+$(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
+    dtrans/util/ftransl \
+    dtrans/util/sysdtrans \
 ))
 endif
 
