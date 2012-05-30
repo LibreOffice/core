@@ -467,7 +467,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
     ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
-    if( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) >>= aTmpStr )
+    if( SvxShape::getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) >>= aTmpStr )
         aPersistName = aTmpStr;
 
     //TODO/LATER: how to cope with creation failure?!
@@ -498,7 +498,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), Any( aTmpStr = aPersistName ) );
+        SvxShape::setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), Any( aTmpStr = aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if( pOle2Obj->IsEmpty() )
@@ -561,7 +561,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
+        SvxShape::setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if ( pOle2Obj->IsEmpty() )
