@@ -26,6 +26,8 @@
 
 $(eval $(call gb_Module_Module,testtools))
 
+ifneq ($(CROSS_COMPILING),YES)
+
 $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest \
 	InternalUnoApi_bridgetest \
@@ -53,7 +55,6 @@ endif
 #))
 #endif
 
-ifneq ($(CROSS_COMPILING),YES)
 # FIXME: Mac OSX PPC GCC fails this test!, likely broken UNO bridge.
 # (is it still relevant?)
 ifneq ($(COM)$(OS)$(CPU),GCCMACOSXP)
@@ -61,6 +62,7 @@ $(eval $(call gb_Module_add_check_targets,testtools,\
 	CustomTarget_uno_test \
 ))
 endif
+
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
