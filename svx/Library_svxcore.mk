@@ -384,6 +384,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE))$(filter IOS,$(OS)))
 $(eval $(call gb_Library_use_packages,svxcore,\
 	connectivity_inc \
+	connectivity_generated \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
