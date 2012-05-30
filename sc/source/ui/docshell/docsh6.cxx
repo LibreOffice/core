@@ -50,6 +50,7 @@
 #include "globstr.hrc"
 #include "scmod.hxx"
 #include "compiler.hxx"
+#include "interpre.hxx"
 
 #include "formula/FormulaCompiler.hxx"
 #include "comphelper/processfactory.hxx"
@@ -504,6 +505,11 @@ void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )
     // Update the separators.
     ScCompiler::UpdateSeparatorsNative(
         rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
+
+    // Global interpreter settings.
+    ScInterpreter::Config aConfig;
+    aConfig.meIndirectRefSyntax = rOpt.GetIndirectFuncSyntax();
+    ScInterpreter::SetGlobalConfig(aConfig);
 }
 
 void ScDocShell::CheckConfigOptions()

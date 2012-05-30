@@ -82,6 +82,7 @@ static const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
+ScInterpreter::Config ScInterpreter::maGlobalConfig;
 ScTokenStack* ScInterpreter::pGlobalStack = NULL;
 bool ScInterpreter::bGlobalStackInUse = false;
 
@@ -6967,22 +6968,23 @@ void ScInterpreter::ScIndirect()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 )  )
     {
-        bool bTryXlA1 = true;   // whether to try XL_A1 style as well.
-        FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
+        // Reference address syntax for INDIRECT is configurable.
+        FormulaGrammar::AddressConvention eConv = GetGlobalConfig().meIndirectRefSyntax;
+        if (eConv == FormulaGrammar::CONV_UNSPECIFIED)
+            // Use the current address syntax if unspecified.
+            eConv = pDok->GetAddressConvention();
+
         if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
         {
+            // Overwrite the config and try Excel R1C1.
             eConv = FormulaGrammar::CONV_XL_R1C1;
-            bTryXlA1 = false;
         }
         const ScAddress::Details aDetails( eConv, aPos );
-        const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
         ScAddress::ExternalInfo aExtInfo;
-        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
-                (bTryXlA1 && ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd,
-                                               aRefAd2, aDetailsXlA1, &aExtInfo)))
+        if (ConvertDoubleRef(pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo))
         {
             if (aExtInfo.mbExternal)
             {
@@ -6995,9 +6997,7 @@ void ScInterpreter::ScIndirect()
                 PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
                         aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
         }
-        else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, aDetails, &aExtInfo) ||
-                (bTryXlA1 && ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd,
-                                                aDetailsXlA1, &aExtInfo)))
+        else if (ConvertSingleRef(pDok, sRefStr, nTab, aRefAd, aDetails, &aExtInfo))
         {
             if (aExtInfo.mbExternal)
             {

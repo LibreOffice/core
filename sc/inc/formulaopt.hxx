@@ -40,7 +40,8 @@ class SC_DLLPUBLIC ScFormulaOptions
 {
 private:
     bool bUseEnglishFuncName;     // use English function name even if the locale is not English.
-    ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
+    formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
+    formula::FormulaGrammar::AddressConvention eIndirectFuncRefSyntax;
 
     ::rtl::OUString aFormulaSepArg;
     ::rtl::OUString aFormulaSepArrayRow;
@@ -55,6 +56,9 @@ public:
 
     void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
     ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
+
+    void SetIndirectFuncSyntax(formula::FormulaGrammar::AddressConvention eConv) { eIndirectFuncRefSyntax = eConv; }
+    formula::FormulaGrammar::AddressConvention GetIndirectFuncSyntax() const { return eIndirectFuncRefSyntax; }
 
     void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
     bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
@@ -77,7 +81,6 @@ public:
     ScFormulaOptions&  operator=  ( const ScFormulaOptions& rCpy );
     bool               operator== ( const ScFormulaOptions& rOpt ) const;
     bool               operator!= ( const ScFormulaOptions& rOpt ) const;
-
 };
 
 //==================================================================

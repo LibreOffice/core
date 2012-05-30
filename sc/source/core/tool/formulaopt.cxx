@@ -206,7 +206,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_SEP_ARG           2
 #define SCFORMULAOPT_SEP_ARRAY_ROW     3
 #define SCFORMULAOPT_SEP_ARRAY_COL     4
-#define SCFORMULAOPT_COUNT             5
+#define SCFORMULAOPT_INDIRECT_GRAMMAR  5
+#define SCFORMULAOPT_COUNT             6
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -217,6 +218,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/SeparatorArg",        // SCFORMULAOPT_SEP_ARG
         "Syntax/SeparatorArrayRow",   // SCFORMULAOPT_SEP_ARRAY_ROW
         "Syntax/SeparatorArrayCol",   // SCFORMULAOPT_SEP_ARRAY_COL
+        "Syntax/IndirectFuncGrammar", // SCFORMULAOPT_INDIRECT_GRAMMAR
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -299,6 +301,39 @@ ScFormulaCfg::ScFormulaCfg() :
                     if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
                         SetFormulaSepArrayCol(aSep);
                 }
+                case SCFORMULAOPT_INDIRECT_GRAMMAR:
+                {
+                    // Get default value in case this option is not set.
+                    ::formula::FormulaGrammar::AddressConvention eConv = GetIndirectFuncSyntax();
+
+                    do
+                    {
+                        if (!(pValues[nProp] >>= nIntVal))
+                            // extractino failed.
+                            break;
+
+                        switch (nIntVal)
+                        {
+                            case -1: // Same as the formula grammar.
+                                eConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
+                            break;
+                            case 0: // Calc A1
+                                eConv = formula::FormulaGrammar::CONV_OOO;
+                            break;
+                            case 1: // Excel A1
+                                eConv = formula::FormulaGrammar::CONV_XL_A1;
+                            break;
+                            case 2: // Excel R1C1
+                                eConv = formula::FormulaGrammar::CONV_XL_R1C1;
+                            break;
+                            default:
+                                ;
+                        }
+                    }
+                    while (false);
+                    SetIndirectFuncSyntax(eConv);
+                }
+                break;
                 break;
                 }
             }
@@ -342,6 +377,19 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_SEP_ARRAY_COL:
                 pValues[nProp] <<= GetFormulaSepArrayCol();
+            break;
+            case SCFORMULAOPT_INDIRECT_GRAMMAR:
+            {
+                sal_Int32 nVal = -1;
+                switch (GetIndirectFuncSyntax())
+                {
+                    case ::formula::FormulaGrammar::CONV_OOO:     nVal = 0; break;
+                    case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;
+                    case ::formula::FormulaGrammar::CONV_XL_R1C1: nVal = 2; break;
+                    default: break;
+                }
+                pValues[nProp] <<= nVal;
+            }
             break;
         }
     }

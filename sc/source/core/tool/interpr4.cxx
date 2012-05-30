@@ -3692,6 +3692,18 @@ ScInterpreter::~ScInterpreter()
         delete pTokenMatrixMap;
 }
 
+ScInterpreter::Config::Config() :
+    meIndirectRefSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED) {}
+
+void ScInterpreter::SetGlobalConfig(const Config& rConfig)
+{
+    maGlobalConfig = rConfig;
+}
+
+const ScInterpreter::Config& ScInterpreter::GetGlobalConfig()
+{
+    return maGlobalConfig;
+}
 
 void ScInterpreter::GlobalExit()
 {

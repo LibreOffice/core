@@ -95,7 +95,17 @@ class ScInterpreter
     friend class ScChiSqDistFunction;
 
 public:
+
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
+
+    struct Config
+    {
+        formula::FormulaGrammar::AddressConvention meIndirectRefSyntax;
+        Config();
+    };
+
+    static void SetGlobalConfig(const Config& rConfig);
+    static const Config& GetGlobalConfig();
 
     static void GlobalExit();           // aus ScGlobal::Clear() gerufen
 
@@ -120,6 +130,8 @@ public:
     VolatileType GetVolatileType() const;
 
 private:
+    static Config maGlobalConfig;
+
     static ScTokenStack*    pGlobalStack;
     static bool             bGlobalStackInUse;
 
