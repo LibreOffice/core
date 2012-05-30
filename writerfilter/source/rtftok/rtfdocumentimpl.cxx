@@ -84,6 +84,57 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
     return aBorderIds[nIndex];
 }
 
+namespace
+{
+    bool isTrivialCharSprm(Id nSprm)
+    {
+        bool bRet = false;
+        switch (nSprm)
+        {
+            case NS_sprm::LN_CRgFtc0:
+            case NS_sprm::LN_CRgFtc1:
+            case NS_sprm::LN_CRgFtc2:
+            case NS_sprm::LN_CHps:
+            case NS_sprm::LN_CHpsBi:
+            case NS_sprm::LN_CSfxText:
+            case NS_sprm::LN_CDxaSpace:
+            case NS_sprm::LN_CHpsKern:
+            case NS_sprm::LN_CCharScale:
+            case NS_sprm::LN_CRgLid0:
+            case NS_sprm::LN_CRgLid1:
+            case NS_sprm::LN_CLidBi:
+                bRet = true;
+                break;
+            default:
+                break;
+        }
+        return bRet;
+    }
+
+    //rhbz#825548. rtf documents with vast sequences of replicated properties without
+    //any resets to defaults create a huge vector of properties and eat time and memory
+    //
+    //So if we are adding a property which already exists and there are no intermediate
+    //properties which would cause side effects to the property then update the existing
+    //one instead
+    bool tryToSafelyUpdateAnExistingProp(RTFSprms &rSprms, Id nSprm, RTFValue::Pointer_t xArg)
+    {
+        if (!isTrivialCharSprm(nSprm))
+            return false;
+
+        for (RTFSprms::ReverseIterator_t i = rSprms.rbegin(); i != rSprms.rend() && isTrivialCharSprm(i->first); ++i)
+        {
+            if (i->first == nSprm)
+            {
+                i->second = xArg;
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
 static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
         bool bOverwrite = false, bool bAttribute = true)
 {
@@ -107,7 +158,8 @@ static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValu
             }
         }
     }
-    rAttributes.push_back(make_pair(nId, pValue));
+    if (!tryToSafelyUpdateAnExistingProp(rAttributes, nId, pValue))
+        rAttributes.push_back(make_pair(nId, pValue));
 }
 
 static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bOverwrite = false)
@@ -2227,7 +2279,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        m_aStates.top().aCharacterSprms.push_back(make_pair(nSprm, pIntValue));
+        RTFSprms &rSprms = m_aStates.top().aCharacterSprms;
+        if (!tryToSafelyUpdateAnExistingProp(rSprms, nSprm, pIntValue))
+            rSprms.push_back(make_pair(nSprm, pIntValue));
         // Language is a character property, but we should store it at a paragraph level as well for fields.
         if (nKeyword == RTF_LANG && m_bNeedPap)
             m_aStates.top().aParagraphSprms.push_back(make_pair(nSprm, pIntValue));
@@ -2310,7 +2364,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 int nFontIndex = getFontIndex(nParam);
                 RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
-                m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
+                RTFSprms &rSprms = m_aStates.top().aCharacterSprms;
+                if (!tryToSafelyUpdateAnExistingProp(rSprms, NS_sprm::LN_CRgFtc0, pValue))
+                    rSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
                 m_aStates.top().nCurrentEncoding = getEncoding(nFontIndex);
             }
             break;

@@ -40,6 +40,7 @@ namespace writerfilter {
                 typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
                 typedef std::pair<Id, RTFValue::Pointer_t> id_val;
                 typedef std::vector< id_val >::iterator Iterator_t;
+                typedef std::vector< id_val >::reverse_iterator ReverseIterator_t;
                 RTFSprms();
                 RTFSprms(const RTFSprms& rSprms);
                 RTFSprms& operator=(const RTFSprms& rOther);
@@ -51,6 +52,8 @@ namespace writerfilter {
                 id_val& back() { return m_aSprms.back(); }
                 Iterator_t begin() { return m_aSprms.begin(); }
                 Iterator_t end() { return m_aSprms.end(); }
+                ReverseIterator_t rbegin() { return m_aSprms.rbegin(); }
+                ReverseIterator_t rend() { return m_aSprms.rend(); }
                 void push_back(id_val aVal) { m_aSprms.push_back(aVal); }
                 void clear() { return m_aSprms.clear(); }
             private:
