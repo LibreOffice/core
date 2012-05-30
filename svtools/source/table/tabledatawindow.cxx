@@ -196,6 +196,7 @@ namespace svt { namespace table
         Point const aPoint = rMEvt.GetPosPixel();
         RowPos const hitRow = m_rTableControl.getRowAtPoint( aPoint );
         bool const wasRowSelected = m_rTableControl.isRowSelected( hitRow );
+        size_t const nPrevSelRowCount = m_rTableControl.getSelectedRowCount();
 
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
         {
@@ -204,7 +205,8 @@ namespace svt { namespace table
         }
 
         bool const isRowSelected = m_rTableControl.isRowSelected( hitRow );
-        if ( isRowSelected != wasRowSelected )
+        size_t const nCurSelRowCount = m_rTableControl.getSelectedRowCount();
+        if ( isRowSelected != wasRowSelected || nCurSelRowCount != nPrevSelRowCount )
         {
             m_aSelectHdl.Call( NULL );
         }
