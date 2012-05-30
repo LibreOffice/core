@@ -134,11 +134,6 @@ RTFSprms& RTFSprms::operator=(const RTFSprms& rOther)
     return *this;
 }
 
-std::vector< std::pair<Id, RTFValue::Pointer_t> >* RTFSprms::operator->()
-{
-    return &m_aSprms;
-}
-
 void RTFSprms::swap(RTFSprms& rOther)
 {
     m_aSprms.swap(rOther.m_aSprms);

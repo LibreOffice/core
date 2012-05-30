@@ -38,14 +38,21 @@ namespace writerfilter {
         {
             public:
                 typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
-                typedef std::vector< std::pair<Id, RTFValue::Pointer_t> >::iterator Iterator_t;
+                typedef std::pair<Id, RTFValue::Pointer_t> id_val;
+                typedef std::vector< id_val >::iterator Iterator_t;
                 RTFSprms();
                 RTFSprms(const RTFSprms& rSprms);
                 RTFSprms& operator=(const RTFSprms& rOther);
-                std::vector< std::pair<Id, RTFValue::Pointer_t> >* operator->();
                 RTFValue::Pointer_t find(Id nKeyword);
                 bool erase(Id nKeyword);
                 void swap(RTFSprms& rOther);
+                size_t size() const { return m_aSprms.size(); }
+                bool empty() const { return m_aSprms.empty(); }
+                id_val& back() { return m_aSprms.back(); }
+                Iterator_t begin() { return m_aSprms.begin(); }
+                Iterator_t end() { return m_aSprms.end(); }
+                void push_back(id_val aVal) { m_aSprms.push_back(aVal); }
+                void clear() { return m_aSprms.clear(); }
             private:
                 std::vector< std::pair<Id, RTFValue::Pointer_t> > m_aSprms;
         };
