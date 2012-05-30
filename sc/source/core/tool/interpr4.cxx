@@ -3692,15 +3692,12 @@ ScInterpreter::~ScInterpreter()
         delete pTokenMatrixMap;
 }
 
-ScInterpreter::Config::Config() :
-    meIndirectRefSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED) {}
-
-void ScInterpreter::SetGlobalConfig(const Config& rConfig)
+void ScInterpreter::SetGlobalConfig(const ScCalcConfig& rConfig)
 {
     maGlobalConfig = rConfig;
 }
 
-const ScInterpreter::Config& ScInterpreter::GetGlobalConfig()
+const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 {
     return maGlobalConfig;
 }

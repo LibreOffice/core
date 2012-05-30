@@ -82,7 +82,7 @@ static const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
-ScInterpreter::Config ScInterpreter::maGlobalConfig;
+ScCalcConfig ScInterpreter::maGlobalConfig;
 ScTokenStack* ScInterpreter::pGlobalStack = NULL;
 bool ScInterpreter::bGlobalStackInUse = false;
 

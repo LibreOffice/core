@@ -35,6 +35,8 @@
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 
+#include "calcconfig.hxx"
+
 class ScTpFormulaOptions : public SfxTabPage
 {
 public:
@@ -85,6 +87,9 @@ private:
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
     ::rtl::OUString maOldSepValue;
+
+    ScCalcConfig maSavedConfig;
+    ScCalcConfig maCurrentConfig;
 
     sal_Unicode mnDecSep;
 };

@@ -37,6 +37,7 @@
 #include "document.hxx"
 #include "scmatrix.hxx"
 #include "externalrefmgr.hxx"
+#include "calcconfig.hxx"
 
 #include <math.h>
 #include <map>
@@ -98,14 +99,8 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
-    struct Config
-    {
-        formula::FormulaGrammar::AddressConvention meIndirectRefSyntax;
-        Config();
-    };
-
-    static void SetGlobalConfig(const Config& rConfig);
-    static const Config& GetGlobalConfig();
+    static void SetGlobalConfig(const ScCalcConfig& rConfig);
+    static const ScCalcConfig& GetGlobalConfig();
 
     static void GlobalExit();           // aus ScGlobal::Clear() gerufen
 
@@ -130,7 +125,7 @@ public:
     VolatileType GetVolatileType() const;
 
 private:
-    static Config maGlobalConfig;
+    static ScCalcConfig maGlobalConfig;
 
     static ScTokenStack*    pGlobalStack;
     static bool             bGlobalStackInUse;

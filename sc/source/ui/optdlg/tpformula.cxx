@@ -246,7 +246,7 @@ SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreS
 
 sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     ScFormulaOptions aOpt;
     sal_Bool bEnglishFuncName = maCbEnglishFuncName.IsChecked();
     sal_Int16 aSyntaxPos      = maLbFormulaSyntax.GetSelectEntryPos();
@@ -258,7 +258,8 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
          || maCbEnglishFuncName.GetSavedValue() != bEnglishFuncName
          || static_cast<OUString>(maEdSepFuncArg.GetSavedValue()) != aSep
          || static_cast<OUString>(maEdSepArrayCol.GetSavedValue()) != aSepArrayCol
-         || static_cast<OUString>(maEdSepArrayRow.GetSavedValue()) != aSepArrayRow )
+         || static_cast<OUString>(maEdSepArrayRow.GetSavedValue()) != aSepArrayRow
+         || maSavedConfig != maCurrentConfig )
     {
         ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
 
@@ -280,6 +281,7 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
         aOpt.SetFormulaSepArg(aSep);
         aOpt.SetFormulaSepArrayCol(aSepArrayCol);
         aOpt.SetFormulaSepArrayRow(aSepArrayRow);
+        aOpt.SetIndirectFuncSyntax(maCurrentConfig.meIndirectRefSyntax);
 
         rCoreSet.Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
         bRet = true;
@@ -340,9 +342,12 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
 
     // detailed calc settings.
     ScFormulaOptions aDefaults;
-    formula::FormulaGrammar::AddressConvention eConv = aOpt.GetIndirectFuncSyntax();
-    bool bDefault = aDefaults.GetIndirectFuncSyntax() == eConv;
+
+    maSavedConfig.meIndirectRefSyntax = aOpt.GetIndirectFuncSyntax();
+    bool bDefault = aDefaults.GetIndirectFuncSyntax() == maSavedConfig.meIndirectRefSyntax;
     UpdateCustomCalcRadioButtons(bDefault);
+
+    maCurrentConfig = maSavedConfig;
 }
 
 int ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)
