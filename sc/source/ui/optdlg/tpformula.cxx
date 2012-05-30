@@ -92,13 +92,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maEdSepArrayRow.SetGetFocusHdl(aLink);
 
     // Get the decimal separator for current locale.
-    ScFormulaOptions aOpt;
-    const SfxPoolItem* pItem = NULL;
-
-    if(SFX_ITEM_SET == rCoreAttrs.GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
-        aOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
-
-    rtl::OUString aSep = aOpt.GetLocaleDataWrapper().getNumDecimalSep();
+    rtl::OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? sal_Unicode('.') : aSep[0];
 }
 
