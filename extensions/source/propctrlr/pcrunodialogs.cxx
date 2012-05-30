@@ -95,7 +95,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.OTabOrderDialog"));
+        return ::rtl::OUString("org.openoffice.comp.form.ui.OTabOrderDialog");
     }
 
     //---------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace pcr
     ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.ui.TabOrderDialog" ) );
+        aSupported.getArray()[0] = ::rtl::OUString(  "com.sun.star.form.ui.TabOrderDialog"  );
         return aSupported;
     }
 

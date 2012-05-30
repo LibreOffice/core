@@ -136,21 +136,21 @@ namespace pcr
     {
         Sequence< ::rtl::OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.ObjectInspector" ) );
+        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString(  "com.sun.star.inspection.ObjectInspector"  );
         return aSupported;
     }
 
     //------------------------------------------------------------------------
     ::rtl::OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.FormController"));
+        return ::rtl::OUString("org.openoffice.comp.extensions.FormController");
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.PropertyBrowserController"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.form.PropertyBrowserController");
         return aSupported;
     }
 
@@ -271,14 +271,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DialogController"));
+        return ::rtl::OUString("org.openoffice.comp.extensions.DialogController");
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.PropertyBrowserController"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.awt.PropertyBrowserController");
         return aSupported;
     }
 

@@ -133,7 +133,7 @@ Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames(void) 
 Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager"));
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.plugin.PluginManager");
     return aSNS;
 }
 
@@ -178,8 +178,8 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
     Sequence<com::sun::star::plugin::PluginDescription> aRet;
 
     vcl::SettingsConfigItem* pCfg = vcl::SettingsConfigItem::get();
-    rtl::OUString aVal( pCfg->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowserPlugins" ) ),
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Disabled" ) ) ) );
+    rtl::OUString aVal( pCfg->getValue( rtl::OUString(  "BrowserPlugins"  ),
+                                        rtl::OUString(  "Disabled"  ) ) );
     if( ! aVal.toBoolean() )
     {
         aRet = impl_getPluginDescriptions();

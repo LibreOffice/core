@@ -171,14 +171,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL FormComponentPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.FormComponentPropertyHandler" ) );
+        return ::rtl::OUString(  "com.sun.star.comp.extensions.FormComponentPropertyHandler"  );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL FormComponentPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.FormComponentPropertyHandler" ) );
+        aSupported[0] = ::rtl::OUString(  "com.sun.star.form.inspection.FormComponentPropertyHandler"  );
         return aSupported;
     }
 
@@ -229,7 +229,7 @@ namespace pcr
             if ( (eType == TypeClass_STRING || eType == TypeClass_SEQUENCE) &&
                     lcl_isLanguageDependentProperty( _rPropertyName ) )
             {
-                static const ::rtl::OUString s_sResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"));
+                static const ::rtl::OUString s_sResourceResolverPropName("ResourceResolver");
 
                 Reference< resource::XStringResourceResolver > xStringResourceResolver;
                 try
@@ -338,7 +338,7 @@ namespace pcr
         if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
         {
             DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
-            rtl::OUString sObjectID( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
+            rtl::OUString sObjectID(  GRAPHOBJ_URLPREFIX  );
             sObjectID = sObjectID + xGrfObj->getUniqueID();
             m_xComponent->setPropertyValue( _rPropertyName, uno::makeAny( sObjectID ) );
         }
@@ -382,8 +382,8 @@ namespace pcr
                     // StringItemList?
                     else if( eType == TypeClass_SEQUENCE )
                     {
-                        static ::rtl::OUString aDot(RTL_CONSTASCII_USTRINGPARAM("."));
-                        static ::rtl::OUString aEsc(RTL_CONSTASCII_USTRINGPARAM("&"));
+                        static ::rtl::OUString aDot(".");
+                        static ::rtl::OUString aEsc("&");
 
                         // Put strings into resource using new ids
                         Sequence< ::rtl::OUString > aNewStrings;
@@ -1423,7 +1423,7 @@ namespace pcr
             aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        aDescriptor.Category = bIsDataProperty ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("General"));
+        aDescriptor.Category = bIsDataProperty ? ::rtl::OUString("Data") : ::rtl::OUString("General");
         return aDescriptor;
     }
 
@@ -2170,7 +2170,7 @@ namespace pcr
 
                 for ( sal_Int32 i = 0; i < nKnownControlTypes; ++i )
                 {
-                    ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt." ) );
+                    ::rtl::OUString sServiceName(  "com.sun.star.awt."  );
                     sServiceName += ::rtl::OUString::createFromAscii( aControlModelServiceNames[ i ] );
 
                     if ( xServiceInfo->supportsService( sServiceName ) )
@@ -2662,10 +2662,10 @@ namespace pcr
 
             // initialize the dialog
             Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY_THROW );
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), makeAny( xComposer ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) ),        makeAny( m_xComponent ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),  makeAny( VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ) ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),         makeAny( sPropertyUIName ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString(  "QueryComposer"  ), makeAny( xComposer ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString(  "RowSet"  ),        makeAny( m_xComponent ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString(  "ParentWindow"  ),  makeAny( VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ) ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString(  "Title"  ),         makeAny( sPropertyUIName ) );
 
             _rClearBeforeDialog.clear();
             bSuccess = ( xDialog->execute() != 0 );

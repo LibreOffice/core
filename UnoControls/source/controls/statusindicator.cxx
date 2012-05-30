@@ -442,7 +442,7 @@ const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames(
 
 const OUString StatusIndicator::impl_getStaticImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_STATUSINDICATOR ));
+    return OUString(IMPLEMENTATIONNAME_STATUSINDICATOR);
 }
 
 //____________________________________________________________________________________________________________

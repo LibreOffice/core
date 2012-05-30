@@ -68,14 +68,14 @@ namespace dbp
     //---------------------------------------------------------------------
     ::rtl::OUString OGroupBoxSI::getImplementationName() const
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbp.OGroupBoxWizard"));
+        return ::rtl::OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > OGroupBoxSI::getServiceNames() const
     {
         Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.GroupBoxAutoPilot"));
+        aReturn[0] = ::rtl::OUString("com.sun.star.sdb.GroupBoxAutoPilot");
         return aReturn;
     }
 
@@ -85,14 +85,14 @@ namespace dbp
     //---------------------------------------------------------------------
     ::rtl::OUString OListComboSI::getImplementationName() const
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbp.OListComboWizard"));
+        return ::rtl::OUString("org.openoffice.comp.dbp.OListComboWizard");
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > OListComboSI::getServiceNames() const
     {
         Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ListComboBoxAutoPilot"));
+        aReturn[0] = ::rtl::OUString("com.sun.star.sdb.ListComboBoxAutoPilot");
         return aReturn;
     }
 
@@ -102,14 +102,14 @@ namespace dbp
     //---------------------------------------------------------------------
     ::rtl::OUString OGridSI::getImplementationName() const
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbp.OGridWizard"));
+        return ::rtl::OUString("org.openoffice.comp.dbp.OGridWizard");
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > OGridSI::getServiceNames() const
     {
         Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.GridControlAutoPilot"));
+        aReturn[0] = ::rtl::OUString("com.sun.star.sdb.GridControlAutoPilot");
         return aReturn;
     }
 

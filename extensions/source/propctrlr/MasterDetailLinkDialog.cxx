@@ -73,7 +73,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString MasterDetailLinkDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.MasterDetailLinkDialog"));
+        return ::rtl::OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
     }
 
     //---------------------------------------------------------------------
@@ -86,7 +86,7 @@ namespace pcr
     ::comphelper::StringSequence MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.MasterDetailLinkDialog"));
+        aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.form.MasterDetailLinkDialog");
         return aSupported;
     }
 

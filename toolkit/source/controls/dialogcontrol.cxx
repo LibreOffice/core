@@ -69,9 +69,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-#define PROPERTY_DIALOGSOURCEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ))
-#define PROPERTY_IMAGEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ))
-#define PROPERTY_GRAPHIC ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ))
+#define PROPERTY_DIALOGSOURCEURL ::rtl::OUString( "DialogSourceURL" )
+#define PROPERTY_IMAGEURL ::rtl::OUString( "ImageURL" )
+#define PROPERTY_GRAPHIC ::rtl::OUString( "Graphic" )
 //
 
 // we probably will need both a hash of control models and hash of controls
@@ -282,9 +282,9 @@ UnoDialogControl::~UnoDialogControl()
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog"));
+        return ::rtl::OUString("Dialog");
     else
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabPage"));
+        return ::rtl::OUString("TabPage");
 }
 
 void UnoDialogControl::dispose() throw(RuntimeException)
@@ -456,8 +456,8 @@ throw (::com::sun::star::uno::RuntimeException)
         Sequence< rtl::OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
         // Properties in a sequence must be sorted!
-        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ));
-        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width"  ));
+        aProps[0] = rtl::OUString( "Height" );
+        aProps[1] = rtl::OUString( "Width" );
         aValues[0] <<= aAppFontSize.Height();
         aValues[1] <<= aAppFontSize.Width();
 
@@ -483,8 +483,8 @@ throw (::com::sun::star::uno::RuntimeException)
         mbPosModified = true;
         Sequence< rtl::OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX"  ));
-        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ));
+        aProps[0] = rtl::OUString( "PositionX" );
+        aProps[1] = rtl::OUString( "PositionY" );
         aValues[0] <<= aTmp.Width();
         aValues[1] <<= aTmp.Height();
 
@@ -731,9 +731,9 @@ uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType ) throw(
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabcontrol"));
+        return ::rtl::OUString("tabcontrol");
     // Hopefully we can tweak the tabcontrol to display without tabs
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs"));
+    return ::rtl::OUString("tabcontrolnotabs");
 }
 
 void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxControl )
@@ -917,7 +917,7 @@ UnoPageControl::~UnoPageControl()
 
 ::rtl::OUString UnoPageControl::GetComponentServiceName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabpage"));
+    return ::rtl::OUString("tabpage");
 }
 
 
@@ -1024,7 +1024,7 @@ UnoFrameControl::~UnoFrameControl()
 
 ::rtl::OUString UnoFrameControl::GetComponentServiceName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("frame"));
+    return ::rtl::OUString("frame");
 }
 
 void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )

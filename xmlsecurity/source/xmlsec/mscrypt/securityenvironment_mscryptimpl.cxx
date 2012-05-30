@@ -200,12 +200,12 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl :: getSupportedSer
 Sequence< OUString > SecurityEnvironment_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.SecurityEnvironment")) ;
+    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.SecurityEnvironment") ;
     return seqServiceNames ;
 }
 
 OUString SecurityEnvironment_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl")) ;
+    return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl") ;
 }
 
 //Helper for registry
@@ -1177,7 +1177,7 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
 
 ::rtl::OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Microsoft Crypto API"));
+    return rtl::OUString("Microsoft Crypto API");
 }
 
 /* Native methods */

@@ -234,7 +234,7 @@ namespace pcr
                 = _bDoListen ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
 
             (xModelProperties.get()->*pListenerOperation)(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+                ::rtl::OUString(  "IsReadOnly"  ),
                 const_cast< OPropertyBrowserController* >( this )
             );
         }
@@ -373,7 +373,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
-            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to attach to a second frame.")),*this);
+            throw RuntimeException(::rtl::OUString("Unable to attach to a second frame."),*this);
 
         // revoke as focus listener from the old container window
         stopContainerWindowListening();
@@ -389,7 +389,7 @@ namespace pcr
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
         Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
-            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The frame is invalid. Unable to extract the container window.")),*this);
+            throw RuntimeException(::rtl::OUString("The frame is invalid. Unable to extract the container window."),*this);
 
         if ( Construct( pParentWin ) )
         {
@@ -595,14 +595,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.ObjectInspector"));
+        return ::rtl::OUString("org.openoffice.comp.extensions.ObjectInspector");
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.inspection.ObjectInspector"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.inspection.ObjectInspector");
         return aSupported;
     }
 
@@ -1501,7 +1501,7 @@ namespace pcr
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
+                ::cppu::ContextEntry_Init( ::rtl::OUString(  "DialogParentWindow"  ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
             };
             xHandlerContext = ::cppu::createComponentContext(
                 aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),

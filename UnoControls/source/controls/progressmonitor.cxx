@@ -684,7 +684,7 @@ const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames(
 
 const OUString ProgressMonitor::impl_getStaticImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_PROGRESSMONITOR ));
+    return OUString(IMPLEMENTATIONNAME_PROGRESSMONITOR);
 }
 
 //____________________________________________________________________________________________________________

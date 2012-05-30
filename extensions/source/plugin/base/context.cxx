@@ -127,7 +127,7 @@ XPluginContext_Impl::~XPluginContext_Impl()
 
 void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
-    Reference< XInterface >  xInst = m_xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) );
+    Reference< XInterface >  xInst = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") );
     if( ! xInst.is() )
         return;
 
@@ -154,7 +154,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+            aValue.Name     = ::rtl::OUString("Referer");
             aValue.Value <<= pPlugin->getRefererURL();
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
@@ -189,7 +189,7 @@ void XPluginContext_Impl::getURLNotify(const Reference< ::com::sun::star::plugin
 ::rtl::OUString XPluginContext_Impl::getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/)
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Mozilla 3.0"));
+    return ::rtl::OUString("Mozilla 3.0");
 }
 
 void XPluginContext_Impl::displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, const ::rtl::OUString& /*message*/)
@@ -220,7 +220,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         }
     }
 
-    Reference< XInterface > xInst = m_xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) );
+    Reference< XInterface > xInst = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") );
     if( ! xInst.is() )
         return ;
 
@@ -231,10 +231,10 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         try
         {
             ::com::sun::star::beans::PropertyValue aValues[2];
-            aValues[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+            aValues[0].Name = ::rtl::OUString("Referer");
             aValues[0].Value <<= pPlugin->getRefererURL();
 
-            aValues[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PostString"));
+            aValues[1].Name = ::rtl::OUString("PostString");
             aValues[1].Value <<= ::rtl::OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
@@ -305,7 +305,7 @@ void FileSink::closeOutput() throw()
     if( fp )
         fclose( fp );
 
-    Reference< XInterface >  xInst = m_xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) );
+    Reference< XInterface >  xInst = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") );
     Reference< ::com::sun::star::frame::XComponentLoader >  xLoader( xInst, UNO_QUERY );
     XPlugin_Impl* pPlugin = XPluginManager_Impl::getPluginImplementation( m_xPlugin );
 
@@ -314,7 +314,7 @@ void FileSink::closeOutput() throw()
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+            aValue.Name = ::rtl::OUString("Referer");
             aValue.Value <<= pPlugin->getRefererURL();
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );

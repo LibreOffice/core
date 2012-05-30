@@ -76,7 +76,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "serviceManager - "
             "Cannot create simple registry" ) ;
 
-        //xSimpleRegistry->open(OUString(RTL_CONSTASCII_USTRINGPARAM("xmlsecurity.rdb")), sal_False, sal_False);
+        //xSimpleRegistry->open(OUString("xmlsecurity.rdb"), sal_False, sal_False);
         xSimpleRegistry->open(sRdbUrl, sal_True, sal_False);
         OSL_ENSURE( xSimpleRegistry->isValid() ,
             "serviceManager - "
@@ -105,10 +105,10 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
                 "Cannot get multi-service factory" ) ;
 
             Sequence< Any > args( 2 ) ;
-            args[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL )) ;
-            args[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE )) ;
+            args[ 0 ] <<= OUString( UCB_CONFIGURATION_KEY1_LOCAL ) ;
+            args[ 1 ] <<= OUString( UCB_CONFIGURATION_KEY2_OFFICE ) ;
             if( ! ::ucb::ContentBroker::initialize( xSvmg , args ) ) {
-                throw RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot inlitialize ContentBroker")) , Reference< XInterface >() , Any() ) ;
+                throw RuntimeException( OUString("Cannot inlitialize ContentBroker") , Reference< XInterface >() , Any() ) ;
             }
         }
         ********************************************************************/
@@ -128,7 +128,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "Cannot create intial service manager" ) ;
 
         Reference< XInterface > urlResolver =
-            xLocalServiceManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")) , xLocalComponentContext ) ;
+            xLocalServiceManager->createInstanceWithContext( OUString("com.sun.star.bridge.UnoUrlResolver") , xLocalComponentContext ) ;
         OSL_ENSURE( urlResolver.is() ,
             "serviceManager - "
             "Cannot get service instance of \"bridge.UnoUrlResolver\"" ) ;
@@ -152,7 +152,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "Cannot get interface of \"XNamingService\" from URL resolver" ) ;
 
         Reference< XInterface > serviceManager =
-            xNamingService->getRegisteredObject( OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager")) ) ;
+            xNamingService->getRegisteredObject( OUString("StarOffice.ServiceManager") ) ;
         OSL_ENSURE( serviceManager.is() ,
             "serviceManager - "
             "Cannot get service instance of \"StarOffice.ServiceManager\"" ) ;
@@ -167,7 +167,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "serviceManager - "
             "Cannot get interface of \"XPropertySet\" from service \"StarOffice.ServiceManager\"" ) ;
 
-        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xUsedComponentContext ;
+        xPropSet->getPropertyValue( OUString("DefaultContext") ) >>= xUsedComponentContext ;
         OSL_ENSURE( xUsedComponentContext.is() ,
             "serviceManager - "
             "Cannot create remote component context" ) ;
@@ -182,7 +182,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "serviceManager - "
             "Cannot get interface of \"XPropertySet\" from URL resolver" ) ;
 
-        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xUsedComponentContext ;
+        xPropSet->getPropertyValue( OUString("DefaultContext") ) >>= xUsedComponentContext ;
         OSL_ENSURE( xUsedComponentContext.is() ,
             "serviceManager - "
             "Cannot create remote component context" ) ;
@@ -206,7 +206,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "serviceManager - "
             "Cannot get interface of \"XPropertySet\" from service \"StarOffice.ServiceManager\"" ) ;
 
-        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xUsedComponentContext ;
+        xPropSet->getPropertyValue( OUString("DefaultContext") ) >>= xUsedComponentContext ;
         OSL_ENSURE( xUsedComponentContext.is() ,
             "serviceManager - "
             "Cannot create remote component context" ) ;

@@ -320,7 +320,7 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 
 const OUString FrameControl::impl_getStaticImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_FRAMECONTROL ));
+    return OUString(IMPLEMENTATIONNAME_FRAMECONTROL);
 }
 
 //____________________________________________________________________________________________________________

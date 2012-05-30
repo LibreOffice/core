@@ -293,7 +293,7 @@ namespace pcr
                 aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
 
                 // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
-                aScriptEvent.ScriptType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) );
+                aScriptEvent.ScriptType = ::rtl::OUString(  "Script"  );
             }
             return aScriptEvent;
         }
@@ -447,9 +447,9 @@ namespace pcr
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
+        aScriptDescriptor[0].Name = ::rtl::OUString("EventType");
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+        aScriptDescriptor[1].Name = ::rtl::OUString("Script");
         aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );
@@ -542,14 +542,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL EventHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EventHandler" ) );
+        return ::rtl::OUString(  "com.sun.star.comp.extensions.EventHandler"  );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.EventHandler" ) );
+        aSupported[0] = ::rtl::OUString(  "com.sun.star.form.inspection.EventHandler"  );
         return aSupported;
     }
 
@@ -716,9 +716,9 @@ namespace pcr
                 aComposeBuffer.append( xScriptUri->getName() );
 
                 // location
-                const ::rtl::OUString sLocationParamName( RTL_CONSTASCII_USTRINGPARAM( "location" ) );
+                const ::rtl::OUString sLocationParamName(  "location"  );
                 const ::rtl::OUString sLocation = xScriptUri->getParameter( sLocationParamName );
-                const ::rtl::OUString sLangParamName( RTL_CONSTASCII_USTRINGPARAM( "language" ) );
+                const ::rtl::OUString sLangParamName(  "language"  );
                 const ::rtl::OUString sLanguage = xScriptUri->getParameter( sLangParamName );
 
                 if ( !(sLocation.isEmpty() && sLanguage.isEmpty()) )
@@ -883,7 +883,7 @@ namespace pcr
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
         aDescriptor.PrimaryButtonId = rtl::OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = sal_True;
-        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ) );
+        aDescriptor.Category = ::rtl::OUString(  "Events"  );
         return aDescriptor;
     }
 

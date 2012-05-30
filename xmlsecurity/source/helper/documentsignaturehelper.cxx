@@ -91,9 +91,9 @@ void ImplFillElementList(
     const ::rtl::OUString rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
-    ::rtl::OUString aMetaInfName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
-    ::rtl::OUString sMimeTypeName (RTL_CONSTASCII_USTRINGPARAM("mimetype"));
-    ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+    ::rtl::OUString aMetaInfName(  "META-INF"  );
+    ::rtl::OUString sMimeTypeName ("mimetype");
+    ::rtl::OUString aSep(  "/"  );
 
     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
     Sequence< ::rtl::OUString > aElements = xElements->getElementNames();
@@ -115,7 +115,7 @@ void ImplFillElementList(
                 rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
             if (sEncName.isEmpty() && !pNames[n].isEmpty())
                 throw css::uno::Exception(::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Failed to encode element name of XStorage")), 0);
+                "Failed to encode element name of XStorage"), 0);
 
             if ( rxStore->isStreamElement( pNames[n] ) )
             {
@@ -149,7 +149,7 @@ bool DocumentSignatureHelper::isODFPre_1_2(const ::rtl::OUString & sVersion)
 
 bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)
 {
-    ::rtl::OUString sManifestURI(RTL_CONSTASCII_USTRINGPARAM("META-INF/manifest.xml"));
+    ::rtl::OUString sManifestURI("META-INF/manifest.xml");
     bool bOOo3_2 = false;
     typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
     for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
@@ -202,7 +202,7 @@ DocumentSignatureHelper::CreateElementList(
     const DocumentSignatureAlgorithm mode)
 {
     std::vector< rtl::OUString > aElements;
-    ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+    ::rtl::OUString aSep(  "/"  );
 
     switch ( eMode )
     {
@@ -214,7 +214,7 @@ DocumentSignatureHelper::CreateElementList(
                 ImplFillElementList(aElements, rxStore, ::rtl::OUString(), false, mode);
 
                 // 2) Pictures...
-                rtl::OUString aSubStorageName( RTL_CONSTASCII_USTRINGPARAM("Pictures") );
+                rtl::OUString aSubStorageName( "Pictures" );
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -225,7 +225,7 @@ DocumentSignatureHelper::CreateElementList(
                     ; // Doesn't have to exist...
                 }
                 // 3) OLE....
-                aSubStorageName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectReplacements"));
+                aSubStorageName = rtl::OUString("ObjectReplacements");
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -233,7 +233,7 @@ DocumentSignatureHelper::CreateElementList(
                     xSubStore.clear();
 
                     // Object folders...
-                    rtl::OUString aMatchStr( RTL_CONSTASCII_USTRINGPARAM("Object ") );
+                    rtl::OUString aMatchStr( "Object " );
                     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
                     Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
                     sal_Int32 nElements = aElementNames.getLength();
@@ -262,7 +262,7 @@ DocumentSignatureHelper::CreateElementList(
         case SignatureModeMacros:
         {
             // 1) Macros
-            rtl::OUString aSubStorageName( RTL_CONSTASCII_USTRINGPARAM("Basic") );
+            rtl::OUString aSubStorageName( "Basic" );
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -274,7 +274,7 @@ DocumentSignatureHelper::CreateElementList(
             }
 
             // 2) Dialogs
-            aSubStorageName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialogs")) ;
+            aSubStorageName = rtl::OUString("Dialogs") ;
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -285,7 +285,7 @@ DocumentSignatureHelper::CreateElementList(
                 ; // Doesn't have to exist...
             }
             // 3) Scripts
-            aSubStorageName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scripts")) ;
+            aSubStorageName = rtl::OUString("Scripts") ;
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -319,7 +319,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 
     try
     {
-        ::rtl::OUString aSIGStoreName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
+        ::rtl::OUString aSIGStoreName(  "META-INF"  );
         aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
         if ( aHelper.xSignatureStorage.is() )
         {
@@ -446,17 +446,17 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
 
 ::rtl::OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "documentsignatures.xml" ) );
+    return ::rtl::OUString(  "documentsignatures.xml"  );
 }
 
 ::rtl::OUString DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "macrosignatures.xml" ) );
+    return ::rtl::OUString(  "macrosignatures.xml"  );
 }
 
 ::rtl::OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "packagesignatures.xml" ) );
+    return ::rtl::OUString(  "packagesignatures.xml"  );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

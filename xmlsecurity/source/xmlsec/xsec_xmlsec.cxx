@@ -67,8 +67,7 @@ class SerialNumberAdapterImpl : public WeakImplHelper1<
 OUString SerialNumberAdapterImpl_getImplementationName()
     throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.security.SerialNumberAdapter"));
+    return OUString( "com.sun.star.security.SerialNumberAdapter");
 }
 
 Sequence< OUString > SerialNumberAdapterImpl_getSupportedServiceNames()
@@ -76,8 +75,7 @@ Sequence< OUString > SerialNumberAdapterImpl_getSupportedServiceNames()
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.security.SerialNumberAdapter" ) );
+    pArray[0] = OUString( "com.sun.star.security.SerialNumberAdapter"  );
     return aRet;
 }
 

@@ -56,7 +56,7 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
 Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginModel"));
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.plugin.PluginModel");
     return aSNS;
 }
 
@@ -188,7 +188,7 @@ void PluginModel::dispose(void) throw()
 // ::com::sun::star::io::XPersistObject
 ::rtl::OUString PluginModel::getServiceName() throw()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginModel"));
+    return ::rtl::OUString("com.sun.star.plugin.PluginModel");
 }
 
 void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw()

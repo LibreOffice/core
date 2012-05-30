@@ -95,7 +95,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString OControlFontDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.OControlFontDialog"));
+        return ::rtl::OUString("org.openoffice.comp.form.ui.OControlFontDialog");
     }
 
     //---------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace pcr
     ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.ControlFontDialog"));
+        aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.form.ControlFontDialog");
         return aSupported;
     }
 

@@ -56,7 +56,7 @@ namespace lang = com::sun::star::lang ;
 namespace util = com::sun::star::util ;
 namespace uno = com::sun::star::uno ;
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+#define UNISTRING(s) rtl::OUString(s)
 
 #define LAST_CHECK              "LastCheck"
 #define VERSION_FOUND           "UpdateVersionFound"
@@ -213,7 +213,7 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
     // This should become a desktop specific setting in some system backend ..
     rtl::OUString aHomeDir;
     osl::Security().getHomeDir( aHomeDir );
-    aRet = aHomeDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Desktop"));
+    aRet = aHomeDir + rtl::OUString("/Desktop");
 
     // Set path to home directory when there is no /Desktop directory
     osl::Directory aDocumentsDir( aRet );

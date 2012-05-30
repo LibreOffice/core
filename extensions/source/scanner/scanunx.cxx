@@ -266,7 +266,7 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
     if( Sane::IsSane() )
     {
         SEQ( ScannerContext ) aRet(1);
-        aRet.getArray()[0].ScannerName      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SANE"));
+        aRet.getArray()[0].ScannerName      = ::rtl::OUString("SANE");
         aRet.getArray()[0].InternalData     = 0;
         return aRet;
     }
@@ -291,7 +291,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
 
         if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
             throw ScannerException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
+                ::rtl::OUString("Scanner does not exist"),
                 REF( XScannerManager )( this ),
                 ScanError_InvalidContext
             );
@@ -299,7 +299,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
         boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
         if( pHolder->m_bBusy )
             throw ScannerException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner is busy")),
+                ::rtl::OUString("Scanner is busy"),
                 REF( XScannerManager )( this ),
                 ScanError_ScanInProgress
             );
@@ -330,14 +330,14 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
+            ::rtl::OUString("Scanner does not exist"),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner is busy")),
+            ::rtl::OUString("Scanner is busy"),
             REF( XScannerManager )( this ),
             ScanError_ScanInProgress
             );
@@ -356,7 +356,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
+            ::rtl::OUString("Scanner does not exist"),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
@@ -375,7 +375,7 @@ REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_con
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
+            ::rtl::OUString("Scanner does not exist"),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );

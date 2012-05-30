@@ -154,7 +154,7 @@ static void lcl_OpenURL( ::rtl::OUString sURL )
                 ::comphelper::getProcessServiceFactory();
             uno::Reference< css::system::XSystemShellExecute > xSystemShell(
                 xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                    "com.sun.star.system.SystemShellExecute") ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
                 xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
@@ -180,7 +180,7 @@ sal_Bool KillFile_Impl( const String& rURL )
     try
     {
         Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {

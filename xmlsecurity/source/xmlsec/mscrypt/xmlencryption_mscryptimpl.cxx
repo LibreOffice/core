@@ -361,12 +361,12 @@ Sequence< OUString > SAL_CALL XMLEncryption_MSCryptImpl :: getSupportedServiceNa
 Sequence< OUString > XMLEncryption_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLEncryption")) ;
+    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.XMLEncryption") ;
     return seqServiceNames ;
 }
 
 OUString XMLEncryption_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl")) ;
+    return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl") ;
 }
 
 //Helper for registry
