@@ -44,10 +44,10 @@ all:
 
 # See http://cgit.freedesktop.org/libreoffice/libexttextcat/ for upstream
 # sources, far better to commit your changes in there
-TARFILE_NAME=libexttextcat-3.3.0
-TARFILE_MD5=dc8fc13710a987edd59f0bcae004fec2
-TARFILE_ROOTDIR=libexttextcat-3.3.0
-PATCH_FILES=libexttextcat-visibility.patch android.patch
+TARFILE_NAME=libexttextcat-3.3.1
+TARFILE_MD5=6097739c841f671cb21332b9cc593ae7
+TARFILE_ROOTDIR=libexttextcat-3.3.1
+PATCH_FILES=android.patch
 
 .IF "$(GUI)"=="UNX"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
