@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <IShellCursorSupplier.hxx>
 #include <txtftn.hxx>
 #include <fmtanchr.hxx>
@@ -69,8 +67,6 @@ public:
 
 SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
-
-//------------------------------------------------------------
 // This class saves the Pam as sal_uInt16s and can recompose those into a PaM
 SwUndRng::SwUndRng()
     : nSttNode( 0 ), nEndNode( 0 ), nSttCntnt( 0 ), nEndCntnt( 0 )
@@ -137,10 +133,6 @@ SwPaM & SwUndRng::AddUndoRedoPaM(
     return rPaM;
 }
 
-
-//------------------------------------------------------------
-
-
 void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, sal_uLong nSttIdx,
                                     sal_uLong* pEndIdx )
 {
@@ -180,7 +172,8 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext )
 
 void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 {
-    // Move only the Crsr. Bookmarks/TOXMarks/etc. are done by the corresponding JoinNext/JoinPrev
+    // Move only the Crsr. Bookmarks/TOXMarks/etc. are done by the corresponding
+    // JoinNext/JoinPrev
     SwNodeIndex aIdx( rPos.nNode.GetNode().GetNodes(), nIdx );
     ::PaMCorrRel( aIdx, rPos );
 }
@@ -201,7 +194,6 @@ SwUndo::~SwUndo()
 {
     delete pComment;
 }
-
 
 class UndoRedoRedlineGuard
 {
@@ -322,9 +314,6 @@ SwRewriter SwUndo::GetRewriter() const
     return aResult;
 }
 
-
-//------------------------------------------------------------
-
 SwUndoSaveCntnt::SwUndoSaveCntnt()
     : pHistory( 0 )
 {}
@@ -334,15 +323,14 @@ SwUndoSaveCntnt::~SwUndoSaveCntnt()
     delete pHistory;
 }
 
-    // This is needed when deleting content. For REDO all contents will be moved into the
-    // UndoNodesArray. These methods add a seperator for the attributes to the end of TextNodes.
-    // As a result, the attributes will not be expanded.
-    // - MoveTo   moves from NodesArray into UndoNodesArray
-    // - MoveFrom moves from UndoNodesArray into NodesArray
-
-    // 2.8.93:  If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly.
-    //          In that case the whole section should be moved.
-
+// This is needed when deleting content. For REDO all contents will be moved
+// into the UndoNodesArray. These methods add a seperator for the attributes to
+// the end of TextNodes. As a result, the attributes will not be expanded.
+// - MoveTo   moves from NodesArray into UndoNodesArray
+// - MoveFrom moves from UndoNodesArray into NodesArray
+//
+// If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly. In that case the whole
+// section should be moved.
 void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     SwIndex* pCntIdx, sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
@@ -389,13 +377,14 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
         if( pTxtNd )        // add a seperator for the attributes
         {
-            // But since all attributes will be touched at an insert (meaning deleted from the
-            // array and re-added again), attributes might disappear (e.g. "no bold" for 10-20,
-            // "bold" for 12-15 -> when inserting/deleting, the "bold" will be deleted, which is
-            // not wanted here!)! Thus do not touch the hints but manipulate the string directly.
-
+            // But since all attributes will be touched at an insert (meaning
+            // deleted from the array and re-added again), attributes might
+            // disappear (e.g. "no bold" for 10-20,  "bold" for 12-15 -> when
+            // inserting/deleting, the "bold" will be deleted, which is not
+            // wanted here!)! Thus do not touch the hints but manipulate the
+            // string directly.
             String& rStr = (String&)pTxtNd->GetTxt();
-            // For security reasons better only if positioned at the end
+            // For safety reasons better only if positioned at the end
             if( rStr.Len() == aPos.nContent.GetIndex() )
             {
                 rStr.Insert( ' ' );
@@ -494,10 +483,10 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
     }
 }
 
-// These two methods move the Point of Pam backwards/forwards. With that, one can span an area for
-// a Undo/Redo. (The Point is then positioned in front of the area to manipulate!!)
+// These two methods move the Point of Pam backwards/forwards. With that, one
+// can span an area for a Undo/Redo. (The Point is then positioned in front of
+// the area to manipulate!)
 // The flag indicates if there is still content in front of Point.
-
 sal_Bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
 {
     rPam.SetMark();
@@ -517,7 +506,7 @@ void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
     if( bMvBkwrd )
         rPam.Move( fnMoveForward );
     else
-    {                       // set Point to the next position
+    {
         rPam.GetPoint()->nNode++;
         SwCntntNode* pCNd = rPam.GetCntntNode();
         if( pCNd )
@@ -528,14 +517,13 @@ void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
 }
 
 
-/*
-   JP 21.03.94: Delete all objects that have ContentIndices to the given area.
-                Currently these exist:
-                    - Footnotes
-                    - Flys
-                    - Bookmarks
-                    - Directories
-*/
+// Delete all objects that have ContentIndices to the given area.
+// Currently (1994) these exist:
+//                  - Footnotes
+//                  - Flys
+//                  - Bookmarks
+//                  - Directories
+//
 // #i81002# - extending method
 // delete certain (not all) cross-reference bookmarks at text node of <rMark>
 // and at text node of <rPoint>, if these text nodes aren't the same.
@@ -578,8 +566,10 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     continue;
                 }
 
-                // Unfortunately an index needs to be created. Otherwise there will be problems
-                // with TextNode because the index will be deleted in the DTOR of SwFtn!
+// FIXME: duplicated code here and below -> refactor?
+                // Unfortunately an index needs to be created. Otherwise there
+                // will be problems with TextNode because the index will be
+                // deleted in the DTOR of SwFtn!
                 SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
                 if( !pHistory )
                     pHistory = new SwHistory;
@@ -602,8 +592,9 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     nFtnSttIdx >= pEnd->nContent.GetIndex() )))
                     continue;               // continue searching
 
-                // Unfortunately an index needs to be created. Otherwise there will be problems
-                // with TextNode because the index will be deleted in the DTOR of SwFtn!
+                // Unfortunately an index needs to be created. Otherwise there
+                // will be problems with TextNode because the index will be
+                // deleted in the DTOR of SwFtn!
                 SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
                 if( !pHistory )
                     pHistory = new SwHistory;
@@ -822,8 +813,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     if( !bSavePos && !bSaveOtherPos && bDifferentTxtNodesAtMarkAndPoint &&
                         dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk))
                     {
-                        // delete cross-reference bookmark at <pStt>, if only part of
-                        // <pEnd> text node content is deleted.
+                        // delete cross-reference bookmark at <pStt>, if only
+                        // part of <pEnd> text node content is deleted.
                         if( pStt->nNode == pBkmk->GetMarkPos().nNode &&
                             pEnd->nContent.GetIndex() !=
                                 pEnd->nNode.GetNode().GetTxtNode()->Len() )
@@ -831,8 +822,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             bSavePos = true;
                             bSaveOtherPos = false;
                         }
-                        // delete cross-reference bookmark at <pEnd>, if only part of
-                        // <pStt> text node content is deleted.
+                        // delete cross-reference bookmark at <pEnd>, if only
+                        // part of <pStt> text node content is deleted.
                         else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
                             pStt->nContent.GetIndex() != 0 )
                         {
@@ -859,9 +850,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     }
 }
 
-
 // save a complete section into UndoNodes array
-
 SwUndoSaveSection::SwUndoSaveSection()
     : pMvStt( 0 ), pRedlSaveData( 0 ), nMvLen( 0 ), nStartPos( ULONG_MAX )
 {
@@ -885,7 +874,6 @@ void SwUndoSaveSection::SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx )
     SwNodeRange aRg( rSttIdx.GetNode(), *rSttIdx.GetNode().EndOfSectionNode() );
     SaveSection( pDoc, aRg );
 }
-
 
 void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
 {
@@ -923,8 +911,6 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     {
         // check if the content is at the old position
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
-//        OSL_ENSURE( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
-//                "RestoreSection(): Position on content node");
 
         // move the content from UndoNodes array into Fly
         SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection( aSttIdx,
@@ -957,8 +943,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     }
 }
 
-        // save and set the RedlineData
-
+// save and set the RedlineData
 SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
                                         const SwPosition& rSttPos,
                                         const SwPosition& rEndPos,
@@ -1027,9 +1012,9 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
         pRedl->SetContentIdx( &aIdx );
     }
     SetPaM( *pRedl );
-    // First, delete the "old" so that in an Append no unexpected things will happen, e.g. a delete
-    // in an insert. In the latter case the just restored content will be deleted and not the one
-    // you originally wanted.
+    // First, delete the "old" so that in an Append no unexpected things will
+    // happen, e.g. a delete in an insert. In the latter case the just restored
+    // content will be deleted and not the one you originally wanted.
     rDoc.DeleteRedline( *pRedl, false, USHRT_MAX );
 
     RedlineMode_t eOld = rDoc.GetRedlineMode();
@@ -1037,7 +1022,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     //#i92154# let UI know about a new redline with comment
     if (rDoc.GetDocShell() && (pRedl->GetComment() != String()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
-    //
+
     bool const bSuccess = rDoc.AppendRedline( pRedl, true );
     assert(bSuccess); // SwRedlineSaveData::RedlineToDoc: insert redline failed
     (void) bSuccess; // unused in non-debug

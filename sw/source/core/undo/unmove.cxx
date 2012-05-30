@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <UndoSplitMove.hxx>
-
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
@@ -37,9 +35,7 @@
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
 
-
 // MOVE
-
 SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     : SwUndo( UNDO_MOVE ), SwUndRng( rRange ),
     nMvDestNode( rMvPos.nNode.GetIndex() ),
@@ -91,14 +87,12 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
     }
 
-
     nFtnStt = pHistory->Count();
     DelFtn( rRange );
 
     if( pHistory && !pHistory->Count() )
         DELETEZ( pHistory );
 }
-
 
 SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
                         const SwNodeIndex& rMvPos )
@@ -115,6 +109,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     nEndNode = rRg.aEnd.GetIndex();
 
 //  DelFtn( rRange );
+// FIXME: duplication of the method body of DelFtn below
 
     // is the current move from CntntArea into the special section?
     sal_uLong nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
@@ -137,8 +132,6 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
 
     nFtnStt = 0;
 }
-
-
 
 void SwUndoMove::SetDestRange( const SwPaM& rRange,
                                 const SwPosition& rInsPos,
@@ -169,7 +162,6 @@ void SwUndoMove::SetDestRange( const SwPaM& rRange,
     bJoinPrev = bJoin;
 }
 
-
 void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
                                 const SwNodeIndex& rEnd,
                                 const SwNodeIndex& rInsPos )
@@ -185,7 +177,6 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
 
     nDestSttCntnt = nDestEndCntnt = nInsPosCntnt = STRING_MAXLEN;
 }
-
 
 void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -212,8 +203,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             SwPaM aPam( aIdx.GetNode(), nDestSttCntnt,
                         *pDoc->GetNodes()[ nDestEndNode ], nDestEndCntnt );
 
-            // #i17764# if redlines are to be moved, we may not remove them before
-            //          pDoc->Move gets a chance to handle them
+            // #i17764# if redlines are to be moved, we may not remove them
+            // before pDoc->Move gets a chance to handle them
             if( ! bMoveRedlines )
                 RemoveIdxFromRange( aPam, sal_False );
 
@@ -236,7 +227,6 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 
             aPam.Exchange();
             aPam.DeleteMark();
-//          pDoc->ResetAttr( aPam, sal_False );
             if( aPam.GetNode()->IsCntntNode() )
                 aPam.GetNode()->GetCntntNode()->ResetAllAttr();
             // the Pam will be dropped now
@@ -280,7 +270,6 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
         AddUndoRedoPaM(rContext);
     }
 }
-
 
 void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -333,7 +322,6 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
         *pPam->GetMark() = *aPam.GetMark();
     }
 }
-
 
 void SwUndoMove::DelFtn( const SwPaM& rRange )
 {

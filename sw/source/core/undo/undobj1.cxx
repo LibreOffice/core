@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <svl/itemiter.hxx>
-
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <fmtflcnt.hxx>
@@ -49,10 +47,6 @@
 // OD 26.06.2003 #108784#
 #include <dcontact.hxx>
 #include <ndole.hxx>
-
-
-//---------------------------------------------------------------------
-// SwUndoLayBase /////////////////////////////////////////////////////////
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
     : SwUndo( nUndoId ), pFrmFmt( pFormat )
@@ -115,10 +109,9 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         pFrmFmt->SetFmtAttr( SwFmtCntnt( aIdx.GetNode().GetStartNode() ));
     }
 
-    //JP 18.12.98: Bug 60505 - set InCntntAttribute not until there is content!
-    //              Otherwise the layout would format the Fly beforehand but
-    //              would not find content; this happend with graphics from the
-    //              internet
+    // Set InCntntAttribute not until there is content!
+    // Otherwise the layout would format the Fly beforehand but would not find
+    // content; this happend with graphics from the internet.
     if (FLY_AS_CHAR == nRndId)
     {
         // there must be at least the attribute in a TextNode
@@ -235,8 +228,6 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     rFlyFmts.Remove( rFlyFmts.GetPos( pFrmFmt ));
 }
 
-// SwUndoInsLayFmt ///////////////////////////////////////////////////////
-
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
                                             UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
@@ -347,8 +338,6 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
     (void) pFlyFmt;
-//FIXME nobody ever did anything with this selection:
-//    rContext.SetSelections(pFlyFmt, 0);
 }
 
 // #111827#
@@ -367,7 +356,6 @@ rtl::OUString SwUndoInsLayFmt::GetComment() const
           If frame format is present and has an SdrObject use the undo
           comment of the SdrObject. Otherwise use the default comment.
         */
-
         bool bDone = false;
         if (pFrmFmt)
         {
@@ -387,8 +375,6 @@ rtl::OUString SwUndoInsLayFmt::GetComment() const
 
     return aResult;
 }
-
-// SwUndoDelLayFmt ///////////////////////////////////////////////////////
 
 static SwUndoId
 lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
@@ -473,8 +459,6 @@ void SwUndoDelLayFmt::RedoForRollback()
     DelFly( pFrmFmt->GetDoc() );
 }
 
-// SwUndoSetFlyFmt ///////////////////////////////////////////////////////
-
 SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
     : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFmt ), pFrmFmt( &rFlyFmt ),
     pOldFmt( (SwFrmFmt*)rFlyFmt.DerivedFrom() ), pNewFmt( &rNewFrmFmt ),
@@ -495,7 +479,6 @@ SwRewriter SwUndoSetFlyFmt::GetRewriter() const
 
     return aRewriter;
 }
-
 
 SwUndoSetFlyFmt::~SwUndoSetFlyFmt()
 {

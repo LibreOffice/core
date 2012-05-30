@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <hintids.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -34,14 +33,12 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
-
-
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
@@ -60,7 +57,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
-        if( !nSttCntnt )    // dann werden Flys mitgenommen !!
+        if( !nSttCntnt )    // than take the Flys along
         {
             sal_uInt16 nArrLen = pDoc->GetSpzFrmFmts()->Count();
             for( sal_uInt16 n = 0; n < nArrLen; ++n )
@@ -79,7 +76,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
             }
         }
     }
-    // Redline beachten
+    // consider Redline
     if( pDoc->IsRedlineOn() )
     {
         pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
@@ -87,8 +84,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     }
 }
 
-// setze den Destination-Bereich nach dem Einlesen.
-
+// set destination after reading input
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
                                     sal_Bool bSttIsTxtNd )
 {
@@ -105,16 +101,16 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
         nSttNode = pTmpPos->nNode.GetIndex();
         nSttCntnt = pTmpPos->nContent.GetIndex();
 
-        if( !bSttIsTxtNd )      // wird eine Tabellenselektion eingefuegt,
+        if( !bSttIsTxtNd )      // if a table selection is added ...
         {
-            ++nSttNode;         // dann stimmt der CopyPam nicht ganz
+            ++nSttNode;         // ... than the CopyPam is not fully correct
             bSttWasTxtNd = sal_False;
         }
     }
 
     if( bScanFlys && !nSttCntnt )
     {
-        // dann alle neuen Flys zusammen sammeln !!
+        // than collect all new Flys
         SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
         sal_uInt16 nFndPos, nArrLen = pDoc->GetSpzFrmFmts()->Count();
         for( sal_uInt16 n = 0; n < nArrLen; ++n )
@@ -141,18 +137,17 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
     }
 }
 
-
 SwUndoInserts::~SwUndoInserts()
 {
-    if( pPos )      // loesche noch den Bereich aus dem UndoNodes Array
+    if( pPos ) // delete also the section from UndoNodes array
     {
-        // Insert speichert den Inhalt in der IconSection
+        // Insert saves content in IconSection
         SwNodes& rUNds = pPos->nNode.GetNodes();
-        if( pPos->nContent.GetIndex() )         // nicht den gesamten Node loeschen
+        if( pPos->nContent.GetIndex() ) // do not delete complete Node
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            OSL_ENSURE( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
-            if( pTxtNd ) // Robust
+            OSL_ENSURE( pTxtNd, "no TextNode to delete from" );
+            if( pTxtNd ) // robust
             {
                 pTxtNd->EraseText( pPos->nContent );
             }
@@ -167,7 +162,6 @@ SwUndoInserts::~SwUndoInserts()
     delete pRedlData;
 }
 
-
 void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
@@ -176,14 +170,13 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
-    // sind an Point/Mark 2 unterschiedliche TextNodes, dann muss ein
-    // JoinNext ausgefuehrt werden.
+    // if Point and Mark are different text nodes so a JoinNext has to be done
     sal_Bool bJoinNext = nSttNode != nEndNode &&
                 pPam->GetMark()->nNode.GetNode().GetTxtNode() &&
                 pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
 
-    // gibts ueberhaupt Inhalt ? (laden von Zeichenvorlagen hat kein Inhalt!)
+    // Is there any content? (loading from template does not have content)
     if( nSttNode != nEndNode || nSttCntnt != nEndCntnt )
     {
         if( nSttNode != nEndNode )
@@ -196,7 +189,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         RemoveIdxFromRange( *pPam, sal_False );
         SetPaM(*pPam);
 
-        // sind Fussnoten oder CntntFlyFrames im Text ??
+        // are there Footnotes or CntntFlyFrames in text?
         nSetPos = pHistory->Count();
         nNdDiff = pPam->GetMark()->nNode.GetIndex();
         DelCntntIndex( *pPam->GetMark(), *pPam->GetPoint() );
@@ -226,12 +219,14 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTxtNode* pTxtNode = rIdx.GetNode().GetTxtNode();
     if( pTxtNode )
     {
-        if( !pTxtFmtColl )      // falls 0, dann war hier auch kein TextNode,
-        {                       // dann muss dieser geloescht werden,
+        if( !pTxtFmtColl ) // if 0 than it's no TextNode -> delete
+        {
             SwNodeIndex aDelIdx( rIdx );
             rIdx++;
             SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
-            xub_StrLen nCnt = 0; if( pCNd ) nCnt = pCNd->Len();
+            xub_StrLen nCnt = 0;
+            if( pCNd )
+                nCnt = pCNd->Len();
             pPam->GetPoint()->nContent.Assign( pCNd, nCnt );
             pPam->SetMark();
             pPam->DeleteMark();
@@ -254,7 +249,6 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             pTxtNode->RstAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(),
                                 0, 0, true );
 
-            // setze alle Attribute im Node zurueck
             pTxtNode->ResetAllAttr();
 
             if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( pTxtFmtColl ))
@@ -268,7 +262,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // setze noch den Cursor auf den Redo-Bereich
+    // position cursor onto REDO section
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc* pDoc = pPam->GetDoc();
     pPam->DeleteMark();
@@ -282,12 +276,12 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pHistory->SetTmpEnd( nSetPos );
 
-    // alte Anfangs-Position fuers Rollback zurueckholen
+    // retrieve start position for rollback
     if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && pPos )
     {
         sal_Bool bMvBkwrd = MovePtBackward( *pPam );
 
-        // Inhalt wieder einfuegen. (erst pPos abmelden !!)
+        // re-insert content again (first detach pPos!)
         sal_uLong nMvNd = pPos->nNode.GetIndex();
         xub_StrLen nMvCnt = pPos->nContent.GetIndex();
         DELETEZ( pPos );
@@ -339,9 +333,6 @@ void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
     SwPaM & rRepeatPaM( rContext.GetRepeatPaM() );
     aPam.GetDoc()->CopyRange( aPam, *rRepeatPaM.GetPoint(), false );
 }
-
-
-//////////////////////////////////////////////////////////////////////////
 
 SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )
     : SwUndoInserts( UNDO_INSDOKUMENT, rPam )
