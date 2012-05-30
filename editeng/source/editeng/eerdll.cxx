@@ -196,7 +196,7 @@ uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGues
         {
             xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
                     xMgr->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LanguageGuessing" )) ),
+                        rtl::OUString( "com.sun.star.linguistic2.LanguageGuessing" ) ),
                         uno::UNO_QUERY );
         }
     }

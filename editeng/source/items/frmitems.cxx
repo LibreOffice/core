@@ -2056,7 +2056,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
-                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
+                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.script.Converter")),
                     uno::UNO_QUERY );
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
@@ -2861,7 +2861,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter
-                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
+                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.script.Converter")),
                         uno::UNO_QUERY );
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;
@@ -3675,8 +3675,8 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 sLink = *pStrLink;
             else if( pImpl->pGraphicObject )
             {
-                OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM(
-                    UNO_NAME_GRAPHOBJ_URLPREFIX));
+                OUString sPrefix(
+                    UNO_NAME_GRAPHOBJ_URLPREFIX);
                 OUString sId(rtl::OStringToOUString(
                     pImpl->pGraphicObject->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US));

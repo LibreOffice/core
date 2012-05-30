@@ -77,7 +77,7 @@ void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumb
         {
             Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
             Reference < XInterface > xI = xMSF->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.DefaultNumberingProvider" )) );
+                ::rtl::OUString( "com.sun.star.text.DefaultNumberingProvider" ) );
             Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
             DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
             _xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
@@ -138,9 +138,9 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
                     {
                         Sequence< PropertyValue > aProperties(2);
                         PropertyValue* pValues = aProperties.getArray();
-                        pValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+                        pValues[0].Name = rtl::OUString("NumberingType");
                         pValues[0].Value <<= nNumType;
-                        pValues[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                        pValues[1].Name = rtl::OUString("Value");
                         pValues[1].Value <<= (sal_Int32)nNo;
 
                         try

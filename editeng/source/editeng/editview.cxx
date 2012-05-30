@@ -883,7 +883,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 //    aTmp = lcl_Win_GetShortPathName( aTmp );
 #endif
     Graphic aGraphic;
-    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    const String aFilterName(  IMP_PNG  );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -927,7 +927,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         // implementation here by providing an additional parameter.
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
-        rVal.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_MAX_NUMBER_OF_SUGGESTIONS ));
+        rVal.Name = OUString( UPN_MAX_NUMBER_OF_SUGGESTIONS );
         rVal.Value <<= (sal_Int16) 7;
         //
         // Are there any replace suggestions?
@@ -967,9 +967,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             String aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
             String aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
             String aWordStr( EE_RESSTR( RID_STR_WORD ) );
-            aWordStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmpWord );
+            aWordStr.SearchAndReplace( String(  "%x"  ), aTmpWord );
             String aParaStr( EE_RESSTR( RID_STR_PARAGRAPH ) );
-            aParaStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmpPara );
+            aParaStr.SearchAndReplace( String(  "%x"  ), aTmpPara );
             aPopupMenu.InsertItem( MN_WORDLANGUAGE, aWordStr );
             aPopupMenu.SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
             aPopupMenu.InsertItem( MN_PARALANGUAGE, aParaStr );

@@ -489,7 +489,7 @@ void SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleContextBase"));
+    return OUString("AccessibleContextBase");
 }
 
 
@@ -519,10 +519,10 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 {
     ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.accessibility.Accessible")),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.accessibility.AccessibleContext"))
+        OUString(
+            "com.sun.star.accessibility.Accessible"),
+        OUString(
+            "com.sun.star.accessibility.AccessibleContext")
     };
     return uno::Sequence<OUString> (sServiceNames, 2);
 }
@@ -681,7 +681,7 @@ void AccessibleContextBase::ThrowIfDisposed (void)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
+            OUString("object has been already disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

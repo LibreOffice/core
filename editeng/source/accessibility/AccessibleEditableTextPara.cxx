@@ -432,7 +432,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         if( nIndex < 0 || nIndex >= getCharacterCount() )
-            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleEditableTextPara: character index out of bounds")),
+            throw lang::IndexOutOfBoundsException(::rtl::OUString("AccessibleEditableTextPara: character index out of bounds"),
                                                   uno::Reference< uno::XInterface >
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
     }
@@ -442,7 +442,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         if( nIndex < 0 || nIndex > getCharacterCount() )
-            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleEditableTextPara: character position out of bounds")),
+            throw lang::IndexOutOfBoundsException(::rtl::OUString("AccessibleEditableTextPara: character position out of bounds"),
                                                   uno::Reference< uno::XInterface >
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
     }
@@ -521,7 +521,7 @@ namespace accessibility
         if( mpEditSource )
             return *mpEditSource;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No edit source, object is defunct")),
+            throw uno::RuntimeException(::rtl::OUString("No edit source, object is defunct"),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
@@ -535,7 +535,7 @@ namespace accessibility
         SvxAccessibleTextAdapter* pTextForwarder = rEditSource.GetTextForwarderAdapter();
 
         if( !pTextForwarder )
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch text forwarder, object is defunct")),
+            throw uno::RuntimeException(::rtl::OUString("Unable to fetch text forwarder, object is defunct"),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
@@ -543,7 +543,7 @@ namespace accessibility
         if( pTextForwarder->IsValid() )
             return *pTextForwarder;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text forwarder is invalid, object is defunct")),
+            throw uno::RuntimeException(::rtl::OUString("Text forwarder is invalid, object is defunct"),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
@@ -558,7 +558,7 @@ namespace accessibility
 
         if( !pViewForwarder )
         {
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, object is defunct")),
+            throw uno::RuntimeException(::rtl::OUString("Unable to fetch view forwarder, object is defunct"),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
@@ -567,7 +567,7 @@ namespace accessibility
         if( pViewForwarder->IsValid() )
             return *pViewForwarder;
         else
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object is defunct")),
+            throw uno::RuntimeException(::rtl::OUString("View forwarder is invalid, object is defunct"),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
@@ -583,12 +583,12 @@ namespace accessibility
         if( !pTextEditViewForwarder )
         {
             if( bCreate )
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, object is defunct")),
+                throw uno::RuntimeException(::rtl::OUString("Unable to fetch view forwarder, object is defunct"),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
                                               ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
             else
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No view forwarder, object not in edit mode")),
+                throw uno::RuntimeException(::rtl::OUString("No view forwarder, object not in edit mode"),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
                                               ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
@@ -599,12 +599,12 @@ namespace accessibility
         else
         {
             if( bCreate )
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object is defunct")),
+                throw uno::RuntimeException(::rtl::OUString("View forwarder is invalid, object is defunct"),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
                                               ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
             else
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object not in edit mode")),
+                throw uno::RuntimeException(::rtl::OUString("View forwarder is invalid, object not in edit mode"),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
                                               ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
@@ -805,12 +805,12 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         if( !HaveChildren() )
-            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No children available")),
+            throw lang::IndexOutOfBoundsException(::rtl::OUString("No children available"),
                                                   uno::Reference< uno::XInterface >
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
 
         if( i != 0 )
-            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid child index")),
+            throw lang::IndexOutOfBoundsException(::rtl::OUString("Invalid child index"),
                                                   uno::Reference< uno::XInterface >
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
 
@@ -823,7 +823,7 @@ namespace accessibility
             uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
 
             if( !xChild.is() )
-                throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Child creation failed")),
+                throw uno::RuntimeException(::rtl::OUString("Child creation failed"),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* > (this) ) );
 
@@ -1097,7 +1097,7 @@ namespace accessibility
             }
         }
 
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),
+        throw uno::RuntimeException(::rtl::OUString("Cannot access parent"),
                                     uno::Reference< uno::XInterface >
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
@@ -1864,7 +1864,7 @@ namespace accessibility
         aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
         if (!xPropSetInfo.is())
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
+            throw uno::RuntimeException(::rtl::OUString("Cannot query XPropertySetInfo"),
                         uno::Reference< uno::XInterface >
                         ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
@@ -1963,7 +1963,7 @@ namespace accessibility
         aPropSet.SetSelection( MakeSelection( nIndex ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
         if (!xPropSetInfo.is())
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
+            throw uno::RuntimeException(::rtl::OUString("Cannot query XPropertySetInfo"),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
@@ -2231,7 +2231,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         // #105185# Using correct service now
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AccessibleParagraphView"));
+        return ::rtl::OUString("com.sun.star.text.AccessibleParagraphView");
     }
 
 }  // end of namespace accessibility

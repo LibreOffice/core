@@ -804,7 +804,7 @@ void SvxUnoTextField::disposing()
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextField::getImplementationName() throw(uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextField"));
+    return OUString("SvxUnoTextField");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
@@ -889,11 +889,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
 {
     uno::Reference< uno::XInterface > xRet;
 
-    const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
+    const OUString aTextFieldPrexit( "com.sun.star.text.textfield." );
 
     // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
-    const OUString aTextFieldPrexit2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
+    const OUString aTextFieldPrexit2( "com.sun.star.text.TextField." );
 
     if( (ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0) ||
         (ServiceSpecifier.compareTo( aTextFieldPrexit2, aTextFieldPrexit2.getLength() ) == 0) )

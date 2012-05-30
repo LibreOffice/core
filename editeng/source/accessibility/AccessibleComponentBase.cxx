@@ -198,7 +198,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 ::rtl::OUString SAL_CALL AccessibleComponentBase::getTitledBorderText (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ();
+    return ::rtl::OUString ("");
 }
 
 
@@ -207,7 +207,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 ::rtl::OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ();
+    return ::rtl::OUString ("");
 }
 
 

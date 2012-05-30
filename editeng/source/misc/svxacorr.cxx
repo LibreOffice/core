@@ -495,7 +495,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         sal_Int32 nNum = rTxt.Copy( nSttPos, nNumEnd - nSttPos + 1 ).ToInt32( );
 
         // Check if the characters after that number correspond to the ordinal suffix
-        rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix"));
+        rtl::OUString sServiceName("com.sun.star.i18n.OrdinalSuffix");
         uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix(
                 comphelper::createProcessComponent( sServiceName ),
                 uno::UNO_QUERY );
@@ -647,13 +647,13 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
     CharClass& rCC = GetCharClass( eLang );
     const lang::Locale rLocale = rCC.getLocale( );
 
-    if ( rLocale.Language == OUString(RTL_CONSTASCII_USTRINGPARAM( "fr" )) )
+    if ( rLocale.Language == OUString( "fr" ) )
     {
-        bool bFrCA = rLocale.Country == OUString(RTL_CONSTASCII_USTRINGPARAM( "CA" ));
-        OUString allChars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":;?!%" ));
+        bool bFrCA = rLocale.Country == OUString( "CA" );
+        OUString allChars = OUString( ":;?!%" );
         OUString chars( allChars );
         if ( bFrCA )
-            chars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":" ));
+            chars = OUString( ":" );
 
         sal_Unicode cChar = rTxt.GetChar( nEndPos );
         bool bHasSpace = chars.indexOf( cChar ) != -1;
@@ -2046,7 +2046,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
                 // get parser
                 uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+                    OUString("com.sun.star.xml.sax.Parser") );
                 OSL_ENSURE( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
                 if( !xXMLParser.is() )
@@ -2112,7 +2112,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xStrm->SetSize( 0 );
                 xStrm->SetBufferSize( 8192 );
                 String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                OUString aMime( "text/xml" );
                 uno::Any aAny;
                 aAny <<= aMime;
                 xStrm->SetProperty( aPropName, aAny );
@@ -2128,7 +2128,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 }
 
                     uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
+                        OUString("com.sun.star.xml.sax.Writer")));
                     OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
                 uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
                     uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
@@ -2178,7 +2178,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString("com.sun.star.xml.sax.Parser") );
         OSL_ENSURE( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( xXMLParser.is() )
         {
@@ -2417,7 +2417,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DECODE_TO_IURI );
             aInfo.MoveData  = sal_False;
             aAny <<= aInfo;
-            aNewContent.executeCommand( OUString ( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ), aAny);
+            aNewContent.executeCommand( OUString (  "transfer"  ), aAny);
         }
         catch (...)
         {
@@ -2488,7 +2488,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
             String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-            OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+            OUString aMime( "text/xml" );
             uno::Any aAny;
             aAny <<= aMime;
             refList->SetProperty( aPropName, aAny );
@@ -2503,7 +2503,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
             }
 
                 uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
+                    OUString("com.sun.star.xml.sax.Writer")));
                 OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
             uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
                 uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
