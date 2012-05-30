@@ -211,6 +211,9 @@ public class CheckDataPilot {
         XIndexAccess oIndexAccess =
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
+        // Per default there's now just one sheet, make sure we have at least two, then
+        xSpreadsheets.insertNewByName("Some Sheet", (short)0);
+
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));

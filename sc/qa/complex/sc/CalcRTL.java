@@ -106,6 +106,10 @@ public class CalcRTL /* extends ComplexTestCase */
 
         XPropertySet set =  UnoRuntime.queryInterface(
                                    XPropertySet.class, getSpreadsheet());
+
+        // Make sure there are at least 2 sheets, otherwise hiding a sheet won't work
+        xSheetDoc.getSheets().insertNewByName("Some Sheet", (short)0);
+
         assertTrue("Problems when setting property 'IsVisible'",
                changeProperty(set, "IsVisible", Boolean.FALSE));
         assertTrue("Problems when setting property 'IsVisible'",

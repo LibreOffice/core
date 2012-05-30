@@ -142,7 +142,7 @@ public class XMLSettingsExporter extends TestCase {
                 UnoRuntime.queryInterface(XPropertySet.class, xController);
             xPropSet.setPropertyValue("ShowGrid", "false");
 
-            util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
+            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 50);
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

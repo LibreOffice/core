@@ -154,6 +154,8 @@ public class ScDataPilotFieldObj extends TestCase {
         XSpreadsheet oSheet2 = null;
         XIndexAccess oIndexAccess = (XIndexAccess) UnoRuntime.queryInterface(
                                             XIndexAccess.class, xSpreadsheets);
+        // Make sure there are at least two sheets
+        xSpreadsheets.insertNewByName("Some Sheet", (short)0);
 
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(

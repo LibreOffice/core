@@ -156,8 +156,8 @@ public class XMLStylesExporter extends TestCase {
                 UnoRuntime.queryInterface(XStyle.class,SC);
             StyleFamilyName.insertByName(newName, StyleCell);
 
-            log.println("fill sheet 1 with contnet...");
-            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 3, 3, 50, 100);
+            log.println("fill sheet 1 with content...");
+            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 100);
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
