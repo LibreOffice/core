@@ -161,6 +161,7 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
 void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
 {
     meAnchorType = ANCHOR_VML;
+    meCellAnchorType = CELLANCHOR_PIXEL;
 
     ::std::vector< OUString > aTokens;
     sal_Int32 nIndex = 0;
