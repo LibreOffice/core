@@ -2813,7 +2813,7 @@ class SamePos :
 private:
     long mnPo;
 public:
-    SamePos(long nPo) : mnPo(nPo) {};
+    SamePos(long nPo) : mnPo(nPo) {}
     bool operator()(const WW8PLCFx_Fc_FKP::WW8Fkp *pFkp)
         {return mnPo == pFkp->GetFilePos();}
 };
