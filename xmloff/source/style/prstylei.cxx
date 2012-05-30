@@ -81,8 +81,8 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         sal_Bool bDefault )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
-,   msIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   msFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,   msIsPhysical(  "IsPhysical"  )
+,   msFollowStyle(  "FollowStyle"  )
 ,   mxStyles( &rStyles )
 {
 }
@@ -207,15 +207,15 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
+                    pProps->Name = rtl::OUString("ParaStyleName");
                     OUString sParent( GetParentName() );
                     if( !sParent.isEmpty() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
-                        sParent =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+                        sParent =  rtl::OUString("Standard");
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName"));
+                    pProps->Name = rtl::OUString("ParaConditionalStyleName");
                     pProps->Value <<= sParent;
                 }
 
@@ -224,8 +224,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName")) :
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName"));
+                        rtl::OUString("ParaAutoStyleName") :
+                        rtl::OUString("CharAutoStyleName");
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {

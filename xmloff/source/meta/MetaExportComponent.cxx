@@ -102,7 +102,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 uno::Any aAny;
                 aAny <<= GetXMLToken( XML_TEXT );
                 xConvPropSet->setPropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Class")), aAny );
+                        ::rtl::OUString("Class"), aAny );
 
                 uno::Reference< beans::XPropertySet > xPropSet =
                     getExportInfo().is()
@@ -118,7 +118,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 // get filter component
                 xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
                     xFactory->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
+                        ::rtl::OUString("com.sun.star.comp.Oasis2OOoTransformer"),
                         aArgs),
                     uno::UNO_QUERY_THROW );
 
@@ -196,14 +196,14 @@ uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportComponent_getSupportedServi
     throw()
 {
     const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisMetaExporter" ) );
+         "com.sun.star.document.XMLOasisMetaExporter"  );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 rtl::OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLMetaExportComponent" ) );
+    return rtl::OUString(  "XMLMetaExportComponent"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
@@ -217,14 +217,14 @@ uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceName
     throw()
 {
     const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLMetaExporter" ) );
+         "com.sun.star.document.XMLMetaExporter"  );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 rtl::OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLMetaExportOOo" ) );
+    return rtl::OUString(  "XMLMetaExportOOo"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(

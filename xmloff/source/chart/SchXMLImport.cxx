@@ -77,7 +77,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            xFactProp->getPropertyValue(OUString( "DefaultContext" )) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -465,9 +465,9 @@ void SchXMLImportHelper::DeleteDataSeries(
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
+                        OUString(  "Exception caught. Type: " ) +
                         OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
+                        OUString(  ", Message: " ) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 }
@@ -536,7 +536,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 {
                     xResult.set(
                         xContext->getServiceManager()->createInstanceWithContext(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DataSeries" )),
+                            OUString( "com.sun.star.chart2.DataSeries" ),
                             xContext ), uno::UNO_QUERY_THROW );
                 }
                 if( xResult.is() )
@@ -548,9 +548,9 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
+                        OUString(  "Exception caught. Type: " ) +
                         OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
+                        OUString(  ", Message: " ) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
     return xResult;
@@ -608,8 +608,8 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
         if (xDPS.is()) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+                    ::rtl::OUString(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
                     uno::UNO_QUERY_THROW);
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? new SvXMLMetaDocumentContext(*this,
@@ -683,7 +683,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
 
                 if ( !xChartDoc->getDataProvider().is() )
                 {
-                    const OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
+                    const OUString aDataProviderServiceName( "com.sun.star.chart2.data.DataProvider");
                     const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
                     const OUString * pBegin = aServiceNames.getConstArray();
                     const OUString * pEnd = pBegin + aServiceNames.getLength();
@@ -724,14 +724,14 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
 
 Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisImporter" ) );
+    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisImporter"  );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 OUString SAL_CALL SchXMLImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ) );
+    return OUString(  "SchXMLImport"  );
 }
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
@@ -746,14 +746,14 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Referenc
 
 Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisStylesImporter" ) );
+    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisStylesImporter"  );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Styles" ) );
+    return OUString(  "SchXMLImport.Styles"  );
 }
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
@@ -766,14 +766,14 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const R
 
 Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisContentImporter" ) );
+    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisContentImporter"  );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Content" ) );
+    return OUString(  "SchXMLImport.Content"  );
 }
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
@@ -786,14 +786,14 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const 
 
 Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisMetaImporter" ) );
+    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisMetaImporter"  );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport.Meta" ) );
+    return OUString(  "SchXMLImport.Meta"  );
 }
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
@@ -819,7 +819,7 @@ OUString SAL_CALL SchXMLImport::getImplementationName() throw( uno::RuntimeExcep
         case IMPORT_SETTINGS:
         // there is no settings component in chart
         default:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ));
+            return OUString( "SchXMLImport" );
     }
 }
 
