@@ -117,8 +117,8 @@ static bool lcl_eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
 static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = rSprms.find(nId);
-    if (p.get() && p->getSprms()->size())
-        return p->getSprms()->back().second->getAttributes();
+    if (p.get() && p->getSprms().size())
+        return p->getSprms().back().second->getAttributes();
     else
     {
         SAL_WARN("writerfilter", "trying to set property when no type is defined");
@@ -713,7 +713,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     RTFValue::Pointer_t pExtentValue(new RTFValue(aExtentAttributes));
     // docpr sprm
     RTFSprms aDocprAttributes;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin(); i != m_aStates.top().aCharacterAttributes->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
         if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
             aDocprAttributes.set(i->first, i->second);
     RTFValue::Pointer_t pDocprValue(new RTFValue(aDocprAttributes));
@@ -732,14 +732,14 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     {
         // wrap sprm
         RTFSprms aAnchorWrapAttributes;
-        for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin(); i != m_aStates.top().aCharacterAttributes->end(); ++i)
+        for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
             if (i->first == NS_ooxml::LN_CT_WrapSquare_wrapText)
                 aAnchorWrapAttributes.set(i->first, i->second);
         RTFValue::Pointer_t pAnchorWrapValue(new RTFValue(aAnchorWrapAttributes));
         RTFSprms aAnchorAttributes;
         RTFSprms aAnchorSprms;
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
-        if (aAnchorWrapAttributes->size())
+        if (aAnchorWrapAttributes.size())
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);
@@ -1231,8 +1231,8 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
                 if (bCustomMark)
                 {
-                    m_aStates.top().aCharacterAttributes->clear();
-                    m_aStates.top().aCharacterSprms->clear();
+                    m_aStates.top().aCharacterAttributes.clear();
+                    m_aStates.top().aCharacterSprms.clear();
                     RTFValue::Pointer_t pValue(new RTFValue(1));
                     m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
                     text(aCustomMark);
@@ -2472,7 +2472,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
                 RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aTabAttributes));
                 lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_ooxml::LN_CT_Tabs_tab, pValue);
-                m_aStates.top().aTabAttributes->clear();
+                m_aStates.top().aTabAttributes.clear();
             }
             break;
         case RTF_ILVL:
@@ -3008,45 +3008,45 @@ int RTFDocumentImpl::pushState()
 RTFSprms RTFDocumentImpl::mergeSprms()
 {
     RTFSprms aSprms;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aTableSprms->begin();
-            i != m_aStates.top().aTableSprms->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aTableSprms.begin();
+            i != m_aStates.top().aTableSprms.end(); ++i)
         aSprms.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterSprms->begin();
-            i != m_aStates.top().aCharacterSprms->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterSprms.begin();
+            i != m_aStates.top().aCharacterSprms.end(); ++i)
         aSprms.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aParagraphSprms->begin();
-            i != m_aStates.top().aParagraphSprms->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aParagraphSprms.begin();
+            i != m_aStates.top().aParagraphSprms.end(); ++i)
         aSprms.set(i->first, i->second);
     return aSprms;
 }
 
 void RTFDocumentImpl::resetSprms()
 {
-    m_aStates.top().aTableSprms->clear();
-    m_aStates.top().aCharacterSprms->clear();
-    m_aStates.top().aParagraphSprms->clear();
+    m_aStates.top().aTableSprms.clear();
+    m_aStates.top().aCharacterSprms.clear();
+    m_aStates.top().aParagraphSprms.clear();
 }
 
 RTFSprms RTFDocumentImpl::mergeAttributes()
 {
     RTFSprms aAttributes;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aTableAttributes->begin();
-            i != m_aStates.top().aTableAttributes->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aTableAttributes.begin();
+            i != m_aStates.top().aTableAttributes.end(); ++i)
         aAttributes.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin();
-            i != m_aStates.top().aCharacterAttributes->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin();
+            i != m_aStates.top().aCharacterAttributes.end(); ++i)
         aAttributes.set(i->first, i->second);
-    for (RTFSprms::Iterator_t i = m_aStates.top().aParagraphAttributes->begin();
-            i != m_aStates.top().aParagraphAttributes->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aStates.top().aParagraphAttributes.begin();
+            i != m_aStates.top().aParagraphAttributes.end(); ++i)
         aAttributes.set(i->first, i->second);
     return aAttributes;
 }
 
 void RTFDocumentImpl::resetAttributes()
 {
-    m_aStates.top().aTableAttributes->clear();
-    m_aStates.top().aCharacterAttributes->clear();
-    m_aStates.top().aParagraphAttributes->clear();
+    m_aStates.top().aTableAttributes.clear();
+    m_aStates.top().aCharacterAttributes.clear();
+    m_aStates.top().aParagraphAttributes.clear();
 }
 
 int RTFDocumentImpl::popState()
@@ -3087,12 +3087,12 @@ int RTFDocumentImpl::popState()
     }
     else if (aState.nDestinationState == DESTINATION_LISTENTRY)
     {
-        for (RTFSprms::Iterator_t i = aState.aListLevelEntries->begin(); i != aState.aListLevelEntries->end(); ++i)
+        for (RTFSprms::Iterator_t i = aState.aListLevelEntries.begin(); i != aState.aListLevelEntries.end(); ++i)
             aState.aTableSprms.set(i->first, i->second, false);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
-        if (m_aFormfieldAttributes->size() || m_aFormfieldSprms->size())
+        if (m_aFormfieldAttributes.size() || m_aFormfieldSprms.size())
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aFormfieldAttributes, m_aFormfieldSprms));
             RTFSprms aFFAttributes;
@@ -3100,8 +3100,8 @@ int RTFDocumentImpl::popState()
             aFFSprms.set(NS_ooxml::LN_ffdata, pValue);
             writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
             Mapper().props(pProperties);
-            m_aFormfieldAttributes->clear();
-            m_aFormfieldSprms->clear();
+            m_aFormfieldAttributes.clear();
+            m_aFormfieldSprms.clear();
         }
         if (!m_bEq)
             singleChar(0x14);
@@ -3334,8 +3334,8 @@ int RTFDocumentImpl::popState()
         Mapper().startShape(xShape);
         Mapper().props(pProperties);
         Mapper().endShape();
-        m_aObjectAttributes->clear();
-        m_aObjectSprms->clear();
+        m_aObjectAttributes.clear();
+        m_aObjectSprms.clear();
         m_bObject = false;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONDATE)

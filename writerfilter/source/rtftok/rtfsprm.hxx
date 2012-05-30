@@ -38,16 +38,22 @@ namespace writerfilter {
         {
             public:
                 typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
-                typedef std::vector< std::pair<Id, RTFValue::Pointer_t> >::iterator Iterator_t;
+                typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
+                typedef std::vector<Entry_t>::iterator Iterator_t;
                 RTFSprms();
                 RTFSprms(const RTFSprms& rSprms);
                 RTFSprms& operator=(const RTFSprms& rOther);
-                std::vector< std::pair<Id, RTFValue::Pointer_t> >* operator->();
                 RTFValue::Pointer_t find(Id nKeyword);
                 /// Does the same as ->push_back(), except that it can overwrite existing entries.
                 void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
                 bool erase(Id nKeyword);
                 void swap(RTFSprms& rOther);
+                size_t size() const { return m_aSprms.size(); }
+                bool empty() const { return m_aSprms.empty(); }
+                Entry_t& back() { return m_aSprms.back(); }
+                Iterator_t begin() { return m_aSprms.begin(); }
+                Iterator_t end() { return m_aSprms.end(); }
+                void clear() { return m_aSprms.clear(); }
             private:
                 std::vector< std::pair<Id, RTFValue::Pointer_t> > m_aSprms;
         };
