@@ -270,6 +270,10 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
             if ( maCbInterlaced.IsChecked() )
                 nInterlace++;
             pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), nInterlace );
+            sal_Int32 nValue = 0;
+            if ( maCbSaveTransparency.IsChecked() )
+                nValue++;
+            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Translucent" ) ), nValue );
         }
         break;
 
@@ -930,6 +934,16 @@ void ExportDialog::createFilterOptions( vcl::RowOrColumn& rLayout )
             maNfCompression.SetValue( 9 );
             maNfCompression.SetStrictFormat( sal_True );
 
+            // transparency
+            xIndenter = boost::shared_ptr< vcl::Indenter >( new vcl::Indenter( &rLayout, nIndent ) );
+            rLayout.addChild( xIndenter );
+            xRows = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( &rLayout, true ) );
+            xIndenter->setChild( xRows );
+            xRows->addWindow( &maCbSaveTransparency );
+            xSpacer.reset( new vcl::Spacer( &rLayout, 2 ) );
+            rLayout.addChild( xSpacer );
+
+            maCbSaveTransparency.Check( mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Translucent" ) ), 1 ) != 0 );
             maCbInterlaced.Check( mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 ) != 0 );
         }
         break;
