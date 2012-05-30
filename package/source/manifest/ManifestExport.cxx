@@ -37,7 +37,7 @@
 
 #include <ManifestDefines.hxx>
 #include <ManifestExport.hxx>
-#include <Base64Codec.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -275,7 +275,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
 
             pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
             *pDigest >>= aSequence;
-            Base64Codec::encodeBase64( aBuffer, aSequence );
+            ::sax::Converter::encodeBase64(aBuffer, aSequence);
             pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);
@@ -308,7 +308,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
 
             *pVector >>= aSequence;
-            Base64Codec::encodeBase64 ( aBuffer, aSequence );
+            ::sax::Converter::encodeBase64(aBuffer, aSequence);
             pNewAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -334,7 +334,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             *pSalt >>= aSequence;
-            Base64Codec::encodeBase64 ( aBuffer, aSequence );
+            ::sax::Converter::encodeBase64(aBuffer, aSequence);
             pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );

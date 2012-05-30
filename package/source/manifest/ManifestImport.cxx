@@ -29,7 +29,7 @@
 // MARKER( update_precomp.py ): autogen include statement, do not remove
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
-#include <Base64Codec.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
@@ -188,7 +188,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     {
                         aString = aConvertedAttribs[sChecksumAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64( aDecodeBuffer, aString );
+                        ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
                         aSequence[nNumProperty].Name = sDigestProperty;
                         aSequence[nNumProperty++].Value <<= aDecodeBuffer;
                     }
@@ -235,7 +235,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     {
                         aString = aConvertedAttribs[sInitialisationVectorAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                        ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
                         aSequence[nNumProperty].Name = sInitialisationVectorProperty;
                         aSequence[nNumProperty++].Value <<= aDecodeBuffer;
                     }
@@ -250,7 +250,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     {
                         aString = aConvertedAttribs[sSaltAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                        ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
                         aSequence[nNumProperty].Name = sSaltProperty;
                         aSequence[nNumProperty++].Value <<= aDecodeBuffer;
 

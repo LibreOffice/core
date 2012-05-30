@@ -39,12 +39,12 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
+#include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
 
 #include <vector>
 
 #include "exporter.hxx"
-#include "Base64Codec.hxx"
 #include "zip.hxx"
 #include "tempfile.hxx"
 
@@ -161,7 +161,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
             nLen -= nRead;
 
             rtl::OUStringBuffer aStrBuffer;
-            Base64Codec::encodeBase64( aStrBuffer, aInBuffer );
+            ::sax::Converter::encodeBase64(aStrBuffer, aInBuffer);
 
             sal_Int32 nCount = aStrBuffer.getLength();
 
