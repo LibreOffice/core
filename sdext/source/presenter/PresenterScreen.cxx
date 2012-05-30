@@ -465,6 +465,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
     // displayed.
     sal_Int32 nScreenNumber (0);
     sal_Int32 nScreenCount (1);
+    fprintf (stderr, "New foo!\n");
     try
     {
         Reference<beans::XPropertySet> xProperties (rxPresentation, UNO_QUERY);

@@ -101,12 +101,12 @@ public:
 private:
     static ::boost::shared_ptr<TimerScheduler> mpInstance;
     static ::osl::Mutex maInstanceMutex;
+    ::boost::shared_ptr<TimerScheduler> mpLateDestroy; // for clean exit
     static sal_Int32 mnTaskId;
 
     ::osl::Mutex maTaskContainerMutex;
     typedef ::std::set<SharedTimerTask,TimerTaskComparator> TaskContainer;
     TaskContainer maScheduledTasks;
-    bool mbIsRunning;
     ::osl::Mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
 
@@ -118,7 +118,7 @@ private:
     friend class Deleter;
 
     virtual void SAL_CALL run (void);
-    virtual void SAL_CALL onTerminated (void);
+    virtual void SAL_CALL onTerminated (void) { mpLateDestroy.reset(); }
 };
 
 } // end of anonymous namespace
@@ -158,35 +158,18 @@ sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
 
 ::boost::shared_ptr<TimerScheduler> TimerScheduler::Instance (void)
 {
-    ::boost::shared_ptr<TimerScheduler> pInstance = mpInstance;
-    if (pInstance.get() == NULL)
-    {
-        ::osl::MutexGuard aGuard (maInstanceMutex);
-        pInstance = mpInstance;
-        if (pInstance.get() == NULL)
-        {
-            pInstance.reset(new TimerScheduler(), TimerScheduler::Deleter());
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            mpInstance = pInstance;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-    return pInstance;
-}
-
-void TimerScheduler::Release (void)
-{
     ::osl::MutexGuard aGuard (maInstanceMutex);
-    mpInstance.reset();
+    if (mpInstance.get() == NULL)
+    {
+        mpInstance.reset(new TimerScheduler(), TimerScheduler::Deleter());
+        mpInstance->create();
+    }
+    return mpInstance;
 }
 
 TimerScheduler::TimerScheduler (void)
     : maTaskContainerMutex(),
       maScheduledTasks(),
-      mbIsRunning(false),
       maCurrentTaskMutex(),
       mpCurrentTask()
 {
@@ -211,13 +194,9 @@ void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
     if (rpTask->mbIsCanceled)
         return;
 
-    osl::MutexGuard aGuard (maTaskContainerMutex);
-    maScheduledTasks.insert(rpTask);
-
-    if ( ! mbIsRunning)
     {
-        mbIsRunning = true;
-        create();
+        osl::MutexGuard aTaskGuard (maTaskContainerMutex);
+        maScheduledTasks.insert(rpTask);
     }
 }
 
@@ -243,25 +222,19 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // The task that is to be canceled may be currently about to be
     // processed.  Mark it with a flag that a) prevents a repeating task
     // from being scheduled again and b) tries to prevent its execution.
-    if (mpCurrentTask.get() != NULL
-        && mpCurrentTask->mnTaskId == nTaskId)
     {
-        mpCurrentTask->mbIsCanceled = true;
+        ::osl::MutexGuard aGuard (maCurrentTaskMutex);
+        if (mpCurrentTask.get() != NULL
+            && mpCurrentTask->mnTaskId == nTaskId)
+            mpCurrentTask->mbIsCanceled = true;
     }
 
-    // When the last active task was canceled then the timer can be
-    // stopped.
-    if (maScheduledTasks.empty())
-    {
-        mbIsRunning = false;
-        resume();
-        //        join();
-    }
+    // Let the main-loop cleanup in it's own time
 }
 
 void SAL_CALL TimerScheduler::run (void)
 {
-    while (mbIsRunning)
+    while (1)
     {
         // Get the current time.
         TimeValue aCurrentTime;
@@ -299,7 +272,7 @@ void SAL_CALL TimerScheduler::run (void)
             mpCurrentTask = pTask;
         }
 
-        if (mpCurrentTask.get() == NULL)
+        if (pTask.get() == NULL)
         {
             // Wait until the first task becomes due.
             TimeValue aTimeValue;
@@ -309,19 +282,19 @@ void SAL_CALL TimerScheduler::run (void)
         else
         {
             // Execute task.
-            if ( ! mpCurrentTask->maTask.empty()
-                && ! mpCurrentTask->mbIsCanceled)
+            if ( ! pTask->maTask.empty()
+                && ! pTask->mbIsCanceled)
             {
-                mpCurrentTask->maTask(aCurrentTime);
+                pTask->maTask(aCurrentTime);
 
                 // Re-schedule repeating tasks.
-                if (mpCurrentTask->mnRepeatIntervall > 0)
+                if (pTask->mnRepeatIntervall > 0)
                 {
                     ConvertToTimeValue(
-                        mpCurrentTask->maDueTime,
-                        ConvertFromTimeValue(mpCurrentTask->maDueTime)
-                            + mpCurrentTask->mnRepeatIntervall);
-                    ScheduleTask(mpCurrentTask);
+                        pTask->maDueTime,
+                        ConvertFromTimeValue(pTask->maDueTime)
+                            + pTask->mnRepeatIntervall);
+                    ScheduleTask(pTask);
                 }
             }
 
@@ -333,11 +306,11 @@ void SAL_CALL TimerScheduler::run (void)
             mpCurrentTask.reset();
         }
     }
-}
 
-void SAL_CALL TimerScheduler::onTerminated (void)
-{
-    Release();
+    // While holding maInstanceMutex
+    osl::Guard< osl::Mutex > aInstance( maInstanceMutex );
+    mpLateDestroy = mpInstance;
+    mpInstance.reset();
 }
 
 bool TimerScheduler::GetCurrentTime (TimeValue& rCurrentTime)
