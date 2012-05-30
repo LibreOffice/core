@@ -98,4 +98,9 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
     {
         Text [ en-US ] = "Formula syntax that built-in function INDIRECT expects.";
     };
+
+    String STR_USE_FORMULA_SYNTAX
+    {
+        Text [ en-US ] = "Use formula syntax";
+    };
 };

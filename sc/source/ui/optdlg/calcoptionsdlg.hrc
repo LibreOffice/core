@@ -41,4 +41,6 @@
 #define STR_INDIRECT_SYNTAX_CAPTION 22
 #define STR_INDIRECT_SYNTAX_DESC 23
 
+#define STR_USE_FORMULA_SYNTAX 24
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

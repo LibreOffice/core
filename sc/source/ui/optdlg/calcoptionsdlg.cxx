@@ -62,23 +62,6 @@ void OptionString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
     rDev.SetFont(aOldFont);
 }
 
-rtl::OUString toString(formula::FormulaGrammar::AddressConvention eConv)
-{
-    switch (eConv)
-    {
-        case formula::FormulaGrammar::CONV_OOO:
-            return rtl::OUString("Calc A1");
-        case formula::FormulaGrammar::CONV_XL_A1:
-            return rtl::OUString ("Excel A1");
-        case formula::FormulaGrammar::CONV_XL_R1C1:
-            return rtl::OUString("Excel R1C1");
-        case formula::FormulaGrammar::CONV_UNSPECIFIED:
-        default:
-            ;
-    }
-    return rtl::OUString("Use formula syntax");
-}
-
 formula::FormulaGrammar::AddressConvention toAddressConvention(sal_uInt16 nPos)
 {
     switch (nPos)
@@ -110,6 +93,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maCaptionIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_CAPTION).toString()),
     maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString()),
+    maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
     maConfig(rConfig)
 {
     maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -158,7 +142,7 @@ void ScCalcOptionsDialog::SelectionChanged()
     {
         // Formula syntax for INDIRECT function.
         maLbOptionEdit.Clear();
-        maLbOptionEdit.InsertEntry(rtl::OUString("Use formula syntax"));
+        maLbOptionEdit.InsertEntry(maUseFormulaSyntax);
         maLbOptionEdit.InsertEntry(rtl::OUString("Calc A1"));
         maLbOptionEdit.InsertEntry(rtl::OUString("Excel A1"));
         maLbOptionEdit.InsertEntry(rtl::OUString("Excel R1C1"));
@@ -188,8 +172,37 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
         // Formula syntax for INDIRECT function.
         sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
         maConfig.meIndirectRefSyntax = toAddressConvention(nPos);
-        FillOptionsList();
+
+        maLbSettings.SetUpdateMode(false);
+
+        SvLBoxTreeList* pModel = maLbSettings.GetModel();
+        SvLBoxEntry* pEntry = pModel->GetEntry(NULL, 0);
+        if (!pEntry)
+            return;
+
+        OptionString* pItem = new OptionString(
+            maCaptionIndirectSyntax, toString(maConfig.meIndirectRefSyntax));
+        pEntry->ReplaceItem(pItem, 2);
+
+        maLbSettings.SetUpdateMode(true);
     }
+}
+
+rtl::OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const
+{
+    switch (eConv)
+    {
+        case formula::FormulaGrammar::CONV_OOO:
+            return rtl::OUString("Calc A1");
+        case formula::FormulaGrammar::CONV_XL_A1:
+            return rtl::OUString ("Excel A1");
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+            return rtl::OUString("Excel R1C1");
+        case formula::FormulaGrammar::CONV_UNSPECIFIED:
+        default:
+            ;
+    }
+    return maUseFormulaSyntax;
 }
 
 IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)

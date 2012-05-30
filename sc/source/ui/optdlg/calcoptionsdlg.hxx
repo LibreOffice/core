@@ -51,6 +51,8 @@ private:
     void SelectionChanged();
     void ListOptionValueChanged();
 
+    rtl::OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
+
 private:
     SvxCheckListBox maLbSettings;
 
@@ -65,6 +67,7 @@ private:
 
     rtl::OUString maCaptionIndirectSyntax;
     rtl::OUString maDescIndirectSyntax;
+    rtl::OUString maUseFormulaSyntax;
 
     ScCalcConfig maConfig;
 };
