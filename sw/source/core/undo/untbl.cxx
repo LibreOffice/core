@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <UndoTable.hxx>
 
 #include <UndoRedline.hxx>
@@ -367,8 +366,6 @@ SwRewriter SwUndoInsTbl::GetRewriter() const
     return aRewriter;
 }
 
-// -----------------------------------------------------
-
 SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, xub_StrLen nCnt )
     : m_nSttNd( nNd ), m_nEndNd( nEndIdx), m_nCntnt( nCnt ), m_pHstry( 0 )
 {
@@ -695,8 +692,6 @@ void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx
     pBoxSaves->push_back( pNew );
 }
 
-// -----------------------------------------------------
-
 SwUndoTxtToTbl::SwUndoTxtToTbl( const SwPaM& rRg,
                                 const SwInsertTableOptions& rInsTblOpts,
                                 sal_Unicode cCh, sal_uInt16 nAdj,
@@ -835,8 +830,6 @@ SwHistory& SwUndoTxtToTbl::GetHistory()
     return *pHistory;
 }
 
-// -----------------------------------------------------
-
 SwUndoTblHeadline::SwUndoTblHeadline( const SwTable& rTbl, sal_uInt16 nOldHdl,
                                       sal_uInt16 nNewHdl )
     : SwUndo( UNDO_TABLEHEADLINE ),
@@ -878,8 +871,6 @@ void SwUndoTblHeadline::RepeatImpl(::sw::RepeatContext & rContext)
         rContext.GetDoc().SetRowsToRepeat( pTblNd->GetTable(), nNewHeadline );
     }
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, sal_Bool bSaveFml )
     : aTblSet( *rTbl.GetFrmFmt()->GetAttrSet().GetPool(), aTableSetRange ),
@@ -1380,8 +1371,6 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         pNext->CreateNew( rTbl, rParent, rSTbl );
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 // UndoObject for attribute changes on table
 
 SwUndoAttrTbl::SwUndoAttrTbl( const SwTableNode& rTblNd, sal_Bool bClearTabCols )
@@ -1419,8 +1408,6 @@ void SwUndoAttrTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     UndoImpl(rContext);
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 // UndoObject for AutoFormat on Table
 
@@ -1491,8 +1478,6 @@ void SwUndoTblAutoFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     UndoRedo(false, rContext);
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
@@ -1922,8 +1907,6 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTblNd->GetTable() )
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 SwUndoTblMerge::SwUndoTblMerge( const SwPaM& rTblSel )
     : SwUndo( UNDO_TABLE_MERGE ), SwUndRng( rTblSel ), pHistory( 0 )
 {
@@ -2141,8 +2124,6 @@ void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )
     if( pCNd->HasSwAttrSet() )
         pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex() );
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
                                     const SfxItemSet* pNewSet )
@@ -2398,8 +2379,6 @@ void SwUndoTblNumFmt::SetBox( const SwTableBox& rBox )
 {
     nNode = rBox.GetSttIdx();
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 _UndoTblCpyTbl_Entry::_UndoTblCpyTbl_Entry( const SwTableBox& rBox )
     : nBoxIdx( rBox.GetSttIdx() ), nOffset( 0 ),
@@ -2811,8 +2790,6 @@ sal_Bool SwUndoTblCpyTbl::IsEmpty() const
     return !pInsRowUndo && pArr->empty();
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 SwUndoCpyTbl::SwUndoCpyTbl()
     : SwUndo( UNDO_CPYTBL ), pDel( 0 ), nTblNode( 0 )
 {
@@ -2853,8 +2830,6 @@ void SwUndoCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     pDel->UndoImpl(rContext);
     delete pDel, pDel = 0;
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd,
     SwSaveRowSpan* pRowSp, sal_uInt16 eMode, sal_Bool bNewSize )
@@ -2974,8 +2949,6 @@ void SwUndoSplitTbl::SaveFormula( SwHistory& rHistory )
     nFmlEnd = rHistory.Count();
     pHistory->Move( 0, &rHistory );
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 SwUndoMergeTbl::SwUndoMergeTbl( const SwTableNode& rTblNd,
                                 const SwTableNode& rDelTblNd,
@@ -3099,8 +3072,6 @@ void SwUndoMergeTbl::SaveFormula( SwHistory& rHistory )
         pHistory = new SwHistory;
     pHistory->Move( 0, &rHistory );
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
 {
