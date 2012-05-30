@@ -61,6 +61,7 @@ public:
     void testN747461();
     void testN750255();
     void testN652364();
+    void testN760764();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testN747461);
     CPPUNIT_TEST(testN750255);
     CPPUNIT_TEST(testN652364);
+    CPPUNIT_TEST(testN760764);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -401,6 +403,25 @@ xray para2.PageStyleName
     // "Standard" is the style for the first page (2nd is "Converted1").
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle1 );
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
+}
+
+void Test::testN760764()
+{
+    load("n760764.docx");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum(xRunEnumAccess->createEnumeration());
+
+    // Access the second run, which is a textfield
+    xRunEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    float fValue;
+    xRun->getPropertyValue("CharHeight") >>= fValue;
+    // This used to be 11, as character properties were ignored.
+    CPPUNIT_ASSERT_EQUAL(8.f, fValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
