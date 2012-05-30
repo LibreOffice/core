@@ -141,7 +141,7 @@ LWPFilterImportFilter::LWPFilterImportFilter( const uno::Reference< XMultiServic
 {
     try
     {
-        uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( STR_WRITER_IMPORTER_NAME )) ), UNO_QUERY );
+        uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString( STR_WRITER_IMPORTER_NAME ) ), UNO_QUERY );
 
         LWPFilterReader *p = new LWPFilterReader;
         p->setDocumentHandler( xDoc );
@@ -182,7 +182,7 @@ void LWPFilterImportFilter::setTargetDocument( const uno::Reference< XComponent 
 
 OUString LWPFilterImportFilter::getImplementationName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
+    return OUString( STR_IMPLEMENTATION_NAME );
 }
 
 sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) throw()
@@ -201,7 +201,7 @@ sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) t
 Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) throw()
 {
     Sequence< OUString > seq(1);
-    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( STR_SERVICE_NAME ));
+    seq.getArray()[0] = OUString( STR_SERVICE_NAME );
     return seq;
 }
 
@@ -247,14 +247,14 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                        aDescriptor[nPropertyCount].Name = ::rtl::OUString("AsTemplate");
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template"));
+                    return OUString("wordpro_template");
                 }
                 else
                 {
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro"));
+                    return OUString("wordpro");
                 }
             }
             return ret;
@@ -270,7 +270,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
             if(rc != osl::FileBase::E_None)
             {
                 SAXException except;
-                except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "GDocting system path from URL failed!"));
+                except.Message = OUString(  "GDocting system path from URL failed!");
                 throw except;
             }
             */
@@ -282,14 +282,14 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                        aDescriptor[nPropertyCount].Name = ::rtl::OUString("AsTemplate");
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template"));
+                    return OUString("wordpro_template");
                 }
                 else
                 {
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro"));
+                    return OUString("wordpro");
                 }
             }
             return ret;
