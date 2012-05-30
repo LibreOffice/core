@@ -1290,8 +1290,14 @@ $(call gb_LinkTarget_use_external,$(1),openssl)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	secur32 \
 	ws2_32 \
-	$(if $(filter YES,$(WITH_LDAP)),ldap50) \
 )
+
+ifeq ($(WITH_LDAP),YES)
+$(call gb_LinkTarget_add_libs,$(1),\
+	nsldap32v50.lib \
+)
+endif
+
 endif
 
 endef
