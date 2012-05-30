@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <UndoDelete.hxx>
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
@@ -47,19 +46,17 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <sfx2/app.hxx>
-
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 #include <vector>
 
-
 // DELETE
-/*  lcl_MakeAutoFrms has to call MakeFrms for objects bounded "AtChar" ( == AUTO ),
-    if the anchor frame has be moved via _MoveNodes(..) and DelFrms(..)
+/*  lcl_MakeAutoFrms has to call MakeFrms for objects bounded "AtChar"
+    ( == AUTO ), if the anchor frame has be moved via _MoveNodes(..) and
+    DelFrms(..)
 */
-
 void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, sal_uLong nMovedIndex )
 {
     if( rSpzArr.Count() )
@@ -80,28 +77,31 @@ void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, sal_uLong nMovedIndex )
     }
 }
 
-/*
-SwUndoDelete has to perform a deletion and to record anything that is needed to restore the
-situation before the deletion. Unfortunately a part of the deletion will be done after calling
-this Ctor, this has to be kept in mind! In this Ctor only the complete paragraphs will be deleted,
-the joining of the first and last paragraph of the selection will be handled outside this function.
-Here are the main steps of the function:
-1. Deletion/recording of content indizes of the selection: footnotes, fly frames and bookmarks
-Step 1 could shift all nodes by deletion of footnotes => nNdDiff will be set.
-2. If the paragraph where the selection ends, is the last content of a section so that this
-section becomes empty when the paragraphs will be joined we have to do some smart actions ;-)
-The paragraph will be moved outside the section and replaced by a dummy text node, the complete
-section will be deleted in step 3. The difference between replacement dummy and original is
-nReplacementDummy.
-3. Moving complete selected nodes into the UndoArray. Before this happens the selection has to be
-extended if there are sections which would become empty otherwise. BTW: sections will be moved into
-the UndoArray if they are complete part of the selection. Sections starting or ending outside of the
-selection will not be removed from the DocNodeArray even they got a "dummy"-copy in the UndoArray.
-4. We have to anticipate the joining of the two paragraphs if the start paragraph is inside a
-section and the end paragraph not. Then we have to move the paragraph into this section and to
-record this in nSectDiff.
-*/
-
+// SwUndoDelete has to perform a deletion and to record anything that is needed
+// to restore the situation before the deletion. Unfortunately a part of the
+// deletion will be done after calling this Ctor, this has to be kept in mind!
+// In this Ctor only the complete paragraphs will be deleted, the joining of
+// the first and last paragraph of the selection will be handled outside this
+// function.
+// Here are the main steps of the function:
+// 1. Deletion/recording of content indizes of the selection: footnotes, fly
+//    frames and bookmarks
+// Step 1 could shift all nodes by deletion of footnotes => nNdDiff will be set.
+// 2. If the paragraph where the selection ends, is the last content of a
+//    section so that this section becomes empty when the paragraphs will be
+//    joined we have to do some smart actions ;-) The paragraph will be moved
+//    outside the section and replaced by a dummy text node, the complete
+//    section will be deleted in step 3. The difference between replacement
+//    dummy and original is nReplacementDummy.
+// 3. Moving complete selected nodes into the UndoArray. Before this happens the
+//    selection has to be extended if there are sections which would become
+//    empty otherwise. BTW: sections will be moved into the UndoArray if they
+//    are complete part of the selection. Sections starting or ending outside
+//    of the selection will not be removed from the DocNodeArray even they got
+//    a "dummy"-copy in the UndoArray.
+// 4. We have to anticipate the joining of the two paragraphs if the start
+//    paragraph is inside a section and the end paragraph not. Then we have to
+//    move the paragraph into this section and to record this in nSectDiff.
 SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByTblCpy )
     : SwUndo(UNDO_DELETE), SwUndRng( rPam ),
     pMvStt( 0 ), pSttStr(0), pEndStr(0), pRedlData(0), pRedlSaveData(0),
@@ -110,7 +110,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
     bDelFullPara( bFullPara ), bResetPgDesc( sal_False ), bResetPgBrk( sal_False ),
     bFromTableCopy( bCalledByTblCpy )
 {
-    bDelFullPara = bFullPara; // This is set e.g. if an empty paragraph before a table is deleted
+    // bFullPara is set e.g. if an empty paragraph before a table is deleted
+    bDelFullPara = bFullPara;
 
     bCacheComment = false;
 
@@ -174,9 +175,9 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
 
         if( !bJoinNext )        // Selection from bottom to top
         {
-            // When using JoinPrev() all AUTO-PageBreak's will be copied correctly. To restore them
-            // with UNDO, Auto-PageBreak of the EndNode needs to be reset. Same for PageDesc and
-            // ColBreak.
+            // When using JoinPrev() all AUTO-PageBreak's will be copied
+            // correctly. To restore them with UNDO, Auto-PageBreak of the
+            // EndNode needs to be reset. Same for PageDesc and ColBreak.
             if( pEndTxtNd->HasSwAttrSet() )
             {
                 SwRegHistory aRegHist( *pEndTxtNd, pHistory );
@@ -190,7 +191,6 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
             }
         }
     }
-
 
     // Move now also the PaM. The SPoint is at the beginning of a SSelection.
     if( pEnd == rPam.GetPoint() && ( !bFullPara || pSttTxtNd || pEndTxtNd ) )
@@ -222,8 +222,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
         // Step 2: Expand selection if necessary
         if( bJoinNext || bFullPara )
         {
-            // If all content of a section will be moved into Undo, the section itself should be
-            // moved completely.
+            // If all content of a section will be moved into Undo, the section
+            // itself should be moved completely.
             while( aRg.aEnd.GetIndex() + 2  < rDocNds.Count() &&
                 ( (pTmpNd = rDocNds[ aRg.aEnd.GetIndex()+1 ])->IsEndNode() &&
                 pTmpNd->StartOfSectionNode()->IsSectionNode() &&
@@ -236,7 +236,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                 if( pEndTxtNd )
                 {
                     // The end text node has to leave the (expanded) selection
-                    // The dummy is needed because _MoveNodes deletes empty sections
+                    // The dummy is needed because _MoveNodes deletes empty
+                    // sections
                     ++nReplaceDummy;
                     SwNodeRange aMvRg( *pEndTxtNd, 0, *pEndTxtNd, 1 );
                     SwPosition aSplitPos( *pEndTxtNd );
@@ -289,14 +290,16 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
         nNode = rNds.GetEndOfContent().GetIndex();
         rDocNds._MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
         pMvStt = new SwNodeIndex( rNds, nNode );
-        nNode = rNds.GetEndOfContent().GetIndex() - nNode;      // remember difference!
+        // remember difference!
+        nNode = rNds.GetEndOfContent().GetIndex() - nNode;
+
         if( pSttTxtNd && pEndTxtNd )
         {
             //Step 4: Moving around sections
             nSectDiff = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
-            // nSect is the number of sections which starts(ends) between start and end node of the
-            // selection. The "loser" paragraph has to be moved into the section(s) of the
-            // "winner" paragraph
+            // nSect is the number of sections which starts(ends) between start
+            // and end node of the selection. The "loser" paragraph has to be
+            // moved into the section(s) of the "winner" paragraph
             if( nSectDiff )
             {
                 if( bJoinNext )
@@ -318,7 +321,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
     else
         nNode = 0;      // moved no node -> no difference at the end
 
-    // Are there any Nodes that got deleted before that (FootNotes have ContentNodes)?
+    // Are there any Nodes that got deleted before that (FootNotes
+    // have ContentNodes)?
     if( !pSttTxtNd && !pEndTxtNd )
     {
         nNdDiff = nSttNode - rPam.GetPoint()->nNode.GetIndex() - (bFullPara ? 0 : 1);
@@ -362,8 +366,8 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
         nLen = ( bOneNode ? pEnd->nContent.GetIndex() : pSttTxtNd->GetTxt().Len() )
                 - pStt->nContent.GetIndex();
 
-
-        // delete now also the text (all attribute changes are added to UNDO history)
+        // delete now also the text (all attribute changes are added to
+        // UNDO history)
         pSttStr = (String*)new String( pSttTxtNd->GetTxt().Copy( nSttCntnt, nLen ));
         pSttTxtNd->EraseText( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
@@ -382,7 +386,6 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
             return sal_False;           // stop moving more nodes
     }
 
-
     // 2 - copy end into End-String
     if( pEndTxtNd )
     {
@@ -390,15 +393,16 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
         nNdIdx = pEnd->nNode.GetIndex();
         SwRegHistory aRHst( *pEndTxtNd, pHistory );
 
-        // always save all text atttibutes because of possibly overlapping areas of on/off
+        // always save all text atttibutes because of possibly overlapping
+        // areas of on/off
         pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nNdIdx, 0,
                             pEndTxtNd->GetTxt().Len(), true );
 
         if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
 
-
-        // delete now also the text (all attribute changes are added to UNDO history)
+        // delete now also the text (all attribute changes are added to
+        // UNDO history)
         pEndStr = (String*)new String( pEndTxtNd->GetTxt().Copy( 0,
                                     pEnd->nContent.GetIndex() ));
         pEndTxtNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
@@ -420,7 +424,6 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
     return sal_True;                // move Nodes lying in between
 }
 
-
 sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 {
     // Is Undo greater than one Node (that is Start and EndString)?
@@ -441,8 +444,8 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         pEnd->nNode != nSttNode )
         return sal_False;
 
-    // Distinguish between BackSpace and Delete because the Undo array needs to be constructed
-    // differently!
+    // Distinguish between BackSpace and Delete because the Undo array needs to
+    // be constructed differently!
     if( pEnd->nContent == nSttCntnt )
     {
         if( bGroup && !bBackSp ) return sal_False;
@@ -497,8 +500,6 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     bGroup = sal_True;
     return sal_True;
 }
-
-
 
 SwUndoDelete::~SwUndoDelete()
 {
@@ -787,9 +788,10 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 sal_uLong nOldIdx = aPos.nNode.GetIndex();
                 pDoc->SplitNode( aPos, false );
-                // After the split all objects are anchored at the first paragraph,
-                // but the pHistory of the fly frame formats relies on anchoring at
-                // the start of the selection => selection backwards needs a correction.
+                // After the split all objects are anchored at the first
+                // paragraph, but the pHistory of the fly frame formats relies
+                // on anchoring at the start of the selection
+                // => selection backwards needs a correction.
                 if( bBackSp )
                     lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 pTxtNd = aPos.nNode.GetNode().GetTxtNode();
@@ -876,8 +878,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             aPos.nNode = nSttNode - nNdDiff + ( bJoinNext ? 0 : nReplaceDummy );
             SwTxtNode * pTxtNd = aPos.nNode.GetNode().GetTxtNode();
-            // If more than a single Node got deleted, also all "Node" attributes were saved
-
+            // If more than a single Node got deleted, also all "Node"
+            // attributes were saved
             if (pTxtNd != NULL)
             {
                 if( pTxtNd->HasSwAttrSet() && bNodeMove && !pEndStr )
