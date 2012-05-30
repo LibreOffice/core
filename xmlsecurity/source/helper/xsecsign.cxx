@@ -85,7 +85,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
         xMCF->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SIGNATURECREATOR_COMPONENT)), mxCtx),
+            rtl::OUString(SIGNATURECREATOR_COMPONENT), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
@@ -184,10 +184,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     for(i=0; i<size; ++i)
     {
         SignatureReferenceInformation& refInfor = vReferenceInfors[i];
-        refInfor.ouDigestValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CHAR_BLANK));
+        refInfor.ouDigestValue = rtl::OUString(CHAR_BLANK);
     }
 
-    internalSignatureInfor.signatureInfor.ouSignatureValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CHAR_BLANK));
+    internalSignatureInfor.signatureInfor.ouSignatureValue = rtl::OUString(CHAR_BLANK);
 
     return xReferenceResolvedListener;
 }

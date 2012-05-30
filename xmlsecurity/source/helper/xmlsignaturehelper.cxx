@@ -85,7 +85,7 @@ bool XMLSignatureHelper::Init()
 
 void XMLSignatureHelper::ImplCreateSEInitializer()
 {
-    rtl::OUString sSEInitializer(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_COMPONENT ));
+    rtl::OUString sSEInitializer( SEINITIALIZER_COMPONENT );
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
         xMCF->createInstanceWithContext( sSEInitializer,  mxCtx ), uno::UNO_QUERY );
@@ -166,8 +166,8 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
      */
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< io::XActiveDataSource > xSaxWriter(
-        xMCF->createInstanceWithContext(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.xml.sax.Writer")), mxCtx ), uno::UNO_QUERY );
+        xMCF->createInstanceWithContext(rtl::OUString(
+            "com.sun.star.xml.sax.Writer"), mxCtx ), uno::UNO_QUERY );
 
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
 
@@ -185,17 +185,17 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
     /*
      * write the xml context for signatures
      */
-    rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(TAG_DOCUMENTSIGNATURES));
+    rtl::OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
 
     SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
     rtl::OUString sNamespace;
     if (mbODFPre1_2)
-        sNamespace = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DOCUMENTSIGNATURES));
+        sNamespace = rtl::OUString(NS_DOCUMENTSIGNATURES);
     else
-        sNamespace = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DOCUMENTSIGNATURES_ODF_1_2));
+        sNamespace = rtl::OUString(NS_DOCUMENTSIGNATURES_ODF_1_2);
 
     pAttributeList->AddAttribute(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS)),
+        rtl::OUString(ATTR_XMLNS),
         sNamespace);
 
     xDocHandler->startDocument();
@@ -208,7 +208,7 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
 
 void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler )
 {
-    rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(TAG_DOCUMENTSIGNATURES));
+    rtl::OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
     xDocumentHandler->endElement( tag_AllSignatures );
     xDocumentHandler->endDocument();
 }
@@ -265,7 +265,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< xml::sax::XParser > xParser(
         xMCF->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ), mxCtx ),
+            rtl::OUString("com.sun.star.xml.sax.Parser" ), mxCtx ),
         uno::UNO_QUERY );
 
     DBG_ASSERT( xParser.is(), "Can't create parser" );

@@ -69,7 +69,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
         xMCF->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SIGNATUREVERIFIER_COMPONENT )), mxCtx),
+            rtl::OUString( SIGNATUREVERIFIER_COMPONENT ), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
