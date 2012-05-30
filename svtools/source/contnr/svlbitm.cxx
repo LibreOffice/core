@@ -459,6 +459,8 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
             // leave a little space around the box image (looks better)
             if( aContentSize.Height() + 2 > io_rSize.Height() )
                 io_rSize.Height() = aContentSize.Height() + 2;
+            if( aContentSize.Width() + 2 > io_rSize.Width() )
+                io_rSize.Width() = aContentSize.Width() + 2;
         }
     }
 }
