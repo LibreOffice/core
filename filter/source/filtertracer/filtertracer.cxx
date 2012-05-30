@@ -30,9 +30,13 @@
 #include <uno/mapping.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <com/sun/star/util/TextSearch.hpp>
+#include <comphelper/componentcontext.hxx>
 // ----------------
 // - FILTERTRACER -
 // ----------------
+
+using namespace ::com::sun::star;
 
 rtl::OUString FilterTracer_getImplementationName()
     throw( NMSP_UNO::RuntimeException )
@@ -60,8 +64,8 @@ FilterTracer::FilterTracer( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr 
     mpStream    ( NULL ),
     mnLogLevel  ( NMSP_LOGGING::LogLevel::ALL )
 {
-    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.TextSearch" )) ) );
-    mxTextSearch = REF( NMSP_UTIL::XTextSearch )( xObj, ::com::sun::star::uno::UNO_QUERY );
+    uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(rxMgr).getUNOContext() );
+    mxTextSearch = com::sun::star::util::TextSearch::create(xContext);
 }
 FilterTracer::~FilterTracer()
 {
