@@ -131,6 +131,7 @@ namespace svt
             bool                                                                             m_bInitialized;
             rtl::OUString                                                                    m_aCommandURL;
             rtl::OUString                                                                    m_aBaseURL;
+            rtl::OUString                                                                    m_aModuleName;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >           m_xDispatch;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;

@@ -373,6 +373,8 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
                     aPropValue.Value >>= xFrame;
                 else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= aCommandURL;
+                else if ( aPropValue.Name == "ModuleName" )
+                    aPropValue.Value >>= m_aModuleName;
             }
         }
 
