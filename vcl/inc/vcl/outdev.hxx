@@ -599,6 +599,7 @@ public:
                                   MetricVector* pVector = NULL, String* pDisplayText = NULL );
     long                GetTextWidth( const XubString& rStr, xub_StrLen nIndex = 0,
                                       xub_StrLen nLen = STRING_LEN ) const;
+    /// Height where any character of the current font fits; in logic coordinates.
     long                GetTextHeight() const;
     void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
