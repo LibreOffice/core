@@ -213,12 +213,6 @@ TabPage RID_SCPAGE_FORMULA
         Pos = MAP_APPFONT ( 105, 20 ) ;
         Size = MAP_APPFONT ( 60, 46 ) ;
         DropDown = TRUE ;
-        StringList [ en-US ] =
-        {
-            < "Calc A1" ; Default ; > ;
-            < "Excel A1" ; Default ; > ;
-            < "Excel R1C1" ; Default ; > ;
-        };
     };
 
     CheckBox CB_ENGLISH_FUNC_NAME

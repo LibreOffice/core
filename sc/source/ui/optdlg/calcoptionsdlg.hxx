@@ -65,6 +65,10 @@ private:
     OKButton maBtnOK;
     CancelButton maBtnCancel;
 
+    rtl::OUString maCalcA1;
+    rtl::OUString maExcelA1;
+    rtl::OUString maExcelR1C1;
+
     rtl::OUString maCaptionIndirectSyntax;
     rtl::OUString maDescIndirectSyntax;
     rtl::OUString maUseFormulaSyntax;

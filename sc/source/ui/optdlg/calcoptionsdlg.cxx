@@ -91,6 +91,9 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maFtAnnotation(this, ScResId(FT_ANNOTATION)),
     maBtnOK(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
+    maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString()),
+    maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString()),
+    maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString()),
     maCaptionIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_CAPTION).toString()),
     maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString()),
     maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
@@ -143,9 +146,9 @@ void ScCalcOptionsDialog::SelectionChanged()
         // Formula syntax for INDIRECT function.
         maLbOptionEdit.Clear();
         maLbOptionEdit.InsertEntry(maUseFormulaSyntax);
-        maLbOptionEdit.InsertEntry(rtl::OUString("Calc A1"));
-        maLbOptionEdit.InsertEntry(rtl::OUString("Excel A1"));
-        maLbOptionEdit.InsertEntry(rtl::OUString("Excel R1C1"));
+        maLbOptionEdit.InsertEntry(maCalcA1);
+        maLbOptionEdit.InsertEntry(maExcelA1);
+        maLbOptionEdit.InsertEntry(maExcelR1C1);
         switch (maConfig.meIndirectRefSyntax)
         {
             case formula::FormulaGrammar::CONV_OOO:
@@ -193,11 +196,11 @@ rtl::OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConv
     switch (eConv)
     {
         case formula::FormulaGrammar::CONV_OOO:
-            return rtl::OUString("Calc A1");
+            return maCalcA1;
         case formula::FormulaGrammar::CONV_XL_A1:
-            return rtl::OUString ("Excel A1");
+            return maExcelA1;
         case formula::FormulaGrammar::CONV_XL_R1C1:
-            return rtl::OUString("Excel R1C1");
+            return maExcelR1C1;
         case formula::FormulaGrammar::CONV_UNSPECIFIED:
         default:
             ;

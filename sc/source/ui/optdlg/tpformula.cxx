@@ -75,6 +75,10 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
 
     mnDecSep(0)
 {
+    maLbFormulaSyntax.InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString());
+    maLbFormulaSyntax.InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString());
+    maLbFormulaSyntax.InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString());
+
     FreeResource();
 
     Link aLink = LINK( this, ScTpFormulaOptions, ButtonHdl );
