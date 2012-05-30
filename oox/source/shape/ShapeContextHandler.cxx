@@ -30,6 +30,7 @@
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
+#include "oox/drawingml/diagram/diagram.hxx"
 
 namespace oox { namespace shape {
 
@@ -120,6 +121,19 @@ ShapeContextHandler::getDrawingShapeContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
+ShapeContextHandler::getDiagramShapeContext()
+{
+    if (!mxDiagramShapeContext.is())
+    {
+        FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        mpShape.reset(new Shape());
+        mxDiagramShapeContext.set(new DiagramGraphicDataContext(*rFragmentHandler, mpShape));
+    }
+
+    return mxDiagramShapeContext;
+}
+
+uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getContextHandler()
 {
     uno::Reference<xml::sax::XFastContextHandler> xResult;
@@ -129,6 +143,9 @@ ShapeContextHandler::getContextHandler()
         case NMSP_doc:
         case NMSP_vml:
             xResult.set(getDrawingShapeContext());
+            break;
+        case NMSP_dmlDiagram:
+            xResult.set(getDiagramShapeContext());
             break;
         default:
             xResult.set(getGraphicShapeContext(mnStartToken));
@@ -153,6 +170,9 @@ void SAL_CALL ShapeContextHandler::startFastElement
     mxFilterBase->filter(aSeq);
 
     mpThemePtr.reset(new Theme());
+
+    if (Element == DGM_TOKEN(relIds))
+        createFastChildContext(Element, Attribs);
 
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
 
@@ -246,6 +266,12 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             mpDrawing->finalizeFragmentImport();
             if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().takeLastShape() )
                 xResult = pShape->convertAndInsert( xShapes );
+        }
+        else if (mxDiagramShapeContext.is())
+        {
+            basegfx::B2DHomMatrix aMatrix;
+            mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
+            xResult = mpShape->getXShape();
         }
         else if (mpShape.get() != NULL)
         {
