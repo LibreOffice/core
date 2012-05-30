@@ -48,9 +48,9 @@ RTFReferenceProperties::~RTFReferenceProperties()
 
 void RTFReferenceProperties::resolve(Properties& rHandler)
 {
-    for (RTFSprms::Iterator_t i = m_aAttributes.begin(); i != m_aAttributes.end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aAttributes->begin(); i != m_aAttributes->end(); ++i)
         rHandler.attribute(i->first, *i->second.get());
-    for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aSprms->begin(); i != m_aSprms->end(); ++i)
     {
         RTFSprm aSprm(i->first, i->second);
         rHandler.sprm(aSprm);
