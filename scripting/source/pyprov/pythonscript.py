@@ -117,9 +117,9 @@ from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import XServiceInfo
 from com.sun.star.io import IOException
-from com.sun.star.ucb import CommandAbortedException, XCommandEnvironment, XProgressHandler
+from com.sun.star.ucb import CommandAbortedException, XCommandEnvironment, XProgressHandler, Command
 from com.sun.star.task import XInteractionHandler
-from com.sun.star.beans import XPropertySet
+from com.sun.star.beans import XPropertySet, Property
 from com.sun.star.container import XNameContainer
 from com.sun.star.xml.sax import XDocumentHandler, InputSource
 from com.sun.star.uno import Exception as UnoException
@@ -251,12 +251,15 @@ def checkForPythonPathBesideScript( url ):
         
     
 class ScriptContext(unohelper.Base):
-    def __init__( self, ctx, doc ):
+    def __init__( self, ctx, doc, inv ):
         self.ctx = ctx
         self.doc = doc
+        self.inv = inv
        
    # XScriptContext
     def getDocument(self):
+        if self.doc:
+            return self.doc
         return self.getDesktop().getCurrentComponent()
 
     def getDesktop(self):
@@ -265,6 +268,9 @@ class ScriptContext(unohelper.Base):
 
     def getComponentContext(self):
         return self.ctx
+
+    def getInvocationContext(self):
+        return self.inv
 
 #----------------------------------
 # Global Module Administration
@@ -745,7 +751,32 @@ class CommandEnvironment(unohelper.Base, XCommandEnvironment):
 #        log.isDebugLevel() and log.debug( "pythonscript: ModifyListener.modified " + str( event ) )
 #    def disposing( self, event ):
 #        log.isDebugLevel() and log.debug( "pythonscript: ModifyListener.disposing " + str( event ) )
+
+def getModelFromDocUrl(ctx, url):
+    """Get document model from document url."""
+    doc = None
+    args = ("Local", "Office")
+    ucb = ctx.getServiceManager().createInstanceWithArgumentsAndContext(
+        "com.sun.star.ucb.UniversalContentBroker", args, ctx)
+    identifier = ucb.createContentIdentifier(url)
+    content = ucb.queryContent(identifier)
+    p = Property()
+    p.Name = "DocumentModel"
+    p.Handle = -1
     
+    c = Command()
+    c.Handle = -1
+    c.Name = "getPropertyValues"
+    c.Argument = uno.Any("[]com.sun.star.beans.Property", (p,))
+    
+    env = CommandEnvironment()
+    try:
+        ret = content.execute(c, 0, env)
+        doc = ret.getObject(1, None)
+    except Exception as e:
+        log.isErrorLevel() and log.error("getModelFromDocUrl: %s" % url)
+    return doc
+
 def mapStorageType2PackageContext( storageType ):
     ret = storageType
     if( storageType == "share:uno_packages" ):
@@ -872,11 +903,26 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
                 mystr = mystr + str(i)
             log.debug( "Entering PythonScriptProvider.ctor" + mystr )
 
+        doc = None
+        inv = None
         storageType = ""
+
         if isinstance(args[0],unicode ):
             storageType = args[0]
+            if storageType.startswith( "vnd.sun.star.tdoc" ):
+                doc = getModelFromDocUrl(ctx, storageType)
         else:
-            storageType = args[0].SCRIPTING_DOC_URI
+            inv = args[0]
+            try:
+                doc = inv.ScriptContainer
+                content = ctx.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
+                    ctx).createDocumentContent(doc)
+                storageType = content.getIdentifier().getContentIdentifier()
+            except Exception as e:
+                text = lastException2String()
+                log.error( text )
+
         isPackage = storageType.endswith( ":uno_packages" )
 
         try:
@@ -895,7 +941,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
                 raise RuntimeException(
                     "PythonScriptProvider couldn't instantiate " +ucbService, self)
             self.provCtx = ProviderContext(
-                storageType, sfa, urlHelper, ScriptContext( uno.getComponentContext(), None ) )
+                storageType, sfa, urlHelper, ScriptContext( uno.getComponentContext(), doc, inv ) )
             if isPackage:
                 mapPackageName2Path = getPackageName2PathMap( sfa, storageType )
                 self.provCtx.setPackageAttributes( mapPackageName2Path , rootUrl )
