@@ -31,6 +31,11 @@
 ScCalcConfig::ScCalcConfig() :
     meIndirectRefSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED) {}
 
+void ScCalcConfig::reset()
+{
+    *this = ScCalcConfig();
+}
+
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meIndirectRefSyntax == r.meIndirectRefSyntax;

@@ -254,6 +254,12 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
     OUString aSepArrayCol     = maEdSepArrayCol.GetText();
     OUString aSepArrayRow     = maEdSepArrayRow.GetText();
 
+    if (maBtnCustomCalcDefault.IsChecked())
+    {
+        // When Default is selected, reset all the calc config settings to default.
+        maCurrentConfig.reset();
+    }
+
     if ( maLbFormulaSyntax.GetSavedValue() != aSyntaxPos
          || maCbEnglishFuncName.GetSavedValue() != bEnglishFuncName
          || static_cast<OUString>(maEdSepFuncArg.GetSavedValue()) != aSep

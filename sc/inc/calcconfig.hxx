@@ -41,6 +41,8 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     ScCalcConfig();
 
+    void reset();
+
     bool operator== (const ScCalcConfig& r) const;
     bool operator!= (const ScCalcConfig& r) const;
 };
