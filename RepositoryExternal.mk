@@ -1326,27 +1326,8 @@ $(call gb_LinkTarget_add_defs,$(1),\
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(foreach subdir,\
-		addrbook \
-		chrome \
-		content \
-		embed_base \
-		intl \
-		locale \
-		mime \
-		mork \
-		mozldap \
-		msgbase \
-		necko \
-		nspr \
-		pref \
-		profile \
-		rdf \
-		string \
-		uconv \
-		xpcom \
-		xpcom_obsolete \
-		,-I$(OUTDIR_FOR_BUILD)/inc/mozilla/$(subdir)) \
+	-I$(OUTDIR_FOR_BUILD)/inc/mozilla/moz \
+	-I$(OUTDIR_FOR_BUILD)/inc/mozilla/nspr \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\
