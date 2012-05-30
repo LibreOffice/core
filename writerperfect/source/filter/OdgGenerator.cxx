@@ -1347,16 +1347,27 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             if (mxStyle["svg:cy"])
                 pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
             if (mxGradient[1]["svg:stop-opacity"])
-                pDrawGradientElement->addAttribute("draw:start-intensity", mxGradient[1]["svg:stop-opacity"]->getStr());
+            {
+                pDrawOpacityElement->addAttribute("draw:start", mxGradient[1]["svg:stop-opacity"]->getStr());
+                bUseOpacityGradient = true;
+            }
             else
-                pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
+                pDrawOpacityElement->addAttribute("draw:start", "100%");
             if (mxGradient[0]["svg:stop-opacity"])
-                pDrawGradientElement->addAttribute("draw:end-intensity", mxGradient[0]["svg:stop-opacity"]->getStr());
+            {
+                pDrawOpacityElement->addAttribute("draw:end", mxGradient[0]["svg:stop-opacity"]->getStr());
+                bUseOpacityGradient = true;
+            }
             else
-                pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
+                pDrawOpacityElement->addAttribute("draw:end", "100%");
             pDrawGradientElement->addAttribute("draw:border", "0%");
             mGraphicsGradientStyles.push_back(pDrawGradientElement);
             mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+            if (bUseOpacityGradient)
+            {
+                mGraphicsGradientStyles.push_back(pDrawOpacityElement);
+                mGraphicsGradientStyles.push_back(new TagCloseElement("draw:opacity"));
+            }
         }
 
         if(!bUseOpacityGradient)
