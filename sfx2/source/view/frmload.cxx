@@ -695,14 +695,14 @@ UNOSEQUENCE< rtl::OUString > SfxFrameLoader_Impl::impl_getStaticSupportedService
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.SynchronousFrameLoader" ));
+    seqServiceNames.getArray() [0] = ::rtl::OUString( "com.sun.star.frame.SynchronousFrameLoader" );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SfxFrameLoader_Impl::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.office.FrameLoader" ));
+    return ::rtl::OUString( "com.sun.star.comp.office.FrameLoader" );
 }
 
 /* Helper for registry */

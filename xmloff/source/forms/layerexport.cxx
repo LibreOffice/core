@@ -85,7 +85,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const ::rtl::OUString s_sControlNumberStyleNamePrefix(RTL_CONSTASCII_USTRINGPARAM("C"));
+        static const ::rtl::OUString s_sControlNumberStyleNamePrefix("C");
         return s_sControlNumberStyleNamePrefix;
     }
 
@@ -105,7 +105,7 @@ namespace xmloff
         m_rContext.GetAutoStylePool()->AddFamily(
             XML_STYLE_FAMILY_CONTROL_ID, token::GetXMLToken(token::XML_PARAGRAPH),
             m_xStyleExportMapper.get(),
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_PREFIX) )
+            ::rtl::OUString(  XML_STYLE_FAMILY_CONTROL_PREFIX )
         );
 
         // add our event translation table
@@ -514,7 +514,7 @@ namespace xmloff
 
         ::rtl::OUString lcl_findFreeControlId( const MapPropertySet2Map& _rAllPagesControlIds )
         {
-            static const ::rtl::OUString sControlIdBase( RTL_CONSTASCII_USTRINGPARAM( "control" ) );
+            static const ::rtl::OUString sControlIdBase(  "control"  );
             ::rtl::OUString sControlId = sControlIdBase;
 
             size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
@@ -569,7 +569,7 @@ namespace xmloff
                     if (!sReferencedBy.isEmpty())
                         // it's not the first _rxObject referring to the xCurrentReference
                         // -> separate the id
-                        sReferencedBy += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                        sReferencedBy += ::rtl::OUString(",");
                     sReferencedBy += sCurrentId;
                 }
             }
@@ -772,8 +772,8 @@ namespace xmloff
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
                 Sequence< Any > aSupplierArgs(1);
-                aSupplierArgs[0] <<= Locale (   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
+                aSupplierArgs[0] <<= Locale (   ::rtl::OUString("en"),
+                                                ::rtl::OUString("US"),
                                                 ::rtl::OUString()
                                             );
 

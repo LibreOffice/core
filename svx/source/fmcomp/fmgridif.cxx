@@ -432,7 +432,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FmXGridControl"));
+    return ::rtl::OUString("com.sun.star.form.FmXGridControl");
 }
 
 //------------------------------------------------------------------------------
@@ -440,7 +440,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 {
     Sequence< ::rtl::OUString > aServiceNames(2);
     aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
-    aServiceNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
+    aServiceNames[1] = ::rtl::OUString("com.sun.star.awt.UnoControl");
     return aServiceNames;
 }
 
@@ -461,7 +461,7 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 //------------------------------------------------------------------------------
 ::rtl::OUString FmXGridControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DBGrid"));
+    ::rtl::OUString aName("DBGrid");
     return aName;
 }
 
@@ -801,7 +801,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "design" )) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "alive" ));
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString( "design" ) : ::rtl::OUString( "alive" );
     }
 
     // --- </mutex_lock> ---
@@ -1125,7 +1125,7 @@ namespace fmgridif
 {
     const ::rtl::OUString getDataModeIdentifier()
     {
-        static ::rtl::OUString s_sDataModeIdentifier = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+        static ::rtl::OUString s_sDataModeIdentifier = ::rtl::OUString(  "DataMode"  );
         return s_sDataModeIdentifier;
     }
 }
@@ -2483,8 +2483,8 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     {
         aModes.realloc(2);
         ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
-        pModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) );
+        pModes[0] = ::rtl::OUString(  "DataMode"  );
+        pModes[1] = ::rtl::OUString(  "FilterMode"  );
     }
     return aModes;
 }
@@ -2795,7 +2795,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                ::rtl::OUString("com.sun.star.util.URLTransformer")),
             UNO_QUERY);
         pSupported = aSupported.getArray();
         if (xTransformer.is())

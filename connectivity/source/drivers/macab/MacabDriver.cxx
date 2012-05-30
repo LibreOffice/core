@@ -102,7 +102,7 @@ bool MacabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc,
         "MacabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "macabdrv1" )) );
+    const ::rtl::OUString sModuleName( SAL_MODULENAME( "macabdrv1" ) );
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "MacabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -153,7 +153,7 @@ void MacabImplModule::impl_throwGenericSQLException( const ::rtl::OUString& _rMe
 {
     SQLException aError;
     aError.Message = _rMessage;
-    aError.SQLState = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+    aError.SQLState = ::rtl::OUString(  "S1000"  );
     aError.ErrorCode = 0;
     throw aError;
 }
@@ -195,7 +195,7 @@ MacabDriver::MacabDriver(
     try
     {
         Reference< XDesktop > xDesktop(
-            m_xMSFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+            m_xMSFactory->createInstance( ::rtl::OUString(  "com.sun.star.frame.Desktop"  ) ),
             UNO_QUERY_THROW );
         xDesktop->addTerminateListener( this );
     }
@@ -233,7 +233,7 @@ Sequence< ::rtl::OUString > MacabDriver::getSupportedServiceNames_Static(  ) thr
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
 
     return aSNS;
 }
@@ -291,7 +291,7 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const ::rtl::OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:macab:")), 18));
+    return (!url.compareTo(::rtl::OUString("sdbc:address:macab:"), 18));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
