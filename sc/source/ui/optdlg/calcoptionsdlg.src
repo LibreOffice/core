@@ -54,8 +54,8 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
 
     ListBox LB_OPTION_EDIT
     {
-        Pos = MAP_APPFONT ( 50 , 82 ) ;
-        Size = MAP_APPFONT ( 60, 46 ) ;
+        Pos = MAP_APPFONT ( 50, 82 ) ;
+        Size = MAP_APPFONT ( 100, 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };

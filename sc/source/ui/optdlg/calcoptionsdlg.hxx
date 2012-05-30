@@ -42,13 +42,14 @@ public:
     ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig);
     virtual ~ScCalcOptionsDialog();
 
-    DECL_LINK( SettingsSelHdl, void* );
-    DECL_LINK( SettingsDoubleClickHdl, void* );
+    DECL_LINK( SettingsSelHdl, Control* );
+
+    const ScCalcConfig& GetConfig() const;
 
 private:
     void FillOptionsList();
     void SelectionChanged();
-    void EditOption();
+    void ListOptionValueChanged();
 
 private:
     SvxCheckListBox maLbSettings;

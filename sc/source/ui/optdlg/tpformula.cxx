@@ -144,7 +144,7 @@ void ScTpFormulaOptions::LaunchCustomCalcSettings()
     ScCalcOptionsDialog aDlg(this, maCurrentConfig);
     if (aDlg.Execute() == RET_OK)
     {
-
+        maCurrentConfig = aDlg.GetConfig();
     }
 }
 
