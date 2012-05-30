@@ -50,6 +50,13 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
 	shell32 \
 ))
+
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_ldflags,postgresql-sdbc-impl,\
+	/NODEFAULTLIB:libcmt.lib \
+))
+endif
+
 endif
 
 $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
