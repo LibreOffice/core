@@ -224,13 +224,14 @@ private:
         const double nRight,
         const double nBottom);
 
-    /** Return the screen number on which to display the presentation itself
+    /** Return the built-in screen number on the presentation will normally
+        display the presenter console.
         @return
             Returns -1 when the presenter screen can or shall not be
             displayed.
     */
-    sal_Int32 GetScreenNumber (
-        const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
+    sal_Int32 GetPresenterScreenNumber (
+                const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
 
     sal_Int32 GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const;
 

@@ -59,7 +59,7 @@
 #define FT_MONITOR 10
 #define LB_MONITOR 11
 
-#define STR_PRIMARY_MONITOR 1
+#define STR_EXTERNAL_MONITOR 1
 #define STR_MONITOR 2
 #define STR_ALL_MONITORS 3
 

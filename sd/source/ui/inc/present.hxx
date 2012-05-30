@@ -81,7 +81,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     sal_Int32           mnMonitors;
 
-    String              msPrimaryMonitor;
+    String              msExternalMonitor;
     String              msMonitor;
     String              msAllMonitors;
 

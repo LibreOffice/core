@@ -90,7 +90,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                 rOutAttrs               ( rInAttrs ),
                 mnMonitors              ( 0 ),
 
-                msPrimaryMonitor( SdResId(STR_PRIMARY_MONITOR ) ),
+                msExternalMonitor( SdResId(STR_EXTERNAL_MONITOR ) ),
                 msMonitor( SdResId( STR_MONITOR ) ),
                 msAllMonitors( SdResId( STR_ALL_MONITORS ) )
 {
@@ -200,14 +200,14 @@ void SdStartPresentationDlg::InitMonitorSettings()
         else
         {
             sal_Bool bUnifiedDisplay = false;
-            sal_Int32 nPrimaryIndex = 0;
+            sal_Int32 nExternalIndex = 0;
             Reference< XPropertySet > xMonProps( xMultiMon, UNO_QUERY );
             if( xMonProps.is() ) try
             {
                 const OUString sPropName1( "IsUnifiedDisplay" );
                 xMonProps->getPropertyValue( sPropName1 ) >>= bUnifiedDisplay;
-                const OUString sPropName2( "DefaultDisplay" );
-                xMonProps->getPropertyValue( sPropName2 ) >>= nPrimaryIndex;
+                const OUString sPropName2( "ExternalDisplay" );
+                xMonProps->getPropertyValue( sPropName2 ) >>= nExternalIndex;
             }
             catch( Exception& )
             {
@@ -216,7 +216,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
-                String aName( nDisplay == nPrimaryIndex ? msPrimaryMonitor : msMonitor );
+                String aName( nDisplay == nExternalIndex ? msExternalMonitor : msMonitor );
                 const String aNumber( String::CreateFromInt32( nDisplay + 1 ) );
                 aName.SearchAndReplace( sPlaceHolder, aNumber );
                 maLBMonitor.InsertEntry( aName );
@@ -227,7 +227,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
 
             sal_Int32 nSelected = ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue();
             if( nSelected <= 0 )
-                nSelected = nPrimaryIndex;
+                nSelected = nExternalIndex;
             else
                 nSelected--;
 

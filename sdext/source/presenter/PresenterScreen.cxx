@@ -433,21 +433,20 @@ void PresenterScreen::SwitchMonitors()
         Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
         Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
 
-        sal_Int32 nDefaultDisplay = 0;
-        sal_Int32 nScreen = GetScreenNumber (xPresentation);
-
-        if (nScreen == -1) // only a single display somehow
+        // Get the existing presenter console screen, we want to switch the
+        // presentation to use that instead.
+        sal_Int32 nNewScreen = GetPresenterScreenNumber (xPresentation);
+        if (nNewScreen < 0)
             return;
 
-        sal_Int32 nNewScreen = GetPresenterScreenFromScreen (nScreen);
-
+        // Adapt that display number to be the 'default' setting of 0 if it matches
+        sal_Int32 nDefaultDisplay = 0;
         Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
         xDisplayProperties->getPropertyValue(A2S("DefaultDisplay")) >>= nDefaultDisplay;
-
         if (nNewScreen == nDefaultDisplay)
             nNewScreen = 0; // screen zero is best == the primary display
         else
-            nNewScreen++;
+            nNewScreen++; // otherwise we store screens offset by one.
 
         // Set the new presentation display
         Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
@@ -458,20 +457,22 @@ void PresenterScreen::SwitchMonitors()
     }
 }
 
-sal_Int32 PresenterScreen::GetScreenNumber (
+// FIXME: really VCL should hold the current 'external' and 'built-in'
+// display states, and hide them behind some attractive API, and
+// the PresenterConsole should link VCL directly ...
+sal_Int32 PresenterScreen::GetPresenterScreenNumber (
     const Reference<presentation::XPresentation2>& rxPresentation) const
 {
-    // Determine the screen on which the full screen presentation is being
-    // displayed.
     sal_Int32 nScreenNumber (0);
     sal_Int32 nScreenCount (1);
-    fprintf (stderr, "New foo!\n");
     try
     {
         Reference<beans::XPropertySet> xProperties (rxPresentation, UNO_QUERY);
         if ( ! xProperties.is())
             return -1;
 
+        // Determine the screen on which the full screen presentation is being
+        // displayed.
         sal_Int32 nDisplayNumber (-1);
         if ( ! (xProperties->getPropertyValue(A2S("Display")) >>= nDisplayNumber))
             return -1;
@@ -487,7 +488,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
             // Instantiate the DisplayAccess service to find out which
             // screen number that is.
             if (nDisplayNumber <= 0 && xDisplayProperties.is())
-                xDisplayProperties->getPropertyValue(A2S("DefaultDisplay")) >>= nScreenNumber;
+                xDisplayProperties->getPropertyValue(A2S("ExternalDisplay")) >>= nScreenNumber;
         }
 
         // We still have to determine the number of screens to decide
@@ -513,7 +514,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/StartAlways"))) >>= bStartAlways)
             {
                 if (bStartAlways)
-                    return nScreenNumber;
+                    return GetPresenterScreenFromScreen(nScreenNumber);
             }
             return -1;
         }
@@ -525,7 +526,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
         // the default instead.
     }
 
-    return nScreenNumber;
+    return GetPresenterScreenFromScreen(nScreenNumber);
 }
 
 sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const
@@ -558,17 +559,15 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
 {
     // A negative value means that the presentation spans all available
     // displays.  That leaves no room for the presenter.
-    const sal_Int32 nScreenNumber(GetScreenNumber(rxPresentation));
-    if (nScreenNumber < 0)
+    const sal_Int32 nScreen(GetPresenterScreenNumber(rxPresentation));
+    if (nScreen < 0)
         return NULL;
-
-    sal_Int32 nPresenterScreenNumber = GetPresenterScreenFromScreen (nScreenNumber);
 
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),
         PresenterHelper::msFullScreenPaneURL
             +A2S("?FullScreen=true&ScreenNumber=")
-                + OUString::valueOf(nPresenterScreenNumber));
+                + OUString::valueOf(nScreen));
 }
 
 void PresenterScreen::RequestShutdownPresenterScreen (void)

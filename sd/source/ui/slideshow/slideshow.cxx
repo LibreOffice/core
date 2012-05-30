@@ -1298,7 +1298,7 @@ sal_Int32 SlideShow::GetDisplay()
             Reference<XPropertySet> xMonitorProperties(
                 xFactory->createInstance( "com.sun.star.awt.DisplayAccess" ),
                 UNO_QUERY_THROW);
-            xMonitorProperties->getPropertyValue("DefaultDisplay") >>= nDisplay;
+            xMonitorProperties->getPropertyValue("ExternalDisplay") >>= nDisplay;
         }
         catch( Exception& )
         {

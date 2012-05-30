@@ -274,9 +274,9 @@ ModalDialog DLG_START_PRESENTATION
         ClipChildren = TRUE;
     };
 
-    String STR_PRIMARY_MONITOR
+    String STR_EXTERNAL_MONITOR
     {
-        Text [ en-US ] = "Display %1 (primary)";
+        Text [ en-US ] = "Display %1 (external)";
     };
 
     String STR_MONITOR
