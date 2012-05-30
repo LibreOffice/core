@@ -35,12 +35,6 @@ $(eval $(call gb_Library_add_defs,bootstrap,\
         $(if $(filter-out $(diag),cache),-D__DIAGNOSE)) \
 ))
 
-ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_defs,bootstrap,\
-    -0b0 \
-))
-endif
-
 endif
 
 $(eval $(call gb_Library_set_include,bootstrap,\

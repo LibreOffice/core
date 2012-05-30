@@ -27,16 +27,6 @@
 
 $(eval $(call gb_Library_Library,stocservices))
 
-ifneq ($(debug),)
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_defs,stocservices,\
-    -0b0 \
-))
-endif
-
-endif
-
 $(eval $(call gb_Library_set_include,stocservices,\
     -I$(SRCDIR)/stoc/inc \
     $$(INCLUDE) \

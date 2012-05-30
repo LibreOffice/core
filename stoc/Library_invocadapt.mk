@@ -27,16 +27,6 @@
 
 $(eval $(call gb_Library_Library,invocadapt))
 
-ifneq ($(debug),)
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_defs,invocadapt,\
-    -0b0 \
-))
-endif
-
-endif
-
 $(eval $(call gb_Library_use_internal_api,invocadapt,\
     invadp \
 ))
