@@ -970,7 +970,6 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
     return bNameOK;
 }
 
-typedef std::vector< std::pair< sal_uInt32, sal_uInt32 > > PathSurrogateVector;
 typedef std::vector< SdrObject* > SdrObjectVector;
 
 void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )

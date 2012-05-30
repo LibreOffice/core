@@ -47,7 +47,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 // -------------------------------------------------------------------------
 sdbcx::ObjectType OGroups::createObject(const ::rtl::OUString& _rName)
 {

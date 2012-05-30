@@ -70,7 +70,6 @@ OUString getImplementationName_DocumentHandlerImpl()
 }
 
 typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
-typedef ::boost::unordered_map< sal_Int32, OUString > t_Long2OUStringMap;
 
 struct PrefixEntry
 {

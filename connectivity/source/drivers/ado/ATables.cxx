@@ -53,8 +53,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");

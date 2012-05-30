@@ -68,8 +68,6 @@ using namespace ::com::sun::star::uno;
 
 DBG_NAME(SfxVirtualMenu)
 
-typedef SfxMenuControl* SfxMenuControlPtr;
-
 class SfxMenuImageControl_Impl : public SfxControllerItem
 {
     SfxVirtualMenu*     pMenu;

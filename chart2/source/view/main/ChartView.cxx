@@ -455,7 +455,6 @@ VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< VCoordinateSystem
 }
 
 typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
-typedef std::pair< VCoordinateSystem* , tFullAxisIndex > tFullCoordinateSystem;
 typedef std::map< VCoordinateSystem*, tFullAxisIndex > tCoordinateSystemMap;
 
 struct AxisUsage

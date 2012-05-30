@@ -467,9 +467,6 @@ namespace
         typedef boost::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef boost::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef boost::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
-        typedef boost::unordered_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
-
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 
         sal_Int32                 m_nNextFontId;

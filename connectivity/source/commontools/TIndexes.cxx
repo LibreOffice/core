@@ -46,7 +46,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 // -----------------------------------------------------------------------------
 OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,

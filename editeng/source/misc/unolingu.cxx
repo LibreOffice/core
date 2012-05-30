@@ -28,7 +28,6 @@
 
 
 #include <map>
-#include <set>
 #include <vector>
 #include <list>
 #include <memory>
@@ -219,9 +218,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
     {
         typedef OUString OUstring_t;
         typedef Sequence< OUString > Sequence_OUString_t;
-        typedef std::vector< OUstring_t > OUString_vector_t;
-        typedef std::set< OUstring_t > OUString_set_t;
-        std::vector< OUString_vector_t > aVector;
         typedef std::map< OUstring_t, Sequence_OUString_t > list_entry_map_t;
 
         RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - updating..." );

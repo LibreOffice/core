@@ -69,7 +69,6 @@
 #include "UserDefinedProperties.hxx"
 #include "SceneProperties.hxx"
 
-#include <map>
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -496,8 +495,6 @@ sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
 
     return nNewAPIIndex;
 }
-
-typedef ::std::map< OUString, OUString > tChartTypeMap;
 
 OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
 {

@@ -140,7 +140,6 @@ int XMLFontAutoStylePoolEntryCmp_Impl(
     }
 }
 
-typedef XMLFontAutoStylePoolEntry_Impl *XMLFontAutoStylePoolEntryPtr;
 DECLARE_CONTAINER_SORT_DEL( XMLFontAutoStylePool_Impl,
                             XMLFontAutoStylePoolEntry_Impl )
 IMPL_CONTAINER_SORT( XMLFontAutoStylePool_Impl,

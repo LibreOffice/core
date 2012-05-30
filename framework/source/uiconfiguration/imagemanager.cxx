@@ -91,8 +91,6 @@ const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COL
 namespace framework
 {
 
-typedef GraphicNameAccess CmdToXGraphicNameAccess;
-
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************

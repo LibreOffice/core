@@ -59,7 +59,6 @@ using css::system::SimpleMailClientFlags::NO_USER_INTERFACE;
 using css::system::SimpleMailClientFlags::NO_LOGON_DIALOG;
 
 typedef std::vector<rtl::OUString> StringList_t;
-typedef StringList_t::const_iterator StringListIterator_t;
 
 const rtl::OUString TO(RTL_CONSTASCII_USTRINGPARAM("--to"));
 const rtl::OUString CC(RTL_CONSTASCII_USTRINGPARAM("--cc"));

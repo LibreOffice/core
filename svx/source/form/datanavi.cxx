@@ -188,7 +188,6 @@ namespace svxform
             return;
 
         using namespace ::com::sun::star::uno;
-        typedef com::sun::star::form::binding::XValueBinding XValueBinding_t;
 
         ItemNode *pItemNode = static_cast<ItemNode*>(pSelected->GetUserData());
 

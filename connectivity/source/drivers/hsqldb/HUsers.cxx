@@ -45,7 +45,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 OUsers::OUsers( ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,

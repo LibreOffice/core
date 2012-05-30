@@ -69,8 +69,6 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
-
 //==========================================================================
 //= ODBTable
 //==========================================================================

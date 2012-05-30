@@ -664,8 +664,6 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaA
     }
 }
 
-typedef EditCharAttrib* EditCharAttribPtr;
-
 void ImpEditEngine::RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich, sal_Bool bRemoveFeatures )
 {
     ContentNode* pNode = aEditDoc.GetObject( nPara );

@@ -100,7 +100,6 @@ Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 {
     return new ODbaseIndex(m_pTable);
 }
-typedef connectivity::sdbcx::OCollection ODbaseTables_BASE_BASE;
 // -------------------------------------------------------------------------
 // XAppend
 sdbcx::ObjectType ODbaseIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )

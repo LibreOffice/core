@@ -46,8 +46,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 sdbcx::ObjectType OUsers::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);

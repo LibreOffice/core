@@ -41,7 +41,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-typedef file::OColumns ODbaseColumns_BASE;
 sdbcx::ObjectType ODbaseColumns::createObject(const ::rtl::OUString& _rName)
 {
 

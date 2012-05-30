@@ -72,7 +72,6 @@ Reference< XPropertySet > ODbaseTables::createDescriptor()
 {
     return new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
 }
-typedef connectivity::sdbcx::OCollection ODbaseTables_BASE_BASE;
 // -------------------------------------------------------------------------
 // XAppend
 sdbcx::ObjectType ODbaseTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )

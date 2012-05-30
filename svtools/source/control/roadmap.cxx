@@ -49,7 +49,6 @@ namespace svt
 {
 //.........................................................................
 
-    typedef std::vector< ::rtl::OUString > S_Vector;
     typedef std::vector< RoadmapItem* > HL_Vector;
 
     //=====================================================================

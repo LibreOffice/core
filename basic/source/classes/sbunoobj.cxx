@@ -3248,8 +3248,6 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         refVar->PutBool( sal_True );
 }
 
-typedef boost::unordered_map< ::rtl::OUString, std::vector< ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleHash;
-
 
 // helper wrapper function to interact with TypeProvider and
 // XTypeDescriptionEnumerationAccess.

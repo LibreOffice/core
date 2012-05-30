@@ -341,8 +341,6 @@ bool lcl_isSeriesAttachedToFirstAxis(
     return bResult;
 }
 
-typedef ::std::pair< OUString, OUString > tLabelAndValueRange;
-
 OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
 {
     OUStringBuffer aResult;

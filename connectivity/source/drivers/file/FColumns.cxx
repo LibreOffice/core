@@ -44,8 +44,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
-
 sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
 

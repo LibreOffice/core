@@ -65,8 +65,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-typedef std::vector< std::vector< double > > PolyPolygonDistances;
-
 struct FWCharacterData                  // representing a single character
 {
     std::vector< PolyPolygon >          vOutlines;
