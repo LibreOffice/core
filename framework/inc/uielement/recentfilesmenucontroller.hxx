@@ -106,7 +106,6 @@ namespace framework
             struct RecentFile
             {
                 rtl::OUString aURL;
-                rtl::OUString aFilter;
                 rtl::OUString aTitle;
                 rtl::OUString aPassword;
             };

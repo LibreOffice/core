@@ -148,8 +148,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
                     if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
                         a >>= aRecentFile.aURL;
-                    else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
-                        a >>= aRecentFile.aFilter;
                     else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
                         a >>= aRecentFile.aTitle;
                     else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
@@ -274,8 +272,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
 void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 {
-    static int NUM_OF_PICKLIST_ARGS = 3;
-
     Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XDispatch >            xDispatch;
     Reference< XDispatchProvider >    xDispatchProvider;
@@ -298,7 +294,8 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aTargetURL.Complete = rRecentFile.aURL;
         m_xURLTransformer->parseStrict( aTargetURL );
 
-        aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
+        sal_Int32 nSize = 2;
+        aArgsList.realloc(nSize);
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
         aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
 
@@ -306,24 +303,13 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
         aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
 
-        ::rtl::OUString  aFilter( rRecentFile.aFilter );
-        sal_Int32 nPos = aFilter.indexOf( '|' );
-        if ( nPos >= 0 )
+        if (!m_aModuleName.isEmpty())
         {
-            ::rtl::OUString aFilterOptions;
-
-            if ( nPos < ( aFilter.getLength() - 1 ) )
-                aFilterOptions = aFilter.copy( nPos+1 );
-
-            aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
-            aArgsList[2].Value <<= aFilterOptions;
-
-            aFilter = aFilter.copy( 0, nPos-1 );
-            aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
+            // Type detection needs to know which app we are opening it from.
+            aArgsList.realloc(++nSize);
+            aArgsList[nSize-1].Name = "DocumentService";
+            aArgsList[nSize-1].Value <<= m_aModuleName;
         }
-
-        aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
-        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
         xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0 );
     }
