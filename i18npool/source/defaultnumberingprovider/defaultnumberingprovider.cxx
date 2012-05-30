@@ -634,10 +634,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += OUString::valueOf( number );
                break;
           case NUMBER_NONE:
-               return OUString(RTL_CONSTASCII_USTRINGPARAM("")); // ignore prefix and suffix
+               return OUString(""); // ignore prefix and suffix
           case CHAR_SPECIAL:
                // apparently, we're supposed to return an empty string in this case...
-               return OUString(RTL_CONSTASCII_USTRINGPARAM("")); // ignore prefix and suffix
+               return OUString(""); // ignore prefix and suffix
           case PAGE_DESCRIPTOR:
           case BITMAP:
                OSL_ASSERT(0);
@@ -673,25 +673,25 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 break;
           case NUMBER_LOWER_ZH:
                 natNum = NativeNumberMode::NATNUM7;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("zh"));
+                locale.Language = OUString("zh");
                 break;
           case NUMBER_UPPER_ZH_TW:
-                locale.Country = OUString(RTL_CONSTASCII_USTRINGPARAM("TW"));
+                locale.Country = OUString("TW");
           case NUMBER_UPPER_ZH:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("zh"));
+                locale.Language = OUString("zh");
                 break;
           case NUMBER_TRADITIONAL_JA:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("ja"));
+                locale.Language = OUString("ja");
                 break;
           case NUMBER_UPPER_KO:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("ko"));
+                locale.Language = OUString("ko");
                 break;
           case NUMBER_HANGUL_KO:
                 natNum = NativeNumberMode::NATNUM11;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("ko"));
+                locale.Language = OUString("ko");
                 break;
 
           case CIRCLE_NUMBER:
@@ -955,17 +955,17 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
 //            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
         else {
             OUString result;
-            Locale aLocale(OUString(RTL_CONSTASCII_USTRINGPARAM("en")), OUString(), OUString());
+            Locale aLocale(OUString("en"), OUString(), OUString());
             Sequence<beans::PropertyValue> aProperties(2);
-            aProperties[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+            aProperties[0].Name = OUString("NumberingType");
             aProperties[0].Value <<= aSupportedTypes[index].nType;
-            aProperties[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+            aProperties[1].Name = OUString("Value");
             for (sal_Int32 j = 1; j <= 3; j++) {
                 aProperties[1].Value <<= j;
                 result += makeNumberingString( aProperties, aLocale );
-                result += OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
+                result += OUString(", ");
             }
-            result += OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+            result += OUString("...");
             return result;
         }
 }
@@ -976,7 +976,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
     if (! xHierarchicalNameAccess.is()) {
         Reference< XInterface > xInterface;
 
-        xInterface = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")));
+        xInterface = xSMgr->createInstance(OUString("com.sun.star.configuration.ConfigurationProvider"));
         Reference< XMultiServiceFactory > xConfigProvider =
                 Reference< XMultiServiceFactory >(xInterface, UNO_QUERY );
 
@@ -985,12 +985,12 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 
         Sequence< Any > aArgs(1);
         beans::PropertyValue aPath;
-        aPath.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-        aPath.Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/I18N")),
+        aPath.Name = OUString("nodepath");
+        aPath.Value <<= OUString("/org.openoffice.Office.Common/I18N"),
         aArgs[0] <<= aPath;
 
         xInterface = xConfigProvider->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), aArgs);
+            OUString("com.sun.star.configuration.ConfigurationAccess"), aArgs);
 
         xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
 
@@ -1013,8 +1013,8 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
         Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
         sal_Int16* pArray = aRet.getArray();
 
-        sal_Bool cjkEnabled = isScriptFlagEnabled(OUString(RTL_CONSTASCII_USTRINGPARAM("CJK/CJKFont")));
-        sal_Bool ctlEnabled = isScriptFlagEnabled(OUString(RTL_CONSTASCII_USTRINGPARAM("CTL/CTLFont")));
+        sal_Bool cjkEnabled = isScriptFlagEnabled(OUString("CJK/CJKFont"));
+        sal_Bool ctlEnabled = isScriptFlagEnabled(OUString("CTL/CTLFont"));
 
         for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
             if ( (aSupportedTypes[i].langOption & LANG_ALL) ||

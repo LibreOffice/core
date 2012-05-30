@@ -111,7 +111,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
 sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {
         Reference < XInterface > xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.IndexEntrySupplier_")) + name);
+            OUString("com.sun.star.i18n.IndexEntrySupplier_") + name);
 
         if ( xI.is() ) {
             xI->queryInterface( ::getCppuType((const Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
@@ -166,7 +166,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                         // load service with name <base>_<algorithm>
                 (a > 0 && createLocaleSpecificIndexEntrySupplier(aSortAlgorithm)) ||
                         // load default service with name <base>_Unicode
-                        createLocaleSpecificIndexEntrySupplier(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")))) {
+                        createLocaleSpecificIndexEntrySupplier(OUString("Unicode"))) {
                 return xIES;
             }
         }

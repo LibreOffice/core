@@ -49,9 +49,9 @@ IndexEntrySupplier_asian::IndexEntrySupplier_asian(
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_asian";
 #ifndef DISABLE_DYNLOADING
 #ifdef SAL_DLLPREFIX
-    OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"index_data" SAL_DLLEXTENSION));
+    OUString lib(SAL_DLLPREFIX"index_data" SAL_DLLEXTENSION);
 #else
-    OUString lib(RTL_CONSTASCII_USTRINGPARAM("index_data" SAL_DLLEXTENSION));
+    OUString lib("index_data" SAL_DLLEXTENSION);
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
@@ -95,9 +95,9 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     sal_uInt16** (*func)(sal_Int16*)=NULL;
 #ifndef DISABLE_DYNLOADING
     if (hModule) {
-        OUString get(RTL_CONSTASCII_USTRINGPARAM("get_indexdata_"));
+        OUString get("get_indexdata_");
         if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 )
-            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString(RTL_CONSTASCII_USTRINGPARAM("_TW_"))+rAlgorithm).pData);
+            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString("_TW_")+rAlgorithm).pData);
         if (!func)
             func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString('_')+rAlgorithm).pData);
     }
@@ -173,7 +173,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
     if (hModule) {
         const sal_Char *func_name=NULL;
         if ( rLocale.Language == "zh" )
-            func_name=(OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
+            func_name=(OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
         else if ( rLocale.Language == "ko" )
             func_name="get_ko_phonetic";
         if (func_name)
@@ -181,7 +181,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
     }
 #else
     if ( rLocale.Language == "zh" )
-        func = (OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0) ?  get_zh_zhuyin : get_zh_pinyin;
+        func = (OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  get_zh_zhuyin : get_zh_pinyin;
     else if ( rLocale.Language == "ko" )
         func = get_ko_phonetic;
 

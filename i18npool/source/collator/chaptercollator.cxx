@@ -43,7 +43,7 @@ ChapterCollator::ChapterCollator( const Reference < XMultiServiceFactory >& rxMS
 {
     if ( rxMSF.is()) {
         Reference < XInterface > xI =
-        rxMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")));
+        rxMSF->createInstance( OUString("com.sun.star.i18n.CharacterClassification"));
         if ( xI.is() )
             xI->queryInterface(::getCppuType((const Reference< XCharacterClassification>*)0)) >>= cclass;
     }
@@ -76,7 +76,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     if( ans != 0 )
         return ans;
 
-    const OUString aAddAllowed(RTL_CONSTASCII_USTRINGPARAM("?"));
+    const OUString aAddAllowed("?");
     ParseResult res1, res2;
     // since parseAnyToken does not take length as parameter, we have to copy
     // it to a temp. string.

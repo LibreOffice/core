@@ -189,11 +189,11 @@ NumberFormatCodeMapper::mapElementTypeShortToString(sal_Int16 formatType)
     switch ( formatType )
     {
         case com::sun::star::i18n::KNumberFormatType::SHORT :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "short" ) );
+            return ::rtl::OUString(  "short"  );
         case com::sun::star::i18n::KNumberFormatType::MEDIUM :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "medium" ) );
+            return ::rtl::OUString(  "medium"  );
         case com::sun::star::i18n::KNumberFormatType::LONG :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "long" ) );
+            return ::rtl::OUString(  "long"  );
     }
     return ::rtl::OUString();
 }
@@ -217,21 +217,21 @@ NumberFormatCodeMapper::mapElementUsageShortToString(sal_Int16 formatUsage)
     switch ( formatUsage )
     {
         case com::sun::star::i18n::KNumberFormatUsage::DATE :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DATE" ) );
+            return ::rtl::OUString(  "DATE"  );
         case com::sun::star::i18n::KNumberFormatUsage::TIME :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TIME" ) );
+            return ::rtl::OUString(  "TIME"  );
         case com::sun::star::i18n::KNumberFormatUsage::DATE_TIME :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DATE_TIME" ) );
+            return ::rtl::OUString(  "DATE_TIME"  );
         case com::sun::star::i18n::KNumberFormatUsage::FIXED_NUMBER :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FIXED_NUMBER" ) );
+            return ::rtl::OUString(  "FIXED_NUMBER"  );
         case com::sun::star::i18n::KNumberFormatUsage::FRACTION_NUMBER :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FRACTION_NUMBER" ) );
+            return ::rtl::OUString(  "FRACTION_NUMBER"  );
         case com::sun::star::i18n::KNumberFormatUsage::PERCENT_NUMBER :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PERCENT_NUMBER" ) );
+            return ::rtl::OUString(  "PERCENT_NUMBER"  );
         case com::sun::star::i18n::KNumberFormatUsage::CURRENCY :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CURRENCY" ) );
+            return ::rtl::OUString(  "CURRENCY"  );
         case com::sun::star::i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER :
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SCIENTIFIC_NUMBER" ) );
+            return ::rtl::OUString(  "SCIENTIFIC_NUMBER"  );
     }
     return ::rtl::OUString();
 }
@@ -269,7 +269,7 @@ NumberFormatCodeMapper::createLocaleDataObject() {
 
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >
         xI = xMSF->createInstance(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.LocaleData" ) ));
+        ::rtl::OUString(  "com.sun.star.i18n.LocaleData"  ));
 
     if ( xI.is() ) {
         ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData >*)0) );
@@ -281,7 +281,7 @@ NumberFormatCodeMapper::createLocaleDataObject() {
 NumberFormatCodeMapper::getImplementationName(void)
                 throw( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.NumberFormatCodeMapper"));
+    return ::rtl::OUString("com.sun.star.i18n.NumberFormatCodeMapper");
 }
 
 const sal_Char cNumFormat[] = "com.sun.star.i18n.NumberFormatMapper";

@@ -711,13 +711,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             OUString aKey( aUsage + OUString( sal_Unicode(',')) + aType);
             if (!aDefaultsSet.insert( aKey).second)
             {
-                OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "Duplicated default for usage=\""));
+                OUString aStr(  "Duplicated default for usage=\"");
                 aStr += aUsage;
-                aStr += OUString( RTL_CONSTASCII_USTRINGPARAM( "\" type=\""));
+                aStr += OUString(  "\" type=\"");
                 aStr += aType;
-                aStr += OUString( RTL_CONSTASCII_USTRINGPARAM( "\": formatindex=\""));
+                aStr += OUString(  "\": formatindex=\"");
                 aStr += aFormatIndex;
-                aStr += OUString( RTL_CONSTASCII_USTRINGPARAM( "\"."));
+                aStr += OUString(  "\".");
                 incError( aStr);
             }
         }
@@ -786,10 +786,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (strcmp( of.getLocale(), "en_US") != 0)
                     {
                         OUString aCode( n->getValue());
-                        OUString aPar1( RTL_CONSTASCII_USTRINGPARAM( "0)" ));
-                        OUString aPar2( RTL_CONSTASCII_USTRINGPARAM( "-)" ));
-                        OUString aPar3( RTL_CONSTASCII_USTRINGPARAM( " )" ));
-                        OUString aPar4( RTL_CONSTASCII_USTRINGPARAM( "])" ));
+                        OUString aPar1( "0)");
+                        OUString aPar2( "-)" );
+                        OUString aPar3( " )" );
+                        OUString aPar4( "])" );
                         if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 ||
                                 aCode.indexOf( aPar3 ) > 0 || aCode.indexOf( aPar4 ) > 0)
                             fprintf( stderr, "Warning: FormatCode formatindex=\"%d\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\n", formatindex);
@@ -1586,7 +1586,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && daysNode == NULL) {
-            of.writeParameter("dayRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("dayRef", OUString("ref"), i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
@@ -1618,7 +1618,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && monthsNode == NULL) {
-            of.writeParameter("monthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("monthRef", OUString("ref"), i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
@@ -1653,7 +1653,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && genitiveMonthsNode == NULL) {
-            of.writeParameter("genitiveMonthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("genitiveMonthRef", OUString("ref"), i);
             of.writeParameter("genitiveMonthRefName", ref_name, i);
             nbOfGenitiveMonths[i] = 0;
         } else {
@@ -1689,7 +1689,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && partitiveMonthsNode == NULL) {
-            of.writeParameter("partitiveMonthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("partitiveMonthRef", OUString("ref"), i);
             of.writeParameter("partitiveMonthRefName", ref_name, i);
             nbOfPartitiveMonths[i] = 0;
         } else {
@@ -1721,7 +1721,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && erasNode == NULL) {
-            of.writeParameter("eraRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("eraRef", OUString("ref"), i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {

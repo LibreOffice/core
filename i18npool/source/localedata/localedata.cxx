@@ -581,7 +581,7 @@ Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& nam
         // Referred locale not found, return name for en_US locale.
         if (index == cals.getLength()) {
             cals = getAllCalendars2(
-                    Locale(OUString(RTL_CONSTASCII_USTRINGPARAM("en")), OUString(RTL_CONSTASCII_USTRINGPARAM("US")), OUString()));
+                    Locale(OUString("en"), OUString("US"), OUString()));
             if (cals.getLength() > 0)
                 ref_cal = cals[0];
             else
@@ -1053,7 +1053,7 @@ OUString SAL_CALL
 LocaleData::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
-    return indexArray ? OUString(RTL_CONSTASCII_USTRINGPARAM("0-9"))+OUString(indexArray[2]) : OUString();
+    return indexArray ? OUString("0-9")+OUString(indexArray[2]) : OUString();
 }
 
 OUString SAL_CALL
@@ -1621,7 +1621,7 @@ sal_Bool OutlineNumbering::hasElements(  ) throw(RuntimeException)
 OUString SAL_CALL
 LocaleData::getImplementationName() throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(clocaledata));
+    return OUString(clocaledata);
 }
 
 sal_Bool SAL_CALL
@@ -1635,7 +1635,7 @@ Sequence< OUString > SAL_CALL
 LocaleData::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(clocaledata));
+    aRet[0] = OUString(clocaledata);
     return aRet;
 }
 

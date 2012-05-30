@@ -138,9 +138,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
-                    if (OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0)
+                    if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule,
-                                    (func_base + OUString(RTL_CONSTASCII_USTRINGPARAM("TW_")) + rAlgorithm).pData);
+                                    (func_base + OUString("TW_") + rAlgorithm).pData);
                     if (!func)
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, (func_base + rAlgorithm).pData);
                 } else {

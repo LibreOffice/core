@@ -555,7 +555,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
         }
 
         Reference < uno::XInterface > xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator_")) + aLocaleName);
+            OUString("com.sun.star.i18n.BreakIterator_") + aLocaleName);
 
         if ( xI.is() ) {
             xI->queryInterface( getCppuType((const Reference< XBreakIterator>*)0) ) >>= xBI;
@@ -606,7 +606,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                     // load service with name <base>_<lang>
                     createLocaleSpecificBreakIterator(rLocale.Language)) ||
                     // load default service with name <base>_Unicode
-                    createLocaleSpecificBreakIterator(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")))) {
+                    createLocaleSpecificBreakIterator(OUString("Unicode"))) {
                 lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
                 return xBI;
             }

@@ -112,8 +112,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.Transliteration")));
+                    OUString(
+                        "com.sun.star.i18n.Transliteration"));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -134,8 +134,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit2.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.Transliteration")));
+                    OUString(
+                        "com.sun.star.i18n.Transliteration"));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -151,7 +151,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     if ( !xBreak.is() )
     {
         Reference < XInterface > xI = xMSF->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
+                OUString("com.sun.star.i18n.BreakIterator"));
         if( xI.is() )
             xI->queryInterface( ::getCppuType(
                         (const Reference< XBreakIterator >*)0))
@@ -411,7 +411,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
         if ( !xCharClass.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")));
+                    OUString("com.sun.star.i18n.CharacterClassification"));
             if( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XCharacterClassification >*)0))

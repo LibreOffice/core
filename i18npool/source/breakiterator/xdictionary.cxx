@@ -97,15 +97,15 @@ xdictionary::xdictionary(const sal_Char *lang) :
         hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
         if( hModule ) {
             sal_IntPtr (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getExistMark")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getExistMark").pData );
             existMark = (sal_uInt8*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getIndex1")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex1").pData );
             index1 = (sal_Int16*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getIndex2")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex2").pData );
             index2 = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getLenArray")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getLenArray").pData );
             lenArray = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getDataArea")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getDataArea").pData );
             dataArea = (sal_Unicode*) (*func)();
         }
         else

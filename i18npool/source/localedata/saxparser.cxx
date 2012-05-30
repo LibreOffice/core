@@ -163,7 +163,7 @@ public: // Error handler
         ++nError;
         printf( "Error !\n" );
         throw  SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("error from error handler")) ,
+            OUString( "error from error handler") ,
             Reference < XInterface >() ,
             aSAXParseException );
     }
@@ -332,7 +332,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        OUString("com.sun.star.xml.sax.Parser") );
     int nError = 0;
     if( x.is() )
     {
