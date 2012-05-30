@@ -41,6 +41,70 @@ public class DocumentLoader
 
     private static String TAG = "DocumentLoader";
 
+    class MyXController
+        implements com.sun.star.frame.XController {
+
+        com.sun.star.frame.XModel model;
+        com.sun.star.frame.XFrame frame;
+
+        public void attachFrame(com.sun.star.frame.XFrame frame)
+        {
+            Log.i(TAG, "attachFrame");
+            this.frame = frame;
+        }
+
+        public boolean attachModel(com.sun.star.frame.XModel model)
+        {
+            Log.i(TAG, "attachModel");
+            this.model = model;
+            return true;
+        }
+
+        public boolean suspend(boolean doSuspend)
+        {
+            Log.i(TAG, "suspend");
+            return false;
+        }
+
+        public Object getViewData()
+        {
+            Log.i(TAG, "getViewData");
+            return null;
+        }
+
+        public void restoreViewData(Object data)
+        {
+            Log.i(TAG, "restoreViewData");
+        }
+
+        public com.sun.star.frame.XModel getModel()
+        {
+            Log.i(TAG, "getModel");
+            return model;
+        }
+
+        public com.sun.star.frame.XFrame getFrame()
+        {
+            Log.i(TAG, "getFrame");
+            return frame;
+        }
+
+        public void dispose()
+        {
+            Log.i(TAG, "dispose");
+        }
+
+        public void addEventListener(com.sun.star.lang.XEventListener listener)
+        {
+            Log.i(TAG, "addEventListener");
+        }
+
+        public void removeEventListener(com.sun.star.lang.XEventListener listener)
+        {
+            Log.i(TAG, "removeEventListener");
+        }
+    }
+
     static void dump(String objectName, Object object)
     {
         Log.i(TAG, objectName + " is " + (object != null ? object.toString() : "null"));
@@ -170,6 +234,13 @@ public class DocumentLoader
 
                 dump("toolkit", toolkit);
 
+                com.sun.star.awt.XToolkit xToolkit = (com.sun.star.awt.XToolkit)
+                    UnoRuntime.queryInterface(com.sun.star.awt.XToolkit.class, toolkit);
+
+                com.sun.star.awt.XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
+
+                dump("device", device);
+
                 // I guess the XRenderable thing might be what we want to use,
                 // having the code pretend it is printing?
 
@@ -177,13 +248,16 @@ public class DocumentLoader
                     UnoRuntime.queryInterface(com.sun.star.view.XRenderable.class, oDoc);
 
                 com.sun.star.beans.PropertyValue renderProps[] =
-                    new com.sun.star.beans.PropertyValue[1];
+                    new com.sun.star.beans.PropertyValue[3];
                 renderProps[0] = new com.sun.star.beans.PropertyValue();
                 renderProps[0].Name = "IsPrinter";
                 renderProps[0].Value = new Boolean(true);
-//                renderProps[1] = new com.sun.star.beans.PropertyValue();
-//                renderProps[1].Name = "View";
-//                renderProps[1].Value = no idea where to get an XController...
+                renderProps[1] = new com.sun.star.beans.PropertyValue();
+                renderProps[1].Name = "RenderDevice";
+                renderProps[1].Value = device;
+                renderProps[2] = new com.sun.star.beans.PropertyValue();
+                renderProps[2].Name = "View";
+                renderProps[2].Value = new MyXController();
 
                 Log.i(TAG, "getRendererCount: " + renderBabe.getRendererCount(oDoc, renderProps));
 
