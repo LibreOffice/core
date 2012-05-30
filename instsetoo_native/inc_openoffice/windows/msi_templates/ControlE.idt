@@ -42,11 +42,6 @@ CustomSetup	Next	DoAction	SetApplicationSelected	Not Installed And (APPLICATIONC
 CustomSetup	Next	DoAction	SetApplicationSelected	Installed	5
 CustomSetup	Next	SpawnDialog	ApplicationInfo1	APP_SELECTED <> 1	6
 CustomSetupTips	OK	EndDialog	Return	1	1
-DestinationFolder	Back	NewDialog	CustomerInformation	1	0
-DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
-DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
-DestinationFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
-DestinationFolder	Next	NewDialog	SetupType	1	0
 DiskSpaceRequirements	OK	EndDialog	Return	1	0
 FilesInUse	Exit	EndDialog	Exit	1	0
 FilesInUse	Ignore	EndDialog	Ignore	1	0
