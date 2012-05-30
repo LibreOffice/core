@@ -189,7 +189,7 @@ String RID_UPDATE_BUBBLE_T_UPDATE_AVAIL
 
 String RID_UPDATE_BUBBLE_UPDATE_AVAIL
 {
-    Text [ en-US ] = "Click here to start the download.";
+    Text [ en-US ] = "Click the icon to start the download.";
 };
 
 String RID_UPDATE_BUBBLE_T_UPDATE_NO_DOWN
@@ -199,7 +199,7 @@ String RID_UPDATE_BUBBLE_T_UPDATE_NO_DOWN
 
 String RID_UPDATE_BUBBLE_UPDATE_NO_DOWN
 {
-    Text [ en-US ] = "Click here for more information.";
+    Text [ en-US ] = "Click the icon for more information.";
 };
 
 String RID_UPDATE_BUBBLE_T_AUTO_START
@@ -229,7 +229,7 @@ String RID_UPDATE_BUBBLE_T_DOWNLOAD_PAUSED
 
 String RID_UPDATE_BUBBLE_DOWNLOAD_PAUSED
 {
-    Text [ en-US ] = "Click here to resume.";
+    Text [ en-US ] = "Click the icon to resume.";
 };
 
 String RID_UPDATE_BUBBLE_T_ERROR_DOWNLOADING
@@ -239,7 +239,7 @@ String RID_UPDATE_BUBBLE_T_ERROR_DOWNLOADING
 
 String RID_UPDATE_BUBBLE_ERROR_DOWNLOADING
 {
-    Text [ en-US ] = "Click here for more information.";
+    Text [ en-US ] = "Click the icon for more information.";
 };
 
 String RID_UPDATE_BUBBLE_T_DOWNLOAD_AVAIL
@@ -249,7 +249,7 @@ String RID_UPDATE_BUBBLE_T_DOWNLOAD_AVAIL
 
 String RID_UPDATE_BUBBLE_DOWNLOAD_AVAIL
 {
-    Text [ en-US ] = "Click here to start the installation.";
+    Text [ en-US ] = "Click the icon to start the installation.";
 };
 
 String RID_UPDATE_BUBBLE_T_EXT_UPD_AVAIL
@@ -259,6 +259,6 @@ String RID_UPDATE_BUBBLE_T_EXT_UPD_AVAIL
 
 String RID_UPDATE_BUBBLE_EXT_UPD_AVAIL
 {
-    Text [ en-US ] = "Click here for more information.";
+    Text [ en-US ] = "Click the icon for more information.";
 };
 
