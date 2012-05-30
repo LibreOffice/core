@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,dbase))
 
-$(eval $(call gb_Library_use_packages,calc,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_set_componentfile,dbase,connectivity/source/drivers/dbase/dbase))
 
 $(eval $(call gb_Library_use_api,dbase,\

@@ -29,10 +29,6 @@ $(eval $(call gb_Library_Library,odbcbase))
 
 $(eval $(call gb_Library_set_warnings_not_errors,odbcbase))
 
-$(eval $(call gb_Library_use_packages,calc,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_use_api,odbcbase,\
 	offapi \
 	udkapi \

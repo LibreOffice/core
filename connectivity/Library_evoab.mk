@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,evoab))
 
-$(eval $(call gb_Library_use_packages,calc,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_set_include,evoab,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \

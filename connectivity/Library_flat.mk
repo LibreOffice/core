@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,flat))
 
-$(eval $(call gb_Library_use_packages,calc,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_set_componentfile,flat,connectivity/source/drivers/flat/flat))
 
 $(eval $(call gb_Library_use_api,flat,\

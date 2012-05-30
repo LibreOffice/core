@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,jdbc))
 
-$(eval $(call gb_Library_use_packages,calc,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_set_componentfile,jdbc,connectivity/source/drivers/jdbc/jdbc))
 
 $(eval $(call gb_Library_use_api,jdbc,\
