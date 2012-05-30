@@ -196,7 +196,7 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString("MaxRowCount")
-                ,::rtl::OUString("Records (max."))
+                ,::rtl::OUString("Records (max.)")
                 ,sal_False
                 ,::rtl::OUString("100")
                 ,Sequence< ::rtl::OUString >())
