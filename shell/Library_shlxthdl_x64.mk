@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_ldflags,shlxthdl_x64,\
 	/EXPORT:DllGetClassObject \
 	/EXPORT:DllRegisterServer \
 	/EXPORT:DllUnregisterServer \
+	/NODEFAULTLIB:libcmt.lib \
 ))
 
 $(eval $(call gb_Library_add_x64_generated_exception_objects,shlxthdl_x64,\
