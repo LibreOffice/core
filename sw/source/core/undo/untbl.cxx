@@ -47,7 +47,7 @@
 #include <pam.hxx>
 #include <cntfrm.hxx>
 #include <tblsel.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <tabcol.hxx>
@@ -228,8 +228,6 @@ sal_uInt16 aSave_BoxCntntSet[] = {
     RES_PARATR_ADJUST, RES_PARATR_ADJUST,
     0 };
 
-
-
 SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTblOpts,
                             const SwTableAutoFmt* pTAFmt,
@@ -246,7 +244,7 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 n
     if( pTAFmt )
         pAutoFmt = new SwTableAutoFmt( *pTAFmt );
 
-    // Redline beachten
+    // consider redline
     SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
     if( rDoc.IsRedlineOn() )
     {
@@ -256,7 +254,6 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 n
 
     sTblNm = rName;
 }
-
 
 SwUndoInsTbl::~SwUndoInsTbl()
 {
@@ -272,14 +269,14 @@ void SwUndoInsTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode );
 
     SwTableNode* pTblNd = aIdx.GetNode().GetTableNode();
-    OSL_ENSURE( pTblNd, "kein TabellenNode" );
+    OSL_ENSURE( pTblNd, "no TableNode" );
     pTblNd->DelFrms();
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         rDoc.DeleteRedline( *pTblNd, true, USHRT_MAX );
     RemoveIdxFromSection( rDoc, nSttNode );
 
-    // harte SeitenUmbrueche am nachfolgenden Node verschieben
+    // move hard page breaks into next node
     SwCntntNode* pNextNd = rDoc.GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]->GetCntntNode();
     if( pNextNd )
     {
@@ -310,7 +307,6 @@ void SwUndoInsTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
 }
 
-
 void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
@@ -327,7 +323,7 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
         SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNode->GetTable(), pNewType );
-        pTblNode->SetNewTable( pDDETbl );       // setze die DDE-Tabelle
+        pTblNode->SetNewTable( pDDETbl );
         delete pDDEFldType, pDDEFldType = 0;
     }
 
@@ -353,7 +349,6 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-
 void SwUndoInsTbl::RepeatImpl(::sw::RepeatContext & rContext)
 {
     rContext.GetDoc().InsertTable(
@@ -377,7 +372,7 @@ SwRewriter SwUndoInsTbl::GetRewriter() const
 SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, xub_StrLen nCnt )
     : m_nSttNd( nNd ), m_nEndNd( nEndIdx), m_nCntnt( nCnt ), m_pHstry( 0 )
 {
-    // Attributierung des gejointen Node merken.
+    // keep attributes of the joined node
     SwTxtNode* pNd = rDoc.GetNodes()[ nNd ]->GetTxtNode();
     if( pNd )
     {
@@ -452,7 +447,6 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
         delete pHistory, pHistory = 0;
 }
 
-
 SwUndoTblToTxt::~SwUndoTblToTxt()
 {
     delete pDDEFldType;
@@ -460,8 +454,6 @@ SwUndoTblToTxt::~SwUndoTblToTxt()
     delete pBoxSaves;
     delete pHistory;
 }
-
-
 
 void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -477,17 +469,17 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     rDoc.DelNumRules( *pPam );
     pPam->DeleteMark();
 
-    // dann sammel mal alle Uppers ein
+    // now collect all Uppers
     SwNode2Layout aNode2Layout( aFrmIdx.GetNode() );
 
-    // erzeuge die TabelleNode Structur
+    // create TableNode structure
     SwTableNode* pTblNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *pBoxSaves );
     pTblNd->GetTable().SetTableModel( pTblSave->IsNewModel() );
     SwTableFmt* pTableFmt = rDoc.MakeTblFrmFmt( sTblNm, rDoc.GetDfltFrmFmt() );
     pTblNd->GetTable().RegisterToFormat( *pTableFmt );
     pTblNd->GetTable().SetRowsToRepeat( nHdlnRpt );
 
-    // erzeuge die alte Tabellen Struktur
+    // create old table structure
     pTblSave->CreateNew( pTblNd->GetTable() );
 
     if( pDDEFldType )
@@ -495,7 +487,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
         SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNd->GetTable(), pNewType );
-        pTblNd->SetNewTable( pDDETbl, sal_False );      // setze die DDE-Tabelle
+        pTblNd->SetNewTable( pDDETbl, sal_False );
         delete pDDEFldType, pDDEFldType = 0;
     }
 
@@ -516,7 +508,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(),
                                    pTblNd->GetIndex(), pTblNd->GetIndex()+1 );
 
-    // will man eine TabellenSelektion ??
+    // Is a table selection requested?
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pPam->SetMark();
@@ -528,7 +520,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     ClearFEShellTabCols();
 }
 
-    // steht im untbl.cxx und darf nur vom Undoobject gerufen werden
+// located in untbl.cxx and only an Undo object is allowed to call it
 SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
                                 const SwTblToTxtSaves& rSavedData )
 {
@@ -553,9 +545,8 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         }
     }
 
-    // dann die Tabellen Struktur teilweise aufbauen. Erstmal eine Line
-    // in der alle Boxen stehen! Die korrekte Struktur kommt dann aus der
-    // SaveStruct
+    // than create table structure partially. First a single line that contains
+    // all boxes. The correct structure is than taken from SaveStruct.
     SwTableBoxFmt* pBoxFmt = GetDoc()->MakeTableBoxFmt();
     SwTableLineFmt* pLineFmt = GetDoc()->MakeTableLineFmt();
     SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.size(), 0 );
@@ -572,9 +563,8 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
 
         if( USHRT_MAX != pSave->m_nCntnt )
         {
-            // an der ContentPosition splitten, das vorherige Zeichen
-            // loeschen (ist der Trenner!)
-            OSL_ENSURE( pTxtNd, "Wo ist der TextNode geblieben?" );
+            // split at ContentPosition, delete previous char (= seperator)
+            OSL_ENSURE( pTxtNd, "Where is my TextNode?" );
             SwIndex aCntPos( pTxtNd, pSave->m_nCntnt - 1 );
 
             pTxtNd->EraseText( aCntPos, 1 );
@@ -641,7 +631,6 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     return pTblNd;
 }
 
-
 void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
@@ -651,11 +640,11 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     pPam->GetPoint()->nContent.Assign( 0, 0 );
     SwNodeIndex aSaveIdx( pPam->GetPoint()->nNode, -1 );
 
-    pPam->SetMark();            // alle Indizies abmelden
+    pPam->SetMark();            // log off all indices
     pPam->DeleteMark();
 
     SwTableNode* pTblNd = pPam->GetNode()->GetTableNode();
-    OSL_ENSURE( pTblNd, "keinen TableNode gefunden" );
+    OSL_ENSURE( pTblNd, "Could not find any TableNode" );
 
     if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)pTblNd->GetTable()).
@@ -668,16 +657,15 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     if( !pCNd && 0 == ( pCNd = rDoc.GetNodes().GoNext( &aSaveIdx ) ) &&
         0 == ( pCNd = rDoc.GetNodes().GoPrevious( &aSaveIdx )) )
     {
-        OSL_FAIL( "wo steht denn nun der TextNode" );
+        OSL_FAIL( "Where is the TextNode now?" );
     }
 
     pPam->GetPoint()->nNode = aSaveIdx;
     pPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
-    pPam->SetMark();            // alle Indizies abmelden
+    pPam->SetMark();            // log off all indices
     pPam->DeleteMark();
 }
-
 
 void SwUndoTblToTxt::RepeatImpl(::sw::RepeatContext & rContext)
 {
@@ -739,10 +727,10 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     sal_uLong nTblNd = nSttNode;
     if( nSttCntnt )
-        ++nTblNd;       // Node wurde vorher gesplittet
+        ++nTblNd;       // Node was splitted previously
     SwNodeIndex aIdx( rDoc.GetNodes(), nTblNd );
     SwTableNode *const pTNd = aIdx.GetNode().GetTableNode();
-    OSL_ENSURE( pTNd, "keinen Tabellen-Node gefunden" );
+    OSL_ENSURE( pTNd, "Could not find a TableNode" );
 
     RemoveIdxFromSection( rDoc, nTblNd );
 
@@ -763,7 +751,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pBox )
                 ::_DeleteBox( rTbl, pBox, 0, sal_False, sal_False );
             else {
-                OSL_ENSURE( !this, "Wo ist die Box geblieben?" );
+                OSL_ENSURE( !this, "Where is my box?" );
             }
         }
     }
@@ -782,7 +770,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeIndex & rIdx = aPam.GetPoint()->nNode;
 
-            // dann die Crsr/etc. nochmal relativ verschieben
+            // than move, relatively, the Crsr/etc. again
             RemoveIdxRel( rIdx.GetIndex()+1, *pPos );
 
             rIdx.GetNode().GetCntntNode()->JoinNext();
@@ -800,7 +788,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             aPam.GetMark()->nContent.Assign( 0, 0 );
             aPam.GetPoint()->nContent.Assign( 0, 0 );
 
-            // dann die Crsr/etc. nochmal relativ verschieben
+            // than move, relatively, the Crsr/etc. again
             pPos->nContent.Assign( pTxtNd, pTxtNd->GetTxt().Len() );
             RemoveIdxRel( nEndNode + 1, *pPos );
 
@@ -810,7 +798,6 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     AddUndoRedoPaM(rContext);
 }
-
 
 void SwUndoTxtToTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -822,7 +809,6 @@ void SwUndoTxtToTbl::RedoImpl(::sw::UndoRedoContext & rContext)
                 aInsTblOpts, rPam, cTrenner, nAdjust, pAutoFmt );
     ((SwFrmFmt*)pTable->GetFrmFmt())->SetName( sTblNm );
 }
-
 
 void SwUndoTxtToTbl::RepeatImpl(::sw::RepeatContext & rContext)
 {
@@ -857,9 +843,9 @@ SwUndoTblHeadline::SwUndoTblHeadline( const SwTable& rTbl, sal_uInt16 nOldHdl,
     nOldHeadline( nOldHdl ),
     nNewHeadline( nNewHdl )
 {
-    OSL_ENSURE( rTbl.GetTabSortBoxes().Count(), "Tabelle ohne Inhalt" );
+    OSL_ENSURE( rTbl.GetTabSortBoxes().Count(), "Table without content" );
     const SwStartNode *pSttNd = rTbl.GetTabSortBoxes()[ 0 ]->GetSttNd();
-    OSL_ENSURE( pSttNd, "Box ohne Inhalt" );
+    OSL_ENSURE( pSttNd, "Box without content" );
 
     nTblNd = pSttNd->StartOfSectionIndex();
 }
@@ -868,7 +854,7 @@ void SwUndoTblHeadline::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwTableNode* pTNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
-    OSL_ENSURE( pTNd, "keinen Tabellen-Node gefunden" );
+    OSL_ENSURE( pTNd, "could not find any TableNode" );
 
     rDoc.SetRowsToRepeat( pTNd->GetTable(), nOldHeadline );
 }
@@ -878,7 +864,7 @@ void SwUndoTblHeadline::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     SwTableNode* pTNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
-    OSL_ENSURE( pTNd, "keinen Tabellen-Node gefunden" );
+    OSL_ENSURE( pTNd, "could not find any TableNode" );
 
     rDoc.SetRowsToRepeat( pTNd->GetTable(), nNewHeadline );
 }
@@ -893,9 +879,7 @@ void SwUndoTblHeadline::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-
 //////////////////////////////////////////////////////////////////////////
-
 
 _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, sal_Bool bSaveFml )
     : aTblSet( *rTbl.GetFrmFmt()->GetAttrSet().GetPool(), aTableSetRange ),
@@ -916,26 +900,23 @@ _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, sal_Bool bSaveFm
     pSwTable = 0;
 }
 
-
 _SaveTable::~_SaveTable()
 {
     delete pLine;
 }
-
 
 sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
 {
     sal_uInt16 nRet = aFrmFmts.GetPos( pFmt );
     if( USHRT_MAX == nRet )
     {
-        // Kopie vom ItemSet anlegen
+        // Create copy of ItemSet
         SfxItemSet* pSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
             bIsLine ? aTableLineSetRange : aTableBoxSetRange );
         pSet->Put( pFmt->GetAttrSet() );
-        //JP 20.04.98: Bug 49502 - wenn eine Formel gesetzt ist, nie den
-        //              Value mit sichern. Der muss gegebenfalls neu
-        //              errechnet werden!
-        //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
+        // When a formula is set, never save the value. It possibly must be
+        // recalculated.
+        // Save formulas always in plain text.
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pSet->GetItemState( RES_BOXATR_FORMULA, sal_True, &pItem ))
         {
@@ -956,14 +937,13 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
     return nRet;
 }
 
-
 void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
 {
     sal_uInt16 n;
 
     bModifyBox = bMdfyBox;
 
-    // zuerst die Attribute des TabellenFrmFormates zurueck holen
+    // first, get back attributes of TableFrmFormat
     SwFrmFmt* pFmt = rTbl.GetFrmFmt();
     SfxItemSet& rFmtSet  = (SfxItemSet&)pFmt->GetAttrSet();
     rFmtSet.ClearItem();
@@ -975,7 +955,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
         pFmt->SetInCache( sal_False );
     }
 
-    // zur Sicherheit alle Tableframes invalidieren
+    // for safety, invalidate all TableFrames
     SwIterator<SwTabFrm,SwFmt> aIter( *pFmt );
     for( SwTabFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         if( pLast->GetTable() == &rTbl )
@@ -984,7 +964,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
             pLast->SetCompletePaint();
         }
 
-    // FrmFmts mit Defaults (0) fuellen
+    // fill FrmFmts with defaults (0)
     pFmt = 0;
     for( n = aSets.size(); n; --n )
         aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
@@ -998,7 +978,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
     {
         if( !pLn )
         {
-            OSL_ENSURE( !this, "Anzahl der Lines hat sich veraendert" );
+            OSL_ENSURE( !this, "Number of lines changed" );
             break;
         }
 
@@ -1009,12 +989,10 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
     bModifyBox = sal_False;
 }
 
-
 void _SaveTable::SaveCntntAttrs( SwDoc* pDoc )
 {
     pLine->SaveCntntAttrs( pDoc );
 }
-
 
 void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
                             sal_Bool bRestoreChart )
@@ -1022,11 +1000,9 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     sal_uInt16 n;
 
     _FndBox aTmpBox( 0, 0 );
-    //if( bRestoreChart )
-    //    // ? TL_CHART2: notification or locking of controller required ?
     aTmpBox.DelFrms( rTbl );
 
-    // zuerst die Attribute des TabellenFrmFormates zurueck holen
+    // first, get back attributes of TableFrmFormat
     SwFrmFmt* pFmt = rTbl.GetFrmFmt();
     SfxItemSet& rFmtSet  = (SfxItemSet&)pFmt->GetAttrSet();
     rFmtSet.ClearItem();
@@ -1038,10 +1014,10 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
         pFmt->SetInCache( sal_False );
     }
 
-    // SwTableBox muss ein Format haben!!
+    // SwTableBox must have a format
     SwTableBox aParent( (SwTableBoxFmt*)pFmt, rTbl.GetTabLines().Count(), 0 );
 
-    // FrmFmts mit Defaults (0) fuellen
+    // fill FrmFmts with defaults (0)
     pFmt = 0;
     for( n = aSets.size(); n; --n )
         aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
@@ -1049,7 +1025,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     pLine->CreateNew( rTbl, aParent, *this );
     aFrmFmts.Remove( 0, aFrmFmts.Count() );
 
-    // die neuen Lines eintragen, die alten loeschen
+    // add new lines, delete old ones
     sal_uInt16 nOldLines = nLineCount;
     if( USHRT_MAX == nLineCount )
         nOldLines = rTbl.GetTabLines().Count();
@@ -1112,7 +1088,6 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     }
 }
 
-
 void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
                             sal_uInt16 nFmtPos, SwFrmFmt* pOldFmt )
 {
@@ -1129,7 +1104,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
         aFrmFmts.Replace( pFmt, nFmtPos );
     }
 
-    //Erstmal die Frms ummelden.
+    // first re-assign Frms
     SwIterator<SwTabFrm,SwFmt> aIter( *pOldFmt );
     for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
@@ -1147,7 +1122,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
         }
     }
 
-    //Jetzt noch mich selbst ummelden.
+    // than re-assign myself
     if ( pTblLn )
         const_cast<SwTableLine*>(pTblLn)->RegisterToFormat( *pFmt );
     else if ( pTblBx )
@@ -1163,9 +1138,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
 
     if( !pOldFmt->GetDepends() )
         delete pOldFmt;
-
 }
-
 
 _SaveLine::_SaveLine( _SaveLine* pPrev, const SwTableLine& rLine, _SaveTable& rSTbl )
     : pNext( 0 )
@@ -1181,13 +1154,11 @@ _SaveLine::_SaveLine( _SaveLine* pPrev, const SwTableLine& rLine, _SaveTable& rS
         pBx = new _SaveBox( pBx, *rLine.GetTabBoxes()[ n ], rSTbl );
 }
 
-
 _SaveLine::~_SaveLine()
 {
     delete pBox;
     delete pNext;
 }
-
 
 void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
 {
@@ -1198,13 +1169,12 @@ void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
     {
         if( !pBx )
         {
-            OSL_ENSURE( !this, "Anzahl der Boxen hat sich veraendert" );
+            OSL_ENSURE( !this, "Number of boxes changed" );
             break;
         }
         pBx->RestoreAttr( *rLine.GetTabBoxes()[ n ], rSTbl );
     }
 }
-
 
 void _SaveLine::SaveCntntAttrs( SwDoc* pDoc )
 {
@@ -1212,7 +1182,6 @@ void _SaveLine::SaveCntntAttrs( SwDoc* pDoc )
     if( pNext )
         pNext->SaveCntntAttrs( pDoc );
 }
-
 
 void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl )
 {
@@ -1242,7 +1211,6 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
         pNext->CreateNew( rTbl, rParent, rSTbl );
 }
 
-
 _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
     : pNext( 0 ), nSttNode( ULONG_MAX ), nRowSpan(0)
 {
@@ -1268,26 +1236,24 @@ _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
     }
 }
 
-
 _SaveBox::~_SaveBox()
 {
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )     // no EndBox
         delete Ptrs.pLine;
     else
         delete Ptrs.pCntntAttrs;
     delete pNext;
 }
 
-
 void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
 {
     rSTbl.NewFrmFmt( 0, &rBox, nItemSet, rBox.GetFrmFmt() );
 
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )     // no EndBox
     {
         if( !rBox.GetTabLines().Count() )
         {
-            OSL_ENSURE( !this, "Anzahl der Lines hat sich veraendert" );
+            OSL_ENSURE( !this, "Number of lines changed" );
         }
         else
         {
@@ -1296,7 +1262,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
             {
                 if( !pLn )
                 {
-                    OSL_ENSURE( !this, "Anzahl der Lines hat sich veraendert" );
+                    OSL_ENSURE( !this, "Number of lines changed" );
                     break;
                 }
 
@@ -1335,16 +1301,15 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
     }
     else
     {
-        OSL_ENSURE( !this, "Box nicht mehr am gleichen Node" );
+        OSL_ENSURE( !this, "Box not anymore at the same node" );
     }
 }
 
-
 void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
 {
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )     // no EndBox
     {
-        // weiter in der Line
+        // continue in current line
         Ptrs.pLine->SaveCntntAttrs( pDoc );
     }
     else
@@ -1372,7 +1337,6 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
         pNext->SaveCntntAttrs( pDoc );
 }
 
-
 void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl )
 {
     SwTableBoxFmt* pFmt = (SwTableBoxFmt*)rSTbl.aFrmFmts[ nItemSet ];
@@ -1384,7 +1348,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
 
-    if( ULONG_MAX == nSttNode )     // keine EndBox
+    if( ULONG_MAX == nSttNode )     // no EndBox
     {
         SwTableBox* pNew = new SwTableBox( pFmt, 1, &rParent );
         rParent.GetTabBoxes().push_back( pNew );
@@ -1393,9 +1357,9 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
     }
     else
     {
-        // Box zum StartNode in der alten Tabelle suchen
+        // search box for StartNode in old table
         SwTableBox* pBox = rTbl.GetTblBox( nSttNode );
-        OSL_ENSURE( pBox, "Wo ist meine TabellenBox geblieben?" );
+        OSL_ENSURE( pBox, "Where is my TableBox?" );
 
         SwFrmFmt* pOld = pBox->GetFrmFmt();
         pBox->RegisterToFormat( *pFmt );
@@ -1416,11 +1380,9 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         pNext->CreateNew( rTbl, rParent, rSTbl );
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
-// UndoObject fuer Attribut Aenderung an der Tabelle
-
+// UndoObject for attribute changes on table
 
 SwUndoAttrTbl::SwUndoAttrTbl( const SwTableNode& rTblNd, sal_Bool bClearTabCols )
     : SwUndo( UNDO_TABLE_ATTR ),
@@ -1439,7 +1401,7 @@ void SwUndoAttrTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwTableNode* pTblNd = rDoc.GetNodes()[ nSttNode ]->GetTableNode();
-    OSL_ENSURE( pTblNd, "kein TabellenNode" );
+    OSL_ENSURE( pTblNd, "no TableNode" );
 
     if (pTblNd)
     {
@@ -1458,11 +1420,9 @@ void SwUndoAttrTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     UndoImpl(rContext);
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
-// UndoObject fuer AutoFormat an der Tabelle
-
+// UndoObject for AutoFormat on Table
 
 SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
                                     const SwTableAutoFmt& rAFmt )
@@ -1475,8 +1435,8 @@ SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
 
     if( rAFmt.IsFont() || rAFmt.IsJustify() )
     {
-        // dann auch noch ueber die ContentNodes der EndBoxen und
-        // und alle Absatz-Attribute zusammen sammeln
+        // than also go over the ContentNodes of the EndBoxes and collect
+        // all paragraph attributes
         pSaveTbl->SaveCntntAttrs( (SwDoc*)rTblNd.GetDoc() );
         bSaveCntntAttr = sal_True;
     }
@@ -1493,18 +1453,17 @@ void SwUndoTblAutoFmt::SaveBoxCntnt( const SwTableBox& rBox )
     m_Undos.push_back(p);
 }
 
-
 void
 SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwTableNode* pTblNd = rDoc.GetNodes()[ nSttNode ]->GetTableNode();
-    OSL_ENSURE( pTblNd, "kein TabellenNode" );
+    OSL_ENSURE( pTblNd, "no TableNode" );
 
     SwTable& table = pTblNd->GetTable();
     _SaveTable* pOrig = new _SaveTable( table );
-        // dann auch noch ueber die ContentNodes der EndBoxen und
-        // und alle Absatz-Attribute zusammen sammeln
+    // than go also over the ContentNodes of the EndBoxes and collect
+    // all paragraph attributes
     if( bSaveCntntAttr )
         pOrig->SaveCntntAttrs( &rDoc );
 
@@ -1533,7 +1492,6 @@ void SwUndoTblAutoFmt::RedoImpl(::sw::UndoRedoContext & rContext)
     UndoRedo(false, rContext);
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
@@ -1552,10 +1510,9 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
     const SwTable& rTbl = rTblNd.GetTable();
     pSaveTbl = new _SaveTable( rTbl );
 
-    // und die Selektion merken
+    // and remember selection
     ReNewBoxes( rBoxes );
 }
-
 
 SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
@@ -1571,7 +1528,7 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
     const SwTable& rTbl = rTblNd.GetTable();
     pSaveTbl = new _SaveTable( rTbl );
 
-    // und die Selektion merken
+    // and remember selection
     ReNewBoxes( rBoxes );
 }
 
@@ -1598,7 +1555,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     sal_uInt16 n;
     sal_uInt16 i;
 
-    OSL_ENSURE( ! IsDelBox(), "falsche Action" );
+    OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
     for( n = 0, i = 0; n < rOld.Count(); ++i )
@@ -1606,15 +1563,14 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
         if( rOld[ n ] == rTblBoxes[ i ] )
             ++n;
         else
-            // neue Box: sortiert einfuegen!!
+            // new box: insert sorted
             pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
     }
 
     for( ; i < rTblBoxes.Count(); ++i )
-        // neue Box: sortiert einfuegen!!
+        // new box: insert sorted
         pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
 }
-
 
 SwTableLine* lcl_FindTableLine( const SwTable& rTable,
                                 const SwTableBox& rBox )
@@ -1642,7 +1598,6 @@ const SwTableLines& lcl_FindParentLines( const SwTable& rTable,
     return rRet;
 }
 
-
 void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                                     const SwTableSortBoxes& rOld,
                                     const SwSelBoxes& rBoxes,
@@ -1651,7 +1606,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     const SwTable& rTbl = rTblNd.GetTable();
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
 
-    OSL_ENSURE( ! IsDelBox(), "falsche Action" );
+    OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
     OSL_ENSURE( rTbl.IsNewModel() || rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
@@ -1724,10 +1679,9 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     }
 }
 
-
 void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
 {
-    OSL_ENSURE( IsDelBox(), "falsche Action" );
+    OSL_ENSURE( IsDelBox(), "wrong Action" );
     if( pDelSects.get() == NULL )
         pDelSects.reset( new SwUndoSaveSections( 10 ) );
 
@@ -1739,14 +1693,13 @@ void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
     nSttNode = pTblNd->GetIndex();
 }
 
-
 void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode );
 
     SwTableNode *const pTblNd = aIdx.GetNode().GetTableNode();
-    OSL_ENSURE( pTblNd, "kein TabellenNode" );
+    OSL_ENSURE( pTblNd, "no TableNode" );
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
@@ -1761,12 +1714,12 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     std::vector< SwTableBox* > aDelBoxes;
     if( IsDelBox() )
     {
-        // Trick: die fehlenden Boxen in irgendeine Line einfuegen, beim
-        // CreateNew werden sie korrekt verbunden.
+        // Trick: add missing boxes in any line, they will be connected
+        // correctly when calling CreateNew
         SwTableBox* pCpyBox = pTblNd->GetTable().GetTabSortBoxes()[0];
         SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
-        // die Sections wieder herstellen
+        // restore sections
         for( sal_uInt16 n = pDelSects->size(); n; )
         {
             SwUndoSaveSection* pSave = &(*pDelSects)[ --n ];
@@ -1781,17 +1734,17 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else if( !pNewSttNds->empty() )
     {
-        // dann muessen Nodes verschoben und nicht geloescht werden!
-        // Dafuer brauchen wir aber ein temp Array
+        // Than the nodes have be moved and not deleted!
+        // But for that we need a temp array.
         std::vector<_BoxMove> aTmp( pNewSttNds->begin(), pNewSttNds->end() );
 
-        // von hinten anfangen
+        // backwards
         for( int n = aTmp.size() - 1; n >= 0 ; --n)
         {
-            // Box aus der Tabellen-Struktur entfernen
+            // delete box from table structure
             sal_uLong nIdx = aTmp[n].index;
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
-            OSL_ENSURE( pBox, "Wo ist meine TabellenBox geblieben?" );
+            OSL_ENSURE( pBox, "Where is my TableBox?" );
 
             // TL_CHART2: notify chart about box to be removed
             if (pPCD)
@@ -1805,16 +1758,16 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwTableLine* pLine = lcl_FindTableLine( pTblNd->GetTable(), *pBox );
                 SwNodeIndex aInsPos( *(pLine->GetTabBoxes()[0]->GetSttNd()), 2 );
 
-                // alle StartNode Indizies anpassen
+                // adjust all StartNode indices
                 sal_uInt16 i = n;
                 sal_uLong nSttIdx = aInsPos.GetIndex() - 2,
                        nNdCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
                 while( i && aTmp[ --i ].index > nSttIdx )
                     aTmp[ i ].index += nNdCnt;
 
-                // erst die Box loeschen
+                // first delete box
                 delete pBox;
-                // dann die Nodes verschieben,
+                // than move nodes
                 rDoc.GetNodes()._MoveNodes( aRg, rDoc.GetNodes(), aInsPos, sal_False );
             }
             else
@@ -1858,13 +1811,12 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTblNd->GetTable() )
 }
 
-
 void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
     SwTableNode* pTblNd = rDoc.GetNodes()[ nSttNode ]->GetTableNode();
-    OSL_ENSURE( pTblNd, "kein TabellenNode" );
+    OSL_ENSURE( pTblNd, "no TableNode" );
     CHECK_TABLE( pTblNd->GetTable() )
 
     SwSelBoxes aSelBoxes;
@@ -1874,7 +1826,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
         aSelBoxes.Insert( pBox );
     }
 
-    // SelBoxes erzeugen und InsertCell/-Row/SplitTbl aufrufen
+    // create SelBoxes and call InsertCell/-Row/SplitTbl
     switch( GetId() )
     {
     case UNDO_TABLE_INSCOL:
@@ -1970,14 +1922,13 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTblNd->GetTable() )
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 SwUndoTblMerge::SwUndoTblMerge( const SwPaM& rTblSel )
     : SwUndo( UNDO_TABLE_MERGE ), SwUndRng( rTblSel ), pHistory( 0 )
 {
     const SwTableNode* pTblNd = rTblSel.GetNode()->FindTableNode();
-    OSL_ENSURE( pTblNd, "Wo ist TabllenNode" );
+    OSL_ENSURE( pTblNd, "Where is the TableNode?" );
     pSaveTbl = new _SaveTable( pTblNd->GetTable() );
     pMoves = new SwUndoMoves;
     nTblNode = pTblNd->GetIndex();
@@ -1996,7 +1947,7 @@ void SwUndoTblMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( rDoc.GetNodes(), nTblNode );
 
     SwTableNode *const pTblNd = aIdx.GetNode().GetTableNode();
-    OSL_ENSURE( pTblNd, "kein TabellenNode" );
+    OSL_ENSURE( pTblNd, "no TableNode" );
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
@@ -2005,11 +1956,10 @@ void SwUndoTblMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     _FndBox aTmpBox( 0, 0 );
     // ? TL_CHART2: notification or locking of controller required ?
 
+    // 1. restore deleted boxes:
 
-    // 1. die geloeschten Boxen wiederherstellen:
-
-    // Trick: die fehlenden Boxen in irgendeine Line einfuegen, beim
-    // CreateNew werden sie korrekt verbunden.
+    // Trick: add missing boxes in any line, they will be connected
+    // correctly when calling CreateNew
     SwTableBox *pBox, *pCpyBox = pTblNd->GetTable().GetTabSortBoxes()[0];
     SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
@@ -2035,24 +1985,24 @@ CHECKTABLE(pTblNd->GetTable())
 CHECKTABLE(pTblNd->GetTable())
 
     SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
-    // 2. die eingefuegten Boxen loeschen
-    // die Nodes loeschen (von Hinten!!)
+    // 2. deleted the inserted boxes
+    // delete nodes (from last to first)
     for( n = aNewSttNds.size(); n; )
     {
-        // Box aus der Tabellen-Struktur entfernen
+        // remove box from table structure
         sal_uLong nIdx = aNewSttNds[ --n ];
 
         if( !nIdx && n )
         {
             nIdx = aNewSttNds[ --n ];
             pBox = pTblNd->GetTable().GetTblBox( nIdx );
-            OSL_ENSURE( pBox, "Wo ist meine TabellenBox geblieben?" );
+            OSL_ENSURE( pBox, "Where is my TableBox?" );
 
             if( !pSaveTbl->IsNewModel() )
                 rDoc.GetNodes().MakeTxtNode( SwNodeIndex(
                     *pBox->GetSttNd()->EndOfSectionNode() ), pColl );
 
-            // das war der Trenner, -> die verschobenen herstellen
+            // this was the separator -> restore moved ones
             for( sal_uInt16 i = pMoves->size(); i; )
             {
                 SwTxtNode* pTxtNd = 0;
@@ -2066,7 +2016,7 @@ CHECKTABLE(pTblNd->GetTable())
                 pUndo->UndoImpl(rContext);
                 if( pUndo->IsMoveRange() )
                 {
-                    // den ueberfluessigen Node loeschen
+                    // delete the unnecessary node
                     aIdx = pUndo->GetEndNode();
                     SwCntntNode *pCNd = aIdx.GetNode().GetCntntNode();
                     if( pCNd )
@@ -2080,12 +2030,12 @@ CHECKTABLE(pTblNd->GetTable())
                 }
                 else if( pTxtNd )
                 {
-                    // evt. noch ueberflussige Attribute loeschen
+                    // also delete not needed attributes
                     SwIndex aTmpIdx( pTxtNd, nDelPos );
                     if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
                         pTxtNd->RstAttr( aTmpIdx, pTxtNd->GetTxt().Len() -
                                                             nDelPos + 1 );
-                    // das Trennzeichen loeschen
+                    // delete separator
                     pTxtNd->EraseText( aTmpIdx, 1 );
                 }
             }
@@ -2104,7 +2054,7 @@ CHECKTABLE(pTblNd->GetTable())
             pTBoxes->erase( std::find(pTBoxes->begin(), pTBoxes->end(), pBox ) );
 
 
-            // Indizies aus dem Bereich loeschen
+            // delete indices from section
             {
                 SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
                 rDoc.CorrAbs( SwNodeIndex( aTmpIdx, 1 ),
@@ -2129,8 +2079,6 @@ CHECKTABLE(pTblNd->GetTable())
         pHistory->TmpRollback( &rDoc, 0 );
         pHistory->SetTmpEnd( pHistory->Count() );
     }
-//  nTblNode = pTblNd->GetIndex();
-
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = nSttNode;
@@ -2166,15 +2114,15 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 
 void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 {
-    // die Selektion merken
+    // memorize selection
     for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
         aBoxes.insert( rBoxes[n]->GetSttIdx() );
 
-    // als Trennung fuers einfuegen neuer Boxen nach dem Verschieben!
+    // as separator for inserts of new boxes after shifting
     aNewSttNds.push_back( (sal_uLong)0 );
 
-     // The new table model does not delete overlapped cells (by row span),
-     // so the rBoxes array might be empty even some cells have been merged.
+    // The new table model does not delete overlapped cells (by row span),
+    // so the rBoxes array might be empty even some cells have been merged.
     if( rBoxes.Count() )
         nTblNode = rBoxes[ 0 ]->GetSttNd()->FindTableNode()->GetIndex();
 }
@@ -2193,7 +2141,6 @@ void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )
     if( pCNd->HasSwAttrSet() )
         pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex() );
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -2253,7 +2200,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
         }
     }
 
-    // wird die History ueberhaupt benoetigt ??
+    // is a history needed at all?
     if( pHistory && !pHistory->Count() )
         DELETEZ( pHistory );
 }
@@ -2271,10 +2218,10 @@ void SwUndoTblNumFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwStartNode* pSttNd = rDoc.GetNodes()[ nNode ]->
                             FindSttNodeByType( SwTableBoxStartNode );
-    OSL_ENSURE( pSttNd, "ohne StartNode kein TabellenBox" );
+    OSL_ENSURE( pSttNd, "without StartNode no TableBox" );
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTblBox(
                                     pSttNd->GetIndex() );
-    OSL_ENSURE( pBox, "keine TabellenBox gefunden" );
+    OSL_ENSURE( pBox, "found no TableBox" );
 
     SwTableBoxFmt* pFmt = rDoc.MakeTableBoxFmt();
     pFmt->SetFmtAttr( *pBoxSet );
@@ -2284,16 +2231,16 @@ void SwUndoTblNumFmt::UndoImpl(::sw::UndoRedoContext & rContext)
         return;
 
     SwTxtNode* pTxtNd = rDoc.GetNodes()[ nNdPos ]->GetTxtNode();
-    // wenn mehr als ein Node geloescht wurde, dann wurden auch
-    // alle "Node"-Attribute gespeichert
+    // If more than one node was deleted than all "node" attributes were also
+    // saved
     if( pTxtNd->HasSwAttrSet() )
         pTxtNd->ResetAllAttr();
 
     if( pTxtNd->GetpSwpHints() && aStr.Len() )
         pTxtNd->ClearSwpHintsArr( true );
 
-    // ChgTextToNum(..) only acts when the strings are different. We
-    // need to do the same here.
+    // ChgTextToNum(..) only acts when the strings are different. We need to do
+    // the same here.
     if( pTxtNd->GetTxt() != aStr )
     {
         rDoc.DeleteRedline( *( pBox->GetSttNd() ), false, USHRT_MAX );
@@ -2355,11 +2302,9 @@ RedlineModeInternGuard::~RedlineModeInternGuard()
     mrDoc.SetRedlineMode_intern( meOldRedlineMode );
 }
 
-
-
 void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // konnte die Box veraendert werden ?
+    // Could the box be changed?
     if( !pBoxSet )
         return ;
 
@@ -2371,10 +2316,10 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwNode * pNd = & pPam->GetPoint()->nNode.GetNode();
     SwStartNode* pSttNd = pNd->FindSttNodeByType( SwTableBoxStartNode );
-    OSL_ENSURE( pSttNd, "ohne StartNode kein TabellenBox" );
+    OSL_ENSURE( pSttNd, "without StartNode no TableBox" );
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTblBox(
                                     pSttNd->GetIndex() );
-    OSL_ENSURE( pBox, "keine TabellenBox gefunden" );
+    OSL_ENSURE( pBox, "found no TableBox" );
 
     SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
     if( bNewFmt || bNewFml || bNewValue )
@@ -2382,9 +2327,8 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                                 RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
-        // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-        //              Sorge dafuer, das der Text auch entsprechend
-        //              formatiert wird!
+        // Resetting attributes is not enough. In addition, take care that the
+        // text will be also formatted correctly.
         pBoxFmt->LockModify();
 
         if( bNewFml )
@@ -2415,9 +2359,8 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
         aBoxSet.Put( SwTblBoxNumFormat( nFmtIdx ));
         aBoxSet.Put( SwTblBoxValue( fNum ));
 
-        // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-        //              Sorge dafuer, das der Text auch entsprechend
-        //              formatiert wird!
+        // Resetting attributes is not enough. In addition, take care that the
+        // text will be also formatted correctly.
         pBoxFmt->LockModify();
         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
         pBoxFmt->UnlockModify();
@@ -2430,11 +2373,10 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        // es ist keine Zahl
+        // it's no number
 
-        // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
-        //              Sorge dafuer, das der Text auch entsprechend
-        //              formatiert wird!
+        // Resetting attributes is not enough. In addition, take care that the
+        // text will be also formatted correctly.
         pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
 
         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
@@ -2442,7 +2384,7 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( bNewFml )
     {
-        // egal was gesetzt wurde, ein Update der Tabelle macht sich immer gut
+        // No matter what was set, an update of the table is always a good idea
         SwTableFmlUpdate aTblUpdate( &pSttNd->FindTableNode()->GetTable() );
         rDoc.UpdateTblFlds( &aTblUpdate );
     }
@@ -2457,7 +2399,6 @@ void SwUndoTblNumFmt::SetBox( const SwTableBox& rBox )
     nNode = rBox.GetSttIdx();
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 _UndoTblCpyTbl_Entry::_UndoTblCpyTbl_Entry( const SwTableBox& rBox )
@@ -2471,7 +2412,6 @@ _UndoTblCpyTbl_Entry::~_UndoTblCpyTbl_Entry()
     delete pUndo;
     delete pBoxNumAttr;
 }
-
 
 SwUndoTblCpyTbl::SwUndoTblCpyTbl()
     : SwUndo( UNDO_TBLCPYTBL ), pInsRowUndo( 0 )
@@ -2750,8 +2690,7 @@ void SwUndoTblCpyTbl::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rI
 {
     _UndoTblCpyTbl_Entry* pEntry = &(*pArr).back();
 
-    // wurde der Inhalt geloescht, so loesche jetzt auch noch den temp.
-    // erzeugten Node
+    // If the content was deleted than remove also the temporarily created node
     if( bDelCntnt )
     {
         SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
@@ -2848,7 +2787,6 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     return pUndo;
 }
 
-
 sal_Bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
                                 sal_uInt16 nCnt )
 {
@@ -2873,7 +2811,6 @@ sal_Bool SwUndoTblCpyTbl::IsEmpty() const
     return !pInsRowUndo && pArr->empty();
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 SwUndoCpyTbl::SwUndoCpyTbl()
@@ -2891,7 +2828,7 @@ void SwUndoCpyTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwTableNode* pTNd = rDoc.GetNodes()[ nTblNode ]->GetTableNode();
 
-    // harte SeitenUmbrueche am nachfolgenden Node verschieben
+    // move hard page breaks into next node
     SwCntntNode* pNextNd = rDoc.GetNodes()[ pTNd->EndOfSectionIndex()+1 ]->GetCntntNode();
     if( pNextNd )
     {
@@ -2917,7 +2854,6 @@ void SwUndoCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     delete pDel, pDel = 0;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd,
@@ -2930,7 +2866,7 @@ SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd,
     {
     case HEADLINE_BOXATRCOLLCOPY:
             pHistory = new SwHistory;
-            // kein break;
+            // no break
     case HEADLINE_BORDERCOPY:
     case HEADLINE_BOXATTRCOPY:
         pSavTbl = new _SaveTable( rTblNd.GetTable(), 1, sal_False );
@@ -2954,7 +2890,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
     rIdx = nTblNode + nOffset;
 
-    //Den implizit erzeugten Absatz wieder entfernen.
+    // remove implicitly created paragraph again
     pDoc->GetNodes().Delete( rIdx, 1 );
 
     rIdx = nTblNode + nOffset;
@@ -2970,8 +2906,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     case HEADLINE_BOXATRCOLLCOPY:
         if( pHistory )
             pHistory->TmpRollback( pDoc, nFmlEnd );
-
-        // kein break
+        // no break
     case HEADLINE_BOXATTRCOPY:
     case HEADLINE_BORDERCOPY:
         {
@@ -2981,7 +2916,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         break;
 
     case HEADLINE_CNTNTCOPY:
-        // die erzeugte 1. Line muss wieder entfernt werden
+        // the created first line has to be removed again
         {
             SwSelBoxes aSelBoxes;
             SwTableBox* pBox = rTbl.GetTblBox( nTblNode + nOffset + 1 );
@@ -3040,7 +2975,6 @@ void SwUndoSplitTbl::SaveFormula( SwHistory& rHistory )
     pHistory->Move( 0, &rHistory );
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 SwUndoMergeTbl::SwUndoMergeTbl( const SwTableNode& rTblNd,
@@ -3049,7 +2983,7 @@ SwUndoMergeTbl::SwUndoMergeTbl( const SwTableNode& rTblNd,
     : SwUndo( UNDO_MERGE_TABLE ), pSavTbl( 0 ),
     pHistory( 0 ), nMode( nMd ), bWithPrev( bWithPrv )
 {
-    // Endnode der letzen Tabellenzelle merken, die auf der Position verbleibt
+    // memorize end node of the last table cell that'll stay in position
     if( bWithPrev )
         nTblNode = rDelTblNd.EndOfSectionIndex() - 1;
     else
@@ -3084,7 +3018,7 @@ void SwUndoMergeTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     aMsgHnt.eFlags = TBL_BOXPTR;
     pDoc->UpdateTblFlds( &aMsgHnt );
 
-    //Lines fuer das Layout-Update herausuchen.
+    // get lines for layout update
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( *pTbl );
     aFndBox.DelFrms( *pTbl );
@@ -3092,23 +3026,21 @@ void SwUndoMergeTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx, sal_True, sal_False );
 
-    //Layout updaten
+    // update layout
     aFndBox.MakeFrms( *pTbl );
     // ? TL_CHART2: notification or locking of controller required ?
 
     if( bWithPrev )
     {
-        // den Namen umsetzen
+        // move name
         pNew->GetTable().GetFrmFmt()->SetName( pTbl->GetFrmFmt()->GetName() );
         pSavHdl->RestoreAttr( pNew->GetTable() );
     }
     else
         pTbl = &pNew->GetTable();
+
     pTbl->GetFrmFmt()->SetName( aName );
-
-//  pSavTbl->CreateNew( *pTbl, sal_False );
     pSavTbl->RestoreAttr( *pTbl );
-
 
     if( pHistory )
     {
@@ -3116,11 +3048,11 @@ void SwUndoMergeTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->SetTmpEnd( pHistory->Count() );
     }
 
-    // fuer die neue Tabelle die Frames anlegen
+    // create frames for the new table
     SwNodeIndex aTmpIdx( *pNew );
     pNew->MakeFrms( &aTmpIdx );
 
-    // Cursor  irgendwo in den Content stellen
+    // position cursor somewhere in content
     SwCntntNode* pCNd = pDoc->GetNodes().GoNext( &rIdx );
     pPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
@@ -3168,7 +3100,6 @@ void SwUndoMergeTbl::SaveFormula( SwHistory& rHistory )
     pHistory->Move( 0, &rHistory );
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
@@ -3207,10 +3138,9 @@ void CheckTable( const SwTable& rTbl )
     {
         const SwTableBox* pBox = rSrtArr[ n ];
         const SwNode* pNd = pBox->GetSttNd();
-        OSL_ENSURE( rNds[ pBox->GetSttIdx() ] == pNd, "Box mit falchem StartNode"  );
+        OSL_ENSURE( rNds[ pBox->GetSttIdx() ] == pNd, "Box with wrong StartNode"  );
     }
 }
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

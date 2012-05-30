@@ -26,14 +26,12 @@
  *
  ************************************************************************/
 
-
 #include <UndoSplitMove.hxx>
-
 #include "doc.hxx"
 #include "pam.hxx"
 #include "swtable.hxx"
 #include "ndtxt.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"
 #include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
@@ -43,11 +41,8 @@
 #include "docary.hxx"
 #include <IShellCursorSupplier.hxx>
 
-
 //------------------------------------------------------------------
-
 // SPLITNODE
-
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
                                     sal_Bool bChkTable )
@@ -56,7 +51,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         bTblFlag( sal_False ), bChkTblStt( bChkTable )
 {
     SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    OSL_ENSURE( pTxtNd, "nur beim TextNode rufen!" );
+    OSL_ENSURE( pTxtNd, "only for TextNode" );
     if( pTxtNd->GetpSwpHints() )
     {
         pHistory = new SwHistory;
@@ -65,7 +60,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         if( !pHistory->Count() )
             DELETEZ( pHistory );
     }
-    // Redline beachten
+    // consider Redline
     if( pDoc->IsRedlineOn() )
     {
         pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
@@ -88,7 +83,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
     rPam.DeleteMark();
     if( bTblFlag )
     {
-        // dann wurde direkt vor der akt. Tabelle ein TextNode eingefuegt.
+        // than a TextNode was added directly before the current table
         SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
         rIdx = nNode;
         SwTxtNode* pTNd;
@@ -97,7 +92,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pCurrNd->IsCntntNode() && pTblNd &&
             0 != ( pTNd = pDoc->GetNodes()[ pTblNd->GetIndex()-1 ]->GetTxtNode() ))
         {
-            // verschiebe die BreakAttribute noch
+            // move break attributes
             SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
             const SfxItemSet* pNdSet = pTNd->GetpSwAttrSet();
             if( pNdSet )
@@ -112,7 +107,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                     pTableFmt->SetFmtAttr( *pItem );
             }
 
-            // dann loesche den wieder
+            // than delete it again
             SwNodeIndex aDelNd( *pTblNd, -1 );
             rPam.GetPoint()->nContent.Assign( (SwCntntNode*)pCurrNd, 0 );
             RemoveIdxRel( aDelNd.GetIndex(), *rPam.GetPoint() );
@@ -154,7 +149,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    // setze noch den Cursor auf den Undo-Bereich
+    // also set the cursor onto undo section
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = nNode;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nCntnt );

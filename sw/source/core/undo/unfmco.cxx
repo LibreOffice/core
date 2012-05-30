@@ -26,20 +26,14 @@
  *
  ************************************************************************/
 
-
-
-
 #include "doc.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"
 #include "pam.hxx"
 #include "ndtxt.hxx"
-
 #include <UndoCore.hxx>
 #include "rolbck.hxx"
 
-
 //--------------------------------------------------
-
 
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,
@@ -57,12 +51,10 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
         aFmtName = pColl->GetName();
 }
 
-
 SwUndoFmtColl::~SwUndoFmtColl()
 {
     delete pHistory;
 }
-
 
 void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -73,7 +65,6 @@ void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
     // create cursor for undo range
     AddUndoRedoPaM(rContext);
 }
-
 
 void SwUndoFmtColl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -89,8 +80,8 @@ void SwUndoFmtColl::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
 {
-    // es kann nur eine TextFmtColl auf einen Bereich angewendet werden,
-    // also erfrage auch nur in dem Array
+    // Only one TextFrmColl can be applied to a section, thus request only in
+    // this array.
     sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
     // does the format still exist?

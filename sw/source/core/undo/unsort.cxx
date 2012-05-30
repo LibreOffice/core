@@ -26,11 +26,9 @@
  *
  ************************************************************************/
 
-
 #include <UndoSort.hxx>
-
 #include <doc.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
@@ -41,23 +39,19 @@
 #include <redline.hxx>
 #include <node2lay.hxx>
 
-
 /*--------------------------------------------------------------------
-    Beschreibung:  Undo fuers Sorting
+    Description:   Undo for Sorting
  --------------------------------------------------------------------*/
-
-
 
 SwSortUndoElement::~SwSortUndoElement()
 {
-    // sind String Pointer gespeichert ??
-    if( 0xffffffff != SORT_TXT_TBL.TXT.nKenn )
+    // are there string pointers saved?
+    if( 0xffffffff != SORT_TXT_TBL.TXT.nKenn ) // Kenn(ung) = identifier
     {
         delete SORT_TXT_TBL.TBL.pSource;
         delete SORT_TXT_TBL.TBL.pTarget;
     }
 }
-
 
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     : SwUndo(UNDO_SORT_TXT), SwUndRng(rRg), pUndoTblAttr( 0 ),
@@ -91,7 +85,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if(pSortOpt->bTable)
     {
-        // Undo Tabelle
+        // Undo for Table
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         if( pUndoTblAttr )
@@ -116,11 +110,11 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
             const SwTableBox* pTarget = rTbl.GetTblBox(
                     *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
-            // zurueckverschieben
+            // move back
             MoveCell(&rDoc, pTarget, pSource,
                      USHRT_MAX != aMovedList.GetPos(pSource) );
 
-            // schon Verschobenen in der Liste merken
+            // store moved entry in list
             aMovedList.push_back(pTarget);
         }
 
@@ -132,13 +126,12 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        // Undo Text
+        // Undo for Text
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
         RemoveIdxFromRange(rPam, true);
 
-        // fuer die sorted Positions einen Index anlegen.
-        // JP 25.11.97: Die IndexList muss aber nach SourcePosition
-        //              aufsteigend sortiert aufgebaut werden
+        // create index for (sorted) positions
+        // The IndexList must be created based on (asc.) sorted SourcePosition.
         SwUndoSortList aIdxList;
         sal_uInt16 i;
 
@@ -159,7 +152,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
             rDoc.MoveNodeRange(aRg, aIdx,
                 IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
-        // Indixes loeschen
+        // delete indices
         for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
             delete *it;
         aIdxList.clear();
@@ -173,7 +166,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if(pSortOpt->bTable)
     {
-        // Redo bei Tabelle
+        // Redo for Table
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
@@ -193,10 +186,10 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             const SwTableBox* pTarget = rTbl.GetTblBox(
                     (const String&) *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
-            // zurueckverschieben
+            // move back
             MoveCell(&rDoc, pSource, pTarget,
                      USHRT_MAX != aMovedList.GetPos( pTarget ) );
-            // schon Verschobenen in der Liste merken
+            // store moved entry in list
             aMovedList.push_back( pSource );
         }
 
@@ -222,7 +215,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         sal_uInt16 i;
 
         for( i = 0; i < aSortList.size(); ++i)
-        {   // aktuelle Pos ist die Ausgangslage
+        {   // current position is starting point
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i].SORT_TXT_TBL.TXT.nSource);
             aIdxList.insert( aIdxList.begin() + i, pIdx );
@@ -235,7 +228,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.MoveNodeRange(aRg, aIdx,
                 IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
-        // Indixes loeschen
+        // delete indices
         for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
             delete *it;
         aIdxList.clear();
@@ -272,6 +265,5 @@ void SwUndoSort::Insert( sal_uLong nOrgPos, sal_uLong nNewPos)
     SwSortUndoElement* pEle = new SwSortUndoElement(nOrgPos, nNewPos);
     aSortList.push_back( pEle );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
