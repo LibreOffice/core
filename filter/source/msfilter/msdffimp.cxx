@@ -4326,15 +4326,14 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     rSt >> aRecHd;
     if ( aRecHd.nRecType == DFF_msofbtSpContainer )
     {
-        sal_Int32 nGroupRotateAngle = 0;
-        sal_Int32 nSpFlags = 0;
         mnFix16Angle = 0;
         if (!aRecHd.SeekToBegOfRecord(rSt))
             return pRet;
         pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
-            nSpFlags = nGroupShapeFlags;
+            sal_Int32 nGroupRotateAngle = 0;
+            sal_Int32 nSpFlags = nGroupShapeFlags;
             nGroupRotateAngle = mnFix16Angle;
 
             Rectangle aClientRect( rClientRect );
