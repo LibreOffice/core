@@ -80,6 +80,7 @@ $(eval $(call gb_Library_add_ldflags,ooofilt,\
 	/EXPORT:DllGetClassObject \
 	/EXPORT:DllRegisterServer \
 	/EXPORT:DllUnregisterServer \
+	/NODEFAULTLIB:libcmt.lib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ooofilt,\

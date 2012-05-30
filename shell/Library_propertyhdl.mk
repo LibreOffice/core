@@ -76,6 +76,7 @@ $(eval $(call gb_Library_use_static_libraries,propertyhdl,\
 $(eval $(call gb_Library_add_ldflags,propertyhdl,\
 	/EXPORT:DllCanUnloadNow \
 	/EXPORT:DllGetClassObject \
+	/NODEFAULTLIB:libcmt.lib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,propertyhdl,\
