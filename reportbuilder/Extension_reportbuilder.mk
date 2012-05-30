@@ -43,7 +43,7 @@ $(eval $(call gb_Extension_add_files,report-builder,,\
 endif
 
 ifneq ($(SYSTEM_JFREEREPORT),YES)
-include $(OUTDIR)/bin/jfreereport_version.mk
+include $(SRCDIR)/jfreereport/version.mk
 $(eval $(call gb_Extension_add_files,report-builder,,\
 	$(OUTDIR)/bin/flow-engine-$(FLOW_ENGINE_VERSION).jar \
 	$(OUTDIR)/bin/flute-$(FLUTE_VERSION).jar \
