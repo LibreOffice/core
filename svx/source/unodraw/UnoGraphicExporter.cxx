@@ -207,33 +207,45 @@ namespace svx
     */
     BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, sal_Bool bTransparent, const Size* pSize )
     {
-        Graphic     aGraphic( rMtf );
-        BitmapEx    aBmpEx;
+        BitmapEx aBmpEx;
 
-        // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
-        // rasterconverted to a bitmap
-        const SvtOptionsDrawinglayer aDrawinglayerOpt;
-        const GraphicConversionParameters aParameters(
-            pSize ? *pSize : Size(0, 0),
-            true, // allow unlimited size
-            aDrawinglayerOpt.IsAntiAliasing(),
-            aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
-
-        if( bTransparent )
+        if(bTransparent)
         {
-            Graphic aMaskGraphic(rMtf.GetMonochromeMtf(COL_BLACK));
-            Bitmap  aMaskBmp(aMaskGraphic.GetBitmap(aParameters));
+            // use new primitive conversion tooling
+            basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
 
-            aMaskBmp.Convert(BMP_CONVERSION_1BIT_THRESHOLD);
-            aBmpEx = BitmapEx(aGraphic.GetBitmap(aParameters), aMaskBmp);
+            if(pSize)
+            {
+                // use 100th mm for primitive bitmap converter tool, input is pixel
+                // use a real OutDev to get the correct DPI, the static LogicToLogic assumes 72dpi which is wrong (!)
+                const Size aSize100th(Application::GetDefaultDevice()->PixelToLogic(*pSize, MapMode(MAP_100TH_MM)));
+
+                aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
+            }
+            else
+            {
+                // use 100th mm for primitive bitmap converter tool
+                const Size aSize100th(Application::GetDefaultDevice()->LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapMode(MAP_100TH_MM)));
+
+                aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
+            }
+
+            aBmpEx = convertMetafileToBitmapEx(rMtf, aRange);
         }
         else
         {
-            aBmpEx = BitmapEx(aGraphic.GetBitmap(aParameters));
-        }
+            const SvtOptionsDrawinglayer aDrawinglayerOpt;
+            const GraphicConversionParameters aParameters(
+                pSize ? *pSize : Size(0, 0),
+                true, // allow unlimited size
+                aDrawinglayerOpt.IsAntiAliasing(),
+                aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
+            const Graphic aGraphic(rMtf);
 
-        aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
-        aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
+            aBmpEx = BitmapEx(aGraphic.GetBitmap(aParameters));
+            aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
+            aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
+        }
 
         return aBmpEx;
     }

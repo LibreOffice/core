@@ -263,6 +263,10 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
             if ( mpCbInterlaced->IsChecked() )
                 nInterlace++;
             pFilterOptions->WriteInt32(OUString("Interlaced"), nInterlace);
+            sal_Int32 nValue = 0;
+            if ( mpCbSaveTransparency->IsChecked() )
+                nValue++;
+            pFilterOptions->WriteInt32(OUString("Translucent"), nValue);
         }
         break;
 
@@ -782,6 +786,7 @@ void ExportDialog::createFilterOptions()
             sal_Int32 nCompression = mpFilterOptionsItem->ReadInt32(OUString("Compression"), 6);
             if ( ( nCompression < 1 ) || ( nCompression > 9 ) )
                 nCompression = 6;
+
             get(mpSbCompression, "compressionpngsb");
             get(mpNfCompression, "compressionpngnf-nospin");
             mpSbCompression->SetRangeMin( 1 );
@@ -793,7 +798,11 @@ void ExportDialog::createFilterOptions()
 
             // Interlaced
             mpMode->Show();
-            mpCbInterlaced->Check( mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 0) != 0);
+            mpCbInterlaced->Check(mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 0) != 0);
+
+            // Transparency
+            mpDrawingObjects->Show();
+            mpCbSaveTransparency->Check(mpFilterOptionsItem->ReadInt32(OUString("Translucent"), 1) != 0);
         }
         break;
         case FORMAT_BMP :
@@ -820,9 +829,11 @@ void ExportDialog::createFilterOptions()
         break;
         case FORMAT_GIF :
         {
+            // Interlaced
             mpMode->Show();
             mpCbInterlaced->Check(mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 1) != 0);
 
+            // Transparency
             mpDrawingObjects->Show();
             mpCbSaveTransparency->Check(mpFilterOptionsItem->ReadInt32(OUString("Translucent"), 1) != 0);
         }
