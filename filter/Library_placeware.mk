@@ -34,11 +34,11 @@ $(eval $(call gb_Library_use_libraries,placeware,\
 	cppuhelper \
 	cppu \
 	sal \
+	sax \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,placeware,\
-	filter/source/placeware/Base64Codec \
 	filter/source/placeware/exporter \
 	filter/source/placeware/filter \
 	filter/source/placeware/tempfile \

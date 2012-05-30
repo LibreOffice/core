@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,package2,\
 	cppu \
 	cppuhelper \
 	sal \
+	sax \
 	ucbhelper \
 	$(gb_STDLIBS) \
 ))
@@ -60,7 +61,6 @@ $(eval $(call gb_Library_use_externals,package2,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,package2,\
-	package/source/manifest/Base64Codec \
 	package/source/manifest/ManifestExport \
 	package/source/manifest/ManifestImport \
 	package/source/manifest/ManifestReader \
