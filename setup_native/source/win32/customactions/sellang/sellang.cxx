@@ -66,6 +66,7 @@ langid_to_string( LANGID langid, int *have_default_lang )
 #define CASE(name, primary) \
         case LANG_##primary: return #name
     CASE(af, AFRIKAANS);
+    CASE(am, AMHARIC);
     CASE(ar, ARABIC);
     CASE(as, ASSAMESE);
     CASE(be, BELARUSIAN);
