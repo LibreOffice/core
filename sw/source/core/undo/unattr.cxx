@@ -26,16 +26,11 @@
  *
  ************************************************************************/
 
-
 #include <UndoAttribute.hxx>
-
 #include <svl/itemiter.hxx>
-
 #include <editeng/tstpitem.hxx>
-
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-
 #include <hintids.hxx>
 #include <fmtflcnt.hxx>
 #include <txtftn.hxx>
@@ -64,9 +59,6 @@
 #include <section.hxx>
 #include <charfmt.hxx>
 #include <switerator.hxx>
-
-
-// -----------------------------------------------------
 
 SwUndoFmtAttrHelper::SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSvDrwPt )
     : SwClient( &rFmt )
@@ -122,8 +114,6 @@ void SwUndoFmtAttrHelper::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pN
         }
     }
 }
-
-// -----------------------------------------------------
 
 SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
                               SwFmt& rChgFmt,
@@ -365,8 +355,6 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
             }
         }
         break;
-//  case RES_CHRFMT:
-//  case RES_FRMFMT:
 
     case RES_FLYFRMFMT:
         {
@@ -431,12 +419,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
             // store old value as attribute, to keep SwUndoFmtAttr small
             m_pOldSet->Put( SwFmtFrmSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
         }
-/*      else
-        {
-            pOldSet->Put( pFmt->GetVertOrient() );
-            pOldSet->Put( pFmt->GetHoriOrient() );
-        }
-*/  }
+    }
 
     const SwFmtAnchor& rAnchor =
         static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, sal_False ) );
@@ -519,8 +502,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
             // write the current value into cache
             aDrawOldPt = pFrmFmt->FindSdrObject()->GetRelativePos();
-// According to AMA/MA not needed anymore
-//          pCont->DisconnectFromLayout();
         }
         else
         {
@@ -576,8 +557,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // The Draw model also prepared an Undo object for its right positioning
         // which unfortunately is relative. Therefore block here a position
         // change of the Contact object by setting the anchor.
-//JP 08.10.97: ist laut AMA/MA nicht mehr noetig
-//          pCont->ConnectToLayout();
         SdrObject* pObj = pCont->GetMaster();
 
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
@@ -611,7 +590,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     return true;
 }
 
-// -----------------------------------------------------
 SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
                                         const sal_uInt16 nWhichId )
     : SwUndo( UNDO_RESETATTR )
@@ -645,8 +623,6 @@ void SwUndoFmtResetAttr::RedoImpl(::sw::UndoRedoContext &)
         m_pChangedFormat->ResetFmtAttr( m_nWhichId );
     }
 }
-
-// -----------------------------------------------------
 
 SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, sal_uInt16 nFmtId )
     : SwUndo( UNDO_RESETATTR ), SwUndRng( rRange )
@@ -774,9 +750,6 @@ void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
     m_Ids.clear();
     m_Ids.insert( rAttrs.begin(), rAttrs.end() );
 }
-
-// -----------------------------------------------------
-
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
                         const SetAttrMode nFlags )
@@ -926,7 +899,6 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-
 void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
 {
     if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, sal_False ))
@@ -996,8 +968,6 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
     }
 }
 
-// -----------------------------------------------------
-
 SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     : SwUndo( UNDO_SETDEFTATTR )
     , m_pOldSet( 0 )
@@ -1052,8 +1022,6 @@ void SwUndoDefaultAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     UndoImpl(rContext);
 }
 
-// -----------------------------------------------------
-
 SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
             const SwPaM& rPam, sal_Bool bFlag, sal_Bool bMod )
     : SwUndo( bFlag ? UNDO_INC_LEFTMARGIN : UNDO_DEC_LEFTMARGIN )
@@ -1093,8 +1061,6 @@ void SwUndoMoveLeftMargin::RepeatImpl(::sw::RepeatContext & rContext)
     rDoc.MoveLeftMargin(rContext.GetRepeatPaM(), GetId() == UNDO_INC_LEFTMARGIN,
             m_bModulus );
 }
-
-// -----------------------------------------------------
 
 SwUndoChangeFootNote::SwUndoChangeFootNote(
             const SwPaM& rRange, const String& rTxt,
@@ -1137,10 +1103,6 @@ void SwUndoChangeFootNote::RepeatImpl(::sw::RepeatContext & rContext)
     rDoc.SetCurFtn( rContext.GetRepeatPaM(), m_Text, m_nNumber, m_bEndNote );
 }
 
-
-// -----------------------------------------------------
-
-
 SwUndoFootNoteInfo::SwUndoFootNoteInfo( const SwFtnInfo &rInfo )
     : SwUndo( UNDO_FTNINFO )
     , m_pFootNoteInfo( new SwFtnInfo( rInfo ) )
@@ -1166,9 +1128,6 @@ void SwUndoFootNoteInfo::RedoImpl(::sw::UndoRedoContext & rContext)
     rDoc.SetFtnInfo( *m_pFootNoteInfo );
     m_pFootNoteInfo.reset( pInf );
 }
-
-
-// -----------------------------------------------------
 
 SwUndoEndNoteInfo::SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo )
     : SwUndo( UNDO_FTNINFO )
@@ -1196,8 +1155,6 @@ void SwUndoEndNoteInfo::RedoImpl(::sw::UndoRedoContext & rContext)
     m_pEndNoteInfo.reset( pInf );
 }
 
-// -----------------------------------------------------
-
 SwUndoDontExpandFmt::SwUndoDontExpandFmt( const SwPosition& rPos )
     : SwUndo( UNDO_DONTEXPAND )
     , m_nNodeIndex( rPos.nNode.GetIndex() )
@@ -1215,7 +1172,6 @@ void SwUndoDontExpandFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), m_nContentIndex);
     pDoc->DontExpandFmt( rPos, sal_False );
 }
-
 
 void SwUndoDontExpandFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {

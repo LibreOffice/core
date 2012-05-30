@@ -26,16 +26,11 @@
  *
  ************************************************************************/
 
-
 #include <UndoOverwrite.hxx>
-
 #include <tools/resid.hxx>
-
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
-
 #include <comphelper/processfactory.hxx>
-
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IShellCursorSupplier.hxx>
@@ -46,19 +41,12 @@
 #include <rolbck.hxx>
 #include <acorrect.hxx>
 #include <docary.hxx>
-
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
-
-
-//------------------------------------------------------------
-
-// OVERWRITE
-
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
@@ -190,10 +178,6 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     return sal_True;
 }
 
-
-
-
-
 void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
@@ -243,6 +227,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
         rIdx--;
     }
+
     if( pHistory )
     {
         if( pTxtNd->GetpSwpHints() )
@@ -284,7 +269,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
-    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite not in TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
 
     if( pRedlSaveData )
@@ -339,8 +324,6 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 
     return aResult;
 }
-
-//------------------------------------------------------------
 
 struct _UndoTransliterate_Data
 {
@@ -495,6 +478,5 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

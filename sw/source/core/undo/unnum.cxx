@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <UndoNumbering.hxx>
-
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <doc.hxx>
@@ -38,7 +36,6 @@
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
-
 
 SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwNumRule& rNewRule,
@@ -178,9 +175,6 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
         pOldNumRule = new SwNumRule( rOld );
 }
 
-/*  */
-
-
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( UNDO_DELNUM ), SwUndRng( rPam )
 {
@@ -254,10 +248,6 @@ void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     nSttNode = nNewStt;
 
-// We want to keep the Bookmarks/Directories, don't we?
-//  SetPaM( rUndoIter );
-//  RemoveIdxFromRange( *rUndoIter.pAktPam, sal_True );
-
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     rContext.GetDoc().MoveParagraph( rPam, -nOffset,
                                         UNDO_OUTLINE_UD == GetId() );
@@ -267,10 +257,6 @@ void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoMoveNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-// We want to keep the Bookmarks/Directories, don't we?
-//  SetPaM( rUndoIter );
-//  RemoveIdxFromRange( *rUndoIter.pAktPam, sal_True );
-
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     rContext.GetDoc().MoveParagraph(rPam, nOffset, UNDO_OUTLINE_UD == GetId());
 }
@@ -288,9 +274,6 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
         rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, sal_False);
     }
 }
-
-/*  */
-
 
 SwUndoNumUpDown::SwUndoNumUpDown( const SwPaM& rPam, short nOff )
     : SwUndo( nOff > 0 ? UNDO_NUMUP : UNDO_NUMDOWN ), SwUndRng( rPam ),
@@ -316,8 +299,6 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
 {
     rContext.GetDoc().NumUpDown(rContext.GetRepeatPaM(), 1 == nOffset);
 }
-
-/*  */
 
 // #115901#
 SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bOldNum,
@@ -365,8 +346,6 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-/*  */
-
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bFlg )
     : SwUndo( UNDO_SETNUMRULESTART ),
     nIdx( rPos.nNode.GetIndex() ), nOldStt( USHRT_MAX ),
@@ -393,7 +372,6 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
     }
 }
 
-
 void SwUndoNumRuleStart::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
@@ -407,7 +385,6 @@ void SwUndoNumRuleStart::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.SetNumRuleStart( aPos, !bFlag );
     }
 }
-
 
 void SwUndoNumRuleStart::RedoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -423,7 +400,6 @@ void SwUndoNumRuleStart::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-
 void SwUndoNumRuleStart::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
@@ -436,6 +412,5 @@ void SwUndoNumRuleStart::RepeatImpl(::sw::RepeatContext & rContext)
         rDoc.SetNumRuleStart(*rContext.GetRepeatPaM().GetPoint(), bFlag);
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

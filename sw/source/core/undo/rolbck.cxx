@@ -26,15 +26,10 @@
  *
  ************************************************************************/
 
-
 #include <rolbck.hxx>
-
 #include <tools/resid.hxx>
-
 #include <svl/itemiter.hxx>
-
 #include <editeng/brkitem.hxx>
-
 #include <hints.hxx>
 #include <hintids.hxx>
 #include <fmtftn.hxx>
@@ -56,8 +51,8 @@
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>            // SwTxtNode
-#include <paratr.hxx>           //
-#include <cellatr.hxx>          //
+#include <paratr.hxx>
+#include <cellatr.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -74,7 +69,6 @@ String SwHistoryHint::GetDescription() const
     return String();
 }
 
-
 SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
     :  SwHistoryHint( HSTRY_SETFMTHNT )
     ,  m_pAttr( pFmtHt->Clone() )
@@ -90,7 +84,7 @@ SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
             break;
         case RES_BOXATR_FORMULA:
         {
-            //JP 30.07.98: Bug 54295 - save formulas always in plain text
+            // save formulas always in plain text
             SwTblBoxFormula& rNew = static_cast<SwTblBoxFormula&>(*m_pAttr);
             if ( rNew.IsIntrnlName() )
             {
@@ -117,7 +111,7 @@ SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
 
 String SwHistorySetFmt::GetDescription() const
 {
-    String aResult ;
+    String aResult;
 
     sal_uInt16 nWhich = m_pAttr->Which();
     switch (nWhich)
@@ -184,14 +178,12 @@ SwHistorySetFmt::~SwHistorySetFmt()
 {
 }
 
-
 SwHistoryResetFmt::SwHistoryResetFmt(const SfxPoolItem* pFmtHt, sal_uLong nNodeIdx)
     : SwHistoryHint( HSTRY_RESETFMTHNT )
     , m_nNodeIndex( nNodeIdx )
     , m_nWhich( pFmtHt->Which() )
 {
 }
-
 
 void SwHistoryResetFmt::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -206,7 +198,6 @@ void SwHistoryResetFmt::SetInDoc( SwDoc* pDoc, bool )
             ResetFmtAttr( m_nWhich );
     }
 }
-
 
 SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTHNT )
@@ -231,11 +222,9 @@ SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     }
 }
 
-
 SwHistorySetTxt::~SwHistorySetTxt()
 {
 }
-
 
 void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -260,7 +249,6 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
                         nsSetAttrMode::SETATTR_NOHINTADJUST );
     }
 }
-
 
 SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
@@ -293,7 +281,6 @@ SwHistorySetTxtFld::~SwHistorySetTxtFld()
 {
 }
 
-
 void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
 {
     if ( !m_pFld.get() )
@@ -322,8 +309,6 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
-
 SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETREFMARKHNT )
     , m_RefName( pTxtHt->GetRefMark().GetRefName() )
@@ -332,7 +317,6 @@ SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, sal_uLong nNodeP
     , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
 }
-
 
 void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -352,7 +336,6 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
 SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTOXMARKHNT )
     , m_TOXMark( pTxtHt->GetTOXMark() )
@@ -364,7 +347,6 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNodeP
 {
     m_TOXMark.DeRegister();
 }
-
 
 void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -397,7 +379,6 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
                         nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
-
 int SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
 {
     return m_TOXName   == rCmp.GetTOXType()->GetTypeName() &&
@@ -410,7 +391,6 @@ int SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
            );
 }
 
-
 SwHistoryResetTxt::SwHistoryResetTxt( sal_uInt16 nWhich,
             xub_StrLen nAttrStart, xub_StrLen nAttrEnd, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_RESETTXTHNT )
@@ -418,7 +398,6 @@ SwHistoryResetTxt::SwHistoryResetTxt( sal_uInt16 nWhich,
     , m_nAttr( nWhich )
 {
 }
-
 
 void SwHistoryResetTxt::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -429,7 +408,6 @@ void SwHistoryResetTxt::SetInDoc( SwDoc* pDoc, bool )
         pTxtNd->DeleteAttributes( m_nAttr, m_nStart, m_nEnd );
     }
 }
-
 
 SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETFTNHNT )
@@ -477,7 +455,6 @@ SwHistorySetFootnote::~SwHistorySetFootnote()
 {
 }
 
-
 void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
@@ -524,7 +501,6 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
 SwHistoryChangeFmtColl::SwHistoryChangeFmtColl( SwFmtColl* pFmtColl, sal_uLong nNd,
                             sal_uInt8 nNodeWhich )
     : SwHistoryHint( HSTRY_CHGFMTCOLL )
@@ -559,7 +535,6 @@ void SwHistoryChangeFmtColl::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
 SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
     : SwHistoryHint( HSTRY_FLYCNT )
     , m_pUndo( new SwUndoDelLayFmt( pFlyFmt ) )
@@ -568,11 +543,9 @@ SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
     m_pUndo->ChgShowSel( sal_False );
 }
 
-
 SwHistoryTxtFlyCnt::~SwHistoryTxtFlyCnt()
 {
 }
-
 
 void SwHistoryTxtFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -581,8 +554,6 @@ void SwHistoryTxtFlyCnt::SetInDoc( SwDoc* pDoc, bool )
     ::sw::UndoRedoContext context(*pDoc, *pISCS);
     m_pUndo->UndoImpl(context);
 }
-
-
 
 SwHistoryBookmark::SwHistoryBookmark(
     const ::sw::mark::IMark& rBkmk,
@@ -619,7 +590,6 @@ SwHistoryBookmark::SwHistoryBookmark(
         }
     }
 }
-
 
 void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -696,7 +666,6 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
 bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 {
     return m_nNode == rBkmk.GetMarkPos().nNode.GetIndex()
@@ -708,9 +677,6 @@ const ::rtl::OUString& SwHistoryBookmark::GetName() const
 {
     return m_aName;
 }
-
-/*************************************************************************/
-
 
 SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                         sal_uLong nNodePos, const std::set<sal_uInt16> &rSetArr )
@@ -744,10 +710,9 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
 
                 case RES_BOXATR_FORMULA:
                     {
-                    //JP 20.04.98: Bug 49502 - When a formula is set, never save
-                    //             the value. It possibly must be recalculated!
-                    //JP 30.07.98: Bug 54295 - Save formulas always in plain
-                    //             text
+                        // When a formula is set, never save the value. It
+                        // possibly must be recalculated!
+                        // Save formulas always in plain text
                         m_OldSet.ClearItem( RES_BOXATR_VALUE );
 
                         SwTblBoxFormula& rNew =
@@ -811,9 +776,6 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-/*************************************************************************/
-
-
 SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
                     sal_uLong nNodePos, xub_StrLen nAttrStt, xub_StrLen nAttrEnd )
     : SwHistoryHint( HSTRY_RESETATTRSET )
@@ -868,7 +830,6 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
     }
 }
 
-
 void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
@@ -898,10 +859,6 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
         }
     }
 }
-
-
-/*************************************************************************/
-
 
 SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
@@ -946,9 +903,6 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
-/*************************************************************************/
-
 SwHistoryChangeFlyChain::SwHistoryChangeFlyChain( SwFlyFrmFmt& rFmt,
                                         const SwFmtChain& rAttr )
     : SwHistoryHint( HSTRY_CHGFLYCHAIN )
@@ -957,7 +911,6 @@ SwHistoryChangeFlyChain::SwHistoryChangeFlyChain( SwFlyFrmFmt& rFmt,
     , m_pFlyFmt( &rFmt )
 {
 }
-
 
 void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 {
@@ -990,7 +943,6 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-
 // -> #i27615#
 SwHistoryChangeCharFmt::SwHistoryChangeCharFmt(const SfxItemSet & rSet,
                                      const String & sFmt)
@@ -1011,7 +963,6 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 // <- #i27615#
 
 
-
 SwHistory::SwHistory( sal_uInt16 nInitSz )
     : m_SwpHstry()
     , m_nEndDiff( 0 )
@@ -1019,19 +970,10 @@ SwHistory::SwHistory( sal_uInt16 nInitSz )
     m_SwpHstry.reserve( (sal_uInt8)nInitSz );
 }
 
-
 SwHistory::~SwHistory()
 {
     Delete( 0 );
 }
-
-
-/*************************************************************************
-|*
-|*    void SwHistory::Add()
-|*
-|*
-*************************************************************************/
 
 void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
                      sal_uLong nNodeIdx )
@@ -1055,7 +997,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
     m_SwpHstry.push_back( pHt );
 }
 
-
+// FIXME: refactor the following "Add" methods (DRY)?
 void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
@@ -1100,7 +1042,6 @@ void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
     m_SwpHstry.push_back( pHt );
 }
 
-
 void SwHistory::Add( SwFmtColl* pColl, sal_uLong nNodeIdx, sal_uInt8 nWhichNd )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
@@ -1110,7 +1051,6 @@ void SwHistory::Add( SwFmtColl* pColl, sal_uLong nNodeIdx, sal_uInt8 nWhichNd )
     m_SwpHstry.push_back( pHt );
 }
 
-
 void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
@@ -1118,7 +1058,6 @@ void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOth
     SwHistoryHint * pHt = new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos);
     m_SwpHstry.push_back( pHt );
 }
-
 
 void SwHistory::Add( SwFrmFmt& rFmt )
 {
@@ -1177,14 +1116,6 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
     m_SwpHstry.push_back( pHt );
 }
 
-/*************************************************************************
-|*
-|*    sal_Bool SwHistory::Rollback()
-|*
-|*
-*************************************************************************/
-
-
 bool SwHistory::Rollback( SwDoc* pDoc, sal_uInt16 nStart )
 {
     if ( !Count() )
@@ -1202,8 +1133,6 @@ bool SwHistory::Rollback( SwDoc* pDoc, sal_uInt16 nStart )
     m_nEndDiff = 0;
     return true;
 }
-
-
 
 bool SwHistory::TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool bToFirst )
 {
@@ -1231,7 +1160,6 @@ bool SwHistory::TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool bToFirst )
     return true;
 }
 
-
 void SwHistory::Delete( sal_uInt16 nStart )
 {
     for ( sal_uInt16 n = Count(); n > nStart; )
@@ -1242,10 +1170,9 @@ void SwHistory::Delete( sal_uInt16 nStart )
     m_nEndDiff = 0;
 }
 
-
 sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
 {
-    OSL_ENSURE( nNewTmpEnd <= Count(),  "SwHistory::SetTmpEnd: out of bounds" );
+    OSL_ENSURE( nNewTmpEnd <= Count(), "SwHistory::SetTmpEnd: out of bounds" );
 
     sal_uInt16 nOld = Count() - m_nEndDiff;
     m_nEndDiff = Count() - nNewTmpEnd;
@@ -1294,11 +1221,9 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
     const xub_StrLen * pEndIdx;
     for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
     {
-        // BP: nAttrStt must even be set when !pEndIdx
+        // nAttrStt must even be set when !pEndIdx
         pHt = pHts->GetTextHint(n);
         nAttrStt = *pHt->GetStart();
-// JP: ???? why nAttrStt >= nEnd
-//      if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt >= nEnd )
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 
@@ -1324,8 +1249,6 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
         if ( nStart <= nAttrStt )
         {
             if ( nEnd > nAttrStt
-// JP: ???? why nAttrStt >= nEnd
-//              || (nEnd == nAttrStt && (!pEndIdx || nEnd == pEndIdx->GetIndex()))
             )
             {
                 Add( pHt, nNodeIdx, false );
@@ -1338,11 +1261,7 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
     }
 }
 
-
-/*************************************************************************/
-
 // Class to register the history at a Node, Format, HintsArray, ...
-
 SwRegHistory::SwRegHistory( SwHistory* pHst )
     : SwClient( 0 )
     , m_pHistory( pHst )
@@ -1373,7 +1292,6 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     // #i114861#
     // Do not handle a "noop" modify
     // - e.g. <SwTxtNode::NumRuleChgd()> uses such a "noop" modify
-//    if ( m_pHistory && ( pOld || pNew ) )
     if ( m_pHistory && ( pOld || pNew ) &&
          pOld != pNew )
     {
@@ -1408,13 +1326,10 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-
-
 void SwRegHistory::AddHint( SwTxtAttr* pHt, const bool bNew )
 {
     m_pHistory->Add( pHt, m_nNodeIndex, bNew );
 }
-
 
 bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     xub_StrLen const nStart, xub_StrLen const nEnd, SetAttrMode const nFlags )
@@ -1436,11 +1351,11 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
 
     const bool bInserted = pTxtNode->SetAttr( rSet, nStart, nEnd, nFlags );
 
-        // Caution: The array can be deleted when inserting an attribute!
-        // This can happen when the value that should be added first deletes
-        // an existing attribute but does not need to be added itself because
-        // the paragraph attributes are identical
-        // ( -> bForgetAttr in SwpHints::Insert )
+    // Caution: The array can be deleted when inserting an attribute!
+    // This can happen when the value that should be added first deletes
+    // an existing attribute but does not need to be added itself because
+    // the paragraph attributes are identical
+    // ( -> bForgetAttr in SwpHints::Insert )
     if ( pTxtNode->GetpSwpHints() && m_pHistory )
     {
         pTxtNode->GetpSwpHints()->DeRegister();

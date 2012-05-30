@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <UndoRedline.hxx>
-
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <doc.hxx>
@@ -45,14 +43,12 @@
 extern void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev );
 extern void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev );
 
-//------------------------------------------------------------------
-
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
     pRedlData( 0 ), pRedlSaveData( 0 ), nUserId( nUsrId ),
     bHiddenRedlines( sal_False )
 {
-    // mind the Redline
+    // consider Redline
     SwDoc& rDoc = *rRange.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
@@ -97,7 +93,6 @@ sal_uInt16 SwUndoRedline::GetRedlSaveCount() const
     return pRedlSaveData ? pRedlSaveData->Count() : 0;
 }
 
-
 void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
@@ -120,7 +115,6 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
         SetPaM(rPam, true);
     }
 }
-
 
 void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -155,9 +149,6 @@ void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     rDoc.DeleteRedline(rPam, true, USHRT_MAX);
 }
-
-
-// SwUndoRedlineDelete ///////////////////////////////////////////////////
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     : SwUndoRedline( nUsrId ? nUsrId : UNDO_DELETE, rRange ),
@@ -227,7 +218,6 @@ sal_Bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
     }
     return bRet;
 }
-
 
 SwUndoRedlineSort::SwUndoRedlineSort( const SwPaM& rRange,
                                     const SwSortOptions& rOpt )
@@ -343,8 +333,6 @@ void SwUndoRedlineSort::SetOffset( const SwNodeIndex& rIdx )
     nOffset = rIdx.GetIndex() - nSttNode;
 }
 
-// SwUndoAcceptRedline ///////////////////////////////////////////////////
-
 SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )
     : SwUndoRedline( UNDO_ACCEPT_REDLINE, rRange )
 {
@@ -374,8 +362,6 @@ void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
 {
     rContext.GetDoc().RejectRedline(rContext.GetRepeatPaM(), true);
 }
-
-// SwUndoCompDoc /////////////////////////////////////////////////////////
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( 0 ),
@@ -520,6 +506,5 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SetPaM(*pPam, true);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

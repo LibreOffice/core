@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <UndoTable.hxx>
-
 #include <UndoRedline.hxx>
 #include <UndoDelete.hxx>
 #include <UndoSplitMove.hxx>
@@ -155,7 +154,6 @@ class _SaveLine
     sal_uInt16 nItemSet;
 
 public:
-
     _SaveLine( _SaveLine* pPrev, const SwTableLine& rLine, _SaveTable& rSTbl );
     ~_SaveLine();
 
@@ -1051,7 +1049,6 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     if( n < nOldLines )
     {
         // remove remaining lines...
-
         for (sal_uInt16 k1 = 0; k1 < nOldLines - n;  ++k1)
         {
             const SwTableBoxes &rBoxes = rTbl.GetTabLines()[n + k1]->GetTabBoxes();
@@ -1372,7 +1369,6 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
 }
 
 // UndoObject for attribute changes on table
-
 SwUndoAttrTbl::SwUndoAttrTbl( const SwTableNode& rTblNd, sal_Bool bClearTabCols )
     : SwUndo( UNDO_TABLE_ATTR ),
     nSttNode( rTblNd.GetIndex() )
@@ -1410,7 +1406,6 @@ void SwUndoAttrTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 // UndoObject for AutoFormat on Table
-
 SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
                                     const SwTableAutoFmt& rAFmt )
     : SwUndo( UNDO_TABLE_AUTOFMT ),
@@ -1940,7 +1935,6 @@ void SwUndoTblMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     // ? TL_CHART2: notification or locking of controller required ?
 
     // 1. restore deleted boxes:
-
     // Trick: add missing boxes in any line, they will be connected
     // correctly when calling CreateNew
     SwTableBox *pBox, *pCpyBox = pTblNd->GetTable().GetTabSortBoxes()[0];
@@ -2036,7 +2030,6 @@ CHECKTABLE(pTblNd->GetTable())
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
             pTBoxes->erase( std::find(pTBoxes->begin(), pTBoxes->end(), pBox ) );
 
-
             // delete indices from section
             {
                 SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
@@ -2050,7 +2043,6 @@ CHECKTABLE(pTblNd->GetTable())
         }
     }
 CHECKTABLE(pTblNd->GetTable())
-
 
     pSaveTbl->CreateNew( pTblNd->GetTable(), sal_True, sal_False );
 
@@ -2260,8 +2252,8 @@ class RedlineModeInternGuard
 
 public:
     RedlineModeInternGuard(
-        SwDoc& rDoc,                      /// change mode of this document
-        RedlineMode_t eNewRedlineMode,    /// new redline mode
+        SwDoc& rDoc,                      // change mode of this document
+        RedlineMode_t eNewRedlineMode,    // new redline mode
         RedlineMode_t eRedlineModeMask  = (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE /*change only bits set in this mask*/));
 
     ~RedlineModeInternGuard();
