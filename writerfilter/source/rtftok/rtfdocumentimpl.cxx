@@ -1614,7 +1614,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PJc, pValue));
+        m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PJc, pValue);
         return 0;
     }
 
@@ -2223,7 +2223,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        m_aStates.top().aCharacterSprms->push_back(make_pair(nSprm, pIntValue));
+        m_aStates.top().aCharacterSprms.set(nSprm, pIntValue);
         // Language is a character property, but we should store it at a paragraph level as well for fields.
         if (nKeyword == RTF_LANG && m_bNeedPap)
             m_aStates.top().aParagraphSprms->push_back(make_pair(nSprm, pIntValue));
@@ -2241,7 +2241,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        m_aStates.top().aParagraphSprms->push_back(make_pair(nSprm, pIntValue));
+        m_aStates.top().aParagraphSprms.set(nSprm, pIntValue);
         if (nKeyword == RTF_ITAP && nParam > 0)
             // Invalid tables may omit INTBL after ITAP
             dispatchFlag(RTF_INTBL);
@@ -2306,7 +2306,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 int nFontIndex = getFontIndex(nParam);
                 RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
-                m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
+                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CRgFtc0, pValue);
                 m_aStates.top().nCurrentEncoding = getEncoding(nFontIndex);
             }
             break;
@@ -2354,7 +2354,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_SGC, pValue)); // paragraph style
             }
             else
-                m_aStates.top().aParagraphAttributes->push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
+                m_aStates.top().aParagraphAttributes.set(NS_rtf::LN_ISTD, pIntValue);
             break;
         case RTF_CS:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
@@ -2814,11 +2814,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_SB:
             lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
-                    NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue);
+                    NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue, true);
             break;
         case RTF_SA:
             lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
-                    NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue);
+                    NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue, true);
             break;
         case RTF_DPX:
             m_aStates.top().aDrawingObject.nLeft = TWIP_TO_MM100(nParam);
@@ -2868,11 +2868,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aDrawingObject.nFillColorB = nParam; m_aStates.top().aDrawingObject.bHasFillColor = true;
             break;
         case RTF_LI:
-            m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PDxaLeft, pIntValue));
+            m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PDxaLeft, pIntValue);
             // It turns out \li should reset the \fi inherited from the stylesheet.
             // So set the direct formatting to zero, if we don't have such direct formatting yet.
             if (!m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PDxaLeft1).get())
-                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PDxaLeft1, RTFValue::Pointer_t(new RTFValue(0))));
+                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PDxaLeft1, RTFValue::Pointer_t(new RTFValue(0)));
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
@@ -2953,7 +2953,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     }
     if (nSprm >= 0)
     {
-        m_aStates.top().aCharacterSprms->push_back(make_pair(nSprm, pBoolValue));
+        m_aStates.top().aCharacterSprms.set(nSprm, pBoolValue);
         return 0;
     }
 

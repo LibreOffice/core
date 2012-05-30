@@ -105,6 +105,20 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword)
     return pValue;
 }
 
+void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite)
+{
+    if (bOverwrite)
+    {
+        for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
+            if (i->first == nKeyword)
+            {
+                i->second = pValue;
+                return;
+            }
+    }
+    m_aSprms.push_back(std::make_pair(nKeyword, pValue));
+}
+
 bool RTFSprms::erase(Id nKeyword)
 {
     for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)

@@ -44,6 +44,8 @@ namespace writerfilter {
                 RTFSprms& operator=(const RTFSprms& rOther);
                 std::vector< std::pair<Id, RTFValue::Pointer_t> >* operator->();
                 RTFValue::Pointer_t find(Id nKeyword);
+                /// Does the same as ->push_back(), except that it can overwrite existing entries.
+                void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
                 bool erase(Id nKeyword);
                 void swap(RTFSprms& rOther);
             private:
