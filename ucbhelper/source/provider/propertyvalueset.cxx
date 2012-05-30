@@ -639,8 +639,8 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
         m_bTriedToGetTypeConverter = sal_True;
         m_xTypeConverter = Reference< XTypeConverter >(
                                 m_xSMgr->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.script.Converter" )) ),
+                                    OUString(
+                                        "com.sun.star.script.Converter" ) ),
                                 UNO_QUERY );
 
         OSL_ENSURE( m_xTypeConverter.is(),

@@ -320,17 +320,17 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rxSMgr->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationProvider" )) ),
+                    rtl::OUString(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
                 uno::UNO_QUERY );
 
         uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONFIG_ROOT_KEY ));
+        aArguments[ 0 ] <<= rtl::OUString( CONFIG_ROOT_KEY );
 
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationAccess" )),
+                        rtl::OUString(
+                            "com.sun.star.configuration.ConfigurationAccess" ),
                     aArguments ) );
 
         OSL_ENSURE( xInterface.is(),
@@ -722,14 +722,14 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 if ( nColonPos == -1 )
                 {
                     // No port given, server pattern equals current token
-                    aPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    aPort = rtl::OUString("*");
                     if ( aToken.indexOf( '*' ) == -1 )
                     {
                         // pattern describes exactly one server
                         aServer = aToken;
                     }
 
-                    aToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":*"));
+                    aToken += rtl::OUString(":*");
                 }
                 else
                 {

@@ -105,10 +105,10 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                   "ResultSetImplHelper" )),
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                   DYNAMICRESULTSET_SERVICE_NAME )) );
+                               rtl::OUString(
+                                   "ResultSetImplHelper" ),
+                               rtl::OUString(
+                                   DYNAMICRESULTSET_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -261,8 +261,8 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
                 = uno::Reference<
                     com::sun::star::ucb::XCachedDynamicResultSetStubFactory >(
                         m_xSMgr->createInstance(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
+                            rtl::OUString(
+                                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
                 uno::UNO_QUERY );
         }
         catch ( uno::Exception const & )

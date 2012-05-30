@@ -225,8 +225,8 @@ InitUCBHelper()
 
     // Create UCB.
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString( UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 }
 
@@ -286,8 +286,8 @@ bool ContentBroker_Impl::initialize()
                 try
                 {
                     xIfc = m_xSMgr->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.ucb.UniversalContentBroker" )) );
+                            OUString(
+                                "com.sun.star.ucb.UniversalContentBroker" ) );
                 }
                 catch ( Exception const & )
                 {
@@ -320,8 +320,8 @@ bool ContentBroker_Impl::initialize()
                 try
                 {
                     xIfc = m_xSMgr->createInstanceWithArguments(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.ucb.UniversalContentBroker" )),
+                            OUString(
+                                "com.sun.star.ucb.UniversalContentBroker" ),
                             m_aArguments );
                 }
                 catch ( Exception const & )
