@@ -851,8 +851,8 @@ namespace cmis
                 }
                 else
                 {
-                    // TODO Removing a folder and its children needs removeTree in libcmis
-                    // the remove() function only works for empty folders or documents
+                    libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( ).get() );
+                    folder->removeTree( );
                 }
             }
             catch ( const libcmis::Exception& e )
