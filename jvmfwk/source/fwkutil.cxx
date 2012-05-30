@@ -69,7 +69,7 @@ bool isAccessibilitySupportDesired()
 {
     OUString sValue;
     if ((sal_True == ::rtl::Bootstrap::get(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY")), sValue)) && sValue == "1"
+        OUString("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY"), sValue)) && sValue == "1"
         )
         return false;
 
@@ -260,7 +260,7 @@ rtl::OUString findPlugin(
     }
     rtl::OUString retVal;
     rtl::OUString sProgDir = getExecutableDirectory();
-    sUrl = sProgDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
+    sUrl = sProgDir + rtl::OUString("/")
         + plugin;
     jfw::FileStatus s = checkFileURL(sUrl);
     if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
@@ -272,11 +272,11 @@ rtl::OUString findPlugin(
             rtl::OUString url;
 #ifdef UNX
 #if defined(MACOSX)
-            rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DYLD_LIBRARY_PATH"));
+            rtl::OUString path = rtl::OUString("DYLD_LIBRARY_PATH");
 #elif defined(AIX)
-            rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LIBPATH"));
+            rtl::OUString path = rtl::OUString("LIBPATH");
 #else
-            rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LD_LIBRARY_PATH"));
+            rtl::OUString path = rtl::OUString("LD_LIBRARY_PATH");
 #endif
             rtl::OUString env_path;
             oslProcessError err = osl_getEnvironment(path.pData, &env_path.pData);
