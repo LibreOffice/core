@@ -229,7 +229,7 @@ static int _get_primary_monitor (GdkScreen *pScreen)
 }
 } // end anonymous namespace
 
-unsigned int GtkSalSystem::GetDisplayDefaultScreen()
+unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
     int idx = getScreenIdxFromPtr (pDefault);

@@ -68,7 +68,7 @@ bool X11SalSystem::IsUnifiedDisplay()
     return pSalDisp->IsXinerama() ? true : (nScreenCount == 1);
 }
 
-unsigned int X11SalSystem::GetDisplayDefaultScreen()
+unsigned int X11SalSystem::GetDisplayBuiltInScreen()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     return pSalDisp->GetDefaultXScreen().getXScreen();

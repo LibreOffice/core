@@ -1260,10 +1260,10 @@ bool Application::IsUnifiedDisplay()
     return pSys ? pSys->IsUnifiedDisplay() : true;
 }
 
-unsigned int Application::GetDisplayDefaultScreen()
+unsigned int Application::GetDisplayBuiltInScreen()
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDisplayDefaultScreen() : 0;
+    return pSys ? pSys->GetDisplayBuiltInScreen() : 0;
 }
 
 Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
@@ -1292,7 +1292,7 @@ unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
 unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
 {
     if( !IsUnifiedDisplay() )
-        return GetDisplayDefaultScreen();
+        return GetDisplayBuiltInScreen();
 
     const unsigned int nScreens = GetScreenCount();
     unsigned int nBestMatchScreen = 0;

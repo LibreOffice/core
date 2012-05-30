@@ -179,7 +179,7 @@ unsigned int WinSalSystem::GetDisplayScreenCount()
     return m_aMonitors.size();
 }
 
-unsigned int WinSalSystem::GetDisplayDefaultScreen()
+unsigned int WinSalSystem::GetDisplayBuiltInScreen()
 {
     initMonitors();
     return m_nPrimary;

@@ -231,6 +231,8 @@ DisplayAccess::DisplayAccess()
 
 static const char* pUnifiedDisplayName = "IsUnifiedDisplay";
 static const char* pDefaultDisplayName = "DefaultDisplay";
+static const char* pBuiltInDisplayName = "BuiltInDisplay";
+static const char* pExternalDisplayName = "ExternalDisplay";
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL DisplayAccess::getPropertySetInfo() throw (RuntimeException)
@@ -250,9 +252,32 @@ Any SAL_CALL DisplayAccess::getPropertyValue( const OUString& PropertyName ) thr
     {
         aRet <<= sal_Bool( Application::IsUnifiedDisplay() );
     }
-    else if( PropertyName.equalsAscii( pDefaultDisplayName ) )
+    else if( PropertyName.equalsAscii( pDefaultDisplayName ) || // Unhelpful name, legacy setting
+             PropertyName.equalsAscii( pBuiltInDisplayName ) )
     {
-        aRet <<= sal_Int32( Application::GetDisplayDefaultScreen() );
+        aRet <<= sal_Int32( Application::GetDisplayBuiltInScreen() );
+    }
+    else if( PropertyName.equalsAscii( pExternalDisplayName ) )
+    {
+        // This is really unpleasant, in theory we could have multiple
+        // external displays etc.
+        sal_Int32 nExternal(0);
+        switch (Application::GetDisplayBuiltInScreen())
+        {
+        case 0:
+            nExternal = 1;
+            break;
+        case 1:
+            nExternal = 0;
+            break;
+        default:
+            // When the built-in display is neither 0 nor 1
+            // then place the full-screen presentation on the
+            // first available screen.
+            nExternal = 0;
+            break;
+        }
+        aRet <<= nExternal;
     }
     else
         throw UnknownPropertyException();
@@ -268,9 +293,11 @@ void SAL_CALL DisplayAccess::removeVetoableChangeListener( const OUString&, cons
 // XPropertySetInfo
 Sequence< Property > SAL_CALL DisplayAccess::getProperties() throw (RuntimeException)
 {
-    Sequence< Property > aProps(2);
+    Sequence< Property > aProps(4);
     aProps[0] = getPropertyByName( OUString::createFromAscii( pUnifiedDisplayName ) );
     aProps[1] = getPropertyByName( OUString::createFromAscii( pDefaultDisplayName ) );
+    aProps[2] = getPropertyByName( OUString::createFromAscii( pBuiltInDisplayName ) );
+    aProps[3] = getPropertyByName( OUString::createFromAscii( pExternalDisplayName ) );
     return aProps;
 }
 
@@ -279,15 +306,20 @@ Property SAL_CALL DisplayAccess::getPropertyByName( const OUString& aName ) thro
     if( aName.equalsAscii( pUnifiedDisplayName ) )
         return Property( aName, 0, ::getCppuType( (sal_Bool const *)0 ), PropertyAttribute::READONLY );
 
-    if( aName.equalsAscii( pDefaultDisplayName ) )
+    if( aName.equalsAscii( pDefaultDisplayName ) ||
+        aName.equalsAscii( pBuiltInDisplayName ) ||
+        aName.equalsAscii( pExternalDisplayName ) )
         return Property( aName, 0, ::getCppuType( (sal_Int32 const *)0 ), PropertyAttribute::READONLY );
+
     throw UnknownPropertyException();
 }
 
 ::sal_Bool SAL_CALL DisplayAccess::hasPropertyByName( const OUString& Name ) throw (RuntimeException)
 {
     return Name.equalsAscii( pUnifiedDisplayName ) ||
-           Name.equalsAscii( pDefaultDisplayName );
+           Name.equalsAscii( pDefaultDisplayName ) ||
+           Name.equalsAscii( pBuiltInDisplayName ) ||
+           Name.equalsAscii( pExternalDisplayName );
 }
 
 // XIndexAccess

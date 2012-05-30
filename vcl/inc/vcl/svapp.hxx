@@ -300,7 +300,11 @@ public:
     // will always be GetDisplayDefaultScreen()
     SAL_DLLPRIVATE static unsigned int  GetBestScreen( const Rectangle& );
     SAL_DLLPRIVATE static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
-    SAL_DLLPRIVATE static unsigned int  GetDisplayDefaultScreen();
+    // This returns the LCD screen number for a laptop, or the primary
+    // external VGA display for a desktop machine - it is where a presenter
+    // console should be rendered if there are other (non-built-in) screens
+    // present.
+    SAL_DLLPRIVATE static unsigned int  GetDisplayBuiltInScreen();
     SAL_DLLPRIVATE static rtl::OUString GetDisplayScreenName( unsigned int nScreen );
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();

@@ -45,7 +45,7 @@ public:
     // overload pure virtual methods
     virtual unsigned int GetDisplayScreenCount();
     virtual bool         IsUnifiedDisplay();
-    virtual unsigned int GetDisplayDefaultScreen();
+    virtual unsigned int GetDisplayBuiltInScreen();
     virtual Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle    GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );

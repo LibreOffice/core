@@ -69,7 +69,7 @@ public:
     virtual ~WinSalSystem();
 
     virtual unsigned int GetDisplayScreenCount();
-    virtual unsigned int GetDisplayDefaultScreen();
+    virtual unsigned int GetDisplayBuiltInScreen();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );

@@ -86,7 +86,7 @@ public:
 
         @returns the default screen number
     */
-    virtual unsigned int GetDisplayDefaultScreen() { return 0; }
+    virtual unsigned int GetDisplayBuiltInScreen() { return 0; }
     /*  Gets relative position and size of the screens attached to the display
 
         @param nScreen
