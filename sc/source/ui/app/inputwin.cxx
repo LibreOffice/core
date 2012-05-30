@@ -1139,7 +1139,6 @@ ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh
         mnLastExpandedLines( INPUTWIN_MULTILINES ),
         mbInvalidate( false )
 {
-    mnTextHeight = GetTextHeight();
     Size aBorder;
     aBorder = CalcWindowSize( aBorder);
     mnBorderHeight = aBorder.Height();
@@ -1173,7 +1172,7 @@ EditView* ScMultiTextWnd::GetEditView()
 long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
 {
     // add padding ( for the borders of the window )
-    return ( nLines *  mnTextHeight ) + mnBorderHeight;
+    return ( nLines * LogicToPixel( Size( 0, GetTextHeight() ) ).Height() ) + mnBorderHeight;
 }
 
 void ScMultiTextWnd::SetNumLines( long nLines )
@@ -1463,6 +1462,7 @@ ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
     SetLineColor        ( COL_BLACK );
     SetMapMode          ( MAP_TWIP );
     SetPointer          ( POINTER_TEXT );
+    SetFont( aTextFont );
 }
 
 ScTextWnd::~ScTextWnd()
