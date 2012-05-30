@@ -195,7 +195,12 @@ namespace cmis
         try
         {
             if ( !m_pObject.get() )
-                m_pObject = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+            {
+                if ( !m_sObjectId.isEmpty( ) )
+                    m_pObject = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+                else
+                    m_pObject = m_pSession->getRootFolder( );
+            }
         }
         catch ( const libcmis::Exception& e )
         {

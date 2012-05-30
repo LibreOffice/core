@@ -88,7 +88,11 @@ namespace cmis
 
     rtl::OUString URL::getObjectId( )
     {
-        return m_aQuery["id"];
+        rtl::OUString sResult;
+        map< rtl::OUString, rtl::OUString >::iterator it = m_aQuery.find( "id" );
+        if ( it != m_aQuery.end( ) )
+            sResult = it->second;
+        return sResult;
     }
 
     rtl::OUString URL::getBindingUrl( )
