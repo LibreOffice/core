@@ -43,6 +43,11 @@
 
 namespace { struct SimpleLayoutEngine : public rtl::Static< ServerFontLayoutEngine, SimpleLayoutEngine > {}; }
 
+void GlyphMetric::SetSize(const Size& s)
+{
+    maSize = Size(std::max<long>(1, s.Width()), std::max<long>(1, s.Height()));
+}
+
 // =======================================================================
 // layout implementation for ServerFont
 // =======================================================================

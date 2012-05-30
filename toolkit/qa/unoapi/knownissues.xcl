@@ -150,10 +150,6 @@ toolkit.UnoControlNumericField::com::sun::star::awt::XView
 toolkit.UnoControlCheckBox::com::sun::star::awt::XView
 toolkit.UnoScrollBarControl::com::sun::star::awt::XView
 
-
-### i87757 ###
-toolkit.AccessibleFixedText::com::sun::star::accessibility::XAccessibleText
-
 ### i37643 ###
 toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleEventBroadcaster
 

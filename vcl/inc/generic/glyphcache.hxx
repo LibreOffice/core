@@ -132,7 +132,7 @@ protected:
     friend class GlyphData;
     void                    SetOffset( int nX, int nY ) { maOffset = Point( nX, nY); }
     void                    SetDelta( int nX, int nY )  { maDelta = Point( nX, nY); }
-    void                    SetSize( const Size& s )    { maSize = s; }
+    void                    SetSize(const Size& s);
     void                    SetCharWidth( long nW )     { mnAdvanceWidth = nW; }
 
 private:
