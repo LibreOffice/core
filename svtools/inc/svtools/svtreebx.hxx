@@ -78,6 +78,8 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
     short           nFocusWidth;
     sal_uInt16          aContextBmpMode;
 
+    long mnCheckboxItemWidth;
+
 #ifdef _SVTREEBX_CXX
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
 

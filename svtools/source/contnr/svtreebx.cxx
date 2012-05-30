@@ -88,6 +88,7 @@ void SvTreeListBox::InitTreeView()
     nFirstSelTab = 0;
     nLastSelTab = 0;
     nFocusWidth = -1;
+    mnCheckboxItemWidth = 0;
 
     Link* pLink = new Link( LINK(this,SvTreeListBox, DefaultCompare) );
     pLBoxImpl->m_pLink = pLink;
@@ -212,9 +213,11 @@ void SvTreeListBox::SetTabs()
     long nStartPos = TAB_STARTPOS;
     long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
 
+    // pCheckButtonData->Width() knows nothing about the native checkbox width,
+    // so we have mnCheckboxItemWidth which becomes valid when something is added.
     long nCheckWidth = 0;
     if( nTreeFlags & TREEFLAG_CHKBTN )
-        nCheckWidth = pCheckButtonData->aBmps[0].GetSizePixel().Width();
+        nCheckWidth = mnCheckboxItemWidth;
     long nCheckWidthDIV2 = nCheckWidth / 2;
 
     long nContextWidth = nContextBmpWidthMax;
@@ -519,6 +522,20 @@ void SvTreeListBox::ImpEntryInserted( SvLBoxEntry* pEntry )
         }
     }
     SetEntryHeight( (SvLBoxEntry*)pEntry );
+
+    if( nTreeFlags & TREEFLAG_CHKBTN )
+    {
+        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        if( pItem )
+        {
+            long nWidth = pItem->GetSize(this, pEntry).Width();
+            if( mnCheckboxItemWidth < nWidth )
+            {
+                mnCheckboxItemWidth = nWidth;
+                nTreeFlags |= TREEFLAG_RECALCTABS;
+            }
+        }
+    }
 }
 
 
