@@ -1276,7 +1276,7 @@ else # !SYSTEM_POSTGRESQL
 define gb_LinkTarget__use_postgresql
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR_FOR_BUILD)/inc/postgresql \
+	-I$(OUTDIR)/inc/postgresql \
 	$$(INCLUDE) \
 )
 
@@ -1326,8 +1326,8 @@ $(call gb_LinkTarget_add_defs,$(1),\
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(OUTDIR_FOR_BUILD)/inc/mozilla/moz \
-	-I$(OUTDIR_FOR_BUILD)/inc/mozilla/nspr \
+	-I$(OUTDIR)/inc/mozilla/moz \
+	-I$(OUTDIR)/inc/mozilla/nspr \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1378,8 +1378,8 @@ $(call gb_LinkTarget_add_defs,$(1),\
 endif
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(OUTDIR_FOR_BUILD)/lib/embed_base_s.lib \
-	$(OUTDIR_FOR_BUILD)/lib/mozreg_s.lib \
+	$(OUTDIR)/lib/embed_base_s.lib \
+	$(OUTDIR)/lib/mozreg_s.lib \
 )
 
 endif
