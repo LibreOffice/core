@@ -876,8 +876,6 @@ SAL_CALL osl_mapFile(
         if (nSize > 0)
         {
             c ^= pData[0];
-            pData += nSize;
-            nSize -= nSize;
         }
     }
     return osl_File_E_None;

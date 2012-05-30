@@ -266,7 +266,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
             nRetValue += (double)nVal;
             if ( pLong[ nSwitch ] < 0 )
             {
-                nRetValue -= nRetValue;
+                nRetValue = -nRetValue;
             }
             nRetValue /= 65536;
         }
