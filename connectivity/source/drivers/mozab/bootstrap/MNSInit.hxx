@@ -28,7 +28,7 @@
 
 #ifndef _CONNECTIVITY_MAB_NS_INIT_HXX_
 #define _CONNECTIVITY_MAB_NS_INIT_HXX_ 1
-#include "MNSDeclares.hxx"
+#include "mozillasrc/MNSDeclares.hxx"
 
 #include <sal/types.h>
 

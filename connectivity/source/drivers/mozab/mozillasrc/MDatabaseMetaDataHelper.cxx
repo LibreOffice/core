@@ -28,7 +28,7 @@
 
 
 // Mozilla includes.
-#include <MNSInclude.hxx>
+#include "MNSInclude.hxx"
 
 #include "resource/mozab_res.hrc"
 #include "MDatabaseMetaDataHelper.hxx"
@@ -44,7 +44,7 @@
 #include <nsIAbDirFactoryService.h>
 #include "post_include_mozilla.h"
 
-#include <MNSInit.hxx>
+#include "bootstrap/MNSInit.hxx"
 #include <MNameMapper.hxx>
 #include "MNSMozabProxy.hxx"
 #include <MNSDeclares.hxx>

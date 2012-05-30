@@ -26,11 +26,11 @@
  *
  ************************************************************************/
 
-#include <MNSInclude.hxx>
+#include "mozillasrc/MNSInclude.hxx"
 
 #include "mozilla_nsinit.h"
 
-#include <MNSInit.hxx>
+#include "MNSInit.hxx"
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -39,9 +39,9 @@
 #include <rtl/bootstrap.hxx>
 
 #include "MConfigAccess.hxx"
-#include "MNSDeclares.hxx"
+#include "mozillasrc/MNSDeclares.hxx"
 #include <osl/thread.hxx>
-#include <MNSTerminateListener.hxx>
+#include "mozillasrc/MNSTerminateListener.hxx"
 
 static nsIServiceManager*   sServiceManager = nsnull;
 static sal_Int32            sInitCounter = 0;

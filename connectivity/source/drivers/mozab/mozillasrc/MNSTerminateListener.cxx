@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
-#include <MNSTerminateListener.hxx>
+#include "MNSTerminateListener.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <MNSInit.hxx>
+#include "bootstrap/MNSInit.hxx"
 
 
 using namespace ::com::sun::star::uno;

@@ -27,8 +27,8 @@
  ************************************************************************/
 
 #include "MNSRunnable.hxx"
-#include "MDatabaseMetaDataHelper.hxx"
-#include "MQuery.hxx"
+#include "mozillasrc/MDatabaseMetaDataHelper.hxx"
+#include "mozillasrc/MQuery.hxx"
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 

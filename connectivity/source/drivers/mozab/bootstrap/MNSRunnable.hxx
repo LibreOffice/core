@@ -28,10 +28,10 @@
 
 #ifndef _CONNECTIVITY_MAB_MOZAB_RUNNABLE_HXX_
 #define _CONNECTIVITY_MAB_MOZAB_RUNNABLE_HXX_
-#include "MNSDeclares.hxx"
+#include "mozillasrc/MNSDeclares.hxx"
 #include <osl/thread.hxx>
 
-#include <MNSInclude.hxx>
+#include "mozillasrc/MNSInclude.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
 

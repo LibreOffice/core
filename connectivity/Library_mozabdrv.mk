@@ -28,8 +28,6 @@
 $(eval $(call gb_Library_Library,mozabdrv))
 
 $(eval $(call gb_Library_set_include,mozabdrv,\
-	-I$(SRCDIR)/connectivity/source/drivers/mozab/bootstrap \
-	-I$(SRCDIR)/connectivity/source/drivers/mozab/mozillasrc \
 	-I$(SRCDIR)/connectivity/source/drivers/mozab \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \

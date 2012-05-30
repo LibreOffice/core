@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_defs,mozbootstrap,\
 ))
 
 $(eval $(call gb_Library_set_include,mozbootstrap,\
-	-I$(SRCDIR)/connectivity/source/drivers/mozab/mozillasrc \
+	-I$(SRCDIR)/connectivity/source/drivers/mozab \
 	$$(INCLUDE) \
 ))
 
