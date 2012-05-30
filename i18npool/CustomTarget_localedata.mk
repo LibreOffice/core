@@ -54,7 +54,7 @@ $(i18npool_LDDIR)/saxparser.rdb : $(i18npool_LDDIR)/saxparser.input \
 		$(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR_FOR_BUILD)/xml/ \
 			-o $@ $(SOLARENV)/bin/packcomponents.xslt $<)
 
-$(i18npool_LDDIR)/saxparser.input : $(call gb_ComponentTarget_get_target,sax/source/expatwrap/expwrap) | $(i18npool_LDDIR)/.dir
+$(i18npool_LDDIR)/saxparser.input : $(call gb_ComponentTarget_get_outdir_target,sax/source/expatwrap/expwrap) | $(i18npool_LDDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo '<list><filename>component/sax/source/expatwrap/expwrap.component</filename></list>' > $@
 
