@@ -48,6 +48,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 
 // ______________________________________________
 // includes of other projects
@@ -55,6 +56,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpaths.hxx>
 
@@ -1091,11 +1093,10 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
     {
         // create the needed substitution service.
         // We must replace all used variables inside readed path values.
-        // In case we can't do so ... the whole office can't work realy.
+        // In case we can't do so ... the whole office can't work really.
         // That's why it seams to be OK to throw a RuntimeException then.
-        xSubst = css::uno::Reference< css::util::XStringSubstitution >(
-                                xSMGR->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES),
-                                css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(xSMGR).getUNOContext() );
+        xSubst = css::util::PathSubstitution::create(xContext);
 
         // SAFE ->
         WriteGuard aWriteLock(m_aLock);

@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -440,7 +441,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     ::comphelper::ComponentContext aContext( xSMgr );
-    m_xSubstVariables.set( aContext.createComponent( "com.sun.star.util.PathSubstitution" ), UNO_QUERY_THROW );
+    m_xSubstVariables.set( PathSubstitution::create(aContext.getUNOContext()) );
     m_xMacroExpander.set( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY_THROW );
 
     // Create temporary hash map to have a mapping between property names and property handles

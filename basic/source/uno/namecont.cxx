@@ -62,6 +62,7 @@
 #include <com/sun/star/script/LibraryNotLoadedException.hpp>
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -388,11 +389,7 @@ SfxLibraryContainer::SfxLibraryContainer( void )
 
     mxSFI = ucb::SimpleFileAccess::create( comphelper::ComponentContext(mxMSF).getUNOContext() );
 
-    mxStringSubstitution = Reference< XStringSubstitution >( mxMSF->createInstance
-        ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution")) ), UNO_QUERY );
-    SAL_WARN_IF(
-        !mxStringSubstitution.is(), "basic",
-        "couldn't create PathSubstitution component");
+    mxStringSubstitution = util::PathSubstitution::create( comphelper::ComponentContext(mxMSF).getUNOContext() );
 }
 
 SfxLibraryContainer::~SfxLibraryContainer()

@@ -37,6 +37,7 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 /** === end UNO includes === **/
 
@@ -75,6 +76,7 @@ namespace logging
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::util::PathSubstitution;
     using ::com::sun::star::util::XStringSubstitution;
     using ::com::sun::star::beans::NamedValue;
     /** === end UNO using === **/
@@ -240,9 +242,8 @@ namespace logging
     {
         try
         {
-            Reference< XStringSubstitution > xStringSubst;
-            if ( m_aContext.createComponent( "com.sun.star.util.PathSubstitution", xStringSubst ) )
-                _inout_rURL = xStringSubst->substituteVariables( _inout_rURL, true );
+            Reference< XStringSubstitution > xStringSubst(PathSubstitution::create(m_aContext.getUNOContext()));
+            _inout_rURL = xStringSubst->substituteVariables( _inout_rURL, true );
         }
         catch( const Exception& )
         {
