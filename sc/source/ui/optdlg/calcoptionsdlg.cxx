@@ -64,7 +64,7 @@ void OptionString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
 
 }
 
-ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent) :
+ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig) :
     ModalDialog(pParent, ScResId(RID_SCDLG_FORMULA_CALCOPTIONS)),
     maLbSettings(this, ScResId(LB_SETTINGS)),
     maFtOptionEditCaption(this, ScResId(FT_OPTION_EDIT_CAPTION)),
@@ -74,7 +74,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent) :
     maBtnOK(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maCaptionIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_CAPTION).toString()),
-    maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString())
+    maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString()),
+    maConfig(rConfig)
 {
     maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
     maLbSettings.SetHighlightRange();

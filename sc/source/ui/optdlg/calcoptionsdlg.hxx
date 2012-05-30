@@ -34,10 +34,12 @@
 #include "vcl/fixed.hxx"
 #include "svx/checklbx.hxx"
 
+#include "calcconfig.hxx"
+
 class ScCalcOptionsDialog : public ModalDialog
 {
 public:
-    ScCalcOptionsDialog(Window* pParent);
+    ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig);
     virtual ~ScCalcOptionsDialog();
 
     DECL_LINK( SettingsSelHdl, void* );
@@ -62,6 +64,8 @@ private:
 
     rtl::OUString maCaptionIndirectSyntax;
     rtl::OUString maDescIndirectSyntax;
+
+    ScCalcConfig maConfig;
 };
 
 #endif
