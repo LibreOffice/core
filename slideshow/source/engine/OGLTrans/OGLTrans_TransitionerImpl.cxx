@@ -73,6 +73,11 @@ namespace unx
 #include <X11/X.h>
 #include <GL/glx.h>
 #include <GL/glxext.h>
+
+#if GLX_GLXEXT_VERSION<18
+    typedef void(*PFNGLXBINDTEXIMAGEEXTPROC)(Display*dpy,GLXDrawable,int,const int*);
+    typedef void(*PFNGLXRELEASETEXIMAGEEXTPROC)(Display*,GLXDrawable,int);
+#endif
 }
 #endif
 #include <vcl/sysdata.hxx>
