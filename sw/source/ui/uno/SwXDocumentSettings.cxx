@@ -839,7 +839,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_SETUP:
         {
-            SfxPrinter *pPrinter = mpDocSh->GetDoc()->getPrinter( sal_False );
+            SfxPrinter *pPrinter = mpDoc->getPrinter( sal_False );
             if (pPrinter)
             {
                 SvMemoryStream aStream;
