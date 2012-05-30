@@ -105,7 +105,7 @@ public class DocumentLoader
         }
     }
 
-    static void dump(String objectName, Object object)
+    static void dumpUNOObject(String objectName, Object object)
     {
         Log.i(TAG, objectName + " is " + (object != null ? object.toString() : "null"));
 
@@ -126,6 +126,17 @@ public class DocumentLoader
 
         for (com.sun.star.uno.Type t : types)
             Log.i(TAG, "  " + t.getTypeName());
+    }
+
+    static void dumpBytes(byte[] image)
+    {
+        for (int i = 0; i < 160; i += 16) {
+            String s = "";
+            for (int j = 0; j < 16; j++)
+                s = s + String.format(" %02x", image[i+j]);
+
+            Log.i(TAG, s);
+        }
     }
 
     @Override
@@ -207,7 +218,7 @@ public class DocumentLoader
                     xCompLoader.loadComponentFromURL
                     (sUrl, "_blank", 0, loadProps);
 
-                dump("oDoc", oDoc);
+                dumpUNOObject("oDoc", oDoc);
 
                 // Test stuff, try creating various services, see what types
                 // they offer, stuff that is hard to find out by reading
@@ -219,12 +230,12 @@ public class DocumentLoader
                     xCompLoader.loadComponentFromURL
                     ("private:factory/swriter", "_blank", 0, loadProps);
 
-                dump("swriter", swriter);
+                dumpUNOObject("swriter", swriter);
 
                 Object frameControl = xMCF.createInstanceWithContext
                     ("com.sun.star.frame.FrameControl", xContext);
 
-                dump("frameControl", frameControl);
+                dumpUNOObject("frameControl", frameControl);
 
                 com.sun.star.awt.XControl control = (com.sun.star.awt.XControl)
                     UnoRuntime.queryInterface(com.sun.star.awt.XControl.class, frameControl);
@@ -232,14 +243,14 @@ public class DocumentLoader
                 Object toolkit = xMCF.createInstanceWithContext
                     ("com.sun.star.awt.Toolkit", xContext);
 
-                dump("toolkit", toolkit);
+                dumpUNOObject("toolkit", toolkit);
 
                 com.sun.star.awt.XToolkit xToolkit = (com.sun.star.awt.XToolkit)
                     UnoRuntime.queryInterface(com.sun.star.awt.XToolkit.class, toolkit);
 
                 com.sun.star.awt.XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
 
-                dump("device", device);
+                dumpUNOObject("device", device);
 
                 // I guess the XRenderable thing might be what we want to use,
                 // having the code pretend it is printing?
@@ -262,6 +273,14 @@ public class DocumentLoader
                 Log.i(TAG, "getRendererCount: " + renderBabe.getRendererCount(oDoc, renderProps));
 
                 renderBabe.render(0, oDoc, renderProps);
+
+                com.sun.star.awt.XBitmap bitmap = device.createBitmap(0, 0, 1024, 1024);
+
+                byte[] image = bitmap.getDIB();
+
+                Log.i(TAG, "image is " + image.length + " bytes");
+
+                dumpBytes(image);
             }
         }
         catch (Exception e) {
