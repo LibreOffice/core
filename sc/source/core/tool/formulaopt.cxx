@@ -55,6 +55,7 @@ ScFormulaOptions::ScFormulaOptions()
 ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
     bUseEnglishFuncName ( rCpy.bUseEnglishFuncName ),
     eFormulaGrammar     ( rCpy.eFormulaGrammar ),
+    eIndirectFuncRefSyntax(rCpy.eIndirectFuncRefSyntax),
     aFormulaSepArg      ( rCpy.aFormulaSepArg ),
     aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
     aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol )
@@ -143,6 +144,7 @@ ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
 {
     bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
     eFormulaGrammar     = rCpy.eFormulaGrammar;
+    eIndirectFuncRefSyntax = rCpy.eIndirectFuncRefSyntax;
     aFormulaSepArg      = rCpy.aFormulaSepArg;
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
     aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
@@ -153,6 +155,7 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
 {
     return bUseEnglishFuncName == rOpt.bUseEnglishFuncName
         && eFormulaGrammar     == rOpt.eFormulaGrammar
+        && eIndirectFuncRefSyntax == rOpt.eIndirectFuncRefSyntax
         && aFormulaSepArg      == rOpt.aFormulaSepArg
         && aFormulaSepArrayRow == rOpt.aFormulaSepArrayRow
         && aFormulaSepArrayCol == rOpt.aFormulaSepArrayCol;
@@ -304,6 +307,7 @@ ScFormulaCfg::ScFormulaCfg() :
                     if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
                         SetFormulaSepArrayCol(aSep);
                 }
+                break;
                 case SCFORMULAOPT_INDIRECT_GRAMMAR:
                 {
                     // Get default value in case this option is not set.
@@ -336,7 +340,6 @@ ScFormulaCfg::ScFormulaCfg() :
                     while (false);
                     SetIndirectFuncSyntax(eConv);
                 }
-                break;
                 break;
                 }
             }

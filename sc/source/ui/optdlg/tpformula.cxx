@@ -79,6 +79,8 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
 
     Link aLink = LINK( this, ScTpFormulaOptions, ButtonHdl );
     maBtnSepReset.SetClickHdl(aLink);
+    maBtnCustomCalcDefault.SetClickHdl(aLink);
+    maBtnCustomCalcCustom.SetClickHdl(aLink);
     maBtnCustomCalcDetails.SetClickHdl(aLink);
 
     aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
@@ -119,6 +121,22 @@ void ScTpFormulaOptions::OnFocusSeparatorInput(Edit* pEdit)
     Selection aSel(0, nLen);
     pEdit->SetSelection(aSel);
     maOldSepValue = pEdit->GetText();
+}
+
+void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
+{
+    if (bDefault)
+    {
+        maBtnCustomCalcDefault.Check(true);
+        maBtnCustomCalcCustom.Check(false);
+        maBtnCustomCalcDetails.Disable();
+    }
+    else
+    {
+        maBtnCustomCalcDefault.Check(false);
+        maBtnCustomCalcCustom.Check(true);
+        maBtnCustomCalcDetails.Enable();
+    }
 }
 
 void ScTpFormulaOptions::LaunchCustomCalcSettings()
@@ -179,10 +197,14 @@ bool ScTpFormulaOptions::IsValidSeparatorSet() const
     return true;
 }
 
-IMPL_LINK( ScTpFormulaOptions, ButtonHdl, PushButton*, pBtn )
+IMPL_LINK( ScTpFormulaOptions, ButtonHdl, Button*, pBtn )
 {
     if (pBtn == &maBtnSepReset)
         ResetSeparators();
+    else if (pBtn == &maBtnCustomCalcDefault)
+        UpdateCustomCalcRadioButtons(true);
+    else if (pBtn == &maBtnCustomCalcCustom)
+        UpdateCustomCalcRadioButtons(false);
     else if (pBtn == &maBtnCustomCalcDetails)
         LaunchCustomCalcSettings();
 
@@ -315,6 +337,12 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     }
     else
         ResetSeparators();
+
+    // detailed calc settings.
+    ScFormulaOptions aDefaults;
+    formula::FormulaGrammar::AddressConvention eConv = aOpt.GetIndirectFuncSyntax();
+    bool bDefault = aDefaults.GetIndirectFuncSyntax() == eConv;
+    UpdateCustomCalcRadioButtons(bDefault);
 }
 
 int ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)

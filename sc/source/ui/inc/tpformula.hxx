@@ -52,12 +52,13 @@ private:
 
     void ResetSeparators();
     void OnFocusSeparatorInput(Edit* pEdit);
+    void UpdateCustomCalcRadioButtons(bool bDefault);
     void LaunchCustomCalcSettings();
 
     bool IsValidSeparator(const ::rtl::OUString& rSep) const;
     bool IsValidSeparatorSet() const;
 
-    DECL_LINK( ButtonHdl, PushButton* );
+    DECL_LINK( ButtonHdl, Button* );
     DECL_LINK( SepModifyHdl, Edit* );
     DECL_LINK( SepEditOnFocusHdl, Edit* );
 
