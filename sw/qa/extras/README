@@ -123,7 +123,7 @@ similarly to the property you want (getXYZ()). If there is none, it is most
 probably a property that can be read using XPropertySet:
 
 uno::Reference<beans::XPropertySet> properties(textDocument, uno::UNO_QUERY);
-sal_Int32 value; // the right type for the property
+sal_Int32 val; // the right type for the property
 properties->getPropertyValue("CharacterCount") >>= val;
 
 If there is a function to obtain the property, you need access it using the right interface.

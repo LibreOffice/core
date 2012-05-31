@@ -5,7 +5,7 @@ A few module that normally get built at the end of the build process
 are already converted. this 'pseudo-module' build them all as one.
 
 As module get converted to gbuild they can be added to this module
-if they fix the neceesary pre-requisite. that is:
+if they fix the necessary pre-requisite. that is:
 
 To qualify a module must not be the dependant of any other module,
 except postprocess or if the other module itself is under tail_build
