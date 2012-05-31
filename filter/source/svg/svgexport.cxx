@@ -88,6 +88,7 @@ static const char    aOOOAttrFooterVisibility[] = NSPREFIX "footer-visibility";
 static const char    aOOOAttrDateTimeField[] = NSPREFIX "date-time-field";
 static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
 static const char    aOOOAttrHeaderField[] = NSPREFIX "header-field";
+static const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
 
 // ooo xml attributes for pages and shapes
 static const char    aOOOAttrName[] = NSPREFIX "name";
@@ -1013,6 +1014,19 @@ sal_Bool SVGFilter::implGenerateMetaData()
                         {
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, B2UCONST( "hidden" ) );
                         }
+
+                        // We look for a slide transition.
+                        // Transition properties are exported together with animations.
+                        sal_Int16 nTransitionType(0);
+                        if( xPropSet->getPropertyValue( B2UCONST( "TransitionType" ) )  >>= nTransitionType )
+                        {
+                            sal_Int16 nTransitionSubType(0);
+                            if( xPropSet->getPropertyValue( B2UCONST( "TransitionSubtype" ) )  >>= nTransitionSubType )
+                            {
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasTransition, B2UCONST( "true" ) );
+                            }
+                        }
+
                     }
                 }
 

@@ -635,6 +635,7 @@ var aOOOAttrNumberingType = 'page-numbering-type';
 
 var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
+var aOOOAttrHasTransition = 'has-transition';
 var aOOOAttrBackgroundVisibility = 'background-visibility';
 var aOOOAttrMasterObjectsVisibility = 'master-objects-visibility';
 var aOOOAttrPageNumberVisibility = 'page-number-visibility';
@@ -1194,6 +1195,16 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.aTextFieldContentProviderSet[aFooterClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrFooterField );
     this.aTextFieldContentProviderSet[aHeaderClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrHeaderField );
 
+    // We look for slide transition.
+    this.aTransitionHandler = null;
+    this.bHasTransition = this.initHasTransition() || true;
+    if( this.bHasTransition )
+    {
+        this.aTransitionHandler = new SlideTransition( this.getSlideAnimationsRoot(), this.slideId );
+        if( this.aTransitionHandler.isValid() )
+            log( this.aTransitionHandler.info() );
+    }
+
     // We initialize the SlideAnimationsHandler object
     this.aSlideAnimationsHandler = new SlideAnimations( aSlideShow.getContext() );
     this.aSlideAnimationsHandler.importAnimations( this.getSlideAnimationsRoot() );
@@ -1210,7 +1221,8 @@ MetaSlide.prototype =
 /*** public methods ***/
 
 /** show
- *  Set the visibility property of the slide to 'inherit'.
+ *  Set the visibility property of the slide to 'inherit'
+ *  and update the master page view.
  */
 show : function()
 {
@@ -1259,6 +1271,12 @@ initMasterPage : function()
         this.theMetaDoc.aTextFieldHandlerSet[ sMasterPageId ] = new Object();
     }
     return this.theMetaDoc.aMasterPageSet[ sMasterPageId ];
+},
+
+initHasTransition : function()
+{
+    var sHasTransition = this.element.getAttributeNS( NSS['ooo'], aOOOAttrHasTransition );
+    return ( sHasTransition === 'true' );
 },
 
 initVisibilityProperty : function( aVisibilityAttribute, nDefaultValue )
@@ -1595,6 +1613,15 @@ MasterPageView.prototype.createElement = function()
     assert( aMasterPageViewElement,
             'MasterPageView.createElement: failed to create a master page view element.' );
     aMasterPageViewElement.setAttribute( 'class', 'MasterPageView' );
+
+    // we place a white rect below any else element
+    // that is also a workaround for some kind of slide transition
+    // when the master page is empty
+    var aWhiteRect = theDocument.createElementNS( NSS['svg'], 'rect' );
+    aWhiteRect.setAttribute( 'width', String( WIDTH ) );
+    aWhiteRect.setAttribute( 'height', String( HEIGHT) );
+    aWhiteRect.setAttribute( 'fill', '#FFFFFF' );
+    aMasterPageViewElement.appendChild( aWhiteRect );
 
     // init the Background element
     if( this.aMetaSlide.nIsBackgroundVisible )
@@ -2491,7 +2518,7 @@ function dispatchEffects(dir)
 function skipEffects(dir)
 {
     // TODO to be implemented
-    switchSlide(dir);
+    switchSlide(dir, true);
 }
 
 function switchSlide( nOffset, bSkipTransition )
@@ -2615,6 +2642,67 @@ function bind( aObject, aMethod )
                 return aMethod.call( aObject, arguments[0] );
             };
 }
+
+function bind2( aFunction )
+{
+    var aBoundArgList = arguments;
+
+    var aResultFunction = null;
+
+    switch( aBoundArgList.length )
+    {
+        case 1: aResultFunction = function()
+                {
+                    return aFunction.call( arguments[0], arguments[1],
+                                           arguments[2], arguments[3],
+                                           arguments[4] );
+                };
+                break;
+        case 2: aResultFunction = function()
+                {
+                    return aFunction.call( aBoundArgList[1], arguments[0],
+                                           arguments[1], arguments[2],
+                                           arguments[3] );
+                };
+                break;
+        case 3: aResultFunction = function()
+                {
+                    return aFunction.call( aBoundArgList[1], aBoundArgList[2],
+                                           arguments[0], arguments[1],
+                                           arguments[2] );
+                };
+                break;
+        case 4: aResultFunction = function()
+                {
+                    return aFunction.call( aBoundArgList[1], aBoundArgList[2],
+                                           aBoundArgList[3], arguments[0],
+                                           arguments[1] );
+                };
+                break;
+        case 5: aResultFunction = function()
+                {
+                    return aFunction.call( aBoundArgList[1], aBoundArgList[2],
+                                           aBoundArgList[3], aBoundArgList[4],
+                                           arguments[0] );
+                };
+                break;
+        default:
+            log( 'bind2: arity not handled.' );
+    }
+
+    return aResultFunction;
+}
+
+//function concat3( s1, s2, s3 )
+//{
+//    log( s1 + s2 + s3 );
+//}
+//
+//var bound1 = bind2( concat3, 'Qui' );
+//bound1( 'Quo', 'Qua' );
+//
+//var bound2 = bind2( concat3, 'Qui', 'Quo' );
+//bound2( 'Qua' );
 
 function getCurrentSystemTime()
 {
@@ -3333,31 +3421,59 @@ var aAttributeMap =
 };
 
 
+// Transition Classes
+TRANSITION_INVALID              = 0;    // Invalid type
+TRANSITION_CLIP_POLYPOLYGON     = 1;    // Transition expressed by parametric clip polygon
+TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-crafted function
+
+aTransitionClassOutMap = ['invalid', 'clip polypolygon', 'special'];
+
+
 // Transition Types
 BARWIPE_TRANSITION          = 1;
-FADE_TRANSITION             = 2; // 37
+PUSHWIPE_TRANSITION         = 2; // 35
+SLIDEWIPE_TRANSITION        = 3; // 36
+FADE_TRANSITION             = 4; // 37
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
+    'pushWipe'          : PUSHWIPE_TRANSITION,
+    'slideWipe'         : SLIDEWIPE_TRANSITION,
     'fade'              : FADE_TRANSITION
 };
 
-aTransitionTypeOutMap = [ '', 'barWipe', 'fade' ];
+aTransitionTypeOutMap = [ '', 'barWipe', 'pushWipe', 'slideWipe', 'fade' ];
 
 
 // Transition Subtypes
 DEFAULT_TRANS_SUBTYPE               = 0;
 LEFTTORIGHT_TRANS_SUBTYPE           = 1;
 TOPTOBOTTOM_TRANS_SUBTYPE           = 2;
-CROSSFADE_TRANS_SUBTYPE             = 3; // 101
+FROMLEFT_TRANS_SUBTYPE              = 3; // 97
+FROMTOP_TRANS_SUBTYPE               = 4;
+FROMRIGHT_TRANS_SUBTYPE             = 5;
+FROMBOTTOM_TRANS_SUBTYPE            = 6
+CROSSFADE_TRANS_SUBTYPE             = 7;
+FADETOCOLOR_TRANS_SUBTYPE           = 8;
+FADEFROMCOLOR_TRANS_SUBTYPE         = 9;
+FADEOVERCOLOR_TRANS_SUBTYPE         = 10; // 104
 
 aTransitionSubtypeInMap = {
     'leftToRight'       : LEFTTORIGHT_TRANS_SUBTYPE,
     'topToBottom'       : TOPTOBOTTOM_TRANS_SUBTYPE,
-    'crossfade'         : CROSSFADE_TRANS_SUBTYPE
+    'fromLeft'          : FROMLEFT_TRANS_SUBTYPE,
+    'fromTop'           : FROMTOP_TRANS_SUBTYPE,
+    'fromRight'         : FROMRIGHT_TRANS_SUBTYPE,
+    'fromBottom'        : FROMBOTTOM_TRANS_SUBTYPE,
+    'crossfade'         : CROSSFADE_TRANS_SUBTYPE,
+    'fadeToColor'       : FADETOCOLOR_TRANS_SUBTYPE,
+    'fadeFromColor'     : FADEFROMCOLOR_TRANS_SUBTYPE,
+    'fadeOverColor'     : FADEOVERCOLOR_TRANS_SUBTYPE
 };
 
-aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'crossfade' ];
+aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'fromLeft',
+                             'fromTop', 'fromRight', 'fromBottom', 'crossfade',
+                             'fadeToColor', 'fadeFromColor', 'fadeOverColor' ];
 
 
 // Transition Modes
@@ -3366,6 +3482,116 @@ TRANSITION_MODE_OUT = 0;
 
 aTransitionModeInMap = { 'out': TRANSITION_MODE_OUT, 'in': TRANSITION_MODE_IN };
 aTransitionModeOutMap = [ 'out', 'in' ];
+
+
+// Transition Reverse Methods
+
+// Ignore direction attribute altogether.
+// (If it has no sensible meaning for this transition.)
+REVERSEMETHOD_IGNORE                    = 0;
+// Revert by changing the direction of the parameter sweep.
+// (From 1->0 instead of 0->1)
+REVERSEMETHOD_INVERT_SWEEP              = 1;
+// Revert by subtracting the generated polygon from the target bound rect.
+REVERSEMETHOD_SUBTRACT_POLYGON          = 2;
+// Combination of REVERSEMETHOD_INVERT_SWEEP and REVERSEMETHOD_SUBTRACT_POLYGON.
+REVERSEMETHOD_SUBTRACT_AND_INVERT       = 3;
+// Reverse by rotating polygon 180 degrees.
+REVERSEMETHOD_ROTATE_180                = 4;
+// Reverse by flipping polygon at the y axis.
+REVERSEMETHOD_FLIP_X                    = 5;
+// Reverse by flipping polygon at the x axis.
+REVERSEMETHOD_FLIP_Y                    = 6;
+
+aReverseMethodOutMap = ['ignore', 'invert sweep', 'subtract polygon',
+                        'subtract and invert', 'rotate 180', 'flip x', 'flip y'];
+
+// ------------------------------------------------------------------------------------------ //
+// Transition filter info table
+
+var aTransitionInfoTable = {};
+
+// type: fake transition
+aTransitionInfoTable[0] = {};
+// subtype: default
+aTransitionInfoTable[0][0] =
+{
+    'class' : TRANSITION_INVALID,
+    'rotationAngle' : 0.0,
+    'scaleX' : 0.0,
+    'scaleY' : 0.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : false,
+    'scaleIsotropically' : false
+};
+
+
+aTransitionInfoTable[BARWIPE_TRANSITION] = {};
+aTransitionInfoTable[BARWIPE_TRANSITION][LEFTTORIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : false,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BARWIPE_TRANSITION][TOPTOBOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : false,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[PUSHWIPE_TRANSITION] = {};
+aTransitionInfoTable[PUSHWIPE_TRANSITION][FROMLEFT_TRANS_SUBTYPE] =
+aTransitionInfoTable[PUSHWIPE_TRANSITION][FROMTOP_TRANS_SUBTYPE] =
+aTransitionInfoTable[PUSHWIPE_TRANSITION][FROMRIGHT_TRANS_SUBTYPE] =
+aTransitionInfoTable[PUSHWIPE_TRANSITION][FROMBOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_SPECIAL,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[SLIDEWIPE_TRANSITION] = {};
+aTransitionInfoTable[SLIDEWIPE_TRANSITION][FROMLEFT_TRANS_SUBTYPE] =
+aTransitionInfoTable[SLIDEWIPE_TRANSITION][FROMTOP_TRANS_SUBTYPE] =
+aTransitionInfoTable[SLIDEWIPE_TRANSITION][FROMRIGHT_TRANS_SUBTYPE] =
+aTransitionInfoTable[SLIDEWIPE_TRANSITION][FROMBOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_SPECIAL,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[FADE_TRANSITION] = {};
+aTransitionInfoTable[FADE_TRANSITION][CROSSFADE_TRANS_SUBTYPE] =
+aTransitionInfoTable[FADE_TRANSITION][FADETOCOLOR_TRANS_SUBTYPE] =
+aTransitionInfoTable[FADE_TRANSITION][FADEFROMCOLOR_TRANS_SUBTYPE] =
+aTransitionInfoTable[FADE_TRANSITION][FADEOVERCOLOR_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_SPECIAL,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
 
 
 // ------------------------------------------------------------------------------------------ //
@@ -5847,6 +6073,453 @@ HSLAnimationWrapper.prototype.getUnderlyingValue = function()
 
 
 // ------------------------------------------------------------------------------------------ //
+/** Class SlideChangeBase
+ *  The base abstract class of classes performing slide transitions.
+ *
+ *  @param aLeavingSlide
+ *      An object of type AnimatedSlide handling the leaving slide.
+ *  @param aEnteringSlide
+ *      An object of type AnimatedSlide handling the entering slide.
+ */
+function SlideChangeBase(aLeavingSlide, aEnteringSlide)
+{
+    this.aLeavingSlide = aLeavingSlide;
+    this.aEnteringSlide = aEnteringSlide;
+    this.bIsFinished = false;
+}
+
+/** start
+ *  The transition initialization is performed here.
+ */
+SlideChangeBase.prototype.start = function()
+{
+    if( this.bIsFinished )
+        return;
+};
+
+/** start
+ *  The transition clean up is performed here.
+ */
+SlideChangeBase.prototype.end = function()
+{
+    if( this.bIsFinished )
+        return;
+
+    this.aLeavingSlide.hide();
+    this.aEnteringSlide.reset();
+    this.aLeavingSlide.reset();
+
+    this.bIsFinished = true;
+};
+
+/** perform
+ *  This method is responsible for performing the slide transition.
+ *
+ *  @param nValue
+ *      The time parameter.
+ *  @return {Boolean}
+ *      If the transition is performed returns tue else returns false.
+ */
+SlideChangeBase.prototype.perform = function( nValue )
+{
+    if( this.bIsFinished ) return false;
+
+    if( this.aLeavingSlide )
+        this.performOut( nValue );
+
+    if( this.aEnteringSlide )
+        this.performIn( nValue );
+
+    return true;
+};
+
+SlideChangeBase.prototype.getUnderlyingValue = function()
+{
+    return 0.0;
+};
+
+SlideChangeBase.prototype.performIn = function( nValue )
+{
+    log( 'SlideChangeBase.performIn: abstract method called' );
+};
+
+SlideChangeBase.prototype.performOut = function( nValue )
+{
+    log( 'SlideChangeBase.performOut: abstract method called' );
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class FadingSlideChange
+ *  This class performs a slide transition by fading out the leaving slide and
+ *  fading in the entering slide.
+ *
+ *  @param aLeavingSlide
+ *      An object of type AnimatedSlide handling the leaving slide.
+ *  @param aEnteringSlide
+ *      An object of type AnimatedSlide handling the entering slide.
+ */
+function FadingSlideChange( aLeavingSlide, aEnteringSlide )
+{
+    FadingSlideChange.superclass.constructor.call( this, aLeavingSlide, aEnteringSlide );
+    this.bFirstRun = true;
+}
+extend( FadingSlideChange, SlideChangeBase );
+
+/** start
+ *  This method notifies to the slides involved in the transition the attributes
+ *  appended to the slide elements for performing the animation.
+ *  Moreover it sets the entering slide in the initial state and makes the slide
+ *  visible.
+ */
+FadingSlideChange.prototype.start = function()
+{
+    FadingSlideChange.superclass.start.call( this );
+    this.aEnteringSlide.notifyUsedAttribute( 'opacity' );
+    this.aLeavingSlide.notifyUsedAttribute( 'opacity' );
+    this.aEnteringSlide.setOpacity( 0.0 );
+    this.aEnteringSlide.show();
+};
+
+/** performIn
+ *  This method set the opacity of the entering slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+FadingSlideChange.prototype.performIn = function( nT )
+{
+    this.aEnteringSlide.setOpacity( nT );
+};
+
+/** performOut
+ *  This method set the opacity of the leaving slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+FadingSlideChange.prototype.performOut = function( nT )
+{
+
+    this.aLeavingSlide.setOpacity( 1 - nT );
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class FadingOverColorSlideChange
+ *  This class performs a slide transition by fading out the leaving slide to
+ *  a given color and fading in the entering slide from the same color.
+ *
+ *  @param aLeavingSlide
+ *      An object of type AnimatedSlide handling the leaving slide.
+ *  @param aEnteringSlide
+ *      An object of type AnimatedSlide handling the entering slide.
+ *  @param sFadeColor
+ *      A string representing the color the leaving slide fades out to and
+ *      the entering slide fade in from.
+ */
+function FadingOverColorSlideChange( aLeavingSlide, aEnteringSlide, sFadeColor )
+{
+    FadingSlideChange.superclass.constructor.call( this, aLeavingSlide, aEnteringSlide );
+    this.sFadeColor = sFadeColor;
+    if( !this.sFadeColor )
+    {
+        log( 'FadingOverColorSlideChange: sFadeColor not valid.' );
+        this.sFadeColor = '#000000';
+    }
+    this.aColorPlaneElement = this.createColorPlaneElement();
+}
+extend( FadingOverColorSlideChange, SlideChangeBase );
+
+/** start
+ *  This method notifies to the slides involved in the transition the attributes
+ *  appended to the slide elements for performing the animation.
+ *  Moreover it inserts the color plane element below the leaving slide.
+ *  Finally it sets the entering slide in the initial state and makes
+ *  the slide visible.
+ */
+FadingOverColorSlideChange.prototype.start = function()
+{
+    FadingOverColorSlideChange.superclass.start.call( this );
+    this.aEnteringSlide.notifyUsedAttribute( 'opacity' );
+    this.aLeavingSlide.notifyUsedAttribute( 'opacity' );
+    this.aLeavingSlide.insertBefore( this.aColorPlaneElement );
+    this.aEnteringSlide.setOpacity( 0.0 );
+    this.aEnteringSlide.show();
+};
+
+/** end
+ *  This method removes the color plane element.
+ */
+FadingOverColorSlideChange.prototype.end = function()
+{
+    FadingOverColorSlideChange.superclass.end.call( this );
+    this.aLeavingSlide.removeElement( this.aColorPlaneElement );
+};
+
+/** performIn
+ *  This method set the opacity of the entering slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+FadingOverColorSlideChange.prototype.performIn = function( nT )
+{
+    this.aEnteringSlide.setOpacity( (nT > 0.55) ? 2.0*(nT-0.55) : 0.0 );
+};
+
+/** performOut
+ *  This method set the opacity of the leaving slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+FadingOverColorSlideChange.prototype.performOut = function( nT )
+{
+    this.aLeavingSlide.setOpacity( (nT > 0.45) ? 0.0 : 2.0*(0.45-nT) );
+};
+
+FadingOverColorSlideChange.prototype.createColorPlaneElement = function()
+{
+    var aColorPlaneElement = document.createElementNS( NSS['svg'], 'rect' );
+    aColorPlaneElement.setAttribute( 'width', String( this.aLeavingSlide.getWidth() ) );
+    aColorPlaneElement.setAttribute( 'height', String( this.aLeavingSlide.getHeight() ) );
+    aColorPlaneElement.setAttribute( 'fill', this.sFadeColor );
+    return aColorPlaneElement;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class MovingSlideChange
+ *  This class performs a slide transition that involves translating the leaving
+ *  slide and/or the entering one in a given direction.
+ *
+ *  @param aLeavingSlide
+ *      An object of type AnimatedSlide handling the leaving slide.
+ *  @param aEnteringSlide
+ *      An object of type AnimatedSlide handling the entering slide.
+ *  @param aLeavingDirection
+ *      A 2D vector object {x, y}.
+ *  @param aEnteringDirection
+ *      A 2D vector object {x, y}.
+ */
+function MovingSlideChange( aLeavingSlide, aEnteringSlide,
+                            aLeavingDirection, aEnteringDirection )
+{
+    MovingSlideChange.superclass.constructor.call( this, aLeavingSlide, aEnteringSlide );
+    this.aLeavingDirection = aLeavingDirection;
+    this.aEnteringDirection = aEnteringDirection;
+}
+extend( MovingSlideChange, SlideChangeBase );
+
+/** start
+ *  This method notifies to the slides involved in the transition the attributes
+ *  appended to the slide elements for performing the animation.
+ *  Moreover it sets the entering slide in the initial state and makes the slide
+ *  visible.
+ */
+MovingSlideChange.prototype.start = function()
+{
+    MovingSlideChange.superclass.start.call( this );
+    this.aEnteringSlide.notifyUsedAttribute( 'transform' );
+    this.aLeavingSlide.notifyUsedAttribute( 'transform' );
+    // Before setting the 'visibility' attribute of the entering slide to 'visible'
+    // we translate it to the initial position so that it is not really visible
+    // because it is clipped out.
+    this.performIn( 0 );
+    this.aEnteringSlide.show();
+};
+
+/** performIn
+ *  This method set the position of the entering slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+MovingSlideChange.prototype.performIn = function( nT )
+{
+    var nS = nT - 1;
+    var dx = nS * this.aEnteringDirection.x * this.aEnteringSlide.getWidth();
+    var dy = nS * this.aEnteringDirection.y * this.aEnteringSlide.getHeight();
+    this.aEnteringSlide.translate( dx, dy );
+};
+
+/** performOut
+ *  This method set the position of the leaving slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+MovingSlideChange.prototype.performOut = function( nT )
+{
+    var dx = nT * this.aLeavingDirection.x * this.aLeavingSlide.getWidth();
+    var dy = nT * this.aLeavingDirection.y * this.aLeavingSlide.getHeight();
+    this.aLeavingSlide.translate( dx, dy );
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class AnimatedSlide
+ *  This class handle a slide element during a slide transition.
+ *
+ *  @param aMetaSlide
+ *      The MetaSlide object related to the slide element to be handled.
+ */
+function AnimatedSlide( aMetaSlide )
+{
+    if( !aMetaSlide )
+    {
+        log( 'AnimatedSlide constructor: meta slide is not valid' );
+    }
+
+    this.aMetaSlide = aMetaSlide;
+    this.aSlideElement = this.aMetaSlide.slideElement;
+
+    this.aUsedAttributeSet = new Array();
+}
+
+/** show
+ *  Set the visibility property of the slide to 'inherit'
+ *  and update the master page view.
+ */
+AnimatedSlide.prototype.show = function()
+{
+    this.aMetaSlide.show();
+};
+
+/** hide
+ *  Set the visibility property of the slide to 'hidden'.
+ */
+AnimatedSlide.prototype.hide = function()
+{
+    this.aMetaSlide.hide();
+};
+
+/** notifyUsedAttribute
+ *  Populate the set of attribute used for the transition.
+ *
+ *  @param sName
+ *      A string representing an attribute name.
+ */
+AnimatedSlide.prototype.notifyUsedAttribute = function( sName )
+{
+    this.aUsedAttributeSet.push( sName );
+};
+
+/** reset
+ *  Remove from the handled slide element any attribute that was appended for
+ *  performing the transition.
+ */
+AnimatedSlide.prototype.reset = function()
+{
+    var i;
+    for( i = 0; i < this.aUsedAttributeSet.length; ++i )
+    {
+        var sAttrName = this.aUsedAttributeSet[i];
+        this.aSlideElement.removeAttribute( sAttrName );
+    }
+    this.aUsedAttributeSet = new Array();
+};
+
+/** insertBefore
+ *  Insert an svg element before the handled slide element.
+ *
+ *  @param aElement
+ *      A svg element.
+ */
+AnimatedSlide.prototype.insertBefore = function( aElement )
+{
+    if( aElement )
+    {
+         this.aSlideElement.parentNode.insertBefore( aElement, this.aSlideElement );
+    }
+};
+
+/** appendElement
+ *  Insert an svg element after the handled slide element.
+ *
+ *  @param aElement
+ *      A svg element.
+ */
+AnimatedSlide.prototype.appendElement = function( aElement )
+{
+    if( aElement )
+    {
+         this.aSlideElement.parentNode.appendChild( aElement );
+    }
+};
+
+/** appendElement
+ *  Remove an svg element.
+ *
+ *  @param aElement
+ *      A svg element.
+ */
+AnimatedSlide.prototype.removeElement = function( aElement )
+{
+    if( aElement )
+    {
+         this.aSlideElement.parentNode.removeChild( aElement );
+    }
+};
+
+/** getWidth
+ *
+ *  @return {Number}
+ *      The slide width.
+ */
+AnimatedSlide.prototype.getWidth = function()
+{
+    return WIDTH;
+};
+
+/** getHeight
+ *
+ *  @return {Number}
+ *      The slide height.
+ */
+AnimatedSlide.prototype.getHeight = function()
+{
+    return HEIGHT;
+};
+
+/** setOpacity
+ *
+ *  @param nValue
+ *      A number in the [0,1] range representing the slide opacity.
+ */
+AnimatedSlide.prototype.setOpacity = function( nValue )
+{
+    this.aSlideElement.setAttribute( 'opacity', nValue );
+};
+
+/** translate
+ *  Translate the handled slide.
+ *
+ *  @param nDx
+ *     A number representing the translation that occurs in the x direction.
+ *  @param nDy
+ *     A number representing the translation that occurs in the y direction.
+ */
+AnimatedSlide.prototype.translate = function( nDx, nDy )
+{
+    var sTransformAttr = 'translate(' + nDx + ',' + nDy + ')';
+    this.aSlideElement.setAttribute( 'transform', sTransformAttr );
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
 function AnimatedElement( aElement )
 {
     if( !aElement )
@@ -6270,6 +6943,302 @@ AnimatedElement.prototype.setFontColor = function( sValue )
 AnimatedElement.prototype.DBG = function( sMessage, nTime )
 {
     aAnimatedElementDebugPrinter.print( 'AnimatedElement(' + this.getId() + ')' + sMessage, nTime );
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class SlideTransition
+ *  This class is responsible for initializing the properties of a slide
+ *  transition and create the object that actually will perform the transition.
+ *
+ *  @param aAnimationsRootElement
+ *      The <defs> element wrapping all animations for the related slide.
+ *  @param aSlideId
+ *      A string representing a slide id.
+ */
+function SlideTransition( aAnimationsRootElement, aSlideId )
+{
+    this.sSlideId = aSlideId;
+    this.bIsValid = false;
+    this.eTransitionType = undefined;
+    this.eTransitionSubType = undefined;
+    this.bReverseDirection = false;
+    this.eTransitionMode = TRANSITION_MODE_IN;
+    this.sFadeColor = null;
+    this.aDuration = null;
+    this.nMinFrameCount = undefined;
+
+    if( aAnimationsRootElement )
+    {
+        if( aAnimationsRootElement.firstElementChild &&
+            ( aAnimationsRootElement.firstElementChild.getAttribute( 'begin' ) === (this.sSlideId + '.begin') ) )
+        {
+            var aTransitionFilterElement = aAnimationsRootElement.firstElementChild.firstElementChild;
+            if( aTransitionFilterElement && ( aTransitionFilterElement.localName === 'transitionFilter' ) )
+            {
+                this.aElement = aTransitionFilterElement;
+                this.parseElement();
+            }
+            aAnimationsRootElement.removeChild( aAnimationsRootElement.firstElementChild );
+        }
+    }
+}
+
+SlideTransition.prototype.createSlideTransition = function( aLeavingSlide, aEnteringSlide )
+{
+    if( !this.isValid() )
+        return null;
+    if( this.eTransitionType == 0 )
+        return null;
+
+    if( !aEnteringSlide )
+    {
+        log( 'SlideTransition.createSlideTransition: invalid entering slide.' );
+        return null;
+    }
+
+    var aTransitionInfo = aTransitionInfoTable[this.eTransitionType][this.eTransitionSubType];
+    var eTransitionClass = aTransitionInfo['class'];
+
+    switch( eTransitionClass )
+    {
+        default:
+        case TRANSITION_INVALID:
+            log( 'SlideTransition.createSlideTransition: transition class: TRANSITION_INVALID' );
+            return null;
+
+        case TRANSITION_CLIP_POLYPOLYGON:
+            return null;
+
+        case TRANSITION_SPECIAL:
+            switch( this.eTransitionType )
+            {
+                default:
+                    log( 'SlideTransition.createSlideTransition: ' +
+                         'transition class: TRANSITION_SPECIAL, ' +
+                         'unknown transition type: ' + this.eTransitionType );
+                    return null;
+
+                case PUSHWIPE_TRANSITION:
+                {
+                    var bCombined = false;
+                    var aDirection = null;
+                    switch( this.eTransitionSubType )
+                    {
+                        default:
+                            log( 'SlideTransition.createSlideTransition: ' +
+                                 'transition type: PUSHWIPE_TRANSITION, ' +
+                                 'unknown transition subtype: ' + this.eTransitionSubType );
+                            return null;
+                        case FROMTOP_TRANS_SUBTYPE:
+                            aDirection = { x: 0.0, y: 1.0 };
+                            break;
+                        case FROMBOTTOM_TRANS_SUBTYPE:
+                            aDirection = { x: 0.0, y: -1.0 };
+                            break;
+                        case FROMLEFT_TRANS_SUBTYPE:
+                            aDirection = { x: 1.0, y: 0.0 };
+                            break;
+                        case FROMRIGHT_TRANS_SUBTYPE:
+                            aDirection = { x: -1.0, y: 0.0 };
+                            break;
+                    }
+                    if( bCombined )
+                        return null;
+                    else
+                        return new MovingSlideChange( aLeavingSlide, aEnteringSlide, aDirection, aDirection );
+                }
+
+                case SLIDEWIPE_TRANSITION:
+                {
+                    var aInDirection = null;
+                    switch( this.eTransitionSubType )
+                    {
+                        default:
+                            log( 'SlideTransition.createSlideTransition: ' +
+                                 'transition type: SLIDEWIPE_TRANSITION, ' +
+                                 'unknown transition subtype: ' + this.eTransitionSubType );
+                            return null;
+                        case FROMTOP_TRANS_SUBTYPE:
+                            aInDirection = { x: 0.0, y: 1.0 };
+                            break;
+                        case FROMBOTTOM_TRANS_SUBTYPE:
+                            aInDirection = { x: 0.0, y: -1.0 };
+                            break;
+                        case FROMLEFT_TRANS_SUBTYPE:
+                            aInDirection = { x: 1.0, y: 0.0 };
+                            break;
+                        case FROMRIGHT_TRANS_SUBTYPE:
+                            aInDirection = { x: -1.0, y: 0.0 };
+                            break;
+                    }
+                    var aNoDirection = { x: 0.0, y: 0.0 };
+                    if( !this.bReverseDirection )
+                    {
+                        return new MovingSlideChange( aLeavingSlide, aEnteringSlide, aNoDirection, aInDirection );
+                    }
+                    else
+                    {
+                        return new MovingSlideChange( aLeavingSlide, aEnteringSlide, aInDirection, aNoDirection );
+                    }
+                }
+
+                case FADE_TRANSITION:
+                    switch( this.eTransitionSubType )
+                    {
+                        default:
+                            log( 'SlideTransition.createSlideTransition: ' +
+                                 'transition type: FADE_TRANSITION, ' +
+                                 'unknown transition subtype: ' + this.eTransitionSubType );
+                            return null;
+                        case CROSSFADE_TRANS_SUBTYPE:
+                            return new FadingSlideChange( aLeavingSlide, aEnteringSlide );
+                        case FADEOVERCOLOR_TRANS_SUBTYPE:
+                            return new FadingOverColorSlideChange( aLeavingSlide, aEnteringSlide, this.getFadeColor() );
+                    }
+            }
+    }
+};
+
+SlideTransition.prototype.parseElement = function()
+{
+    var aAnimElem = this.aElement;
+
+    // type attribute
+    this.eTransitionType = undefined;
+    var sTypeAttr = aAnimElem.getAttribute( 'type' );
+    if( sTypeAttr && aTransitionTypeInMap[ sTypeAttr ] )
+    {
+        this.eTransitionType = aTransitionTypeInMap[ sTypeAttr ];
+    }
+    else
+    {
+        log( 'SlideTransition.parseElement: transition type not valid: ' + sTypeAttr );
+    }
+
+    // subtype attribute
+    this.eTransitionSubType = undefined;
+    var sSubTypeAttr = aAnimElem.getAttribute( 'subtype' );
+    if( sSubTypeAttr && aTransitionSubtypeInMap[ sSubTypeAttr ] )
+    {
+        this.eTransitionSubType = aTransitionSubtypeInMap[ sSubTypeAttr ];
+        this.bIsValid = true;
+    }
+    else
+    {
+        log( 'SlideTransition.parseElement: transition subtype not valid: ' + sSubTypeAttr );
+    }
+
+    // direction attribute
+    this.bReverseDirection = false;
+    var sDirectionAttr = aAnimElem.getAttribute( 'direction' );
+    if( sDirectionAttr == 'reverse' )
+        this.bReverseDirection = true;
+
+    // mode attribute:
+    this.eTransitionMode = TRANSITION_MODE_IN;
+    var sModeAttr = aAnimElem.getAttribute( 'mode' );
+    if( sModeAttr === 'out' )
+        this.eTransitionMode = TRANSITION_MODE_OUT;
+
+    // fade color
+    this.sFadeColor = null;
+    if( this.eTransitionType == FADE_TRANSITION &&
+        ( this.eTransitionSubType == FADEFROMCOLOR_TRANS_SUBTYPE ||
+          this.eTransitionSubType == FADEOVERCOLOR_TRANS_SUBTYPE ||
+          this.eTransitionSubType == FADETOCOLOR_TRANS_SUBTYPE ) )
+    {
+        var sColorAttr = aAnimElem.getAttribute( 'fadeColor' );
+        if( sColorAttr )
+            this.sFadeColor = sColorAttr;
+        else
+            this.sFadeColor='#000000';
+    }
+
+
+    // dur attribute
+    this.aDuration = null;
+    var sDurAttr = aAnimElem.getAttribute( 'dur' );
+    this.aDuration = new Duration( sDurAttr );
+    if( !this.aDuration.isSet() )
+    {
+        this.aDuration = new Duration( null ); // duration == 0.0
+    }
+
+    // set up min frame count value;
+    this.nMinFrameCount = ( this.getDuration().isValue() )
+        ? ( this.getDuration().getValue() * MINIMUM_FRAMES_PER_SECONDS )
+        : MINIMUM_FRAMES_PER_SECONDS;
+    if( this.nMinFrameCount < 1.0 )
+        this.nMinFrameCount = 1;
+    else if( this.nMinFrameCount > MINIMUM_FRAMES_PER_SECONDS )
+        this.nMinFrameCount = MINIMUM_FRAMES_PER_SECONDS;
+
+};
+
+SlideTransition.prototype.isValid = function()
+{
+    return this.bIsValid;
+};
+
+SlideTransition.prototype.getTransitionType = function()
+{
+    return this.eTransitionType;
+};
+
+SlideTransition.prototype.getTransitionSubType = function()
+{
+    return this.eTransitionSubType;
+};
+
+SlideTransition.prototype.getTransitionMode = function()
+{
+    return this.eTransitionMode;
+};
+
+SlideTransition.prototype.getFadeColor = function()
+{
+    return this.sFadeColor;
+};
+
+SlideTransition.prototype.getReverseDirection = function()
+{
+    return this.bReverseDirection;
+};
+
+SlideTransition.prototype.getDuration = function()
+{
+    return this.aDuration;
+};
+
+SlideTransition.prototype.getMinFrameCount = function()
+{
+    return this.nMinFrameCount;
+};
+
+SlideTransition.prototype.info = function()
+{
+
+    var sInfo ='slide transition <' + this.sSlideId + '>: ';
+    // transition type
+    sInfo += ';  type: ' + aTransitionTypeOutMap[ String( this.getTransitionType() ) ];
+
+    // transition subtype
+    sInfo += ';  subtype: ' + aTransitionSubtypeOutMap[ this.getTransitionSubType() ];
+
+    // transition direction
+    if( this.getReverseDirection() )
+        sInfo += ';  direction: reverse';
+
+    // transition mode
+    sInfo += '; mode: ' + aTransitionModeOutMap[ this.getTransitionMode() ];
+
+    // duration
+    if( this.getDuration() )
+        sInfo += '; duration: ' + this.getDuration().info();
+
+    return sInfo;
 };
 
 
@@ -6911,12 +7880,14 @@ function ActivityParamSet()
     this.aEndEvent = null;
     this.aTimerEventQueue = null;
     this.aActivityQueue = null;
+    this.nMinDuration = undefined;
+    this.nMinNumberOfFrames = MINIMUM_FRAMES_PER_SECONDS;
+    this.bAutoReverse = false;
     this.nRepeatCount = 1.0;
     this.nAccelerationFraction = 0.0;
     this.nDecelerationFraction = 0.0;
-    this.bAutoReverse = false;
-    this.nMinDuration = undefined;
-    this.nMinNumberOfFrames = MINIMUM_FRAMES_PER_SECONDS;
+    this.nSlideWidth = undefined;
+    this.nSlideHeight = undefined;
     this.aDiscreteTimes = new Array();
 }
 
@@ -8091,6 +9062,7 @@ function SlideShow()
     this.eDirection = FORWARD;
     this.bIsIdle = true;
     this.bIsEnabled = true;
+    this.bNoSlideTransition = false;
 }
 
 
@@ -8107,6 +9079,48 @@ SlideShow.prototype.setSlideEvents = function( aNextEffectEventArray, aEventMult
     this.aContext.aEventMultiplexer = aEventMultiplexer;
     this.aEventMultiplexer = aEventMultiplexer;
     this.nCurrentEffect = 0;
+};
+
+SlideShow.prototype.createSlideTransition = function( aSlideTransitionHandler, aLeavingSlide, aEnteringSlide, aTransitionEndEvent )
+{
+    if( !aEnteringSlide )
+    {
+        log( 'SlideShow.createSlideTransition: entering slide element is not valid.' );
+        return null;
+    }
+
+    if( this.bNoSlideTransition ) return null;
+
+    var aAnimatedLeavingSlide = null;
+    if( aLeavingSlide )
+        aAnimatedLeavingSlide = new AnimatedSlide( aLeavingSlide );
+    var aAnimatedEnteringSlide = new AnimatedSlide( aEnteringSlide );
+
+    var aSlideTransition = aSlideTransitionHandler.createSlideTransition( aAnimatedLeavingSlide, aAnimatedEnteringSlide );
+    if( !aSlideTransition ) return null;
+
+    // compute duration
+    var nDuration = 0.001;
+    if( aSlideTransitionHandler.getDuration().isValue() )
+    {
+        nDuration = aSlideTransitionHandler.getDuration().getValue();
+    }
+    else
+    {
+        log( 'SlideShow.createSlideTransition: duration is not a number' );
+    }
+
+    var aCommonParameterSet = new ActivityParamSet();
+    aCommonParameterSet.aEndEvent = aTransitionEndEvent;
+    aCommonParameterSet.aTimerEventQueue = this.aTimerEventQueue;
+    aCommonParameterSet.aActivityQueue = this.aActivityQueue;
+    aCommonParameterSet.nMinDuration = nDuration;
+    aCommonParameterSet.nMinNumberOfFrames = aSlideTransitionHandler.getMinFrameCount();
+    aCommonParameterSet.nSlideWidth = WIDTH;
+    aCommonParameterSet.nSlideHeight = HEIGHT;
+
+    return new SimpleActivity( aCommonParameterSet, aSlideTransition, FORWARD );
+
 };
 
 SlideShow.prototype.isRunning = function()
@@ -8131,6 +9145,21 @@ SlideShow.prototype.notifySlideStart = function( nSlideIndex )
     var aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
     for( var sId in aAnimatedElementMap )
         aAnimatedElementMap[ sId ].notifySlideStart();
+};
+
+SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
+{
+    theMetaDoc.setCurrentSlide( nSlideIndex );
+    if( this.isEnabled() )
+    {
+        // clear all queues
+        this.dispose();
+
+        this.notifySlideStart( nSlideIndex );
+
+        theMetaDoc.getCurrentSlide().aSlideAnimationsHandler.start();
+        this.update();
+    }
 };
 
 SlideShow.prototype.nextEffect = function()
@@ -8199,62 +9228,52 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
         }
     }
 
-    if( !bSkipSlideTransition )
+    if( this.isEnabled() && !bSkipSlideTransition  )
     {
         // create slide transition and add to activity queue
-        // to be implemented
-        aMetaDoc.setCurrentSlide( nNewSlide );
+        if ( ( nOldSlide !== undefined ) &&
+            ( ( nNewSlide > nOldSlide ) ||
+              ( ( nNewSlide == 0) && ( nOldSlide == (aMetaDoc.nNumberOfSlides - 1) ) ) ) )
+        {
+            var aOldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
+            var aNewMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
+
+            var aSlideTransitionHandler = aNewMetaSlide.aTransitionHandler;
+            if( aSlideTransitionHandler && aSlideTransitionHandler.isValid() )
+            {
+                var aLeavingSlide = aOldMetaSlide;
+                var aEnteringSlide = aNewMetaSlide;
+                var aTransitionEndEvent = makeEvent( bind2( this.notifyTransitionEnd, this, nNewSlide ) );
+
+                var aTransitionActivity =
+                    this.createSlideTransition( aSlideTransitionHandler, aLeavingSlide,
+                                                aEnteringSlide, aTransitionEndEvent );
+
+                if( aTransitionActivity )
+                {
+                    this.aActivityQueue.addActivity( aTransitionActivity );
+                    this.update();
+                }
+                else
+                {
+                    this.notifyTransitionEnd( nNewSlide );
+                }
+            }
+            else
+            {
+                this.notifyTransitionEnd( nNewSlide );
+            }
+        }
+        else
+        {
+            this.notifyTransitionEnd( nNewSlide );
+        }
     }
     else
     {
-        aMetaDoc.setCurrentSlide( nNewSlide );
+        this.notifyTransitionEnd( nNewSlide );
     }
 
-    // handle new slide
-    if( this.isEnabled() )
-    {
-        this.notifySlideStart( nNewSlide );
-
-        aMetaDoc.getCurrentSlide().aSlideAnimationsHandler.start();
-        this.update();
-    }
-
-
-    /*
-    var nOldSlide = nCurSlide;
-    nCurSlide = nNewSlide;
-
-    var oldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
-    var newMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
-
-    if( !this.isEnabled() )
-    {
-        oldMetaSlide.hide();
-        newMetaSlide.show();
-        return;
-    }
-
-    // force end animations and hide current slide
-    oldMetaSlide.hide();
-    oldMetaSlide.aSlideAnimationsHandler.end( bSkipSlideTransition );
-
-    // clear all queues
-    this.dispose();
-
-    // prepare to show a new slide
-    this.notifySlideStart();
-
-    if( !bSkipSlideTransition )
-    {
-        // create slide transition and add to activity queue
-        // to be implemented
-    }
-
-    // show next slide and start animations
-    newMetaSlide.show();
-    newMetaSlide.aSlideAnimationsHandler.start();
-    this.update();
-    */
 };
 
 SlideShow.prototype.update = function()
@@ -8267,6 +9286,8 @@ SlideShow.prototype.update = function()
     this.aActivityQueue.process();
 
     this.aFrameSynchronization.synchronize();
+
+    this.aActivityQueue.processDequeued();
 
     ROOT_NODE.unsuspendRedraw(suspendHandle);
     ROOT_NODE.forceRedraw();
