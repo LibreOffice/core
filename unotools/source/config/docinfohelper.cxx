@@ -66,8 +66,8 @@ namespace utl
             }
         }
 
-        ::rtl::OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
-        ::rtl::OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
+        ::rtl::OUString os( "$_OS" );
+        ::rtl::OUString arch( "$_ARCH" );
         ::rtl::Bootstrap::expandMacros(os);
         ::rtl::Bootstrap::expandMacros(arch);
         aResult.append( (sal_Unicode)'$' );

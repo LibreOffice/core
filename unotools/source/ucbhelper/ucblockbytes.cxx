@@ -1027,9 +1027,7 @@ static sal_Bool UCBOpenContentSync(
                     aExcep.Server = aURL.GetHost();
                     aExcep.Classification = InteractionClassification_ERROR;
                     aExcep.Message =
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "server not responding after five seconds"));
+                        rtl::OUString( "server not responding after five seconds");
                     Any request;
                     request <<= aExcep;
                     ucbhelper::InteractionRequest *ir =
@@ -1335,7 +1333,7 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
             {
                 Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
                 Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
-                                    xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
+                                    xFactory->createInstance ( ::rtl::OUString("com.sun.star.io.TempFile") ),
                                     UNO_QUERY );
 
                 if( rxTempOut.is() )
@@ -1680,7 +1678,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     {
         Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
         Command aCommand;
-        aCommand.Name     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
+        aCommand.Name     = ::rtl::OUString("setPropertyValues");
         aCommand.Handle   = -1; /* unknown */
         aCommand.Argument <<= rProps;
         xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
@@ -1691,7 +1689,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     aArgument.Mode = OpenMode::DOCUMENT;
 
     Command aCommand;
-    aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") );
+    aCommand.Name = ::rtl::OUString( "open" );
     aCommand.Argument <<= aArgument;
 
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );

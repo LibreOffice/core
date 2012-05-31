@@ -349,7 +349,7 @@ namespace utl
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
-            try { bIsSet = xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.SetAccess"))); }
+            try { bIsSet = xSI->supportsService(::rtl::OUString("com.sun.star.configuration.SetAccess")); }
             catch(Exception&) { }
         }
         return bIsSet;
@@ -491,7 +491,7 @@ namespace utl
         //--------------------------------------------------------------------
         static const ::rtl::OUString& lcl_getProviderServiceName( )
         {
-            static ::rtl::OUString s_sProviderServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
+            static ::rtl::OUString s_sProviderServiceName(  "com.sun.star.configuration.ConfigurationProvider"  );
             return s_sProviderServiceName;
         }
 
@@ -523,8 +523,8 @@ namespace utl
                 aArgs.put( "depth", i_nDepth );
 
                 ::rtl::OUString sAccessService( i_bUpdatable ?
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" )) :
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )));
+                                ::rtl::OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ) :
+                                ::rtl::OUString( "com.sun.star.configuration.ConfigurationAccess" ));
 
                 Reference< XInterface > xRoot(
                     i_rxConfigProvider->createInstanceWithArguments( sAccessService, aArgs.getWrappedPropertyValues() ),
