@@ -27,8 +27,9 @@
 
 $(eval $(call gb_Library_Library,dbtools))
 
+# connectivity_generated causes cyclic dependency here, so set include path
+# for that instead
 $(eval $(call gb_Library_use_packages,dbtools,\
-	connectivity_generated \
 	connectivity_inc \
 ))
 
