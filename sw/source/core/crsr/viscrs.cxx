@@ -332,7 +332,7 @@ void SwSelPaintRects::Show()
 
         if(mpCursorOverlay)
         {
-            if(!aNewRanges.empty())
+            if(aNewRanges.size())
             {
                 static_cast< sdr::overlay::OverlaySelection* >(mpCursorOverlay)->setRanges(aNewRanges);
             }

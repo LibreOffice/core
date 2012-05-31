@@ -224,7 +224,7 @@ void SwAccessiblePortionData::LineBreak()
 void SwAccessiblePortionData::Skip(sal_uInt16 nLength)
 {
     OSL_ENSURE( !bFinished, "We are already done!" );
-    OSL_ENSURE( aModelPositions.empty(), "Never Skip() after portions" );
+    OSL_ENSURE( aModelPositions.size() == 0, "Never Skip() after portions" );
     OSL_ENSURE( nLength <= pTxtNode->GetTxt().Len(), "skip exceeds model string!" );
 
     nModelPosition += nLength;

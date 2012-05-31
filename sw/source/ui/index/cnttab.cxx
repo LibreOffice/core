@@ -2515,7 +2515,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
                 aAuthFieldsLB.RemoveEntry(nLstBoxPos);
             }
 
-            ++aIt; // #i21237#
+            aIt++; // #i21237#
         }
         aAuthFieldsLB.SelectEntryPos(0);
     }
@@ -2926,7 +2926,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 bLastWasText = sal_False;
             }
 
-            ++aIt; // #i21237#
+            aIt++; // #i21237#
         }
         if(!bLastWasText)
         {
