@@ -765,7 +765,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     }
 
     //transport seriesnames to the coordinatesystems if needed
-    if( !m_aSeriesPlotterList.empty() )
+    if( m_aSeriesPlotterList.size() )
     {
         uno::Sequence< rtl::OUString > aSeriesNames;
         bool bSeriesNamesInitialized = false;

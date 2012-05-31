@@ -110,7 +110,7 @@ struct lcl_LessXOfPoint
     inline bool operator() ( const std::vector< double >& first,
                              const std::vector< double >& second )
     {
-        if( !first.empty() && !second.empty() )
+        if( first.size() > 0 && second.size() > 0 )
         {
             return first[0]<second[0];
         }
