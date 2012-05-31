@@ -387,7 +387,7 @@ sub usage()
           "     --bug-numbers   print just fixed bug numbers\n" .
           "     --rev-list      use \"git rev-list\" instead of \"git log\"; useful to check\n" .
           "                     differences between branches\n" .
-          "      topdir         directory with the libreoffice/bootstrap clone; the piece repos\n" .
+          "      topdir         directory with the libreoffice/core clone; the piece repos\n" .
           "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
           "      git_arg        extra parameters passed to the git command to define\n" .
           "                     the area of interest; The default command is \"git log\" and\n" .
@@ -422,7 +422,7 @@ foreach my $arg (@ARGV) {
         usage();
         exit;
     } elsif ($arg eq '--no-pieces') {
-        $piece = "bootstrap";
+        $piece = "core";
     } elsif ($arg =~ m/--piece=(.*)/) {
 	$piece = $1;
     } elsif ($arg =~ m/--log-suffix=(.*)/) {
