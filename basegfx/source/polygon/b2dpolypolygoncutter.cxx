@@ -903,7 +903,7 @@ namespace basegfx
 
             // first step: prepareForPolygonOperation and simple merge of non-overlapping
             // PolyPolygons for speedup; this is possible for the wanted OR-operation
-            if(!aInput.empty())
+            if(aInput.size())
             {
                 std::vector< basegfx::B2DPolyPolygon > aResult;
                 aResult.reserve(aInput.size());
@@ -912,7 +912,7 @@ namespace basegfx
                 {
                     const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(aInput[a]));
 
-                    if(!aResult.empty())
+                    if(aResult.size())
                     {
                         const B2DRange aCandidateRange(aCandidate.getB2DRange());
                         bool bCouldMergeSimple(false);
