@@ -1862,6 +1862,50 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
 }
 
 __attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_twiddle_1BGR_1to_1RGBA(JNIEnv* env,
+                                                              jobject clazz,
+                                                              jbyteArray source,
+                                                              jint offset,
+                                                              jint width,
+                                                              jint height,
+                                                              jobject destination)
+{
+    jbyte *dst = (jbyte*) (*env)->GetDirectBufferAddress(env, destination);
+    void *a = (*env)->GetPrimitiveArrayCritical(env, source, NULL);
+    jbyte *src = ((jbyte *) a) + offset;
+
+    jbyte *srcp;
+    jbyte *dstp = dst;
+    int step = ((((width * 3) - 1) / 4) + 1) * 4;
+
+    int i, j;
+
+    (void) clazz;
+
+    if (height > 0) {
+        srcp = src + step * (height - 1);
+        step = -step;
+    } else {
+        srcp = src;
+    }
+
+    LOGI("twiddle: src=%p, srcp=%p, dstp=%p, step=%d", src, srcp, dstp, step);
+
+    for (i = 0; i < height; i++) {
+        for (j = 0; j < width; j++) {
+            *dstp++ = srcp[j*3+2];
+            *dstp++ = srcp[j*3+1];
+            *dstp++ = srcp[j*3+0];
+            *dstp++ = 0xFF;
+        }
+        srcp += step;
+    }
+
+    (*env)->ReleasePrimitiveArrayCritical(env, source, a, 0);
+}
+
+__attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)
 {

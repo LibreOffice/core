@@ -39,6 +39,7 @@ import fi.iki.tml.CommandLine;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -107,6 +108,13 @@ public class Bootstrap extends NativeActivity
     // A method that starts a thread to redirect stdout and stderr writes to
     // the Android logging mechanism, or stops the redirection.
     public static native boolean redirect_stdio(boolean state);
+
+    // The DIB returned by css.awt.XBitmap.getDIB is in BGR_888 form, at least
+    // for Writer documents. We need it in Android's Bitmap.Config.ARGB_888
+    // format, which actually is RGBA_888, whee... At least in Android 4.0.3,
+    // at least on my device. No idea if it is always like that or not, the
+    // documentation sucks.
+    public static native void twiddle_BGR_to_RGBA(byte[] source, int offset, int width, int height, ByteBuffer destination);
 
     // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
     // and 2) should be called from other kinds of LO code using apps.
