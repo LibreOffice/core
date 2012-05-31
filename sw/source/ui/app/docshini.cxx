@@ -706,8 +706,8 @@ void SwDocShell::SubInitNew()
         0, 0, 0  };
     if(!bWeb)
     {
-        nRange[ (SAL_N_ELEMENTS(nRange)) - 3 ] = RES_PARATR_TABSTOP;
-        nRange[ (SAL_N_ELEMENTS(nRange)) - 2 ] = RES_PARATR_HYPHENZONE;
+        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 3 ] = RES_PARATR_TABSTOP;
+        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 2 ] = RES_PARATR_HYPHENZONE;
     }
     SfxItemSet aDfltSet( pDoc->GetAttrPool(), nRange );
 

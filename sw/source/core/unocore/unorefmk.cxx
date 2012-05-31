@@ -182,7 +182,7 @@ static char const*const g_ServicesReferenceMark[] =
 };
 
 static const size_t g_nServicesReferenceMark(
-    SAL_N_ELEMENTS(g_ServicesReferenceMark));
+    sizeof(g_ServicesReferenceMark)/sizeof(g_ServicesReferenceMark[0]));
 
 sal_Bool SAL_CALL
 SwXReferenceMark::supportsService(const OUString& rServiceName)
@@ -923,7 +923,7 @@ static char const*const g_ServicesMeta[] =
 };
 
 static const size_t g_nServicesMeta(
-    SAL_N_ELEMENTS(g_ServicesMeta));
+    sizeof(g_ServicesMeta)/sizeof(g_ServicesMeta[0]));
 
 sal_Bool SAL_CALL
 SwXMeta::supportsService(const ::rtl::OUString& rServiceName)
@@ -1361,7 +1361,7 @@ static char const*const g_ServicesMetaField[] =
 };
 
 static const size_t g_nServicesMetaField(
-    SAL_N_ELEMENTS(g_ServicesMetaField));
+    sizeof(g_ServicesMetaField)/sizeof(g_ServicesMetaField[0]));
 
 sal_Bool SAL_CALL
 SwXMetaField::supportsService(const ::rtl::OUString& rServiceName)

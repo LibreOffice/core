@@ -461,7 +461,7 @@ void SwCaptionDialog::CheckButtonWidth()
             &aOKButton, &aCancelButton, &aHelpButton, &aAutoCaptionButton, &aOptionButton
         };
         Button** pCurrent = pBtns;
-        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS(pBtns); ++i, ++pCurrent )
+        for ( sal_uInt32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
         {
             aNewSize = (*pCurrent)->GetSizePixel();
             aNewSize.Width() += nDelta;

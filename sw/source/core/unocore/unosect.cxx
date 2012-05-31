@@ -1774,20 +1774,20 @@ static char const*const g_ServicesTextSection[] =
     "com.sun.star.document.LinkTarget",
 };
 
-static const size_t g_nServicesTextSection(SAL_N_ELEMENTS(g_ServicesTextSection));
-
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
-            g_nServicesTextSection, g_ServicesTextSection, rServiceName);
+            SAL_N_ELEMENTS(g_ServicesTextSection),
+            g_ServicesTextSection, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
 SwXTextSection::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesTextSection, g_ServicesTextSection);
+                SAL_N_ELEMENTS(g_ServicesTextSection),
+                g_ServicesTextSection);
 }
 
 // MetadatableMixin

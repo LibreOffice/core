@@ -2373,22 +2373,20 @@ static char const*const g_ServicesDocumentIndexes[] =
     "com.sun.star.text.DocumentIndexes",
 };
 
-static const size_t g_nServicesDocumentIndexes(
-    SAL_N_ELEMENTS(g_ServicesDocumentIndexes));
-
 sal_Bool SAL_CALL
 SwXDocumentIndexes::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
-        g_nServicesDocumentIndexes, g_ServicesDocumentIndexes, rServiceName);
+        SAL_N_ELEMENTS(g_ServicesDocumentIndexes)
+        g_ServicesDocumentIndexes, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
-        g_nServicesDocumentIndexes, g_ServicesDocumentIndexes);
+        SAL_N_ELEMENTS(g_ServicesDocumentIndexes), g_ServicesDocumentIndexes);
 }
 
 sal_Int32 SAL_CALL
@@ -2577,16 +2575,14 @@ static char const*const g_ServicesIndexStyleAccess[] =
     "com.sun.star.text.DocumentIndexParagraphStyles",
 };
 
-static const size_t g_nServicesIndexStyleAccess(
-    SAL_N_ELEMENTS(g_ServicesIndexStyleAccess));
-
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::supportsService(
         const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
-        g_nServicesIndexStyleAccess, g_ServicesIndexStyleAccess, rServiceName);
+        SAL_N_ELEMENTS(g_ServicesIndexStyleAccess),
+        g_ServicesIndexStyleAccess, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2594,7 +2590,8 @@ SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
 throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesIndexStyleAccess, g_ServicesIndexStyleAccess);
+        SAL_N_ELEMENTS(g_ServicesIndexStyleAccess),
+        g_ServicesIndexStyleAccess);
 }
 
 void SAL_CALL
@@ -2712,16 +2709,14 @@ static char const*const g_ServicesIndexTokenAccess[] =
     "com.sun.star.text.DocumentIndexLevelFormat",
 };
 
-static const size_t g_nServicesIndexTokenAccess(
-    SAL_N_ELEMENTS(g_ServicesIndexTokenAccess));
-
 sal_Bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::supportsService(
         const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
-        g_nServicesIndexTokenAccess, g_ServicesIndexTokenAccess, rServiceName);
+        SAL_N_ELEMENTS(g_ServicesIndexTokenAccess),
+        g_ServicesIndexTokenAccess, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2729,7 +2724,8 @@ SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
 throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesIndexTokenAccess, g_ServicesIndexTokenAccess);
+            SAL_N_ELEMENTS(g_ServicesIndexTokenAccess),
+            g_ServicesIndexTokenAccess);
 }
 
 struct TokenType {

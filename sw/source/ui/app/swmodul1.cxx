@@ -467,7 +467,8 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
          COL_AUTHOR4_DARK,      COL_AUTHOR5_DARK,   COL_AUTHOR6_DARK,
          COL_AUTHOR7_DARK,      COL_AUTHOR8_DARK,   COL_AUTHOR9_DARK };
 
-        aCol.SetColor( aColArr[ nAuthor % (SAL_N_ELEMENTS(aColArr)) ] );
+        aCol.SetColor( aColArr[ nAuthor % (sizeof( aColArr ) /
+                                           sizeof( aColArr[0] )) ] );
     }
 
     sal_Bool bBackGr = COL_NONE == rAttr.nColor;

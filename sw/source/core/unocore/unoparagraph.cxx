@@ -304,7 +304,7 @@ static char const*const g_ServicesParagraph[] =
 };
 
 static const size_t g_nServicesParagraph(
-    SAL_N_ELEMENTS(g_ServicesParagraph));
+    sizeof(g_ServicesParagraph)/sizeof(g_ServicesParagraph[0]));
 
 sal_Bool SAL_CALL
 SwXParagraph::supportsService(const OUString& rServiceName)

@@ -334,8 +334,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
     const SmTokenTableEntry * pRes = 0;
     if (rName.Len())
     {
-        sal_Int32 nEntries = SAL_N_ELEMENTS(aTokenTable);
-        for (sal_Int32 i = 0;  i < nEntries;  ++i)
+        for (sal_Int32 i = 0; i < SAL_N_ELEMENTS(aTokenTable); ++i)
         {
             if (rName.EqualsIgnoreCaseAscii( aTokenTable[i].pIdent ))
             {
@@ -343,7 +342,6 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
                 break;
             }
         }
-
     }
 
     return pRes;

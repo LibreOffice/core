@@ -982,7 +982,7 @@ static char const*const g_ServicesTextCursor[] =
 };
 
 static const size_t g_nServicesTextCursor(
-    SAL_N_ELEMENTS(g_ServicesTextCursor));
+    sizeof(g_ServicesTextCursor)/sizeof(g_ServicesTextCursor[0]));
 
 sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)

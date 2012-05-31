@@ -549,7 +549,7 @@ static char const*const g_ServicesParagraphEnum[] =
 };
 
 static const size_t g_nServicesParagraphEnum(
-    SAL_N_ELEMENTS(g_ServicesParagraphEnum));
+    sizeof(g_ServicesParagraphEnum)/sizeof(g_ServicesParagraphEnum[0]));
 
 sal_Bool SAL_CALL
 SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
@@ -934,7 +934,7 @@ static char const*const g_ServicesTextRange[] =
 };
 
 static const size_t g_nServicesTextRange(
-    SAL_N_ELEMENTS(g_ServicesTextRange));
+    sizeof(g_ServicesTextRange)/sizeof(g_ServicesTextRange[0]));
 
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -1666,7 +1666,7 @@ static char const*const g_ServicesTextRanges[] =
 };
 
 static const size_t g_nServicesTextRanges(
-    SAL_N_ELEMENTS(g_ServicesTextRanges));
+    sizeof(g_ServicesTextRanges)/sizeof(g_ServicesTextRanges[0]));
 
 sal_Bool SAL_CALL SwXTextRanges::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -1963,7 +1963,7 @@ static char const*const g_ServicesParaFrameEnum[] =
 };
 
 static const size_t g_nServicesParaFrameEnum(
-    SAL_N_ELEMENTS(g_ServicesParaFrameEnum));
+    sizeof(g_ServicesParaFrameEnum)/sizeof(g_ServicesParaFrameEnum[0]));
 
 sal_Bool SAL_CALL
 SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)

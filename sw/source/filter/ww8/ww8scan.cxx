@@ -261,7 +261,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
         {164, 4, L_FIX}, // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
     return &aSprmSrch;
 };
 
@@ -444,7 +444,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {207, 0, L_VAR}  // rtl property ?
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
     return &aSprmSrch;
 };
 
@@ -783,7 +783,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x246D, 1, L_FIX}
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
+    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
     return &aSprmSrch;
 };
 
@@ -6360,7 +6360,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
                 p->sFontname = String(pVer6->szFfn, eEnc);
-                const sal_uInt16 maxStrSize = SAL_N_ELEMENTS(pVer6->szFfn);
+                const sal_uInt16 maxStrSize = sizeof (pVer6->szFfn) / sizeof (pVer6->szFfn[0]);
                 if (p->ibszAlt && p->ibszAlt < maxStrSize) //don't start after end of string
                 {
                     p->sFontname.Append(';');

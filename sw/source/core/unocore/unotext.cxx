@@ -2369,7 +2369,7 @@ static char const*const g_ServicesBodyText[] =
 };
 
 static const size_t g_nServicesBodyText(
-    SAL_N_ELEMENTS(g_ServicesBodyText));
+    sizeof(g_ServicesBodyText)/sizeof(g_ServicesBodyText[0]));
 
 sal_Bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -2665,20 +2665,20 @@ static char const*const g_ServicesHeadFootText[] =
     "com.sun.star.text.Text",
 };
 
-static const size_t g_nServicesHeadFootText(SAL_N_ELEMENTS(g_ServicesHeadFootText));
-
 sal_Bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
-            g_nServicesHeadFootText, g_ServicesHeadFootText, rServiceName);
+            SAL_N_ELEMENTS(g_ServicesHeadFootText),
+            g_ServicesHeadFootText, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
 SwXHeadFootText::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
-            g_nServicesHeadFootText, g_ServicesHeadFootText);
+            SAL_N_ELEMENTS(g_ServicesHeadFootText),
+            g_ServicesHeadFootText);
 }
 
 const SwStartNode *SwXHeadFootText::GetStartNode() const
