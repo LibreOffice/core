@@ -26,7 +26,8 @@ sub search_bugs($$$$)
     while (defined $bug) {
 
         # match fdo#123, rhz#123, i#123
-        if ( $line =~ m/(\w*\#+\d+)/ ) {
+        # but match only bug number with >= 4 digits
+        if ( $line =~ m/(\w*\#+\d{4,})/ ) {
             $bug_orig = $1;
             $bug = $1;
         # match #i123#
