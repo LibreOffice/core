@@ -544,81 +544,94 @@ void GtkSalGraphics::copyBits( const SalTwoRect* pPosAry,
  */
 sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
-    if (
-        ((nType==CTRL_PUSHBUTTON)  && (nPart==PART_ENTIRE_CONTROL))     ||
-         ((nType==CTRL_RADIOBUTTON) && (nPart==PART_ENTIRE_CONTROL))        ||
-        ((nType==CTRL_CHECKBOX)    && (nPart==PART_ENTIRE_CONTROL))        ||
-        ((nType==CTRL_SCROLLBAR) &&
-                (  (nPart==PART_DRAW_BACKGROUND_HORZ)
-                || (nPart==PART_DRAW_BACKGROUND_VERT)
-                || (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==HAS_THREE_BUTTONS) )                  )    ||
-        ((nType==CTRL_EDITBOX) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==HAS_BACKGROUND_TEXTURE) )             )    ||
-        ((nType==CTRL_MULTILINE_EDITBOX) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==HAS_BACKGROUND_TEXTURE) )             )    ||
-        ((nType==CTRL_SPINBOX) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==PART_ALL_BUTTONS)
-                || (nPart==HAS_BACKGROUND_TEXTURE) )            )    ||
-        ((nType==CTRL_SPINBUTTONS) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==PART_ALL_BUTTONS)    )                )    ||
-        ((nType==CTRL_COMBOBOX) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==HAS_BACKGROUND_TEXTURE)    )            )    ||
-        (((nType==CTRL_TAB_ITEM) || (nType==CTRL_TAB_PANE) ||
-          (nType==CTRL_TAB_BODY) || (nType==CTRL_FIXEDBORDER)) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==PART_TABS_DRAW_RTL) )                )    ||
-        ((nType==CTRL_LISTBOX) &&
-                (  (nPart==PART_ENTIRE_CONTROL)
-                || (nPart==PART_WINDOW)
-                || (nPart==HAS_BACKGROUND_TEXTURE) )            )   ||
-        ((nType == CTRL_TOOLBAR) &&
-                 (    (nPart==PART_ENTIRE_CONTROL)
-                ||  (nPart==PART_DRAW_BACKGROUND_HORZ)
-                ||  (nPart==PART_DRAW_BACKGROUND_VERT)
-                ||  (nPart==PART_THUMB_HORZ)
-                ||  (nPart==PART_THUMB_VERT)
-                ||  (nPart==PART_BUTTON)
-                ||  (nPart==PART_SEPARATOR_HORZ)
-                ||  (nPart==PART_SEPARATOR_VERT)
+    switch(nType)
+    {
+        case CTRL_PUSHBUTTON:
+        case CTRL_RADIOBUTTON:
+        case CTRL_CHECKBOX:
+        case CTRL_TOOLTIP:
+        case CTRL_PROGRESS:
+        case CTRL_LISTNODE:
+        case CTRL_LISTNET:
+            if(nPart==PART_ENTIRE_CONTROL)
+                return true;
+            break;
+
+        case CTRL_SCROLLBAR:
+            if(nPart==PART_DRAW_BACKGROUND_HORZ || nPart==PART_DRAW_BACKGROUND_VERT ||
+               nPart==PART_ENTIRE_CONTROL       || nPart==HAS_THREE_BUTTONS)
+                return true;
+            break;
+
+        case CTRL_EDITBOX:
+        case CTRL_MULTILINE_EDITBOX:
+        case CTRL_COMBOBOX:
+            if(nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE)
+                return true;
+            break;
+
+        case CTRL_SPINBOX:
+            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS || nPart==HAS_BACKGROUND_TEXTURE)
+                return true;
+            break;
+
+        case CTRL_SPINBUTTONS:
+            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS)
+                return true;
+            break;
+
+        case CTRL_WINDOW_BACKGROUND:
+            return true;
+
+        case CTRL_TAB_ITEM:
+        case CTRL_TAB_PANE:
+        case CTRL_TAB_BODY:
+        case CTRL_FIXEDBORDER:
+            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
+                return true;
+            break;
+
+        case CTRL_LISTBOX:
+            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE)
+                return true;
+            break;
+
+        case CTRL_TOOLBAR:
+            if( nPart==PART_ENTIRE_CONTROL
+                ||  nPart==PART_DRAW_BACKGROUND_HORZ
+                ||  nPart==PART_DRAW_BACKGROUND_VERT
+                ||  nPart==PART_THUMB_HORZ
+                ||  nPart==PART_THUMB_VERT
+                ||  nPart==PART_BUTTON
+                ||  nPart==PART_SEPARATOR_HORZ
+                ||  nPart==PART_SEPARATOR_VERT
                 )
-                                                                )   ||
-        ((nType == CTRL_MENUBAR) &&
-                (   (nPart==PART_ENTIRE_CONTROL)
-                ||  (nPart==PART_MENU_ITEM)
-                )
-                                                                )   ||
-        ((nType == CTRL_TOOLTIP) &&
-                (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
-        ((nType == CTRL_MENU_POPUP) &&
-                (   (nPart==PART_ENTIRE_CONTROL)
-                ||  (nPart==PART_MENU_ITEM)
-                ||  (nPart==PART_MENU_ITEM_CHECK_MARK)
-                ||  (nPart==PART_MENU_ITEM_RADIO_MARK)
-                ||  (nPart==PART_MENU_SEPARATOR)
-                ||  (nPart==PART_MENU_SUBMENU_ARROW)
-                )
-                                                                )   ||
-        ((nType == CTRL_PROGRESS) &&
-                (   (nPart == PART_ENTIRE_CONTROL) )
-                )                                                   ||
-        ((nType == CTRL_LISTNODE || nType == CTRL_LISTNET) &&
-                (   (nPart == PART_ENTIRE_CONTROL) )
-                )                                                   ||
-        ((nType == CTRL_SLIDER) &&
-                (   (nPart == PART_TRACK_HORZ_AREA)
-                ||  (nPart == PART_TRACK_VERT_AREA)
-                )
-        ) ||
-        (nType == CTRL_WINDOW_BACKGROUND)
-        )
-        return( sal_True );
-    return( sal_False );
+                return true;
+            break;
+
+        case CTRL_MENUBAR:
+            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_MENU_ITEM)
+                return true;
+            break;
+
+        case CTRL_MENU_POPUP:
+            if (nPart==PART_ENTIRE_CONTROL
+                ||  nPart==PART_MENU_ITEM
+                ||  nPart==PART_MENU_ITEM_CHECK_MARK
+                ||  nPart==PART_MENU_ITEM_RADIO_MARK
+                ||  nPart==PART_MENU_SEPARATOR
+                ||  nPart==PART_MENU_SUBMENU_ARROW
+            )
+                return true;
+            break;
+
+        case CTRL_SLIDER:
+            if(nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA)
+                return true;
+            break;
+    }
+
+    return false;
 }
 
 
