@@ -34,10 +34,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.polites.android.GestureImageView;
+
+import com.sun.star.awt.XBitmap;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XDevice;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XEventListener;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XTypeProvider;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.view.XRenderable;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import com.sun.star.uno.UnoRuntime;
 
 import org.libreoffice.android.Bootstrap;
 
@@ -47,18 +64,18 @@ public class DocumentLoader
     private static String TAG = "DocumentLoader";
 
     class MyXController
-        implements com.sun.star.frame.XController {
+        implements XController {
 
-        com.sun.star.frame.XModel model;
-        com.sun.star.frame.XFrame frame;
+        XFrame frame;
+        XModel model;
 
-        public void attachFrame(com.sun.star.frame.XFrame frame)
+        public void attachFrame(XFrame frame)
         {
             Log.i(TAG, "attachFrame");
             this.frame = frame;
         }
 
-        public boolean attachModel(com.sun.star.frame.XModel model)
+        public boolean attachModel(XModel model)
         {
             Log.i(TAG, "attachModel");
             this.model = model;
@@ -82,13 +99,13 @@ public class DocumentLoader
             Log.i(TAG, "restoreViewData");
         }
 
-        public com.sun.star.frame.XModel getModel()
+        public XModel getModel()
         {
             Log.i(TAG, "getModel");
             return model;
         }
 
-        public com.sun.star.frame.XFrame getFrame()
+        public XFrame getFrame()
         {
             Log.i(TAG, "getFrame");
             return frame;
@@ -99,12 +116,12 @@ public class DocumentLoader
             Log.i(TAG, "dispose");
         }
 
-        public void addEventListener(com.sun.star.lang.XEventListener listener)
+        public void addEventListener(XEventListener listener)
         {
             Log.i(TAG, "addEventListener");
         }
 
-        public void removeEventListener(com.sun.star.lang.XEventListener listener)
+        public void removeEventListener(XEventListener listener)
         {
             Log.i(TAG, "removeEventListener");
         }
@@ -117,19 +134,19 @@ public class DocumentLoader
         if (object == null)
             return;
 
-        com.sun.star.lang.XTypeProvider typeProvider = (com.sun.star.lang.XTypeProvider)
-            UnoRuntime.queryInterface(com.sun.star.lang.XTypeProvider.class, object);
+        XTypeProvider typeProvider = (XTypeProvider)
+            UnoRuntime.queryInterface(XTypeProvider.class, object);
 
         Log.i(TAG, "typeProvider is " + (typeProvider != null ? typeProvider.toString() : "null"));
 
         if (typeProvider == null)
             return;
 
-        com.sun.star.uno.Type[] types = typeProvider.getTypes();
+        Type[] types = typeProvider.getTypes();
         if (types == null)
             return;
 
-        for (com.sun.star.uno.Type t : types)
+        for (Type t : types)
             Log.i(TAG, "  " + t.getTypeName());
     }
 
@@ -171,14 +188,13 @@ public class DocumentLoader
             Log.i(TAG, "Sleeping NOW");
             Thread.sleep(20000);
 
-            com.sun.star.uno.XComponentContext xContext = null;
+            XComponentContext xContext = null;
 
             xContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
             Log.i(TAG, "xContext is" + (xContext!=null ? " not" : "") + " null");
 
-            com.sun.star.lang.XMultiComponentFactory xMCF =
-                xContext.getServiceManager();
+            XMultiComponentFactory xMCF = xContext.getServiceManager();
 
             Log.i(TAG, "xMCF is" + (xMCF!=null ? " not" : "") + " null");
 
@@ -204,23 +220,22 @@ public class DocumentLoader
 
             Bootstrap.initUCBHelper();
 
-            com.sun.star.frame.XComponentLoader xCompLoader = (com.sun.star.frame.XComponentLoader)
-                UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            XComponentLoader xCompLoader = (XComponentLoader)
+                UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
 
             Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
 
             // Load the wanted document(s)
             String[] inputs = input.split(":");
             for (int i = 0; i < inputs.length; i++) {
-                com.sun.star.beans.PropertyValue loadProps[] =
-                    new com.sun.star.beans.PropertyValue[3];
-                loadProps[0] = new com.sun.star.beans.PropertyValue();
+                PropertyValue loadProps[] = new PropertyValue[3];
+                loadProps[0] = new PropertyValue();
                 loadProps[0].Name = "Hidden";
                 loadProps[0].Value = new Boolean(true);
-                loadProps[1] = new com.sun.star.beans.PropertyValue();
+                loadProps[1] = new PropertyValue();
                 loadProps[1].Name = "ReadOnly";
                 loadProps[1].Value = new Boolean(true);
-                loadProps[2] = new com.sun.star.beans.PropertyValue();
+                loadProps[2] = new PropertyValue();
                 loadProps[2].Name = "Preview";
                 loadProps[2].Value = new Boolean(true);
 
@@ -234,53 +249,33 @@ public class DocumentLoader
 
                 dumpUNOObject("oDoc", oDoc);
 
-                // Test stuff, try creating various services, see what types
-                // they offer, stuff that is hard to find out by reading
-                // nonexistent useful documentation.
-
-                Log.i(TAG, "Attempting to load private:factory/swriter");
-
-                Object swriter =
-                    xCompLoader.loadComponentFromURL
-                    ("private:factory/swriter", "_blank", 0, loadProps);
-
-                dumpUNOObject("swriter", swriter);
-
-                Object frameControl = xMCF.createInstanceWithContext
-                    ("com.sun.star.frame.FrameControl", xContext);
-
-                dumpUNOObject("frameControl", frameControl);
-
-                com.sun.star.awt.XControl control = (com.sun.star.awt.XControl)
-                    UnoRuntime.queryInterface(com.sun.star.awt.XControl.class, frameControl);
-
                 Object toolkit = xMCF.createInstanceWithContext
                     ("com.sun.star.awt.Toolkit", xContext);
 
                 dumpUNOObject("toolkit", toolkit);
 
-                com.sun.star.awt.XToolkit xToolkit = (com.sun.star.awt.XToolkit)
-                    UnoRuntime.queryInterface(com.sun.star.awt.XToolkit.class, toolkit);
+                XToolkit xToolkit = (XToolkit)
+                    UnoRuntime.queryInterface(XToolkit.class, toolkit);
 
-                com.sun.star.awt.XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
+                XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
 
                 dumpUNOObject("device", device);
 
                 // I guess the XRenderable thing might be what we want to use,
                 // having the code pretend it is printing?
 
-                com.sun.star.view.XRenderable renderBabe = (com.sun.star.view.XRenderable)
-                    UnoRuntime.queryInterface(com.sun.star.view.XRenderable.class, oDoc);
+                XRenderable renderBabe = (XRenderable)
+                    UnoRuntime.queryInterface(XRenderable.class, oDoc);
 
-                com.sun.star.beans.PropertyValue renderProps[] =
-                    new com.sun.star.beans.PropertyValue[3];
-                renderProps[0] = new com.sun.star.beans.PropertyValue();
+                PropertyValue renderProps[] =
+                    new PropertyValue[3];
+                renderProps[0] = new PropertyValue();
                 renderProps[0].Name = "IsPrinter";
                 renderProps[0].Value = new Boolean(true);
-                renderProps[1] = new com.sun.star.beans.PropertyValue();
+                renderProps[1] = new PropertyValue();
                 renderProps[1].Name = "RenderDevice";
                 renderProps[1].Value = device;
-                renderProps[2] = new com.sun.star.beans.PropertyValue();
+                renderProps[2] = new PropertyValue();
                 renderProps[2].Name = "View";
                 renderProps[2].Value = new MyXController();
 
@@ -288,7 +283,7 @@ public class DocumentLoader
 
                 renderBabe.render(0, oDoc, renderProps);
 
-                com.sun.star.awt.XBitmap bitmap = device.createBitmap(0, 0, 1024, 1024);
+                XBitmap bitmap = device.createBitmap(0, 0, 1024, 1024);
 
                 byte[] image = bitmap.getDIB();
 
@@ -328,7 +323,7 @@ public class DocumentLoader
 
                 Bootstrap.twiddle_BGR_to_RGBA(image, imagebb.getInt(0x0a), width, height, argb);
 
-                ImageView imageView = new ImageView(this);
+                ImageView imageView = new GestureImageView(this);
 
                 Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(argb);
