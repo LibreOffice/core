@@ -588,7 +588,11 @@ void CommandLineArgs::InitParamValues()
     m_minimized = false;
     m_invisible = false;
     m_norestore = false;
+#ifdef LIBO_HEADLESS
+    m_headless = true;
+#else
     m_headless = false;
+#endif
     m_quickstart = false;
     m_noquickstart = false;
     m_terminateafterinit = false;
