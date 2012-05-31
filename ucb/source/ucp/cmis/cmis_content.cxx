@@ -127,6 +127,25 @@ namespace
         }
         return false;
     }
+
+    util::DateTime lcl_boostToUnoTime( boost::posix_time::ptime boostTime )
+    {
+        util::DateTime unoTime;
+        unoTime.Year = boostTime.date().year();
+        unoTime.Month = boostTime.date().month();
+        unoTime.Day = boostTime.date().day();
+        unoTime.Hours = boostTime.time_of_day().hours();
+        unoTime.Minutes = boostTime.time_of_day().minutes();
+        unoTime.Seconds = boostTime.time_of_day().seconds();
+
+        long total_milli = boostTime.time_of_day().total_milliseconds( );
+        long milli = total_milli - boostTime.time_of_day().total_seconds( );
+        long hundredthSeconds = milli / 10;
+
+        unoTime.HundredthSeconds = hundredthSeconds;
+
+        return unoTime;
+    }
 }
 
 namespace cmis
@@ -199,7 +218,10 @@ namespace cmis
                 if ( !m_sObjectId.isEmpty( ) )
                     m_pObject = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
                 else
+                {
                     m_pObject = m_pSession->getRootFolder( );
+                    m_sObjectId = rtl::OUString::createFromAscii( m_pObject->getId( ).c_str( ) );
+                }
             }
         }
         catch ( const libcmis::Exception& e )
@@ -256,10 +278,8 @@ namespace cmis
             }
             else if ( rProp.Name == "IsFolder" )
             {
-                if( getObject()->getBaseType( ) == "cmis:folder" )
-                    xRow->appendBoolean( rProp, true );
-                else
-                    xRow->appendVoid( rProp );
+                sal_Bool bFolder = getObject()->getBaseType( ) == "cmis:folder";
+                xRow->appendBoolean( rProp, bFolder );
             }
             else if ( rProp.Name == "Title" )
             {
@@ -300,15 +320,13 @@ namespace cmis
             }
             else if ( rProp.Name == "DateCreated" )
             {
-                // TODO Fix this value
-                SAL_INFO( "cmisucp", "TODO - Fix property value " << rProp.Name );
-                xRow->appendVoid( rProp );
+                util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getCreationDate( ) );
+                xRow->appendTimestamp( rProp, aTime );
             }
             else if ( rProp.Name == "DateModified" )
             {
-                // TODO Fix this value
-                SAL_INFO( "cmisucp", "TODO - Fix property value " << rProp.Name );
-                xRow->appendVoid( rProp );
+                util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getLastModificationDate( ) );
+                xRow->appendTimestamp( rProp, aTime );
             }
             else if ( rProp.Name == "Size" )
             {
@@ -334,7 +352,9 @@ namespace cmis
         bool bExists = true;
         try
         {
-            libcmis::ObjectPtr object = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+            if ( !m_sObjectId.isEmpty( ) )
+                libcmis::ObjectPtr object = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+            // No need to handle the root folder case... how can it not exists?
         }
         catch ( const libcmis::Exception& )
         {
@@ -725,19 +745,27 @@ namespace cmis
 
         string parentId;
 
-        libcmis::ObjectPtr pObj = getObject( );
-        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( ).get( ) );
-        if ( NULL != document )
+        try
         {
-            vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
-            if ( parents.size( ) > 0 )
-                parentId = parents.front( )->getId( );
+            libcmis::ObjectPtr pObj = getObject( );
+            libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( ).get( ) );
+            if ( NULL != document )
+            {
+                vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
+                if ( parents.size( ) > 0 )
+                    parentId = parents.front( )->getId( );
+            }
+            else
+            {
+                libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
+                if ( NULL != folder )
+                    parentId = folder->getFolderParent( )->getId( );
+            }
         }
-        else
+        catch ( const libcmis::Exception & )
         {
-            libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
-            if ( NULL != folder )
-                parentId = folder->getFolderParent( )->getId( );
+            // We may have an exception if we don't have the rights to
+            // get the parent ID
         }
 
         if ( !parentId.empty() )
