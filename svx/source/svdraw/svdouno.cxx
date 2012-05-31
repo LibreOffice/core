@@ -254,7 +254,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
     {
         uno::Reference< beans::XPropertySet > xModelProperties( GetUnoControlModel(), uno::UNO_QUERY_THROW );
         xModelProperties->setPropertyValue(
-            ::rtl::OUString::intern(  "ContextWritingMode"  ),
+            ::rtl::OUString(  "ContextWritingMode"  ),
             uno::makeAny( _nContextWritingMode )
         );
     }
