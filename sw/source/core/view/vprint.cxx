@@ -71,19 +71,21 @@
 #include <viewopt.hxx>
 #include <printdata.hxx>    // SwPrintData
 #include <pagedesc.hxx>
-#include <poolfmt.hxx>
-#include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <poolfmt.hxx>      // fuer RES_POOLPAGE_JAKET
+#include <mdiexp.hxx>       // Ansteuern der Statusleiste
+#include <statstr.hrc>      //      -- " --
 #include <ptqueue.hxx>
 #include <tabfrm.hxx>
-#include <txtfrm.hxx>           // MinPrtLine
-#include <viscrs.hxx>          // SwShellCrsr
+#include <txtfrm.hxx>       // MinPrtLine
+#include <viscrs.hxx>       // SwShellCrsr
 #include <fmtpdsc.hxx>      // SwFmtPageDesc
 #include <globals.hrc>
 
 
 using namespace ::com::sun::star;
 
+//--------------------------------------------------------------------
+//Klasse zum Puffern von Paints
 class SwQueuedPaint
 {
 public:
@@ -189,6 +191,13 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
+/******************************************************************************
+ *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
+ *  Beschreibung:
+ *  Erstellt    :   OK 04.11.94 16:27
+ *  Aenderung   :
+ ******************************************************************************/
+
 void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ )
 {
     OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
@@ -236,6 +245,13 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
         pOut = pOutDev;    //Oder was sonst?
 }
 
+/******************************************************************************
+ *  Methode     :   void ViewShell::ChgAllPageOrientation
+ *  Erstellt    :   MA 08. Aug. 95
+ *  Aenderung   :
+ ******************************************************************************/
+
+
 void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 {
     OSL_ENSURE( nStartAction, "missing an Action" );
@@ -259,6 +275,10 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
             aNew.SetLandscape( bNewOri );
             SwFrmFmt& rFmt = aNew.GetMaster();
             SwFmtFrmSize aSz( rFmt.GetFrmSize() );
+            // Groesse anpassen.
+            // PORTRAIT  -> Hoeher als Breit
+            // LANDSCAPE -> Breiter als Hoch
+            // Hoehe ist die VarSize, Breite ist die FixSize (per Def.)
             if( bNewOri ? aSz.GetHeight() > aSz.GetWidth()
                         : aSz.GetHeight() < aSz.GetWidth() )
             {
@@ -271,6 +291,13 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
         }
     }
 }
+
+/******************************************************************************
+ *  Methode     :   void ViewShell::ChgAllPageOrientation
+ *  Erstellt    :   MA 08. Aug. 95
+ *  Aenderung   :
+ ******************************************************************************/
+
 
 void ViewShell::ChgAllPageSize( Size &rSz )
 {
@@ -312,6 +339,7 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     SET_CURR_SHELL( this );
 
     SwRootFrm* pMyLayout = GetLayout();
+    // ULONG nStatMax = pLayout->GetPageNum();
 
     const SwFrm *pPage = pMyLayout->Lower();
     SwLayAction aAction( pMyLayout, Imp() );
@@ -330,9 +358,9 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
         aAction.Action();
 
-        aVisArea = aOldVis;
+        aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
-
+//       SwPaintQueue::Repaint();
     }
 
     pMyLayout->EndAllAction();
@@ -344,10 +372,15 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
+    // Wir bauen uns ein neues Dokument
+//    SwDoc *pPrtDoc = new SwDoc;
+//    pPrtDoc->acquire();
+//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
-    // Make a copy of it since it gets destroyed with the temporary document
-    // used for PDF export
+    // Der Drucker wird uebernommen
+    //! Make a copy of it since it gets destroyed with the temporary document
+    //! used for PDF export
     if (pPrt)
         pPrtDoc->setPrinter( new SfxPrinter(*pPrt), true, true );
 
@@ -357,15 +390,18 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
             pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
 
+    // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
+    //                              the PrintDoc - will be replaced!
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
     SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
-    if( !pActCrsr->HasMark() )
+    if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
     {
         pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
     }
 
+    // Die Y-Position der ersten Selektion
     Point aSelPoint;
     if( pFESh->IsTableMode() )
     {
@@ -394,21 +430,26 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         pPage->GetPageDesc()->GetName() ) : &pPrtDoc->_GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
-    {
+    {   // Am letzten Absatz die Absatzattribute richten:
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
         SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
         SwCntntNode *pLastNd =
             pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
-
+        // Hier werden die Absatzattribute des ersten Absatzes uebertragen
         if( pLastNd && pLastNd->IsTxtNode() )
             ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
     }
 
+    // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+//      if( aDocShellRef.Is() )
+//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
+    // und fuellen es mit dem selektierten Bereich
     pFESh->Copy( pPrtDoc );
 
+    //Jetzt noch am ersten Absatz die Seitenvorlage setzen
     {
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx );
+        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
         if( pFESh->IsTableMode() )
         {
             SwTableNode* pTNd = pCNd->FindTableNode();
@@ -425,7 +466,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
                 {
                     SwCntntNode *pFirstNd =
                         pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
-
+                    // Hier werden die Absatzattribute des ersten Absatzes uebertragen
                     if( pFirstNd && pFirstNd->IsTxtNode() )
                         ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
                 }
@@ -459,6 +500,9 @@ sal_Bool ViewShell::PrintOrPDFExport(
     SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Immer die Druckroutinen in viewpg.cxx (PrintProspect) mitpflegen!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
     OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
@@ -484,10 +528,12 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pDrawView->SetBufferedOverlayAllowed( false );
     }
 
-    {
+    {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
+        //Shell zurueckgesetzt wird.
+
         SET_CURR_SHELL( pShell );
 
-
+        //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
         if( pOpt->IsReadonly() )
             pShell->pOpt->SetReadonly( sal_True );
 
@@ -518,6 +564,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
 // FIXME disabled because rPrintData.aOffset is always (0,0)
 #if 0
+        //  wenn wir einen Umschlag drucken wird ein Offset beachtet
         if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
         {
             Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
@@ -535,7 +582,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
 
         SwPaintQueue::Repaint();
-    }
+    }  //Zus. Scope wg. CurShell!
 
     delete pShell;
 
@@ -546,9 +593,21 @@ sal_Bool ViewShell::PrintOrPDFExport(
     return sal_True;
 }
 
+/******************************************************************************
+ *  Methode     :   PrtOle2()
+ *  Beschreibung:
+ *  Erstellt    :   PK 07.12.94
+ *  Aenderung   :   MA 16. Feb. 95
+ ******************************************************************************/
+
+
+
 void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect )
 {
+  //Wir brauchen eine Shell fuer das Drucken. Entweder hat das Doc schon
+    //eine, dann legen wir uns eine neue Sicht an, oder das Doc hat noch
+    //keine, dann erzeugen wir die erste Sicht.
     ViewShell *pSh;
     if( pDoc->GetCurrentViewShell() )
         pSh = new ViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );//swmod 080129
@@ -577,15 +636,26 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         // formatting of the document.
         // Seiten fuers Drucken formatieren
         // pSh->CalcPagesForPrint( SHRT_MAX );
+        //#39275# jetzt will der Meyer doch ein Clipping
         pOleOut->Push( PUSH_CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );
+//      SFX_APP()->SpoilDemoOutput( *pOleOut, rRect );
 
         pOleOut->Pop();
-
+        // erst muss das CurrShell Object zerstoert werden!!
     }
     delete pSh;
 }
+
+/******************************************************************************
+ *  Methode     :   IsAnyFieldInDoc()
+ *  Beschreibung:   Stellt fest, ob im DocNodesArray Felder verankert sind
+ *  Erstellt    :   JP 27.07.95
+ *  Aenderung   :   JP 10.12.97
+ ******************************************************************************/
+
+
 
 sal_Bool ViewShell::IsAnyFieldInDoc() const
 {
@@ -596,13 +666,21 @@ sal_Bool ViewShell::IsAnyFieldInDoc() const
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            //#i101026# do not include postits in field check
+            //#i101026# mod: do not include postits in field check
             const SwField* pFld = pFmtFld->GetFld();
             if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() && (pFld->Which() != RES_POSTITFLD))
                 return sal_True;
         }
     return sal_False;
 }
+
+
+
+/******************************************************************************
+ *  SwDrawViewSave
+ *
+ *  Saves some settings at the draw view
+ ******************************************************************************/
 
 SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
     : pDV( pSdrView )
@@ -623,7 +701,7 @@ SwDrawViewSave::~SwDrawViewSave()
 }
 
 
-// #i6467# - method also called for page preview
+// OD 09.01.2003 #i6467# - method also called for page preview
 void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     pOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
@@ -638,7 +716,7 @@ void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
         SdrView *pDrawView = GetDrawView();
         String sLayerNm;
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
-        // #i6467# - consider, if view shell belongs to page preview
+        // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
         if ( !IsPreView() )
         {
             pDrawView->SetLayerPrintable( sLayerNm, rOptions.bPrintControl );

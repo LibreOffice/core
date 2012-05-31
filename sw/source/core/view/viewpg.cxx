@@ -60,6 +60,7 @@ using namespace ::com::sun::star;
 SwPageFrm const*
 lcl_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage); // vprint.cxx
 
+// OD 12.12.2002 #103492#
 SwPagePreviewLayout* ViewShell::PagePreviewLayout()
 {
     return Imp()->PagePreviewLayout();
@@ -70,7 +71,10 @@ void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
     Imp()->InvalidateAccessiblePreViewSelection( nSelPage );
 }
 
-//#i6467# adjust view options for page preview
+/** adjust view options for page preview
+
+    OD 09.01.2003 #i6467#
+*/
 void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 {
     if ( !IsPreView() )
@@ -84,7 +88,9 @@ void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
     return;
 }
 
-//#i14016# - consider empty pages on calculation of the scaling for a page to be printed.
+// print brochure
+// OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
+// for a page to be printed.
 void ViewShell::PrintProspect(
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
@@ -103,10 +109,12 @@ void ViewShell::PrintProspect(
 
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
+// const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
+//            rPagesToPrint.first : rPagesToPrint.second);
     OSL_ENSURE( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
     OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 
-    // create a new shell for the Printer
+    // eine neue Shell fuer den Printer erzeugen
     ViewShell aShell( *this, 0, pPrinter );
 
     SET_CURR_SHELL( &aShell );
@@ -131,7 +139,8 @@ void ViewShell::PrintProspect(
         pNxtPage = lcl_getPage(*aShell.GetLayout(), rPagesToPrint.second);
     }
 
-    //#i14016# - consider empty pages on calculation of page size, used for calculation of scaling.
+    // OD 05.05.2003 #i14016# - consider empty pages on calculation
+    // of page size, used for calculation of scaling.
     Size aSttPageSize;
     if ( pStPage )
     {
@@ -179,6 +188,7 @@ void ViewShell::PrintProspect(
         nMaxRowSz = Max( aNxtPageSize.Height(), aSttPageSize.Height() );
     }
 
+    // den MapMode einstellen
     aMapMode.SetOrigin( Point() );
     {
         Fraction aScX( aPrtSize.Width(), nMaxColSz );
@@ -187,6 +197,8 @@ void ViewShell::PrintProspect(
             aScY = aScX;
 
         {
+            // fuer Drawing, damit diese ihre Objecte vernuenftig Painten
+            // koennen, auf "glatte" Prozentwerte setzen
             aScY *= Fraction( 1000, 1 );
             long nTmp = (long)aScY;
             if( 1 < nTmp )

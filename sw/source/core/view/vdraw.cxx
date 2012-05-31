@@ -37,6 +37,8 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 
+/// OD 29.08.2002 #102450#
+/// include <svx/svdoutl.hxx>
 #include <svx/svdoutl.hxx>
 
 #include "fesh.hxx"
@@ -54,13 +56,51 @@
 #include <IDocumentDrawModelAccess.hxx>
 
 
+/*************************************************************************
+|*
+|*  SwSaveHdl
+|*
+|*  Ersterstellung      MA 14. Feb. 95
+|*  Letzte Aenderung    MA 02. Jun. 98
+|*
+|*************************************************************************/
+//SwSaveHdl::SwSaveHdl( SwViewImp *pI ) :
+//  pImp( pI ),
+//  bXorVis( FALSE )
+//{
+    //if ( pImp->HasDrawView() )
+    //{
+    //  bXorVis = pImp->GetDrawView()->IsShownXorVisible( pImp->GetShell()->GetOut());
+    //  if ( bXorVis )
+    //      pImp->GetDrawView()->HideShownXor( pImp->GetShell()->GetOut() );
+    //}
+//}
+
+
+//SwSaveHdl::~SwSaveHdl()
+//{
+    //if ( bXorVis )
+    //  pImp->GetDrawView()->ShowShownXor( pImp->GetShell()->GetOut() );
+//}
+
+
+/*************************************************************************
+|*
+|*  SwViewImp::StartAction(), EndAction()
+|*
+|*  Ersterstellung      MA 14. Feb. 95
+|*  Letzte Aenderung    MA 14. Sep. 98
+|*
+|*************************************************************************/
 void SwViewImp::StartAction()
 {
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->HideChainMarker();
+            ((SwFEShell*)pSh)->HideChainMarker();   //Kann sich geaendert haben
+        //bResetXorVisibility = GetDrawView()->IsShownXorVisible( GetShell()->GetOut());
+        //GetDrawView()->HideShownXor( GetShell()->GetOut() );
     }
 }
 
@@ -69,20 +109,34 @@ void SwViewImp::EndAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
+        //if ( bResetXorVisibility )
+        //  GetDrawView()->ShowShownXor( GetShell()->GetOut() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->SetChainMarker();   // May have changed
+            ((SwFEShell*)pSh)->SetChainMarker();    //Kann sich geaendert haben
     }
 }
 
+/*************************************************************************
+|*
+|*  SwViewImp::LockPaint(), UnlockPaint()
+|*
+|*  Ersterstellung      MA 11. Jun. 96
+|*  Letzte Aenderung    MA 11. Jun. 96
+|*
+|*************************************************************************/
 void SwViewImp::LockPaint()
 {
     if ( HasDrawView() )
     {
+        //HMHbShowHdlPaint = GetDrawView()->IsMarkHdlShown();
+        //HMHif ( bShowHdlPaint )
+        //HMH   GetDrawView()->HideMarkHdl();
         bResetHdlHiddenPaint = !GetDrawView()->areMarkHandlesHidden();
         GetDrawView()->hideMarkHandles();
     }
     else
     {
+        //HMHbShowHdlPaint = FALSE;
         bResetHdlHiddenPaint = sal_False;
     }
 }
@@ -91,8 +145,25 @@ void SwViewImp::UnlockPaint()
 {
     if ( bResetHdlHiddenPaint )
         GetDrawView()->showMarkHandles();
+    //HMHif ( bShowHdlPaint )
+    //HMH   GetDrawView()->ShowMarkHdl();
 }
 
+/*************************************************************************
+|*
+|*  SwViewImp::PaintLayer(), PaintDispatcher()
+|*
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    AMA 04. Jun. 98
+|*
+|*************************************************************************/
+// OD 29.08.2002 #102450#
+// add 3rd paramter <const Color* pPageBackgrdColor> for setting this
+// color as the background color at the outliner of the draw view.
+// OD 09.12.2002 #103045# - add 4th parameter for the horizontal text direction
+// of the page in order to set the default horizontal text direction at the
+// outliner of the draw view for painting layers <hell> and <heaven>.
+// OD 25.06.2003 #108784# - correct type of 1st parameter
 void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
                             SwPrintData const*const pPrintData,
                             const SwRect& ,
@@ -112,11 +183,14 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             pOutDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
                                 DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
         }
+
+        // OD 29.08.2002 #102450#
         // For correct handling of accessibility, high contrast, the page background
         // color is set as the background color at the outliner of the draw view.
         // Only necessary for the layers hell and heaven
         Color aOldOutlinerBackgrdColor;
-        // set default horizontal text direction on painting <hell> or <heaven>.
+        // OD 09.12.2002 #103045# - set default horizontal text direction on
+        // painting <hell> or <heaven>.
         EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
         const IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
@@ -148,8 +222,9 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         GetPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector );
         pOutDev->Pop();
 
+        // OD 29.08.2002 #102450#
         // reset background color of the outliner
-        // reset default horizontal text direction
+        // OD 09.12.2002 #103045# - reset default horizontal text direction
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
              (_nLayerID == pIDDMA->GetHeavenId()) )
         {
@@ -161,6 +236,14 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
     }
 }
 
+/*************************************************************************
+|*
+|*  SwViewImp::IsDragPossible()
+|*
+|*  Ersterstellung      MA 19. Jan. 93
+|*  Letzte Aenderung    MA 16. Jan. 95
+|*
+|*************************************************************************/
 #define WIEDUWILLST 400
 
 sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
@@ -192,6 +275,15 @@ sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
     return aRect.IsInside( rPoint );
 }
 
+/*************************************************************************
+|*
+|*  SwViewImp::NotifySizeChg()
+|*
+|*  Ersterstellung      MA 23. Jun. 93
+|*  Letzte Aenderung    MA 05. Oct. 98
+|*
+|*************************************************************************/
+
 void SwViewImp::NotifySizeChg( const Size &rNewSz )
 {
     if ( !HasDrawView() )
@@ -200,6 +292,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     if ( GetPageView() )
         GetPageView()->GetPage()->SetSize( rNewSz );
 
+    //Begrenzung des Arbeitsbereiches.
     const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
     sal_Bool bCheckDrawObjs = sal_False;
@@ -220,6 +313,8 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
         SdrObject *pObj = pPage->GetObj( nObj );
         if( !pObj->ISA(SwVirtFlyDrawObj) )
         {
+            //Teilfix(26793): Objekte, die in Rahmen verankert sind, brauchen
+            //nicht angepasst werden.
             const SwContact *pCont = (SwContact*)GetUserCall(pObj);
             //JP - 16.3.00 Bug 73920: this function might be called by the
             //              InsertDocument, when a PageDesc-Attribute is
@@ -236,7 +331,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            // no move for drawing objects in header/footer
+            // OD 19.06.2003 #108784# - no move for drawing objects in header/footer
             if ( pAnchor->FindFooterOrHeader() )
             {
                 continue;
@@ -253,7 +348,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
 
-                //Note anchor: Large objects can not disappear from the top.
+                //Notanker: Grosse Objekte nicht nach oben verschwinden lassen.
                 aSz.Width() = aSz.Height() = 0;
                 if ( aBound.Bottom() < aRect.Top() )
                     aSz.Width() = (aBound.Bottom() - aRect.Top()) - MINFLY;

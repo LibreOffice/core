@@ -38,13 +38,15 @@
 #include <viewopt.hxx>
 #include <swregion.hxx>
 #include <comcore.hrc>
+// OD 19.02.2003 #107369# - method <SwAlignRect(..)>
 #include <frmtool.hxx>
+// OD 24.09.2003 #i19975#
 #include <svx/zoomitem.hxx>
 #include <printdata.hxx>
 
 #include <IDocumentDeviceAccess.hxx>
 
-// method to update statics for paint
+// OD 20.02.2003 #107369# - method to update statics for paint
 // Note: method defined in '/sw/source/core/layout/paintfrm.cxx'
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
@@ -60,6 +62,7 @@ SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
 {
     _Clear();
 
+    // OD 2004-03-05 #i18143#
     mbBookPreview = false;
     mbBookPreviewModeToggled = false;
 
@@ -95,6 +98,7 @@ void SwPagePreviewLayout::_Clear()
     mnSelectedPageNum = 0;
     _ClearPrevwPageData();
 
+    // OD 07.11.2003 #i22014#
     mbInPaint = false;
     mbNewLayoutDuringPaint = false;
 }
@@ -122,6 +126,12 @@ void SwPagePreviewLayout::_ClearPrevwPageData()
     maPrevwPages.clear();
 }
 
+/** calculate page preview layout sizes
+
+    OD 18.12.2002 #103492#
+
+    @author OD
+*/
 void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
 {
     // calculate maximal page size; calculate also number of pages
@@ -160,6 +170,7 @@ void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
 
         // document height
         // determine number of rows needed for <nPages> in preview layout
+        // OD 19.02.2003 #107369# - use method <GetRowOfPage(..)>.
         sal_uInt16 nDocRows = GetRowOfPage( mnPages );
         aDocSize.Height() = nDocRows * maMaxPageSize.Height() +
                             (nDocRows+1) * mnYFree;
@@ -170,12 +181,14 @@ void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
 
 /** init page preview layout
 
+    OD 11.12.2002 #103492#
     initialize the page preview settings for a given layout.
     side effects:
     (1) If parameter <_bCalcScale> is true, mapping mode with calculated
     scaling is set at the output device and the zoom at the view options of
     the given view shell is set with the calculated scaling.
 
+    @author OD
 */
 bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
                                 const sal_uInt16 _nRows,
@@ -234,6 +247,7 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
         aMapMode.SetScaleX( aYScale );
         // set created mapping mode with calculated scaling at output device.
         mrParentViewShell.GetOut()->SetMapMode( aMapMode );
+        // OD 20.02.2003 #107369# - update statics for paint.
         ::SwCalcPixStatics( mrParentViewShell.GetOut() );
     }
 
@@ -245,6 +259,12 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     return true;
 }
 
+/** apply new zoom at given view shell
+
+    OD 11.12.2002 #103492# - implementation of <_ApplyNewZoomAtViewShell>
+
+    @author OD
+*/
 void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
 {
     SwViewOption aNewViewOptions = *(mrParentViewShell.GetViewOptions());
@@ -258,6 +278,12 @@ void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
     }
 }
 
+/** method to adjust page preview layout to document changes
+
+    OD 18.12.2002 #103492#
+
+    @author OD
+*/
 bool SwPagePreviewLayout::ReInit()
 {
     // check environment and parameters
@@ -278,8 +304,13 @@ bool SwPagePreviewLayout::ReInit()
 // =============================================================================
 // methods to prepare paint of page preview
 // =============================================================================
+/** prepare paint of page preview
 
-// _nProposedStartPageNum, _onStartPageNum are absolute
+    OD 12.12.2002 #103492#
+    OD 21.03.2003 #108282# - delete parameter _onStartPageVirtNum
+
+    @author OD, _nProposedStartPageNum, _onStartPageNum are absolute
+*/
 bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                                    const Point      _aProposedStartPos,
                                    const Size&      _rPxWinSize,
@@ -337,7 +368,8 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         // determine start page
         if ( _bStartWithPageAtFirstCol )
         {
-            // leaving left-top-corner blank is controlled by <mbBookPreview>.
+            // OD 19.02.2003 #107369# - leaving left-top-corner blank is
+            // controlled by <mbBookPreview>.
             if ( mbBookPreview &&
                  ( nProposedStartPageNum == 1 || nRowOfProposed == 1 )
                )
@@ -376,14 +408,16 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         sal_uInt16 nRowOfProposed =
                 static_cast<sal_uInt16>(_aProposedStartPos.Y() / mnRowHeight) + 1;
         // determine start page == page at proposed start position
-        // leaving left-top-corner blank is controlled by <mbBookPreview>.
+        // OD 19.02.2003 #107369# - leaving left-top-corner blank is
+        // controlled by <mbBookPreview>.
         if ( mbBookPreview &&
              ( nRowOfProposed == 1 && nColOfProposed == 1 )
            )
             mnPaintPhyStartPageNum = 1;
         else
         {
-            // leaving left-top-corner blank is controlled by <mbBookPreview>.
+            // OD 19.02.2003 #107369# - leaving left-top-corner blank is
+            // controlled by <mbBookPreview>.
             mnPaintPhyStartPageNum = (nRowOfProposed-1) * mnCols + nColOfProposed;
             if ( mbBookPreview )
                 --mnPaintPhyStartPageNum;
@@ -414,7 +448,8 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     _CalcDocPrevwPaintRect();
     _orDocPreviewPaintRect = maPaintedPrevwDocRect;
 
-    // shift visible preview document area to the left,if on the right is an area left blank.
+    // OD 20.01.2003 #103492# - shift visible preview document area to the left,
+    // if on the right is an area left blank.
     if ( !mbDoesLayoutColsFitIntoWindow &&
          maPaintedPrevwDocRect.GetWidth() < maWinSize.Width() )
     {
@@ -424,7 +459,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                  _rPxWinSize, _onStartPageNum,
                  _orDocPreviewPaintRect, _bStartWithPageAtFirstCol );
     }
-    // shift visible preview document area to the left,if on the right is an area left blank.
+
+    // OD 20.01.2003 #103492# - shift visible preview document area to the top,
+    // if on the botton is an area left blank.
     if ( mbBookPreviewModeToggled &&
          maPaintedPrevwDocRect.Bottom() == maPreviewDocRect.Bottom() &&
          maPaintedPrevwDocRect.GetHeight() < maWinSize.Height() )
@@ -454,7 +491,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     // accessible pages with needed data.
     _CalcPreviewPages();
 
-    // indicate new layout, if print preview is in paint
+    // OD 07.11.2003 #i22014# - indicate new layout, if print preview is in paint
     if ( mbInPaint )
     {
         mbNewLayoutDuringPaint = true;
@@ -469,6 +506,12 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     return true;
 }
 
+/** calculate additional paint offset
+
+    OD 12.12.2002 #103492#
+
+    @author OD
+*/
 void SwPagePreviewLayout::_CalcAdditionalPaintOffset()
 {
     if ( mnPrevwLayoutWidth <= maWinSize.Width() &&
@@ -496,6 +539,12 @@ void SwPagePreviewLayout::_CalcAdditionalPaintOffset()
     }
 }
 
+/** calculate painted preview document rectangle
+
+    OD 12.12.2002 #103492#
+
+    @author OD
+*/
 void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
 {
     Point aTopLeftPos = maPaintPreviewDocOffset;
@@ -503,12 +552,14 @@ void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
 
     Size aSize;
     if ( mbDoesLayoutColsFitIntoWindow )
+        //aSize.Width() = mnPrevwLayoutWidth;
         aSize.Width() = Min( mnPrevwLayoutWidth,
                              maPreviewDocRect.GetWidth() - aTopLeftPos.X() );
     else
         aSize.Width() = Min( maPreviewDocRect.GetWidth() - aTopLeftPos.X(),
                              maWinSize.Width() - maAdditionalPaintOffset.X() );
     if ( mbDoesLayoutRowsFitIntoWindow )
+        //aSize.Height() = mnPrevwLayoutHeight;
         aSize.Height() = Min( mnPrevwLayoutHeight,
                               maPreviewDocRect.GetHeight() - aTopLeftPos.Y() );
     else
@@ -517,6 +568,12 @@ void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
     maPaintedPrevwDocRect.SetSize( aSize );
 }
 
+/** calculate preview pages
+
+    OD 12.12.2002 #103492#
+
+    @author OD
+*/
 void SwPagePreviewLayout::_CalcPreviewPages()
 {
     _ClearPrevwPageData();
@@ -571,7 +628,8 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         }
         if ( aCurrPaintOffset.X() < maWinSize.Width() )
         {
-            // leaving left-top-corner blank is controlled by <mbBookPreview>.
+            // OD 19.02.2003 #107369# - leaving left-top-corner blank is
+            // controlled by <mbBookPreview>.
             if ( mbBookPreview && pPage->GetPhyPageNum() == 1 && mnCols != 1 && nCurrCol == 1
                )
             {
@@ -612,6 +670,12 @@ void SwPagePreviewLayout::_CalcPreviewPages()
     }
 }
 
+/** determines preview data for a given page and a given preview offset
+
+    OD 13.12.2002 #103492#
+
+    @author OD
+*/
 bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
                                                    const Point& _rPrevwOffset,
                                                    PrevwPage* _opPrevwPage )
@@ -650,6 +714,12 @@ bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
     return true;
 }
 
+/** enable/disable book preview
+
+    OD 2004-03-04 #i18143#
+
+    @author OD
+*/
 bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
                                               sal_uInt16& _onStartPageNum,
                                               Rectangle&  _orDocPreviewPaintRect )
@@ -687,7 +757,12 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
 // methods to determine new data for changing the current shown part of the
 // document preview.
 // =============================================================================
+/** calculate start position for new scale
 
+    OD 12.12.2002 #103492#
+
+    @author OD
+*/
 Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
                           const Fraction& _aNewScale,
                           const Fraction& _aOldScale,
@@ -957,7 +1032,12 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
 // =============================================================================
 // methods to paint page preview layout
 // =============================================================================
+/** paint prepared preview
 
+    OD 12.12.2002 #103492#
+
+    @author OD
+*/
 bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 {
     // check environment and parameters
@@ -972,7 +1052,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
             return false;
     }
 
-    // #i22014# no paint if <superfluous> flag is set at layout
+    // OD 17.11.2003 #i22014# - no paint, if <superfluous> flag is set at layout
     if ( mrLayoutRootFrm.IsSuperfluous() )
     {
         return true;
@@ -980,7 +1060,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 
     // environment and parameter ok
 
-    // #i22014#
+    // OD 07.11.2003 #i22014#
     if ( mbInPaint )
     {
         return false;
@@ -1041,8 +1121,8 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 const Color aRetouche( mrParentViewShell.Imp()->GetRetoucheColor() );
                 if( pOutputDev->GetFillColor() != aRetouche )
                     pOutputDev->SetFillColor( aRetouche );
-                pOutputDev->SetLineColor(); // no line color
-                // use aligned page rectangle
+                pOutputDev->SetLineColor(); // OD 20.02.2003 #107369# - no line color
+                // OD 20.02.2003 #107369# - use aligned page rectangle
                 {
                     SwRect aTmpPageRect( aPageRect );
                     ::SwAlignRect( aTmpPageRect, &mrParentViewShell);
@@ -1059,7 +1139,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                                     TEXT_DRAW_CLIP );
                 pOutputDev->SetFont( aOldFont );
                 // paint shadow and border for empty page
-                // use new method to paint page border and shadow
+                // OD 19.02.2003 #107369# - use new method to paint page border and shadow
                 SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
             }
             else
@@ -1068,7 +1148,8 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 aPxPaintRect.Intersection( aPxOutRect );
                 Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
                 mrParentViewShell.Paint( aPaintRect );
-                // #i80691# paint page border and shadow
+                // --> OD 2007-08-15 #i80691#
+                // paint page border and shadow
                 {
                     SwRect aPageBorderRect;
                     SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect,
@@ -1078,8 +1159,10 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                     SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
                     mrParentViewShell.DLPostPaint2(true);
                 }
+                // <--
             }
-            // #i22014# stop painting, because new print preview layout is created during paint.
+            // OD 07.11.2003 #i22014# - stop painting, because new print
+            // preview layout is created during paint.
             if ( mbNewLayoutDuringPaint )
             {
                 break;
@@ -1093,7 +1176,8 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
         }
     }
 
-    // #i22014# no update of accessible preview, if a new print preview layout is created during paint.
+    // OD 17.11.2003 #i22014# - no update of accessible preview, if a new
+    // print preview layout is created during paint.
     if ( !mbNewLayoutDuringPaint )
     {
         // update at accessiblilty interface
@@ -1107,12 +1191,19 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     pOutputDev->SetMapMode( aSavedMapMode );
     mrParentViewShell.aVisArea.Clear();
 
+    // OD 07.11.2003 #i22014#
     mbInPaint = false;
     mbNewLayoutDuringPaint = false;
 
     return true;
 }
 
+/** repaint pages on page preview
+
+    OD 18.12.2002 #103492#
+
+    @author OD
+*/
 void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
 {
     // check environment and parameters
@@ -1158,6 +1249,12 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
     }
 }
 
+/** paint selection mark at page
+
+    OD 17.12.2002 #103492#
+
+    @author OD
+*/
 void SwPagePreviewLayout::_PaintSelectMarkAtPage(
                                     const PrevwPage* _aSelectedPrevwPage ) const
 {
@@ -1183,20 +1280,20 @@ void SwPagePreviewLayout::_PaintSelectMarkAtPage(
     // calculate page rectangle in pixel coordinates
     SwRect aPageRect( _aSelectedPrevwPage->aLogicPos,
                          _aSelectedPrevwPage->aPageSize );
-    // use aligned page rectangle, as it is used for
+    // OD 19.02.2003 #107369# - use aligned page rectangle, as it is used for
     // page border and shadow paint - see <SwPageFrm::PaintBorderAndShadow(..)>
     ::SwAlignRect( aPageRect, &mrParentViewShell);
     Rectangle aPxPageRect = pOutputDev->LogicToPixel( aPageRect.SVRect() );
 
     // draw two rectangle
-    // adjust position of select mark rectangle
+    // OD 19.02.2003 #107369# - adjust position of select mark rectangle
     Rectangle aRect( aPxPageRect.Left(), aPxPageRect.Top(),
                        aPxPageRect.Right(), aPxPageRect.Bottom() );
     aRect = pOutputDev->PixelToLogic( aRect );
-    pOutputDev->SetFillColor(); // no fill color
+    pOutputDev->SetFillColor(); // OD 20.02.2003 #107369# - no fill color
     pOutputDev->SetLineColor( aSelPgLineColor );
     pOutputDev->DrawRect( aRect );
-    // adjust position of select mark rectangle
+    // OD 19.02.2003 #107369# - adjust position of select mark rectangle
     aRect = Rectangle( aPxPageRect.Left()+1, aPxPageRect.Top()+1,
                        aPxPageRect.Right()-1, aPxPageRect.Bottom()-1 );
     aRect = pOutputDev->PixelToLogic( aRect );
@@ -1210,8 +1307,14 @@ void SwPagePreviewLayout::_PaintSelectMarkAtPage(
     pOutputDev->SetMapMode( aSavedMapMode );
 }
 
-// Perform paint for current selected page in order to unmark it.
-// Set new selected page and perform paint to mark this page.
+/** paint to mark new selected page
+
+    OD 17.12.2002 #103492#
+    Perform paint for current selected page in order to unmark it.
+    Set new selected page and perform paint to mark this page.
+
+    @author OD, _nSelectedPage, mnSelectedPage are absolut
+*/
 void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 {
     sal_uInt16 nOldSelectedPageNum = mnSelectedPageNum;
@@ -1221,7 +1324,7 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
     const PrevwPage* pOldSelectedPrevwPage = _GetPrevwPageByPageNum( nOldSelectedPageNum );
     if ( pOldSelectedPrevwPage && pOldSelectedPrevwPage->bVisible )
     {
-        // invalidate only areas of selection mark.
+        // OD 20.02.2003 #107369# - invalidate only areas of selection mark.
         SwRect aPageRect( pOldSelectedPrevwPage->aPrevwWinPos,
                               pOldSelectedPrevwPage->aPageSize );
         ::SwAlignRect( aPageRect, &mrParentViewShell);
@@ -1255,7 +1358,12 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 // =============================================================================
 // helper methods
 // =============================================================================
+/** get preview page by physical page number
 
+    OD 17.12.2002 #103492#
+
+    @author OD
+*/
 struct EqualsPageNumPred
 {
     const sal_uInt16 mnPageNum;
@@ -1278,9 +1386,16 @@ const PrevwPage* SwPagePreviewLayout::_GetPrevwPageByPageNum( const sal_uInt16 _
         return (*aFoundPrevwPageIter);
 }
 
+/** determine row the page with the given number is in
+
+    OD 17.01.2003 #103492#
+
+    @author OD, _nPageNum is relative
+*/
 sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 {
-    // leaving left-top-corner blank is controlled by <mbBookPreview>.
+    // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
+    // by <mbBookPreview>.
     if ( mbBookPreview )
     {
         // Note: increase given physical page number by one, because left-top-corner
@@ -1294,9 +1409,17 @@ sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 
     return nRow;
 }
+
+/** determine column the page with the given number is in
+
+    OD 17.01.2003 #103492#
+
+    @author OD, _nPageNum is relative
+*/
 sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
 {
-    // leaving left-top-corner blank is controlled by <mbBookPreview>.
+    // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
+    // by <mbBookPreview>.
     if ( mbBookPreview )
     {
         // Note: increase given physical page number by one, because left-top-corner
@@ -1317,6 +1440,12 @@ Size SwPagePreviewLayout::GetPrevwDocSize() const
     return maPreviewDocRect.GetSize();
 }
 
+/** get size of a preview page by its physical page number
+
+    OD 15.01.2003 #103492#
+
+    @author OD
+*/
 Size SwPagePreviewLayout::GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) const
 {
     const PrevwPage* pPrevwPage = _GetPrevwPageByPageNum( _nPageNum );
@@ -1330,6 +1459,12 @@ Size SwPagePreviewLayout::GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) cons
     }
 }
 
+/** get virtual page number by its physical page number
+
+    OD 21.03.2003 #108282#
+
+    @author OD
+*/
 sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const
 {
     const PrevwPage* pPrevwPage = _GetPrevwPageByPageNum( _nPageNum );
@@ -1343,6 +1478,10 @@ sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) 
     }
 }
 
+/** Convert absolute to relative page numbers (see PrintEmptyPages)
+
+    @author FME
+*/
 sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const
 {
     if ( mbBookPreview || mbPrintEmptyPages || !_nAbsPageNum )
@@ -1365,6 +1504,10 @@ sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nA
     return nRet;
 }
 
+/** Convert relative to absolute page numbers (see PrintEmptyPages)
+
+    @author FME
+*/
 sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const
 {
     if ( mbBookPreview || mbPrintEmptyPages || !_nRelPageNum )
