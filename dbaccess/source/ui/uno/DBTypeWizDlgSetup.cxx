@@ -37,7 +37,6 @@
 #include <vcl/msgbox.hxx>
 
 using namespace dbaui;
-namespace css = ::com::sun::star;
 
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup()
 {

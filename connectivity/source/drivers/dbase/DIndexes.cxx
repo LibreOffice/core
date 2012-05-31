@@ -46,8 +46,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-namespace starutil      = ::com::sun::star::util;
-
 sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString sFile = m_pTable->getConnection()->getURL();

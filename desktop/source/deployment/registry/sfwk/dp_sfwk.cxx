@@ -47,7 +47,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::script;
 
 using ::rtl::OUString;
-namespace css = ::com::sun::star;
 
 namespace dp_registry
 {

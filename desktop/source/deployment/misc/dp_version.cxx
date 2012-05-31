@@ -36,8 +36,6 @@
 
 namespace {
 
-namespace css = ::com::sun::star;
-
 ::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
 {
     while (*index < version.getLength() && version[*index] == '0') {

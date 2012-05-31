@@ -36,7 +36,6 @@
 
 #define COLUMN_NAME     1
 
-namespace css = com::sun::star;
 using rtl::OUString;
 
 PlacesListBox_Impl::PlacesListBox_Impl( Window* pParent, const rtl::OUString& rTitle ) :

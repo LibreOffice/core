@@ -38,8 +38,6 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-namespace css = ::com::sun::star;
-
 //-----------------------------------------------------------------------------
 void lcl_sleep(::osl::Condition& aCondition   ,
                ::sal_Int32       nMilliSeconds)

@@ -71,7 +71,6 @@ namespace frame = com::sun::star::frame;
 namespace beans = com::sun::star::beans;
 namespace container = com::sun::star::container;
 namespace uno = com::sun::star::uno;
-namespace lang = com::sun::star::lang;
 namespace document = com::sun::star::document;
 namespace sheet = com::sun::star::sheet;
 namespace io = com::sun::star::io;

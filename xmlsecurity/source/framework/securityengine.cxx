@@ -32,8 +32,6 @@
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxw = com::sun::star::xml::wrapper;
 
 #define DECLARE_ASCII( SASCIIVALUE )                                                                            \
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )

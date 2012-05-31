@@ -40,7 +40,6 @@
 #include "dp_commandenvironments.hxx"
 
 namespace deployment = com::sun::star::deployment;
-namespace lang  = com::sun::star::lang;
 namespace task = com::sun::star::task;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;

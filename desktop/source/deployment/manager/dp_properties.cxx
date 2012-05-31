@@ -38,7 +38,6 @@
 #include "dp_properties.hxx"
 
 namespace lang  = com::sun::star::lang;
-namespace task = com::sun::star::task;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 namespace css = com::sun::star;

@@ -40,15 +40,10 @@
 
 #include "cli_bridge.h"
 #include "cli_proxy.h"
-namespace srr= System::Runtime::Remoting;
-namespace srrp= System::Runtime::Remoting::Proxies;
 #using <mscorlib.dll>
 #if defined(_MSC_VER) && (_MSC_VER < 1400)
 #include <_vcclrit.h>
 #endif
-
-namespace  cssu= com::sun::star::uno;
-
 
 namespace sri= System::Runtime::InteropServices;
 using ::rtl::OUString;

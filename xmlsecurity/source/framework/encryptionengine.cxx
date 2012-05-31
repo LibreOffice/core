@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
 

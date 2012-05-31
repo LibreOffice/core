@@ -36,7 +36,6 @@ using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 
-namespace css = ::com::sun::star;
 namespace dp_registry
 {
 namespace backend

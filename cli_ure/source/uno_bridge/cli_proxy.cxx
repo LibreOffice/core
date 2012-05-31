@@ -40,12 +40,10 @@
 
 namespace sr = System::Reflection;
 namespace st = System::Text;
-namespace sre = System::Reflection::Emit;
 namespace sc = System::Collections;
 namespace srrm = System::Runtime::Remoting::Messaging;
 namespace srr = System::Runtime::Remoting;
 namespace srrp = System::Runtime::Remoting::Proxies;
-namespace sri = System::Runtime::InteropServices;
 namespace sd = System::Diagnostics;
 namespace css = com::sun::star;
 namespace ucss = unoidl::com::sun::star;

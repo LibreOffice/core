@@ -36,7 +36,6 @@
 #include "dp_scriptbackenddb.hxx"
 
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 

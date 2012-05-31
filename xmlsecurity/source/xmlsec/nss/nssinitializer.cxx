@@ -81,7 +81,6 @@
 namespace css = ::com::sun::star;
 namespace cssu = css::uno;
 namespace cssl = css::lang;
-namespace cssxc = css::xml::crypto;
 
 using namespace xmlsecurity;
 using namespace com::sun::star;

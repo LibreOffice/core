@@ -123,8 +123,6 @@ using ::com::sun::star::frame::XLoadable;
 using ::com::sun::star::frame::XStorable;
 using ::com::sun::star::lang::XComponent;
 
-namespace fpf = ::framework::pattern::frame;
-
 
 namespace framework
 {

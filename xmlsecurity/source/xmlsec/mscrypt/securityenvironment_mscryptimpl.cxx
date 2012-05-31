@@ -70,7 +70,6 @@ using ::rtl::OUString ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
-namespace css = ::com::sun::star;
 
 extern X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
 

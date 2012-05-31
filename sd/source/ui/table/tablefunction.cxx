@@ -84,8 +84,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::linguistic2;
 
-namespace css = ::com::sun::star;
-
 namespace sd
 {
 extern void showTableDesignDialog( ::Window*, ViewShellBase& );

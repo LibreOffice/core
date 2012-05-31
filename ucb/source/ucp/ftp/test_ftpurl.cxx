@@ -41,9 +41,6 @@
     return number_of_errors
 
 
-namespace ccsu = com::sun::star::ucb;
-
-
 struct ServerInfo {
     rtl::OUString host;
     rtl::OUString port;

@@ -44,8 +44,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-namespace starutil      = ::com::sun::star::util;
-
 sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& /*_rName*/)
 {
     return sdbcx::ObjectType();

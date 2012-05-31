@@ -33,9 +33,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace css = com::sun::star;
-namespace uno = css::uno;
-namespace lang = css::lang;
+namespace uno = com::sun::star::uno;
 
 //------------------------------------------------------------------------------
 

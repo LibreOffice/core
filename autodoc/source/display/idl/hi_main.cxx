@@ -80,19 +80,6 @@ using       ::ary::idl::ifc_ce::Dyn_CeIterator;
 
 extern const String C_sCssFilename_Idl("idl.css");
 
-/*
-typedef     ::ary::Dyn_StdConstIterator< ::ary::idl::CommentedRelation>
-            Dyn_ComRefIterator;
-namespace   read_module     = ::ary::idl::ifc_module;
-namespace   read_interface  = ::ary::idl::ifc_interface;
-namespace   read_service    = ::ary::idl::ifc_service;
-namespace   read_struct     = ::ary::idl::ifc_struct;
-namespace   read_exception  = ::ary::idl::ifc_exception;
-namespace   read_enum       = ::ary::idl::ifc_enum;
-namespace   read_typedef    = ::ary::idl::ifc_typedef;
-namespace   read_constgroup = ::ary::idl::ifc_constantsgroup;
-*/
-
 namespace
 {
 

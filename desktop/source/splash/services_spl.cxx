@@ -36,8 +36,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 static cppu::ImplementationEntry const services[] = {
     { &desktop::splash::create, &desktop::splash::getImplementationName,
       &desktop::splash::getSupportedServiceNames,

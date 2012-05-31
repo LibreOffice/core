@@ -71,8 +71,6 @@
 #include <deque>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-namespace css = ::com::sun::star;
-
 DBG_NAME(SfxDispatcherFlush)
 DBG_NAME(SfxDispatcherFillState)
 

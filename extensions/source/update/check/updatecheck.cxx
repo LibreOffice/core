@@ -63,15 +63,12 @@
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
-namespace awt = com::sun::star::awt ;
 namespace beans = com::sun::star::beans ;
-namespace container = com::sun::star::container ;
 namespace deployment = com::sun::star::deployment ;
 namespace frame = com::sun::star::frame ;
 namespace lang = com::sun::star::lang ;
 namespace c3s = com::sun::star::system ;
 namespace task = com::sun::star::task ;
-namespace util = com::sun::star::util ;
 namespace uno = com::sun::star::uno ;
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))

@@ -40,12 +40,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 LocalizedPropertyNode::LocalizedPropertyNode(
     int layer, Type staticType, bool nillable):
     Node(layer), staticType_(staticType), nillable_(nillable)

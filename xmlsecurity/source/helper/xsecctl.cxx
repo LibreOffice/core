@@ -46,7 +46,6 @@ namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 namespace cssxw = com::sun::star::xml::wrapper;
-namespace cssb = com::sun::star::beans;
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;

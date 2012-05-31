@@ -35,7 +35,6 @@
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxw = com::sun::star::xml::wrapper;
 
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.SignatureVerifier"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureVerifierImpl"
