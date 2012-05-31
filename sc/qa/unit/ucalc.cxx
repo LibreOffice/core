@@ -62,6 +62,8 @@
 #include "dpsave.hxx"
 #include "dpdimsave.hxx"
 #include "dpcache.hxx"
+#include "calcconfig.hxx"
+#include "interpre.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -829,6 +831,92 @@ void testFuncDATEDIF( ScDocument* pDoc )
     }
 }
 
+void testFuncINDIRECT(ScDocument* pDoc)
+{
+    clearRange(pDoc, ScRange(0, 0, 0, 0, 10, 0)); // Clear A1:A11
+    rtl::OUString aTabName;
+    bool bGood = pDoc->GetName(0, aTabName);
+    CPPUNIT_ASSERT_MESSAGE("failed to get sheet name.", bGood);
+
+    rtl::OUString aTest = "Test", aRefErr = "#REF!";
+    pDoc->SetString(0, 10, 0, aTest);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", pDoc->GetString(0,10,0) == aTest);
+
+    rtl::OUString aPrefix = "=INDIRECT(\"";
+
+    rtl::OUString aFormula = aPrefix + aTabName + ".A11\")"; // Calc A1
+    pDoc->SetString(0, 0, 0, aFormula);
+    aFormula = aPrefix + aTabName + "!A11\")"; // Excel A1
+    pDoc->SetString(0, 1, 0, aFormula);
+    aFormula = aPrefix + aTabName + "!R11C1\")"; // Excel R1C1
+    pDoc->SetString(0, 2, 0, aFormula);
+    aFormula = aPrefix + aTabName + "!R11C1\";0)"; // Excel R1C1 (forced)
+    pDoc->SetString(0, 3, 0, aFormula);
+
+    pDoc->CalcAll();
+    {
+        // Default is to use the current formula syntax, which is Calc A1.
+        const rtl::OUString* aChecks[] = {
+            &aTest, &aRefErr, &aRefErr, &aTest
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
+        }
+    }
+
+    ScCalcConfig aConfig;
+    aConfig.meIndirectRefSyntax = formula::FormulaGrammar::CONV_OOO;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    pDoc->CalcAll();
+    {
+        // Explicit Calc A1 syntax
+        const rtl::OUString* aChecks[] = {
+            &aTest, &aRefErr, &aRefErr, &aTest
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
+        }
+    }
+
+    aConfig.meIndirectRefSyntax = formula::FormulaGrammar::CONV_XL_A1;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    pDoc->CalcAll();
+    {
+        // Excel A1 syntax
+        const rtl::OUString* aChecks[] = {
+            &aRefErr, &aTest, &aRefErr, &aTest
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
+        }
+    }
+
+    aConfig.meIndirectRefSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    pDoc->CalcAll();
+    {
+        // Excel R1C1 syntax
+        const rtl::OUString* aChecks[] = {
+            &aRefErr, &aRefErr, &aTest, &aTest
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            rtl::OUString aVal = pDoc->GetString(0, i, 0);
+            CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
+        }
+    }
+}
+
 void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
@@ -843,6 +931,7 @@ void Test::testCellFunctions()
     testFuncMATCH(m_pDoc);
     testFuncCELL(m_pDoc);
     testFuncDATEDIF(m_pDoc);
+    testFuncINDIRECT(m_pDoc);
 
     m_pDoc->DeleteTab(0);
 }
