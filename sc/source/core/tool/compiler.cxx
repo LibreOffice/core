@@ -2483,7 +2483,7 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
             // XXX none currently. Example:
             //{ "ORG.OPENOFFICE.EASTERSUNDAY", ocEasterSunday }
         };
-        static const size_t nOdffAliases = SAL_N_ELEMENTS(aOdffAliases);
+        static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
         for (size_t i=0; i<nOdffAliases; ++i)
         {
             if (rName.EqualsIgnoreCaseAscii( aOdffAliases[i].pName))

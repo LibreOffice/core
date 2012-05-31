@@ -41,7 +41,7 @@ static const ScTableProtection::Option aOptions[] = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
 };
-static const sal_uInt16 nOptionCount = SAL_N_ELEMENTS(aOptions);
+static const sal_uInt16 nOptionCount = sizeof(aOptions) / sizeof (aOptions[0]);
 
 
 ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent) :

@@ -2364,7 +2364,7 @@ void ScInterpreter::ScBase()
             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
             0
         };
-        static const int nDigits = SAL_N_ELEMENTS(pDigits)-1;
+        static const int nDigits = (sizeof (pDigits)/sizeof(pDigits[0]))-1;
         xub_StrLen nMinLen;
         if ( nParamCount == 3 )
         {
@@ -2573,7 +2573,7 @@ void ScInterpreter::ScRoman()
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
             static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-            static const sal_uInt16 nMaxIndex = (sal_uInt16)(SAL_N_ELEMENTS(pValues) - 1);
+            static const sal_uInt16 nMaxIndex = (sal_uInt16)((sizeof(pValues)/sizeof(pValues[0])) - 1);
 
             String aRoman;
             sal_uInt16 nVal = (sal_uInt16) fVal;
@@ -2806,7 +2806,7 @@ bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
         { "SKK", 30.1260,  2 }
     };
 
-    const size_t nConversionCount = SAL_N_ELEMENTS(aConvertTable);
+    const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
     for ( size_t i = 0; i < nConversionCount; i++ )
         if ( aSearchUnit.EqualsIgnoreCaseAscii( aConvertTable[i].pCurrText ) )
         {

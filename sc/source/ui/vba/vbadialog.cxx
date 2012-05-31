@@ -69,7 +69,7 @@ static const DialogMatch aDialogMatchList[] =
     { 269,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoFormat" ) ) }                 // xlDialogFormatAuto -> .uno:AutoFormat
 };
 
-const sal_Int32 nDialogSize = SAL_N_ELEMENTS( aDialogMatchList ) ;
+const sal_Int32 nDialogSize = sizeof (aDialogMatchList) / sizeof (aDialogMatchList[0]);
 
 rtl::OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )

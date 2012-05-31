@@ -193,7 +193,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream >> nMark;
     bool bValidMark = false;
-    for (size_t i=0; i < SAL_N_ELEMENTS(nValidMarks) && !bValidMark; ++i)
+    for (size_t i=0; i < sizeof(nValidMarks)/sizeof(nValidMarks[0]) && !bValidMark; ++i)
     {
         if (nValidMarks[i] == nMark)
             bValidMark = true;
@@ -650,7 +650,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             pLotus2,
                             pQPro
                             };
-                        const sal_uInt16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
+                        const sal_uInt16 nFilterCount = sizeof (ppFilterPatterns) / sizeof (ppFilterPatterns[0]);
 
                         static const sal_Char* const pFilterName[] =     // zugehoerige Filter
                             {

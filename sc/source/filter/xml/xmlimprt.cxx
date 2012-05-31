@@ -1964,7 +1964,7 @@ ScXMLImport::ScXMLImport(
         { XML_CURRENCY,     util::NumberFormat::CURRENCY },
         { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
     };
-    size_t n = SAL_N_ELEMENTS(aCellTypePairs);
+    size_t n = sizeof(aCellTypePairs)/sizeof(aCellTypePairs[0]);
     for (size_t i = 0; i < n; ++i)
     {
         aCellTypeMap.insert(
