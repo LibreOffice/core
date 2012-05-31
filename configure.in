@@ -601,11 +601,6 @@ AC_ARG_ENABLE(epm,
          useless for large scale package building.])
 )
 
-AC_ARG_ENABLE(activex_component,
-    AS_HELP_STRING([--disable-activex-component],
-        [Remove support for ActiveX embedding of LibreOffice.])
-)
-
 AC_ARG_ENABLE(odk,
     AS_HELP_STRING([--disable-odk],
         [LibreOffice includes an ODK, office development kit which some packagers may
@@ -2556,6 +2551,7 @@ if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to use ActiveX])
     if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
         DISABLE_ACTIVEX=""
+        SCPDEFS="$SCPDEFS -DWITH_ACTIVEX_COMPONENT"
         AC_MSG_RESULT([yes])
     else
         DISABLE_ACTIVEX="TRUE"
@@ -10476,22 +10472,7 @@ else
 fi
 AC_SUBST(ENABLE_SILENT_MSI)
 
-dnl ===================================================================
-dnl Test whether to enable ActiveX embedding
-dnl ===================================================================
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
-    AC_MSG_CHECKING([whether to enable ActiveX embedding of LibreOffice components])
-    if test "$enable_activex_component" = "yes" -o "$enable_activex_component" = "TRUE" -o "$enable_activex_component" = ""; then
-        ENABLE_ACTIVEX_COMPONENT="TRUE"
-        AC_MSG_RESULT([yes])
-        SCPDEFS="$SCPDEFS -DWITH_ACTIVEX_COMPONENT"
-    else
-        ENABLE_ACTIVEX_COMPONENT=""
-        AC_MSG_RESULT([no])
-    fi
-    AC_SUBST(ENABLE_ACTIVEX_COMPONENT)
-    AC_SUBST(SCPDEFS)
-fi
+AC_SUBST(SCPDEFS)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
 if test "$_os" = "Darwin"; then
