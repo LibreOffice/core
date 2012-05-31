@@ -194,6 +194,9 @@ public class ScModelObj extends TestCase {
                 oSheet.getCellByPosition(5, 5),
                 oSheet.getCellByPosition(6, 5)
             };
+
+            // Make sure there are at least two sheets:
+            oSheets.insertNewByName("Some Sheet", (short) 1);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
