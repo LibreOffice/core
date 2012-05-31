@@ -450,7 +450,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
         {
             if( bInterlaced )
             {
-                long nT1;
+                long nT1, nT2;
 
                 // falls Interlaced, werden die Zeilen kopiert
                 if( nLastInterCount )
@@ -488,7 +488,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
 
                 if( nT1 >= nImageHeight )
                 {
-                    long nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
+                    nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
                     nT1 = ( nT2 << 3 ) + 4;
                     nLastInterCount = 3;
 

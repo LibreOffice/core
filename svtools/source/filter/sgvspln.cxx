@@ -801,6 +801,9 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 *************************************************************************/
 sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
 {
+    short  MinKoord=-32000; // zur Vermeidung
+    short  MaxKoord=32000;  // von Ueberlaeufen
+
     double* ax;          // Koeffizienten der Polynome
     double* ay;
     double* bx;
@@ -811,20 +814,19 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
     double* dy;
     double* tv;
 
+    double  Step;        // Schrittweite fuer t
+    double  dt1,dt2,dt3; // Delta t, y, ^3
+    double  t;
     sal_Bool    bEnde;       // Teilpolynom zu Ende?
     sal_uInt16  n;           // Anzahl der zu zeichnenden Teilpolynome
     sal_uInt16  i;           // aktuelles Teilpolynom
     sal_Bool    bOk;         // noch alles ok?
+    sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
+    long    x,y;
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
     if (bOk) {
-        short  MinKoord=-32000; // zur Vermeidung
-        short  MaxKoord=32000;  // von Ueberlaeufen
-        double Step =10;
-        double  dt1,dt2,dt3; // Delta t, y, ^3
-        double  t;
-        sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
-        long    x,y;
+        Step =10;
 
         rPoly.SetSize(1);
         rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); // erster Punkt

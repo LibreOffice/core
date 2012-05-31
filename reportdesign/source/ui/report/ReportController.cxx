@@ -3201,7 +3201,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
                                             ,PROPERTY_FORMATSSUPPLIER
                                             ,PROPERTY_BACKGROUNDCOLOR
         };
-        for(size_t i = 0; i < sizeof (nProps) / sizeof (nProps[0]);++i)
+        for(size_t i = 0; i < sizeof (sProps) / sizeof (sProps[0]); ++i)
         {
             if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
                 xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));

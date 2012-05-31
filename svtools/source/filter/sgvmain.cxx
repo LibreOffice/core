@@ -766,6 +766,7 @@ void CircType::Draw(OutputDevice& rOut)
 void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
+    unsigned char   nSgfTyp;
     sal_uInt16          nVersion;
     String          aStr(
         reinterpret_cast< char const * >(&Filename[ 1 ]),
@@ -775,7 +776,7 @@ void BmapType::Draw(OutputDevice& rOut)
     SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
     if ( pInp )
     {
-        unsigned char nSgfTyp=CheckSgfTyp( *pInp,nVersion);
+        nSgfTyp=CheckSgfTyp( *pInp,nVersion);
         switch(nSgfTyp) {
             case SGF_BITIMAGE: {
                 GraphicFilter aFlt;
