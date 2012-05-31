@@ -317,9 +317,9 @@ namespace rptui
         for (; pPropsIter != pPropsEnd; ++pPropsIter)
         {
             size_t nPos = 0;
-            for (; nPos < SAL_N_ELEMENTS(pExcludeProperties) && pExcludeProperties[nPos] != pPropsIter->Name;++nPos )
+            for (; nPos < sizeof(pExcludeProperties)/sizeof(pExcludeProperties[0]) && pExcludeProperties[nPos] != pPropsIter->Name;++nPos )
                 ;
-            if ( nPos == SAL_N_ELEMENTS(pExcludeProperties) )
+            if ( nPos == sizeof(pExcludeProperties)/sizeof(pExcludeProperties[0]) )
                 _rExcludeProperties.push_back(*pPropsIter);
         }
     }

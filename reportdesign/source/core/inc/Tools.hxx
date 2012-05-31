@@ -38,7 +38,6 @@
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 
-#include <sal/macros.h>
 
 #include "Section.hxx"
 #include "corestrings.hrc"

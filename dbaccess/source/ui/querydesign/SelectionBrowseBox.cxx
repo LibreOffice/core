@@ -203,7 +203,7 @@ void OSelectionBrowseBox::initialize()
         String sGroup = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';') - 1);
         m_aFunctionStrings = m_aFunctionStrings.GetToken(0);
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
+        for (size_t i = 0; i < sizeof (eFunctions) / sizeof (eFunctions[0]); ++i)
         {
             m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
             m_aFunctionStrings += rtl::OStringToOUString(rContext.getIntlKeywordAscii(eFunctions[i]),
@@ -354,7 +354,8 @@ void OSelectionBrowseBox::Init()
 
     Size aHeight;
     const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
-    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls);++i)
+
+    for (sal_Size_t i = 0; i < sizeof (pControls) / sizeof (pControls[0]); ++i)
     {
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
@@ -2180,7 +2181,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 {
     sal_Int32 nErg(0);
     // only the first 11 row are interesting
-    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
+    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
     for(sal_Int32 i=0;i<nSize;i++)
     {
         if(!m_bVisibleRow[i])
@@ -2192,7 +2193,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
 {
     // only the first 11 row are interesting
-    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
+    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
     for(sal_Int32 i=0;i< nSize;i++)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }

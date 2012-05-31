@@ -51,7 +51,7 @@ OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
-    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         pWindows[i]->Show();
 }
 // -----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
-    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
         Font aFont = pWindows[i]->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);

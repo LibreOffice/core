@@ -30,7 +30,6 @@
 #define DBACCESS_DBMM_TYPES_HXX
 
 #include <tools/string.hxx>
-#include <sal/macros.h>
 
 //........................................................................
 namespace dbmm

@@ -147,7 +147,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
-                ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
+                ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
                 xOwnContext ) );
             // create a property browser controller
             bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
@@ -218,7 +218,7 @@ PropBrw::~PropBrw()
             const ::rtl::OUString pProps[] = { ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) )
                                             ,  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) )};
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i)
+            for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
                 xName->removeByName(pProps[i]);
         }
     }

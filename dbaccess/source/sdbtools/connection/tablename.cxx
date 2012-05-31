@@ -41,7 +41,6 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
-#include <sal/macros.h>
 
 //........................................................................
 namespace sdbtools
@@ -232,7 +231,7 @@ namespace sdbtools
 
             bool found = false;
             size_t i = 0;
-            for ( ; ( i < SAL_N_ELEMENTS( TypeTable ) ) && !found; ++i )
+            for ( ; ( i < sizeof( TypeTable ) / sizeof( TypeTable[0] ) ) && !found; ++i )
                 if ( TypeTable[i].nCompositionType == _nType )
                     found = true;
             if ( !found )

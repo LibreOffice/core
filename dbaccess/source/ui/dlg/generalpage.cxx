@@ -128,7 +128,7 @@ namespace dbaui
                 &m_aTypePostLabel
             };
             const long nOffset = m_aRB_OpenDocument.GetPosPixel().Y() - m_aRB_CreateDatabase.GetPosPixel().Y();
-            for ( size_t i=0; i < SAL_N_ELEMENTS( pWindowsToMove ); ++i )
+            for ( size_t i=0; i < sizeof( pWindowsToMove ) / sizeof( pWindowsToMove[0] ); ++i )
             {
                 Point aPos( pWindowsToMove[i]->GetPosPixel() );
                 aPos.Y() -= nOffset;

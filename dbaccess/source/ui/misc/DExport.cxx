@@ -361,7 +361,7 @@ void ODatabaseExport::insertValueIntoColumn()
                                     ,NumberFormat::NUMBER
                                     ,NumberFormat::LOGICAL
                                 };
-                                for (size_t i = 0; i < SAL_N_ELEMENTS(nFormats); ++i)
+                                for (size_t i = 0; i < sizeof(nFormats)/sizeof(nFormats[0]); ++i)
                                 {
                                     try
                                     {

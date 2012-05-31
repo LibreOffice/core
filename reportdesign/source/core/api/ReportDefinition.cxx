@@ -1857,7 +1857,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         aArguments.get_ensureType( "ReadOnly", bReadOnly );
         nFirstOpenMode = bReadOnly ? 1 : 0;
     }
-    const size_t nLastOpenMode = SAL_N_ELEMENTS( nOpenModes ) - 1;
+    const size_t nLastOpenMode = sizeof( nOpenModes ) / sizeof( nOpenModes[0] ) - 1;
     for ( size_t i=nFirstOpenMode; i <= nLastOpenMode; ++i )
     {
         uno::Sequence< uno::Any > aStorageCreationArgs(2);
@@ -2399,7 +2399,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OReportDefinition::getAvailableService
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"))
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
+    static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
 
     uno::Sequence< ::rtl::OUString > aSeq( nSvxComponentServiceNameListCount );
     ::rtl::OUString* pStrings = aSeq.getArray();

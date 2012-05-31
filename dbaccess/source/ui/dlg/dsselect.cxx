@@ -33,7 +33,6 @@
 #include <vcl/msgbox.hxx>
 #include "localresaccess.hxx"
 #include <tools/rcid.h>
-#include <sal/macros.h>
 
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

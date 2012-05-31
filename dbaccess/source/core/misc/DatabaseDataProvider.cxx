@@ -828,7 +828,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         {
             aRowLabels.push_back(::rtl::OUString::valueOf(h+1));
             ::std::vector< double > aRow;
-            const sal_Int32 nSize = SAL_N_ELEMENTS(fDefaultData);
+            const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
             for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)
             {
                 if ( k >= nSize )

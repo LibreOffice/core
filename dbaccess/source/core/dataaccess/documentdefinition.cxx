@@ -1528,7 +1528,7 @@ void ODocumentDefinition::separateOpenCommandArguments( const Sequence< Property
     {
         "RecoveryStorage"
     };
-    for ( size_t i=0; i < SAL_N_ELEMENTS( pObjectDescriptorArgs ); ++i )
+    for ( size_t i=0; i < sizeof( pObjectDescriptorArgs ) / sizeof( pObjectDescriptorArgs[0] ); ++i )
     {
         if ( aOpenCommandArguments.has( pObjectDescriptorArgs[i] ) )
         {

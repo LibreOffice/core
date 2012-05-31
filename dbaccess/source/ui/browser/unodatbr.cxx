@@ -1329,7 +1329,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
                 ID_BROWSER_INSERTCONTENT
             };
 
-            for ( size_t i=0; i < SAL_N_ELEMENTS( pURLs ); ++i )
+            for ( size_t i=0; i < sizeof( pURLs ) / sizeof( pURLs[0] ); ++i )
             {
                 URL aURL;
                 aURL.Complete = ::rtl::OUString::createFromAscii( pURLs[i] );

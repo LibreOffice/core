@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <sal/macros.h>
-
 #include "dsntypes.hxx"
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
@@ -435,7 +433,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
         KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
     };
 
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aKnowPrefixes ); ++i )
+    for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
     {
         sal_uInt16 nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.Len() : (sal_uInt16)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
         if ( sDsn.EqualsIgnoreCaseAscii( aKnowPrefixes[i].pAsciiPrefix, 0, nMatchLen ) )

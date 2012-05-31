@@ -43,7 +43,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/macros.h>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -215,7 +214,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
         { PROPERTY_TABLENAME,        PROPERTY_ID_TABLENAME },
         { PROPERTY_REALNAME,         PROPERTY_ID_REALNAME }
     };
-    for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
+    for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
     {
         if ( xPSI->hasPropertyByName( aProps[i].sName ) )
             setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );

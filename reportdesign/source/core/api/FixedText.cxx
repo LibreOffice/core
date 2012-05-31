@@ -48,7 +48,7 @@ namespace reportdesign
 uno::Sequence< ::rtl::OUString > lcl_getFixedTextOptionals()
 {
     ::rtl::OUString pProps[] = { PROPERTY_DATAFIELD,PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
+    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 DBG_NAME( rpt_OFixedText )
 // -----------------------------------------------------------------------------
