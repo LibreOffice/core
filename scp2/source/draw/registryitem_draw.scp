@@ -409,7 +409,7 @@ RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_FriendlyTypeName
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "soffice.StarDrawDocument.6";
