@@ -1048,7 +1048,9 @@ End
 #endif
 
 #if defined UNX && ! defined QUARTZ
+#if ! defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Vclplug_Svp, vclplug_svp )
+#endif
 STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 #endif
 

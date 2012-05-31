@@ -43,10 +43,8 @@ int SVMain();
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
-#if defined(ANDROID) || defined(LIBO_HEADLESS)
 #if defined(ANDROID)
     try {
-#endif
         rtl::Bootstrap::setIniFilename(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///assets/program/lofficerc")));
 #endif
