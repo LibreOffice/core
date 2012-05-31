@@ -416,7 +416,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
         {
             Sequence< Any > aArgument( 1 );
             Sequence< PropertyValue > aPropValues( 1 );
-            aPropValues[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShape"));
+            aPropValues[ 0 ].Name = rtl::OUString("CustomShape");
             aPropValues[ 0 ].Value <<= aXShape;
             aArgument[ 0 ] <<= aPropValues;
             Reference< XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
@@ -1053,7 +1053,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
     }
 
     // Equations //
-    const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM( "Equations" ) );
+    const rtl::OUString sEquations(  "Equations"  );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sEquations );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
     {
@@ -1070,7 +1070,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
     }
 
     // Handles //
-    const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM( "Handles" ) );
+    const rtl::OUString sHandles(  "Handles"  );
     pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sHandles );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
     {
@@ -1260,7 +1260,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
 
         case DEFAULT_EQUATIONS :
         {
-            const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM( "Equations" ) );
+            const rtl::OUString sEquations(  "Equations"  );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sEquations );
             if ( pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
             {
@@ -1285,7 +1285,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
 
         case DEFAULT_TEXTFRAMES :
         {
-            const rtl::OUString sTextFrames( RTL_CONSTASCII_USTRINGPARAM( "TextFrames" ) );
+            const rtl::OUString sTextFrames(  "TextFrames"  );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sTextFrames );
             if ( pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
             {
@@ -1313,7 +1313,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
 
         case DEFAULT_HANDLES :
         {
-            const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM( "Handles" ) );
+            const rtl::OUString sHandles(  "Handles"  );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sHandles );
             if ( pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
             {
@@ -3178,11 +3178,11 @@ sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
 bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
 {
     bool bRetval(false);
-    static ::rtl::OUString Imps_sNameASOrtho_quadrat( RTL_CONSTASCII_USTRINGPARAM( "quadrat" ) );
-    static ::rtl::OUString Imps_sNameASOrtho_round_quadrat( RTL_CONSTASCII_USTRINGPARAM( "round-quadrat" ) );
-    static ::rtl::OUString Imps_sNameASOrtho_circle( RTL_CONSTASCII_USTRINGPARAM( "circle" ) );
-    static ::rtl::OUString Imps_sNameASOrtho_circle_pie( RTL_CONSTASCII_USTRINGPARAM( "circle-pie" ) );
-    static ::rtl::OUString Imps_sNameASOrtho_ring( RTL_CONSTASCII_USTRINGPARAM( "ring" ) );
+    static ::rtl::OUString Imps_sNameASOrtho_quadrat(  "quadrat"  );
+    static ::rtl::OUString Imps_sNameASOrtho_round_quadrat(  "round-quadrat"  );
+    static ::rtl::OUString Imps_sNameASOrtho_circle(  "circle"  );
+    static ::rtl::OUString Imps_sNameASOrtho_circle_pie(  "circle-pie"  );
+    static ::rtl::OUString Imps_sNameASOrtho_ring(  "ring"  );
 
     if(Imps_sNameASOrtho_quadrat.equalsIgnoreAsciiCase(rName))
     {

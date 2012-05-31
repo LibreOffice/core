@@ -438,7 +438,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
-        const static rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+        const static rtl::OUString aMenuBarURL(  "private:resource/menubar/menubar" );
         if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
             xLayoutManager->createElement( aMenuBarURL );
     }
@@ -454,7 +454,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
-        xMan.set(xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ),uno::UNO_QUERY);
+        xMan.set(xFrame->getPropertyValue( ::rtl::OUString("LayoutManager") ),uno::UNO_QUERY);
     }
     catch ( uno::Exception& )
     {
@@ -908,7 +908,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
 
                         // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                         uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                        aArgs[0].Name = ::rtl::OUString(  "URL"  );
                         aArgs[0].Value <<= ::rtl::OUString( aNewLinkURL );
                         xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 

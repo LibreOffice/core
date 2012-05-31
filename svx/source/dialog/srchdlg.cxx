@@ -129,12 +129,12 @@ struct SearchDlg_Impl
         bDeltaCalculated( sal_False ),
         pRanges         ( NULL )
         {
-            aCommand1URL.Complete = aCommand1URL.Main = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:SearchViaComponent1"));
-            aCommand1URL.Protocol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:"));
-            aCommand1URL.Path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchViaComponent1"));
-            aCommand2URL.Complete = aCommand2URL.Main = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:SearchViaComponent2"));
-            aCommand2URL.Protocol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:"));
-            aCommand2URL.Path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchViaComponent2"));
+            aCommand1URL.Complete = aCommand1URL.Main = rtl::OUString("vnd.sun.search:SearchViaComponent1");
+            aCommand1URL.Protocol = rtl::OUString("vnd.sun.search:");
+            aCommand1URL.Path = rtl::OUString("SearchViaComponent1");
+            aCommand2URL.Complete = aCommand2URL.Main = rtl::OUString("vnd.sun.search:SearchViaComponent2");
+            aCommand2URL.Protocol = rtl::OUString("vnd.sun.search:");
+            aCommand2URL.Path = rtl::OUString("SearchViaComponent2");
         }
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
@@ -452,7 +452,7 @@ void SvxSearchDialog::Construct_Impl()
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
     const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();
     const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
-    rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_self"));
+    rtl::OUString sTarget("_self");
 
     bool bSearchComponent1 = false;
     bool bSearchComponent2 = false;
@@ -473,27 +473,27 @@ void SvxSearchDialog::Construct_Impl()
         {
             uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(xMgr->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider"))),
+                    ::rtl::OUString(  "com.sun.star.configuration.ConfigurationProvider")),
                     uno::UNO_QUERY);
             uno::Sequence< uno::Any > aArgs(1);
-            ::rtl::OUString sPath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/SearchOptions/"));
+            ::rtl::OUString sPath( "/org.openoffice.Office.Common/SearchOptions/");
             aArgs[0] <<= sPath;
 
             uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess")),
+                        ::rtl::OUString( "com.sun.star.configuration.ConfigurationUpdateAccess"),
                         aArgs);
             uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
             if(xDirectAccess.is())
             {
                 ::rtl::OUString sTemp;
-                ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchGroupLabel"));
+                ::rtl::OUString sProperty( "ComponentSearchGroupLabel");
                 uno::Any aRet = xDirectAccess->getByName(sProperty);
                 aRet >>= sTemp;
                 aSearchComponentFL.SetText( sTemp );
-                aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel1")));
+                aRet = xDirectAccess->getByName(::rtl::OUString( "ComponentSearchCommandLabel1"));
                 aRet >>= sTemp;
                 aSearchComponent1PB.SetText( sTemp );
-                aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ComponentSearchCommandLabel2")));
+                aRet = xDirectAccess->getByName(::rtl::OUString( "ComponentSearchCommandLabel2"));
                 aRet >>= sTemp;
                 aSearchComponent2PB.SetText( sTemp );
             }
@@ -1541,9 +1541,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
-        pArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchString"));
+        pArgs[0].Name = ::rtl::OUString("SearchString");
         pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
-        pArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
+        pArgs[1].Name = ::rtl::OUString("ParentWindow");
         pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
         if(pBtn == &aSearchComponent1PB)
         {

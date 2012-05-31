@@ -272,7 +272,7 @@ namespace
         {
             // prepare BreakIterator
             Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
+            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString("com.sun.star.i18n.BreakIterator"));
 
             if(xInterface.is())
             {

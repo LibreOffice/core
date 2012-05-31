@@ -45,8 +45,8 @@
 //===============================================
 // const
 
-#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svx.RecoveryUI"))
-#define SERVICENAME_RECOVERYUI              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.dialog.RecoveryUI"))
+#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString("com.sun.star.comp.svx.RecoveryUI")
+#define SERVICENAME_RECOVERYUI              ::rtl::OUString("com.sun.star.dialog.RecoveryUI")
 
 //===============================================
 // namespace
@@ -191,16 +191,16 @@ static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT)
-    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
+    OUString    ustrValue = OUString("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #elif defined(MACOSX)
-    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
+    OUString    ustrValue = OUString("~");
 #else
-    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
+    OUString    ustrValue = OUString("$SYSUSERCONFIG");
 #endif
     Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT)
-    ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
+    ustrValue += OUString("/user/crashdata");
 #endif
     return ustrValue;
 }
@@ -218,8 +218,8 @@ static OUString GetUnsentURL()
 {
     OUString    aURL = GetCrashConfigDir();
 
-    aURL += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-    aURL += OUString( RTL_CONSTASCII_USTRINGPARAM( LCKFILE ) );
+    aURL += OUString(  "/"  );
+    aURL += OUString(  LCKFILE  );
 
     return aURL;
 }
@@ -292,9 +292,9 @@ void RecoveryUI::impl_doRecovery()
 {
     sal_Bool bRecoveryOnly( sal_False );
 
-    ::rtl::OUString CFG_PACKAGE_RECOVERY( RTL_CONSTASCII_USTRINGPARAM  ( "org.openoffice.Office.Recovery/" ));
-    ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
-    ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
+    ::rtl::OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/");
+    ::rtl::OUString CFG_PATH_CRASHREPORTER(  "CrashReporter" );
+    ::rtl::OUString CFG_ENTRY_ENABLED( "Enabled" );
 
     sal_Bool bCrashRepEnabled(sal_False);
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(

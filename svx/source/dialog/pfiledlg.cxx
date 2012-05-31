@@ -83,7 +83,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
     if( xMgr.is() )
     {
         uno::Reference< plugin::XPluginManager > rPluginManager( xMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
+            OUString("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
         if ( rPluginManager.is() )
         {
             const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
