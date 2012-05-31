@@ -35,7 +35,7 @@
 #define PB_BACK                 4
 #define TLB_PAGES               5
 
-#define FB_BORDER               19
+#define FL_SEPARATOR            19
 
 #define FT_HINT                 21
 #define CB_DISABLE              22
@@ -57,8 +57,8 @@
 
 // metrics
 
-#define WIDTH_PAGEFRAME         (TP_WIDTH + 3)
-#define HEIGHT_PAGEFRAME        (TP_HEIGHT + 6)
+#define WIDTH_PAGEFRAME         TP_WIDTH
+#define HEIGHT_PAGEFRAME        TP_HEIGHT
 
 #define COL_1                   (RSC_SP_DLG_INNERBORDER_LEFT)
 #define COL_2                   (COL_1+0)
@@ -77,5 +77,6 @@
 #define ROW_1                   (RSC_SP_DLG_INNERBORDER_TOP)
 #define ROW_2                   (ROW_1+HEIGHT_PAGEFRAME)
 #define ROW_3                   (ROW_2+RSC_SP_CTRL_GROUP_Y)
-#define ROW_4                   (ROW_3+RSC_CD_PUSHBUTTON_HEIGHT)
-#define ROW_5                   (ROW_4+RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define ROW_4                   (ROW_3+RSC_CD_FIXEDLINE_HEIGHT)
+#define ROW_5                   (ROW_4+RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_6                   (ROW_5+RSC_SP_DLG_INNERBORDER_BOTTOM)

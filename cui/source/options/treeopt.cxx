@@ -501,7 +501,7 @@ struct OptionsGroupInfo
     aCancelPB           ( this, CUI_RES( PB_CANCEL ) ),\
     aHelpPB             ( this, CUI_RES( PB_HELP ) ),\
     aBackPB             ( this, CUI_RES( PB_BACK ) ),\
-    aHiddenGB           ( this, CUI_RES( FB_BORDER ) ),\
+    aSeparatorFL        ( this, CUI_RES( FL_SEPARATOR ) ),\
     aTreeLB             ( this, CUI_RES( TLB_PAGES ) ),\
     sTitle              ( GetText() ),\
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
@@ -785,8 +785,6 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aTreeLB.SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     aBackPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
     aOkPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
-
-    aHiddenGB.Show();
 }
 
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
@@ -1079,13 +1077,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );
             pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
 
-            Point aTreePos(aTreeLB.GetPosPixel());
-            Size aTreeSize(aTreeLB.GetSizePixel());
-            Point aGBPos(aHiddenGB.GetPosPixel());
-            Size aPageSize(pPageInfo->m_pPage->GetSizePixel());
-            Size aGBSize(aHiddenGB.GetSizePixel());
-            Point aPagePos( aGBPos.X() + ( aGBSize.Width() - aPageSize.Width() ) / 2,
-                            aGBPos.Y() + ( aGBSize.Height() - aPageSize.Height() ) / 2 );
+            Point aPagePos( aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
             pPageInfo->m_pPage->SetPosPixel( aPagePos );
             if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
             {
@@ -1111,12 +1103,12 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         pPageInfo->m_pExtPage = new ExtensionsTabPage(
             this, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
-        Size aSize = aHiddenGB.GetSizePixel();
-        aSize.Width() = aSize.Width() - 4;
-        aSize.Height() = aSize.Height() - 4;
-        Point aPos = aHiddenGB.GetPosPixel();
-        aPos.X() = aPos.X() + 2;
-        aPos.Y() = aPos.Y() + 2;
+        Size aSize;
+        aSize.Width() = aSeparatorFL.GetSizePixel().Width();
+        aSize.Height() = aSeparatorFL.GetSizePixel().Height() - aTreeLB.GetPosPixel().Y();
+        Point aPos;
+        aPos.X() = aSeparatorFL.GetPosPixel().X();
+        aPos.Y() = aTreeLB.GetPosPixel().Y();
         pPageInfo->m_pExtPage->SetPosSizePixel( aPos, aSize );
     }
 
@@ -1928,7 +1920,7 @@ namespace
 
 void OfaTreeOptionsDialog::ResizeTreeLB( void )
 {
-    const long  nMax = aHiddenGB.GetSizePixel().Width() * 42 / 100;
+    const long  nMax = aSeparatorFL.GetSizePixel().Width() * 42 / 100;
                                             // don't ask where 42 comes from... but it looks / feels ok ;-)
     long        nDelta = 50;                // min.
     sal_uInt16      nDepth = 0;
@@ -1971,7 +1963,7 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     MoveControl( aCancelPB, nDelta );
     MoveControl( aHelpPB, nDelta );
     MoveControl( aBackPB, nDelta );
-    MoveControl( aHiddenGB, nDelta );
+    MoveControl( aSeparatorFL, nDelta );
 }
 
 bool isNodeActive( OptionsNode* pNode, Module* pModule )

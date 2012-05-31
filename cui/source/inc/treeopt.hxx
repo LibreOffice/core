@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <tools/resary.hxx>
-#include <vcl/fixbrd.hxx>
+#include <vcl/fixed.hxx>
 
 class SfxModule;
 class SfxShell;
@@ -155,7 +155,7 @@ private:
     HelpButton      aHelpPB;
     PushButton      aBackPB;
 
-    FixedBorder     aHiddenGB;
+    FixedLine       aSeparatorFL;
 
     SvTreeListBox   aTreeLB;
 
