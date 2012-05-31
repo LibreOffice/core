@@ -53,7 +53,8 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
                     rItemSet,
-                    GetCircObj().getText(0)));
+                    GetCircObj().getText(0),
+                    false));
 
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetCircObj().GetGeoRect();
