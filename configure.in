@@ -148,6 +148,7 @@ test_randr=yes
 test_xrender=yes
 test_cups=yes
 test_fontconfig=yes
+test_cairo=yes
 
 # Default values, as such probably valid just for Linux, set
 # differently below just for Mac OS X,but at least better than
@@ -3706,6 +3707,7 @@ if test "$enable_headless" = "yes"; then
     test_kde=no
     test_kde4=no
     test_unix_quickstarter=no
+    test_cairo=no
 fi
 
 dnl check for cups support
@@ -8928,7 +8930,7 @@ elif test -z "$enable_cairo_canvas"; then
 fi
 
 ENABLE_CAIRO_CANVAS=""
-if test "$enable_cairo_canvas" = "yes"; then
+if test "$test_cairo" = "yes" -a "$enable_cairo_canvas" = "yes"; then
     ENABLE_CAIRO_CANVAS="TRUE"
 fi
 AC_SUBST(ENABLE_CAIRO_CANVAS)
@@ -10649,49 +10651,51 @@ dnl ===================================================================
 
 SYSTEM_CAIRO=""
 
-AC_MSG_CHECKING([whether to use the system cairo])
+if test "$test_cairo" = "yes" ; then
+    AC_MSG_CHECKING([whether to use the system cairo])
 
-if test "$with_system_cairo" = "yes"; then
-    SYSTEM_CAIRO=YES
-    AC_MSG_RESULT([yes])
+    if test "$with_system_cairo" = "yes"; then
+        SYSTEM_CAIRO=YES
+        AC_MSG_RESULT([yes])
 
-    PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+        PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
 
-    if test "$test_xrender" = "yes"; then
-        if test "$with_system_xextensions_headers" != "no"; then
-            AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-            AC_LANG_PUSH([C])
-            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
+        if test "$test_xrender" = "yes"; then
+            if test "$with_system_xextensions_headers" != "no"; then
+                AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+                AC_LANG_PUSH([C])
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
 #ifdef PictStandardA8
 #else
       return fail;
 #endif
 ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])])
 
-            AC_LANG_POP([C])
+                AC_LANG_POP([C])
+            fi
         fi
-    fi
-    libo_MINGW_CHECK_DLL([CAIRO], [libcairo])
-    libo_MINGW_TRY_DLL([FONTCONFIG], [libfontconfig])
-    libo_MINGW_TRY_DLL([FREETYPE], [libfreetype])
-    libo_MINGW_TRY_DLL([PIXMAN], [libpixman])
-    libo_MINGW_TRY_DLL([PNG15], [libpng15])
-else
-    AC_MSG_RESULT([no])
-
-    if test $_os = WINNT; then
-        dnl We only need cairo for Windows if we
-        dnl build librsvg or directx disabled
-        if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
-            BUILD_TYPE="$BUILD_TYPE CAIRO"
-        fi
+        libo_MINGW_CHECK_DLL([CAIRO], [libcairo])
+        libo_MINGW_TRY_DLL([FONTCONFIG], [libfontconfig])
+        libo_MINGW_TRY_DLL([FREETYPE], [libfreetype])
+        libo_MINGW_TRY_DLL([PIXMAN], [libpixman])
+        libo_MINGW_TRY_DLL([PNG15], [libpng15])
     else
-        if test "$enable_cairo_canvas" = "yes"; then
-            BUILD_TYPE="$BUILD_TYPE CAIRO"
+        AC_MSG_RESULT([no])
+
+        if test $_os = WINNT; then
+            dnl We only need cairo for Windows if we
+            dnl build librsvg or directx disabled
+            if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
+                BUILD_TYPE="$BUILD_TYPE CAIRO"
+            fi
         else
-            if test "$with_system_cairo" != "yes"; then
-                if test "$ENABLE_LIBRSVG" != NO; then
-                    BUILD_TYPE="$BUILD_TYPE CAIRO"
+            if test "$enable_cairo_canvas" = "yes"; then
+                BUILD_TYPE="$BUILD_TYPE CAIRO"
+            else
+                if test "$with_system_cairo" != "yes"; then
+                    if test "$ENABLE_LIBRSVG" != NO; then
+                        BUILD_TYPE="$BUILD_TYPE CAIRO"
+                    fi
                 fi
             fi
         fi
