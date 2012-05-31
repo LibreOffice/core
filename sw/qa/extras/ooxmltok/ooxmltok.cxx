@@ -62,6 +62,7 @@ public:
     void testN750255();
     void testN652364();
     void testN760764();
+    void testN764005();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testN750255);
     CPPUNIT_TEST(testN652364);
     CPPUNIT_TEST(testN760764);
+    CPPUNIT_TEST(testN764005);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -422,6 +424,23 @@ void Test::testN760764()
     xRun->getPropertyValue("CharHeight") >>= fValue;
     // This used to be 11, as character properties were ignored.
     CPPUNIT_ASSERT_EQUAL(8.f, fValue);
+}
+
+void Test::testN764005()
+{
+    load("n764005.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+
+    // The picture in the header wasn't absolutely positioned and wasn't in the background.
+    text::TextContentAnchorType eValue;
+    xPropertySet->getPropertyValue("AnchorType") >>= eValue;
+    CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
+    sal_Bool bValue = sal_True;
+    xPropertySet->getPropertyValue("Opaque") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_False, bValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
