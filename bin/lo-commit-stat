@@ -63,10 +63,12 @@ sub standardize_summary($)
     $line =~ s/^\s*//;
     $line =~ s/\s*$//;
 
-    # lower first letter
-    $line =~ m/(^.)/;
-    my $first_char = lc($1);
-    $line =~ s/^./$first_char/;
+    # lower first letter if the word contains only lowercase letter
+    if ( $line =~ m/(^.[a-z]+\b)/ ) {
+        $line =~ m/(^.)/;
+        my $first_char = lc($1);
+        $line =~ s/^./$first_char/;
+    }
 
     # FIXME: remove do at the end of line
     #        remove bug numbers
@@ -259,7 +261,7 @@ sub print_stat($$)
             my $old_summary="";
             my %authors = ();
             my %bugs = ();
-            foreach my $id ( sort { $pdata->{$piece}{$a}{'summary'} cmp $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
+            foreach my $id ( sort { lc $pdata->{$piece}{$a}{'summary'} cmp lc $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
                 my $summary = $pdata->{$piece}{$id}{'summary'};
                 if ($summary ne $old_summary) {
                     print_summary_in_stat($old_summary, \$piece_title, \%bugs, \%authors, "    + ", $log);
