@@ -293,7 +293,19 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
     pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
 
+    // Object no fill no line
+
+    aName = String(SdResId(STR_POOLSHEET_OBJNOLINENOFILL));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
+    pSheet->SetParent(aStdName);
+    pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJNOLINENOFILL );
+    pISet = &pSheet->GetItemSet();
+
+    pISet->Put(XFillStyleItem(XFILL_NONE));
+    pISet->Put(XLineStyleItem(XLINE_NONE));
+
     // Text
+
     aName = String(SdResId(STR_POOLSHEET_TEXT));
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);

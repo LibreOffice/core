@@ -716,7 +716,8 @@ namespace drawinglayer
 
         attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
             const SfxItemSet& rSet,
-            const SdrText* pText)
+            const SdrText* pText,
+            bool bHasContent)
         {
             attribute::SdrLineAttribute aLine;
             attribute::SdrFillAttribute aFill;
@@ -760,7 +761,11 @@ namespace drawinglayer
                 }
             }
 
-            if(!aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
+            // bHasContent is used from OLE and graphic objects. Normally a possible shadow
+            // depends on line, fill or text to be set, but for these objects it is possible
+            // to have none of these, but still content which needs to have a shadow (if set),
+            // so shadow needs to be tried
+            if(bHasContent || !aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
             {
                 // try shadow
                 aShadow = createNewSdrShadowAttribute(rSet);

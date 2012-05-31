@@ -59,6 +59,7 @@
 #include <svtools/soerr.hxx>
 
 #include <sfx2/ipclient.hxx>
+#include "glob.hrc"
 
 using namespace com::sun::star;
 

@@ -53,6 +53,7 @@
 #define HID_PSEUDOSHEET_BACKGROUND          (HID_SD_START + 97)
 #define HID_PSEUDOSHEET_NOTES               (HID_SD_START + 98)
 #define HID_PSEUDOSHEET_SUBTITLE            (HID_SD_START + 101)
+#define HID_POOLSHEET_OBJNOLINENOFILL       (HID_SD_START + 102)
 
 #define HID_SD_CELL_STYLE_DEFAULT                           (HID_SD_START + 194)
 #define HID_SD_CELL_STYLE_BANDED                            (HID_SD_START + 195)

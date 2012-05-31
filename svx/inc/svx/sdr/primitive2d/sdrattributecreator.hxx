@@ -94,7 +94,8 @@ namespace drawinglayer
 
         attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
             const SfxItemSet& rSet,
-            const SdrText* pText);
+            const SdrText* pText,
+            bool bHasContent); // used from OLE and graphic
 
         attribute::SdrLineFillShadowAttribute3D createNewSdrLineFillShadowAttribute(
             const SfxItemSet& rSet,

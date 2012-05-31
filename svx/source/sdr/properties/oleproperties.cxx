@@ -55,10 +55,6 @@ namespace sdr
 
             // force ItemSet
             GetObjectItemSet();
-
-            // #i108221#
-            mpItemSet->Put( XFillStyleItem(XFILL_NONE) );
-            mpItemSet->Put( XLineStyleItem(XLINE_NONE) );
         }
     } // end of namespace properties
 } // end of namespace sdr

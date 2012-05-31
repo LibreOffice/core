@@ -46,7 +46,8 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
                     rItemSet,
-                    GetPathObj().getText(0)));
+                    GetPathObj().getText(0),
+                    false));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
             Point aGridOff = GetPathObj().GetGridOffset();
             // Hack for calc, transform position of object according

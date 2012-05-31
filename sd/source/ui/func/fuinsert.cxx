@@ -79,6 +79,7 @@
 #include "sdxfer.hxx"
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
+#include "glob.hrc"
 
 using namespace com::sun::star;
 

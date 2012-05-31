@@ -891,6 +891,7 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_POOLSHEET_OBJWITHARROW:    nNameId = STR_POOLSHEET_OBJWITHARROW;   break;
                 case HID_POOLSHEET_OBJWITHSHADOW:   nNameId = STR_POOLSHEET_OBJWITHSHADOW;  break;
                 case HID_POOLSHEET_OBJWITHOUTFILL:  nNameId = STR_POOLSHEET_OBJWITHOUTFILL; break;
+                case HID_POOLSHEET_OBJNOLINENOFILL: nNameId = STR_POOLSHEET_OBJNOLINENOFILL;break;
                 case HID_POOLSHEET_TEXT:            nNameId = STR_POOLSHEET_TEXT;           break;
                 case HID_POOLSHEET_TEXTBODY:        nNameId = STR_POOLSHEET_TEXTBODY;       break;
                 case HID_POOLSHEET_TEXTBODY_JUSTIFY:nNameId = STR_POOLSHEET_TEXTBODY_JUSTIFY;break;

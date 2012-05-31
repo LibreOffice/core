@@ -88,10 +88,14 @@ namespace sdr
 
             // Prepare attribute settings, will be used soon anyways
             const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
+
+            // this may be refined more granular; if no content, attributes may get simpler
+            const bool bHasContent(true);
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
                     rItemSet,
-                    GetOle2Obj().getText(0)));
+                    GetOle2Obj().getText(0),
+                    bHasContent));
             drawinglayer::primitive2d::Primitive2DReference xContent;
 
             if(GetOle2Obj().IsChart())

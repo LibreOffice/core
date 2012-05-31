@@ -297,10 +297,6 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
-            drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
-                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
-                    GetGrafObject().getText(0)));
 
             // create and fill GraphicAttr
             GraphicAttr aLocalGrafInfo;
@@ -317,25 +313,14 @@ namespace sdr
             aLocalGrafInfo.SetDrawMode(((SdrGrafModeItem&)rItemSet.Get(SDRATTR_GRAFMODE)).GetValue());
             aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
-            if(aAttribute.isDefault() && 255L != aLocalGrafInfo.GetTransparency())
-            {
-                // no fill, no line, no text (invisible), but the graphic content is visible.
-                // Create evtl. shadow for content which was not created by createNewSdrLineFillShadowTextAttribute yet
-                const drawinglayer::attribute::SdrShadowAttribute aShadow(
-                    drawinglayer::primitive2d::createNewSdrShadowAttribute(rItemSet));
+            // we have content if graphic is not completely transparent
+            const bool bHasContent(255L != aLocalGrafInfo.GetTransparency());
+            drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                    rItemSet,
+                    GetGrafObject().getText(0),
+                    bHasContent));
 
-                if(!aShadow.isDefault())
-                {
-                    // create new attribute set if indeed shadow is used
-                    aAttribute = drawinglayer::attribute::SdrLineFillShadowTextAttribute(
-                        aAttribute.getLine(),
-                        aAttribute.getFill(),
-                        aAttribute.getLineStartEnd(),
-                        aShadow,
-                        aAttribute.getFillFloatTransGradient(),
-                        aAttribute.getText());
-                }
-            }
             // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
             // which will use the primitive data we just create in the near future
             Rectangle rRectangle = GetGrafObject().GetGeoRect();

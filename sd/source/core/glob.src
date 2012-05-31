@@ -245,6 +245,10 @@ String STR_POOLSHEET_MEASURE
 {
     Text [ en-US ] = "Dimension Line" ;
 };
+String STR_POOLSHEET_OBJNOLINENOFILL
+{
+    Text [ en-US ] = "Object with no fill and no line" ;
+};
 String STR_POOLSHEET_OBJWITHARROW
 {
     Text [ en-US ] = "Object with arrow" ;

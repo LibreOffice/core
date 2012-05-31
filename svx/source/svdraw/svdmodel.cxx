@@ -128,6 +128,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nProgressMax=0;
     nProgressOfs=0;
     pDefaultStyleSheet=NULL;
+    mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = 0;
     pLinkManager=NULL;
     pUndoStack=NULL;
     pRedoStack=NULL;
