@@ -591,6 +591,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             {
                 aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
                 aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
+                aPropSet.setProperty(PROP_Opaque, sal_False);
             }
             if ( maTypeModel.maPositionVerticalRelative == "page" )
             {

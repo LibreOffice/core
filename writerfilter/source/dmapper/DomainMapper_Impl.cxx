@@ -1529,9 +1529,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
             bIsGraphic = false;
 
-        xProps->setPropertyValue(
-                rPropNameSupplier.GetName( PROP_OPAQUE ),
-                uno::makeAny( true ) );
+        if (nAnchorType != text::TextContentAnchorType_AT_PAGE)
+            xProps->setPropertyValue(
+                    rPropNameSupplier.GetName( PROP_OPAQUE ),
+                    uno::makeAny( true ) );
         if (xSInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextFrame"))))
         {
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);

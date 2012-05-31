@@ -308,6 +308,7 @@ NumberingLevel
 NumberingRules
 NumberingType
 Offset
+Opaque
 OpCodeMap
 Orientation
 OutputPosition
