@@ -385,9 +385,9 @@ public class _XAccessibleText extends MultiMethodTest {
                 localres = chBounds.X >= 0;
                 localres &= (chBounds.Y >= 0);
                 localres &= ((chBounds.X + chBounds.Width) <= bounds.Width);
-                localres &= ((chBounds.X + chBounds.Width) > 0);
+                localres &= ((chBounds.X + chBounds.Width) >= 0);
                 localres &= ((chBounds.Y + chBounds.Height) <= bounds.Height);
-                localres &= ((chBounds.Y + chBounds.Height) > 0);
+                localres &= ((chBounds.Y + chBounds.Height) >= 0);
 
                 if (!localres) {
                     log.println("Text at this place: "+oObj.getCharacter(i));

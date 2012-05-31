@@ -761,7 +761,10 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
         {
             // merge rectangle
             aRectangle += aPos;
-            rRect.Union( aRectangle );
+            if (rRect.IsEmpty())
+                rRect = aRectangle;
+            else
+                rRect.Union(aRectangle);
             bRet = true;
         }
     }

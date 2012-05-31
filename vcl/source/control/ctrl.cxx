@@ -172,7 +172,10 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
     long nIndex = -1;
     for( long i = m_aUnicodeBoundRects.size()-1; i >= 0; i-- )
     {
-        if( m_aUnicodeBoundRects[ i ].IsInside( rPoint ) )
+        Point aTopLeft = m_aUnicodeBoundRects[i].TopLeft();
+        Point aBottomRight = m_aUnicodeBoundRects[i].BottomRight();
+        if (rPoint.X() >= aTopLeft.X() && rPoint.Y() >= aTopLeft.Y() &&
+            rPoint.X() <= aBottomRight.X() && rPoint.Y() <= aBottomRight.Y())
         {
             nIndex = i;
             break;
