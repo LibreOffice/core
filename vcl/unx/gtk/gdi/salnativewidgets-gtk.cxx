@@ -1140,25 +1140,25 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 sal_Bool GtkSalGraphics::NWPaintGTKWindowBackground(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart,
-            const Rectangle& rControlRectangle,
+            const Rectangle& /* rControlRectangle */,
             const clipList& rClipList,
-            ControlState nState, const ImplControlValue&,
+            ControlState /* nState */, const ImplControlValue&,
             const OUString& )
 {
-        int w,h;
-        gtk_window_get_size(GTK_WINDOW(m_pWindow),&w,&h);
-        GdkRectangle clipRect;
-        for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
-        {
-            clipRect.x = it->Left();
-            clipRect.y = it->Top();
-            clipRect.width = it->GetWidth();
-            clipRect.height = it->GetHeight();
+    int w,h;
+    gtk_window_get_size(GTK_WINDOW(m_pWindow),&w,&h);
+    GdkRectangle clipRect;
+    for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
+    {
+        clipRect.x = it->Left();
+        clipRect.y = it->Top();
+        clipRect.width = it->GetWidth();
+        clipRect.height = it->GetHeight();
 
-            gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_NONE,&clipRect,m_pWindow,"base",0,0,w,h);
-        }
+        gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_NONE,&clipRect,m_pWindow,"base",0,0,w,h);
+    }
 
-        return sal_True;
+    return sal_True;
 }
 
 sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
@@ -1281,18 +1281,17 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
                                 &clipRect, m_pWindow, "base", x, y, w, h );
         }
 
-        if ( (nState & CTRL_STATE_DEFAULT) && GTK_IS_BUTTON(button) )
+        if ( GTK_IS_BUTTON(button) )
         {
-            gtk_paint_box( button->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                           &clipRect, button, "buttondefault", x, y, w, h );
-        }
-        /* don't draw "button", because it can be a tool_button, and
-         * it causes some weird things, so, the default button is
-         * just fine */
-        if(GTK_IS_BUTTON(button))
-        {
+            if ( (nState & CTRL_STATE_DEFAULT) )
+                gtk_paint_box( button->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                               &clipRect, button, "buttondefault", x, y, w, h );
+
+            /* don't draw "button", because it can be a tool_button, and
+             * it causes some weird things, so, the default button is
+             * just fine */
             gtk_paint_box( button->style, gdkDrawable, stateType, shadowType,
-                               &clipRect, button, "button", xi, yi, wi, hi );
+                           &clipRect, button, "button", xi, yi, wi, hi );
         }
     }
 
