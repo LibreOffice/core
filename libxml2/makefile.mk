@@ -31,9 +31,9 @@ TARGET=so_libxml2
 .INCLUDE :	settings.mk
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
-#all:
-#	@echo "An already available installation of libxml should exist on your system."
-#	@echo "Therefore the version provided here does not need to be built in addition."
+all:
+    @echo "An already available installation of libxml should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
