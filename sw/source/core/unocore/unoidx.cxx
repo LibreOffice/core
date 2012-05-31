@@ -2378,7 +2378,7 @@ SwXDocumentIndexes::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
-        SAL_N_ELEMENTS(g_ServicesDocumentIndexes)
+        SAL_N_ELEMENTS(g_ServicesDocumentIndexes),
         g_ServicesDocumentIndexes, rServiceName);
 }
 

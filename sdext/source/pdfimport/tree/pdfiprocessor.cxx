@@ -219,7 +219,7 @@ sal_Int32 PDFIProcessor::getFontId( const FontAttributes& rAttr ) const
 // line diagnose block - start
 void PDFIProcessor::processGlyphLine()
 {
-    if( m_GlyphsList.empty() )
+    if( m_GlyphsList.size()<1 )
         return;
 
     double fPreAvarageSpaceValue= 0.0;
@@ -315,21 +315,17 @@ void PDFIProcessor::processGlyphLine()
     ParagraphElement* pPara= NULL ;
     FrameElement* pFrame= NULL ;
 
-    if(!m_GlyphsList.empty())
+    if(m_GlyphsList.size()>0)
     {
         pFrame = m_pElFactory->createFrameElement( m_GlyphsList[0].getCurElement(), getGCId( getTransformGlyphContext( m_GlyphsList[0])) );
         pFrame->ZOrder = m_nNextZOrder++;
         pPara = m_pElFactory->createParagraphElement( pFrame );
-
-
 
         processGlyph( 0,
                   m_GlyphsList[0],
                   pPara,
                   pFrame,
                   m_bIsWhiteSpaceInLine );
-
-
     }
 
 
