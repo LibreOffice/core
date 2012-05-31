@@ -1524,6 +1524,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION)) >>= nVertPosition;
         if (nHoriPosition != 0 || nVertPosition != 0)
             bIsGraphic = false;
+        text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
+        xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
+        if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
+            bIsGraphic = false;
 
         xProps->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_OPAQUE ),
