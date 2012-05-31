@@ -266,7 +266,7 @@ ModalDialog DLG_FPICKER_QUERYFOLDERNAME
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Text = "Ordner" ;
-    Size = MAP_APPFONT ( 100 , 45 ) ;
+    Size = MAP_APPFONT ( 215 , 45 ) ;
     FixedText FT_SVT_QUERYFOLDERNAME_DLG_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;

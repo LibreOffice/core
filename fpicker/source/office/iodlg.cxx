@@ -810,9 +810,10 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
 {
     pThis->_pFileView->EndInplaceEditing( false );
 
-    INetURLObject aObj( pThis->_pFileView->GetViewURL() );
-    String sFolderName = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8 );
-    svtools::QueryFolderNameDialog aDlg( pThis, sFolderName, String( SvtResId( STR_SVT_NEW_FOLDER ) ) );
+    SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
+    rtl::OUString aTitle;
+    aContent.getTitle( aTitle );
+    svtools::QueryFolderNameDialog aDlg( pThis, aTitle, String( SvtResId( STR_SVT_NEW_FOLDER ) ) );
     sal_Bool bHandled = sal_False;
 
     while ( !bHandled )
