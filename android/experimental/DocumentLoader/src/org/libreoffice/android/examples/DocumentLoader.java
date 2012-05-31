@@ -29,8 +29,13 @@
 package org.libreoffice.android.examples;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import com.sun.star.uno.UnoRuntime;
 
@@ -128,12 +133,18 @@ public class DocumentLoader
             Log.i(TAG, "  " + t.getTypeName());
     }
 
-    static void dumpBytes(byte[] image)
+    static void dumpBytes(String imageName, byte[] image)
     {
-        for (int i = 0; i < 160; i += 16) {
+        if (image == null) {
+            Log.i(TAG, imageName + " is null");
+            return;
+        }
+        Log.i(TAG, imageName + " is " + image.length + " bytes");
+
+        for (int i = 0; i < Math.min(image.length, 160); i += 16) {
             String s = "";
-            for (int j = 0; j < 16; j++)
-                s = s + String.format(" %02x", image[i+j]);
+            for (int j = i; j < Math.min(image.length, i+16); j++)
+                s = s + String.format(" %02x", image[j]);
 
             Log.i(TAG, s);
         }
@@ -202,13 +213,16 @@ public class DocumentLoader
             String[] inputs = input.split(":");
             for (int i = 0; i < inputs.length; i++) {
                 com.sun.star.beans.PropertyValue loadProps[] =
-                    new com.sun.star.beans.PropertyValue[2];
+                    new com.sun.star.beans.PropertyValue[3];
                 loadProps[0] = new com.sun.star.beans.PropertyValue();
                 loadProps[0].Name = "Hidden";
                 loadProps[0].Value = new Boolean(true);
                 loadProps[1] = new com.sun.star.beans.PropertyValue();
                 loadProps[1].Name = "ReadOnly";
                 loadProps[1].Value = new Boolean(true);
+                loadProps[2] = new com.sun.star.beans.PropertyValue();
+                loadProps[2].Name = "Preview";
+                loadProps[2].Value = new Boolean(true);
 
                 String sUrl = "file://" + inputs[i];
 
@@ -278,9 +292,50 @@ public class DocumentLoader
 
                 byte[] image = bitmap.getDIB();
 
-                Log.i(TAG, "image is " + image.length + " bytes");
+                dumpBytes("image", image);
 
-                dumpBytes(image);
+                byte[] mask = bitmap.getMaskDIB();
+
+                dumpBytes("mask", mask);
+
+                if (image[0] != 'B' || image[1] != 'M') {
+                    Log.e(TAG, "getDIB() didn't return a BMP file");
+                    return;
+                }
+
+                ByteBuffer imagebb = ByteBuffer.wrap(image);
+                imagebb.order(ByteOrder.LITTLE_ENDIAN);
+
+                if (imagebb.getInt(0x0e) != 40) {
+                    Log.e(TAG, "getDIB() didn't return a DIB with BITMAPINFOHEADER");
+                    return;
+                }
+
+                if (imagebb.getShort(0x1c) != 24) {
+                    Log.e(TAG, "getDIB() didn't return a 24 bpp DIB");
+                    return;
+                }
+
+                if (imagebb.getInt(0x1e) != 0) {
+                    Log.e(TAG, "getDIB() didn't return a BI_RGB DIB");
+                    return;
+                }
+
+                int width = imagebb.getInt(0x12);
+                int height = imagebb.getInt(0x16);
+
+                ByteBuffer argb = ByteBuffer.allocateDirect(width * height * 4);
+
+                Bootstrap.twiddle_BGR_to_RGBA(image, imagebb.getInt(0x0a), width, height, argb);
+
+                ImageView imageView = new ImageView(this);
+
+                Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                bm.copyPixelsFromBuffer(argb);
+
+                imageView.setImageBitmap(bm);
+
+                setContentView(imageView);
             }
         }
         catch (Exception e) {
