@@ -289,7 +289,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -410,7 +410,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterGlobalDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -497,7 +497,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -860,7 +860,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.WriterDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -1111,7 +1111,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.WriterTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -1263,7 +1263,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.WriterGlobalDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -1415,7 +1415,7 @@ End
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.WriterWebTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";

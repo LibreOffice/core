@@ -288,7 +288,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarMathDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Math";
@@ -566,7 +566,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.MathDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Math";

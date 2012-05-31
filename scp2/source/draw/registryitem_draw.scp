@@ -289,7 +289,7 @@ End
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarDrawDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -403,7 +403,7 @@ End
 RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarDrawTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -710,7 +710,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.DrawDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -938,7 +938,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.DrawTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";

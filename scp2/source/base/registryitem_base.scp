@@ -97,7 +97,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Base_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.DatabaseDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Base";

@@ -289,7 +289,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarCalcDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -403,7 +403,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -710,7 +710,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.CalcDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
@@ -938,7 +938,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    ComponentCondition = "VersionNT >= 600";
+    ComponentCondition = "VersionNT >= 601";
     Subkey = "opendocument.CalcTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
