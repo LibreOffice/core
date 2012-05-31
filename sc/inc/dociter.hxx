@@ -573,6 +573,7 @@ public:
         SCTAB mnTab;
         ::boost::shared_ptr<ScFlatBoolRowSegments> mpRanges;
 
+        TabRanges();
         TabRanges(SCTAB nTab);
     };
 
