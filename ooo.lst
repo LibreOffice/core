@@ -6,7 +6,10 @@
 
 # Load libraries from svn.apache.org.  When the source code was checked out
 # with SVN then these should already be present.
-http://svn.apache.org/repos/asf/incubator/ooo/trunk/ext_sources/
+
+### TODO: update the revision when the content of ext_sources is changed!
+http://svn.apache.org/repos/asf/!svn/bc/1327774/incubator/ooo/trunk/ext_sources/
+
 # Libraries with category A license
 0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz
 067201ea8b126597670b5eff72e1f66c-mythes-1.2.0.tar.gz
