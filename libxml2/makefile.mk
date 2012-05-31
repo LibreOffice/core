@@ -31,9 +31,9 @@ TARGET=so_libxml2
 .INCLUDE :	settings.mk
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
-all:
-    @echo "An already available installation of libxml should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+#all:
+#	@echo "An already available installation of libxml should exist on your system."
+#	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -49,6 +49,8 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-gnome599717.patch \
             libxml2-xpath.patch \
             libxml2-global-symbols.patch \
+            libxml2-testapi.patch \
+            libxml2-runtest.patch
 
 .IF "$(OS)" == "WNT"
 PATCH_FILES+= libxml2-long-path.patch
