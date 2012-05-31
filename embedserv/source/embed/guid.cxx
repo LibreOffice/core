@@ -39,31 +39,31 @@
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarWriterDocument.6" ) );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.WriterDocument.1" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.WriterDocument.1" ) );
 
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarCalcDocument.6" ) );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.CalcDocument.1" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.CalcDocument.1" ) );
 
     if ( *guid == OID_DrawingServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarDrawDocument.6" ) );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.DrawDocument.1" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.DrawDocument.1" ) );
 
     if ( *guid == OID_PresentationServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarImpressDocument.6" ) );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.ImpressDocument.1" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.ImpressDocument.1" ) );
 
     if ( *guid == OID_MathServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarMathDocument.6" ) );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.MathDocument.1" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.MathDocument.1" ) );
 
     return ::rtl::OUString();
 }

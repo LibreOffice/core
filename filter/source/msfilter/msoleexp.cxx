@@ -79,17 +79,17 @@ SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
 String GetStorageType( const SvGlobalName& aEmbName )
 {
     if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "opendocument.MathDocument.1" );
+            return String::CreateFromAscii( "LibreOffice.MathDocument.1" );
     else if ( aEmbName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "opendocument.WriterDocument.1" );
+            return String::CreateFromAscii( "LibreOffice.WriterDocument.1" );
     else if ( aEmbName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "opendocument.CalcDocument.1" );
+            return String::CreateFromAscii( "LibreOffice.CalcDocument.1" );
     else if ( aEmbName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "opendocument.DrawDocument.1" );
+            return String::CreateFromAscii( "LibreOffice.DrawDocument.1" );
     else if ( aEmbName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "opendocument.ImpressDocument.1" );
+            return String::CreateFromAscii( "LibreOffice.ImpressDocument.1" );
     else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "opendocument.ChartDocument.1" );
+            return String::CreateFromAscii( "LibreOffice.ChartDocument.1" );
 
     return String();
 }
