@@ -66,6 +66,7 @@ class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScSortWarningDlg;
 class ScTextImportOptionsDlg;
+class ScDataBarSettingsDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -135,6 +136,11 @@ class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg  //add for
     DECL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl,ScColRowLabelDlg)
     virtual sal_Bool IsCol();
     virtual sal_Bool IsRow();
+};
+
+class AbstractScDataBarSettingsDlg_Impl : public AbstractScDataBarSettingsDlg
+{
+    DECL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl, ScDataBarSettingsDlg)
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg  //add for ScDataPilotDatabaseDlg
@@ -414,6 +420,8 @@ public:
                                                     sal_Bool                bColDefault = sal_True );
 
     virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
+
+    virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent ,int nId ); //add for ScDataBarSettingsDlg
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ); //add for ScDataPilotDatabaseDlg
 

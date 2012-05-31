@@ -85,6 +85,10 @@ public:
     virtual sal_Bool IsRow() = 0;
 };
 
+class AbstractScDataBarSettingsDlg : public VclAbstractDialog
+{
+};
+
 class AbstractScDataPilotDatabaseDlg  :public VclAbstractDialog  //add for ScDataPilotDatabaseDlg
 {
 public:
@@ -347,6 +351,9 @@ public:
                                                     int nId,
                                                     sal_Bool                bColDefault = sal_True ) = 0;
     virtual VclAbstractDialog * CreateScSortWarningDlg ( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId ) = 0;  //add for ScSortWarningDlg
+
+    virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent ,int nId ) = 0; //add for ScDataBarSettingsDlg
+
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ) = 0; //add for ScDataPilotDatabaseDlg
 
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg ( Window* pParent, sal_Bool bEnableExternal, int nId ) = 0; //add for ScDataPilotSourceTypeDlg

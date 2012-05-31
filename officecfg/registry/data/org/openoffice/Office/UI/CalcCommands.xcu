@@ -439,9 +439,24 @@
                     <value xml:lang="en-US">Select Row</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ConditionalFormatMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">C~onditional Formatting</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataBarDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Data Bar...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ColorScaleDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Color Scale...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ConditionalFormatDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">C~onditional Formatting...</value>
+                    <value xml:lang="en-US">Conditional Formatting...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Deselect" oor:op="replace">

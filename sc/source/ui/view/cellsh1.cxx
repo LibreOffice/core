@@ -2069,6 +2069,33 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_COLORSCALE:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+
+                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DATABAR );
+                OSL_ENSURE(pDlg, "Dialog create fail!");
+                pDlg->Execute();
+                delete pDlg;
+            }
+            break;
+
+        case SID_DATABAR:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+
+                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DATABAR );
+                OSL_ENSURE(pDlg, "Dialog create fail!");
+                if(pDlg->Execute() == RET_OK)
+                {
+                    //add here code that handles the data bar inserting
+                }
+                delete pDlg;
+            }
+            break;
+
         case SID_EXTERNAL_SOURCE:
             {
                 String aFile;
