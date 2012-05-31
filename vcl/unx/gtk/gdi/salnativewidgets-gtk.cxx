@@ -46,6 +46,7 @@
 #include "vcl/vclenum.hxx"
 #include "vcl/fontmanager.hxx"
 typedef struct _cairo_font_options cairo_font_options_t;
+const char* const tabPrelitDataName="libreoffice-tab-is-prelit";
 
 // initialize statics
 sal_Bool GtkSalGraphics::bThemeChanged = sal_True;
@@ -2461,9 +2462,14 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
         case CTRL_TAB_ITEM:
             stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
 
+            if( nState & CTRL_STATE_ROLLOVER )
+                g_object_set_data(G_OBJECT(pixmap),tabPrelitDataName,(gpointer)TRUE);
+
             gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
                 (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
                 tabRect.GetWidth(), tabRect.GetHeight(), GTK_POS_BOTTOM );
+
+            g_object_steal_data(G_OBJECT(pixmap),tabPrelitDataName);
 
             if ( nState & CTRL_STATE_SELECTED )
             {
