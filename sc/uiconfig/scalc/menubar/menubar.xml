@@ -259,7 +259,13 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:DesignerDialog"/>
             <menu:menuitem menu:id=".uno:AutoFormat"/>
-            <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
+            <menu:menu menu:id=".uno:ConditionalFormatMenu">
+	          <menu:menupopup>
+	            <menu:menuitem menu:id="uno:DataBarDialog"/>
+	            <menu:menuitem menu:id="uno:ColorScaleDialog"/>
+	            <menu:menuitem menu:id="uno:ConditionalFormatDialog"/>
+	          </menu:menupopup>
+	        </menu:menu>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:AnchorMenu">
                 <menu:menupopup>

@@ -188,6 +188,8 @@ interface CellSelection
     SID_CANCEL      [ ExecMethod = Execute; ]
     SID_TOGGLE_REL  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_CONDFRMT    [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    SID_COLORSCALE          [ ExecMethod = ExecuteEdit; ]
+    SID_DATABAR             [ ExecMethod = ExecuteEdit; ]
     FID_CONDITIONAL_FORMAT  [ ExecMethod = ExecuteEdit; ]
     FID_NOTE_VISIBLE        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DELETE_NOTE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]

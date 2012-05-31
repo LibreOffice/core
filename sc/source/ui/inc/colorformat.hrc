@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2011 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "sc.hrc"
+
+#define BTN_OK 1
+#define BTN_CANCEL 2
+
+#define FL_BAR_COLORS 10
+#define FL_AXIS 11
+#define FL_VALUES 12
+#define FT_MINIMUM 13
+#define FT_MAXIMUM 14
+#define FT_POSITIVE 15
+#define FT_NEGATIVE 16
+#define FT_POSITION 17
+#define FT_COLOR_AXIS 18
+#define LB_POS 19
+#define LB_NEG 20
+#define LB_COL_AXIS 21
+
+#define LB_TYPE 22
+#define LB_AXIS_POSITION 23
+
+#define ED_MIN 24
+#define ED_MAX 25
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

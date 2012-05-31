@@ -79,6 +79,7 @@
 #include "datafdlg.hxx"
 #include "tpcompatibility.hxx"
 #include "tpdefaults.hxx"
+#include "colorformat.hxx"
 
 // ause
 #include "editutil.hxx"
@@ -87,6 +88,7 @@ IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl);
@@ -766,6 +768,22 @@ VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window
 }
 
 
+AbstractScDataBarSettingsDlg* ScAbstractDialogFactory_Impl::CreateScDataBarSetttingsDlg(Window* pParent, int nId)
+{
+    ScDataBarSettingsDlg* pDlg = NULL;
+    switch( nId )
+    {
+        case RID_SCDLG_DATABAR:
+            pDlg = new ScDataBarSettingsDlg( pParent );
+            break;
+        default:
+            break;
+    }
+    if(pDlg)
+        return new AbstractScDataBarSettingsDlg_Impl( pDlg );
+
+    return NULL;
+}
 
 
 AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg (Window* pParent ,
