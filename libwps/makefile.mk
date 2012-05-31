@@ -49,11 +49,8 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream
 .ENDIF
 
-TARFILE_NAME=libwps-0.2.6
-TARFILE_MD5=6f0d48db6e8a96d4c0eafb029ccc07b6
-
-PATCH_FILES=\
-    $(TARFILE_NAME).patch
+TARFILE_NAME=libwps-0.2.7
+TARFILE_MD5=d197bd6211669a2fa4ca648faf04bcb1
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src/lib
