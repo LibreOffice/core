@@ -331,6 +331,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     CharSet eEncoding = osl_getThreadTextEncoding();
     {
         sal_uInt16 nUS;
+        short nShort;
         sal_Char cChar;
         sal_Bool bFlag;
         String sStr;
@@ -362,7 +363,6 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         }
         else                // old start-value was a Byte
         {
-            short nShort;
             rStream >> nUS;         aFmt.SetStart( nUS );
             sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetPrefix( sStr );
