@@ -295,6 +295,14 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_PRESENT)
+End
+
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
@@ -413,6 +421,14 @@ RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_AppUserModelID
     Subkey = "soffice.StarImpressTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressTemplate.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_IMPRESS_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell
@@ -715,6 +731,14 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
 
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_PRESENT)
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odp_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -947,6 +971,14 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_AppUserModelID
     Subkey = "opendocument.ImpressTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressTemplate.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_PRESENT_TEMPLATE)
 End
 
 #ifdef _MSC_VER

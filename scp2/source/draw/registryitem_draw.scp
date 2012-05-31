@@ -295,6 +295,14 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_DRAWING)
+End
+
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -399,6 +407,14 @@ RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_AppUserModelID
     Subkey = "soffice.StarDrawTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_DRAWING)
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell
@@ -700,6 +716,14 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Draw";
 End
 
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_DRAW)
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odg_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -918,6 +942,14 @@ RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_AppUserModelID
     Subkey = "opendocument.DrawTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawTemplate.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_DRAW_TEMPLATE)
 End
 
 #ifdef _MSC_VER

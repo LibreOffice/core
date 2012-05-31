@@ -295,6 +295,14 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
+RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "soffice.StarWriterDocument.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_TEXT)
+End
+
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -408,6 +416,14 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
+RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "soffice.StarWriterGlobalDocument.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_MASTERDOC)
+End
+
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarWriterGlobalDocument.6\shell";
@@ -485,6 +501,14 @@ RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
+RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "soffice.StarWriterTemplate.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_WRITER_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_Shell
@@ -842,6 +866,14 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
+RegistryItem gid_Regitem_Openoffice_Writerdocument_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterDocument.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_WRITER)
+End
+
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -1085,6 +1117,14 @@ RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
+RegistryItem gid_Regitem_Openoffice_Writertemplate_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterTemplate.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_WRITER_TEMPLATE)
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ott_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1229,6 +1269,14 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Writer";
 End
 
+RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterGlobalDocument.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_MASTERDOC)
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odm_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1371,6 +1419,14 @@ RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
     Subkey = "opendocument.WriterWebTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
+End
+
+RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterWebTemplate.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_WEBDOC)
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell

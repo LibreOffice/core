@@ -295,6 +295,14 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_SPREADSHEET)
+End
+
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
@@ -399,6 +407,14 @@ RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcTemplate.6";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(SO60_CALC_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell
@@ -700,6 +716,14 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
     Value = "TheDocumentFoundation.LibreOffice.Calc";
 End
 
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_CALC)
+End
+
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ods_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -918,6 +942,14 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
     Subkey = "opendocument.CalcTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Calc";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_FriendlyTypeName
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcTemplate.1";
+    Name = "FriendlyTypeName";
+    REG_VALUE_LNG(OO_CALC_TEMPLATE)
 End
 
 #ifdef _MSC_VER
