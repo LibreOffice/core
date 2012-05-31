@@ -134,6 +134,30 @@ ModalDialog DLG_FPICKER_PLACE_EDIT
         Size = MAP_APPFONT ( 137 , 12 ) ;
         Border = TRUE ;
     };
+    FixedText FT_ADDPLACE_CMIS_BINDING
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Binding URL" ;
+    };
+    Edit ED_ADDPLACE_CMIS_BINDING
+    {
+        Pos = MAP_APPFONT ( 55, 44 ) ;
+        Size = MAP_APPFONT ( 137 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_ADDPLACE_CMIS_REPOSITORY
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Repository" ;
+    };
+    Edit ED_ADDPLACE_CMIS_REPOSITORY
+    {
+        Pos = MAP_APPFONT ( 55, 60 ) ;
+        Size = MAP_APPFONT ( 137 , 12 ) ;
+        Border = TRUE ;
+    };
     ListBox LB_ADDPLACE_SERVERTYPE
     {
         Pos = MAP_APPFONT ( 55, 28 ) ;
@@ -146,6 +170,7 @@ ModalDialog DLG_FPICKER_PLACE_EDIT
             < "FTP" ; >;
             < "SSH" ; >;
             < "Windows Share" ; >;
+            < "CMIS (Atom Binding)" ; >;
         };
     };
     FixedText FT_ADDPLACE_USERNAME

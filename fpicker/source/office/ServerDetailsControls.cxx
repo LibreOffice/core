@@ -234,7 +234,6 @@ INetURLObject SmbDetailsContainer::getUrl( )
     rtl::OUString sUrl;
     if ( !sHost.isEmpty( ) )
     {
-        INetURLObject aUrl;
         sUrl = "smb://" + sHost + "/";
         if ( !sShare.isEmpty( ) )
             sUrl += sShare;
@@ -271,5 +270,69 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     return bSuccess;
 }
+
+INetURLObject CmisDetailsContainer::getUrl( )
+{
+    rtl::OUString sBindingUrl = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->GetText() ).trim( );
+    rtl::OUString sRepo = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_REPOSITORY ) )->GetText() ).trim( );
+
+    rtl::OUString sUrl;
+    if ( !sBindingUrl.isEmpty( ) && !sRepo.isEmpty() )
+    {
+        sal_Int32 pos = sBindingUrl.indexOf( rtl::OUString::createFromAscii( "://" ) );
+        if ( pos > 0 )
+            sBindingUrl = sBindingUrl.copy( pos + 3 );
+        sUrl = "cmis+atom://" + sBindingUrl + "?repo-id=" + sRepo;
+    }
+
+    return INetURLObject( sUrl );
+}
+
+bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
+{
+    bool bSuccess =  rUrl.GetProtocol() == INET_PROT_CMIS_ATOM;
+
+    if ( bSuccess )
+    {
+        rtl::OUString sBindingUrl( "http://" );
+        sBindingUrl += rUrl.GetHost( );
+        if ( rUrl.HasPort( ) )
+            sBindingUrl += rtl::OUString::valueOf( sal_Int32( rUrl.GetPort( ) ) );
+        sBindingUrl += rUrl.GetURLPath( );
+
+        // Split the query into bits and locate the repo-id key
+        rtl::OUString sQuery = rUrl.GetParam( );
+        rtl::OUString sRepositoryId;
+
+        while ( !sQuery.isEmpty() )
+        {
+            sal_Int32 nPos = sQuery.indexOfAsciiL( "&", 1 );
+            rtl::OUString sSegment;
+            if ( nPos > 0 )
+            {
+                sSegment = sQuery.copy( 0, nPos );
+                sQuery = sQuery.copy( nPos + 1 );
+            }
+            else
+            {
+                sSegment = sQuery;
+                sQuery = rtl::OUString();
+            }
+
+            sal_Int32 nEqPos = sSegment.indexOfAsciiL( "=", 1 );
+            rtl::OUString key = sSegment.copy( 0, nEqPos );
+            rtl::OUString value = sSegment.copy( nEqPos +1 );
+
+            if ( key == "repo-id" )
+                sRepositoryId = value;
+        }
+
+        static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->SetText( sBindingUrl );
+        static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_REPOSITORY ) )->SetText( sRepositoryId );
+    }
+
+    return bSuccess;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,6 +53,10 @@
 #define ED_ADDPLACE_SHARE       	 		    28
 #define FT_ADDPLACE_SMBPATH        	 		    29
 #define ED_ADDPLACE_SMBPATH        	 		    30
+#define FT_ADDPLACE_CMIS_BINDING                31
+#define ED_ADDPLACE_CMIS_BINDING                32
+#define FT_ADDPLACE_CMIS_REPOSITORY             33
+#define ED_ADDPLACE_CMIS_REPOSITORY             34
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

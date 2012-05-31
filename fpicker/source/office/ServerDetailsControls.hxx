@@ -119,5 +119,15 @@ class SmbDetailsContainer : public DetailsContainer
         virtual bool setUrl( const INetURLObject& rUrl );
 };
 
+class CmisDetailsContainer : public DetailsContainer
+{
+    public:
+        CmisDetailsContainer( ) : DetailsContainer( ) { };
+        ~CmisDetailsContainer( ) { };
+
+        virtual INetURLObject getUrl( );
+        virtual bool setUrl( const INetURLObject& rUrl );
+};
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

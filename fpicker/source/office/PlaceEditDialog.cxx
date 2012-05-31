@@ -33,6 +33,7 @@
 #include "PlaceEditDialog.hxx"
 #include "ServerDetailsControls.hxx"
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/msgbox.hxx>
 
 using namespace boost;
@@ -56,6 +57,10 @@ PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
     m_aEDShare( this, SvtResId( ED_ADDPLACE_SHARE ) ),
     m_aFTSmbPath( this, SvtResId( FT_ADDPLACE_SMBPATH ) ),
     m_aEDSmbPath( this, SvtResId( ED_ADDPLACE_SMBPATH ) ),
+    m_aFTCmisBinding( this, SvtResId( FT_ADDPLACE_CMIS_BINDING ) ),
+    m_aEDCmisBinding( this, SvtResId( ED_ADDPLACE_CMIS_BINDING ) ),
+    m_aFTCmisRepository( this, SvtResId( FT_ADDPLACE_CMIS_REPOSITORY ) ),
+    m_aEDCmisRepository( this, SvtResId( ED_ADDPLACE_CMIS_REPOSITORY ) ),
     m_aFTUsername( this, SvtResId( FT_ADDPLACE_USERNAME ) ),
     m_aEDUsername( this, SvtResId( ED_ADDPLACE_USERNAME ) ),
     m_aBTOk( this, SvtResId( BT_ADDPLACE_OK ) ),
@@ -95,6 +100,10 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent, const PlacePtr& pPlace ) :
     m_aEDShare( this, SvtResId( ED_ADDPLACE_SHARE ) ),
     m_aFTSmbPath( this, SvtResId( FT_ADDPLACE_SMBPATH ) ),
     m_aEDSmbPath( this, SvtResId( ED_ADDPLACE_SMBPATH ) ),
+    m_aFTCmisBinding( this, SvtResId( FT_ADDPLACE_CMIS_BINDING ) ),
+    m_aEDCmisBinding( this, SvtResId( ED_ADDPLACE_CMIS_BINDING ) ),
+    m_aFTCmisRepository( this, SvtResId( FT_ADDPLACE_CMIS_REPOSITORY ) ),
+    m_aEDCmisRepository( this, SvtResId( ED_ADDPLACE_CMIS_REPOSITORY ) ),
     m_aFTUsername( this, SvtResId( FT_ADDPLACE_USERNAME ) ),
     m_aEDUsername( this, SvtResId( ED_ADDPLACE_USERNAME ) ),
     m_aBTOk( this, SvtResId( BT_ADDPLACE_OK ) ),
@@ -197,6 +206,22 @@ void PlaceEditDialog::InitDetails( )
     pSmbDetails->addControl( ED_ADDPLACE_SMBPATH, &m_aEDSmbPath );
     pSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back( pSmbDetails );
+
+    // Create CMIS control
+    shared_ptr< DetailsContainer > pCmisDetails( new CmisDetailsContainer( ) );
+    pCmisDetails->addControl( FT_ADDPLACE_CMIS_BINDING, &m_aFTCmisBinding );
+    pCmisDetails->addControl( ED_ADDPLACE_CMIS_BINDING, &m_aEDCmisBinding );
+    pCmisDetails->addControl( FT_ADDPLACE_CMIS_REPOSITORY, &m_aFTCmisRepository );
+    pCmisDetails->addControl( ED_ADDPLACE_CMIS_REPOSITORY, &m_aEDCmisRepository );
+    pCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+
+    if ( officecfg::Office::Common::Misc::ExperimentalMode::get() )
+        m_aDetailsContainers.push_back( pCmisDetails );
+    else
+    {
+        // Remove the CMIS entry, left it in src file for l10n
+        m_aLBServerType.RemoveEntry( m_aLBServerType.GetEntryCount( ) - 1 );
+    }
 
     // Set default to first value
     m_aLBServerType.SelectEntryPos( 0 );

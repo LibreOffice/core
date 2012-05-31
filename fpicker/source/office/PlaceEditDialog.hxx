@@ -69,6 +69,11 @@ private :
     FixedText    m_aFTSmbPath;
     Edit         m_aEDSmbPath;
 
+    FixedText    m_aFTCmisBinding;
+    Edit         m_aEDCmisBinding;
+    FixedText    m_aFTCmisRepository;
+    Edit         m_aEDCmisRepository;
+
     FixedText    m_aFTUsername;
     Edit         m_aEDUsername;
     OKButton m_aBTOk;
