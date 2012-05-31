@@ -202,7 +202,7 @@ MultipleTextElement::Data( unsigned i_nNr ) const
 {
     static const Simstr sNull_;
 
-    if (i_nNr < aContent.size())
+    if (aContent.is_valid_index(i_nNr))
         return aContent[i_nNr];
     return sNull_;
 }
