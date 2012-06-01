@@ -1234,8 +1234,7 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow )
                     bNext = fetchRow();
                 if ( bNext )
                 {
-                    m_xRow.set(m_xDriverRow,UNO_QUERY_THROW);
-                    return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
+                    i_bFetchRow = true;
                 }
             }
             else
