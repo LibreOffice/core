@@ -53,7 +53,7 @@ void XPathLogger::updateCurrentPath()
 
     for (vector<string>::const_iterator aIt = m_path.begin();
          aIt != m_path.end();
-         aIt++)
+         ++aIt)
     {
         if (m_currentPath.size() > 0)
             m_currentPath += "/";

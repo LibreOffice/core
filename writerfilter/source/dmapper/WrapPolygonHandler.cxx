@@ -90,7 +90,7 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
     {
         awt::Point aPoint(aIt->X + rPoint.X, aIt->Y + rPoint.Y);
         pResult->addPoint(aPoint);
-        aIt++;
+        ++aIt;
     }
 
     return pResult;
@@ -107,7 +107,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
     {
         awt::Point aPoint(Fraction(aIt->X) * rFractionX, Fraction(aIt->Y) * rFractionY);
         pResult->addPoint(aPoint);
-        aIt++;
+        ++aIt;
     }
 
     return pResult;
@@ -149,7 +149,7 @@ drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
     {
         (*pPolygon)[n] = *aIt;
         ++n;
-        aIt++;
+        ++aIt;
     }
 
     return aPolyPolygon;
