@@ -197,19 +197,19 @@ void SwTabFrm::RegistFlys()
 /*************************************************************************
 |*  Some prototypes
 |*************************************************************************/
-void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom );
-void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
+void SwInvalidateAll( SwFrm *pFrm, long nBottom );
+void lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
 sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
-sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
+sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells = false );
 // OD 2004-02-18 #106629# - correct type of 1st parameter
 // #i26945# - add parameter <_bConsiderObjs> in order to
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
-SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm *pRow,
+SwTwips lcl_CalcMinRowHeight( const SwRowFrm *pRow,
                                           const sal_Bool _bConsiderObjs );
 SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
 
@@ -1380,7 +1380,7 @@ bool SwTabFrm::Join()
 |*  SwTabFrm::MakeAll()
 |*
 |*************************************************************************/
-void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
+void SwInvalidatePositions( SwFrm *pFrm, long nBottom )
 {
     // LONG_MAX == nBottom means we have to calculate all
     sal_Bool bAll = LONG_MAX == nBottom;
@@ -1405,7 +1405,7 @@ void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
               (*fnRect->fnYDiff)( (pFrm->Frm().*fnRect->fnGetTop)(), nBottom ) < 0 ) );
 }
 
-void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom )
+void SwInvalidateAll( SwFrm *pFrm, long nBottom )
 {
     // LONG_MAX == nBottom means we have to calculate all
     sal_Bool bAll = LONG_MAX == nBottom;
@@ -1556,7 +1556,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
 
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
-sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
+sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
@@ -1599,7 +1599,7 @@ sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
     return bRet;
 }
 
-void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
+void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 {
     // #i26945# - For correct appliance of the 'straightforward
     // object positioning process, it's needed to notify that the page frame,
@@ -1696,7 +1696,7 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         pPageFrm->SetLayoutInProgress( false );
 }
 
-void MA_FASTCALL lcl_RecalcTable( SwTabFrm& rTab,
+void lcl_RecalcTable( SwTabFrm& rTab,
                                   SwLayoutFrm *pFirstRow,
                                   SwLayNotify &rNotify )
 {
@@ -3767,7 +3767,7 @@ void SwRowFrm::MakeAll()
 |*  SwRowFrm::Format()
 |*
 |*************************************************************************/
-long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
+long CalcHeightWidthFlys( const SwFrm *pFrm )
 {
     SWRECTFN( pFrm )
     long nHeight = 0;
@@ -3903,7 +3903,7 @@ SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttr
 // #i26945# - add parameter <_bConsiderObjs> in order to
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
-SwTwips MA_FASTCALL lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
+SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
                                            const sal_Bool _bConsiderObjs,
                                            const SwBorderAttrs *pAttrs = 0 )
 {
@@ -3960,7 +3960,7 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
 // OD 2004-02-18 #106629# - correct type of 1st parameter
 // #i26945# - add parameter <_bConsiderObjs> in order to control,
 // if floating screen objects have to be considered for the minimal cell height
-SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
+SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
                                           const sal_Bool _bConsiderObjs )
 {
     SWRECTFN( _pRow )

@@ -50,12 +50,6 @@ class SwPageDesc;
 class SwTableBox;
 struct SwFindRowSpanCacheObj;
 
-#if defined(MSC)
-#define MA_FASTCALL __fastcall
-#else
-#define MA_FASTCALL
-#endif
-
 #define FAR_AWAY       LONG_MAX - 20000        //Initale Position der Flys.
 #define BROWSE_HEIGHT   56700L * 10L               //10 Meter
 
@@ -66,13 +60,13 @@ struct SwFindRowSpanCacheObj;
 //Painten des Hintergrunds. Mit Brush oder Graphic.
 // - add 6th parameter to indicate that method should
 //     consider background transparency, saved in the color of the brush item
-void MA_FASTCALL DrawGraphic( const SvxBrushItem *, OutputDevice *,
-      const SwRect &rOrg, const SwRect &rOut, const sal_uInt8 nGrfNum = GRFNUM_NO,
-      const sal_Bool bConsiderBackgroundTransparency = sal_False );
+void DrawGraphic( const SvxBrushItem *, OutputDevice *,
+                  const SwRect &rOrg, const SwRect &rOut, const sal_uInt8 nGrfNum = GRFNUM_NO,
+                  const sal_Bool bConsiderBackgroundTransparency = sal_False );
 
 // - method to align rectangle
 // Created declaration here to avoid <extern> declarations
-void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh );
+void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 
 // - method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations
@@ -84,13 +78,13 @@ void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh );
 
 //Nicht gleich die math.lib anziehen.
-sal_uLong MA_FASTCALL SqRt( BigInt nX );
+sal_uLong SqRt( BigInt nX );
 
 SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart );
 void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
 
 //CntntNodes besorgen, CntntFrms erzeugen und in den LayFrm haengen.
-void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
+void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  sal_Bool bPages = sal_False, sal_uLong nEndIndex = 0,
                  SwFrm *pPrv = 0 );
 
@@ -105,11 +99,11 @@ extern sal_Bool bDontCreateObjects;
 extern sal_Bool bSetCompletePaintOnInvalidate;
 
 //Fuer Tabelleneinstellung per Tastatur.
-long MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow );
-long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm );  //MA_FLY_HEIGHT
+long CalcRowRstHeight( SwLayoutFrm *pRow );
+long CalcHeightWidthFlys( const SwFrm *pFrm );
 
 //Neue Seite einsetzen
-SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
+SwPageFrm *InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
                           sal_Bool bOdd, sal_Bool bInsertEmpty, sal_Bool bFtn,
                           SwFrm *pSibling );
 
@@ -134,7 +128,7 @@ const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp );
 
 sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
 
-const SwFrm * MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage );
+const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
 
 // wird von SwCntntNode::GetFrm und von SwFlyFrm::GetFrm
 //              gerufen

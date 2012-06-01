@@ -83,7 +83,7 @@ SwColumnFrm::~SwColumnFrm()
 |*
 |*************************************************************************/
 
-void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
+void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
             "Keine Spalten zu entfernen." );
@@ -105,7 +105,7 @@ void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
     }
 }
 
-SwLayoutFrm * MA_FASTCALL lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
+SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
 {
     SwFrm *pCol = pLay->Lower();
     if ( pLay->IsPageFrm() )

@@ -581,7 +581,7 @@ public:
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };
 
-const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
+const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                                          const Point &rPt,
                                          const SwCntntFrm *pCnt )
 {
@@ -896,7 +896,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
     return 0;
 }
 
-sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
+sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
                           const sal_Bool bBody, const sal_Bool bFtn )
 {
@@ -961,7 +961,7 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
     return nDistance;
 }
 
-const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
+const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                                   const sal_Bool bBody, const sal_Bool bFtn )
 {
     //Starting from pCnt searches the CntntFrm whose left upper corner is the

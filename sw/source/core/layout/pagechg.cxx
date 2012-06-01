@@ -405,7 +405,7 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
 |*      generischen Cntnt
 |*
 |*************************************************************************/
-void MA_FASTCALL lcl_FormatLay( SwLayoutFrm *pLay )
+void lcl_FormatLay( SwLayoutFrm *pLay )
 {
     //Alle LayoutFrms - nicht aber Tables, Flys o.ae. - formatieren.
 
@@ -420,7 +420,7 @@ void MA_FASTCALL lcl_FormatLay( SwLayoutFrm *pLay )
     pLay->Calc();
 }
 
-void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
+void lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
 {
     //Anlegen bzw. registrieren von Flys und Drawobjekten.
     //Die Formate stehen in der SpzTbl (vom Dokument).

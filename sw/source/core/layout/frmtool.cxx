@@ -1206,7 +1206,7 @@ void lcl_SetPos( SwFrm&             _rNewFrm,
         _rNewFrm.Frm().Pos().Y() += 1;
 }
 
-void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
+void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              sal_uLong nIndex, sal_Bool bPages, sal_uLong nEndIndex,
                              SwFrm *pPrv )
 {
@@ -2354,7 +2354,7 @@ const SdrObject *SwOrderIter::Prev()
 
 // #115759# - 'remove' also drawing object from page and
 // at-fly anchored objects from page
-void MA_FASTCALL lcl_RemoveObjsFromPage( SwFrm* _pFrm )
+void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 {
     OSL_ENSURE( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_RemoveFlysFromPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
@@ -2517,7 +2517,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 
 // #115759# - add also drawing objects to page and at-fly
 // anchored objects to page
-void MA_FASTCALL lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
+void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
 {
     OSL_ENSURE( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_AddFlysToPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
@@ -2666,7 +2666,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
 |*
 |*************************************************************************/
 
-sal_uLong MA_FASTCALL SqRt( BigInt nX )
+sal_uLong SqRt( BigInt nX )
 {
     BigInt nErg = 1;
 
@@ -2684,7 +2684,7 @@ sal_uLong MA_FASTCALL SqRt( BigInt nX )
 
 /*************************************************************************/
 
-SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
+SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
                           sal_Bool bOdd, sal_Bool bInsertEmpty, sal_Bool bFtn,
                           SwFrm *pSibling )
 {
@@ -2724,7 +2724,7 @@ SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 |*
 |*************************************************************************/
 
-void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
+void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 {
     SwSortedObjs *pObjs = (SwSortedObjs*)pAnch->GetDrawObjs();
     for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
@@ -2892,7 +2892,7 @@ void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
     }
 }
 
-void MA_FASTCALL lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
+void lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
     const SwRect &rRect, const PrepareHint eHint )
 {
     if ( pCnt->IsTxtFrm() )
@@ -3224,7 +3224,7 @@ sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
 
 //---------------------------------
 
-SwTwips MA_FASTCALL lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
+SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
 {
     if ( pCell->Lower()->IsCntntFrm() || pCell->Lower()->IsSctFrm() )
     {
@@ -3268,7 +3268,7 @@ SwTwips MA_FASTCALL lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
     }
 }
 
-SwTwips MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow )
+SwTwips CalcRowRstHeight( SwLayoutFrm *pRow )
 {
     SwTwips nRstHeight = LONG_MAX;
     SwLayoutFrm *pLow = (SwLayoutFrm*)pRow->Lower();
@@ -3280,7 +3280,7 @@ SwTwips MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow )
     return nRstHeight;
 }
 
-const SwFrm* MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage )
+const SwFrm* FindPage( const SwRect &rRect, const SwFrm *pPage )
 {
     if ( !rRect.IsOver( pPage->Frm() ) )
     {

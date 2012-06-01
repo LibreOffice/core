@@ -618,7 +618,7 @@ sal_Bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 //Ueberspringen von wiederholten Headlines.
 //MA 26. Jan. 98: Chg auch andere Geschuetzte Bereiche ueberspringen.
 // FME: Skip follow flow cells
-const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
+const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
                                                        GetNxtPrvCnt fnNxtPrv,
                                                        sal_Bool bMissHeadline,
                                                        sal_Bool bInReadOnly,
@@ -649,7 +649,7 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
     return pCnt;
 }
 
-sal_Bool MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
+sal_Bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     GetNxtPrvCnt fnNxtPrv, sal_Bool bInReadOnly )
 {
     OSL_ENSURE( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),

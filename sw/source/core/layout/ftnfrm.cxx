@@ -61,7 +61,7 @@
 
 #define ENDNOTE 0x80000000
 
-sal_uLong MA_FASTCALL lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
+sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
 {
     const SwFtnIdxs &rFtnIdxs = pDoc->GetFtnIdxs();
 

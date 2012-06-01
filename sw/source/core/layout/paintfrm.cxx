@@ -1180,7 +1180,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 // Correction: adjust rectangle on pixel level in order
 //          to assure, that the border 'leaves its original pixel', if it has to.
 //          No prior adjustments for odd relation between pixel and twip.
-void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
+void SwAlignRect( SwRect &rRect, const ViewShell *pSh )
 {
     if( !rRect.HasArea() )
         return;
@@ -1329,7 +1329,7 @@ void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
     pGrfRect->SSize( rOut.PixelToLogic( aPxRect.GetSize() ) );
 }
 
-long MA_FASTCALL lcl_AlignWidth( const long nWidth )
+long lcl_AlignWidth( const long nWidth )
 {
     if ( nWidth )
     {
@@ -1341,7 +1341,7 @@ long MA_FASTCALL lcl_AlignWidth( const long nWidth )
     return nWidth;
 }
 
-long MA_FASTCALL lcl_AlignHeight( const long nHeight )
+long lcl_AlignHeight( const long nHeight )
 {
     if ( nHeight )
     {
@@ -1353,14 +1353,14 @@ long MA_FASTCALL lcl_AlignHeight( const long nHeight )
     return nHeight;
 }
 
-long MA_FASTCALL lcl_MinHeightDist( const long nDist )
+long lcl_MinHeightDist( const long nDist )
 {
     if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
         return nDist;
     return ::lcl_AlignHeight( Max( nDist, nMinDistPixelH ));
 }
 
-long MA_FASTCALL lcl_MinWidthDist( const long nDist )
+long lcl_MinWidthDist( const long nDist )
 {
     if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
         return nDist;
@@ -1368,7 +1368,7 @@ long MA_FASTCALL lcl_MinWidthDist( const long nDist )
 }
 
 //Calculate PrtArea plus surrounding plus shadow.
-void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
+void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const sal_Bool bShadow )
 {
@@ -1463,7 +1463,7 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
-void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
+void lcl_ExtendLeftAndRight( SwRect&                _rRect,
                                          const SwFrm&           _rFrm,
                                          const SwBorderAttrs&   _rAttrs,
                                          const SwRectFn&        _rRectFn )
@@ -1482,7 +1482,7 @@ void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
     }
 }
 
-void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
+void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
                            const SwRect &rRect, SwRegionRects &rRegion )
 {
     const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
@@ -1800,7 +1800,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
         pOut->Pop();
 } // end of method <lcl_DrawGraphic>
 
-void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
+void DrawGraphic( const SvxBrushItem *pBrush,
                               OutputDevice *pOutDev,
                               const SwRect &rOrg,
                               const SwRect &rOut,
@@ -3257,7 +3257,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 |*
 |*************************************************************************/
 
-void MA_FASTCALL lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
+void lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
 {
     //It's possible that the Cont will get destroyed.
     SwCntntFrm *pCnt = pCont->ContainsCntnt();
@@ -3860,7 +3860,7 @@ void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 |*************************************************************************/
 
 //Weiter unten definiert
-void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
+void lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
                                const SwRect &rRect, const SwPageFrm *pPage );
 
 struct BorderLinesGuard
@@ -4413,7 +4413,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 // printer output device.
 // NOTE: For printer output device left/right border rectangle <_iorRect>
 //       has to be already non-overlapping the outer top/bottom border rectangle.
-void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
+void lcl_SubTopBottom( SwRect&              _iorRect,
                                    const SvxBoxItem&    _rBox,
                                    const SwBorderAttrs& _rAttrs,
                                    const SwFrm&         _rFrm,
@@ -6293,7 +6293,7 @@ SizePtr pWidth = &Size::nA;
 SizePtr pHeight = &Size::nB;
 
 // OD 18.11.2002 #99672# - new parameter <_pSubsLines>
-void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
+void lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const SwPageFrm *pPage,
                                   const Point &rP1,
                                   const Point &rP2,

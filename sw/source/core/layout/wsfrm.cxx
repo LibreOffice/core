@@ -3285,7 +3285,7 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
 /*************************************************************************
 |*  Local helpers for SwLayoutFrm::FormatWidthCols()
 |*************************************************************************/
-long MA_FASTCALL lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
+long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
     SwLayoutFrm *pCol = (SwLayoutFrm*)pLayFrm->Lower();
