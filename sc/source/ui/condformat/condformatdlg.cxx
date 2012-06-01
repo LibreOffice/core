@@ -29,6 +29,8 @@
 #include "condformatdlg.hxx"
 #include "condformatdlg.hrc"
 
+#include <vcl/vclevent.hxx>
+
 #include "anyrefdg.hxx"
 #include "document.hxx"
 #include "conditio.hxx"
@@ -36,8 +38,9 @@
 #include <iostream>
 
 ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent):
-    Control(pParent, ScResId( CTRL_ENTRY ) ),
+    Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
+    meType(CONDITION),
     maLbType( this, ScResId( LB_TYPE ) ),
     maFtCondNr( this, ScResId( FT_COND_NR ) ),
     maFtCondition( this, ScResId( FT_CONDITION ) ),
@@ -54,17 +57,11 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent):
     SwitchToType(COLLAPSED);
     FreeResource();
 
+    maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
+
     maLbType.SelectEntryPos(1);
     maLbCondType.SelectEntryPos(0);
     maEdVal2.Hide();
-}
-
-long ScCondFrmtEntry::GetHeight() const
-{
-    if(mbActive)
-	return 100;
-    else
-	return 10;
 }
 
 namespace {
@@ -83,9 +80,37 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
 	    break;
     }
 
+    return rtl::OUString("");
+}
+
+rtl::OUString getExpression(sal_Int32 nIndex)
+{
+    switch(nIndex)
+    {
+	case 0:
+	    return rtl::OUString("=");
+	case 1:
+	    return rtl::OUString("<");
+	case 2:
+	    return rtl::OUString(">");
+	case 5:
+	    return rtl::OUString("!=");
+	default:
+	    return rtl::OUString("not yet supported");
+    }
     return rtl::OUString();
 }
 
+}
+
+long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
+{
+    if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    {
+	std::cout << "ButtonDown " << std::endl;
+	ImplCallEventListenersAndHandler( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, maClickHdl, this );
+    }
+    Control::Notify(rNEvt);
 }
 
 void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
@@ -93,11 +118,16 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
     switch(eType)
     {
 	case COLLAPSED:
-	    maLbType.Hide();
-	    maFtCondition.SetText(getTextForType(meType));
-	    maFtCondition.Show();
-	    maEdVal2.Hide();
-	    maEdVal1.Hide();
+	    {
+		maLbType.Hide();
+		rtl::OUStringBuffer maCondText(getTextForType(meType));
+		maCondText.append(rtl::OUString(" "));
+		maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
+		maFtCondition.SetText(maCondText.makeStringAndClear());
+		maFtCondition.Show();
+		maEdVal2.Hide();
+		maEdVal1.Hide();
+	    }
 	    break;
 	default:
 	    maLbType.Show();
@@ -111,36 +141,33 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
 
 void ScCondFrmtEntry::Select()
 {
-    mbActive = !mbActive;
+    Size aSize = GetSizePixel();
+    aSize.Height() = 130;
+    SetSizePixel(aSize);
+    SetControlBackground(Color(COL_RED));
+    SwitchToType(meType);
+}
 
-    if(mbActive)
-    {
-	Size aSize = GetSizePixel();
-	aSize.Height() += 120;
-	SetSizePixel(aSize);
-	SetControlBackground(Color(COL_RED));
-	SwitchToType(meType);
-    }
-    else
-    {
-	Size aSize = GetSizePixel();
-	aSize.Height() = 60;
-	SetSizePixel(aSize);
-	SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
-	SwitchToType(COLLAPSED);
-    }
+void ScCondFrmtEntry::Deselect()
+{
+    Size aSize = GetSizePixel();
+    aSize.Height() = 40;
+    SetSizePixel(aSize);
+    SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
+    SwitchToType(COLLAPSED);
 }
 
 ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId):
     Control(pParent, rResId),
     mbHasScrollBar(false),
-    mpScrollBar(NULL),
+    mpScrollBar(new ScrollBar(this, WB_VERT )),
     mnTopIndex(0)
 {
+    mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
+    mpScrollBar->EnableDrag();
     maEntries.push_back( new ScCondFrmtEntry(this) );
     maEntries.push_back( new ScCondFrmtEntry(this) );
     maEntries.push_back( new ScCondFrmtEntry(this) );
-    maEntries[1].Select();
 
     RecalcAll();
     FreeResource();
@@ -148,10 +175,43 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId):
 
 void ScCondFormatList::RecalcAll()
 {
+    sal_Int32 nTotalHeight = 0;
+    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+	nTotalHeight += itr->GetSizePixel().Height();
+    }
+
+    Size aCtrlSize = GetOutputSize();
+    long nSrcBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    if(nTotalHeight > GetSizePixel().Height())
+    {
+	mbHasScrollBar = true;
+	mpScrollBar->SetPosSizePixel(Point(aCtrlSize.Width() -nSrcBarSize, 0),
+					Size(nSrcBarSize, aCtrlSize.Height()) );
+	std::cout << "Need ScrollBar" << std::endl;
+	mpScrollBar->SetRangeMax(nTotalHeight);
+	mpScrollBar->SetVisibleSize(aCtrlSize.Height());
+	mpScrollBar->Show();
+    }
+    else
+    {
+	std::cout << "Don't need ScrollBar" << std::endl;
+
+	mbHasScrollBar = false;
+	mpScrollBar->Hide();
+    }
+
     Point aPoint(0,0);
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
 	itr->SetPosPixel(aPoint);
+	Size aSize = itr->GetSizePixel();
+	if(mbHasScrollBar)
+	    aSize.Width() = aCtrlSize.Width() - nSrcBarSize;
+	else
+	    aSize.Width() = aCtrlSize.Width();
+	itr->SetSizePixel(aSize);
+
 	aPoint.Y() += itr->GetSizePixel().Height();
     }
 }
@@ -183,6 +243,22 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
     return 0;
 }
 
+IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
+{
+    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+	itr->Deselect();
+    }
+    pEntry->Select();
+    RecalcAll();
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
+{
+
+    return 0;
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

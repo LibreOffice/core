@@ -36,6 +36,7 @@
 #include "rangelst.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScConditionalFormat;
@@ -53,6 +54,8 @@ class ScCondFrmtEntry : public Control
 private:
     bool mbActive;
     ScCondFormatEntryType meType;
+
+    Link maClickHdl;
 
     //general ui elements
     ListBox maLbType;
@@ -75,8 +78,10 @@ private:
 public:
     ScCondFrmtEntry( Window* pParent );
 
-    long GetHeight() const;
+    virtual long Notify( NotifyEvent& rNEvt );
+
     void Select();
+    void Deselect();
 };
 
 class ScCondFormatList : public Control
@@ -86,7 +91,7 @@ private:
     EntryContainer maEntries;
 
     bool mbHasScrollBar;
-    ScrollBar* mpScrollBar;
+    boost::scoped_ptr<ScrollBar> mpScrollBar;
     long mnTopIndex;
 
     void RecalcAll();
@@ -94,6 +99,8 @@ public:
     ScCondFormatList( Window* pParent, const ResId& rResId );
 
     DECL_LINK( AddBtnHdl, void* );
+    DECL_LINK( ScrollHdl, void* );
+    DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
 };
 
