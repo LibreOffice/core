@@ -65,9 +65,16 @@ struct SfxDock_Impl
     long                nSize;
 };
 
-typedef SfxDock_Impl* SfxDockPtr;
-SV_DECL_PTRARR_DEL( SfxDockArr_Impl, SfxDockPtr, 4 )
-SV_IMPL_PTRARR( SfxDockArr_Impl, SfxDockPtr);
+class SfxDockArr_Impl : public std::vector<SfxDock_Impl*>
+{
+public:
+    ~SfxDockArr_Impl()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+
+};
 
 class SfxEmptySplitWin_Impl : public SplitWindow
 {
@@ -273,7 +280,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
                         pDock->bNewLine = sal_True;
                 }
 
-                pDockArr->Insert(pDock,n);
+                pDockArr->insert(pDockArr->begin() + n, pDock);
             }
         }
     }
@@ -317,7 +324,7 @@ void SfxSplitWindow::SaveConfig_Impl()
 
     sal_uInt16 nCount = 0;
     sal_uInt16 n;
-    for ( n=0; n<pDockArr->Count(); n++ )
+    for ( n=0; n<pDockArr->size(); n++ )
     {
         SfxDock_Impl *pDock = (*pDockArr)[n];
         if ( pDock->bHide || pDock->pWin )
@@ -326,7 +333,7 @@ void SfxSplitWindow::SaveConfig_Impl()
 
     aWinData += String::CreateFromInt32( nCount );
 
-    for ( n=0; n<pDockArr->Count(); n++ )
+    for ( n=0; n<pDockArr->size(); n++ )
     {
         SfxDock_Impl *pDock = (*pDockArr)[n];
         if ( !pDock->bHide && !pDock->pWin )
@@ -394,7 +401,7 @@ void SfxSplitWindow::Split()
 
     SplitWindow::Split();
 
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         SfxDock_Impl *pD = (*pDockArr)[n];
@@ -440,7 +447,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     sal_Bool bNewLine = sal_True;
     sal_Bool bSaveConfig = sal_False;
     SfxDock_Impl *pFoundDock=0;
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         SfxDock_Impl *pDock = (*pDockArr)[n];
@@ -500,7 +507,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         // Not found, insert at end
         pFoundDock = new SfxDock_Impl;
         pFoundDock->bHide = sal_True;
-        pDockArr->Insert( pFoundDock, nCount );
+        pDockArr->push_back( pFoundDock );
         pFoundDock->nType = pDockWin->GetType();
         nLine++;
         nPos = 0;
@@ -527,7 +534,7 @@ void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, sal_Bool bSa
 
 {
     SfxDock_Impl *pDock=0;
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     sal_Bool bFound = sal_False;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
@@ -539,7 +546,7 @@ void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, sal_Bool bSa
 
             // Window has a position, this we forget
             bFound = sal_True;
-            pDockArr->Remove(n);
+            pDockArr->erase(pDockArr->begin() + n);
             break;
         }
     }
@@ -599,7 +606,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
     // The window must be inserted before the first window so that it has the
     // same or a greater position than pDockWin.
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     sal_uInt16 nLastWindowIdx(0);
 
     // If no window is found, a first window is inserted
@@ -640,7 +647,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         nInsertPos = nLastWindowIdx + 1;    // ignore all non-windows after the last window
     }
 
-    pDockArr->Insert(pDock, nInsertPos);
+    pDockArr->insert(pDockArr->begin() + nInsertPos, pDock);
     InsertWindow_Impl( pDock, rSize, nLine, nPos, bNewLine );
     SaveConfig_Impl();
 }
@@ -794,7 +801,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, sal_Bool bHide )
     }
 
     SfxDock_Impl *pDock=0;
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         pDock = (*pDockArr)[n];
@@ -1214,7 +1221,7 @@ void SfxSplitWindow::FadeIn()
 
 void SfxSplitWindow::Show_Impl()
 {
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         SfxDock_Impl *pDock = (*pDockArr)[n];
@@ -1227,7 +1234,7 @@ sal_Bool SfxSplitWindow::ActivateNextChild_Impl( sal_Bool bForward )
 {
     // If no pActive, go to first and last window (!bForward is first
     // decremented in the loop)
-    sal_uInt16 nCount = pDockArr->Count();
+    sal_uInt16 nCount = pDockArr->size();
     sal_uInt16 n = bForward ? 0 : nCount;
 
     // if Focus is within, then move to a window forward or backwards
