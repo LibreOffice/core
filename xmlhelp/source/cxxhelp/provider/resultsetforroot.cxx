@@ -55,17 +55,17 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< lang::XMultiServiceFac
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ));
+    aCommand.Name = rtl::OUString( "getPropertyValues" );
     aCommand.Argument <<= m_sProperty;
 
     for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )
     {
         m_aPath[i] =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" )) +
-            m_aPath[i]                                               +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "?Language=" ))           +
-            m_aURLParameter.get_language()                           +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&System=" ))             +
+            rtl::OUString( "vnd.sun.star.help://" ) +
+            m_aPath[i]                              +
+            rtl::OUString( "?Language=" )           +
+            m_aURLParameter.get_language()          +
+            rtl::OUString( "&System=" )             +
             m_aURLParameter.get_system();
 
         m_nRow = sal_Int32( i );

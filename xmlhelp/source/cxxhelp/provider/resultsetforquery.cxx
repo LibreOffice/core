@@ -94,7 +94,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_aURLParameter( aURLParameter )
 {
     Reference< XTransliteration > xTrans(
-        xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Transliteration" )) ),
+        xMSF->createInstance( rtl::OUString( "com.sun.star.i18n.Transliteration" ) ),
         UNO_QUERY );
     Locale aLocale( aURLParameter.get_language(),
                     rtl::OUString(),
@@ -323,8 +323,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         delete pIndexFolderVector;
     }
 
-    sal_Int32 replIdx = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#HLP#" )).getLength();
-    rtl::OUString replWith = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ));
+    sal_Int32 replIdx = rtl::OUString( "#HLP#" ).getLength();
+    rtl::OUString replWith = rtl::OUString( "vnd.sun.star.help://" );
 
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
@@ -338,16 +338,16 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ));
+    aCommand.Name = rtl::OUString( "getPropertyValues" );
     aCommand.Argument <<= m_sProperty;
 
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )
     {
         m_aPath[m_nRow] =
-            m_aPath[m_nRow]                                          +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "?Language=" ))           +
-            m_aURLParameter.get_language()                           +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&System=" ))             +
+            m_aPath[m_nRow]                         +
+            rtl::OUString( "?Language=" )           +
+            m_aURLParameter.get_language()          +
+            rtl::OUString( "&System=" )             +
             m_aURLParameter.get_system();
 
         uno::Reference< XContent > content = queryContent();

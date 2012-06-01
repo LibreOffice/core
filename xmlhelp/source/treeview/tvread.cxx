@@ -185,11 +185,11 @@ using namespace com::sun::star::deployment;
 
 
 ConfigData::ConfigData()
-    : prodName(RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME")),
-      prodVersion(RTL_CONSTASCII_USTRINGPARAM("%PRODUCTVERSION")),
-      vendName(RTL_CONSTASCII_USTRINGPARAM("%VENDORNAME")),
-      vendVersion(RTL_CONSTASCII_USTRINGPARAM("%VENDORVERSION")),
-      vendShort(RTL_CONSTASCII_USTRINGPARAM("%VENDORSHORT"))
+    : prodName("%PRODUCTNAME"),
+      prodVersion("%PRODUCTVERSION"),
+      vendName("%VENDORNAME"),
+      vendVersion("%VENDORVERSION"),
+      vendShort("%VENDORSHORT")
 {
 }
 
@@ -308,7 +308,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
     {
         TargetURL = ( tvDom->getTargetURL() + configData.appendix );
         if( !tvDom->anchor.isEmpty() )
-            TargetURL += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#" )) +
+            TargetURL += ( rtl::OUString( "#" ) +
                            tvDom->anchor );
     }
     else
@@ -363,9 +363,9 @@ TVRead::getElementNames( )
 {
     Sequence< rtl::OUString > seq( 3 );
 
-    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ));
-    seq[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
-    seq[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Children" ));
+    seq[0] = rtl::OUString( "Title" );
+    seq[1] = rtl::OUString( "TargetURL" );
+    seq[2] = rtl::OUString( "Children" );
 
     return seq;
 }
@@ -666,7 +666,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
       // try to determine path from default
-      instPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$(instpath)/help" ));
+      instPath = rtl::OUString( "$(instpath)/help" );
 
     // replace anything like $(instpath);
     subst( xSMgr,instPath );
@@ -684,21 +684,21 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-              xSMgr ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY_THROW);
+              xSMgr ->createInstance(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-        aParam.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Product"));
+        aParam.Name    = ::rtl::OUString("nodepath");
+        aParam.Value <<= ::rtl::OUString("/org.openoffice.Setup/Product");
         lParams[0] = uno::makeAny(aParam);
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                    ::rtl::OUString("com.sun.star.configuration.ConfigurationAccess"),
                     lParams) );
 
         uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupExtension")));
+        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString("ooSetupExtension"));
 
         aRet >>= setupextension;
     }
@@ -707,7 +707,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     }
 
     rtl::OUString productVersion( setupversion +
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " )) +
+                                  rtl::OUString( " " ) +
                                   setupextension );
     rtl::OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
 
@@ -717,7 +717,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
     if( errFile != osl::FileBase::E_None ) return configData;
     if( url.lastIndexOf( sal_Unicode( '/' ) ) != url.getLength() - 1 )
-        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
+        url += rtl::OUString( "/" );
     rtl::OUString ret;
     sal_Int32 idx;
     osl::DirectoryItem aDirItem;
@@ -730,8 +730,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         ret = locale.copy( 0,idx );
     else
         {
-        locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en-US" ));
-        ret = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+        locale = rtl::OUString( "en-US" );
+        ret = rtl::OUString("en");
         }
     url = url + ret;
 
@@ -804,11 +804,11 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
        configData.system = system;
     configData.locale = locale;
     configData.appendix =
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "?Language=" )) +
+        rtl::OUString( "?Language=" ) +
         configData.locale +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&System=" )) +
+        rtl::OUString( "&System=" ) +
         configData.system +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&UseDB=no" )) ;
+        rtl::OUString( "&UseDB=no" ) ;
 
     return configData;
 }
@@ -830,7 +830,7 @@ TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr
         try
         {
             rtl::OUString sProviderService =
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
+                rtl::OUString( "com.sun.star.configuration.ConfigurationProvider" );
             sProvider =
                 Reference< XMultiServiceFactory >(
                     m_xSMgr->createInstance( sProviderService ),
@@ -857,7 +857,7 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
     {
         Sequence< Any > seq(1);
         rtl::OUString sReaderService =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
+            rtl::OUString( "com.sun.star.configuration.ConfigurationAccess" );
 
         seq[0] <<= rtl::OUString::createFromAscii( file );
 
@@ -934,7 +934,7 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
         {
             xCfgMgr =
                 Reference< XConfigManager >(
-                    m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" )) ),
+                    m_xSMgr->createInstance( rtl::OUString( "com.sun.star.config.SpecialConfigManager" ) ),
                     UNO_QUERY );
         }
         catch( const com::sun::star::uno::Exception& )
@@ -953,9 +953,9 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
 //===================================================================
 // class ExtensionIteratorBase
 
-static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
-static rtl::OUString aHelpFilesBaseName(RTL_CONSTASCII_USTRINGPARAM("help"));
-static rtl::OUString aHelpMediaType(RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.help"));
+static rtl::OUString aSlash("/");
+static rtl::OUString aHelpFilesBaseName("help");
+static rtl::OUString aHelpMediaType("application/vnd.sun.star.help");
 
 ExtensionIteratorBase::ExtensionIteratorBase( const rtl::OUString& aLanguage )
         : m_eState( USER_EXTENSIONS )
@@ -972,19 +972,19 @@ void ExtensionIteratorBase::init()
     if (xProps.is())
     {
         xProps->getPropertyValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= m_xContext;
+            ::rtl::OUString( "DefaultContext" ) ) >>= m_xContext;
         OSL_ASSERT( m_xContext.is() );
     }
     if( !m_xContext.is() )
     {
         throw RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExtensionIteratorBase::init(), no XComponentContext" )),
+            ::rtl::OUString( "ExtensionIteratorBase::init(), no XComponentContext" ),
             Reference< XInterface >() );
     }
 
     Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )),
+        xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
 
     m_bUserPackagesLoaded = false;
@@ -1055,7 +1055,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     if( !m_bUserPackagesLoaded )
     {
         Reference< XPackageManager > xUserManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")) );
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString("user") );
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -1085,7 +1085,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     if( !m_bSharedPackagesLoaded )
     {
         Reference< XPackageManager > xSharedManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")) );
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString("shared") );
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -1115,7 +1115,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     if( !m_bBundledPackagesLoaded )
     {
         Reference< XPackageManager > xBundledManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")) );
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString("bundled") );
         m_aBundledPackagesSeq = xBundledManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -1239,18 +1239,18 @@ rtl::OUString TreeFileIterator::expandURL( const rtl::OUString& aURL )
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
 
         xFac = Reference< uri::XUriReferenceFactory >(
-            xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
+            xSMgr->createInstanceWithContext( rtl::OUString(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
         if( !xFac.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Databases::expand(), could not instatiate UriReferenceFactory." )),
+                ::rtl::OUString( "Databases::expand(), could not instatiate UriReferenceFactory." ),
                 Reference< XInterface >() );
         }
 
         xMacroExpander = Reference< util::XMacroExpander >(
             m_xContext->getValueByName(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ),
+            ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander" ) ),
             UNO_QUERY_THROW );
      }
 

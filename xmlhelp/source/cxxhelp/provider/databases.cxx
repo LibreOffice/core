@@ -82,7 +82,7 @@ using namespace com::sun::star::deployment;
 using namespace com::sun::star::beans;
 
 
-static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
+static rtl::OUString aSlash("/");
 
 rtl::OUString Databases::expandURL( const rtl::OUString& aURL )
 {
@@ -104,18 +104,18 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
         Reference< XMultiComponentFactory > xSMgr( xContext->getServiceManager(), UNO_QUERY );
 
         xFac = Reference< uri::XUriReferenceFactory >(
-            xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")), xContext ) , UNO_QUERY );
+            xSMgr->createInstanceWithContext( rtl::OUString(
+            "com.sun.star.uri.UriReferenceFactory"), xContext ) , UNO_QUERY );
         if( !xFac.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Databases::expand(), could not instatiate UriReferenceFactory." )),
+                ::rtl::OUString( "Databases::expand(), could not instatiate UriReferenceFactory." ),
                 Reference< XInterface >() );
         }
 
         xMacroExpander = Reference< util::XMacroExpander >(
             xContext->getValueByName(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ),
+            ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander" ) ),
             UNO_QUERY_THROW );
      }
 
@@ -153,13 +153,13 @@ Databases::Databases( sal_Bool showBasic,
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
-      newProdName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$[officename]" )) ),
-      newProdVersion(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$[officeversion]" )) ),
-      prodName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" )) ),
-      prodVersion( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" )) ),
-      vendName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "%VENDORNAME" )) ),
-      vendVersion( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "%VENDORVERSION" )) ),
-      vendShort( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "%VENDORSHORT" )) ),
+      newProdName(rtl::OUString( "$[officename]" ) ),
+      newProdVersion(rtl::OUString( "$[officeversion]" ) ),
+      prodName( rtl::OUString( "%PRODUCTNAME" ) ),
+      prodVersion( rtl::OUString( "%PRODUCTVERSION" ) ),
+      vendName( rtl::OUString( "%VENDORNAME" ) ),
+      vendVersion( rtl::OUString( "%VENDORVERSION" ) ),
+      vendShort( rtl::OUString( "%VENDORSHORT" ) ),
       m_aImagesZipPaths( imagesZipPaths ),
       m_nSymbolsStyle( 0 )
 {
@@ -182,7 +182,7 @@ Databases::Databases( sal_Bool showBasic,
     setInstallPath( instPath );
 
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        m_xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )),
+        m_xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
 }
 
@@ -248,7 +248,7 @@ static bool impl_getZipFile(
         {
             if ( 1 + aFileName.lastIndexOf( '/' ) != aFileName.getLength() )
             {
-                aFileName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
+                aFileName += rtl::OUString( "/" );
             }
             aFileName += rZipName;
             // the icons are not read when the URL is a symlink
@@ -270,23 +270,23 @@ rtl::OString Databases::getImagesZipFileURL()
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            m_xSMgr ->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")), m_xContext), uno::UNO_QUERY_THROW);
+            m_xSMgr ->createInstanceWithContext(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider"), m_xContext), uno::UNO_QUERY_THROW);
 
         // set root path
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-        aParam.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common"));
+        aParam.Name    = ::rtl::OUString("nodepath");
+        aParam.Value <<= ::rtl::OUString("org.openoffice.Office.Common");
         lParams[0] = uno::makeAny(aParam);
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                    ::rtl::OUString("com.sun.star.configuration.ConfigurationAccess"),
                     lParams) );
 
         bool bChanged = false;
         uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
-        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc/SymbolSet")));
+        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString("Misc/SymbolSet"));
         if ( (aResult >>= nSymbolsStyle) && m_nSymbolsStyle != nSymbolsStyle )
         {
             m_nSymbolsStyle = nSymbolsStyle;
@@ -296,21 +296,21 @@ rtl::OString Databases::getImagesZipFileURL()
         if ( m_aImagesZipFileURL.isEmpty() || bChanged )
         {
             rtl::OUString aImageZip, aSymbolsStyleName;
-            aResult = xAccess->getByHierarchicalName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc/SymbolStyle")));
+            aResult = xAccess->getByHierarchicalName(::rtl::OUString("Misc/SymbolStyle"));
             aResult >>= aSymbolsStyleName;
 
             bool bFound = false;
             if ( !aSymbolsStyleName.isEmpty() )
             {
-                rtl::OUString aZipName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "images_" ));
+                rtl::OUString aZipName = rtl::OUString( "images_" );
                 aZipName += aSymbolsStyleName;
-                aZipName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".zip" ));
+                aZipName += rtl::OUString( ".zip" );
 
                 bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
             }
 
             if ( ! bFound )
-                bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "images.zip" )), aImageZip );
+                bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString( "images.zip" ), aImageZip );
 
             if ( ! bFound )
                 aImageZip = rtl::OUString();
@@ -455,7 +455,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    rtl::OUString key = processLang(Language) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) + Module;
+    rtl::OUString key = processLang(Language) + rtl::OUString( "/" ) + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
         m_aModInfo.insert( ModInfoTable::value_type( key,0 ) );
@@ -466,7 +466,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
     {
         osl::File cfgFile( getInstallPathAsURL() +
                            key +
-                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".cfg" )) );
+                           rtl::OUString( ".cfg" ) );
 
         if( osl::FileBase::E_None != cfgFile.open( osl_File_OpenFlag_Read ) )
             it->second = 0;
@@ -485,7 +485,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 
             const sal_Unicode* str = fileContent.getStr();
             rtl::OUString current,lang_,program,startid,title,heading,fulltext;
-            rtl::OUString order(RTL_CONSTASCII_USTRINGPARAM( "1" ));
+            rtl::OUString order( "1" );
 
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
             {
@@ -601,7 +601,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
     osl::MutexGuard aGuard( m_aMutex );
 
 
-    rtl::OUString aFileExt( helpText ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ht")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".db" )) );
+    rtl::OUString aFileExt( helpText ? rtl::OUString(".ht") : rtl::OUString(".db") );
     rtl::OUString dbFileName = aSlash + Database + aFileExt;
     rtl::OUString key;
     if( pExtensionPath == NULL )
@@ -627,7 +627,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         rtl::OUString fileNameDBHelp( fileURL );
         //Extensions always use the new format
         if( pExtensionPath != NULL )
-            fileNameDBHelp += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" ));
+            fileNameDBHelp += rtl::OUString( "_" );
         //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
         //fails for example when using long path names on Windows (starting with \\?\)
         if( m_xSFA->exists( fileNameDBHelp ) )
@@ -665,28 +665,28 @@ Databases::getCollator( const rtl::OUString& Language,
     {
         it->second =
             Reference< XCollator > (
-                m_xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )),
+                m_xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.i18n.Collator" ),
                 m_xContext ), UNO_QUERY );
         rtl::OUString langStr = processLang(Language);
         rtl::OUString countryStr = country(Language);
         if( countryStr.isEmpty() )
         {
             if( langStr.compareToAscii("de") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"));
+                countryStr = rtl::OUString("DE");
             else if( langStr.compareToAscii("en") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+                countryStr = rtl::OUString("US");
             else if( langStr.compareToAscii("es") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ES"));
+                countryStr = rtl::OUString("ES");
             else if( langStr.compareToAscii("it") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IT"));
+                countryStr = rtl::OUString("IT");
             else if( langStr.compareToAscii("fr") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FR"));
+                countryStr = rtl::OUString("FR");
             else if( langStr.compareToAscii("sv") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SE"));
+                countryStr = rtl::OUString("SE");
             else if( langStr.compareToAscii("ja") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JP"));
+                countryStr = rtl::OUString("JP");
             else if( langStr.compareToAscii("ko") == 0 )
-                countryStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KR"));
+                countryStr = rtl::OUString("KR");
         }
         it->second->loadDefaultCollator(  Locale( langStr,
                                                   countryStr,
@@ -901,7 +901,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    rtl::OUString key = processLang(Language) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) + Database;
+    rtl::OUString key = processLang(Language) + rtl::OUString( "/" ) + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
         m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) );
@@ -921,7 +921,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
             rtl::OUString fileNameDBHelp( fileURL );
             if( bExtension )
-                fileNameDBHelp += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" ));
+                fileNameDBHelp += rtl::OUString( "_" );
             if( m_xSFA->exists( fileNameDBHelp ) )
             {
                 DBHelp aDBHelp( fileNameDBHelp, m_xSFA );
@@ -1077,14 +1077,14 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
 
             // let ZipPackage be used ( no manifest.xml is required )
             beans::NamedValue aArg;
-            aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+            aArg.Name = ::rtl::OUString( "StorageFormat" );
             aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
             aArguments[ 1 ] <<= aArg;
 
             Reference< XInterface > xIfc
                 = m_xSMgr->createInstanceWithArgumentsAndContext(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.packages.comp.ZipPackage" )),
+                    rtl::OUString(
+                        "com.sun.star.packages.comp.ZipPackage" ),
                     aArguments, m_xContext );
 
             if ( xIfc.is() )
@@ -1231,7 +1231,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         {
             // #i50760: "default" needs to adapt HC mode
             uno::Reference< awt::XToolkit > xToolkit = uno::Reference< awt::XToolkit >(
-                    ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ), uno::UNO_QUERY );
+                    ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( "com.sun.star.awt.Toolkit" ) ), uno::UNO_QUERY );
             if ( xToolkit.is() )
             {
                 uno::Reference< awt::XExtendedToolkit > xExtToolkit( xToolkit, uno::UNO_QUERY );
@@ -1243,9 +1243,9 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
                         uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
                         if ( xVclWindowPeer.is() )
                         {
-                            uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HighContrastMode" )) );
+                            uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString( "HighContrastMode" ) );
                             if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
-                                aCSS = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "highcontrastblack" ));
+                                aCSS = rtl::OUString( "highcontrastblack" );
                         }
                     }
                 }
@@ -1259,14 +1259,14 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
                 fileURL =
                     getInstallPathAsURL()  +
                     processLang( Language )       +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) +
+                    rtl::OUString( "/" ) +
                     aCSS +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".css" ));
+                    rtl::OUString( ".css" );
             else if( retry == 1 )
                 fileURL =
                     getInstallPathAsURL()  +
                     aCSS +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".css" ));
+                    rtl::OUString( ".css" );
 
             osl::DirectoryItem aDirItem;
             osl::File aFile( fileURL );
@@ -1291,7 +1291,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
             if ( !retry && error && bHighContrastMode )
             {
                 // fall back to default css
-                aCSS = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "default" ));
+                aCSS = rtl::OUString( "default" );
                 retry = 2;
                 bHighContrastMode = sal_False;
             }
@@ -1398,7 +1398,7 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
         //TODO: check returned error code
 
     if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
-        m_aInstallDirectory += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
+        m_aInstallDirectory += rtl::OUString( "/" );
 }
 
 
@@ -1438,20 +1438,20 @@ void ExtensionIteratorBase::init()
         if (xProps.is())
         {
             xProps->getPropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= m_xContext;
+                ::rtl::OUString( "DefaultContext" ) ) >>= m_xContext;
             OSL_ASSERT( m_xContext.is() );
         }
     }
     if( !m_xContext.is() )
     {
         throw RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExtensionIteratorBase::init(), no XComponentContext" )),
+            ::rtl::OUString( "ExtensionIteratorBase::init(), no XComponentContext" ),
             Reference< XInterface >() );
     }
 
     Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )),
+        xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
 
     m_bUserPackagesLoaded = false;
@@ -1491,7 +1491,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     }
     if( bRegistered )
     {
-        rtl::OUString aHelpMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.help" ) );
+        rtl::OUString aHelpMediaType( "application/vnd.sun.star.help" );
         if( xPackage->isBundle() )
         {
             Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
@@ -1535,7 +1535,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aUserPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( rtl::OUString("user"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bUserPackagesLoaded = true;
     }
 
@@ -1563,7 +1563,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aSharedPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( rtl::OUString("shared"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bSharedPackagesLoaded = true;
     }
 
@@ -1591,7 +1591,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aBundledPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( rtl::OUString("bundled"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bBundledPackagesLoaded = true;
     }
 
@@ -1826,7 +1826,7 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
                 aRetFile =
                     m_rDatabases.getInstallPathAsURL() +
                     m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".key" ));
+                    rtl::OUString( ".key" );
 
                 o_rbExtension = false;
 
@@ -1887,7 +1887,7 @@ rtl::OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     ( Reference< deployment::XPackage > xPackage )
 {
     rtl::OUString aExpandedURL =
-        implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".key" )), xPackage );
+        implGetFileFromPackage( rtl::OUString( ".key" ), xPackage );
 
     return aExpandedURL;
 }
@@ -1960,7 +1960,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     Reference< XHierarchicalNameAccess > xNA;
 
     rtl::OUString zipFile =
-        implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".jar" )), xPackage );
+        implGetFileFromPackage( rtl::OUString( ".jar" ), xPackage );
 
     try
     {
@@ -1969,15 +1969,15 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+        aArg.Name = ::rtl::OUString( "StorageFormat" );
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
         Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
         Reference< XInterface > xIfc
             = xSMgr->createInstanceWithArgumentsAndContext(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.packages.comp.ZipPackage" )),
+                rtl::OUString(
+                    "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments, m_xContext );
 
         if ( xIfc.is() )
@@ -2030,7 +2030,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
                 aIndexFolder =
                     m_rDatabases.getInstallPathAsURL() +
                     m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" ));
+                    rtl::OUString( ".idxl" );
 
                 o_rbTemporary = false;
                 o_rbExtension = false;
@@ -2090,7 +2090,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
 rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, Reference< deployment::XPackage > xPackage )
 {
     rtl::OUString aIndexFolder =
-        implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
+        implGetFileFromPackage( rtl::OUString( ".idxl" ), xPackage );
 
     o_rbTemporary = false;
     if( !m_xSFA->isFolder( aIndexFolder ) )
@@ -2103,7 +2103,7 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
             bool bIsWriteAccess = false;
             try
             {
-                rtl::OUString aCreateTestFolder = aLangURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CreateTestFolder" ));
+                rtl::OUString aCreateTestFolder = aLangURL + rtl::OUString( "CreateTestFolder" );
                 m_xSFA->createFolder( aCreateTestFolder );
                 if( m_xSFA->isFolder( aCreateTestFolder  ) )
                     bIsWriteAccess = true;
@@ -2124,9 +2124,9 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
                 if( nLastSlash != -1 )
                     aLang = aLangURL.copy( nLastSlash + 1 );
                 else
-                    aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
+                    aLang = rtl::OUString( "en" );
 
-		rtl::OUString aMod(RTL_CONSTASCII_USTRINGPARAM("help"));
+                rtl::OUString aMod("help");
 
                 rtl::OUString aZipDir = aLangURL;
                 if( !bIsWriteAccess )
@@ -2154,9 +2154,9 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
 		aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )
-                    aIndexFolder = implGetFileFromPackage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".idxl" )), xPackage );
+                    aIndexFolder = implGetFileFromPackage( rtl::OUString( ".idxl" ), xPackage );
                 else
-                    aIndexFolder = aZipDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/help.idxl" ));
+                    aIndexFolder = aZipDir + rtl::OUString( "/help.idxl" );
             }
             catch (const Exception &)
             {

@@ -76,21 +76,21 @@ int main( int argc,char* argv[] )
 
     try
     {
-        rtl::OUString installDir(RTL_CONSTASCII_USTRINGPARAM("//./e|/index/"));
+        rtl::OUString installDir("//./e|/index/");
         QueryProcessor queryProcessor( installDir );
 
         std::vector<rtl::OUString> Query(2);
-        Query[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "text*" ));
-        Query[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "abbildung" ));
-        rtl::OUString Scope = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "headingheading" ));
+        Query[0] = rtl::OUString( "text*" );
+        Query[1] = rtl::OUString( "abbildung" );
+        rtl::OUString Scope = rtl::OUString( "headingheading" );
         int HitCount = 40;
 
          QueryStatement queryStatement( HitCount,Query,Scope );
         queryResults = queryProcessor.processQuery( queryStatement );
 
         rtl::OUString translations[2];
-        translations[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#HLP#" ));
-        translations[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ));
+        translations[0] = rtl::OUString( "#HLP#" );
+        translations[1] = rtl::OUString( "vnd.sun.star.help://" );
 
         PrefixTranslator* translator =  PrefixTranslator::makePrefixTranslator( translations,2 );
 
