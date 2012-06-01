@@ -40,6 +40,10 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
 
 $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
+$(eval $(call gb_Library_use_externals,drawinglayer,\
+	libxml2 \
+))
+
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     basegfx \
     canvastools \
@@ -172,7 +176,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor3d/zbufferprocessor3d \
     drawinglayer/source/texture/texture3d \
     drawinglayer/source/texture/texture \
-    drawinglayer/source/dumper/ChartViewDumper \
+    drawinglayer/source/dumper/XShapeDumper \
 ))
 
 # vim: set noet sw=4 ts=4:

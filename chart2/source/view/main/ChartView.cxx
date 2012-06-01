@@ -73,6 +73,8 @@
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 
+#include <drawinglayer/XShapeDumper.hxx>
+
 #include <time.h>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
@@ -3024,7 +3026,7 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
 }
 
 /* ----------------------
-    goes to drawinglayer/
+    goes to drawinglayer/XShapeDumper.cxx
     ----------------------
 namespace {
 
@@ -3130,21 +3132,12 @@ rtl::OUString ChartView::dump() throw (uno::RuntimeException)
 
     if (!xPageShapes.is())
         return rtl::OUString();
+    else
+    {
+        XShapeDumper dumper;
+        return dumper.dump(xPageShapes);
+    }
 
-    rtl::OStringBuffer aString;
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
-    xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
-    xmlTextWriterSetIndent( xmlWriter, 1 );
-
-    xmlTextWriterStartDocument( xmlWriter, NULL, NULL, NULL );
-
-    dumpXShapes( xPageShapes, xmlWriter );
-
-    xmlTextWriterEndDocument( xmlWriter );
-    xmlFreeTextWriter( xmlWriter );
-
-
-    return OStringToOUString(aString.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
 }
 
 //.............................................................................
