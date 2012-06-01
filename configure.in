@@ -2524,10 +2524,6 @@ dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-
-    dnl Include twain scanners
-    BUILD_TYPE="$BUILD_TYPE TWAIN"
-
     dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
     if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then

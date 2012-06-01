@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn))
 
 $(eval $(call gb_Library_use_packages,scn,\
     sane_inc \
-    twain_inc \
 ))
 
 $(eval $(call gb_Library_use_api,scn,\
@@ -57,6 +56,8 @@ $(eval $(call gb_Library_add_exception_objects,scn,\
 ))
 
 ifeq ($(GUI),WNT)
+$(eval $(call gb_Library_use_packages,scn,twain_inc))
+
 $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/scanwin \
 ))

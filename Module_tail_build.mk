@@ -112,9 +112,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     test \
     toolkit \
 	tools \
-	$(if $(filter TWAIN,$(BUILD_TYPE)),\
-		twain \
-	) \
+    twain \
     ucb \
     unixODBC \
     UnoControls \
