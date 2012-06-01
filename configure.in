@@ -8060,16 +8060,20 @@ if test "$WANT_X11" = "yes"; then
     dnl ===================================================================
     AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt headers not found])],
      [#include <X11/Intrinsic.h>])
-fi
 
-AC_MSG_CHECKING([whether to use internal X11 extensions headers])
-if test "$with_system_xextensions_headers" != "no"; then
-    AC_MSG_RESULT([no])
-    AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
-     [#include <X11/extensions/shape.h>])
-else
-    AC_MSG_RESULT([yes])
-    BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
+    dnl ===================================================================
+    dnl Check for extension headers
+    dnl ===================================================================
+    AC_MSG_CHECKING([whether to use internal X11 extensions headers])
+    if test "$with_system_xextensions_headers" != "no"; then
+        AC_MSG_RESULT([no])
+        AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
+        [#include <X11/extensions/shape.h>])
+    else
+        AC_MSG_RESULT([yes])
+        BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
+    fi
+
 fi
 
 dnl ===================================================================
