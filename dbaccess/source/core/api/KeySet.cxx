@@ -1416,6 +1416,7 @@ void OKeySet::fillAllRows()
 sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::wasNull" );
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
     return m_xRow->wasNull();
 }
 
