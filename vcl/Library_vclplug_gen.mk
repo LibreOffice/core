@@ -28,12 +28,6 @@
 
 $(eval $(call gb_Library_Library,vclplug_gen))
 
-ifneq ($(filter X11_EXTENSIONS,$(BUILD_TYPE)),)
-$(eval $(call gb_Library_use_packages,vclplug_gen,\
-	x11_extensions_inc \
-))
-endif
-
 $(eval $(call gb_Library_set_include,vclplug_gen,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \

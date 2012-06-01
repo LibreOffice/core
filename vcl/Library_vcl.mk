@@ -44,6 +44,12 @@ endif
 
 $(eval $(call gb_Library_use_package,vcl,vcl_inc))
 
+ifneq ($(filter X11_EXTENSIONS,$(BUILD_TYPE)),)
+$(eval $(call gb_Library_use_packages,vclplug_gen,\
+	x11_extensions_inc \
+))
+endif
+
 $(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
 
 $(eval $(call gb_Library_set_include,vcl,\
