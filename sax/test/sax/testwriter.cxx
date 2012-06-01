@@ -329,12 +329,12 @@ Reference < XInterface > SAL_CALL OSaxWriterTest_CreateInstance( const Reference
 
 OUString     OSaxWriterTest_getServiceName( ) throw  ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.xml.sax.Writer"));
+    return OUString( "test.com.sun.star.xml.sax.Writer");
 }
 
 OUString    OSaxWriterTest_getImplementationName( ) throw  ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.extensions.xml.sax.Writer"));
+    return OUString( "test.extensions.xml.sax.Writer");
 }
 
 Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw  ()
@@ -352,7 +352,7 @@ void OSaxWriterTest::testInvariant( const OUString& TestName,
                                     const Reference < XInterface >& TestObject )
     throw  (    IllegalArgumentException, RuntimeException)
 {
-    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) == TestName ) {
+    if( OUString("com.sun.star.xml.sax.Writer") == TestName ) {
         Reference< XDocumentHandler > doc( TestObject , UNO_QUERY );
         Reference< XExtendedDocumentHandler > ext( TestObject , UNO_QUERY );
         Reference< XActiveDataSource > source( TestObject , UNO_QUERY );
@@ -373,7 +373,7 @@ sal_Int32 OSaxWriterTest::test(
     sal_Int32 hTestHandle)
     throw  (    IllegalArgumentException,RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) == TestName )
+    if( OUString( "com.sun.star.xml.sax.Writer") == TestName )
     {
         try
         {
@@ -471,10 +471,10 @@ void OSaxWriterTest::writeParagraph(
 
 void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r )
 {
-    OUString testParagraph = OUString( RTL_CONSTASCII_USTRINGPARAM(
+    OUString testParagraph = OUString(
         "Dies ist ein bloeder Test um zu uberpruefen, ob der SAXWriter "
         "wohl Zeilenumbrueche halbwegs richtig macht oder ob er die Zeile "
-        "bis zum bitteren Ende schreibt." ));
+        "bis zum bitteren Ende schreibt." );
 
     OFileWriter *pw = new OFileWriter("output.xml");
     AttributeListImpl *pList = new AttributeListImpl;
@@ -491,24 +491,24 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
 
     r->startDocument();
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg1" )),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("bla\n   u")) );
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg2")) ,
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("blub")) );
+    pList->addAttribute( OUString( "Arg1" ),
+                         OUString( "CDATA") ,
+                         OUString( "bla\n   u") );
+    pList->addAttribute( OUString( "Arg2") ,
+                         OUString( "CDATA") ,
+                         OUString( "blub") );
 
-    r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag1"))  , rList );
+    r->startElement( OUString( "tag1")  , rList );
     r->ignorableWhitespace( OUString() );
 
-    r->characters( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
+    r->characters( OUString( "huhu") );
     r->ignorableWhitespace( OUString() );
 
-    r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("hi")) , rList );
+    r->startElement( OUString( "hi") , rList );
     r->ignorableWhitespace( OUString() );
 
     // the enpassant must be converted & -> &amp;
-    r->characters( OUString( RTL_CONSTASCII_USTRINGPARAM("&#252;")) );
+    r->characters( OUString( "&#252;") );
 
     // Test added for mib. Tests if errors during conversions occurs
     r->ignorableWhitespace( OUString() );
@@ -524,7 +524,7 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
 
     // '>' must not be converted
     r->startCDATA();
-    r->characters( OUString( RTL_CONSTASCII_USTRINGPARAM(">fsfsdf<"))  );
+    r->characters( OUString( ">fsfsdf<")  );
     r->endCDATA();
     r->ignorableWhitespace( OUString() );
 
@@ -532,16 +532,16 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
 
 
     r->ignorableWhitespace( OUString() );
-    r->comment( OUString( RTL_CONSTASCII_USTRINGPARAM("Dies ist ein Kommentar !")) );
+    r->comment( OUString( "Dies ist ein Kommentar !") );
     r->ignorableWhitespace( OUString() );
 
-    r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("emptytagtest"))  , rList );
-    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("emptytagtest")) );
+    r->startElement( OUString( "emptytagtest")  , rList );
+    r->endElement( OUString( "emptytagtest") );
 
-    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("hi")) );
+    r->endElement( OUString( "hi") );
     r->ignorableWhitespace( OUString() );
 
-    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag1")) );
+    r->endElement( OUString( "tag1") );
     r->endDocument();
 
 }
@@ -566,7 +566,7 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
         sal_Bool bException = sal_True;
         try
         {
-            r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) , rList );
+            r->startElement( OUString( "huhu") , rList );
             bException = sal_False;
         }
         catch( SAXException &e )
@@ -578,13 +578,13 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
 
     r->startDocument();
 
-    r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) , rList );
+    r->startElement( OUString( "huhu") , rList );
     r->startCDATA();
 
     {
         sal_Bool bException = sal_True;
         try{
-            r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) , rList );
+            r->startElement( OUString( "huhu") , rList );
             bException = sal_False;
         }
         catch( SAXException &e ) {
@@ -608,7 +608,7 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
 
         }
     }
-    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
+    r->endElement( OUString( "huhu") );
 
     r->endDocument();
 }
@@ -631,10 +631,10 @@ void OSaxWriterTest::testDTD(const  Reference< XExtendedDocumentHandler > &r )
 
 
     r->startDocument();
-    r->unknown( OUString( RTL_CONSTASCII_USTRINGPARAM("<!DOCTYPE iCalendar >\n")) );
-    r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) , rList );
+    r->unknown( OUString( "<!DOCTYPE iCalendar >\n") );
+    r->startElement( OUString( "huhu") , rList );
 
-    r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
+    r->endElement( OUString( "huhu") );
     r->endDocument();
 }
 
@@ -644,10 +644,10 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     AttributeListImpl *pList = new AttributeListImpl;
 
     OUString testParagraph =
-        OUString( RTL_CONSTASCII_USTRINGPARAM(
+        OUString(
             "Dies ist ein bloeder Test um zu uberpruefen, ob der SAXWriter "
             "wohl Zeilenumbrueche halbwegs richtig macht oder ob er die Zeile "
-            "bis zum bitteren Ende schreibt." ));
+            "bis zum bitteren Ende schreibt." );
 
 
     Reference< XAttributeList > rList( (XAttributeList *) pList , UNO_QUERY );
@@ -668,12 +668,12 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     // just write a bunch of xml tags !
     // for performance testing
     sal_Int32 i2;
-    OUString huhu( RTL_CONSTASCII_USTRINGPARAM("huhu") );
+    OUString huhu( "huhu" );
     OUString emptyString;
     const int ITERATIONS = 125;
     for( i2 = 0 ; i2 < ITERATIONS ; i2 ++ )
     {
-        r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) +
+        r->startElement( OUString( "tag" ) +
                          OUString::valueOf( i2 ), rList );
         for( sal_Int32 i = 0 ; i < 450 ; i ++ )
         {
@@ -688,7 +688,7 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     for( i2 = ITERATIONS-1 ; i2 >= 0  ; i2-- )
     {
         r->ignorableWhitespace( emptyString );
-        r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) + OUString::valueOf( i2 ) );
+        r->endElement( OUString( "tag" ) + OUString::valueOf( i2 ) );
     }
 
     r->endDocument();

@@ -670,7 +670,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      xProgress );
-            aTemp += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?repairpackage"));
+            aTemp += rtl::OUString("?repairpackage");
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
@@ -688,7 +688,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
                 ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
                 ::com::sun::star::uno::Any aAny;
                 aAny <<= aSequ;
-                m_pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")), aAny );
+                m_pContent->setPropertyValue( ::rtl::OUString("EncryptionKey"), aAny );
             }
         }
     }
@@ -1177,7 +1177,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 aArg.Data = xStream;
                 aArg.ReplaceExisting = sal_True;
                 aAny <<= aArg;
-                m_pContent->executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")), aAny );
+                m_pContent->executeCommand( ::rtl::OUString("insert"), aAny );
 
                 // wrapper now controls lifetime of temporary file
                 m_aTempURL.Erase();
@@ -1782,7 +1782,7 @@ void UCBStorage_Impl::Init()
     {
         // Hack! Avoid access to the manifest file until mediatype is not available in the first segment of a
         // disk spanned file
-        m_aContentType = m_aOriginalContentType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.impress") );
+        m_aContentType = m_aOriginalContentType = ::rtl::OUString( "application/vnd.sun.xml.impress" );
     }
     else if ( m_pContent )
     {
@@ -1794,8 +1794,8 @@ void UCBStorage_Impl::Init()
                 if ( m_nError == ERRCODE_NONE )
                 {
                     // read the manifest.xml file
-                    aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("META-INF") ) );
-                    aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("manifest.xml") ) );
+                    aObj.Append( String( "META-INF" ) );
+                    aObj.Append( String( "manifest.xml" ) );
 
                     // create input stream
                     SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
@@ -1811,7 +1811,7 @@ void UCBStorage_Impl::Init()
                             Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
                                 Reference< ::com::sun::star::packages::manifest::XManifestReader >
                                     ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.manifest.ManifestReader"))), UNO_QUERY) ;
+                                        ::rtl::OUString("com.sun.star.packages.manifest.ManifestReader")), UNO_QUERY) ;
                             Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
 
                             // cleanup
@@ -1831,7 +1831,7 @@ void UCBStorage_Impl::Init()
         {
             // get the manifest information from the package
             try {
-                Any aAny = m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
+                Any aAny = m_pContent->getPropertyValue( ::rtl::OUString("MediaType") );
                 rtl::OUString aTmp;
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
@@ -1876,7 +1876,7 @@ void UCBStorage_Impl::CreateContent()
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      m_xProgressHandler );
-            aTemp += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?repairpackage"));
+            aTemp += rtl::OUString("?repairpackage");
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
@@ -1903,10 +1903,10 @@ void UCBStorage_Impl::ReadContent()
     // create cursor for access to children
     Sequence< ::rtl::OUString > aProps(4);
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-    pProps[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
-    pProps[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-    pProps[3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size"));
+    pProps[0] = ::rtl::OUString("Title");
+    pProps[1] = ::rtl::OUString("IsFolder");
+    pProps[2] = ::rtl::OUString("MediaType");
+    pProps[3] = ::rtl::OUString("Size");
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -1961,13 +1961,13 @@ void UCBStorage_Impl::ReadContent()
                     {
                         xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                                 m_xProgressHandler );
-                            aName += String( RTL_CONSTASCII_USTRINGPARAM( "?repairpackage" ) );
+                            aName += String(  "?repairpackage"  );
                     }
 
                     ::ucbhelper::Content aContent( aName, xComEnv );
 
                     ::rtl::OUString aMediaType;
-                    Any aAny = aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
+                    Any aAny = aContent.getPropertyValue( ::rtl::OUString("MediaType") );
                     if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
                         pElement->m_bIsStorage = sal_True;
                     else if ( aMediaType.isEmpty() )
@@ -2127,9 +2127,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
     if ( !m_bIsRoot )
         aPath += m_aName;
     aPath += '/';
-    aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+    aProps[0].Name = ::rtl::OUString("MediaType");
     aProps[0].Value <<= (::rtl::OUString ) m_aContentType;
-    aProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FullPath"));
+    aProps[1].Name = ::rtl::OUString("FullPath");
     aProps[1].Value <<= (::rtl::OUString ) aPath;
     rSequence[ nProps++ ] = aProps;
 
@@ -2150,9 +2150,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
             // properties of streams
             String aElementPath( aPath );
             aElementPath += pElement->m_aName;
-            aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+            aProps[0].Name = ::rtl::OUString("MediaType");
             aProps[0].Value <<= (::rtl::OUString ) pElement->GetContentType();
-            aProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FullPath"));
+            aProps[1].Name = ::rtl::OUString("FullPath");
             aProps[1].Value <<= (::rtl::OUString ) aElementPath;
             rSequence[ nProps++ ] = aProps;
         }
@@ -2199,7 +2199,7 @@ sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
 
                 Sequence < ::rtl::OUString > aNames(1);
                 ::rtl::OUString* pNames = aNames.getArray();
-                pNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                pNames[0] = ::rtl::OUString(  "Title"  );
                 Sequence < Any > aValues(1);
                 Any* pValues = aValues.getArray();
                 pValues[0] = makeAny( ::rtl::OUString( m_aName ) );
@@ -2269,7 +2269,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if( !pElement->m_xStream.Is() || pElement->m_xStream->Clear() )
                         {
-                            pContent->executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
+                            pContent->executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else
@@ -2315,7 +2315,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (rtl::OUString) pElement->m_aName;
-                        pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), aAny );
+                        pContent->setPropertyValue( ::rtl::OUString("Title"), aAny );
                     }
 
                     if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
@@ -2324,7 +2324,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (rtl::OUString) pElement->GetContentType();
-                        pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny );
+                        pContent->setPropertyValue( ::rtl::OUString("MediaType"), aAny );
                     }
 
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
@@ -2375,7 +2375,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
                     aType <<= (rtl::OUString) m_aContentType;
-                    m_pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aType );
+                    m_pContent->setPropertyValue( ::rtl::OUString("MediaType"), aType );
 
                     if (  m_bIsLinked )
                     {
@@ -2398,7 +2398,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             Reference < ::com::sun::star::packages::manifest::XManifestWriter > xWriter =
                                 Reference< ::com::sun::star::packages::manifest::XManifestWriter >
                                     ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.manifest.ManifestWriter"))), UNO_QUERY) ;
+                                        ::rtl::OUString("com.sun.star.packages.manifest.ManifestWriter")), UNO_QUERY) ;
                             sal_Int32 nCount = GetObjectCount() + 1;
                             Sequence < Sequence < PropertyValue > > aProps( nCount );
                             sal_Int32 nProps = 0;
@@ -2410,7 +2410,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter = NULL;
                             xOutputStream = NULL;
                             DELETEZ( pTempFile );
-                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("manifest.xml")), NameClash::OVERWRITE );
+                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString("manifest.xml"), NameClash::OVERWRITE );
                         }
                     }
                     else
@@ -2421,7 +2421,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 #endif
                         // force writing
                         Any aAny;
-                        m_pContent->executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flush")), aAny );
+                        m_pContent->executeCommand( ::rtl::OUString("flush"), aAny );
                         if ( m_pSource != 0 )
                         {
                             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );

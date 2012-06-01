@@ -152,7 +152,7 @@ public: // Error handler
     {
         printf( "Error !\n" );
         throw  SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("error from error handler")) ,
+            OUString( "error from error handler") ,
             Reference < XInterface >() ,
             aSAXParseException );
     }
@@ -504,14 +504,14 @@ int main (int argc, char **argv)
 
     // create service manager
     Reference< XMultiServiceFactory > xSMgr = createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" )) );
+        OUString(  "applicat.rdb" ) );
 
     Reference < XImplementationRegistration > xReg;
     try
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
+            OUString("com.sun.star.registry.ImplementationRegistration") );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -523,9 +523,9 @@ int main (int argc, char **argv)
     try
     {
         // Load dll for the tested component
-        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM( "sax.uno" SAL_DLLEXTENSION ));
+        OUString aDllName( "sax.uno" SAL_DLLEXTENSION );
         xReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString("com.sun.star.loader.SharedLibrary"),
             aDllName,
             Reference< XSimpleRegistry > ()  );
     }
@@ -542,7 +542,7 @@ int main (int argc, char **argv)
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        OUString("com.sun.star.xml.sax.Parser") );
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );
@@ -582,7 +582,7 @@ int main (int argc, char **argv)
     //----------------------
     // The SAX-Writer demo
     //----------------------
-    x= xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) );
+    x= xSMgr->createInstance( OUString("com.sun.star.xml.sax.Writer") );
     if( x.is() )
     {
         printf( "start writing to %s\n" , argv[2] );
@@ -597,50 +597,50 @@ int main (int argc, char **argv)
         Reference< XExtendedDocumentHandler > r( x , UNO_QUERY );
         r->startDocument();
 
-        pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg1" )),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("foo\n   u")) );
-        pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg2")) ,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("foo2")) );
+        pList->addAttribute( OUString( "Arg1" ),
+                             OUString( "CDATA") ,
+                             OUString( "foo\n   u") );
+        pList->addAttribute( OUString( "Arg2") ,
+                             OUString( "CDATA") ,
+                             OUString( "foo2") );
 
-        r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag1"))  , rList );
+        r->startElement( OUString( "tag1")  , rList );
         // tells the writer to insert a linefeed
         r->ignorableWhitespace( OUString() );
 
-        r->characters( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
+        r->characters( OUString( "huhu") );
         r->ignorableWhitespace( OUString() );
 
-        r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("hi")) , rList );
+        r->startElement( OUString( "hi") , rList );
         r->ignorableWhitespace( OUString() );
 
         // the enpassant must be converted & -> &amp;
-        r->characters( OUString( RTL_CONSTASCII_USTRINGPARAM("&#252;")) );
+        r->characters( OUString( "&#252;") );
         r->ignorableWhitespace( OUString() );
 
         // '>' must not be converted
         r->startCDATA();
-        r->characters( OUString( RTL_CONSTASCII_USTRINGPARAM(" > foo < "))  );
+        r->characters( OUString( " > foo < ")  );
         r->endCDATA();
         r->ignorableWhitespace( OUString() );
 
-        OUString testParagraph = OUString( RTL_CONSTASCII_USTRINGPARAM(
+        OUString testParagraph = OUString(
             "This is only a test to check, if the writer inserts line feeds "
-            "if needed or if the writer puts the whole text into one line." ));
+            "if needed or if the writer puts the whole text into one line." );
         writeParagraphHelper( r , testParagraph );
 
         r->ignorableWhitespace( OUString() );
-        r->comment( OUString( RTL_CONSTASCII_USTRINGPARAM("This is a comment !")) );
+        r->comment( OUString( "This is a comment !") );
         r->ignorableWhitespace( OUString() );
 
-        r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("emptytagtest"))  , rList );
-        r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("emptytagtest")) );
+        r->startElement( OUString( "emptytagtest")  , rList );
+        r->endElement( OUString( "emptytagtest") );
         r->ignorableWhitespace( OUString() );
 
-        r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("hi")) );
+        r->endElement( OUString( "hi") );
         r->ignorableWhitespace( OUString() );
 
-        r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag1")) );
+        r->endElement( OUString( "tag1") );
         r->endDocument();
 
         printf( "finished writing\n" );

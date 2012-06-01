@@ -198,7 +198,7 @@ inline sal_uInt32 SaxWriterHelper::writeSequence() throw( SAXException )
         Any a;
         a <<= e;
         throw SAXException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("io exception during writing")),
+            OUString("io exception during writing"),
             Reference< XInterface > (),
             a );
     }
@@ -983,12 +983,12 @@ Reference < XInterface > SAL_CALL SaxWriter_CreateInstance(
 
 OUString SaxWriter_getServiceName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"));
+    return OUString("com.sun.star.xml.sax.Writer");
 }
 
 OUString SaxWriter_getImplementationName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.extensions.xml.sax.Writer"));
+    return OUString("com.sun.star.extensions.xml.sax.Writer");
 }
 
 Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
@@ -1064,12 +1064,12 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
     if( ! m_bDocStarted )
     {
         throw SAXException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("endDocument called before startDocument")),
+            OUString("endDocument called before startDocument"),
             Reference< XInterface >() , Any() );
     }
     if( m_nLevel ) {
         throw SAXException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("unexpected end of document")),
+            OUString("unexpected end of document"),
             Reference< XInterface >() , Any() );
     }
     mp_SaxWriterHelper->endDocument();
@@ -1082,7 +1082,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
         Any a;
         a <<= e;
         throw SAXException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("IO exception during closing the IO Stream")),
+            OUString("IO exception during closing the IO Stream"),
             Reference< XInterface > (),
             a );
     }
@@ -1095,13 +1095,13 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
     if( ! m_bDocStarted )
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "startElement called before startDocument" ));
+        except.Message = OUString(  "startElement called before startDocument" );
         throw except;
     }
     if( m_bIsCDATA )
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "startElement call not allowed with CDATA sections" ));
+        except.Message = OUString(  "startElement call not allowed with CDATA sections" );
         throw except;
     }
 
@@ -1147,13 +1147,13 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
     if (eRet == SAX_WARNING)
     {
         SAXInvalidCharacterException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export in a attribute value" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export in a attribute value"  );
         throw except;
     }
     else if (eRet == SAX_ERROR)
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export"  );
         throw except;
     }
 }
@@ -1189,7 +1189,7 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
     if (!bRet)
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export"  );
         throw except;
     }
 }
@@ -1199,7 +1199,7 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
     if( ! m_bDocStarted )
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "characters method called before startDocument" ) );
+        except.Message = OUString(  "characters method called before startDocument"  );
         throw except;
     }
 
@@ -1241,7 +1241,7 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
     if (bThrowException)
     {
         SAXInvalidCharacterException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export"  );
         throw except;
     }
 }
@@ -1286,7 +1286,7 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
     if (!mp_SaxWriterHelper->processingInstruction(aTarget, aData))
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export"  );
         throw except;
     }
 }
@@ -1320,7 +1320,7 @@ void SAXWriter::endCDATA(void) throw (RuntimeException)
     if( ! m_bDocStarted | ! m_bIsCDATA)
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "endCDATA was called without startCDATA" ) );
+        except.Message = OUString(  "endCDATA was called without startCDATA"  );
         throw except;
     }
 
@@ -1358,7 +1358,7 @@ void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeExc
     if (!mp_SaxWriterHelper->comment(sComment))
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export"  );
         throw except;
     }
 }
@@ -1399,7 +1399,7 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
     if (!mp_SaxWriterHelper->writeString( sString, sal_False, sal_False))
     {
         SAXException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        except.Message = OUString(  "Invalid charcter during XML-Export"  );
         throw except;
     }
 }

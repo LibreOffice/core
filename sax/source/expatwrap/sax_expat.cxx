@@ -207,7 +207,7 @@ Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
 Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME) );
+    aRet.getArray()[0] = ::rtl::OUString( SERVICE_NAME );
     return aRet;
 }
 
@@ -476,7 +476,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 
     if( ! entity.structSource.aInputStream.is() )
     {
-        throw SAXException( OUString(RTL_CONSTASCII_USTRINGPARAM("No input source")) ,
+        throw SAXException( OUString("No input source") ,
                             Reference< XInterface > () , Any() );
     }
 
@@ -491,7 +491,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     entity.pParser = XML_ParserCreate( 0 );
     if( ! entity.pParser )
     {
-        throw SAXException( OUString(RTL_CONSTASCII_USTRINGPARAM("Couldn't create parser")) ,
+        throw SAXException( OUString("Couldn't create parser") ,
                             Reference< XInterface > (), Any() );
     }
 
@@ -604,7 +604,7 @@ void SaxExpatParser::setLocale( const Locale & locale ) throw (RuntimeException)
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName() throw ()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 // XServiceInfo
@@ -625,7 +625,7 @@ Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw ()
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
+    seq.getArray()[0] = OUString( SERVICE_NAME );
     return seq;
 }
 
@@ -640,82 +640,82 @@ OUString getErrorMessage( XML_Error xmlE, OUString sSystemId , sal_Int32 nLine )
 {
     OUString Message;
     if( XML_ERROR_NONE == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("No"));
+        Message = OUString("No");
     }
     else if( XML_ERROR_NO_MEMORY == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("no memory"));
+        Message = OUString("no memory");
     }
     else if( XML_ERROR_SYNTAX == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("syntax"));
+        Message = OUString("syntax");
     }
     else if( XML_ERROR_NO_ELEMENTS == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("no elements"));
+        Message = OUString("no elements");
     }
     else if( XML_ERROR_INVALID_TOKEN == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("invalid token"));
+        Message = OUString("invalid token");
     }
     else if( XML_ERROR_UNCLOSED_TOKEN == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("unclosed token"));
+        Message = OUString("unclosed token");
     }
     else if( XML_ERROR_PARTIAL_CHAR == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("partial char"));
+        Message = OUString("partial char");
     }
     else if( XML_ERROR_TAG_MISMATCH == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("tag mismatch"));
+        Message = OUString("tag mismatch");
     }
     else if( XML_ERROR_DUPLICATE_ATTRIBUTE == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("duplicate attribute"));
+        Message = OUString("duplicate attribute");
     }
     else if( XML_ERROR_JUNK_AFTER_DOC_ELEMENT == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("junk after doc element"));
+        Message = OUString("junk after doc element");
     }
     else if( XML_ERROR_PARAM_ENTITY_REF == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("parameter entity reference"));
+        Message = OUString("parameter entity reference");
     }
     else if( XML_ERROR_UNDEFINED_ENTITY == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("undefined entity"));
+        Message = OUString("undefined entity");
     }
     else if( XML_ERROR_RECURSIVE_ENTITY_REF == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("recursive entity reference"));
+        Message = OUString("recursive entity reference");
     }
     else if( XML_ERROR_ASYNC_ENTITY == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("async entity"));
+        Message = OUString("async entity");
     }
     else if( XML_ERROR_BAD_CHAR_REF == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("bad char reference"));
+        Message = OUString("bad char reference");
     }
     else if( XML_ERROR_BINARY_ENTITY_REF == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("binary entity reference"));
+        Message = OUString("binary entity reference");
     }
     else if( XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("attribute external entity reference"));
+        Message = OUString("attribute external entity reference");
     }
     else if( XML_ERROR_MISPLACED_XML_PI == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("misplaced xml processing instruction"));
+        Message = OUString("misplaced xml processing instruction");
     }
     else if( XML_ERROR_UNKNOWN_ENCODING == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("unknown encoding"));
+        Message = OUString("unknown encoding");
     }
     else if( XML_ERROR_INCORRECT_ENCODING == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("incorrect encoding"));
+        Message = OUString("incorrect encoding");
     }
     else if( XML_ERROR_UNCLOSED_CDATA_SECTION == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("unclosed cdata section"));
+        Message = OUString("unclosed cdata section");
     }
     else if( XML_ERROR_EXTERNAL_ENTITY_HANDLING == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("external entity reference"));
+        Message = OUString("external entity reference");
     }
     else if( XML_ERROR_NOT_STANDALONE == xmlE ) {
-        Message = OUString(RTL_CONSTASCII_USTRINGPARAM("not standalone"));
+        Message = OUString("not standalone");
     }
 
-    OUString str(RTL_CONSTASCII_USTRINGPARAM("["));
+    OUString str("[");
     str += sSystemId;
-    str += OUString(RTL_CONSTASCII_USTRINGPARAM(" line "));
+    str += OUString(" line ");
     str += OUString::valueOf( nLine );
-    str += OUString(RTL_CONSTASCII_USTRINGPARAM("]: "));
+    str += OUString("]: ");
     str += Message;
-    str += OUString(RTL_CONSTASCII_USTRINGPARAM("error"));
+    str += OUString("error");
 
     return str;
 }
@@ -791,7 +791,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
 {
     // in case of two concurrent threads, there is only the danger of an leak,
     // which is neglectable for one string
-    static OUString g_CDATA( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
+    static OUString g_CDATA(  "CDATA"  );
 
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
 
@@ -863,8 +863,7 @@ void SaxExpatParser_Impl::callbackEntityDecl(
         OSL_TRACE("SaxExpatParser: internal entity declaration, stopping");
         XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
         pImpl->exception = SAXParseException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "SaxExpatParser: internal entity declaration, stopping")),
+            ::rtl::OUString( "SaxExpatParser: internal entity declaration, stopping"),
             0, Any(),
             pImpl->rDocumentLocator->getPublicId(),
             pImpl->rDocumentLocator->getSystemId(),

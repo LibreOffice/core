@@ -1217,7 +1217,7 @@ void SotStorage::SetKey( const rtl::OString& rKey )
             ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
             ::com::sun::star::uno::Any aAny;
             aAny <<= aSequ;
-            SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")), aAny );
+            SetProperty( ::rtl::OUString("EncryptionKey"), aAny );
         }
     }
 }
@@ -1243,8 +1243,8 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
         {
             uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
             xStreamProps->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-                        uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) );
+                        ::rtl::OUString(  "MediaType"  ),
+                        uno::makeAny( ::rtl::OUString(  "application/vnd.sun.star.oleobject"  ) ) );
         }
 
            pStream = utl::UcbStreamHelper::CreateStream( xStream );
@@ -1266,7 +1266,7 @@ sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::s
         return 0;
 
     ::rtl::OUString aMediaType;
-    xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= aMediaType;
+    xProps->getPropertyValue( ::rtl::OUString("MediaType") ) >>= aMediaType;
     if ( !aMediaType.isEmpty() )
     {
         ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

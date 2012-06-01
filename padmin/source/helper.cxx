@@ -72,11 +72,11 @@ ResId padmin::PaResId( sal_uInt32 nId )
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                     vcl::unohelper::GetMultiServiceFactory(),
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/L10N")) );
+                    OUString("org.openoffice.Setup/L10N") );
         if ( aNode.isValid() )
         {
             rtl::OUString aLoc;
-            Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")) );
+            Any aValue = aNode.getNodeValue( OUString("ooLocale") );
             if( aValue >>= aLoc )
             {
                 sal_Int32 nIndex = 0;
@@ -287,7 +287,7 @@ bool padmin::chooseDirectory( String& rInOutPath )
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        Reference< XFolderPicker > xFolderPicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
+        Reference< XFolderPicker > xFolderPicker( xFactory->createInstance( OUString(  "com.sun.star.ui.dialogs.FolderPicker"  ) ), UNO_QUERY );
         if( xFolderPicker.is() )
         {
             Reference< XControlAccess > xCA( xFolderPicker, UNO_QUERY );
@@ -297,8 +297,8 @@ bool padmin::chooseDirectory( String& rInOutPath )
                 {
                     Any aState;
                     aState <<= sal_False;
-                    xCA->setControlProperty( OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpButton" ) ),
-                                             OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ),
+                    xCA->setControlProperty( OUString(  "HelpButton"  ),
+                                             OUString(  "Visible"  ),
                                              aState );
 
                 }

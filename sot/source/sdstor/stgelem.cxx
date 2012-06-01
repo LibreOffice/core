@@ -235,11 +235,11 @@ static String ToUpperUnicode( const String & rStr )
     // I don't know the locale, so en_US is hopefully fine
     /*
     com.sun.star.lang.Locale aLocale;
-    aLocale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aLocale.Country  = OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+    aLocale.Language = OUString("en");
+    aLocale.Country  = OUString("US");
     */
-    static rtl::OUString aEN(RTL_CONSTASCII_USTRINGPARAM("en"));
-    static rtl::OUString aUS(RTL_CONSTASCII_USTRINGPARAM("US"));
+    static rtl::OUString aEN("en");
+    static rtl::OUString aUS("US");
     static CharClass aCC( com::sun::star::lang::Locale( aEN, aUS, rtl::OUString() ) );
     return aCC.uppercase( rStr );
 }

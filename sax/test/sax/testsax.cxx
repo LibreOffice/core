@@ -118,12 +118,12 @@ Reference < XInterface > SAL_CALL OSaxParserTest_CreateInstance( const Reference
 
 OUString     OSaxParserTest_getServiceName( ) throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.xml.sax.Parser" ));
+    return OUString( "test.com.sun.star.xml.sax.Parser" );
 }
 
 OUString    OSaxParserTest_getImplementationName( ) throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.extensions.xml.sax.Parser"));
+    return OUString( "test.extensions.xml.sax.Parser");
 }
 
 Sequence<OUString> OSaxParserTest_getSupportedServiceNames( ) throw ()
@@ -143,7 +143,7 @@ void OSaxParserTest::testInvariant(
     const Reference < XInterface >& TestObject )
     throw ( IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) == TestName ) {
+    if( OUString( "com.sun.star.xml.sax.Parser") == TestName ) {
         Reference < XParser > parser( TestObject , UNO_QUERY );
 
         ERROR_ASSERT( parser.is() , "XDataInputStream cannot be queried" );
@@ -157,7 +157,7 @@ sal_Int32 OSaxParserTest::test(
     sal_Int32 hTestHandle)
     throw ( IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) == TestName )  {
+    if( OUString( "com.sun.star.xml.sax.Parser") == TestName )  {
         try
         {
             if( 0 == hTestHandle ) {
@@ -237,7 +237,7 @@ Reference < XInputStream > createStreamFromSequence(
     const Reference < XMultiServiceFactory > &xSMgr )
 {
     Reference < XInterface > xOutStreamService =
-        xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")) );
+        xSMgr->createInstance( OUString("com.sun.star.io.Pipe") );
     OSL_ASSERT( xOutStreamService.is() );
     Reference< XOutputStream >  rOutStream( xOutStreamService , UNO_QUERY );
     OSL_ASSERT( rOutStream.is() );
@@ -301,7 +301,7 @@ public: // Error handler
     {
         printf( "Error !\n" );
         throw  SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("error from error handler")) ,
+            OUString( "error from error handler") ,
             Reference < XInterface >() ,
             aSAXParseException );
     }
@@ -509,7 +509,7 @@ void OSaxParserTest::testSimple(    const Reference < XParser > &rParser )
     Reference< XInputStream > rInStream;
     OUString sInput;
     rInStream = createStreamFromSequence( seqBytes , m_rFactory );
-    sInput = OUString( OUString( RTL_CONSTASCII_USTRINGPARAM("internal")) );
+    sInput = OUString( OUString( "internal") );
 
     if( rParser.is() ) {
         InputSource source;
@@ -575,7 +575,7 @@ void OSaxParserTest::testNamespaces( const Reference < XParser > &rParser )
     OUString sInput;
 
     rInStream = createStreamFromSequence( seqBytes , m_rFactory );
-    sInput = OUString( RTL_CONSTASCII_USTRINGPARAM( "internal" ));
+    sInput = OUString(  "internal" );
 
     if( rParser.is() ) {
         InputSource source;
@@ -629,7 +629,7 @@ void OSaxParserTest::testEncoding( const Reference < XParser > &rParser )
     OUString sInput;
 
     rInStream = createStreamFromSequence( seqBytes , m_rFactory );
-    sInput = OUString( RTL_CONSTASCII_USTRINGPARAM("internal") );
+    sInput = OUString( "internal" );
 
     if( rParser.is() ) {
         InputSource source;
@@ -663,7 +663,7 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
 {
 
     Reference< XInputStream > rInStream = createStreamFromFile( "testsax.xml" , m_rFactory );
-    OUString sInput = OUString( RTL_CONSTASCII_USTRINGPARAM( "testsax.xml" ) );
+    OUString sInput = OUString(  "testsax.xml"  );
 
 
     if( rParser.is() && rInStream.is() ) {
@@ -723,7 +723,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
 
     Reference < XInputStream > rInStream =
         createStreamFromFile( "testPerformance.xml" , m_rFactory );
-    OUString sInput = OUString( RTL_CONSTASCII_USTRINGPARAM( "testperformance.xml") );
+    OUString sInput = OUString(  "testperformance.xml" );
 
     if( rParser.is() && rInStream.is() ) {
         InputSource source;
@@ -797,16 +797,16 @@ sal_Bool SAL_CALL component_writeInfo(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
             OUString str =
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                OUString( "/" ) +
                 OSaxParserTest_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString( "/UNO/SERVICES" );
             Reference< XRegistryKey > xNewKey = xKey->createKey( str );
             xNewKey->createKey( OSaxParserTest_getServiceName() );
 
             str =
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                OUString( "/" ) +
                 OSaxWriterTest_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString( "/UNO/SERVICES" );
 
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OSaxWriterTest_getServiceName() );

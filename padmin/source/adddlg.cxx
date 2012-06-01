@@ -95,11 +95,11 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
 {
     if( m_aPDFBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("pdf="));
+        rInfo.m_aFeatures = OUString("pdf=");
     }
     else if( m_aFaxBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax"));
+        rInfo.m_aFeatures = OUString("fax");
     }
     else
         rInfo.m_aFeatures = OUString();
@@ -284,7 +284,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                     aDir.append( sal_Unicode( '/' ) );
                     aDir.appendAscii( PRINTER_PPDDIR );
                     rtl::OUString aPPDDir( aDir.makeStringAndClear() );
-                    FindFiles( aPPDDir, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD;PS.GZ;PPD.GZ" ) ), true );
+                    FindFiles( aPPDDir, aFiles, String(  "PS;PPD;PS.GZ;PPD.GZ"  ), true );
                     for( file = aFiles.begin(); file != aFiles.end(); ++file )
                     {
                         String aFile( aPPDDir );
@@ -528,8 +528,8 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         if( pParser == NULL )
         {
             String aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), rtl::OStringToOUString(aPrinter, aEncoding) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), rtl::OStringToOUString(aDriver, aEncoding) );
+            aText.SearchAndReplace( String(  "%s1"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText.SearchAndReplace( String(  "%s2"  ), rtl::OStringToOUString(aDriver, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -541,7 +541,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         if (aCommand.isEmpty())
         {
             String aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText.SearchAndReplace( String(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -569,7 +569,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             aInfo.m_pParser->getMargins( rtl::OStringToOUString(aValue, aEncoding),
                                          nLeft, nRight, nTop, nBottom ) )
         {
-            const PPDKey* pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+            const PPDKey* pKey = aInfo.m_pParser->getKey( String(  "PageSize"  ) );
             const PPDValue* pValue = pKey ? pKey->getValue( rtl::OStringToOUString(aValue, aEncoding) ) : NULL;
             if( pKey && pValue )
                 aInfo.m_aContext.setValue( pKey, pValue );
@@ -652,7 +652,7 @@ void APOldPrinterPage::addOldPrinters()
         if( ! rManager.addPrinter( pInfo->m_aPrinterName, pInfo->m_aDriverName ) )
         {
             String aText( PaResId( RID_TXT_PRINTERADDFAILED ) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), pInfo->m_aPrinterName );
+            aText.SearchAndReplace( String(  "%s"  ), pInfo->m_aPrinterName );
                 ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
                 aBox.Execute();
                 continue;
@@ -698,7 +698,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
     {
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
+        rInfo.m_aDriverName = OUString("SGENPRT");
     }
 }
 
@@ -731,9 +731,9 @@ bool APPdfDriverPage::check()
 void APPdfDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
+        rInfo.m_aDriverName = OUString("SGENPRT");
     else if( isDist() )
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("ADISTILL"));
+        rInfo.m_aDriverName = OUString("ADISTILL");
 }
 
 //--------------------------------------------------------------------
@@ -1019,13 +1019,13 @@ void AddPrinterDialog::addPrinter()
             }
             else if( m_pChooseDevicePage->isFax() )
             {
-                aInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax="));
+                aInfo.m_aFeatures = OUString("fax=");
                 if( m_pFaxNamePage->isFaxSwallow() )
-                    aInfo.m_aFeatures += OUString(RTL_CONSTASCII_USTRINGPARAM("swallow"));
+                    aInfo.m_aFeatures += OUString("swallow");
             }
             else if( m_pChooseDevicePage->isPDF() )
             {
-                OUString aPdf( RTL_CONSTASCII_USTRINGPARAM("pdf=") );
+                OUString aPdf( "pdf=" );
                 aPdf += m_pPdfCommandPage->getPdfDir();
                 aInfo.m_aFeatures = aPdf;
             }
