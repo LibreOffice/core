@@ -251,20 +251,15 @@ Size VclButtonBox::calculateRequisition() const
     if (!nVisibleChildren)
         return Size();
 
-    rtl::OString sChildInternalPadX(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-x"));
-    sal_Int32 nChildInternalPadX = getWidgetStyleProperty<sal_Int32>(sChildInternalPadX, DEFAULT_CHILD_INTERNAL_PAD_X);
-    rtl::OString sChildInternalPadY(RTL_CONSTASCII_STRINGPARAM("child-internal-pad-y"));
-    sal_Int32 nChildInternalPadY = getWidgetStyleProperty<sal_Int32>(sChildInternalPadY, DEFAULT_CHILD_INTERNAL_PAD_Y);
-    Size aChildPad(nChildInternalPadX, nChildInternalPadY);
-
     long nPrimaryDimension =
         (getPrimaryDimension(aSize) * nVisibleChildren) +
-        (m_nSpacing * (nVisibleChildren-1)) +
-        ((getPrimaryDimension(aChildPad)*2) * nVisibleChildren);
+        (m_nSpacing * (nVisibleChildren-1));
     setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing);
 
     long nSecondaryDimension = getSecondaryDimension(aSize);
-    setSecondaryDimension(aSize, nSecondaryDimension + getSecondaryDimension(aChildPad)*2);
+    setSecondaryDimension(aSize, nSecondaryDimension);
+
+    fprintf(stderr, "button box asked for %ld %ld\n", aSize.Width(), aSize.Height());
 
     return aSize;
 }
@@ -272,6 +267,8 @@ Size VclButtonBox::calculateRequisition() const
 
 void VclButtonBox::setAllocation(const Size &rAllocation)
 {
+    fprintf(stderr, "button box got %ld %ld\n", rAllocation.Width(), rAllocation.Height());
+
     sal_uInt16 nVisibleChildren = 0;
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
