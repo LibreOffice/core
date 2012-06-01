@@ -317,7 +317,7 @@ Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Referen
 OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+    return OUString(  IMPLNAME  );
 }
 
 //*************************************************************************
@@ -342,7 +342,7 @@ Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
 //*************************************************************************
 Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames_Static(  )
 {
-    OUString aStr( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME ) );
+    OUString aStr(  SERVICENAME  );
     return Sequence< OUString >( &aStr, 1 );
 }
 
@@ -402,7 +402,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xIntrospection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.beans.Introspection") ) );
         m_xIntrospection = Reference< XIntrospection >( xIFace, UNO_QUERY );
     }
     return m_xIntrospection;
@@ -415,7 +415,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xReflection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.reflection.CoreReflection") ) );
         m_xReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
     }
     return m_xReflection;
@@ -428,7 +428,7 @@ Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterSe
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xInvocationAdapterFactory.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.script.InvocationAdapterFactory") ) );
         m_xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >( xIFace, UNO_QUERY );
     }
     return m_xInvocationAdapterFactory;
@@ -442,7 +442,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xConverter.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.script.Converter") ) );
         m_xConverter = Reference< XTypeConverter >( xIFace, UNO_QUERY );
     }
     return m_xConverter;
@@ -642,7 +642,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
         nIndex++;
 
     OUString aListenerName = (aListenerType[nIndex] == 'X') ? aListenerType.copy(nIndex+1) : aListenerType;
-    OUString aAddListenerName = OUString(RTL_CONSTASCII_USTRINGPARAM("add")) + aListenerName;
+    OUString aAddListenerName = OUString("add") + aListenerName;
 
     // Send Methods to the correct addListener-Method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
@@ -834,7 +834,7 @@ void EventAttacherImpl::removeListener
     if( aListenerName[nIndex] == 'X' )
         // erase X from the interface name
         aListenerName = aListenerName.copy( nIndex +1 );
-    aRemoveListenerName = OUString( RTL_CONSTASCII_USTRINGPARAM("remove") ) + aListenerName;
+    aRemoveListenerName = OUString( "remove" ) + aListenerName;
 
     // Search methods for the correct removeListener method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
@@ -923,7 +923,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) ),
+            OUString(  IMPLNAME  ),
             ::comp_EventAttacher::EventAttacherImpl_CreateInstance,
             ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static() ) );
 
