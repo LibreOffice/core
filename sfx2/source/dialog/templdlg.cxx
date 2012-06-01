@@ -624,7 +624,6 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(
 
 class StyleTreeArr_Impl;
 
-
 /*  [Description]
 
     Internal structure for the establishment of the hierarchical view
@@ -645,14 +644,20 @@ struct StyleTree_Impl
     sal_uIntPtr Count();
 };
 
-typedef StyleTree_Impl* StyleTree_ImplPtr;
-SV_DECL_PTRARR_DEL(StyleTreeArr_Impl, StyleTree_ImplPtr, 16)
-SV_IMPL_PTRARR(StyleTreeArr_Impl, StyleTree_ImplPtr)
+class StyleTreeArr_Impl : public std::vector<StyleTree_Impl*>
+{
+public:
+    ~StyleTreeArr_Impl()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
 
+};
 
 sal_uIntPtr StyleTree_Impl::Count()
 {
-    return pChildren ? pChildren->Count() : 0L;
+    return pChildren ? pChildren->size() : 0L;
 }
 
 //-------------------------------------------------------------------------
@@ -670,15 +675,16 @@ void StyleTree_Impl::Put(StyleTree_Impl* pIns, sal_uIntPtr lPos)
         pChildren = new StyleTreeArr_Impl;
 
     if ( ULONG_MAX == lPos )
-        lPos = pChildren->Count();
-    pChildren->Insert( pIns, (sal_uInt16)lPos );
+        pChildren->push_back( pIns );
+    else
+        pChildren->insert( pChildren->begin() + (sal_uInt16)lPos, pIns );
 }
 
 //-------------------------------------------------------------------------
 
 StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 {
-    const sal_uInt16 nCount = rArr.Count();
+    const sal_uInt16 nCount = rArr.size();
 
     comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
@@ -688,12 +694,12 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
     sal_uInt16 i;
     for(i = 0; i < nCount; ++i)
     {
-        StyleTree_ImplPtr pEntry = rArr[i];
+        StyleTree_Impl* pEntry = rArr[i];
         if(pEntry->HasParent())
         {
             for(sal_uInt16 j = 0; j < nCount; ++j)
             {
-                StyleTree_ImplPtr pCmp = rArr[j];
+                StyleTree_Impl* pCmp = rArr[j];
                 if(pCmp->aName == pEntry->aParent)
                 {
                     // Paste initial filter
@@ -708,10 +714,10 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
         }
     }
 
-    for(i = 0; i < rArr.Count(); )
+    for(i = 0; i < rArr.size(); )
     {
         if(rArr[i]->HasParent())
-            rArr.Remove(i);
+            rArr.erase(rArr.begin() + i);
         else
             ++i;
     }
@@ -734,12 +740,12 @@ inline sal_Bool IsExpanded_Impl( const ExpandedEntries& rEntries,
 
 
 SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
-                                 StyleTree_ImplPtr pEntry,
+                                 StyleTree_Impl* pEntry,
                                  const ExpandedEntries& rEntries,
                                  SvLBoxEntry* pParent = 0)
 {
     SvLBoxEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
-    const sal_uInt16 nCount = pEntry->pChildren? pEntry->pChildren->Count(): 0;
+    const sal_uInt16 nCount = pEntry->pChildren ? pEntry->pChildren->size() : 0;
     for(sal_uInt16 i = 0; i < nCount; ++i)
         FillBox_Impl(pBox, (*pEntry->pChildren)[i], rEntries, pNewEntry);
     return pNewEntry;
@@ -1184,9 +1190,9 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
             pTreeBox->SetDragDropMode(SV_DRAGDROP_NONE);
         while(pStyle)
         {
-            StyleTree_ImplPtr pNew =
+            StyleTree_Impl* pNew =
                 new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
-            aArr.Insert(pNew, aArr.Count());
+            aArr.push_back(pNew);
             pStyle = pStyleSheetPool->Next();
         }
         MakeTree_Impl(aArr);
@@ -1196,10 +1202,10 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
                 MakeExpanded_Impl( aEntries);
         pTreeBox->SetUpdateMode( sal_False );
         pTreeBox->Clear();
-        const sal_uInt16 nCount = aArr.Count();
+        const sal_uInt16 nCount = aArr.size();
         for(sal_uInt16 i = 0; i < nCount; ++i)
             FillBox_Impl(pTreeBox, aArr[i], aEntries);
-;
+
         EnableItem(SID_STYLE_WATERCAN,sal_False);
 
         SfxTemplateItem* pState = pFamilyState[nActFamily-1];
