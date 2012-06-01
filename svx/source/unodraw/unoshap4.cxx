@@ -358,8 +358,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
             if( pGraphic )
             {
                 GraphicObject aObj( *pGraphic );
-                aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    UNO_NAME_GRAPHOBJ_URLPREFIX));
+                aURL = OUString( UNO_NAME_GRAPHOBJ_URLPREFIX);
                 aURL += rtl::OStringToOUString(aObj.GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
             }
@@ -420,7 +419,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
     ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
-    if( getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )) ) >>= aTmpStr )
+    if( getPropertyValue( OUString( UNO_NAME_OLE2_PERSISTNAME ) ) >>= aTmpStr )
         aPersistName = aTmpStr;
 
     //TODO/LATER: how to cope with creation failure?!
@@ -451,7 +450,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )), Any( aTmpStr = aPersistName ) );
+        setPropertyValue( OUString( UNO_NAME_OLE2_PERSISTNAME ), Any( aTmpStr = aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if( pOle2Obj->IsEmpty() )
@@ -474,14 +473,14 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
     ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-    aMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+    aMediaDescr[0].Name = ::rtl::OUString("URL");
     aMediaDescr[0].Value <<= aLinkURL;
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
     if ( xInteraction.is() )
     {
         aMediaDescr.realloc( 2 );
-        aMediaDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+        aMediaDescr[1].Name = ::rtl::OUString(  "InteractionHandler"  );
         aMediaDescr[1].Value <<= xInteraction;
     }
 
@@ -514,7 +513,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )), uno::makeAny( aPersistName ) );
+        setPropertyValue( OUString( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if ( pOle2Obj->IsEmpty() )
@@ -584,7 +583,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.AppletShape"  ) );
 }
 
 SvxAppletShape::~SvxAppletShape() throw()
@@ -596,7 +595,7 @@ void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
     createObject(aAppletClassId);
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.AppletShape"  ) );
 }
 
 void SAL_CALL SvxAppletShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -657,7 +656,7 @@ bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.PluginShape"  ) );
 }
 
 SvxPluginShape::~SvxPluginShape() throw()
@@ -669,7 +668,7 @@ void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
     createObject(aPluginClassId);
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.PluginShape"  ) );
 }
 
 void SAL_CALL SvxPluginShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -730,7 +729,7 @@ bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.FrameShape"  ) );
 }
 
 SvxFrameShape::~SvxFrameShape() throw()
@@ -742,7 +741,7 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
     createObject(aIFrameClassId);
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.FrameShape"  ) );
 }
 
 void SAL_CALL SvxFrameShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -805,7 +804,7 @@ bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
+    SetShapeType( rtl::OUString(  "com.sun.star.drawing.MediaShape"  ) );
 }
 
 //----------------------------------------------------------------------

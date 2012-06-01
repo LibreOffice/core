@@ -755,7 +755,7 @@ void PPTDocument::Load( const rtl::OUString& rFilePath )
     maStorage = new SotStorage( rFilePath, STREAM_STD_READ );
     if( !maStorage->GetError() )
     {
-        mpDocStream = maStorage->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("PowerPoint Document") ), STREAM_STD_READ );
+        mpDocStream = maStorage->OpenSotStream( String( "PowerPoint Document" ), STREAM_STD_READ );
         if( mpDocStream )
         {
             DffRecordHeader aRecordHeader;
@@ -867,7 +867,7 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
 {
     ::sfx2::FileDialogHelper aDlg(
         ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.ppt" ) );
+    String aStrFilterType(  "*.ppt"  );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 //  INetURLObject aFile( SvtPathOptions().GetPalettePath() );
 //  aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -888,19 +888,19 @@ MSViewerWorkWindow::MSViewerWorkWindow() :
 {
     Size aOutputSize( 400, 600 );
     SetOutputSizePixel( aOutputSize );
-    SetText( String( RTL_CONSTASCII_USTRINGPARAM( "MSViewer" ) ) );
+    SetText( String(  "MSViewer"  ) );
 
     Size aOutSize( GetOutputSizePixel() );
 
-    Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Courier" ) ), GetFont().GetSize() );
+    Font aFont( String(  "Courier"  ), GetFont().GetSize() );
 
     mpMenuBar = new MenuBar();
-    mpMenuBar->InsertItem( 1, String( RTL_CONSTASCII_USTRINGPARAM("~File" ) ) );
+    mpMenuBar->InsertItem( 1, String( "~File"  ) );
     mpFileMenu = new PopupMenu();
-    mpFileMenu->InsertItem( 2, String( RTL_CONSTASCII_USTRINGPARAM("~View" ) ) );
-    mpFileMenu->InsertItem( 3, String( RTL_CONSTASCII_USTRINGPARAM("~Compare" ) ) );
+    mpFileMenu->InsertItem( 2, String( "~View"  ) );
+    mpFileMenu->InsertItem( 3, String( "~Compare"  ) );
     mpFileMenu->InsertSeparator();
-    mpFileMenu->InsertItem( 4, String( RTL_CONSTASCII_USTRINGPARAM("~Quit" ) ) );
+    mpFileMenu->InsertItem( 4, String( "~Quit"  ) );
     mpFileMenu->SetSelectHdl( LINK( this, MSViewerWorkWindow, implMenuHdl ) );
 
     mpMenuBar->SetPopupMenu( 1, mpFileMenu );
@@ -1116,8 +1116,8 @@ void MSViewerWorkWindow::Resize()
 
         // Init UCB
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-        aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+        aArgs[ 0 ] <<= rtl::OUString( UCB_CONFIGURATION_KEY1_LOCAL );
+        aArgs[ 1 ] <<= rtl::OUString( UCB_CONFIGURATION_KEY2_OFFICE );
         sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xMSF, aArgs );
         if ( !bSuccess )
         {
@@ -1142,7 +1142,7 @@ void MSViewerWorkWindow::Resize()
 
         aURL.removeSegment();
         aURL.removeFinalSlash();
-        aURL.Append( String(  RTL_CONSTASCII_USTRINGPARAM( "msview.xml" )  ) );
+        aURL.Append( String(   "msview.xml"   ) );
 
         load_config( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
     }

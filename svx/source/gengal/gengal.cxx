@@ -203,9 +203,9 @@ void GalApp::Init()
             lastSlash = fileName.lastIndexOf( '\\' );
 #endif
         rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
-        rtl::OUString installPrefix = baseBinDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/../.."));
+        rtl::OUString installPrefix = baseBinDir + rtl::OUString("/../..");
 
-        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("OOO_INSTALL_PREFIX"));
+        rtl::OUString envVar("OOO_INSTALL_PREFIX");
         osl_setEnvironment(envVar.pData, installPrefix.pData);
     }
     OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
@@ -225,9 +225,9 @@ void GalApp::InitUCB()
 {
     Sequence< Any > aArgs(2);
     aArgs[0]
-        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
+        <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL);
     aArgs[1]
-        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
+        <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE);
 
     if (! ::ucbhelper::ContentBroker::initialize( xMSF, aArgs ) )
         fprintf( stderr, "Failed to init content broker\n" );
@@ -237,7 +237,7 @@ int GalApp::Main()
 {
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
-    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Default name"));
+    rtl::OUString aName("Default name");
     sal_uInt32 nNumFrom = 0;
     FileNameList aFiles;
 

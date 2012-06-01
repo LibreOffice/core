@@ -143,9 +143,9 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) );
+                        aFormat = String(  "gif"  );
                     else
-                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
+                        aFormat = String(  "png"  );
 
                     bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
@@ -439,7 +439,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 
         if( 1 == nTokenCount )
         {
-            rPictureStorageName = String( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICSTORAGE_NAME ) );
+            rPictureStorageName = String(  XML_GRAPHICSTORAGE_NAME  );
             rPictureStreamName = aURLStr;
         }
         else
@@ -508,7 +508,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rt
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
         if( aRet.xStream.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
         {
-            ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+            ::rtl::OUString aPropName( "UseCommonStoragePasswordEncryption" );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
             xProps->setPropertyValue( aPropName, uno::makeAny( sal_True) );
         }
@@ -593,12 +593,12 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             if( !aMimeType.isEmpty() )
             {
                 aAny <<= aMimeType;
-                xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
+                xProps->setPropertyValue( String(  "MediaType"  ), aAny );
             }
 
             const sal_Bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff";
             aAny <<= bCompressed;
-            xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
+            xProps->setPropertyValue( String(  "Compressed"  ), aAny );
 
             SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
@@ -611,9 +611,9 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) );
+                        aFormat = String(  "gif"  );
                     else
-                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
+                        aFormat = String(  "png"  );
 
                     bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStream,
                                                      rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
@@ -687,7 +687,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
             if( aObj.GetType() != GRAPHIC_NONE )
             {
                 maGrfObjs.push_back( aObj );
-                ::rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ) );
+                ::rtl::OUString aBaseURL(  XML_GRAPHICOBJECT_URL_BASE  );
 
                 rURLPair.second = aBaseURL;
                 rURLPair.second += rtl::OStringToOUString(aObj.GetUniqueID(),
@@ -713,14 +713,14 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 {
                     switch( aGfxLink.GetType() )
                     {
-                        case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".tif" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".met" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ); break;
+                        case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = String(  ".eps"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = String(  ".gif"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = String(  ".jpg"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = String(  ".png"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = String(  ".tif"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String(  ".wmf"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String(  ".met"  ); break;
+                        case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String(  ".pct"  ); break;
                         case( GFX_LINK_TYPE_NATIVE_SVG ): 
                             // backward-compat kludge: since no released OOo
                             // version to date can handle svg properly, wrap it up
@@ -730,14 +730,14 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                             if( SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
                             {
                                 bUseGfxLink = false;
-                                aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                                aExtension = String(  ".svm"  );
                             }
                             else
-                                aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svg" ) );
+                                aExtension = String(  ".svg"  );
                             break;
 
                         default:
-                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".grf" ) );
+                            aExtension = String(  ".grf"  );
                         break;
                     }
                 }
@@ -746,23 +746,23 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                     if( aGrfObject.GetType() == GRAPHIC_BITMAP )
                     {
                         if( aGrfObject.IsAnimated() )
-                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) );
+                            aExtension = String(  ".gif"  );
                         else
-                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
+                            aExtension = String(  ".png"  );
                     }
                     else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
                         if ( ImplCheckForEPS( rMtf ) )
-                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) );
+                            aExtension = String(  ".eps"  );
                         else
-                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                            aExtension = String(  ".svm"  );
                     }
                 }
 
                 rtl::OUString aURLEntry;
-                const String sPictures( RTL_CONSTASCII_USTRINGPARAM( "Pictures/" ) );
+                const String sPictures(  "Pictures/"  );
 
                 if ( !rRequestedFileName.isEmpty() )
                 {
@@ -885,7 +885,7 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
                 rtl::OUString aParam( aToken.copy( 0, n ) );
                 rtl::OUString aValue( aToken.copy( n + 1, aToken.getLength() - ( n + 1 ) ) );
 
-                const rtl::OUString sRequestedName( RTL_CONSTASCII_USTRINGPARAM("requestedName") );
+                const rtl::OUString sRequestedName( "requestedName" );
                 if ( aParam.match( sRequestedName ) )
                     aRequestedFileName = aValue;
             }
@@ -964,7 +964,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
                 if( !aId.isEmpty() )
                 {
-                    aRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ));
+                    aRet = ::rtl::OUString( XML_GRAPHICOBJECT_URL_BASE );
                     aRet += aId;
                 }
             }
@@ -1135,15 +1135,15 @@ Reference< XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const R
 ::rtl::OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.GraphicImportHelper" ));
+    return ::rtl::OUString(  "com.sun.star.comp.Svx.GraphicImportHelper" );
 }
 Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames()
     throw()
 {
     // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
     Sequence< ::rtl::OUString > aSupportedServiceNames( 2 );
-    aSupportedServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.GraphicObjectResolver" ) );
-    aSupportedServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStreamResolver" ) );
+    aSupportedServiceNames[0] = ::rtl::OUString(  "com.sun.star.document.GraphicObjectResolver"  );
+    aSupportedServiceNames[1] = ::rtl::OUString(  "com.sun.star.document.BinaryStreamResolver"  );
     return aSupportedServiceNames;
 }
 
@@ -1156,15 +1156,15 @@ Reference< XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const R
 ::rtl::OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.GraphicExportHelper" ));
+    return ::rtl::OUString(  "com.sun.star.comp.Svx.GraphicExportHelper" );
 }
 Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames()
     throw()
 {
     // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
     Sequence< ::rtl::OUString > aSupportedServiceNames( 2 );
-    aSupportedServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.GraphicObjectResolver" ) );
-    aSupportedServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStreamResolver" ) );
+    aSupportedServiceNames[0] = ::rtl::OUString(  "com.sun.star.document.GraphicObjectResolver"  );
+    aSupportedServiceNames[1] = ::rtl::OUString(  "com.sun.star.document.BinaryStreamResolver"  );
     return aSupportedServiceNames;
 }
 
