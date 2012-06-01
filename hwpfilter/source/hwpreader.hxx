@@ -228,7 +228,7 @@ Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
 
 HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact )
 {
-    OUString sService(RTL_CONSTASCII_USTRINGPARAM( WRITER_IMPORTER_NAME ));
+    OUString sService( WRITER_IMPORTER_NAME );
     try {
         Reference< XDocumentHandler >
             xHandler( xFact->createInstance( sService ), UNO_QUERY );
@@ -237,11 +237,11 @@ HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact 
         p->setDocumentHandler( xHandler );
 
         Sequence< Any > aArgs( 2 );
-        aArgs[0] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-        aArgs[1] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+        aArgs[0] <<= OUString("Local");
+        aArgs[1] <<= OUString("Office");
         Reference< XInterface > xUCB
             ( xFact->createInstanceWithArguments
-               (OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.UniversalContentBroker")),
+               (OUString("com.sun.star.ucb.UniversalContentBroker"),
                 aArgs));
         p->setUCB( xUCB );
 
@@ -282,12 +282,12 @@ void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
 
 OUString HwpImportFilter::getImplementationName_Static() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
@@ -322,7 +322,7 @@ OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::s
              detect_hwp_version(reinterpret_cast<const char*>(aData.getConstArray()))
            )
         {
-            sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MIZI_Hwp_97"));
+            sTypeName = OUString("writer_MIZI_Hwp_97");
         }
     }
 
@@ -333,8 +333,8 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME1));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME2));
+    pArray[0] = OUString(SERVICE_NAME1);
+    pArray[1] = OUString(SERVICE_NAME2);
     return aRet;
 }
 
