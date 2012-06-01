@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     cppcanvas \
     cppu \
     cppuhelper \
+    cpputools \
     cui \
     dbaccess \
     desktop \
@@ -70,10 +71,12 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     i18nutil \
     idl \
     idlc \
+    io \
     javaunohelper \
     jvmaccess \
     jvmfwk \
     jurt \
+    l10ntools \
     lingucomponent \
     linguistic \
     lotuswordpro \
@@ -87,6 +90,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oovbaapi \
     oox \
     package \
+    packimages \
     padmin \
     psprint_config \
     rdbmaker \
@@ -102,23 +106,31 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sc \
     scaddins \
     sccomp \
+    scp2 \
     scripting \
     sd \
     sdext \
     sfx2 \
+    shell \
     slideshow \
     smoketest \
+    solenv \
     sot \
     starmath \
     stoc \
+    store
     svl \
     svtools \
     svx \
     sw \
     swext \
     test \
+    testtools \
     toolkit \
     tools \
+	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
+		translations \
+	) \
     twain \
     ucb \
     ucbhelper \
@@ -137,12 +149,17 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     wizards \
     writerfilter \
     writerperfect \
+	$(if $(filter X11_EXTENSIONS,$(BUILD_TYPE)),\
+		x11_extensions \
+	) \
     xmerge \
     xmlsecurity \
     xml2cmp \
+    xmlhelp \
     xmloff \
     xmlreader \
     xmlscript \
+    xmlsecurity \
 ))
 
 ifneq ($(SOLAR_JAVA),)
