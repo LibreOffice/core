@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-// header for define RTL_CONSTASCII_USTRINGPARAM
 #include <rtl/ustring.h>
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
@@ -80,12 +79,9 @@ using ::rtl::OUString;
     {
         (void)ex; // avoid warning for pro build
 
-        OSL_FAIL( OUStringToOString( OUString(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
-                        ex.Message), RTL_TEXTENCODING_ASCII_US ).getStr());
-
+        OSL_FAIL( OUStringToOString( "Exception caught. Type: " +
+                        OUString::createFromAscii( typeid( ex ).name() ) +
+                        ", Message: " + ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
     return aResult;
@@ -202,7 +198,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.DataSeriesWrapper")) ), uno::UNO_QUERY );
+                    "com.sun.star.comp.chart2.DataSeriesWrapper" ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -239,7 +235,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.DataSeriesWrapper")) ), uno::UNO_QUERY );
+                     "com.sun.star.comp.chart2.DataSeriesWrapper" ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {

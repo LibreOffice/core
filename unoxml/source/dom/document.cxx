@@ -808,8 +808,7 @@ namespace DOM
             if (!aNsUri.isEmpty())
             {
                 if (!aNsPrefix.isEmpty()) {
-                    aQName = aNsPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
-                                + aQName;
+                    aQName = aNsPrefix + ":" + aQName;
                 }
                 xNewElement = xDocument->createElementNS(aNsUri, aQName);
             } else {
@@ -831,8 +830,7 @@ namespace DOM
                     if (!aAttrUri.isEmpty())
                     {
                         if (!aAttrPrefix.isEmpty()) {
-                            aAttrName = aAttrPrefix +
-                                OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aAttrName;
+                            aAttrName = aAttrPrefix + ":" + aAttrName;
                         }
                         xNewElement->setAttributeNS(
                                 aAttrUri, aAttrName, sValue);
@@ -905,11 +903,9 @@ namespace DOM
         {
             Reference< XDocumentEvent > const xDocevent(xDocument, UNO_QUERY);
             Reference< XMutationEvent > const event(xDocevent->createEvent(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInsertedIntoDocument"))),
-                UNO_QUERY_THROW);
+                "DOMNodeInsertedIntoDocument"), UNO_QUERY_THROW);
             event->initMutationEvent(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInsertedIntoDocument"))
-                , sal_True, sal_False, Reference< XNode >(),
+                "DOMNodeInsertedIntoDocument", sal_True, sal_False, Reference< XNode >(),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
             xDocET->dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -949,11 +945,10 @@ namespace DOM
         return xNode;
     }
 
-
     OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)
     {
         // does not need mutex currently
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#document"));
+        return OUString("#document");
     }
 
     OUString SAL_CALL CDocument::getNodeValue() throw (RuntimeException)

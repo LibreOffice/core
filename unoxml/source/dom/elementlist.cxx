@@ -65,9 +65,8 @@ namespace DOM
         try {
             Reference< XEventTarget > const xTarget(
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
-            OUString aType(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"));
             sal_Bool capture = sal_False;
-            xTarget->addEventListener(aType,
+            xTarget->addEventListener("DOMSubtreeModified",
                     Reference< XEventListener >(this), capture);
         } catch (const Exception &e){
             OString aMsg("Exception caught while registering NodeList as listener:\n");

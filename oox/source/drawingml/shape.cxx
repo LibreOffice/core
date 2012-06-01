@@ -336,17 +336,18 @@ Reference< XShape > Shape::createAndInsert(
     awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
     OUString aServiceName;
-    if( rServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape") ) &&
+    if( rServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
         mpGraphicPropertiesPtr && !mpGraphicPropertiesPtr->maAudio.msEmbed.isEmpty() )
     {
-        aServiceName = finalizeServiceName( rFilterBase, OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.MediaShape" ) ), aShapeRectHmm );
+        aServiceName = finalizeServiceName( rFilterBase, "com.sun.star.presentation.MediaShape", aShapeRectHmm );
         bIsEmbMedia = true;
     }
     else
     {
         aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
     }
-    sal_Bool bIsCustomShape = aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShape" ) ) || aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ConnectorShape" ) );
+    sal_Bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
+                                aServiceName == "com.sun.star.drawing.ConnectorShape" );
 
     basegfx::B2DHomMatrix aTransformation;
 
@@ -529,9 +530,9 @@ Reference< XShape > Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
-        if ( bIsEmbMedia || aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) )
+        if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
-        if ( mpTablePropertiesPtr.get() && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape")) )
+        if ( mpTablePropertiesPtr.get() && aServiceName == "com.sun.star.drawing.TableShape" )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
         aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr );
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
@@ -546,7 +547,7 @@ Reference< XShape > Shape::createAndInsert(
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
         // do not set properties at a group shape (this causes assertions from svx)
-        if( aServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")) )
+        if( aServiceName != "com.sun.star.drawing.GroupShape" )
             PropertySet( xSet ).setProperties( aShapeProps );
 
         if( bIsCustomShape )

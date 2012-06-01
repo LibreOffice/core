@@ -139,8 +139,8 @@ void PPTShape::addShape(
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
             sal_Bool bClearText = sal_False;
 
-            if ( sServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) &&
-                 sServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) )
+            if ( sServiceName !=  "com.sun.star.drawing.GraphicObjectShape"  &&
+                 sServiceName !=  "com.sun.star.drawing.OLE2Shape" )
             {
                 const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
                 OSL_TRACE("has master: %p", rSlidePersist.getMasterPersist().get());

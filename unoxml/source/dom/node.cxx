@@ -376,10 +376,8 @@ namespace DOM
         pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInserted"))), UNO_QUERY);
-        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInserted"))
-            , sal_True, sal_False,
-            this,
+            "DOMNodeInserted"), UNO_QUERY);
+        event->initMutationEvent("DOMNodeInserted", sal_True, sal_False, this,
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
 
         // the following dispatch functions use only UNO interfaces
@@ -816,8 +814,8 @@ namespace DOM
          */
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeRemoved"))), UNO_QUERY);
-            event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeRemoved")),
+            "DOMNodeRemoved"), UNO_QUERY);
+            event->initMutationEvent("DOMNodeRemoved",
             sal_True,
             sal_False,
             this,
@@ -950,9 +948,9 @@ namespace DOM
         // target is _this_ node
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"))), UNO_QUERY);
+            "DOMSubtreeModified"), UNO_QUERY);
         event->initMutationEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified")), sal_True,
+            "DOMSubtreeModified", sal_True,
             sal_False, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));

@@ -176,7 +176,7 @@ namespace DOM
             throw SAXException();
 
         Reference< XDocumentBuilder > aBuilder(m_aServiceManager->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder"))), UNO_QUERY_THROW);
+                "com.sun.star.xml.dom.DocumentBuilder"), UNO_QUERY_THROW);
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
         m_aDocument = aDocument;
@@ -226,7 +226,7 @@ namespace DOM
             attr_qname = attribs->getNameByIndex(i);
             attr_value = attribs->getValueByIndex(i);
             // new prefix mapping
-            if (attr_qname.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:"))) == 0)
+            if (attr_qname.indexOf("xmlns:") == 0)
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
                 aNSMap.insert(NSMap::value_type(newprefix, attr_value));
@@ -319,7 +319,7 @@ namespace DOM
         OUString aRefName;
         OUString aPrefix = aElement->getPrefix();
         if (!aPrefix.isEmpty())
-            aRefName = aPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aElement->getTagName();
+            aRefName = aPrefix + ":" + aElement->getTagName();
         else
             aRefName = aElement->getTagName();
         if (aRefName != aName) // consistency check

@@ -310,7 +310,7 @@ namespace XPath
             va_end(args);
 
             ::rtl::OUStringBuffer buf(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error:\n")));
+                "libxml2 error:\n");
             buf.appendAscii(str);
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
@@ -321,11 +321,11 @@ namespace XPath
         {
             (void) userData;
             ::rtl::OUStringBuffer buf(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error:\n")));
+                "libxml2 error:\n");
             if (error) {
                 buf.append(make_error_message(error));
             } else {
-                buf.append(OUString(RTL_CONSTASCII_USTRINGPARAM("no error argument!")));
+                buf.append("no error argument!");
             }
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);

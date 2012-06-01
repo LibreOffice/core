@@ -64,7 +64,7 @@ namespace DOM
 
     OUString SAL_CALL CText::getNodeName() throw (RuntimeException)
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#text"));
+        return OUString("#text");
     }
 
     Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)

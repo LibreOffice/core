@@ -349,18 +349,18 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
         OUString aName, aValue;
         if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
-                 if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "position" ) ) )      mrTypeModel.maPosition = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left" ) ) )          mrTypeModel.maLeft = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "top" ) ) )           mrTypeModel.maTop = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "width" ) ) )         mrTypeModel.maWidth = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "height" ) ) )        mrTypeModel.maHeight = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-left" ) ) )   mrTypeModel.maMarginLeft = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-top" ) ) )    mrTypeModel.maMarginTop = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso-position-vertical-relative" ) ) ) mrTypeModel.maPositionVerticalRelative = aValue;
+                 if( aName == "position" )      mrTypeModel.maPosition = aValue;
+            else if( aName == "left" )           mrTypeModel.maLeft = aValue;
+            else if( aName == "top" )            mrTypeModel.maTop = aValue;
+            else if( aName == "width" )          mrTypeModel.maWidth = aValue;
+            else if( aName == "height" )         mrTypeModel.maHeight = aValue;
+            else if( aName == "margin-left" )    mrTypeModel.maMarginLeft = aValue;
+            else if( aName == "margin-top" )     mrTypeModel.maMarginTop = aValue;
+            else if( aName == "mso-position-vertical-relative" )  mrTypeModel.maPositionVerticalRelative = aValue;
             else if( aName == "mso-position-horizontal" ) mrTypeModel.maPositionHorizontal = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso-fit-shape-to-text" ) ) )          mrTypeModel.mbAutoHeight = sal_True;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "rotation" ) ) )      mrTypeModel.maRotation = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "flip" ) ) )      mrTypeModel.maFlip = aValue;
+            else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = sal_True;
+            else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
+            else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
         }
     }
 }
@@ -389,7 +389,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
         case VML_TOKEN( textbox ):
             // Custom shape in Writer with a textbox are transformed into a frame
             dynamic_cast<SimpleShape&>( mrShape ).setService(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")));
+                    "com.sun.star.text.TextFrame");
             return new TextBoxContext( *this, mrShapeModel.createTextBox(), rAttribs );
         case VMLX_TOKEN( ClientData ):
             return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );
@@ -397,7 +397,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
             // Force RectangleShape, this is ugly :(
             // and is there because of the lines above which change it to TextFrame
             dynamic_cast< SimpleShape& >( mrShape ).setService(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape")));
+                    "com.sun.star.drawing.RectangleShape");
             mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
             break;
     }

@@ -61,7 +61,7 @@ namespace DOM
         if (!i_xHandler.is()) throw RuntimeException();
         comphelper::AttributeList *pAttrs =
             new comphelper::AttributeList();
-        OUString type = OUString();
+        OUString type = "";
         // add namespace definitions to attributes
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
@@ -69,8 +69,7 @@ namespace DOM
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
             OUString name = (prefix.isEmpty())
-                ? OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns"))
-                : OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:")) + prefix;
+                ? OUString( "xmlns" ) : OUString( "xmlns:" ) + prefix;
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const sal_Char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
@@ -583,8 +582,8 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified"))), UNO_QUERY);
-        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified")),
+            "DOMAttrModified"), UNO_QUERY);
+        event->initMutationEvent("DOMAttrModified",
             sal_True, sal_False, Reference< XNode >(xAttr, UNO_QUERY),
             OUString(), xAttr->getValue(), xAttr->getName(),
             AttrChangeType_ADDITION);
@@ -648,8 +647,8 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified"))), UNO_QUERY);
-        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified")),
+            "DOMAttrModified"), UNO_QUERY);
+        event->initMutationEvent("DOMAttrModified",
             sal_True, sal_False,
             Reference< XNode >(getAttributeNode(name), UNO_QUERY),
             oldValue, value, name, aChangeType);
@@ -730,10 +729,9 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified"))), UNO_QUERY);
+            "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified")),
-            sal_True, sal_False,
+            "DOMAttrModified", sal_True, sal_False,
             Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
             oldValue, value, qualifiedName, aChangeType);
 
@@ -778,8 +776,7 @@ namespace DOM
     void SAL_CALL CElement::setElementName(const OUString& aName)
         throw (RuntimeException, DOMException)
     {
-        if (aName.isEmpty() ||
-            (0 <= aName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(":")))))
+        if (aName.isEmpty() || (0 <= aName.indexOf(':')))
         {
             DOMException e;
             e.Code = DOMExceptionType_INVALID_CHARACTER_ERR;
