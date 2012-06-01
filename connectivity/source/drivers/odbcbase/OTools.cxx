@@ -693,8 +693,8 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 --nLen;
             aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding));
 
-            // It is about Binariy Data, a String, that for StarView is to long or
-            // the driver kan't predict the length of the data - as well as save the
+            // It is about Binary Data, a String, that for StarView is too long or
+            // the driver can't predict the length of the data - as well as save the
             // MemoryStream.
             while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
             {
