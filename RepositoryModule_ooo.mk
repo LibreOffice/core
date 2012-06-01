@@ -73,9 +73,9 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idlc \
     io \
     javaunohelper \
+    jurt \
     jvmaccess \
     jvmfwk \
-    jurt \
     l10ntools \
     lingucomponent \
     linguistic \
@@ -93,6 +93,9 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     packimages \
     padmin \
     psprint_config \
+	$(if $(strip $(OOO_JUNIT_JAR)),\
+		qadevOOo \
+	) \
     rdbmaker \
     regexp \
     reportbuilder \
@@ -161,13 +164,5 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     xmlscript \
     xmlsecurity \
 ))
-
-ifneq ($(SOLAR_JAVA),)
- ifneq "$(OOO_JUNIT_JAR)" ""
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    qadevOOo \
-))
-  endif
-endif
 
 # vim: set noet ts=4 sw=4:
