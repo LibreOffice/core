@@ -69,6 +69,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #else
     HWND hWndParent;
     UINT nFlags;
+    int  nCode;
 
     /* get app name or NULL if unknown (don't call assert) */
     LPCSTR lpszAppName = "Error";
@@ -89,8 +90,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     {
         if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
         {
-            TCHAR   szBoxMessage[1024];
-            int     nCode;
+            TCHAR szBoxMessage[1024];
 
             /* active popup window for the current thread */
             hWndParent = GetActiveWindow();
