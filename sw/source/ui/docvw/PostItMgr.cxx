@@ -935,7 +935,9 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     long            lTopBorder      = rBorder.Top() + 5;
     long            lBottomBorder   = rBorder.Bottom() - 5;
     const long      lVisibleHeight  = lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
+    long            lSpaceUsed = 0;
     long            lTranslatePos   = 0;
+    int             loop = 0;
     bool            bScrollbars     = false;
 
     // do all neccessary resizings
@@ -965,8 +967,6 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     if (aVisiblePostItList.size()>1)
     {
         bool bDone = false;
-        long lSpaceUsed = 0;
-        int  loop = 0;
         // if no window is moved anymore we are finished
         while (!bDone)
         {

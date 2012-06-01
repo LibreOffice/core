@@ -1830,12 +1830,12 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
+    sal_Int32 nCount = 0;
     if(IsValid())
     {
         sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().Count();
         SwTxtFtn* pTxtFtn;
         uno::Reference< XFootnote >  xRef;
-        sal_Int32 nCount = 0;
         for( n = 0; n < nFtnCnt; ++n )
         {
             pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
