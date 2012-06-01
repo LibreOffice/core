@@ -20,7 +20,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonDocs(this,SfxResId(BTN_SELECT_DOCS)),
       aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
-      aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS))
+      aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
+      maView(this,SfxResId(TEMPLATE_VIEW))
 {
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));

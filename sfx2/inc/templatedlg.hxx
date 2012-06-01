@@ -10,6 +10,8 @@
 #ifndef TEMPLATEDLG_HXX
 #define TEMPLATEDLG_HXX
 
+#include <svtools/thumbnailview.hxx>
+
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 
@@ -34,6 +36,8 @@ private:
     PushButton aButtonPresents;
     PushButton aButtonSheets;
     PushButton aButtonDraws;
+
+    ThumbnailView maView;
 };
 
 #endif // TEMPLATEDLG_HXX

@@ -11,3 +11,5 @@
 #define BTN_SELECT_PRESENTATIONS    3
 #define BTN_SELECT_SHEETS           4
 #define BTN_SELECT_DRAWS            5
+
+#define TEMPLATE_VIEW               6

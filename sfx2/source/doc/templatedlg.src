@@ -16,7 +16,7 @@ ModalDialog DLG_TEMPLATE_MANAGER
     OutputSize = TRUE;
     SVLook = TRUE;
     Moveable = TRUE;
-    Size = MAP_APPFONT ( 271 , 162 );
+    Size = MAP_APPFONT ( 270 , 165 );
     Text [en-US] = "Template Manager";
 
     PushButton BTN_SELECT_ALL
@@ -58,5 +58,12 @@ ModalDialog DLG_TEMPLATE_MANAGER
         Size = MAP_APPFONT(50,14);
         TabStop = TRUE;
         Text [en-US] = "Drawings";
+    };
+
+    Control TEMPLATE_VIEW
+    {
+        Pos = MAP_APPFONT(5,30);
+        Size = MAP_APPFONT(50,260);
+        TabStop = TRUE;
     };
 };
