@@ -121,8 +121,8 @@ int MyApp::Main()
      *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= OUString( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= OUString( UCB_CONFIGURATION_KEY2_OFFICE );
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif

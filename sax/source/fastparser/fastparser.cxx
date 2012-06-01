@@ -453,7 +453,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     entity.maStructSource = maStructSource;
 
     if( !entity.maStructSource.aInputStream.is() )
-        throw SAXException( OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source" ) ), Reference< XInterface >(), Any() );
+        throw SAXException( OUString(  "No input source" ), Reference< XInterface >(), Any() );
 
     entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
     if( !entity.maStructSource.sEncoding.isEmpty() )
@@ -462,7 +462,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     // create parser with proper encoding
     entity.mpParser = XML_ParserCreate( 0 );
     if( !entity.mpParser )
-        throw SAXException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't create parser" ) ), Reference< XInterface >(), Any() );
+        throw SAXException( OUString( "Couldn't create parser" ), Reference< XInterface >(), Any() );
 
     // set all necessary C-Callbacks
     XML_SetUserData( entity.mpParser, this );
@@ -566,14 +566,14 @@ void FastSaxParser::setLocale( const Locale & Locale ) throw (RuntimeException)
 Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(PARSER_SERVICE_NAME) );
+    aRet.getArray()[0] = ::rtl::OUString( PARSER_SERVICE_NAME );
     return aRet;
 }
 
 // XServiceInfo
 OUString FastSaxParser::getImplementationName() throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_IMPLEMENTATION_NAME ));
+    return OUString( PARSER_IMPLEMENTATION_NAME );
 }
 
 // XServiceInfo
@@ -594,7 +594,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames(void) throw (Runtim
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_SERVICE_NAME ));
+    seq.getArray()[0] = OUString( PARSER_SERVICE_NAME );
     return seq;
 }
 
@@ -911,8 +911,8 @@ void FastSaxParser::callbackEntityDecl(
         OSL_TRACE("FastSaxParser: internal entity declaration, stopping");
         XML_StopParser(getEntity().mpParser, XML_FALSE);
         getEntity().maSavedException <<= SAXParseException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "FastSaxParser: internal entity declaration, stopping")),
+            ::rtl::OUString(
+                    "FastSaxParser: internal entity declaration, stopping"),
             static_cast<OWeakObject*>(this), Any(),
             mxDocumentLocator->getPublicId(),
             mxDocumentLocator->getSystemId(),
