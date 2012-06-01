@@ -2370,6 +2370,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aDefaultState.aCharacterSprms.set(NS_sprm::LN_CLidBi, pIntValue);
             break;
         case RTF_CHCBPAT:
+            if (nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
                 lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_sprm::LN_CShd, NS_ooxml::LN_CT_Shd_fill, pValue);

@@ -93,6 +93,7 @@ public:
     void testFdo49271();
     void testFdo49692();
     void testFdo45190();
+    void testFdo50539();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testFdo49271);
     CPPUNIT_TEST(testFdo49692);
     CPPUNIT_TEST(testFdo45190);
+    CPPUNIT_TEST(testFdo50539);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -741,6 +743,22 @@ void Test::testFdo45190()
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-100)), nValue);
+}
+
+void Test::testFdo50539()
+{
+    load("fdo50539.rtf");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    // \chcbpat with zero argument should mean the auto (-1) color, not a default color (black)
+    xPropertySet->getPropertyValue("CharBackColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
