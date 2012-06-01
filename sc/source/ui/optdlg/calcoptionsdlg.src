@@ -89,14 +89,14 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
         TabStop = TRUE ;
     };
 
-    String STR_INDIRECT_SYNTAX_CAPTION
+    String STR_STRING_REF_SYNTAX_CAPTION
     {
-        Text [ en-US ] = "Formula syntax for INDIRECT function";
+        Text [ en-US ] = "Reference syntax for string reference";
     };
 
-    String STR_INDIRECT_SYNTAX_DESC
+    String STR_STRING_REF_SYNTAX_DESC
     {
-        Text [ en-US ] = "Formula syntax that built-in function INDIRECT expects.";
+        Text [ en-US ] = "Formula syntax to use when parsing references given in string paramters.  This affects built-in functions such as INDIRECT that takes a reference as a string value.";
     };
 
     String STR_USE_FORMULA_SYNTAX

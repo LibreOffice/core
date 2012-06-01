@@ -1348,11 +1348,11 @@
                     </info>
                     <value></value>
                 </prop>
-                <prop oor:name="IndirectFuncGrammar" oor:type="xs:int" oor:nillable="false">
+                <prop oor:name="StringRefAddressSyntax" oor:type="xs:int" oor:nillable="false">
                     <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
                     <info>
                         <author>kyoshida</author>
-                        <desc>Grammar for INDIRECT function</desc>
+                        <desc>Address syntax for reference in string for functions such as INDIRECT.</desc>
                     </info>
                     <constraints>
                         <enumeration oor:value="-1">

@@ -69,8 +69,8 @@ private:
     rtl::OUString maExcelA1;
     rtl::OUString maExcelR1C1;
 
-    rtl::OUString maCaptionIndirectSyntax;
-    rtl::OUString maDescIndirectSyntax;
+    rtl::OUString maCaptionStringRefSyntax;
+    rtl::OUString maDescStringRefSyntax;
     rtl::OUString maUseFormulaSyntax;
 
     ScCalcConfig maConfig;

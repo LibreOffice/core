@@ -509,7 +509,7 @@ void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )
 
     // Global interpreter settings.
     ScCalcConfig aConfig;
-    aConfig.meIndirectRefSyntax = rOpt.GetIndirectFuncSyntax();
+    aConfig.meStringRefAddressSyntax = rOpt.GetStringRefAddressSyntax();
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 

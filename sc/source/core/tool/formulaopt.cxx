@@ -55,7 +55,7 @@ ScFormulaOptions::ScFormulaOptions()
 ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
     bUseEnglishFuncName ( rCpy.bUseEnglishFuncName ),
     eFormulaGrammar     ( rCpy.eFormulaGrammar ),
-    eIndirectFuncRefSyntax(rCpy.eIndirectFuncRefSyntax),
+    eStringRefSyntax(rCpy.eStringRefSyntax),
     aFormulaSepArg      ( rCpy.aFormulaSepArg ),
     aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
     aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol )
@@ -72,7 +72,7 @@ void ScFormulaOptions::SetDefaults()
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
 
     // unspecified means use the current formula syntax.
-    eIndirectFuncRefSyntax = formula::FormulaGrammar::CONV_UNSPECIFIED;
+    eStringRefSyntax = formula::FormulaGrammar::CONV_UNSPECIFIED;
 
     ResetFormulaSeparators();
 }
@@ -144,7 +144,7 @@ ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
 {
     bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
     eFormulaGrammar     = rCpy.eFormulaGrammar;
-    eIndirectFuncRefSyntax = rCpy.eIndirectFuncRefSyntax;
+    eStringRefSyntax = rCpy.eStringRefSyntax;
     aFormulaSepArg      = rCpy.aFormulaSepArg;
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
     aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
@@ -155,7 +155,7 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
 {
     return bUseEnglishFuncName == rOpt.bUseEnglishFuncName
         && eFormulaGrammar     == rOpt.eFormulaGrammar
-        && eIndirectFuncRefSyntax == rOpt.eIndirectFuncRefSyntax
+        && eStringRefSyntax == rOpt.eStringRefSyntax
         && aFormulaSepArg      == rOpt.aFormulaSepArg
         && aFormulaSepArrayRow == rOpt.aFormulaSepArrayRow
         && aFormulaSepArrayCol == rOpt.aFormulaSepArrayCol;
@@ -212,19 +212,19 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_SEP_ARG           2
 #define SCFORMULAOPT_SEP_ARRAY_ROW     3
 #define SCFORMULAOPT_SEP_ARRAY_COL     4
-#define SCFORMULAOPT_INDIRECT_GRAMMAR  5
+#define SCFORMULAOPT_STRING_REF_SYNTAX 5
 #define SCFORMULAOPT_COUNT             6
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Syntax/Grammar",             // SCFORMULAOPT_GRAMMAR
-        "Syntax/EnglishFunctionName", // SCFORMULAOPT_ENGLISH_FUNCNAME
-        "Syntax/SeparatorArg",        // SCFORMULAOPT_SEP_ARG
-        "Syntax/SeparatorArrayRow",   // SCFORMULAOPT_SEP_ARRAY_ROW
-        "Syntax/SeparatorArrayCol",   // SCFORMULAOPT_SEP_ARRAY_COL
-        "Syntax/IndirectFuncGrammar", // SCFORMULAOPT_INDIRECT_GRAMMAR
+        "Syntax/Grammar",                // SCFORMULAOPT_GRAMMAR
+        "Syntax/EnglishFunctionName",    // SCFORMULAOPT_ENGLISH_FUNCNAME
+        "Syntax/SeparatorArg",           // SCFORMULAOPT_SEP_ARG
+        "Syntax/SeparatorArrayRow",      // SCFORMULAOPT_SEP_ARRAY_ROW
+        "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
+        "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -308,10 +308,10 @@ ScFormulaCfg::ScFormulaCfg() :
                         SetFormulaSepArrayCol(aSep);
                 }
                 break;
-                case SCFORMULAOPT_INDIRECT_GRAMMAR:
+                case SCFORMULAOPT_STRING_REF_SYNTAX:
                 {
                     // Get default value in case this option is not set.
-                    ::formula::FormulaGrammar::AddressConvention eConv = GetIndirectFuncSyntax();
+                    ::formula::FormulaGrammar::AddressConvention eConv = GetStringRefAddressSyntax();
 
                     do
                     {
@@ -338,7 +338,7 @@ ScFormulaCfg::ScFormulaCfg() :
                         }
                     }
                     while (false);
-                    SetIndirectFuncSyntax(eConv);
+                    SetStringRefAddressSyntax(eConv);
                 }
                 break;
                 }
@@ -384,10 +384,10 @@ void ScFormulaCfg::Commit()
             case SCFORMULAOPT_SEP_ARRAY_COL:
                 pValues[nProp] <<= GetFormulaSepArrayCol();
             break;
-            case SCFORMULAOPT_INDIRECT_GRAMMAR:
+            case SCFORMULAOPT_STRING_REF_SYNTAX:
             {
                 sal_Int32 nVal = -1;
-                switch (GetIndirectFuncSyntax())
+                switch (GetStringRefAddressSyntax())
                 {
                     case ::formula::FormulaGrammar::CONV_OOO:     nVal = 0; break;
                     case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;

@@ -94,8 +94,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString()),
     maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString()),
     maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString()),
-    maCaptionIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_CAPTION).toString()),
-    maDescIndirectSyntax(ScResId(STR_INDIRECT_SYNTAX_DESC).toString()),
+    maCaptionStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_CAPTION).toString()),
+    maDescStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_DESC).toString()),
     maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
     maConfig(rConfig)
 {
@@ -131,7 +131,7 @@ void ScCalcOptionsDialog::FillOptionsList()
         pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
         pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
         OptionString* pItem = new OptionString(
-            maCaptionIndirectSyntax, toString(maConfig.meIndirectRefSyntax));
+            maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
         pEntry->AddItem(pItem);
         pModel->Insert(pEntry);
     }
@@ -149,7 +149,7 @@ void ScCalcOptionsDialog::SelectionChanged()
         maLbOptionEdit.InsertEntry(maCalcA1);
         maLbOptionEdit.InsertEntry(maExcelA1);
         maLbOptionEdit.InsertEntry(maExcelR1C1);
-        switch (maConfig.meIndirectRefSyntax)
+        switch (maConfig.meStringRefAddressSyntax)
         {
             case formula::FormulaGrammar::CONV_OOO:
                 maLbOptionEdit.SelectEntryPos(1);
@@ -164,7 +164,7 @@ void ScCalcOptionsDialog::SelectionChanged()
             default:
                 maLbOptionEdit.SelectEntryPos(0);
         }
-        maFtAnnotation.SetText(maDescIndirectSyntax);
+        maFtAnnotation.SetText(maDescStringRefSyntax);
     }
 }
 
@@ -174,7 +174,7 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
     {
         // Formula syntax for INDIRECT function.
         sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
-        maConfig.meIndirectRefSyntax = toAddressConvention(nPos);
+        maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
         maLbSettings.SetUpdateMode(false);
 
@@ -184,7 +184,7 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
             return;
 
         OptionString* pItem = new OptionString(
-            maCaptionIndirectSyntax, toString(maConfig.meIndirectRefSyntax));
+            maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
         pEntry->ReplaceItem(pItem, 2);
 
         maLbSettings.SetUpdateMode(true);

@@ -29,7 +29,7 @@
 #include "calcconfig.hxx"
 
 ScCalcConfig::ScCalcConfig() :
-    meIndirectRefSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED) {}
+    meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED) {}
 
 void ScCalcConfig::reset()
 {
@@ -38,7 +38,7 @@ void ScCalcConfig::reset()
 
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
-    return meIndirectRefSyntax == r.meIndirectRefSyntax;
+    return meStringRefAddressSyntax == r.meStringRefAddressSyntax;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

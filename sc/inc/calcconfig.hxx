@@ -37,7 +37,7 @@
  */
 struct SC_DLLPUBLIC ScCalcConfig
 {
-    formula::FormulaGrammar::AddressConvention meIndirectRefSyntax;
+    formula::FormulaGrammar::AddressConvention meStringRefAddressSyntax;
 
     ScCalcConfig();
 

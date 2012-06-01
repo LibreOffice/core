@@ -868,7 +868,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
     }
 
     ScCalcConfig aConfig;
-    aConfig.meIndirectRefSyntax = formula::FormulaGrammar::CONV_OOO;
+    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_OOO;
     ScInterpreter::SetGlobalConfig(aConfig);
     pDoc->CalcAll();
     {
@@ -884,7 +884,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
         }
     }
 
-    aConfig.meIndirectRefSyntax = formula::FormulaGrammar::CONV_XL_A1;
+    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_A1;
     ScInterpreter::SetGlobalConfig(aConfig);
     pDoc->CalcAll();
     {
@@ -900,7 +900,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
         }
     }
 
-    aConfig.meIndirectRefSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
+    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
     ScInterpreter::SetGlobalConfig(aConfig);
     pDoc->CalcAll();
     {
