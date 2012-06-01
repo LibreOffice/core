@@ -158,7 +158,7 @@ throw (RuntimeException)
     }
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
+    OUString sXMLImportService (  "com.sun.star.comp.Writer.XMLOasisImporter"  );
     Reference < XDocumentHandler > xInternalHandler( comphelper::ComponentContext( mxContext ).createComponent( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
@@ -245,14 +245,14 @@ throw( uno::RuntimeException )
     confidence = WPDocument::isFileFormatSupported(&input);
 
     if (confidence == WPD_CONFIDENCE_EXCELLENT || confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
-        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_WordPerfect_Document" ) );
+        sTypeName = OUString(  "writer_WordPerfect_Document"  );
 
     if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
+            Descriptor[location].Name = ::rtl::OUString("TypeName");
         }
 
         Descriptor[location].Value <<=sTypeName;
@@ -286,7 +286,7 @@ throw (Exception, RuntimeException)
 OUString WordPerfectImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WordPerfectImportFilter" ) );
+    return OUString (  "com.sun.star.comp.Writer.WordPerfectImportFilter"  );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
@@ -301,8 +301,8 @@ throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+    pArray[0] =  OUString (  SERVICE_NAME1  );
+    pArray[1] =  OUString (  SERVICE_NAME2  );
     return aRet;
 }
 #undef SERVICE_NAME2
@@ -380,7 +380,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getP
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue *pArray = aRet.getArray();
 
-    pArray[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Password") );
+    pArray[0].Name = rtl::OUString( "Password" );
     pArray[0].Value <<= msPassword;
 
     return aRet;
@@ -397,7 +397,7 @@ throw(beans::UnknownPropertyException, beans::PropertyVetoException,
         const beans::PropertyValue &rProp = pPropArray[i];
         ::rtl::OUString aPropName = rProp.Name;
 
-        if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
+        if ( aPropName == ::rtl::OUString("Password") )
             rProp.Value >>= msPassword;
         else if ( aPropName == "InputStream" )
             rProp.Value >>= mxInputStream;
@@ -427,7 +427,7 @@ throw (RuntimeException)
 OUString WordPerfectImportFilterDialog_getImplementationName ()
 throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WordPerfectImportFilterDialog" ) );
+    return OUString (  "com.sun.star.comp.Writer.WordPerfectImportFilterDialog"  );
 }
 
 #define SERVICE_NAME "com.sun.star.ui.dialogs.FilterOptionsDialog"
@@ -442,7 +442,7 @@ throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString (  SERVICE_NAME  );
     return aRet;
 }
 #undef SERVICE_NAME
