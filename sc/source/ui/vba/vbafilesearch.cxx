@@ -56,7 +56,7 @@ static Reference< XSimpleFileAccess3 > getFileAccess( void )
         if( xSMgr.is() )
         {
             xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
+                ( ::rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         }
     }
     return xSFI;
@@ -180,15 +180,15 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
     if ( IsWildCard( aTempFileName ) )
     {
         bool bEndWithAsterisk = aTempFileName.endsWithAsciiL("*", 1);
-        bool bStartWithAsterisk = (aTempFileName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"))) == 0);
+        bool bStartWithAsterisk = (aTempFileName.indexOf(::rtl::OUString("*")) == 0);
         if ( !bEndWithAsterisk && !bStartWithAsterisk )
         {
-            aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+            aTempFileName = ::rtl::OUString("*") + aTempFileName + ::rtl::OUString("*");
         }
     }
     else
     {
-        aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+        aTempFileName = ::rtl::OUString("*") + aTempFileName + ::rtl::OUString("*");
     }
     WildCard wildCard( aTempFileName );
     SearchWildCard( wildCard, m_sLookIn, m_bSearchSubFolders, m_aSearchedFiles );
@@ -227,7 +227,7 @@ Reference< XFoundFiles > SAL_CALL ScVbaFileSearch::getFoundFiles() throw (css::u
 
 rtl::OUString ScVbaFileSearch::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaFileSearch"));
+    return rtl::OUString("VbaFileSearch");
 }
 
 css::uno::Sequence< rtl::OUString > ScVbaFileSearch::getServiceNames()
@@ -236,7 +236,7 @@ css::uno::Sequence< rtl::OUString > ScVbaFileSearch::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.FileSearch") );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.FileSearch" );
     }
     return aServiceNames;
 }

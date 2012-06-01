@@ -86,26 +86,26 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     uno::Any aAny;
 
     aAny <<= rtl::OUString(rName);
-    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" )), aAny );
+    xPropSet->setPropertyValue( rtl::OUString( "Label" ), aAny );
 
     ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
     aAny <<= aTmp;
-    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aAny );
+    xPropSet->setPropertyValue( rtl::OUString( "TargetURL" ), aAny );
 
     if( rTarget.Len() )
     {
         aAny <<= rtl::OUString(rTarget);
-        xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), aAny );
+        xPropSet->setPropertyValue( rtl::OUString( "TargetFrame" ), aAny );
     }
 
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
-    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aAny );
+    xPropSet->setPropertyValue( rtl::OUString( "ButtonType" ), aAny );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {
         aAny <<= sal_True;
-        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
+        xPropSet->setPropertyValue( rtl::OUString(  "DispatchURLInternal" ), aAny );
     }
 
     Point aPos;

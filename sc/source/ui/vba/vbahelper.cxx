@@ -82,7 +82,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xIntrospection.set( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection") ) ), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( rtl::OUString( "com.sun.star.beans.Introspection" ) ), uno::UNO_QUERY_THROW );
     }
     return xIntrospection->inspect( aObject );
 }
@@ -90,7 +90,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
 uno::Reference< script::XTypeConverter >
 getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static uno::Reference< script::XTypeConverter > xTypeConv( xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter") ), xContext ), uno::UNO_QUERY_THROW );
+    static uno::Reference< script::XTypeConverter > xTypeConv( xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( "com.sun.star.script.Converter" ), xContext ), uno::UNO_QUERY_THROW );
     return xTypeConv;
 }
 // helper method to determine if the view ( calc ) is in print-preview mode
@@ -124,10 +124,10 @@ private:
     static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
         static uno::Reference< beans::XPropertySet > xTmpProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
+        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString(  "DefaultContext" )), uno::UNO_QUERY_THROW );
         static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
                 xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.GlobalSheetSettings" ) ) ,xContext ), uno::UNO_QUERY_THROW );
+        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString(  "com.sun.star.sheet.GlobalSheetSettings"  ) ,xContext ), uno::UNO_QUERY_THROW );
         return xProps;
     }
 
@@ -270,7 +270,7 @@ getCurrentDocument() throw (uno::RuntimeException)
 
 
     uno::Any aModel;
-    SbxVariable *pCompVar = basicChosen->Find(  UniString(RTL_CONSTASCII_USTRINGPARAM("ThisComponent")), SbxCLASS_OBJECT );
+    SbxVariable *pCompVar = basicChosen->Find(  UniString("ThisComponent"), SbxCLASS_OBJECT );
 
     if ( pCompVar )
     {
@@ -281,14 +281,14 @@ getCurrentDocument() throw (uno::RuntimeException)
             // trying last gasp try the current component
             uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
             // test if vba service is present
-            uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString(  "DefaultContext" )), uno::UNO_QUERY_THROW );
             uno::Reference<lang::XMultiComponentFactory > xSMgr( xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
-            uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), xCtx), uno::UNO_QUERY_THROW );
+            uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop"), xCtx), uno::UNO_QUERY_THROW );
             xModel.set( xDesktop->getCurrentComponent(), uno::UNO_QUERY );
             if ( !xModel.is() )
             {
                 throw uno::RuntimeException(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't extract model from basic ( its obviously not set yet ) therefore don't know the currently selected document") ), uno::Reference< uno::XInterface >() );
+                    rtl::OUString( "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document") ), uno::Reference< uno::XInterface >() );
             }
             return xModel;
         }
@@ -303,9 +303,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     {
         OSL_TRACE("Failed to get ThisComponent");
         throw uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "Can't determine the currently selected document") ),
+            rtl::OUString( "Can't determine the currently selected document" ),
             uno::Reference< uno::XInterface >() );
     }
     return xModel;
@@ -408,7 +406,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     if ( nCopies > 1 ) // Collate only useful when more that 1 copy
         Collate >>= bCollate;
 
-    rtl::OUString sRange(  RTL_CONSTASCII_USTRINGPARAM( "-" ) );
+    rtl::OUString sRange(   "-"  );
     rtl::OUString sFileName;
 
     if (( nFrom || nTo ) )
@@ -535,7 +533,7 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
                 break;
             }
         default:
-                   throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, can't convert" ) ), uno::Reference< uno::XInterface >() );
+                   throw uno::RuntimeException( rtl::OUString(  "Invalid type, can't convert"  ), uno::Reference< uno::XInterface >() );
     }
     return sString;
 }
@@ -592,7 +590,7 @@ ContainerUtilities::FieldInList( const uno::Sequence< rtl::OUString >& SearchLis
 }
 bool NeedEsc(sal_Unicode cCode)
 {
-    String sEsc(RTL_CONSTASCII_USTRINGPARAM(".^$+\\|{}()"));
+    String sEsc(".^$+\\|{}()");
     return (STRING_NOTFOUND != sEsc.Search(cCode));
 }
 
@@ -615,11 +613,11 @@ rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
                 start++;
                 break;
             case '*':
-                sResult.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".*")));
+                sResult.append(rtl::OUString(".*"));
                 start++;
                 break;
             case '#':
-                sResult.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[0-9]")));
+                sResult.append(rtl::OUString("[0-9]"));
                 start++;
                 break;
             case '~':
@@ -713,42 +711,42 @@ UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
     double UserFormGeometryHelper::getLeft()
     {
     sal_Int32 nLeft = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ) ) >>= nLeft;
+    mxModel->getPropertyValue( rtl::OUString(  VBA_LEFT  ) ) >>= nLeft;
     return Millimeter::getInPoints( nLeft );
     }
     void UserFormGeometryHelper::setLeft( double nLeft )
     {
-        mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nLeft ) ) );
+        mxModel->setPropertyValue( rtl::OUString(  VBA_LEFT  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nLeft ) ) );
     }
     double UserFormGeometryHelper::getTop()
     {
     sal_Int32 nTop = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ) ) >>= nTop;
+    mxModel->getPropertyValue( rtl::OUString(   VBA_TOP  ) ) >>= nTop;
     return Millimeter::getInPoints( nTop );
     }
     void UserFormGeometryHelper::setTop( double nTop )
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
+    mxModel->setPropertyValue( rtl::OUString(   VBA_TOP  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
     }
     double UserFormGeometryHelper::getHeight()
     {
     sal_Int32 nHeight = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ) ) >>= nHeight;
+    mxModel->getPropertyValue( rtl::OUString(   SC_UNONAME_CELLHGT  ) ) >>= nHeight;
     return Millimeter::getInPoints( nHeight );
     }
     void UserFormGeometryHelper::setHeight( double nHeight )
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
+    mxModel->setPropertyValue( rtl::OUString(   SC_UNONAME_CELLHGT  ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
     }
     double UserFormGeometryHelper::getWidth()
     {
     sal_Int32 nWidth = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ) ) >>= nWidth;
+    mxModel->getPropertyValue( rtl::OUString(   SC_UNONAME_CELLWID  ) ) >>= nWidth;
     return Millimeter::getInPoints( nWidth );
     }
     void UserFormGeometryHelper::setWidth( double nWidth)
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
+    mxModel->setPropertyValue( rtl::OUString(   SC_UNONAME_CELLWID  ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
     }
 
 SfxItemSet*

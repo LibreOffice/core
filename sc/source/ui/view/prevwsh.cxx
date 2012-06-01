@@ -954,14 +954,14 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     if(pSeq)
     {
         sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
-        pSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
-        rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
+        pSeq[0].Name = rtl::OUString(SC_VIEWID);
+        rtl::OUStringBuffer sBuffer(rtl::OUString(SC_VIEW));
         ::sax::Converter::convertNumber(sBuffer,
                 static_cast<sal_Int32>(nViewID));
         pSeq[0].Value <<= sBuffer.makeStringAndClear();
-        pSeq[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMVALUE));
+        pSeq[1].Name = rtl::OUString(SC_ZOOMVALUE);
         pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
-        pSeq[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageNumber"));
+        pSeq[2].Name = rtl::OUString("PageNumber");
         pSeq[2].Value <<= pPreview->GetPageNo();
     }
 }

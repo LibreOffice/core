@@ -334,8 +334,8 @@ void Test::tearDown()
 
 void Test::testCollator()
 {
-    OUString s1(RTL_CONSTASCII_USTRINGPARAM("A"));
-    OUString s2(RTL_CONSTASCII_USTRINGPARAM("B"));
+    OUString s1("A");
+    OUString s2("B");
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
@@ -343,12 +343,12 @@ void Test::testCollator()
 
 void Test::testInput()
 {
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    rtl::OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    OUString numstr(RTL_CONSTASCII_USTRINGPARAM("'10.5"));
-    OUString str(RTL_CONSTASCII_USTRINGPARAM("'apple'"));
+    OUString numstr("'10.5");
+    OUString str("'apple'");
     OUString test;
 
     m_pDoc->SetString(0, 0, 0, numstr);
@@ -369,7 +369,7 @@ void testFuncSUM(ScDocument* pDoc)
     double result;
     pDoc->SetValue (0, 0, 0, val);
     pDoc->SetValue (0, 1, 0, val);
-    pDoc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
+    pDoc->SetString (0, 2, 0, rtl::OUString("=SUM(A1:A2)"));
     pDoc->CalcAll();
     pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
@@ -384,12 +384,12 @@ void testFuncPRODUCT(ScDocument* pDoc)
     pDoc->SetValue(0, 1, 0, val);
     val = 3;
     pDoc->SetValue(0, 2, 0, val);
-    pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
+    pDoc->SetString(0, 3, 0, OUString("=PRODUCT(A1:A3)"));
     pDoc->CalcAll();
     pDoc->GetValue(0, 3, 0, result);
     CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
 
-    pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
+    pDoc->SetString(0, 4, 0, OUString("=PRODUCT({1;2;3})"));
     pDoc->CalcAll();
     pDoc->GetValue(0, 4, 0, result);
     CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
@@ -405,38 +405,38 @@ void testFuncN(ScDocument* pDoc)
     // Put values to reference.
     double val = 0;
     pDoc->SetValue(0, 0, 0, val);
-    pDoc->SetString(0, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("Text")));
+    pDoc->SetString(0, 2, 0, OUString("Text"));
     val = 1;
     pDoc->SetValue(0, 3, 0, val);
     val = -1;
     pDoc->SetValue(0, 4, 0, val);
     val = 12.3;
     pDoc->SetValue(0, 5, 0, val);
-    pDoc->SetString(0, 6, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("'12.3")));
+    pDoc->SetString(0, 6, 0, OUString("'12.3"));
 
     // Cell references
-    pDoc->SetString(1, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A1)")));
-    pDoc->SetString(1, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A2)")));
-    pDoc->SetString(1, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A3)")));
-    pDoc->SetString(1, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A4)")));
-    pDoc->SetString(1, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A5)")));
-    pDoc->SetString(1, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A6)")));
-    pDoc->SetString(1, 6, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A9)")));
+    pDoc->SetString(1, 0, 0, OUString("=N(A1)"));
+    pDoc->SetString(1, 1, 0, OUString("=N(A2)"));
+    pDoc->SetString(1, 2, 0, OUString("=N(A3)"));
+    pDoc->SetString(1, 3, 0, OUString("=N(A4)"));
+    pDoc->SetString(1, 4, 0, OUString("=N(A5)"));
+    pDoc->SetString(1, 5, 0, OUString("=N(A6)"));
+    pDoc->SetString(1, 6, 0, OUString("=N(A9)"));
 
     // In-line values
-    pDoc->SetString(1, 7, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(0)")));
-    pDoc->SetString(1, 8, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(1)")));
-    pDoc->SetString(1, 9, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(-1)")));
-    pDoc->SetString(1, 10, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(123)")));
-    pDoc->SetString(1, 11, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"\")")));
-    pDoc->SetString(1, 12, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"12\")")));
-    pDoc->SetString(1, 13, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"foo\")")));
+    pDoc->SetString(1, 7, 0, OUString("=N(0)"));
+    pDoc->SetString(1, 8, 0, OUString("=N(1)"));
+    pDoc->SetString(1, 9, 0, OUString("=N(-1)"));
+    pDoc->SetString(1, 10, 0, OUString("=N(123)"));
+    pDoc->SetString(1, 11, 0, OUString("=N(\"\")"));
+    pDoc->SetString(1, 12, 0, OUString("=N(\"12\")"));
+    pDoc->SetString(1, 13, 0, OUString("=N(\"foo\")"));
 
     // Range references
-    pDoc->SetString(1, 14, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A1:A8)")));
-    pDoc->SetString(1, 15, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A4:B8)")));
-    pDoc->SetString(1, 16, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A6:B8)")));
-    pDoc->SetString(1, 17, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(A2:B8)")));
+    pDoc->SetString(1, 14, 0, OUString("=N(A1:A8)"));
+    pDoc->SetString(1, 15, 0, OUString("=N(A4:B8)"));
+    pDoc->SetString(1, 16, 0, OUString("=N(A6:B8)"));
+    pDoc->SetString(1, 17, 0, OUString("=N(A2:B8)"));
 
     // Calculate and check the results.
     pDoc->CalcAll();
@@ -527,8 +527,8 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     // Clear A1:A2.
     clearRange(pDoc, ScRange(0, 0, 0, 0, 1, 0));
 
-    pDoc->SetString(0, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=\"\"")));
-    pDoc->SetString(0, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=COUNTIF(A1;1)")));
+    pDoc->SetString(0, 0, 0, rtl::OUString("=\"\""));
+    pDoc->SetString(0, 1, 0, rtl::OUString("=COUNTIF(A1;1)"));
     pDoc->CalcAll();
 
     double result = pDoc->GetValue(0, 1, 0);
@@ -919,7 +919,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
 void Test::testCellFunctions()
 {
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    rtl::OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -938,12 +938,12 @@ void Test::testCellFunctions()
 
 void Test::testSheetsFunc()
 {
-    rtl::OUString aTabName1(RTL_CONSTASCII_USTRINGPARAM("test1"));
-    rtl::OUString aTabName2(RTL_CONSTASCII_USTRINGPARAM("test2"));
+    rtl::OUString aTabName1("test1");
+    rtl::OUString aTabName2("test2");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
 
-    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=SHEETS()")));
+    m_pDoc->SetString(0, 0, 0, OUString("=SHEETS()"));
     m_pDoc->CalcFormulaTree(false, true);
     double original;
     m_pDoc->GetValue(0, 0, 0, original);
@@ -971,13 +971,13 @@ void Test::testSheetsFunc()
 
 void Test::testVolatileFunc()
 {
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    rtl::OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
     double val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_pDoc->SetString(0, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=IF(A1>0;NOW();0")));
+    m_pDoc->SetString(0, 1, 0, OUString("=IF(A1>0;NOW();0"));
     double now1;
     m_pDoc->GetValue(0, 1, 0, now1);
     CPPUNIT_ASSERT_MESSAGE("Value of NOW() should be positive.", now1 > 0.0);
@@ -1001,12 +1001,12 @@ void Test::testVolatileFunc()
 
 void Test::testFuncParam()
 {
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    rtl::OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
     // First, the normal case, with no missing parameters.
-    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=AVERAGE(1;2;3)")));
+    m_pDoc->SetString(0, 0, 0, OUString("=AVERAGE(1;2;3)"));
     m_pDoc->CalcFormulaTree(false, true);
     double val;
     m_pDoc->GetValue(0, 0, 0, val);
@@ -1014,7 +1014,7 @@ void Test::testFuncParam()
 
     // Now function with missing parameters.  Missing values should be treated
     // as zeros.
-    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=AVERAGE(1;;;)")));
+    m_pDoc->SetString(0, 0, 0, OUString("=AVERAGE(1;;;)"));
     m_pDoc->CalcFormulaTree(false, true);
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 0.25);
@@ -1033,7 +1033,7 @@ void Test::testNamedRange()
         { "MyRange3", "$Sheet1.$C$1:$C$100",     4 }
     };
 
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
+    rtl::OUString aTabName("Sheet1");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -1064,7 +1064,7 @@ void Test::testNamedRange()
 
     // Test usage in formula expression.
     m_pDoc->SetRangeName(pNewRanges);
-    m_pDoc->SetString (1, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1/Divisor")));
+    m_pDoc->SetString (1, 0, 0, rtl::OUString("=A1/Divisor"));
     m_pDoc->CalcAll();
 
     double result;
@@ -1265,7 +1265,7 @@ void Test::testMatrix()
 
         pMat->PutBoolean(true, 1, 1);
         pMat->PutDouble(-12.5, 4, 5);
-        rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("Test"));
+        rtl::OUString aStr("Test");
         pMat->PutString(aStr, 8, 2);
         pMat->PutEmptyPath(8, 11);
         checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
@@ -1479,8 +1479,8 @@ public:
 
 void Test::testPivotTable()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -1636,7 +1636,7 @@ void Test::testPivotTable()
     // Insert a brand new pivot table object once again, but this time, don't
     // create the output to avoid creating a data cache.
     m_pDoc->DeleteTab(1);
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     pDPObj = createDPFromRange(
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
@@ -1663,8 +1663,8 @@ void Test::testPivotTable()
 
 void Test::testPivotTableLabels()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -1719,8 +1719,8 @@ void Test::testPivotTableLabels()
 
 void Test::testPivotTableDateLabels()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -1795,8 +1795,8 @@ void Test::testPivotTableDateLabels()
 
 void Test::testPivotTableFilters()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -1857,16 +1857,16 @@ void Test::testPivotTableFilters()
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=B6")));
+                      rtl::OUString("=B6"));
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
     // Set current page of 'Group2' to 'A'.
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
     ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("Group2")));
+        OUString("Group2"));
     CPPUNIT_ASSERT_MESSAGE("Dimension not found", pDim);
-    OUString aPage(RTL_CONSTASCII_USTRINGPARAM("A"));
+    OUString aPage("A");
     pDim->SetCurrentPage(&aPage);
     pDPObj->SetSaveData(aSaveData);
     aOutRange = refresh(pDPObj);
@@ -1927,8 +1927,8 @@ void Test::testPivotTableFilters()
 
 void Test::testPivotTableNamedSource()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -1956,7 +1956,7 @@ void Test::testPivotTableNamedSource()
     aSrcRange.Format(aRangeStr, SCR_ABS_3D, m_pDoc);
 
     // Name this range.
-    rtl::OUString aRangeName(RTL_CONSTASCII_USTRINGPARAM("MyData"));
+    rtl::OUString aRangeName("MyData");
     ScRangeName* pNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
     ScRangeData* pName = new ScRangeData(
@@ -2028,7 +2028,7 @@ void Test::testPivotTableNamedSource()
 
 void Test::testPivotTableCache()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(0, OUString("Data"));
 
     // Raw data
     const char* aData[][3] = {
@@ -2190,8 +2190,8 @@ void Test::testPivotTableCache()
 
 void Test::testPivotTableDuplicateDataFields()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Raw data
     const char* aData[][2] = {
@@ -2287,8 +2287,8 @@ void Test::testPivotTableDuplicateDataFields()
 
 void Test::testPivotTableNormalGrouping()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Raw data
     const char* aData[][2] = {
@@ -2347,8 +2347,8 @@ void Test::testPivotTableNormalGrouping()
     ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
     CPPUNIT_ASSERT_MESSAGE("Failed to create dimension data.", pDimData);
 
-    rtl::OUString aGroupPrefix(RTL_CONSTASCII_USTRINGPARAM("Group"));
-    rtl::OUString aBaseDimName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    rtl::OUString aGroupPrefix("Group");
+    rtl::OUString aBaseDimName("Name");
     rtl::OUString aGroupDimName =
         pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
 
@@ -2359,9 +2359,9 @@ void Test::testPivotTableNormalGrouping()
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group1"));
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A")));
-        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("B")));
-        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C")));
+        aGroup.AddElement(rtl::OUString("A"));
+        aGroup.AddElement(rtl::OUString("B"));
+        aGroup.AddElement(rtl::OUString("C"));
         aGroupDim.AddGroupItem(aGroup);
         pDimData->AddGroupDimension(aGroupDim);
 
@@ -2401,9 +2401,9 @@ void Test::testPivotTableNormalGrouping()
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group2"));
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D")));
-        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("E")));
-        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("F")));
+        aGroup.AddElement(rtl::OUString("D"));
+        aGroup.AddElement(rtl::OUString("E"));
+        aGroup.AddElement(rtl::OUString("F"));
         pGroupDim->AddGroupItem(aGroup);
     }
 
@@ -2438,8 +2438,8 @@ void Test::testPivotTableNormalGrouping()
 
 void Test::testPivotTableNumberGrouping()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Raw data
     const char* aData[][2] = {
@@ -2500,7 +2500,7 @@ void Test::testPivotTableNumberGrouping()
         aInfo.mfStart = 30;
         aInfo.mfEnd = 60;
         aInfo.mfStep = 10;
-        ScDPSaveNumGroupDimension aGroup(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Order")), aInfo);
+        ScDPSaveNumGroupDimension aGroup(rtl::OUString("Order"), aInfo);
         pDimData->AddNumGroupDimension(aGroup);
     }
 
@@ -2533,8 +2533,8 @@ void Test::testPivotTableNumberGrouping()
 
 void Test::testPivotTableDateGrouping()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
 
     // Raw data
     const char* aData[][2] = {
@@ -2575,7 +2575,7 @@ void Test::testPivotTableDateGrouping()
     ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
     CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
 
-    rtl::OUString aBaseDimName(RTL_CONSTASCII_USTRINGPARAM("Date"));
+    rtl::OUString aBaseDimName("Date");
 
     ScDPNumGroupInfo aInfo;
     aInfo.mbEnable = true;
@@ -2642,9 +2642,9 @@ void Test::testPivotTableDateGrouping()
     {
         // Let's hide year 2012.
         pSaveData = pDPObj->GetSaveData();
-        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Years")));
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(rtl::OUString("Years"));
         CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
-        ScDPSaveMember* pMem = pDim->GetMemberByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2012")));
+        ScDPSaveMember* pMem = pDim->GetMemberByName(rtl::OUString("2012"));
         CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMem);
         pMem->SetIsVisible(false);
     }
@@ -2678,7 +2678,7 @@ void Test::testPivotTableDateGrouping()
 
 void Test::testSheetCopy()
 {
-    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
+    OUString aTabName("TestTab");
     m_pDoc->InsertTab(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
     SCROW nRow1, nRow2;
@@ -2715,7 +2715,7 @@ void Test::testSheetCopy()
 
 void Test::testSheetMove()
 {
-    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab1"));
+    OUString aTabName("TestTab1");
     m_pDoc->InsertTab(0, aTabName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount(), static_cast<SCTAB>(1));
     SCROW nRow1, nRow2;
@@ -2723,7 +2723,7 @@ void Test::testSheetMove()
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     //test if inserting before another sheet works
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("TestTab2")));
+    m_pDoc->InsertTab(0, OUString("TestTab2"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have two sheets", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
@@ -2821,10 +2821,10 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 void Test::testExternalRef()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString aExtDocName(RTL_CONSTASCII_USTRINGPARAM("file:///extdata.fake"));
-    OUString aExtSh1Name(RTL_CONSTASCII_USTRINGPARAM("Data1"));
-    OUString aExtSh2Name(RTL_CONSTASCII_USTRINGPARAM("Data2"));
-    OUString aExtSh3Name(RTL_CONSTASCII_USTRINGPARAM("Data3"));
+    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtSh1Name("Data1");
+    OUString aExtSh2Name("Data2");
+    OUString aExtSh3Name("Data3");
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -2836,16 +2836,16 @@ void Test::testExternalRef()
     pExtDoc->InsertTab(1, aExtSh2Name);
     pExtDoc->InsertTab(2, aExtSh3Name);
 
-    OUString name(RTL_CONSTASCII_USTRINGPARAM("Name"));
-    OUString value(RTL_CONSTASCII_USTRINGPARAM("Value"));
-    OUString andy(RTL_CONSTASCII_USTRINGPARAM("Andy"));
-    OUString bruce(RTL_CONSTASCII_USTRINGPARAM("Bruce"));
-    OUString charlie(RTL_CONSTASCII_USTRINGPARAM("Charlie"));
-    OUString david(RTL_CONSTASCII_USTRINGPARAM("David"));
-    OUString edward(RTL_CONSTASCII_USTRINGPARAM("Edward"));
-    OUString frank(RTL_CONSTASCII_USTRINGPARAM("Frank"));
-    OUString george(RTL_CONSTASCII_USTRINGPARAM("George"));
-    OUString henry(RTL_CONSTASCII_USTRINGPARAM("Henry"));
+    OUString name("Name");
+    OUString value("Value");
+    OUString andy("Andy");
+    OUString bruce("Bruce");
+    OUString charlie("Charlie");
+    OUString david("David");
+    OUString edward("Edward");
+    OUString frank("Frank");
+    OUString george("George");
+    OUString henry("Henry");
 
     // Sheet 1
     pExtDoc->SetString(0, 0, 0, name);
@@ -2884,8 +2884,8 @@ void Test::testExternalRef()
     // Test external refernces on the main document while the external
     // document is still in memory.
     OUString test;
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Test Sheet")));
-    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A1")));
+    m_pDoc->InsertTab(0, OUString("Test Sheet"));
+    m_pDoc->SetString(0, 0, 0, OUString("='file:///extdata.fake'#Data1.A1"));
     m_pDoc->GetString(0, 0, 0, test);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(name));
 
@@ -2902,15 +2902,15 @@ void Test::testExternalRef()
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[1].equals(aExtSh2Name));
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[2].equals(aExtSh3Name));
 
-    m_pDoc->SetString(1, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B1")));
+    m_pDoc->SetString(1, 0, 0, OUString("='file:///extdata.fake'#Data1.B1"));
     m_pDoc->GetString(1, 0, 0, test);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(value));
 
-    m_pDoc->SetString(0, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A2")));
-    m_pDoc->SetString(0, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A3")));
-    m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A4")));
-    m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A5")));
-    m_pDoc->SetString(0, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A6")));
+    m_pDoc->SetString(0, 1, 0, OUString("='file:///extdata.fake'#Data1.A2"));
+    m_pDoc->SetString(0, 2, 0, OUString("='file:///extdata.fake'#Data1.A3"));
+    m_pDoc->SetString(0, 3, 0, OUString("='file:///extdata.fake'#Data1.A4"));
+    m_pDoc->SetString(0, 4, 0, OUString("='file:///extdata.fake'#Data1.A5"));
+    m_pDoc->SetString(0, 5, 0, OUString("='file:///extdata.fake'#Data1.A6"));
 
     {
         // Referencing an empty cell should display '0'.
@@ -2921,11 +2921,11 @@ void Test::testExternalRef()
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
         }
     }
-    m_pDoc->SetString(1, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B2")));
-    m_pDoc->SetString(1, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B3")));
-    m_pDoc->SetString(1, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B4")));
-    m_pDoc->SetString(1, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B5")));
-    m_pDoc->SetString(1, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B6")));
+    m_pDoc->SetString(1, 1, 0, OUString("='file:///extdata.fake'#Data1.B2"));
+    m_pDoc->SetString(1, 2, 0, OUString("='file:///extdata.fake'#Data1.B3"));
+    m_pDoc->SetString(1, 3, 0, OUString("='file:///extdata.fake'#Data1.B4"));
+    m_pDoc->SetString(1, 4, 0, OUString("='file:///extdata.fake'#Data1.B5"));
+    m_pDoc->SetString(1, 5, 0, OUString("='file:///extdata.fake'#Data1.B6"));
     {
         double pChecks[] = { 10, 11, 12, 13, 0 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -2935,10 +2935,10 @@ void Test::testExternalRef()
         }
     }
 
-    m_pDoc->SetString(2, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A1")));
-    m_pDoc->SetString(2, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A2")));
-    m_pDoc->SetString(2, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A3")));
-    m_pDoc->SetString(2, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A4")));
+    m_pDoc->SetString(2, 0, 0, OUString("='file:///extdata.fake'#Data3.A1"));
+    m_pDoc->SetString(2, 1, 0, OUString("='file:///extdata.fake'#Data3.A2"));
+    m_pDoc->SetString(2, 2, 0, OUString("='file:///extdata.fake'#Data3.A3"));
+    m_pDoc->SetString(2, 3, 0, OUString("='file:///extdata.fake'#Data3.A4"));
     {
         const char* pChecks[] = { "Name", "Edward", "Frank", "George" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -2948,10 +2948,10 @@ void Test::testExternalRef()
         }
     }
 
-    m_pDoc->SetString(3, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B1")));
-    m_pDoc->SetString(3, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B2")));
-    m_pDoc->SetString(3, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B3")));
-    m_pDoc->SetString(3, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B4")));
+    m_pDoc->SetString(3, 0, 0, OUString("='file:///extdata.fake'#Data3.B1"));
+    m_pDoc->SetString(3, 1, 0, OUString("='file:///extdata.fake'#Data3.B2"));
+    m_pDoc->SetString(3, 2, 0, OUString("='file:///extdata.fake'#Data3.B3"));
+    m_pDoc->SetString(3, 3, 0, OUString("='file:///extdata.fake'#Data3.B4"));
     {
         const char* pChecks[] = { "Value", "99", "98", "97" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -2996,12 +2996,12 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
-    pExtDoc->SetString(0, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'1.2")));
-    pExtDoc->SetString(0, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Foo")));
+    pExtDoc->SetString(0, 0, 0, rtl::OUString("'1.2"));
+    pExtDoc->SetString(0, 1, 0, rtl::OUString("Foo"));
     pExtDoc->SetValue(0, 2, 0, 12.3);
-    pDoc->SetString(0, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=T('file:///extdata.fake'#Data.A1)")));
-    pDoc->SetString(0, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=T('file:///extdata.fake'#Data.A2)")));
-    pDoc->SetString(0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=T('file:///extdata.fake'#Data.A3)")));
+    pDoc->SetString(0, 0, 0, rtl::OUString("=T('file:///extdata.fake'#Data.A1)"));
+    pDoc->SetString(0, 1, 0, rtl::OUString("=T('file:///extdata.fake'#Data.A2)"));
+    pDoc->SetString(0, 2, 0, rtl::OUString("=T('file:///extdata.fake'#Data.A3)"));
     pDoc->CalcAll();
 
     rtl::OUString aRes = pDoc->GetString(0, 0, 0);
@@ -3015,7 +3015,7 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString aExtDocName(RTL_CONSTASCII_USTRINGPARAM("file:///extdata.fake"));
+    OUString aExtDocName("file:///extdata.fake");
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -3030,7 +3030,7 @@ void Test::testExternalRefFunctions()
 
     // Populate the external source document.
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
-    pExtDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    pExtDoc->InsertTab(0, rtl::OUString("Data"));
     double val = 1;
     pExtDoc->SetValue(0, 0, 0, val);
     // leave cell B1 empty.
@@ -3044,7 +3044,7 @@ void Test::testExternalRefFunctions()
     pExtDoc->SetValue(0, 3, 0, val);
     pExtDoc->SetValue(1, 3, 0, val);
 
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+    m_pDoc->InsertTab(0, rtl::OUString("Test"));
 
     struct {
         const char* pFormula; double fResult;
@@ -3078,7 +3078,7 @@ void Test::testExternalRefFunctions()
 
 void Test::testDataArea()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(0, OUString("Data"));
 
     // Totally empty sheet should be rightfully considered empty in all accounts.
     CPPUNIT_ASSERT_MESSAGE("Sheet is expected to be empty.", m_pDoc->IsPrintEmpty(0, 0, 0, 100, 100));
@@ -3101,7 +3101,7 @@ void Test::testDataArea()
                            m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100));
 
     // Adding a real cell content should turn the block non-empty.
-    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("Some text")));
+    m_pDoc->SetString(0, 0, 0, OUString("Some text"));
     CPPUNIT_ASSERT_MESSAGE("Now the block should not be empty with a real cell content.",
                            !m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100));
 
@@ -3112,14 +3112,14 @@ void Test::testDataArea()
 
 void Test::testStreamValid()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
-    m_pDoc->InsertTab(2, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
-    m_pDoc->InsertTab(3, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet4")));
+    m_pDoc->InsertTab(0, OUString("Sheet1"));
+    m_pDoc->InsertTab(1, OUString("Sheet2"));
+    m_pDoc->InsertTab(2, OUString("Sheet3"));
+    m_pDoc->InsertTab(3, OUString("Sheet4"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount(), static_cast<SCTAB>(4));
 
-    OUString a1(RTL_CONSTASCII_USTRINGPARAM("A1"));
-    OUString a2(RTL_CONSTASCII_USTRINGPARAM("A2"));
+    OUString a1("A1");
+    OUString a2("A2");
     OUString test;
 
     // Put values into Sheet1.
@@ -3131,10 +3131,10 @@ void Test::testStreamValid()
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A2", test.equals(a2));
 
     // Put formulas into Sheet2 to Sheet4 to reference values from Sheet1.
-    m_pDoc->SetString(0, 0, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
-    m_pDoc->SetString(0, 1, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
-    m_pDoc->SetString(0, 0, 2, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
-    m_pDoc->SetString(0, 0, 3, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
+    m_pDoc->SetString(0, 0, 1, OUString("=Sheet1.A1"));
+    m_pDoc->SetString(0, 1, 1, OUString("=Sheet1.A2"));
+    m_pDoc->SetString(0, 0, 2, OUString("=Sheet1.A1"));
+    m_pDoc->SetString(0, 0, 3, OUString("=Sheet1.A2"));
 
     m_pDoc->GetString(0, 0, 1, test);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A1", test.equals(a1));
@@ -3544,7 +3544,7 @@ void Test::testFunctionLists()
 
 void Test::testGraphicsInGroup()
 {
-    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
+    OUString aTabName("TestTab");
     m_pDoc->InsertTab(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
     SCROW nRow1, nRow2;
@@ -3644,8 +3644,8 @@ void Test::testGraphicsInGroup()
 
 void Test::testGraphicsOnSheetMove()
 {
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab1")));
-    m_pDoc->InsertTab(1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab2")));
+    m_pDoc->InsertTab(0, rtl::OUString("Tab1"));
+    m_pDoc->InsertTab(1, rtl::OUString("Tab2"));
     CPPUNIT_ASSERT_MESSAGE("There should be only 2 sheets to begin with", m_pDoc->GetTableCount() == 2);
 
     m_pDoc->InitDrawLayer();
@@ -3672,7 +3672,7 @@ void Test::testGraphicsOnSheetMove()
 
     // Insert a new sheet at left-end, and make sure the object has moved to
     // the 2nd page.
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewTab")));
+    m_pDoc->InsertTab(0, rtl::OUString("NewTab"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(3));
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
@@ -3718,10 +3718,10 @@ void Test::testGraphicsOnSheetMove()
 
 void Test::testPostIts()
 {
-    rtl::OUString aHello(RTL_CONSTASCII_USTRINGPARAM("Hello world"));
-    rtl::OUString aJimBob(RTL_CONSTASCII_USTRINGPARAM("Jim Bob"));
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("PostIts"));
-    rtl::OUString aTabName2(RTL_CONSTASCII_USTRINGPARAM("Table2"));
+    rtl::OUString aHello("Hello world");
+    rtl::OUString aJimBob("Jim Bob");
+    rtl::OUString aTabName("PostIts");
+    rtl::OUString aTabName2("Table2");
     m_pDoc->InsertTab(0, aTabName);
 
     ScAddress rAddr(2, 2, 0);
@@ -3764,13 +3764,13 @@ void Test::testToggleRefFlag()
     // the document, as ScRefFinder does not depend on the content of the
     // document except for the sheet names.
 
-    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Test"));
+    OUString aTabName("Test");
     m_pDoc->InsertTab(0, aTabName);
 
     {
         // Calc A1: basic 2D reference
 
-        OUString aFormula(RTL_CONSTASCII_USTRINGPARAM("=B100"));
+        OUString aFormula("=B100");
         ScAddress aPos(1, 5, 0);
         ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
 
@@ -3801,7 +3801,7 @@ void Test::testToggleRefFlag()
     {
         // Excel R1C1: basic 2D reference
 
-        OUString aFormula(RTL_CONSTASCII_USTRINGPARAM("=R2C1"));
+        OUString aFormula("=R2C1");
         ScAddress aPos(3, 5, 0);
         ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 
@@ -3837,8 +3837,8 @@ void Test::testToggleRefFlag()
 
 void Test::testAutofilter()
 {
-    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Test"));
-    OUString aDBName(RTL_CONSTASCII_USTRINGPARAM("NONAME"));
+    OUString aTabName("Test");
+    OUString aDBName("NONAME");
 
     m_pDoc->InsertTab( 0, aTabName );
 
@@ -3930,8 +3930,8 @@ void Test::testAutofilter()
 
 void Test::testCopyPaste()
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
+    m_pDoc->InsertTab(0, OUString("Sheet1"));
+    m_pDoc->InsertTab(1, OUString("Sheet2"));
     //test copy&paste + ScUndoPaste
     //copy local and global range names in formulas
     //string cells and value cells
@@ -3940,13 +3940,13 @@ void Test::testCopyPaste()
     m_pDoc->SetValue(3, 1, 0, 1);
     m_pDoc->SetValue(3, 2, 0, 2);
     m_pDoc->SetValue(3, 3, 0, 3);
-    m_pDoc->SetString(2, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("test")));
+    m_pDoc->SetString(2, 0, 0, OUString("test"));
     ScAddress aAdr (0, 0, 0);
 
     //create some range names, local and global
-    ScRangeData* pLocal1 = new ScRangeData(m_pDoc, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local1")), aAdr);
-    ScRangeData* pLocal2 = new ScRangeData(m_pDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("local2")), aAdr);
-    ScRangeData* pGlobal = new ScRangeData(m_pDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("global")), aAdr);
+    ScRangeData* pLocal1 = new ScRangeData(m_pDoc, rtl::OUString("local1"), aAdr);
+    ScRangeData* pLocal2 = new ScRangeData(m_pDoc, OUString("local2"), aAdr);
+    ScRangeData* pGlobal = new ScRangeData(m_pDoc, OUString("global"), aAdr);
     ScRangeName* pGlobalRangeName = new ScRangeName();
     pGlobalRangeName->insert(pGlobal);
     ScRangeName* pLocalRangeName1 = new ScRangeName();
@@ -3956,7 +3956,7 @@ void Test::testCopyPaste()
     m_pDoc->SetRangeName(0, pLocalRangeName1);
 
     //add formula
-    rtl::OUString aFormulaString(RTL_CONSTASCII_USTRINGPARAM("=local1+global+SUM($C$1:$D$4)"));
+    rtl::OUString aFormulaString("=local1+global+SUM($C$1:$D$4)");
     m_pDoc->SetString(1, 0, 0, aFormulaString);
 
     double aValue = 0;
@@ -3993,12 +3993,12 @@ void Test::testCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
 
     //chack local range name after copying
-    pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
+    pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("local range name 1 should be copied", pLocal1);
     ScRange aRangeLocal1;
     pLocal1->IsValidReference(aRangeLocal1);
     CPPUNIT_ASSERT_MESSAGE("local range 1 should still point to Sheet1.A1",aRangeLocal1 == ScRange(0,0,0,0,0,0));
-    pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
+    pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", pLocal2 == NULL);
 
 
@@ -4028,7 +4028,7 @@ void Test::testMergedCells()
 {
     //test merge and unmerge
     //TODO: an undo/redo test for this would be a good idea
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->InsertTab(0, rtl::OUString("Sheet1"));
     m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
@@ -4097,7 +4097,7 @@ void Test::testSetBackgroundColor()
     //test set background color
     //TODO: set color1 and set color2 and do an undo to check if color1 is set now.
 
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->InsertTab(0, rtl::OUString("Sheet1"));
     Color aColor;
 
      //test yellow
@@ -4126,10 +4126,10 @@ void Test::testUpdateReference()
 {
     //test that formulas are correctly updated during sheet delete
     //TODO: add tests for relative references, updating of named ranges, ...
-    rtl::OUString aSheet1(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
-    rtl::OUString aSheet2(RTL_CONSTASCII_USTRINGPARAM("Sheet2"));
-    rtl::OUString aSheet3(RTL_CONSTASCII_USTRINGPARAM("Sheet3"));
-    rtl::OUString aSheet4(RTL_CONSTASCII_USTRINGPARAM("Sheet4"));
+    rtl::OUString aSheet1("Sheet1");
+    rtl::OUString aSheet2("Sheet2");
+    rtl::OUString aSheet3("Sheet3");
+    rtl::OUString aSheet4("Sheet4");
     m_pDoc->InsertTab(0, aSheet1);
     m_pDoc->InsertTab(1, aSheet2);
     m_pDoc->InsertTab(2, aSheet3);
@@ -4138,8 +4138,8 @@ void Test::testUpdateReference()
     m_pDoc->SetValue(0,0,2, 1);
     m_pDoc->SetValue(1,0,2, 2);
     m_pDoc->SetValue(1,1,3, 4);
-    m_pDoc->SetString(2,0,2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1+B1")));
-    m_pDoc->SetString(2,1,2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet4.B2+A1")));
+    m_pDoc->SetString(2,0,2, rtl::OUString("=A1+B1"));
+    m_pDoc->SetString(2,1,2, rtl::OUString("=Sheet4.B2+A1"));
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
@@ -4244,10 +4244,10 @@ void Test::testJumpToPrecedentsDependents()
 {
     // Precedent is another cell that the cell references, while dependent is
     // another cell that references it.
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+    m_pDoc->InsertTab(0, rtl::OUString("Test"));
 
-    m_pDoc->SetString(2, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1+A2+B3"))); // C1
-    m_pDoc->SetString(2, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1")));       // C2
+    m_pDoc->SetString(2, 0, 0, rtl::OUString("=A1+A2+B3")); // C1
+    m_pDoc->SetString(2, 1, 0, rtl::OUString("=A1"));       // C2
     m_pDoc->CalcAll();
 
     std::vector<ScTokenRef> aRefTokens;
