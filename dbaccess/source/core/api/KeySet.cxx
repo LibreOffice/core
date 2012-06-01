@@ -1334,11 +1334,12 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
 void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::refreshRow" );
-    if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
-        return;
 
     m_xRow = NULL;
     ::comphelper::disposeComponent(m_xSet);
+
+    if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
+        return;
 
     if ( m_aKeyIter->second.second.second.is() )
     {
