@@ -310,6 +310,46 @@ namespace svt
         return bRet;
     }
 
+    rtl::OUString SmartContent::createFolder( const rtl::OUString& _rTitle )
+    {
+        rtl::OUString aCreatedUrl;
+        try
+        {
+            rtl::OUString sFolderType;
+
+            Sequence< ContentInfo > aInfo = m_pContent->queryCreatableContentsInfo();
+            const ContentInfo* pInfo = aInfo.getConstArray();
+            sal_Int32 nCount = aInfo.getLength();
+            for ( sal_Int32 i = 0; i < nCount; ++i, ++pInfo )
+            {
+                // Simply look for the first KIND_FOLDER...
+                if ( pInfo->Attributes & ContentInfoAttribute::KIND_FOLDER )
+                {
+                    sFolderType = pInfo->Type;
+                    break;
+                }
+            }
+
+            if ( !sFolderType.isEmpty() )
+            {
+                ucbhelper::Content aCreated;
+                Sequence< rtl::OUString > aNames( 1 );
+                rtl::OUString* pNames = aNames.getArray();
+                pNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                Sequence< Any > aValues( 1 );
+                Any* pValues = aValues.getArray();
+                pValues[0] = makeAny( _rTitle );
+                m_pContent->insertNewContent( sFolderType, aNames, aValues, aCreated );
+
+                aCreatedUrl = aCreated.getURL();
+            }
+        }
+        catch( const Exception& )
+        {
+        }
+        return aCreatedUrl;
+    }
+
 //........................................................................
 } // namespace svt
 //........................................................................

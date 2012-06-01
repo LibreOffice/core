@@ -819,7 +819,14 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     while ( !bHandled )
     {
         if ( aDlg.Execute() == RET_OK )
-            bHandled = pThis->_pFileView->CreateNewFolder( aDlg.GetName() );
+        {
+            rtl::OUString aUrl = aContent.createFolder( aDlg.GetName( ) );
+            if ( !aUrl.isEmpty( ) )
+            {
+                pThis->_pFileView->CreatedFolder( aUrl, aDlg.GetName() );
+                bHandled = sal_True;
+            }
+        }
         else
             bHandled = sal_True;
     }

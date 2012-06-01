@@ -1293,23 +1293,13 @@ String SvtFileView::GetCurrentURL() const
 }
 // -----------------------------------------------------------------------------
 
-sal_Bool SvtFileView::CreateNewFolder( const String& rNewFolder )
+void SvtFileView::CreatedFolder( const String& rUrl, const String& rNewFolder )
 {
-    sal_Bool bRet = sal_False;
-    INetURLObject aObj( mpImp->maViewURL );
-    aObj.insertName( rNewFolder, false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-    String sURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
-    if ( ::utl::UCBContentHelper::MakeFolder( sURL, sal_True ) )
-    {
-        String sTitle = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-        String sEntry = mpImp->FolderInserted( sURL, sTitle );
-        SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( sEntry, mpImp->maFolderImage, mpImp->maFolderImage );
-        SvtContentEntry* pUserData = new SvtContentEntry( sURL, sal_True );
-        pEntry->SetUserData( pUserData );
-        mpImp->mpView->MakeVisible( pEntry );
-        bRet = sal_True;
-    }
-    return bRet;
+    String sEntry = mpImp->FolderInserted( rUrl, rNewFolder );
+    SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( sEntry, mpImp->maFolderImage, mpImp->maFolderImage );
+    SvtContentEntry* pUserData = new SvtContentEntry( rUrl, sal_True );
+    pEntry->SetUserData( pUserData );
+    mpImp->mpView->MakeVisible( pEntry );
 }
 
 // -----------------------------------------------------------------------

@@ -98,7 +98,7 @@ public:
     String                  GetCurrentURL() const;
 
     sal_Bool                GetParentURL( String& _rParentURL ) const;
-    sal_Bool                CreateNewFolder( const String& rNewFolder );
+    void                    CreatedFolder( const String& rUrl, const String& rNewFolder );
 
     void                    SetHelpId( const rtl::OString& rHelpId );
     const rtl::OString&     GetHelpId( ) const;

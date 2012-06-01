@@ -61,7 +61,7 @@ namespace svt
 
     private:
         ::rtl::OUString                                                                  m_sURL;
-        ::ucbhelper::Content*                                                                  m_pContent;
+        ::ucbhelper::Content*                                                            m_pContent;
         State                                                                            m_eState;
         ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >  m_xCmdEnv;
         ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler > m_xOwnInteraction;
@@ -173,6 +173,13 @@ namespace svt
                 the content is bound and not invalid
         */
         sal_Bool    canCreateFolder( );
+
+        /** creates a new folder with the given title and return the corresponding URL.
+
+            @return
+                the URL of the created folder or an empty string
+          */
+        rtl::OUString    createFolder( const rtl::OUString& _rTitle );
 
         /** binds to the given URL, checks whether or not it refers to a folder
 

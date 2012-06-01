@@ -466,8 +466,6 @@ namespace cmis
         sal_Bool bReplaceExisting, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             throw( uno::Exception )
     {
-        SAL_INFO( "cmisucp", "TODO - Content::insert()" );
-
         if ( !xInputStream.is() )
         {
             ucbhelper::cancelCommandExecution( uno::makeAny
@@ -481,6 +479,8 @@ namespace cmis
             // For transient content, the URL is the one of the parent
             if ( m_bTransient )
             {
+                string sNewId;
+
                 // Try to get the object from the server if there is any
                 libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
                 if ( pFolder != NULL )
@@ -499,7 +499,16 @@ namespace cmis
                         newPath += "/";
                     newPath += newName;
 
-                    libcmis::ObjectPtr object = m_pSession->getObjectByPath( newPath );
+                    libcmis::ObjectPtr object;
+                    try
+                    {
+                        object = m_pSession->getObjectByPath( newPath );
+                        sNewId = object->getId( );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        // Nothing matched the path
+                    }
 
                     if ( NULL != object.get( ) )
                     {
@@ -524,13 +533,40 @@ namespace cmis
                     }
                     else
                     {
-                        // TODO We need to create a brand new object... either folder or document
+                        // We need to create a brand new object... either folder or document
+                        bool bIsFolder = m_pObjectType->getBaseType( )->getId( ) == "cmis:folder";
+                        setCmisProperty( "cmis:objectTypeId", m_pObjectType->getId( ) );
+
+                        if ( bIsFolder )
+                        {
+                            libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
+                            sNewId = pNew->getId( );
+                        }
+                        else
+                        {
+                            boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                            uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+                            copyData( xInputStream, xOutput );
+                            libcmis::DocumentPtr pNew = pFolder->createDocument( m_pObjectProps, pOut, string() );
+                            sNewId = pNew->getId( );
+                        }
+                    }
+
+                    if ( !sNewId.empty( ) )
+                    {
+                        // Update the current content: it's no longer transient
+                        m_sObjectId = rtl::OUString::createFromAscii( sNewId.c_str( ) );
+                        URL aUrl( m_sURL );
+                        aUrl.setObjectId( m_sObjectId );
+                        m_sURL = aUrl.asString( );
+                        m_pObject.reset( );
+                        m_pObjectType.reset( );
+                        m_pObjectProps.clear( );
+                        m_bTransient = false;
+
+                        inserted();
                     }
                 }
-            }
-            else
-            {
-                // TODO Update the current object... but I'm not sure this case can happen with UCB
             }
         }
         catch ( const libcmis::Exception& e )
@@ -559,11 +595,15 @@ namespace cmis
     {
         // Get the already set properties if possible
         if ( !m_bTransient && getObject( ).get( ) )
+        {
             m_pObjectProps = getObject()->getProperties( );
+            m_pObjectType = getObject()->getTypeDescription();
+        }
 
         sal_Int32 nCount = rValues.getLength();
         uno::Sequence< uno::Any > aRet( nCount );
 
+        bool bChanged = false;
         const beans::PropertyValue* pValues = rValues.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
@@ -600,13 +640,20 @@ namespace cmis
                 }
 
                 setCmisProperty( "cmis:name", OUSTR_TO_STDSTR( aNewTitle ) );
+                bChanged = true;
             }
             else
             {
+                SAL_INFO( "cmisucp", "Couln't set property: " << rValue.Name );
                 lang::IllegalAccessException e ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")),
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;
             }
+        }
+
+        if ( !m_bTransient && bChanged )
+        {
+            getObject()->updateProperties();
         }
 
         return aRet;
@@ -1030,16 +1077,25 @@ namespace cmis
     {
         if ( m_pObjectType.get( ) )
         {
-            map< string, libcmis::PropertyTypePtr > propsTypes = m_pObjectType->getPropertiesTypes( );
-            map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find( sName );
+            map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find( sName );
+            vector< string > values;
+            values.push_back( sValue );
 
-            if ( typeIt != propsTypes.end( ) )
+            if ( propIt == m_pObjectProps.end( ) && m_pObjectType.get( ) )
             {
-                libcmis::PropertyTypePtr propType = typeIt->second;
-                vector< string > values;
-                values.push_back( sValue );
-                libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
-                m_pObjectProps.insert( pair< string, libcmis::PropertyPtr >( sName, property ) );
+                map< string, libcmis::PropertyTypePtr > propsTypes = m_pObjectType->getPropertiesTypes( );
+                map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find( sName );
+
+                if ( typeIt != propsTypes.end( ) )
+                {
+                    libcmis::PropertyTypePtr propType = typeIt->second;
+                    libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
+                    m_pObjectProps.insert( pair< string, libcmis::PropertyPtr >( sName, property ) );
+                }
+            }
+            else if ( propIt != m_pObjectProps.end( ) )
+            {
+                propIt->second->setValues( values );
             }
         }
     }
