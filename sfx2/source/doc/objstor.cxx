@@ -688,9 +688,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
                     if ( !pTemplateItem || !pTemplateItem->GetValue() )
                         bHasName = sal_True;
-
-                    if ( !IsReadOnly() && IsLoadReadonly() )
-                        SetReadOnlyUI();
                 }
                 else
                     SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -750,6 +747,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     if ( bOk )
     {
+        if ( IsReadOnlyMedium() || IsLoadReadonly() )
+            SetReadOnlyUI();
+
         try
         {
             ::ucbhelper::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );

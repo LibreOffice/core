@@ -404,6 +404,11 @@ sal_Bool SfxObjectShell::IsReadOnlyMedium() const
     return pMedium->IsReadOnly();
 }
 
+bool SfxObjectShell::IsOriginallyReadOnlyMedium() const
+{
+    return pMedium == 0 || pMedium->IsOriginallyReadOnly();
+}
+
 //-------------------------------------------------------------------------
 
 void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
@@ -415,10 +420,9 @@ void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
 */
 
 {
-    sal_Bool bWasRO = IsReadOnly();
-    pImp->bReadOnlyUI = bReadOnly;
-    if ( bWasRO != IsReadOnly() )
+    if ( bReadOnly != pImp->bReadOnlyUI )
     {
+        pImp->bReadOnlyUI = bReadOnly;
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
     }
 }
@@ -453,7 +457,7 @@ void SfxObjectShell::SetReadOnly()
 
 sal_Bool SfxObjectShell::IsReadOnly() const
 {
-    return pImp->bReadOnlyUI || IsReadOnlyMedium();
+    return pImp->bReadOnlyUI || pMedium == 0;
 }
 
 //-------------------------------------------------------------------------

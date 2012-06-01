@@ -213,6 +213,11 @@ public:
                         GetVersionList( bool _bNoReload = false );
     sal_Bool            IsReadOnly();
 
+    // Whether the medium had originally been opened r/o, independent of later
+    // changes via SetOpenMode; used to keep track of the "true" state of the
+    // medium across toggles via SID_EDITDOC (which do change SetOpenMode):
+    bool                IsOriginallyReadOnly() const;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetInputStream();
 
     void                CreateTempFile( sal_Bool bReplace = sal_True );

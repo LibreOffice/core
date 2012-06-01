@@ -312,6 +312,8 @@ public:
 
     uno::Reference< logging::XSimpleLogRing > m_xLogRing;
 
+    bool m_originallyReadOnly;
+
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
 };
@@ -339,7 +341,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     pTempFile( NULL ),
     nLastStorageError( 0 ),
     m_bRemoveBackup( sal_False ),
-    m_nSignatureState( SIGNATURESTATE_NOSIGNATURES )
+    m_nSignatureState( SIGNATURESTATE_NOSIGNATURES ),
+    m_originallyReadOnly(false)
 {
     aDoneLink.CreateMutex();
 }
@@ -1057,6 +1060,11 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                         bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
                 }
 #endif
+
+                if ( bContentReadonly )
+                {
+                    pImp->m_originallyReadOnly = true;
+                }
             }
 
             // do further checks only if the file not readonly in fs
@@ -2874,15 +2882,14 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
         }
     }
 
-    sal_Bool bReadOnly = sal_False;
     SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
     if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
-        bReadOnly = sal_True;
+        pImp->m_originallyReadOnly = true;
 
     SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
     if (!pFileNameItem) throw uno::RuntimeException();
     aLogicName = pFileNameItem->GetValue();
-    nStorOpenMode = bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    nStorOpenMode = pImp->m_originallyReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     Init_Impl();
 }
 
@@ -3205,6 +3212,11 @@ sal_Bool SfxMedium::IsReadOnly()
     }
 
     return bReadOnly;
+}
+
+bool SfxMedium::IsOriginallyReadOnly() const
+{
+    return pImp->m_originallyReadOnly;
 }
 
 //----------------------------------------------------------------

@@ -405,6 +405,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
                 }
                 nOpenMode = SFX_STREAM_READONLY;
+                pSh->SetReadOnlyUI(true);
             }
             else
             {
@@ -424,12 +425,20 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pSh->SetModifyPasswordEntered();
                 }
 
-                nOpenMode = SFX_STREAM_READWRITE;
-                pSh->SetReadOnlyUI( sal_False );
+                nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
 
                 // if only the view was in the readonly mode then there is no need to do the reload
-                if ( !pSh->IsReadOnly() )
+                if ( !pSh->IsReadOnlyMedium() )
+                {
+                    // SetReadOnlyUI causes recomputation of window title, using
+                    // open mode among other things, so call SetOpenMode before
+                    // SetReadOnlyUI:
+                    pMed->SetOpenMode( nOpenMode );
+                    pSh->SetReadOnlyUI( sal_False );
                     return;
+                }
+
+                pSh->SetReadOnlyUI( sal_False );
             }
 
             if ( rReq.IsAPI() )
@@ -580,8 +589,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             SID_FILE_NAME, sal_False);
             // Open as editable?
             sal_Bool bForEdit = !pSh->IsReadOnly();
-            if ( rReq.GetSlot() == SID_EDITDOC )
-                bForEdit = !bForEdit;
 
             // If possible ask the User
             sal_Bool bDo = ( GetViewShell()->PrepareClose() != sal_False );
@@ -650,9 +657,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // let the current security settings be checked again
                     pNewSet->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::USE_CONFIG ) );
 
-                    if ( rReq.GetSlot() == SID_EDITDOC || !bForEdit )
+                    if ( pSh->IsOriginallyReadOnlyMedium() )
                         // edit mode is switched or reload of readonly document
-                        pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, !bForEdit ) );
+                        pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                     else
                         // Reload of file opened for writing
                         pNewSet->ClearItem( SID_DOC_READONLY );
@@ -778,12 +785,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetModifyPasswordEntered( sal_False );
                         xNewObj->SetReadOnly();
                     }
-                    else if ( rReq.GetSlot() == SID_EDITDOC && bForEdit && !xNewObj->IsReadOnlyMedium() )
+                    else if ( rReq.GetSlot() == SID_EDITDOC )
                     {
-                        // the filter might request setting of the document to readonly state
-                        // but in case of SID_EDITDOC it should not happen if the document
-                        // can be opened for editing
-                        xNewObj->SetReadOnlyUI( sal_False );
+                        xNewObj->SetReadOnlyUI( !bForEdit );
                     }
 
                     if ( xNewObj->IsDocShared() )

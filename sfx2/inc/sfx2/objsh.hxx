@@ -273,6 +273,7 @@ public:
     void                        SetReadOnly();
     sal_Bool                    IsReadOnly() const;
     sal_Bool                    IsReadOnlyMedium() const;
+    bool                        IsOriginallyReadOnlyMedium() const;
     void                        SetReadOnlyUI( sal_Bool bReadOnly = sal_True );
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
