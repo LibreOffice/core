@@ -427,8 +427,16 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
 }
 
 //=========================================================================
-SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16)
-SV_IMPL_PTRARR(ExpandedEntries, StringPtr)
+class ExpandedEntries : public std::vector<StringPtr>
+{
+public:
+    ~ExpandedEntries()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+
+};
 
 /*  [Description]
 
@@ -474,13 +482,12 @@ public:
 void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries& rEntries) const
 {
     SvLBoxEntry *pEntry;
-    sal_uInt16 nCount=0;
     for(pEntry=(SvLBoxEntry*)FirstVisible();pEntry;pEntry=(SvLBoxEntry*)NextVisible(pEntry))
     {
         if(IsExpanded(pEntry))
         {
             StringPtr pString=new String(GetEntryText(pEntry));
-            rEntries.Insert(pString,nCount++);
+            rEntries.push_back(pString);
         }
     }
 }
@@ -730,7 +737,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 inline sal_Bool IsExpanded_Impl( const ExpandedEntries& rEntries,
                              const String &rStr)
 {
-    sal_uInt16 nCount=rEntries.Count();
+    sal_uInt16 nCount=rEntries.size();
     for(sal_uInt16 n=0;n<nCount;n++)
         if(*rEntries[n]==rStr)
             return sal_True;
