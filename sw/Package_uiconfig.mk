@@ -29,6 +29,7 @@
 $(eval $(call gb_Package_Package,sw_uiconfig,$(SRCDIR)/sw/uiconfig))
 
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/ui/titlepage.ui,swriter/ui/titlepage.ui))
+$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/ui/20705.ui,swriter/ui/20705.ui))
 
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/menubar/menubar.xml,sglobal/menubar/menubar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/statusbar/statusbar.xml,sglobal/statusbar/statusbar.xml))
