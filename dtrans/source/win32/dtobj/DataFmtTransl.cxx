@@ -79,7 +79,7 @@ const OUString TEXT_PLAIN_CHARSET   ("text/plain;charset=");
 const OUString HPNAME_OEM_ANSI_TEXT ("OEM/ANSI Text");
 
 const OUString HTML_FORMAT_NAME_WINDOWS ("HTML Format");
-const OUString HTML_FORMAT_NAME_SOFFICE ("HTML (HyperText Markup Language"));
+const OUString HTML_FORMAT_NAME_SOFFICE ("HTML (HyperText Markup Language");
 
 //------------------------------------------------------------------------
 //
