@@ -720,7 +720,7 @@ OUString XMLElement::ToOUString(){
 /*****************************************************************************/
 void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
-    static const OUString XML_LANG ( RTL_CONSTASCII_USTRINGPARAM("xml-lang") );
+    static const OUString XML_LANG ( "xml-lang" );
 
     if(pCur!=NULL){
         if(rootelement){
@@ -742,34 +742,34 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
                 if( !pElement->GetName().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("comment")) ){
-                    buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\<")) );
+                    buffer.append( OUString("\\<") );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
                         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
 
                             OUString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
                             if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) );
+                                buffer.append( OUString(" ") );
                                 buffer.append( aAttrName );
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("=")) );
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
+                                buffer.append( OUString("=") );
+                                buffer.append( OUString("\\\"") );
                                 buffer.append( (*pElement->GetAttributeList())[ j ]->GetValue() );
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
+                                buffer.append( OUString("\\\"") );
                             }
                         }
                     }
                     if ( !pElement->GetChildList())
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("/\\>")) );
+                        buffer.append( OUString("/\\>") );
                     else {
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\>")) );
+                        buffer.append( OUString("\\>") );
                         XMLChildNode* tmp=NULL;
                         for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
                             tmp = (*pElement->GetChildList())[ k ];
                             Print( tmp, buffer , false);
                         }
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\</")) );
+                        buffer.append( OUString("\\</") );
                         buffer.append( pElement->GetName() );
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\>")) );
+                        buffer.append( OUString("\\>") );
                     }
                 }
             }
@@ -782,9 +782,9 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("<!--")) );
+                buffer.append( OUString("<!--") );
                 buffer.append( pComment->GetComment() );
-                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("-->")) );
+                buffer.append( OUString("-->") );
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {
@@ -1031,8 +1031,7 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
     aErrorInformation.eCode = XML_ERROR_NONE;
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
-    aErrorInformation.sMessage = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ERROR: Unable to open file "));
+    aErrorInformation.sMessage = rtl::OUString( "ERROR: Unable to open file ");
     aErrorInformation.sMessage += rFileName;
 
     rtl::OUString aFileURL(common::pathnameToAbsoluteUrl(rFileName));
@@ -1065,15 +1064,12 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
     if ( !pXMLFile->GetName().isEmpty()) {
-        aErrorInformation.sMessage = rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("File "));
+        aErrorInformation.sMessage = rtl::OUString( "File ");
         aErrorInformation.sMessage += pXMLFile->GetName();
-        aErrorInformation.sMessage += rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(" parsed successfully"));
+        aErrorInformation.sMessage += rtl::OUString( " parsed successfully");
     }
     else
-        aErrorInformation.sMessage = rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("XML-File parsed successfully"));
+        aErrorInformation.sMessage = rtl::OUString( "XML-File parsed successfully");
 
     if (!XML_Parse(aParser, reinterpret_cast< char * >(p), s, true))
     {
@@ -1081,110 +1077,84 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
         aErrorInformation.nLine = XML_GetErrorLineNumber( aParser );
         aErrorInformation.nColumn = XML_GetErrorColumnNumber( aParser );
 
-        aErrorInformation.sMessage = rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("ERROR: "));
+        aErrorInformation.sMessage = rtl::OUString( "ERROR: ");
         if ( !pXMLFile->GetName().isEmpty())
             aErrorInformation.sMessage += pXMLFile->GetName();
         else
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("XML-File ("));
+            aErrorInformation.sMessage += rtl::OUString( "XML-File (");
         aErrorInformation.sMessage += rtl::OUString::valueOf(
             sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine));
-        aErrorInformation.sMessage += rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(","));
+        aErrorInformation.sMessage += rtl::OUString( ",");
         aErrorInformation.sMessage += rtl::OUString::valueOf(
             sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn));
-        aErrorInformation.sMessage += rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("): "));
+        aErrorInformation.sMessage += rtl::OUString( "): ");
 
         switch (aErrorInformation.eCode) {
         case XML_ERROR_NO_MEMORY:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("No memory"));
+            aErrorInformation.sMessage += rtl::OUString( "No memory");
             break;
         case XML_ERROR_SYNTAX:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Syntax"));
+            aErrorInformation.sMessage += rtl::OUString( "Syntax");
             break;
         case XML_ERROR_NO_ELEMENTS:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("No elements"));
+            aErrorInformation.sMessage += rtl::OUString( "No elements");
             break;
         case XML_ERROR_INVALID_TOKEN:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Invalid token"));
+            aErrorInformation.sMessage += rtl::OUString( "Invalid token");
             break;
         case XML_ERROR_UNCLOSED_TOKEN:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Unclosed token"));
+            aErrorInformation.sMessage += rtl::OUString( "Unclosed token");
             break;
         case XML_ERROR_PARTIAL_CHAR:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Partial char"));
+            aErrorInformation.sMessage += rtl::OUString( "Partial char");
             break;
         case XML_ERROR_TAG_MISMATCH:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Tag mismatch"));
+            aErrorInformation.sMessage += rtl::OUString( "Tag mismatch");
             break;
         case XML_ERROR_DUPLICATE_ATTRIBUTE:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Dublicat attribute"));
+            aErrorInformation.sMessage += rtl::OUString( "Dublicat attribute");
             break;
         case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Junk after doc element"));
+            aErrorInformation.sMessage += rtl::OUString( "Junk after doc element");
             break;
         case XML_ERROR_PARAM_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Param entity ref"));
+            aErrorInformation.sMessage += rtl::OUString( "Param entity ref");
             break;
         case XML_ERROR_UNDEFINED_ENTITY:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Undefined entity"));
+            aErrorInformation.sMessage += rtl::OUString( "Undefined entity");
             break;
         case XML_ERROR_RECURSIVE_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Recursive entity ref"));
+            aErrorInformation.sMessage += rtl::OUString( "Recursive entity ref");
             break;
         case XML_ERROR_ASYNC_ENTITY:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Async_entity"));
+            aErrorInformation.sMessage += rtl::OUString( "Async_entity");
             break;
         case XML_ERROR_BAD_CHAR_REF:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Bad char ref"));
+            aErrorInformation.sMessage += rtl::OUString( "Bad char ref");
             break;
         case XML_ERROR_BINARY_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Binary entity"));
+            aErrorInformation.sMessage += rtl::OUString( "Binary entity");
             break;
         case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Attribute external entity ref"));
+            aErrorInformation.sMessage += rtl::OUString( "Attribute external entity ref");
             break;
         case XML_ERROR_MISPLACED_XML_PI:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Misplaced xml pi"));
+            aErrorInformation.sMessage += rtl::OUString( "Misplaced xml pi");
             break;
         case XML_ERROR_UNKNOWN_ENCODING:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Unknown encoding"));
+            aErrorInformation.sMessage += rtl::OUString( "Unknown encoding");
             break;
         case XML_ERROR_INCORRECT_ENCODING:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Incorrect encoding"));
+            aErrorInformation.sMessage += rtl::OUString( "Incorrect encoding");
             break;
         case XML_ERROR_UNCLOSED_CDATA_SECTION:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Unclosed cdata section"));
+            aErrorInformation.sMessage += rtl::OUString( "Unclosed cdata section");
             break;
         case XML_ERROR_EXTERNAL_ENTITY_HANDLING:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("External entity handling"));
+            aErrorInformation.sMessage += rtl::OUString( "External entity handling");
             break;
         case XML_ERROR_NOT_STANDALONE:
-            aErrorInformation.sMessage += rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("Not standalone"));
+            aErrorInformation.sMessage += rtl::OUString( "Not standalone");
             break;
         case XML_ERROR_NONE:
             break;

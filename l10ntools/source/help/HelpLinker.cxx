@@ -899,7 +899,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //This part is used when compileExtensionHelp is called from the extensions manager.
         //If extension help is compiled using helplinker in the build process
         rtl::OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
-        aIdxCaptionPathFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/idxcaption.xsl"));
+        aIdxCaptionPathFileURL += rtl::OUString("/idxcaption.xsl");
 
         rtl::OString aOStr_IdxCaptionPathFileURL( rtl::OUStringToOString
             ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
@@ -924,7 +924,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //then  -idxcontent must be supplied
         //This part is used when compileExtensionHelp is called from the extensions manager.
         rtl::OUString aIdxContentPathFileURL( *pOfficeHelpPath );
-        aIdxContentPathFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/idxcontent.xsl"));
+        aIdxContentPathFileURL += rtl::OUString("/idxcontent.xsl");
 
         rtl::OString aOStr_IdxContentPathFileURL( rtl::OUStringToOString
             ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
@@ -1058,7 +1058,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 
     // i83624: Tree files
     ::rtl::OUString aTreeFileURL = aExtensionLanguageRoot;
-    aTreeFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/help.tree"));
+    aTreeFileURL += rtl::OUString("/help.tree");
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
     osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
