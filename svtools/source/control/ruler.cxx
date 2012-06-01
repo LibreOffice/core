@@ -39,7 +39,7 @@
 // =======================================================================
 
 #define RULER_OFF           3
-#define RULER_TEXTOFF       2
+#define RULER_TEXTOFF       5
 #define RULER_RESIZE_OFF    4
 #define RULER_LINE_WIDTH    7
 #define RULER_MIN_SIZE      3
@@ -286,10 +286,10 @@ void Ruler::ImplInit( WinBits nWinBits )
     // Einstellungen setzen
     ImplInitSettings( sal_True, sal_True, sal_True );
 
-    // Default-Groesse setzen
-    long nDefHeight = GetTextHeight() + RULER_OFF*2 + RULER_TEXTOFF*2 + mnBorderWidth;
-    if ( ( nDefHeight % 2 ) != 0 )
-        ++nDefHeight;
+    // Setup the default size
+    Rectangle aRect;
+    GetTextBoundRect( aRect, rtl::OUString( "0123456789" ) );
+    long nDefHeight = aRect.GetHeight() + RULER_OFF*2 + RULER_TEXTOFF*2 + mnBorderWidth;
 
     Size aDefSize;
     if ( nWinBits & WB_HORZ )
@@ -373,14 +373,20 @@ void Ruler::ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 )
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplVDrawText( long nX, long nY, const String& rText )
+void Ruler::ImplVDrawText( long nX, long nY, const String& rText, long nMin, long nMax )
 {
-    if ( (nX > -RULER_CLIP) && (nX < mnVirWidth+RULER_CLIP) )
+    Rectangle aRect;
+    maVirDev.GetTextBoundRect( aRect, rText );
+
+    long nShiftX = ( aRect.GetWidth() / 2 ) + aRect.Left();
+    long nShiftY = ( aRect.GetHeight() / 2 ) + aRect.Top();
+
+    if ( (nX > -RULER_CLIP) && (nX < mnVirWidth+RULER_CLIP) && ( nX < nMax - nShiftX ) && ( nX > nMin + nShiftX ) )
     {
         if ( mnWinStyle & WB_HORZ )
-            maVirDev.DrawText( Point( nX, nY ), rText );
+            maVirDev.DrawText( Point( nX - nShiftX, nY - nShiftY ), rText );
         else
-            maVirDev.DrawText( Point( nY, nX ), rText );
+            maVirDev.DrawText( Point( nY - nShiftX, nX - nShiftY ), rText );
     }
 }
 
@@ -456,8 +462,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long    nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1;
     Size    aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
     long    nTickWidth;
-    long    nX;
-    long    nY;
     sal_Bool    bNoTicks = sal_False;
 
     //Amelia
@@ -485,17 +489,13 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
 
     // Groessenvorberechnung
     // Sizes calculation
-    sal_Bool bVertRight = sal_False;
     if ( mnWinStyle & WB_HORZ )
         nTickWidth = aPixSize.Width();
     else
     {
         Font aFont = GetFont();
         if ( mnWinStyle & WB_RIGHT_ALIGNED )
-        {
             aFont.SetOrientation( 2700 );
-            bVertRight = sal_True;
-        }
         else
             aFont.SetOrientation( 900 );
         maVirDev.SetFont( aFont );
@@ -565,17 +565,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     if ( (mpData->nMargin1Style & RULER_STYLE_INVISIBLE) || (mpData->nMargin1 != 0) )
                     {
                         aNumStr = (sal_Unicode)'0';
-                        Rectangle aRect;
-                        GetTextBoundRect( aRect, aNumStr );
-                        long nTxtWidth2 = aRect.Right() / 2 + 1;
-                        long nTxtHeight2 = aRect.Bottom() / 2 + 1;
-
-                        if ( (mnWinStyle & WB_HORZ)^mpData->bTextRTL )
-                            nX = nStart-nTxtWidth2;
-                        else
-                            nX = nStart+nTxtWidth2;
-                        long n_Y = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
-                        ImplVDrawText( nX, n_Y, aNumStr );
+                        ImplVDrawText( nStart, nCenter, aNumStr );
                     }
                 }
             }
@@ -596,33 +586,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     else
                         aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
 
-                    Rectangle aRect;
-                    GetTextBoundRect( aRect, aNumStr );
-                    long nTxtWidth2 = aRect.Right() / 2 + 1;
-                    long nTxtHeight2 = aRect.Bottom() / 2 + 1;
-
-                    nX = nStart+n;
-                    //different orientation needs a different starting position
-                    nY = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
-
-                    // Check if we can display full number
-                    if ( nX < (nMax-nTxtWidth2) )
-                    {
-                        if ( mnWinStyle & WB_HORZ )
-                            nX -= nTxtWidth2;
-                        else
-                            nX += nTxtWidth2;
-                        ImplVDrawText( nX, nY, aNumStr );
-                    }
-                    nX = nStart-n;
-                    if ( nX > (nMin+nTxtWidth2) )
-                    {
-                        if ( mnWinStyle & WB_HORZ )
-                            nX -= nTxtWidth2;
-                        else
-                            nX += nTxtWidth2;
-                        ImplVDrawText( nX, nY, aNumStr );
-                    }
+                    ImplVDrawText( nStart + n, nCenter, aNumStr, nMin, nMax );
+                    ImplVDrawText( nStart - n, nCenter, aNumStr, nMin, nMax );
                 }
                 // Tick/Tick2 - Output (Strokes)
                 else
