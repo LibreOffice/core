@@ -122,7 +122,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sot \
     starmath \
     stoc \
-    store
+    store \
     svl \
     svtools \
     svx \
