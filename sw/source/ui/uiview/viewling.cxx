@@ -130,7 +130,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                 {
                     Reference< ui::dialogs::XExecutableDialog > xDialog(
                             xMCF->createInstanceWithContext(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
+                                rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
                                 , xContext), UNO_QUERY);
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
@@ -140,7 +140,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
                         PropertyValue aParam;
-                        aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
+                        aParam.Name = rtl::OUString("ParentWindow");
                         aParam.Value <<= makeAny(xDialogParentWindow);
                         pArray[0] <<= makeAny(aParam);
                         xInit->initialize( aSeq );
@@ -726,7 +726,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 Menu* pMenu = 0;
 
                 ::rtl::OUString sMenuName  = bUseGrammarContext ?
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/GrammarContextMenu")) : OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/SpellContextMenu"));
+                    OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
                 if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
 
@@ -852,7 +852,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     {
         const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
 
-        rtl::OUString sListKey = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN_LISTENTRY ) );
+        rtl::OUString sListKey = rtl::OUString(  ODF_FORMDROPDOWN_LISTENTRY  );
         IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find( sListKey );
         if(pListEntries != pParameters->end())
         {
@@ -867,7 +867,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         }
 
         // Select the current one
-        rtl::OUString sResultKey = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN_RESULT ) );
+        rtl::OUString sResultKey = rtl::OUString( ODF_FORMDROPDOWN_RESULT  );
         IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find( sResultKey );
         if ( pResult != pParameters->end() )
         {
@@ -895,7 +895,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
         sal_Int32 selection = pBox->GetSelectEntryPos();
         if ( selection >= 0 )
         {
-            rtl::OUString sKey = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN_RESULT ) );
+            rtl::OUString sKey = rtl::OUString(  ODF_FORMDROPDOWN_RESULT  );
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
             SwView& rView = ( ( SwEditWin* )GetParent() )->GetView();

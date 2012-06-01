@@ -791,7 +791,7 @@ bool AttributeOutputBase::AnalyzeURL( const String& rUrl, const String& /*rTarge
 
                 if ( bkmkName == sLink )
                 {
-                    sMark = String( RTL_CONSTASCII_USTRINGPARAM( "_toc" ) );
+                    sMark = String(  "_toc"  );
                     sMark += String::CreateFromInt32( aIter->second );
                 }
             }
@@ -1787,7 +1787,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     if ( aAttrIter.RequiresImplicitBookmark() )
     {
-        String sBkmkName = String( RTL_CONSTASCII_USTRINGPARAM( "_toc" ) );
+        String sBkmkName = String(  "_toc"  );
         sBkmkName += String::CreateFromInt32( rNode.GetIndex() );
         AppendWordBookmark( sBkmkName );
     }

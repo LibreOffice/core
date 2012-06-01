@@ -141,7 +141,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                         new SwConnectionContext(
                             rConfigItem.GetInServerName(),
                             rConfigItem.GetInServerPort(),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
+                            ::rtl::OUString("Insecure"));
                 xInMailService->connect(xConnectionContext, xAuthenticator);
                 rxInMailService = xInMailService;
             }
@@ -168,7 +168,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetMailServer(),
                         rConfigItem.GetMailPort(),
-                        rConfigItem.IsSecureConnection() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")) );
+                        rConfigItem.IsSecureConnection() ? OUString("Ssl") : OUString("Insecure") );
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }
@@ -678,7 +678,7 @@ uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
 {
     uno::Reference< beans::XPropertySet > xPropSet =
                 uno::Reference< beans::XPropertySet>(rSrvMgr, uno::UNO_QUERY);
-    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString("DefaultContext"));
     uno::Reference< uno::XComponentContext> rCmpCtx;
     aAny >>= rCmpCtx;
     return rCmpCtx;

@@ -43,7 +43,7 @@ SwVbaCheckBox::SwVbaCheckBox( const uno::Reference< ooo::vba::XHelperInterface >
     if( !sType.equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX ) )
     {
         throw uno::RuntimeException( rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("It is not a CheckBox")), uno::Reference< uno::XInterface >() );
+            "It is not a CheckBox"), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -71,14 +71,14 @@ sal_Bool SAL_CALL SwVbaCheckBox::getValue() throw ( uno::RuntimeException )
 
 void SAL_CALL SwVbaCheckBox::setValue( sal_Bool value ) throw ( uno::RuntimeException )
 {
-    rtl::OUString sValue = value ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("on")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("off"));
-    mxFormField->addParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ECMA_FORMCHECKBOX_CHECKED )), sValue, sal_True );
+    rtl::OUString sValue = value ? rtl::OUString("on") : rtl::OUString("off");
+    mxFormField->addParam( rtl::OUString( ECMA_FORMCHECKBOX_CHECKED ), sValue, sal_True );
 }
 
 rtl::OUString
 SwVbaCheckBox::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCheckBox"));
+    return rtl::OUString("SwVbaCheckBox");
 }
 
 uno::Sequence< rtl::OUString >
@@ -88,7 +88,7 @@ SwVbaCheckBox::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.CheckBox" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.word.CheckBox"  );
     }
     return aServiceNames;
 }

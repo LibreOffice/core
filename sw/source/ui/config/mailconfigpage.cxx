@@ -374,7 +374,7 @@ void SwTestAccountSettingsDialog::Test()
                         new SwConnectionContext(
                             m_pParent->m_pConfigItem->GetInServerName(),
                             m_pParent->m_pConfigItem->GetInServerPort(),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
+                            ::rtl::OUString("Insecure"));
                 xInMailService->connect(xConnectionContext, xAuthenticator);
             }
             if(m_bStop)
@@ -404,7 +404,7 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_aServerED.GetText(),
                         sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_aPortNF.GetValue()),
-                        m_pParent->m_aSecureCB.IsChecked() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
+                        m_pParent->m_aSecureCB.IsChecked() ? OUString("Ssl") : OUString("Insecure"));
             xMailService->connect(xConnectionContext, xAuthenticator);
             bIsLoggedIn = xMailService->isConnected();
             if( xInMailService.is() )

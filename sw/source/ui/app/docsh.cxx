@@ -275,7 +275,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     SW_MOD()->SetEmbeddedLoadSave( sal_False );
 
-    SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+    SetError( nErr, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
     sal_Bool bOk = !IsError( nErr );
 
     if ( bOk && !pDoc->IsInLoadAsynchron() )
@@ -371,7 +371,7 @@ sal_Bool SwDocShell::Save()
         }
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
-    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
 
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
@@ -510,7 +510,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Increase RSID
         pDoc->setRsid( pDoc->getRsid() );
     }
-    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
 
     return !IsError( nErr );
 }
@@ -597,7 +597,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                     Sequence<rtl::OUString> aModNames = xLib->getElementNames();
                     if(aModNames.getLength())
                     {
-                        SetError(WARN_SWG_HTML_NO_MACROS, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                        SetError(WARN_SWG_HTML_NO_MACROS, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
                         break;
                     }
                 }
@@ -669,7 +669,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 // TODO/MBA: testing
                 uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
                 if ( xSet.is() )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
+                    xSet->setPropertyValue( ::rtl::OUString("MediaType"), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
             }
             catch (const uno::Exception&)
             {
@@ -753,7 +753,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     SW_MOD()->SetEmbeddedLoadSave( sal_False );
-    SetError( nErrno ? nErrno : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+    SetError( nErrno ? nErrno : nVBWarning, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
 

@@ -767,8 +767,8 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
           || rInfos.eType ==  ww::eDATE
           || rInfos.eType ==  ww::eTIME )
         {
-           sToken.SearchAndReplaceAll( String( RTL_CONSTASCII_USTRINGPARAM("NNNN") ), String( RTL_CONSTASCII_USTRINGPARAM("dddd")  ) );
-           sToken.SearchAndReplaceAll( String( RTL_CONSTASCII_USTRINGPARAM("NN") ), String( RTL_CONSTASCII_USTRINGPARAM("ddd")  ) );
+           sToken.SearchAndReplaceAll( String( "NNNN" ), String( "dddd"  ) );
+           sToken.SearchAndReplaceAll( String( "NN" ), String( "ddd"  ) );
         }
         // Write the Field command
         DoWriteCmd( sToken );

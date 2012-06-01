@@ -633,25 +633,25 @@ static void lcl_html_setFixedFontProperty(
                                     DEFAULTFONT_FLAGS_ONLYONE )  );
     Any aTmp;
     aTmp <<= OUString( aFixedFont.GetName() );
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FontName")), aTmp );
+    rPropSet->setPropertyValue( OUString("FontName"), aTmp );
 
     aTmp <<= OUString( aFixedFont.GetStyleName() );
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FontStyleName")),
+    rPropSet->setPropertyValue( OUString("FontStyleName"),
                                 aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetFamily();
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FontFamily")), aTmp );
+    rPropSet->setPropertyValue( OUString("FontFamily"), aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetCharSet();
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FontCharset")),
+    rPropSet->setPropertyValue( OUString("FontCharset"),
                                 aTmp );
 
     aTmp <<= (sal_Int16) aFixedFont.GetPitch();
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FontPitch")), aTmp );
+    rPropSet->setPropertyValue( OUString("FontPitch"), aTmp );
 
     float fVal(10.);
     aTmp.setValue( &fVal, ::getCppuType(&fVal ));
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FontHeight")), aTmp );
+    rPropSet->setPropertyValue( OUString("FontHeight"), aTmp );
 }
 
 class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
@@ -961,7 +961,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         uno::Reference< XInterface > xCreate =
             rServiceFactory ->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")));
+        OUString("com.sun.star.drawing.ControlShape"));
         if( !xCreate.is() )
             return xShape;
 
@@ -1001,11 +1001,11 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             Any aAny2;
             aAny2 <<= (sal_Int32)nLeftSpace;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), aAny2 );
+                OUString("LeftMargin"), aAny2 );
 
             aAny2 <<= (sal_Int32)nRightSpace;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), aAny2 );
+                OUString("RightMargin"), aAny2 );
         }
 
         // oberen/unteren Rand setzen
@@ -1032,16 +1032,16 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             uno::Any aAny2;
             aAny2 <<= (sal_Int32)nUpperSpace;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), aAny2 );
+                OUString("TopMargin"), aAny2 );
 
             aAny2 <<= (sal_Int32)nLowerSpace;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), aAny2 );
+                OUString("BottomMargin"), aAny2 );
         }
 
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             rFCompPropSet->getPropertySetInfo();
-        OUString sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("BackgroundColor"));
+        OUString sPropName = OUString("BackgroundColor");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_BACKGROUND, sal_True,
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1057,7 +1057,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         }
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("TextColor"));
+        sPropName = OUString("TextColor");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_COLOR, sal_True,
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1067,7 +1067,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontHeight"));
+        sPropName = OUString("FontHeight");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONTSIZE,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1082,31 +1082,31 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) )
         {
             const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontName"));
+            sPropName = OUString("FontName");
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= OUString( pFontItem->GetFamilyName() );
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontStyleName"));
+            sPropName = OUString("FontStyleName");
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= OUString( pFontItem->GetStyleName() );
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontFamily"));
+            sPropName = OUString("FontFamily");
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= (sal_Int16)pFontItem->GetFamily() ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontCharset"));
+            sPropName = OUString("FontCharset");
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= (sal_Int16)pFontItem->GetCharSet() ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontPitch"));
+            sPropName = OUString("FontPitch");
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= (sal_Int16)pFontItem->GetPitch() ;
@@ -1114,7 +1114,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             }
         }
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontWeight"));
+        sPropName = OUString("FontWeight");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_WEIGHT,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1125,7 +1125,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontSlant"));
+        sPropName = OUString("FontSlant");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_POSTURE,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1134,7 +1134,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontUnderline"));
+        sPropName = OUString("FontUnderline");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_UNDERLINE,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1143,7 +1143,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("FontStrikeout"));
+        sPropName = OUString("FontStrikeout");
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_CROSSEDOUT,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1231,18 +1231,18 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             }
             aTmp <<= (sal_Int16)nVertOri ;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), aTmp );
+                OUString("VertOrient"), aTmp );
         }
 
         aTmp <<= (sal_Int16)nAnchorType ;
         xShapePropSet->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")), aTmp );
+            OUString("AnchorType"), aTmp );
 
         if( text::TextContentAnchorType_AT_PAGE == nAnchorType )
         {
             aTmp <<= (sal_Int16) 1 ;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")), aTmp );
+                OUString("AnchorPageNo"), aTmp );
         }
         else
         {
@@ -1255,30 +1255,30 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             aTmp.setValue( &xTxtRg,
                            ::getCppuType((uno::Reference< text::XTextRange>*)0));
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("TextRange")), aTmp );
+                OUString("TextRange"), aTmp );
         }
 
         if( bSetPos )
         {
             aTmp <<= (sal_Int16)text::HoriOrientation::NONE;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), aTmp );
+                OUString("HoriOrient"), aTmp );
             aTmp <<= (sal_Int32)nXPos ;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), aTmp );
+                OUString("HoriOrientPosition"), aTmp );
 
             aTmp <<= (sal_Int16)text::VertOrientation::NONE;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), aTmp );
+                OUString("VertOrient"), aTmp );
             aTmp <<= (sal_Int32)nYPos ;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), aTmp );
+                OUString("VertOrientPosition"), aTmp );
         }
         if( bSetSurround )
         {
             aTmp <<= (sal_Int16)nSurround ;
             xShapePropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Surround")), aTmp );
+                OUString("Surround"), aTmp );
         }
 
         pFormImpl->GetShapes()->add(xShape);
@@ -1404,7 +1404,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         return;
 
     uno::Reference< XInterface > xInt = rSrvcMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form")) );
+        OUString("com.sun.star.form.component.Form") );
     if( !xInt.is() )
         return;
 
@@ -1418,7 +1418,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xFormPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp );
+    xFormPropSet->setPropertyValue( OUString("Name"), aTmp );
 
     if( aAction.Len() )
     {
@@ -1431,24 +1431,24 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         aAction = aURLObj.GetPartBeforeLastName();
     }
     aTmp <<= OUString(aAction);
-    xFormPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")),
+    xFormPropSet->setPropertyValue( OUString("TargetURL"),
                                     aTmp );
 
     FormSubmitMethod eMethod = (FormSubmitMethod)nMethod;
     aTmp.setValue( &eMethod, ::getCppuType((const FormSubmitMethod*)0) );
-    xFormPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitMethod")),
+    xFormPropSet->setPropertyValue( OUString("SubmitMethod"),
                                     aTmp );
 
      FormSubmitEncoding eEncType = (FormSubmitEncoding)nEncType;
     aTmp.setValue( &eEncType, ::getCppuType((const FormSubmitEncoding*)0) );
     xFormPropSet->setPropertyValue(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitEncoding")), aTmp );
+        OUString("SubmitEncoding"), aTmp );
 
     if( sTarget.Len() )
     {
         aTmp <<= OUString(sTarget);
         xFormPropSet->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")), aTmp );
+            OUString("TargetFrame"), aTmp );
     }
 
     const uno::Reference< container::XIndexContainer > & rForms =
@@ -1700,7 +1700,7 @@ void SwHTMLParser::InsertInput()
         return;
 
     String sServiceName(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.")) );
+        OUString("com.sun.star.form.component.") );
     sServiceName.AppendAscii( pType );
     uno::Reference< XInterface > xInt =
         rServiceFactory->createInstance( sServiceName );
@@ -1715,21 +1715,21 @@ void SwHTMLParser::InsertInput()
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp );
+    xPropSet->setPropertyValue( OUString("Name"), aTmp );
 
     if( HTML_IT_HIDDEN != eType  )
     {
         if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
         {
             aTmp <<= (sal_Int16) (sal_Int16)nTabIndex ;
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex")), aTmp );
+            xPropSet->setPropertyValue( OUString("TabIndex"), aTmp );
         }
 
         if( bDisabled )
         {
             sal_Bool bFalse = sal_False;
             aTmp.setValue(&bFalse, ::getBooleanCppuType()  );
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")), aTmp );
+            xPropSet->setPropertyValue( OUString("Enabled"), aTmp );
         }
     }
 
@@ -1745,11 +1745,11 @@ void SwHTMLParser::InsertInput()
     case HTML_IT_RADIO:
         {
             if( !bValue )
-                aTmp <<= OUString(RTL_CONSTASCII_USTRINGPARAM( OOO_STRING_SVTOOLS_HTML_on ));
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("RefValue")),
+                aTmp <<= OUString( OOO_STRING_SVTOOLS_HTML_on );
+            xPropSet->setPropertyValue( OUString("RefValue"),
                                         aTmp );
             aTmp <<= OUString();
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
+            xPropSet->setPropertyValue( OUString("Label"),
                                         aTmp );
             // Beim RadioButton darf die DefaultChecked-Property
             // erst gesetzt werden, wenn das Control angelegt und ein
@@ -1759,7 +1759,7 @@ void SwHTMLParser::InsertInput()
             {
                 aTmp <<= (sal_Int16) nChecked ;
                 xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultState")), aTmp );
+                    OUString("DefaultState"), aTmp );
             }
 
             const SvxMacro* pMacro = aMacroTbl.Get( HTML_ET_ONCLICK );
@@ -1788,10 +1788,10 @@ void SwHTMLParser::InsertInput()
             aTmp.setValue( &eButtonType,
                            ::getCppuType((const FormButtonType*)0));
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonType")), aTmp );
+                OUString("ButtonType"), aTmp );
 
             aTmp <<= (sal_Int16) 0  ;
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Border")),
+            xPropSet->setPropertyValue( OUString("Border"),
                                         aTmp );
         }
         break;
@@ -1820,13 +1820,13 @@ void SwHTMLParser::InsertInput()
                 ;
             }
             aTmp <<= OUString(sText);
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
+            xPropSet->setPropertyValue( OUString("Label"),
                                         aTmp );
 
             aTmp.setValue( &eButtonType,
                            ::getCppuType((const FormButtonType*)0));
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonType")), aTmp );
+                OUString("ButtonType"), aTmp );
 
             bMinWidth = bMinHeight = sal_True;
             bUseSize = sal_True;
@@ -1840,19 +1840,19 @@ void SwHTMLParser::InsertInput()
         {
         // Beim File-Control wird der VALUE aus Sicherheitsgruenden ignoriert.
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultText")), aTmp );
+                OUString("DefaultText"), aTmp );
             if( nMaxLen != 0 )
             {
                 aTmp <<= (sal_Int16) nMaxLen ;
                 xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("MaxTextLen")), aTmp );
+                    OUString("MaxTextLen"), aTmp );
             }
         }
 
         if( HTML_IT_PASSWORD == eType )
         {
             aTmp <<= (sal_Int16)'*' ;
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("EchoChar")),
+            xPropSet->setPropertyValue( OUString("EchoChar"),
                                         aTmp );
         }
 
@@ -1865,7 +1865,7 @@ void SwHTMLParser::InsertInput()
         break;
 
     case HTML_IT_HIDDEN:
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenValue")),
+        xPropSet->setPropertyValue( OUString("HiddenValue"),
                                     aTmp );
         bHidden = sal_True;
         break;
@@ -1946,7 +1946,7 @@ void SwHTMLParser::InsertInput()
     if( HTML_IT_RADIO == eType )
     {
         aTmp <<= (sal_Int16) nChecked ;
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultState")), aTmp );
+        xPropSet->setPropertyValue( OUString("DefaultState"), aTmp );
     }
 
     if( HTML_IT_IMAGE == eType )
@@ -1955,7 +1955,7 @@ void SwHTMLParser::InsertInput()
         // Download der Grafik erst dann am XModel anmelden kann,
         // wenn das Control eingefuegt ist.
         aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), sImgSrc, Link(), false));
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ImageURL")),
+        xPropSet->setPropertyValue( OUString("ImageURL"),
                                     aTmp );
     }
 
@@ -2103,7 +2103,7 @@ void SwHTMLParser::NewTextArea()
         return;
     }
     uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.TextField")) );
+        OUString("com.sun.star.form.component.TextField") );
     if( !xInt.is() )
     {
         FinishTextArea();
@@ -2117,24 +2117,24 @@ void SwHTMLParser::NewTextArea()
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp );
+    xPropSet->setPropertyValue( OUString("Name"), aTmp );
 
     sal_Bool bTrue = sal_True;
     aTmp.setValue( &bTrue, ::getBooleanCppuType() );
-    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLine")),
+    xPropSet->setPropertyValue( OUString("MultiLine"),
                                 aTmp );
-    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VScroll")), aTmp );
+    xPropSet->setPropertyValue( OUString("VScroll"), aTmp );
     if( HTML_WM_OFF == nWrap )
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HScroll")),
+        xPropSet->setPropertyValue( OUString("HScroll"),
                                     aTmp );
     if( HTML_WM_HARD == nWrap )
         xPropSet->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("HardLineBreaks")), aTmp );
+            OUString("HardLineBreaks"), aTmp );
 
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
     {
         aTmp <<= (sal_Int16)nTabIndex ;
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex")),
+        xPropSet->setPropertyValue( OUString("TabIndex"),
                                     aTmp );
     }
 
@@ -2144,7 +2144,7 @@ void SwHTMLParser::NewTextArea()
     {
         sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
+        xPropSet->setPropertyValue( OUString("Enabled"),
                                     aTmp );
     }
 
@@ -2212,7 +2212,7 @@ void SwHTMLParser::EndTextArea()
 
     Any aTmp;
     aTmp <<= OUString(pFormImpl->GetText());
-    rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultText")),
+    rPropSet->setPropertyValue( OUString("DefaultText"),
                                 aTmp );
     pFormImpl->EraseText();
 
@@ -2381,7 +2381,7 @@ void SwHTMLParser::NewSelect()
         return;
     }
     uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.ListBox")) );
+        OUString("com.sun.star.form.component.ListBox") );
     if( !xInt.is() )
     {
         FinishTextArea();
@@ -2395,12 +2395,12 @@ void SwHTMLParser::NewSelect()
 
     Any aTmp;
     aTmp <<= OUString(sName);
-    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp );
+    xPropSet->setPropertyValue( OUString("Name"), aTmp );
 
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
     {
         aTmp <<= (sal_Int16)nTabIndex ;
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex")),
+        xPropSet->setPropertyValue( OUString("TabIndex"),
                                     aTmp );
     }
 
@@ -2408,7 +2408,7 @@ void SwHTMLParser::NewSelect()
     {
         sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
+        xPropSet->setPropertyValue( OUString("Enabled"),
                                     aTmp );
     }
 
@@ -2418,7 +2418,7 @@ void SwHTMLParser::NewSelect()
     {
         sal_Bool bTrue = sal_True;
         aTmp.setValue( &bTrue, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Dropdown")),
+        xPropSet->setPropertyValue( OUString("Dropdown"),
                                     aTmp );
     }
     else
@@ -2431,7 +2431,7 @@ void SwHTMLParser::NewSelect()
             sal_Bool bTrue = sal_True;
             aTmp.setValue( &bTrue, ::getBooleanCppuType() );
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("MultiSelection")), aTmp );
+                OUString("MultiSelection"), aTmp );
         }
         aTextSz.Height() = nSelectEntryCnt;
         bMinHeight = sal_False;
@@ -2524,15 +2524,15 @@ void SwHTMLParser::EndSelect()
         Any aAny( &aList, ::getCppuType((uno::Sequence<OUString>*)0) );
 
         rPropSet->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("StringItemList")), aAny );
+            OUString("StringItemList"), aAny );
 
         aAny <<= ListSourceType_VALUELIST;
         rPropSet->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("ListSourceType")), aAny );
+            OUString("ListSourceType"), aAny );
 
         aAny.setValue( &aValueList, ::getCppuType((uno::Sequence<OUString>*)0) );
 
-        rPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ListSource")),
+        rPropSet->setPropertyValue( OUString("ListSource"),
                                     aAny );
 
         size_t nSelCnt = pFormImpl->GetSelectedList().size();
@@ -2553,7 +2553,7 @@ void SwHTMLParser::EndSelect()
                        ::getCppuType((uno::Sequence<sal_Int16>*)0) );
 
         rPropSet->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultSelection")), aAny );
+            OUString("DefaultSelection"), aAny );
 
         pFormImpl->EraseStringList();
         pFormImpl->EraseValueList();

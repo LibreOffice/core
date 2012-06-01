@@ -399,7 +399,7 @@ void SwSidebarWin::CheckMetaText()
     else if (sMeta.Len() > 22)
     {
         sMeta.Erase(20);
-        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+        sMeta = sMeta + rtl::OUString("...");
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {
@@ -426,7 +426,7 @@ void SwSidebarWin::CheckMetaText()
     }
     if (GetTime()!=0)
     {
-        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( GetTime(),false );
+        sMeta = sMeta + rtl::OUString(" ")  + rLocalData.getTime( GetTime(),false );
     }
     if ( mpMetadataDate->GetText() != sMeta )
     {
