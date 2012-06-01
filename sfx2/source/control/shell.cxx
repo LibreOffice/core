@@ -61,9 +61,15 @@ DBG_NAME(SfxShell)
 TYPEINIT0(SfxShell);
 
 //====================================================================
-typedef SfxSlot* SfxSlotPtr;
-SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4 )
-SV_IMPL_PTRARR( SfxVerbSlotArr_Impl, SfxSlotPtr);
+class SfxVerbSlotArr_Impl : public std::vector<SfxSlot*>
+{
+public:
+    ~SfxVerbSlotArr_Impl()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+};
 
 using namespace com::sun::star;
 
@@ -979,7 +985,7 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
     {
         SfxBindings *pBindings =
             pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
-        sal_uInt16 nCount = pImp->aSlotArr.Count();
+        sal_uInt16 nCount = pImp->aSlotArr.size();
         for (sal_uInt16 n1=0; n1<nCount ; n1++)
         {
             sal_uInt16 nId = SID_VERB_START + n1;
@@ -1013,16 +1019,16 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
         pNewSlot->pFirstArgDef = 0;
         pNewSlot->pUnoName = 0;
 
-        if (pImp->aSlotArr.Count())
+        if (!pImp->aSlotArr.empty())
         {
-            SfxSlot *pSlot = (pImp->aSlotArr)[0];
+            SfxSlot *pSlot = pImp->aSlotArr[0];
             pNewSlot->pNextSlot = pSlot->pNextSlot;
             pSlot->pNextSlot = pNewSlot;
         }
         else
             pNewSlot->pNextSlot = pNewSlot;
 
-        pImp->aSlotArr.Insert(pNewSlot, (sal_uInt16) n);
+        pImp->aSlotArr.insert(pImp->aSlotArr.begin() + (sal_uInt16) n, pNewSlot);
     }
 
     pImp->aVerbList = aVerbs;
