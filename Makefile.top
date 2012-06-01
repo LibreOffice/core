@@ -94,6 +94,7 @@ psprint_config\
 qadevOOo\
 regexp\
 registry\
+remotebridges\
 reportbuilder\
 reportdesign\
 rdbmaker\
@@ -228,7 +229,6 @@ python\
 pyuno\
 readlicense_oo\
 redland\
-remotebridges\
 rhino\
 saxon\
 setup_native\

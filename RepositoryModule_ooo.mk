@@ -98,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	) \
     rdbmaker \
     regexp \
+    remotebridges \
     reportbuilder \
     reportdesign \
     ridljar \
