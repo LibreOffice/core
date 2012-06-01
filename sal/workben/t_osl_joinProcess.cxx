@@ -36,12 +36,12 @@
 #include <signal.h>
 
 #ifdef WNT
-    const rtl::OUString IMAGE_NAME(RTL_CONSTASCII_USTRINGPARAM("ojpx.exe"));
+    const rtl::OUString IMAGE_NAME("ojpx.exe");
 #else
-    const rtl::OUString IMAGE_NAME(RTL_CONSTASCII_USTRINGPARAM("ojpx"));
+    const rtl::OUString IMAGE_NAME("ojpx");
 #endif
 
-const rtl::OUString CWD(RTL_CONSTASCII_USTRINGPARAM("."));
+const rtl::OUString CWD(".");
 
 class Test_osl_Process : public CppUnit::TestFixture
 {

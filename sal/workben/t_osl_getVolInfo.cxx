@@ -88,28 +88,28 @@ public:
 
     void test_osl_getVolumeInformation()
     {
-        rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_1));
+        rtl::OUString path = rtl::OUString(TEST_PATH_1);
         rtl::OUString path_url;
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_2));
+        path = rtl::OUString(TEST_PATH_2);
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_3));
+        path = rtl::OUString(TEST_PATH_3);
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_4));
+        path = rtl::OUString(TEST_PATH_4);
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_5));
+        path = rtl::OUString(TEST_PATH_5);
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_6));
+        path = rtl::OUString(TEST_PATH_6);
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
     }

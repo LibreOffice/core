@@ -103,22 +103,22 @@ static Reference<XInterface> SAL_CALL test21_createInstance(const Reference<XMul
         throw (RuntimeException)
 {
     return Reference<XInterface>( static_cast<XWeak*>( new TestService(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME1)),
-        OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1)) )), UNO_QUERY);
+        OUString(  IMPLNAME1),
+        OUString(  SERVICENAME1) )), UNO_QUERY);
 }
 static Reference<XInterface> SAL_CALL test22_createInstance(const Reference<XMultiServiceFactory> & rSMgr)
         throw (RuntimeException)
 {
     return Reference<XInterface>( static_cast<XWeak*>( new TestService(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME2)),
-        OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME2)) )), UNO_QUERY);
+        OUString(  IMPLNAME2),
+        OUString(  SERVICENAME2) )), UNO_QUERY);
 }
 static Reference<XInterface> SAL_CALL test23_createInstance(const Reference<XMultiServiceFactory> & rSMgr)
         throw (RuntimeException)
 {
     return Reference<XInterface>( static_cast<XWeak*>( new TestService(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME3)),
-        OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME3)) )), UNO_QUERY);
+        OUString(  IMPLNAME3),
+        OUString(  SERVICENAME3) )), UNO_QUERY);
 }
 
 
@@ -132,20 +132,20 @@ extern "C" {
             {
                 Reference< XRegistryKey > xNewKey(
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME1 "/UNO/SERVICES" )) ) );
+                        OUString( "/" IMPLNAME1 "/UNO/SERVICES" ) ) );
 
-                xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1)));
+                xNewKey->createKey( OUString(  SERVICENAME1));
 
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME2 "/UNO/SERVICES" )) );
+                        OUString( "/" IMPLNAME2 "/UNO/SERVICES" ) );
 
-                xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME2)));
+                xNewKey->createKey(OUString(  SERVICENAME2));
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME3 "/UNO/SERVICES" ))   );
+                        OUString( "/" IMPLNAME3 "/UNO/SERVICES" )   );
 
-                xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME3)));
+                xNewKey->createKey(OUString(  SERVICENAME3));
 
                 return sal_True;
             }
@@ -162,12 +162,12 @@ extern "C" {
         void * pRet = 0;
 
 
-        OUString implname1( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME1) );
-        OUString serviceName1( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1) );
-        OUString implname2( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME2) );
-        OUString serviceName2( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME2) );
-        OUString implname3( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME3) );
-        OUString serviceName3( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME3) );
+        OUString implname1(  IMPLNAME1 );
+        OUString serviceName1(  SERVICENAME1 );
+        OUString implname2(  IMPLNAME2 );
+        OUString serviceName2(  SERVICENAME2 );
+        OUString implname3(  IMPLNAME3 );
+        OUString serviceName3(  SERVICENAME3 );
 
         if (implname1.equals( OUString::createFromAscii(pImplName)))
         {
