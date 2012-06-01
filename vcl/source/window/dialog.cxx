@@ -558,10 +558,24 @@ void Dialog::StateChanged( StateChangedType nType )
             maLayoutTimer.Stop();
 
             //resize dialog to fit requisition on initial show
-            const Window *pContainer = GetWindow(WINDOW_FIRSTCHILD);
-            Size aSize = pContainer->get_preferred_size();
-            aSize.Height() += 2*m_nBorderWidth;
-            aSize.Width() += 2*m_nBorderWidth;
+            VclBox *pBox = dynamic_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+
+            const DialogStyle& rDialogStyle =
+                GetSettings().GetStyleSettings().GetDialogStyle();
+            pBox->set_border_width(rDialogStyle.content_area_border);
+            pBox->set_spacing(rDialogStyle.content_area_spacing);
+
+            VclButtonBox *pActionArea = getActionArea(this);
+            if (pActionArea)
+            {
+                pActionArea->set_border_width(rDialogStyle.action_area_border);
+                pActionArea->set_spacing(rDialogStyle.button_spacing);
+            }
+
+            Size aSize = get_preferred_size();
+
+            fprintf(stderr, "100 dialog sized to %d %d\n", aSize.Width(),
+                aSize.Height());
 
             Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
             aSize.Width() = std::min(aMax.Width(), aSize.Width());
@@ -569,6 +583,12 @@ void Dialog::StateChanged( StateChangedType nType )
 
             SetMinOutputSizePixel(aSize);
             SetSizePixel(aSize);
+
+            aSize = GetSizePixel();
+
+            fprintf(stderr, "101 dialog sized to %d %d\n", aSize.Width(),
+                aSize.Height());
+
         }
 
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
@@ -1065,9 +1085,24 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
         return SystemWindow::GetOptimalSize(eType);
 
     Size aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
-    aSize.Height() += 2*m_nBorderWidth;
-    aSize.Width() += 2*m_nBorderWidth;
-    return Window::CalcWindowSize(aSize);
+
+    fprintf(stderr, "dialog contents wanted to be %d %d\n", aSize.Width(),
+        aSize.Height());
+
+    aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2*m_nBorderWidth;
+    aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2*m_nBorderWidth;
+
+    fprintf(stderr, "stage 2 dialog wanted to be %d %d\n", aSize.Width(),
+        aSize.Height());
+
+    aSize = Window::CalcWindowSize(aSize);
+
+    fprintf(stderr, "stage 3 dialog wanted to be %d %d\n", aSize.Width(),
+        aSize.Height());
+
+    return aSize;
 }
 
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
@@ -1079,24 +1114,22 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
         return 0;
     }
     Size aSize = GetSizePixel();
+
+    fprintf(stderr, "stage 4 dialog claimed to be %d %d\n", aSize.Width(),
+        aSize.Height());
+
     aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
         + 2 * m_nBorderWidth;
     aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
         + 2 * m_nBorderWidth;
+
+    fprintf(stderr, "stage 5 space for contents ends up as %d %d\n", aSize.Width(),
+        aSize.Height());
+    fprintf(stderr, "dialog got given %d %d\n", aSize.Width(),
+        aSize.Height());
+
     Point aPos(mpWindowImpl->mnLeftBorder + m_nBorderWidth,
         mpWindowImpl->mnTopBorder + m_nBorderWidth);
-
-    const DialogStyle& rDialogStyle =
-        GetSettings().GetStyleSettings().GetDialogStyle();
-    pBox->set_border_width(rDialogStyle.content_area_border);
-    pBox->set_spacing(rDialogStyle.content_area_spacing);
-
-    VclButtonBox *pActionArea = getActionArea(this);
-    if (pActionArea)
-    {
-        pActionArea->set_border_width(rDialogStyle.action_area_border);
-        pActionArea->set_spacing(rDialogStyle.button_spacing);
-    }
 
     pBox->SetPosSizePixel(aPos, aSize);
     return 0;
