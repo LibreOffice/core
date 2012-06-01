@@ -19,6 +19,7 @@ AttachedAxisIndex
 AutoFilter
 AutoShowInfo
 Autocomplete
+BackColor
 BackGraphicLocation
 BackGraphicURL
 Background

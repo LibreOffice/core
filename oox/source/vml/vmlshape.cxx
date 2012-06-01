@@ -354,6 +354,15 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
     maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
+
+    // TextFrames have FillColor, not BackColor
+    uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
+    if (xSInfo->supportsService("com.sun.star.text.TextFrame") && aPropMap.hasProperty(PROP_FillColor))
+    {
+        aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
+        aPropMap.erase(PROP_FillColor);
+    }
+
     PropertySet( rxShape ).setProperties( aPropMap );
 }
 
