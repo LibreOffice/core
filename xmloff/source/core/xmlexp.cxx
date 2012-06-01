@@ -418,8 +418,8 @@ void SvXMLExport::_InitCtor()
 
     mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
 
-    msGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
-    msEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
+    msGraphicObjectProtocol = OUString(  "vnd.sun.star.GraphicObject:"  );
+    msEmbeddedObjectProtocol = OUString(  "vnd.sun.star.EmbeddedObject:"  );
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -567,9 +567,9 @@ SvXMLExport::~SvXMLExport()
             {
                 if (mpProgressBarHelper)
                 {
-                    OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
-                    OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
-                    OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
+                    OUString sProgressMax(XML_PROGRESSMAX);
+                    OUString sProgressCurrent(XML_PROGRESSCURRENT);
+                    OUString sRepeat(XML_PROGRESSREPEAT);
                     if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                         xPropertySetInfo->hasPropertyByName(sProgressCurrent))
                     {
@@ -586,7 +586,7 @@ SvXMLExport::~SvXMLExport()
                 }
                 if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
                 {
-                    OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
+                    OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                     if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                     {
                         uno::Sequence<sal_Int32> aWasUsed;
@@ -636,7 +636,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
-            OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM(XML_USEPRETTYPRINTING));
+            OUString sUsePrettyPrinting(XML_USEPRETTYPRINTING);
             if (xPropertySetInfo->hasPropertyByName(sUsePrettyPrinting))
             {
                 uno::Any aAny = mxExportInfo->getPropertyValue(sUsePrettyPrinting);
@@ -648,7 +648,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 
             if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
             {
-                OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
+                OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                 if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                 {
                     uno::Any aAny = mxExportInfo->getPropertyValue(sWrittenNumberFormats);
@@ -672,8 +672,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         try
         {
             Reference < XInterface > xIfc =
-                xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.xml.NamespaceMap")) );
+                xFactory->createInstance(OUString( "com.sun.star.xml.NamespaceMap") );
             if( xIfc.is() )
             {
                 Reference< XNameAccess > xNamespaceMap( xIfc, UNO_QUERY );
@@ -758,7 +757,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
             mxExportInfo->getPropertySetInfo();
         OUString sPropName(
-                RTL_CONSTASCII_USTRINGPARAM("BaseURI" ) );
+                "BaseURI"  );
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
@@ -767,14 +766,14 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             mpImpl->SetSchemeOf( msOrigFileName );
         }
         OUString sRelPath;
-        sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
+        sPropName = OUString( "StreamRelPath"  );
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
             aAny >>= sRelPath;
         }
         OUString sName;
-        sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamName" ) );
+        sPropName = OUString( "StreamName"  );
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
@@ -792,19 +791,19 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
         // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
         const ::rtl::OUString sOutlineStyleAsNormalListStyle(
-                RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
+                "OutlineStyleAsNormalListStyle" );
         if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
             aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
         }
 
-        OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+        OUString sTargetStorage( "TargetStorage" );
         if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
             mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
 
         const ::rtl::OUString sExportTextNumberElement(
-                RTL_CONSTASCII_USTRINGPARAM("ExportTextNumberElement") );
+                "ExportTextNumberElement" );
         if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
@@ -926,10 +925,8 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
     uno::Sequence<OUString> aSeq(2);
-    aSeq[0] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
-    aSeq[1] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLExportFilter"));
+    aSeq[0] = OUString( "com.sun.star.document.ExportFilter");
+    aSeq[1] = OUString( "com.sun.star.xml.XMLExportFilter");
     return aSeq;
 }
 
@@ -1131,8 +1128,8 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
     // transfer style names (+ families) TO other components (if appropriate)
     if( ( ( mnExportFlags & EXPORT_CONTENT ) == 0 ) && mxExportInfo.is() )
     {
-        static OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
-        static OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
+        static OUString sStyleNames( "StyleNames" );
+        static OUString sStyleFamilies( "StyleFamilies" );
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
         if ( xPropertySetInfo->hasPropertyByName( sStyleNames ) && xPropertySetInfo->hasPropertyByName( sStyleFamilies ) )
         {
@@ -1149,8 +1146,8 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
 void SvXMLExport::ImplExportAutoStyles( sal_Bool )
 {
     // transfer style names (+ families) FROM other components (if appropriate)
-    OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
-    OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
+    OUString sStyleNames( "StyleNames" );
+    OUString sStyleFamilies( "StyleFamilies" );
     if( ( ( mnExportFlags & EXPORT_STYLES ) == 0 )
         && mxExportInfo.is()
         && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
@@ -1233,7 +1230,7 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
     if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
     {
         rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(s_grddl_xsl)) );
+            OUString(s_grddl_xsl) );
     }
 #endif
 }
@@ -1264,8 +1261,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 {
                     mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
                         xFactory->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.document.ExportGraphicObjectResolver"))));
+                            OUString( "com.sun.star.document.ExportGraphicObjectResolver")));
                     bOwnGraphicResolver = mxGraphicResolver.is();
                 }
 
@@ -1273,8 +1269,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 {
                     mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
                         xFactory->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.document.ExportEmbeddedObjectResolver"))));
+                            OUString( "com.sun.star.document.ExportEmbeddedObjectResolver")));
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
@@ -1304,7 +1299,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 Any aAny;
                 aAny <<= GetXMLToken( eClass );
                 xConvPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("Class")), aAny );
+                        OUString("Class"), aAny );
 
                 Reference< XPropertySet > xPropSet =
                     mxExportInfo.is()
@@ -1320,7 +1315,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 // get filter component
                 Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                     xFactory->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
+                    OUString("com.sun.star.comp.Oasis2OOoTransformer"),
                                 aArgs), UNO_QUERY);
                 OSL_ENSURE( xTmpDocHandler.is(),
                     "can't instantiate OASIS transformer component" );
@@ -1410,7 +1405,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             // office:mimetype = ... (only for stream containing the content)
             if( eClass != XML_TOKEN_INVALID )
             {
-                OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.opendocument.") );
+                OUString aTmp( "application/vnd.oasis.opendocument." );
                 aTmp += GetXMLToken( eClass );
                 AddAttribute( XML_NAMESPACE_OFFICE, XML_MIMETYPE, aTmp );
             }
@@ -1510,7 +1505,7 @@ void SvXMLExport::_ExportScripts()
     if ( mnExportFlags & EXPORT_EMBEDDED )
     {
         ::rtl::OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":Basic" ) );
+        aValue += ::rtl::OUString(  ":Basic"  );
         AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, sal_True, sal_True );
@@ -1520,7 +1515,7 @@ void SvXMLExport::_ExportScripts()
         {
             Reference< beans::XPropertySet > xPSet( mxModel, UNO_QUERY );
             if ( xPSet.is() )
-                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) );
+                xPSet->getPropertyValue( ::rtl::OUString(  "BasicLibraries"  ) );
         }
 
         Reference< document::XExporter > xExporter;
@@ -1531,7 +1526,7 @@ void SvXMLExport::_ExportScripts()
             Sequence < Any > aArgs( 1 );
             aArgs[0] <<= xHdl;
             xExporter.set( xMSF->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisBasicExporter" ) ), aArgs ),
+                OUString(  "com.sun.star.document.XMLOasisBasicExporter"  ), aArgs ),
                 UNO_QUERY );
         }
 
@@ -1570,7 +1565,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export (fill-)gradient-styles
         try
         {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance( OUString("com.sun.star.drawing.GradientTable" ) ), uno::UNO_QUERY );
             if( xGradient.is() )
             {
                 XMLGradientStyleExport aGradientStyle( *this );
@@ -1603,7 +1598,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export (fill-)hatch-styles
         try
         {
-            uno::Reference< container::XNameAccess > xHatch( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xHatch( xFact->createInstance( OUString("com.sun.star.drawing.HatchTable" ) ), uno::UNO_QUERY );
             if( xHatch.is() )
             {
                 XMLHatchStyleExport aHatchStyle( *this );
@@ -1635,7 +1630,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export (fill-)bitmap-styles
         try
         {
-            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance( OUString("com.sun.star.drawing.BitmapTable" ) ), uno::UNO_QUERY );
             if( xBitmap.is() )
             {
                 XMLImageStyle aImageStyle;
@@ -1668,7 +1663,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export transparency-gradient -styles
         try
         {
-            uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance( OUString("com.sun.star.drawing.TransparencyGradientTable" ) ), uno::UNO_QUERY );
             if( xTransGradient.is() )
             {
                 XMLTransGradientStyleExport aTransGradientstyle( *this );
@@ -1701,7 +1696,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export marker-styles
         try
         {
-            uno::Reference< container::XNameAccess > xMarker( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xMarker( xFact->createInstance( OUString("com.sun.star.drawing.MarkerTable" ) ), uno::UNO_QUERY );
             if( xMarker.is() )
             {
                 XMLMarkerStyleExport aMarkerStyle( *this );
@@ -1734,7 +1729,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export dash-styles
         try
         {
-            uno::Reference< container::XNameAccess > xDashes( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable") ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xDashes( xFact->createInstance( OUString("com.sun.star.drawing.DashTable" ) ), uno::UNO_QUERY );
             if( xDashes.is() )
             {
                 XMLDashStyleExport aDashStyle( *this );
@@ -1835,7 +1830,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
             sal_Int32 nOldLength(rProps.getLength());
             rProps.realloc(nOldLength + 1);
             beans::PropertyValue aProp;
-            aProp.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Views"));
+            aProp.Name = OUString("Views");
             aProp.Value <<= xIndexAccess;
             rProps[nOldLength] = aProp;
         }
@@ -2002,10 +1997,10 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
             uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
-                OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
-                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
-                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
-                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
+                OUString sProgressRange(XML_PROGRESSRANGE);
+                OUString sProgressMax(XML_PROGRESSMAX);
+                OUString sProgressCurrent(XML_PROGRESSCURRENT);
+                OUString sRepeat(XML_PROGRESSREPEAT);
                 if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
                     xPropertySetInfo->hasPropertyByName(sProgressRange))
@@ -2047,9 +2042,9 @@ XMLEventExport& SvXMLExport::GetEventExport()
         mpEventExport = new XMLEventExport(*this, NULL);
 
         // and register standard handlers + names
-        OUString sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic"));
+        OUString sStarBasic("StarBasic");
         mpEventExport->AddHandler(sStarBasic, new XMLStarBasicExportHandler());
-        OUString sScript(RTL_CONSTASCII_USTRINGPARAM("Script"));
+        OUString sScript("Script");
         mpEventExport->AddHandler(sScript, new XMLScriptExportHandler());
         mpEventExport->AddTranslationTable(aStandardEventTable);
     }
@@ -2159,7 +2154,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
                 new ::comphelper::PropertySetInfo( aInfoMap )));
 
         if( bIsChart )
-            xInfoProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ExportTableNumberList")), makeAny( true ));
+            xInfoProp->setPropertyValue( OUString( "ExportTableNumberList"), makeAny( true ));
 
         aArgs.realloc( 2 );
         aArgs[1] <<= xInfoProp;

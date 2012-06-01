@@ -2275,7 +2275,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_REORGANIZE:
             if ( m_pContent )
                 m_pContent->executeCommand (
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("reorganizeData")),
+                    rtl::OUString("reorganizeData"),
                     uno::Any());
             else
                 print( "No content!" );

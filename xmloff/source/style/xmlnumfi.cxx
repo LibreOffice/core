@@ -877,7 +877,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
         {
             // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
             // and a quote to resume quoting.
-            rtl::OUString aInsert( RTL_CONSTASCII_USTRINGPARAM( "\"\\\"" ) );
+            rtl::OUString aInsert(  "\"\\\""  );
 
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )
@@ -1216,7 +1216,7 @@ void SvXMLNumFmtElementContext::EndElement()
             {
                 rParent.AddNumber( aNumInfo );      // simple number
 
-                rParent.AddToCode( OUString(RTL_CONSTASCII_USTRINGPARAM("E+")) );
+                rParent.AddToCode( OUString("E+") );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
             }
@@ -2014,7 +2014,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
-    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
+    OUString sValue("value()");        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&

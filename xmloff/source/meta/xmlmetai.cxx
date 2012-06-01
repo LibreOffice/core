@@ -147,9 +147,9 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
         throw;
     } catch (const uno::Exception& e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString(
                 "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception")),
+                "properties init exception"),
             rImport, makeAny(e));
     }
 }
@@ -165,14 +165,14 @@ lcl_initGenerator(SvXMLImport & rImport,
     try {
         uno::Reference< xml::xpath::XXPathAPI > const xPath(
             rImport.getServiceFactory()->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.xml.xpath.XPathAPI"))),
+                ::rtl::OUString(
+                    "com.sun.star.xml.xpath.XPathAPI")),
             uno::UNO_QUERY_THROW );
         xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 
-        ::rtl::OUString const expr(RTL_CONSTASCII_USTRINGPARAM(
-            "string(/office:document-meta/office:meta/meta:generator)"));
+        ::rtl::OUString const expr(
+            "string(/office:document-meta/office:meta/meta:generator"));
         uno::Reference< xml::xpath::XXPathObject > const xObj(
             xPath->eval(xDoc.get(), expr), uno::UNO_SET_THROW);
         OUString const value(xObj->getString());
@@ -181,8 +181,8 @@ lcl_initGenerator(SvXMLImport & rImport,
         throw;
     } catch (const uno::Exception& e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "SvXMLMetaDocumentContext::initGenerator: exception")),
+            ::rtl::OUString(
+                                "SvXMLMetaDocumentContext::initGenerator: exception"),
             rImport, makeAny(e));
     }
 }
@@ -267,7 +267,7 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
                 OUStringBuffer sBuffer(
                     i_rBuildId.copy( nBegin+1, nEnd-nBegin-1 ) );
                 const OUString sBuildCompare(
-                    RTL_CONSTASCII_USTRINGPARAM( "$Build-" ) );
+                     "$Build-"  );
                 nBegin = i_rBuildId.indexOf( sBuildCompare, nEnd );
                 if ( nBegin != -1 )
                 {
@@ -289,11 +289,11 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
             (i_rBuildId.compareToAscii(
                 RTL_CONSTASCII_STRINGPARAM("OpenOffice.org 1") ) == 0))
         {
-            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("645$8687"));
+            sBuildId = OUString("645$8687");
         }
         if ((i_rBuildId.compareToAscii( RTL_CONSTASCII_STRINGPARAM("NeoOffice/2") ) == 0) )
         {
-            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("680$9134")); // fake NeoOffice as OpenOffice.org 2.2 release
+            sBuildId = OUString("680$9134"); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
 
@@ -301,7 +301,7 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
     {
         if( xImportInfo.is() )
         {
-            const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
+            const OUString aPropName("BuildId");
             uno::Reference< beans::XPropertySetInfo > xSetInfo(
                 xImportInfo->getPropertySetInfo());
             if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )

@@ -643,7 +643,7 @@ void FormattedFieldElement::endElement()
     OUString sDefault(
         _xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
-            OUString( "value-default") ) );
+            OUString( "value-default" ) ) );
     if (!sDefault.isEmpty())
     {
         double d = sDefault.toDouble();
@@ -671,7 +671,7 @@ void FormattedFieldElement::endElement()
     OUString sFormat(
         _xAttributes->getValueByUidName(
             _pImport->XMLNS_DIALOGS_UID,
-            OUString( "format-code") ) );
+            OUString( "format-code" ) ) );
     if (!sFormat.isEmpty())
     {
         lang::Locale locale;
@@ -679,7 +679,7 @@ void FormattedFieldElement::endElement()
         OUString sLocale(
             _xAttributes->getValueByUidName(
                 _pImport->XMLNS_DIALOGS_UID,
-                OUString( "format-locale") ) );
+                OUString( "format-locale" ) ) );
         if (!sLocale.isEmpty())
         {
             // split locale
@@ -852,7 +852,7 @@ void NumericFieldElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlNumericFieldModel") );
+        OUString( "com.sun.star.awt.UnoControlNumericFieldModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -940,7 +940,7 @@ void DateFieldElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlDateFieldModel") );
+        OUString( "com.sun.star.awt.UnoControlDateFieldModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1031,7 +1031,7 @@ void CurrencyFieldElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlCurrencyFieldModel") );
+        OUString( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1125,7 +1125,7 @@ void FileControlElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFileControlModel") );
+        OUString( "com.sun.star.awt.UnoControlFileControlModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1184,7 +1184,7 @@ void TreeControlElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.tree.TreeControlModel") );
+        OUString( "com.sun.star.awt.tree.TreeControlModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1254,7 +1254,7 @@ void ImageControlElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlImageControlModel") );
+        OUString( "com.sun.star.awt.UnoControlImageControlModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1309,7 +1309,7 @@ void TextElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFixedTextModel") );
+        OUString( "com.sun.star.awt.UnoControlFixedTextModel" ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1447,7 +1447,7 @@ void TextFieldElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlEditModel") );
+        OUString( "com.sun.star.awt.UnoControlEditModel" ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -2085,7 +2085,7 @@ void CheckBoxElement::endElement()
 {
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlCheckBoxModel") );
+        OUString( "com.sun.star.awt.UnoControlCheckBoxModel" ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
