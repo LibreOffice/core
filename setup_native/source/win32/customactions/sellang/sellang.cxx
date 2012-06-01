@@ -49,6 +49,21 @@
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
+BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
+{
+    DWORD sz = 0;
+    if ( MsiGetProperty( hMSI, pPropName, "", &sz ) == ERROR_MORE_DATA ) {
+        sz++;
+        DWORD nbytes = sz * sizeof( char );
+        char* buff = reinterpret_cast<char*>( malloc( nbytes ) );
+        ZeroMemory( buff, nbytes );
+        MsiGetProperty( hMSI, pPropName, buff, &sz );
+        *ppValue = buff;
+        return ( strlen(buff) > 0 );
+    }
+    return FALSE;
+}
+
 static const char *
 langid_to_string( LANGID langid, int *have_default_lang )
 {
@@ -187,7 +202,7 @@ static BOOL
 present_in_ui_langs(const char *lang)
 {
     for (int i = 0; i < num_ui_langs; i++)
-        if (memcmp (ui_langs[i], lang, 2) == 0)
+        if (memcmp (ui_langs[i], lang, ( strlen(ui_langs[i]) >= strlen(lang) ) ? strlen(lang) : strlen(ui_langs[i]) ) == 0)
             return TRUE;
     return FALSE;
 }
@@ -235,58 +250,88 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     MsiCloseHandle(view);
 
     if (nlangs > 0) {
-        /* Deselect those languages that don't match any of the UI languages
-         * available on the system.
-         */
-
         int i;
-        int have_system_default_lang = 0;
-        const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage(), &have_system_default_lang);
-        const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()), NULL);
-
-        EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
-
-        /* If one of the alternative languages in a multi-language installer
-         * is the system default UI language, deselect those languages that
-         * aren't among the UI languages available on the system.
-         * (On most Windows installations, just one UI language is present,
-         * which obviously is the same as the default UI language. But
-         * we want to be generic.)
-         * If none of the languages in a multi-language installer is the
-         * system default UI language (this happens now in 2.4.0 where we
-         * cannot put as many UI languages into the installer as we would
-         * like, but only half a dozen: en-US,de,es,fr,it,pt-BR), pretend
-         * that English is the system default UI language,
-         * so that we will by default deselect everything except
-         * English. We don't want to by default install all half dozen
-         * languages for an unsuspecting user of a Finnish Windows, for
-         * instance. Sigh.
-         */
-        if (system_default_lang[0]) {
-            for (i = 0; i < nlangs; i++) {
-                if (memcmp (system_default_lang, langs[i], 2) == 0) {
-                    have_system_default_lang = 1;
-                }
+        char* pVal = NULL;
+        if ( (GetMsiProp( handle, "UI_LANGS", &pVal )) && pVal ) {
+            /* user gave UI languages explicitely with UI_LANGS property */
+            int sel_ui_lang = 0;
+            strcpy(langs[nlangs++], "en_US");
+            char *str_ptr;
+            str_ptr = strtok(pVal, ",");
+            for(; str_ptr != NULL ;) {
+                ui_langs[num_ui_langs] = str_ptr;
+                num_ui_langs++;
+                str_ptr = strtok(NULL, ",");
             }
-        }
-
-        if (!have_system_default_lang) {
-            system_default_lang = "en";
-            have_system_default_lang = 1;
-        }
-        if (have_system_default_lang) {
             for (i = 0; i < nlangs; i++) {
-                if (memcmp(system_default_lang, langs[i], 2) != 0 &&
-                    memcmp(user_locale_lang, langs[i], 2) != 0 &&
-                    !present_in_ui_langs(langs[i])) {
+                if (!present_in_ui_langs(langs[i])) {
                     UINT rc;
                     sprintf(feature, "gm_Langpack_r_%s", langs[i]);
                     rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
                 }
+                else {
+                    sel_ui_lang++;
+                }
+            }
+            if ( sel_ui_lang == 0 ) {
+                /* When UI_LANG property contains only languages that are not present
+                 * in the installer, install at least en_US localization.
+                 */
+                MsiSetFeatureStateA(handle, "gm_Langpack_r_en_US", INSTALLSTATE_LOCAL);
+            }
+        }
+        else {
+            /* Deselect those languages that don't match any of the UI languages
+             * available on the system.
+             */
+
+            int have_system_default_lang = 0;
+            const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage(), &have_system_default_lang);
+            const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()), NULL);
+
+            EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
+
+            /* If one of the alternative languages in a multi-language installer
+             * is the system default UI language, deselect those languages that
+             * aren't among the UI languages available on the system.
+             * (On most Windows installations, just one UI language is present,
+             * which obviously is the same as the default UI language. But
+             * we want to be generic.)
+             * If none of the languages in a multi-language installer is the
+             * system default UI language (this happens now in 2.4.0 where we
+             * cannot put as many UI languages into the installer as we would
+             * like, but only half a dozen: en-US,de,es,fr,it,pt-BR), pretend
+             * that English is the system default UI language,
+             * so that we will by default deselect everything except
+             * English. We don't want to by default install all half dozen
+             * languages for an unsuspecting user of a Finnish Windows, for
+             * instance. Sigh.
+             */
+            if (system_default_lang[0]) {
+                for (i = 0; i < nlangs; i++) {
+                    if (memcmp (system_default_lang, langs[i], 2) == 0) {
+                        have_system_default_lang = 1;
+                    }
+                }
+            }
+
+            if (!have_system_default_lang) {
+                system_default_lang = "en";
+                have_system_default_lang = 1;
+            }
+            if (have_system_default_lang) {
+                for (i = 0; i < nlangs; i++) {
+                    if (memcmp(system_default_lang, langs[i], 2) != 0 &&
+                        memcmp(user_locale_lang, langs[i], 2) != 0 &&
+                        !present_in_ui_langs(langs[i])) {
+                        UINT rc;
+                        sprintf(feature, "gm_Langpack_r_%s", langs[i]);
+                        rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
+                    }
+                }
             }
         }
     }
-
     MsiCloseHandle(database);
 
     return ERROR_SUCCESS;
