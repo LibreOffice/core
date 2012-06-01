@@ -48,6 +48,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
+#include <boost/static_assert.hpp>
 #include <list>
 #include <algorithm>
 #include <string.h>
@@ -372,6 +373,12 @@ void OKeySet::executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OU
     ::comphelper::disposeComponent(io_xAnalyzer);
 }
 
+void OKeySet::invalidateRow()
+{
+    m_xRow = NULL;
+    ::comphelper::disposeComponent(m_xSet);
+}
+
 Any SAL_CALL OKeySet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getBookmark" );
@@ -385,6 +392,8 @@ sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLExcept
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::moveToBookmark" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
+    if (m_aKeyIter != m_aKeyMap.end())
+        refreshRow();
     return m_aKeyIter != m_aKeyMap.end();
 }
 
@@ -395,10 +404,11 @@ sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int3
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
     if(m_aKeyIter != m_aKeyMap.end())
     {
-        relative(rows);
+        return relative(rows);
     }
 
-    return !isBeforeFirst() && !isAfterLast();
+    invalidateRow();
+    return false;
 }
 
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
@@ -1107,10 +1117,21 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
     if(isAfterLast())
         return sal_False;
     ++m_aKeyIter;
-    if(!m_bRowCountFinal) // not yet all records fetched
+    if(!m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end())
     {
-        if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
+        // not yet all records fetched, but we reached the end of those we fetched
+        // try to fetch one more row
+        if (fetchRow())
+        {
+            OSL_ENSURE(!isAfterLast(), "fetchRow succeeded, but isAfterLast()");
+            return true;
+        }
+        else
+        {
+            // nope, we arrived at end of data
             m_aKeyIter = m_aKeyMap.end();
+            OSL_ENSURE(isAfterLast(), "fetchRow failed, but not end of data");
+        }
     }
 
     refreshRow();
@@ -1153,8 +1174,7 @@ void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::beforeFirst" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.begin();
-    m_xRow = NULL;
-    ::comphelper::disposeComponent(m_xSet);
+    invalidateRow();
 }
 
 void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
@@ -1163,8 +1183,7 @@ void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     fillAllRows();
     m_aKeyIter = m_aKeyMap.end();
-    m_xRow = NULL;
-    ::comphelper::disposeComponent(m_xSet);
+    invalidateRow();
 }
 
 sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
@@ -1173,8 +1192,14 @@ sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.begin();
     ++m_aKeyIter;
-    if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
-        m_aKeyIter = m_aKeyMap.end();
+    if(m_aKeyIter == m_aKeyMap.end())
+    {
+        if (!fetchRow())
+        {
+            m_aKeyIter = m_aKeyMap.end();
+            return false;
+        }
+    }
     else
         refreshRow();
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
@@ -1189,12 +1214,17 @@ sal_Bool OKeySet::last_checked( sal_Bool i_bFetchRow)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::last_checked" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
-    fillAllRows();
+    bool fetchedRow = fillAllRows();
 
     m_aKeyIter = m_aKeyMap.end();
     --m_aKeyIter;
-    if ( i_bFetchRow )
-        refreshRow();
+    if ( !fetchedRow )
+    {
+        if ( i_bFetchRow )
+            refreshRow();
+        else
+            invalidateRow();
+    }
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
@@ -1216,10 +1246,11 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow )
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::absolute" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     OSL_ENSURE(row,"absolute(0) isn't allowed!");
+    bool fetchedRow = false;
     if(row < 0)
     {
         if(!m_bRowCountFinal)
-            fillAllRows();
+            fetchedRow = fillAllRows();
 
         for(;row < 0 && m_aKeyIter != m_aKeyMap.begin();++row)
             m_aKeyIter--;
@@ -1228,18 +1259,32 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow )
     {
         if(row >= (sal_Int32)m_aKeyMap.size())
         {
+            // we don't have this row
             if(!m_bRowCountFinal)
             {
+                // but there may still be rows to fetch.
                 sal_Bool bNext = sal_True;
                 for(sal_Int32 i=m_aKeyMap.size()-1;i < row && bNext;++i)
                     bNext = fetchRow();
+                // it is guaranteed that the above loop has executed at least once,
+                // that is fetchRow called at least once.
                 if ( bNext )
                 {
-                    i_bFetchRow = true;
+                    fetchedRow = true;
+                }
+                else
+                {
+                    // reached end of data before desired row
+                    m_aKeyIter = m_aKeyMap.end();
+                    return false;
                 }
             }
             else
+            {
+                // no more rows to fetch -> fail
                 m_aKeyIter = m_aKeyMap.end();
+                return false;
+            }
         }
         else
         {
@@ -1248,8 +1293,13 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow )
                 ++m_aKeyIter;
         }
     }
-    if ( i_bFetchRow )
-        refreshRow();
+    if ( !fetchedRow )
+    {
+        if ( i_bFetchRow )
+            refreshRow();
+        else
+            invalidateRow();
+    }
 
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
@@ -1274,6 +1324,8 @@ sal_Bool OKeySet::previous_checked( sal_Bool i_bFetchRow )
         --m_aKeyIter;
         if ( i_bFetchRow )
             refreshRow();
+        else
+            invalidateRow();
     }
     return m_aKeyIter != m_aKeyMap.begin();
 }
@@ -1332,8 +1384,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
         return;
 
-    m_xRow = NULL;
-    ::comphelper::disposeComponent(m_xSet);
+    invalidateRow();
 
     if ( m_aKeyIter->second.second.second.is() )
     {
@@ -1356,12 +1407,26 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         else
             OSL_FAIL("m_rRowCount got out of sync: non-empty m_aKeyMap, but m_rRowCount <= 0");
 
-        if (!isAfterLast())
+        if (m_aKeyIter == m_aKeyMap.end())
         {
-            // it was the last row, but there may be another one to fetch
-            fetchRow();
+            ::comphelper::disposeComponent(m_xSet);
+            if (!isAfterLast())
+            {
+                // it was the last fetched row,
+                // but there may be another one to fetch
+                if (!fetchRow())
+                {
+                    // nope, that really was the last
+                    m_aKeyIter = m_aKeyMap.end();
+                    OSL_ENSURE(isAfterLast(), "fetchRow() failed but not isAfterLast()!");
+                }
+            }
+            // Now, either fetchRow has set m_xRow or isAfterLast()
         }
-        refreshRow();
+        else
+        {
+            refreshRow();
+        }
     }
     else
     {
@@ -1380,22 +1445,38 @@ sal_Bool OKeySet::fetchRow()
     if ( bRet )
     {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size() + m_pForeignColumnNames->size());
+        ORowSetRow aFullRow = new connectivity::ORowVector< ORowSetValue >(m_pColumnNames->size());
+
+        // Fetch the columns only once and in order, to satisfy restrictive backends such as ODBC
+        const int cc = m_xSetMetaData->getColumnCount();
+        connectivity::ORowVector< ORowSetValue >::Vector::iterator aFRIter = aFullRow->get().begin();
+        // Column 0 is reserved for the bookmark; unused here.
+        ++aFRIter;
+        BOOST_STATIC_ASSERT(sizeof(int) >= sizeof(sal_Int32)); // "At least a 32 bit word expected"
+        for (int i = 1; i <= cc; ++i, ++aFRIter )
+        {
+            aFRIter->fill(i, m_xSetMetaData->getColumnType(i), m_xDriverRow);
+        }
+
+        ::comphelper::disposeComponent(m_xSet);
+        m_xRow.set(new OPrivateRow(aFullRow->get()));
+
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
-        // first fetch the values needed for the key columns
+        // copy key columns
         SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
         SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
         for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
-            aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xDriverRow);
+            aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xRow);
         }
-        // now fetch the values from the missing columns from other tables
+        // copy missing columns from other tables
         aPosIter = (*m_pForeignColumnNames).begin();
         aPosEnd  = (*m_pForeignColumnNames).end();
         for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         {
             const SelectColumnDescription& rColDesc = aPosIter->second;
-            aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xDriverRow);
+            aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xRow);
         }
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,::std::pair<sal_Int32,Reference<XRow> >(0,NULL)))).first;
     }
@@ -1404,13 +1485,18 @@ sal_Bool OKeySet::fetchRow()
     return bRet;
 }
 
-void OKeySet::fillAllRows()
+bool OKeySet::fillAllRows()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::fillAllRows" );
-    if(!m_bRowCountFinal)
+    if(m_bRowCountFinal)
+    {
+        return false;
+    }
+    else
     {
         while(fetchRow())
             ;
+        return true;
     }
 }
 // XRow

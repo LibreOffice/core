@@ -131,8 +131,10 @@ namespace dbaccess
         void copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sal_Int32 i_nBookmark);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
-        void fillAllRows();
+        // returns true if it did any work
+        bool fillAllRows();
         sal_Bool fetchRow();
+        void invalidateRow();
 
         void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
         void initColumns();
