@@ -79,7 +79,7 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ContentProvider::getImplementationName_static() throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.ucp.ext.ContentProvider" ) );
+        return ::rtl::OUString(  "org.openoffice.comp.ucp.ext.ContentProvider"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -92,8 +92,8 @@ namespace ucb { namespace ucp { namespace ext
     Sequence< ::rtl::OUString > SAL_CALL ContentProvider::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServiceNames(2);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.ContentProvider" ) );
-        aServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.ExtensionContentProvider" ) );
+        aServiceNames[0] = ::rtl::OUString(  "com.sun.star.ucb.ContentProvider"  );
+        aServiceNames[1] = ::rtl::OUString(  "com.sun.star.ucb.ExtensionContentProvider"  );
         return aServiceNames;
     }
 
@@ -113,13 +113,13 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString ContentProvider::getRootURL()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.extension://" ) );
+        return ::rtl::OUString(  "vnd.sun.star.extension://"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString ContentProvider::getArtificialNodeContentType()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.extension-content" ) );
+        return ::rtl::OUString(  "application/vnd.sun.star.extension-content"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ namespace ucb { namespace ucp { namespace ext
         throw( IllegalIdentifierException, RuntimeException )
     {
         // Check URL scheme...
-        const ::rtl::OUString sScheme( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.extension") );
+        const ::rtl::OUString sScheme( "vnd.sun.star.extension" );
         if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( sScheme ) )
             throw IllegalIdentifierException();
 

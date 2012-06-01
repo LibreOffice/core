@@ -149,8 +149,8 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 rtl::OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
 {
     return isFolder(uno::Reference< ucb::XCommandEnvironment >())
-        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FOLDER_TYPE ))
-        : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FILE_TYPE ));
+        ? rtl::OUString( GIO_FOLDER_TYPE )
+        : rtl::OUString( GIO_FILE_TYPE );
 }
 
 #define EXCEPT(aExcept) \
@@ -304,7 +304,7 @@ uno::Any Content::mapGIOError( GError *pError )
 uno::Any Content::getBadArgExcept()
 {
     return uno::makeAny( lang::IllegalArgumentException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong argument type!")),
+        rtl::OUString("Wrong argument type!"),
         static_cast< cppu::OWeakObject * >( this ), -1) );
 }
 
@@ -528,7 +528,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 static lang::IllegalAccessException
 getReadOnlyException( const uno::Reference< uno::XInterface >& rContext )
 {
-    return lang::IllegalAccessException ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")), rContext );
+    return lang::IllegalAccessException ( rtl::OUString("Property is read-only!"), rContext );
 }
 
 void Content::queryChildren( ContentRefList& rChildren )
@@ -544,7 +544,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aURL += rtl::OUString("/");
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -676,7 +676,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if (!( rValue.Value >>= aNewTitle ))
             {
                 aRet[ n ] <<= beans::IllegalTypeException
-                    ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")),
+                    ( rtl::OUString("Property value has wrong type!"),
                       static_cast< cppu::OWeakObject * >( this ) );
                 continue;
             }
@@ -684,7 +684,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( aNewTitle.getLength() <= 0 )
             {
                 aRet[ n ] <<= lang::IllegalArgumentException
-                    ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty title not allowed!")),
+                    ( rtl::OUString("Empty title not allowed!"),
                       static_cast< cppu::OWeakObject * >( this ), -1 );
                 continue;
 
@@ -700,7 +700,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 g_warning ("Set new name to '%s'", newName);
 #endif
 
-                aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+                aEvent.PropertyName = rtl::OUString("Title");
                 if (oldName)
                     aEvent.OldValue = uno::makeAny(rtl::OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8));
                 aEvent.NewValue = uno::makeAny(aNewTitle);
@@ -744,7 +744,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if (!exchangeIdentity( xNewId ) )
                 {
                     aRet[ nTitlePos ] <<= uno::Exception
-                        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Exchange failed!")),
+                        ( rtl::OUString("Exchange failed!"),
                           static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1105,19 +1105,19 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            rtl::OUString("Title"),
             -1,
             getCppuType( static_cast< rtl::OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
-        seq[0].Type       = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FILE_TYPE ));
+        seq[0].Type       = rtl::OUString( GIO_FILE_TYPE );
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
-        seq[1].Type       = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FOLDER_TYPE ));
+        seq[1].Type       = rtl::OUString( GIO_FOLDER_TYPE );
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
@@ -1162,7 +1162,7 @@ uno::Reference< ucb::XContent >
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aURL += rtl::OUString("/");
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
     aURL += rtl::OUString::createFromAscii( name );
@@ -1220,40 +1220,40 @@ uno::Sequence< beans::Property > Content::getProperties(
 {
     static const beans::Property aGenericProperties[] =
     {
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+        beans::Property( rtl::OUString(  "IsDocument"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+        beans::Property( rtl::OUString(  "IsFolder"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+        beans::Property( rtl::OUString(  "Title"  ),
             -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
             beans::PropertyAttribute::BOUND ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+        beans::Property( rtl::OUString(  "IsReadOnly"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
+        beans::Property( rtl::OUString(  "DateCreated"  ),
             -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
+        beans::Property( rtl::OUString(  "DateModified"  ),
             -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
+        beans::Property( rtl::OUString(  "Size"  ),
             -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ) ),
+        beans::Property( rtl::OUString(  "IsVolume"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsCompactDisc" ) ),
+        beans::Property( rtl::OUString(  "IsCompactDisc"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ) ),
+        beans::Property( rtl::OUString(  "IsRemoveable"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ),
+        beans::Property( rtl::OUString(  "IsHidden"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
+        beans::Property( rtl::OUString(  "CreatableContentsInfo"  ),
             -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
@@ -1268,35 +1268,35 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
     {
         // Required commands
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+        ( rtl::OUString(  "getCommandInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+        ( rtl::OUString(  "getPropertySetInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+        ( rtl::OUString(  "getPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+        ( rtl::OUString(  "setPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
         // Optional standard commands
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+        ( rtl::OUString(  "delete"  ),
           -1, getCppuBooleanType() ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+        ( rtl::OUString(  "insert"  ),
           -1, getCppuType( static_cast<ucb::InsertCommandArgument * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+        ( rtl::OUString(  "open"  ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+        ( rtl::OUString(  "transfer"  ),
           -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+        ( rtl::OUString(  "createNewContent"  ),
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
@@ -1324,14 +1324,14 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType ) throw ( uno
 
 rtl::OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
 {
-       return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.GIOContent"));
+       return rtl::OUString("com.sun.star.comp.GIOContent");
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
        throw( uno::RuntimeException )
 {
        uno::Sequence< rtl::OUString > aSNS( 1 );
-       aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.GIOContent"));
+       aSNS.getArray()[ 0 ] = rtl::OUString("com.sun.star.ucb.GIOContent");
        return aSNS;
 }
 

@@ -173,14 +173,14 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
 
     if ( pUri->query )
     {
-        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+        mPath += rtl::OUString("?");
         mPath += rtl::OStringToOUString(
             pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
+        mPath += rtl::OUString("#");
         mPath += rtl::OStringToOUString(
             pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }

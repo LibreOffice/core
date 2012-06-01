@@ -200,7 +200,7 @@ FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
+  return ServiceName == rtl::OUString("com.sun.star.ucb.FileContentProvider");
 }
 
 
@@ -276,7 +276,7 @@ FileProvider::queryContent(
                                               aUnc );
 
     if(  err )
-        throw IllegalIdentifierException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw IllegalIdentifierException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
 }
@@ -405,17 +405,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName")),
+    m_seq[0] = Property( rtl::OUString("HostName"),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeDirectory")),
+    m_seq[1] = Property( rtl::OUString("HomeDirectory"),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileSystemNotation")),
+    m_seq[2] = Property( rtl::OUString("FileSystemNotation"),
                          -1,
                          getCppuType( static_cast< sal_Int32* >( 0 ) ),
                          PropertyAttribute::READONLY );
@@ -467,7 +467,7 @@ XPropertySetInfoImpl2::getPropertyByName(
         if( m_seq[i].Name == aName )
             return m_seq[i];
 
-    throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    throw UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -549,7 +549,7 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
         aPropertyName.compareToAscii( "HostName" ) == 0 )
         return;
     else
-        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -581,7 +581,7 @@ FileProvider::getPropertyValue(
         return aAny;
     }
     else
-        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 

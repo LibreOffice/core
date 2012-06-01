@@ -115,7 +115,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
     {
         uno::Sequence< beans::Property > aProps( 1 );
         aProps.getArray()[ 0 ] = beans::Property(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+                    rtl::OUString("Title"),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND );
@@ -237,11 +237,11 @@ Content* Content::create(
 ::rtl::OUString Content::getContentType(
     const ::rtl::OUString& aScheme, sal_Bool bFolder )
 {
-    return ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/"))
+    return ( rtl::OUString("application/")
              + aScheme
              + ( bFolder
-                 ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-folder"))
-                 : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-stream")) ) );
+                 ? rtl::OUString("-folder")
+                 : rtl::OUString("-stream") ) );
 }
 
 //=========================================================================
@@ -415,8 +415,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.ucb.PackageContent" ));
+    return rtl::OUString( "com.sun.star.comp.ucb.PackageContent" );
 }
 
 //=========================================================================
@@ -426,13 +425,9 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
 {
     uno::Sequence< rtl::OUString > aSNS( 1 );
     if ( isFolder() )
-        aSNS.getArray()[ 0 ]
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                PACKAGE_FOLDER_CONTENT_SERVICE_NAME ));
+        aSNS.getArray()[ 0 ] = rtl::OUString( PACKAGE_FOLDER_CONTENT_SERVICE_NAME );
     else
-        aSNS.getArray()[ 0 ]
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                PACKAGE_STREAM_CONTENT_SERVICE_NAME ));
+        aSNS.getArray()[ 0 ] = rtl::OUString( PACKAGE_STREAM_CONTENT_SERVICE_NAME );
 
     return aSNS;
 }
@@ -478,8 +473,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    rtl::OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -499,8 +493,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    rtl::OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -511,8 +504,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "No properties!" )),
+                                    rtl::OUString( "No properties!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -550,8 +542,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    rtl::OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -571,8 +562,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    rtl::OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -600,8 +590,7 @@ uno::Any SAL_CALL Content::execute(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                               "Uri")),
+                             rtl::OUString( "Uri"),
                              -1,
                              uno::makeAny(m_xIdentifier->
                                               getContentIdentifier()),
@@ -610,8 +599,7 @@ uno::Any SAL_CALL Content::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Cannot remove persistent data!" )),
+                rtl::OUString( "Cannot remove persistent data!" ),
                 this );
             // Unreachable
         }
@@ -631,8 +619,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    rtl::OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -654,8 +641,7 @@ uno::Any SAL_CALL Content::execute(
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    rtl::OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -676,8 +662,7 @@ uno::Any SAL_CALL Content::execute(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                               "Uri")),
+                             rtl::OUString( "Uri"),
                              -1,
                              uno::makeAny(m_xIdentifier->
                                               getContentIdentifier()),
@@ -686,8 +671,7 @@ uno::Any SAL_CALL Content::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Cannot write file to disk!" )),
+                rtl::OUString( "Cannot write file to disk!" ),
                 this );
             // Unreachable
         }
@@ -1581,8 +1565,7 @@ uno::Any Content::open(
                     uno::Any aProps
                         = uno::makeAny(
                                  beans::PropertyValue(
-                                     rtl::OUString(
-                                         RTL_CONSTASCII_USTRINGPARAM("Uri")),
+                                     rtl::OUString( "Uri"),
                                      -1,
                                      uno::makeAny(m_xIdentifier->
                                                       getContentIdentifier()),
@@ -1594,8 +1577,7 @@ uno::Any Content::open(
                             ? xEnv
                             : uno::Reference<
                                   ucb::XCommandEnvironment >(),
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "Got no data stream!" )),
+                        rtl::OUString( "Got no data stream!" ),
                         this );
                     // Unreachable
                 }
@@ -1662,7 +1644,7 @@ void Content::insert(
 
     rtl::OUString aNewURL = m_aUri.getParentUri();
     if (1 + aNewURL.lastIndexOf('/') != aNewURL.getLength())
-        aNewURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aNewURL += rtl::OUString("/");
     aNewURL += ::ucb_impl::urihelper::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
@@ -1697,7 +1679,7 @@ void Content::insert(
                 do
                 {
                     rtl::OUString aNew = aNewUri.getUri();
-                    aNew += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
+                    aNew += rtl::OUString("_");
                     aNew += rtl::OUString::valueOf( ++nTry );
                     aNewUri.setUri( aNew );
                 }
@@ -1708,8 +1690,7 @@ void Content::insert(
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Unable to resolve name clash!" )),
+                                rtl::OUString( "Unable to resolve name clash!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 nNameClashResolve ) ),
                     xEnv );
@@ -1717,7 +1698,7 @@ void Content::insert(
                 }
                 else
                 {
-                    m_aProps.aTitle += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
+                    m_aProps.aTitle += rtl::OUString("_");
                     m_aProps.aTitle += rtl::OUString::valueOf( nTry );
                 }
             }
@@ -1753,8 +1734,7 @@ void Content::insert(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(m_xIdentifier->
                                                    getContentIdentifier()),
@@ -1763,7 +1743,7 @@ void Content::insert(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot store persistent data!")),
+            rtl::OUString("Cannot store persistent data!"),
             this );
         // Unreachable
     }
@@ -1801,8 +1781,7 @@ void Content::destroy(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Not persistent!" )),
+                                rtl::OUString( "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -1844,8 +1823,7 @@ void Content::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Not persistent!" )),
+                                rtl::OUString( "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -1866,7 +1844,7 @@ void Content::transfer(
 
     // Is source not a parent of me / not me?
     rtl::OUString aId = m_aUri.getParentUri();
-    aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aId += rtl::OUString("/");
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
     {
@@ -1875,8 +1853,7 @@ void Content::transfer(
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(
-                                      rtl::OUString(
-                                          RTL_CONSTASCII_USTRINGPARAM("Uri")),
+                                      rtl::OUString( "Uri"),
                                       -1,
                                       uno::makeAny(rInfo.SourceURL),
                                       beans::PropertyState_DIRECT_VALUE));
@@ -1884,8 +1861,7 @@ void Content::transfer(
                 ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Target is equal to or is a child of source!" )),
+                rtl::OUString( "Target is equal to or is a child of source!" ),
                 this );
             // Unreachable
         }
@@ -1916,8 +1892,7 @@ void Content::transfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(xId->getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1925,8 +1900,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Cannot instanciate source object!" )),
+            rtl::OUString( "Cannot instanciate source object!" ),
             this );
         // Unreachable
     }
@@ -1950,8 +1924,7 @@ void Content::transfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Folder")),
+                                  rtl::OUString( "Folder"),
                                   -1,
                                   uno::makeAny(aId),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1959,8 +1932,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "XContentCreator::createNewContent failed!" )),
+            rtl::OUString( "XContentCreator::createNewContent failed!" ),
             this );
         // Unreachable
     }
@@ -2072,7 +2044,7 @@ void Content::transfer(
                     rtl::OUString aChildId = xId->getContentIdentifier();
                     if ( ( aChildId.lastIndexOf( '/' ) + 1 )
                                                 != aChildId.getLength() )
-                        aChildId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                        aChildId += rtl::OUString("/");
 
                     aChildId += ::ucb_impl::urihelper::encodeSegment( aName );
 
@@ -2109,8 +2081,7 @@ void Content::transfer(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                               "Uri")),
+                             rtl::OUString( "Uri"),
                              -1,
                              uno::makeAny(
                                  xSource->m_xIdentifier->
@@ -2120,8 +2091,7 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Cannot remove persistent data of source object!" )),
+                rtl::OUString( "Cannot remove persistent data of source object!" ),
                 this );
             // Unreachable
         }
@@ -2218,7 +2188,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     OSL_ENSURE( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ),
                 "Content::queryChildren - Invalid URL!" );
 
-    aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aURL += rtl::OUString("/");
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -2332,8 +2302,7 @@ sal_Bool Content::loadData(
             {
                 uno::Any aHasEncryptedEntries
                     = xPackagePropSet->getPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "HasEncryptedEntries" )) );
+                        rtl::OUString( "HasEncryptedEntries" ) );
                 if ( !( aHasEncryptedEntries >>= rProps.bHasEncryptedEntries ) )
                 {
                     OSL_FAIL( "Content::loadData - "
@@ -2381,7 +2350,7 @@ sal_Bool Content::loadData(
             {
                 uno::Any aMediaType
                     = xPropSet->getPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
+                        rtl::OUString("MediaType") );
                 if ( !( aMediaType >>= rProps.aMediaType ) )
                 {
                     OSL_FAIL( "Content::loadData - Got no MediaType value!" );
@@ -2425,7 +2394,7 @@ sal_Bool Content::loadData(
                 {
                     uno::Any aSize
                         = xPropSet->getPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) );
+                            rtl::OUString("Size") );
                     if ( !( aSize >>= rProps.nSize ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Size value!" );
@@ -2448,7 +2417,7 @@ sal_Bool Content::loadData(
                 {
                     uno::Any aCompressed
                         = xPropSet->getPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")) );
+                            rtl::OUString("Compressed") );
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Compressed value!" );
@@ -2471,7 +2440,7 @@ sal_Bool Content::loadData(
                 {
                     uno::Any aEncrypted
                         = xPropSet->getPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")) );
+                            rtl::OUString("Encrypted") );
                     if ( !( aEncrypted >>= rProps.bEncrypted ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
@@ -2569,7 +2538,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             try
             {
                 xPackagePropSet->setPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")),
+                        rtl::OUString("EncryptionKey"),
                         uno::makeAny( m_aProps.aEncryptionKey ) );
                 m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;
             }
@@ -2694,7 +2663,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         if ( m_nModifiedProps & MEDIATYPE_MODIFIED )
         {
             xPropSet->setPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
+                                rtl::OUString("MediaType"),
                                 uno::makeAny( m_aProps.aMediaType ) );
             m_nModifiedProps &= ~MEDIATYPE_MODIFIED;
         }
@@ -2703,7 +2672,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
+                                rtl::OUString("Compressed"),
                                 uno::makeAny( m_aProps.bCompressed ) );
 
             m_nModifiedProps &= ~COMPRESSED_MODIFIED;
@@ -2713,7 +2682,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")),
+                                rtl::OUString("Encrypted"),
                                 uno::makeAny( m_aProps.bEncrypted ) );
 
             m_nModifiedProps &= ~ENCRYPTED_MODIFIED;
@@ -2723,7 +2692,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")),
+                            rtl::OUString("EncryptionKey"),
                             uno::makeAny( m_aProps.aEncryptionKey ) );
 
             m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;

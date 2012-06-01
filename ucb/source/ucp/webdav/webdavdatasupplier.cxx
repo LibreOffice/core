@@ -161,12 +161,12 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
                             = *( m_pImpl->m_aResults[ nIndex ]->pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aId += rtl::OUString("/");
 
         aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
-            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aId += rtl::OUString("/");
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
@@ -456,9 +456,7 @@ sal_Bool DataSupplier::getData()
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
-                                    rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM(
-                                            "IsFolder" ) ) );
+                                    rtl::OUString( "IsFolder"  ) );
                             rValue >>= bFolder;
 
                             if ( !bFolder )
@@ -473,9 +471,7 @@ sal_Bool DataSupplier::getData()
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
-                                    rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM(
-                                            "IsDocument" ) ) );
+                                    rtl::OUString( "IsDocument"  ) );
                             rValue >>= bDocument;
 
                             if ( !bDocument )

@@ -52,7 +52,7 @@ sal_Bool convert( shell* pShell,
         {
             xConverter = uno::Reference< script::XTypeConverter >(
                 pShell->m_xMultiServiceFactory->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ), uno::UNO_QUERY );
+                    rtl::OUString("com.sun.star.script.Converter") ), uno::UNO_QUERY );
         }
 
         try
@@ -143,7 +143,7 @@ XRow_impl::getString(
      uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-    throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+    throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
   rtl::OUString  Value;
   osl::MutexGuard aGuard( m_aMutex );
   m_nWasNull = ::convert<rtl::OUString>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -157,7 +157,7 @@ XRow_impl::getBoolean(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     sal_Bool  Value( false );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<sal_Bool>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -172,7 +172,7 @@ XRow_impl::getByte(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     sal_Int8  Value( 0 );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<sal_Int8>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -186,7 +186,7 @@ XRow_impl::getShort(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     sal_Int16  Value( 0 );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<sal_Int16>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -201,7 +201,7 @@ XRow_impl::getInt(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     sal_Int32  Value( 0 );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<sal_Int32>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -215,7 +215,7 @@ XRow_impl::getLong(
      uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     sal_Int64  Value( 0 );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<sal_Int64>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -229,7 +229,7 @@ XRow_impl::getFloat(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     float  Value( 0 );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<float>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -243,7 +243,7 @@ XRow_impl::getDouble(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     double  Value( 0 );
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<double>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -257,7 +257,7 @@ XRow_impl::getBytes(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     uno::Sequence< sal_Int8 >  Value(0);
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<uno::Sequence< sal_Int8 > >( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -271,7 +271,7 @@ XRow_impl::getDate(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     util::Date  Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<util::Date>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -285,7 +285,7 @@ XRow_impl::getTime(
          uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     util::Time  Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<util::Time>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -299,7 +299,7 @@ XRow_impl::getTimestamp(
      uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-    throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+    throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
   util::DateTime  Value;
   osl::MutexGuard aGuard( m_aMutex );
   m_nWasNull = ::convert<util::DateTime>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -314,7 +314,7 @@ XRow_impl::getBinaryStream(
      uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-    throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+    throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
   uno::Reference< io::XInputStream >  Value;
   osl::MutexGuard aGuard( m_aMutex );
   m_nWasNull = ::convert<uno::Reference< io::XInputStream > >( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -329,7 +329,7 @@ XRow_impl::getCharacterStream(
            uno::RuntimeException)
 {
   if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-      throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+      throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
   uno::Reference< io::XInputStream > Value;
   osl::MutexGuard aGuard( m_aMutex );
   m_nWasNull = ::convert< uno::Reference< io::XInputStream> >( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -345,7 +345,7 @@ XRow_impl::getObject(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     uno::Any  Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<uno::Any>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
@@ -359,7 +359,7 @@ XRow_impl::getRef(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     uno::Reference< sdbc::XRef > Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<uno::Reference< sdbc::XRef> >( m_pMyShell,
@@ -376,7 +376,7 @@ XRow_impl::getBlob(
      uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     uno::Reference< sdbc::XBlob > Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<uno::Reference< sdbc::XBlob> >( m_pMyShell,
@@ -393,7 +393,7 @@ XRow_impl::getClob(
      uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     uno::Reference< sdbc::XClob > Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<uno::Reference< sdbc::XClob> >( m_pMyShell,
@@ -411,7 +411,7 @@ XRow_impl::getArray(
            uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     uno::Reference< sdbc::XArray > Value;
     osl::MutexGuard aGuard( m_aMutex );
     m_nWasNull = ::convert<uno::Reference< sdbc::XArray> >( m_pMyShell,

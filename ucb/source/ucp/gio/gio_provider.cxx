@@ -94,10 +94,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       com::sun::star::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                       "com.sun.star.comp.GIOContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                       "com.sun.star.ucb.GIOContentProvider" )) );
+                     rtl::OUString( "com.sun.star.comp.GIOContentProvider" ),
+                     rtl::OUString( "com.sun.star.ucb.GIOContentProvider" ) );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 

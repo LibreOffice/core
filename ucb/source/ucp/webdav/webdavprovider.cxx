@@ -93,10 +93,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.WebDAVContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         WEBDAV_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     rtl::OUString( "com.sun.star.comp.WebDAVContentProvider" ),
+                     rtl::OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -147,24 +145,21 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    HTTP_URL_SCHEME )) );
+                               rtl::OUString( HTTP_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAV_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAV_URL_SCHEME_LENGTH,
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    HTTP_URL_SCHEME )) );
+                               rtl::OUString( HTTP_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAVS_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAVS_URL_SCHEME_LENGTH,
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    HTTPS_URL_SCHEME )) );
+                               rtl::OUString( HTTPS_URL_SCHEME ) );
         bNewId = true;
     }
 
@@ -179,7 +174,7 @@ ContentProvider::queryContent(
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
         {
-            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aURL += rtl::OUString("/");
             bNewId = true;
         }
     }

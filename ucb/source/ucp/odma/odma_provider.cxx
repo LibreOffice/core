@@ -149,9 +149,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.odma.ContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_PROVIDER_SERVICE_NAME) ) );
+                     rtl::OUString( "com.sun.star.comp.odma.ContentProvider" ),
+                     rtl::OUString(ODMA_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -176,7 +175,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if(!getHandle())
         throw ucb::IllegalIdentifierException();
 
-    rtl::OUString aScheme( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(ODMA_URL_SCHEME) ) );
+    rtl::OUString aScheme( rtl::OUString( ODMA_URL_SCHEME ) );
     sal_Int32 nIndex = 0;
     rtl::OUString sOdma = aScheme.getToken(3,'.',nIndex);
     rtl::OUString sCanonicURL = Identifier->getContentIdentifier();
@@ -227,7 +226,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             aProp = new ContentProperties();
             aProp->m_sDocumentName = ::rtl::OStringToOUString(rtl::OString(lpszDocName),RTL_TEXTENCODING_ASCII_US);
             aProp->m_sDocumentId   = sDocId;
-            aProp->m_sContentType  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_TYPE));
+            aProp->m_sContentType  = ::rtl::OUString(ODMA_CONTENT_TYPE);
             append(aProp);
         }
         delete [] lpszDocName;
@@ -451,7 +450,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
             sal_Char* lpszDocName   = new sal_Char[ODM_NAME_MAX * nMaxCount];
             sal_Char* lpszDocInfo   = new sal_Char[ODM_DOCID_MAX];
 
-            ::rtl::OUString sContentType(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_TYPE));
+            ::rtl::OUString sContentType(ODMA_CONTENT_TYPE);
             do
             {
                 if(nCount >= nMaxCount)
@@ -578,7 +577,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
     ::rtl::OUString sCanonicURL = _sCanonicURL;
     // now check what formats we allow
     if(nPos == _sCanonicURL.getLength()) // only ask for root entry
-        sCanonicURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sCanonicURL = ::rtl::OUString("/");
 
     if(nPos < sCanonicURL.getLength())
     {
@@ -589,7 +588,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
     {
         sCanonicURL = sCanonicURL.copy(1);
         if(sCanonicURL.getLength() == 1 && sCanonicURL.getStr()[0] == sal_Unicode('.'))
-            sCanonicURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            sCanonicURL = ::rtl::OUString("/");
     }
     return sCanonicURL;
 }

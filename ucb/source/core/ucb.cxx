@@ -347,10 +347,8 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UniversalContentBroker,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.UniversalContentBroker" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         UCB_SERVICE_NAME )) );
+                     OUString( "com.sun.star.comp.ucb.UniversalContentBroker" ),
+                     OUString( UCB_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -651,8 +649,7 @@ Any SAL_CALL UniversalContentBroker::execute(
         {
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                OUString( "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 ) ),
                 Environment );
@@ -834,8 +831,8 @@ bool UniversalContentBroker::getContentProviderData(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 m_xSMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationProvider" )) ),
+                    OUString(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
                 uno::UNO_QUERY_THROW );
 
         OUStringBuffer aFullPath;
@@ -848,14 +845,13 @@ bool UniversalContentBroker::getContentProviderData(
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
         aProperty.Name
-            = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            = OUString(  "nodepath"  );
         aProperty.Value <<= aFullPath.makeStringAndClear();
         aArguments[ 0 ] <<= aProperty;
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationAccess" ) ),
+                    OUString( "com.sun.star.configuration.ConfigurationAccess"  ),
                     aArguments ) );
 
         if ( !m_xNotifier.is() )

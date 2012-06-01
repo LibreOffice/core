@@ -135,10 +135,8 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
-                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" )),
-                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                   DYNAMIC_RESULTSET_SERVICE_NAME )) );
+                                   OUString( "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
+                                   OUString( DYNAMIC_RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -254,8 +252,7 @@ SortedDynamicResultSet::connectToCache(
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 mxSMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
+                    OUString( "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )
@@ -340,7 +337,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     Any  aRet;
 
     try {
-        aRet = pCurSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) );
+        aRet = pCurSet->getPropertyValue( OUString("IsRowCountFinal") );
     }
     catch (const UnknownPropertyException&) {}
     catch (const WrappedTargetException&) {}
@@ -511,10 +508,8 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" )),
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         DYNAMIC_RESULTSET_FACTORY_NAME )) );
+                         OUString( "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
+                         OUString( DYNAMIC_RESULTSET_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

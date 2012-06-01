@@ -48,20 +48,20 @@ struct UCBDeadPropertyValueParseContext
 };
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aTypeString(RTL_CONSTASCII_USTRINGPARAM("string"));
-const rtl::OUString UCBDeadPropertyValue::aTypeLong(RTL_CONSTASCII_USTRINGPARAM("long"));
-const rtl::OUString UCBDeadPropertyValue::aTypeShort(RTL_CONSTASCII_USTRINGPARAM("short"));
-const rtl::OUString UCBDeadPropertyValue::aTypeBoolean(RTL_CONSTASCII_USTRINGPARAM("boolean"));
-const rtl::OUString UCBDeadPropertyValue::aTypeChar(RTL_CONSTASCII_USTRINGPARAM("char"));
-const rtl::OUString UCBDeadPropertyValue::aTypeByte(RTL_CONSTASCII_USTRINGPARAM("byte"));
-const rtl::OUString UCBDeadPropertyValue::aTypeHyper(RTL_CONSTASCII_USTRINGPARAM("hyper"));
-const rtl::OUString UCBDeadPropertyValue::aTypeFloat(RTL_CONSTASCII_USTRINGPARAM("float"));
-const rtl::OUString UCBDeadPropertyValue::aTypeDouble(RTL_CONSTASCII_USTRINGPARAM("double"));
+const rtl::OUString UCBDeadPropertyValue::aTypeString("string");
+const rtl::OUString UCBDeadPropertyValue::aTypeLong("long");
+const rtl::OUString UCBDeadPropertyValue::aTypeShort("short");
+const rtl::OUString UCBDeadPropertyValue::aTypeBoolean("boolean");
+const rtl::OUString UCBDeadPropertyValue::aTypeChar("char");
+const rtl::OUString UCBDeadPropertyValue::aTypeByte("byte");
+const rtl::OUString UCBDeadPropertyValue::aTypeHyper("hyper");
+const rtl::OUString UCBDeadPropertyValue::aTypeFloat("float");
+const rtl::OUString UCBDeadPropertyValue::aTypeDouble("double");
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aXMLPre(RTL_CONSTASCII_USTRINGPARAM("<ucbprop><type>"));
-const rtl::OUString UCBDeadPropertyValue::aXMLMid(RTL_CONSTASCII_USTRINGPARAM("</type><value>"));
-const rtl::OUString UCBDeadPropertyValue::aXMLEnd(RTL_CONSTASCII_USTRINGPARAM("</value></ucbprop>"));
+const rtl::OUString UCBDeadPropertyValue::aXMLPre("<ucbprop><type>");
+const rtl::OUString UCBDeadPropertyValue::aXMLMid("</type><value>");
+const rtl::OUString UCBDeadPropertyValue::aXMLEnd("</value></ucbprop>");
 
 #define STATE_TOP (1)
 
@@ -377,7 +377,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
                     if ( aStringValue.equalsIgnoreAsciiCase(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) ) )
+                            rtl::OUString("true") ) )
                         rOutData <<= sal_Bool( sal_True );
                     else
                         rOutData <<= sal_Bool( sal_False );

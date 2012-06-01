@@ -235,7 +235,7 @@ void XResultSet_impl::rowCountChanged()
         aOldValue = aNewValue-1;
     }
     beans::PropertyChangeEvent aEv;
-    aEv.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
+    aEv.PropertyName = rtl::OUString("RowCount");
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= aOldValue;
@@ -260,7 +260,7 @@ void XResultSet_impl::isFinalChanged()
         m_bRowCountFinal = true;
     }
     beans::PropertyChangeEvent aEv;
-    aEv.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
+    aEv.PropertyName = rtl::OUString("IsRowCountFinal");
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     sal_Bool fval = false;
@@ -349,7 +349,7 @@ XResultSet_impl::OneMore(
         }
         else  // error fetching anything
         {
-            throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+            throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
         }
     }
 }
@@ -507,7 +507,7 @@ XResultSet_impl::relative(
            uno::RuntimeException)
 {
     if( isAfterLast() || isBeforeFirst() )
-        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     if( row > 0 )
         while( row-- ) next();
     else if( row < 0 )
@@ -659,7 +659,7 @@ XResultSet_impl::getStaticResultSet()
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     return uno::Reference< sdbc::XResultSet >( this );
 }
@@ -675,7 +675,7 @@ XResultSet_impl::setListener(
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     m_xListener = Listener;
 
@@ -718,9 +718,9 @@ XResultSet_impl::connectToCache(
         = m_pMyShell->m_xMultiServiceFactory;
 
     if( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
     if( m_bStatic )
-        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     uno::Reference< ucb::XSourceInitialization > xTarget(
         xCache, uno::UNO_QUERY );
@@ -732,8 +732,8 @@ XResultSet_impl::connectToCache(
             xStubFactory
                 = uno::Reference< ucb::XCachedDynamicResultSetStubFactory >(
                     mxSMgr->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
+                        rtl::OUString(
+                            "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
                     uno::UNO_QUERY );
         }
         catch ( uno::Exception const & )
@@ -747,7 +747,7 @@ XResultSet_impl::connectToCache(
             return;
         }
     }
-    throw ucb::ServiceNotFoundException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    throw ucb::ServiceNotFoundException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 //=========================================================================
@@ -804,12 +804,12 @@ XResultSet_impl::getPropertySetInfo()
 {
 
     uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
+    seq[0].Name = rtl::OUString("RowCount");
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
-    seq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
+    seq[0].Name = rtl::OUString("IsRowCountFinal");
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
@@ -829,10 +829,10 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ||
-        aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
+    if( aPropertyName == rtl::OUString("IsRowCountFinal") ||
+        aPropertyName == rtl::OUString("RowCount") )
         return;
-    throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -842,13 +842,13 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) )
+    if( PropertyName == rtl::OUString("IsRowCountFinal") )
     {
         uno::Any aAny;
         aAny <<= m_bRowCountFinal;
         return aAny;
     }
-    else if ( PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
+    else if ( PropertyName == rtl::OUString("RowCount") )
     {
         uno::Any aAny;
         sal_Int32 count = sal::static_int_cast<sal_Int32>(m_aItems.size());
@@ -856,7 +856,7 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
         return aAny;
     }
     else
-        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -867,7 +867,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) )
+    if( aPropertyName == rtl::OUString("IsRowCountFinal") )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
@@ -876,7 +876,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
 
         m_pIsFinalListeners->addInterface( xListener );
     }
-    else if ( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
+    else if ( aPropertyName == rtl::OUString("RowCount") )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
@@ -885,7 +885,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
         m_pRowCountListeners->addInterface( xListener );
     }
     else
-        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -896,13 +896,13 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) &&
+    if( aPropertyName == rtl::OUString("IsRowCountFinal") &&
         m_pIsFinalListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
         m_pIsFinalListeners->removeInterface( aListener );
     }
-    else if ( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) &&
+    else if ( aPropertyName == rtl::OUString("RowCount") &&
               m_pRowCountListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -910,7 +910,7 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
         m_pRowCountListeners->removeInterface( aListener );
     }
     else
-        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL XResultSet_impl::addVetoableChangeListener(

@@ -144,7 +144,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                          RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
                     thePropertyValue.Value
-                        <<= OUString(RTL_CONSTASCII_USTRINGPARAM("collection"));
+                        <<= OUString("collection");
                 }
             }
 

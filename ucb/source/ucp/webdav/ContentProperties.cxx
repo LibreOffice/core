@@ -103,17 +103,17 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         NeonUri aURI( rResource.uri );
         m_aEscapedTitle = aURI.GetPathBaseName();
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ]
+        (*m_xProps)[ rtl::OUString("Title") ]
             = PropertyValue(
                 uno::makeAny( aURI.GetPathBaseNameUnescaped() ), true );
     }
     catch ( DAVException const & )
     {
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ]
+        (*m_xProps)[ rtl::OUString("Title") ]
             = PropertyValue(
                 uno::makeAny(
                     rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "*** unknown ***" ) ) ),
+                         "*** unknown ***"  ) ),
                 true );
     }
 
@@ -139,11 +139,11 @@ ContentProperties::ContentProperties(
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( sal_False )
 {
-    (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ]
+    (*m_xProps)[ rtl::OUString("Title") ]
         = PropertyValue( uno::makeAny( rTitle ), true );
-    (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")) ]
+    (*m_xProps)[ rtl::OUString("IsFolder") ]
         = PropertyValue( uno::makeAny( bFolder ), true );
-    (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")) ]
+    (*m_xProps)[ rtl::OUString("IsDocument") ]
         = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
 }
 
@@ -152,7 +152,7 @@ ContentProperties::ContentProperties( const rtl::OUString & rTitle )
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( sal_False )
 {
-    (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ]
+    (*m_xProps)[ rtl::OUString("Title") ]
         = PropertyValue( uno::makeAny( rTitle ), true );
 }
 
@@ -328,17 +328,17 @@ void ContentProperties::UCBNamesToHTTPNames(
         if ( rProp.Name == "DateModified" )
         {
             propertyNames.push_back(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Last-Modified")) );
+                rtl::OUString("Last-Modified") );
         }
         else if ( rProp.Name == "MediaType" )
         {
             propertyNames.push_back(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content-Type")) );
+                rtl::OUString("Content-Type") );
         }
         else if ( rProp.Name == "Size" )
         {
             propertyNames.push_back(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content-Length")) );
+                rtl::OUString("Content-Length") );
         }
         else
         {
@@ -417,7 +417,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateCreated")) ]
+        (*m_xProps)[ rtl::OUString("DateCreated") ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
     //  else if ( rName.equals( DAVProperties::DISPLAYNAME ) )
@@ -432,7 +432,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         rtl::OUString aValue;
         rValue >>= aValue;
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) ]
+        (*m_xProps)[ rtl::OUString("Size") ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
     else if ( rName == "Content-Length" )
@@ -444,13 +444,13 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         rtl::OUString aValue;
         rValue >>= aValue;
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) ]
+        (*m_xProps)[ rtl::OUString("Size") ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
     else if ( rName.equals( DAVProperties::GETCONTENTTYPE ) )
     {
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ]
+        (*m_xProps)[ rtl::OUString("MediaType") ]
             = PropertyValue( rValue, true );
     }
     else if ( rName == "Content-Type" )
@@ -459,7 +459,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         // Only DAV resources have this property.
 
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ]
+        (*m_xProps)[ rtl::OUString("MediaType") ]
             = PropertyValue( rValue, true );
     }
     //  else if ( rName.equals( DAVProperties::GETETAG ) )
@@ -473,7 +473,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")) ]
+        (*m_xProps)[ rtl::OUString("DateModified") ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
     else if ( rName == "Last-Modified" )
@@ -487,7 +487,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")) ]
+        (*m_xProps)[ rtl::OUString("DateModified") ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
     //  else if ( rName.equals( DAVProperties::LOCKDISCOVERY ) )
@@ -503,14 +503,14 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
             aValue.equalsIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "collection" ) );
 
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")) ]
+        (*m_xProps)[ rtl::OUString("IsFolder") ]
             = PropertyValue( uno::makeAny( bFolder ), true );
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")) ]
+        (*m_xProps)[ rtl::OUString("IsDocument") ]
             = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
-        (*m_xProps)[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")) ]
+        (*m_xProps)[ rtl::OUString("ContentType") ]
             = PropertyValue( uno::makeAny( bFolder
-                ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_COLLECTION_TYPE ))
-                : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_CONTENT_TYPE )) ), true );
+                ? rtl::OUString( WEBDAV_COLLECTION_TYPE )
+                : rtl::OUString( WEBDAV_CONTENT_TYPE ) ), true );
     }
     //  else if ( rName.equals( DAVProperties::SOURCE ) )
     //  {
@@ -541,17 +541,17 @@ namespace
             DAVProperties::LOCKDISCOVERY,
 
             DAVProperties::GETETAG,
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ETag" ) ),
+            rtl::OUString(  "ETag"  ),
 
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Last-Modified" ) ),
+            rtl::OUString(  "DateModified"  ),
+            rtl::OUString(  "Last-Modified"  ),
             DAVProperties::GETLASTMODIFIED,
 
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content-Length" ) ),
+            rtl::OUString(  "Size"  ),
+            rtl::OUString(  "Content-Length"  ),
             DAVProperties::GETCONTENTLENGTH,
 
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Date" ) )
+            rtl::OUString(  "Date"  )
         };
 
         for ( sal_uInt32 n = 0;

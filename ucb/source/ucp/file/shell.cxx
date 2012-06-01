@@ -161,24 +161,23 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
       m_xMultiServiceFactory( xMultiServiceFactory ),
-      Title( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-      CasePreservingURL(
-          RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL") ),
-      IsDocument( RTL_CONSTASCII_USTRINGPARAM("IsDocument") ),
-      IsFolder( RTL_CONSTASCII_USTRINGPARAM("IsFolder") ),
-      DateModified( RTL_CONSTASCII_USTRINGPARAM("DateModified") ),
-      Size( RTL_CONSTASCII_USTRINGPARAM("Size") ),
-      IsVolume( RTL_CONSTASCII_USTRINGPARAM("IsVolume") ),
-      IsRemoveable( RTL_CONSTASCII_USTRINGPARAM("IsRemoveable") ),
-      IsRemote( RTL_CONSTASCII_USTRINGPARAM("IsRemote") ),
-      IsCompactDisc( RTL_CONSTASCII_USTRINGPARAM("IsCompactDisc") ),
-      IsFloppy( RTL_CONSTASCII_USTRINGPARAM("IsFloppy") ),
-      IsHidden( RTL_CONSTASCII_USTRINGPARAM("IsHidden") ),
-      ContentType( RTL_CONSTASCII_USTRINGPARAM("ContentType") ),
-      IsReadOnly( RTL_CONSTASCII_USTRINGPARAM("IsReadOnly") ),
-      CreatableContentsInfo( RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo") ),
-      FolderContentType( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder") ),
-      FileContentType( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-file") ),
+      Title( "Title" ),
+      CasePreservingURL( "CasePreservingURL" ),
+      IsDocument( "IsDocument" ),
+      IsFolder( "IsFolder" ),
+      DateModified( "DateModified" ),
+      Size( "Size" ),
+      IsVolume( "IsVolume" ),
+      IsRemoveable( "IsRemoveable" ),
+      IsRemote( "IsRemote" ),
+      IsCompactDisc( "IsCompactDisc" ),
+      IsFloppy( "IsFloppy" ),
+      IsHidden( "IsHidden" ),
+      ContentType( "ContentType" ),
+      IsReadOnly( "IsReadOnly" ),
+      CreatableContentsInfo( "CreatableContentsInfo" ),
+      FolderContentType( "application/vnd.sun.staroffice.fsys-folder" ),
+      FileContentType( "application/vnd.sun.staroffice.fsys-file" ),
       m_sCommandInfo( 9 )
 {
     // Title
@@ -358,45 +357,45 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::READONLY ) );
 
     // Commands
-    m_sCommandInfo[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo"));
+    m_sCommandInfo[0].Name = rtl::OUString("getCommandInfo");
     m_sCommandInfo[0].Handle = -1;
     m_sCommandInfo[0].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo"));
+    m_sCommandInfo[1].Name = rtl::OUString("getPropertySetInfo");
     m_sCommandInfo[1].Handle = -1;
     m_sCommandInfo[1].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
+    m_sCommandInfo[2].Name = rtl::OUString("getPropertyValues");
     m_sCommandInfo[2].Handle = -1;
     m_sCommandInfo[2].ArgType = getCppuType( static_cast< uno::Sequence< beans::Property >* >( 0 ) );
 
-    m_sCommandInfo[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
+    m_sCommandInfo[3].Name = rtl::OUString("setPropertyValues");
     m_sCommandInfo[3].Handle = -1;
     m_sCommandInfo[3].ArgType = getCppuType( static_cast< uno::Sequence< beans::PropertyValue >* >( 0 ) );
 
-    m_sCommandInfo[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
+    m_sCommandInfo[4].Name = rtl::OUString("open");
     m_sCommandInfo[4].Handle = -1;
     m_sCommandInfo[4].ArgType = getCppuType( static_cast< OpenCommandArgument* >( 0 ) );
 
-    m_sCommandInfo[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer"));
+    m_sCommandInfo[5].Name = rtl::OUString("transfer");
     m_sCommandInfo[5].Handle = -1;
     m_sCommandInfo[5].ArgType = getCppuType( static_cast< TransferInfo* >( 0 ) );
 
-    m_sCommandInfo[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
+    m_sCommandInfo[6].Name = rtl::OUString("delete");
     m_sCommandInfo[6].Handle = -1;
     m_sCommandInfo[6].ArgType = getCppuType( static_cast< sal_Bool* >( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert"));
+    m_sCommandInfo[7].Name = rtl::OUString("insert");
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
+    m_sCommandInfo[7].Name = rtl::OUString("createNewContent");
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
 
     if(m_bWithConfig)
     {
-        rtl::OUString Store(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Store"));
+        rtl::OUString Store("com.sun.star.ucb.Store");
         uno::Reference< XPropertySetRegistryFactory > xRegFac(
             m_xMultiServiceFactory->createInstance( Store ),
             uno::UNO_QUERY );
@@ -496,7 +495,7 @@ shell::associate( const rtl::OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::PropertyExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::PropertyExistException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -509,7 +508,7 @@ shell::associate( const rtl::OUString& aUnqPath,
         PropertySet& properties = *(it->second.properties);
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
-            throw beans::PropertyExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+            throw beans::PropertyExistException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
         // Property does not exist
         properties.insert( newProperty );
@@ -532,7 +531,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::NotRemoveableException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::NotRemoveableException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -544,7 +543,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
-        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     properties.erase( it1 );
 
@@ -840,7 +839,7 @@ shell::setv( const rtl::OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            ret[i] <<= beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+            ret[i] <<= beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -850,7 +849,7 @@ shell::setv( const rtl::OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            ret[i] <<= lang::IllegalAccessException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+            ret[i] <<= lang::IllegalAccessException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -908,7 +907,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         ret[0] <<= beans::PropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
+                            rtl::OUString("Uri"), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError(IOErrorCode_GENERAL);
@@ -921,7 +920,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -972,7 +971,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         names[0] <<= beans::PropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
+                            rtl::OUString("Uri"), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError;
@@ -1029,7 +1028,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             }
         }
     }   // end for
@@ -1201,7 +1200,7 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( RTL_CONSTASCII_USTRINGPARAM("_") );
+                    rtl::OUString aPostFix( "_" );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1431,7 +1430,7 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( RTL_CONSTASCII_USTRINGPARAM("_") );
+                    rtl::OUString aPostFix( "_" );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1972,7 +1971,7 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
 {
     if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
     {
-        Unq = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
+        Unq = rtl::OUString("file:///");
         return false;
     }
 
@@ -2053,7 +2052,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                                           RTL_TEXTENCODING_UTF8 );
 
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                    newDstUnqPath += rtl::OUString("/");
 
                 newDstUnqPath += tit;
 
@@ -3020,7 +3019,7 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+        rtl::OUString("Title"),
         -1,
         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
         beans::PropertyAttribute::MAYBEVOID
@@ -3043,20 +3042,20 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 void SAL_CALL
 shell::getScheme( rtl::OUString& Scheme )
 {
-  Scheme = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file"));
+  Scheme = rtl::OUString("file");
 }
 
 rtl::OUString SAL_CALL
 shell::getImplementationName_static( void )
 {
-  return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ucb.FileProvider"));
+  return rtl::OUString("com.sun.star.comp.ucb.FileProvider");
 }
 
 
 uno::Sequence< rtl::OUString > SAL_CALL
 shell::getSupportedServiceNames_static( void )
 {
-  rtl::OUString Supported(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
+  rtl::OUString Supported("com.sun.star.ucb.FileContentProvider");
   com::sun::star::uno::Sequence< rtl::OUString > Seq( &Supported,1 );
   return Seq;
 }

@@ -319,7 +319,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
         }
         aGuard.reacquire();
 
-        OUString aName(RTL_CONSTASCII_USTRINGPARAM("ResultSetType"));
+        OUString aName("ResultSetType");
         //find out, if we are ForwardOnly and cache the value:
 
         impl_init_xPropertySetOrigin();

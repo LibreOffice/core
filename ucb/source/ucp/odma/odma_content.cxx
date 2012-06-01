@@ -175,7 +175,7 @@ rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
     // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.odma.Content"));
+    return rtl::OUString("com.sun.star.comp.odma.Content");
 }
 
 //=========================================================================
@@ -186,7 +186,7 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
     // @@@ Adjust macro name.
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODMA_CONTENT_SERVICE_NAME ));
+            = rtl::OUString( ODMA_CONTENT_SERVICE_NAME );
     return aSNS;
 }
 
@@ -201,7 +201,7 @@ rtl::OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     // @@@ Adjust macro name ( def in odma_provider.hxx ).
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODMA_CONTENT_TYPE ));
+    return rtl::OUString( ODMA_CONTENT_TYPE );
 }
 
 //=========================================================================
@@ -352,9 +352,9 @@ uno::Any SAL_CALL Content::execute(
             m_pContent = new ::ucbhelper::Content(sFileURL,NULL);
             if(!m_pContent->isDocument())
             {
-                rtl::OUString sErrorMsg(RTL_CONSTASCII_USTRINGPARAM("File: "));
+                rtl::OUString sErrorMsg("File: ");
                 sErrorMsg += sFileURL;
-                sErrorMsg += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" could not be found."));
+                sErrorMsg += rtl::OUString(" could not be found.");
                 ucbhelper::cancelCommandExecution(
                         uno::makeAny( io::IOException(
                                         sErrorMsg,
@@ -511,7 +511,7 @@ uno::Any SAL_CALL Content::execute(
         //  aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
         aTransferInfo.NewTitle = sFileURL.copy( 1 + nLastIndex );
         // Copy our saved backup copy to the "shadow" file.
-        aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),uno::makeAny(aTransferInfo));
+        aContent.executeCommand(::rtl::OUString("transfer"),uno::makeAny(aTransferInfo));
         // Tell the DMS that the "shadow" file is done and can be
         // imported.
         getContentProvider()->saveDocument(aProp->m_sDocumentId);
@@ -561,8 +561,8 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     ::rtl::OUString sURL = m_xIdentifier->getContentIdentifier();
 
     // @@@ Extract URL of parent from aURL and return it...
-    static ::rtl::OUString sScheme1(RTL_CONSTASCII_USTRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT "/"));
-    static ::rtl::OUString sScheme2(RTL_CONSTASCII_USTRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT));
+    static ::rtl::OUString sScheme1(ODMA_URL_SCHEME ODMA_URL_SHORT "/");
+    static ::rtl::OUString sScheme2(ODMA_URL_SCHEME ODMA_URL_SHORT);
     if(sURL == sScheme1 || sURL == sScheme2)
         sURL = ::rtl::OUString();
     else
@@ -681,27 +681,27 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
+            beans::Property( rtl::OUString("ContentType"),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_sContentType );
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            beans::Property( rtl::OUString("Title"),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
             rData->m_sTitle );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+            beans::Property( rtl::OUString("IsDocument"),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_bIsDocument );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
+            beans::Property( rtl::OUString("IsFolder"),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
@@ -710,40 +710,40 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // @@@ Append other properties supported directly.
         xRow->appendTimestamp(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateCreated")),
+            beans::Property( rtl::OUString("DateCreated"),
                       -1,
                       getCppuType(static_cast< const util::DateTime * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_aDateCreated );
         xRow->appendTimestamp(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")),
+            beans::Property( rtl::OUString("DateModified"),
                       -1,
                       getCppuType(static_cast< const util::DateTime * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_aDateModified );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")),
+            beans::Property( rtl::OUString("IsReadOnly"),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData->m_bIsReadOnly );
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Author")),
+            beans::Property( rtl::OUString("Author"),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
             rData->m_sAuthor );
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Subject")),
+            beans::Property( rtl::OUString("Subject"),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
             rData->m_sSubject );
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Keywords")),
+            beans::Property( rtl::OUString("Keywords"),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
@@ -836,8 +836,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!") ),
+                            rtl::OUString( "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else
@@ -900,8 +899,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= uno::Exception(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "No property set for storing the value!" )),
+                                rtl::OUString( "No property set for storing the value!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -934,7 +932,7 @@ void Content::insert(
         OSL_FAIL( "Content::insert - property value missing!" );
 
         uno::Sequence< rtl::OUString > aProps( 1 );
-        aProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("zzzz"));
+        aProps[ 0 ] = rtl::OUString("zzzz");
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 rtl::OUString(),
@@ -1055,8 +1053,7 @@ void Content::changePropertyValue(const beans::PropertyValue& _rValue,
     if(bError)
     {
         _rRet[ _rnCurrentPos ] <<= beans::IllegalTypeException(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "Property value has wrong type!" )),
+                        rtl::OUString( "Property value has wrong type!" ),
                         static_cast< cppu::OWeakObject * >( this ) );
     }
 }

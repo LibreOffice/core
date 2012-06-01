@@ -50,8 +50,8 @@ CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > 
                 , m_bFirstFetchSizePropagationDone( sal_False )
                 , m_nLastFetchSize( 1 )//this value is not important at all
                 , m_bLastFetchDirection( sal_True )//this value is not important at all
-                , m_aPropertyNameForFetchSize( OUString(RTL_CONSTASCII_USTRINGPARAM("FetchSize")) )
-                , m_aPropertyNameForFetchDirection( OUString(RTL_CONSTASCII_USTRINGPARAM("FetchDirection")) )
+                , m_aPropertyNameForFetchSize( OUString("FetchSize") )
+                , m_aPropertyNameForFetchDirection( OUString("FetchDirection") )
 {
     impl_init();
 }
@@ -172,10 +172,8 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.CachedContentResultSetStub" )),
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        CACHED_CRS_STUB_SERVICE_NAME )) );
+                        OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
+                        OUString( CACHED_CRS_STUB_SERVICE_NAME ) );
 
 //-----------------------------------------------------------------
 // XFetchProvider methods.
@@ -531,10 +529,8 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                     CACHED_CRS_STUB_FACTORY_NAME )) );
+                     OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
+                     OUString( CACHED_CRS_STUB_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

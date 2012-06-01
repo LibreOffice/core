@@ -179,7 +179,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
         if ( xRootReadAccess.is() )
         {
             rtl::OUString aTitlePath = m_aPath;
-            aTitlePath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Title"));
+            aTitlePath += rtl::OUString("/Title");
 
             // Note: Avoid NoSuchElementExceptions, because exceptions are
             //       relatively 'expensive'. Checking for availability of
@@ -203,7 +203,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
             // Get TargetURL value.
             rtl::OUString aTargetURLPath = m_aPath;
-            aTargetURLPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/TargetURL"));
+            aTargetURLPath += rtl::OUString("/TargetURL");
             if ( !( xRootReadAccess->getByHierarchicalName( aTargetURLPath )
                     >>= aValue ) )
             {
@@ -222,7 +222,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             rData.setTargetURL( aValue );
 
             rtl::OUString aTypePath = m_aPath;
-            aTypePath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Type"));
+            aTypePath += rtl::OUString("/Type");
             if ( xRootReadAccess->hasByHierarchicalName( aTypePath ) )
             {
                 // Might not be present since it was introduced long after
@@ -304,15 +304,13 @@ sal_Bool HierarchyEntry::setData(
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue      aProperty;
 
-            aProperty.Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_NODEPATH ) );
+            aProperty.Name    = rtl::OUString( CFGPROPERTY_NODEPATH  );
             aProperty.Value <<= aParentPath;
             aArguments[ 0 ] <<= aProperty;
 
             uno::Reference< util::XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            READWRITE_SERVICE_NAME ) ),
+                        rtl::OUString( READWRITE_SERVICE_NAME  ),
                         aArguments ),
                     uno::UNO_QUERY );
 
@@ -343,7 +341,7 @@ sal_Bool HierarchyEntry::setData(
                     else
                     {
                         xParentNameAccess->getByName(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
+                            rtl::OUString("Children") )
                                 >>= xNameAccess;
                     }
 
@@ -391,8 +389,7 @@ sal_Bool HierarchyEntry::setData(
                         // Append new entry to parents child list,
                         // which is a set of entries.
                         xParentNameAccess->getByName(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                            "Children" )) ) >>= xFac;
+                                        rtl::OUString( "Children" ) ) >>= xFac;
                     }
 
                     OSL_ENSURE( xFac.is(),
@@ -423,7 +420,7 @@ sal_Bool HierarchyEntry::setData(
                 {
                     // Set Title value.
                     xNameReplace->replaceByName(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+                        rtl::OUString("Title"),
                         uno::makeAny( rData.getTitle() ) );
 
                     // Set TargetURL value.
@@ -439,14 +436,14 @@ sal_Bool HierarchyEntry::setData(
                             = m_xOfficeInstDirs->makeRelocatableURL( aValue );
 
                     xNameReplace->replaceByName(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")),
+                        rtl::OUString("TargetURL"),
                         uno::makeAny( aValue ) );
 
                     // Set Type value.
                     sal_Int32 nType
                         = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
                     xNameReplace->replaceByName(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")),
+                        rtl::OUString("Type"),
                         uno::makeAny( nType ) );
 
                     if ( xContainer.is() )
@@ -571,15 +568,13 @@ sal_Bool HierarchyEntry::move(
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
 
-        aProperty.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_NODEPATH ) );
+        aProperty.Name  = rtl::OUString( CFGPROPERTY_NODEPATH  );
         aProperty.Value <<= aOldParentPath;
         aArguments[ 0 ] <<= aProperty;
 
         xOldParentBatch = uno::Reference< util::XChangesBatch >(
             m_xConfigProvider->createInstanceWithArguments(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    READWRITE_SERVICE_NAME ) ),
+                rtl::OUString( READWRITE_SERVICE_NAME  ),
                 aArguments ),
             uno::UNO_QUERY );
 
@@ -597,15 +592,13 @@ sal_Bool HierarchyEntry::move(
         {
             bDifferentParents = sal_True;
 
-            aProperty.Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_NODEPATH ) );
+            aProperty.Name    = rtl::OUString( CFGPROPERTY_NODEPATH  );
             aProperty.Value <<= aNewParentPath;
             aArguments[ 0 ] <<= aProperty;
 
             xNewParentBatch = uno::Reference< util::XChangesBatch >(
                 m_xConfigProvider->createInstanceWithArguments(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        READWRITE_SERVICE_NAME ) ),
+                    rtl::OUString( READWRITE_SERVICE_NAME  ),
                     aArguments ),
                 uno::UNO_QUERY );
 
@@ -656,7 +649,7 @@ sal_Bool HierarchyEntry::move(
         else
         {
             xOldParentNameAccess->getByName(
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
+                 rtl::OUString("Children") )
                     >>= xOldNameContainer;
         }
 
@@ -735,7 +728,7 @@ sal_Bool HierarchyEntry::move(
             else
             {
                 xNewParentNameAccess->getByName(
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
+                     rtl::OUString("Children") )
                         >>= xNewNameContainer;
             }
         }
@@ -746,7 +739,7 @@ sal_Bool HierarchyEntry::move(
             return sal_False;
 
         xNewNameReplace->replaceByName(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            rtl::OUString("Title"),
             uno::makeAny( rData.getTitle() ) );
 
         // TargetURL property may contain a reference to the Office
@@ -758,11 +751,11 @@ sal_Bool HierarchyEntry::move(
         if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty() )
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")),
+            rtl::OUString("TargetURL"),
             uno::makeAny( aValue ) );
         sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
         xNewNameReplace->replaceByName(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")),
+            rtl::OUString("Type"),
             uno::makeAny( nType ) );
 
         xNewNameContainer->insertByName( aNewKey, aEntry );
@@ -836,15 +829,13 @@ sal_Bool HierarchyEntry::remove()
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue      aProperty;
 
-            aProperty.Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_NODEPATH ) );
+            aProperty.Name    = rtl::OUString( CFGPROPERTY_NODEPATH  );
             aProperty.Value <<= aParentPath;
             aArguments[ 0 ] <<= aProperty;
 
             uno::Reference< util::XChangesBatch > xBatch(
                 m_xConfigProvider->createInstanceWithArguments(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        READWRITE_SERVICE_NAME ) ),
+                    rtl::OUString( READWRITE_SERVICE_NAME  ),
                     aArguments ),
                 uno::UNO_QUERY );
 
@@ -874,7 +865,7 @@ sal_Bool HierarchyEntry::remove()
                     // Append new entry to parents child list,
                     // which is a set of entries.
                      xParentNameAccess->getByName(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
+                        rtl::OUString("Children") )
                             >>= xContainer;
                 }
 
@@ -939,7 +930,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 if ( !m_aPath.isEmpty() )
                 {
                     rtl::OUString aPath = m_aPath;
-                    aPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Children"));
+                    aPath += rtl::OUString("/Children");
 
                     xRootHierNameAccess->getByHierarchicalName( aPath )
                         >>= xNameAccess;
@@ -1078,7 +1069,7 @@ HierarchyEntry::getRootReadAccess()
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
                     aProperty.Name = rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( CFGPROPERTY_NODEPATH ) );
+                         CFGPROPERTY_NODEPATH  );
                     aProperty.Value <<= rtl::OUString(); // root path
                     aArguments[ 0 ] <<= aProperty;
 
@@ -1087,9 +1078,7 @@ HierarchyEntry::getRootReadAccess()
                     m_xRootReadAccess
                         = uno::Reference< container::XHierarchicalNameAccess >(
                             m_xConfigProvider->createInstanceWithArguments(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        READ_SERVICE_NAME ) ),
+                                rtl::OUString( READ_SERVICE_NAME  ),
                                 aArguments ),
                             uno::UNO_QUERY );
                 }
@@ -1147,9 +1136,9 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             rtl::OUString aTargetURL = aTitle;
             rtl::OUString aType      = aTitle;
 
-            aTitle     += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Title"));
-            aTargetURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/TargetURL"));
-            aType      += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Type"));
+            aTitle     += rtl::OUString("/Title");
+            aTargetURL += rtl::OUString("/TargetURL");
+            aType      += rtl::OUString("/Type");
 
             rtl::OUString aValue;
             m_pImpl->dir->getByHierarchicalName( aTitle ) >>= aValue;

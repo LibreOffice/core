@@ -100,10 +100,8 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.HierarchyContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     rtl::OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
+                     rtl::OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -239,9 +237,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                 {
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
-                    aProperty.Name
-                        = rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                    aProperty.Name = rtl::OUString( "nodepath"  );
                     aProperty.Value <<= rtl::OUString(); // root path
                     aArguments[ 0 ] <<= aProperty;
 
@@ -250,10 +246,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                     (*it).second.xRootReadAccess
                         = uno::Reference< container::XHierarchicalNameAccess >(
                             xConfigProv->createInstanceWithArguments(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.ucb."
-                                        "HierarchyDataReadAccess" ) ),
+                                rtl::OUString( "com.sun.star.ucb.HierarchyDataReadAccess"  ),
                                 aArguments ),
                             uno::UNO_QUERY );
                 }
@@ -292,8 +285,7 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
             if ( xPropSet.is() )
             {
                 xPropSet->getPropertyValue(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                    rtl::OUString( "DefaultContext"  ) )
                 >>= xCtx;
             }
 
@@ -304,9 +296,7 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
             if ( xCtx.is() )
             {
                 xCtx->getValueByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "/singletons/"
-                        "com.sun.star.util.theOfficeInstallationDirectories" ) ) )
+                    rtl::OUString( "/singletons/com.sun.star.util.theOfficeInstallationDirectories"  ) )
                 >>= m_xOfficeInstDirs;
 
 // Be silent. singleton only available in an Office environment.

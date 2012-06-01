@@ -198,9 +198,9 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
     sal_Int32 nCount = rInData.getLength();
     if ( nCount )
     {
-        rtl::OUString aPre( RTL_CONSTASCII_USTRINGPARAM("<link><src>") );
-        rtl::OUString aMid( RTL_CONSTASCII_USTRINGPARAM("</src><dst>") );
-        rtl::OUString aEnd( RTL_CONSTASCII_USTRINGPARAM("</dst></link>") );
+        rtl::OUString aPre( "<link><src>" );
+        rtl::OUString aMid( "</src><dst>" );
+        rtl::OUString aEnd( "</dst></link>" );
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {

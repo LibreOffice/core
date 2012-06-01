@@ -103,8 +103,8 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 
 XSERVICEINFO_IMPL_1(
     FTPContentProvider,
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.FTPContentProvider")),
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FTP_CONTENT_PROVIDER_SERVICE_NAME)));
+    rtl::OUString("com.sun.star.comp.FTPContentProvider"),
+    rtl::OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME));
 
 //=========================================================================
 //
@@ -158,7 +158,7 @@ FTPContentProvider::queryContent(
                     this);
 
         if(!m_pProxyDecider->shouldUseProxy(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp")),
+            rtl::OUString("ftp"),
             aURL.host(),
             aURL.port().toInt32()))
         {
@@ -267,11 +267,10 @@ FTPContentProvider::getHttpProvider()
         if(xManager.is())
             return
                 xManager->queryContentProvider(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http:")));
+                    rtl::OUString("http:"));
         else
             throw RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "bad ucbhelper::ContentBroker")),
+                rtl::OUString( "bad ucbhelper::ContentBroker"),
                 *this);
     } else
         return 0;

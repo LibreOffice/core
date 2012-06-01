@@ -265,7 +265,7 @@ rtl::OUString SAL_CALL
 BaseContent::getImplementationName()
     throw( RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ucb.FileContent"));
+    return rtl::OUString("com.sun.star.comp.ucb.FileContent");
 }
 
 
@@ -287,7 +287,7 @@ BaseContent::getSupportedServiceNames()
     throw( RuntimeException )
 {
     Sequence< rtl::OUString > ret( 1 );
-    ret[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContent"));
+    ret[0] = rtl::OUString("com.sun.star.ucb.FileContent");
     return ret;
 }
 
@@ -419,7 +419,7 @@ BaseContent::execute( const Command& aCommand,
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL")),
+            rtl::OUString("CasePreservingURL"),
             -1,
             getCppuType( static_cast< sal_Bool* >(0) ),
             0 );
@@ -528,7 +528,7 @@ BaseContent::getContentType()
             {
                 // Who am I ?
                 Sequence< beans::Property > seq(1);
-                seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+                seq[0] = beans::Property( rtl::OUString("IsDocument"),
                                           -1,
                                           getCppuType( static_cast< sal_Bool* >(0) ),
                                           0 );
@@ -605,7 +605,7 @@ BaseContent::addProperty(
 {
     if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name.isEmpty() )
     {
-        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), 0 );
     }
 
     m_pMyShell->associate( m_aUncPath,Name,DefaultValue,Attributes );
@@ -621,7 +621,7 @@ BaseContent::removeProperty(
 {
 
     if( m_nState & Deleted )
-        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     m_pMyShell->deassociate( m_aUncPath, Name );
 }
@@ -665,7 +665,7 @@ BaseContent::createNewContent(
     try
     {
         Sequence< beans::Property > seq(1);
-        seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+        seq[0] = beans::Property( rtl::OUString("IsDocument"),
                                   -1,
                                   getCppuType( static_cast< sal_Bool* >(0) ),
                                   0 );
@@ -768,7 +768,7 @@ BaseContent::setParent(
     throw( lang::NoSupportException,
            RuntimeException)
 {
-    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    throw lang::NoSupportException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -866,7 +866,7 @@ BaseContent::setPropertyValues(
         return Sequence< Any >( Values.getLength() );
     }
 
-    const rtl::OUString Title(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    const rtl::OUString Title("Title");
 
     // Special handling for files which have to be inserted
     if( m_nState & JustInserted )
@@ -920,7 +920,7 @@ BaseContent::setPropertyValues(
                             // m_aUncPath contains parent's URI.
 
                             if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                                m_aUncPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                                m_aUncPath += rtl::OUString("/");
 
                             m_aUncPath += rtl::Uri::encode( NewTitle,
                                                             rtl_UriCharClassPchar,
@@ -949,19 +949,19 @@ BaseContent::setPropertyValues(
             rtl::OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
             {
-                ret[i] <<= beans::IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+                ret[i] <<= beans::IllegalTypeException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
                 break;
             }
             else if( NewTitle.isEmpty() )
             {
-                ret[i] <<= lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
+                ret[i] <<= lang::IllegalArgumentException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), 0 );
                 break;
             }
 
 
             rtl::OUString aDstName = getParentName( m_aUncPath );
             if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
-                aDstName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                aDstName += rtl::OUString("/");
 
             aDstName += rtl::Uri::encode( NewTitle,
                                           rtl_UriCharClassPchar,
@@ -1123,7 +1123,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
     // Is destination a document or a folder ?
     Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+    seq[0] = beans::Property( rtl::OUString("IsDocument"),
                               -1,
                               getCppuType( static_cast< sal_Bool* >(0) ),
                               0 );
@@ -1146,7 +1146,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         // as child
         dstUncPath = m_aUncPath;
 
-    dstUncPath += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + NewTitle );
+    dstUncPath += ( rtl::OUString("/") + NewTitle );
 
     sal_Int32 NameClash = aTransferInfo.NameClash;
 
@@ -1192,7 +1192,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     sal_Bool bDocument = false;
 
     Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+    seq[0] = beans::Property( rtl::OUString("IsDocument"),
                               -1,
                               getCppuType( static_cast< sal_Bool* >(0) ),
                               0 );
@@ -1257,7 +1257,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             m_pMyShell->clearError( nMyCommandIdentifier );
             m_aUncPath = getParentName( m_aUncPath );
             if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                m_aUncPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                m_aUncPath += rtl::OUString("/");
 
             m_aUncPath += rtl::Uri::encode( aRequestImpl->newName(),
                                             rtl_UriCharClassPchar,

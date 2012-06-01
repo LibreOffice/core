@@ -247,12 +247,12 @@ CommandProcessorInfo::CommandProcessorInfo()
 
     (*m_pInfo)[ 0 ]
         = ucb::CommandInfo(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GETCOMMANDINFO_NAME )), // Name
+            rtl::OUString( GETCOMMANDINFO_NAME ), // Name
             GETCOMMANDINFO_HANDLE, // Handle
             getCppuVoidType() ); // ArgType
     (*m_pInfo)[ 1 ]
         = ucb::CommandInfo(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GLOBALTRANSFER_NAME )), // Name
+            rtl::OUString( GLOBALTRANSFER_NAME ), // Name
             GLOBALTRANSFER_HANDLE, // Handle
             getCppuType(
                 static_cast<
@@ -486,12 +486,12 @@ bool setTitle(
     {
         uno::Sequence< beans::PropertyValue > aPropValues( 1 );
         aPropValues[ 0 ].Name
-            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+            = rtl::OUString(  "Title"  );
         aPropValues[ 0 ].Handle = -1;
         aPropValues[ 0 ].Value  = uno::makeAny( rNewTitle );
 
         ucb::Command aSetPropsCommand(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+            rtl::OUString(  "setPropertyValues"  ),
             -1,
             uno::makeAny( aPropValues ) );
 
@@ -547,8 +547,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Folder")),
+                                  rtl::OUString( "Folder"),
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -556,19 +555,19 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target is no XCommandProcessor!")),
+            rtl::OUString("Target is no XCommandProcessor!"),
             rContext.xProcessor );
         // Unreachable
     }
 
     uno::Sequence< beans::Property > aPropsToObtain( 1 );
     aPropsToObtain[ 0 ].Name
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo"));
+        = rtl::OUString("CreatableContentsInfo");
     aPropsToObtain[ 0 ].Handle
         = -1;
 
     ucb::Command aGetPropsCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
+            rtl::OUString("getPropertyValues"),
             -1,
             uno::makeAny( aPropsToObtain ) );
 
@@ -601,8 +600,7 @@ uno::Reference< ucb::XContent > createNew(
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Folder")),
+                                  rtl::OUString( "Folder"),
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -610,7 +608,7 @@ uno::Reference< ucb::XContent > createNew(
                 ucb::IOErrorCode_CANT_CREATE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 rContext.xOrigEnv,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target is no XContentCreator!")),
+                rtl::OUString("Target is no XContentCreator!"),
                 rContext.xProcessor );
             // Unreachable
         }
@@ -623,7 +621,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Folder")),
+                              rtl::OUString("Folder"),
                               -1,
                               uno::makeAny(rContext.aArg.TargetURL),
                               beans::PropertyState_DIRECT_VALUE));
@@ -631,7 +629,7 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No types creatable!")),
+            rtl::OUString("No types creatable!"),
             rContext.xProcessor );
         // Unreachable
     }
@@ -697,8 +695,7 @@ uno::Reference< ucb::XContent > createNew(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                            "Unknown transfer operation!" )),
+                                        rtl::OUString( "Unknown transfer operation!" ),
                                         rContext.xProcessor,
                                         -1 ) ),
                               rContext.xOrigEnv );
@@ -718,7 +715,7 @@ uno::Reference< ucb::XContent > createNew(
                 // First, try it using "CreatabeleContentsInfo" property and
                 // "createNewContent" command -> the "new" way.
                 ucb::Command aCreateNewCommand(
-                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent")),
+                   rtl::OUString("createNewContent"),
                    -1,
                    uno::makeAny( aTypesInfo[ n ] ) );
 
@@ -738,8 +735,7 @@ uno::Reference< ucb::XContent > createNew(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Folder")),
+                                 rtl::OUString( "Folder"),
                                  -1,
                                  uno::makeAny(rContext.aArg.TargetURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -747,8 +743,7 @@ uno::Reference< ucb::XContent > createNew(
                     ucb::IOErrorCode_CANT_CREATE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "createNewContent failed!" )),
+                    rtl::OUString( "createNewContent failed!" ),
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -767,7 +762,7 @@ void transferProperties(
         throw( uno::Exception )
 {
     ucb::Command aGetPropertySetInfoCommand(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo")),
+                rtl::OUString("getPropertySetInfo"),
                 -1,
                 uno::Any() );
 
@@ -779,8 +774,7 @@ void transferProperties(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -788,8 +782,7 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unable to get propertyset info from source object!" )),
+            rtl::OUString( "Unable to get propertyset info from source object!" ),
             rContext.xProcessor );
         // Unreachable
     }
@@ -797,7 +790,7 @@ void transferProperties(
     uno::Sequence< beans::Property > aAllProps = xInfo->getProperties();
 
     ucb::Command aGetPropsCommand1(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
+                rtl::OUString("getPropertyValues"),
                 -1,
                 uno::makeAny( aAllProps ) );
 
@@ -809,8 +802,7 @@ void transferProperties(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -818,8 +810,7 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unable to get properties from source object!" )),
+            rtl::OUString( "Unable to get properties from source object!" ),
             rContext.xProcessor );
         // Unreachable
     }
@@ -890,7 +881,7 @@ void transferProperties(
     if ( !bHasTitle && !rContext.aArg.NewTitle.isEmpty() )
     {
         aPropValues[ nWritePos ].Name
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            = rtl::OUString("Title");
         aPropValues[ nWritePos ].Handle = -1;
         aPropValues[ nWritePos ].Value <<= rContext.aArg.NewTitle;
 
@@ -902,7 +893,7 @@ void transferProperties(
                                 == ucb::TransferCommandOperation_LINK ) )
     {
         aPropValues[ nWritePos ].Name
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
+            = rtl::OUString("TargetURL");
         aPropValues[ nWritePos ].Handle = -1;
         aPropValues[ nWritePos ].Value <<= rContext.aArg.SourceURL;
 
@@ -914,7 +905,7 @@ void transferProperties(
     // Set properties at new object.
 
     ucb::Command aSetPropsCommand(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues")),
+                rtl::OUString("setPropertyValues"),
                 -1,
                 uno::makeAny( aPropValues ) );
 
@@ -949,7 +940,7 @@ uno::Reference< io::XInputStream > getInputStream(
         aArg.Properties = uno::Sequence< beans::Property >( 0 ); // unused
 
         ucb::Command aOpenCommand(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
+                                rtl::OUString("open"),
                                 -1,
                                 uno::makeAny( aArg ) );
 
@@ -977,7 +968,7 @@ uno::Reference< io::XInputStream > getInputStream(
         {
             uno::Reference< io::XOutputStream > xOutputStream(
                 rContext.xSMgr->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")) ),
+                    rtl::OUString("com.sun.star.io.Pipe") ),
                 uno::UNO_QUERY );
 
             if ( xOutputStream.is() )
@@ -989,7 +980,7 @@ uno::Reference< io::XInputStream > getInputStream(
                 aArg.Properties = uno::Sequence< beans::Property >( 0 );
 
                 ucb::Command aOpenCommand(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
+                                    rtl::OUString("open"),
                                     -1,
                                     uno::makeAny( aArg ) );
 
@@ -1022,11 +1013,11 @@ uno::Reference< sdbc::XResultSet > getResultSet(
 
     uno::Sequence< beans::Property > aProps( 3 );
 
-    aProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+    aProps[ 0 ].Name   = rtl::OUString("IsFolder");
     aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
+    aProps[ 1 ].Name   = rtl::OUString("IsDocument");
     aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
+    aProps[ 2 ].Name   = rtl::OUString("TargetURL");
     aProps[ 2 ].Handle = -1; /* unknown */
 
     ucb::OpenCommandArgument2 aArg;
@@ -1035,7 +1026,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     aArg.Sink       = 0;
     aArg.Properties = aProps;
 
-    ucb::Command aOpenCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
+    ucb::Command aOpenCommand( rtl::OUString("open"),
                                      -1,
                                      uno::makeAny( aArg ) );
     try
@@ -1073,11 +1064,11 @@ void handleNameClashRename(
 
     // Obtain old title.
     uno::Sequence< beans::Property > aProps( 1 );
-    aProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    aProps[ 0 ].Name   = rtl::OUString("Title");
     aProps[ 0 ].Handle = -1;
 
     ucb::Command aGetPropsCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
+            rtl::OUString("getPropertyValues"),
             -1,
             uno::makeAny( aProps ) );
 
@@ -1089,7 +1080,7 @@ void handleNameClashRename(
         uno::Any aProps2
             = uno::makeAny(
                      beans::PropertyValue(
-                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
+                         rtl::OUString(  "Uri"  ),
                          -1,
                          uno::makeAny(
                              xNew->getIdentifier()->getContentIdentifier() ),
@@ -1098,8 +1089,7 @@ void handleNameClashRename(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >( &aProps2, 1 ),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unable to get properties from new object!" )),
+            rtl::OUString( "Unable to get properties from new object!" ),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1109,9 +1099,7 @@ void handleNameClashRename(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Unable to get property 'Title' "
-                                "from new object!" )),
+                            rtl::OUString( "Unable to get property 'Title' from new object!" ),
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1130,7 +1118,7 @@ void handleNameClashRename(
         aOldTitlePre = aOldTitle;
 
     if ( nPos > 0 )
-        aOldTitlePre += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
+        aOldTitlePre += rtl::OUString("_");
 
     sal_Bool bContinue = sal_True;
     do
@@ -1180,8 +1168,7 @@ void handleNameClashRename(
                         uno::Any aProps2
                             = uno::makeAny(
                                 beans::PropertyValue(
-                                    rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ),
+                                    rtl::OUString( "Uri"  ),
                                     -1,
                                     uno::makeAny(
                                         xNew->getIdentifier()->
@@ -1191,8 +1178,7 @@ void handleNameClashRename(
                             ucb::IOErrorCode_CANT_READ,
                             uno::Sequence< uno::Any >( &aProps2, 1 ),
                             rContext.xOrigEnv,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Got no data stream from source!" )),
+                            rtl::OUString( "Got no data stream from source!" ),
                             rContext.xProcessor );
                         // Unreachable
                     }
@@ -1204,7 +1190,7 @@ void handleNameClashRename(
             aArg.ReplaceExisting = sal_False;
 
             ucb::Command aInsertCommand(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
+                        rtl::OUString("insert"),
                         -1,
                         uno::makeAny( aArg ) );
 
@@ -1228,8 +1214,7 @@ void handleNameClashRename(
         ucbhelper::cancelCommandExecution(
             uno::makeAny(
                 ucb::UnsupportedNameClashException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Unable to resolve name clash!" )),
+                    rtl::OUString( "Unable to resolve name clash!" ),
                     rContext.xProcessor,
                     ucb::NameClash::RENAME ) ),
             rContext.xOrigEnv );
@@ -1251,9 +1236,8 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Unable to get property 'IsFolder' "
-                                "from source object!" )),
+                            rtl::OUString( "Unable to get property 'IsFolder' "
+                                "from source object!" ),
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1265,9 +1249,8 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Unable to get property 'IsDocument' "
-                                "from source object!" )),
+                            rtl::OUString( "Unable to get property 'IsDocument' "
+                                "from source object!" ),
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1292,8 +1275,7 @@ void globalTransfer_(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "Folder")),
+                                  rtl::OUString( "Folder"),
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1301,8 +1283,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "No matching content type at target!" )),
+            rtl::OUString( "No matching content type at target!" ),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1319,8 +1300,7 @@ void globalTransfer_(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(
                                       xNew->getIdentifier()->
@@ -1330,8 +1310,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "New content is not a XCommandProcessor!" )),
+            rtl::OUString( "New content is not a XCommandProcessor!" ),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1344,8 +1323,7 @@ void globalTransfer_(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1353,8 +1331,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Source content is not a XCommandProcessor!" )),
+            rtl::OUString( "Source content is not a XCommandProcessor!" ),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1423,7 +1400,7 @@ void globalTransfer_(
         try
         {
             ucb::Command aInsertCommand(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
+                                    rtl::OUString("insert"),
                                     -1,
                                     uno::makeAny( aArg ) );
 
@@ -1441,9 +1418,9 @@ void globalTransfer_(
             // No chance to solve name clashes, because I'm not able to detect
             // whether there is one.
             throw ucb::UnsupportedNameClashException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    rtl::OUString(
                         "Unable to resolve name clashes, no chance to detect "
-                        "that there is one!" )),
+                        "that there is one!" ),
                     rContext.xProcessor,
                     rContext.aArg.NameClash );
         }
@@ -1469,9 +1446,9 @@ void globalTransfer_(
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                rtl::OUString(
                                     "BUG: insert + replace == true MUST NOT "
-                                    "throw NameClashException." )),
+                                    "throw NameClashException." ),
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1518,9 +1495,8 @@ void globalTransfer_(
                             case ABORT:
                                 throw ucb::CommandFailedException(
                                     rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM(
                                             "abort requested via interaction "
-                                            "handler" ) ),
+                                            "handler"  ),
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
     //                            break;
@@ -1550,10 +1526,7 @@ void globalTransfer_(
                                 {
                                     // error setting title. Abort.
                                     throw ucb::CommandFailedException(
-                                        rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "error setting Title property!"
-                                            ) ),
+                                        rtl::OUString( "error setting Title property!" ),
                                         uno::Reference< uno::XInterface >(),
                                         aExc );
                                 }
@@ -1572,9 +1545,8 @@ void globalTransfer_(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
                                 rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
                                         "default action, don't know how to "
-                                        "handle name clash" ) ),
+                                        "handle name clash"  ),
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1605,8 +1577,7 @@ void globalTransfer_(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Uri")),
+                                 rtl::OUString( "Uri"),
                                  -1,
                                  uno::makeAny(rContext.aArg.SourceURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -1614,8 +1585,7 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Unable to get properties from children of source!" )),
+                    rtl::OUString( "Unable to get properties from children of source!" ),
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1628,8 +1598,7 @@ void globalTransfer_(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                     "Uri")),
+                                 rtl::OUString( "Uri"),
                                  -1,
                                  uno::makeAny(rContext.aArg.SourceURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -1637,8 +1606,7 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Unable to get children of source!" )),
+                    rtl::OUString( "Unable to get children of source!" ),
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1694,13 +1662,13 @@ void globalTransfer_(
             aAny =
                 xcp->execute(
                     ucb::Command(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo")),
+                        rtl::OUString("getCommandInfo"),
                         -1,
                         uno::Any()),
                     0,
                     rContext.xEnv );
 
-        const rtl::OUString cmdName(RTL_CONSTASCII_USTRINGPARAM("flush"));
+        const rtl::OUString cmdName("flush");
         if((aAny >>= xci) && xci->hasCommandByName(cmdName))
             xcp->execute(
                 ucb::Command(
@@ -1745,8 +1713,7 @@ void UniversalContentBroker::globalTransfer(
             m_xSMgr, uno::UNO_QUERY_THROW );
         uno::Reference< uno::XComponentContext > xCtx;
             xCtx.set( xProps->getPropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+                rtl::OUString( "DefaultContext"  ) ),
                 uno::UNO_QUERY_THROW );
 
             xLocalEnv.set( ucb::CommandEnvironment::create(
@@ -1779,8 +1746,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1788,8 +1754,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Can't instanciate target object!" )),
+            rtl::OUString( "Can't instanciate target object!" ),
             this );
         // Unreachable
     }
@@ -1804,8 +1769,7 @@ void UniversalContentBroker::globalTransfer(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                               "Uri")),
+                             rtl::OUString( "Uri"),
                              -1,
                              uno::makeAny(rArg.TargetURL),
                              beans::PropertyState_DIRECT_VALUE));
@@ -1813,8 +1777,7 @@ void UniversalContentBroker::globalTransfer(
                 ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Target content is not a XCommandProcessor!" )),
+                rtl::OUString( "Target content is not a XCommandProcessor!" ),
                 this );
             // Unreachable
         }
@@ -1834,7 +1797,7 @@ void UniversalContentBroker::globalTransfer(
             try
             {
                 ucb::Command aCommand(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")), // Name
+                    rtl::OUString("transfer"), // Name
                     -1,                                           // Handle
                     uno::makeAny( aTransferArg ) );               // Argument
 
@@ -1870,7 +1833,7 @@ void UniversalContentBroker::globalTransfer(
                             ucb::NameClash::ERROR );
 
                         ucb::Command aCommand1(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
+                            rtl::OUString("transfer"),
                             -1,
                             uno::makeAny( aTransferArg1 ) );
 
@@ -1914,9 +1877,8 @@ void UniversalContentBroker::globalTransfer(
                             case ABORT:
                                 throw ucb::CommandFailedException(
                                     rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM(
                                             "abort requested via interaction "
-                                            "handler" ) ),
+                                            "handler"  ),
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
 //                                break;
@@ -1968,8 +1930,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1977,8 +1938,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Can't instanciate source object!" )),
+            rtl::OUString( "Can't instanciate source object!" ),
             this );
         // Unreachable
     }
@@ -1989,8 +1949,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                                  rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1998,8 +1957,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Source content is not a XCommandProcessor!" )),
+            rtl::OUString( "Source content is not a XCommandProcessor!" ),
             this );
         // Unreachable
     }
@@ -2008,17 +1966,17 @@ void UniversalContentBroker::globalTransfer(
 
     uno::Sequence< beans::Property > aProps( 4 );
 
-    aProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+    aProps[ 0 ].Name   = rtl::OUString("IsFolder");
     aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
+    aProps[ 1 ].Name   = rtl::OUString("IsDocument");
     aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
+    aProps[ 2 ].Name   = rtl::OUString("TargetURL");
     aProps[ 2 ].Handle = -1; /* unknown */
-    aProps[ 3 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI"));
+    aProps[ 3 ].Name   = rtl::OUString("BaseURI");
     aProps[ 3 ].Handle = -1; /* unknown */
 
     ucb::Command aGetPropsCommand(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
+                rtl::OUString("getPropertyValues"),
                 -1,
                 uno::makeAny( aProps ) );
 
@@ -2029,8 +1987,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps2
             = uno::makeAny(beans::PropertyValue(
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                    "Uri")),
+                               rtl::OUString( "Uri"),
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -2038,8 +1995,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps2, 1),
             xEnv,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unable to get properties from source object!" )),
+            rtl::OUString( "Unable to get properties from source object!" ),
             this );
         // Unreachable
     }
@@ -2072,7 +2028,7 @@ void UniversalContentBroker::globalTransfer(
         try
         {
             ucb::Command aCommand(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), // Name
+                rtl::OUString("delete"), // Name
                 -1,                                         // Handle
                 uno::makeAny( sal_Bool( sal_True ) ) );     // Argument
 

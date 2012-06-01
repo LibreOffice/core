@@ -161,7 +161,7 @@ rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
             = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aId += rtl::OUString("/");
 
         aId += m_pImpl->m_aResults[ nIndex ]->aData.getName();
 

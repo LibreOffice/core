@@ -122,10 +122,8 @@ XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.CachedDynamicResultSetStub" )),
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        CACHED_DRS_STUB_SERVICE_NAME )) );
+                        OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStub" ),
+                        OUString( CACHED_DRS_STUB_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -166,10 +164,8 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedDynamicResultSetStubFactory,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                     CACHED_DRS_STUB_FACTORY_NAME )) );
+                     OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" ),
+                     OUString( CACHED_DRS_STUB_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.
@@ -216,8 +212,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
         try
         {
             xSortFactory = Reference< XSortedDynamicResultSetFactory >(
-                m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.SortedDynamicResultSetFactory" )) ),
+                m_xSMgr->createInstance( OUString( "com.sun.star.ucb.SortedDynamicResultSetFactory" ) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )

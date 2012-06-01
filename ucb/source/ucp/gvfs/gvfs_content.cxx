@@ -247,15 +247,14 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.GnomeVFSContent"));
+    return rtl::OUString("com.sun.star.comp.GnomeVFSContent");
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.ucb.GnomeVFSContent" ));
+    aSNS.getArray()[ 0 ] = rtl::OUString( "com.sun.star.ucb.GnomeVFSContent" );
     return aSNS;
 }
 
@@ -267,9 +266,9 @@ rtl::OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GVFS_FOLDER_TYPE ));
+        return rtl::OUString( GVFS_FOLDER_TYPE );
     else
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GVFS_FILE_TYPE ));
+        return rtl::OUString( GVFS_FILE_TYPE );
 }
 
 //
@@ -279,7 +278,7 @@ rtl::OUString SAL_CALL Content::getContentType()
 uno::Any Content::getBadArgExcept()
 {
     return uno::makeAny( lang::IllegalArgumentException
-                 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong argument type!")),
+                 ( rtl::OUString("Wrong argument type!"),
                    static_cast< cppu::OWeakObject * >( this ),
                    -1 ) );
 }
@@ -459,19 +458,19 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            rtl::OUString("Title"),
             -1,
             getCppuType( static_cast< rtl::OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
-        seq[0].Type       = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GVFS_FILE_TYPE ));
+        seq[0].Type       = rtl::OUString( GVFS_FILE_TYPE );
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
-        seq[1].Type       = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GVFS_FOLDER_TYPE ));
+        seq[1].Type       = rtl::OUString( GVFS_FOLDER_TYPE );
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
@@ -515,7 +514,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         rtl::OUString aURL = getOUURI();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aURL += rtl::OUString("/");
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
     // This looks problematic to me cf. webdav
@@ -704,7 +703,7 @@ static lang::IllegalAccessException
 getReadOnlyException( Content *ctnt )
 {
     return lang::IllegalAccessException
-        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")),
+        ( rtl::OUString("Property is read-only!"),
           static_cast< cppu::OWeakObject * >( ctnt ) );
 }
 
@@ -713,7 +712,7 @@ Content::makeNewURL( const char */*newName*/ )
 {
     rtl::OUString aNewURL = getParentURL();
     if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
-        aNewURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aNewURL += rtl::OUString("/");
 
     char *name = gnome_vfs_escape_string( m_info.name );
     aNewURL += GnomeToOUString( name );
@@ -808,7 +807,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( rValue.Value >>= aNewTitle ) {
                 if ( aNewTitle.isEmpty() )
                     aRet[ n ] <<= lang::IllegalArgumentException
-                        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty title not allowed!")),
+                        ( rtl::OUString("Empty title not allowed!"),
                           static_cast< cppu::OWeakObject * >( this ), -1 );
                 else {
                     char *newName = OUStringToGnome( aNewTitle );
@@ -818,7 +817,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         g_warning ("Set new name to '%s'", newName);
 #endif
 
-                        aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+                        aEvent.PropertyName = rtl::OUString("Title");
                         aEvent.OldValue     = uno::makeAny( GnomeToOUString( newInfo.name ) );
                         aEvent.NewValue     = uno::makeAny( aNewTitle );
                         aChanges.getArray()[ nChanged ] = aEvent;
@@ -831,7 +830,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
             } else
                 aRet[ n ] <<= beans::IllegalTypeException
-                    ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")),
+                    ( rtl::OUString("Property value has wrong type!"),
                       static_cast< cppu::OWeakObject * >( this ) );
 
         } else if ( rValue.Name == "DateCreated" || rValue.Name == "DateModified" ) {
@@ -867,7 +866,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aGuard.clear();
             if (!exchangeIdentity( xNewId ) )
                 aRet[ nTitlePos ] <<= uno::Exception
-                    ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Exchange failed!")),
+                    ( rtl::OUString("Exchange failed!"),
                       static_cast< cppu::OWeakObject * >( this ) );
         }
     }
@@ -896,7 +895,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aURL += rtl::OUString("/");
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -1030,7 +1029,7 @@ void Content::transfer(const ucb::TransferInfo & /*rArgs*/,
     ucbhelper::cancelCommandExecution
         ( uno::makeAny
             ( ucb::InteractiveBadTransferURLException
-                ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported URL scheme!")),
+                ( rtl::OUString("Unsupported URL scheme!"),
                   static_cast< cppu::OWeakObject * >( this ) ) ),
           xEnv );
 }
@@ -1184,7 +1183,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
         aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
         aException <<=
             ucb::InteractiveAugmentedIOException
-            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not found!")),
+            ( rtl::OUString("Not found!"),
               static_cast< cppu::OWeakObject * >( this ),
               task::InteractionClassification_ERROR,
               ucb::IOErrorCode_NOT_EXISTING,
@@ -1309,45 +1308,45 @@ uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     static const beans::Property aGenericProperties[] = {
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                beans::Property( rtl::OUString(  "ContentType"  ),
                  -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                beans::Property( rtl::OUString(  "IsDocument"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                beans::Property( rtl::OUString(  "IsFolder"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                beans::Property( rtl::OUString(  "Title"  ),
                  -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                  beans::PropertyAttribute::BOUND ),
         // Optional ...
-        beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
+        beans::Property( rtl::OUString(  "DateCreated"  ),
                  -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
+                beans::Property( rtl::OUString(  "DateModified"  ),
                  -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
 // FIXME: Too expensive for now (?)
-//                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+//                beans::Property( rtl::OUString(  "MediaType"  ),
 //                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
 //                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
+                beans::Property( rtl::OUString(  "Size"  ),
                  -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+                beans::Property( rtl::OUString(  "IsReadOnly"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ) ),
+                beans::Property( rtl::OUString(  "IsVolume"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsCompactDisk" ) ),
+                beans::Property( rtl::OUString(  "IsCompactDisk"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ),
+                beans::Property( rtl::OUString(  "IsHidden"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
+                beans::Property( rtl::OUString(  "CreatableContentsInfo"  ),
                  -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
@@ -1364,35 +1363,35 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     static ucb::CommandInfo aCommandInfoTable[] = {
         // Required commands
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+        ( rtl::OUString(  "getCommandInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+        ( rtl::OUString(  "getPropertySetInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+        ( rtl::OUString(  "getPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+        ( rtl::OUString(  "setPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
         // Optional standard commands
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+        ( rtl::OUString(  "delete"  ),
           -1, getCppuBooleanType() ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+        ( rtl::OUString(  "insert"  ),
           -1, getCppuType( static_cast<ucb::InsertCommandArgument * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+        ( rtl::OUString(  "open"  ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+        ( rtl::OUString(  "transfer"  ),
           -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+        ( rtl::OUString(  "createNewContent"  ),
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 

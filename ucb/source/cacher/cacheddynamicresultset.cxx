@@ -120,10 +120,8 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.ucb.CachedDynamicResultSet" )),
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            CACHED_DRS_SERVICE_NAME )) );
+                            OUString( "com.sun.star.comp.ucb.CachedDynamicResultSet" ),
+                            OUString( CACHED_DRS_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // own methds. ( inherited )
@@ -176,10 +174,8 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedDynamicResultSetFactory,
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" )),
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         CACHED_DRS_FACTORY_NAME )) );
+                         OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
+                         OUString( CACHED_DRS_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

@@ -443,10 +443,10 @@ public:
         throw( RuntimeException );
 };
 
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( RTL_CONSTASCII_USTRINGPARAM("RowCount") );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal") );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( RTL_CONSTASCII_USTRINGPARAM("FetchSize") );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( "RowCount" );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( "IsRowCountFinal" );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( "FetchSize" );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( "FetchDirection" );
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > xInfo )
@@ -971,10 +971,10 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
-                               OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.ucb.CachedContentResultSet" )),
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            CACHED_CONTENT_RESULTSET_SERVICE_NAME )) );
+                               OUString(
+                            "com.sun.star.comp.ucb.CachedContentResultSet" ),
+                            OUString(
+                            CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XPropertySet methods. ( inherited )
@@ -2150,8 +2150,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
         m_bTriedToGetTypeConverter = sal_True;
         m_xTypeConverter = Reference< XTypeConverter >(
                                 m_xSMgr->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.script.Converter" )) ),
+                                    OUString( "com.sun.star.script.Converter" ) ),
                                 UNO_QUERY );
 
         OSL_ENSURE( m_xTypeConverter.is(),
@@ -2200,10 +2199,8 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetFactory,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                           "com.sun.star.comp.ucb.CachedContentResultSetFactory" )),
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         CACHED_CONTENT_RESULTSET_FACTORY_NAME )) );
+                     OUString( "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
+                     OUString( CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

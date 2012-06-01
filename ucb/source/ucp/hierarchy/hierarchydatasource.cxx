@@ -266,14 +266,11 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 //=========================================================================
 
 XSERVICEINFO_IMPL_0( HierarchyDataSource,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.HierarchyDataSource" )) )
+                     rtl::OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.DefaultHierarchyDataSource" ));
-    aSNS[ 1 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.HierarchyDataSource" ));
+    aSNS[ 0 ] = rtl::OUString( "com.sun.star.ucb.DefaultHierarchyDataSource" );
+    aSNS[ 1 ] = rtl::OUString( "com.sun.star.ucb.HierarchyDataSource" );
     return aSNS;
 }
 
@@ -340,10 +337,8 @@ HierarchyDataSource::createInstance( const rtl::OUString & aServiceSpecifier )
     // Create view to root node.
 
     beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( CFGPROPERTY_NODEPATH ) );
-    aProp.Value <<=
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIG_DATA_ROOT_KEY ) );
+    aProp.Name = rtl::OUString( CFGPROPERTY_NODEPATH  );
+    aProp.Value <<= rtl::OUString( CONFIG_DATA_ROOT_KEY  );
 
     uno::Sequence< uno::Any > aArguments( 1 );
     aArguments[ 0 ] <<= aProp;
@@ -369,10 +364,8 @@ HierarchyDataSource::getAvailableServiceNames()
     throw ( uno::RuntimeException )
 {
     uno::Sequence< rtl::OUString > aNames( 2 );
-    aNames[ 0 ] = rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( READ_SERVICE_NAME ) );
-    aNames[ 1 ] = rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( READWRITE_SERVICE_NAME ) );
+    aNames[ 0 ] = rtl::OUString( READ_SERVICE_NAME  );
+    aNames[ 1 ] = rtl::OUString( READWRITE_SERVICE_NAME  );
     return aNames;
 }
 
@@ -487,8 +480,7 @@ HierarchyDataSource::createInstanceWithArguments(
         {
             // Create configuration read-only access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        CONFIG_READ_SERVICE_NAME ) ),
+                                rtl::OUString( CONFIG_READ_SERVICE_NAME  ),
                                 aNewArgs );
         }
         else
@@ -500,16 +492,14 @@ HierarchyDataSource::createInstanceWithArguments(
                 aNewArgs.realloc( nLen + 1 );
 
                 beans::PropertyValue aProp;
-                aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_LAZYWRITE ) );
+                aProp.Name = rtl::OUString( CFGPROPERTY_LAZYWRITE  );
                 aProp.Value <<= sal_True;
                 aNewArgs[ nLen ] <<= aProp;
             }
 
             // Create configuration read-write access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        CONFIG_READWRITE_SERVICE_NAME ) ),
+                                rtl::OUString( CONFIG_READWRITE_SERVICE_NAME  ),
                                 aNewArgs );
         }
     }
@@ -546,9 +536,7 @@ HierarchyDataSource::getConfigProvider()
                 m_xConfigProvider
                     = uno::Reference< lang::XMultiServiceFactory >(
                         m_xSMgr->createInstance(
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    CONFIG_PROVIDER_SERVICE_NAME ) ) ),
+                            rtl::OUString( CONFIG_PROVIDER_SERVICE_NAME  ) ),
                         uno::UNO_QUERY );
 
                 OSL_ENSURE( m_xConfigProvider.is(),
@@ -587,14 +575,13 @@ bool HierarchyDataSource::createConfigPath(
         }
 
         rtl::OUString aOutPath(
-                RTL_CONSTASCII_USTRINGPARAM( CONFIG_DATA_ROOT_KEY "/" ) );
+                 CONFIG_DATA_ROOT_KEY "/"  );
         aOutPath += rInPath;
         rOutPath = aOutPath;
     }
     else
     {
-        rOutPath = rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( CONFIG_DATA_ROOT_KEY ) );
+        rOutPath = rtl::OUString( CONFIG_DATA_ROOT_KEY  );
     }
 
     return true;
@@ -756,14 +743,11 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 
 XSERVICEINFO_NOFACTORY_IMPL_0(
         HierarchyDataAccess,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.ucb.HierarchyDataAccess" ) ) )
+        rtl::OUString( "com.sun.star.comp.ucb.HierarchyDataAccess"  ) )
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS[ 0 ] = rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( READ_SERVICE_NAME ) );
-    aSNS[ 1 ] = rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( READWRITE_SERVICE_NAME ) );
+    aSNS[ 0 ] = rtl::OUString( READ_SERVICE_NAME  );
+    aSNS[ 1 ] = rtl::OUString( READWRITE_SERVICE_NAME  );
     return aSNS;
 }
 

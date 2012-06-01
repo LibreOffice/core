@@ -192,15 +192,15 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL Content::getImplementationName() throw( RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.ucp.ext.Content" ) );
+        return ::rtl::OUString(  "org.openoffice.comp.ucp.ext.Content"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL Content::getSupportedServiceNames() throw( RuntimeException )
     {
         Sequence< ::rtl::OUString > aServiceNames(2);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.Content" ) );
-        aServiceNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.ExtensionContent" ) );
+        aServiceNames[0] = ::rtl::OUString(  "com.sun.star.ucb.Content"  );
+        aServiceNames[1] = ::rtl::OUString(  "com.sun.star.ucb.ExtensionContent"  );
         return aServiceNames;
     }
 
@@ -289,7 +289,7 @@ namespace ucb { namespace ucp { namespace ext
             {
                 const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
                 ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment );
-                aRet = aRequestedContent.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ), makeAny( aOpenCommand ) );
+                aRet = aRequestedContent.executeCommand( ::rtl::OUString(  "open"  ), makeAny( aOpenCommand ) );
             }
         }
 
@@ -449,22 +449,22 @@ namespace ucb { namespace ucp { namespace ext
         else
         {
             // Append all Core Properties.
-            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
+            xRow->appendString ( Property( ::rtl::OUString("ContentType"),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
-            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            xRow->appendString ( Property( ::rtl::OUString("Title"),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
-            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+            xRow->appendBoolean( Property( ::rtl::OUString("IsDocument"),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 sal_False );
-            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
+            xRow->appendBoolean( Property( ::rtl::OUString("IsFolder"),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
@@ -555,7 +555,7 @@ namespace ucb { namespace ucp { namespace ext
         for ( sal_Int32 n = 0; n < nCount; ++n, ++pValues )
         {
             // all our properties are read-only ...
-            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("property is read-only.")), *this );
+            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString("property is read-only."), *this );
         }
 
         return aRet;
@@ -571,23 +571,23 @@ namespace ucb { namespace ucp { namespace ext
             // Mandatory commands
             ///////////////////////////////////////////////////////////////
             CommandInfo(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                ::rtl::OUString(  "getCommandInfo"  ),
                 -1,
                 getCppuVoidType()
             ),
             CommandInfo(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                ::rtl::OUString(  "getPropertySetInfo"  ),
                 -1,
                 getCppuVoidType()
             ),
             CommandInfo(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                ::rtl::OUString(  "getPropertyValues"  ),
                 -1,
                 getCppuType(
                     static_cast< Sequence< Property > * >( 0 ) )
             ),
             CommandInfo(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                ::rtl::OUString(  "setPropertyValues"  ),
                 -1,
                 getCppuType(
                     static_cast< Sequence< PropertyValue > * >( 0 ) )
@@ -596,7 +596,7 @@ namespace ucb { namespace ucp { namespace ext
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
             , CommandInfo(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                ::rtl::OUString(  "open"  ),
                 -1,
                 getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
             )
@@ -611,25 +611,25 @@ namespace ucb { namespace ucp { namespace ext
         static Property aProperties[] =
         {
             Property(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                ::rtl::OUString(  "ContentType"  ),
                 -1,
                 getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                ::rtl::OUString(  "IsDocument"  ),
                 -1,
                 getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                ::rtl::OUString(  "IsFolder"  ),
                 -1,
                 getCppuBooleanType(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                ::rtl::OUString(  "Title"  ),
                 -1,
                 getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
@@ -648,7 +648,7 @@ namespace ucb { namespace ucp { namespace ext
         try
         {
             Sequence< Property > aProps(1);
-            aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) );
+            aProps[0].Name = ::rtl::OUString(  "IsFolder"  );
             Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
             bIsFolder = xRow->getBoolean(1);
         }
@@ -672,7 +672,7 @@ namespace ucb { namespace ucp { namespace ext
             try
             {
                 Sequence< Property > aProps(1);
-                aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) );
+                aProps[0].Name = ::rtl::OUString(  "ContentType"  );
                 Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
                 m_aContentType.reset( xRow->getString(1) );
             }

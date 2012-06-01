@@ -136,9 +136,9 @@ FTPURL::FTPURL(const rtl::OUString& url,
         malformed_exception
     )
     : m_pFCP(pFCP),
-      m_aUsername(RTL_CONSTASCII_USTRINGPARAM("anonymous")),
+      m_aUsername("anonymous"),
       m_bShowPassword(false),
-      m_aPort(RTL_CONSTASCII_USTRINGPARAM("21"))
+      m_aPort("21")
 {
     parse(url);  // can reset m_bShowPassword
 }
@@ -401,7 +401,7 @@ namespace ftp {
         // Setting username:password
 #define SET_USER_PASSWORD(username,password)                      \
    rtl::OUString combi(username  +                                \
-                       rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")) +      \
+                       rtl::OUString(":") +      \
                        password);                                 \
    rtl::OString aUserPsswd(combi.getStr(),                        \
                            combi.getLength(),                     \
@@ -549,7 +549,7 @@ rtl::OUString FTPURL::net_title() const
 
         if(try_more &&
            1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-            url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));  // add end-slash
+            url += rtl::OUString("/");  // add end-slash
         else if(!try_more &&
                 1+url.lastIndexOf(sal_Unicode('/')) == url.getLength())
             url = url.copy(0,url.getLength()-1);         // remove end-slash
@@ -567,7 +567,7 @@ rtl::OUString FTPURL::net_title() const
             // Format of current working directory:
             // 257 "/bla/bla" is current directory
             sal_Int32 index1 = aNetTitle.lastIndexOf(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("257")));
+                rtl::OUString("257"));
             index1 = 1+aNetTitle.indexOf(sal_Unicode('"'),index1);
             sal_Int32 index2 = aNetTitle.indexOf(sal_Unicode('"'),index1);
             aNetTitle = aNetTitle.copy(index1,index2-index1);
@@ -595,7 +595,7 @@ rtl::OUString FTPURL::net_title() const
                 aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
                 // must be root
-                aNetTitle = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                aNetTitle = rtl::OUString("/");
             try_more = false;
         }
 
@@ -729,7 +729,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     rtl::OUString url(parent(true));
     if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        url += rtl::OUString("/");
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -769,7 +769,7 @@ rtl::OUString FTPURL::ren(const rtl::OUString& NewTitle)
 
     rtl::OUString url(parent(true));
     if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        url += rtl::OUString("/");
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -819,7 +819,7 @@ void FTPURL::del() const
 
     rtl::OUString url(parent(true));
     if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        url += rtl::OUString("/");
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);

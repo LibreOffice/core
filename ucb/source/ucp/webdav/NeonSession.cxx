@@ -167,7 +167,7 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
         std::find_if(pAry,pAry+nLen,
                      boost::bind(comphelper::TNamedValueEqualFunctor(),
                                  _1,
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KeepAlive")))));
+                                 rtl::OUString("KeepAlive"))));
     if ( pValue != pAry+nLen && !pValue->Value.get<sal_Bool>() )
         return true;
 
@@ -382,7 +382,7 @@ namespace {
     ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
     {
         ::rtl::OUString sPart;
-        ::rtl::OUString sPartId(RTL_CONSTASCII_USTRINGPARAM("CN="));
+        ::rtl::OUString sPartId("CN=");
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
@@ -409,8 +409,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         xCertificateContainer
             = uno::Reference< security::XCertificateContainer >(
                 pSession->getMSF()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.security.CertificateContainer" )) ),
+                    rtl::OUString( "com.sun.star.security.CertificateContainer" ) ),
                 uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -442,7 +441,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     {
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
             pSession->getMSF()->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_COMPONENT )) ),
+                rtl::OUString( SEINITIALIZER_COMPONENT ) ),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -487,8 +486,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
 
         uno::Reference< security::XCertificate> xImCert(
             xSecurityEnv->createCertificateFromAscii(
-                rtl::OStringToOUString(
-                    sInterMediateCertB64, RTL_TEXTENCODING_ASCII_US ) ) );
+                rtl::OStringToOUString( sInterMediateCertB64, RTL_TEXTENCODING_ASCII_US ) ) );
         if ( xImCert.is() )
             vecCerts.push_back( xImCert );
     }
@@ -778,7 +776,7 @@ void NeonSession::Init()
         m_aNeonLockStore.registerSession( m_pHttpSession );
 
         if ( m_aScheme.equalsIgnoreAsciiCase(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "https" ) ) ) )
+            rtl::OUString(  "https"  ) ) )
         {
             // Set a failure callback for certificate check
             ne_ssl_set_verify(
@@ -2169,7 +2167,7 @@ NeonSession::isDomainMatch( rtl::OUString certHostName )
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ) &&
+    if ( 0 == certHostName.indexOf( rtl::OUString("*") ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );
