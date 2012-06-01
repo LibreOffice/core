@@ -67,85 +67,86 @@ ModalDialog RID_SCDLG_CONDFORMAT
 	Pos = MAP_APPFONT( 5, 20 );
 	Size = MAP_APPFONT( 190, 120 );
 
-	Control CTRL_ENTRY
+    };
+};
+
+Control RID_COND_ENTRY
+{
+    Pos = MAP_APPFONT( 0, 0 );
+    Size = MAP_APPFONT( 190, 40 );
+    Border = TRUE;
+
+    FixedText FT_COND_NR
+    {
+	Pos = MAP_APPFONT( 2, 2 );
+	Size = MAP_APPFONT( 30, 10 );
+	Text [ en-US ] = "Condition";
+    };
+
+    FixedText FT_CONDITION
+    {
+	Pos = MAP_APPFONT( 40, 2 );
+	Size = MAP_APPFONT( 90, 10 );
+    };
+
+    ListBox LB_TYPE
+    {
+	Pos = MAP_APPFONT( 5, 15 );
+	Size = MAP_APPFONT( 40, 14 );
+	Border = TRUE;
+	DropDown = TRUE;
+	StringList [ en-US ] =
 	{
-	    Pos = MAP_APPFONT( 0, 0 );
-	    Size = MAP_APPFONT( 190, 40 );
-	    Border = TRUE;
-
-	    FixedText FT_COND_NR
-	    {
-		Pos = MAP_APPFONT( 2, 2 );
-		Size = MAP_APPFONT( 30, 10 );
-		Text [ en-US ] = "Condition";
-	    };
-
-	    FixedText FT_CONDITION
-	    {
-		Pos = MAP_APPFONT( 40, 2 );
-		Size = MAP_APPFONT( 30, 10 );
-	    };
-
-	    ListBox LB_TYPE
-	    {
-		Pos = MAP_APPFONT( 5, 15 );
-		Size = MAP_APPFONT( 40, 14 );
-		Border = TRUE;
-		DropDown = TRUE;
-		StringList [ en-US ] =
-		{
-		    "All Cells";
-		    "Cell value is";
-		    "Formula is";
-		};
-	    };
-	    ListBox LB_CELLIS_TYPE
-	    {
-		Pos = MAP_APPFONT( 50, 15 );
-		Size = MAP_APPFONT( 30, 14 );
-		Border = TRUE;
-		DropDown = TRUE;
-		StringList [ en-US ] =
-		{
-		    "equal to";
-		    "less than";
-		    "greater than";
-		    "less than or equal to";
-		    "greater than or equal to";
-		    "not equal to";
-		    "between";
-		    "not between";
-		};
-	    };
-	    FixedText FT_STYLE
-	    {
-		Pos = MAP_APPFONT( 10, 32 );
-		Size = MAP_APPFONT( 35, 14 );
-		Text [ en-US ] = "Apply Style";
-	    };
-	    Edit ED_VAL1
-	    {
-		Pos = MAP_APPFONT( 90, 15 );
-		Size = MAP_APPFONT( 70, 14 );
-		Border = TRUE;
-	    };
-	    Edit ED_VAL2
-	    {
-		Pos = MAP_APPFONT( 130, 15 );
-		Size = MAP_APPFONT( 30, 14 );
-		Border = TRUE;
-	    };
-	    ListBox LB_STYLE
-	    {
-		Pos = MAP_APPFONT( 50, 32 );
-		Size = MAP_APPFONT( 30, 14 );
-		Border = TRUE;
-		DropDown = TRUE;
-		StringList [ en-US ] =
-		{
-		    "New Style...";
-		};
-	    };
+	    "All Cells";
+	    "Cell value is";
+	    "Formula is";
+	};
+    };
+    ListBox LB_CELLIS_TYPE
+    {
+	Pos = MAP_APPFONT( 50, 15 );
+	Size = MAP_APPFONT( 30, 14 );
+	Border = TRUE;
+	DropDown = TRUE;
+	StringList [ en-US ] =
+	{
+	    "equal to";
+	    "less than";
+	    "greater than";
+	    "less than or equal to";
+	    "greater than or equal to";
+	    "not equal to";
+	    "between";
+	    "not between";
+	};
+    };
+    FixedText FT_STYLE
+    {
+	Pos = MAP_APPFONT( 10, 32 );
+	Size = MAP_APPFONT( 35, 14 );
+	Text [ en-US ] = "Apply Style";
+    };
+    Edit ED_VAL1
+    {
+	Pos = MAP_APPFONT( 90, 15 );
+	Size = MAP_APPFONT( 70, 14 );
+	Border = TRUE;
+    };
+    Edit ED_VAL2
+    {
+	Pos = MAP_APPFONT( 130, 15 );
+	Size = MAP_APPFONT( 30, 14 );
+	Border = TRUE;
+    };
+    ListBox LB_STYLE
+    {
+	Pos = MAP_APPFONT( 50, 32 );
+	Size = MAP_APPFONT( 30, 14 );
+	Border = TRUE;
+	DropDown = TRUE;
+	StringList [ en-US ] =
+	{
+	    "New Style...";
 	};
     };
 };

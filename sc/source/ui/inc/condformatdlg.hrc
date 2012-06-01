@@ -35,7 +35,6 @@
 #define BTN_REMOVE 11
 
 #define CTRL_LIST 12
-#define CTRL_ENTRY 13
 
 #define LB_TYPE 14
 #define FT_COND_NR 15
