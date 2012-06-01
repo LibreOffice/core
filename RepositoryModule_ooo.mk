@@ -157,7 +157,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 		x11_extensions \
 	) \
     xmerge \
-    xmlsecurity \
     xml2cmp \
     xmlhelp \
     xmloff \
