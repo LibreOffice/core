@@ -42,6 +42,7 @@
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
@@ -68,6 +69,7 @@
 #include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -1118,11 +1120,8 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                 util::URL aURL;
                 aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SetDocumentProperties"));
 
-                uno::Reference< util::XURLTransformer > xTransformer(
-                            m_pOwner->GetServiceFactory()->createInstance(
-                                            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer") ),
-                            uno::UNO_QUERY );
-                if ( xTransformer.is() && xTransformer->parseStrict( aURL ) )
+                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( ::comphelper::ComponentContext(m_pOwner->GetServiceFactory()).getUNOContext() ) );
+                if ( xTransformer->parseStrict( aURL ) )
                 {
                     uno::Reference< frame::XDispatch > xDispatch = xFrameDispatch->queryDispatch(
                                                                                 aURL,

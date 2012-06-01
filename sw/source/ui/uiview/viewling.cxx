@@ -79,6 +79,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <vcl/svapp.hxx>
@@ -749,17 +750,11 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                 xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
                             com::sun::star::util::URL aURL;
                             uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY );
-                            uno::Reference< lang::XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
 
                             try
                             {
                                 uno::Reference< frame::XDispatch > xDispatch;
-                                uno::Reference< util::XURLTransformer > xURLTransformer;
-                                if (xMgr.is())
-                                {
-                                    xURLTransformer = uno::Reference< util::XURLTransformer >( xMgr->createInstance(
-                                            C2U("com.sun.star.util.URLTransformer")), UNO_QUERY);
-                                }
+                                uno::Reference< util::XURLTransformer > xURLTransformer = util::URLTransformer::create(comphelper::getProcessComponentContext());
 
                                 aURL.Complete = aCommand;
                                 xURLTransformer->parseStrict(aURL);

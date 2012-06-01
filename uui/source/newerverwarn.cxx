@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 
@@ -138,8 +139,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
             util::URL aURL;
             if ( aVal >>= aURL.Complete )
             {
-                uno::Reference< util::XURLTransformer > xTransformer(
-                    aContext.createComponent( "com.sun.star.util.URLTransformer" ), uno::UNO_QUERY_THROW );
+                uno::Reference< util::XURLTransformer > xTransformer( util::URLTransformer::create(aContext.getUNOContext()) );
                 xTransformer->parseStrict( aURL );
 
                 uno::Reference < frame::XDesktop > xDesktop(

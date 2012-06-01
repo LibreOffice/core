@@ -179,7 +179,6 @@
  */
 #define  SERVICE_CONFIGURATIONUPDATEACCESS  _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationUpdateAccess" )
 #define  SERVICE_CONFIGURATIONACCESS        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationAccess"       )
-#define  SERVICE_URLTRANSFORMER             _FILTER_CONFIG_FROM_ASCII_("com.sun.star.util.URLTransformer"                     )
 #define  SERVICE_FILTERCONFIGREFRESH        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.document.FilterConfigRefresh"            )
 
 /** @short  some configuration paths.

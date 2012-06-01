@@ -69,6 +69,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::std;
 using namespace ::rtl;
@@ -586,12 +588,11 @@ sal_Bool ImpOptimizer::Optimize()
     return sal_True;
 }
 
-static void DispatchURL( Reference< XComponentContext > xMSF, OUString sURL, Reference< XFrame > xFrame )
+static void DispatchURL( Reference< XComponentContext > xContext, OUString sURL, Reference< XFrame > xFrame )
 {
     try
     {
-        Reference< XURLTransformer > xURLTransformer( xMSF->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.util.URLTransformer"  ), xMSF ), UNO_QUERY_THROW );
+        Reference< XURLTransformer > xURLTransformer( URLTransformer::create(xContext) );
         util::URL aUrl;
         aUrl.Complete = sURL;
         xURLTransformer->parseStrict( aUrl );

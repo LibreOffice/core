@@ -66,8 +66,10 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 //      other includes
+#include <comphelper/componentcontext.hxx>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
@@ -119,7 +121,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex())
         , LayoutManager_PBase( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
         , m_xSMGR( xServiceManager )
-        , m_xURLTransformer( xServiceManager->createInstance( SERVICENAME_URLTRANSFORMER ), UNO_QUERY )
+        , m_xURLTransformer( URLTransformer::create(::comphelper::ComponentContext(xServiceManager).getUNOContext()) )
         , m_xDisplayAccess( xServiceManager->createInstance( SERVICENAME_DISPLAYACCESS ), UNO_QUERY )
         , m_nLockCount( 0 )
         , m_bActive( false )

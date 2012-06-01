@@ -53,9 +53,11 @@
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 //_______________________________________________
 // other includes
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -681,7 +683,7 @@ void SAL_CALL BackingComp::dispose()
     // kill the menu
     css::util::URL aURL;
     aURL.Complete = DECLARE_ASCII(".uno:close");
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
     if (xParser.is())
         xParser->parseStrict(aURL);
 

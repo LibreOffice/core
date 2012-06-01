@@ -51,6 +51,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -710,8 +711,8 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
     {
         com::sun::star::util::URL aURL;
         aURL.Complete = rURL;
-        Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->
-            createInstance( ASCII_STR("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
+        Reference< com::sun::star::util::XURLTransformer > xTrans(
+                    com::sun::star::util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aURL );
 
         String aTarget;
@@ -1615,8 +1616,8 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = ASCII_STR("slot:5540");
-    Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+    Reference< com::sun::star::util::XURLTransformer > xTrans(
+                com::sun::star::util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
 
     Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );

@@ -32,6 +32,7 @@
 //_______________________________________________
 // includes
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -42,6 +43,7 @@
 #include <framework/interaction.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //_______________________________________________
 // namespace
@@ -77,7 +79,7 @@ TypeDetection::~TypeDetection()
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICE_URLTRANSFORMER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
     xParser->parseStrict(aURL);
 
     // set std types as minimum requirement first!
@@ -261,7 +263,7 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICE_URLTRANSFORMER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
     xParser->parseStrict(aURL);
 
     rtl::OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(

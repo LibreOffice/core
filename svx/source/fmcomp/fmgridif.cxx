@@ -48,6 +48,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
@@ -2794,15 +2795,10 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
 
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.util.URLTransformer")),
-            UNO_QUERY);
+            util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
         pSupported = aSupported.getArray();
-        if (xTransformer.is())
-        {
-            for (i=0; i<aSupported.getLength(); ++i)
-                xTransformer->parseStrict(pSupported[i]);
-        }
+        for (i=0; i<aSupported.getLength(); ++i)
+            xTransformer->parseStrict(pSupported[i]);
     }
 
     return aSupported;

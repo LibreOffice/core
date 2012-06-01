@@ -53,6 +53,7 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
@@ -340,14 +341,11 @@ namespace
         bool bDoesAllow = sal_False;
         try
         {
-            Reference< XURLTransformer > xTransformer;
-            if ( _rContext.createComponent( "com.sun.star.util.URLTransformer", xTransformer ) )
-            {
-                URL aURL;
-                aURL.Complete = _rURL;
-                xTransformer->parseStrict( aURL );
-                bDoesAllow = aURL.Arguments == "Interactive";
-            }
+            Reference< XURLTransformer > xTransformer( URLTransformer::create(_rContext.getUNOContext()) );
+            URL aURL;
+            aURL.Complete = _rURL;
+            xTransformer->parseStrict( aURL );
+            bDoesAllow = aURL.Arguments == "Interactive";
         }
         catch( const Exception& )
         {

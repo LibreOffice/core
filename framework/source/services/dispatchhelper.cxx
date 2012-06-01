@@ -36,11 +36,13 @@
 
 //_______________________________________________
 // interface includes
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
 //_______________________________________________
 // includes of other projects
+#include <comphelper/componentcontext.hxx>
 
 //_______________________________________________
 // namespace
@@ -130,7 +132,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // parse given URL
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()) );
     aReadLock.unlock();
     /* } SAFE */
 

@@ -50,7 +50,6 @@ namespace framework{
 #define SERVICENAME_TASK                                        DECLARE_ASCII("com.sun.star.frame.Task"                             )
 #define SERVICENAME_FRAMELOADERFACTORY                          DECLARE_ASCII("com.sun.star.frame.FrameLoaderFactory"               )
 #define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
-#define SERVICENAME_URLTRANSFORMER                              DECLARE_ASCII("com.sun.star.util.URLTransformer"                    )
 #define SERVICENAME_PLUGINFRAME                                 DECLARE_ASCII("com.sun.star.mozilla.Plugin"                         )
 #define SERVICENAME_BRIDGEFACTORY                               DECLARE_ASCII("com.sun.star.bridge.BridgeFactory"                   )
 #define SERVICENAME_MEDIATYPEDETECTIONHELPER                    DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper"         )

@@ -57,6 +57,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -318,7 +319,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontDialogForParagraph"));
         }
 
-        uno::Reference< util::XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
+        uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create(::comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
         xURLTransformer->parseStrict( aURL );
         uno::Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
         if( xDispatch.is() )

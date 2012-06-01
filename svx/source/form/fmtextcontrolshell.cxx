@@ -49,6 +49,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -1316,8 +1317,7 @@ namespace svx
         {
             if ( !m_xURLTransformer.is() )
             {
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                aContext.createComponent( "com.sun.star.util.URLTransformer", m_xURLTransformer );
+                m_xURLTransformer = util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
             }
             if ( m_xURLTransformer.is() )
                 m_xURLTransformer->parseStrict( _rURL );

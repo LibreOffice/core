@@ -69,10 +69,12 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
@@ -2098,9 +2100,9 @@ void MenuBarManager::SetHdl()
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuBarManager, Select ));
 
     if ( !m_xURLTransformer.is() && mxServiceFactory.is() )
-        m_xURLTransformer.set( mxServiceFactory->createInstance(
-                                                                SERVICENAME_URLTRANSFORMER),
-                                                             UNO_QUERY );
+        m_xURLTransformer.set(
+             URLTransformer::create(
+                 ::comphelper::ComponentContext(mxServiceFactory).getUNOContext()) );
 }
 
 }

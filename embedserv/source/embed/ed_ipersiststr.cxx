@@ -42,9 +42,10 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/util/XUrlTransformer.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
-
+#include <comphelper/componentcontext.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
@@ -228,18 +229,13 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
         rtl::OUString sDocUrl;
         if ( pFilePath )
         {
-            ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.util.URLTransformer" ) );
-            uno::Reference< util::XURLTransformer > aTransformer( m_xFactory->createInstance( aServiceName ),
-                                                                    uno::UNO_QUERY );
-            if ( aTransformer.is() )
-            {
-                util::URL aURL;
+            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+            util::URL aURL;
 
-                aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
+            aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
 
-                if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) )
-                    sDocUrl = aURL.Complete;
-            }
+            if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) )
+                sDocUrl = aURL.Complete;
         }
 
         aArgs[nInd++].Value <<= sDocUrl;
@@ -894,9 +890,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
             util::URL aURL;
             aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>( pszFileName ) );
 
-            ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.util.URLTransformer" ) );
-            uno::Reference< util::XURLTransformer > aTransformer( m_xFactory->createInstance( aServiceName ),
-                                                                  uno::UNO_QUERY_THROW );
+            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
 
             if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) && aURL.Complete.getLength() )
             {

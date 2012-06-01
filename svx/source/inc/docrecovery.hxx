@@ -61,7 +61,6 @@
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 
 #define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
-#define SERVICENAME_URLTRANSFORMER                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer"        ))
 #define SERVICENAME_RECOVERYCORE                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.AutoRecovery"         ))
 #define SERVICENAME_FOLDERPICKER                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker"    ))
 #define SERVICENAME_DESKTOP                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"              ))

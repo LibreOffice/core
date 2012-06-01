@@ -37,6 +37,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 /** === end UNO includes === **/
@@ -290,7 +291,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void UrlClickHandler::impl_dispatch_throw( const ::rtl::OUString& _rURL )
     {
-        Reference< XURLTransformer > xTransformer( m_aContext.createComponent( "com.sun.star.util.URLTransformer" ), UNO_QUERY_THROW );
+        Reference< XURLTransformer > xTransformer( URLTransformer::create(m_aContext.getUNOContext()) );
         URL aURL; aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenHyperlink" ) );
         xTransformer->parseStrict( aURL );
 

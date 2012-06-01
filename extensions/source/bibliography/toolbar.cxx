@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <datman.hxx>
@@ -261,10 +262,8 @@ void BibToolBar::InitListener()
 {
     sal_uInt16  nCount=GetItemCount();
 
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< frame::XDispatch >  xDisp(xController,UNO_QUERY);
-
-    uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+    uno::Reference< util::XURLTransformer > xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
     if( xTrans.is() )
     {
         util::URL aQueryURL;
@@ -345,9 +344,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
     if( xDSP.is() && !aCommand.isEmpty())
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-
-        uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+        uno::Reference< util::XURLTransformer >  xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
         if( xTrans.is() )
         {
             // Datei laden

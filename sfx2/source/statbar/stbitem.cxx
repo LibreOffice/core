@@ -28,6 +28,7 @@
 
 #include <svl/stritem.hxx>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -86,8 +87,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 
     util::URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
-    uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-        rtl::OUString("com.sun.star.util.URLTransformer")), uno::UNO_QUERY );
+    uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
 
     SfxObjectShell* pObjShell = NULL;

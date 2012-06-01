@@ -35,6 +35,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -45,6 +46,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+#include <comphelper/componentcontext.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -116,9 +118,7 @@ throw ( RuntimeException )
              m_xServiceManager.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                            UNO_QUERY );
+            xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() );
 
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );

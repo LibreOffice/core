@@ -79,6 +79,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
+#include "com/sun/star/util/URLTransformer.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
@@ -859,8 +860,7 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         xNameAccess->getByName(OUSTR("URL")) >>= aURL.Complete;
 
         uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        uno::Reference < util::XURLTransformer > xTransformer( xFactory->createInstance( OUSTR( "com.sun.star.util.URLTransformer" ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
         xTransformer->parseStrict(aURL);
 

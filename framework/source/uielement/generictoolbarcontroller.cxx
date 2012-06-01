@@ -38,6 +38,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -49,6 +50,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+#include <comphelper/componentcontext.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -167,9 +169,7 @@ throw ( RuntimeException )
              m_xServiceManager.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
-                                                                rtl::OUString( "com.sun.star.util.URLTransformer" )),
-                                                            UNO_QUERY );
+            xURLTransformer = URLTransformer::create(::comphelper::ComponentContext(m_xServiceManager).getUNOContext());
 
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
@@ -364,7 +364,7 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
     if ( !pMenu )
     {
         Reference< XDispatchProvider > xDispatch;
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString( "com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        Reference< XURLTransformer > xURLTransformer = URLTransformer::create(::comphelper::ComponentContext(m_xServiceManager).getUNOContext());
         pMenu = new Toolbarmenu();
         m_xMenuManager.set( new MenuBarManager( m_xServiceManager, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
         if ( m_xMenuManager.is() )

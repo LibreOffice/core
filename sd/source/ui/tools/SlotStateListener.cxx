@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 
@@ -125,19 +126,10 @@ void SlotStateListener::disposing (void)
 util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
 {
     util::URL aURL;
-
     aURL.Complete = rSlotName;
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceManager (
-        ::comphelper::getProcessServiceFactory());
-    if (xServiceManager.is())
-    {
-        uno::Reference<util::XURLTransformer> xTransformer(xServiceManager->createInstance(
-            "com.sun.star.util.URLTransformer"),
-            uno::UNO_QUERY);
-        if (xTransformer.is())
-            xTransformer->parseStrict(aURL);
-    }
+    uno::Reference<util::XURLTransformer> xTransformer(util::URLTransformer::create(::comphelper::getProcessComponentContext()));
+    xTransformer->parseStrict(aURL);
 
     return aURL;
 }

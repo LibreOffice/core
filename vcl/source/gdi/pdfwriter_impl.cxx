@@ -76,6 +76,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 #include "cppuhelper/implbase1.hxx"
@@ -10560,19 +10561,14 @@ sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 
     if (!m_xTrans.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory() );
-        if( xFact.is() )
-        {
-            m_xTrans = uno::Reference < util::XURLTransformer >(
-                xFact->createInstance( OUString( "com.sun.star.util.URLTransformer"  ) ), uno::UNO_QUERY );
-        }
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        m_xTrans = util::URLTransformer::create(xContext);;
     }
 
     util::URL aURL;
     aURL.Complete = rURL;
 
-    if (m_xTrans.is())
-        m_xTrans->parseStrict( aURL );
+    m_xTrans->parseStrict( aURL );
 
     m_aLinks[ nLinkId ].m_aURL  = aURL.Complete;
 

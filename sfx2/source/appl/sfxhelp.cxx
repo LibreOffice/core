@@ -39,6 +39,7 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -839,8 +840,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
             {
                 URL aURL;
                 aURL.Complete = CreateHelpURL_Impl( rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), GetHelpModuleName_Impl() );
-                Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+                Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
                 xTrans->parseStrict(aURL);
 
                 Reference < XFrame > xCurrentFrame;

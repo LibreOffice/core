@@ -60,6 +60,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/svstdarr.hxx>
@@ -1161,10 +1162,8 @@ void FmGridControl::DeleteSelectedRows()
         aUrl.Complete = FMURL_CONFIRM_DELETION;
         // #100312# ------------
         Reference< ::com::sun::star::util::XURLTransformer > xTransformer(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
-        if( xTransformer.is() )
-            xTransformer->parseStrict( aUrl );
+            ::com::sun::star::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
+        xTransformer->parseStrict( aUrl );
 
         Reference< ::com::sun::star::frame::XDispatch >  xDispatch = xDispatcher->queryDispatch(aUrl, rtl::OUString(), 0);
         Reference< ::com::sun::star::form::XConfirmDeleteListener >  xConfirm(xDispatch, UNO_QUERY);

@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <svl/itemiter.hxx>
@@ -40,6 +41,7 @@
 #include <svl/itempool.hxx>
 #include <svtools/itemdel.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <svl/smplhint.hxx>
@@ -373,9 +375,7 @@ void SfxRequest_Impl::Record
                 ::comphelper::getProcessServiceFactory(),
                 com::sun::star::uno::UNO_QUERY);
 
-        com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > xTransform(
-                xFactory->createInstance(rtl::OUString("com.sun.star.util.URLTransformer")),
-                com::sun::star::uno::UNO_QUERY);
+        uno::Reference< util::XURLTransformer > xTransform( util::URLTransformer::create( ::comphelper::ComponentContext(xFactory).getUNOContext() ) );
 
         com::sun::star::util::URL aURL;
         aURL.Complete = aCmd;

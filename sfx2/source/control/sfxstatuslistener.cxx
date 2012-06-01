@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
@@ -66,8 +67,7 @@ SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDis
     m_xDispatchProvider( rDispatchProvider )
 {
     m_aCommand.Complete = rCommand;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
+    Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
         m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );

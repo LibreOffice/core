@@ -39,6 +39,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -2189,7 +2190,7 @@ sal_Bool SfxBindings::ExecuteCommand_Impl( const String& rCommand )
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = rCommand;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
+    Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aURL );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
     if ( xDisp.is() )

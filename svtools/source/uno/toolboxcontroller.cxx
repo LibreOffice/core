@@ -33,12 +33,14 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
 #include <vcl/toolbox.hxx>
+#include <comphelper/componentcontext.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
 const char TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE[] = "SupportsVisible";
@@ -103,9 +105,9 @@ ToolboxController::ToolboxController(
 
     try
     {
-        m_pImpl->m_xUrlTransformer.set( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
+        m_pImpl->m_xUrlTransformer.set(
+            ::com::sun::star::util::URLTransformer::create(
+                ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
     }
     catch(const Exception&)
     {
@@ -241,9 +243,9 @@ throw ( Exception, RuntimeException )
         try
         {
             if ( !m_pImpl->m_xUrlTransformer.is() && m_xServiceManager.is() )
-                m_pImpl->m_xUrlTransformer.set( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                            UNO_QUERY );
+                m_pImpl->m_xUrlTransformer.set(
+                    ::com::sun::star::util::URLTransformer::create(
+                        ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
         }
         catch(const Exception&)
         {

@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_api,ctl,\
 ))
 
 $(eval $(call gb_Library_use_libraries,ctl,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \

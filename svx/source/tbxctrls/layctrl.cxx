@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/colorcfg.hxx>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 // namespaces
 using namespace ::com::sun::star::uno;
@@ -377,9 +378,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     if ( xDispatchProvider.is() )
     {
         com::sun::star::util::URL aTargetURL;
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString("com.sun.star.util.URLTransformer")),
-                UNO_QUERY );
+        Reference < XURLTransformer > xTrans( URLTransformer::create(::comphelper::getProcessComponentContext()) );
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );
 

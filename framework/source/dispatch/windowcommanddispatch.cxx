@@ -41,11 +41,13 @@
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 //_______________________________________________
 // includes of other projects
 
+#include <comphelper/componentcontext.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cmdevt.hxx>
@@ -185,7 +187,7 @@ void WindowCommandDispatch::impl_dispatchCommand(const ::rtl::OUString& sCommand
         if ( ! xProvider.is())
             return;
 
-        css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(xSMGR).getUNOContext()));
         css::util::URL aCommand;
         aCommand.Complete = sCommand;
         xParser->parseStrict(aCommand);

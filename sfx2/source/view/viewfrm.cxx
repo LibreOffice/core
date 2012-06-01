@@ -58,6 +58,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
@@ -3150,7 +3151,9 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         {
             ::com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = ::rtl::OUString(".component:DB/DataSourceBrowser");
-            Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
+            Reference < ::com::sun::star::util::XURLTransformer > xTrans(
+                    ::com::sun::star::util::URLTransformer::create(
+                         ::comphelper::getProcessComponentContext() ) );
             xTrans->parseStrict( aTargetURL );
 
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );

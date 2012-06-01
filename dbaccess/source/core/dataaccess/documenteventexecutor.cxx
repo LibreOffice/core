@@ -30,6 +30,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -62,6 +63,7 @@ namespace dbaccess
     using ::com::sun::star::document::XEventsSupplier;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::util::URLTransformer;
     using ::com::sun::star::util::XURLTransformer;
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::frame::XDispatch;
@@ -144,7 +146,7 @@ namespace dbaccess
 
         try
         {
-            _rContext.createComponent( "com.sun.star.util.URLTransformer", m_pData->xURLTransformer );
+            m_pData->xURLTransformer = URLTransformer::create(_rContext.getUNOContext());
         }
         catch( const Exception& )
         {

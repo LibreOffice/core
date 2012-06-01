@@ -31,11 +31,13 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
@@ -56,25 +58,21 @@ static const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
 static const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
 static const char COMMAND_APPENDSEARCHHISTORY[] = "AppendSearchHistory";
 
-static const char SERVICENAME_URLTRANSFORMER[] = "com.sun.star.util.URLTransformer";
 static const sal_Int32       REMEMBER_SIZE = 10;
 
 void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
-    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( rSMgr->createInstance(rtl::OUString(SERVICENAME_URLTRANSFORMER)), css::uno::UNO_QUERY );
-    if ( xURLTransformer.is() )
-    {
-        css::util::URL aURL;
-        aURL.Complete = rtl::OUString(COMMAND_EXECUTESEARCH);
-        xURLTransformer->parseStrict(aURL);
+    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create(::comphelper::ComponentContext(rSMgr).getUNOContext()) );
+    css::util::URL aURL;
+    aURL.Complete = rtl::OUString(COMMAND_EXECUTESEARCH);
+    xURLTransformer->parseStrict(aURL);
 
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
-        if ( xDispatchProvider.is() )
-        {
-            css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
-            if ( xDispatch.is() && !aURL.Complete.isEmpty() )
-                xDispatch->dispatch( aURL, lArgs );
-        }
+    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
+    if ( xDispatchProvider.is() )
+    {
+        css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+        if ( xDispatch.is() && !aURL.Complete.isEmpty() )
+            xDispatch->dispatch( aURL, lArgs );
     }
 }
 

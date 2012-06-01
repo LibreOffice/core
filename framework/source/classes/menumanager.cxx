@@ -47,6 +47,7 @@
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -59,6 +60,7 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
@@ -302,7 +304,7 @@ void MenuManager::SetHdl()
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuManager, Select ));
 
     if ( mxServiceFactory.is() )
-        m_xURLTransformer.set( mxServiceFactory->createInstance(SERVICENAME_URLTRANSFORMER),UNO_QUERY );
+        m_xURLTransformer.set( URLTransformer::create(::comphelper::ComponentContext(mxServiceFactory).getUNOContext()) );
 }
 
 MenuManager::~MenuManager()

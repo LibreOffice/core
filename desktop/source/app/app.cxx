@@ -50,6 +50,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include "com/sun/star/util/URLTransformer.hpp"
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -1186,20 +1187,18 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
                              sal_Bool bExistsRecoveryData)
 {
     static ::rtl::OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
-    static ::rtl::OUString SERVICENAME_URLPARSER("com.sun.star.util.URLTransformer");
     static ::rtl::OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
     static ::rtl::OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
     static ::rtl::OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-    css::uno::Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
+    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
         xSMGR->createInstance(SERVICENAME_RECOVERYUI),
         css::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::util::XURLTransformer > xURLParser(
-        xSMGR->createInstance(SERVICENAME_URLPARSER),
-        css::uno::UNO_QUERY_THROW);
+    Reference< css::util::XURLTransformer > xURLParser(
+        css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
     css::util::URL aURL;
     if (bEmergencySave)
@@ -2459,9 +2458,7 @@ void Desktop::OpenClients()
                     ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.AutoRecovery") ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
-            Reference< XURLTransformer > xParser(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.util.URLTransformer") ),
-                    ::com::sun::star::uno::UNO_QUERY_THROW );
+            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
             css::util::URL aCmd;
             aCmd.Complete = ::rtl::OUString("vnd.sun.star.autorecovery:/disableRecovery");
@@ -2886,9 +2883,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         // The user will try it again, in case nothing happens .-)
         try
         {
-            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+            Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-            com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >
+            Reference< css::frame::XDispatchProvider >
                 xDesktop( xSMGR->createInstance( OUString("com.sun.star.frame.Desktop") ),
                 ::com::sun::star::uno::UNO_QUERY );
 
@@ -2896,7 +2893,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             if ( ! xDesktop.is())
                 return;
 
-            css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(rtl::OUString("com.sun.star.util.URLTransformer")), css::uno::UNO_QUERY_THROW);
+            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
             css::util::URL aCommand;
             if( rAppEvent.GetData() == ::rtl::OUString("PREFERENCES") )
                 aCommand.Complete = rtl::OUString( ".uno:OptionsTreeDialog"  );

@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -51,6 +52,7 @@
 #include <svtools/transfer.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <sot/filelist.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
@@ -232,8 +234,8 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
     // open file
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get()                                  , css::uno::UNO_QUERY );
-    css::uno::Reference< css::util::XURLTransformer > xParser     ( m_xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(::comphelper::ComponentContext(m_xFactory).getUNOContext()) );
     aReadLock.unlock();
     /* } SAFE */
     if (xTargetFrame.is() && xParser.is())
