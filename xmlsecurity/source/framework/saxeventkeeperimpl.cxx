@@ -161,7 +161,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
 {
     BufferNode* pBufferNode = NULL;
 
-    if ( (!m_vNewElementCollectors.empty()) ||
+    if ( (m_vNewElementCollectors.size()>0) ||
          (m_pNewBlocker != NULL))
     {
         /*
@@ -202,7 +202,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
             m_pNewBlocker = NULL;
         }
 
-        if (!m_vNewElementCollectors.empty())
+        if (m_vNewElementCollectors.size()>0)
         {
             std::vector< const ElementCollector* >::const_iterator ii = m_vNewElementCollectors.begin();
 
@@ -713,7 +713,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
  ******************************************************************************/
 {
     m_bIsReleasing = true;
-    while (!m_vReleasedElementMarkBuffers.empty())
+    while (m_vReleasedElementMarkBuffers.size()>0)
     {
         std::vector< sal_Int32 >::iterator pId = m_vReleasedElementMarkBuffers.begin();
         sal_Int32 nId = *pId;

@@ -317,7 +317,7 @@ bool BufferNode::hasAnything() const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    return (m_pBlocker != NULL || !m_vElementCollectors.empty());
+    return (m_pBlocker != NULL || m_vElementCollectors.size() > 0);
 }
 
 bool BufferNode::hasChildren() const
@@ -344,7 +344,7 @@ bool BufferNode::hasChildren() const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    return (!m_vChildren.empty());
+    return (m_vChildren.size() > 0);
 }
 
 std::vector< const BufferNode* >* BufferNode::getChildren() const
@@ -378,7 +378,7 @@ const BufferNode* BufferNode::getFirstChild() const
 {
     BufferNode* rc = NULL;
 
-    if (!m_vChildren.empty())
+    if (m_vChildren.size() > 0)
     {
         rc = (BufferNode*)m_vChildren.front();
     }
@@ -853,7 +853,7 @@ void BufferNode::elementCollectorNotify()
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    if (!m_vElementCollectors.empty())
+    if (m_vElementCollectors.size()>0)
     {
         cssxc::sax::ElementMarkPriority nMaxPriority = cssxc::sax::ElementMarkPriority_MINIMUM;
         cssxc::sax::ElementMarkPriority nPriority;
