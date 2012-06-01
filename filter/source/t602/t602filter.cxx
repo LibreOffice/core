@@ -168,7 +168,7 @@ T602ImportFilter::~T602ImportFilter()
 
 /*    if ( aFilterName == "T602Document" || aTypeName == "writer_T602_Document" )
         // preselection by type (extension) or filter name: no reason to check type
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_T602_Document" ) ); */
+        return rtl::OUString(  "writer_T602_Document"  ); */
 
     ::com::sun::star::uno::Sequence< sal_Int8 > aData;
     size_t numBytes = 4;
@@ -180,7 +180,7 @@ T602ImportFilter::~T602ImportFilter()
         (aData[1] != 'C') || (aData[2] != 'T') || (aData[3] != ' '))
         return ::rtl::OUString();
 
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_T602_Document" ) );
+    return rtl::OUString(  "writer_T602_Document"  );
 }
 
 // XFilter
@@ -271,7 +271,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     }
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLImporter" ) );
+    OUString sXMLImportService (  "com.sun.star.comp.Writer.XMLImporter"  );
 
     mxHandler = Reference< XDocumentHandler >( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
@@ -883,7 +883,7 @@ Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
 OUString T602ImportFilter_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString (  IMPLEMENTATION_NAME  );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
@@ -899,8 +899,8 @@ Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+    pArray[0] =  OUString (  SERVICE_NAME1  );
+    pArray[1] =  OUString (  SERVICE_NAME2  );
     return aRet;
 }
 #undef SERVICE_NAME2
@@ -1015,12 +1015,12 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     ous[2] = getResStr(T602FILTER_STR_ENCODING_CP895);
     ous[3] = getResStr(T602FILTER_STR_ENCODING_KOI8CS2);
     any <<= ous;
-    xPSetCodeLB->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( "StringItemList" )), any);
+    xPSetCodeLB->setPropertyValue(OUString(  "StringItemList" ), any);
 
     Sequence < sal_Int16 > shr(1);
     shr[0] = ini.forcecode ? ((sal_Int16) ini.xcode) + 1 : 0;
     any <<= shr;
-    xPSetCodeLB->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedItems" )), any);
+    xPSetCodeLB->setPropertyValue(OUString(  "SelectedItems" ), any);
 
     Reference < XInterface > AzbCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetAzbukaCB( AzbCheckBoxModel, UNO_QUERY );
@@ -1211,7 +1211,7 @@ Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames( 
 OUString T602ImportFilterDialog_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString (  IMPLEMENTATION_NAME  );
 }
 
 #define SERVICE_NAME "com.sun.star.ui.dialogs.FilterOptionsDialog"
@@ -1226,7 +1226,7 @@ Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString (  SERVICE_NAME  );
     return aRet;
 }
 #undef SERVICE_NAME

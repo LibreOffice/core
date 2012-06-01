@@ -191,17 +191,17 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 css::uno::Reference<XPropertySet> xProps(m_rServiceFactory,
                         UNO_QUERY_THROW);
                 xContext.set(xProps->getPropertyValue(::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
+                         "DefaultContext" )),
                         UNO_QUERY_THROW);
                 css::uno::Reference<XMacroExpander>
                         xMacroExpander(
                                 xContext->getValueByName(
                                         ::rtl::OUString(
-                                                RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" ))),
+                                                 "/singletons/com.sun.star.util.theMacroExpander" )),
                                 UNO_QUERY_THROW);
                 sExpandedUrl = xMacroExpander->expandMacros(sUrl);
                 sal_Int32 nPos = sExpandedUrl.indexOf(::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" )));
+                         "vnd.sun.star.expand:" ));
                 if (nPos != -1)
                     sExpandedUrl = sExpandedUrl.copy(nPos + 20);
             }
@@ -249,10 +249,10 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 subs(
                         m_rServiceFactory->createInstance(
                                 OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ))),
+                                         "com.sun.star.util.PathSubstitution" )),
                         UNO_QUERY);
         OUString aWorkingDir(subs->getSubstituteVariableValue(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("$(progurl)"))));
+                "$(progurl"))));
         INetURLObject aObj(aWorkingDir);
         aObj.setFinalSlash();
         bool bWasAbsolute;
@@ -303,7 +303,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 xSaxParser(
                         m_rServiceFactory->createInstance(
                                 OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ))),
+                                         "com.sun.star.xml.sax.Parser" )),
                         UNO_QUERY);
         OSL_ASSERT(xSaxParser.is());
         if (!xSaxParser.is())
@@ -313,17 +313,17 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         Sequence<Any> args(3);
         NamedValue nv;
 
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "StylesheetURL" ));
+        nv.Name = OUString( "StylesheetURL" );
         nv.Value <<= expandUrl(udStyleSheet);
         args[0] <<= nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "SourceURL" ));
+        nv.Name = OUString( "SourceURL" );
         nv.Value <<= aURL;
         args[1] <<= nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "SourceBaseURL" ));
+        nv.Name = OUString( "SourceBaseURL" );
         nv.Value <<= OUString(INetURLObject(aURL).getBase());
         args[2] <<= nv;
 
-        OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.documentconversion.LibXSLTTransformer"));
+        OUString serviceName("com.sun.star.comp.documentconversion.LibXSLTTransformer");
         if (!msUserData[1].isEmpty())
             serviceName = msUserData[1];
 
@@ -349,7 +349,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                                 pipeout(
                                         m_rServiceFactory->createInstance(
                                                 OUString(
-                                                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ))),
+                                                         "com.sun.star.io.Pipe" )),
                                         UNO_QUERY);
                         css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
@@ -375,7 +375,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
                                         ::com::sun::star::ucb::InteractiveAugmentedIOException exc(
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Timeout!")),
+                                                rtl::OUString("Timeout!"),
                                                 static_cast< OWeakObject * >( this ),
                                                 InteractionClassification_ERROR,
                                                 ::com::sun::star::ucb::IOErrorCode_GENERAL,
@@ -461,33 +461,33 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 setDelegate(css::uno::Reference<XExtendedDocumentHandler> (
                                 m_rServiceFactory->createInstance(
                                         OUString(
-                                                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ))),
+                                                 "com.sun.star.xml.sax.Writer" )),
                                 UNO_QUERY));
             }
 
         // create transformer
         Sequence<Any> args(4);
         NamedValue nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "StylesheetURL" ));
+        nv.Name = OUString( "StylesheetURL" );
         nv.Value <<= expandUrl(udStyleSheet);
         args[0] <<= nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+        nv.Name = OUString( "TargetURL" );
         nv.Value <<= sURL;
         args[1] <<= nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "DoctypeSystem" ));
+        nv.Name = OUString( "DoctypeSystem" );
         nv.Value <<= aDoctypeSystem;
         args[2] <<= nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "DoctypePublic" ));
+        nv.Name = OUString( "DoctypePublic" );
         nv.Value <<= aDoctypePublic;
         args[3] <<= nv;
-        nv.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetBaseURL" ));
+        nv.Name = OUString( "TargetBaseURL" );
         INetURLObject ineturl(sURL);
         ineturl.removeSegment();
         m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::NO_DECODE);
         nv.Value <<= m_aExportBaseUrl;
         args[3] <<= nv;
 
-        OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.documentconversion.LibXSLTTransformer"));
+        OUString serviceName("com.sun.star.comp.documentconversion.LibXSLTTransformer");
         if (!msUserData[1].isEmpty())
             serviceName = msUserData[1];
 
@@ -505,7 +505,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                         pipeout(
                                 m_rServiceFactory->createInstance(
                                         OUString(
-                                                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ))),
+                                                 "com.sun.star.io.Pipe" )),
                                 UNO_QUERY);
                 css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
@@ -600,7 +600,7 @@ extern "C"
                         Sequence<OUString> serviceNames(1);
                         serviceNames.getArray()[0]
                                 = OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( FILTER_SERVICE_NAME ));
+                                         FILTER_SERVICE_NAME );
 
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
@@ -622,7 +622,7 @@ extern "C"
                         Sequence<OUString> serviceNames(1);
                         serviceNames.getArray()[0]
                                 = OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( TRANSFORMER_SERVICE_NAME ));
+                                         TRANSFORMER_SERVICE_NAME );
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(
