@@ -182,7 +182,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
         pWindow = new MetricField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
-        pWindow = new ListBox(pParent, WB_DROPDOWN|WB_CENTER|WB_VCENTER|WB_3DLOOK);
+        pWindow = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
@@ -547,8 +547,6 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
         fprintf(stderr, "problem one\n");
 
     sal_uInt16 nPosition = getPositionWithinParent(rOrig);
-
-    rReplacement.ImplInit(rOrig.mpWindowImpl->mpRealParent, rOrig.GetStyle(), NULL);
 
     if (rReplacement.mpWindowImpl->mpBorderWindow)
         fprintf(stderr, "problem two\n");

@@ -1657,10 +1657,7 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {
     if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
-    {
-        SetField( this );
         return;
-    }
 
     rResId.SetRT( RSC_METRICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
@@ -1670,6 +1667,23 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+void MetricField::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        SpinField::ImplInit(rOther.GetParent(), rOther.GetStyle());
+        SetField( this );
+    }
+
+    SpinField::take_properties(rOther);
+
+    MetricField &rOtherField = static_cast<MetricField&>(rOther);
+    maCustomUnitText = rOtherField.maCustomUnitText;
+    maCurUnitText = rOtherField.maCurUnitText;
+    mnBaseValue = rOtherField.mnBaseValue;
+    meUnit = rOtherField.meUnit;
 }
 
 bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -1682,18 +1696,6 @@ bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rVa
     else
         return SpinField::set_property(rKey, rValue);
     return true;
-}
-
-void MetricField::take_properties(Window &rOther)
-{
-    MetricField &rOtherField = static_cast<MetricField&>(rOther);
-
-    maCustomUnitText = rOtherField.maCustomUnitText;
-    maCurUnitText = rOtherField.maCurUnitText;
-    mnBaseValue = rOtherField.mnBaseValue;
-    meUnit = rOtherField.meUnit;
-
-    SpinField::take_properties(rOther);
 }
 
 void MetricField::ImplLoadRes( const ResId& rResId )

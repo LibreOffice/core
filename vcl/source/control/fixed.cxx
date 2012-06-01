@@ -177,6 +177,14 @@ FixedText::FixedText( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void FixedText::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+
+    Control::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation ) :
@@ -594,6 +602,14 @@ FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void FixedLine::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+
+    Control::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------

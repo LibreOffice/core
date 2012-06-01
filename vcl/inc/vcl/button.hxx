@@ -200,6 +200,7 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
+    virtual void take_properties(Window &rOther);
 };
 
 inline void PushButton::Check( sal_Bool bCheck )
@@ -232,6 +233,7 @@ public:
                     OKButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
+    virtual void take_properties(Window &rOther);
 };
 
 // ----------------
@@ -254,6 +256,7 @@ public:
                     CancelButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
+    virtual void take_properties(Window &rOther);
 };
 
 // --------------
@@ -276,6 +279,7 @@ public:
                     HelpButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
+    virtual void take_properties(Window &rOther);
 };
 
 // ---------------

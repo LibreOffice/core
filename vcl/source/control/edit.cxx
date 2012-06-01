@@ -200,8 +200,34 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
+Edit::Edit( Window* pParent, const ResId& rResId ) :
+    Control( WINDOW_EDIT )
+{
+    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
+    ImplInitEditData();
+    rResId.SetRT( RSC_EDIT );
+    WinBits nStyle = ImplInitRes( rResId );
+    ImplInit( pParent, nStyle );
+    ImplLoadRes( rResId );
+
+    // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
+    // ctor has already started:
+    if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
+        Show();
+}
+
 void Edit::take_properties(Window &rOther)
 {
+    if (!GetParent())
+    {
+        ImplInitEditData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Control::take_properties(rOther);
+
     Edit &rOtherEdit = static_cast<Edit&>(rOther);
     maText = rOtherEdit.maText;
     maSaveValue = rOtherEdit.maSaveValue;
@@ -221,25 +247,6 @@ void Edit::take_properties(Window &rOther)
     mbIsSubEdit = rOtherEdit.mbIsSubEdit;
     mbInMBDown = rOtherEdit.mbInMBDown;
     mbActivePopup = rOtherEdit.mbActivePopup;
-    Control::take_properties(rOther);
-}
-
-Edit::Edit( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_EDIT )
-{
-    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
-        return;
-
-    ImplInitEditData();
-    rResId.SetRT( RSC_EDIT );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
-    // ctor has already started:
-    if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
-        Show();
 }
 
 // -----------------------------------------------------------------------

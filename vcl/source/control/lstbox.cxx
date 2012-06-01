@@ -74,10 +74,30 @@ ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     rResId.SetRT( RSC_LISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
+
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+void ListBox::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitListBoxData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Control::take_properties(rOther);
+
+    fprintf(stderr, "ListBox::take_properties\n");
+    ListBox &rOtherListBox = static_cast<ListBox&>(rOther);
+    mnDDHeight = rOtherListBox.mnDDHeight;
+    mnSaveValue = rOtherListBox.mnSaveValue;
+    mbDDAutoSize = rOtherListBox.mbDDAutoSize;
+    mnLineCount = rOtherListBox.mnLineCount;
+    fprintf(stderr, "ListBox::take_properties %p %d\n", this, IsVisible());
 }
 
 // -----------------------------------------------------------------------

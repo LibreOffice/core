@@ -1220,6 +1220,17 @@ PushButton::PushButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void PushButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitPushButtonData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Button::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 PushButton::~PushButton()
@@ -1763,6 +1774,13 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void OKButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    PushButton::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 void OKButton::Click()
@@ -1833,6 +1851,13 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void CancelButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    PushButton::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 void CancelButton::Click()
@@ -1901,6 +1926,13 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void HelpButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    PushButton::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -2456,6 +2488,29 @@ RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void RadioButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitRadioButtonData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Button::take_properties(rOther);
+
+    RadioButton &rOtherRadio = static_cast<RadioButton&>(rOther);
+    if (rOtherRadio.m_xGroup.get())
+    {
+        rOtherRadio.m_xGroup->erase(&rOtherRadio);
+        rOtherRadio.m_xGroup->insert(this);
+    }
+    std::swap(m_xGroup, rOtherRadio.m_xGroup);
+    mbChecked = rOtherRadio.mbChecked;
+    mbSaveValue = rOtherRadio.mbSaveValue;
+    mbRadioCheck = rOtherRadio.mbRadioCheck;
+    mbStateChanged = rOtherRadio.mbStateChanged;
+}
+
 // -----------------------------------------------------------------------
 
 void RadioButton::ImplLoadRes( const ResId& rResId )
@@ -2829,22 +2884,6 @@ void RadioButton::SetState( sal_Bool bCheck )
         StateChanged( STATE_CHANGE_STATE );
         Toggle();
     }
-}
-
-void RadioButton::take_properties(Window &rOther)
-{
-    RadioButton &rOtherRadio = static_cast<RadioButton&>(rOther);
-    if (rOtherRadio.m_xGroup.get())
-    {
-        rOtherRadio.m_xGroup->erase(&rOtherRadio);
-        rOtherRadio.m_xGroup->insert(this);
-    }
-    std::swap(m_xGroup, rOtherRadio.m_xGroup);
-    mbChecked = rOtherRadio.mbChecked;
-    mbSaveValue = rOtherRadio.mbSaveValue;
-    mbRadioCheck = rOtherRadio.mbRadioCheck;
-    mbStateChanged = rOtherRadio.mbStateChanged;
-    Button::take_properties(rOther);
 }
 
 bool RadioButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -3419,6 +3458,22 @@ CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void CheckBox::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitCheckBoxData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Button::take_properties(rOther);
+
+    CheckBox &rOtherCheck = static_cast<CheckBox&>(rOther);
+    meState = rOtherCheck.meState;
+    meSaveValue = rOtherCheck.meSaveValue;
+    mbTriState = rOtherCheck.mbTriState;
+}
+
 // -----------------------------------------------------------------------
 
 void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
@@ -3801,15 +3856,6 @@ void CheckBox::SetState( TriState eState )
         StateChanged( STATE_CHANGE_STATE );
         Toggle();
     }
-}
-
-void CheckBox::take_properties(Window &rOther)
-{
-    CheckBox &rOtherCheck = static_cast<CheckBox&>(rOther);
-    meState = rOtherCheck.meState;
-    meSaveValue = rOtherCheck.meSaveValue;
-    mbTriState = rOtherCheck.mbTriState;
-    Button::take_properties(rOther);
 }
 
 bool CheckBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)

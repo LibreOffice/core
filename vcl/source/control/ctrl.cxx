@@ -65,15 +65,7 @@ Control::Control( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
 {
     ImplInitControlData();
-    Window::ImplInit( pParent, nStyle, NULL );
-}
-
-void Control::take_properties(Window &rOther)
-{
-    Control &rOtherControl = static_cast<Control&>(rOther);
-    std::swap(mpControlData, rOtherControl.mpControlData);
-    mbHasFocus = rOtherControl.mbHasFocus;
-    Window::take_properties(rOther);
+    ImplInit( pParent, nStyle, NULL );
 }
 
 Control::Control( Window* pParent, const ResId& rResId ) :
@@ -87,6 +79,21 @@ Control::Control( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void Control::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitControlData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle(), NULL);
+    }
+
+    Window::take_properties(rOther);
+
+    Control &rOtherControl = static_cast<Control&>(rOther);
+    std::swap(mpControlData, rOtherControl.mpControlData);
+    mbHasFocus = rOtherControl.mbHasFocus;
 }
 
 // -----------------------------------------------------------------------

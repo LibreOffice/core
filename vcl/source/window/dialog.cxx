@@ -1175,6 +1175,8 @@ bool Dialog::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacem
         rReplacement.ImplInit(pActionArea, 0, NULL);
         rReplacement.Hide();
     }
+    else
+        fprintf(stderr, "%d found\n", nID);
     assert(rReplacement.mpWindowImpl);
     return true;
 }
