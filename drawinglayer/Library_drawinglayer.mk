@@ -44,6 +44,10 @@ $(eval $(call gb_Library_use_externals,drawinglayer,\
 	libxml2 \
 ))
 
+$(eval $(call gb_Library_use_externals,drawinglayer,\
+	libxml2 \
+))
+
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     basegfx \
     canvastools \

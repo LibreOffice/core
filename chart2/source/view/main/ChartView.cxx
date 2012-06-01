@@ -3012,6 +3012,106 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
     return aServiceNames;
 }
 
+/* ----------------------
+    goes to drawinglayer/XShapeDumper.cxx
+    ----------------------
+namespace {
+
+#define DEBUG_DUMPER 0
+
+int writeCallback(void* pContext, const char* sBuffer, int nLen)
+{
+    rtl::OStringBuffer* pBuffer = static_cast<rtl::OStringBuffer*>(pContext);
+    pBuffer->append(sBuffer);
+    return nLen;
+}
+
+int closeCallback(void* )
+{
+    return 0;
+}
+
+void dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, rPoint.Y);
+}
+
+void dumpSizeAsAttribute(const awt::Size& rSize, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeX"), "%" SAL_PRIdINT32, rSize.Width);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeY"), "%" SAL_PRIdINT32, rSize.Height);
+}
+
+void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter )
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s", rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
+}
+
+void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter );
+
+void dumpXShape( uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter  )
+{
+    xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
+
+    dumpPositionAsAttribute(xShape->getPosition(), xmlWriter);
+    dumpSizeAsAttribute(xShape->getSize(), xmlWriter);
+    uno::Reference< drawing::XShapeDescriptor > xDescr(xShape, uno::UNO_QUERY_THROW);
+    dumpShapeDescriptorAsAttribute(xDescr, xmlWriter);
+
+    uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
+    uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
+
+    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("Name");
+    rtl::OUString aName;
+    if (aAny >>= aName)
+    {
+        if (!aName.isEmpty())
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    if (xServiceInfo->supportsService("com.sun.star.drawing.Text"))
+    {
+        uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
+        rtl::OUString aText = xText->getString();
+        if(!aText.isEmpty())
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+    {
+        uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
+        dumpXShapes(xShapes, xmlWriter);
+    }
+#if DEBUG_DUMPER
+    sal_Int32 nServices = aServiceNames.getLength();
+    for (sal_Int32 i = 0; i < nServices; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ServiceName" ));
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", rtl::OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
+        xmlTextWriterEndElement( xmlWriter );
+    }
+#endif
+
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter )
+{
+    xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
+    uno::Reference< container::XIndexAccess > xIA( xShapes, uno::UNO_QUERY_THROW);
+    sal_Int32 nLength = xIA->getCount();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        uno::Reference< drawing::XShape > xShape( xIA->getByIndex( i ), uno::UNO_QUERY_THROW );
+        dumpXShape( xShape, xmlWriter );
+    }
+
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+}
+*/
+
 rtl::OUString ChartView::dump() throw (uno::RuntimeException)
 {
     impl_updateView();
