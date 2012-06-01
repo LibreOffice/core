@@ -648,27 +648,28 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & Context)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-    css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
-
-    sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException);
-
-    css::uno::Reference< css::container::XEnumeration > SAL_CALL
-    createEnumeration() throw (css::uno::RuntimeException);
-
-    sal_Bool SAL_CALL has(css::uno::Any const & aElement)
+    virtual css::uno::Type SAL_CALL getElementType()
         throw (css::uno::RuntimeException);
 
-    void SAL_CALL insert(css::uno::Any const & aElement)
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    createEnumeration() throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL has(css::uno::Any const & aElement)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL insert(css::uno::Any const & aElement)
         throw (
             css::lang::IllegalArgumentException,
             css::container::ElementExistException, css::uno::RuntimeException);
 
-    void SAL_CALL remove(css::uno::Any const & aElement)
+    virtual void SAL_CALL remove(css::uno::Any const & aElement)
         throw (
             css::lang::IllegalArgumentException,
             css::container::NoSuchElementException, css::uno::RuntimeException);
 
-    css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
     createContentEnumeration(rtl::OUString const & aServiceName)
         throw (css::uno::RuntimeException);
 
