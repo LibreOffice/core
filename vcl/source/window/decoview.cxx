@@ -666,8 +666,8 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     if( pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
     {
         ImplControlValue aControlValue( nStyle |
-                                        (pWin->GetType()==WINDOW_BORDERWINDOW) ?
-                                        FRAME_DRAW_BORDERWINDOWBORDER : 0 );
+                                        (pWin->GetType()==WINDOW_BORDERWINDOW ?
+                                        FRAME_DRAW_BORDERWINDOWBORDER : 0) );
         Rectangle aBound, aContent;
         Rectangle aNatRgn( rRect );
         if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
