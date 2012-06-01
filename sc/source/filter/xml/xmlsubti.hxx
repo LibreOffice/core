@@ -69,7 +69,6 @@ private:
 public:
                                         ScMyTableData(SCTAB nSheet = -1, sal_Int32 nCol = -1, sal_Int32 nRow = -1);
                                         ~ScMyTableData();
-    com::sun::star::table::CellAddress  GetCellPos() const { return aTableCellPos; }
     sal_Int32                           GetRow() const { return aTableCellPos.Row; }
     sal_Int32                           GetColumn() const { return aTableCellPos.Column; }
     void                                AddRow();
