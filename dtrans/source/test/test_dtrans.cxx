@@ -232,7 +232,7 @@ private:
 StringTransferable::StringTransferable( ) :
     m_seqDFlv( 1 ),
     m_receivedLostOwnership( sal_False ),
-    m_Data( OUString(RTL_CONSTASCII_USTRINGPARAM("clipboard test content")) )
+    m_Data( OUString("clipboard test content") )
 {
     DataFlavor df;
 
@@ -244,7 +244,7 @@ StringTransferable::StringTransferable( ) :
     */
 
     //df.MimeType = L"text/plain; charset=windows1252";
-    df.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/html"));
+    df.MimeType = OUString("text/html");
     df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
 
     m_seqDFlv[0] = df;
@@ -355,10 +355,10 @@ int SAL_CALL main( int argc, const char* argv[] )
         //--------------------------------------------------------------
 
         Sequence< Any > arguments(1);
-        arguments[0] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
+        arguments[0] = makeAny( OUString("generic") );
 
         Reference< XClipboard > xClipboard( xServiceManager->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard")),
+            OUString("com.sun.star.datatransfer.clipboard.GenericClipboard"),
             arguments ), UNO_QUERY );
 
         ENSURE( xClipboard.is(), "*** ERROR *** generic clipboard service could not be created." );
@@ -438,7 +438,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         //--------------------------------------------------------------
 
         Reference< XClipboardManager > xClipboardManager( xServiceManager->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.ClipboardManager")) ), UNO_QUERY );
+            OUString("com.sun.star.datatransfer.clipboard.ClipboardManager") ), UNO_QUERY );
 
         ENSURE( xClipboardManager.is(), "*** ERROR *** clipboard manager service could not be created." );
 
@@ -451,14 +451,14 @@ int SAL_CALL main( int argc, const char* argv[] )
         TEST( "initial number of clipboards (0): ", xClipboardManager->listClipboardNames().getLength() == 0 );
         PERFORM( "insertion of generic clipboard: ", xClipboardManager->addClipboard( xClipboard ) );
         TEST( "number of inserted clipboards (1): ", xClipboardManager->listClipboardNames().getLength() == 1 );
-        TEST( "name of inserted clipboard (generic): ", xClipboardManager->listClipboardNames()[0] == OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
-        TEST( "inserted clipboard instance: ", xClipboardManager->getClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) ) == xClipboard );
-        PERFORM( "removal of generic clipboard: ", xClipboardManager->removeClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) ) );
+        TEST( "name of inserted clipboard (generic): ", xClipboardManager->listClipboardNames()[0] == OUString("generic") );
+        TEST( "inserted clipboard instance: ", xClipboardManager->getClipboard( OUString("generic") ) == xClipboard );
+        PERFORM( "removal of generic clipboard: ", xClipboardManager->removeClipboard( OUString("generic") ) );
         TEST( "number of inserted clipboards (0): ", xClipboardManager->listClipboardNames().getLength() == 0 );
         TRACE( "Testing inserted clipboard instance (none): " );
         try
         {
-            xClipboardManager->getClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
+            xClipboardManager->getClipboard( OUString("generic") );
             TRACE( "FAILED\n" );
         }
         catch (const NoSuchElementException&)

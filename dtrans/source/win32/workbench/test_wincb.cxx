@@ -163,7 +163,7 @@ private:
 
 CTransferable::CTransferable( ) :
     m_FlavorList( 1 ),
-    m_Data( OUString(RTL_CONSTASCII_USTRINGPARAM("Ich habe mir ein neues Fahrrad gekauft!")) )
+    m_Data( OUString("Ich habe mir ein neues Fahrrad gekauft!") )
 {
     DataFlavor df;
 
@@ -269,7 +269,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     // get the global service-manager
     //-------------------------------------------------
 
-    OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
+    OUString rdbName = OUString(  RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.

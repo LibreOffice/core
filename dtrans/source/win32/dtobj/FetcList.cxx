@@ -281,7 +281,7 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
                 aFormatEtcContainer.addFormatEtc( fetc );
 
                 // and HTML Format
-                OUString htmlFormat( RTL_CONSTASCII_USTRINGPARAM("HTML Format") );
+                OUString htmlFormat( "HTML Format" );
                 aFormatEtcContainer.addFormatEtc(
                     m_DataFormatTranslator.getFormatEtcForClipformatName( htmlFormat ) );
             }
@@ -359,8 +359,7 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     try
     {
         Reference< XMimeContentTypeFactory > xMimeFac(
-            m_SrvMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( \
-                "com.sun.star.datatransfer.MimeContentTypeFactory" )) ), UNO_QUERY );
+            m_SrvMgr->createInstance( OUString( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
 
         if( xMimeFac.is( ) )
         {

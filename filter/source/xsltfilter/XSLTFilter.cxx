@@ -251,8 +251,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                                 OUString(
                                          "com.sun.star.util.PathSubstitution" )),
                         UNO_QUERY);
-        OUString aWorkingDir(subs->getSubstituteVariableValue(OUString(
-                "$(progurl"))));
+        OUString aWorkingDir(subs->getSubstituteVariableValue(OUString( "$(progurl)")));
         INetURLObject aObj(aWorkingDir);
         aObj.setFinalSlash();
         bool bWasAbsolute;

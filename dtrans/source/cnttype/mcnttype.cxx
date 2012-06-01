@@ -85,7 +85,7 @@ OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 {
-    return m_MediaType + OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + m_MediaSubtype;
+    return m_MediaType + OUString("/") + m_MediaSubtype;
 }
 
 //------------------------------------------------------------------------
@@ -206,7 +206,7 @@ void SAL_CALL CMimeContentType::type( void )
     {
         if ( isInRange( m_nxtSym, sToken ) )
             m_MediaType += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("/ ")) ) )
+        else if ( isInRange( m_nxtSym, OUString("/ ") ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -215,7 +215,7 @@ void SAL_CALL CMimeContentType::type( void )
 
     // check FOLLOW( type )
     skipSpaces( );
-    acceptSym( OUString(RTL_CONSTASCII_USTRINGPARAM("/")) );
+    acceptSym( OUString("/") );
 
     subtype( );
 }
@@ -238,7 +238,7 @@ void SAL_CALL CMimeContentType::subtype( void )
     {
         if ( isInRange( m_nxtSym, sToken ) )
             m_MediaSubtype += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("; ")) ) )
+        else if ( isInRange( m_nxtSym, OUString("; ") ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -259,13 +259,13 @@ void SAL_CALL CMimeContentType::trailer( void )
     rtl::OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
-        if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM("(")) )
+        if ( m_nxtSym == OUString("(") )
         {
             getSym( );
             comment( );
-            acceptSym( OUString(RTL_CONSTASCII_USTRINGPARAM(")")) );
+            acceptSym( OUString(")") );
         }
-        else if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM(";")) )
+        else if ( m_nxtSym == OUString(";") )
         {
             // get the parameter name
             getSym( );
@@ -277,7 +277,7 @@ void SAL_CALL CMimeContentType::trailer( void )
             OUString pname = pName( );
 
             skipSpaces();
-            acceptSym( OUString(RTL_CONSTASCII_USTRINGPARAM("=")) );
+            acceptSym( OUString("=") );
 
             // get the parameter value
             skipSpaces( );
@@ -308,7 +308,7 @@ OUString SAL_CALL CMimeContentType::pName( )
     {
         if ( isInRange( m_nxtSym, sToken ) )
             pname += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("= ")) ) )
+        else if ( isInRange( m_nxtSym, OUString("= ") ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -328,7 +328,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
 
     rtl::OUString sToken(TOKEN);
     // quoted pvalue
-    if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
+    if ( m_nxtSym == OUString( "\"" ) )
     {
         getSym( );
         pvalue = quotedPValue( );
@@ -375,7 +375,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         else if ( isInRange( m_nxtSym, rtl::OUString(TOKEN) + rtl::OUString(TSPECIALS) + rtl::OUString(SPACE) ) )
         {
             pvalue += m_nxtSym;
-            if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
+            if ( m_nxtSym == OUString( "\"" ) )
                 bAfterQuoteSign = sal_True;
             else
                 bAfterQuoteSign = sal_False;
@@ -401,7 +401,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     {
         if ( isInRange( m_nxtSym, sToken ) )
             pvalue += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("; ")) ) )
+        else if ( isInRange( m_nxtSym, OUString("; ") ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -421,7 +421,7 @@ void SAL_CALL CMimeContentType::comment( void )
     {
         if ( isInRange( m_nxtSym, rtl::OUString(TOKEN) + rtl::OUString(SPACE) ) )
             getSym( );
-        else if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM(")")) )
+        else if ( m_nxtSym == OUString(")") )
             break;
         else
             throw IllegalArgumentException( );

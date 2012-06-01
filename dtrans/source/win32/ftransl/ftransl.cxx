@@ -55,10 +55,10 @@
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            getCppuType( (const ::rtl::OUString*) 0 )
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
-#define OUSTR( str )              OUString(RTL_CONSTASCII_USTRINGPARAM( #str ))
+#define OUSTR( str )              OUString( #str )
 #define EMPTY_OUSTR               OUString()
 
-const rtl::OUString Windows_FormatName (RTL_CONSTASCII_USTRINGPARAM("windows_formatname"));
+const rtl::OUString Windows_FormatName ("windows_formatname");
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
 const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const ::rtl::OUString*)0);
 
@@ -84,7 +84,7 @@ namespace MODULE_PRIVATE
     Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.DataFormatTranslator"));
+        aRet[0] = OUString("com.sun.star.datatransfer.DataFormatTranslator");
         return aRet;
     }
 }
@@ -231,7 +231,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
 OUString SAL_CALL CDataFormatTranslator::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ));
+    return OUString( IMPL_NAME );
 }
 
 // -------------------------------------------------

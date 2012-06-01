@@ -133,7 +133,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
     PyThreadState * state = PyThreadState_Get();
     if( ! state )
     {
-        throw RuntimeException( OUString( "python global interpreter must be held (thread must be attached" )),
+        throw RuntimeException( OUString( "python global interpreter must be held (thread must be attached)" ),
                                 Reference< XInterface > () );
     }
 
@@ -361,7 +361,7 @@ Runtime::Runtime() throw(  RuntimeException )
     {
         throw RuntimeException(
             OUString( "pyuno runtime is not initialized, "
-                                                  "(the pyuno.bootstrap needs to be called before using any uno classes")),
+                                                  "(the pyuno.bootstrap needs to be called before using any uno classes)"),
             Reference< XInterface > () );
     }
     impl = reinterpret_cast< RuntimeImpl * > (runtime.get());

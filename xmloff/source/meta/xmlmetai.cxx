@@ -171,8 +171,7 @@ lcl_initGenerator(SvXMLImport & rImport,
         xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 
-        ::rtl::OUString const expr(
-            "string(/office:document-meta/office:meta/meta:generator"));
+        ::rtl::OUString const expr( "string(/office:document-meta/office:meta/meta:generator)");
         uno::Reference< xml::xpath::XXPathObject > const xObj(
             xPath->eval(xDoc.get(), expr), uno::UNO_SET_THROW);
         OUString const value(xObj->getString());

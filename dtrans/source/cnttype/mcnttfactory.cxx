@@ -59,7 +59,7 @@ namespace
     Sequence< OUString > SAL_CALL MimeContentTypeFactory_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"));
+        aRet[0] = OUString("com.sun.star.datatransfer.MimeContentTypeFactory");
         return aRet;
     }
 }
@@ -91,7 +91,7 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_IMPL_NAME ));
+    return OUString( MIMECONTENTTYPEFACTORY_IMPL_NAME );
 }
 
 // -------------------------------------------------

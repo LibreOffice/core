@@ -509,7 +509,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     if ( !m_rXMimeCntFactory.is( ) )
     {
         m_rXMimeCntFactory = Reference< XMimeContentTypeFactory >( m_SrvMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")) ), UNO_QUERY );
+            OUString("com.sun.star.datatransfer.MimeContentTypeFactory") ), UNO_QUERY );
     }
     OSL_ASSERT( m_rXMimeCntFactory.is( ) );
 
