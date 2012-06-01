@@ -56,7 +56,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    getServiceFactory().get()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.security.DocumentDigitalSignatures" ))), uno::UNO_QUERY );
+                    getServiceFactory().get()->createInstance( rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 

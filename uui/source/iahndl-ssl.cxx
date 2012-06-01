@@ -97,7 +97,7 @@ isDomainMatch(
        if (hostName.equalsIgnoreAsciiCase( element ))
            return true;
 
-       if ( 0 == element.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "*" )) ) &&
+       if ( 0 == element.indexOf( rtl::OUString( "*" ) ) &&
                  hostName.getLength() >= element.getLength()  )
        {
            rtl::OUString cmpStr = element.copy( 1 );
@@ -133,7 +133,7 @@ getLocalizedDatTimeStr(
 
     pNumberFormatter->GetOutputString(
         aDate - *pNullDate, nFormat, aTmpStr, &pColor );
-    aDateTimeStr = aTmpStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+    aDateTimeStr = aTmpStr + rtl::OUString(" ");
 
     nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
     pNumberFormatter->GetOutputString(
@@ -184,7 +184,7 @@ executeUnknownAuthDialog(
     catch (std::bad_alloc const &)
     {
         throw uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  rtl::OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
@@ -258,7 +258,7 @@ executeSSLWarnDialog(
     catch (std::bad_alloc const &)
     {
         throw uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  rtl::OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
