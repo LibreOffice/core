@@ -39,6 +39,7 @@
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
 #include "tokenarray.hxx"
+#include "convuno.hxx"
 #include <svx/svdpage.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -65,12 +66,12 @@ using ::std::auto_ptr;
 using namespace com::sun::star;
 
 ScMyTableData::ScMyTableData(SCTAB nSheet, SCCOL nCol, SCROW nRow)
-    :   nColsPerCol(nDefaultColCount, 1),
+    :   maTableCellPos(nCol, nRow, nSheet),
+        nColsPerCol(nDefaultColCount, 1),
         nRealCols(nDefaultColCount + 1, 0),
         nRowsPerRow(nDefaultRowCount, 1),
         nRealRows(nDefaultRowCount + 1, 0),
-        nChangedCols(),
-        maTableCellPos(nCol, nRow, nSheet)
+        nChangedCols()
 {
     for (sal_Int32 i = 0; i < 3; ++i)
         nRealCols[i] = i;
@@ -293,8 +294,13 @@ void ScMyTables::UnMerge()
 {
     if ( xCurrentCellRange.is() )
     {
+        //extra step here until this area is fully converted
+        com::sun::star::table::CellAddress aCellPos;
+        ScAddress aScCellPos = GetRealScCellPos();
+        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
         table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCurrentCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
+        if (IsMerged(xCurrentCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
         {
             //unmerge
             uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
@@ -309,8 +315,13 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
 {
     if ( xCurrentCellRange.is() )
     {
+        //extra step here until this area is fully converted
+        com::sun::star::table::CellAddress aCellPos;
+        ScAddress aScCellPos = GetRealScCellPos();
+        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
         table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCurrentCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
+        if (IsMerged(xCurrentCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
         {
             //unmerge
             uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
@@ -347,9 +358,10 @@ void ScMyTables::InsertRow()
 {
     if ( xCurrentCellRange.is() )
     {
+        ScAddress aScCellPos = GetRealScCellPos();
         table::CellRangeAddress aCellAddress;
-        sal_Int32 nRow(GetRealCellPos().Row);
-        for (sal_Int32 j = 0; j < GetRealCellPos().Column - pCurrentTab->GetColumn() - 1; ++j)
+        SCROW nRow(aScCellPos.Row());
+        for (sal_Int32 j = 0; j < aScCellPos.Col() - pCurrentTab->GetColumn() - 1; ++j)
         {
             if (IsMerged(xCurrentCellRange, j, nRow - 1, aCellAddress))
             {
@@ -380,7 +392,7 @@ void ScMyTables::NewRow()
     if (pCurrentTab->GetRealRows(pCurrentTab->GetRow()) >
         maTables[n-2].GetRowsPerRow(maTables[n-2].GetRow()) - 1)
     {
-        if (GetRealCellPos().Column > 0)
+        if (GetRealScCellPos().Col() > 0)
             InsertRow();
 
         for (size_t i = n - 1; i > 0; --i)
@@ -418,9 +430,14 @@ void ScMyTables::InsertColumn()
 {
     if ( xCurrentCellRange.is() )
     {
+        //extra step here until this area is fully converted
+        com::sun::star::table::CellAddress aCellPos;
+        ScAddress aScCellPos = GetRealScCellPos();
+        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
         table::CellRangeAddress aCellAddress;
-        sal_Int32 nCol(GetRealCellPos().Column);
-        sal_Int32 n = GetRealCellPos().Row - pCurrentTab->GetRow() - 1;
+        sal_Int32 nCol(aCellPos.Column);
+        sal_Int32 n = aCellPos.Row - pCurrentTab->GetRow() - 1;
         for (sal_Int32 j = 0; j <= n; ++j)
         {
             table::CellRangeAddress aTempCellAddress;
@@ -662,28 +679,10 @@ void ScMyTables::DeleteTable()
     }
 }
 
-table::CellAddress ScMyTables::GetRealCellPos()
-{
-    sal_Int32 nRow = 0;
-    sal_Int32 nCol = 0;
-    size_t n = maTables.size();
-    for (size_t i = 0; i < n; ++i)
-    {
-        const ScMyTableData& rTab = maTables[i];
-        nCol += rTab.GetRealCols(rTab.GetColumn());
-        nRow += rTab.GetRealRows(rTab.GetRow());
-    }
-
-    aRealCellPos.Row = nRow;
-    aRealCellPos.Column = nCol;
-    aRealCellPos.Sheet = nCurrentSheet;
-    return aRealCellPos;
-}
-
 ScAddress ScMyTables::GetRealScCellPos() const
 {
-    sal_Int32 nRow = 0;
-    sal_Int32 nCol = 0;
+    SCROW nRow = 0;
+    SCCOL nCol = 0;
     size_t n = maTables.size();
     for (size_t i = 0; i < n; ++i)
     {
@@ -691,7 +690,7 @@ ScAddress ScMyTables::GetRealScCellPos() const
         nCol += rTab.GetRealCols(rTab.GetColumn());
         nRow += rTab.GetRealRows(rTab.GetRow());
     }
-    return ScAddress( static_cast<SCCOL>(nCol), static_cast<SCCOL>(nRow), nCurrentSheet );
+    return ScAddress( nCol, nRow, nCurrentSheet );
 }
 
 void ScMyTables::AddColCount(sal_Int32 nTempColCount)

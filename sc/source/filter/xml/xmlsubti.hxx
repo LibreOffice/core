@@ -137,7 +137,6 @@ private:
     ::boost::ptr_vector<ScMyTableData>  maTables;
     ScXMLTabProtectionData              maProtectionData;
     ScMyMatrixRangeList                 aMatrixRangeList;
-    com::sun::star::table::CellAddress  aRealCellPos;
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
@@ -169,7 +168,6 @@ public:
     bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
         { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
-    com::sun::star::table::CellAddress  GetRealCellPos();
     ScAddress                           GetRealScCellPos() const;
     void                                AddColCount(sal_Int32 nTempColCount);
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);

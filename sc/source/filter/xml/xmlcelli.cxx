@@ -279,7 +279,11 @@ void ScXMLTableRowCellContext::UnlockSolarMutex()
 
 void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTempText)
 {
-    com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+    //extra step here until this area is fully converted
+    com::sun::star::table::CellAddress aCellPos;
+    ScAddress aScCellPos = rXMLImport.GetTables().GetRealScCellPos();
+    ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
     if (CellExists(aCellPos))
     {
         uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
@@ -326,7 +330,12 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
         {
             bIsEmpty = false;
             bTextP = true;
-            com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+
+            //extra step here until this area is fully converted
+            com::sun::star::table::CellAddress aCellPos;
+            ScAddress aScCellPos = rXMLImport.GetTables().GetRealScCellPos();
+            ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
             if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
                 !rXMLImport.GetTables().IsPartOfMatrix(static_cast<SCCOL>(aCellPos.Column), static_cast<SCROW>(aCellPos.Row)) )
             {
@@ -338,7 +347,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
                 }
                 else
                 {
-                    // com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
                     if (CellExists(aCellPos))
                     {
                         if (bIsFirstTextImport && !rXMLImport.GetRemoveLastChar())
@@ -421,7 +429,11 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
     if (!pContext && !bTextP)
     {
-        com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+        //extra step here until this area is fully converted
+        com::sun::star::table::CellAddress aCellPos;
+        ScAddress aScCellPos = rXMLImport.GetTables().GetRealScCellPos();
+        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
         uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
         if (xShapes.is())
         {
@@ -725,12 +737,16 @@ void ScXMLTableRowCellContext::EndElement()
             }
         }
         ScMyTables& rTables = rXMLImport.GetTables();
-        table::CellAddress aCellPos = rTables.GetRealCellPos();
+
+        //extra step here until this area is fully converted
+        com::sun::star::table::CellAddress aCellPos;
+        ScAddress aScCellPos = rXMLImport.GetTables().GetRealScCellPos();
+        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
+
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
             aCellPos.Row -= (nRepeatedRows - 1);
 
         //duplicated for now
-        ScAddress aScCellPos = rTables.GetRealScCellPos();
         if (aScCellPos.Col() > 0 && nRepeatedRows > 1)
             aScCellPos.SetRow( aScCellPos.Row() - (nRepeatedRows - 1) );
 
