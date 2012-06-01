@@ -347,13 +347,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
         //10 lines
         sal_Int32 nHeight = m_pWestFontSizeLB->CalcWindowSizePixel(10);
 
-        rtl::OString sHeightRequest(RTL_CONSTASCII_STRINGPARAM("height-request"));
-        m_pWestFontNameLB->setChildProperty<sal_Int32>(sHeightRequest,
-            nHeight);
-        m_pWestFontStyleLB->setChildProperty<sal_Int32>(sHeightRequest,
-            nHeight);
-        m_pWestFontSizeLB->setChildProperty<sal_Int32>(sHeightRequest,
-            nHeight);
+        m_pWestFontNameLB->set_height_request(nHeight);
+        m_pWestFontStyleLB->set_height_request(nHeight);
+        m_pWestFontSizeLB->set_height_request(nHeight);
     }
 
     m_pEastLine = new FixedLine(&m_aGrid, CUI_RES( FL_EAST ) );

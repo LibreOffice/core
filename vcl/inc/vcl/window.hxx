@@ -1086,6 +1086,26 @@ public:
     virtual Size GetOptimalSize(WindowSizeType eType) const;
 
     /*
+     * Sets the "width-request" property
+     *
+     * Override for width request of the widget, or -1 if natural request
+     * should be used.
+     *
+     * @see get_preferred_size, set_width_request
+     */
+    void set_height_request(sal_Int32 nHeightRequest);
+
+    /*
+     * Sets the "height-request" property
+     *
+     * Override for height request of the widget, or -1 if natural request
+     * should be used.
+     *
+     * @see get_preferred_size, set_height_request
+     */
+    void set_width_request(sal_Int32 nWidthRequest);
+
+    /*
      * Retrieves the preferred size of a widget taking
      * into account the "width-request" and "height-request" properties.
      *

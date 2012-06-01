@@ -281,6 +281,8 @@ public:
     sal_Int32           mnTopBorder;
     sal_Int32           mnRightBorder;
     sal_Int32           mnBottomBorder;
+    sal_Int32           mnWidthRequest;
+    sal_Int32           mnHeightRequest;
     long                mnX;
     long                mnY;
     long                mnAbsScreenX;

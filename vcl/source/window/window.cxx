@@ -615,6 +615,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnTopBorder         = 0;            // top border
     mpWindowImpl->mnRightBorder       = 0;            // right border
     mpWindowImpl->mnBottomBorder      = 0;            // bottom border
+    mpWindowImpl->mnWidthRequest      = -1;           // width request
+    mpWindowImpl->mnHeightRequest     = -1;           // height request
     mpWindowImpl->mnX                 = 0;            // X-Position to Parent
     mpWindowImpl->mnY                 = 0;            // Y-Position to Parent
     mpWindowImpl->mnAbsScreenX        = 0;            // absolute X-position on screen, used for RTL window positioning
@@ -5384,6 +5386,28 @@ void Window::SetStyle( WinBits nStyle )
     }
 }
 
+void Window::set_height_request(sal_Int32 nHeightRequest)
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if ( mpWindowImpl->mnHeightRequest != nHeightRequest )
+    {
+        mpWindowImpl->mnHeightRequest = nHeightRequest;
+        queue_resize();
+    }
+}
+
+void Window::set_width_request(sal_Int32 nWidthRequest)
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if ( mpWindowImpl->mnWidthRequest != nWidthRequest )
+    {
+        mpWindowImpl->mnWidthRequest = nWidthRequest;
+        queue_resize();
+    }
+}
+
 // -----------------------------------------------------------------------
 
 void Window::SetExtendedStyle( WinBits nExtendedStyle )
@@ -9644,11 +9668,8 @@ uno::Any Window::getWidgetAnyProperty(const rtl::OString &rString) const
 
 Size Window::get_preferred_size() const
 {
-    rtl::OString sWidthRequest(RTL_CONSTASCII_STRINGPARAM("width-request"));
-    rtl::OString sHeightRequest(RTL_CONSTASCII_STRINGPARAM("height-request"));
-    sal_Int32 nWidth = getWidgetProperty<sal_Int32>(sWidthRequest, -1);
-    sal_Int32 nHeight = getWidgetProperty<sal_Int32>(sHeightRequest, -1);
-    Size aRet(nWidth, nHeight);
+    Size aRet(mpWindowImpl->mnWidthRequest, mpWindowImpl->mnHeightRequest);
+    fprintf(stderr, "numbers are %d %d\n", aRet.Width(), aRet.Height());
     if (aRet.Width() == -1 || aRet.Height() == -1)
     {
         Size aOptimal = GetOptimalSize(WINDOWSIZE_PREFERRED);
@@ -9676,6 +9697,8 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mnTopBorder = pWindowImpl->mnTopBorder;
     mpWindowImpl->mnRightBorder = pWindowImpl->mnRightBorder;
     mpWindowImpl->mnBottomBorder = pWindowImpl->mnBottomBorder;
+    mpWindowImpl->mnWidthRequest = pWindowImpl->mnWidthRequest;
+    mpWindowImpl->mnHeightRequest = pWindowImpl->mnHeightRequest;
     mpWindowImpl->mnX = pWindowImpl->mnX;
     mpWindowImpl->mnY = pWindowImpl->mnY;
     mpWindowImpl->mnAbsScreenX = pWindowImpl->mnAbsScreenX;
@@ -9834,6 +9857,10 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
         SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height-request")))
+        set_height_request(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-request")))
+        set_width_request(rValue.toInt32());
     else
     {
         fprintf(stderr, "unhandled property %s\n", rKey.getStr());
