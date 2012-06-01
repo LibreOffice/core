@@ -1106,10 +1106,16 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
     if(isAfterLast())
         return sal_False;
     ++m_aKeyIter;
-    if(!m_bRowCountFinal) // not yet all records fetched
+    if(!m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end())
     {
-        if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
+        // not yet all records fetched, but we reached the end of those we fetched
+        // try to fetch one more row
+        if (!fetchRow())
+        {
+            // nope, we arrived at end of data
             m_aKeyIter = m_aKeyMap.end();
+            OSL_ENSURE(isAfterLast(), "fetchRow failed, but not end of data");
+        }
     }
 
     refreshRow();
