@@ -750,52 +750,52 @@ namespace osl_FileBase
 
   void getAbsoluteFileURL::getAbsoluteFileURL_001_1()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/relative/file1")) );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative/file1") );
     check_getAbsoluteFileURL( aUserDirectoryURL, "relative/file1",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_2()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/relative/file2")) );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative/file2") );
     check_getAbsoluteFileURL( aUserDirectoryURL, "relative/./file2",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_3()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/file3")) );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/file3") );
     check_getAbsoluteFileURL( aUserDirectoryURL, "relative/../file3",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_4()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/file4")) );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/file4") );
     check_getAbsoluteFileURL( aUserDirectoryURL, "././relative/../file4",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_5()
   {
     rtl::OUString suAssume;
 #if ( defined UNX )
-    suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/relative/")) );
+    suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative/") );
 #else
-    suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/relative")) );
+    suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative") );
 #endif
     check_getAbsoluteFileURL( aUserDirectoryURL, "././relative/.",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_6()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/.relative")) );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/.relative") );
     check_getAbsoluteFileURL( aUserDirectoryURL, "./.relative",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_7()
   {
     rtl::OUString suAssume;
 #if (defined UNX )
-    suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/.a/")) );
+    suAssume = aUserDirectoryURL.concat( rtl::OUString("/.a/") );
 #else //windows
-    suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/.a")) );
+    suAssume = aUserDirectoryURL.concat( rtl::OUString("/.a") );
 #endif
     check_getAbsoluteFileURL( aUserDirectoryURL, "./.a/mydir/..",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_8()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp/ok")) );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/tmp/ok") );
 #if ( defined UNX )
     check_getAbsoluteFileURL( aUserDirectoryURL, "tmp//ok",::osl::FileBase::E_None, suAssume );
 #else
@@ -806,8 +806,8 @@ namespace osl_FileBase
   {
 #if ( defined UNX )     //Link is not defined in Windows
         ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-        ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/link.file"));
-        ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/canonical.name"));
+        ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
+        ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/canonical.name");
 
                 rtl::OString strLinkFileName, strSrcFileName;
                 strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
@@ -817,7 +817,7 @@ namespace osl_FileBase
                 sal_Int32 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
         CPPUNIT_ASSERT( fd == 0 );
         rtl::OString sLnkURL = OUStringToOString( aLnkURL1, RTL_TEXTENCODING_ASCII_US );
-            rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/canonical.name")) );
+            rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/canonical.name") );
         check_getAbsoluteFileURL( aUserDirectoryURL, sLnkURL, ::osl::FileBase::E_None, suAssume );
         deleteTestFile( aCanURL1 );
                 fd = remove( strLinkFileName.getStr() );
@@ -831,12 +831,12 @@ namespace osl_FileBase
     void getAbsoluteFileURL::getAbsoluteFileURL_004()
     {
         //create two level directories under $Temp/PID/
-        ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/test1"));
+        ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString("/test1");
         createTestDirectory( aUStrUpBase );
-        ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/test1/dir1"));
+        ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString("/test1/dir1");
         createTestDirectory( aUStrBase );
 
-        ::rtl::OUString suAssume = aUserDirectoryURL.concat( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/mytestfile")) );
+        ::rtl::OUString suAssume = aUserDirectoryURL.concat( ::rtl::OUString("/mytestfile") );
         check_getAbsoluteFileURL( aUStrBase, "../../mytestfile" , ::osl::FileBase::E_None, suAssume );
         deleteTestDirectory( aUStrBase );
         deleteTestDirectory( aUStrUpBase );
@@ -2588,8 +2588,8 @@ namespace osl_FileStatus
             sal_Int32 fd;
 
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpdir/link.file"));
-            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpdir/tmpname"));
+            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpdir/link.file");
+            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpdir/tmpname");
 
                 rtl::OString strLinkFileName;
                 rtl::OString strSrcFileName;
@@ -2603,7 +2603,7 @@ namespace osl_FileStatus
             // testDirectory is "/tmp/PID/tmpdir/"
             ::osl::Directory testDirectory( aTmpName3 );
                 ::osl::FileBase::RC nError1 = testDirectory.open();
-            ::rtl::OUString aFileName (RTL_CONSTASCII_USTRINGPARAM("link.file"));
+            ::rtl::OUString aFileName ("link.file");
             sal_Bool bOk = sal_False;
             while (1) {
                 nError1 = testDirectory.getNextItem( rItem_link, 4 );
@@ -2904,7 +2904,7 @@ namespace osl_FileStatus
 #else                                    //Windows version
         void getAttributes_004()
         {
-            ::rtl::OUString aUserHiddenFileURL (RTL_CONSTASCII_USTRINGPARAM("file:///c:/AUTOEXEC.BAT"));
+            ::rtl::OUString aUserHiddenFileURL ("file:///c:/AUTOEXEC.BAT");
             nError = ::osl::DirectoryItem::get( aUserHiddenFileURL, rItem_hidden );
             CPPUNIT_ASSERT_MESSAGE("get item fail", nError == FileBase::E_None );
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
@@ -3212,8 +3212,8 @@ namespace osl_FileStatus
         {
             //create a link file;
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/link.file"));
-            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpname"));
+            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
+            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpname");
 
                 rtl::OString strLinkFileName, strSrcFileName;
                 strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
@@ -4400,9 +4400,9 @@ namespace osl_File
         //create directory $TEMP/tmpname/tmpdir
         createTestDirectory( aTmpName8 );
         //move directory $TEMP/tmpname to $TEMP/tmpname/tmpdir/tmpname
-        rtl::OUString newName = aTmpName8 + OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpname"));
+        rtl::OUString newName = aTmpName8 + OUString("/tmpname");
         nError1 = ::osl::File::move( aTmpName3, newName );
-        //deleteTestDirectory( newName + OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpname")) );
+        //deleteTestDirectory( newName + OUString("/tmpname") );
         //deleteTestDirectory( newName );
         deleteTestDirectory( aTmpName8 );
         deleteTestDirectory( aTmpName6 );
@@ -5595,8 +5595,8 @@ namespace osl_Directory
             sal_Bool bFoundOK = sal_False;
 
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( aUStr_LnkFileSys += aSlashURL ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpdir/link.file"));
-            ( aUStr_SrcFileSys += aSlashURL ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpdir/tmpname"));
+            ( aUStr_LnkFileSys += aSlashURL ) += ::rtl::OUString("/tmpdir/link.file");
+            ( aUStr_SrcFileSys += aSlashURL ) += ::rtl::OUString("/tmpdir/tmpname");
 
             ::rtl::OString strLinkFileName, strSrcFileName;
             strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
@@ -5610,7 +5610,7 @@ namespace osl_Directory
             //open a directory
             nError1 = testDirectory.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            ::rtl::OUString aFileName (RTL_CONSTASCII_USTRINGPARAM("link.file"));
+            ::rtl::OUString aFileName ("link.file");
 
             while (1) {
                 nError1 = testDirectory.getNextItem( rItem, 4 );
@@ -5871,7 +5871,7 @@ namespace osl_Directory
             osl_setFileAttributes(aTmpDir.pData, 0); //no access allowed now
 
             //Shouldn't be possible now to create a dir underneath it
-            rtl::OUString aTmpSubLevel = aTmpDir + OUString(RTL_CONSTASCII_USTRINGPARAM("/notallowedhere"));
+            rtl::OUString aTmpSubLevel = aTmpDir + OUString("/notallowedhere");
             nError1 = ::osl::Directory::create(aTmpSubLevel);
 
             //allow removal
@@ -6114,7 +6114,7 @@ namespace osl_Directory
         void with_relative_path()
         {
             FileBase::RC rc = Directory::createPath(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_POSTFIX)));
+                OUString(TEST_PATH_POSTFIX));
 
             CPPUNIT_ASSERT_MESSAGE
             (

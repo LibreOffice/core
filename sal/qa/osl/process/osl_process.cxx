@@ -75,9 +75,9 @@
 #endif
 
 #if defined(WNT)
-    const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child.exe"));
+    const rtl::OUString EXECUTABLE_NAME ("osl_process_child.exe");
 #else
-    const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child"));
+    const rtl::OUString EXECUTABLE_NAME ("osl_process_child");
 #endif
 
 //########################################
@@ -106,7 +106,7 @@ inline ::rtl::OUString getExecutablePath( void )
     osl::Module::getUrlFromAddress( ( void* ) &getExecutablePath, dirPath );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
-    dirPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Executable"));
+    dirPath += rtl::OUString("Executable");
     return dirPath;
 }
 
@@ -126,15 +126,15 @@ class Test_osl_joinProcess : public CppUnit::TestFixture
 public:
 
     Test_osl_joinProcess() :
-        join_param_(OUString(RTL_CONSTASCII_USTRINGPARAM("-join"))),
-        wait_time_(OUString(RTL_CONSTASCII_USTRINGPARAM("1"))),
+        join_param_(OUString("-join")),
+        wait_time_(OUString("1")),
         parameters_count_(2)
     {
         parameters_[0] = join_param_.pData;
         parameters_[1] = wait_time_.pData;
         suCWD = getExecutablePath();
         suExecutableFileURL = suCWD;
-        suExecutableFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        suExecutableFileURL += rtl::OUString("/");
         suExecutableFileURL += EXECUTABLE_NAME;
     }
 
@@ -424,13 +424,13 @@ public:
     //------------------------------------------------
     // ctor
     Test_osl_executeProcess() :
-        env_param_(OUString(RTL_CONSTASCII_USTRINGPARAM("-env"))),
+        env_param_(OUString("-env")),
         parameters_count_(2)
     {
         parameters_[0] = env_param_.pData;
         suCWD = getExecutablePath();
         suExecutableFileURL = suCWD;
-        suExecutableFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        suExecutableFileURL += rtl::OUString("/");
         suExecutableFileURL += EXECUTABLE_NAME;
     }
 
@@ -616,10 +616,10 @@ public:
     void osl_execProc_merged_child_environment()
     {
         rtl_uString* child_env[4];
-        OUString env1(RTL_CONSTASCII_USTRINGPARAM(ENV1));
-        OUString env2(RTL_CONSTASCII_USTRINGPARAM(ENV2));
-        OUString env3(RTL_CONSTASCII_USTRINGPARAM(ENV3));
-        OUString env4(RTL_CONSTASCII_USTRINGPARAM(ENV4));
+        OUString env1(ENV1);
+        OUString env2(ENV2);
+        OUString env3(ENV3);
+        OUString env4(ENV4);
 
         child_env[0] = env1.pData;
         child_env[1] = env2.pData;
@@ -670,9 +670,9 @@ public:
     {
         oslProcess process;
 #if defined(WNT)
-        rtl::OUString suBatch = suCWD + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("batch.bat"));
+        rtl::OUString suBatch = suCWD + rtl::OUString("/") + rtl::OUString("batch.bat");
 #else
-        rtl::OUString suBatch = suCWD + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("batch.sh"));
+        rtl::OUString suBatch = suCWD + rtl::OUString("/") + rtl::OUString("batch.sh");
 #endif
         oslProcessError osl_error = osl_executeProcess(
             suBatch.pData,

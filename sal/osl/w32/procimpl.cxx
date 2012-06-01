@@ -60,8 +60,8 @@ extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile
 //#################################################
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
 const sal_Char* SPACE = " ";
-const rtl::OUString ENV_COMSPEC (RTL_CONSTASCII_USTRINGPARAM("COMSPEC"));
-const rtl::OUString QUOTE(RTL_CONSTASCII_USTRINGPARAM("\""));
+const rtl::OUString ENV_COMSPEC ("COMSPEC");
+const rtl::OUString QUOTE("\"");
 
 namespace /* private */
 {
@@ -358,7 +358,7 @@ namespace /* private */
         if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
             return rtl::OUString();
 
-        exe_path = getShortPath(exe_path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe")));
+        exe_path = getShortPath(exe_path, rtl::OUString(".exe"));
 
         if (exe_path.indexOf(' ') != -1)
             exe_path = quote_string(exe_path);
