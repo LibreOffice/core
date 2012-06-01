@@ -57,7 +57,7 @@ const ScMysalIntVec::size_type nDefaultTabCount = 10;
 class ScMyTableData
 {
 private:
-    com::sun::star::table::CellAddress  aTableCellPos;
+    ScAddress                           maTableCellPos;
     ScMysalIntVec                       nColsPerCol;
     ScMysalIntVec                       nRealCols;
     ScMysalIntVec                       nRowsPerRow;
@@ -67,13 +67,13 @@ private:
     sal_Int32                           nSubTableSpanned;
     ScMysalIntList                      nChangedCols;
 public:
-                                        ScMyTableData(SCTAB nSheet = -1, sal_Int32 nCol = -1, sal_Int32 nRow = -1);
+                                        ScMyTableData(SCTAB nSheet = -1, SCCOL nCol = -1, SCROW nRow = -1);
                                         ~ScMyTableData();
-    sal_Int32                           GetRow() const { return aTableCellPos.Row; }
-    sal_Int32                           GetColumn() const { return aTableCellPos.Column; }
+    SCROW                               GetRow() const { return maTableCellPos.Row(); }
+    SCCOL                               GetColumn() const { return maTableCellPos.Col(); }
     void                                AddRow();
     void                                AddColumn();
-    void                                SetFirstColumn() { aTableCellPos.Column = -1; }
+    void                                SetFirstColumn() { maTableCellPos.SetCol(-1); }
     sal_Int32                           GetColsPerCol(const sal_Int32 nIndex) const { return nColsPerCol[nIndex]; }
     void                                SetColsPerCol(const sal_Int32 nIndex, sal_Int32 nValue = 1) { nColsPerCol[nIndex] = nValue; }
     sal_Int32                           GetRealCols(const sal_Int32 nIndex, const bool bIsNormal = true) const;

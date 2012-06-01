@@ -64,17 +64,14 @@ using ::std::auto_ptr;
 
 using namespace com::sun::star;
 
-ScMyTableData::ScMyTableData(SCTAB nSheet, sal_Int32 nCol, sal_Int32 nRow)
+ScMyTableData::ScMyTableData(SCTAB nSheet, SCCOL nCol, SCROW nRow)
     :   nColsPerCol(nDefaultColCount, 1),
         nRealCols(nDefaultColCount + 1, 0),
         nRowsPerRow(nDefaultRowCount, 1),
         nRealRows(nDefaultRowCount + 1, 0),
-        nChangedCols()
+        nChangedCols(),
+        maTableCellPos(nCol, nRow, nSheet)
 {
-    aTableCellPos.Sheet = nSheet;
-    aTableCellPos.Column = nCol;
-    aTableCellPos.Row = nRow;
-
     for (sal_Int32 i = 0; i < 3; ++i)
         nRealCols[i] = i;
     for (sal_Int32 j = 0; j < 3; ++j)
@@ -91,24 +88,24 @@ ScMyTableData::~ScMyTableData()
 
 void ScMyTableData::AddRow()
 {
-    ++aTableCellPos.Row;
-    if (static_cast<sal_uInt32>(aTableCellPos.Row) >= nRowsPerRow.size())
+    maTableCellPos.SetRow( maTableCellPos.Row() + 1 );
+    if (static_cast<sal_uInt32>(maTableCellPos.Row()) >= nRowsPerRow.size())
     {
         nRowsPerRow.resize(nRowsPerRow.size() + nDefaultRowCount, 1);
         nRealRows.resize(nRowsPerRow.size() + nDefaultRowCount + 1, 0);
     }
-    nRealRows[aTableCellPos.Row + 1] = nRealRows[aTableCellPos.Row] + nRowsPerRow[aTableCellPos.Row];
+    nRealRows[maTableCellPos.Row() + 1] = nRealRows[maTableCellPos.Row()] + nRowsPerRow[maTableCellPos.Row()];
 }
 
 void ScMyTableData::AddColumn()
 {
-    ++aTableCellPos.Column;
-    if (static_cast<sal_uInt32>(aTableCellPos.Column) >= nColsPerCol.size())
+    maTableCellPos.SetCol( maTableCellPos.Col() + 1 );
+    if (static_cast<sal_uInt32>(maTableCellPos.Col()) >= nColsPerCol.size())
     {
         nColsPerCol.resize(nColsPerCol.size() + nDefaultColCount, 1);
         nRealCols.resize(nColsPerCol.size() + nDefaultColCount + 1, 0);
     }
-    nRealCols[aTableCellPos.Column + 1] = nRealCols[aTableCellPos.Column] + nColsPerCol[aTableCellPos.Column];
+    nRealCols[maTableCellPos.Col() + 1] = nRealCols[maTableCellPos.Col()] + nColsPerCol[maTableCellPos.Col()];
 }
 
 sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const bool /* bIsNormal */) const
