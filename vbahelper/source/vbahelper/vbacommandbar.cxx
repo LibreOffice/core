@@ -47,7 +47,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")) );
+    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString("UIName") );
     rtl::OUString sName;
     aName >>= sName;
     if( sName.isEmpty() )
@@ -57,9 +57,9 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
             if( m_sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) )
             {
                 if( pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar") );
+                    sName = rtl::OUString( "Worksheet Menu Bar" );
                 else if( pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
-                    sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Menu Bar") );
+                    sName = rtl::OUString( "Menu Bar" );
                 return sName;
             }
         }
@@ -69,7 +69,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
         {
             uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
-            getPropertyValue( aToolBar, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UIName") ) ) >>= sName;
+            getPropertyValue( aToolBar, rtl::OUString( "UIName" ) ) >>= sName;
         }
     }
     return sName;
@@ -78,7 +78,7 @@ void SAL_CALL
 ScVbaCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")), uno::makeAny( _name ) );
+    xPropertySet->setPropertyValue( rtl::OUString("UIName"), uno::makeAny( _name ) );
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -97,7 +97,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
         {
             uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
-            getPropertyValue( aToolBar, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
+            getPropertyValue( aToolBar, rtl::OUString( "Visible" ) ) >>= bVisible;
         }
     }
     catch (const uno::Exception&)
@@ -182,7 +182,7 @@ ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/
 rtl::OUString
 ScVbaCommandBar::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBar"));
+    return rtl::OUString("ScVbaCommandBar");
 }
 
 uno::Sequence<rtl::OUString>
@@ -192,7 +192,7 @@ ScVbaCommandBar::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBar" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBar"  );
     }
     return aServiceNames;
 }
@@ -264,7 +264,7 @@ uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, co
 
 rtl::OUString VbaDummyCommandBar::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBar"));
+    return rtl::OUString("VbaDummyCommandBar");
 }
 
 uno::Sequence< rtl::OUString > VbaDummyCommandBar::getServiceNames()
@@ -273,7 +273,7 @@ uno::Sequence< rtl::OUString > VbaDummyCommandBar::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBar" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBar"  );
     }
     return aServiceNames;
 }

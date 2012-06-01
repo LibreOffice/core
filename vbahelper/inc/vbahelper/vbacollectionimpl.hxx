@@ -249,7 +249,7 @@ protected:
     virtual css::uno::Any getItemByStringIndex( const rtl::OUString& sIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xNameAccess.is() )
-            throw css::uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScVbaCollectionBase string index access not supported by this object") ), css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException( rtl::OUString( "ScVbaCollectionBase string index access not supported by this object" ), css::uno::Reference< css::uno::XInterface >() );
 
         if( mbIgnoreCase )
         {
@@ -269,12 +269,11 @@ protected:
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xIndexAccess.is() )
-            throw css::uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScVbaCollectionBase numeric index access not supported by this object") ), css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException( rtl::OUString( "ScVbaCollectionBase numeric index access not supported by this object" ), css::uno::Reference< css::uno::XInterface >() );
         if ( nIndex <= 0 )
         {
             throw  css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "index is 0 or negative" ) ),
+                ::rtl::OUString( "index is 0 or negative"  ),
                 css::uno::Reference< css::uno::XInterface >() );
         }
         // need to adjust for vba index ( for which first element is 1 )
@@ -305,8 +304,7 @@ public:
             if ( ( Index1 >>= nIndex ) != sal_True )
             {
                 rtl::OUString message;
-                message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Couldn't convert index to Int32"));
+                message = rtl::OUString( "Couldn't convert index to Int32");
                 throw  css::lang::IndexOutOfBoundsException( message,
                     css::uno::Reference< css::uno::XInterface >() );
             }
@@ -320,7 +318,7 @@ public:
     // XDefaultMethod
     ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException)
     {
-        const static rtl::OUString sName( RTL_CONSTASCII_USTRINGPARAM("Item") );
+        const static rtl::OUString sName( "Item" );
         return sName;
     }
     // XEnumerationAccess

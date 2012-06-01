@@ -41,7 +41,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-#define CREATEOUSTRING(asciistr) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(asciistr))
+#define CREATEOUSTRING(asciistr) rtl::OUString(asciistr)
 
 typedef std::map< rtl::OUString, rtl::OUString > MSO2OOCommandbarMap;
 
@@ -105,27 +105,27 @@ void VbaCommandBarHelper::Init( ) throw (css::uno::RuntimeException)
     m_xDocCfgMgr = xUICfgSupplier->getUIConfigurationManager();
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") ) ) )
+    if( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
     {
-        maModuleId = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
+        maModuleId = rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" );
     }
-    else if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument" ) ) ) )
+    else if( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.text.TextDocument"  ) ) )
     {
-        maModuleId = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
+        maModuleId = rtl::OUString( "com.sun.star.text.TextDocument" );
     }
 
     if( maModuleId.isEmpty() )
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< lang::XMultiServiceFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))), uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp( xServiceManager->createInstance( rtl::OUString(  "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )), uno::UNO_QUERY_THROW );
 
     m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::container::XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.WindowStateConfiguration" ))), uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::container::XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString(  "com.sun.star.ui.WindowStateConfiguration" )), uno::UNO_QUERY_THROW );
 
     m_xWindowState.set( xNameAccess->getByName( maModuleId ), uno::UNO_QUERY_THROW );
 }
@@ -185,7 +185,7 @@ uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() 
 {
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xFrame, uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( rtl::OUString("LayoutManager") ), uno::UNO_QUERY_THROW );
     return xLayoutManager;
 }
 
@@ -195,7 +195,7 @@ sal_Bool VbaCommandBarHelper::hasToolbar( const rtl::OUString& sResourceUrl, con
     {
         rtl::OUString sUIName;
         uno::Reference< beans::XPropertySet > xPropertySet( m_xDocCfgMgr->getSettings( sResourceUrl, sal_False ), uno::UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_DESCRIPTOR_UINAME)) ) >>= sUIName;
+        xPropertySet->getPropertyValue( rtl::OUString(ITEM_DESCRIPTOR_UINAME) ) >>= sUIName;
         if( sName.equalsIgnoreAsciiCase( sUIName ) )
             return sal_True;
     }
@@ -216,7 +216,7 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
         sResourceUrl = allNames[i];
-        if(sResourceUrl.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL )) ) == 0 )
+        if(sResourceUrl.indexOf( rtl::OUString( ITEM_TOOLBAR_URL ) ) == 0 )
         {
             if( hasToolbar( sResourceUrl, sName ) )
                 return sResourceUrl;
@@ -224,7 +224,7 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
     }
 
     // the customize toolbars creating during importing, shoud found there.
-    static rtl::OUString sToolbarPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/custom_" ) );
+    static rtl::OUString sToolbarPrefix(  "private:resource/toolbar/custom_"  );
     sResourceUrl = sToolbarPrefix.concat( sName );
     if( hasToolbar( sResourceUrl, sName ) )
         return sResourceUrl;
@@ -241,7 +241,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
     {
         rtl::OUString sLabel;
         xIndexAccess->getByIndex( i ) >>= aProps;
-        getPropertyValue( aProps, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_DESCRIPTOR_LABEL)) ) >>= sLabel;
+        getPropertyValue( aProps, rtl::OUString(ITEM_DESCRIPTOR_LABEL) ) >>= sLabel;
         // handle the hotkey marker '~' (remove in toolbars (?), replace by '&' in menus)
         ::rtl::OUStringBuffer aBuffer;
         sal_Int32 index = sLabel.indexOf( sal_Unicode('~') );
@@ -268,8 +268,8 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
 
 rtl::OUString VbaCommandBarHelper::generateCustomURL()
 {
-    rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
-    url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_TOOLBAR_STR ));
+    rtl::OUString url( ITEM_TOOLBAR_URL );
+    url += rtl::OUString( CUSTOM_TOOLBAR_STR );
 
     // use a random number to minimize possible clash with existing custom toolbars
     srand( unsigned( time( NULL ) ));

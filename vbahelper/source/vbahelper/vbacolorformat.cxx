@@ -71,20 +71,20 @@ ScVbaColorFormat::getRGB() throw (uno::RuntimeException)
     switch( m_nColorFormatType )
     {
     case ColorFormatType::LINEFORMAT_FORECOLOR:
-        m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) ) >>= nRGB;
+        m_xPropertySet->getPropertyValue( rtl::OUString("LineColor") ) >>= nRGB;
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         //TODO BackColor not supported
-        // m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Color")), uno::makeAny( nRGB ) );
+        // m_xPropertySet->setPropertyValue( rtl::OUString("Color"), uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
-        m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) ) >>= nRGB;
+        m_xPropertySet->getPropertyValue( rtl::OUString("FillColor") ) >>= nRGB;
         break;
     case ColorFormatType::FILLFORMAT_BACKCOLOR:
         nRGB = m_nFillFormatBackColor;
         break;
     default:
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second parameter of ColorFormat is wrong.")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Second parameter of ColorFormat is wrong."), uno::Reference< uno::XInterface >() );
     }
     nRGB = OORGBToXLRGB( nRGB );
     return nRGB;
@@ -97,13 +97,13 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException)
     switch( m_nColorFormatType )
     {
     case ColorFormatType::LINEFORMAT_FORECOLOR:
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), uno::makeAny( nRGB ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("LineColor"), uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         // TODO BackColor not supported
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), uno::makeAny( nRGB ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("FillColor"), uno::makeAny( nRGB ) );
         if( m_pFillFormat )
         {
             m_pFillFormat->setForeColorAndInternalStyle(nRGB);
@@ -117,7 +117,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException)
         }
         break;
     default:
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second parameter of ColorFormat is wrong.")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Second parameter of ColorFormat is wrong."), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -163,7 +163,7 @@ ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor ) throw (uno::RuntimeEx
 rtl::OUString
 ScVbaColorFormat::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaColorFormat"));
+    return rtl::OUString("ScVbaColorFormat");
 }
 
 uno::Sequence< rtl::OUString >
@@ -173,7 +173,7 @@ ScVbaColorFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.ColorFormat" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.msforms.ColorFormat"  );
     }
     return aServiceNames;
 }

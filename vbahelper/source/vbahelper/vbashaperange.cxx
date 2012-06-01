@@ -83,7 +83,7 @@ ScVbaShapeRange::getShapes() throw (uno::RuntimeException)
     if ( !m_xShapes.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        m_xShapes.set( xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection")) ), uno::UNO_QUERY_THROW );
+        m_xShapes.set( xMSF->createInstance( rtl::OUString("com.sun.star.drawing.ShapeCollection") ), uno::UNO_QUERY_THROW );
         sal_Int32 nLen = m_xIndexAccess->getCount();
         for ( sal_Int32 index = 0; index < nLen; ++index )
             m_xShapes->add( uno::Reference< drawing::XShape >( m_xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW ) );
@@ -394,7 +394,7 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 ScVbaShapeRange::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShapeRange"));
+    return rtl::OUString("ScVbaShapeRange");
 }
 
 uno::Sequence< rtl::OUString >
@@ -404,7 +404,7 @@ ScVbaShapeRange::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.ShapeRange" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.msform.ShapeRange"  );
     }
     return aServiceNames;
 }

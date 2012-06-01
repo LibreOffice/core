@@ -71,15 +71,15 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+    aProps[0].Name = rtl::OUString( ITEM_DESCRIPTOR_COMMANDURL );
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+    aProps[1].Name = rtl::OUString( ITEM_DESCRIPTOR_HELPURL );
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
+    aProps[2].Name = rtl::OUString( ITEM_DESCRIPTOR_LABEL );
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+    aProps[3].Name = rtl::OUString( ITEM_DESCRIPTOR_TYPE );
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
+    aProps[4].Name = rtl::OUString( ITEM_DESCRIPTOR_CONTAINER );
     aProps[4].Value = aSubMenu;
     aProps[5].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE );
     aProps[5].Value <<= isVisible;
@@ -93,19 +93,19 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+    aProps[0].Name = rtl::OUString( ITEM_DESCRIPTOR_COMMANDURL );
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+    aProps[1].Name = rtl::OUString( ITEM_DESCRIPTOR_HELPURL );
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
+    aProps[2].Name = rtl::OUString( ITEM_DESCRIPTOR_LABEL );
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+    aProps[3].Name = rtl::OUString( ITEM_DESCRIPTOR_TYPE );
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
+    aProps[4].Name = rtl::OUString( ITEM_DESCRIPTOR_CONTAINER );
     aProps[4].Value = aSubMenu;
-    aProps[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_ISVISIBLE ));
+    aProps[5].Name = rtl::OUString( ITEM_DESCRIPTOR_ISVISIBLE );
     aProps[5].Value <<= isVisible;
-    aProps[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
+    aProps[6].Name = rtl::OUString( ITEM_DESCRIPTOR_STYLE );
     aProps[6].Value <<= nStyle;
 
     return aProps;
@@ -132,7 +132,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     uno::Sequence< beans::PropertyValue > aProps;
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( aProps, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )) ) >>= xSubMenu;
+    getPropertyValue( aProps, rtl::OUString( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( xSubMenu.is() )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
@@ -171,8 +171,8 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 {
     // Parameter is not supported
     // the following name needs to be individually created;
-    rtl::OUString sLabel(RTL_CONSTASCII_USTRINGPARAM("Custom"));
-    rtl::OUString sCommandUrl(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR)) + sLabel);
+    rtl::OUString sLabel("Custom");
+    rtl::OUString sCommandUrl(rtl::OUString( CUSTOM_MENU_STR) + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
     sal_Bool bTemporary = sal_True;
@@ -184,11 +184,11 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     if( nType != office::MsoControlType::msoControlButton &&
         nType != office::MsoControlType::msoControlPopup )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
 
     if( Id.hasValue() || Parameter.hasValue( ) )
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
     }
 
     if( Before.hasValue() )
@@ -241,7 +241,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 rtl::OUString
 ScVbaCommandBarControls::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControls"));
+    return rtl::OUString("ScVbaCommandBarControls");
 }
 
 uno::Sequence<rtl::OUString>
@@ -251,7 +251,7 @@ ScVbaCommandBarControls::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBarControls" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarControls"  );
     }
     return aServiceNames;
 }
@@ -314,7 +314,7 @@ uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
 // XHelperInterface
 rtl::OUString VbaDummyCommandBarControls::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBarControls"));
+    return rtl::OUString("VbaDummyCommandBarControls");
 }
 
 uno::Sequence<rtl::OUString> VbaDummyCommandBarControls::getServiceNames()
@@ -323,7 +323,7 @@ uno::Sequence<rtl::OUString> VbaDummyCommandBarControls::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBarControls" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarControls"  );
     }
     return aServiceNames;
 }

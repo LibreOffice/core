@@ -110,7 +110,7 @@ public:
     void Start( const ::rtl::Reference< VbaApplicationBase > xBase, const ::rtl::OUString& aFunction, double nFrom, double nTo )
     {
         if ( !xBase.is() || aFunction.isEmpty() )
-            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected arguments!" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( ::rtl::OUString(  "Unexpected arguments!"  ), uno::Reference< uno::XInterface >() );
 
         m_xBase = xBase;
         m_aTimerInfo = VbaTimerInfo( aFunction, ::std::pair< double, double >( nFrom, nTo ) );
@@ -215,8 +215,8 @@ VbaApplicationBase::getDisplayStatusBar() throw (uno::RuntimeException)
     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
 
     if( xProps.is() ){
-        uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ), uno::UNO_QUERY_THROW );
-        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
+        uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( rtl::OUString("LayoutManager") ), uno::UNO_QUERY_THROW );
+        rtl::OUString url( "private:resource/statusbar/statusbar" );
         if( xLayoutManager.is() && xLayoutManager->isElementVisible( url ) ){
             return sal_True;
         }
@@ -232,8 +232,8 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar) throw (uno::
     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
 
     if( xProps.is() ){
-        uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ), uno::UNO_QUERY_THROW );
-        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
+        uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( rtl::OUString("LayoutManager") ), uno::UNO_QUERY_THROW );
+        rtl::OUString url( "private:resource/statusbar/statusbar" );
         if( xLayoutManager.is() ){
             if( bDisplayStatusBar && !xLayoutManager->isElementVisible( url ) ){
                 if( !xLayoutManager->showElement( url ) )
@@ -312,7 +312,7 @@ VbaApplicationBase::CommandBars( const uno::Any& aIndex ) throw (uno::RuntimeExc
 ::rtl::OUString SAL_CALL
 VbaApplicationBase::getVersion() throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(OFFICEVERSION));
+    return rtl::OUString(OFFICEVERSION);
 }
 
 uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const uno::Any& varg1, const uno::Any& varg2, const uno::Any& varg3, const uno::Any& varg4, const uno::Any& varg5, const uno::Any& varg6, const uno::Any& varg7, const uno::Any& varg8, const uno::Any& varg9, const uno::Any& varg10, const uno::Any& varg11, const uno::Any& varg12, const uno::Any& varg13, const uno::Any& varg14, const uno::Any& varg15, const uno::Any& varg16, const uno::Any& varg17, const uno::Any& varg18, const uno::Any& varg19, const uno::Any& varg20, const uno::Any& varg21, const uno::Any& varg22, const uno::Any& varg23, const uno::Any& varg24, const uno::Any& varg25, const uno::Any& varg26, const uno::Any& varg27, const uno::Any& varg28, const uno::Any& varg29, const uno::Any& varg30 ) throw (uno::RuntimeException)
@@ -361,7 +361,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The macro doesn't exist") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "The macro doesn't exist" ), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -369,13 +369,13 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const :
     throw ( uno::RuntimeException )
 {
     if ( aFunction.isEmpty() )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected function name!" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( ::rtl::OUString(  "Unexpected function name!"  ), uno::Reference< uno::XInterface >() );
 
     double nEarliestTime = 0;
     double nLatestTime = 0;
     if ( !( aEarliestTime >>= nEarliestTime )
       || ( aLatestTime.hasValue() && !( aLatestTime >>= nLatestTime ) ) )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Only double is supported as time for now!" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( ::rtl::OUString(  "Only double is supported as time for now!"  ), uno::Reference< uno::XInterface >() );
 
     sal_Bool bSetTimer = sal_True;
     aSchedule >>= bSetTimer;
@@ -414,7 +414,7 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
         aArgs[ 0 ] <<= getCurrentDocument();
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBE" ) ), aArgs, mxContext );
+            ::rtl::OUString(  "ooo.vba.vbide.VBE"  ), aArgs, mxContext );
         return uno::Any( xVBE );
     }
     catch( const uno::Exception& )
@@ -426,7 +426,7 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
 rtl::OUString
 VbaApplicationBase::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase"));
+    return rtl::OUString("VbaApplicationBase");
 }
 
 uno::Sequence<rtl::OUString>
@@ -436,7 +436,7 @@ VbaApplicationBase::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VbaApplicationBase" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.VbaApplicationBase"  );
     }
     return aServiceNames;
 }
@@ -445,7 +445,7 @@ void SAL_CALL VbaApplicationBase::Undo()
     throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    dispatchRequests( xModel, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) ) );
+    dispatchRequests( xModel, ::rtl::OUString(  ".uno:Undo"  ) );
 }
 
 void VbaApplicationBase::Quit() throw (uno::RuntimeException)

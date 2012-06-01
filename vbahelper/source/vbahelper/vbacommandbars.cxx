@@ -68,7 +68,7 @@ public:
         if( hasMoreElements() )
         {
             rtl::OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
-            if( sResourceUrl.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/")) ) != -1 )
+            if( sResourceUrl.indexOf( rtl::OUString("private:resource/toolbar/") ) != -1 )
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
                 uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False, sal_False ) );
@@ -123,7 +123,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Worksheet Menu Bar") ) )
             {
                 // spreadsheet menu bar
-                sResourceUrl = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_MENUBAR_URL ));
+                sResourceUrl = rtl::OUString( ITEM_MENUBAR_URL );
                 bMenu = sal_True;
             }
             else if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Cell") ) )
@@ -137,7 +137,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Menu Bar") ) )
             {
                 // text processor menu bar
-                sResourceUrl = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_MENUBAR_URL ));
+                sResourceUrl = rtl::OUString( ITEM_MENUBAR_URL );
                 bMenu = sal_True;
             }
         }
@@ -157,7 +157,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     }
 
     if( !aRet.hasValue() )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Toolbar do not exist") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Toolbar do not exist" ), uno::Reference< uno::XInterface >() );
 
     return aRet;
 }
@@ -178,11 +178,11 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
     {
         sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sName );
         if( !sResourceUrl.isEmpty() )
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Toolbar exists") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Toolbar exists" ), uno::Reference< uno::XInterface >() );
     }
     else
     {
-        sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom1") );
+        sName = rtl::OUString( "Custom1" );
     }
 
     sal_Bool bTemporary = sal_False;
@@ -203,7 +203,7 @@ ScVbaCommandBars::getCount() throw(css::uno::RuntimeException)
     uno::Sequence< ::rtl::OUString > allNames = m_xNameAccess->getElementNames();
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
-        if(allNames[i].indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/")) ) != -1 )
+        if(allNames[i].indexOf( rtl::OUString("private:resource/toolbar/") ) != -1 )
         {
             nCount++;
         }
@@ -227,9 +227,9 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
     {
         uno::Any aSource;
         if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
-            aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar"));
+            aSource <<= rtl::OUString("Worksheet Menu Bar");
         else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
-            aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Menu Bar"));
+            aSource <<= rtl::OUString("Menu Bar");
         if( aSource.hasValue() )
             return createCollectionObject( aSource );
     }
@@ -240,7 +240,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
 rtl::OUString
 ScVbaCommandBars::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBars"));
+    return rtl::OUString("ScVbaCommandBars");
 }
 
 uno::Sequence<rtl::OUString>
@@ -250,7 +250,7 @@ ScVbaCommandBars::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBars" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBars"  );
     }
     return aServiceNames;
 }

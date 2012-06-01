@@ -94,7 +94,7 @@ public:
             m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext), uno::UNO_QUERY_THROW );
+            (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop"), m_xContext), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -263,25 +263,25 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
 
      uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
+            ::rtl::OUString("com.sun.star.frame.Desktop"),
                 mxContext), uno::UNO_QUERY_THROW );
     rtl::OUString sURL;
     if( meDocType == WORD_DOCUMENT )
-        sURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter") );
+        sURL = rtl::OUString( "private:factory/swriter" );
     else if( meDocType == EXCEL_DOCUMENT )
-        sURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc") );
+        sURL = rtl::OUString( "private:factory/scalc" );
     else
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
 
     // prepare the media descriptor
     ::comphelper::MediaDescriptor aMediaDesc;
     aMediaDesc[ ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
-    aMediaDesc.setComponentDataEntry( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ApplyFormDesignMode" ) ), uno::Any( false ) );
+    aMediaDesc.setComponentDataEntry( ::rtl::OUString(  "ApplyFormDesignMode"  ), uno::Any( false ) );
 
     // craete the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
                                        sURL ,
-                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
+                                       rtl::OUString( "_blank" ), 0,
                                        aMediaDesc.getAsConstPropertyValueList() );
 
     // #163808# lock document controllers and container window if specified by application
@@ -298,7 +298,7 @@ void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc"));
+    rtl::OUString url = rtl::OUString(  ".uno:CloseDoc");
     dispatchRequests(xModel,url);
 */
 }
@@ -323,17 +323,17 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XDesktop > xDesktop
-        (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))                    , mxContext),
+        (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop")                    , mxContext),
         uno::UNO_QUERY_THROW );
     uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
+        ::rtl::OUString("com.sun.star.frame.Desktop"),
         mxContext),
         uno::UNO_QUERY_THROW );
 
     uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
-    sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode") );
+    sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( "MacroExecutionMode" );
     sProps[ sProps.getLength() - 1 ].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
 
     if ( ReadOnly.hasValue()  )
@@ -342,13 +342,13 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
         if ( bIsReadOnly )
         {
             sProps.realloc( sProps.getLength() + 1 );
-            sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
+            sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( "ReadOnly" );
             sProps[ sProps.getLength() - 1 ].Value <<= true;
         }
     }
 
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL( aURL,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_default") ),
+        rtl::OUString( "_default" ),
         frame::FrameSearchFlag::CREATE,
         sProps);
 

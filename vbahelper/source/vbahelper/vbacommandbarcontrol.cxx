@@ -49,7 +49,7 @@ ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException )
 {
     // "Label" always empty
     rtl::OUString sCaption;
-    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sCaption;
+    getPropertyValue( m_aPropertyValues, rtl::OUString("Label") ) >>= sCaption;
     return sCaption;
 }
 
@@ -57,7 +57,7 @@ void SAL_CALL
 ScVbaCommandBarControl::setCaption( const ::rtl::OUString& _caption ) throw (uno::RuntimeException)
 {
     rtl::OUString sCaption = _caption.replace('&','~');
-    setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), uno::makeAny( sCaption ) );
+    setPropertyValue( m_aPropertyValues, rtl::OUString("Label"), uno::makeAny( sCaption ) );
     ApplyChange();
 }
 
@@ -65,7 +65,7 @@ ScVbaCommandBarControl::setCaption( const ::rtl::OUString& _caption ) throw (uno
 ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException)
 {
     rtl::OUString sCommandURL;
-    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandURL")) ) >>= sCommandURL;
+    getPropertyValue( m_aPropertyValues, rtl::OUString("CommandURL") ) >>= sCommandURL;
     return sCommandURL;
 }
 
@@ -79,7 +79,7 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
     {
         rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         OSL_TRACE(" ScVbaCommandBarControl::setOnAction: %s", rtl::OUStringToOString( aCommandURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-        setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandURL")), uno::makeAny( aCommandURL ) );
+        setPropertyValue( m_aPropertyValues, rtl::OUString("CommandURL"), uno::makeAny( aCommandURL ) );
         ApplyChange();
     }
 }
@@ -171,7 +171,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
 {
     // only Popup Menu has controls
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )) ) >>= xSubMenu;
+    getPropertyValue( m_aPropertyValues, rtl::OUString( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
     if( !xSubMenu.is() )
         throw uno::RuntimeException();
 
@@ -186,7 +186,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
 rtl::OUString
 ScVbaCommandBarControl::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControl"));
+    return rtl::OUString("ScVbaCommandBarControl");
 }
 
 uno::Sequence<rtl::OUString>
@@ -196,7 +196,7 @@ ScVbaCommandBarControl::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBarControl" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarControl"  );
     }
     return aServiceNames;
 }
@@ -212,7 +212,7 @@ ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelp
 rtl::OUString
 ScVbaCommandBarPopup::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarPopup"));
+    return rtl::OUString("ScVbaCommandBarPopup");
 }
 
 uno::Sequence<rtl::OUString>
@@ -222,7 +222,7 @@ ScVbaCommandBarPopup::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBarPopup" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarPopup"  );
     }
     return aServiceNames;
 }
@@ -238,7 +238,7 @@ ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHe
 rtl::OUString
 ScVbaCommandBarButton::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarButton"));
+    return rtl::OUString("ScVbaCommandBarButton");
 }
 
 uno::Sequence<rtl::OUString>
@@ -248,7 +248,7 @@ ScVbaCommandBarButton::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBarButton" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarButton"  );
     }
     return aServiceNames;
 }

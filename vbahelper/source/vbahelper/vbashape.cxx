@@ -150,7 +150,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     {
         enum drawing::ConnectorType connectorType;
         uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind"))) >>= connectorType;
+        xPropertySet->getPropertyValue( rtl::OUString("EdgeKind")) >>= connectorType;
         if( connectorType == drawing::ConnectorType_CURVE )
             return office::MsoShapeType::msoFreeform;
         else if( connectorType == drawing::ConnectorType_LINE )
@@ -165,7 +165,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     else if( sShapeType == "com.sun.star.drawing.TextShape" )
         return office::MsoShapeType::msoTextBox;
     else
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("the shape type do not be supported: ")) + sShapeType, uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("the shape type do not be supported: ") + sShapeType, uno::Reference< uno::XInterface >() );
 }
 
 // Attributes
@@ -221,7 +221,7 @@ ScVbaShape::getLeft() throw (uno::RuntimeException)
     {
         // fail to get position by using XShape::getPosition()
         sal_Int32 nLeft = 0;
-        m_xPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition") ) ) >>= nLeft;
+        m_xPropertySet->getPropertyValue( rtl::OUString( "HoriOrientPosition" ) ) >>= nLeft;
         left = Millimeter::getInPoints( nLeft );
     }
     return left;
@@ -238,7 +238,7 @@ ScVbaShape::setLeft( double _left ) throw (uno::RuntimeException)
     {
         sal_Int32 nLeft = 0;
         nLeft = Millimeter::getInHundredthsOfOneMillimeter( _left );
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::makeAny( nLeft ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("HoriOrientPosition"), uno::makeAny( nLeft ) );
     }
 }
 
@@ -253,7 +253,7 @@ ScVbaShape::getTop() throw (uno::RuntimeException)
     catch( uno::Exception& )
     {
         sal_Int32 nTop = 0;
-        m_xPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition") ) ) >>= nTop;
+        m_xPropertySet->getPropertyValue( rtl::OUString( "VertOrientPosition" ) ) >>= nTop;
         top = Millimeter::getInPoints( nTop );
     }
     return top;
@@ -270,7 +270,7 @@ ScVbaShape::setTop( double _top ) throw (uno::RuntimeException)
     {
         sal_Int32 nTop = 0;
         nTop = Millimeter::getInHundredthsOfOneMillimeter( _top );
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::makeAny( nTop ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("VertOrientPosition"), uno::makeAny( nTop ) );
     }
 }
 
@@ -291,7 +291,7 @@ sal_Int32 SAL_CALL
 ScVbaShape::getZOrderPosition() throw (uno::RuntimeException)
 {
     sal_Int32 nZOrderPosition = 0;
-    uno::Any aZOrderPosition =  m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) );
+    uno::Any aZOrderPosition =  m_xPropertySet->getPropertyValue( rtl::OUString("ZOrder") );
     aZOrderPosition >>= nZOrderPosition;
     return nZOrderPosition + 1;
 }
@@ -307,7 +307,7 @@ ScVbaShape::getRotation() throw (uno::RuntimeException)
 {
     double dRotation = 0;
     sal_Int32 nRotation = 0;
-    m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")) ) >>= nRotation;
+    m_xPropertySet->getPropertyValue( rtl::OUString("RotateAngle") ) >>= nRotation;
     dRotation = static_cast< double >( nRotation /100 );
     return dRotation;
 }
@@ -316,7 +316,7 @@ void SAL_CALL
 ScVbaShape::setRotation( double _rotation ) throw (uno::RuntimeException)
 {
     sal_Int32 nRotation = static_cast < sal_Int32 > ( _rotation * 100 );
-    m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), uno::makeAny( nRotation ) );
+    m_xPropertySet->setPropertyValue( rtl::OUString("RotateAngle"), uno::makeAny( nRotation ) );
 }
 
 uno::Reference< msforms::XLineFormat > SAL_CALL
@@ -343,13 +343,13 @@ uno::Any SAL_CALL
 ScVbaShape::TextFrame() throw (uno::RuntimeException)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
+    if( xServiceInfo->supportsService( ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument"  ) ) )
     {
         uno::Reference< lang::XMultiServiceFactory > xSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         uno::Sequence< uno::Any > aArgs(2);
         aArgs[0] = uno::makeAny( getParent() );
         aArgs[1] <<= m_xShape;
-        uno::Reference< uno::XInterface > xTextFrame( xSF->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.TextFrame") ) , aArgs ) , uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XInterface > xTextFrame( xSF->createInstanceWithArguments( rtl::OUString( "ooo.vba.excel.TextFrame" ) , aArgs ) , uno::UNO_QUERY_THROW );
         return uno::makeAny( xTextFrame );
     }
 
@@ -367,33 +367,33 @@ void SAL_CALL
 ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException)
 {
     sal_Int32 nOrderPositon;
-    uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) );
+    uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( rtl::OUString("ZOrder") );
     aOrderPostion >>= nOrderPositon;
     switch( ZOrderCmd )
     {
     case office::MsoZOrderCmd::msoBringToFront:
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( SAL_MAX_INT32 ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("ZOrder"), uno::makeAny( SAL_MAX_INT32 ) );
         break;
     case office::MsoZOrderCmd::msoSendToBack:
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( (sal_Int32)0 ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("ZOrder"), uno::makeAny( (sal_Int32)0 ) );
         break;
     case office::MsoZOrderCmd::msoBringForward:
         nOrderPositon += 1;
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( nOrderPositon ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString("ZOrder"), uno::makeAny( nOrderPositon ) );
         break;
     case office::MsoZOrderCmd::msoSendBackward:
         if( nOrderPositon > 0 )
         {
             nOrderPositon -= 1;
-            m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( nOrderPositon ) );
+            m_xPropertySet->setPropertyValue( rtl::OUString("ZOrder"), uno::makeAny( nOrderPositon ) );
         }
         break;
     // below two commands use with Writer for text and image object.
     case office::MsoZOrderCmd::msoBringInFrontOfText:
     case office::MsoZOrderCmd::msoSendBehindText:
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This ZOrderCmd is not implemented, it is use with writer.")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("This ZOrderCmd is not implemented, it is use with writer."), uno::Reference< uno::XInterface >() );
     default:
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid Parameter.")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Invalid Parameter."), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -446,7 +446,7 @@ ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScaleHeight.Scale wrong value is given.")) , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("ScaleHeight.Scale wrong value is given.") , uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -475,7 +475,7 @@ ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScaleHeight.Scale wrong value is given.")) , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("ScaleHeight.Scale wrong value is given.") , uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -514,7 +514,7 @@ void SAL_CALL ScVbaShape::Copy() throw (uno::RuntimeException)
     {
         Select( uno::Any() );
         // Copy this Shape.
-        rtl::OUString sUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Copy") );
+        rtl::OUString sUrl = rtl::OUString( ".uno:Copy" );
         dispatchRequests( m_xModel, sUrl );
     }
 }
@@ -550,7 +550,7 @@ ScVbaShape::getRelativeHorizontalPosition() throw (uno::RuntimeException)
 {
     sal_Int32 nRelativeHorizontalPosition = word::WdRelativeHorizontalPosition::wdRelativeHorizontalPositionMargin;
     sal_Int16 nType = text::RelOrientation::PAGE_LEFT;
-    m_xPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation") ) ) >>= nType;
+    m_xPropertySet->getPropertyValue( rtl::OUString( "HoriOrientRelation" ) ) >>= nType;
 
     switch( nType )
     {
@@ -613,7 +613,7 @@ ScVbaShape::setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalpositi
             DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString());
         }
     }
-    m_xPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation") ), uno::makeAny( nType ) );
+    m_xPropertySet->setPropertyValue( rtl::OUString( "HoriOrientRelation" ), uno::makeAny( nType ) );
 }
 
 sal_Int32 SAL_CALL
@@ -621,7 +621,7 @@ ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException)
 {
     sal_Int32 nRelativeVerticalPosition = word::WdRelativeVerticalPosition::wdRelativeVerticalPositionMargin;
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
-    m_xPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation") ) ) >>= nType;
+    m_xPropertySet->getPropertyValue( rtl::OUString( "VertOrientRelation" ) ) >>= nType;
 
     switch( nType )
     {
@@ -684,29 +684,29 @@ ScVbaShape::setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition )
             DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString());
         }
     }
-    m_xPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation") ), uno::makeAny( nType ) );
+    m_xPropertySet->setPropertyValue( rtl::OUString( "VertOrientRelation" ), uno::makeAny( nType ) );
 }
 
 uno::Any SAL_CALL
 ScVbaShape::WrapFormat() throw (uno::RuntimeException)
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument" ) ) ) )
+    if( xServiceInfo->supportsService( ::rtl::OUString( "com.sun.star.text.TextDocument"  ) ) )
     {
         uno::Reference< lang::XMultiServiceFactory > xSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         uno::Sequence< uno::Any > aArgs(2);
         aArgs[0] = uno::makeAny( getParent() );
         aArgs[1] <<= m_xShape;
-        uno::Reference< uno::XInterface > xWrapFormat( xSF->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.WrapFormat") ) , aArgs ) , uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XInterface > xWrapFormat( xSF->createInstanceWithArguments( rtl::OUString( "ooo.vba.word.WrapFormat" ) , aArgs ) , uno::UNO_QUERY_THROW );
         return uno::makeAny( xWrapFormat );
     }
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
 }
 
 rtl::OUString
 ScVbaShape::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShape"));
+    return rtl::OUString("ScVbaShape");
 }
 
 uno::Sequence< rtl::OUString >
@@ -716,7 +716,7 @@ ScVbaShape::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.Shape" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.msform.Shape"  );
     }
     return aServiceNames;
 }
