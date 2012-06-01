@@ -270,7 +270,6 @@ void ScDLL::Init()
     ScDbNameDlgWrapper          ::RegisterChildWindow(false, pMod);
     ScConsolidateDlgWrapper     ::RegisterChildWindow(false, pMod);
     ScPrintAreasDlgWrapper      ::RegisterChildWindow(false, pMod);
-    ScCondFormatDlgWrapper      ::RegisterChildWindow(false, pMod);
     ScColRowNameRangesDlgWrapper::RegisterChildWindow(false, pMod);
     ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
 

@@ -71,7 +71,6 @@
 #define CMD_SID_RANGE_COL                           ".uno:Column"
 #define CMD_FID_COL_WIDTH                           ".uno:ColumnWidth"
 #define CMD_FID_CHG_COMMENT                         ".uno:CommentChange"
-#define CMD_FID_CONDITIONAL_FORMAT                  ".uno:ConditionalFormat"
 #define CMD_SID_OPENDLG_CONDFRMT                    ".uno:ConditionalFormatDialog"
 #define CMD_SID_CONSOLIDATE                         ".uno:ConsolidateExec"
 #define CMD_FID_USE_NAME                            ".uno:CreateNames"

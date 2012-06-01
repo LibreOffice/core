@@ -74,13 +74,13 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/miscdlgs.src \
     sc/source/ui/src/tabopdlg.src \
     sc/source/ui/src/scstring.src \
-    sc/source/ui/src/condfrmt.src \
     sc/source/ui/src/dbnamdlg.src \
     sc/source/ui/src/opredlin.src \
     sc/source/ui/src/sortdlg.src \
     sc/source/ui/src/attrdlg.src \
     sc/source/ui/src/filter.src \
     sc/source/ui/src/colorformat.src \
+    sc/source/ui/src/condformatdlg.src \
     sc/source/ui/cctrl/checklistmenu.src \
     sc/source/ui/navipi/navipi.src \
     sc/source/ui/docshell/tpstat.src \
