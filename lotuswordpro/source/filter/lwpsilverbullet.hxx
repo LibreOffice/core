@@ -81,9 +81,9 @@ const sal_uInt16 NUMCHAR_i = 0x05;      //index for numberchar "i"
 const sal_uInt16 NUMCHAR_other= 0x06;   //index for numberchar "other"
 const sal_uInt16 NUMCHAR_01 = 0x0B;     //index for numberchar "01"
 
-const sal_uInt16 NUMCHAR_Chinese1 = 0x09;       //index for numberchar "Ҽ"
-const sal_uInt16 NUMCHAR_Chinese2 = 0x08;       //index for numberchar "һ"
-const sal_uInt16 NUMCHAR_Chinese3= 0x0A;    //index for numberchar "��"
+const sal_uInt16 NUMCHAR_Chinese1 = 0x09;       //index for numberchar "Ò¼"
+const sal_uInt16 NUMCHAR_Chinese2 = 0x08;       //index for numberchar "Ò»"
+const sal_uInt16 NUMCHAR_Chinese3= 0x0A;    //index for numberchar "¼×"
 const sal_uInt16 NUMCHAR_Chinese4 = 0x13;       //index for numberchar "01" in chinese version
 
 class LwpStory;
@@ -110,9 +110,9 @@ public:
 
     UChar32 GetBulletChar();
 
-    rtl::OUString GetPrefix();
+    rtl::OUString GetPrefix() { return rtl::OUString(); }
 
-    rtl::OUString GetSuffix();
+    rtl::OUString GetSuffix() { return rtl::OUString(); }
 
     inline rtl::OUString GetNumberingName();
 

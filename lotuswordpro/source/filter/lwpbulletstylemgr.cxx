@@ -99,24 +99,25 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
 rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
     LwpIndentOverride* pIndent)
 {
+    rtl::OUString aEmpty;
+
     if(!pPara || !pIndent || !pBullOver)
     {
-//      assert(false);
-        return rtl::OUString();
+        return aEmpty;
     }
 
     LwpSilverBullet* pSilverBullet = pPara->GetSilverBullet();
     if (!pSilverBullet)
     {
         assert(false);
-        return rtl::OUString();
+        return aEmpty;
     }
 
     LwpPara* pBulletPara = pSilverBullet->GetBulletPara();
     if (!pBulletPara)
     {
         assert(false);
-        return rtl::OUString();
+        return aEmpty;
     }
 
     LwpParaProperty* pProp = pPara->GetProperty(PP_LOCAL_INDENT);
@@ -203,7 +204,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     rtl::OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
                     if (pParaNumber->GetStyleID() == NUMCHAR_01 || pParaNumber->GetStyleID() == NUMCHAR_Chinese4)
                     {
-                        aPrefix += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+                        aPrefix += rtl::OUString("0");
                     }
                     aFmt.SetPrefix(aPrefix);
 
@@ -231,7 +232,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     }
 
                     pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber).toChar(),
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")), aPrefix, aSuffix);
+                        rtl::OUString("Times New Roman"), aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);

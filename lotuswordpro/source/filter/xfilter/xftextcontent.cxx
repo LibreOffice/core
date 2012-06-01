@@ -81,8 +81,8 @@ void    XFTextContent::SetText(const rtl::OUString& text)
 void    XFTextContent::ToXml(IXFStream *pStrm)
 {
 //  pStrm->Characters(m_strText);
-    rtl::OUString sSpaceToken(RTL_CONSTASCII_USTRINGPARAM(" "));
-    sSpaceToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+    rtl::OUString sSpaceToken(" ");
+    sSpaceToken += rtl::OUString(" ");
     rtl::OUString sSubString;
     sal_Int32 nIndex = 0;
     sal_Int32 nSize = m_strText.getLength();
