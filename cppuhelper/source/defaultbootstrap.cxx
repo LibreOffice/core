@@ -60,6 +60,7 @@
 #include "cppuhelper/compbase8.hxx"
 #include "cppuhelper/component_context.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/shlib.hxx"
 #include "osl/file.hxx"
 #include "registry/registry.hxx"
@@ -124,28 +125,17 @@ void decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory) {
     }
 }
 
-struct Implementation: private boost::noncopyable {
-    Implementation(
+struct ImplementationInfo: private boost::noncopyable {
+    ImplementationInfo(
         rtl::OUString const & theName, rtl::OUString const & theLoader,
-        rtl::OUString const & theUri,
-        rtl::OUString const & thePrefix = rtl::OUString(),
+        rtl::OUString const & theUri, rtl::OUString const & thePrefix,
         css::uno::Reference< css::uno::XComponentContext > const &
-            theAlienContext
-                = css::uno::Reference< css::uno::XComponentContext >()):
+            theAlienContext):
         name(theName), loader(theLoader), uri(theUri), prefix(thePrefix),
-        alienContext(theAlienContext), loaded(false)
+        alienContext(theAlienContext)
     {}
 
-    Implementation(
-        rtl::OUString const & theName,
-        css::uno::Reference< css::lang::XSingleComponentFactory > const &
-            theFactory1,
-        css::uno::Reference< css::lang::XSingleServiceFactory > const &
-            theFactory2,
-        css::uno::Reference< css::lang::XComponent > const & theComponent):
-        name(theName), factory1(theFactory1), factory2(theFactory2),
-        component(theComponent), loaded(true)
-    {}
+    explicit ImplementationInfo(rtl::OUString const & theName): name(theName) {}
 
     rtl::OUString const name;
     rtl::OUString const loader;
@@ -154,6 +144,32 @@ struct Implementation: private boost::noncopyable {
     css::uno::Reference< css::uno::XComponentContext > const alienContext;
     std::vector< rtl::OUString > services;
     std::vector< rtl::OUString > singletons;
+};
+
+struct Implementation: private boost::noncopyable {
+    Implementation(
+        rtl::OUString const & name, rtl::OUString const & loader,
+        rtl::OUString const & uri,
+        rtl::OUString const & prefix = rtl::OUString(),
+        css::uno::Reference< css::uno::XComponentContext > const &
+            alienContext
+                = css::uno::Reference< css::uno::XComponentContext >()):
+        info(new ImplementationInfo(name, loader, uri, prefix, alienContext)),
+        loaded(false)
+    {}
+
+    Implementation(
+        rtl::OUString const & name,
+        css::uno::Reference< css::lang::XSingleComponentFactory > const &
+            theFactory1,
+        css::uno::Reference< css::lang::XSingleServiceFactory > const &
+            theFactory2,
+        css::uno::Reference< css::lang::XComponent > const & theComponent):
+        info(new ImplementationInfo(name)), factory1(theFactory1),
+        factory2(theFactory2), component(theComponent), loaded(true)
+    {}
+
+    boost::shared_ptr< ImplementationInfo > info;
     css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
     css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
     css::uno::Reference< css::lang::XComponent > component;
@@ -463,13 +479,13 @@ void Parser::handleImplementation() {
 
 void Parser::handleService() {
     rtl::OUString name(getNameAttribute());
-    implementation_->services.push_back(name);
+    implementation_->info->services.push_back(name);
     data_->services[name].push_back(implementation_);
 }
 
 void Parser::handleSingleton() {
     rtl::OUString name(getNameAttribute());
-    implementation_->singletons.push_back(name);
+    implementation_->info->singletons.push_back(name);
     data_->singletons[name].push_back(implementation_);
 }
 
@@ -585,7 +601,17 @@ public:
         context_ = context;
     }
 
+    css::uno::Reference< css::uno::XComponentContext > getContext() const {
+        assert(context_.is());
+        return context_;
+    }
+
     Data const & getData() const { return data_; }
+
+    void loadImplementation(
+        boost::shared_ptr< ImplementationInfo > const & info,
+        css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
+        css::uno::Reference< css::lang::XSingleServiceFactory > * factory2);
 
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
@@ -757,11 +783,135 @@ private:
     boost::shared_ptr< Implementation > findServiceImplementation(
         rtl::OUString const & specifier);
 
-    void loadImplementation(Implementation * implementation);
-
     css::uno::Reference< css::uno::XComponentContext > context_;
     Data data_;
 };
+
+class FactoryWrapper:
+    public cppu::WeakImplHelper3<
+        css::lang::XSingleComponentFactory, css::lang::XSingleServiceFactory,
+        css::lang::XServiceInfo >,
+    private boost::noncopyable
+{
+public:
+    FactoryWrapper(
+        rtl::Reference< ServiceManager > const & manager,
+        boost::shared_ptr< ImplementationInfo > const & info):
+        manager_(manager), info_(info), loaded_(false)
+    { assert(manager.is() && info.get() != 0); }
+
+private:
+    virtual ~FactoryWrapper() {}
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    createInstanceWithContext(
+        css::uno::Reference< css::uno::XComponentContext > const & Context)
+        throw (css::uno::Exception, css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    createInstanceWithArgumentsAndContext(
+        css::uno::Sequence< css::uno::Any > const & Arguments,
+        css::uno::Reference< css::uno::XComponentContext > const & Context)
+        throw (css::uno::Exception, css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    createInstance() throw (css::uno::Exception, css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    createInstanceWithArguments(
+        css::uno::Sequence< css::uno::Any > const & Arguments)
+        throw (css::uno::Exception, css::uno::RuntimeException);
+
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    getSupportedServiceNames() throw (css::uno::RuntimeException);
+
+    void loadImplementation();
+
+    rtl::Reference< ServiceManager > manager_;
+    boost::shared_ptr< ImplementationInfo > info_;
+
+    osl::Mutex mutex_;
+    bool loaded_;
+    css::uno::Reference< css::lang::XSingleComponentFactory > factory1_;
+    css::uno::Reference< css::lang::XSingleServiceFactory > factory2_;
+};
+
+void ServiceManager::loadImplementation(
+        boost::shared_ptr< ImplementationInfo > const & info,
+        css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
+        css::uno::Reference< css::lang::XSingleServiceFactory > * factory2)
+{
+    assert(
+        info.get() != 0 && factory1 != 0 && !factory1->is() && factory2 != 0
+        && !factory2->is());
+    rtl::OUString uri;
+    try {
+        uri = cppu::bootstrap_expandUri(info->uri);
+    } catch (css::lang::IllegalArgumentException & e) {
+        throw css::uno::DeploymentException(
+            "Cannot expand URI" + info->uri + ": " + e.Message,
+            static_cast< cppu::OWeakObject * >(this));
+    }
+    css::uno::Reference< css::uno::XInterface > f0;
+    // Shortcut loading via SharedLibrary loader, to pass in prefix argument
+    // (which the loader's activate implementation would normally obtain through
+    // the legacy xKey argument):
+    if (!info->alienContext.is()
+        && info->loader == "com.sun.star.loader.SharedLibrary")
+    {
+        rtl::OUString prefix(info->prefix);
+        if (!prefix.isEmpty()) {
+            prefix += "_";
+        }
+        try {
+            f0 = cppu::loadSharedLibComponentFactory(
+                uri, rtl::OUString(), info->name, this,
+                css::uno::Reference< css::registry::XRegistryKey >(), prefix);
+        } catch (css::loader::CannotActivateFactoryException & e) {
+            throw css::uno::DeploymentException(
+                "Cannot activate implementation " + uri + ": " + e.Message,
+                static_cast< cppu::OWeakObject * >(this));
+        }
+    } else {
+        SAL_INFO_IF(
+            !info->prefix.isEmpty(), "cppuhelper",
+            "Loader " << info->loader << " and non-empty prefix "
+                << info->prefix);
+        css::uno::Reference< css::uno::XComponentContext > ctxt;
+        css::uno::Reference< css::lang::XMultiComponentFactory > smgr;
+        if (info->alienContext.is()) {
+            ctxt = info->alienContext;
+            smgr = css::uno::Reference< css::lang::XMultiComponentFactory >(
+                ctxt->getServiceManager(), css::uno::UNO_SET_THROW);
+        } else {
+            assert(context_.is());
+            ctxt = context_;
+            smgr = this;
+        }
+        css::uno::Reference< css::loader::XImplementationLoader > loader(
+            smgr->createInstanceWithContext(info->loader, ctxt),
+            css::uno::UNO_QUERY_THROW);
+        try {
+            f0 = loader->activate(
+                info->name, rtl::OUString(), uri,
+                css::uno::Reference< css::registry::XRegistryKey >());
+        } catch (css::loader::CannotActivateFactoryException & e) {
+            throw css::uno::DeploymentException(
+                "Cannot activate implementation " + uri + ": " + e.Message,
+                static_cast< cppu::OWeakObject * >(this));
+        }
+    }
+    factory1->set(f0, css::uno::UNO_QUERY);
+    if (!factory1->is()) {
+        factory2->set(f0, css::uno::UNO_QUERY);
+    }
+}
 
 rtl::OUString ServiceManager::getImplementationName()
     throw (css::uno::RuntimeException)
@@ -852,7 +1002,7 @@ ServiceManager::createInstanceWithContext(
         return impl->factory2->createInstance();
     }
     throw css::uno::DeploymentException(
-        "Implementation " + impl->name + " does not provide a factory",
+        "Implementation " + impl->info->name + " does not provide a factory",
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -876,7 +1026,7 @@ ServiceManager::createInstanceWithArgumentsAndContext(
         return impl->factory2->createInstanceWithArguments(Arguments);
     }
     throw css::uno::DeploymentException(
-        "Implementation " + impl->name + " does not provide a factory",
+        "Implementation " + impl->info->name + " does not provide a factory",
         static_cast< cppu::OWeakObject * >(this));
 }
 
@@ -1036,21 +1186,21 @@ ServiceManager::createContentEnumeration(rtl::OUString const & aServiceName)
     {
         Implementation * impl = i->get();
         assert(impl != 0);
-        bool loaded;
         {
             osl::MutexGuard g(rBHelper.rMutex);
             if (isDisposed()) {
                 factories.clear();
                 break;
             }
-            loaded = impl->loaded;
-        }
-        //TODO: There is a race here, as the relevant service factory can be
-        // removed while the mutex is unlocked and loading can thus fail, as the
-        // entity from which to load can disappear once the service factory is
-        // removed.
-        if (!loaded) {
-            loadImplementation(impl);
+            if (!impl->loaded) {
+                // Postpone actual factory instantiation as long as possible (so
+                // that e.g. opening LO's "Tools - Macros" menu does not try to
+                // instantiate a JVM, which can lead to a synchronous error
+                // dialog when no JVM is specified, and showing the dialog while
+                // hovering over a menu can cause trouble):
+                impl->factory1 = new FactoryWrapper(this, impl->info);
+                impl->loaded = true;
+            }
         }
         if (impl->factory1.is()) {
             factories.push_back(css::uno::makeAny(impl->factory1));
@@ -1058,7 +1208,8 @@ ServiceManager::createContentEnumeration(rtl::OUString const & aServiceName)
             factories.push_back(css::uno::makeAny(impl->factory2));
         } else {
             throw css::uno::DeploymentException(
-                "Implementation " + impl->name + " does not provide a factory",
+                ("Implementation " + impl->info->name
+                 + " does not provide a factory"),
                 static_cast< cppu::OWeakObject * >(this));
         }
     }
@@ -1365,17 +1516,19 @@ bool ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
                 uri + ": duplicate <implementation name=\"" + name + "\">",
                 css::uno::Reference< css::uno::XInterface >());
         }
-        readLegacyRdbStrings(uri, implKey, "UNO/SERVICES", &impl->services);
+        readLegacyRdbStrings(
+            uri, implKey, "UNO/SERVICES", &impl->info->services);
         for (std::vector< rtl::OUString >::const_iterator j(
-                 impl->services.begin());
-             j != impl->services.end(); ++j)
+                 impl->info->services.begin());
+             j != impl->info->services.end(); ++j)
         {
             data_.services[*j].push_back(impl);
         }
-        readLegacyRdbStrings(uri, implKey, "UNO/SINGLETONS", &impl->singletons);
+        readLegacyRdbStrings(
+            uri, implKey, "UNO/SINGLETONS", &impl->info->singletons);
         for (std::vector< rtl::OUString >::const_iterator j(
-                 impl->singletons.begin());
-             j != impl->singletons.end(); ++j)
+                 impl->info->singletons.begin());
+             j != impl->info->singletons.end(); ++j)
         {
             data_.singletons[*j].push_back(impl);
         }
@@ -1494,7 +1647,7 @@ void ServiceManager::insertLegacyFactory(
     css::uno::Sequence< rtl::OUString > services(
         factoryInfo->getSupportedServiceNames());
     for (sal_Int32 i = 0; i != services.getLength(); ++i) {
-        impl->services.push_back(services[i]);
+        impl->info->services.push_back(services[i]);
         extra.services[services[i]].push_back(impl);
     }
     if (insertExtraData(extra) && comp.is()) {
@@ -1560,15 +1713,15 @@ bool ServiceManager::insertExtraData(Data const & extra) {
             assert(i->second[0].get() != 0);
             SAL_INFO_IF(
                 i->second.size() > 1, "cppuhelper",
-                "Arbitrarily chosing " << i->second[0]->name
+                "Arbitrarily chosing " << i->second[0]->info->name
                     << " among multiple implementations for singleton "
                     << i->first);
             try {
                 cont->insertByName(
-                    name + "/service", css::uno::Any(i->second[0]->name));
+                    name + "/service", css::uno::Any(i->second[0]->info->name));
             } catch (css::container::ElementExistException &) {
                 cont->replaceByName(
-                    name + "/service", css::uno::Any(i->second[0]->name));
+                    name + "/service", css::uno::Any(i->second[0]->info->name));
             }
             try {
                 cont->insertByName(name, css::uno::Any());
@@ -1594,13 +1747,13 @@ void ServiceManager::removeRdbFiles(std::vector< rtl::OUString > const & uris) {
              j != data_.namedImplementations.end();)
         {
             assert(j->second.get() != 0);
-            if (j->second->uri == *i) {
+            if (j->second->info->uri == *i) {
                 //TODO: The below leaves data_ in an inconsistent state upon
                 // exceptions:
                 removeFromImplementationMap(
-                    &data_.services, j->second->services, j->second);
+                    &data_.services, j->second->info->services, j->second);
                 removeFromImplementationMap(
-                    &data_.singletons, j->second->singletons, j->second);
+                    &data_.singletons, j->second->info->singletons, j->second);
                 data_.namedImplementations.erase(j++);
             } else {
                 ++j;
@@ -1626,11 +1779,11 @@ bool ServiceManager::removeLegacyFactory(
         assert(i->second.get() != 0);
         //TODO: The below leaves data_ in an inconsistent state upon exceptions:
         removeFromImplementationMap(
-            &data_.services, i->second->services, i->second);
+            &data_.services, i->second->info->services, i->second);
         removeFromImplementationMap(
-            &data_.singletons, i->second->singletons, i->second);
-        if (!i->second->name.isEmpty()) {
-            data_.namedImplementations.erase(i->second->name);
+            &data_.singletons, i->second->info->singletons, i->second);
+        if (!i->second->info->name.isEmpty()) {
+            data_.namedImplementations.erase(i->second->info->name);
         }
         data_.dynamicImplementations.erase(i);
         if (removeListener) {
@@ -1659,9 +1812,9 @@ void ServiceManager::removeImplementation(rtl::OUString name) {
     assert(i->second.get() != 0);
     //TODO: The below leaves data_ in an inconsistent state upon exceptions:
     removeFromImplementationMap(
-        &data_.services, i->second->services, i->second);
+        &data_.services, i->second->info->services, i->second);
     removeFromImplementationMap(
-        &data_.singletons, i->second->singletons, i->second);
+        &data_.singletons, i->second->info->singletons, i->second);
     for (DynamicImplementations::iterator j(
              data_.dynamicImplementations.begin());
          j != data_.dynamicImplementations.end(); ++j)
@@ -1694,7 +1847,7 @@ boost::shared_ptr< Implementation > ServiceManager::findServiceImplementation(
             assert(!i->second.empty());
             SAL_INFO_IF(
                 i->second.size() > 1, "cppuhelper",
-                "Arbitrarily chosing " << i->second[0]->name
+                "Arbitrarily chosing " << i->second[0]->info->name
                     << " among multiple implementations for " << i->first);
             impl = i->second[0];
         }
@@ -1705,82 +1858,124 @@ boost::shared_ptr< Implementation > ServiceManager::findServiceImplementation(
     // while the mutex is unlocked and loading can thus fail, as the entity from
     // which to load can disappear once the service factory is removed.
     if (!loaded) {
-        loadImplementation(impl.get());
+        css::uno::Reference< css::lang::XSingleComponentFactory > f1;
+        css::uno::Reference< css::lang::XSingleServiceFactory > f2;
+        loadImplementation(impl->info, &f1, &f2);
+        osl::MutexGuard g(rBHelper.rMutex);
+        if (!(isDisposed() || impl->loaded)) {
+            impl->loaded = true;
+            impl->factory1 = f1;
+            impl->factory2 = f2;
+        }
     }
     return impl;
 }
 
-void ServiceManager::loadImplementation(Implementation * implementation) {
-    assert(implementation != 0);
-    rtl::OUString uri;
-    try {
-        uri = cppu::bootstrap_expandUri(implementation->uri);
-    } catch (css::lang::IllegalArgumentException & e) {
-        throw css::uno::DeploymentException(
-            "Cannot expand URI" + implementation->uri + ": " + e.Message,
+css::uno::Reference< css::uno::XInterface >
+FactoryWrapper::createInstanceWithContext(
+    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    loadImplementation();
+    return factory1_.is()
+        ? factory1_->createInstanceWithContext(Context)
+        : factory2_->createInstance();
+}
+
+css::uno::Reference< css::uno::XInterface >
+FactoryWrapper::createInstanceWithArgumentsAndContext(
+    css::uno::Sequence< css::uno::Any > const & Arguments,
+    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    loadImplementation();
+    return factory1_.is()
+        ? factory1_->createInstanceWithArgumentsAndContext(Arguments, Context)
+        : factory2_->createInstanceWithArguments(Arguments);
+}
+
+css::uno::Reference< css::uno::XInterface > FactoryWrapper::createInstance()
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    loadImplementation();
+    return factory1_.is()
+        ? factory1_->createInstanceWithContext(manager_->getContext())
+        : factory2_->createInstance();
+}
+
+css::uno::Reference< css::uno::XInterface >
+FactoryWrapper::createInstanceWithArguments(
+    css::uno::Sequence< css::uno::Any > const & Arguments)
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    loadImplementation();
+    return factory1_.is()
+        ? factory1_->createInstanceWithArgumentsAndContext(
+            Arguments, manager_->getContext())
+        : factory2_->createInstanceWithArguments(Arguments);
+}
+
+rtl::OUString FactoryWrapper::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return info_->name;
+}
+
+sal_Bool FactoryWrapper::supportsService(rtl::OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< rtl::OUString > names(getSupportedServiceNames());
+    for (sal_Int32 i = 0; i != names.getLength(); ++i) {
+        if (ServiceName == names[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+css::uno::Sequence< rtl::OUString > FactoryWrapper::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    if (info_->services.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
+        throw css::uno::RuntimeException(
+            "Implementation " + info_->name + " supports too many services",
             static_cast< cppu::OWeakObject * >(this));
     }
-    css::uno::Reference< css::uno::XInterface > f0;
-    // Shortcut loading via SharedLibrary loader, to pass in prefix argument
-    // (which the loader's activate implementation would normally obtain through
-    // the legacy xKey argument):
-    if (!implementation->alienContext.is()
-        && implementation->loader == "com.sun.star.loader.SharedLibrary")
+    css::uno::Sequence< rtl::OUString > names(
+        static_cast< sal_Int32 >(info_->services.size()));
+    sal_Int32 i = 0;
+    for (std::vector< rtl::OUString >::const_iterator j(
+             info_->services.begin());
+         j != info_->services.end(); ++j)
     {
-        rtl::OUString prefix(implementation->prefix);
-        if (!prefix.isEmpty()) {
-            prefix += "_";
-        }
-        try {
-            f0 = cppu::loadSharedLibComponentFactory(
-                uri, rtl::OUString(), implementation->name, this,
-                css::uno::Reference< css::registry::XRegistryKey >(), prefix);
-        } catch (css::loader::CannotActivateFactoryException & e) {
-            throw css::uno::DeploymentException(
-                "Cannot activate implementation " + uri + ": " + e.Message,
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    } else {
-        SAL_INFO_IF(
-            !implementation->prefix.isEmpty(), "cppuhelper",
-            "Loader " << implementation->loader << " and non-empty prefix "
-                << implementation->prefix);
-        css::uno::Reference< css::uno::XComponentContext > ctxt;
-        css::uno::Reference< css::lang::XMultiComponentFactory > smgr;
-        if (implementation->alienContext.is()) {
-            ctxt = implementation->alienContext;
-            smgr = css::uno::Reference< css::lang::XMultiComponentFactory >(
-                ctxt->getServiceManager(), css::uno::UNO_SET_THROW);
-        } else {
-            assert(context_.is());
-            ctxt = context_;
-            smgr = this;
-        }
-        css::uno::Reference< css::loader::XImplementationLoader > loader(
-            smgr->createInstanceWithContext(implementation->loader, ctxt),
-            css::uno::UNO_QUERY_THROW);
-        try {
-            f0 = loader->activate(
-                implementation->name, rtl::OUString(), uri,
-                css::uno::Reference< css::registry::XRegistryKey >());
-        } catch (css::loader::CannotActivateFactoryException & e) {
-            throw css::uno::DeploymentException(
-                "Cannot activate implementation " + uri + ": " + e.Message,
-                static_cast< cppu::OWeakObject * >(this));
+        names[i++] = *j;
+    }
+    return names;
+}
+
+void FactoryWrapper::loadImplementation() {
+    {
+        osl::MutexGuard g(mutex_);
+        if (loaded_) {
+            return;
         }
     }
-    css::uno::Reference< css::lang::XSingleComponentFactory > f1(
-        f0, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XSingleComponentFactory > f1;
     css::uno::Reference< css::lang::XSingleServiceFactory > f2;
-    if (!f1.is()) {
-        f2 = css::uno::Reference< css::lang::XSingleServiceFactory >(
-            f0, css::uno::UNO_QUERY);
+    //TODO: There is a race here, as the relevant service factory can already
+    // have been removed and loading can thus fail, as the entity from which to
+    // load can disappear once the service factory is removed:
+    manager_->loadImplementation(info_, &f1, &f2);
+    if (!(f1.is() || f2.is())) {
+        throw css::uno::DeploymentException(
+            "Implementation " + info_->name + " does not provide a factory",
+            static_cast< cppu::OWeakObject * >(this));
     }
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (!(isDisposed() || implementation->loaded)) {
-        implementation->loaded = true;
-        implementation->factory1 = f1;
-        implementation->factory2 = f2;
+    osl::MutexGuard g(mutex_);
+    if (!loaded_) {
+        loaded_ = true;
+        factory1_ = f1;
+        factory2_ = f2;
     }
 }
 
@@ -1818,12 +2013,12 @@ css::uno::Reference< css::uno::XComponentContext > bootstrapComponentContext(
         assert(i->second[0].get() != 0);
         SAL_INFO_IF(
             i->second.size() > 1, "cppuhelper",
-            "Arbitrarily chosing " << i->second[0]->name
+            "Arbitrarily chosing " << i->second[0]->info->name
                 << " among multiple implementations for " << i->first);
         context_values.push_back(
             cppu::ContextEntry_Init(
                 "/singletons/" + i->first,
-                css::uno::makeAny(i->second[0]->name), true));
+                css::uno::makeAny(i->second[0]->info->name), true));
     }
     cppu::add_access_control_entries(&context_values, bootstrap);
     assert(!context_values.empty());
