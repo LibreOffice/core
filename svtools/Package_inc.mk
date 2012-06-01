@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -161,6 +161,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textdata.hxx,svtools/t
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/texteng.hxx,svtools/texteng.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textview.hxx,svtools/textview.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textwindowpeer.hxx,svtools/textwindowpeer.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/thumbnailview.hxx,svtools/thumbnailview.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolbarmenu.hxx,svtools/toolbarmenu.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolboxcontroller.hxx,svtools/toolboxcontroller.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/decklayouter.hxx,svtools/toolpanel/decklayouter.hxx))

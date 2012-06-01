@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@ $(eval $(call gb_Library_use_package,svt,svtools_inc))
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
 $(eval $(call gb_Library_use_api,svt,\
-	udkapi \
-	offapi \
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_set_include,svt,\
@@ -69,7 +69,7 @@ $(eval $(call gb_Library_use_libraries,svt,\
 ))
 
 $(eval $(call gb_Library_use_externals,svt,\
-	icuuc \
+    icuuc \
     jpeg \
 ))
 
@@ -129,6 +129,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/stdctrl \
     svtools/source/control/stdmenu \
     svtools/source/control/tabbar \
+    svtools/source/control/thumbnailview \
     svtools/source/control/toolbarmenu \
     svtools/source/control/toolbarmenuacc \
     svtools/source/control/urlcontrol \
