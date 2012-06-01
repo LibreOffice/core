@@ -1496,14 +1496,6 @@ void GtkSalFrame::Enable( sal_Bool /*bEnable*/ )
 
 void GtkSalFrame::setMinMaxSize()
 {
-/*  FIXME: for yet unknown reasons the reported size is a little smaller
- *  than the max size hint; one would guess that this was due to the border
- *  sizes of the widgets involved (GtkWindow and GtkFixed), but setting the
- *  their border to 0 (which is the default anyway) does not change the
- *  behaviour. Until the reason is known we'll add some pixels here.
- */
-#define CONTAINER_ADJUSTMENT 6
-
     /*  #i34504# metacity (and possibly others) do not treat
      *  _NET_WM_STATE_FULLSCREEN and max_width/heigth independently;
      *  whether they should is undefined. So don't set the max size hint
@@ -1517,14 +1509,14 @@ void GtkSalFrame::setMinMaxSize()
         {
             if( m_aMinSize.Width() && m_aMinSize.Height() && ! m_bFullscreen )
             {
-                aGeo.min_width  = m_aMinSize.Width()+CONTAINER_ADJUSTMENT;
-                aGeo.min_height = m_aMinSize.Height()+CONTAINER_ADJUSTMENT;
+                aGeo.min_width  = m_aMinSize.Width();
+                aGeo.min_height = m_aMinSize.Height();
                 aHints |= GDK_HINT_MIN_SIZE;
             }
             if( m_aMaxSize.Width() && m_aMaxSize.Height() && ! m_bFullscreen )
             {
-                aGeo.max_width  = m_aMaxSize.Width()+CONTAINER_ADJUSTMENT;
-                aGeo.max_height = m_aMaxSize.Height()+CONTAINER_ADJUSTMENT;
+                aGeo.max_width  = m_aMaxSize.Width();
+                aGeo.max_height = m_aMaxSize.Height();
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
