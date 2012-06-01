@@ -206,8 +206,15 @@ struct SfxFoundCache_Impl
 
 //--------------------------------------------------------------------------
 
-SV_DECL_PTRARR_SORT_DEL(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*, 16)
-SV_IMPL_OP_PTRARR_SORT(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*);
+class SfxFoundCacheArr_Impl : public std::vector<SfxFoundCache_Impl*>
+{
+public:
+    ~SfxFoundCacheArr_Impl()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+};
 
 //==========================================================================
 
@@ -412,7 +419,7 @@ void SfxBindings::Update_Impl
             // Post Status
             const SfxInterface *pInterface =
                 rDispat.GetShell(pMsgServer->GetShellLevel())->GetInterface();
-            for ( sal_uInt16 nPos = 0; nPos < aFound.Count(); ++nPos )
+            for ( sal_uInt16 nPos = 0; nPos < aFound.size(); ++nPos )
             {
                 const SfxFoundCache_Impl *pFound = aFound[nPos];
                 sal_uInt16 nWhich = pFound->nWhichId;
@@ -1368,9 +1375,9 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     pFnc = pRealSlot->GetStateFnc();
 
     // the RealSlot is always on
-    const SfxFoundCache_Impl *pFound = new SfxFoundCache_Impl(
+    SfxFoundCache_Impl *pFound = new SfxFoundCache_Impl(
         pRealSlot->GetSlotId(), pRealSlot->GetWhich(rPool), pRealSlot, pCache );
-    rFound.Insert( pFound );
+    rFound.push_back( pFound );
 
     sal_uInt16 nSlot = pRealSlot->GetSlotId();
     if ( !(nSlot >= SID_VERB_START && nSlot <= SID_VERB_END) )
@@ -1435,25 +1442,25 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
         if ( bInsert && bSameMethod )
         {
-            const SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
+            SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
                 pSibling->GetSlotId(), pSibling->GetWhich(rPool),
                 pSibling, pSiblingCache );
 
-            rFound.Insert( pFoundCache );
+            rFound.push_back( pFoundCache );
         }
 
         pSibling = pSibling->GetNextSlot();
     }
 
     // Create a Set from the ranges
-    sal_uInt16 *pRanges = new sal_uInt16[rFound.Count() * 2 + 1];
+    sal_uInt16 *pRanges = new sal_uInt16[rFound.size() * 2 + 1];
     int j = 0;
     sal_uInt16 i = 0;
-    while ( i < rFound.Count() )
+    while ( i < rFound.size() )
     {
         pRanges[j++] = rFound[i]->nWhichId;
             // consecutive numbers
-        for ( ; i < rFound.Count()-1; ++i )
+        for ( ; i < rFound.size()-1; ++i )
             if ( rFound[i]->nWhichId+1 != rFound[i+1]->nWhichId )
                 break;
         pRanges[j++] = rFound[i++]->nWhichId;
