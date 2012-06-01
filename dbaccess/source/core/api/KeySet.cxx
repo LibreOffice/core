@@ -1344,10 +1344,23 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     sal_Bool bOK = doTryRefetch_throw();
     if ( !bOK )
     {
+        // This row has disappeared; remove it.
         OKeySetMatrix::iterator aTemp = m_aKeyIter;
+        // use *next* row
         ++m_aKeyIter;
         m_aKeyMap.erase(aTemp);
-        --m_rRowCount;
+
+        // adjust RowCount for the row we have removed
+        if (m_rRowCount > 0)
+            --m_rRowCount;
+        else
+            OSL_FAIL("m_rRowCount got out of sync: non-empty m_aKeyMap, but m_rRowCount <= 0");
+
+        if (!isAfterLast())
+        {
+            // it was the last row, but there may be another one to fetch
+            fetchRow();
+        }
         refreshRow();
     }
     else
