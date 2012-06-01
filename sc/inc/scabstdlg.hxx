@@ -85,6 +85,10 @@ public:
     virtual sal_Bool IsRow() = 0;
 };
 
+class AbstractScCondFormatDlg : public VclAbstractDialog
+{
+};
+
 class AbstractScDataBarSettingsDlg : public VclAbstractDialog
 {
 };
@@ -351,6 +355,9 @@ public:
                                                     int nId,
                                                     sal_Bool                bColDefault = sal_True ) = 0;
     virtual VclAbstractDialog * CreateScSortWarningDlg ( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId ) = 0;  //add for ScSortWarningDlg
+
+    virtual AbstractScCondFormatDlg* CreateScCondFormatDlg (Window* pParent, ScDocument* pDoc, ScConditionalFormat* pFormat,
+                                                                const ScRangeList& rList, int nId ) = 0; //add for ScCondFormatDlg
 
     virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent ,int nId ) = 0; //add for ScDataBarSettingsDlg
 

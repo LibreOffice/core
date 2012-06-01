@@ -52,7 +52,6 @@
 #include "dbnamdlg.hxx"
 #include "pvlaydlg.hxx"
 #include "areasdlg.hxx"
-#include "condfrmt.hxx"
 #include "rangeutl.hxx"
 #include "crnrdlg.hxx"
 #include "formula.hxx"
@@ -343,20 +342,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_OPENDLG_EDIT_PRINTAREA:
         {
             pResult = new ScPrintAreasDlg( pB, pCW, pParent );
-        }
-        break;
-
-        case SID_OPENDLG_CONDFRMT:
-        {
-            ScViewData* pViewData = GetViewData();
-
-            const ScConditionalFormat* pForm = pDoc->GetCondFormat(
-                pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
-
-            // aktuelle Tabelle merken (wg. RefInput im Dialog)
-            pViewData->SetRefTabNo( pViewData->GetTabNo() );
-
-            pResult = new ScConditionalFormatDlg( pB, pCW, pParent, pDoc, pForm );
         }
         break;
 

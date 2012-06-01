@@ -312,7 +312,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/app/transobj \
 	sc/source/ui/app/typemap \
 	sc/source/ui/app/uiitems \
-	sc/source/ui/attrdlg/condfrmt \
 	sc/source/ui/attrdlg/scabstdlg \
 	sc/source/ui/cctrl/cbuttonw \
 	sc/source/ui/cctrl/checklistmenu \

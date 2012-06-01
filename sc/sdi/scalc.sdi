@@ -1069,7 +1069,7 @@ SfxVoidItem CommentChange FID_CHG_COMMENT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ConditionalFormat FID_CONDITIONAL_FORMAT
+SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
 ()
 [
     /* flags: */
@@ -1077,7 +1077,7 @@ SfxVoidItem ConditionalFormat FID_CONDITIONAL_FORMAT
     Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
-    HasDialog = FALSE,
+    HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -1086,11 +1086,11 @@ SfxVoidItem ConditionalFormat FID_CONDITIONAL_FORMAT
     Synchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
 ]
 
 //--------------------------------------------------------------------------
@@ -1120,31 +1120,6 @@ SfxVoidItem ColorScaleDialog SID_COLORSCALE
 
 //--------------------------------------------------------------------------
 SfxVoidItem DataBarDialog SID_DATABAR
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
 ()
 [
     /* flags: */

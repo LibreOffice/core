@@ -222,20 +222,6 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                            || ((nCol2 - nCol1) < 2) || ((nRow2 - nRow1) < 2);
                 break;
 
-            case SID_OPENDLG_CONDFRMT :
-                {
-                    if ( !bEditable && bOnlyNotBecauseOfMatrix )
-                    {
-                        bNeedEdit = false;
-                    }
-                    if ( pDocShell && pDocShell->IsDocShared() )
-                    {
-                        bDisable = sal_True;
-                    }
-                }
-                break;
-
-            case FID_CONDITIONAL_FORMAT :
             case SID_CELL_FORMAT_RESET :
             case FID_CELL_FORMAT :
             case SID_ENABLE_HYPHENATION :

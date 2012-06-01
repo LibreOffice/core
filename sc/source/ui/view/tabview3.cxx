@@ -430,7 +430,6 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_INSERT_POSTIT );
     rBindings.Invalidate( SID_CHARMAP );
     rBindings.Invalidate( SID_OPENDLG_FUNCTION );
-    rBindings.Invalidate( SID_OPENDLG_CONDFRMT );
     rBindings.Invalidate( FID_VALIDATION );
     rBindings.Invalidate( SID_EXTERNAL_SOURCE );
     rBindings.Invalidate( SID_TEXT_TO_COLUMNS );

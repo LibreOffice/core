@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <iostream>
 
 //------------------------------------------------------------------
 
@@ -2049,23 +2049,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        case FID_CONDITIONAL_FORMAT:
-            if( pReqArgs )
+        case SID_OPENDLG_CONDFRMT:
             {
-                const SfxPoolItem* pItem;
-                if( pReqArgs->HasItem( FID_CONDITIONAL_FORMAT, &pItem ) )
-                {
-                    // when RefInput has switched to other tabs as data table, switch back
-                    if ( GetViewData()->GetTabNo() != GetViewData()->GetRefTabNo() )
-                    {
-                        pTabViewShell->SetTabNo( GetViewData()->GetRefTabNo() );
-                        pTabViewShell->PaintExtras();
-                    }
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    const ScCondFrmtItem* pCndFmtItem = (const ScCondFrmtItem*) pItem;
-                    pTabViewShell->SetConditionalFormat( pCndFmtItem->GetData() );
-                    rReq.Done();
-                }
+                ScRangeList aRangeList;
+                GetViewData()->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+                ScDocument* pDoc = GetViewData()->GetDocument();
+
+                AbstractScCondFormatDlg* pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, RID_SCDLG_CONDFORMAT );
+                OSL_ENSURE(pDlg, "Dialog create fail!");
+                pDlg->Execute();
+                delete pDlg;
             }
             break;
 

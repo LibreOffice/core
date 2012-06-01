@@ -80,6 +80,7 @@
 #include "tpcompatibility.hxx"
 #include "tpdefaults.hxx"
 #include "colorformat.hxx"
+#include "condformatdlg.hxx"
 
 // ause
 #include "editutil.hxx"
@@ -88,6 +89,7 @@ IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
@@ -767,6 +769,24 @@ VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window
     return 0;
 }
 
+
+AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditionalFormat* pFormat,
+                                                                            const ScRangeList& rRange, int nId)
+{
+    ScCondFormatDlg* pDlg = NULL;
+    switch( nId )
+    {
+        case RID_SCDLG_CONDFORMAT:
+            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange );
+            break;
+        default:
+            break;
+    }
+    if(pDlg)
+        return new AbstractScCondFormatDlg_Impl( pDlg );
+
+    return NULL;
+}
 
 AbstractScDataBarSettingsDlg* ScAbstractDialogFactory_Impl::CreateScDataBarSetttingsDlg(Window* pParent, int nId)
 {

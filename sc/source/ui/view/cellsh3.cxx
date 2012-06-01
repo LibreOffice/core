@@ -886,16 +886,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_OPENDLG_CONDFRMT:
-            {
-                sal_uInt16          nId  = ScCondFormatDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-
-                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
-            }
-            break;
-
         //  ----------------------------------------------------------------
 
         case FID_INPUTLINE_STATUS:
