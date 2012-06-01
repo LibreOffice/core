@@ -172,7 +172,7 @@ DirectoryTraveller::DirectoryTraveller (
       m_nCount   (0)
 {
     m_aPath += rName;
-    m_aPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    m_aPath += OUString("/");
 }
 
 /*
@@ -344,7 +344,7 @@ int SAL_CALL main (int argc, char **argv)
     }
 
     // Stream Read/Write.
-    OUString aPath (RTL_CONSTASCII_USTRINGPARAM("/"));
+    OUString aPath ("/");
     if ((nOptions & OPTION_READ) || (nOptions & OPTION_WRITE))
     {
         // Mode.
@@ -366,9 +366,9 @@ int SAL_CALL main (int argc, char **argv)
 
         for (int i = 0; i < _DEMOSTOR_LOOPS; i++)
         {
-            OUString aName (RTL_CONSTASCII_USTRINGPARAM("demostor-"));
+            OUString aName ("demostor-");
             aName += OUString::valueOf ((sal_Int32)(i + 1), 10);
-            aName += OUString(RTL_CONSTASCII_USTRINGPARAM (".dat"));
+            aName += OUString(".dat");
 
 #if (_DEMOSTOR_REMOVE == 1)
             eErrCode = aFile.remove (aPath, aName);
@@ -456,7 +456,7 @@ int SAL_CALL main (int argc, char **argv)
     {
         // Create symlink to (root) directory.
         eErrCode = aFile.symlink (
-            aPath,      OUString(RTL_CONSTASCII_USTRINGPARAM("000000/")),
+            aPath,      OUString("000000/"),
             OUString(), aPath);
         OSL_POSTCOND(
             ((eErrCode == store_E_None         ) ||
@@ -464,11 +464,11 @@ int SAL_CALL main (int argc, char **argv)
             "t_store::main(): store_symlink() failed");
 
         // Create symlink to file.
-        OUString aLinkName (RTL_CONSTASCII_USTRINGPARAM("demostor-1.lnk"));
+        OUString aLinkName ("demostor-1.lnk");
 
         eErrCode = aFile.symlink (
             aPath, aLinkName,
-            aPath, OUString(RTL_CONSTASCII_USTRINGPARAM("demostor-1.dat")));
+            aPath, OUString("demostor-1.dat"));
         OSL_POSTCOND(
             ((eErrCode == store_E_None         ) ||
              (eErrCode == store_E_AlreadyExists)    ),
@@ -477,7 +477,7 @@ int SAL_CALL main (int argc, char **argv)
             (eErrCode == store_E_AlreadyExists)    )
         {
             OUString aShortcut (
-                RTL_CONSTASCII_USTRINGPARAM("Shortcut to demostor-1.dat"));
+                "Shortcut to demostor-1.dat");
             eErrCode = aFile.rename (
                 aPath, aLinkName,
                 aPath, aShortcut);
@@ -488,7 +488,7 @@ int SAL_CALL main (int argc, char **argv)
         }
 
         // Create directory.
-        OUString aDirName (RTL_CONSTASCII_USTRINGPARAM("demostor-1.dir"));
+        OUString aDirName ("demostor-1.dir");
         store::OStoreDirectory aDir;
 
         eErrCode = aDir.create (
@@ -515,7 +515,7 @@ int SAL_CALL main (int argc, char **argv)
         {
             // Open symlink entry.
             eErrCode = aRootDir.create (
-                aFile, aPath, OUString(RTL_CONSTASCII_USTRINGPARAM("000000")),
+                aFile, aPath, OUString("000000"),
                 store_AccessReadOnly);
         }
         else

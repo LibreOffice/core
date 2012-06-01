@@ -69,7 +69,7 @@ using com::sun::star::beans::XIntrospection;
 
 namespace pyuno
 {
-#define USTR_ASCII(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
+#define USTR_ASCII(x) OUString(  x  )
 
 static PyTypeObject RuntimeImpl_Type =
 {
@@ -133,8 +133,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
     PyThreadState * state = PyThreadState_Get();
     if( ! state )
     {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "python global interpreter must be held (thread must be attached)" )),
+        throw RuntimeException( OUString( "python global interpreter must be held (thread must be attached" )),
                                 Reference< XInterface > () );
     }
 
@@ -142,8 +141,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
 
     if( ! globalDict.is() ) // FATAL !
     {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "can't find __main__ module" )), Reference< XInterface > ());
+        throw RuntimeException( OUString( "can't find __main__ module" ), Reference< XInterface > ());
     }
     runtimeImpl = PyDict_GetItemString( globalDict.get() , "pyuno_runtime" );
 }
@@ -182,7 +180,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
-    fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(  SAL_CONFIGFILE("pyuno") ));
+    fileName += OUString(  SAL_CONFIGFILE("pyuno" ));
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
@@ -246,7 +244,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     RuntimeImpl *me = PyObject_New (RuntimeImpl, &RuntimeImpl_Type);
     if( ! me )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "cannot instantiate pyuno::RuntimeImpl" ) ),
+            OUString(  "cannot instantiate pyuno::RuntimeImpl"  ),
             Reference< XInterface > () );
     me->cargo = 0;
     // must use a different struct here, as the PyObject_New
@@ -259,60 +257,59 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     c->xContext = ctx;
     c->xInvocation = Reference< XSingleServiceFactory > (
         ctx->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Invocation" ) ),
+            OUString(  "com.sun.star.script.Invocation"  ),
             ctx ),
         UNO_QUERY );
     if( ! c->xInvocation.is() )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno: couldn't instantiate invocation service" ) ),
+            OUString(  "pyuno: couldn't instantiate invocation service"  ),
             Reference< XInterface > () );
 
     c->xTypeConverter = Reference< XTypeConverter > (
         ctx->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ) ),
+            OUString(  "com.sun.star.script.Converter"  ),
             ctx ),
         UNO_QUERY );
     if( ! c->xTypeConverter.is() )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno: couldn't instantiate typeconverter service" )),
+            OUString(  "pyuno: couldn't instantiate typeconverter service" ),
             Reference< XInterface > () );
 
     c->xCoreReflection = Reference< XIdlReflection > (
         ctx->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.CoreReflection" ) ),
+            OUString(  "com.sun.star.reflection.CoreReflection"  ),
             ctx ),
         UNO_QUERY );
     if( ! c->xCoreReflection.is() )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno: couldn't instantiate corereflection service" )),
+            OUString(  "pyuno: couldn't instantiate corereflection service" ),
             Reference< XInterface > () );
 
     c->xAdapterFactory = Reference< XInvocationAdapterFactory2 > (
         ctx->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.InvocationAdapterFactory" ) ),
+            OUString(  "com.sun.star.script.InvocationAdapterFactory"  ),
             ctx ),
         UNO_QUERY );
     if( ! c->xAdapterFactory.is() )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno: couldn't instantiate invocation adapter factory service" )),
+            OUString(  "pyuno: couldn't instantiate invocation adapter factory service" ),
             Reference< XInterface > () );
 
     c->xIntrospection = Reference< XIntrospection > (
         ctx->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection" ) ),
+            OUString(  "com.sun.star.beans.Introspection"  ),
             ctx ),
         UNO_QUERY );
     if( ! c->xIntrospection.is() )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno: couldn't instantiate introspection service" )),
+            OUString(  "pyuno: couldn't instantiate introspection service" ),
             Reference< XInterface > () );
 
-    Any a = ctx->getValueByName(OUString(
-        RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager" )) );
+    Any a = ctx->getValueByName(OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) );
     a >>= c->xTdMgr;
     if( ! c->xTdMgr.is() )
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno: couldn't retrieve typedescriptionmanager" )),
+            OUString(  "pyuno: couldn't retrieve typedescriptionmanager" ),
             Reference< XInterface > () );
 
     me->cargo =c;
@@ -338,8 +335,7 @@ void Runtime::initialize( const Reference< XComponentContext > & ctx )
 
     if( runtime.is() && impl->cargo->valid )
     {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "pyuno runtime has already been initialized before" ) ),
+        throw RuntimeException( OUString( "pyuno runtime has already been initialized before"  ),
                                 Reference< XInterface > () );
     }
     PyRef keep( RuntimeImpl::create( ctx ) );
@@ -364,8 +360,8 @@ Runtime::Runtime() throw(  RuntimeException )
     if( ! runtime.is() )
     {
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("pyuno runtime is not initialized, "
-                                                  "(the pyuno.bootstrap needs to be called before using any uno classes)")),
+            OUString( "pyuno runtime is not initialized, "
+                                                  "(the pyuno.bootstrap needs to be called before using any uno classes")),
             Reference< XInterface > () );
     }
     impl = reinterpret_cast< RuntimeImpl * > (runtime.get());
@@ -399,8 +395,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
 {
     if( ! impl->cargo->valid )
     {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "pyuno runtime must be initialized before calling any2PyObject" )),
+        throw RuntimeException( OUString( "pyuno runtime must be initialized before calling any2PyObject" ),
                                 Reference< XInterface > () );
     }
 
@@ -640,8 +635,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
 {
     if( ! impl->cargo->valid )
     {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "pyuno runtime must be initialized before calling any2PyObject" )),
+        throw RuntimeException( OUString( "pyuno runtime must be initialized before calling any2PyObject" ),
                                 Reference< XInterface > () );
     }
 
@@ -834,9 +828,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             else
             {
                 throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                  "uno.Any instance not accepted during method call, "
-                                  "use uno.invoke instead" ) ),
+                    OUString( "uno.Any instance not accepted during method call, "
+                                  "use uno.invoke instead"  ),
                     Reference< XInterface > () );
             }
         }
@@ -931,17 +924,17 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             }
             else
             {
-                str = OUString(RTL_CONSTASCII_USTRINGPARAM("Couldn't find uno._uno_extract_printable_stacktrace"));
+                str = OUString("Couldn't find uno._uno_extract_printable_stacktrace");
             }
         }
         else
         {
-            str = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not load uno.py, no stacktrace available"));
+            str = OUString("Could not load uno.py, no stacktrace available");
             if ( !e.Message.isEmpty() )
             {
-                str += OUString (RTL_CONSTASCII_USTRINGPARAM(" (Error loading uno.py: "));
+                str += OUString (" (Error loading uno.py: ");
                 str += e.Message;
-                str += OUString (RTL_CONSTASCII_USTRINGPARAM(")"));
+                str += OUString (")");
             }
         }
 
@@ -949,7 +942,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
     else
     {
         // it may occur, that no traceback is given (e.g. only native code below)
-        str = OUString( RTL_CONSTASCII_USTRINGPARAM( "no traceback available" ) );
+        str = OUString(  "no traceback available"  );
     }
 
     if( isInstanceOfStructOrException( excValue.get() ) )
@@ -1026,7 +1019,7 @@ PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
     tstate = PyThreadState_New( interp );
     if( !tstate  )
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "Couldn't create a pythreadstate" ) ),
+            OUString( "Couldn't create a pythreadstate"  ),
             Reference< XInterface > () );
     PyEval_AcquireThread( tstate);
     // set LC_NUMERIC to "C"
