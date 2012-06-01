@@ -234,6 +234,7 @@ public:
 private:
     friend class GlyphCache;
     friend class ServerFontLayout;
+    friend class X11SalGraphics;
 
     void                        AddRef() const      { ++mnRefCount; }
     long                        GetRefCount() const { return mnRefCount; }

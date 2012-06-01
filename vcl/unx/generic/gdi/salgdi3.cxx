@@ -701,7 +701,21 @@ sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& 
 
     nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
-    rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
+    Rectangle aRect( rGM.GetOffset(), rGM.GetSize() );
+
+    if ( pSF->mnCos != 0x10000 && pSF->mnSin != 0 )
+    {
+        double nCos = pSF->mnCos / 65536.0;
+        double nSin = pSF->mnSin / 65536.0;
+        rRect.Left() =  nCos*aRect.Left() + nSin*aRect.Top();
+        rRect.Top()  = -nSin*aRect.Left() - nCos*aRect.Top();
+
+        rRect.Right()  =  nCos*aRect.Right() + nSin*aRect.Bottom();
+        rRect.Bottom() = -nSin*aRect.Right() - nCos*aRect.Bottom();
+    }
+    else
+        rRect = aRect;
+
     return sal_True;
 }
 
