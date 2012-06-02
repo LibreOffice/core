@@ -45,7 +45,7 @@ class SwDoc;
 class SwNode;
 struct SwPosition;
 
-// Update an den Expression Feldern
+// Update expression fields
 class _SetGetExpFld
 {
     sal_uLong nNode;
@@ -120,8 +120,7 @@ public:
 typedef _SetGetExpFld* _SetGetExpFldPtr;
 SV_DECL_PTRARR_SORT_DEL( _SetGetExpFlds, _SetGetExpFldPtr, 0 )
 
-
-// Struktur zum Speichern der Strings aus SetExp-String-Feldern
+// struct for saving strings from the SetExp's string fields
 struct _HashStr : public SwHash
 {
     String aSetStr;
@@ -137,32 +136,28 @@ struct SwCalcFldType : public SwHash
     {}
 };
 
-// Suche nach dem String, der unter dem Namen in der HashTabelle abgelegt
-// wurde
+// search for the string that was saved under rName in the hash table
 void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
                     String& rRet, sal_uInt16* pPos = 0 );
 
-
-// --------
-
-const int GETFLD_ALL        = 3;        // veroderte Flags !!
+const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;
 const int GETFLD_EXPAND     = 2;
 
 class SwDocUpdtFld
 {
-    _SetGetExpFlds* pFldSortLst;    // akt. Field-Liste zum Calculieren
+    _SetGetExpFlds* pFldSortLst;    // current field list for calculation
     SwCalcFldType*  aFldTypeTable[ TBLSZ ];
 
-// noch eine weitere Optimierung - wird z.Z. nicht angesprochen!
-    long nFldUpdtPos;               // ab dieser Position mit Update starten
-    SwCntntNode* pCNode;            // der TxtNode zur UpdatePos.
+    // another optimization - currently not used!
+    long nFldUpdtPos;               // start update from this position
+    SwCntntNode* pCNode;            // TxtNode at update position
 
-    sal_uLong nNodes;                   // sollte die NodesAnzahl unterschiedlich sein
+    sal_uLong nNodes;               // if the node count is different
     sal_uInt8 nFldLstGetMode;
 
-    sal_Bool bInUpdateFlds : 1;         // zur Zeit laeuft ein UpdateFlds,
-    sal_Bool bFldsDirty : 1;            // irgendwelche Felder sind ungueltig
+    sal_Bool bInUpdateFlds : 1;     // currently there is an UpdateFlds
+    sal_Bool bFldsDirty : 1;        // some fields are invalid
 
     void _MakeFldList( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTxtFld& , sal_uInt16 nFldWhich );

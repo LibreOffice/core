@@ -43,10 +43,6 @@ struct SwTOXSortTabBase;
 
 typedef std::vector<SwTOXSortTabBase*> SwTOXSortTabBases;
 
-/*--------------------------------------------------------------------
-     Beschreibung: Ring der speziellen Verzeichnisse
- --------------------------------------------------------------------*/
-
 class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
     SwTOXSortTabBases aSortArr;
@@ -62,45 +58,43 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void    UpdateAuthorities( const SwTOXInternational& rIntl );
     void    UpdateAll();
 
-    // Sortiert einfuegen ins Array fuer die Generierung
+    // insert sorted into array for creation
     void    InsertSorted(SwTOXSortTabBase* pBase);
 
-    // Alpha-Trennzeichen bei der Generierung einfuegen
+    // insert alpha delimiter at creation
     void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
-    // Textrumpf generieren
-    // add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
+    // generate text body
     void GenerateText( sal_uInt16 nArrayIdx,
                        sal_uInt16 nCount,
                        const sal_uInt32   _nTOXSectNdIdx,
                        const SwPageDesc*  _pDefaultPageDesc );
 
-    // Seitennummerplatzhalter gegen aktuelle Nummern austauschen
+    // replace page num placeholder with actual page number
     void    _UpdatePageNum( SwTxtNode* pNd,
                             const std::vector<sal_uInt16>& rNums,
                             const SvPtrarr &rDescs,
                             const std::vector<sal_uInt16>* pMainEntryNums,
                             const SwTOXInternational& rIntl );
 
-    // Bereich fuer Stichwort einfuegen suchen
+    // get section for entering keywords
     Range GetKeyRange( const String& rStr, const String& rStrReading,
                        const SwTOXSortTabBase& rNew, sal_uInt16 nLevel,
                        const Range& rRange );
 
-    // returne die TextCollection ueber den Namen / aus Format-Pool
+    // return text collection via name/ from format pool
     SwTxtFmtColl* GetTxtFmtColl( sal_uInt16 nLevel );
 
 public:
     SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
     virtual ~SwTOXBaseSection();
 
-    // add parameter <_bNewTOX> in order to distinguish
-    // between the creation of a new table-of-content or an update of
-    // a table-of-content. Default value: false
+    // <_bNewTOX> : distinguish between the creation of a new table-of-content
+    //              (true) or an update of a table-of-content (false)
     void Update( const SfxItemSet* pAttr = 0,
-                 const bool        _bNewTOX = false ); // Formatieren
-    void UpdatePageNum();               // Seitennummern einfuegen
-    TYPEINFO();                         // fuers rtti
+                 const bool        _bNewTOX = false );
+    void UpdatePageNum();               // insert page numbering
+    TYPEINFO();                         // for rtti
 
     sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
 };

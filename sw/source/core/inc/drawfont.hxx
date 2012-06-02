@@ -42,12 +42,7 @@ class SwFont;
 class Font;
 class SwUnderlineFont;
 
-/*************************************************************************
- *                      class SwDrawTextInfo
- *
- * encapsulates information for drawing text
- *************************************************************************/
-
+// encapsulates information for drawing text
 class SwDrawTextInfo
 {
     const SwTxtFrm* pFrm;
@@ -58,7 +53,7 @@ class SwDrawTextInfo
     const XubString* pText;
     const SwWrongList* pWrong;
     const SwWrongList* pGrammarCheck;
-    const SwWrongList* pSmartTags; // SMARTTAGS
+    const SwWrongList* pSmartTags;
     const Size* pSize;
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
@@ -78,26 +73,28 @@ class SwDrawTextInfo
     xub_StrLen nNumberOfBlanks;
     sal_uInt8 nCursorBidiLevel;
     sal_Bool bBullet : 1;
-    sal_Bool bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
-    sal_Bool bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
-    sal_Bool bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
-    sal_Bool bSpaceStop : 1;    // For underlining we need to know, if a portion
-                            // is right in front of a hole portion or a
-                            // fix margin portion.
+    sal_Bool bUpper : 1;        // for small caps: upper case flag
+    sal_Bool bDrawSpace : 1;    // for small caps: underline/ line through
+    sal_Bool bGreyWave  : 1;    // grey wave line for extended text input
+    // For underlining we need to know, if a section is right in front of a
+    // whole block or a fix margin section.
+    sal_Bool bSpaceStop : 1;
     sal_Bool bSnapToGrid : 1;   // Does paragraph snap to grid?
-    sal_Bool bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
-                            // line numbering
-    sal_Bool bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
-                                // position if screen position is inside second
-                                // half of bound rect, used for Accessibility
+    // Paint text as if text has LTR direction, used for line numbering
+    sal_Bool bIgnoreFrmRTL : 1;
+    // GetCrsrOfst should not return the next position if screen position is
+    // inside second half of bound rect, used for Accessibility
+    sal_Bool bPosMatchesBounds :1;
 
-    SwDrawTextInfo();       // nicht zulaessig
+    SwDrawTextInfo();          // prohibited
 public:
 
 #ifdef DBG_UTIL
-    bool m_bPos   : 1;    // These flags should control that the appropriate
-    bool m_bWrong : 1;    // Set-function has been called before calling
-    bool m_bGrammarCheck : 1;     //  the Get-function of a member
+    // These flags should control that the appropriate Set-function has been
+    // called before calling the Get-function of a member
+    bool m_bPos   : 1;
+    bool m_bWrong : 1;
+    bool m_bGrammarCheck : 1;
     bool m_bSize  : 1;
     bool m_bFnt   : 1;
     bool m_bHyph  : 1;
@@ -137,9 +134,8 @@ public:
         bIgnoreFrmRTL = sal_False;
         bPosMatchesBounds = sal_False;
 
-        // These values are initialized but, they have to be
-        // set explicitly via their Set-function before they may
-        // be accessed by their Get-function:
+        // These values are initialized but have to be set explicitly via their
+        // Set-function before they may be accessed by their Get-function:
         pPos = 0;
         pWrong = 0;
         pGrammarCheck = 0;
@@ -158,9 +154,9 @@ public:
         bDrawSpace = sal_False;
 
 #ifdef DBG_UTIL
-        // these flags control, whether the matching member variables have
-        // been set by using the Set-function before they may be accessed
-        // by their Get-function:
+        // these flags control whether the matching member variables have been
+        // set by using the Set-function before they may be accessed by their
+        // Get-function:
         m_bPos = m_bWrong = m_bGrammarCheck = m_bSize = m_bFnt = m_bAscent =
         m_bSpace = m_bNumberOfBlanks = m_bUppr =
         m_bDrawSp = m_bLeft = m_bRight = m_bKana = m_bOfst = m_bHyph =
@@ -618,10 +614,9 @@ public:
 
     void Shift( sal_uInt16 nDir );
 
-    // sets a new color at the output device if necessary
-    // if a font is passed as argument, the change if made to the font
-    // otherwise the font at the output device is changed
-    // returns if the font has been changed
+    // sets a new color at the output device if necessary if a font is passed
+    // as argument, the change if made to the font otherwise the font at the
+    // output device is changed returns if the font has been changed
     sal_Bool ApplyAutoColor( Font* pFnt = 0 );
 };
 

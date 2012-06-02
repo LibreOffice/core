@@ -30,15 +30,9 @@
 #define _DRAWDEV_HXX
 
 #include "swrect.hxx"
-
 #include <vcl/outdev.hxx>
 
-/*************************************************************************
- *                          class SwDrawDev
- *
- * Alle Draw-Methoden werden um den Offset *pPos verschoben.
- *************************************************************************/
-
+// all draw methods will be moved by offset *pPos
 class SwDrawDev
 {
     OutputDevice  *pOut;
@@ -50,7 +44,7 @@ public:
 
     inline OutputDevice *GetOut() { return pOut; }
 
-    // Ausgabemethoden
+    // output methods
     inline void DrawText( const Point& rStart, const String& rTxt,
                           const sal_uInt16 nIdx = 0,
                           const sal_uInt16 nLen = STRING_LEN );
@@ -71,10 +65,7 @@ public:
     inline const Point *GetOrigin() const {return pPos; }
 };
 
-/*************************************************************************
- *                      SwDrawDev::DrawText
- *************************************************************************/
-
+// implementation
 inline void SwDrawDev::DrawText( const Point& rStart, const String& rTxt,
                                  const sal_uInt16 nIdx, const sal_uInt16 nLen )
 {
@@ -83,10 +74,6 @@ inline void SwDrawDev::DrawText( const Point& rStart, const String& rTxt,
     else
         pOut->DrawText( rStart - *pPos, rTxt, nIdx, nLen );
 }
-
-/*************************************************************************
- *                      SwDrawDev::DrawStretchText
- *************************************************************************/
 
 inline void SwDrawDev::DrawStretchText( const Point& rStart, sal_uInt16 nWidth,
        const String& rTxt, const sal_uInt16 nIdx, const sal_uInt16 nLen )
@@ -97,10 +84,6 @@ inline void SwDrawDev::DrawStretchText( const Point& rStart, sal_uInt16 nWidth,
         pOut->DrawStretchText( rStart - *pPos, nWidth, rTxt, nIdx, nLen );
 }
 
-/*************************************************************************
- *                      SwDrawDev::DrawTextArray
- *************************************************************************/
-
 inline void SwDrawDev::DrawTextArray( const Point& rStart, const String& rTxt,
             long *pKernArray, const sal_uInt16 nIdx, const sal_uInt16 nLen )
 {
@@ -110,10 +93,6 @@ inline void SwDrawDev::DrawTextArray( const Point& rStart, const String& rTxt,
         pOut->DrawTextArray( rStart - *pPos, rTxt, pKernArray, nIdx, nLen );
 }
 
-/*************************************************************************
- *                      SwDrawDev::DrawLine
- *************************************************************************/
-
 inline void SwDrawDev::DrawLine( const Point& rStart, const Point& rEnd )
 {
     if( !pPos )
@@ -121,10 +100,6 @@ inline void SwDrawDev::DrawLine( const Point& rStart, const Point& rEnd )
     else
         pOut->DrawLine( rStart - *pPos, rEnd - *pPos );
 }
-
-/*************************************************************************
- *                      SwDrawDev::DrawRect
- *************************************************************************/
 
 inline void SwDrawDev::DrawRect( const SwRect& rRect,
                       const sal_uInt16 nHorzRound, const sal_uInt16 nVertRound )

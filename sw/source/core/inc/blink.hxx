@@ -82,7 +82,7 @@ public:
     inline sal_Bool IsVisible() const { return bVisible ; }
 };
 
-// Blink-Manager, globale Variable, in Blink.Cxx angelegt
+// Blink-Manager, global variable, see Blink.Cxx
 extern SwBlink *pBlink;
 
 

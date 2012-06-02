@@ -38,15 +38,15 @@ class SwBorderAttrs;
 class SwAttrSetChg;
 class SwTxtFrm;
 
-//Implementiert in cntfrm.cxx, wird von cntfrm.cxx und crsrsh.cxx angezogen
+// implemented in cntfrm.cxx, used in cntfrm.cxx and crsrsh.cxx
 extern sal_Bool GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
 
 class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
-    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    //ruft MakePrtArea
+    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    // calls MakePrtArea
 
-    // parameter <bObjsInNewUpper>, indicating that objects are existing in
-    // remaining area of new upper
+    // parameter <bObjsInNewUpper>  indicates that objects exist in remaining
+    // area of new upper
     sal_Bool _WouldFit( SwTwips nSpace,
                     SwLayoutFrm *pNewUpper,
                     sal_Bool bTstMove,
@@ -73,7 +73,7 @@ protected:
 
 public:
     virtual ~SwCntntFrm();
-    TYPEINFO(); //bereits in Basisklassen drin
+    TYPEINFO(); // already in base class
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
@@ -88,7 +88,7 @@ public:
     inline       SwCntntFrm *GetPrecede();
     SwTxtFrm* FindMaster() const;
 
-        //Layoutabhaengiges Cursortravelling
+    // layout dependent cursor travelling
     virtual sal_Bool    LeftMargin( SwPaM * ) const;
     virtual sal_Bool    RightMargin( SwPaM *, sal_Bool bAPI = sal_False ) const;
     virtual sal_Bool    UnitUp( SwPaM *, const SwTwips nOffset = 0,
@@ -103,11 +103,11 @@ public:
     inline  sal_Bool    EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
-    // bSplit indicates, that the paragraph has to be split
-    // bTst indicates, that we are currently doing a test formatting
+    // bSplit indicates that the paragraph has to be split
+    // bTst indicates that we are currently doing a test formatting
     virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
 
-    sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
+    sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* ); // called by MoveFwd if content
 
     inline  SwCntntFrm* GetNextCntntFrm() const;
     inline  SwCntntFrm* GetPrevCntntFrm() const;

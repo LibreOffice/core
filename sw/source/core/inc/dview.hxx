@@ -39,9 +39,8 @@ class SwAnchoredObject;
 
 class SwDrawView : public FmFormView
 {
-    //Fuer den Anker
-    Point           aAnchorPoint;       //Ankerposition
-    SwViewImp      &rImp;               //Die View gehoert immer zu einer Shell
+    Point           aAnchorPoint;       // anchor position
+    SwViewImp      &rImp;               // a view is always part of a shell
 
     const SwFrm *CalcAnchor();
 
@@ -88,7 +87,7 @@ protected:
 public:
     SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
 
-    //aus der Basisklasse
+    // from base class
     virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const;
     virtual SdrObject*   GetMaxToBtmObj(SdrObject* pObj) const;
     virtual void         MarkListHasChanged();
@@ -106,7 +105,7 @@ public:
     const SwViewImp &Imp() const { return rImp; }
           SwViewImp &Imp()       { return rImp; }
 
-    //Anker und Xor fuer das Draggen.
+    // anchor and Xor for dragging
     void ShowDragAnchor();
 
     virtual void DeleteMarked();

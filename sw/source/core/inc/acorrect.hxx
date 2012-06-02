@@ -76,24 +76,22 @@ public:
 
     virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL );
 
-    // returne den Text eines vorherigen Absatzes.
-    // Dieser darf nicht leer sein!
-    // Gibt es diesen nicht oder gibt es davor nur Leere, dann returne 0
-    // Das Flag gibt an:
-    //      sal_True: den, vor der normalen Einfuegeposition (sal_True)
-    //      sal_False: den, in den das korrigierte Wort eingfuegt wurde.
-    //              (Muss nicht der gleiche Absatz sein!!!!)
+    // return text of a previous paragraph
+    // This must not be empty/blank!
+    // If it does not exist or if there is nothing before, return 0.
+    //  - sal_True:  paragraph before "normal" insertion position
+    //  - sal_False: paragraph in that the corrected word was inserted
+    //               (does not need to be the same paragraph)
     virtual const String* GetPrevPara( sal_Bool bAtNormalPos );
 
     virtual sal_Bool ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   const String** ppPara );
 
-    // wird nach dem austauschen der Zeichen von den Funktionen
-    //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
-    // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
-    // aufgenommen werden.
+    // Will be called after swapping characters by the functions
+    //  - FnCptlSttWrd and
+    //  - FnCptlSttSntnc.
+    // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
                                     const String& rExceptWord, sal_Unicode cChar );
     virtual LanguageType GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara ) const;

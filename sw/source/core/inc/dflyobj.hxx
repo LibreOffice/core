@@ -40,9 +40,7 @@ const sal_uInt32 SWGInventor =  sal_uInt32('S')*0x00000001+
 const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
 const sal_uInt16 SwDrawFirst            = 0x0001;
 
-//---------------------------------------
-//SwFlyDrawObj, Die DrawObjekte fuer Flys.
-
+// DrawObjects for Flys
 class SwFlyDrawObj : public SdrObject
 {
 private:
@@ -59,18 +57,15 @@ public:
     SwFlyDrawObj();
     ~SwFlyDrawObj();
 
-    //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
-    //(per Factory).
+    // for instantiation of this class while loading (via factory)
     virtual sal_uInt32 GetObjInventor()     const;
     virtual sal_uInt16 GetObjIdentifier()   const;
     virtual sal_uInt16 GetObjVersion()      const;
 };
 
-//---------------------------------------
-//SwVirtFlyDrawObj, die virtuellen Objekte fuer Flys.
-//Flys werden immer mit virtuellen Objekten angezeigt. Nur so koennen sie
-//ggf. mehrfach angezeigt werden (Kopf-/Fusszeilen).
-
+// virtual objects for Flys
+// Flys will always be shown with virtual objects. By doing that, they can be
+// shown multiple times if needed (header/footer).
 class SwVirtFlyDrawObj : public SdrVirtObj
 {
 private:
@@ -96,10 +91,10 @@ public:
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
     ~SwVirtFlyDrawObj();
 
-    //Ueberladene Methoden der Basisklasse SdrVirtObj
+    // overloaded method of base class SdrVirtObj
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
 
-    //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
+    // we treat the size calculation completely on ourself here
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual const Rectangle& GetLastBoundRect() const;
     virtual       void       RecalcBoundRect();
@@ -121,13 +116,13 @@ public:
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();
 
-    // Get Methoden fuer die Fly Verpointerung
+    // methods to get pointers for the Fly
           SwFlyFrm* GetFlyFrm()         { return pFlyFrm; }
     const SwFlyFrm* GetFlyFrm() const   { return pFlyFrm; }
 
     void SetRect() const;
 
-    // ist eine URL an einer Grafik gesetzt, dann ist das ein Makro-Object
+    // if an URL is attached to a graphic than this is a macro object
     virtual bool       HasMacro() const;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;

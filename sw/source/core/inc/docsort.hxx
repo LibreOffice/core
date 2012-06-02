@@ -45,14 +45,11 @@ class _FndLine;
 class CollatorWrapper;
 class LocaleDataWrapper;
 
-
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 }}}}
 
-/*--------------------------------------------------------------------
-    Beschreibung: Liste aller sortierten Elemente
- --------------------------------------------------------------------*/
+// List of all sorted elements
 typedef const _FndBox*      _FndBoxPtr;
 typedef SwSortElement*      SwSortElementPtr;
 
@@ -64,11 +61,7 @@ public:
     sal_uInt16 GetPos(const SwTableBox* pTableBox) const;
 };
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Funktionen zum Moven von Boxen
- --------------------------------------------------------------------*/
-
+// Functions for moving boxes
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox,
              sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
@@ -76,10 +69,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
               const SwTableBox* pTar, sal_Bool bMovedBefore, SwUndoSort* pUD=0);
 
-/*-------------------------------------------------------------------
-    Beschreibung: Elemente zum Sortieren von Text und Tabellen-Inhalt
- --------------------------------------------------------------------*/
-
+// Elements for sorting text and table content
 struct SwSortElement
 {
     static SwSortOptions*       pOptions;
@@ -104,10 +94,7 @@ struct SwSortElement
     double StrToDouble(const String& rStr) const;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Sortieren Text
- --------------------------------------------------------------------*/
-
+// sort text
 struct SwSortTxtElement : public SwSortElement
 {
     // fuer Text
@@ -120,10 +107,7 @@ struct SwSortTxtElement : public SwSortElement
     virtual String GetKey( sal_uInt16 nKey ) const;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Sortieren Tabelle
- --------------------------------------------------------------------*/
-
+// sort table
 struct SwSortBoxElement : public SwSortElement
 {
     sal_uInt16                      nRow;
@@ -135,12 +119,7 @@ struct SwSortBoxElement : public SwSortElement
     virtual double GetValue( sal_uInt16 nKey ) const;
 };
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: SymFndBoxes stellt ein zweidimensionales
-                  Array von FndBoxes dar
- --------------------------------------------------------------------*/
-
+// two-dimensional array of FndBoxes
 class FlatFndBox
 {
 public:
