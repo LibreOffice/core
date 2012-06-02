@@ -111,23 +111,23 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
     const sal_Int32 len( aArguments.getLength() );
     if (len < 1 || len > 2) {
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
-                    "must give 1 or 2 argument(s)")), *this, 2);
+                ::rtl::OUString("CLiteral::initialize: "
+                    "must give 1 or 2 argument(s)"), *this, 2);
     }
 
     ::rtl::OUString arg0;
     if (!(aArguments[0] >>= arg0)) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
-                "argument must be string")), *this, 0);
+            ::rtl::OUString("CLiteral::initialize: "
+                "argument must be string"), *this, 0);
     }
     //FIXME: what is legal?
     if (true) {
         m_Value = arg0;
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
-                "argument is not valid literal value")), *this, 0);
+            ::rtl::OUString("CLiteral::initialize: "
+                "argument is not valid literal value"), *this, 0);
     }
 
     if (len > 1) {
@@ -138,21 +138,21 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
                 m_Language = arg1;
             } else {
                 throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
-                        "argument is not valid language")), *this, 1);
+                    ::rtl::OUString("CLiteral::initialize: "
+                        "argument is not valid language"), *this, 1);
             }
         } else if ((aArguments[1] >>= xURI)) {
             if (xURI.is()) {
                 m_xDatatype = xURI;
             } else {
                 throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
-                        "argument is null")), *this, 1);
+                    ::rtl::OUString("CLiteral::initialize: "
+                        "argument is null"), *this, 1);
             }
         } else {
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
-                    "argument must be string or URI")), *this, 1);
+                ::rtl::OUString("CLiteral::initialize: "
+                    "argument must be string or URI"), *this, 1);
         }
     }
 }
@@ -199,15 +199,13 @@ css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype() throw (cs
 namespace comp_CLiteral {
 
 ::rtl::OUString SAL_CALL _getImplementationName() {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "CLiteral"));
+    return ::rtl::OUString( "CLiteral");
 }
 
 css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.rdf.Literal"));
+    s[0] = ::rtl::OUString( "com.sun.star.rdf.Literal");
     return s;
 }
 
