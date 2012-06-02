@@ -195,9 +195,9 @@ protected:
     SAL_DLLPRIVATE void             ImplSetSalMenu( SalMenu *pMenu );
     SAL_DLLPRIVATE const XubString& ImplGetHelpText( sal_uInt16 nItemId ) const;
 
-    // returns native check and option menu symbol height;
-    // return value is Max( rCheckHeight, rRadioHeight )
-    SAL_DLLPRIVATE long             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const;
+    // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
+    // return value is maximum width and height of checkboxes and radiobuttons
+    SAL_DLLPRIVATE Size             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight ) const;
 
     // returns native submenu arrow size and spacing from right border
     // return value is whether it's supported natively

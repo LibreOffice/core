@@ -2231,9 +2231,10 @@ void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::st
     mxAccessible = rxAccessible;
 }
 
-long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const
+Size Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight ) const
 {
-    rMaxWidth = rCheckHeight = rRadioHeight = 0;
+    long nCheckWidth = 0, nRadioWidth = 0;
+    rCheckHeight = rRadioHeight = 0;
 
     if( ! bIsMenuBar )
     {
@@ -2255,7 +2256,7 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
             )
             {
                 rCheckHeight = aNativeBounds.GetHeight();
-                rMaxWidth = aNativeContent.GetWidth();
+                nCheckWidth = aNativeBounds.GetWidth();
             }
         }
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
@@ -2271,11 +2272,11 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
             )
             {
                 rRadioHeight = aNativeBounds.GetHeight();
-                rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
+                nRadioWidth = aNativeBounds.GetWidth();
             }
         }
     }
-    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
+    return Size(Max(nCheckWidth, nRadioWidth), Max(rCheckHeight, rRadioHeight));
 }
 
 sal_Bool Menu::ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const
@@ -2359,14 +2360,14 @@ Size Menu::ImplCalcSize( Window* pWin )
     long nMaxWidth = 0;
     long nMinMenuItemHeight = nFontHeight;
     long nCheckHeight = 0, nRadioHeight = 0;
-    long nCheckWidth = 0, nMaxCheckWidth = 0;
-    long nMaxHeight = ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight, nMaxCheckWidth );
-    if( nMaxHeight > nMinMenuItemHeight )
-        nMinMenuItemHeight = nMaxHeight;
+    long nCheckWidth = 0;
+    Size aMaxSize = ImplGetNativeCheckAndRadioSize(pWin, nCheckHeight, nRadioHeight);
+    if( aMaxSize.Height() > nMinMenuItemHeight )
+        nMinMenuItemHeight = aMaxSize.Height();
 
     // When no native rendering of the checkbox & no image in the menu, we
     // have to add some extra space even in the MENU_FLAG_SHOWCHECKIMAGES case
-    bool bSpaceForCheckbox = ( nMaxHeight == 0 );
+    bool bSpaceForCheckbox = ( aMaxSize.Height() == 0 );
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
@@ -2429,7 +2430,7 @@ Size Menu::ImplCalcSize( Window* pWin )
             // Check Buttons:
             if ( !bIsMenuBar && pData->HasCheck() )
             {
-                nCheckWidth = nMaxCheckWidth;
+                nCheckWidth = aMaxSize.Width();
                 if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
                 {
                     // checks / images take the same place
@@ -2505,8 +2506,8 @@ Size Menu::ImplCalcSize( Window* pWin )
         {
             long nImgOrChkWidth = 0;
             nImagePos = nCheckPos;
-            if( nMaxHeight > 0 ) // NWF case
-                nImgOrChkWidth = nMaxHeight + nExtra;
+            if( aMaxSize.Height() > 0 ) // NWF case
+                nImgOrChkWidth = aMaxSize.Height() + nExtra;
             else // non NWF case
                 nImgOrChkWidth = nFontHeight/2 + gfxExtra;
             nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
@@ -2617,8 +2618,8 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
     long nFontHeight = pWin->GetTextHeight();
     long nExtra = nFontHeight/4;
 
-    long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
-    ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight, nMaxCheckWidth );
+    long nCheckHeight = 0, nRadioHeight = 0;
+    ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight );
 
     DecorationView aDecoView( pWin );
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
