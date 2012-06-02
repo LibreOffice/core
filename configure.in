@@ -7799,15 +7799,12 @@ dnl ===================================================================
 AC_MSG_CHECKING([which sane header to use])
 if test "$with_system_sane" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_SANE_HEADER=YES
     AC_CHECK_HEADER(sane/sane.h, [],
       [AC_MSG_ERROR(sane not found. install sane)], [])
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_SANE_HEADER=NO
     BUILD_TYPE="$BUILD_TYPE SANE"
 fi
-AC_SUBST(SYSTEM_SANE_HEADER)
 
 dnl ===================================================================
 dnl Check for system icu

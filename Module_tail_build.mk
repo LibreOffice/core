@@ -85,9 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     reportbuilder \
     reportdesign \
     rsc \
-	$(if $(filter SANE,$(BUILD_TYPE)),\
-		sane \
-	) \
+    sane \
 	sax \
     sc \
     scaddins \
