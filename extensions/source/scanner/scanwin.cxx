@@ -296,11 +296,11 @@ void ImpTwain::ImplOpenSourceManager()
     {
         pMod = new ::osl::Module( ::rtl::OUString() );
 
-        if( pMod->load( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( TWAIN_LIBNAME ) ) ) )
+        if( pMod->load( ::rtl::OUString( TWAIN_LIBNAME  ) ) )
         {
             nCurState = 2;
 
-            if( ( ( pDSM = (DSMENTRYPROC) pMod->getSymbol( String( RTL_CONSTASCII_USTRINGPARAM( TWAIN_FUNCNAME ) ) ) ) != NULL ) &&
+            if( ( ( pDSM = (DSMENTRYPROC) pMod->getSymbol( String( TWAIN_FUNCNAME  ) ) ) != NULL ) &&
                 ( PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_PARENT, MSG_OPENDSM, &hTwainWnd ) == TWRC_SUCCESS ) )
             {
                 nCurState = 3;
@@ -580,7 +580,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
         {
             // query desktop instance
             uno::Reference< frame::XDesktop > xDesktop( xMgr->createInstance(
-                                                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY );
+                                                            OUString("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
 
             if( xDesktop.is() )
             {
@@ -594,7 +594,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
                     try
                     {
                         aActiveFrame = xDesktopProps->getPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveFrame")) );
+                            OUString("ActiveFrame") );
                     }
                     catch( const beans::UnknownPropertyException& )
                     {
@@ -998,7 +998,7 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
     osl::MutexGuard aGuard( maProtector );
     SEQ( ScannerContext )   aRet( 1 );
 
-    aRet.getArray()[0].ScannerName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) );
+    aRet.getArray()[0].ScannerName = ::rtl::OUString( "TWAIN"  );
     aRet.getArray()[0].InternalData = 0;
 
     return aRet;
@@ -1012,8 +1012,8 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rCont
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
-        throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
+    if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( "TWAIN"  ) )
+        throw ScannerException( ::rtl::OUString( "Scanner does not exist"  ), xThis, ScanError_InvalidContext );
 
     ReleaseData();
 
@@ -1028,8 +1028,8 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
-        throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
+    if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( "TWAIN"  ) )
+        throw ScannerException( ::rtl::OUString( "Scanner does not exist"  ), xThis, ScanError_InvalidContext );
 
     ReleaseData();
     aTwain.PerformTransfer( *this, rxListener );
@@ -1043,8 +1043,8 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
-        throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
+    if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( "TWAIN"  ) )
+        throw ScannerException( ::rtl::OUString( "Scanner does not exist"  ), xThis, ScanError_InvalidContext );
 
     return( ( aTwain.GetState() == TWAIN_STATE_CANCELED ) ? ScanError_ScanCanceled : ScanError_ScanErrorNone );
 }
