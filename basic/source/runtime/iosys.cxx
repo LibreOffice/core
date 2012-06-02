@@ -291,8 +291,8 @@ sal_Bool hasUno( void )
         }
         else
         {
-            Reference< XContentProviderManager > xManager( xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                    ( "com.sun.star.ucb.UniversalContentBroker" )) ), UNO_QUERY );
+            Reference< XContentProviderManager > xManager( xSMgr->createInstance(
+                                                               ::rtl::OUString( "com.sun.star.ucb.UniversalContentBroker" ) ), UNO_QUERY );
 
             if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
             {

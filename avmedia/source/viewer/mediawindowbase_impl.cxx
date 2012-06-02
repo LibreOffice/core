@@ -74,7 +74,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
         {
 
             uno::Reference< ::com::sun::star::media::XManager > xManager(
-                xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MANAGER_SERVICE_NAME )) ),
+                xFactory->createInstance( ::rtl::OUString( AVMEDIA_MANAGER_SERVICE_NAME ) ),
                 uno::UNO_QUERY );
 
             if( xManager.is() )
