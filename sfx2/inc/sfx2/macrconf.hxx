@@ -33,6 +33,7 @@
 #include "sal/types.h"
 #include <tools/errcode.hxx>
 #include <sfx2/evntconf.hxx>
+#include <vector>
 
 class SfxMacroInfo;
 class SfxSlot;
@@ -47,8 +48,7 @@ class SbxArray;
 class SvStream;
 class SvxMacro;
 
-typedef SfxMacroInfo* SfxMacroInfoPtr;
-SV_DECL_PTRARR(SfxMacroInfoArr_Impl, SfxMacroInfoPtr, 5)
+typedef std::vector<SfxMacroInfo*> SfxMacroInfoArr_Impl;
 
 class SFX2_DLLPUBLIC SfxMacroInfo
 {
