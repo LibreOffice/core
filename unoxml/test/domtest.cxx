@@ -339,14 +339,10 @@ struct SerializerTest : public CppUnit::TestFixture
 
         maRegisteredNamespaces.realloc(2);
         maRegisteredNamespaces[0] = beans::make_Pair(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "urn:oasis:names:tc:opendocument:xmlns:office:1.0") ),
+            rtl::OUString( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" ),
             xml::sax::FastToken::NAMESPACE);
         maRegisteredNamespaces[1] = beans::make_Pair(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "http://www.w3.org/1999/xlink") ),
+            rtl::OUString( "http://www.w3.org/1999/xlink" ),
             2*xml::sax::FastToken::NAMESPACE);
     }
 
