@@ -36,6 +36,7 @@
 
 #include <impoct.hxx>
 #include <impvect.hxx>
+#include <math.h>
 
 // -----------
 // - Defines -
@@ -914,6 +915,8 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong 
             bRet = ImplScaleFast( rScaleX, rScaleY );
         else if( BMP_SCALE_INTERPOLATE == nScaleFlag )
             bRet = ImplScaleInterpolate( rScaleX, rScaleY );
+        else if( BMP_SCALE_LANCZOS == nScaleFlag )
+            bRet = ImplScaleLanczos( rScaleX, rScaleY );
         else
             bRet = sal_False;
     }
@@ -2203,6 +2206,240 @@ sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     }
 
     return bRet;
+}
+
+//-----------------------------------------------------------------------------------
+bool Bitmap::ImplScaleLanczos( const double& rScaleX, const double& rScaleY )
+{
+    const Size  aSizePix( GetSizePixel() );
+    const long  nWidth = aSizePix.Width();
+    const long  nHeight = aSizePix.Height();
+    const long  nNewWidth = FRound( nWidth * rScaleX );
+    const long  nNewHeight = FRound( nHeight * rScaleY );
+
+    double aSupport = 3.0; // Sampling radius
+
+    // Do horizontal filtering
+    double aScale = nNewWidth / (double) nWidth;
+    double aScaledRadius = aSupport / aScale;
+    int aNumberOfContributions  = (int) ( 2 * aScaledRadius + 1 );
+
+    double* pWeights = new double[ nNewWidth*aNumberOfContributions ];
+    int* pPixels = new int[ nNewWidth*aNumberOfContributions ];
+    int* pCount = new int[ nNewWidth ];
+
+    ImplCalculateContributions( nWidth, nNewWidth, aSupport, aNumberOfContributions, pWeights, pPixels, pCount );
+
+    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    Bitmap aNewBitmap( Size( nNewWidth, nHeight ), GetBitCount(), &pReadAcc->GetPalette() );
+    bool bResult = ImplHorizontalConvolution( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+
+    // Cleanup
+    ReleaseAccess( pReadAcc );
+    delete[] pWeights;
+    delete[] pCount;
+    delete[] pPixels;
+
+    if ( !bResult )
+        return bResult;
+
+    // Swap current bitmap with new bitmap
+    ImplAssignWithSize( aNewBitmap );
+
+    // Do vertical filtering
+    aScale = nNewHeight / (double) nHeight;
+    aScaledRadius = aSupport / aScale;
+    aNumberOfContributions  = (int) ( 2 * aScaledRadius + 1 );
+
+    pWeights = new double[ nNewHeight*aNumberOfContributions ];
+    pPixels = new int[ nNewHeight*aNumberOfContributions ];
+    pCount = new int[ nNewHeight ];
+
+    ImplCalculateContributions(nHeight, nNewHeight, aSupport, aNumberOfContributions, pWeights, pPixels, pCount );
+
+    pReadAcc = AcquireReadAccess();
+    aNewBitmap = Bitmap( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
+    bResult = ImplVerticalConvolution( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+
+    // Cleanup
+    ReleaseAccess( pReadAcc );
+    delete[] pWeights;
+    delete[] pCount;
+    delete[] pPixels;
+
+    if ( !bResult )
+        return bResult;
+
+    // Swap current bitmap with new bitmap
+    ImplAssignWithSize( aNewBitmap );
+
+    return true;
+}
+
+void Bitmap::ImplCalculateContributions( const int aSourceSize, const int aDestinationSize, const double aSupport,
+                                         const int aNumberOfContributions, double* pWeights, int* pPixels,
+                                         int* pCount )
+{
+    const double aScale = aDestinationSize / (double) aSourceSize;
+    const double aScaledRadius = aSupport / aScale;
+    const double aFilterFactor = aScale;
+
+    double aWeight, aCenter;
+    int aIndex, aLeft, aRight;
+
+    for ( int i = 0; i < aDestinationSize; i++ ) {
+        aIndex = i * aNumberOfContributions;
+        pCount[i] = 0;
+        aCenter = ((double)i) / aScale;
+
+        aLeft = (int)((aCenter + 0.5) - aScaledRadius);
+        aRight = (int)(aLeft + 2 * aScaledRadius);
+
+        for ( int j = aLeft; j<= aRight; j++ ) {
+            if ( j < 0 || j >= aSourceSize ) {
+                continue;
+            }
+
+            aWeight = ImplLanczosKernel( (aCenter - j) * aFilterFactor, aSupport );
+            if (aWeight == 0.0) {
+                continue;
+            }
+
+            int currentCount = pCount[ i ];
+            pWeights[ aIndex + currentCount ] = aWeight;
+            pPixels[ aIndex + currentCount ] = j;
+            pCount[ i ]++;
+        }
+    }
+}
+
+bool Bitmap::ImplHorizontalConvolution(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount)
+{
+    BitmapWriteAccess* pWriteAcc = aNewBitmap.AcquireWriteAccess();
+
+    if (!pReadAcc || !pWriteAcc)
+    {
+        return false;
+    }
+
+    const int nHeight = GetSizePixel().Height();
+    const int nNewWidth = aNewBitmap.GetSizePixel().Width();
+
+    BitmapColor aColor;
+    double aValueRed, aValueGreen, aValueBlue;
+    double aSum, aWeight;
+    int aBaseIndex, aIndex;
+
+    for ( int y = 0; y < nHeight; y++ )
+    {
+        for ( int i = 0; i < nNewWidth; i++ )
+        {
+            aBaseIndex = i * aNumberOfContributions;
+            aValueRed = aValueGreen = aValueBlue = 0.0;
+            aSum = 0.0;
+
+            for ( int j=0; j < pCount[i]; j++ )
+            {
+                aIndex = aBaseIndex + j;
+                aWeight = pWeights[ aIndex ];
+                aSum += aWeight;
+                if( pReadAcc->HasPalette() )
+                {
+                    aColor = pReadAcc->GetPaletteColor( pReadAcc->GetPixel( y , pPixels[ aIndex ] ) );
+                }
+                else
+                {
+                    aColor = pReadAcc->GetPixel( y , pPixels[ aIndex ] );
+                }
+
+                aValueRed   += aWeight * aColor.GetRed();
+                aValueGreen += aWeight * aColor.GetGreen();
+                aValueBlue  += aWeight * aColor.GetBlue();
+            }
+
+            BitmapColor aResultColor(
+                (sal_uInt8) MinMax( aValueRed   / aSum, 0, 255 ),
+                (sal_uInt8) MinMax( aValueGreen / aSum, 0, 255 ),
+                (sal_uInt8) MinMax( aValueBlue  / aSum, 0, 255 ) );
+            pWriteAcc->SetPixel( y, i, aResultColor );
+        }
+    }
+    aNewBitmap.ReleaseAccess( pWriteAcc );
+    return true;
+}
+
+bool Bitmap::ImplVerticalConvolution(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount)
+{
+    BitmapWriteAccess* pWriteAcc = aNewBitmap.AcquireWriteAccess();
+
+    if (!pReadAcc || !pWriteAcc)
+    {
+        return false;
+    }
+
+    const int   nWidth = GetSizePixel().Width();
+    const int   nNewHeight = aNewBitmap.GetSizePixel().Height();
+
+    BitmapColor aColor;
+    double aValueRed, aValueGreen, aValueBlue;
+    double aSum, aWeight;
+    int aBaseIndex, aIndex;
+    for (int x = 0; x < nWidth; x++)
+    {
+        for (int i = 0; i < nNewHeight; i++)
+        {
+            aBaseIndex = i * aNumberOfContributions;
+            aSum = 0.0;
+            aValueRed = aValueGreen = aValueBlue = 0.0;
+
+            for (int j=0; j < pCount[i]; j++)
+            {
+                aIndex = aBaseIndex + j;
+                aWeight = pWeights[ aIndex ];
+                aSum += aWeight;
+                if( pReadAcc->HasPalette() )
+                {
+                    aColor = pReadAcc->GetPaletteColor( pReadAcc->GetPixel( pPixels[ aIndex ] , x ) );
+                }
+                else
+                {
+                    aColor = pReadAcc->GetPixel( pPixels[ aIndex ] , x );
+                }
+                aValueRed   += aWeight * aColor.GetRed();
+                aValueGreen += aWeight * aColor.GetGreen();
+                aValueBlue  += aWeight * aColor.GetBlue();
+            }
+
+            BitmapColor aResultColor(
+                (sal_uInt8) MinMax( aValueRed   / aSum, 0, 255 ),
+                (sal_uInt8) MinMax( aValueGreen / aSum, 0, 255 ),
+                (sal_uInt8) MinMax( aValueBlue  / aSum, 0, 255 ) );
+            pWriteAcc->SetPixel( i, x, aResultColor );
+        }
+    }
+
+    aNewBitmap.ReleaseAccess( pWriteAcc );
+    return true;
+}
+
+double Bitmap::ImplLanczosKernel( const double aValue, const double aSupport ) {
+    double x = aValue;
+    if (x == 0.0)
+    {
+        return 1.0;
+    }
+    if (x < 0.0)
+    {
+        x = -x;
+    }
+
+    x *= M_PI;
+    if (x < aSupport)
+    {
+        double x3 = x / 3.0;
+        return (sin(x) / x) * sin(x3) / x3;
+    }
+    return 0.0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

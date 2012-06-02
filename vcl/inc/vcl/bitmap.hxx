@@ -49,6 +49,7 @@
 #define BMP_SCALE_NONE              0x00000000UL
 #define BMP_SCALE_FAST              0x00000001UL
 #define BMP_SCALE_INTERPOLATE       0x00000002UL
+#define BMP_SCALE_LANCZOS           0x00000003UL
 
 // -----------------------------------------------------------------------------
 
@@ -276,6 +277,18 @@ public:
 
     SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE bool                     ImplScaleLanczos( const double& rScaleX, const double& rScaleY );
+
+    SAL_DLLPRIVATE void                     ImplCalculateContributions( const int aSourceSize, const int aDestinationSize,
+                                                const double aSupport, const int aNumberOfContributions,
+                                                double* pWeights, int* pPixels, int* pCount );
+    SAL_DLLPRIVATE bool                     ImplHorizontalConvolution( Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
+                                                int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
+    SAL_DLLPRIVATE bool                     ImplVerticalConvolution( Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
+                                                int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
+
+    SAL_DLLPRIVATE static double            ImplLanczosKernel( const double aValue, const double aSupport );
+
     SAL_DLLPRIVATE sal_Bool                 ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE sal_Bool                 ImplMakeMonoDither();
     SAL_DLLPRIVATE sal_Bool                 ImplMakeGreyscales( sal_uInt16 nGreyscales );
