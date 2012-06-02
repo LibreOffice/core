@@ -970,7 +970,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VIGRA test" )) );
+            SetText( rtl::OUString( "VIGRA test" ) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -1074,9 +1074,9 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         basegfx::B2DPolyPolygon aPoly;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "m0 0 h7 v7 h-7 z" )) );
+                                        ::rtl::OUString( "m0 0 h7 v7 h-7 z" ) );
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "m2 2 h3 v3 h-3 z" )) );
+                                        ::rtl::OUString( "m2 2 h3 v3 h-3 z" ) );
 
         pDevice->fillPolyPolygon(
             aPoly,
@@ -1095,7 +1095,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         pMask->drawLine( aPt111, aPt222, aCol333, basebmp::DrawMode_PAINT );
 
 
-        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" ));
+        ::rtl::OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
         pMask->clear(basebmp::Color(0xFFFFFFFF));
@@ -1233,8 +1233,8 @@ void TestApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
