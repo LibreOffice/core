@@ -36,7 +36,14 @@
 #include <tools/string.hxx>
 #include <vector>
 
-typedef std::vector<TextCharAttrib*> TextCharAttribs;
+class TextCharAttribs : public std::vector<TextCharAttrib*> {
+public:
+    ~TextCharAttribs()
+    {
+        for( iterator it = begin(); it != end(); ++it )
+            delete *it;
+    }
+};
 
 class TextCharAttribList : private TextCharAttribs
 {

@@ -177,7 +177,14 @@ public:
     inline sal_Bool operator != ( const TextLine& rLine ) const;
 };
 
-typedef std::vector<TextLine*> TextLines;
+class TextLines : public std::vector<TextLine*> {
+public:
+    ~TextLines()
+    {
+        for( iterator it = begin(); it != end(); ++it )
+            delete *it;
+    }
+};
 
 inline sal_Bool TextLine::operator == ( const TextLine& rLine ) const
 {
