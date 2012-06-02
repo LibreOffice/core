@@ -93,7 +93,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?")));
+        rtl::OUString sTemp(SVLIBRARY("?"));
         sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
         sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
     }
@@ -127,8 +127,8 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 Reference< XInterface > openConfig(const char* sPackage)
     throw(RuntimeException)
 {
-    static OUString TYPEPKG( RTL_CONSTASCII_USTRINGPARAM( "types" ) );
-    static OUString FILTERPKG( RTL_CONSTASCII_USTRINGPARAM( "filters" ) );
+    static OUString TYPEPKG( "types"  );
+    static OUString FILTERPKG( "filters"  );
 
     Reference< XMultiServiceFactory > xSMGR(
         comphelper::getProcessServiceFactory() );
@@ -137,7 +137,7 @@ Reference< XInterface > openConfig(const char* sPackage)
     {
         // get access to config API (not to file!)
         Reference< XMultiServiceFactory > xConfigProvider( xSMGR->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))), UNO_QUERY);
+            OUString( "com.sun.star.configuration.ConfigurationProvider" )), UNO_QUERY);
 
         if (xConfigProvider.is())
         {
@@ -145,16 +145,16 @@ Reference< XInterface > openConfig(const char* sPackage)
             PropertyValue   aParam    ;
 
             // define cfg path for open
-            aParam.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            aParam.Name = OUString( "nodepath" );
             if (TYPEPKG.equalsIgnoreAsciiCaseAscii(sPackage))
-                aParam.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.TypeDetection.Types/Types" ));
+                aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
             if (FILTERPKG.equalsIgnoreAsciiCaseAscii(sPackage))
-                aParam.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.TypeDetection.GraphicFilter/Filters" ));
+                aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
             lParams[0] = makeAny(aParam);
 
             // get access to file
             xCfg = xConfigProvider->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )), lParams);
+                OUString( "com.sun.star.configuration.ConfigurationAccess" ), lParams);
         }
     }
     catch(const RuntimeException&)
@@ -167,14 +167,14 @@ Reference< XInterface > openConfig(const char* sPackage)
 
 void FilterConfigCache::ImplInit()
 {
-    static OUString STYPE                ( RTL_CONSTASCII_USTRINGPARAM( "Type"               ) );
-    static OUString SUINAME              ( RTL_CONSTASCII_USTRINGPARAM( "UIName"             ) );
-    static OUString SUICOMPONENT         ( RTL_CONSTASCII_USTRINGPARAM( "UIComponent"        ) );
-    static OUString SFLAGS               ( RTL_CONSTASCII_USTRINGPARAM( "Flags"              ) );
-    static OUString SMEDIATYPE           ( RTL_CONSTASCII_USTRINGPARAM( "MediaType"          ) );
-    static OUString SEXTENSIONS          ( RTL_CONSTASCII_USTRINGPARAM( "Extensions"         ) );
-    static OUString SFORMATNAME          ( RTL_CONSTASCII_USTRINGPARAM( "FormatName"         ) );
-    static OUString SREALFILTERNAME      ( RTL_CONSTASCII_USTRINGPARAM( "RealFilterName"     ) );
+    static OUString STYPE                ( "Type"                );
+    static OUString SUINAME              ( "UIName"              );
+    static OUString SUICOMPONENT         ( "UIComponent"         );
+    static OUString SFLAGS               ( "Flags"               );
+    static OUString SMEDIATYPE           ( "MediaType"           );
+    static OUString SEXTENSIONS          ( "Extensions"          );
+    static OUString SFORMATNAME          ( "FormatName"          );
+    static OUString SREALFILTERNAME      ( "RealFilterName"      );
 
     // get access to config
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );

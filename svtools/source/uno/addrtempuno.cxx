@@ -111,7 +111,7 @@ namespace svt
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_ALIASES)), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
@@ -137,7 +137,7 @@ namespace svt
     //-------------------------------------------------------------------------
     ::rtl::OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" ));
+        return ::rtl::OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
     }
 
     //-------------------------------------------------------------------------
@@ -150,7 +150,7 @@ namespace svt
     ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
+        aSupported.getArray()[0] = ::rtl::OUString( "com.sun.star.ui.AddressBookSourceDialog" );
         return aSupported;
     }
 

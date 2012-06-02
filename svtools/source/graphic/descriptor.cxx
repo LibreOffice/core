@@ -185,7 +185,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL
 ::rtl::OUString GraphicDescriptor::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.graphic.GraphicDescriptor" ) );
+    return ::rtl::OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
 }
 
 // ------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ uno::Sequence< ::rtl::OUString > GraphicDescriptor::getSupportedServiceNames_Sta
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicDescriptor" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.GraphicDescriptor"  );
 
     return aSeq;
 }
@@ -395,7 +395,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                     }
 
                     if( aMimeType.isEmpty() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
-                        aMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VCLGRAPHIC ));
+                        aMimeType = ::rtl::OUString(MIMETYPE_VCLGRAPHIC );
                 }
                 else
                     aMimeType = maMimeType;

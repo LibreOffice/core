@@ -65,9 +65,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XMultiServiceFactory >& _r
         ,m_bNeedInitialization( false )
         ,m_aContext( _rxORB )
 {
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_TITLE)), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_PARENT)), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
         &m_xParent, getCppuType(&m_xParent));
 }
 
@@ -82,9 +82,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bNeedInitialization( false )
         ,m_aContext(_rxContext)
 {
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_TITLE)), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_PARENT)), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
         &m_xParent, getCppuType(&m_xParent));
 }
 
@@ -180,7 +180,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const ::rtl::OUString& _rTitle ) thro
 
     try
     {
-        setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_TITLE)), makeAny(_rTitle));
+        setPropertyValue(::rtl::OUString(UNODIALOG_PROPERTY_TITLE), makeAny(_rTitle));
     }
     catch(RuntimeException&)
     {
@@ -242,7 +242,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 
         if (m_bExecuting)
             throw RuntimeException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "already executing the dialog (recursive call)" ) ),
+                    ::rtl::OUString( "already executing the dialog (recursive call)" ),
                     *this
                   );
 
