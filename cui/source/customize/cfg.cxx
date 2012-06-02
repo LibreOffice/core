@@ -211,7 +211,7 @@ OUString replaceSaveInName(
     const OUString& rSaveInName )
 {
     OUString name;
-    OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%SAVE IN SELECTION%" ));
+    OUString placeholder("%SAVE IN SELECTION%" );
 
     sal_Int32 pos = rMessage.indexOf( placeholder );
 
@@ -251,10 +251,10 @@ generateCustomName(
 {
     // find and replace the %n placeholder in the prefix string
     OUString name;
-    OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%n" ));
+    OUString placeholder("%n" );
 
     sal_Int32 pos = prefix.indexOf(
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "%n" )) );
+        OUString("%n" ) );
 
     if ( pos != -1 )
     {
@@ -301,8 +301,8 @@ OUString
 generateCustomURL(
     SvxEntries* entries )
 {
-    OUString url = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
-    url += OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_TOOLBAR_STR ));
+    OUString url = OUString(ITEM_TOOLBAR_URL );
+    url += OUString(CUSTOM_TOOLBAR_STR );
 
     // use a random number to minimize possible clash with existing custom toolbars
     url += OUString::valueOf( sal_Int64( generateRandomValue() ), 16 );
@@ -336,7 +336,7 @@ generateCustomMenuURL(
     SvxEntries* entries,
     sal_Int32 suffix = 1 )
 {
-    OUString url(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR ));
+    OUString url(CUSTOM_MENU_STR );
     url += OUString::valueOf( suffix );
 
     // now check is there is an already existing entry with this url
@@ -415,29 +415,29 @@ OUString GetModuleName( const OUString& aModuleId )
 {
     if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
          aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"));
+        return OUString("Writer");
     else if ( aModuleId == "com.sun.star.text.WebDocument" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Web"));
+        return OUString("Writer/Web");
     else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"));
+        return OUString("Draw");
     else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"));
+        return OUString("Impress");
     else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"));
+        return OUString("Calc");
     else if ( aModuleId == "com.sun.star.script.BasicIDE" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Basic"));
+        return OUString("Basic");
     else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Math"));
+        return OUString("Math");
     else if ( aModuleId == "com.sun.star.sdb.RelationDesign" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Relation Design"));
+        return OUString("Relation Design");
     else if ( aModuleId == "com.sun.star.sdb.QueryDesign" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Query Design"));
+        return OUString("Query Design");
     else if ( aModuleId == "com.sun.star.sdb.TableDesign" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Table Design"));
+        return OUString("Table Design");
     else if ( aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Data Source Browser" ));
+        return OUString("Data Source Browser" );
     else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("Database" ));
+        return OUString("Database" );
 
     return ::rtl::OUString();
 }
@@ -586,16 +586,16 @@ ConvertSvxConfigEntry(
     const SvxConfigEntry* pEntry )
 {
     static const OUString aDescriptorCommandURL (
-        RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ) );
+        ITEM_DESCRIPTOR_COMMANDURL  );
 
     static const OUString aDescriptorType(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
+            ITEM_DESCRIPTOR_TYPE  );
 
     static const OUString aDescriptorLabel(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ) );
+            ITEM_DESCRIPTOR_LABEL  );
 
     static const OUString aDescriptorContainer(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) );
+            ITEM_DESCRIPTOR_CONTAINER  );
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
@@ -664,19 +664,19 @@ ConvertToolbarEntry(
     const SvxConfigEntry* pEntry )
 {
     static const OUString aDescriptorCommandURL (
-        RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ) );
+        ITEM_DESCRIPTOR_COMMANDURL  );
 
     static const OUString aDescriptorType(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
+            ITEM_DESCRIPTOR_TYPE  );
 
     static const OUString aDescriptorLabel(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ) );
+            ITEM_DESCRIPTOR_LABEL  );
 
     static const OUString aDescriptorContainer(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) );
+            ITEM_DESCRIPTOR_CONTAINER  );
 
     static const OUString aIsVisible(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_ISVISIBLE ) );
+            ITEM_DESCRIPTOR_ISVISIBLE  );
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
 
@@ -764,9 +764,9 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.ModuleManager") );
-    static ::rtl::OUString SERVICENAME_DESKTOP       (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.Desktop"           ) );
-    static ::rtl::OUString MODULEID_STARTMODULE      (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.StartModule"       ) );
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER ("com.sun.star.frame.ModuleManager" );
+    static ::rtl::OUString SERVICENAME_DESKTOP       ("com.sun.star.frame.Desktop"            );
+    static ::rtl::OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
 
     try
     {
@@ -819,7 +819,7 @@ SvxConfigDialog::SvxConfigDialog(
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
 
-        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
+        if (text.indexOf(OUString(ITEM_TOOLBAR_URL)) == 0)
         {
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
@@ -892,12 +892,11 @@ SaveInData::SaveInData(
         ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
 
     xProps->getPropertyValue(
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )))
+        OUString("DefaultContext" ))
             >>= m_xComponentContext;
 
     m_aSeparatorSeq.realloc( 1 );
-    m_aSeparatorSeq[0].Name  = OUString(
-        RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
+    m_aSeparatorSeq[0].Name  = OUString( ITEM_DESCRIPTOR_TYPE  );
     m_aSeparatorSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
 
     if ( bDocConfig )
@@ -913,8 +912,7 @@ SaveInData::SaveInData(
 
     uno::Reference< container::XNameAccess > xNameAccess(
         m_xServiceManager->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.frame.UICommandDescription" ) ) ),
+            OUString( "com.sun.star.frame.UICommandDescription"  ) ),
         uno::UNO_QUERY );
 
     if ( xNameAccess.is() )
@@ -1047,14 +1045,14 @@ MenuSaveInData::MenuSaveInData(
     :
         SaveInData( cfgmgr, xParentCfgMgr, aModuleId, isDocConfig ),
         m_aMenuResourceURL(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_MENUBAR_URL ) ),
+            ITEM_MENUBAR_URL  ),
         m_aDescriptorContainer(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) ),
+            ITEM_DESCRIPTOR_CONTAINER  ),
         pRootEntry( 0 )
 {
     try
     {
-        OUString url( RTL_CONSTASCII_USTRINGPARAM( ITEM_MENUBAR_URL ) );
+        OUString url( ITEM_MENUBAR_URL  );
         m_xMenuSettings = GetConfigManager()->getSettings( url, sal_False );
     }
     catch ( container::NoSuchElementException& )
@@ -1086,7 +1084,7 @@ MenuSaveInData::GetEntries()
     if ( pRootEntry == NULL )
     {
         pRootEntry = new SvxConfigEntry(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MainMenus")),
+            rtl::OUString("MainMenus"),
             rtl::OUString(), sal_True);
 
         if ( m_xMenuSettings.is() )
@@ -1186,8 +1184,7 @@ bool MenuSaveInData::LoadSubMenus(
 
                     if ( !subMenuTitle.isEmpty() )
                     {
-                        subMenuTitle += OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(aMenuSeparatorStr));
+                        subMenuTitle += OUString( aMenuSeparatorStr);
                     }
                     else
                     {
@@ -1673,13 +1670,12 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         // replace %MODULENAME in the label with the correct module name
         uno::Reference< css::frame::XModuleManager > xModuleManager(
             xServiceManager->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" ) ) ),
+                OUString( "com.sun.star.frame.ModuleManager"  ) ),
             uno::UNO_QUERY_THROW );
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
-        OUString aSearchString(RTL_CONSTASCII_USTRINGPARAM( "%MODULENAME" ));
+        OUString aSearchString("%MODULENAME" );
         sal_Int32 index = title.indexOf( aSearchString );
 
         if ( index != -1 )
@@ -1691,8 +1687,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
             xModuleCfgSupplier( xServiceManager->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
+                OUString( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )),
             uno::UNO_QUERY );
 
         // Set up data for module specific menus
@@ -1716,7 +1711,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         {
             nPos = aSaveInListBox.InsertEntry(
                 utl::ConfigManager::getProductName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) + aModuleName );
+                OUString( " "  ) + aModuleName );
             aSaveInListBox.SetEntryData( nPos, pModuleData );
         }
 
@@ -1800,8 +1795,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             {
                 uno::Reference< frame::XFramesSupplier > xFramesSupplier(
                     xServiceManager->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.frame.Desktop" ) ) ),
+                        OUString( "com.sun.star.frame.Desktop"  ) ),
                     uno::UNO_QUERY_THROW );
 
                 uno::Reference< frame::XFrames > xFrames =
@@ -1900,8 +1894,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         uno::Reference< frame::XFramesSupplier > xFramesSupplier(
             xServiceManager->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.Desktop" ) ) ),
+                OUString( "com.sun.star.frame.Desktop"  ) ),
             uno::UNO_QUERY_THROW );
 
         if ( !_inout_rxFrame.is() )
@@ -1924,8 +1917,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         uno::Reference< css::frame::XModuleManager > xModuleManager(
             xServiceManager->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" ) ) ),
+                OUString( "com.sun.star.frame.ModuleManager"  ) ),
             uno::UNO_QUERY_THROW );
 
         try
@@ -2050,7 +2042,7 @@ void SvxConfigPage::AddSubMenusToUI(
         if ( pEntryData->IsPopup() )
         {
             OUString subMenuTitle( rBaseTitle );
-            subMenuTitle += OUString(RTL_CONSTASCII_USTRINGPARAM(aMenuSeparatorStr));
+            subMenuTitle += OUString(aMenuSeparatorStr);
             subMenuTitle += stripHotKey( pEntryData->GetName() );
 
             sal_uInt16 nPos = aTopLevelListBox.InsertEntry( subMenuTitle );
@@ -2200,7 +2192,7 @@ SvLBoxEntry* SvxConfigPage::InsertEntryIntoUI(
     if (pNewEntryData->IsSeparator())
     {
         pNewEntry = aContentsListBox->InsertEntry(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(aSeparatorStr)),
+            rtl::OUString(aSeparatorStr),
             0, sal_False, nPos, pNewEntryData);
     }
     else
@@ -3149,8 +3141,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
-    m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
-    m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
+    m_aURLToSelect = OUString(ITEM_TOOLBAR_URL );
+    m_aURLToSelect += OUString("standardbar" );
 
     const SfxPoolItem* pItem =
         rSet.GetItem( rSet.GetPool()->GetWhich( SID_CONFIG ) );
@@ -3158,7 +3150,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     if ( pItem )
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
-        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
+        if (text.indexOf(OUString(ITEM_TOOLBAR_URL)) == 0)
         {
             m_aURLToSelect = text.copy( 0 );
         }
@@ -3700,8 +3692,8 @@ void SvxToolbarConfigPage::Init()
         }
 
         // in future select the default toolbar: Standard
-        m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
-        m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
+        m_aURLToSelect = OUString(ITEM_TOOLBAR_URL );
+        m_aURLToSelect += OUString("standardbar" );
     }
 
     aTopLevelListBox.SelectEntryPos(nPos, sal_True);
@@ -3726,15 +3718,14 @@ ToolbarSaveInData::ToolbarSaveInData(
 
     SaveInData              ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
     pRootEntry              ( NULL ),
-    m_aDescriptorContainer  ( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) )
+    m_aDescriptorContainer  ( ITEM_DESCRIPTOR_CONTAINER  )
 
 {
     // Initialize the m_xPersistentWindowState variable which is used
     // to get the default properties of system toolbars such as name
     uno::Reference< container::XNameAccess > xPWSS(
         m_xServiceManager->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.ui.WindowStateConfiguration" ) ) ),
+            OUString( "com.sun.star.ui.WindowStateConfiguration"  ) ),
         uno::UNO_QUERY );
 
     if ( xPWSS.is() )
@@ -3763,7 +3754,7 @@ void ToolbarSaveInData::SetSystemStyle(
     if ( xPropSet.is() )
     {
         uno::Any a = xPropSet->getPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+            OUString( "LayoutManager"  ) );
         a >>= xLayoutManager;
     }
 
@@ -3806,7 +3797,7 @@ void ToolbarSaveInData::SetSystemStyle(
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {
-    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString("private" ) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3845,7 +3836,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
     sal_Int32 result = 0;
 
-    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString("private" ) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3879,7 +3870,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 {
     OUString result;
 
-    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString("private" ) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3905,7 +3896,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         }
     }
 
-    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( ".uno" )) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(".uno" ) ) == 0 &&
          m_xCommandToLabelMap.is() &&
          m_xCommandToLabelMap->hasByName( rResourceURL ) )
     {
@@ -3953,7 +3944,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
     {
 
         pRootEntry = new SvxConfigEntry(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MainToolbars")),
+            rtl::OUString("MainToolbars"),
             rtl::OUString(), sal_True);
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
@@ -4007,7 +3998,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 // insert into boost::unordered_map to filter duplicates from the parent
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
-                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
+                OUString custom(CUSTOM_TOOLBAR_STR);
                 if ( systemname.indexOf( custom ) == 0 )
                 {
                     pEntry->SetUserDefined( sal_True );
@@ -4059,7 +4050,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 }
 
                 // custom toolbars of the parent are not visible in the document layer
-                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
+                OUString custom(CUSTOM_TOOLBAR_STR);
                 if ( systemname.indexOf( custom ) == 0 )
                     continue;
 
@@ -4278,7 +4269,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     if ( pToolbar->IsUserDefined() )
     {
         xProps->setPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
+            OUString(ITEM_DESCRIPTOR_UINAME ),
             uno::makeAny( OUString( pToolbar->GetName() ) ) );
     }
 
@@ -4326,7 +4317,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
         xPropertySet( xSettings, uno::UNO_QUERY );
 
     xPropertySet->setPropertyValue(
-        OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
+        OUString(ITEM_DESCRIPTOR_UINAME ),
             uno::makeAny( pToolbar->GetName() ) );
 
     try
@@ -5066,7 +5057,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     {
         m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
             xServiceManager->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider" ) ) ),
+                ::rtl::OUString("com.sun.star.graphic.GraphicProvider"  ) ),
             uno::UNO_QUERY );
     }
 
@@ -5076,10 +5067,10 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     }
 
     uno::Reference< beans::XPropertySet > xPropSet(
-        xServiceManager->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ) ) ),
+        xServiceManager->createInstance( ::rtl::OUString("com.sun.star.util.PathSettings"  ) ),
         uno::UNO_QUERY );
 
-    uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" ) ) );
+    uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( "UserConfig"  ) );
 
     ::rtl::OUString aDirectory;
 
@@ -5092,7 +5083,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         sal_Unicode aChar = aDirectory[ aCount-1 ];
         if ( aChar != '/')
         {
-            aDirectory += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+            aDirectory += ::rtl::OUString( "/"  );
         }
     }
     else
@@ -5100,11 +5091,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         aBtnImport.Enable( sal_False );
     }
 
-    aDirectory += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/import" ) );
+    aDirectory += ::rtl::OUString( "soffice.cfg/import"  );
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
         xServiceManager->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" ) ) ),
+        ::rtl::OUString("com.sun.star.embed.FileSystemStorageFactory"  ) ),
         uno::UNO_QUERY );
 
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -5117,17 +5108,17 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     uno::Sequence< uno::Any > aProp( 2 );
     beans::PropertyValue aPropValue;
 
-    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ) );
+    aPropValue.Name = ::rtl::OUString( "UserConfigStorage"  );
     aPropValue.Value <<= xStorage;
     aProp[ 0 ] <<= aPropValue;
 
-    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) );
+    aPropValue.Name = ::rtl::OUString( "OpenMode"  );
     aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
     aProp[ 1 ] <<= aPropValue;
 
     m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
         xServiceManager->createInstanceWithArguments(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ImageManager" ) ), aProp ),
+        ::rtl::OUString("com.sun.star.ui.ImageManager"  ), aProp ),
         uno::UNO_QUERY );
 
     ImageInfo mImageInfo;
@@ -5314,7 +5305,7 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
     }
 
     aImportDialog.SetCurrentFilter(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PNG - Portable Network Graphic")));
+        rtl::OUString("PNG - Portable Network Graphic"));
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {
@@ -5370,7 +5361,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
+    aMediaProps[0].Name = ::rtl::OUString("URL" );
     aMediaProps[0].Value <<= aURL;
 
     com::sun::star::awt::Size aSize;
@@ -5382,7 +5373,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
         uno::Any a = props->getPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")) );
+            OUString("SizePixel") );
         a >>= aSize;
         if (0 == aSize.Width || 0 == aSize.Height)
             return sal_False;
@@ -5449,7 +5440,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
+    aMediaProps[0].Name = ::rtl::OUString("URL" );
     uno::Reference< css::ui::XUIConfigurationPersistence >
         xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5478,7 +5469,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     {
         ::rtl::OUString aSourcePath( rPaths[0] );
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+            aSourcePath = rPaths[0] + ::rtl::OUString("/"  );
 
         for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
@@ -5527,10 +5518,10 @@ void SvxIconSelectorDialog::ImportGraphics(
     if ( rejectedCount != 0 )
     {
         OUString message;
-        OUString newLine(RTL_CONSTASCII_USTRINGPARAM("\n"));
+        OUString newLine("\n");
         OUString fPath;
         if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+              fPath = rPaths[0].copy(8) + ::rtl::OUString("/"  );
         for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
             message += fPath + rejected[i];
@@ -5550,7 +5541,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
+    aMediaProps[0].Name = ::rtl::OUString("URL" );
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;
@@ -5562,7 +5553,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
 
         uno::Any a = props->getPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")) );
+            OUString("SizePixel") );
 
             xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
@@ -5653,7 +5644,7 @@ rtl::OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMess
 {
     rtl::OUString name;
     rtl::OUString message = String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
-    rtl::OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%ICONNAME" ));
+    rtl::OUString placeholder("%ICONNAME" );
     sal_Int32 pos = message.indexOf( placeholder );
     if ( pos != -1 )
     {

@@ -121,7 +121,7 @@ using namespace ::com::sun::star::util;
 #ifdef C2U
     #error  "Who define C2U before! I use it to create const ascii strings ..."
 #else
-    #define C2U(cChar)      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( cChar ) )
+    #define C2U(cChar)      rtl::OUString( cChar  )
 #endif
 
 #define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
@@ -824,7 +824,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     SvLBoxEntry* pEntry = NULL;
     if ( pLastPageSaver )
     {
-        String sExpand( RTL_CONSTASCII_USTRINGPARAM( EXPAND_PROTOCOL ) );
+        String sExpand( EXPAND_PROTOCOL  );
         String sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
         if ( sLastURL.Len() == 0 )
@@ -842,11 +842,10 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
             Reference< XComponentContext > xContext;
             Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
             xProps->getPropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ) >>= xContext;
+                ::rtl::OUString( "DefaultContext"  ) ) >>= xContext;
             if ( xContext.is() )
                 m_xMacroExpander = Reference< com::sun::star::util::XMacroExpander >(
-                    xContext->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "/singletons/com.sun.star.util.theMacroExpander" ) ) ), UNO_QUERY );
+                    xContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) ), UNO_QUERY );
         }
 
         SvLBoxEntry* pTemp = aTreeLB.First();
@@ -1202,30 +1201,29 @@ sal_Bool EnableSSO( void )
     rtl::OUString theIniFile;
     osl_getExecutableFile( &theIniFile.pData );
     theIniFile = theIniFile.copy( 0, theIniFile.lastIndexOf( '/' ) + 1 ) +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "configmgr" )) );
+                 rtl::OUString(SAL_CONFIGFILE( "configmgr" ) );
     ::rtl::Bootstrap theBootstrap( theIniFile );
 
     rtl::OUString theOfflineValue;
-    rtl::OUString theDefaultOfflineValue (RTL_CONSTASCII_USTRINGPARAM("false") );
-    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_Offline") ),
+    rtl::OUString theDefaultOfflineValue ("false" );
+    theBootstrap.getFrom( rtl::OUString("CFG_Offline" ),
                           theOfflineValue,
                           theDefaultOfflineValue );
 
     rtl::OUString theServerTypeValue;
-    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_ServerType") ),
+    theBootstrap.getFrom( rtl::OUString("CFG_ServerType" ),
                           theServerTypeValue );
 
     rtl::OUString theBackendServiceTypeValue;
-    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_BackendService") ),
+    theBootstrap.getFrom( rtl::OUString("CFG_BackendService" ),
                           theBackendServiceTypeValue );
 
     sal_Bool bSSOEnabled =
         ( theOfflineValue == theDefaultOfflineValue                     &&
           ( theServerTypeValue.isEmpty() ||
-          theServerTypeValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno") ) ) &&
+          theServerTypeValue == rtl::OUString("uno" ) ) &&
           theBackendServiceTypeValue ==
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.comp.configuration.backend.LdapSingleBackend") ) );
+            rtl::OUString( "com.sun.star.comp.configuration.backend.LdapSingleBackend" ) );
     if ( bSSOEnabled && GetSSOCreator() == 0 )
     {
         bSSOEnabled = sal_False;
@@ -1241,11 +1239,11 @@ CreateTabPage GetSSOCreator( void )
     if ( theSymbol == 0 )
     {
         osl::Module aModule;
-        rtl::OUString theModuleName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "ssoopt" ) ) );
+        rtl::OUString theModuleName( SVLIBRARY( "ssoopt"  ) );
         if( aModule.loadRelative(
                 &thisModule, theModuleName, SAL_LOADMODULE_DEFAULT ) )
         {
-            rtl::OUString theSymbolName( RTL_CONSTASCII_USTRINGPARAM("CreateSSOTabPage" ) );
+            rtl::OUString theSymbolName( "CreateSSOTabPage"  );
             theSymbol = reinterpret_cast<CreateTabPage>(aModule.getFunctionSymbol( theSymbolName ));
         }
     }
@@ -1492,8 +1490,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
     Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
     Reference< XPropertySet >  xProp(
-            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.linguistic2.LinguProperties") ) ),
+            xMgr->createInstance( ::rtl::OUString( "com.sun.star.linguistic2.LinguProperties" ) ),
             UNO_QUERY );
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
     {
