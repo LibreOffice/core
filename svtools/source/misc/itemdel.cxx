@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
 #include <limits.h>
+#include <vector>
 
 #include <svl/svarray.hxx>
 #include <svl/itempool.hxx>
@@ -55,7 +56,7 @@ public:
                  ~SfxItemDesruptor_Impl();
 };
 
-SV_DECL_PTRARR( SfxItemDesruptorList_Impl, SfxItemDesruptor_Impl*, 4 )
+typedef std::vector<SfxItemDesruptor_Impl*> SfxItemDesruptorList_Impl;
 
 static SfxItemDesruptorList_Impl *pItemDesruptList = NULL;
 
@@ -76,8 +77,8 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     SfxItemDesruptorList_Impl* &rpList = pItemDesruptList;
     if ( !rpList )
         rpList = new SfxItemDesruptorList_Impl;
-    const SfxItemDesruptor_Impl *pThis = this;
-    rpList->Insert( pThis, rpList->Count() );
+    SfxItemDesruptor_Impl *pThis = this;
+    rpList->push_back( pThis );
 }
 
 // ------------------------------------------------------------------------
@@ -93,7 +94,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
     DBG_ASSERT( rpList, "no DesruptorList" );
     const SfxItemDesruptor_Impl *pThis = this;
     if ( rpList ) HACK(warum?)
-        rpList->Remove( rpList->GetPos(pThis) );
+        rpList->erase( std::find( rpList->begin(), rpList->end(), pThis ) );
 
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount( 0 );
