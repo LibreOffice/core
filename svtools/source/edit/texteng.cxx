@@ -70,9 +70,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-typedef TextView* TextViewPtr;
-SV_DECL_PTRARR( TextViews, TextViewPtr, 0 )
-
 
 // -------------------------------------------------------------------------
 // (-) class TextEngine
@@ -140,7 +137,7 @@ TextEngine::~TextEngine()
 
 void TextEngine::InsertView( TextView* pTextView )
 {
-    mpViews->Insert( pTextView, mpViews->Count() );
+    mpViews->push_back( pTextView );
     pTextView->SetSelection( TextSelection() );
 
     if ( !GetActiveView() )
@@ -149,11 +146,11 @@ void TextEngine::InsertView( TextView* pTextView )
 
 void TextEngine::RemoveView( TextView* pTextView )
 {
-    sal_uInt16 nPos = mpViews->GetPos( pTextView );
-    if( nPos != USHRT_MAX )
+    TextViews::iterator it = std::find( mpViews->begin(), mpViews->end(), pTextView );
+    if( it != mpViews->end() )
     {
         pTextView->HideCursor();
-        mpViews->Remove( nPos, 1 );
+        mpViews->erase( it );
         if ( pTextView == GetActiveView() )
             SetActiveView( 0 );
     }
@@ -161,12 +158,12 @@ void TextEngine::RemoveView( TextView* pTextView )
 
 sal_uInt16 TextEngine::GetViewCount() const
 {
-    return mpViews->Count();
+    return mpViews->size();
 }
 
 TextView* TextEngine::GetView( sal_uInt16 nView ) const
 {
-    return mpViews->GetObject( nView );
+    return (*mpViews)[ nView ];
 }
 
 TextView* TextEngine::GetActiveView() const
@@ -227,9 +224,9 @@ void TextEngine::SetFont( const Font& rFont )
         FormatFullDoc();
         UpdateViews();
 
-        for ( sal_uInt16 nView = mpViews->Count(); nView; )
+        for ( sal_uInt16 nView = mpViews->size(); nView; )
         {
-            TextView* pView = mpViews->GetObject( --nView );
+            TextView* pView = (*mpViews)[ --nView ];
             pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
         }
     }
@@ -450,9 +447,9 @@ void TextEngine::ImpRemoveText()
 
     TextPaM aStartPaM( 0, 0 );
     TextSelection aEmptySel( aStartPaM, aStartPaM );
-    for ( sal_uInt16 nView = 0; nView < mpViews->Count(); nView++ )
+    for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
     {
-        TextView* pView = mpViews->GetObject( nView );
+        TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
     }
     ResetUndo();
@@ -473,9 +470,9 @@ void TextEngine::SetText( const XubString& rText )
     if ( rText.Len() )
         aPaM = ImpInsertText( aEmptySel, rText );
 
-    for ( sal_uInt16 nView = 0; nView < mpViews->Count(); nView++ )
+    for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
     {
-        TextView* pView = mpViews->GetObject( nView );
+        TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
 
         // Wenn kein Text, dann auch Kein Format&Update
@@ -1530,9 +1527,9 @@ void TextEngine::UpdateViews( TextView* pCurView )
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc nicht formatiert!" );
 
-    for ( sal_uInt16 nView = 0; nView < mpViews->Count(); nView++ )
+    for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
     {
-        TextView* pView = mpViews->GetObject( nView );
+        TextView* pView = (*mpViews)[ nView ];
         pView->HideCursor();
 
         Rectangle aClipRec( maInvalidRec );
@@ -2812,11 +2809,11 @@ void TextEngine::ImpParagraphInserted( sal_uLong nPara )
 {
     // Die aktive View braucht nicht angepasst werden, aber bei allen
     // passiven muss die Selektion angepasst werden:
-    if ( mpViews->Count() > 1 )
+    if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->Count(); nView; )
+        for ( sal_uInt16 nView = mpViews->size(); nView; )
         {
-            TextView* pView = mpViews->GetObject( --nView );
+            TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
             {
                 for ( int n = 0; n <= 1; n++ )
@@ -2833,11 +2830,11 @@ void TextEngine::ImpParagraphInserted( sal_uLong nPara )
 
 void TextEngine::ImpParagraphRemoved( sal_uLong nPara )
 {
-    if ( mpViews->Count() > 1 )
+    if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->Count(); nView; )
+        for ( sal_uInt16 nView = mpViews->size(); nView; )
         {
-            TextView* pView = mpViews->GetObject( --nView );
+            TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
             {
                 sal_uLong nParas = mpDoc->GetNodes().Count();
@@ -2861,11 +2858,11 @@ void TextEngine::ImpParagraphRemoved( sal_uLong nPara )
 
 void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars )
 {
-    if ( mpViews->Count() > 1 )
+    if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->Count(); nView; )
+        for ( sal_uInt16 nView = mpViews->size(); nView; )
         {
-            TextView* pView = mpViews->GetObject( --nView );
+            TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
             {
                 sal_uInt16 nEnd = nPos+nChars;
@@ -2888,11 +2885,11 @@ void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 n
 
 void TextEngine::ImpCharsInserted( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars )
 {
-    if ( mpViews->Count() > 1 )
+    if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->Count(); nView; )
+        for ( sal_uInt16 nView = mpViews->size(); nView; )
         {
-            TextView* pView = mpViews->GetObject( --nView );
+            TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
             {
                 for ( int n = 0; n <= 1; n++ )

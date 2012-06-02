@@ -34,7 +34,6 @@ class TextDoc;
 class TextView;
 class TextPaM;
 class TextSelection;
-class TextViews;
 class TEParaPortions;
 class TextAttrib;
 class TextCharAttrib;
@@ -79,6 +78,8 @@ namespace i18n {
 class LocaleDataWrapper;
 
 enum TxtAlign { TXTALIGN_LEFT, TXTALIGN_CENTER, TXTALIGN_RIGHT };
+
+typedef std::vector<TextView*> TextViews;
 
 class SVT_DLLPUBLIC TextEngine : public SfxBroadcaster
 {
