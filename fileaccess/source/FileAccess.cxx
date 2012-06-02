@@ -299,15 +299,14 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
                 {
                     xPropSet->getPropertyValue(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                            "DefaultContext"  ) )
                                 >>= xCtx;
                 }
 
                 Reference< XMacroExpander > xExpander;
 
                 xCtx->getValueByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "/singletons/com.sun.star.util.theMacroExpander" ) ) )
+                    rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) )
                             >>= xExpander;
 
                 OSL_ENSURE( xExpander.is(),
@@ -319,10 +318,8 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
             catch ( Exception const & )
             {
                 throw RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "OFileAccess::transferrImpl - Unable to obtain "
-                            "destination folder URL!" ) ),
+                    rtl::OUString( "OFileAccess::transferrImpl - Unable to obtain "
+                            "destination folder URL!"  ),
                     static_cast< cppu::OWeakObject * >( this ) );
             }
 
@@ -331,10 +328,8 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
         }
 
         throw RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "OFileAccess::transferrImpl - Unable to obtain "
-                    "destination folder URL!" ) ),
+            rtl::OUString( "OFileAccess::transferrImpl - Unable to obtain "
+                    "destination folder URL!"  ),
                 static_cast< cppu::OWeakObject * >( this ) );
 
     }
@@ -377,7 +372,7 @@ void OFileAccess::kill( const rtl::OUString& FileURL )
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     try
     {
-        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "delete" )), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( rtl::OUString("delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
@@ -404,7 +399,7 @@ sal_Bool OFileAccess::isReadOnly( const rtl::OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-    Any aRetAny = aCnt.getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) );
+    Any aRetAny = aCnt.getPropertyValue( rtl::OUString( "IsReadOnly"  ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
     return bRet;
@@ -417,7 +412,7 @@ void OFileAccess::setReadOnly( const rtl::OUString& FileURL, sal_Bool bReadOnly 
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aAny;
     aAny <<= bReadOnly;
-    aCnt.setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ), aAny );
+    aCnt.setPropertyValue( rtl::OUString( "IsReadOnly"  ), aAny );
 }
 
 void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
@@ -466,7 +461,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
 
             Sequence<rtl::OUString> aNames(1);
             rtl::OUString* pNames = aNames.getArray();
-            pNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+            pNames[0] = rtl::OUString( "Title"  );
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( rtl::OUString( aTitle ) );
@@ -497,7 +492,7 @@ sal_Int32 OFileAccess::getSize( const rtl::OUString& FileURL )
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-    aCnt.getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= nTemp;
+    aCnt.getPropertyValue( rtl::OUString("Size" ) ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
 }
@@ -521,7 +516,7 @@ DateTime OFileAccess::getDateTimeModified( const rtl::OUString& FileURL )
 
     Reference< XCommandEnvironment > aCmdEnv;
     ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-    aYoung.getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTime;
+    aYoung.getPropertyValue( rtl::OUString("DateModified" ) ) >>= aDateTime;
     return aDateTime;
 }
 
@@ -663,7 +658,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
 
     try
     {
-        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "open" )), aCmdArg );
+        aCnt.executeCommand( rtl::OUString("open" ), aCmdArg );
     }
     catch ( InteractiveIOException const & e )
     {
@@ -681,7 +676,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
             aInsertArg.ReplaceExisting = sal_False;
 
             aCmdArg <<= aInsertArg;
-            aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "insert" )), aCmdArg );
+            aCnt.executeCommand( rtl::OUString("insert" ), aCmdArg );
 
             // Retry...
             return openFileReadWrite( FileURL );
@@ -740,7 +735,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
             Sequence<rtl::OUString> aNames(1);
             rtl::OUString* pNames = aNames.getArray();
             pNames[0] = rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                            "Title"  );
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( rtl::OUString( rTitle ) );
@@ -821,7 +816,7 @@ sal_Bool OFileAccess::isHidden( const ::rtl::OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-    Any aRetAny = aCnt.getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ) );
+    Any aRetAny = aCnt.getPropertyValue( rtl::OUString( "IsHidden"  ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
     return bRet;
@@ -834,7 +829,7 @@ void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aAny;
     aAny <<= bHidden;
-    aCnt.setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), aAny );
+    aCnt.setPropertyValue( rtl::OUString( "IsHidden"  ), aAny );
 }
 
 //==================================================================================================
@@ -850,7 +845,7 @@ Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMu
 Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
 {
     Sequence< rtl::OUString > seqNames(1);
-    seqNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
+    seqNames.getArray()[0] = rtl::OUString(SERVICE_NAME );
     return seqNames;
 }
 
