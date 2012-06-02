@@ -90,7 +90,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas test" )) );
+            SetText( rtl::OUString( "Canvas test" ) );
             SetSizePixel( Size( 600, 450 ) );
             EnablePaint( true );
             Show();
@@ -150,8 +150,8 @@ class DemoRenderer
 
             lang::Locale aLocale;
             rendering::FontInfo aFontInfo;
-            aFontInfo.FamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Swiss" ));
-            aFontInfo.StyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SansSerif" ));
+            aFontInfo.FamilyName = ::rtl::OUString( "Swiss" );
+            aFontInfo.StyleName = ::rtl::OUString( "SansSerif" );
             geometry::Matrix2D aFontMatrix( 1, 0,
                                             0, 1 );
             rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );
@@ -688,8 +688,8 @@ void DemoApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     InitVCL( xFactory );
