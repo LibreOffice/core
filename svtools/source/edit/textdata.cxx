@@ -32,8 +32,6 @@
 
 #include <tools/debug.hxx>
 
-SV_IMPL_PTRARR( TextLines, TextLinePtr );
-
 
 // -------------------------------------------------------------------------
 // (+) class TextSelection
@@ -186,9 +184,9 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
 
 sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
 {
-    for ( sal_uInt16 nLine = 0; nLine < maLines.Count(); nLine++ )
+    for ( sal_uInt16 nLine = 0; nLine < maLines.size(); nLine++ )
     {
-        TextLine* pLine = maLines.GetObject( nLine );
+        TextLine* pLine = maLines[ nLine ];
         if ( ( bInclEnd && ( pLine->GetEnd() >= nChar ) ) ||
              ( pLine->GetEnd() > nChar ) )
         {
@@ -199,13 +197,13 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
     // Dann sollte es am Ende der letzten Zeile sein!
     DBG_ASSERT( nChar == maLines[ maLines.Count() - 1 ]->GetEnd(), "Index voll daneben!" );
     DBG_ASSERT( !bInclEnd, "Zeile nicht gefunden: FindLine" );
-    return ( maLines.Count() - 1 );
+    return ( maLines.size() - 1 );
 }
 
 
 void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine )
 {
-    sal_uInt16 nLines = maLines.Count();
+    sal_uInt16 nLines = maLines.size();
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {

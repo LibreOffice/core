@@ -424,7 +424,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
             {
                 TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
                 sal_uInt16 nStartLine = 0;
-                sal_uInt16 nEndLine = pTEParaPortion->GetLines().Count() -1;
+                sal_uInt16 nEndLine = pTEParaPortion->GetLines().size() -1;
                 if ( nPara == nStartPara )
                     nStartLine = pTEParaPortion->GetLineNumber( aSel.GetStart().GetIndex(), sal_False );
                 if ( nPara == nEndPara )
@@ -433,7 +433,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
                 // ueber die Zeilen iterieren....
                 for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
                 {
-                    TextLine* pLine = pTEParaPortion->GetLines().GetObject( nLine );
+                    TextLine* pLine = pTEParaPortion->GetLines()[ nLine ];
                     sal_uInt16 nStartIndex = pLine->GetStart();
                     sal_uInt16 nEndIndex = pLine->GetEnd();
                     if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
@@ -1032,7 +1032,7 @@ void TextView::Command( const CommandEvent& rCEvt )
 
             TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
             sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex(), sal_True );
-            TextLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+            TextLine* pLine = pParaPortion->GetLines()[ nLine ];
             if ( pLine && ( nInputEnd > pLine->GetEnd() ) )
                 nInputEnd = pLine->GetEnd();
             Rectangle aR2 = mpImpl->mpTextEngine->PaMtoEditCursor( TextPaM( aPaM.GetPara(), nInputEnd ) );
@@ -1571,7 +1571,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
         // Wenn davor eine autom.Umgebrochene Zeile, und ich muss genau an das
         // Ende dieser Zeile, landet der Cursor in der aktuellen Zeile am Anfang
         // Siehe Problem: Letztes Zeichen einer autom.umgebr. Zeile = Cursor
-        TextLine* pLine = pPPortion->GetLines().GetObject( nLine - 1 );
+        TextLine* pLine = pPPortion->GetLines()[ nLine - 1 ];
         if ( aPaM.GetIndex() && ( aPaM.GetIndex() == pLine->GetEnd() ) )
             aPaM.GetIndex()--;
     }
@@ -1579,7 +1579,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
     {
         aPaM.GetPara()--;
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
-        sal_uInt16 nL = pPPortion->GetLines().Count() - 1;
+        sal_uInt16 nL = pPPortion->GetLines().size() - 1;
         sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), nL, nX+1 );
         aPaM.GetIndex() = nCharPos;
     }
@@ -1602,13 +1602,13 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
     sal_uInt16 nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), sal_False );
-    if ( nLine < ( pPPortion->GetLines().Count() - 1 ) )
+    if ( nLine < ( pPPortion->GetLines().size() - 1 ) )
     {
         sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine+1, nX );
         aPaM.GetIndex() = nCharPos;
 
         // Sonderbehandlung siehe CursorUp...
-        TextLine* pLine = pPPortion->GetLines().GetObject( nLine + 1 );
+        TextLine* pLine = pPPortion->GetLines()[ nLine + 1 ];
         if ( ( aPaM.GetIndex() == pLine->GetEnd() ) && ( aPaM.GetIndex() > pLine->GetStart() ) && aPaM.GetIndex() < pPPortion->GetNode()->GetText().Len() )
             aPaM.GetIndex()--;
     }
@@ -1618,8 +1618,8 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
         sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), 0, nX+1 );
         aPaM.GetIndex() = nCharPos;
-        TextLine* pLine = pPPortion->GetLines().GetObject( 0 );
-        if ( ( aPaM.GetIndex() == pLine->GetEnd() ) && ( aPaM.GetIndex() > pLine->GetStart() ) && ( pPPortion->GetLines().Count() > 1 ) )
+        TextLine* pLine = pPPortion->GetLines().front();
+        if ( ( aPaM.GetIndex() == pLine->GetEnd() ) && ( aPaM.GetIndex() > pLine->GetStart() ) && ( pPPortion->GetLines().size() > 1 ) )
             aPaM.GetIndex()--;
     }
 
@@ -1632,7 +1632,7 @@ TextPaM TextView::CursorStartOfLine( const TextPaM& rPaM )
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
     sal_uInt16 nLine = pPPortion->GetLineNumber( aPaM.GetIndex(), sal_False );
-    TextLine* pLine = pPPortion->GetLines().GetObject( nLine );
+    TextLine* pLine = pPPortion->GetLines()[ nLine ];
     aPaM.GetIndex() = pLine->GetStart();
 
     return aPaM;
@@ -1644,7 +1644,7 @@ TextPaM TextView::CursorEndOfLine( const TextPaM& rPaM )
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
     sal_uInt16 nLine = pPPortion->GetLineNumber( aPaM.GetIndex(), sal_False );
-    TextLine* pLine = pPPortion->GetLines().GetObject( nLine );
+    TextLine* pLine = pPPortion->GetLines()[ nLine ];
     aPaM.GetIndex() = pLine->GetEnd();
 
     if ( pLine->GetEnd() > pLine->GetStart() )  // Leerzeile

@@ -65,6 +65,7 @@
 
 #include <set>
 #include <vector>
+#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -283,7 +284,7 @@ String TextEngine::GetTextLines( LineEnd aSeparator ) const
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nP );
 
-        sal_uInt16 nLines = pTEParaPortion->GetLines().Count();
+        sal_uInt16 nLines = pTEParaPortion->GetLines().size();
         for ( sal_uInt16 nL = 0; nL < nLines; nL++ )
         {
             TextLine* pLine = pTEParaPortion->GetLines()[nL];
@@ -903,7 +904,7 @@ Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, sal_Bool bSpecial )
         for ( sal_uLong nPortion = 0; nPortion < rPaM.GetPara(); nPortion++ )
         {
             TEParaPortion* pPortion = mpTEParaPortions->GetObject(nPortion);
-            nY += pPortion->GetLines().Count() * mnCharHeight;
+            nY += pPortion->GetLines().size() * mnCharHeight;
         }
     }
 
@@ -936,9 +937,9 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, sal_Bool bSpecial, sal
     long nY = 0;
     sal_uInt16 nCurIndex = 0;
     TextLine* pLine = 0;
-    for ( sal_uInt16 nLine = 0; nLine < pPortion->GetLines().Count(); nLine++ )
+    for ( sal_uInt16 nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
-        TextLine* pTmpLine = pPortion->GetLines().GetObject( nLine );
+        TextLine* pTmpLine = pPortion->GetLines()[ nLine ];
         if ( ( pTmpLine->GetStart() == rPaM.GetIndex() ) || ( pTmpLine->IsIn( rPaM.GetIndex(), bSpecial ) ) )
         {
             pLine = pTmpLine;
@@ -953,7 +954,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, sal_Bool bSpecial, sal
         // Cursor am Ende des Absatzes.
         DBG_ASSERT( rPaM.GetIndex() == nCurIndex, "Index voll daneben in GetEditCursor!" );
 
-        pLine = pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1 );
+        pLine = pPortion->GetLines().back();
         nY -= mnCharHeight;
         nCurIndex = nCurIndex - pLine->GetLen();
     }
@@ -1088,7 +1089,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, sal_Bool bSmart )
     for ( sal_uLong nPortion = 0; nPortion < mpTEParaPortions->Count(); nPortion++ )
     {
         TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
-        long nTmpHeight = pPortion->GetLines().Count() * mnCharHeight;
+        long nTmpHeight = pPortion->GetLines().size() * mnCharHeight;
         nY += nTmpHeight;
         if ( nY > rDocPos.Y() )
         {
@@ -1118,9 +1119,9 @@ sal_uInt16 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara
     long nY = 0;
     TextLine* pLine = 0;
     sal_uInt16 nLine;
-    for ( nLine = 0; nLine < pPortion->GetLines().Count(); nLine++ )
+    for ( nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
-        TextLine* pTmpLine = pPortion->GetLines().GetObject( nLine );
+        TextLine* pTmpLine = pPortion->GetLines()[ nLine ];
         nY += mnCharHeight;
         if ( nY > rPosInPara.Y() )  // das war 'se
         {
@@ -1133,7 +1134,7 @@ sal_uInt16 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara
     nCurIndex = GetCharPos( nPortion, nLine, rPosInPara.X(), bSmart );
 
     if ( nCurIndex && ( nCurIndex == pLine->GetEnd() ) &&
-         ( pLine != pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1) ) )
+         ( pLine != pPortion->GetLines().back() ) )
     {
         uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
         sal_Int32 nCount = 1;
@@ -1146,7 +1147,7 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
 {
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
-    TextLine* pLine = pPortion->GetLines().GetObject( nLine );
+    TextLine* pLine = pPortion->GetLines()[ nLine ];
 
     sal_uInt16 nCurIndex = pLine->GetStart();
 
@@ -1206,10 +1207,10 @@ sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara )
 {
     sal_uLong nParaWidth = 0;
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
-    for ( sal_uInt16 nLine = pPortion->GetLines().Count(); nLine; )
+    for ( sal_uInt16 nLine = pPortion->GetLines().size(); nLine; )
     {
         sal_uLong nLineWidth = 0;
-        TextLine* pLine = pPortion->GetLines().GetObject( --nLine );
+        TextLine* pLine = pPortion->GetLines()[ --nLine ];
         for ( sal_uInt16 nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
         {
             TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
@@ -1286,7 +1287,7 @@ sal_uInt16 TextEngine::GetLineCount( sal_uLong nParagraph ) const
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
     if ( pPPortion )
-        return pPPortion->GetLines().Count();
+        return pPPortion->GetLines().size();
 
     return 0xFFFF;
 }
@@ -1296,9 +1297,9 @@ sal_uInt16 TextEngine::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) cons
     DBG_ASSERT( nParagraph < mpTEParaPortions->Count(), "GetLineCount: Out of range" );
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
-    if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
+    if ( pPPortion && ( nLine < pPPortion->GetLines().size() ) )
     {
-        TextLine* pLine = pPPortion->GetLines().GetObject( nLine );
+        TextLine* pLine = pPPortion->GetLines()[ nLine ];
         return pLine->GetLen();
     }
 
@@ -1312,7 +1313,7 @@ sal_uLong TextEngine::CalcParaHeight( sal_uLong nParagraph ) const
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
     DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetParaHeight" );
     if ( pPPortion )
-        nHeight = pPPortion->GetLines().Count() * mnCharHeight;
+        nHeight = pPPortion->GetLines().size() * mnCharHeight;
 
     return nHeight;
 }
@@ -1324,12 +1325,12 @@ void TextEngine::UpdateSelections()
 Range TextEngine::GetInvalidYOffsets( sal_uLong nPortion )
 {
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPortion );
-    sal_uInt16 nLines = pTEParaPortion->GetLines().Count();
+    sal_uInt16 nLines = pTEParaPortion->GetLines().size();
     sal_uInt16 nLastInvalid, nFirstInvalid = 0;
     sal_uInt16 nLine;
     for ( nLine = 0; nLine < nLines; nLine++ )
     {
-        TextLine* pL = pTEParaPortion->GetLines().GetObject( nLine );
+        TextLine* pL = pTEParaPortion->GetLines()[ nLine ];
         if ( pL->IsInvalid() )
         {
             nFirstInvalid = nLine;
@@ -1339,7 +1340,7 @@ Range TextEngine::GetInvalidYOffsets( sal_uLong nPortion )
 
     for ( nLastInvalid = nFirstInvalid; nLastInvalid < nLines; nLastInvalid++ )
     {
-        TextLine* pL = pTEParaPortion->GetLines().GetObject( nLine );
+        TextLine* pL = pTEParaPortion->GetLines()[ nLine ];
         if ( pL->IsValid() )
             break;
     }
@@ -1637,7 +1638,7 @@ void TextEngine::FormatDoc()
             maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
         }
         nY += CalcParaHeight( nPara );
-        if ( !mbHasMultiLineParas && pTEParaPortion->GetLines().Count() > 1 )
+        if ( !mbHasMultiLineParas && pTEParaPortion->GetLines().size() > 1 )
             mbHasMultiLineParas = sal_True;
     }
 
@@ -1679,7 +1680,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
     TextLine* pTmpLine = new TextLine;
     pTmpLine->SetStart( pNode->GetText().Len() );
     pTmpLine->SetEnd( pTmpLine->GetStart() );
-    pTEParaPortion->GetLines().Insert( pTmpLine, pTEParaPortion->GetLines().Count() );
+    pTEParaPortion->GetLines().push_back( pTmpLine );
 
     if ( ImpGetAlign() == TXTALIGN_CENTER )
         pTmpLine->SetStartX( (short)(mnMaxTextWidth / 2) );
@@ -2017,11 +2018,11 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             // --------------------------------------------------
             // Ueber die Zeilen des Absatzes...
             // --------------------------------------------------
-            sal_uInt16 nLines = pPortion->GetLines().Count();
+            sal_uInt16 nLines = pPortion->GetLines().size();
             sal_uInt16 nIndex = 0;
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
             {
-                TextLine* pLine = pPortion->GetLines().GetObject(nLine);
+                TextLine* pLine = pPortion->GetLines()[nLine];
                 Point aTmpPos( rStartPos.X() + pLine->GetStartX(), nY );
 
                 if ( ( !pPaintArea || ( ( nY + mnCharHeight ) > pPaintArea->Top() ) )
@@ -2196,7 +2197,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     DBG_ASSERT( pTEParaPortion->IsInvalid(), "CreateLines: Portion nicht invalid!" );
 
-    sal_uInt16 nOldLineCount = pTEParaPortion->GetLines().Count();
+    sal_uInt16 nOldLineCount = pTEParaPortion->GetLines().size();
 
     // ---------------------------------------------------------------
     // Schnelle Sonderbehandlung fuer leere Absaetze...
@@ -2206,21 +2207,25 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         // schnelle Sonderbehandlung...
         if ( pTEParaPortion->GetTextPortions().Count() )
             pTEParaPortion->GetTextPortions().Reset();
-        if ( pTEParaPortion->GetLines().Count() )
-            pTEParaPortion->GetLines().DeleteAndDestroy( 0, pTEParaPortion->GetLines().Count() );
+        if ( !pTEParaPortion->GetLines().empty() )
+        {
+            BOOST_FOREACH(TextLine* pLine, pTEParaPortion->GetLines())
+                delete pLine;
+            pTEParaPortion->GetLines().clear();
+        }
         CreateAndInsertEmptyLine( nPara );
         pTEParaPortion->SetValid();
-        return nOldLineCount != pTEParaPortion->GetLines().Count();
+        return nOldLineCount != pTEParaPortion->GetLines().size();
     }
 
     // ---------------------------------------------------------------
     // Initialisierung......
     // ---------------------------------------------------------------
 
-    if ( pTEParaPortion->GetLines().Count() == 0 )
+    if ( pTEParaPortion->GetLines().empty() )
     {
         TextLine* pL = new TextLine;
-        pTEParaPortion->GetLines().Insert( pL, 0 );
+        pTEParaPortion->GetLines().push_back( pL );
     }
 
     const short nInvalidDiff = pTEParaPortion->GetInvalidDiff();
@@ -2269,10 +2274,10 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     // Zeilen flaggen => nicht removen !
     // ---------------------------------------------------------------
 
-    sal_uInt16 nLine = pTEParaPortion->GetLines().Count()-1;
+    sal_uInt16 nLine = pTEParaPortion->GetLines().size()-1;
     for ( sal_uInt16 nL = 0; nL <= nLine; nL++ )
     {
-        TextLine* pLine = pTEParaPortion->GetLines().GetObject( nL );
+        TextLine* pLine = pTEParaPortion->GetLines()[ nL ];
         if ( pLine->GetEnd() > nInvalidStart )
         {
             nLine = nL;
@@ -2285,7 +2290,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     if ( nLine && ( !pTEParaPortion->IsSimpleInvalid() || ( nInvalidEnd < pNode->GetText().Len() ) || ( nInvalidDiff <= 0 ) ) )
         nLine--;
 
-    TextLine* pLine = pTEParaPortion->GetLines().GetObject( nLine );
+    TextLine* pLine = pTEParaPortion->GetLines()[ nLine ];
 
     // ---------------------------------------------------------------
     // Ab hier alle Zeilen durchformatieren...
@@ -2484,8 +2489,8 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
 
         // Naechste Zeile oder ggf. neue Zeile....
         pLine = 0;
-        if ( nLine < pTEParaPortion->GetLines().Count()-1 )
-            pLine = pTEParaPortion->GetLines().GetObject( ++nLine );
+        if ( nLine < pTEParaPortion->GetLines().size()-1 )
+            pLine = pTEParaPortion->GetLines()[ ++nLine ];
         if ( pLine && ( nIndex >= pNode->GetText().Len() ) )
         {
             nDelFromLine = nLine;
@@ -2494,7 +2499,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         if ( !pLine && ( nIndex < pNode->GetText().Len() )  )
         {
             pLine = new TextLine;
-            pTEParaPortion->GetLines().Insert( pLine, ++nLine );
+            pTEParaPortion->GetLines().insert( pTEParaPortion->GetLines().begin() + ++nLine, pLine );
         }
         if ( pLine )
         {
@@ -2507,16 +2512,20 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     }   // while ( Index < Len )
 
     if ( nDelFromLine != 0xFFFF )
-        pTEParaPortion->GetLines().DeleteAndDestroy( nDelFromLine, pTEParaPortion->GetLines().Count() - nDelFromLine );
+        for( TextLines::iterator it = pTEParaPortion->GetLines().begin() + nDelFromLine;
+             it != pTEParaPortion->GetLines().end(); ++it )
+            delete *it;
+        pTEParaPortion->GetLines().erase( pTEParaPortion->GetLines().begin() + nDelFromLine,
+                                          pTEParaPortion->GetLines().end() );
 
-    DBG_ASSERT( pTEParaPortion->GetLines().Count(), "Keine Zeile nach CreateLines!" );
+    DBG_ASSERT( pTEParaPortion->GetLines().size(), "Keine Zeile nach CreateLines!" );
 
     if ( bLineBreak == sal_True )
         CreateAndInsertEmptyLine( nPara );
 
     pTEParaPortion->SetValid();
 
-    return nOldLineCount != pTEParaPortion->GetLines().Count();
+    return nOldLineCount != pTEParaPortion->GetLines().size();
 }
 
 String TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )

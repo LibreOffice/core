@@ -177,8 +177,7 @@ public:
     inline sal_Bool operator != ( const TextLine& rLine ) const;
 };
 
-typedef TextLine* TextLinePtr;
- SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1 )
+typedef std::vector<TextLine*> TextLines;
 
 inline sal_Bool TextLine::operator == ( const TextLine& rLine ) const
 {
