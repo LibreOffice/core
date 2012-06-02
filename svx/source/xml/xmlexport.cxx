@@ -85,7 +85,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
 
         if( bDocRet )
         {
-            uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
+            uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( "com.sun.star.xml.sax.Writer"  ) ) );
             if( !xWriter.is() )
             {
                 OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
@@ -226,7 +226,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             aParserInput.aInputStream = xInputStream;
 
             // get parser
-            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ), UNO_QUERY );
+            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString("com.sun.star.xml.sax.Parser") ), UNO_QUERY );
             DBG_ASSERT( xParser.is(), "Can't create parser" );
 
             // prepare filter arguments

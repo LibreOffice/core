@@ -49,8 +49,8 @@ namespace textconversiondlgs
 //.............................................................................
 using namespace ::com::sun::star;
 
-#define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.linguistic2.ChineseTranslationDialog"))
-#define SERVICE_NAME ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
+#define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
+#define SERVICE_NAME ::rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 

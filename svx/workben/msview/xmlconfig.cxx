@@ -119,7 +119,7 @@ ElementConfigType ConfigHandler::parseType( const OUString& sType ) throw (SAXEx
     }
     else
     {
-        OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "unknown type: " ) );
+        OUString aMessage( "unknown type: "  );
         aMessage += sType;
         errorThrow( aMessage );
     }
@@ -132,7 +132,7 @@ void ConfigHandler::addElement( ElementConfigPtr& rElementConfig ) throw ( SAXEx
     ElementConfigContainer* pParent = dynamic_cast< ElementConfigContainer* >( maElementStack.top().get() );
 
     if( !pParent )
-        errorThrow( OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal parent for element" ) ) );
+        errorThrow( OUString( "illegal parent for element"  ) );
 
 
     pParent->addElementConfig( rElementConfig );
@@ -150,7 +150,7 @@ OUString ConfigHandler::getAttribute( const Reference< XAttributeList > & xAttri
             return xAttribs->getValueByIndex( i );
     }
 
-    OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "missing required attribute: ") );
+    OUString aMessage( "missing required attribute: " );
     aMessage += aName;
     errorThrow( aMessage );
 
@@ -201,7 +201,7 @@ void SAL_CALL ConfigHandler::startElement(const OUString& aName, const Reference
 
     if( !pElement.get() )
     {
-        OUString aMessage( OUString( RTL_CONSTASCII_USTRINGPARAM("unknown config element: ")) );
+        OUString aMessage( OUString( "unknown config element: ") );
         aMessage += aName;
         errorThrow( aMessage  );
     }
@@ -246,7 +246,7 @@ sal_Int32 toInt( const OUString& rText )
 ElementConfigPtr ConfigHandler::importAtomConfig( const Reference< XAttributeList > & xAttribs, bool bIsContainer ) throw (SAXException)
 {
     if( !maElementStack.empty() )
-        errorThrow( OUString( RTL_CONSTASCII_USTRINGPARAM("atom elements must be root" ) ) );
+        errorThrow( OUString( "atom elements must be root"  ) );
 
     ElementConfigPtr aPtr( new AtomConfig( getAttribute(xAttribs,"name"), bIsContainer ) );
     gAtomConfigMap[ (UINT16)toInt(getAttribute(xAttribs,"id"))] = aPtr;
@@ -325,7 +325,7 @@ void load_config( const OUString& rPath )
         // get parser
         Reference< XParser > xParser(
             comphelper::getProcessServiceFactory()->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
+                OUString("com.sun.star.xml.sax.Parser") ),
             UNO_QUERY_THROW );
 
         // get filter
@@ -357,7 +357,7 @@ rtl::OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) cons
     if( maName.getLength() )
     {
         aRet += maName;
-        aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " = " ) );
+        aRet += OUString( " = "  );
     }
 
     switch( mnType )
@@ -399,10 +399,10 @@ rtl::OUString ElementConfig::dump_hex( SvStream& rStream, sal_Size& nLength )
         if( (nRow == 16) || (nLength==0) )
         {
             while( aHex.getLength() < (16*3) )
-                aHex += OUString( RTL_CONSTASCII_USTRINGPARAM(" ") );
+                aHex += OUString( " " );
             aOut += aHex;
             aOut += aAscii;
-            aOut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\r" ) );
+            aOut += OUString( "\n\r"  );
             aHex = aEmpty;
             aAscii = aEmpty;
             nRow = 0;
@@ -488,7 +488,7 @@ rtl::OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLeng
         {
             aRet += (*aIter++)->format( rStream, nLength );
             if( (aIter != aEnd) || (nLength != 0) )
-                aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\r" ) );
+                aRet += OUString( "\n\r"  );
         }
 
         if( nLength )
@@ -498,7 +498,7 @@ rtl::OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLeng
     {
         aRet = getName();
         if( aRet.getLength() )
-            aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " = " ) );
+            aRet += OUString( " = "  );
 
         OUString aValue;
         switch( getType() )
@@ -530,7 +530,7 @@ rtl::OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLeng
         }
         else
         {
-            aValue = OUString( RTL_CONSTASCII_USTRINGPARAM("<empty!?>") );
+            aValue = OUString( "<empty!?>" );
         }
 
         aRet += aValue;

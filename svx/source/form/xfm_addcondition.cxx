@@ -63,14 +63,14 @@ namespace svxform
     Sequence< ::rtl::OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames()
     {
         ::comphelper::StringSequence aSupported( 1 );
-        aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xforms.ui.dialogs.AddCondition" ) );
+        aSupported.getArray()[0] = ::rtl::OUString( "com.sun.star.xforms.ui.dialogs.AddCondition"  );
         return aSupported;
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OAddConditionDialog_GetImplementationName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svx.OAddConditionDialog"));
+        return ::rtl::OUString("org.openoffice.comp.svx.OAddConditionDialog");
     }
 
     //====================================================================
@@ -81,7 +81,7 @@ namespace svxform
         :OAddConditionDialogBase( _rxORB )
     {
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Binding" ) ),
+            ::rtl::OUString( "Binding"  ),
             PROPERTY_ID_BINDING,
             PropertyAttribute::TRANSIENT,
             &m_xBinding,
@@ -89,7 +89,7 @@ namespace svxform
         );
 
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FacetName" ) ),
+            ::rtl::OUString( "FacetName"  ),
             PROPERTY_ID_FACET_NAME,
             PropertyAttribute::TRANSIENT,
             &m_sFacetName,
@@ -97,7 +97,7 @@ namespace svxform
         );
 
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConditionValue" ) ),
+            ::rtl::OUString( "ConditionValue"  ),
             PROPERTY_ID_CONDITION_VALUE,
             PropertyAttribute::TRANSIENT,
             &m_sConditionValue,
@@ -105,7 +105,7 @@ namespace svxform
         );
 
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormModel" ) ),
+            ::rtl::OUString( "FormModel"  ),
             PROPERTY_ID_FORM_MODEL,
             PropertyAttribute::TRANSIENT,
             &m_xWorkModel,

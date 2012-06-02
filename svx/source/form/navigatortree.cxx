@@ -1497,7 +1497,7 @@ namespace svxform
             aNewName = aBaseName;
             if( i>0 )
             {
-                aNewName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                aNewName += ::rtl::OUString(" ");
                 aNewName += ::rtl::OUString::valueOf(i).getStr();
             }
 

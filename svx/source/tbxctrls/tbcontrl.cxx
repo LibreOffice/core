@@ -428,16 +428,16 @@ void SvxStyleBox_Impl::Select()
 
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Value  = makeAny( OUString( aSelEntry ) );
-            aArgs[1].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Family"));
+            aArgs[1].Name   = OUString("Family");
             aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
             if( bCreateNew )
             {
-                aArgs[0].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Param"));
+                aArgs[0].Name   = OUString("Param");
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:StyleNewByExample"), aArgs);
             }
             else
             {
-                aArgs[0].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Template"));
+                aArgs[0].Name   = OUString("Template");
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
             }
         }
@@ -785,7 +785,7 @@ void SvxFontNameBox_Impl::Select()
 
             Any a;
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name   = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ));
+            aArgs[0].Name   = OUString( "CharFontName" );
             aFontItem.QueryValue( a );
             aArgs[0].Value  = a;
 
@@ -795,7 +795,7 @@ void SvxFontNameBox_Impl::Select()
             ReleaseFocus_Impl();
 
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                                         OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" )),
+                                         OUString( ".uno:CharFontName" ),
                                          aArgs );
         }
         else
@@ -854,7 +854,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         Reference< XDispatchProvider > aDisp( GetFrame()->getController(), UNO_QUERY );
         SfxQueryStatus aQueryStatus( aDisp,
                                      SID_ATTR_AUTO_COLOR_INVALID,
-                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoColorInvalid" )));
+                                     rtl::OUString( ".uno:AutoColorInvalid" ));
         SfxItemState eState = aQueryStatus.QueryState( pDummy );
         if( (SFX_ITEM_DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
@@ -908,7 +908,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SetText( rWndTitle );
     aColorSet.Show();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
+    AddStatusListener( rtl::OUString( ".uno:ColorTableState" ));
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1233,10 +1233,10 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 
     Any a;
     Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OuterBorder" ));
+    aArgs[0].Name = OUString( "OuterBorder" );
     aBorderOuter.QueryValue( a );
     aArgs[0].Value = a;
-    aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InnerBorder" ));
+    aArgs[1].Name = OUString( "InnerBorder" );
     aBorderInner.QueryValue( a );
     aArgs[1].Value = a;
 
@@ -1246,7 +1246,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     aFrameSet.SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SetBorderStyle" )),
+                                 OUString( ".uno:SetBorderStyle" ),
                                  aArgs );
     return 0;
 }
@@ -1331,7 +1331,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     try
     {
         Reference< lang::XServiceInfo > xServices( rFrame->getController()->getModel(), UNO_QUERY_THROW );
-        m_bIsWriter = xServices->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument")));
+        m_bIsWriter = xServices->supportsService(::rtl::OUString("com.sun.star.text.TextDocument"));
     }
     catch(const uno::Exception& )
     {
@@ -1405,12 +1405,12 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ));
+    aArgs[0].Name = OUString( "LineStyle" );
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
     aArgs[0].Value = a;
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineStyle" )),
+                                 OUString( ".uno:LineStyle" ),
                                  aArgs );
     return 0;
 }
@@ -1535,11 +1535,11 @@ struct SvxStyleToolBoxControl::Impl
         {
             Reference< style::XStyleFamiliesSupplier > xStylesSupplier( xModel, UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServices( xModel, UNO_QUERY_THROW );
-            bSpecModeWriter = xServices->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument")));
+            bSpecModeWriter = xServices->supportsService(::rtl::OUString("com.sun.star.text.TextDocument"));
             if(bSpecModeWriter)
             {
                 Reference<container::XNameAccess> xParaStyles;
-                    xStylesSupplier->getStyleFamilies()->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"))) >>=
+                    xStylesSupplier->getStyleFamilies()->getByName(::rtl::OUString("ParagraphStyles")) >>=
                     xParaStyles;
                 static const sal_Char* aWriterStyles[] =
                 {
@@ -1556,7 +1556,7 @@ struct SvxStyleToolBoxControl::Impl
                         Reference< beans::XPropertySet > xStyle;
                         xParaStyles->getByName( rtl::OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
                         ::rtl::OUString sName;
-                        xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
+                        xStyle->getPropertyValue(::rtl::OUString("DisplayName")) >>= sName;
                         if( !sName.isEmpty() )
                             aDefaultStyles.push_back(sName);
                     }
@@ -1567,7 +1567,7 @@ struct SvxStyleToolBoxControl::Impl
             }
             else if( 0 != (
                 bSpecModeCalc = xServices->supportsService(::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")))))
+                    "com.sun.star.sheet.SpreadsheetDocument"))))
             {
                 static const sal_Char* aCalcStyles[] =
                 {
@@ -1578,7 +1578,7 @@ struct SvxStyleToolBoxControl::Impl
                 };
                 Reference<container::XNameAccess> xCellStyles;
                     xStylesSupplier->getStyleFamilies()->getByName(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles"))) >>=
+                        ::rtl::OUString("CellStyles")) >>=
                         xCellStyles;
                 for( sal_uInt32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
                 {
@@ -1589,7 +1589,7 @@ struct SvxStyleToolBoxControl::Impl
                         {
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
                             ::rtl::OUString sName;
-                            xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
+                            xStyle->getPropertyValue(::rtl::OUString("DisplayName")) >>= sName;
                             if( !sName.isEmpty() )
                                 aDefaultStyles.push_back(sName);
                         }
@@ -2004,7 +2004,7 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
 {
     SvxStyleBox_Impl* pBox = new SvxStyleBox_Impl( pParent,
                                                    SID_STYLE_APPLY,
-                                                   OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StyleApply" )),
+                                                   OUString( ".uno:StyleApply" ),
                                                    SFX_STYLE_FAMILY_PARA,
                                                    Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                                    m_xFrame,
@@ -2117,7 +2117,7 @@ SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" )),
+                OUString( ".uno:Color" ),
                 SID_ATTR_CHAR_COLOR,
                 m_xFrame,
                 SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
@@ -2193,7 +2193,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     sal_uInt16 nResId = GetSlotId() == SID_BACKGROUND_COLOR ?
                         RID_SVXSTR_BACKGROUND : RID_SVXSTR_COLOR;
     SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BackgroundColor" )),
+        OUString( ".uno:BackgroundColor" ),
                                     SID_BACKGROUND_COLOR,
                                     m_xFrame,
                                     SVX_RESSTR(nResId),
@@ -2257,13 +2257,13 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     switch( nSlotId )
     {
         case SID_ATTR_CHAR_COLOR:
-            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" )));
+            addStatusListener( OUString( ".uno:Color" ));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             mLastColor = COL_RED;
             break;
 
         case SID_ATTR_CHAR_COLOR2:
-            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" )));
+            addStatusListener( OUString( ".uno:CharColorExt" ));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             mLastColor = COL_RED;
             break;
@@ -2271,13 +2271,13 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
         case SID_BACKGROUND_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         default:
-            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
+            addStatusListener( OUString( ".uno:CharBackgroundExt" ));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             mLastColor = COL_YELLOW;
             break;
 
         case SID_FRAME_LINECOLOR:
-            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" )));
+            addStatusListener( OUString( ".uno:FrameLineColor" ));
             nMode = 0;
             mLastColor = COL_BLUE;
             break;
@@ -2394,29 +2394,29 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
     {
         case SID_ATTR_CHAR_COLOR2 :
             bNoArgs     = sal_True;
-            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" ));
-            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColorExt" ));
+            aCommand    = OUString( ".uno:CharColorExt" );
+            aParamName  = OUString( "CharColorExt" );
             break;
 
         case SID_ATTR_CHAR_COLOR  :
-            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" ));
-            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "Color" ));
+            aCommand    = OUString( ".uno:Color" );
+            aParamName  = OUString( "Color" );
             break;
 
         case SID_BACKGROUND_COLOR :
-            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BackgroundColor" ));
-            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ));
+            aCommand    = OUString( ".uno:BackgroundColor" );
+            aParamName  = OUString( "BackgroundColor" );
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
             bNoArgs     = sal_True;
-            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" ));
-            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharBackgroundExt" ));
+            aCommand    = OUString( ".uno:CharBackgroundExt" );
+            aParamName  = OUString( "CharBackgroundExt" );
             break;
 
         case SID_FRAME_LINECOLOR  :
-            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" ));
-            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameLineColor" ));
+            aCommand    = OUString( ".uno:FrameLineColor" );
+            aParamName  = OUString( "FrameLineColor" );
             break;
     }
 
@@ -2563,7 +2563,7 @@ SfxPopupWindowType SvxFrameLineColorToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" )),
+                                        OUString( ".uno:FrameLineColor" ),
                                         SID_FRAME_LINECOLOR,
                                         m_xFrame,
                                         SVX_RESSTR(RID_SVXSTR_FRAME_COLOR),
