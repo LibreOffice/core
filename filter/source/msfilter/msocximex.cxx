@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define C2U(cChar)  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+#define C2U(cChar)  rtl::OUString(cChar)
 
 static char sWW8_form[] = "WW-Standard";
 

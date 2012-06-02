@@ -204,9 +204,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             break;
         }
-        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" )) ));
+        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString( "RotateAngle" ) ));
 
-        if( ( rObj.ImplGetPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" )) ) &&
+        if( ( rObj.ImplGetPropertyValue( ::rtl::OUString( "IsFontwork" ) ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType().EqualsAscii( "drawing.Measure" ) || rObj.GetType().EqualsAscii( "drawing.Caption" ) )
         {
@@ -287,7 +287,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             sal_Int32 nRadius = (sal_Int32)rObj.ImplGetInt32PropertyValue(
-                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CornerRadius" )));
+                                            ::rtl::OUString( "CornerRadius" ));
             if( nRadius )
             {
                 nRadius = ImplMapSize( Size( nRadius, 0 )).Width();
@@ -316,7 +316,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             CircleKind  eCircleKind = CircleKind_FULL;
             PolyStyle   ePolyKind = PolyStyle();
-            if ( rObj.ImplGetPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleKind" )) ) )
+            if ( rObj.ImplGetPropertyValue( ::rtl::OUString( "CircleKind" ) ) )
             {
                 eCircleKind = *( (CircleKind*)rObj.GetUsrAny().getValue() );
                 switch ( eCircleKind )
@@ -351,10 +351,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             else
             {
                 sal_Int32 nStartAngle, nEndAngle;
-                if ( !rObj.ImplGetPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleStartAngle" )) ) )
+                if ( !rObj.ImplGetPropertyValue( ::rtl::OUString( "CircleStartAngle" ) ) )
                     break;
                 nStartAngle = *( (sal_Int32*)rObj.GetUsrAny().getValue() );
-                if( !rObj.ImplGetPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleEndAngle" )) ) )
+                if( !rObj.ImplGetPropertyValue( ::rtl::OUString( "CircleEndAngle" ) ) )
                     break;
                 nEndAngle = *( (sal_Int32*)rObj.GetUsrAny().getValue() );
 
@@ -605,7 +605,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                  'D' == rObj.GetType().GetChar( 9 ) )   // drawing.3D
         {
             // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
-            if ( !rObj.ImplGetPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" )) ) )
+            if ( !rObj.ImplGetPropertyValue( ::rtl::OUString( "Bitmap" ) ) )
                 break;
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -629,7 +629,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         aPropOpt.CreateShadowProperties( rObj.mXPropSet );
 
         if( USHRT_MAX != mpEscherEx->GetHellLayerId() &&
-            rObj.ImplGetPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayerID" )) ) &&
+            rObj.ImplGetPropertyValue( ::rtl::OUString( "LayerID" ) ) &&
             (*((sal_uInt16*)rObj.GetUsrAny().getValue()) ) == mpEscherEx->GetHellLayerId() )
         {
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
@@ -690,7 +690,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
-        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ))));
+        rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString( "RotateAngle" )));
         sal_Int32 nAngle = rObj.GetAngle();
         if( rObj.GetType().EqualsAscii( "drawing.Line" ))
         {
@@ -1042,8 +1042,8 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
         xub_StrLen nPos = mType.SearchAscii( "Shape" );
         mType.Erase( nPos, 5 );
 
-        static const OUString sPresStr(RTL_CONSTASCII_USTRINGPARAM( "IsPresentationObject" ));
-        static const OUString sEmptyPresStr(RTL_CONSTASCII_USTRINGPARAM( "IsEmptyPresentationObject" ));
+        static const OUString sPresStr("IsPresentationObject" );
+        static const OUString sEmptyPresStr("IsEmptyPresentationObject" );
 
         if( ImplGetPropertyValue( sPresStr ) )
             mbPresObj = ::cppu::any2bool( mAny );

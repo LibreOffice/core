@@ -2033,7 +2033,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
     if ( pCustoShape )
     {
         uno::Sequence< rtl::OUString > sEquationSource;
-        const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM( "Equations" ) );
+        const rtl::OUString sEquations( "Equations"  );
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)
             pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sEquations );
@@ -2163,19 +2163,19 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if ( aXPropSet.is() )
     {
         SdrObjCustomShape* pCustoShape = (SdrObjCustomShape*)GetSdrObjectFromXShape( rXShape );
-        const rtl::OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+        const rtl::OUString sCustomShapeGeometry( "CustomShapeGeometry"  );
         uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
-            const rtl::OUString sViewBox            ( RTL_CONSTASCII_USTRINGPARAM( "ViewBox" ) );
-            const rtl::OUString sTextRotateAngle    ( RTL_CONSTASCII_USTRINGPARAM( "TextRotateAngle" ) );
-            const rtl::OUString sExtrusion          ( RTL_CONSTASCII_USTRINGPARAM( "Extrusion" ) );
-            const rtl::OUString sEquations          ( RTL_CONSTASCII_USTRINGPARAM( "Equations" ) );
-            const rtl::OUString sPath               ( RTL_CONSTASCII_USTRINGPARAM( "Path" ) );
-            const rtl::OUString sTextPath           ( RTL_CONSTASCII_USTRINGPARAM( "TextPath" ) );
-            const rtl::OUString sHandles            ( RTL_CONSTASCII_USTRINGPARAM( "Handles" ) );
-            const rtl::OUString sAdjustmentValues   ( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
+            const rtl::OUString sViewBox            ( "ViewBox"  );
+            const rtl::OUString sTextRotateAngle    ( "TextRotateAngle"  );
+            const rtl::OUString sExtrusion          ( "Extrusion"  );
+            const rtl::OUString sEquations          ( "Equations"  );
+            const rtl::OUString sPath               ( "Path"  );
+            const rtl::OUString sTextPath           ( "TextPath"  );
+            const rtl::OUString sHandles            ( "Handles"  );
+            const rtl::OUString sAdjustmentValues   ( "AdjustmentValues"  );
 
             const beans::PropertyValue* pAdjustmentValuesProp = NULL;
             sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
@@ -2240,28 +2240,28 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         for ( r = 0; r < nrCount; r++ )
                         {
                             const beans::PropertyValue& rrProp = aExtrusionPropSeq[ r ];
-                            const rtl::OUString sExtrusionBrightness            ( RTL_CONSTASCII_USTRINGPARAM( "Brightness" ) );
-                            const rtl::OUString sExtrusionDepth                 ( RTL_CONSTASCII_USTRINGPARAM( "Depth" ) );
-                            const rtl::OUString sExtrusionDiffusion             ( RTL_CONSTASCII_USTRINGPARAM( "Diffusion" ) );
-                            const rtl::OUString sExtrusionNumberOfLineSegments  ( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLineSegments" ) );
-                            const rtl::OUString sExtrusionLightFace             ( RTL_CONSTASCII_USTRINGPARAM( "LightFace" ) );
-                            const rtl::OUString sExtrusionFirstLightHarsh       ( RTL_CONSTASCII_USTRINGPARAM( "FirstLightHarsh" ) );
-                            const rtl::OUString sExtrusionSecondLightHarsh      ( RTL_CONSTASCII_USTRINGPARAM( "SecondLightHarsh" ) );
-                            const rtl::OUString sExtrusionFirstLightLevel       ( RTL_CONSTASCII_USTRINGPARAM( "FirstLightLevel" ) );
-                            const rtl::OUString sExtrusionSecondLightLevel      ( RTL_CONSTASCII_USTRINGPARAM( "SecondLightLevel" ) );
-                            const rtl::OUString sExtrusionFirstLightDirection   ( RTL_CONSTASCII_USTRINGPARAM( "FirstLightDirection" ) );
-                            const rtl::OUString sExtrusionSecondLightDirection  ( RTL_CONSTASCII_USTRINGPARAM( "SecondLightDirection" ) );
-                            const rtl::OUString sExtrusionMetal                 ( RTL_CONSTASCII_USTRINGPARAM( "Metal" ) );
-                            const rtl::OUString sExtrusionShadeMode             ( RTL_CONSTASCII_USTRINGPARAM( "ShadeMode" ) );
-                            const rtl::OUString sExtrusionRotateAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) );
-                            const rtl::OUString sExtrusionRotationCenter        ( RTL_CONSTASCII_USTRINGPARAM( "RotationCenter" ) );
-                            const rtl::OUString sExtrusionShininess             ( RTL_CONSTASCII_USTRINGPARAM( "Shininess" ) );
-                            const rtl::OUString sExtrusionSkew                  ( RTL_CONSTASCII_USTRINGPARAM( "Skew" ) );
-                            const rtl::OUString sExtrusionSpecularity           ( RTL_CONSTASCII_USTRINGPARAM( "Specularity" ) );
-                            const rtl::OUString sExtrusionProjectionMode        ( RTL_CONSTASCII_USTRINGPARAM( "ProjectionMode" ) );
-                            const rtl::OUString sExtrusionViewPoint             ( RTL_CONSTASCII_USTRINGPARAM( "ViewPoint" ) );
-                            const rtl::OUString sExtrusionOrigin                ( RTL_CONSTASCII_USTRINGPARAM( "Origin" ) );
-                            const rtl::OUString sExtrusionColor                 ( RTL_CONSTASCII_USTRINGPARAM( "Color" ) );
+                            const rtl::OUString sExtrusionBrightness            ( "Brightness"  );
+                            const rtl::OUString sExtrusionDepth                 ( "Depth"  );
+                            const rtl::OUString sExtrusionDiffusion             ( "Diffusion"  );
+                            const rtl::OUString sExtrusionNumberOfLineSegments  ( "NumberOfLineSegments"  );
+                            const rtl::OUString sExtrusionLightFace             ( "LightFace"  );
+                            const rtl::OUString sExtrusionFirstLightHarsh       ( "FirstLightHarsh"  );
+                            const rtl::OUString sExtrusionSecondLightHarsh      ( "SecondLightHarsh"  );
+                            const rtl::OUString sExtrusionFirstLightLevel       ( "FirstLightLevel"  );
+                            const rtl::OUString sExtrusionSecondLightLevel      ( "SecondLightLevel"  );
+                            const rtl::OUString sExtrusionFirstLightDirection   ( "FirstLightDirection"  );
+                            const rtl::OUString sExtrusionSecondLightDirection  ( "SecondLightDirection"  );
+                            const rtl::OUString sExtrusionMetal                 ( "Metal"  );
+                            const rtl::OUString sExtrusionShadeMode             ( "ShadeMode"  );
+                            const rtl::OUString sExtrusionRotateAngle           ( "RotateAngle"  );
+                            const rtl::OUString sExtrusionRotationCenter        ( "RotationCenter"  );
+                            const rtl::OUString sExtrusionShininess             ( "Shininess"  );
+                            const rtl::OUString sExtrusionSkew                  ( "Skew"  );
+                            const rtl::OUString sExtrusionSpecularity           ( "Specularity"  );
+                            const rtl::OUString sExtrusionProjectionMode        ( "ProjectionMode"  );
+                            const rtl::OUString sExtrusionViewPoint             ( "ViewPoint"  );
+                            const rtl::OUString sExtrusionOrigin                ( "Origin"  );
+                            const rtl::OUString sExtrusionColor                 ( "Color"  );
 
                             if ( rrProp.Name.equals( sExtrusion ) )
                             {
@@ -2576,16 +2576,16 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         for ( r = 0; r < nrCount; r++ )
                         {
                             const beans::PropertyValue& rrProp = aPathPropSeq[ r ];
-                            const rtl::OUString sPathExtrusionAllowed               ( RTL_CONSTASCII_USTRINGPARAM( "ExtrusionAllowed" ) );
-                            const rtl::OUString sPathConcentricGradientFillAllowed  ( RTL_CONSTASCII_USTRINGPARAM( "ConcentricGradientFillAllowed" ) );
-                            const rtl::OUString sPathTextPathAllowed                ( RTL_CONSTASCII_USTRINGPARAM( "TextPathAllowed" ) );
-                            const rtl::OUString sPathCoordinates                    ( RTL_CONSTASCII_USTRINGPARAM( "Coordinates" ) );
-                            const rtl::OUString sPathGluePoints                     ( RTL_CONSTASCII_USTRINGPARAM( "GluePoints" ) );
-                            const rtl::OUString sPathGluePointType                  ( RTL_CONSTASCII_USTRINGPARAM( "GluePointType" ) );
-                            const rtl::OUString sPathSegments                       ( RTL_CONSTASCII_USTRINGPARAM( "Segments" ) );
-                            const rtl::OUString sPathStretchX                       ( RTL_CONSTASCII_USTRINGPARAM( "StretchX" ) );
-                            const rtl::OUString sPathStretchY                       ( RTL_CONSTASCII_USTRINGPARAM( "StretchY" ) );
-                            const rtl::OUString sPathTextFrames                     ( RTL_CONSTASCII_USTRINGPARAM( "TextFrames" ) );
+                            const rtl::OUString sPathExtrusionAllowed               ( "ExtrusionAllowed"  );
+                            const rtl::OUString sPathConcentricGradientFillAllowed  ( "ConcentricGradientFillAllowed"  );
+                            const rtl::OUString sPathTextPathAllowed                ( "TextPathAllowed"  );
+                            const rtl::OUString sPathCoordinates                    ( "Coordinates"  );
+                            const rtl::OUString sPathGluePoints                     ( "GluePoints"  );
+                            const rtl::OUString sPathGluePointType                  ( "GluePointType"  );
+                            const rtl::OUString sPathSegments                       ( "Segments"  );
+                            const rtl::OUString sPathStretchX                       ( "StretchX"  );
+                            const rtl::OUString sPathStretchY                       ( "StretchY"  );
+                            const rtl::OUString sPathTextFrames                     ( "TextFrames"  );
 
                             if ( rrProp.Name.equals( sPathExtrusionAllowed ) )
                             {
@@ -2893,9 +2893,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         for ( r = 0; r < nrCount; r++ )
                         {
                             const beans::PropertyValue& rrProp = aTextPathPropSeq[ r ];
-                            const rtl::OUString sTextPathMode       ( RTL_CONSTASCII_USTRINGPARAM( "TextPathMode" ) );
-                            const rtl::OUString sTextPathScaleX     ( RTL_CONSTASCII_USTRINGPARAM( "ScaleX" ) );
-                            const rtl::OUString sSameLetterHeights  ( RTL_CONSTASCII_USTRINGPARAM( "SameLetterHeights" ) );
+                            const rtl::OUString sTextPathMode       ( "TextPathMode"  );
+                            const rtl::OUString sTextPathScaleX     ( "ScaleX"  );
+                            const rtl::OUString sSameLetterHeights  ( "SameLetterHeights"  );
 
                             if ( rrProp.Name.equals( sTextPath ) )
                             {
@@ -2962,16 +2962,16 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( xText.is() )
                                 aText = xText->getString();
                             if ( aText.isEmpty() )
-                                aText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "your text" ));   // todo: moving into a resource
+                                aText = ::rtl::OUString( "your text" );   // todo: moving into a resource
                             AddOpt( DFF_Prop_gtextUNICODE, aText );
 
                             // FontWork Font
                             rtl::OUString aFontName;
-                            const rtl::OUString sCharFontName           ( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) );
+                            const rtl::OUString sCharFontName           ( "CharFontName"  );
                             uno::Any aAny = aXPropSet->getPropertyValue( sCharFontName );
                             aAny >>= aFontName;
                             if ( aFontName.isEmpty() )
-                                aFontName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arial Black" ));
+                                aFontName = ::rtl::OUString( "Arial Black" );
                             AddOpt( DFF_Prop_gtextFont, aFontName );
 
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharScaleWidth" ) ), sal_True ) )
@@ -3061,17 +3061,17 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     {
                                         const beans::PropertyValue& rPropVal = rPropSeq[ j ];
 
-                                        const rtl::OUString sPosition           ( RTL_CONSTASCII_USTRINGPARAM( "Position" ) );
-                                        const rtl::OUString sMirroredX          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredX" ) );
-                                        const rtl::OUString sMirroredY          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredY" ) );
-                                        const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
-                                        const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
-                                        const rtl::OUString sRadiusRangeMinimum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMinimum" ) );
-                                        const rtl::OUString sRadiusRangeMaximum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMaximum" ) );
-                                        const rtl::OUString sRangeXMinimum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeXMinimum" ) );
-                                        const rtl::OUString sRangeXMaximum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeXMaximum" ) );
-                                        const rtl::OUString sRangeYMinimum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeYMinimum" ) );
-                                        const rtl::OUString sRangeYMaximum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeYMaximum" ) );
+                                        const rtl::OUString sPosition           ( "Position"  );
+                                        const rtl::OUString sMirroredX          ( "MirroredX"  );
+                                        const rtl::OUString sMirroredY          ( "MirroredY"  );
+                                        const rtl::OUString sSwitched           ( "Switched"  );
+                                        const rtl::OUString sPolar              ( "Polar"  );
+                                        const rtl::OUString sRadiusRangeMinimum ( "RadiusRangeMinimum"  );
+                                        const rtl::OUString sRadiusRangeMaximum ( "RadiusRangeMaximum"  );
+                                        const rtl::OUString sRangeXMinimum      ( "RangeXMinimum"  );
+                                        const rtl::OUString sRangeXMaximum      ( "RangeXMaximum"  );
+                                        const rtl::OUString sRangeYMinimum      ( "RangeYMinimum"  );
+                                        const rtl::OUString sRangeYMaximum      ( "RangeYMaximum"  );
 
                                         if ( rPropVal.Name.equals( sPosition ) )
                                         {
@@ -4052,9 +4052,9 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
                 SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)
                     pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
-                const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM( "Path" ) );
-                const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
-                const rtl::OUString sGluePointType( RTL_CONSTASCII_USTRINGPARAM( "GluePointType" ) );
+                const rtl::OUString sPath( "Path"  );
+                const rtl::OUString sType( "Type"  );
+                const rtl::OUString sGluePointType( "GluePointType"  );
 
                 rtl::OUString sShapeType;
                 uno::Any* pType = rGeometryItem.GetPropertyValueByName( sType );

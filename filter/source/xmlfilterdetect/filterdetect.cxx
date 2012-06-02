@@ -124,7 +124,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
 ::rtl::OUString supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
 {
     ::rtl::OUString sTypeName;
-    if ( clipBoardFormat.match(OUString(RTL_CONSTASCII_USTRINGPARAM("doctype:"))) )
+    if ( clipBoardFormat.match(OUString("doctype:")) )
     {
         ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
         if (resultString.indexOf(tryStr) >= 0)
@@ -189,7 +189,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
             return ::rtl::OUString();
 
         // test typedetect code
-        Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),UNO_QUERY);
+        Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( "com.sun.star.document.TypeDetection" )),UNO_QUERY);
         Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
         nLength = myTypes.getLength();
 
@@ -224,7 +224,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
         if (location == aArguments.getLength())
         {
             aArguments.realloc(nLength+1);
-            aArguments[location].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeName" ));
+            aArguments[location].Name = ::rtl::OUString( "TypeName" );
         }
         aArguments[location].Value <<=sTypeName;
     }
