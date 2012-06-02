@@ -202,7 +202,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             if(sComposedName.isEmpty())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-            ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("DROP VIEW "));
+            ::rtl::OUString aSql("DROP VIEW ");
             aSql += sComposedName;
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");
@@ -229,7 +229,7 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
         Reference<XPropertySet> xProp(Event.Element,UNO_QUERY);
         ::rtl::OUString sType;
         xProp->getPropertyValue(PROPERTY_TYPE) >>= sType;
-        if ( sType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
+        if ( sType == ::rtl::OUString("VIEW") )
             insertElement(sName,createObject(sName));
     }
 }
@@ -265,7 +265,7 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
 ::rtl::OUString OViewContainer::getTableTypeRestriction() const
 {
     // no restriction at all (other than the ones provided externally)
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
+    return ::rtl::OUString( "VIEW"  );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

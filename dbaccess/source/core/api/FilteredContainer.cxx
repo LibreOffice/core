@@ -359,7 +359,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
                 }
             }
 
-            static const ::rtl::OUString sAll(RTL_CONSTASCII_USTRINGPARAM("%"));
+            static const ::rtl::OUString sAll("%");
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
 
@@ -450,9 +450,9 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
             OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
         }
 
-        const ::rtl::OUString sAll( RTL_CONSTASCII_USTRINGPARAM( "%" ) );
-        const ::rtl::OUString sView( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
-        const ::rtl::OUString sTable( RTL_CONSTASCII_USTRINGPARAM( "TABLE" ) );
+        const ::rtl::OUString sAll( "%"  );
+        const ::rtl::OUString sView( "VIEW"  );
+        const ::rtl::OUString sTable( "TABLE"  );
 
         switch ( nFilterMode )
         {

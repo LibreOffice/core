@@ -106,7 +106,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyCont
 // ::com::sun::star::lang::XServiceInfo
 rtl::OUString OColumn::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OColumn"));
+    return rtl::OUString("com.sun.star.sdb.OColumn");
 }
 
 sal_Bool OColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
@@ -216,7 +216,7 @@ OColumns::~OColumns()
 // XServiceInfo
 rtl::OUString OColumns::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OColumns"));
+    return rtl::OUString("com.sun.star.sdb.OColumns");
 }
 
 sal_Bool OColumns::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)

@@ -398,18 +398,18 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
 
                 ::rtl::OUString sType;
                 xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
-                bIsView = sType.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")));
+                bIsView = sType.equalsIgnoreAsciiCase(::rtl::OUString("VIEW"));
             }
 
             if(sComposedName.isEmpty())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-            ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("DROP "));
+            ::rtl::OUString aSql("DROP ");
 
             if ( bIsView ) // here we have a view
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
+                aSql += ::rtl::OUString("VIEW ");
             else
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
+                aSql += ::rtl::OUString("TABLE ");
             aSql += sComposedName;
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");

@@ -165,17 +165,17 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
 void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::insertRow" );
-    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
+    ::rtl::OUStringBuffer aSql(::rtl::OUString("INSERT INTO "));
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( ")));
+    aSql.append(::rtl::OUString(" ( "));
     // set values and column names
-    ::rtl::OUStringBuffer aValues = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
-    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
+    ::rtl::OUStringBuffer aValues = ::rtl::OUString(" VALUES ( ");
+    static ::rtl::OUString aPara("?,");
     ::rtl::OUString aQuote = getIdentifierQuoteString();
-    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
+    static ::rtl::OUString aComma(",");
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
@@ -245,16 +245,16 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     ::rtl::OUString aColumnName;
 
-    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+    static ::rtl::OUString aPara("?,");
+    static ::rtl::OUString aAnd(" AND ");
 
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
     sal_Int32 nCheckCount = 1; // index for the orginal values
     sal_Int32 i = 1;
 
-    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
-    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
+    ::rtl::OUString sIsNull(" IS NULL");
+    ::rtl::OUString sParam(" = ?");
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
     ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
@@ -301,9 +301,9 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE "));
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString("UPDATE ");
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SET ")));
+    aSql.append(::rtl::OUString(" SET "));
     // list all cloumns that should be set
 
     ::rtl::OUStringBuffer aCondition;
@@ -314,7 +314,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
+        aSql.append(::rtl::OUString(" WHERE "));
         aSql.append(aCondition.makeStringAndClear());
     }
     else
@@ -349,13 +349,13 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString("DELETE FROM ");
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
+    aSql.append(::rtl::OUString(" WHERE "));
 
     // list all cloumns that should be set
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+    static ::rtl::OUString aAnd(" AND ");
 
     // use keys and indexes for exact positioning
     // first the keys

@@ -131,7 +131,7 @@ void OPreparedStatement::release() throw ()
 // XServiceInfo
 rtl::OUString OPreparedStatement::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OPreparedStatement"));
+    return rtl::OUString("com.sun.star.sdb.OPreparedStatement");
 }
 
 sal_Bool OPreparedStatement::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)

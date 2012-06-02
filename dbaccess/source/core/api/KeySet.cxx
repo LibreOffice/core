@@ -203,7 +203,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
 
     if ( o_pKeyColumnNames->empty() )
     {
-        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not find any key column." ) ), *this );
+        ::dbtools::throwGenericSQLException( ::rtl::OUString( "Could not find any key column."  ), *this );
     }
 
     for (   SelectColumnsMetaData::const_iterator keyColumn = o_pKeyColumnNames->begin();
@@ -226,10 +226,10 @@ namespace
 {
     void appendOneKeyColumnClause( const ::rtl::OUString &tblName, const ::rtl::OUString &colName, ::rtl::OUStringBuffer &o_buf )
     {
-        static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
-        static ::rtl::OUString s_sParam0(RTL_CONSTASCII_USTRINGPARAM(" ( 1 = ? AND "));
-        static ::rtl::OUString s_sParam1(RTL_CONSTASCII_USTRINGPARAM(" = ? OR 1 = ? AND "));
-        static ::rtl::OUString s_sParam2(RTL_CONSTASCII_USTRINGPARAM(" IS NULL ) "));
+        static ::rtl::OUString s_sDot(".");
+        static ::rtl::OUString s_sParam0(" ( 1 = ? AND ");
+        static ::rtl::OUString s_sParam1(" = ? OR 1 = ? AND ");
+        static ::rtl::OUString s_sParam2(" IS NULL ) ");
         o_buf.append(s_sParam0);
         o_buf.append(tblName);
         o_buf.append(s_sDot);
@@ -261,7 +261,7 @@ void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParam
 
 ::rtl::OUStringBuffer OKeySet::createKeyFilter()
 {
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+    static ::rtl::OUString aAnd(" AND ");
     const ::rtl::OUString aQuote    = getIdentifierQuoteString();
     ::rtl::OUStringBuffer aFilter;
     // create the where clause
@@ -307,7 +307,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     const Sequence< ::rtl::OUString> aSeq = xSelectTables->getElementNames();
     if ( aSeq.getLength() > 1 ) // special handling for join
     {
-        static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+        static ::rtl::OUString aAnd(" AND ");
         const ::rtl::OUString aQuote    = getIdentifierQuoteString();
         const ::rtl::OUString* pIter = aSeq.getConstArray();
         const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
@@ -429,22 +429,22 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString("DELETE FROM ");
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
+    aSql.append(::rtl::OUString(" WHERE "));
 
     // list all cloumns that should be set
     const ::rtl::OUString aQuote    = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    static ::rtl::OUString aOr(RTL_CONSTASCII_USTRINGPARAM(" OR "));
-    static ::rtl::OUString aEqual(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
+    static ::rtl::OUString aAnd(" AND ");
+    static ::rtl::OUString aOr(" OR ");
+    static ::rtl::OUString aEqual(" = ?");
 
 
     // use keys and indexes for excat postioning
     // first the keys
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
-    ::rtl::OUStringBuffer aCondition = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( "));
+    ::rtl::OUStringBuffer aCondition = ::rtl::OUString("( ");
 
     SelectColumnsMetaData::const_iterator aIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
@@ -517,15 +517,15 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE "));
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString("UPDATE ");
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SET ")));
+    aSql.append(::rtl::OUString(" SET "));
     // list all cloumns that should be set
-    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM(" = ?,"));
+    static ::rtl::OUString aPara(" = ?,");
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
-    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
+    static ::rtl::OUString aAnd(" AND ");
+    ::rtl::OUString sIsNull(" IS NULL");
+    ::rtl::OUString sParam(" = ?");
 
     // use keys and indexes for excat postioning
     // first the keys
@@ -598,7 +598,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 
     if(sKeyCondition.getLength() || sIndexCondition.getLength())
     {
-        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
+        aSql.append(::rtl::OUString(" WHERE "));
         if(sKeyCondition.getLength() && sIndexCondition.getLength())
         {
             aSql.append(sKeyCondition.makeStringAndClear());
@@ -691,17 +691,17 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
 void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::insertRow" );
-    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
+    ::rtl::OUStringBuffer aSql(::rtl::OUString("INSERT INTO "));
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( ")));
+    aSql.append(::rtl::OUString(" ( "));
     // set values and column names
-    ::rtl::OUStringBuffer aValues(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( ")));
-    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
+    ::rtl::OUStringBuffer aValues(::rtl::OUString(" VALUES ( "));
+    static ::rtl::OUString aPara("?,");
     ::rtl::OUString aQuote = getIdentifierQuoteString();
-    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
+    static ::rtl::OUString aComma(",");
 
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -809,8 +809,8 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
     if ( i_sTableName.isEmpty() && !bAutoValuesFetched && m_bInserted )
     {
         // first check if all key column values were set
-        const ::rtl::OUString sMax(RTL_CONSTASCII_USTRINGPARAM(" MAX("));
-        const ::rtl::OUString sMaxEnd(RTL_CONSTASCII_USTRINGPARAM("),"));
+        const ::rtl::OUString sMax(" MAX(");
+        const ::rtl::OUString sMaxEnd("),");
         const ::rtl::OUString sQuote = getIdentifierQuoteString();
         ::rtl::OUString sMaxStmt;
         aEnd = m_pKeyColumnNames->end();
@@ -831,10 +831,10 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
 
         if(!sMaxStmt.isEmpty())
         {
-            sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
-            ::rtl::OUString sStmt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+            sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1,::rtl::OUString(" "));
+            ::rtl::OUString sStmt = ::rtl::OUString("SELECT ");
             sStmt += sMaxStmt;
-            sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FROM "));
+            sStmt += ::rtl::OUString("FROM ");
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
             sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
@@ -941,13 +941,13 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString("DELETE FROM ");
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
+    aSql.append(::rtl::OUString(" WHERE "));
 
     // list all cloumns that should be set
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+    static ::rtl::OUString aAnd(" AND ");
 
     // use keys and indexes for excat postioning
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
@@ -976,10 +976,10 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
             if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
             {
                 OSL_FAIL("can a primary key be null");
-                aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")));
+                aSql.append(::rtl::OUString(" IS NULL"));
             }
             else
-                aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = ?")));
+                aSql.append(::rtl::OUString(" = ?"));
             aSql.append(aAnd);
         }
         else
@@ -992,10 +992,10 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
                 {
                     sIndexCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
                     if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
-                        sIndexCondition.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")));
+                        sIndexCondition.append(::rtl::OUString(" IS NULL"));
                     else
                     {
-                        sIndexCondition.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = ?")));
+                        sIndexCondition.append(::rtl::OUString(" = ?"));
                         aIndexColumnPositions.push_back(aIter->second.nPosition);
                     }
                     sIndexCondition.append(aAnd);
