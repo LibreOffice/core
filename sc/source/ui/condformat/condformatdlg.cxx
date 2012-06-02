@@ -30,14 +30,16 @@
 #include "condformatdlg.hrc"
 
 #include <vcl/vclevent.hxx>
+#include <svl/style.hxx>
 
 #include "anyrefdg.hxx"
 #include "document.hxx"
 #include "conditio.hxx"
+#include "stlpool.hxx"
 
 #include <iostream>
 
-ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent):
+ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
     meType(CONDITION),
@@ -48,7 +50,17 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent):
     maEdVal1( this, ScResId( ED_VAL1 ) ),
     maEdVal2( this, ScResId( ED_VAL2 ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
-    maLbStyle( this, ScResId( LB_STYLE ) )
+    maLbStyle( this, ScResId( LB_STYLE ) ),
+    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
+    maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
+    maLbColScale3( this, ScResId( LB_COL_SCALE3 ) ),
+    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maLbEntryTypeMiddle( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maEdMin( this, ScResId( ED_COL_SCALE ) ),
+    maEdMiddle( this, ScResId( ED_COL_SCALE ) ),
+    maEdMax( this, ScResId( ED_COL_SCALE ) ),
+    mpDoc(pDoc)
 {
     Size aSize = GetSizePixel();
     aSize.Height() = 40;
@@ -60,8 +72,22 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent):
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
 
     maLbType.SelectEntryPos(1);
+    maLbType.SetSelectHdl( LINK( this, ScCondFrmtEntry, TypeListHdl ) );
     maLbCondType.SelectEntryPos(0);
     maEdVal2.Hide();
+
+    SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+    {
+	rtl::OUString aName = pStyle->GetName();
+        maLbStyle.InsertEntry( aName );
+    }
+    maLbStyle.SetSeparatorPos(0);
+    maLbStyle.SelectEntryPos(1);
+
+    //disable entries for color formats
+    maLbColorFormat.SelectEntryPos(0);
+    SetCondType();
 }
 
 namespace {
@@ -107,10 +133,9 @@ long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {
-	std::cout << "ButtonDown " << std::endl;
 	ImplCallEventListenersAndHandler( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, maClickHdl, this );
     }
-    Control::Notify(rNEvt);
+    return Control::Notify(rNEvt);
 }
 
 void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
@@ -139,6 +164,67 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
     }
 }
 
+void ScCondFrmtEntry::HideCondElements()
+{
+    maEdVal1.Hide();
+    maEdVal2.Hide();
+    maLbStyle.Hide();
+    maFtStyle.Hide();
+    maLbCondType.Hide();
+}
+
+void ScCondFrmtEntry::SetCondType()
+{
+    maEdVal1.Show();
+    maEdVal2.Show();
+    maLbStyle.Show();
+    maFtStyle.Show();
+    HideColorScaleElements();
+    HideDataBarElements();
+}
+
+void ScCondFrmtEntry::HideColorScaleElements()
+{
+    maLbColorFormat.Hide();
+    maLbColScale2.Hide();
+    maLbColScale3.Hide();
+    maLbEntryTypeMin.Hide();
+    maLbEntryTypeMiddle.Hide();
+    maLbEntryTypeMax.Hide();
+    maEdMin.Hide();
+    maEdMiddle.Hide();
+    maEdMax.Hide();
+}
+
+void ScCondFrmtEntry::SetColorScaleType()
+{
+    HideCondElements();
+    HideDataBarElements();
+    maLbColorFormat.Show();
+    if(maLbColorFormat.GetSelectEntryPos() == 0)
+	maLbColScale2.Show();
+    else
+	maLbColScale3.Show();
+    maLbEntryTypeMin.Show();
+    maLbEntryTypeMiddle.Show();
+    maLbEntryTypeMax.Show();
+    maEdMin.Show();
+    maEdMiddle.Show();
+    maEdMax.Show();
+}
+
+void ScCondFrmtEntry::HideDataBarElements()
+{
+    maLbColorFormat.Hide();
+}
+
+void ScCondFrmtEntry::SetDataBarType()
+{
+    HideCondElements();
+    HideColorScaleElements();
+    maLbColorFormat.Show();
+}
+
 void ScCondFrmtEntry::Select()
 {
     Size aSize = GetSizePixel();
@@ -146,6 +232,7 @@ void ScCondFrmtEntry::Select()
     SetSizePixel(aSize);
     SetControlBackground(Color(COL_RED));
     SwitchToType(meType);
+    mbActive = true;
 }
 
 void ScCondFrmtEntry::Deselect()
@@ -155,19 +242,46 @@ void ScCondFrmtEntry::Deselect()
     SetSizePixel(aSize);
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     SwitchToType(COLLAPSED);
+    mbActive = false;
 }
 
-ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId):
+bool ScCondFrmtEntry::IsSelected() const
+{
+    return mbActive;
+}
+
+IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
+{
+    sal_Int32 nPos = maLbType.GetSelectEntryPos();
+    switch(nPos)
+    {
+	case 1:
+	    SetCondType();
+	    break;
+	case 0:
+	    if(maLbColorFormat.GetSelectEntryPos() < 2)
+		SetColorScaleType();
+	    else
+		SetDataBarType();
+	    break;
+	case 2:
+	    SetCondType();
+	    break;
+	default:
+	    break;
+    }
+    return 0;
+}
+
+ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc):
     Control(pParent, rResId),
     mbHasScrollBar(false),
     mpScrollBar(new ScrollBar(this, WB_VERT )),
-    mnTopIndex(0)
+    mnTopIndex(0),
+    mpDoc(pDoc)
 {
     mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
     mpScrollBar->EnableDrag();
-    maEntries.push_back( new ScCondFrmtEntry(this) );
-    maEntries.push_back( new ScCondFrmtEntry(this) );
-    maEntries.push_back( new ScCondFrmtEntry(this) );
 
     RecalcAll();
     FreeResource();
@@ -216,13 +330,22 @@ void ScCondFormatList::RecalcAll()
     }
 }
 
+void ScCondFormatList::DoScroll(long nDelta)
+{
+    Point aNewPoint = mpScrollBar->GetPosPixel();
+    Rectangle aRect(Point(), GetOutputSize());
+    aRect.Right() -= mpScrollBar->GetSizePixel().Width();
+    Scroll( 0, -nDelta, aRect );
+    mpScrollBar->SetPosPixel(aNewPoint);
+}
+
 ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditionalFormat* pFormat, const ScRangeList& rRange):
     ModalDialog(pParent, ScResId( RID_SCDLG_CONDFORMAT )),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maCondFormList( this, ScResId( CTRL_LIST ) ),
+    maCondFormList( this, ScResId( CTRL_LIST ), pDoc ),
     mpDoc(pDoc),
     mpFormat(pFormat)
 {
@@ -234,11 +357,27 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditiona
     aTitle.append(aRangeString);
     SetText(aTitle.makeStringAndClear());
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
+    maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
+    FreeResource();
 }
 
 IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
 {
-    maEntries.push_back( new ScCondFrmtEntry(this) );
+    maEntries.push_back( new ScCondFrmtEntry(this, mpDoc) );
+    RecalcAll();
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
+{
+    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+	if(itr->IsSelected())
+	{
+	    maEntries.erase(itr);
+	    break;
+	}
+    }
     RecalcAll();
     return 0;
 }
@@ -256,7 +395,7 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
 
 IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 {
-
+    DoScroll(mpScrollBar->GetDelta());
     return 0;
 }
 

@@ -68,20 +68,45 @@ private:
     Edit maEdVal2;
     FixedText maFtStyle;
     ListBox maLbStyle;
+
+    //color format ui elements
+    ListBox maLbColorFormat;
     //color scale ui elements
+    ListBox maLbColScale2;
+    ListBox maLbColScale3;
+
+    ListBox maLbEntryTypeMin;
+    ListBox maLbEntryTypeMiddle;
+    ListBox maLbEntryTypeMax;
+
+    Edit maEdMin;
+    Edit maEdMiddle;
+    Edit maEdMax;
 
     //data bar ui elements
     //
     //
     void SwitchToType(ScCondFormatEntryType eType);
+    void SetCondType();
+    void SetColorScaleType();
+    void SetDataBarType();
+    void HideCondElements();
+    void HideColorScaleElements();
+    void HideDataBarElements();
+
+    ScDocument* mpDoc;
+
+    DECL_LINK( TypeListHdl, void*);
 
 public:
-    ScCondFrmtEntry( Window* pParent );
+    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
 
     virtual long Notify( NotifyEvent& rNEvt );
 
     void Select();
     void Deselect();
+
+    bool IsSelected() const;
 };
 
 class ScCondFormatList : public Control
@@ -94,11 +119,15 @@ private:
     boost::scoped_ptr<ScrollBar> mpScrollBar;
     long mnTopIndex;
 
+    ScDocument* mpDoc;
+
     void RecalcAll();
+    void DoScroll(long nDiff);
 public:
-    ScCondFormatList( Window* pParent, const ResId& rResId );
+    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc );
 
     DECL_LINK( AddBtnHdl, void* );
+    DECL_LINK( RemoveBtnHdl, void* );
     DECL_LINK( ScrollHdl, void* );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
