@@ -44,5 +44,11 @@
 #define ED_VAL2 19
 #define LB_STYLE 20
 #define FT_STYLE 21
+#define LB_COLOR_FORMAT 22
+
+#define LB_COL_SCALE2 23
+#define LB_COL_SCALE3 24
+#define LB_TYPE_COL_SCALE 25
+#define ED_COL_SCALE 28
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
