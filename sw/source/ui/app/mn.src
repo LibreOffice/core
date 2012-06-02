@@ -77,30 +77,37 @@
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_OVERLINE\
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_SHADOWED\
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_CONTOUR\
+                    Checkable = TRUE ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
@@ -108,12 +115,14 @@
                     Identifier = FN_SET_SUPER_SCRIPT ; \
                     HelpId = CMD_FN_SET_SUPER_SCRIPT ; \
                     Text [ en-US ] = "Superscript" ; \
+                    Checkable = TRUE ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_SET_SUB_SCRIPT ; \
                     HelpId = CMD_FN_SET_SUB_SCRIPT ; \
                     Text [ en-US ] = "Subscript" ; \
+                    Checkable = TRUE ; \
                 };\
             };\
         };\
