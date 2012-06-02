@@ -41,7 +41,7 @@
 class SvxBoxEntry;
 class SvxListBase;
 
-SV_DECL_PTRARR( SvxEntryLst, SvxBoxEntry*, 10 )
+typedef std::vector<SvxBoxEntry*> SvxEntryLst;
 
 // class SvxBoxEntry -----------------------------------------------------
 
@@ -55,7 +55,7 @@ public:
     SvxBoxEntry( const SvxBoxEntry& rOrg );
     SvxBoxEntry();
 
-    String              aName;
+    String                  aName;
     sal_uInt16              nId;
 
 private:
