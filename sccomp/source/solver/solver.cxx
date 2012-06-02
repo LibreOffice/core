@@ -58,7 +58,7 @@ using namespace com::sun::star;
 
 using ::rtl::OUString;
 
-#define C2U(constAsciiStr) (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) ))
+#define C2U(constAsciiStr) (::rtl::OUString( constAsciiStr  ))
 
 #define STR_NONNEGATIVE   "NonNegative"
 #define STR_INTEGER       "Integer"
@@ -559,13 +559,13 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
 uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
 {
     uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.Solver" ));
+    aServiceNames[ 0 ] = OUString("com.sun.star.sheet.Solver" );
     return aServiceNames;
 }
 
 OUString SolverComponent_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.Solver" ));
+    return OUString("com.sun.star.comp.Calc.Solver" );
 }
 
 OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeException)

@@ -304,7 +304,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 rtl::OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScAddressConversionObj" ));
+    return rtl::OUString("ScAddressConversionObj" );
 }
 
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const rtl::OUString& rServiceName )
@@ -320,8 +320,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAddressConversionObj::getSupportedServic
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = bIsRange ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICENAME_RANGEADDRESS))
-                         : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICENAME_CELLADDRESS));
+    pArray[0] = bIsRange ? rtl::OUString(SC_SERVICENAME_RANGEADDRESS)
+                         : rtl::OUString(SC_SERVICENAME_CELLADDRESS);
     return aRet;
 }
 
