@@ -91,8 +91,7 @@ public:
     {
         uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
             (xFactory->createInstanceWithContext
-             (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                              ("com.sun.star.ucb.SimpleFileAccess")),
+             (::rtl::OUString( "com.sun.star.ucb.SimpleFileAccess"),
               xContext), uno::UNO_QUERY_THROW);
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
@@ -182,8 +181,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
         {
             uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
                 (xFactory->createInstanceWithContext
-                 (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                  ("com.sun.star.ucb.SimpleFileAccess")),
+                 (::rtl::OUString("com.sun.star.ucb.SimpleFileAccess"),
                   xContext), uno::UNO_QUERY_THROW );
 
             rtl::OString aStr;
