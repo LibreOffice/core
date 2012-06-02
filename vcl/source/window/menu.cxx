@@ -2360,13 +2360,13 @@ Size Menu::ImplCalcSize( Window* pWin )
     long nMinMenuItemHeight = nFontHeight;
     long nCheckHeight = 0, nRadioHeight = 0;
     long nCheckWidth = 0, nMaxCheckWidth = 0;
-    long nMax = ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight, nMaxCheckWidth );
-    if( nMax > nMinMenuItemHeight )
-        nMinMenuItemHeight = nMax;
+    long nMaxHeight = ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight, nMaxCheckWidth );
+    if( nMaxHeight > nMinMenuItemHeight )
+        nMinMenuItemHeight = nMaxHeight;
 
     // When no native rendering of the checkbox & no image in the menu, we
     // have to add some extra space even in the MENU_FLAG_SHOWCHECKIMAGES case
-    bool bSpaceForCheckbox = ( nMax == 0 );
+    bool bSpaceForCheckbox = ( nMaxHeight == 0 );
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
@@ -2505,8 +2505,8 @@ Size Menu::ImplCalcSize( Window* pWin )
         {
             long nImgOrChkWidth = 0;
             nImagePos = nCheckPos;
-            if( nMax > 0 ) // NWF case
-                nImgOrChkWidth = nMax + nExtra;
+            if( nMaxHeight > 0 ) // NWF case
+                nImgOrChkWidth = nMaxHeight + nExtra;
             else // non NWF case
                 nImgOrChkWidth = nFontHeight/2 + gfxExtra;
             nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
