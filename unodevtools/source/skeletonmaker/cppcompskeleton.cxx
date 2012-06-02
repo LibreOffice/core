@@ -154,8 +154,8 @@ void generateCompHelperDefinition(std::ostream & o,
     short nbrackets = generateNamespace(o, implname, true, nm);
 
     o << "::rtl::OUString SAL_CALL _getImplementationName() {\n"
-      << "    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
-      << "        \"" << implname << "\"));\n}\n\n";
+      << "    return ::rtl::OUString(\n"
+      << "        \"" << implname << "\");\n}\n\n";
 
     o << "css::uno::Sequence< ::rtl::OUString > SAL_CALL "
         "_getSupportedServiceNames()\n{\n    css::uno::Sequence< "
@@ -166,8 +166,7 @@ void generateCompHelperDefinition(std::ostream & o,
     while (iter != services.end())
     {
         o << "    s[" << i++ << "] = ::rtl::OUString("
-          << "RTL_CONSTASCII_USTRINGPARAM(\n        \""
-          << (*iter).replace('/','.') << "\"));\n";
+          << (*iter).replace('/','.') << "\");\n";
         ++iter;
     }
     o << "    return s;\n}\n\n";
@@ -524,21 +523,20 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
         o << "        css::uno::Reference< css::lang::XMultiServiceFactory > xProvider"
             "(\n             m_xContext->getServiceManager()->createInstanceWithContext"
-            "(\n                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n    "
-            "                 \"com.sun.star.configuration.ConfigurationProvider\")),"
+            "(\n                 ::rtl::OUString(\n    "
+            "                 \"com.sun.star.configuration.ConfigurationProvider\"),"
             "\n                 m_xContext ), css::uno::UNO_QUERY );\n\n";
 
         o << "        ::rtl::OUString sReadOnlyView(\n"
-            "            RTL_CONSTASCII_USTRINGPARAM(\n"
-            "                \"com.sun.star.configuration.ConfigurationAccess\"));\n\n";
+            "                \"com.sun.star.configuration.ConfigurationAccess\");\n\n";
 
-        o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
-            "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\")));\n"
+        o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString(\n"
+            "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
             "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
             "        sPath.appendAscii(\"/AddInFunctions\");\n\n"
             "        // create arguments: nodepath\n"
             "        css::beans::PropertyValue aArgument;\n"
-            "        aArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"nodepath\"));\n"
+            "        aArgument.Name = ::rtl::OUString(\"nodepath\");\n"
             "        aArgument.Value <<= sPath.makeStringAndClear();\n\n"
             "        css::uno::Sequence< css::uno::Any > aArguments(1);\n"
             "        aArguments[0] <<= aArgument;\n\n";
@@ -553,8 +551,8 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
         o << "        // extend arguments to create a view for all locales to get "
             "simple\n        // access to the compatibilityname property\n"
-            "        aArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"locale\"));\n"
-            "        aArgument.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"*\"));\n"
+            "        aArgument.Name = ::rtl::OUString(\"locale\");\n"
+            "        aArgument.Value <<= ::rtl::OUString(\"*\");\n"
             "        aArguments.realloc(2);\n"
             "        aArguments[1] <<= aArgument;\n\n"
             "        // create view for all locales\n"
@@ -578,7 +576,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "            m_xHAccess->getByHierarchicalName(\n"
             "                buf.makeStringAndClear()), css::uno::UNO_QUERY);\n"
             "        xPropSet->getPropertyValue(\n            "
-            "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(propName))) >>= ret;\n    }\n"
+            "::rtl::OUString(propName)) >>= ret;\n    }\n"
             "     catch ( const css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
             "     catch ( css::uno::Exception & ) {\n    }\n    return ret;\n";
     }

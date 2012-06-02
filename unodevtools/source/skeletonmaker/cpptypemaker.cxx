@@ -328,11 +328,11 @@ void printSetPropertyMixinBody(std::ostream & o,
             o << "    v <<= " << buffer2.makeStringAndClear() << ";\n\n";
         }
 
-        o << "    prepareSet(\n        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\""
-          << fieldname << "\")),\n        css::uno::Any(), v, ";
+        o << "    prepareSet(\n        rtl::OUString(\""
+          << fieldname << "\"),\n        css::uno::Any(), v, ";
     } else {
-        o << "    prepareSet(\n        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\""
-          << fieldname << "\")),\n        css::uno::Any(), css::uno::Any(), ";
+        o << "    prepareSet(\n        rtl::OUString(\""
+          << fieldname << "\"),\n        css::uno::Any(), css::uno::Any(), ";
     }
 
     if (bound)
@@ -421,8 +421,8 @@ void printMethods(std::ostream & o,
             o << "// ::com::sun::star::lang::XServiceName:\n"
                 "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
-                "return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
-                "sADDIN_SERVICENAME));\n}\n";
+                "return ::rtl::OUString("
+                "sADDIN_SERVICENAME);\n}\n";
             generated.add(type);
             return;
         } else if (type.equals("com/sun/star/sheet/XAddIn")) {
@@ -609,7 +609,7 @@ void printMethods(std::ostream & o,
         o << ')';
         printExceptionSpecification(o, options, manager, reader, method);
         if (body) {
-            static OUString s(RTL_CONSTASCII_USTRINGPARAM("void"));
+            static OUString s("void");
             if (defaultbody) {
                 o << "\n{\n";
                 if (!reader.getMethodReturnTypeName(method).equals(s)) {

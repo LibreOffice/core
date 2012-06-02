@@ -402,8 +402,7 @@ OString checkPropertyHelper(
 bool checkXComponentSupport(TypeManager const & manager,
                             typereg::Reader const & reader)
 {
-    static OUString s(RTL_CONSTASCII_USTRINGPARAM(
-                               "com/sun/star/lang/XComponent"));
+    static OUString s( "com/sun/star/lang/XComponent");
     if ( reader.getTypeName().equals(s) )
         return true;
 
@@ -456,8 +455,7 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
     sal_uInt16 flags = 0;
     bool getterSupportsUnknown = false;
 
-    OUString su(RTL_CONSTASCII_USTRINGPARAM(
-                   "com/sun/star/beans/UnknownPropertyException"));
+    OUString su( "com/sun/star/beans/UnknownPropertyException");
     if ( method < reader.getMethodCount()
          && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
          && reader.getMethodName(method) == reader.getFieldName(field) )
@@ -477,8 +475,7 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
          && reader.getMethodName(method) == reader.getFieldName(field) )
     {
         if ( reader.getMethodExceptionCount(method) > 0 ) {
-            OUString s(RTL_CONSTASCII_USTRINGPARAM(
-                           "com/sun/star/beans/PropertyVetoException"));
+            OUString s( "com/sun/star/beans/PropertyVetoException");
             for ( sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method);
                   ++i )
             {
@@ -670,9 +667,9 @@ void generateFunctionParamterMap(std::ostream& o,
         for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
             if ( options.language == 2 ) {
                 o << "        fpm[" << p
-                  << "] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\""
+                  << "] = ::rtl::OUString(\""
                   << codemaker::convertString(reader.getMethodParameterName(m, p))
-                  << "\"));\n";
+                  << "\");\n";
             }
             else {
                 if ( options.java5 )
@@ -689,8 +686,8 @@ void generateFunctionParamterMap(std::ostream& o,
         }
 
         if ( options.language == 2 ) {
-            o << "        m_functionMap[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\""
-              << sMethod << "\"))] = fpm;\n\n";
+            o << "        m_functionMap[::rtl::OUString(\""
+              << sMethod << "\")] = fpm;\n\n";
         }
         else {
             o << "        m_functionMap.put(\"" << sMethod << "\", fpm);\n\n";
