@@ -374,7 +374,7 @@ const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 
 const OUString ProgressBar::impl_getStaticImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_PROGRESSBAR ));
+    return OUString(IMPLEMENTATIONNAME_PROGRESSBAR );
 }
 
 //____________________________________________________________________________________________________________
