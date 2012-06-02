@@ -62,7 +62,7 @@ sal_Bool DocumentLockFile::m_bAllowInteraction = sal_True;
 
 // ----------------------------------------------------------------------
 DocumentLockFile::DocumentLockFile( const ::rtl::OUString& aOrigURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: LockFileCommon( aOrigURL, xFactory, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".~lock." ) ) )
+: LockFileCommon( aOrigURL, xFactory, ::rtl::OUString( ".~lock."  ) )
 {
 }
 
@@ -100,7 +100,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     try
     {
         uno::Reference< io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
+            m_xFactory->createInstance( ::rtl::OUString("com.sun.star.io.TempFile") ),
             uno::UNO_QUERY_THROW );
         uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
 
@@ -124,11 +124,11 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
         aInsertArg.ReplaceExisting = sal_False;
         uno::Any aCmdArg;
         aCmdArg <<= aInsertArg;
-        aTargetContent.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ), aCmdArg );
+        aTargetContent.executeCommand( ::rtl::OUString( "insert"  ), aCmdArg );
 
         // try to let the file be hidden if possible
         try {
-            aTargetContent.setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), uno::makeAny( sal_True ) );
+            aTargetContent.setPropertyValue( ::rtl::OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
         } catch( uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )
@@ -221,7 +221,7 @@ void DocumentLockFile::RemoveFile()
 
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(m_aURL, xEnv);
-    aCnt.executeCommand(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
+    aCnt.executeCommand(rtl::OUString("delete"),
         uno::makeAny(sal_Bool(sal_True)));
 }
 
