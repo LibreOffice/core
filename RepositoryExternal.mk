@@ -54,22 +54,21 @@ endif
 ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
 
 define gb_LinkTarget__use_mozilla_headers
-$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
-$(eval $(call gb_LinkTarget_set_include,$(1),\
+$(call gb_LinkTarget_set_include,$(1),\
 	$(MOZILLA_HEADERS_CFLAGS) \
 	$$(INCLUDE) \
-))
+)
 
 endef
 
 else #!SYSTEM_MOZILLA_HEADERS
 
 define gb_LinkTarget__use_mozilla_headers
-$(eval $(call gb_LinkTarget_use_package,$(1),np_sdk_inc))
-$(eval $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/npsdk \
+$(call gb_LinkTarget_use_package,$(1),mozilla_inc)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/external/npsdk \
 	$$(INCLUDE) \
-))
+)
 
 endef
 

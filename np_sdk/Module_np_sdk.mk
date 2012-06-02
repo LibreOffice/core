@@ -33,6 +33,12 @@ $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_inc \
 ))
 
+ifeq ($(SYSTEM_MOZILLA_HEADERS),NO)
+$(eval $(call gb_Module_add_targets,np_sdk,\
+	Package_mozilla_inc \
+))
+endif
+
 ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	StaticLibrary_nputils \
