@@ -92,11 +92,11 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
         return css::uno::Any();
 
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, css::uno::UNO_QUERY);
-    sal_Bool bCalc   = xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")));
+    sal_Bool bCalc   = xInfo->supportsService(::rtl::OUString("com.sun.star.sheet.SpreadsheetDocument"));
     sal_Bool bWriter = (
-                         xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"))) &&
-                        !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"))) &&
-                        !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument")))
+                         xInfo->supportsService(::rtl::OUString("com.sun.star.text.TextDocument")) &&
+                        !xInfo->supportsService(::rtl::OUString("com.sun.star.text.WebDocument")) &&
+                        !xInfo->supportsService(::rtl::OUString("com.sun.star.text.GlobalDocument"))
                        );
 
     // We are interested only in Writer and Calc. However, here we are
@@ -123,7 +123,7 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
 ::rtl::OUString SAL_CALL MyListener::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYLISTENER_IMPLEMENTATIONNAME));
+    return ::rtl::OUString(MYLISTENER_IMPLEMENTATIONNAME);
 }
 
 
@@ -131,7 +131,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNa
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYLISTENER_SERVICENAME));
+    lNames[0] = ::rtl::OUString(MYLISTENER_SERVICENAME);
     return lNames;
 }
 

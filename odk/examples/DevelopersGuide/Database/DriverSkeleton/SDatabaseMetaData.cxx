@@ -213,7 +213,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
+    ::rtl::OUString aVal("\"");
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue(RTL_CONSTASCII_USTRINGPARAM("sdbc:skeleton:"));
+    ::rtl::OUString aValue("sdbc:skeleton:");
     return aValue;
 }
 // -------------------------------------------------------------------------

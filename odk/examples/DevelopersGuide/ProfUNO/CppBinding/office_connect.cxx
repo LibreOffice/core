@@ -63,7 +63,7 @@ SAL_IMPLEMENT_MAIN()
     // instantiate a sample service with the servicemanager.
     Reference< XInterface > rInstance =
         rServiceManager->createInstanceWithContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")),
+            OUString("com.sun.star.bridge.UnoUrlResolver"),
             rComponentContext );
 
     // Query for the XUnoUrlResolver interface
@@ -77,8 +77,8 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         // resolve the uno-url
-        rInstance = rResolver->resolve( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" )) );
+        rInstance = rResolver->resolve( OUString(
+            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" ) );
 
         if( ! rInstance.is() )
         {

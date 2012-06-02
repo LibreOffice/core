@@ -86,7 +86,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD, aSysDrvSettings;
+    ::rtl::OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
     const char* pUser       = "user";
@@ -109,12 +109,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             pBegin->Value >>= aUID;
-            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UID=")) + aUID;
+            aDSN = aDSN + ::rtl::OUString(";UID=") + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             pBegin->Value >>= aPWD;
-            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";PWD=")) + aPWD;
+            aDSN = aDSN + ::rtl::OUString(";PWD=") + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -123,7 +123,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             pBegin->Value >>= aSysDrvSettings;
-            aDSN += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+            aDSN += ::rtl::OUString(";");
             aDSN += aSysDrvSettings;
         }
     }

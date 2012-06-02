@@ -72,7 +72,7 @@ using ::rtl::OUStringToOString;
 //============================================================================
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"));
+    OUString sConnectionString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     sal_Int32 nCount = (sal_Int32)rtl_getAppCommandArgCount();
 
@@ -101,7 +101,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     */
     Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")),
+            OUString("com.sun.star.bridge.UnoUrlResolver"),
             xComponentContext );
 
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
@@ -122,7 +122,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
-    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xComponentContext;
+    xPropSet->getPropertyValue( OUString("DefaultContext") ) >>= xComponentContext;
 
     // gets the service manager from the office
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
@@ -133,7 +133,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     */
     Reference < XComponentLoader > xComponentLoader(
         xMultiComponentFactoryServer->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ) ),
+            OUString( "com.sun.star.frame.Desktop"  ),
             xComponentContext ), UNO_QUERY );
 
     /* Loads a component specified by an URL into the specified new or existing
@@ -147,7 +147,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     osl::FileBase::getAbsoluteFileURL( sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
 
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-        sAbsoluteDocUrl, OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
+        sAbsoluteDocUrl, OUString( "_blank" ), 0,
         Sequence < ::com::sun::star::beans::PropertyValue >() );
 
     // dispose the local service manager

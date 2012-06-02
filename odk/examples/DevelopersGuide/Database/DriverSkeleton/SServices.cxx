@@ -67,9 +67,9 @@ void REGISTER_PROVIDER(
         const Sequence< OUString>& Services,
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
-    OUString aMainKeyName(RTL_CONSTASCII_USTRINGPARAM("/"));
+    OUString aMainKeyName("/");
     aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    aMainKeyName += OUString("/UNO/SERVICES");
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "SKELETON::component_writeInfo : could not create a registry key !");
