@@ -110,7 +110,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
-    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
+    ConfigItem( ::rtl::OUString(CFG_ROOT_NODE ) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
@@ -198,7 +198,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
-    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
+    ConfigItem( ::rtl::OUString(CFG_ROOT_NODE ) ),
 
     aSearchOpt      ( rItem.aSearchOpt ),
     eFamily         ( rItem.eFamily ),
@@ -373,29 +373,29 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         case 0 :
         {
             Sequence< PropertyValue > aSeq( SRCH_PARAMS );
-            aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_OPTIONS ) );
+            aSeq[0].Name = rtl::OUString( SRCH_PARA_OPTIONS  );
             aSeq[0].Value <<= aSearchOpt;
-            aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_FAMILY ));
+            aSeq[1].Name = rtl::OUString( SRCH_PARA_FAMILY );
             aSeq[1].Value <<= sal_Int16( eFamily );
-            aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_COMMAND ));
+            aSeq[2].Name = rtl::OUString( SRCH_PARA_COMMAND );
             aSeq[2].Value <<= nCommand;
-            aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_CELLTYPE ));
+            aSeq[3].Name = rtl::OUString( SRCH_PARA_CELLTYPE );
             aSeq[3].Value <<= nCellType;
-            aSeq[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_APPFLAG ));
+            aSeq[4].Name = rtl::OUString( SRCH_PARA_APPFLAG );
             aSeq[4].Value <<= nAppFlag;
-            aSeq[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_ROWDIR ));
+            aSeq[5].Name = rtl::OUString( SRCH_PARA_ROWDIR );
             aSeq[5].Value <<= bRowDirection;
-            aSeq[6].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_ALLTABLES ));
+            aSeq[6].Name = rtl::OUString( SRCH_PARA_ALLTABLES );
             aSeq[6].Value <<= bAllTables;
-            aSeq[6].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_SEARCHFILTERED ));
+            aSeq[6].Name = rtl::OUString( SRCH_PARA_SEARCHFILTERED );
             aSeq[6].Value <<= bSearchFiltered;
-            aSeq[7].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_BACKWARD ));
+            aSeq[7].Name = rtl::OUString( SRCH_PARA_BACKWARD );
             aSeq[7].Value <<= bBackward;
-            aSeq[8].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_PATTERN ));
+            aSeq[8].Name = rtl::OUString( SRCH_PARA_PATTERN );
             aSeq[8].Value <<= bPattern;
-            aSeq[9].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_CONTENT ));
+            aSeq[9].Name = rtl::OUString( SRCH_PARA_CONTENT );
             aSeq[9].Value <<= bContent;
-            aSeq[10].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_ASIANOPT ));
+            aSeq[10].Name = rtl::OUString( SRCH_PARA_ASIANOPT );
             aSeq[10].Value <<= bAsianOptions;
             rVal <<= aSeq;
         }
