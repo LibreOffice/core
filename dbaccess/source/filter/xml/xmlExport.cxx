@@ -114,13 +114,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLSettingsExporter"));
+        return ::rtl::OUString("com.sun.star.comp.sdb.XMLSettingsExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -133,13 +133,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLFullExporter"));
+        return ::rtl::OUString("com.sun.star.comp.sdb.XMLFullExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -148,12 +148,12 @@ namespace dbaxml
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
-        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
-        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
-        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
-        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
+        static const ::rtl::OUString s_sTypeBoolean ("boolean");
+        static const ::rtl::OUString s_sTypeShort   ("short");
+        static const ::rtl::OUString s_sTypeInteger ("int");
+        static const ::rtl::OUString s_sTypeLong    ("long");
+        static const ::rtl::OUString s_sTypeDouble  ("double");
+        static const ::rtl::OUString s_sTypeString  ("string");
 
         // handle the type description
         switch (_rType.getTypeClass())
@@ -243,27 +243,27 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
         m_xExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX )));
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_COLUMN,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
         m_xColumnExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX )));
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_CELL,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
         m_xCellExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX )));
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_ROW,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
         m_xRowExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX )));
+        rtl::OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter", "com.sun.star.document.ExportFilter")
@@ -402,13 +402,13 @@ void ODBExport::exportDataSource()
                     sal_Int32 nValue = 0;
                     aValue >>= nValue;
                     if ( sValue == "0" )
-                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-integer"));
+                        sValue = ::rtl::OUString("equal-integer");
                     else if ( sValue == "1" )
-                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("is-boolean"));
+                        sValue = ::rtl::OUString("is-boolean");
                     else if ( sValue == "2" )
-                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-boolean"));
+                        sValue = ::rtl::OUString("equal-boolean");
                     else if ( sValue == "3" )
-                        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-use-only-zero"));
+                        sValue = ::rtl::OUString("equal-use-only-zero");
                     if ( sValue == "equal-integer" )
                         continue;
                     eToken = XML_BOOLEAN_COMPARISON_MODE;
@@ -576,7 +576,7 @@ void ODBExport::exportConnectionData()
                 {
                     ::rtl::OUString sExtension;
                     if ( eType == dbaccess::DST_MSACCESS )
-                        sExtension = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mdb"));
+                        sExtension = ::rtl::OUString("mdb");
                     else
                     {
                         Reference< XPropertySet > xDataSourceSettings;
@@ -863,11 +863,11 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     ::rtl::OUString sValue;
     _xProp->getPropertyValue(PROPERTY_PERSISTENT_NAME) >>= sValue;
     sal_Bool bIsForm = sal_True;
-    _xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsForm"))) >>= bIsForm;
+    _xProp->getPropertyValue(::rtl::OUString("IsForm")) >>= bIsForm;
     if ( bIsForm )
-        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms/")) + sValue;
+        sValue = ::rtl::OUString("forms/") + sValue;
     else
-        sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports/")) + sValue;
+        sValue = ::rtl::OUString("reports/") + sValue;
 
     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
     sal_Bool bAsTemplate = sal_False;
@@ -1312,7 +1312,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
             {
                 sal_Int32 nLength = aProps.getLength();
                 aProps.realloc(nLength + 1);
-                aProps[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Queries"));
+                aProps[nLength].Name = ::rtl::OUString("Queries");
                 Sequence< ::rtl::OUString> aSeq = xCollection->getElementNames();
                 const ::rtl::OUString* pIter = aSeq.getConstArray();
                 const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
@@ -1352,7 +1352,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             if ( aPropValues.getLength() )
             {
                 aProps.realloc(nLength + 1);
-                aProps[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout-settings"));
+                aProps[nLength].Name = ::rtl::OUString("layout-settings");
                 aProps[nLength].Value = aValue;
             }
         }
