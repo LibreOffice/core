@@ -103,8 +103,7 @@ getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
         xContext->getServiceManager(), uno::UNO_SET_THROW);
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
         xServiceFactory->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.uri.UriReferenceFactory")), xContext),
+            ::rtl::OUString( "com.sun.star.uri.UriReferenceFactory"), xContext),
         uno::UNO_QUERY_THROW);
 
     uno::Reference< uri::XUriReference > const xBaseURI(
@@ -214,7 +213,7 @@ RDFaExportHelper::AddRDFa(
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             ::comphelper::OUStringBufferAppender(property),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
+            ::rtl::OUString(" "));
 
         m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_PROPERTY,
             property.makeStringAndClear());

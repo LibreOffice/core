@@ -138,7 +138,7 @@ uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
 
     xml::AttributeData aData;
     aData.Namespace = mpContainer->GetAttrNamespace(nAttr);
-    aData.Type = OUString(RTL_CONSTASCII_USTRINGPARAM("CDATA"));
+    aData.Type = OUString("CDATA");
     aData.Value = mpContainer->GetAttrValue(nAttr);
 
     uno::Any aAny;
@@ -265,13 +265,13 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 //XServiceInfo
 OUString SAL_CALL SvUnoAttributeContainer::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "SvUnoAttributeContainer" ));
+    return OUString( "SvUnoAttributeContainer" );
 }
 
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    OUString aSN( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.AttributeContainer" )) );
+    OUString aSN( OUString( "com.sun.star.xml.AttributeContainer" ) );
     uno::Sequence< OUString > aNS( &aSN, 1L );
     return aNS;
 }

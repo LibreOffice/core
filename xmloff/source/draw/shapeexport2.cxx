@@ -107,13 +107,13 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
     uno::Any aAny;
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xPropSet->getPropertySetInfo()->hasPropertyByName(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("TransformationInHoriL2R"))) )
+            OUString("TransformationInHoriL2R")) )
     {
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TransformationInHoriL2R")));
+        aAny = xPropSet->getPropertyValue(OUString("TransformationInHoriL2R"));
     }
     else
     {
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+        aAny = xPropSet->getPropertyValue(OUString("Transformation"));
     }
     drawing::HomogenMatrix3 aMatrix;
     aAny >>= aMatrix;
@@ -252,17 +252,17 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
         sal_Bool bTemp = false;
 
         // is empty pes shape?
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject"))))
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString("IsEmptyPresentationObject")))
         {
-            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject"))) >>= bIsEmpty;
+            xPropSet->getPropertyValue(OUString("IsEmptyPresentationObject")) >>= bIsEmpty;
             if( bIsEmpty )
                 mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, XML_TRUE);
         }
 
         // is user-transformed?
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent"))))
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString("IsPlaceholderDependent")))
         {
-            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent"))) >>= bTemp;
+            xPropSet->getPropertyValue(OUString("IsPlaceholderDependent")) >>= bTemp;
             if(!bTemp)
                 mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_USER_TRANSFORMED, XML_TRUE);
         }
@@ -423,7 +423,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
         OUString aEventQName(
             mrExport.GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
+                    XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
         mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ACTION, eStrAction );
 
@@ -513,11 +513,10 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
                         mrExport.GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_OOO,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "starbasic" ) ) ) );
+                            OUString( "starbasic"  ) ) );
             OUString aEventQName(
                 mrExport.GetNamespaceMap().GetQNameByKey(
-                        XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
+                        XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
             mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
 
             if( nFound & FOUND_LIBRARY )
@@ -552,7 +551,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                          XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
                 OUString aEventQName(
                     mrExport.GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
+                            XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
                 mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
 
@@ -573,8 +572,8 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
         OUString aDescription;
 
         uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= aTitle;
-        xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Description" )) ) >>= aDescription;
+        xProps->getPropertyValue( OUString( "Title" ) ) >>= aTitle;
+        xProps->getPropertyValue( OUString( "Description" ) ) >>= aDescription;
 
         if(!aTitle.isEmpty())
         {
@@ -709,7 +708,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
 
         // evtl. corner radius?
         sal_Int32 nCornerRadius(0L);
-        xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius"))) >>= nCornerRadius;
+        xPropSet->getPropertyValue(OUString("CornerRadius")) >>= nCornerRadius;
         if(nCornerRadius)
         {
             OUStringBuffer sStringBuffer;
@@ -745,7 +744,7 @@ void XMLShapeExport::ImpExportRectangleShape(
 
         // evtl. corner radius?
         sal_Int32 nCornerRadius(0L);
-        xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius"))) >>= nCornerRadius;
+        xPropSet->getPropertyValue(OUString("CornerRadius")) >>= nCornerRadius;
         if(nCornerRadius)
         {
             OUStringBuffer sStringBuffer;
@@ -797,7 +796,7 @@ void XMLShapeExport::ImpExportLineShape(
         awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
 
         // get the two points
-        uno::Any aAny(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))));
+        uno::Any aAny(xPropSet->getPropertyValue(OUString("Geometry")));
         drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
 
         if(pSourcePolyPolygon)
@@ -898,14 +897,14 @@ void XMLShapeExport::ImpExportEllipseShape(
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         drawing::CircleKind eKind = drawing::CircleKind_FULL;
-        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleKind")) ) >>= eKind;
+        xPropSet->getPropertyValue( OUString("CircleKind") ) >>= eKind;
         if( eKind != drawing::CircleKind_FULL )
         {
             OUStringBuffer sStringBuffer;
             sal_Int32 nStartAngle = 0;
             sal_Int32 nEndAngle = 0;
-            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleStartAngle")) ) >>= nStartAngle;
-            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleEndAngle")) ) >>= nEndAngle;
+            xPropSet->getPropertyValue( OUString("CircleStartAngle") ) >>= nStartAngle;
+            xPropSet->getPropertyValue( OUString("CircleEndAngle") ) >>= nEndAngle;
 
             const double dStartAngle = nStartAngle / 100.0;
             const double dEndAngle = nEndAngle / 100.0;
@@ -987,7 +986,7 @@ void XMLShapeExport::ImpExportPolygonShape(
         if(bBezier)
         {
             // get PolygonBezier
-            uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) );
+            uno::Any aAny( xPropSet->getPropertyValue(OUString("Geometry")) );
             drawing::PolyPolygonBezierCoords* pSourcePolyPolygon =
                 (drawing::PolyPolygonBezierCoords*)aAny.getValue();
 
@@ -1030,7 +1029,7 @@ void XMLShapeExport::ImpExportPolygonShape(
         else
         {
             // get non-bezier polygon
-            uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) );
+            uno::Any aAny( xPropSet->getPropertyValue(OUString("Geometry")) );
             drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
 
             if(pSourcePolyPolygon && pSourcePolyPolygon->getLength())
@@ -1129,11 +1128,11 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 OUString aStreamURL;
                 OUString aStr;
 
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aStreamURL;
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
+                xPropSet->getPropertyValue( OUString("GraphicStreamURL")) >>= aStreamURL;
+                xPropSet->getPropertyValue( OUString("GraphicURL")) >>= sImageURL;
 
                 OUString aResolveURL( sImageURL );
-                const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
+                const rtl::OUString sPackageURL( "vnd.sun.star.Package:" );
 
                     // sj: trying to preserve the filename
                 if ( aStreamURL.match( sPackageURL, 0 ) )
@@ -1147,7 +1146,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         sRequestedName = sRequestedName.copy( 0, nLastIndex );
                     if ( !sRequestedName.isEmpty() )
                     {
-                        aResolveURL = aResolveURL.concat( OUString(RTL_CONSTASCII_USTRINGPARAM("?requestedName=")));
+                        aResolveURL = aResolveURL.concat( OUString("?requestedName="));
                         aResolveURL = aResolveURL.concat( sRequestedName );
                     }
                 }
@@ -1159,14 +1158,14 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 {
                     if( aStr[ 0 ] == '#' )
                     {
-                        aStreamURL = OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ));
+                        aStreamURL = OUString( "vnd.sun.star.Package:" );
                         aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
                     }
 
                     // update stream URL for load on demand
                     uno::Any aAny;
                     aAny <<= aStreamURL;
-                    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
+                    xPropSet->setPropertyValue( OUString("GraphicStreamURL"), aAny );
 
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
@@ -1258,7 +1257,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     // export connection kind
     drawing::ConnectorType eType = drawing::ConnectorType_STANDARD;
-    uno::Any aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")));
+    uno::Any aAny = xProps->getPropertyValue(OUString("EdgeKind"));
     aAny >>= eType;
 
     if( eType != drawing::ConnectorType_STANDARD )
@@ -1271,11 +1270,11 @@ void XMLShapeExport::ImpExportConnectorShape(
     // export line skew
     sal_Int32 nDelta1 = 0, nDelta2 = 0, nDelta3 = 0;
 
-    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")));
+    aAny = xProps->getPropertyValue(OUString("EdgeLine1Delta"));
     aAny >>= nDelta1;
-    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")));
+    aAny = xProps->getPropertyValue(OUString("EdgeLine2Delta"));
     aAny >>= nDelta2;
-    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")));
+    aAny = xProps->getPropertyValue(OUString("EdgeLine3Delta"));
     aAny >>= nDelta3;
 
     if( nDelta1 != 0 || nDelta2 != 0 || nDelta3 != 0 )
@@ -1318,17 +1317,17 @@ void XMLShapeExport::ImpExportConnectorShape(
     */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
+            OUString("StartPositionInHoriL2R")) &&
          xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) )
+            OUString("EndPositionInHoriL2R")) )
     {
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) >>= aStart;
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) >>= aEnd;
+        xProps->getPropertyValue(OUString("StartPositionInHoriL2R")) >>= aStart;
+        xProps->getPropertyValue(OUString("EndPositionInHoriL2R")) >>= aEnd;
     }
     else
     {
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
+        xProps->getPropertyValue(OUString("StartPosition")) >>= aStart;
+        xProps->getPropertyValue(OUString("EndPosition")) >>= aEnd;
     }
 
     if( pRefPoint )
@@ -1380,13 +1379,13 @@ void XMLShapeExport::ImpExportConnectorShape(
     uno::Reference< uno::XInterface > xRefE;
 
     // export start connection
-    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartShape") ) ) >>= xRefS;
+    xProps->getPropertyValue(OUString("StartShape" ) ) >>= xRefS;
     if( xRefS.is() )
     {
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRefS );
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_SHAPE, rShapeId);
 
-        aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")) );
+        aAny = xProps->getPropertyValue(OUString("StartGluePointIndex") );
         sal_Int32 nGluePointId = 0;
         if( aAny >>= nGluePointId )
         {
@@ -1398,13 +1397,13 @@ void XMLShapeExport::ImpExportConnectorShape(
     }
 
     // export end connection
-    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) ) >>= xRefE;
+    xProps->getPropertyValue(OUString("EndShape") ) >>= xRefE;
     if( xRefE.is() )
     {
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRefE );
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_SHAPE, rShapeId);
 
-        aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")) );
+        aAny = xProps->getPropertyValue(OUString("EndGluePointIndex") );
         sal_Int32 nGluePointId = 0;
         if( aAny >>= nGluePointId )
         {
@@ -1415,7 +1414,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         }
     }
 
-    if( xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ) ) >>= aAny )
+    if( xProps->getPropertyValue( OUString( "PolyPolygonBezier" ) ) >>= aAny )
     {
         // get PolygonBezier
         drawing::PolyPolygonBezierCoords* pSourcePolyPolygon =
@@ -1492,17 +1491,17 @@ void XMLShapeExport::ImpExportMeasureShape(
     */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
+            OUString("StartPositionInHoriL2R")) &&
          xProps->getPropertySetInfo()->hasPropertyByName(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) )
+            OUString("EndPositionInHoriL2R")) )
     {
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) >>= aStart;
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPositionInHoriL2R"))) >>= aEnd;
+        xProps->getPropertyValue(OUString("StartPositionInHoriL2R")) >>= aStart;
+        xProps->getPropertyValue(OUString("EndPositionInHoriL2R")) >>= aEnd;
     }
     else
     {
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
-        xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
+        xProps->getPropertyValue(OUString("StartPosition")) >>= aStart;
+        xProps->getPropertyValue(OUString("EndPosition")) >>= aEnd;
     }
 
     if( pRefPoint )
@@ -1606,7 +1605,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             OUString sClassId;
             OUString sURL;
             sal_Bool bInternal = false;
-            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
+            xPropSet->getPropertyValue(OUString("IsInternal")) >>= bInternal;
 
             if( !bIsEmptyPresObj )
             {
@@ -1615,21 +1614,21 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 {
                     // OOo internal links have no storage persistance, URL is stored in the XML file
                     // the result LinkURL is empty in case the object is not a link
-                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "LinkURL" )) ) >>= sURL;
+                    xPropSet->getPropertyValue( OUString( "LinkURL" ) ) >>= sURL;
                 }
 
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
+                xPropSet->getPropertyValue( OUString( "PersistName"  ) ) >>= sPersistName;
                 if ( sURL.isEmpty() )
                 {
                     if( !sPersistName.isEmpty() )
                     {
-                        sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
+                        sURL = OUString(  "vnd.sun.star.EmbeddedObject:"  );
                         sURL += sPersistName;
                     }
                 }
 
                 if( !bInternal )
-                    xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sClassId;
+                    xPropSet->getPropertyValue(OUString("CLSID")) >>= sClassId;
 
                 if( !sClassId.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
@@ -1671,7 +1670,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 {
                     // embedded XML
                     uno::Reference< lang::XComponent > xComp;
-                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xComp;
+                    xPropSet->getPropertyValue( OUString("Model" ) ) >>= xComp;
                     DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
                     mrExport.ExportEmbeddedOwnObject( xComp );
                 }
@@ -1683,14 +1682,14 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                     ::rtl::OUString sURLRequest( sURL );
                     if ( ( mrExport.getExportFlags() & EXPORT_OASIS ) == 0 )
-                        sURLRequest += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?oasis=false" ) );
+                        sURLRequest += ::rtl::OUString(  "?oasis=false"  );
                     mrExport.AddEmbeddedObjectAsBase64( sURLRequest );
                 }
             }
         }
         if( !bIsEmptyPresObj )
         {
-            OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+            OUString sURL(  "vnd.sun.star.GraphicObject:"  );
             sURL += sPersistName;
             if( !bExportEmbedded )
             {
@@ -1728,7 +1727,7 @@ void XMLShapeExport::ImpExportPageShape(
 
         // export page number used for this page
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        const OUString aPageNumberStr(RTL_CONSTASCII_USTRINGPARAM("PageNumber"));
+        const OUString aPageNumberStr("PageNumber");
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
         {
             sal_Int32 nPageNumber = 0;
@@ -1766,7 +1765,7 @@ void XMLShapeExport::ImpExportCaptionShape(
 
         // evtl. corner radius?
         sal_Int32 nCornerRadius(0L);
-        xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius"))) >>= nCornerRadius;
+        xPropSet->getPropertyValue(OUString("CornerRadius")) >>= nCornerRadius;
         if(nCornerRadius)
         {
             OUStringBuffer sStringBuffer;
@@ -1776,7 +1775,7 @@ void XMLShapeExport::ImpExportCaptionShape(
         }
 
         awt::Point aCaptionPoint;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ) ) ) >>= aCaptionPoint;
+        xPropSet->getPropertyValue( OUString(  "CaptionPoint"  ) ) >>= aCaptionPoint;
 
         mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
                 aCaptionPoint.X);
@@ -1822,14 +1821,14 @@ void XMLShapeExport::ImpExportFrameShape(
 
         // export frame url
         OUString aStr;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameURL" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "FrameURL"  ) ) >>= aStr;
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         // export name
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameName" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "FrameName"  ) ) >>= aStr;
         if( !aStr.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
 
@@ -1858,24 +1857,24 @@ void XMLShapeExport::ImpExportAppletShape(
 
         // export frame url
         OUString aStr;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCodeBase" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "AppletCodeBase"  ) ) >>= aStr;
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         // export draw:applet-name
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletName" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "AppletName"  ) ) >>= aStr;
         if( !aStr.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
 
         // export draw:code
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCode" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "AppletCode"  ) ) >>= aStr;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
 
         // export draw:may-script
         sal_Bool bIsScript = false;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletIsScript" ) ) ) >>= bIsScript;
+        xPropSet->getPropertyValue( OUString(  "AppletIsScript"  ) ) >>= bIsScript;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
 
         {
@@ -1884,7 +1883,7 @@ void XMLShapeExport::ImpExportAppletShape(
 
             // export parameters
             uno::Sequence< beans::PropertyValue > aCommands;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCommands" ) ) ) >>= aCommands;
+            xPropSet->getPropertyValue( OUString(  "AppletCommands"  ) ) >>= aCommands;
             const sal_Int32 nCount = aCommands.getLength();
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
@@ -1915,7 +1914,7 @@ void XMLShapeExport::ImpExportPluginShape(
 
         // export plugin url
         OUString aStr;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "PluginURL"  ) ) >>= aStr;
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
@@ -1923,7 +1922,7 @@ void XMLShapeExport::ImpExportPluginShape(
 
 
         // export mime-type
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginMimeType" ) ) ) >>= aStr;
+        xPropSet->getPropertyValue( OUString(  "PluginMimeType"  ) ) >>= aStr;
         if(!aStr.isEmpty())
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
 
@@ -1933,7 +1932,7 @@ void XMLShapeExport::ImpExportPluginShape(
 
             // export parameters
             uno::Sequence< beans::PropertyValue > aCommands;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginCommands" ) ) ) >>= aCommands;
+            xPropSet->getPropertyValue( OUString(  "PluginCommands"  ) ) >>= aCommands;
             const sal_Int32 nCount = aCommands.getLength();
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
@@ -1963,19 +1962,19 @@ static void lcl_CopyStream(
     {
         SAL_WARN("xmloff", "no output stream");
         throw uno::Exception(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no output stream")),0);
+            ::rtl::OUString("no output stream"),0);
     }
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
-            uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString("MediaType"),
+            uno::makeAny(::rtl::OUString(
             //FIXME how to detect real media type?
             //but currently xmloff has this one hardcoded anyway...
-                    "application/vnd.sun.star.media"))));
+                    "application/vnd.sun.star.media")));
         xStreamProps->setPropertyValue( // turn off compression
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
+            ::rtl::OUString("Compressed"),
             uno::makeAny(sal_False));
     }
     ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
@@ -2000,7 +1999,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
                     rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
             uno::Reference<io::XInputStream> xInStream;
             xPropSet->getPropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrivateStream")))
+                ::rtl::OUString("PrivateStream"))
                     >>= xInStream;
 
             if (!xInStream.is())
@@ -2048,7 +2047,7 @@ void XMLShapeExport::ImpExportMediaShape(
 
         // export media url
         OUString aMediaURL;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ) ) >>= aMediaURL;
+        xPropSet->getPropertyValue( OUString(  "MediaURL"  ) ) >>= aMediaURL;
         OUString const persistentURL =
             lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL);
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
@@ -2057,49 +2056,49 @@ void XMLShapeExport::ImpExportMediaShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         // export mime-type
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.media" ) ) );
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, OUString(  "application/vnd.sun.star.media"  ) );
 
         // write plugin
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), sal_True);
 
         // export parameters
-        const OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM( "false" ) ), aTrueStr( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+        const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
 
         sal_Bool bLoop = false;
-        const OUString aLoopStr( RTL_CONSTASCII_USTRINGPARAM( "Loop" ) );
+        const OUString aLoopStr(  "Loop"  );
         xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
         delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
 
         sal_Bool bMute = false;
-        const OUString aMuteStr( RTL_CONSTASCII_USTRINGPARAM( "Mute" ) );
+        const OUString aMuteStr(  "Mute"  );
         xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
         delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
 
         sal_Int16 nVolumeDB = 0;
-        const OUString aVolumeDBStr( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) );
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) ) ) >>= nVolumeDB;
+        const OUString aVolumeDBStr(  "VolumeDB"  );
+        xPropSet->getPropertyValue( OUString(  "VolumeDB"  ) ) >>= nVolumeDB;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::valueOf( static_cast< sal_Int32 >( nVolumeDB ) ) );
         delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
 
         media::ZoomLevel eZoom;
-        const OUString aZoomStr( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) );
+        const OUString aZoomStr(  "Zoom"  );
         OUString aZoomValue;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ) ) >>= eZoom;
+        xPropSet->getPropertyValue( OUString(  "Zoom"  ) ) >>= eZoom;
         switch( eZoom )
         {
-            case( media::ZoomLevel_ZOOM_1_TO_4 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "25%" ) ); break;
-            case( media::ZoomLevel_ZOOM_1_TO_2 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "50%" ) ); break;
-            case( media::ZoomLevel_ORIGINAL ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "100%" ) ); break;
-            case( media::ZoomLevel_ZOOM_2_TO_1 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "200%" ) ); break;
-            case( media::ZoomLevel_ZOOM_4_TO_1 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "400%" ) ); break;
-            case( media::ZoomLevel_FIT_TO_WINDOW ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "fit" ) ); break;
-            case( media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "fixedfit" ) ); break;
-            case( media::ZoomLevel_FULLSCREEN ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "fullscreen" ) ); break;
+            case( media::ZoomLevel_ZOOM_1_TO_4 ): aZoomValue = OUString(  "25%"  ); break;
+            case( media::ZoomLevel_ZOOM_1_TO_2 ): aZoomValue = OUString(  "50%"  ); break;
+            case( media::ZoomLevel_ORIGINAL ): aZoomValue = OUString(  "100%"  ); break;
+            case( media::ZoomLevel_ZOOM_2_TO_1 ): aZoomValue = OUString(  "200%"  ); break;
+            case( media::ZoomLevel_ZOOM_4_TO_1 ): aZoomValue = OUString(  "400%"  ); break;
+            case( media::ZoomLevel_FIT_TO_WINDOW ): aZoomValue = OUString(  "fit"  ); break;
+            case( media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): aZoomValue = OUString(  "fixedfit"  ); break;
+            case( media::ZoomLevel_FULLSCREEN ): aZoomValue = OUString(  "fullscreen"  ); break;
 
             default:
             break;

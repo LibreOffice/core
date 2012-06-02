@@ -82,9 +82,9 @@ using ::rtl::OUString;
         (void)ex; // avoid warning for pro build
 
         OSL_FAIL( OUStringToOString( OUString(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
+                        OUString(  "Exception caught. Type: " ) +
                         OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
+                        OUString(  ", Message: " ) +
                         ex.Message), RTL_TEXTENCODING_ASCII_US ).getStr());
 
     }
@@ -203,7 +203,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.DataSeriesWrapper" )) ), uno::UNO_QUERY );
+                    OUString( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -240,7 +240,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.DataSeriesWrapper" )) ), uno::UNO_QUERY );
+                    OUString( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {

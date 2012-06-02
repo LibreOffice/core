@@ -80,27 +80,27 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     mbExportLayer( sal_False ),
     // #88546# init to sal_False
     mbHandleProgressBar( sal_False ),
-    msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
-    msPrintable( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-    msVisible( RTL_CONSTASCII_USTRINGPARAM("Visible") ),
-    msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
-    msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
-    msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
-    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
-    msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
-    msEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
-    msPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
-    msMacroName( RTL_CONSTASCII_USTRINGPARAM("MacroName") ),
-    msScript( RTL_CONSTASCII_USTRINGPARAM("Script") ),
-    msLibrary( RTL_CONSTASCII_USTRINGPARAM("Library") ),
-    msClickAction( RTL_CONSTASCII_USTRINGPARAM("ClickAction") ),
-    msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
-    msEffect( RTL_CONSTASCII_USTRINGPARAM("Effect") ),
-    msPlayFull( RTL_CONSTASCII_USTRINGPARAM("PlayFull") ),
-    msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
-    msSoundURL( RTL_CONSTASCII_USTRINGPARAM("SoundURL") ),
-    msSpeed( RTL_CONSTASCII_USTRINGPARAM("Speed") ),
-    msStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") )
+    msZIndex( "ZOrder" ),
+    msPrintable( "Printable" ),
+    msVisible( "Visible" ),
+    msEmptyPres( "IsEmptyPresentationObject" ),
+    msModel( "Model" ),
+    msStartShape( "StartShape" ),
+    msEndShape( "EndShape" ),
+    msOnClick( "OnClick" ),
+    msEventType( "EventType" ),
+    msPresentation( "Presentation" ),
+    msMacroName( "MacroName" ),
+    msScript( "Script" ),
+    msLibrary( "Library" ),
+    msClickAction( "ClickAction" ),
+    msBookmark( "Bookmark" ),
+    msEffect( "Effect" ),
+    msPlayFull( "PlayFull" ),
+    msVerb( "Verb" ),
+    msSoundURL( "SoundURL" ),
+    msSpeed( "Speed" ),
+    msStarBasic( "StarBasic" )
 {
     // construct PropertyHandlerFactory
     mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), rExp );
@@ -119,14 +119,14 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 
     mrExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)),
+        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
         GetPropertySetMapper(),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX)));
+        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX));
     mrExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_PRESENTATION_ID,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
+        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
         GetPropertySetMapper(),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX)));
+        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX));
 
     maCurrentInfo = maShapeInfos.end();
 
@@ -156,9 +156,9 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
             if( xSet.is() )
             {
                 rtl::OUString aEngine;
-                xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeEngine" ) ) ) >>= aEngine;
+                xSet->getPropertyValue( OUString(  "CustomShapeEngine"  ) ) >>= aEngine;
                 if ( aEngine.isEmpty() )
-                    aEngine = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
+                    aEngine = OUString(  "com.sun.star.drawing.EnhancedCustomShapeEngine"  );
 
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
@@ -166,10 +166,10 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
-                    aPropValues[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CustomShape" ));
+                    aPropValues[ 0 ].Name = rtl::OUString( "CustomShape" );
                     aPropValues[ 0 ].Value <<= xShape;
                     sal_Bool bForceGroupWithText = sal_True;
-                    aPropValues[ 1 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ForceGroupWithText" ));
+                    aPropValues[ 1 ].Name = rtl::OUString( "ForceGroupWithText" );
                     aPropValues[ 1 ].Value <<= bForceGroupWithText;
                     aArgument[ 0 ] <<= aPropValues;
                     uno::Reference< uno::XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
@@ -279,8 +279,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
         if( bObjSupportsStyle )
         {
-            if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
-                xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) >>= xStyle;
+            if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString("Style")) )
+                xPropSet->getPropertyValue(OUString("Style")) >>= xStyle;
 
             if(xStyle.is())
             {
@@ -292,7 +292,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     if(xStylePropSet.is())
                     {
                         OUString aFamilyName;
-                        xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
+                        xStylePropSet->getPropertyValue(OUString("Family")) >>= aFamilyName;
                         if( !aFamilyName.isEmpty() && aFamilyName != "graphics" )
                             aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
                     }
@@ -394,7 +394,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     // * defaults for style properties are not written, but we need to write the "left",
                     //   because we need to distiguish this "left" from the case where not align attribute
                     //   is present which means "void"
-                    static const ::rtl::OUString s_sParaAdjustPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) );
+                    static const ::rtl::OUString s_sParaAdjustPropertyName(  "ParaAdjust"  );
                     if  (   xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName )
                         &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
                         )
@@ -540,7 +540,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::E_DRAW) ) try
     {
         presentation::ClickAction eAction = presentation::ClickAction_NONE;
-        xSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("OnClick"))) >>= eAction;
+        xSet->getPropertyValue(OUString("OnClick")) >>= eAction;
 
         if( (eAction == presentation::ClickAction_DOCUMENT) ||
             (eAction == presentation::ClickAction_BOOKMARK) )
@@ -676,7 +676,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             {
                 uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 OUString aLayerName;
-                xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "LayerName" )) ) >>= aLayerName;
+                xProps->getPropertyValue( OUString( "LayerName" ) ) >>= aLayerName;
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
@@ -1089,7 +1089,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     if(xPropSet.is())
                     {
                         rtl::OUString sCLSID;
-                        if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
+                        if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
                             if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()))
                             {
@@ -1144,7 +1144,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     if(xPropSet.is()) try
                     {
                         rtl::OUString sCLSID;
-                        if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
+                        if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
                             if( sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) ||
                                 sCLSID.equals(rtl::OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName())) )
@@ -1250,13 +1250,13 @@ void XMLShapeExport::ExportGraphicDefaults()
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString("com.sun.star.drawing.Defaults" ) ), uno::UNO_QUERY );
             if( xDefaults.is() )
             {
-                aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper );
+                aStEx.exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );
 
                 // write graphic family styles
-                aStEx.exportStyleFamily("graphics", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx.exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
         catch(const lang::ServiceNotRegisteredException&)

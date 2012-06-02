@@ -296,13 +296,13 @@ SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
 #define SERVICE(classname,servicename,implementationname,draw,flags)\
 uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
 {\
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( servicename ) );\
+    const OUString aServiceName(  servicename  );\
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
     return aSeq;\
 }\
 OUString SAL_CALL classname##_getImplementationName() throw()\
 {\
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationname ) );\
+    return OUString(  implementationname  );\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
@@ -348,8 +348,8 @@ SdXMLImport::SdXMLImport(
     mbIsDraw(bIsDraw),
     mbLoadDoc(sal_True),
     mbPreview(sal_False),
-    msPageLayouts( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ),
-    msPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) )
+    msPageLayouts(  "PageLayouts"  ),
+    msPreview(  "Preview"  )
 {
     // add namespaces
     GetNamespaceMap().Add(
@@ -378,7 +378,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     if( !xDocServices.is() )
         throw lang::IllegalArgumentException();
 
-    mbIsDraw = !xDocServices->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+    mbIsDraw = !xDocServices->supportsService( OUString(  "com.sun.star.presentation.PresentationDocument"  ) );
 
     // prepare access to styles
     uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
@@ -445,7 +445,7 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
             xInfoSet->getPropertyValue( msPreview ) >>= mbPreview;
 
         ::rtl::OUString const sOrganizerMode(
-            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+            "OrganizerMode");
         if (xInfoSetInfo->hasPropertyByName(sOrganizerMode))
         {
             sal_Bool bStyleOnly(sal_False);
@@ -732,8 +732,8 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+            mxServiceFactory->createInstance(::rtl::OUString(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -757,8 +757,8 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
     if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+            mxServiceFactory->createInstance(::rtl::OUString(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -896,7 +896,7 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
 
     try
     {
-        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
+        xPropSet->setPropertyValue( OUString(  "VisibleArea"  ), uno::makeAny( aVisArea )  );
     }
     catch(const com::sun::star::uno::Exception&)
     {
@@ -913,7 +913,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
     if( !xFac.is() )
         return;
 
-    uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString(  "com.sun.star.document.Settings"  ) ), uno::UNO_QUERY );
     if( !xProps.is() )
         return;
 

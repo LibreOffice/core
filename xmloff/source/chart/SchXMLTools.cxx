@@ -79,7 +79,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            xFactProp->getPropertyValue(OUString( "DefaultContext" )) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -117,7 +117,7 @@ sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
 {
     //returns -1 if nothing found
     sal_Int32 nBuildId = -1;
-    const OUString sBuildCompare( RTL_CONSTASCII_USTRINGPARAM( "$Build-" ) );
+    const OUString sBuildCompare(  "$Build-"  );
     sal_Int32 nEnd = -1;
     sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare, nEnd );
     if( nBegin != -1 )
@@ -191,35 +191,35 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
     //shape property -- chart model object property
     static tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.LineDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.LineDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.LineChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.AreaDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.AreaChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.AreaDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.AreaChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BarDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.BarDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.ColumnChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.PieDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.PieDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.PieChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.DonutDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DonutChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.DonutDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.DonutChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.XYDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ScatterChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.XYDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.ScatterChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.NetDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.NetDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.NetChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.FilledNetDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.FilledNetChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.FilledNetDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.FilledNetChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.StockDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.StockDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.CandleStickChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BubbleDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartType" )) )
+        ( ::rtl::OUString( "com.sun.star.chart.BubbleDiagram" )
+        , ::rtl::OUString( "com.sun.star.chart2.BubbleChartType" ) )
 
         ;
     return g_aChartTypeNameMap;
@@ -322,13 +322,13 @@ XMLTokenEnum getTokenByChartType(
 
     if( bUseOldNames )
     {
-        aPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart."));
-        aPostfix = OUString( RTL_CONSTASCII_USTRINGPARAM("Diagram"));
+        aPrefix = OUString( "com.sun.star.chart.");
+        aPostfix = OUString( "Diagram");
     }
     else
     {
-        aPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2."));
-        aPostfix = OUString( RTL_CONSTASCII_USTRINGPARAM("ChartType"));
+        aPrefix = OUString( "com.sun.star.chart2.");
+        aPostfix = OUString( "ChartType");
     }
 
     if( rChartTypeService.match( aPrefix ))
@@ -380,7 +380,7 @@ Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
     if( xContext.is() )
         xResult.set(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.data.LabeledDataSequence" )),
+                OUString( "com.sun.star.chart2.data.LabeledDataSequence" ),
                 xContext ), uno::UNO_QUERY_THROW );
     return xResult;
 }
@@ -491,7 +491,7 @@ void CreateCategories(
                                 {
                                     (void)ex; // avoid warning for pro build
                                     OSL_FAIL( ::rtl::OUStringToOString(
-                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
+                                                    ::rtl::OUString(  "IllegalArgumentException caught, Message: " ) +
                                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
                                 aData.Categories.set( xLabeledSeq );
@@ -657,7 +657,7 @@ void setXMLRangePropertyAtDataSequence(
         return;
     try
     {
-        const OUString aXMLRangePropName( RTL_CONSTASCII_USTRINGPARAM( "CachedXMLRange" ));
+        const OUString aXMLRangePropName(  "CachedXMLRange" );
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
@@ -667,7 +667,7 @@ void setXMLRangePropertyAtDataSequence(
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( ::rtl::OUStringToOString(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
+                        ::rtl::OUString(  "Exception caught, Message: " ) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 }
@@ -682,7 +682,7 @@ bool getXMLRangePropertyFromDataSequence(
     {
         try
         {
-            const OUString aXMLRangePropName( RTL_CONSTASCII_USTRINGPARAM( "CachedXMLRange" ));
+            const OUString aXMLRangePropName(  "CachedXMLRange" );
             Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
             Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
             bResult =
@@ -697,7 +697,7 @@ bool getXMLRangePropertyFromDataSequence(
         {
             (void)ex; // avoid warning for pro build
             OSL_FAIL( ::rtl::OUStringToOString(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
+                            ::rtl::OUString(  "Exception caught, Message: " ) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
     }
@@ -779,17 +779,17 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame:
     if( !bResult )
     {
         ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-        if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/3") ) ) != -1 )
+        if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/3" ) ) != -1 )
         {
-            if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/300m") ) ) != -1 )
+            if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/300m" ) ) != -1 )
             {
                 sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
                 if( nBuilId>0 && nBuilId<9491 ) //9491 is build id of dev300m76
                     bResult= true;
             }
-            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/310m") ) ) != -1 )
+            else if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/310m" ) ) != -1 )
                 bResult= true;
-            else if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/320m") ) ) != -1 )
+            else if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/320m" ) ) != -1 )
                 bResult= true;
         }
     }
@@ -802,7 +802,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame:
     if( !bResult )
     {
         ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-        if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/680m") ) ) != -1 )
+        if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/680m" ) ) != -1 )
             bResult= true;
     }
     return bResult;
@@ -834,11 +834,11 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
         if( xChild.is() )
         {
             aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
-            if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
+            if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project" ) ) != -1 )
             {
                 //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already)
                 //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
-                if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/31") ) ) != -1 )
+                if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/31" ) ) != -1 )
                     bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer
                 else
                     bResult= true; //in this case the OLE chart was created by an older version, as OLE objects are sometimes stream copied the version can differ from the parents version, so the parents version is not a reliable indicator
@@ -854,11 +854,11 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno:
 {
     bool bResult = false;
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );
-    if(    ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org 1") ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 6") ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 7") ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 6") ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 7") ) ) == 0 )
+    if(    ( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org 1" ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( "StarOffice 6" ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( "StarOffice 7" ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( "StarSuite 6" ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( "StarSuite 7" ) ) == 0 )
         )
         bResult= true;
     return bResult;
@@ -873,7 +873,7 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
         Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
         if( xFact.is() )
         {
-            const OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
+            const OUString aDataProviderServiceName( "com.sun.star.chart2.data.DataProvider");
             const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
             const OUString * pBegin = aServiceNames.getConstArray();
             const OUString * pEnd = pBegin + aServiceNames.getLength();

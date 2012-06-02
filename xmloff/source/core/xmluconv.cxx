@@ -98,7 +98,7 @@ void SvXMLUnitConverter::Impl::createNumTypeInfo() const
         const_cast<Impl*>(this)->m_xNumTypeInfo =
             Reference < XNumberingTypeInfo > (
                 m_xServiceFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DefaultNumberingProvider") ) ), UNO_QUERY );
+                    OUString("com.sun.star.text.DefaultNumberingProvider" ) ), UNO_QUERY );
     }
 }
 
@@ -309,7 +309,7 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
     if (xNumberFormatsSupplier.is())
     {
         const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        return xPropertySet.is() && (xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE))) >>= m_pImpl->m_aNullDate);
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(rtl::OUString(XML_NULLDATE)) >>= m_pImpl->m_aNullDate);
     }
     return sal_False;
 }
@@ -813,8 +813,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
                                 ->m_pImpl->m_xCharClass =
                                     Reference < XCharacterClassification >(
                                 m_pImpl->m_xServiceFactory->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.CharacterClassification_Unicode")) ),
+                                    OUString( "com.sun.star.i18n.CharacterClassification_Unicode") ),
                                 UNO_QUERY );
 
                             OSL_ENSURE( m_pImpl->m_xCharClass.is(),

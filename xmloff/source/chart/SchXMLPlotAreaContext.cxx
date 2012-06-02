@@ -112,7 +112,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
         if( xProp.is() )
         {
             drawing::CameraGeometry aCamGeo;
-            xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "D3DCameraGeometry" ))) >>= aCamGeo;
+            xProp->getPropertyValue( ::rtl::OUString( "D3DCameraGeometry" )) >>= aCamGeo;
             maVRP.setX( aCamGeo.vrp.PositionX );
             maVRP.setY( aCamGeo.vrp.PositionY );
             maVRP.setZ( aCamGeo.vrp.PositionZ );
@@ -205,36 +205,36 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         try
         {
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxis" )), aFalseBool );
+                    rtl::OUString( "HasXAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxisGrid" )), aFalseBool );
+                    rtl::OUString( "HasXAxisGrid" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxisDescription" )), aFalseBool );
+                    rtl::OUString( "HasXAxisDescription" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxis" )), aFalseBool );
+                    rtl::OUString( "HasSecondaryXAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxisDescription" )), aFalseBool );
+                    rtl::OUString( "HasSecondaryXAxisDescription" ), aFalseBool );
 
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxis" )), aFalseBool );
+                    rtl::OUString( "HasYAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxisGrid" )), aFalseBool );
+                    rtl::OUString( "HasYAxisGrid" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxisDescription" )), aFalseBool );
+                    rtl::OUString( "HasYAxisDescription" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" )), aFalseBool );
+                    rtl::OUString( "HasSecondaryYAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxisDescription" )), aFalseBool );
+                    rtl::OUString( "HasSecondaryYAxisDescription" ), aFalseBool );
 
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasZAxis" )), aFalseBool );
+                    rtl::OUString( "HasZAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasZAxisDescription" )), aFalseBool );
+                    rtl::OUString( "HasZAxisDescription" ), aFalseBool );
 
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             aAny <<= eSource;
-            xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
+            xProp->setPropertyValue( rtl::OUString( "DataRowSource" ), aAny );
         }
         catch( const beans::UnknownPropertyException & )
         {
@@ -312,12 +312,12 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 uno::Any aAny;
                 aAny <<= (sal_Bool)(mrColHasLabels);
                 xDocProp->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstColumn" )),
+                    ::rtl::OUString( "DataSourceLabelsInFirstColumn" ),
                     aAny );
 
                 aAny <<= (sal_Bool)(mrRowHasLabels);
                 xDocProp->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstRow" )),
+                    ::rtl::OUString( "DataSourceLabelsInFirstRow" ),
                     aAny );
             }
             catch( const beans::UnknownPropertyException & )
@@ -347,13 +347,13 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     pPropStyleContext->FillPropertySet( xProp );
 
                     // get the data row source that was set without having data
-                    xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )))
+                    xProp->getPropertyValue( ::rtl::OUString( "DataRowSource" ))
                         >>= mrDataRowSource;
 
                     //lines on/off
                     //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
                     mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")), pPropStyleContext, pStylesCtxt );
+                        ::rtl::OUString("Lines"), pPropStyleContext, pStylesCtxt );
 
                     //handle automatic position and size
                     m_aOuterPositioning.readAutomaticPositioningProperties( pPropStyleContext, pStylesCtxt );
@@ -362,12 +362,12 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
                     {
                         bool bIs3d = false;
-                        if( xProp.is() && ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
+                        if( xProp.is() && ( xProp->getPropertyValue(::rtl::OUString("Dim3D")) >>= bIs3d ) &&
                             bIs3d )
                         {
                             if( maChartTypeServiceName == "com.sun.star.chart2.PieChartType" || maChartTypeServiceName == "com.sun.star.chart2.DonutChartType" )
                             {
-                                ::rtl::OUString aPropName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartingAngle")) );
+                                ::rtl::OUString aPropName( ::rtl::OUString("StartingAngle") );
                                 uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
                                 if( !aAStartingAngle.hasValue() )
                                     xProp->setPropertyValue( aPropName, uno::makeAny(sal_Int32(0)) ) ;
@@ -383,35 +383,35 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     if(xProp.is())
     try
     {
-        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolType")));
-        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCaption")));
+        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(::rtl::OUString("SymbolType"));
+        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(::rtl::OUString("DataCaption"));
 
-        mrSeriesDefaultsAndStyles.maErrorIndicatorDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ErrorIndicator")));
-        mrSeriesDefaultsAndStyles.maErrorCategoryDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ErrorCategory")));
-        mrSeriesDefaultsAndStyles.maConstantErrorLowDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConstantErrorLow")));
-        mrSeriesDefaultsAndStyles.maConstantErrorHighDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConstantErrorHigh")));
-        mrSeriesDefaultsAndStyles.maPercentageErrorDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PercentageError")));
-        mrSeriesDefaultsAndStyles.maErrorMarginDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ErrorMargin")));
+        mrSeriesDefaultsAndStyles.maErrorIndicatorDefault = xProp->getPropertyValue(::rtl::OUString("ErrorIndicator"));
+        mrSeriesDefaultsAndStyles.maErrorCategoryDefault = xProp->getPropertyValue(::rtl::OUString("ErrorCategory"));
+        mrSeriesDefaultsAndStyles.maConstantErrorLowDefault = xProp->getPropertyValue(::rtl::OUString("ConstantErrorLow"));
+        mrSeriesDefaultsAndStyles.maConstantErrorHighDefault = xProp->getPropertyValue(::rtl::OUString("ConstantErrorHigh"));
+        mrSeriesDefaultsAndStyles.maPercentageErrorDefault = xProp->getPropertyValue(::rtl::OUString("PercentageError"));
+        mrSeriesDefaultsAndStyles.maErrorMarginDefault = xProp->getPropertyValue(::rtl::OUString("ErrorMargin"));
 
-        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MeanValue")));
-        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegressionCurves")));
+        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(::rtl::OUString("MeanValue"));
+        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(::rtl::OUString("RegressionCurves"));
 
         bool bStacked = false;
-        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Stacked")));
+        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(::rtl::OUString("Stacked"));
         mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
-        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Percent")));
+        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(::rtl::OUString("Percent"));
         mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
-        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StackedBarsConnected")));
+        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(::rtl::OUString("StackedBarsConnected"));
 
         // deep
-        uno::Any aDeepProperty( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deep"))));
+        uno::Any aDeepProperty( xProp->getPropertyValue(::rtl::OUString("Deep")));
         // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
         if( ! (bStacked || mbPercentStacked ))
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
                 bool bIs3d = false;
-                if( ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
+                if( ( xProp->getPropertyValue(::rtl::OUString("Dim3D")) >>= bIs3d ) &&
                     bIs3d )
                 {
                     if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
@@ -423,8 +423,8 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
         mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
 
-        xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberOfLines"))) >>= mnNumOfLinesProp;
-        xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Volume"))) >>= mbStockHasVolume;
+        xProp->getPropertyValue(::rtl::OUString("NumberOfLines")) >>= mnNumOfLinesProp;
+        xProp->getPropertyValue(::rtl::OUString("Volume")) >>= mbStockHasVolume;
     }
     catch( const uno::Exception & rEx )
     {
@@ -454,7 +454,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
         if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
-            xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), uno::makeAny(mrDataRowSource) );
+            xProp->setPropertyValue( rtl::OUString( "DataRowSource" ), uno::makeAny(mrDataRowSource) );
     }
 }
 
@@ -582,7 +582,7 @@ void SchXMLPlotAreaContext::EndElement()
     if( xDiaProp.is())
     {
         sal_Bool bIsThreeDim = sal_False;
-        uno::Any aAny = xDiaProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Dim3D" )));
+        uno::Any aAny = xDiaProp->getPropertyValue( ::rtl::OUString( "Dim3D" ));
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
@@ -597,7 +597,7 @@ void SchXMLPlotAreaContext::EndElement()
         {
             try
             {
-                xDiaProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLines" )),
+                xDiaProp->setPropertyValue( ::rtl::OUString(  "NumberOfLines" ),
                                             uno::makeAny( mnNumOfLinesProp ));
             }
             catch( const uno::Exception & rEx )
@@ -618,7 +618,7 @@ void SchXMLPlotAreaContext::EndElement()
         {
             try
             {
-                xDiaProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Volume" )),
+                xDiaProp->setPropertyValue( ::rtl::OUString(  "Volume" ),
                                             uno::makeAny( true ));
             }
             catch( const uno::Exception & rEx )
@@ -797,9 +797,9 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
     {
         //handle automatic position and size
         SchXMLTools::getPropertyFromContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticSize")), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
+            ::rtl::OUString("AutomaticSize"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
         SchXMLTools::getPropertyFromContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticPosition")), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
+            ::rtl::OUString("AutomaticPosition"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
     }
 }
 
@@ -1130,7 +1130,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFact.is())
             xEqProp.set( xFact->createInstance(
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionEquation" ))), uno::UNO_QUERY );
+                             ::rtl::OUString(  "com.sun.star.chart2.RegressionEquation" )), uno::UNO_QUERY );
         if( xEqProp.is())
         {
             if( !sAutoStyleName.isEmpty() )
@@ -1148,15 +1148,15 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
                         pPropStyleContext->FillPropertySet( xEqProp );
                 }
             }
-            xEqProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowEquation")), uno::makeAny( bShowEquation ));
-            xEqProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowCorrelationCoefficient")), uno::makeAny( bShowRSquare ));
+            xEqProp->setPropertyValue( OUString( "ShowEquation"), uno::makeAny( bShowEquation ));
+            xEqProp->setPropertyValue( OUString( "ShowCorrelationCoefficient"), uno::makeAny( bShowRSquare ));
 
             if( bHasXPos && bHasYPos )
             {
                 chart2::RelativePosition aRelPos;
                 aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
                 aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-                xEqProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "RelativePosition" )),
+                xEqProp->setPropertyValue( OUString(  "RelativePosition" ),
                                            uno::makeAny( aRelPos ));
             }
             OSL_ASSERT( mrRegressionStyle.meType == DataRowPointStyle::REGRESSION );
