@@ -33,7 +33,6 @@
 #include <ndindex.hxx>
 #include <vector>
 
-
 class SwDoc;
 class SwTableBox;
 class SwUndoSort;
@@ -45,9 +44,15 @@ class _FndLine;
 class CollatorWrapper;
 class LocaleDataWrapper;
 
-namespace com { namespace sun { namespace star { namespace lang {
-    struct Locale;
-}}}}
+namespace com {
+    namespace sun {
+        namespace star {
+            namespace lang {
+                struct Locale;
+            }
+        }
+    }
+}
 
 // List of all sorted elements
 typedef const _FndBox*      _FndBoxPtr;
@@ -97,9 +102,8 @@ struct SwSortElement
 // sort text
 struct SwSortTxtElement : public SwSortElement
 {
-    // fuer Text
-    sal_uLong           nOrg;
-    SwNodeIndex     aPos;
+    sal_uLong   nOrg;
+    SwNodeIndex aPos;
 
     SwSortTxtElement( const SwNodeIndex& rPos );
     virtual ~SwSortTxtElement();
@@ -110,7 +114,7 @@ struct SwSortTxtElement : public SwSortElement
 // sort table
 struct SwSortBoxElement : public SwSortElement
 {
-    sal_uInt16                      nRow;
+    sal_uInt16 nRow;
 
     SwSortBoxElement( sal_uInt16 nRC );
     virtual ~SwSortBoxElement();
@@ -126,21 +130,20 @@ public:
     FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox);
     ~FlatFndBox();
 
-    sal_Bool                IsSymmetric() const { return bSym;  }
-    sal_uInt16              GetRows()     const { return nRows; }
-    sal_uInt16              GetCols()     const { return nCols; }
+    sal_Bool            IsSymmetric() const { return bSym;  }
+    sal_uInt16          GetRows()     const { return nRows; }
+    sal_uInt16          GetCols()     const { return nCols; }
 
     const _FndBox*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
-    inline sal_Bool         HasItemSets() const;
+    inline sal_Bool     HasItemSets() const;
     const SfxItemSet*   GetItemSet(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
 private:
-
-    sal_Bool                CheckLineSymmetry(const _FndBox& rBox);
-    sal_Bool                CheckBoxSymmetry(const _FndLine& rLn);
-    sal_uInt16              GetColCount(const _FndBox& rBox);
-    sal_uInt16              GetRowCount(const _FndBox& rBox);
+    sal_Bool            CheckLineSymmetry(const _FndBox& rBox);
+    sal_Bool            CheckBoxSymmetry(const _FndLine& rLn);
+    sal_uInt16          GetColCount(const _FndBox& rBox);
+    sal_uInt16          GetRowCount(const _FndBox& rBox);
     void                FillFlat(const _FndBox&, sal_Bool bLastBox=sal_False);
 
     SwDoc*              pDoc;
@@ -148,18 +151,16 @@ private:
     _FndBoxPtr*         pArr;
     SfxItemSet**        ppItemSets;
 
-    sal_uInt16              nRows;
-    sal_uInt16              nCols;
+    sal_uInt16          nRows;
+    sal_uInt16          nCols;
+    sal_uInt16          nRow;
+    sal_uInt16          nCol;
 
-    sal_uInt16              nRow;
-    sal_uInt16              nCol;
-
-    sal_Bool                bSym;
+    sal_Bool            bSym;
 };
-
 
 inline sal_Bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
 
-#endif // _NDSORT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

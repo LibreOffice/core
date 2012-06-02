@@ -41,6 +41,7 @@ protected:
 #if defined ( GCC) && defined ( C272 )
     ~SwBodyFrm();
 #endif
+
 public:
     SwBodyFrm( SwFrmFmt*, SwFrm* );
 
@@ -50,6 +51,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };
 
-#endif  //_BODYFRM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

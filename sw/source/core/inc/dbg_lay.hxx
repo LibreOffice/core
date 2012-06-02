@@ -77,6 +77,7 @@ class SwProtocol
     static sal_uLong nRecord;
     static SwImplProtocol* pImpl;
     static sal_Bool Start() { return 0 != ( PROT_INIT & nRecord ); }
+
 public:
     static sal_uLong Record() { return nRecord; }
     static void SetRecord( sal_uLong nNew ) { nRecord = nNew; }
@@ -91,10 +92,20 @@ class SwEnterLeave
     SwImplEnterLeave* pImpl;
     void Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar );
     void Dtor();
+
 public:
     SwEnterLeave( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar )
-        { if( SwProtocol::Record( nFunc ) ) Ctor( pFrm, nFunc, nAct, pPar ); else pImpl = NULL; }
-    ~SwEnterLeave() { if( pImpl ) Dtor(); }
+    {
+        if( SwProtocol::Record( nFunc ) )
+            Ctor( pFrm, nFunc, nAct, pPar );
+        else
+            pImpl = NULL;
+    }
+    ~SwEnterLeave()
+    {
+        if( pImpl )
+            Dtor();
+    }
 };
 
 #define PROTOCOL( pFrm, nFunc, nAct, pPar ) {   if( SwProtocol::Record( nFunc ) )\

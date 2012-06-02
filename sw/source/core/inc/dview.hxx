@@ -28,7 +28,6 @@
 #ifndef _DVIEW_HXX
 #define _DVIEW_HXX
 
-
 #include <svx/fmview.hxx>
 
 class OutputDevice;
@@ -119,7 +118,6 @@ public:
     // by its reference object for delete of selection and group selection
     static void ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView );
 };
-
 
 #endif
 

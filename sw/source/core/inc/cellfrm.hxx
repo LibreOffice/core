@@ -25,11 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SW_CELLFRM_HXX
 #define SW_CELLFRM_HXX
 
 #include <tools/mempool.hxx>
-
 #include "layfrm.hxx"
 
 class SwTableBox;

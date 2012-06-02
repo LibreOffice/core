@@ -25,13 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _ACORRECT_HXX
 #define _ACORRECT_HXX
 
 #include <editeng/svxacorr.hxx>
-
 #include <swundo.hxx>
-
 
 class SwEditShell;
 class SwPaM;
@@ -42,6 +41,7 @@ class SfxItemSet;
 class SwDontExpandItem
 {
     SfxItemSet* pDontExpItems;
+
 public:
     SwDontExpandItem() :
         pDontExpItems(0){}
@@ -105,6 +105,7 @@ class SwAutoCorrExceptWord
     sal_Unicode cChar;
     LanguageType eLanguage;
     sal_Bool bDeleted;
+
 public:
     SwAutoCorrExceptWord( sal_uLong nAFlags, sal_uLong nNd, xub_StrLen nContent,
                                         const String& rWord, sal_Unicode cChr,
@@ -117,7 +118,6 @@ public:
     void CheckChar( const SwPosition& rPos, sal_Unicode cChar );
     sal_Bool CheckDelChar( const SwPosition& rPos );
 };
-
 
 #endif
 

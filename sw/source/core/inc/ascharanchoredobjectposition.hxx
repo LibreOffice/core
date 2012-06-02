@@ -25,8 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
 #define _ASCHARANCHOREDOBJECTPOSITION_HXX
+
 #include <anchoredobjectposition.hxx>
 #include <sal/types.h>
 #include <swtypes.hxx>

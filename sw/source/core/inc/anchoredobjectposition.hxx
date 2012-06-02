@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _ANCHOREDOBJECTPOSITION_HXX
 #define _ANCHOREDOBJECTPOSITION_HXX
 

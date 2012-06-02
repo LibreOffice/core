@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _DRAWFONT_HXX
 #define _DRAWFONT_HXX
 

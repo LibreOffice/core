@@ -25,8 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _CNTFRM_HXX
 #define _CNTFRM_HXX
+
 #include "frame.hxx"
 #include "flowfrm.hxx"
 #include "cshtyp.hxx"
@@ -62,7 +64,6 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 
 protected:
-
     sal_Bool MakePrtArea( const SwBorderAttrs & );
 
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
@@ -78,9 +79,9 @@ public:
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
-    inline       SwCntntNode *GetNode();
     inline const SwCntntNode *GetNode() const;
-                 sal_uInt16       GetSectionLevel();
+    inline       SwCntntNode *GetNode();
+    sal_uInt16 GetSectionLevel();
 
     inline const SwCntntFrm *GetFollow() const;
     inline       SwCntntFrm *GetFollow();
@@ -89,18 +90,18 @@ public:
     SwTxtFrm* FindMaster() const;
 
     // layout dependent cursor travelling
-    virtual sal_Bool    LeftMargin( SwPaM * ) const;
-    virtual sal_Bool    RightMargin( SwPaM *, sal_Bool bAPI = sal_False ) const;
-    virtual sal_Bool    UnitUp( SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
-    virtual sal_Bool    UnitDown( SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
-    inline  sal_Bool    StartNextPage( SwPaM * ) const;
-    inline  sal_Bool    StartPrevPage( SwPaM * ) const;
-    inline  sal_Bool    StartCurrPage( SwPaM * ) const;
-    inline  sal_Bool    EndCurrPage( SwPaM * ) const;
-    inline  sal_Bool    EndNextPage( SwPaM * ) const;
-    inline  sal_Bool    EndPrevPage( SwPaM * ) const;
+    virtual sal_Bool LeftMargin( SwPaM * ) const;
+    virtual sal_Bool RightMargin( SwPaM *, sal_Bool bAPI = sal_False ) const;
+    virtual sal_Bool UnitUp( SwPaM *, const SwTwips nOffset = 0,
+                             sal_Bool bSetInReadOnly = sal_False ) const;
+    virtual sal_Bool UnitDown( SwPaM *, const SwTwips nOffset = 0,
+                               sal_Bool bSetInReadOnly = sal_False ) const;
+    inline  sal_Bool StartNextPage( SwPaM * ) const;
+    inline  sal_Bool StartPrevPage( SwPaM * ) const;
+    inline  sal_Bool StartCurrPage( SwPaM * ) const;
+    inline  sal_Bool EndCurrPage( SwPaM * ) const;
+    inline  sal_Bool EndNextPage( SwPaM * ) const;
+    inline  sal_Bool EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates that the paragraph has to be split
@@ -134,11 +135,11 @@ inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
 
 inline SwCntntNode *SwCntntFrm::GetNode()
 {
-    return static_cast< SwCntntNode* >( GetDep());
+    return static_cast< SwCntntNode* >( GetDep() );
 }
 inline const SwCntntNode *SwCntntFrm::GetNode() const
 {
-    return static_cast< const SwCntntNode* >( GetDep());
+    return static_cast< const SwCntntNode* >( GetDep() );
 }
 
 inline const SwCntntFrm *SwCntntFrm::GetFollow() const
@@ -149,6 +150,7 @@ inline SwCntntFrm *SwCntntFrm::GetFollow()
 {
     return (SwCntntFrm*)SwFlowFrm::GetFollow();
 }
+
 inline const SwCntntFrm *SwCntntFrm::GetPrecede() const
 {
     return (const SwCntntFrm*)SwFlowFrm::GetPrecede();

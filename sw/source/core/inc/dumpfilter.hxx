@@ -52,7 +52,6 @@ namespace sw {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xSrcDoc;
 
-
     public:
        LayoutDumpFilter();
        virtual ~LayoutDumpFilter();
@@ -80,7 +79,7 @@ namespace sw {
             throw (::com::sun::star::uno::RuntimeException);
 
     };
-} // Namespace sw
+}
 
 #endif
 

@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _CROSSREFBOOKMRK_HXX
 #define _CROSSREFBOOKMRK_HXX
 
@@ -32,12 +33,11 @@
 #include <bookmrk.hxx>
 #include <rtl/ustring.hxx>
 
-
-namespace sw { namespace mark
-{
-    class CrossRefBookmark
-        : public Bookmark
-    {
+namespace sw {
+    namespace mark {
+        class CrossRefBookmark
+            : public Bookmark
+        {
         public:
             CrossRefBookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
@@ -45,7 +45,6 @@ namespace sw { namespace mark
                 const ::rtl::OUString& rShortName,
                 const ::rtl::OUString& rPrefix);
 
-            // getters
             virtual SwPosition& GetOtherMarkPos() const;
             virtual SwPosition& GetMarkStart() const
                 { return *m_pPos1; }
@@ -54,7 +53,6 @@ namespace sw { namespace mark
             virtual bool IsExpanded() const
                 { return false; }
 
-            // setters
             virtual void SetMarkPos(const SwPosition& rNewPos);
             virtual void SetOtherMarkPos(const SwPosition&)
             {
@@ -68,11 +66,11 @@ namespace sw { namespace mark
                     "<SwCrossRefBookmark::ClearOtherMarkPos(..)>"
                     " - misusage of CrossRefBookmark: other bookmark position isn't allowed to be set or cleared." );
             }
-    };
+        };
 
-    class CrossRefHeadingBookmark
-        : public CrossRefBookmark
-    {
+        class CrossRefHeadingBookmark
+            : public CrossRefBookmark
+        {
         public:
             CrossRefHeadingBookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
@@ -80,11 +78,11 @@ namespace sw { namespace mark
                 const ::rtl::OUString& rShortName);
             static ::rtl::OUString GenerateNewName();
             static bool IsLegalName(const ::rtl::OUString& rName);
-    };
+        };
 
-    class CrossRefNumItemBookmark
-        : public CrossRefBookmark
-    {
+        class CrossRefNumItemBookmark
+            : public CrossRefBookmark
+        {
         public:
             CrossRefNumItemBookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
@@ -92,9 +90,10 @@ namespace sw { namespace mark
                 const ::rtl::OUString& rShortName);
             static ::rtl::OUString GenerateNewName();
             static bool IsLegalName(const ::rtl::OUString& rName);
-    };
+        };
+    }
+}
 
-}}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

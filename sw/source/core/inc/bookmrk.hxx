@@ -30,36 +30,36 @@
 #define _BOOKMRK_HXX
 
 #include <cppuhelper/weakref.hxx>
-
 #include <sfx2/Metadatable.hxx>
-
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <map>
 #include <rtl/ustring.hxx>
-
 #include <IMark.hxx>
 
-
-namespace com { namespace sun { namespace star {
-    namespace text { class XTextContent; }
-} } }
+namespace com {
+    namespace sun {
+        namespace star {
+            namespace text {
+                class XTextContent;
+            }
+        }
+    }
+}
 
 struct SwPosition;  // fwd Decl. wg. UI
 class SwDoc;
 
-namespace sw { namespace mark
-{
-    class MarkBase
-        : virtual public IMark
-    {
+namespace sw {
+    namespace mark {
+        class MarkBase
+            : virtual public IMark
+        {
         public:
-            //getters
             virtual SwPosition& GetMarkPos() const
                 { return *m_pPos1; }
             virtual const ::rtl::OUString& GetName() const
                 { return m_aName; }
-            virtual bool IsCoveringPosition(const SwPosition& rPos) const;
             virtual SwPosition& GetOtherMarkPos() const
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
@@ -81,10 +81,11 @@ namespace sw { namespace mark
                 else
                     return GetOtherMarkPos( );
             }
+
+            virtual bool IsCoveringPosition(const SwPosition& rPos) const;
             virtual bool IsExpanded() const
                 { return m_pPos2; }
 
-            //setters
             virtual void SetName(const ::rtl::OUString& rName)
                 { m_aName = rName; }
             virtual void SetMarkPos(const SwPosition& rNewPos);
@@ -101,7 +102,8 @@ namespace sw { namespace mark
             }
 
             virtual void InitDoc(SwDoc* const)
-            {}
+            {
+            }
 
             virtual ~MarkBase();
 
@@ -116,8 +118,7 @@ namespace sw { namespace mark
             // SwClient
             virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
-            MarkBase(const SwPaM& rPaM,
-                const ::rtl::OUString& rName);
+            MarkBase(const SwPaM& rPaM, const ::rtl::OUString& rName);
             ::boost::scoped_ptr<SwPosition> m_pPos1;
             ::boost::scoped_ptr<SwPosition> m_pPos2;
             ::rtl::OUString m_aName;
@@ -125,29 +126,28 @@ namespace sw { namespace mark
 
             ::com::sun::star::uno::WeakReference<
                 ::com::sun::star::text::XTextContent> m_wXBookmark;
-    };
+        };
 
-    class NavigatorReminder
-        : public MarkBase
-    {
+        class NavigatorReminder
+            : public MarkBase
+        {
         public:
             NavigatorReminder(const SwPaM& rPaM);
-    };
+        };
 
-    class UnoMark
-        : public MarkBase
-    {
+        class UnoMark
+            : public MarkBase
+        {
         public:
             UnoMark(const SwPaM& rPaM);
-    };
+        };
 
-    class DdeBookmark
-        : public MarkBase
-    {
+        class DdeBookmark
+            : public MarkBase
+        {
         public:
             DdeBookmark(const SwPaM& rPaM);
 
-            //getters
             const SwServerObject* GetRefObject() const
                 { return &m_aRefObj; }
             SwServerObject* GetRefObject()
@@ -156,20 +156,20 @@ namespace sw { namespace mark
             bool IsServer() const
                 { return m_aRefObj.Is(); }
 
-            //setters
             void SetRefObject( SwServerObject* pObj );
 
             void DeregisterFromDoc(SwDoc* const pDoc);
             virtual ~DdeBookmark();
+
         private:
             SwServerObjectRef m_aRefObj;
-    };
+        };
 
-    class Bookmark
-        : virtual public IBookmark
-        , public DdeBookmark
-        , public ::sfx2::Metadatable
-    {
+        class Bookmark
+            : virtual public IBookmark
+            , public DdeBookmark
+            , public ::sfx2::Metadatable
+        {
         public:
             Bookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
@@ -197,16 +197,15 @@ namespace sw { namespace mark
         private:
             KeyCode m_aCode;
             ::rtl::OUString m_sShortName;
-    };
+        };
 
-    class Fieldmark
-        : virtual public IFieldmark
-        , public MarkBase
-    {
+        class Fieldmark
+            : virtual public IFieldmark
+            , public MarkBase
+        {
         public:
             Fieldmark(const SwPaM& rPaM);
 
-            // getters
             virtual ::rtl::OUString GetFieldname() const
                 { return m_aFieldname; }
             virtual ::rtl::OUString GetFieldHelptext() const
@@ -218,7 +217,6 @@ namespace sw { namespace mark
             virtual const IFieldmark::parameter_map_t* GetParameters() const
                 { return &m_vParams; }
 
-            // setters
             virtual void SetFieldname(const ::rtl::OUString& aFieldname)
                 { m_aFieldname = aFieldname; }
             virtual void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
@@ -226,24 +224,25 @@ namespace sw { namespace mark
 
             virtual void Invalidate();
             virtual rtl::OUString ToString() const;
+
         private:
             ::rtl::OUString m_aFieldname;
             ::rtl::OUString m_aFieldHelptext;
             IFieldmark::parameter_map_t m_vParams;
-    };
+        };
 
-    class TextFieldmark
-        : public Fieldmark
-    {
+        class TextFieldmark
+            : public Fieldmark
+        {
         public:
             TextFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
-    };
+        };
 
-    class CheckboxFieldmark
-        : virtual public ICheckboxFieldmark
-        , public Fieldmark
-    {
+        class CheckboxFieldmark
+            : virtual public ICheckboxFieldmark
+            , public Fieldmark
+        {
         public:
             CheckboxFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
@@ -251,9 +250,9 @@ namespace sw { namespace mark
             void SetChecked(bool checked);
 
             virtual rtl::OUString toString( ) const;
-    };
-
-}}
+        };
+    }
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

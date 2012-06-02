@@ -62,7 +62,7 @@ public:
                           const sal_uInt16 nHorzRount = 0,
                           const sal_uInt16 nVertRound = 0 );
 
-    inline const Point *GetOrigin() const {return pPos; }
+    inline const Point *GetOrigin() const { return pPos; }
 };
 
 // implementation
@@ -109,7 +109,6 @@ inline void SwDrawDev::DrawRect( const SwRect& rRect,
         aRect.Pos() -= *pPos;
     pOut->DrawRect( aRect.SVRect(), nHorzRound, nVertRound );
 }
-
 
 #endif
 

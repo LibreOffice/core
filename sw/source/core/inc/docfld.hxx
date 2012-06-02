@@ -25,10 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _DOCFLD_HXX
 #define _DOCFLD_HXX
 
-#include <calc.hxx>         // fuer SwHash
+#include <calc.hxx>
 
 class SwTxtFld;
 class SwIndex;
@@ -162,6 +163,7 @@ class SwDocUpdtFld
     void _MakeFldList( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTxtFld& , sal_uInt16 nFldWhich );
     void GetBodyNode( const SwSectionNode&);
+
 public:
     SwDocUpdtFld();
     ~SwDocUpdtFld();
@@ -181,10 +183,9 @@ public:
     sal_Bool IsFieldsDirty() const          { return bFldsDirty; }
     void SetFieldsDirty( sal_Bool b )       { bFldsDirty = b; }
 
-    SwHash**    GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
+    SwHash** GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
 };
 
-
-#endif  // _DOCFLD_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

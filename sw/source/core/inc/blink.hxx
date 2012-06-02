@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _BLINK_HXX
 #define _BLINK_HXX
 
@@ -34,7 +35,6 @@ class SwTxtFrm;
 
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
-
 #include <svl/svarray.hxx>
 
 class SwBlinkPortion
@@ -43,6 +43,7 @@ class SwBlinkPortion
     const SwLinePortion *pPor;
     const SwRootFrm     *pFrm;
     sal_uInt16              nDir;
+
 public:
     SwBlinkPortion( const SwLinePortion* pPortion, sal_uInt16 nDirection )
             { pPor = pPortion; nDir = nDirection; }
@@ -68,6 +69,7 @@ class SwBlink
     SwBlinkList     aList;
     AutoTimer       aTimer;
     sal_Bool            bVisible;
+
 public:
     SwBlink();
     ~SwBlink();

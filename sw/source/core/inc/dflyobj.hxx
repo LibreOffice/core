@@ -25,17 +25,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _DFLYOBJ_HXX
 #define _DFLYOBJ_HXX
+
 #include <svx/svdovirt.hxx>
 
 class SwFlyFrm;
 class SwFrmFmt;
 class SdrObjMacroHitRec;
 
-const sal_uInt32 SWGInventor =  sal_uInt32('S')*0x00000001+
-                            sal_uInt32('W')*0x00000100+
-                            sal_uInt32('G')*0x00010000;
+const sal_uInt32 SWGInventor =  sal_uInt32('S')*0x00000001 +
+                                sal_uInt32('W')*0x00000100 +
+                                sal_uInt32('G')*0x00010000;
 
 const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
 const sal_uInt16 SwDrawFirst            = 0x0001;
@@ -131,7 +133,6 @@ public:
     virtual bool supportsFullDrag() const;
     virtual SdrObject* getFullDragClone() const;
 };
-
 
 #endif
 

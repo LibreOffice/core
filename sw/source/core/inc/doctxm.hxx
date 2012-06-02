@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _DOCTXM_HXX
 #define _DOCTXM_HXX
 
@@ -47,22 +48,22 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
     SwTOXSortTabBases aSortArr;
 
-    void    UpdateMarks( const SwTOXInternational& rIntl,
-                            const SwTxtNode* pOwnChapterNode );
-    void    UpdateOutline( const SwTxtNode* pOwnChapterNode );
-    void    UpdateTemplate( const SwTxtNode* pOwnChapterNode );
-    void    UpdateCntnt( SwTOXElement eType,
-                            const SwTxtNode* pOwnChapterNode );
-    void    UpdateTable( const SwTxtNode* pOwnChapterNode );
-    void    UpdateSequence( const SwTxtNode* pOwnChapterNode );
-    void    UpdateAuthorities( const SwTOXInternational& rIntl );
-    void    UpdateAll();
+    void UpdateMarks( const SwTOXInternational& rIntl,
+                      const SwTxtNode* pOwnChapterNode );
+    void UpdateOutline( const SwTxtNode* pOwnChapterNode );
+    void UpdateTemplate( const SwTxtNode* pOwnChapterNode );
+    void UpdateCntnt( SwTOXElement eType,
+                      const SwTxtNode* pOwnChapterNode );
+    void UpdateTable( const SwTxtNode* pOwnChapterNode );
+    void UpdateSequence( const SwTxtNode* pOwnChapterNode );
+    void UpdateAuthorities( const SwTOXInternational& rIntl );
+    void UpdateAll();
 
     // insert sorted into array for creation
-    void    InsertSorted(SwTOXSortTabBase* pBase);
+    void InsertSorted(SwTOXSortTabBase* pBase);
 
     // insert alpha delimiter at creation
-    void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
+    void InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // generate text body
     void GenerateText( sal_uInt16 nArrayIdx,
@@ -71,11 +72,11 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                        const SwPageDesc*  _pDefaultPageDesc );
 
     // replace page num placeholder with actual page number
-    void    _UpdatePageNum( SwTxtNode* pNd,
-                            const std::vector<sal_uInt16>& rNums,
-                            const SvPtrarr &rDescs,
-                            const std::vector<sal_uInt16>* pMainEntryNums,
-                            const SwTOXInternational& rIntl );
+    void _UpdatePageNum( SwTxtNode* pNd,
+                         const std::vector<sal_uInt16>& rNums,
+                         const SvPtrarr &rDescs,
+                         const std::vector<sal_uInt16>* pMainEntryNums,
+                         const SwTOXInternational& rIntl );
 
     // get section for entering keywords
     Range GetKeyRange( const String& rStr, const String& rStrReading,
@@ -117,7 +118,8 @@ struct SwDefTOXBase_Impl
     pObjBase(0),
     pIllBase(0),
     pAuthBase(0)
-    {}
+    {
+    }
     ~SwDefTOXBase_Impl()
     {
         delete pContBase;
@@ -131,6 +133,6 @@ struct SwDefTOXBase_Impl
 
 };
 
-#endif  // _DOCTXM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
