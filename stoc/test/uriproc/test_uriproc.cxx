@@ -253,7 +253,7 @@ void Test::testParse() {
                 data[i].pathSegmentCount, uriRef->getPathSegmentCount());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), uriRef->getPathSegment(-1));
+                rtl::OUString(""), uriRef->getPathSegment(-1));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].pathSegment0),
@@ -750,9 +750,7 @@ void Test::testVndSunStarExpand() {
         { "vnd.sun.star.expand:%5C$%5C%24%5C%5C", "$$\\" } };
     css::uno::Reference< css::util::XMacroExpander > expander(
         m_context->getValueByName(
-              rtl::OUString(
-                  RTL_CONSTASCII_USTRINGPARAM(
-                      "/singletons/com.sun.star.util.theMacroExpander"))),
+              rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander")),
         css::uno::UNO_QUERY_THROW);
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
@@ -850,7 +848,7 @@ void Test::testVndSunStarScript() {
                                 "testVndSunStarScript",
                                 static_cast< double >(i)
                                 + static_cast< double >(j) / 10.0,
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParameter")),
+                                ::rtl::OUString("setParameter"),
                                 originalReference,
                                 uriRef->getUriReference());
                         }
@@ -862,7 +860,7 @@ void Test::testVndSunStarScript() {
                 TEST_ASSERT_EQUAL(
                     "testVndSunStarScript",
                     i,
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setName")),
+                    ::rtl::OUString("setName"),
                     originalReference,
                     uriRef->getUriReference());
             }
@@ -871,28 +869,26 @@ void Test::testVndSunStarScript() {
 
     css::uno::Reference< css::uri::XUriReference > uriRef(
         m_uriFactory->parse(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "vnd.sun.star.script:Hello?location=Library.Module"))),
+            rtl::OUString( "vnd.sun.star.script:Hello?location=Library.Module")),
         css::uno::UNO_SET_THROW);
     css::uno::Reference< css::uri::XVndSunStarScriptUrlReference >
         scriptUrl(uriRef, css::uno::UNO_QUERY_THROW);
 
     scriptUrl->setParameter(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "location")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "foo")));
+        ::rtl::OUString("location"),
+        ::rtl::OUString("foo"));
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript", (sal_Int32)10, (sal_Int32)1,
         uriRef->getUriReference(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Hello?location=foo")));
+        ::rtl::OUString("vnd.sun.star.script:Hello?location=foo"));
 
     scriptUrl->setParameter(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "language")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarBasic")));
+        ::rtl::OUString("language"),
+        ::rtl::OUString("StarBasic"));
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript", (sal_Int32)10, (sal_Int32)2,
         uriRef->getUriReference(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Hello?location=foo&language=StarBasic")));
+        ::rtl::OUString("vnd.sun.star.script:Hello?location=foo&language=StarBasic"));
 
 
     bool caughtExpected = false;
@@ -904,8 +900,8 @@ void Test::testVndSunStarScript() {
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")),
+        ::rtl::OUString("illegal arguments"),
+        ::rtl::OUString("name"),
         caughtExpected,
         true);
 
@@ -913,15 +909,15 @@ void Test::testVndSunStarScript() {
     try {
         scriptUrl->setParameter(
             ::rtl::OUString(),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("non-empty")));
+            ::rtl::OUString("non-empty"));
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("parameter")),
+        ::rtl::OUString("illegal arguments"),
+        ::rtl::OUString("parameter"),
         caughtExpected,
         true);
 }

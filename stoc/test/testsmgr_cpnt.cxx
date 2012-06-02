@@ -79,7 +79,7 @@ Reference<XMultiServiceFactory> getProcessServiceManager()
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_x.is())
-            s_x = createRegistryServiceFactory( OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb")), sal_False );
+            s_x = createRegistryServiceFactory( OUString("stoctest.rdb"), sal_False );
     }
     return s_x;
 }
@@ -143,7 +143,7 @@ Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
 //
 OUString Test_Manager_Impl::getImplementationName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLEMENTATION_NAME));
+    return OUString(IMPLEMENTATION_NAME);
 }
 
 //*************************************************************************
@@ -173,8 +173,8 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
-    aSNS.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge"));
+    aSNS.getArray()[0] = OUString(SERVICE_NAME);
+    aSNS.getArray()[1] = OUString("com.sun.star.bridge.Bridge");
     return aSNS;
 }
 
@@ -197,9 +197,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 #if ! defined SAL_DLLPREFIX
 #define SAL_DLLPREFIX ""
 #endif
-     OUString atUModule2 = OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION ) );
+     OUString atUModule2 = OUString( SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION  );
 
     // expand shared library name
     OString  atModule2( OUStringToOString(atUModule2, RTL_TEXTENCODING_ASCII_US) );
@@ -211,7 +209,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
     Reference<XContentEnumerationAccess> xContEnum(xSMgr, UNO_QUERY);
     OSL_ENSURE( xContEnum.is() , "query on XContentEnumerationAccess failed" );
-    Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))));
+    Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString("com.sun.star.registry.SimpleRegistry")));
     OSL_ENSURE( xEnum.is() , "createContentEnumeration failed" );
     sal_Int32 nLen = 0;
     while( xEnum->hasMoreElements() )
@@ -236,33 +234,33 @@ extern "C" void SAL_CALL test_ServiceManager()
     OSL_ENSURE( nLen == 8, "more than 6 factories" );
 
     // try to get an instance for a unknown service
-    OSL_VERIFY( !xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("bla.blup.Q"))).is() );
+    OSL_VERIFY( !xSMgr->createInstance(OUString("bla.blup.Q")).is() );
 
     //
     // First test : register service via the internal function of the component itself
     //
     {
         Reference< XImplementationRegistration >
-            xInst( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))), UNO_QUERY );
+            xInst( xSMgr->createInstance(OUString("com.sun.star.registry.ImplementationRegistration")), UNO_QUERY );
         OSL_ENSURE( xInst.is(), "no ImplementationRegistration" );
 
         try {
             // register the services via writeComponentRegInfo (see at end of this file)
-            xInst->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2, Reference< XSimpleRegistry >() );
+            xInst->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"), atUModule2, Reference< XSimpleRegistry >() );
         }
         catch(const CannotRegisterImplementationException &) {
             OSL_ENSURE( 0, "register implementation failed" );
         }
 
         // getImplementations() check
-         Sequence<OUString> seqImpl = xInst->getImplementations(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2);
+         Sequence<OUString> seqImpl = xInst->getImplementations(OUString("com.sun.star.loader.SharedLibrary"), atUModule2);
         OSL_ENSURE( seqImpl.getLength() == 1, "count of implementantions is wrong" );
-        OSL_ENSURE( seqImpl.getConstArray()[0] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.DummyService.V10")), "implementation name is not equal" );
+        OSL_ENSURE( seqImpl.getConstArray()[0] == OUString("com.sun.star.DummyService.V10"), "implementation name is not equal" );
 
 
         // tests, if a service provider can be instantiated.
 
-        Reference< XInterface > xIFace(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ts.TestManagerImpl"))));
+        Reference< XInterface > xIFace(xSMgr->createInstance(OUString("com.sun.star.ts.TestManagerImpl")));
         OSL_ENSURE( xIFace.is(), "loadable service not found" );
 
         // remove the service
@@ -290,7 +288,7 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLEMENTATION_NAME "/UNO/SERVICES") ) ) );
+                    OUString( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
 
             const Sequence< OUString > & rSNL =
                 Test_Manager_Impl::getSupportedServiceNames_Static();
@@ -317,7 +315,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLEMENTATION_NAME) ),
+            OUString( IMPLEMENTATION_NAME ),
             Test_Manager_Impl_CreateInstance,
             Test_Manager_Impl::getSupportedServiceNames_Static() ) );
 

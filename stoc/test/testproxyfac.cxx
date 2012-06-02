@@ -75,7 +75,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
-        { return OUString(RTL_CONSTASCII_USTRINGPARAM("target")); }
+        { return OUString("target"); }
     virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return sal_False; }
@@ -100,7 +100,7 @@ Any TargetObject::queryInterface( Type const & type )
     if (ret.hasValue())
         return ret;
     throw lang::DisposedException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("my test exception") ),
+        OUString( "my test exception" ),
         static_cast< OWeakObject * >(this) );
 }
 
@@ -139,7 +139,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
-        { return OUString(RTL_CONSTASCII_USTRINGPARAM("master")); }
+        { return OUString("master"); }
     virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return sal_False; }
@@ -240,7 +240,7 @@ static void test_proxyfac(
     // proxy the proxy...
     Reference< XInterface > xNew( TestMaster::create( xMaster, xProxyFac ) );
     test_proxyfac_(
-        xNew, OUString( RTL_CONSTASCII_USTRINGPARAM("master") ), xProxyFac );
+        xNew, OUString( "master" ), xProxyFac );
 }
 
 SAL_IMPLEMENT_MAIN()
@@ -248,8 +248,7 @@ SAL_IMPLEMENT_MAIN()
     bool success = true;
 
     Environment cpp_env;
-    OUString cpp( RTL_CONSTASCII_USTRINGPARAM(
-                      CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    OUString cpp( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &cpp_env ),
         cpp.pData, 0 );
@@ -258,31 +257,27 @@ SAL_IMPLEMENT_MAIN()
     {
         Reference< lang::XMultiServiceFactory > xMgr(
             createRegistryServiceFactory(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
+                OUString( "stoctest.rdb" ) ) );
 
         try
         {
             Reference< registry::XImplementationRegistration > xImplReg(
                 xMgr->createInstance(
-                    OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.registry.ImplementationRegistration")
+                    OUString( "com.sun.star.registry.ImplementationRegistration"
                         ) ),
                 UNO_QUERY );
             OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
             OUString aLibName(
-                RTL_CONSTASCII_USTRINGPARAM("proxyfac.uno" SAL_DLLEXTENSION) );
+                "proxyfac.uno" SAL_DLLEXTENSION );
             xImplReg->registerImplementation(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.loader.SharedLibrary") ),
+                OUString( "com.sun.star.loader.SharedLibrary" ),
                 aLibName, Reference< registry::XSimpleRegistry >() );
 
             Reference< reflection::XProxyFactory > xProxyFac(
                 xMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.reflection.ProxyFactory")) ),
+                    OUString(
+                        "com.sun.star.reflection.ProxyFactory") ),
                 UNO_QUERY_THROW );
 
             Reference< XAggregation > x(
@@ -294,7 +289,7 @@ SAL_IMPLEMENT_MAIN()
             Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
             test_proxyfac(
                 xMaster,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("master") ),
+                OUString( "master" ),
                 xProxyFac );
             }
             {
@@ -309,7 +304,7 @@ SAL_IMPLEMENT_MAIN()
             xMaster.clear();
             test_proxyfac(
                 xSlave_lives_alone,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("master") ),
+                OUString( "master" ),
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
             }
@@ -323,7 +318,7 @@ SAL_IMPLEMENT_MAIN()
             test_proxyfac(
                 xProxyFac->createProxy(
                     static_cast< OWeakObject * >( new TargetObject ) ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("target") ),
+                OUString( "target" ),
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
         }
@@ -341,7 +336,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< lang::XComponent > xComp;
         Reference< beans::XPropertySet >(
             xMgr, UNO_QUERY_THROW )->getPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) )
+                OUString( "DefaultContext" ) )
                     >>= xComp;
         xComp->dispose();
     }

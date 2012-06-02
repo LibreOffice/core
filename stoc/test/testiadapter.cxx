@@ -546,7 +546,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
     if (! bImplementedMethod)
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("not an implemented method!") ),
+            OUString( "not an implemented method!" ),
             (OWeakObject *)this, 0 );
     }
 
@@ -765,7 +765,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 SAL_CONST_INT64(0x123456789abcdef0),
                 SAL_CONST_UINT64(0xfedcba9876543210),
-                (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString(RTL_CONSTASCII_USTRINGPARAM("dumdidum")), xI,
+                (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString("dumdidum"), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
         OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
@@ -868,7 +868,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = 5;
-    aExc.Message          = OUString(RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum..."));
+    aExc.Message          = OUString("dum dum dum ich tanz im kreis herum...");
     aExc.Context          = *this;
     throw aExc;
 }
@@ -876,7 +876,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = OUString(RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum..."));
+    aExc.Message          = OUString("dum dum dum ich tanz im kreis herum...");
     aExc.Context          = *this;
     throw aExc;
 }
@@ -884,7 +884,7 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
 void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = OUString(RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum..."));
+    aExc.Message          = OUString("dum dum dum ich tanz im kreis herum...");
     aExc.Context          = *this;
     throw aExc;
 }
@@ -953,7 +953,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
 static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
-        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ), UNO_QUERY );
+        xMgr->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
     Reference< XInvocationAdapterFactory2 > xAdapFac2( xAdapFac, UNO_QUERY_THROW );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
@@ -998,9 +998,9 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
-        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ), UNO_QUERY );
+        xMgr->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
     Reference< XSingleServiceFactory > xInvocFac(
-        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Invocation")) ), UNO_QUERY );
+        xMgr->createInstance( OUString("com.sun.star.script.Invocation") ), UNO_QUERY );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );
@@ -1016,37 +1016,35 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
 SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
+        OUString( "stoctest.rdb" ) ) );
 
     try
     {
         Reference< XImplementationRegistration > xImplReg(
             xMgr->createInstance(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.registry.ImplementationRegistration") ) ),
+                OUString( "com.sun.star.registry.ImplementationRegistration" ) ),
             UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         xImplReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("invocadapt.uno" SAL_DLLEXTENSION)),
+            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("invocadapt.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION)),
+            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("stocservices.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("invocation.uno" SAL_DLLEXTENSION)),
+            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("invocation.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("reflection.uno" SAL_DLLEXTENSION)),
+            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("reflection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("introspection.uno" SAL_DLLEXTENSION)),
+            OUString("com.sun.star.loader.SharedLibrary"),
+            OUString("introspection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
 
         if (test_adapter( xMgr ))

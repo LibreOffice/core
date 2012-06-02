@@ -78,13 +78,13 @@ SAL_IMPLEMENT_MAIN()
     Module module;
 
     OUString dllName(
-        RTL_CONSTASCII_USTRINGPARAM("bootstrap.uno" SAL_DLLEXTENSION) );
+        "bootstrap.uno" SAL_DLLEXTENSION );
 
     if (module.load(dllName))
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            module.getFunctionSymbol( OUString(RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY)) );
+            module.getFunctionSymbol( OUString(COMPONENT_GETFACTORY) );
 
         if (pCompFactoryFunc)
         {
@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN()
     OSL_ENSURE( xServInfo.is(), "testloader error4");
 
     OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.DLLComponentLoader", "testloader error5");
-    OSL_ENSURE( xServInfo->supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ), "testloader error6");
+    OSL_ENSURE( xServInfo->supportsService(OUString( "com.sun.star.loader.SharedLibrary") ), "testloader error6");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "testloader error7");
 
     xIFace.clear();
