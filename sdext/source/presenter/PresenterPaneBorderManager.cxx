@@ -56,13 +56,13 @@ namespace sdext { namespace presenter {
 
 OUString PresenterPaneBorderManager::getImplementationName_static (void)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPaneBorderManager"));
+    return OUString("com.sun.star.comp.Draw.PresenterPaneBorderManager");
 }
 
 Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (void)
 {
     static const ::rtl::OUString sServiceName(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPaneBorderManager"));
+        "com.sun.star.drawing.PresenterPaneBorderManager");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -95,13 +95,13 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     {
         mxPointer = Reference<awt::XPointer>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer")),
+                OUString("com.sun.star.awt.Pointer"),
                 rxContext),
             UNO_QUERY_THROW);
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString("com.sun.star.comp.Draw.PresenterHelper"),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -257,7 +257,7 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid number of arguments")),
+            OUString("PresenterPane: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }
@@ -513,8 +513,7 @@ void PresenterPaneBorderManager::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterPaneBorderManager object has already been disposed")),
+            ::rtl::OUString( "PresenterPaneBorderManager object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

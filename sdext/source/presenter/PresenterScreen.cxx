@@ -56,7 +56,7 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
+#define A2S(s) (::rtl::OUString(s))
 
 namespace sdext { namespace presenter {
 
@@ -170,7 +170,7 @@ Any SAL_CALL PresenterScreenJob::execute(
     }
 
     Reference< XServiceInfo > xInfo( xModel, UNO_QUERY );
-    if( xInfo.is() && xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+    if( xInfo.is() && xInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument"  ) ) )
     {
         // Create a new listener that waits for the full screen presentation
         // to start and to end.  It takes care of its own lifetime.
@@ -265,8 +265,8 @@ void PresenterScreenListener::ThrowIfDisposed (void) const throw (
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterScreenListener object has already been disposed")),
+            OUString(
+                "PresenterScreenListener object has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -507,11 +507,11 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             Reference<XComponentContext> xContext (mxContextWeak);
             PresenterConfigurationAccess aConfiguration (
                 xContext,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+                OUString("/org.openoffice.Office.extension.PresenterScreen/"),
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             if (aConfiguration.GetConfigurationNode(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/StartAlways"))) >>= bStartAlways)
+                OUString("Presenter/StartAlways")) >>= bStartAlways)
             {
                 if (bStartAlways)
                     return GetPresenterScreenFromScreen(nScreenNumber);
@@ -656,13 +656,13 @@ void PresenterScreen::SetupConfiguration (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.extension.PresenterScreen")),
+            OUString("org.openoffice.Office.extension.PresenterScreen"),
             PresenterConfigurationAccess::READ_ONLY);
         maViewDescriptors.clear();
         ProcessViewDescriptions(aConfiguration);
-        OUString sLayoutName (RTL_CONSTASCII_USTRINGPARAM("DefaultLayout"));
+        OUString sLayoutName ("DefaultLayout");
         aConfiguration.GetConfigurationNode(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/CurrentLayout"))) >>= sLayoutName;
+            OUString("Presenter/CurrentLayout")) >>= sLayoutName;
         ProcessLayout(aConfiguration, sLayoutName, rxContext, rxAnchorId);
     }
     catch (RuntimeException&)
@@ -680,14 +680,14 @@ void PresenterScreen::ProcessLayout (
     {
         Reference<container::XHierarchicalNameAccess> xLayoutNode (
             rConfiguration.GetConfigurationNode(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/Layouts/"))+rsLayoutName),
+                OUString("Presenter/Layouts/")+rsLayoutName),
             UNO_QUERY_THROW);
 
         // Read the parent layout first, if one is referenced.
         OUString sParentLayout;
         rConfiguration.GetConfigurationNode(
             xLayoutNode,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("ParentLayout"))) >>= sParentLayout;
+            OUString("ParentLayout")) >>= sParentLayout;
         if (!sParentLayout.isEmpty())
         {
             // Prevent infinite recursion.
@@ -699,16 +699,16 @@ void PresenterScreen::ProcessLayout (
         Reference<container::XNameAccess> xList (
             rConfiguration.GetConfigurationNode(
                 xLayoutNode,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Layout"))),
+                OUString("Layout")),
             UNO_QUERY_THROW);
 
         ::std::vector<rtl::OUString> aProperties (6);
-        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("PaneURL"));
-        aProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewURL"));
-        aProperties[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeX"));
-        aProperties[3] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeY"));
-        aProperties[4] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"));
-        aProperties[5] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"));
+        aProperties[0] = OUString("PaneURL");
+        aProperties[1] = OUString("ViewURL");
+        aProperties[2] = OUString("RelativeX");
+        aProperties[3] = OUString("RelativeY");
+        aProperties[4] = OUString("RelativeWidth");
+        aProperties[5] = OUString("RelativeHeight");
         mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xList,
@@ -734,10 +734,10 @@ void PresenterScreen::ProcessViewDescriptions (
             UNO_QUERY_THROW);
 
         ::std::vector<rtl::OUString> aProperties (4);
-        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewURL"));
-        aProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-        aProperties[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTitle"));
-        aProperties[3] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsOpaque"));
+        aProperties[0] = OUString("ViewURL");
+        aProperties[1] = OUString("Title");
+        aProperties[2] = OUString("AccessibleTitle");
+        aProperties[3] = OUString("IsOpaque");
         mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,

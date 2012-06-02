@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -126,7 +126,7 @@ PresenterButton::PresenterButton (
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString("com.sun.star.comp.Draw.PresenterHelper"),
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -521,8 +521,7 @@ void PresenterButton::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterButton object has already been disposed")),
+            OUString( "PresenterButton object has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

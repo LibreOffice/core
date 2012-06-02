@@ -132,7 +132,7 @@ void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
             sal_Bool bVisible = sal_True;
-            const OUString sVisible( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) );
+            const OUString sVisible( "Visible"  );
             if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
             {
                 if (!bVisible )
@@ -163,7 +163,7 @@ void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
             while( xShapes->getCount() )
                 xShapes->remove( Reference< XShape >( xShapes->getByIndex( xShapes->getCount() - 1 ), UNO_QUERY_THROW ) );
 
-            const OUString sLayout( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) );
+            const OUString sLayout( "Layout"  );
             xPropSet->setPropertyValue( sLayout, Any( (sal_Int16)21 ) );
         }
     }
@@ -183,7 +183,7 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
             Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
             for ( sal_Int32 j = 0; j < xShapes->getCount(); j++ )
             {
-                const OUString sOLE2Shape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.OLE2Shape" ) );
+                const OUString sOLE2Shape( "com.sun.star.drawing.OLE2Shape"  );
                 Reference< XShape > xShape( xShapes->getByIndex( j ), UNO_QUERY_THROW );
                 if ( xShape->getShapeType() == sOLE2Shape )
                 {
@@ -201,7 +201,7 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
                         Reference< XGraphic > xGraphic;
                         if ( xPropSet->getPropertyValue( TKGet( TK_Graphic ) ) >>= xGraphic )
                         {
-                            const OUString sGraphicShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) );
+                            const OUString sGraphicShape( "com.sun.star.drawing.GraphicObjectShape"  );
                             Reference< XMultiServiceFactory > xFact( rxModel, UNO_QUERY_THROW );
                             Reference< XShape > xShape2( xFact->createInstance( sGraphicShape ), UNO_QUERY_THROW );
                             xShapes->add( xShape2 );
@@ -321,10 +321,10 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                         }
                         if ( ( aSourceSizePixel.Width > 0 ) && ( aSourceSizePixel.Height > 0 ) )
                         {
-                            OUString aDestMimeType( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
+                            OUString aDestMimeType( "image/png"  );
                             if ( rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha && !bAnimated )
                             {
-                                aDestMimeType = OUString( RTL_CONSTASCII_USTRINGPARAM( "image/jpeg" ) );
+                                aDestMimeType = OUString( "image/jpeg"  );
 //                                      if( aSourceMimeType != aDestMimeType )
                                 bNeedsOptimizing = sal_True;
                             }
@@ -347,9 +347,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
                             {
-                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), rxMSF ), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.graphic.GraphicProvider"), rxMSF ), UNO_QUERY_THROW );
 
                                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, bRemoveCropArea, aGraphicCropLogic );
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
@@ -367,9 +367,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             else // this is a metafile
             {
                 rtl::OUString aDestMimeType( aSourceMimeType );
-                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), rxMSF ), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), rxMSF ), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), rxMSF ), UNO_QUERY_THROW );
+                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.graphic.GraphicProvider"), rxMSF ), UNO_QUERY_THROW );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
@@ -524,8 +524,8 @@ void ImpOptimizer::DispatchStatus()
     if ( mxStatusDispatcher.is() )
     {
         URL aURL;
-        aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) );
-        aURL.Path = OUString( RTL_CONSTASCII_USTRINGPARAM( "statusupdate" ) );
+        aURL.Protocol = OUString( "vnd.com.sun.star.comp.SunPresentationMinimizer:"  );
+        aURL.Path = OUString( "statusupdate"  );
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }
 }
@@ -590,7 +590,7 @@ static void DispatchURL( Reference< XComponentContext > xMSF, OUString sURL, Ref
     try
     {
         Reference< XURLTransformer > xURLTransformer( xMSF->getServiceManager()->createInstanceWithContext(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), xMSF ), UNO_QUERY_THROW );
+                OUString( "com.sun.star.util.URLTransformer"  ), xMSF ), UNO_QUERY_THROW );
         util::URL aUrl;
         aUrl.Complete = sURL;
         xURLTransformer->parseStrict( aUrl );
@@ -691,7 +691,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 DispatchStatus();
 
                 Reference< XDesktop > xDesktop( mxMSF->getServiceManager()->createInstanceWithContext(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), mxMSF ), UNO_QUERY );
+                        OUString( "com.sun.star.frame.Desktop"  ), mxMSF ), UNO_QUERY );
                 Reference< XFrame > xFrame( xDesktop, UNO_QUERY );
                 xSelf = xFrame->findFrame( TKGet( TK__blank ), FrameSearchFlag::CREATE );
                 Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
@@ -716,7 +716,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
             if ( xFrame.is() )
             {
-                const OUString sSlot( RTL_CONSTASCII_USTRINGPARAM( "slot:27115" ) );
+                const OUString sSlot( "slot:27115"  );
                 DispatchURL( mxMSF, sSlot, xFrame );
             }
         }

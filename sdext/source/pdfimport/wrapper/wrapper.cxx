@@ -594,7 +594,7 @@ void Parser::readFont()
         {
             uno::Reference< beans::XMaterialHolder > xMat(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.FontIdentificator" ) ),
+                    rtl::OUString( "com.sun.star.awt.FontIdentificator"  ),
                     aArgs,
                     m_xContext ),
                 uno::UNO_QUERY );
@@ -620,7 +620,7 @@ void Parser::readFont()
         if( aResult.familyName.isEmpty() )
         {
             // last fallback
-            aResult.familyName  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arial" ) );
+            aResult.familyName  = ::rtl::OUString( "Arial"  );
             aResult.isUnderline = false;
         }
 
@@ -634,17 +634,13 @@ void Parser::readFont()
 uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
 {
     static const rtl::OString aJpegMarker( "JPEG" );
-    static const rtl::OString aPbmMarker(  "PBM" );
-    static const rtl::OString aPpmMarker(  "PPM" );
-    static const rtl::OString aPngMarker(  "PNG" );
-    static const rtl::OUString aJpegFile(
-        RTL_CONSTASCII_USTRINGPARAM( "DUMMY.JPEG" ));
-    static const rtl::OUString aPbmFile(
-        RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PBM" ));
-    static const rtl::OUString aPpmFile(
-        RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PPM" ));
-    static const rtl::OUString aPngFile(
-        RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PNG" ));
+    static const rtl::OString aPbmMarker( "PBM" );
+    static const rtl::OString aPpmMarker( "PPM" );
+    static const rtl::OString aPngMarker( "PNG" );
+    static const rtl::OUString aJpegFile( "DUMMY.JPEG" );
+    static const rtl::OUString aPbmFile( "DUMMY.PBM" );
+    static const rtl::OUString aPpmFile( "DUMMY.PPM" );
+    static const rtl::OUString aPngFile( "DUMMY.PNG" );
 
     rtl::OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
@@ -672,19 +668,19 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     uno::Reference< uno::XComponentContext > xContext( m_xContext, uno::UNO_SET_THROW );
     uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< io::XInputStream > xDataStream( xFactory->createInstanceWithArgumentsAndContext(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.SequenceInputStream" ) ),
+        ::rtl::OUString( "com.sun.star.io.SequenceInputStream"  ),
         aStreamCreationArgs, m_xContext ), uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence(3);
-    aSequence[0] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),
+    aSequence[0] = beans::PropertyValue( ::rtl::OUString("URL"),
                                          0,
                                          uno::makeAny(aFileName),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[1] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")),
+    aSequence[1] = beans::PropertyValue( ::rtl::OUString("InputStream"),
                                          0,
                                          uno::makeAny( xDataStream ),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[2] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputSequence")),
+    aSequence[2] = beans::PropertyValue( ::rtl::OUString("InputSequence"),
                                          0,
                                          uno::makeAny(aDataSequence),
                                          beans::PropertyState_DIRECT_VALUE );
@@ -997,19 +993,19 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
-    rtl::OUStringBuffer converterURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xpdfimport"));
+    rtl::OUStringBuffer converterURL = rtl::OUString("xpdfimport");
 
     // retrieve package location url (xpdfimport executable is located there)
     // ---------------------------------------------------
     uno::Reference<deployment::XPackageInformationProvider> xProvider(
         xContext->getValueByName(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.deployment.PackageInformationProvider"))),
+            rtl::OUString("/singletons/com.sun.star.deployment.PackageInformationProvider")),
         uno::UNO_QUERY);
     if( xProvider.is() )
     {
         converterURL.insert(
             0,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
+            rtl::OUString("/"));
         converterURL.insert(
             0,
             xProvider->getPackageLocation(
@@ -1022,7 +1018,7 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     sal_uInt32 nEnv = 0;
 
     #if defined UNX && ! defined MACOSX
-    rtl::OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "$URE_LIB_DIR" ) );
+    rtl::OUString aStr( "$URE_LIB_DIR"  );
     rtl_bootstrap_expandMacros( &aStr.pData );
     rtl::OUString aSysPath;
     osl_getSystemPathFromFileURL( aStr.pData, &aSysPath.pData );

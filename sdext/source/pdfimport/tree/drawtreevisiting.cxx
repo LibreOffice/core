@@ -61,7 +61,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( this->m_rProcessor.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString("com.sun.star.i18n.BreakIterator"), xContext);
 
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
@@ -74,7 +74,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassi
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString("com.sun.star.i18n.CharacterClassification"), xContext);
         mxCharClass = uno::Reference< i18n::XCharacterClassification >( xInterface, uno::UNO_QUERY );
     }
     return mxCharClass;
@@ -114,7 +114,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text:style-name" ) ) ] =
+        aProps[ rtl::OUString( "text:style-name"  ) ] =
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 

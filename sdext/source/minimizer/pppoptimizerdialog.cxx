@@ -151,11 +151,11 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
 
                 if ( nFileSizeSource && nFileSizeDest )
                 {
-                    rtl::OUStringBuffer sBuf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Your Presentation has been minimized from:")) );
+                    rtl::OUStringBuffer sBuf( rtl::OUString("Your Presentation has been minimized from:") );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeSource >> 10 ) );
-                    sBuf.append( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KB to ")) );
+                    sBuf.append( rtl::OUString("KB to ") );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
-                    sBuf.append( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KB.")) );
+                    sBuf.append( rtl::OUString("KB.") );
                     OUString sResult( sBuf.makeStringAndClear() );
 //                  mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
                 }
@@ -201,7 +201,7 @@ Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME  );
     return aRet;
 }
 

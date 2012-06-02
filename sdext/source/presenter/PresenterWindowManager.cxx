@@ -66,7 +66,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -542,7 +542,7 @@ void PresenterWindowManager::RestoreViewMode (void)
     sal_Int32 nMode (0);
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
     aConfiguration.GetConfigurationNode(A2S("Presenter/InitialViewMode")) >>= nMode;
     switch (nMode)
@@ -568,7 +568,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
     {
         PresenterConfigurationAccess aConfiguration (
             mxComponentContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
             PresenterConfigurationAccess::READ_WRITE);
         aConfiguration.GoToChild(A2S("Presenter"));
         Any aValue;
@@ -1179,8 +1179,7 @@ void PresenterWindowManager::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterWindowManager has already been disposed")),
+            OUString( "PresenterWindowManager has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

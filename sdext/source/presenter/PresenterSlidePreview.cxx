@@ -76,8 +76,8 @@ PresenterSlidePreview::PresenterSlidePreview (
         || ! rpPresenterController.is())
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterSlidePreview can not be constructed due to empty argument")),
+            OUString(
+                "PresenterSlidePreview can not be constructed due to empty argument"),
             static_cast<XWeak*>(this));
     }
 
@@ -103,7 +103,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     if (xFactory.is())
         mxPreviewRenderer = Reference<drawing::XSlideRenderer>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")),
+                OUString("com.sun.star.drawing.SlideRenderer"),
                 rxContext),
             UNO_QUERY);
 
@@ -235,9 +235,9 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
         try
         {
             xPropertySet->getPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= aSlideSize.Width;
+                OUString("Width")) >>= aSlideSize.Width;
             xPropertySet->getPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= aSlideSize.Height;
+                OUString("Height")) >>= aSlideSize.Height;
         }
         catch (beans::UnknownPropertyException&)
         {
@@ -365,8 +365,7 @@ void PresenterSlidePreview::ThrowIfDisposed (void)
     if (PresenterSlidePreviewInterfaceBase::rBHelper.bDisposed || PresenterSlidePreviewInterfaceBase::rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterSlidePreview object has already been disposed")),
+            ::rtl::OUString( "PresenterSlidePreview object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
+#define A2S(s) (::rtl::OUString(s))
 
 //===== PresenterAccessibleObject =============================================
 
@@ -444,7 +444,7 @@ public:
         OUString sName (A2S("Presenter Console"));
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Console/String"))
             >>= sName;
@@ -474,7 +474,7 @@ public:
         {
             PresenterConfigurationAccess aConfiguration (
                 rxContext,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+                OUString("/org.openoffice.Office.extension.PresenterScreen/"),
                 PresenterConfigurationAccess::READ_ONLY);
             aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Preview/String"))
                 >>= sName;
@@ -1895,7 +1895,7 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Notes/String"))
             >>= sName;

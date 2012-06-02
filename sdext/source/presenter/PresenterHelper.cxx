@@ -40,29 +40,19 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-const OUString PresenterHelper::msPaneURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/"));
-const OUString PresenterHelper::msCenterPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CenterPane")));
-const OUString PresenterHelper::msFullScreenPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("FullScreenPane")));
+const OUString PresenterHelper::msPaneURLPrefix( "private:resource/pane/");
+const OUString PresenterHelper::msCenterPaneURL( msPaneURLPrefix + OUString("CenterPane"));
+const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + OUString("FullScreenPane"));
 
-const OUString PresenterHelper::msViewURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/"));
-const OUString PresenterHelper::msPresenterScreenURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreen")));
-const OUString PresenterHelper::msSlideSorterURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorter")));
+const OUString PresenterHelper::msViewURLPrefix( "private:resource/view/");
+const OUString PresenterHelper::msPresenterScreenURL( msViewURLPrefix + OUString("PresenterScreen"));
+const OUString PresenterHelper::msSlideSorterURL( msViewURLPrefix + OUString("SlideSorter"));
 
-const OUString PresenterHelper::msResourceActivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceActivation"));
-const OUString PresenterHelper::msResourceDeactivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivation"));
+const OUString PresenterHelper::msResourceActivationEvent( "ResourceActivation");
+const OUString PresenterHelper::msResourceDeactivationEvent( "ResourceDeactivation");
 
-const OUString PresenterHelper::msDefaultPaneStyle (
-    RTL_CONSTASCII_USTRINGPARAM("DefaultPaneStyle"));
-const OUString PresenterHelper::msDefaultViewStyle (
-    RTL_CONSTASCII_USTRINGPARAM("DefaultViewStyle"));
+const OUString PresenterHelper::msDefaultPaneStyle ( "DefaultPaneStyle");
+const OUString PresenterHelper::msDefaultViewStyle ( "DefaultViewStyle");
 
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
     const Reference<frame::XController>& rxController)

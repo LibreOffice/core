@@ -93,7 +93,7 @@ rtl::OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    rOptimizerDialog.insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedLineModel" ) ),
+    rOptimizerDialog.insertControlModel( OUString( "com.sun.star.awt.UnoControlFixedLineModel"  ),
         rControlName, aNames, aValues );
     return rControlName;
 }
@@ -574,7 +574,7 @@ void OptimizerDialog::InitPage3()
         Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
         for ( sal_Int32 j = 0; j < xShapes->getCount(); j++ )
         {
-            const OUString sOLE2Shape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.OLE2Shape" ) );
+            const OUString sOLE2Shape( "com.sun.star.drawing.OLE2Shape"  );
             Reference< XShape > xShape( xShapes->getByIndex( j ), UNO_QUERY_THROW );
             if ( xShape->getShapeType() == sOLE2Shape )
                 nOLECount++;
@@ -606,7 +606,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
         aVal.setLength( nX + 2 );
         aVal[nX] = nSeparator;
     }
-    aVal.append( OUString(RTL_CONSTASCII_USTRINGPARAM(" MB")) );
+    aVal.append( OUString(" MB") );
     return aVal.makeStringAndClear();
 }
 
@@ -698,7 +698,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             {
                 Reference< XPropertySet > xPropSet( *aIter, UNO_QUERY_THROW );
                 sal_Bool bVisible = sal_True;
-                const OUString sVisible( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) );
+                const OUString sVisible( "Visible"  );
                 if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
                 {
                     if (!bVisible )
@@ -717,7 +717,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
                 Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
                 sal_Bool bVisible = sal_True;
-                const OUString sVisible( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) );
+                const OUString sVisible( "Visible"  );
                 if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
                 {
                     if (!bVisible )
@@ -743,7 +743,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     if ( nDeletedSlides > 1 )
     {
         OUString aStr( getString( STR_DELETE_SLIDES ) );
-        OUString aPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%SLIDES" ) );
+        OUString aPlaceholder( "%SLIDES"  );
         sal_Int32 i = aStr.indexOf( aPlaceholder, 0 );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::valueOf( nDeletedSlides ) );
@@ -761,9 +761,9 @@ void OptimizerDialog::UpdateControlStatesPage4()
     if ( nGraphics > 1 )
     {
         OUString aStr( getString( STR_OPTIMIZE_IMAGES ) );
-        OUString aImagePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%IMAGES" ) );
-        OUString aQualityPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%QUALITY" ) );
-        OUString aResolutionPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%RESOLUTION" ) );
+        OUString aImagePlaceholder( "%IMAGES"  );
+        OUString aQualityPlaceholder( "%QUALITY"  );
+        OUString aResolutionPlaceholder( "%RESOLUTION"  );
         sal_Int32 i = aStr.indexOf( aImagePlaceholder, 0 );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::valueOf( nGraphics ) );
@@ -789,7 +789,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
             for ( sal_Int32 j = 0; j < xShapes->getCount(); j++ )
             {
-                const OUString sOLE2Shape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.OLE2Shape" ) );
+                const OUString sOLE2Shape( "com.sun.star.drawing.OLE2Shape"  );
                 Reference< XShape > xShape( xShapes->getByIndex( j ), UNO_QUERY_THROW );
                 if ( xShape->getShapeType() == sOLE2Shape )
                     nOLEReplacements++;
@@ -798,7 +798,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         if ( nOLEReplacements > 1 )
         {
             OUString aStr( getString( STR_CREATE_REPLACEMENT ) );
-            OUString aPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLE" ) );
+            OUString aPlaceholder( "%OLE"  );
             sal_Int32 i = aStr.indexOf( aPlaceholder, 0 );
             if ( i >= 0 )
                 aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::valueOf( nOLEReplacements ) );
@@ -870,7 +870,7 @@ void OptimizerDialog::InitPage4()
         Sequence< rtl::OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );
 
-        Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlProgressBarModel" ) ),
+        Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlProgressBarModel"  ),
             TKGet( TK_Progress ), aNames, aValues ), UNO_QUERY );
     }
     Reference< XTextListener > xTextListener;

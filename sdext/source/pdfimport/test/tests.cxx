@@ -130,7 +130,7 @@ namespace
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y1,386.0) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.X2,166.7) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y2,406.2) );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", m_aURI, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://download.openoffice.org/")) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", m_aURI, ::rtl::OUString("http://download.openoffice.org/") );
 
             const char* sText = " \n \nThis is a testtext\nNew paragraph,\nnew line\n"
                 "Hyperlink, this is\n?\nThis is more text\noutline mode\n?\nNew paragraph\n";
@@ -388,7 +388,7 @@ namespace
 
         virtual void endText()
         {
-            m_aTextOut.append( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")) );
+            m_aTextOut.append( ::rtl::OUString("\n") );
         }
 
         virtual void drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -511,7 +511,7 @@ namespace
         virtual rtl::OUString SAL_CALL getPackageLocation(rtl::OUString const&)
             throw()
         {
-            rtl::OUString const aLocation(RTL_CONSTASCII_USTRINGPARAM(PDFIMPORT_EXECUTABLE_LOCATION));
+            rtl::OUString const aLocation(PDFIMPORT_EXECUTABLE_LOCATION);
             return aLocation;
         }
 

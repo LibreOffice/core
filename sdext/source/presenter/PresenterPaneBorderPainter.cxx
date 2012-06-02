@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
+#define A2S(s) (::rtl::OUString(s))
 
 namespace sdext { namespace presenter {
 
@@ -394,8 +394,8 @@ void PresenterPaneBorderPainter::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterPaneBorderPainter object has already been disposed")),
+            OUString(
+                "PresenterPaneBorderPainter object has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -421,7 +421,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     {
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString("com.sun.star.comp.Draw.PresenterHelper"),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -624,7 +624,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     RendererPaneStyleContainer::const_iterator iStyle (maRendererPaneStyles.find(rsResourceURL));
     if (iStyle == maRendererPaneStyles.end())
     {
-        OUString sPaneStyleName (RTL_CONSTASCII_USTRINGPARAM("DefaultRendererPaneStyle"));
+        OUString sPaneStyleName ("DefaultRendererPaneStyle");
 
         // Get pane layout name for resource URL.
         const OUString sStyleName (mpTheme->GetStyleName(rsResourceURL));
@@ -865,7 +865,7 @@ RendererPaneStyle::RendererPaneStyle (
         // Get font description.
         mpFont = rpTheme->GetFont(rsStyleName);
 
-        OUString sAnchor (RTL_CONSTASCII_USTRINGPARAM("Left"));
+        OUString sAnchor ("Left");
         if (mpFont.get() != NULL)
         {
             sAnchor = mpFont->msAnchor;

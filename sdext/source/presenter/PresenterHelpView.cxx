@@ -49,7 +49,7 @@ using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 using ::std::vector;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -355,7 +355,7 @@ void PresenterHelpView::ReadHelpStrings (void)
     mpTextContainer.reset(new TextContainer());
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xStrings (
         aConfiguration.GetConfigurationNode(A2S("PresenterScreenSettings/HelpView/HelpStrings")),
@@ -502,8 +502,7 @@ void PresenterHelpView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterHelpView has been already disposed")),
+            OUString( "PresenterHelpView has been already disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

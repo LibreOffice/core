@@ -181,7 +181,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     if ( ! mxComponentContext.is())
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSpritePane: missing component context")),
+            OUString("PresenterSpritePane: missing component context"),
             static_cast<XWeak*>(this));
     }
 
@@ -193,7 +193,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[0] >>= mxPaneId))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid pane id")),
+                    OUString("PresenterPane: invalid pane id"),
                     static_cast<XWeak*>(this),
                     0);
             }
@@ -201,7 +201,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[1] >>= mxParentWindow))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid parent window")),
+                    OUString("PresenterPane: invalid parent window"),
                     static_cast<XWeak*>(this),
                     1);
             }
@@ -210,7 +210,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[2] >>= xParentCanvas))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid parent canvas")),
+                    OUString("PresenterPane: invalid parent canvas"),
                     static_cast<XWeak*>(this),
                     2);
             }
@@ -218,7 +218,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[3] >>= msTitle))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid title")),
+                    OUString("PresenterPane: invalid title"),
                     static_cast<XWeak*>(this),
                     3);
             }
@@ -226,7 +226,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[4] >>= mxBorderPainter))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid border painter")),
+                    OUString("PresenterPane: invalid border painter"),
                     static_cast<XWeak*>(this),
                     4);
             }
@@ -235,7 +235,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if (rArguments.getLength()>5 && ! (rArguments[5] >>= bIsWindowVisibleOnCreation))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid window visibility flag")),
+                    OUString("PresenterPane: invalid window visibility flag"),
                     static_cast<XWeak*>(this),
                     5);
             }
@@ -263,7 +263,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSpritePane: invalid number of arguments")),
+            OUString("PresenterSpritePane: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }
@@ -457,8 +457,7 @@ void PresenterPaneBase::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterPane object has already been disposed")),
+            ::rtl::OUString( "PresenterPane object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

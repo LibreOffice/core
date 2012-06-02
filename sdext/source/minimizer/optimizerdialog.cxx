@@ -114,7 +114,7 @@ void OptimizerDialog::InitRoadmap()
         Sequence< rtl::OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );
 
-        mxRoadmapControlModel = insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlRoadmapModel" ) ),
+        mxRoadmapControlModel = insertControlModel( OUString( "com.sun.star.awt.UnoControlRoadmapModel"  ),
                                                               TKGet( TK_rdmNavi ), aNames, aValues  );
 
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
@@ -127,7 +127,7 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
         rtl::OUString sBitmapPath( getPath( TK_BitmapPath ) );
-        rtl::OUString sBitmap( RTL_CONSTASCII_USTRINGPARAM("/minimizepresi_80.png") );
+        rtl::OUString sBitmap( "/minimizepresi_80.png" );
         rtl::OUString sURL( sBitmapPath += sBitmap );
 
         xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sURL ) );
@@ -553,7 +553,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                                 aLocation = aLocation.copy( 0, nIndex );
 
                             // adding .mini
-                            aLocation = aLocation.concat( OUString(RTL_CONSTASCII_USTRINGPARAM(".mini")) );
+                            aLocation = aLocation.concat( OUString(".mini") );
                             aFileOpenDialog.setDefaultName( aLocation );
                         }
                     }
@@ -603,11 +603,11 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 aArgs[ 0 ] <<= mrOptimizerDialog.GetFrame();
 
                 Reference < XDispatch > xDispatch( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.PPPOptimizer")), aArgs, mrOptimizerDialog.GetComponentContext() ), UNO_QUERY );
+                    OUString("com.sun.star.comp.PPPOptimizer"), aArgs, mrOptimizerDialog.GetComponentContext() ), UNO_QUERY );
 
                 URL aURL;
-                aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.comp.PPPOptimizer:" ) );
-                aURL.Path = OUString( RTL_CONSTASCII_USTRINGPARAM( "optimize" ) );
+                aURL.Protocol = OUString( "vnd.com.sun.star.comp.PPPOptimizer:"  );
+                aURL.Path = OUString( "optimize"  );
 
                 Sequence< PropertyValue > lArguments( 3 );
                 lArguments[ 0 ].Name = TKGet( TK_Settings );

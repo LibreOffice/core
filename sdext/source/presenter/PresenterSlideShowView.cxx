@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -111,7 +111,7 @@ void PresenterSlideShowView::LateInit (void)
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
     mxPresenterHelper.set (xFactory->createInstanceWithContext(
-                   OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                   OUString("com.sun.star.comp.Draw.PresenterHelper"),
                    mxComponentContext),
                UNO_QUERY_THROW);
 
@@ -479,7 +479,7 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
             mxComponentContext, UNO_QUERY);
         if (xFactory.is())
             mxPointer = Reference<awt::XPointer>(
-                xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer"))),
+                xFactory->createInstance(OUString("com.sun.star.awt.Pointer")),
                 UNO_QUERY);
     }
 
@@ -845,7 +845,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
 
         Reference<awt::XToolkit> xToolkit (
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
+                OUString("com.sun.star.awt.Toolkit"),
                 mxComponentContext),
             UNO_QUERY_THROW);
         awt::WindowDescriptor aWindowDescriptor (
@@ -1005,7 +1005,7 @@ void PresenterSlideShowView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSlideShowView object has already been disposed")),
+            OUString("PresenterSlideShowView object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

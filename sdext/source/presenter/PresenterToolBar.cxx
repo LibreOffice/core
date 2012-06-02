@@ -67,7 +67,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -638,7 +638,7 @@ void PresenterToolBar::CreateControls (
     // Expand the macro in the bitmap file names.
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
 
     const OUString sBasePath (PresenterComponent::GetBasePath(mxComponentContext));
@@ -989,8 +989,7 @@ void PresenterToolBar::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterToolBar has already been disposed")),
+            OUString( "PresenterToolBar has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

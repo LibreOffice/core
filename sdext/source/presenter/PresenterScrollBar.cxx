@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 const static double gnScrollBarGap (10);
 
@@ -123,7 +123,7 @@ PresenterScrollBar::PresenterScrollBar (
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString("com.sun.star.comp.Draw.PresenterHelper"),
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -278,7 +278,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
                     try
                     {
                         mpBitmaps.reset(new PresenterBitmapContainer(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreenSettings/ScrollBar/Bitmaps")),
+                            OUString("PresenterScreenSettings/ScrollBar/Bitmaps"),
                             ::boost::shared_ptr<PresenterBitmapContainer>(),
                             mxComponentContext,
                             mxCanvas,

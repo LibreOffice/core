@@ -120,7 +120,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     sal_Int32 nIndex;
     sal_Bool  bEmbedded = sal_False;
     OUString token;
-    OUString aHostName(RTL_CONSTASCII_USTRINGPARAM("localhost"));
+    OUString aHostName("localhost");
     sal_Int32 nPort = 3306;
     OUString aDbName;
 
@@ -130,7 +130,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     // parse url. Url has the following format:
     // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]
 
-    if (!url.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM(MYSQLC_URI_PREFIX)), sizeof(MYSQLC_URI_PREFIX)-1)) {
+    if (!url.compareTo(OUString(MYSQLC_URI_PREFIX), sizeof(MYSQLC_URI_PREFIX)-1)) {
         nIndex = 12;
     } else {
         bEmbedded = sal_True;
@@ -202,7 +202,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             }
 
 #ifndef SYSTEM_MYSQL
-            ::rtl::OUString sMySQLClientLib( RTL_CONSTASCII_USTRINGPARAM( MYSQL_LIB ) );
+            ::rtl::OUString sMySQLClientLib( MYSQL_LIB  );
 
             ::rtl::OUString moduleBase;
             OSL_VERIFY( ::osl::Module::getUrlFromAddress( &thisModule, moduleBase ) );
@@ -250,7 +250,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     // Check if the server is 4.1 or above
     if (this->getMysqlVersion() < 40100) {
         throw SQLException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MySQL Connector/OO.org requires MySQL Server 4.1 or above" ) ),
+            ::rtl::OUString( "MySQL Connector/OO.org requires MySQL Server 4.1 or above"  ),
             *this,
             ::rtl::OUString(),
             0,
@@ -764,9 +764,9 @@ sal_Int32 OConnection::getMysqlVersion()
         try {
             Sequence< Any > aArgs(1);
             Reference< XConnection> xCon = this;
-            aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")), makeAny(xCon));
+            aArgs[0] <<= NamedValue(::rtl::OUString("ActiveConnection"), makeAny(xCon));
 
-            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.ParameterSubstitution")),aArgs),UNO_QUERY);
+            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments(::rtl::OUString("org.openoffice.comp.helper.ParameterSubstitution"),aArgs),UNO_QUERY);
         } catch(const Exception&) {}
     }
     if ( m_xParameterSubstitution.is() ) {

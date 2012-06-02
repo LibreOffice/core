@@ -50,20 +50,20 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane1"));
+    "private:resource/pane/Presenter/Pane1");
 const ::rtl::OUString PresenterPaneFactory::msNextSlidePreviewPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane2"));
+    "private:resource/pane/Presenter/Pane2");
 const ::rtl::OUString PresenterPaneFactory::msNotesPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane3"));
+    "private:resource/pane/Presenter/Pane3");
 const ::rtl::OUString PresenterPaneFactory::msToolBarPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane4"));
+    "private:resource/pane/Presenter/Pane4");
 const ::rtl::OUString PresenterPaneFactory::msSlideSorterPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane5"));
+    "private:resource/pane/Presenter/Pane5");
 const ::rtl::OUString PresenterPaneFactory::msHelpPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane6"));
+    "private:resource/pane/Presenter/Pane6");
 
 const ::rtl::OUString PresenterPaneFactory::msOverlayPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Overlay"));
+    "private:resource/pane/Presenter/Overlay");
 
 //===== PresenterPaneFactory ==================================================
 
@@ -106,7 +106,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
         else
         {
             xCC->addResourceFactory(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/*")),
+                OUString("private:resource/pane/Presenter/*"),
                 this);
         }
     }
@@ -337,8 +337,7 @@ void PresenterPaneFactory::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterPaneFactory object has already been disposed")),
+            OUString( "PresenterPaneFactory object has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

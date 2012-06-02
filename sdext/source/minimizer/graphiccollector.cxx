@@ -56,7 +56,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
         try
         {
             Reference< XFramesSupplier > xDesktop( rxFact->getServiceManager()->createInstanceWithContext(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), rxFact ), UNO_QUERY_THROW );
+                    OUString( "com.sun.star.frame.Desktop"  ), rxFact ), UNO_QUERY_THROW );
             Reference< XFrame > xFrame( xDesktop->getActiveFrame() );
             Reference< XWindow > xWindow( xFrame->getContainerWindow() );
             Reference< XDevice > xDevice( xWindow, UNO_QUERY_THROW );
@@ -72,7 +72,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
 void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
     const rtl::OUString aGraphicURL( rUser.maGraphicURL );
-    const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.GraphicObject:") );
+    const rtl::OUString sPackageURL( "vnd.sun.star.GraphicObject:" );
 
     if ( rGraphicSettings.mbEmbedLinkedGraphics || (aGraphicURL.isEmpty() || aGraphicURL.match( sPackageURL, 0 ) ) )
     {
@@ -231,8 +231,8 @@ void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMSF, cons
     {
         try
         {
-            const OUString sGraphicObjectShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) );
-            const OUString sGroupShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
+            const OUString sGraphicObjectShape( "com.sun.star.drawing.GraphicObjectShape"  );
+            const OUString sGroupShape( "com.sun.star.drawing.GroupShape"  );
             Reference< XShape > xShape( rxShapes->getByIndex( i ), UNO_QUERY_THROW );
             const OUString sShapeType( xShape->getShapeType() );
             if ( sShapeType == sGroupShape )
@@ -356,8 +356,8 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
     {
         try
         {
-            const OUString sGraphicObjectShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) );
-            const OUString sGroupShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
+            const OUString sGraphicObjectShape( "com.sun.star.drawing.GraphicObjectShape"  );
+            const OUString sGroupShape( "com.sun.star.drawing.GroupShape"  );
             Reference< XShape > xShape( rxShapes->getByIndex( i ), UNO_QUERY_THROW );
             const OUString sShapeType( xShape->getShapeType() );
             if ( sShapeType == sGroupShape )

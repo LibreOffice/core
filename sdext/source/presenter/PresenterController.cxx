@@ -77,7 +77,7 @@ namespace {
     const sal_Int32 ConfigurationUpdateEndEventType = 2;
 }
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace sdext { namespace presenter {
 
@@ -1121,8 +1121,8 @@ double PresenterController::GetSlideAspectRatio (void) const
                 Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
                 sal_Int32 nWidth (28000);
                 sal_Int32 nHeight (21000);
-                if ((xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= nWidth)
-                    && (xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= nHeight)
+                if ((xProperties->getPropertyValue(OUString("Width")) >>= nWidth)
+                    && (xProperties->getPropertyValue(OUString("Height")) >>= nHeight)
                     && nHeight > 0)
                 {
                     nSlideAspectRatio = double(nWidth) / double(nHeight);
@@ -1172,8 +1172,7 @@ void PresenterController::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterController object has already been disposed")),
+            OUString( "PresenterController object has already been disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

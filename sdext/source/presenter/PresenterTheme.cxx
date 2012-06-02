@@ -48,7 +48,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::std;
 using ::rtl::OUString;
 
-#define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
+#define A2S(s) (::rtl::OUString(s))
 
 namespace sdext { namespace presenter {
 
@@ -302,7 +302,7 @@ PresenterTheme::~PresenterTheme (void)
 
     PresenterConfigurationAccess aConfiguration (
         mxContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
 
     return aReadContext.ReadTheme(aConfiguration, msThemeName);
@@ -390,7 +390,7 @@ bool PresenterTheme::ConvertToColor (
     ::boost::shared_ptr<PresenterConfigurationAccess> pConfiguration (
         new PresenterConfigurationAccess(
             mxContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+            OUString("/org.openoffice.Office.extension.PresenterScreen/"),
             PresenterConfigurationAccess::READ_WRITE));
 
     // Get configuration node for the view style container of the current
@@ -517,7 +517,7 @@ PresenterTheme::FontDescriptor::FontDescriptor (
       msStyleName(),
       mnSize(12),
       mnColor(0x00000000),
-      msAnchor(OUString(RTL_CONSTASCII_USTRINGPARAM("Left"))),
+      msAnchor(OUString("Left")),
       mnXOffset(0),
       mnYOffset(0)
 {
@@ -737,7 +737,7 @@ ReadContext::ReadContext (
     {
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString("com.sun.star.comp.Draw.PresenterHelper"),
                 rxContext),
             UNO_QUERY_THROW);
     }

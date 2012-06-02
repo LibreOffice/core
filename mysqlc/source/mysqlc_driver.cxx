@@ -83,7 +83,7 @@ OUString MysqlCDriver::getImplementationName_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getImplementationName_Static");
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver" ) );
+    return ::rtl::OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
 }
 /* }}} */
 
@@ -96,7 +96,7 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< OUString > aSNS(1);
-    aSNS[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
     return aSNS;
 }
 /* }}} */
@@ -146,7 +146,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
 #else
     if ( !m_bAttemptedLoadCppConn )
     {
-        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( CPPCONN_LIB ));
+        const ::rtl::OUString sModuleName(CPPCONN_LIB );
         m_hCppConnModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
         m_bAttemptedLoadCppConn = true;
     }
@@ -156,16 +156,16 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
         throw SQLException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to load the " CPPCONN_LIB " library." ) ),
+            ::rtl::OUString( "Unable to load the " CPPCONN_LIB " library."  ),
             *this,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "08001" ) ),  // "unable to connect"
+            ::rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
     }
 
     // find the factory symbol
-    const ::rtl::OUString sSymbolName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sql_mysql_get_driver_instance" ) );
+    const ::rtl::OUString sSymbolName = ::rtl::OUString( "sql_mysql_get_driver_instance"  );
     typedef void* (* FGetMySQLDriver)();
 
     const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
@@ -173,9 +173,9 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");
         throw SQLException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CPPCONN_LIB " is invalid: missing the driver factory function." ) ),
+            ::rtl::OUString( CPPCONN_LIB " is invalid: missing the driver factory function."  ),
             *this,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "08001" ) ),  // "unable to connect"
+            ::rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
@@ -186,9 +186,9 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     if ( !cppDriver )
     {
         throw SQLException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to obtain the MySQL_Driver instance from Connector/C++." ) ),
+            ::rtl::OUString( "Unable to obtain the MySQL_Driver instance from Connector/C++."  ),
             *this,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "08001" ) ),  // "unable to connect"
+            ::rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
@@ -211,7 +211,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
         impl_initCppConn_lck_throw();
         OSL_POSTCOND( cppDriver, "MySQLCDriver::connect: internal error." );
         if ( !cppDriver )
-            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MySQLCDriver::connect: internal error." ) ), *this );
+            throw RuntimeException( ::rtl::OUString( "MySQLCDriver::connect: internal error."  ), *this );
     }
 
     Reference< XConnection > xConn;
@@ -237,7 +237,7 @@ sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const OUString& url)
         throw(SQLException, RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::acceptsURL");
-    return (!url.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysqlc:")), sizeof("sdbc:mysqlc:")-1));
+    return (!url.compareTo(OUString("sdbc:mysqlc:"), sizeof("sdbc:mysqlc:")-1));
 }
 /* }}} */
 
@@ -251,17 +251,17 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const OUSt
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Hostname"))
-                ,OUString(RTL_CONSTASCII_USTRINGPARAM("Name of host"))
+                OUString("Hostname")
+                ,OUString("Name of host")
                 ,sal_True
-                ,OUString(RTL_CONSTASCII_USTRINGPARAM("localhost"))
+                ,OUString("localhost")
                 ,Sequence< OUString >())
             );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Port"))
-                ,OUString(RTL_CONSTASCII_USTRINGPARAM("Port"))
+                OUString("Port")
+                ,OUString("Port")
                 ,sal_True
-                ,OUString(RTL_CONSTASCII_USTRINGPARAM("3306"))
+                ,OUString("3306")
                 ,Sequence< OUString >())
             );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());

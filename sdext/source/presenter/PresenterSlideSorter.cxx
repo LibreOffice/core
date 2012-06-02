@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (::rtl::OUString(pString))
 
 namespace {
     const static sal_Int32 gnVerticalGap (10);
@@ -340,7 +340,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Create the preview cache.
         mxPreviewCache = Reference<drawing::XSlidePreviewCache>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")),
+                OUString("com.sun.star.drawing.PresenterPreviewCache"),
                 mxComponentContext),
             UNO_QUERY_THROW);
         Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY);
@@ -361,7 +361,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Listen for changes of the current slide.
         Reference<beans::XPropertySet> xControllerProperties (rxController, UNO_QUERY_THROW);
         xControllerProperties->addPropertyChangeListener(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentPage")),
+            OUString("CurrentPage"),
             this);
 
         // Move the current slide in the center of the window.
@@ -831,8 +831,8 @@ double PresenterSlideSorter::GetSlideAspectRatio (void) const
             Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
             sal_Int32 nWidth (28000);
             sal_Int32 nHeight (21000);
-            if ((xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= nWidth)
-                && (xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= nHeight)
+            if ((xProperties->getPropertyValue(OUString("Width")) >>= nWidth)
+                && (xProperties->getPropertyValue(OUString("Height")) >>= nHeight)
                 && nHeight > 0)
             {
                 nSlideAspectRatio = double(nWidth) / double(nHeight);
@@ -1056,8 +1056,8 @@ void PresenterSlideSorter::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterSlideSorter has been already disposed")),
+            OUString(
+                "PresenterSlideSorter has been already disposed"),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -1714,7 +1714,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 {
     PresenterConfigurationAccess aConfiguration (
         rxContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XHierarchicalNameAccess> xBitmaps (
         aConfiguration.GetConfigurationNode(
