@@ -319,6 +319,11 @@ endif
 # GUIBASE specific stuff
 
 ifeq ($(GUIBASE),aqua)
+# headers from basebmp are included but the library is not used ?
+$(eval $(call gb_Library_use_packages,vcl,\
+	basebmp_inc \
+))
+
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
