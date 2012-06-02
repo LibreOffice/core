@@ -425,7 +425,7 @@ static bool needsSynchronization(
 static ::rtl::OUString getBrandSharePreregBundledPathURL()
 {
     ::rtl::OUString url(
-        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/prereg/bundled"));
+        "$BRAND_BASE_DIR/share/prereg/bundled");
 
     ::rtl::Bootstrap::expandMacros(url);
     return url;
@@ -433,7 +433,7 @@ static ::rtl::OUString getBrandSharePreregBundledPathURL()
 
 static ::rtl::OUString getUserBundledExtPathURL()
 {
-    ::rtl::OUString folder( RTL_CONSTASCII_USTRINGPARAM( "$BUNDLED_EXTENSIONS_USER" ));
+    ::rtl::OUString folder( "$BUNDLED_EXTENSIONS_USER" );
     ::rtl::Bootstrap::expandMacros(folder);
 
     return folder;
@@ -575,7 +575,7 @@ throw()
                     }
 
                     if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                        newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                        newDstUnqPath += rtl::OUString("/");
 
                     newDstUnqPath += tit;
 
@@ -754,7 +754,7 @@ sal_Bool Desktop::QueryExit()
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
     Reference< ::com::sun::star::frame::XDesktop >
-            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.Desktop") ),
                 UNO_QUERY );
 
     Reference < ::com::sun::star::beans::XPropertySet > xPropertySet( xDesktop, UNO_QUERY );
@@ -762,7 +762,7 @@ sal_Bool Desktop::QueryExit()
     {
         Any a;
         a <<= (sal_Bool)sal_True;
-        xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), a );
     }
 
     sal_Bool bExit = ( !xDesktop.is() || xDesktop->terminate() );
@@ -772,7 +772,7 @@ sal_Bool Desktop::QueryExit()
     {
         Any a;
         a <<= (sal_Bool)sal_False;
-        xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), a );
     }
     else
     {
@@ -836,7 +836,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         case ::utl::Bootstrap::MISSING_INSTALL_DIRECTORY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_PATH_INVALID,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The installation path is not available." )) );
+                        OUString( "The installation path is not available." ) );
             bFileInfo = sal_False;
         }
         break;
@@ -845,7 +845,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration file \"$1\" is missing." )) );
+                        OUString( "The configuration file \"$1\" is missing." ) );
         }
         break;
 
@@ -855,7 +855,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
          case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_CORRUPT,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration file \"$1\" is corrupt." )) );
+                        OUString( "The configuration file \"$1\" is corrupt." ) );
         }
         break;
 
@@ -863,7 +863,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         case ::utl::Bootstrap::MISSING_VERSION_FILE:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration file \"$1\" is missing." )) );
+                        OUString( "The configuration file \"$1\" is missing." ) );
         }
         break;
 
@@ -871,7 +871,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
          case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SUPPORT,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The main configuration file \"$1\" does not support the current version." )) );
+                        OUString( "The main configuration file \"$1\" does not support the current version." ) );
         }
         break;
 
@@ -879,7 +879,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
            case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_DIR_MISSING,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration directory \"$1\" is missing." )) );
+                        OUString( "The configuration directory \"$1\" is missing." ) );
         }
         break;
 
@@ -887,7 +887,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         case ::utl::Bootstrap::INVALID_BOOTSTRAP_DATA:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "An internal failure occurred." )) );
+                        OUString( "An internal failure occurred." ) );
             bFileInfo = sal_False;
         }
         break;
@@ -896,7 +896,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         {
             // This needs to be improved, see #i67575#:
             aMsg = OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "Invalid version file entry" ) );
+                "Invalid version file entry"  );
             bFileInfo = sal_False;
         }
         break;
@@ -1021,10 +1021,10 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
         if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
             aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SERVICE,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "The service manager is not available." )) );
+                            OUString( "The service manager is not available." ) );
         else
             aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration service is not available." )) );
+                            OUString( "The configuration service is not available." ) );
 
         aDiagnosticMessage.append( aErrorMsg );
         aDiagnosticMessage.appendAscii( "\n" );
@@ -1034,7 +1034,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         // we have to ask the user to start the setup on CD/installation directory manually!!
         OUString aStartSetupManually( GetMsgString(
             STR_ASK_START_SETUP_MANUALLY,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair the installation from CD, or the folder containing the installation packages." )) ));
+            OUString( "Start setup application to repair the installation from CD, or the folder containing the installation packages." ) ));
 
         aDiagnosticMessage.append( aStartSetupManually );
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
@@ -1047,7 +1047,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         OUStringBuffer aDiagnosticMessage( 100 );
         OUString aErrorMsg;
         aErrorMsg = GetMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "A general error occurred while accessing your central configuration." )) );
+            OUString( "A general error occurred while accessing your central configuration." ) );
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
         FatalError(aMessage);
@@ -1058,7 +1058,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         OUStringBuffer aDiagnosticMessage( 100 );
         OUString aErrorMsg;
         aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "User installation could not be completed" )) );
+            OUString( "User installation could not be completed" ) );
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
         FatalError(aMessage);
@@ -1071,8 +1071,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         aErrorMsg = GetMsgString(
             //@@@ FIXME: should use an own resource string => #i36213#
             STR_BOOTSTRAP_ERR_LANGUAGE_MISSING,
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "Language could not be determined." )) );
+            OUString( "Language could not be determined." ) );
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage(
             aDiagnosticMessage.makeStringAndClear() );
@@ -1092,13 +1091,11 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
             aErrorMsg = GetMsgString(
                 STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE,
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "User installation could not be completed due to insufficient free disk space." )) );
+                OUString( "User installation could not be completed due to insufficient free disk space." ) );
         else
             aErrorMsg = GetMsgString(
                 STR_BOOSTRAP_ERR_NOACCESSRIGHTS,
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "User installation could not be processed due to missing access rights." )) );
+                OUString( "User installation could not be processed due to missing access rights." ) );
 
         osl::File::getSystemPathFromFileURL( aUserInstallationURL, aUserInstallationPath );
 
@@ -1155,10 +1152,10 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
                              sal_Bool& bRecoveryDataExists,
                              sal_Bool& bSessionDataExists )
 {
-    static const ::rtl::OUString SERVICENAME_RECOVERYCORE(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery"));
-    static const ::rtl::OUString PROP_CRASHED(RTL_CONSTASCII_USTRINGPARAM("Crashed"));
-    static const ::rtl::OUString PROP_EXISTSRECOVERY(RTL_CONSTASCII_USTRINGPARAM("ExistsRecoveryData"));
-    static const ::rtl::OUString PROP_EXISTSSESSION(RTL_CONSTASCII_USTRINGPARAM("ExistsSessionData"));
+    static const ::rtl::OUString SERVICENAME_RECOVERYCORE("com.sun.star.frame.AutoRecovery");
+    static const ::rtl::OUString PROP_CRASHED("Crashed");
+    static const ::rtl::OUString PROP_EXISTSRECOVERY("ExistsRecoveryData");
+    static const ::rtl::OUString PROP_EXISTSSESSION("ExistsSessionData");
 
     bCrashed            = sal_False;
     bRecoveryDataExists = sal_False;
@@ -1188,11 +1185,11 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
                              sal_Bool bCrashed           ,
                              sal_Bool bExistsRecoveryData)
 {
-    static ::rtl::OUString SERVICENAME_RECOVERYUI(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svx.RecoveryUI"));
-    static ::rtl::OUString SERVICENAME_URLPARSER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"));
-    static ::rtl::OUString COMMAND_EMERGENCYSAVE(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doEmergencySave"));
-    static ::rtl::OUString COMMAND_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doAutoRecovery"));
-    static ::rtl::OUString COMMAND_CRASHREPORT(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doCrashReport"));
+    static ::rtl::OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
+    static ::rtl::OUString SERVICENAME_URLPARSER("com.sun.star.util.URLTransformer");
+    static ::rtl::OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
+    static ::rtl::OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
+    static ::rtl::OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -1562,7 +1559,7 @@ int Desktop::Main()
 
 #ifdef DBG_UTIL
         //include version ID in non product builds
-        ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
+        ::rtl::OUString aDefault("development");
         aTitle += rtl::OUString(" [");
         String aVerId( utl::Bootstrap::getProductSource(aDefault));
         aTitle += aVerId;
@@ -1589,7 +1586,7 @@ int Desktop::Main()
         }
 
         xDesktop = Reference<XDesktop>( xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+            OUString( "com.sun.star.frame.Desktop" )), UNO_QUERY );
 
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
@@ -1618,7 +1615,7 @@ int Desktop::Main()
 
         {
             ::comphelper::ComponentContext aContext( xSMgr );
-            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( "com.sun.star.task.OfficeRestartManager"  ) ), UNO_QUERY );
         }
 
         // check whether the shutdown is caused by restart
@@ -1636,7 +1633,7 @@ int Desktop::Main()
         if (pExecGlobals->xGlobalBroadcaster.is())
         {
             css::document::EventObject aEvent;
-            aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp"));
+            aEvent.EventName = ::rtl::OUString("OnStartApp");
             pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
         }
 
@@ -1653,7 +1650,7 @@ int Desktop::Main()
 
         {
             ::comphelper::ComponentContext aContext( xSMgr );
-            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( "com.sun.star.task.OfficeRestartManager"  ) ), UNO_QUERY );
         }
 
         // check whether the shutdown is caused by restart
@@ -1685,7 +1682,7 @@ int Desktop::Main()
                    Reference< XFrame > xBackingFrame;
                    Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
-                   xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                   xBackingFrame = xDesktopFrame->findFrame(OUString( "_blank" ), 0);
                    if (xBackingFrame.is())
                        xContainerWindow = xBackingFrame->getContainerWindow();
                    if (xContainerWindow.is())
@@ -1696,7 +1693,7 @@ int Desktop::Main()
                        lArgs[0] <<= xContainerWindow;
 
                        Reference< XController > xBackingComp(
-                           xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs), UNO_QUERY);
+                           xSMgr->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs), UNO_QUERY);
                         if (xBackingComp.is())
                         {
                             Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
@@ -1839,7 +1836,7 @@ int Desktop::doShutdown()
     if (pExecGlobals->xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
-        aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
+        aEvent.EventName = ::rtl::OUString("OnCloseApp");
         pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
     }
 
@@ -2095,7 +2092,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
         if (getenv ("OOO_EXIT_POST_STARTUP"))
             new ExitTimer();
     } catch (const ::com::sun::star::uno::Exception &e) {
-        String a( RTL_CONSTASCII_USTRINGPARAM( "UNO exception during client open:\n" ) );
+        String a( "UNO exception during client open:\n"  );
         Application::Abort( a + e.Message );
     }
     return 0;
@@ -2125,10 +2122,10 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
 
     Sequence < com::sun::star::beans::PropertyValue > args(1);
-    args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+    args[0].Name = ::rtl::OUString("Hidden");
     args[0].Value <<= sal_True;
     Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+        ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
     if ( !xLoader.is() )
         return;
@@ -2138,7 +2135,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
         try
         {
             Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/swriter"),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2150,7 +2147,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
         try
         {
             Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/scalc"),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2162,7 +2159,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
         try
         {
             Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/sdraw"),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2174,7 +2171,7 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
         try
         {
             Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( rtl::OUString("private:factory/simpress"),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2189,10 +2186,10 @@ void Desktop::PreloadConfigurationData()
     Reference< XNameAccess > xNameAccess( rFactory->createInstance(
         rtl::OUString( "com.sun.star.frame.UICommandDescription" )), UNO_QUERY );
 
-    rtl::OUString aWriterDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
-    rtl::OUString aCalcDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
-    rtl::OUString aDrawDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ));
-    rtl::OUString aImpressDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ));
+    rtl::OUString aWriterDoc( "com.sun.star.text.TextDocument" );
+    rtl::OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
+    rtl::OUString aDrawDoc( "com.sun.star.drawing.DrawingDocument" );
+    rtl::OUString aImpressDoc( "com.sun.star.presentation.PresentationDocument" );
 
     // preload commands configuration
     if ( xNameAccess.is() )
@@ -2414,20 +2411,20 @@ void Desktop::OpenClients()
         if ( lastIndex > 0 )
         {
             aIniName    = aIniName.copy( 0, lastIndex+1 );
-            aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "perftune" ));
+            aIniName    += OUString( "perftune" );
 #if defined(WNT)
-            aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
+            aIniName    += OUString( ".ini" );
 #else
-            aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
+            aIniName    += OUString( "rc" );
 #endif
         }
 
         rtl::Bootstrap aPerfTuneIniFile( aIniName );
 
-        OUString aDefault( RTL_CONSTASCII_USTRINGPARAM( "0" ));
+        OUString aDefault( "0" );
         OUString aPreloadData;
 
-        aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "QuickstartPreloadConfiguration" )), aPreloadData, aDefault );
+        aPerfTuneIniFile.getFrom( OUString( "QuickstartPreloadConfiguration" ), aPreloadData, aDefault );
         if ( aPreloadData == "1" )
         {
             if ( rArgs.IsWriter()  ||
@@ -2459,22 +2456,22 @@ void Desktop::OpenClients()
         try
         {
             Reference< XDispatch > xRecovery(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.AutoRecovery") ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             Reference< XURLTransformer > xParser(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.util.URLTransformer") ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             css::util::URL aCmd;
-            aCmd.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/disableRecovery"));
+            aCmd.Complete = ::rtl::OUString("vnd.sun.star.autorecovery:/disableRecovery");
             xParser->parseStrict(aCmd);
 
             xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
         }
         catch(const css::uno::Exception& e)
         {
-            OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not disable AutoRecovery.\n"))
+            OUString aMessage = OUString("Could not disable AutoRecovery.\n")
                 + e.Message;
             OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
@@ -2508,7 +2505,7 @@ void Desktop::OpenClients()
                     May be we can check the desktop if some documents are existing there.
                  */
                 Reference< XFramesSupplier > xTasksSupplier(
-                        ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.Desktop") ),
                         ::com::sun::star::uno::UNO_QUERY_THROW );
                 Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
                 if ( xList->hasElements() )
@@ -2516,7 +2513,7 @@ void Desktop::OpenClients()
             }
             catch(const css::uno::Exception& e)
             {
-                OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error during recovery\n"))
+                OUString aMessage = OUString("Error during recovery\n")
                     + e.Message;
                 OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
@@ -2526,11 +2523,11 @@ void Desktop::OpenClients()
         try
         {
             xSessionListener = Reference< XInitialization >(::comphelper::getProcessServiceFactory()->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionListener"))), UNO_QUERY_THROW);
+                        OUString("com.sun.star.frame.SessionListener")), UNO_QUERY_THROW);
 
             // specifies whether the UI-interaction on Session shutdown is allowed
             sal_Bool bAllowUI = isUIOnSessionShutdownAllowed();
-            css::beans::NamedValue aProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowUserInteractionOnQuit" ) ),
+            css::beans::NamedValue aProperty( ::rtl::OUString( "AllowUserInteractionOnQuit"  ),
                                               css::uno::makeAny( bAllowUI ) );
             css::uno::Sequence< css::uno::Any > aArgs( 1 );
             aArgs[0] <<= aProperty;
@@ -2539,7 +2536,7 @@ void Desktop::OpenClients()
         }
         catch(const com::sun::star::uno::Exception& e)
         {
-            OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Registration of session listener failed\n"))
+            OUString aMessage = OUString("Registration of session listener failed\n")
                 + e.Message;
             OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
@@ -2557,7 +2554,7 @@ void Desktop::OpenClients()
             }
             catch(const com::sun::star::uno::Exception& e)
             {
-                OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error in session management\n"))
+                OUString aMessage = OUString("Error in session management\n")
                     + e.Message;
                 OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
@@ -2632,7 +2629,7 @@ void Desktop::OpenClients()
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
     Reference< XFramesSupplier > xTasksSupplier(
-            ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.Desktop") ),
             ::com::sun::star::uno::UNO_QUERY_THROW );
     Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
     if ( xList->hasElements() )
@@ -2766,7 +2763,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
             // find active task - the active task is always a visible task
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                  xDesktop( xSMGR->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                  xDesktop( xSMGR->createInstance( OUString("com.sun.star.frame.Desktop") ),
                             ::com::sun::star::uno::UNO_QUERY );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
             if ( !xTask.is() )
@@ -2789,7 +2786,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
 
-                xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                xBackingFrame = xDesktopFrame->findFrame(OUString( "_blank" ), 0);
                 if (xBackingFrame.is())
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
@@ -2797,7 +2794,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     Sequence< Any > lArgs(1);
                     lArgs[0] <<= xContainerWindow;
                     Reference< XController > xBackingComp(
-                        xSMGR->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
+                        xSMGR->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs),
                         UNO_QUERY);
                     if (xBackingComp.is())
                     {
@@ -2892,19 +2889,19 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
             com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >
-                xDesktop( xSMGR->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                xDesktop( xSMGR->createInstance( OUString("com.sun.star.frame.Desktop") ),
                 ::com::sun::star::uno::UNO_QUERY );
 
             // check provider ... we know it's weak reference only
             if ( ! xDesktop.is())
                 return;
 
-            css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(rtl::OUString("com.sun.star.util.URLTransformer")), css::uno::UNO_QUERY_THROW);
             css::util::URL aCommand;
-            if( rAppEvent.GetData() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PREFERENCES")) )
-                aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OptionsTreeDialog" ) );
-            else if( rAppEvent.GetData() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABOUT")) )
-                aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:About" ) );
+            if( rAppEvent.GetData() == ::rtl::OUString("PREFERENCES") )
+                aCommand.Complete = rtl::OUString( ".uno:OptionsTreeDialog"  );
+            else if( rAppEvent.GetData() == ::rtl::OUString("ABOUT") )
+                aCommand.Complete = rtl::OUString( ".uno:About"  );
             if( !aCommand.Complete.isEmpty() )
             {
                 xParser->parseStrict(aCommand);
@@ -2945,26 +2942,26 @@ void Desktop::OpenSplashScreen()
         // Determine application name from command line parameters
         OUString aAppName;
         if ( rCmdLine.IsWriter() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer" ));
+            aAppName = rtl::OUString( "writer" );
         else if ( rCmdLine.IsCalc() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc" ));
+            aAppName = rtl::OUString( "calc" );
         else if ( rCmdLine.IsDraw() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw" ));
+            aAppName = rtl::OUString( "draw" );
         else if ( rCmdLine.IsImpress() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress" ));
+            aAppName = rtl::OUString( "impress" );
         else if ( rCmdLine.IsBase() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "base" ));
+            aAppName = rtl::OUString( "base" );
         else if ( rCmdLine.IsGlobal() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "global" ));
+            aAppName = rtl::OUString( "global" );
         else if ( rCmdLine.IsMath() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "math" ));
+            aAppName = rtl::OUString( "math" );
         else if ( rCmdLine.IsWeb() )
-            aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "web" ));
+            aAppName = rtl::OUString( "web" );
 
         // Which splash to use
-        OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
+        OUString aSplashService( "com.sun.star.office.SplashScreen" );
         if ( rCmdLine.HasSplashPipe() )
-            aSplashService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.PipeSplashScreen"));
+            aSplashService = OUString("com.sun.star.office.PipeSplashScreen");
 
         bVisible = sal_True;
         Sequence< Any > aSeq( 2 );
@@ -2975,7 +2972,7 @@ void Desktop::OpenSplashScreen()
             aSplashService, aSeq), UNO_QUERY);
 
         if(m_rSplashScreen.is())
-                m_rSplashScreen->start(OUString(RTL_CONSTASCII_USTRINGPARAM("SplashScreen")), 100);
+                m_rSplashScreen->start(OUString("SplashScreen"), 100);
     }
 
 }
@@ -3010,9 +3007,9 @@ void Desktop::DoFirstRunInitializations()
 {
     try
     {
-        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.JobExecutor")) ), UNO_QUERY );
+        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.task.JobExecutor") ), UNO_QUERY );
         if( xExecutor.is() )
-            xExecutor->trigger( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("onFirstRunInitialization")) );
+            xExecutor->trigger( ::rtl::OUString("onFirstRunInitialization") );
     }
     catch(const ::com::sun::star::uno::Exception&)
     {
@@ -3023,8 +3020,8 @@ void Desktop::DoFirstRunInitializations()
 // ========================================================================
 void Desktop::CheckFirstRun( )
 {
-    const ::rtl::OUString sCommonMiscNodeName(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Misc"));
-    const ::rtl::OUString sFirstRunNodeName(RTL_CONSTASCII_USTRINGPARAM("FirstRun"));
+    const ::rtl::OUString sCommonMiscNodeName("/org.openoffice.Office.Common/Misc");
+    const ::rtl::OUString sFirstRunNodeName("FirstRun");
 
     // --------------------------------------------------------------------
     // check if this is the first office start

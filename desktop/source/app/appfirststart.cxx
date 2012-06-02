@@ -53,7 +53,7 @@ static Reference< XPropertySet > impl_getConfigurationAccess( const OUString& rP
         configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext() ) );
     Sequence< Any > aArgs( 1 );
-    NamedValue aValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), makeAny( rPath ) );
+    NamedValue aValue( OUString( "nodepath"  ), makeAny( rPath ) );
     aArgs[0] <<= aValue;
     return Reference< XPropertySet >(
             xConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), aArgs ), UNO_QUERY_THROW );
@@ -65,9 +65,9 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
     {
         try
         {
-            Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
+            Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( "org.openoffice.Setup/Office"  ) );
 
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "OfficeRestartInProgress" ) );
+            OUString sPropName( "OfficeRestartInProgress"  );
             Any aRestart = xPSet->getPropertyValue( sPropName );
             sal_Bool bRestart = sal_False;
             if ( ( aRestart >>= bRestart ) && bRestart )
@@ -80,7 +80,7 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
                 aSeq[0] <<= bQuickstart;
 
                 Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Quickstart" ) ) ),UNO_QUERY_THROW );
+                    OUString( "com.sun.star.office.Quickstart"  ) ),UNO_QUERY_THROW );
                 xQuickstart->initialize( aSeq );
             }
         }
@@ -95,8 +95,8 @@ void Desktop::SetRestartState()
 {
     try
     {
-        Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "OfficeRestartInProgress" ) );
+        Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( "org.openoffice.Setup/Office"  ) );
+        OUString sPropName( "OfficeRestartInProgress"  );
         xPSet->setPropertyValue( sPropName, makeAny( sal_True ) );
         Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
     }

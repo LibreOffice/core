@@ -316,7 +316,7 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 OUString SAL_CALL OfficeIPCThreadController::getImplementationName()
 throw ( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.OfficeIPCThreadController" ));
+    return OUString( "com.sun.star.comp.OfficeIPCThreadController" );
 }
 
 sal_Bool SAL_CALL OfficeIPCThreadController::supportsService( const OUString& )
@@ -434,7 +434,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
 
-    pThread->maPipeIdent = OUString( RTL_CONSTASCII_USTRINGPARAM( "SingleOfficeIPC_" ) );
+    pThread->maPipeIdent = OUString( "SingleOfficeIPC_"  );
 
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
@@ -460,20 +460,20 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if ( lastIndex > 0 )
     {
         aIniName    = aIniName.copy( 0, lastIndex+1 );
-        aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "perftune" ));
+        aIniName    += OUString( "perftune" );
 #if defined(WNT)
-        aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
+        aIniName    += OUString( ".ini" );
 #else
-        aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
+        aIniName    += OUString( "rc" );
 #endif
     }
 
     ::rtl::Bootstrap aPerfTuneIniFile( aIniName );
 
-    OUString aDefault( RTL_CONSTASCII_USTRINGPARAM( "0" ));
+    OUString aDefault( "0" );
     OUString aPreloadData;
 
-    aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "FastPipeCommunication" )), aPreloadData, aDefault );
+    aPerfTuneIniFile.getFrom( OUString( "FastPipeCommunication" ), aPreloadData, aDefault );
 
 
     OUString aUserInstallPathHashCode;
@@ -960,13 +960,13 @@ static void AddConversionsToDispatchList(
 
     if( !rParamOut.trim().isEmpty() )
     {
-        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        aParam += ::rtl::OUString(";");
         aParam += aOutDir;
     }
     else
     {
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
-        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";" )) + aPWD;
+        aParam += ::rtl::OUString(";" ) + aPWD;
     }
 
     for (std::vector< rtl::OUString >::const_iterator i(rRequestList.begin());

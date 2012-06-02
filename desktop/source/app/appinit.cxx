@@ -102,9 +102,9 @@ static bool configureUcb()
 
     Sequence< Any > aArgs(2);
     aArgs[0]
-        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
+        <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL);
     aArgs[1]
-        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
+        <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE);
 
     bool ret =
         ::ucbhelper::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
@@ -121,8 +121,7 @@ static bool configureUcb()
             if (xCurrentContext.is())
             {
                 Any aValue = xCurrentContext->getValueByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                       "system.desktop-environment" ) )
+                    rtl::OUString( "system.desktop-environment"  )
                 );
                 rtl::OUString aDesktopEnvironment;
                 if ( (aValue >>= aDesktopEnvironment) && aDesktopEnvironment == "GNOME" )
@@ -140,13 +139,13 @@ static bool configureUcb()
                     {
                         Reference<XContentProvider> xCP(
                             xServiceFactory->createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.ucb.GnomeVFSContentProvider"))),
+                                rtl::OUString(
+                                    "com.sun.star.ucb.GnomeVFSContentProvider")),
                             UNO_QUERY);
                         if(xCP.is())
                             xCPM->registerContentProvider(
                                 xCP,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".*")),
+                                rtl::OUString(".*"),
                                 false);
                     }
                     catch (...)
@@ -169,7 +168,7 @@ Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
 #ifdef ANDROID
-    rtl::OUString aUnoRc( OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///assets/program/unorc" ) ) );
+    rtl::OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
     return Reference<XMultiServiceFactory>(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);
@@ -188,7 +187,7 @@ void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory 
         try
         {
             Reference< XComponent > xComp;
-            if (xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComp )
+            if (xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xComp )
             {
                 xComp->dispose();
             }
@@ -232,7 +231,7 @@ void Desktop::RegisterServices()
         if ( !configureUcb() )
         {
             OSL_FAIL( "Can't configure UCB" );
-            throw com::sun::star::uno::Exception(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegisterServices, configureUcb")), NULL);
+            throw com::sun::star::uno::Exception(rtl::OUString("RegisterServices, configureUcb"), NULL);
         }
 
         CreateTemporaryDirectory();
@@ -260,7 +259,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
         aSeq[1] <<= bAccept;
         Reference<XInitialization> rAcceptor(
             ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Acceptor" ))), UNO_QUERY );
+            OUString("com.sun.star.office.Acceptor" )), UNO_QUERY );
         if ( rAcceptor.is() )
         {
             try
@@ -359,7 +358,7 @@ void Desktop::CreateTemporaryDirectory()
         if ( aResId.GetResMgr()->IsAvailable( aResId ))
             aMsg = String( aResId );
         else
-            aMsg = OUString( RTL_CONSTASCII_USTRINGPARAM( "The path manager is not available.\n" ));
+            aMsg = OUString( "The path manager is not available.\n" );
         e.Message = aMsg + e.Message;
         throw;
     }

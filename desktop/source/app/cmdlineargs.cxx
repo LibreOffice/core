@@ -122,8 +122,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     Reference< XExternalUriReferenceTranslator > xTranslator(
         xMS->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.uri.ExternalUriReferenceTranslator"))),
+        OUString(
+        "com.sun.star.uri.ExternalUriReferenceTranslator")),
         UNO_QUERY);
 
     // parse command line arguments
@@ -334,7 +334,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         {
                             if( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("::ODMA")) )
                             {
-                                ::rtl::OUString sArg(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/"));
+                                ::rtl::OUString sArg("vnd.sun.star.odma:/");
                                 sArg += aArg;
                                 aArg = sArg;
                             }

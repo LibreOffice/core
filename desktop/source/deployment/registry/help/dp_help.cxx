@@ -409,7 +409,7 @@ void BackendImpl::implProcessHelp(
                 if( !xSFA->isFolder( aExpandedHelpURL ) )
                 {
                     rtl::OUString aErrStr = getResourceString( RID_STR_HELPPROCESSING_GENERAL_ERROR );
-                    aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No help folder" ));
+                    aErrStr += rtl::OUString("No help folder" );
                     OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
                     throw deployment::DeploymentException( rtl::OUString(), oWeakThis,
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
@@ -441,8 +441,8 @@ void BackendImpl::implProcessHelp(
                             &langFolderContent,
                             langFolderDest, xCmdEnv);
 
-                        const OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));
-                        const OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
+                        const OUString aHelpStr("help");
+                        const OUString aSlash("/");
 
                         rtl::OUString aJarFile(
                             makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
@@ -453,9 +453,9 @@ void BackendImpl::implProcessHelp(
                             aJarFile, rtl_UriCharClassPchar,
                             rtl_UriEncodeIgnoreEscapes,
                             RTL_TEXTENCODING_UTF8 );
-                        rtl::OUString aDestBasePath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.zip://" ));
+                        rtl::OUString aDestBasePath = rtl::OUString("vnd.sun.star.zip://" );
                         aDestBasePath += aEncodedJarFilePath;
-                        aDestBasePath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
+                        aDestBasePath += rtl::OUString("/" );
 
                         sal_Int32 nLenLangFolderURL = aLangURL.getLength() + 1;
 
@@ -504,9 +504,9 @@ void BackendImpl::implProcessHelp(
                             if( nLastSlash != -1 )
                                 aLang = aLangURL.copy( nLastSlash + 1 );
                             else
-                                aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
+                                aLang = rtl::OUString("en" );
 
-                            rtl::OUString aMod(RTL_CONSTASCII_USTRINGPARAM("help"));
+                            rtl::OUString aMod("help");
 
                             HelpIndexer aIndexer(aLang, aMod, langFolderDestExpanded, langFolderDestExpanded);
                             aIndexer.indexDocuments();
@@ -548,14 +548,14 @@ void BackendImpl::implProcessHelp(
                                 aErrStr += aErrMsg;
                                 if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
                                 {
-                                    aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " in " ));
+                                    aErrStr += rtl::OUString(" in " );
 
                                     rtl::OUString aDecodedFile = rtl::Uri::decode( aErrorInfo.m_aXMLParsingFile,
                                                                                    rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                                     aErrStr += aDecodedFile;
                                     if( aErrorInfo.m_nXMLParsingLine != -1 )
                                     {
-                                        aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ", line " ));
+                                        aErrStr += rtl::OUString(", line " );
                                         aErrStr += ::rtl::OUString::valueOf( aErrorInfo.m_nXMLParsingLine );
                                     }
                                 }
@@ -604,7 +604,7 @@ void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
             if( nLastDot != -1 )
             {
                 rtl::OUString aExt = aURL.copy( nLastDot + 1 );
-                if( aExt.equalsIgnoreAsciiCase( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "xhp" )) ) )
+                if( aExt.equalsIgnoreAsciiCase( rtl::OUString("xhp" ) ) )
                     o_rXhpFileVector.push_back( aURL );
             }
         }
@@ -620,15 +620,15 @@ Reference< ucb::XSimpleFileAccess > BackendImpl::getFileAccess( void )
         {
             m_xSFA = Reference< ucb::XSimpleFileAccess >(
                 xContext->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )),
+                    rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ),
                     xContext ), UNO_QUERY );
         }
         if( !m_xSFA.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                ::rtl::OUString(
                 "dp_registry::backend::help::BackendImpl::getFileAccess(), "
-                "could not instatiate SimpleFileAccess." )),
+                "could not instatiate SimpleFileAccess." ),
                 Reference< XInterface >() );
         }
     }

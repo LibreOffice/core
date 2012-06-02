@@ -67,7 +67,7 @@ using rtl::OUString;
 using namespace desktop;
 using namespace com::sun::star;
 
-#define UNISTRING(s) OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+#define UNISTRING(s) OUString(s)
 
 namespace
 {
@@ -329,15 +329,15 @@ static void impl_setNeedsCompatCheck()
                 comphelper::getProcessComponentContext() ) );
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                      makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
+        beans::NamedValue v( OUString("nodepath"),
+                      makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
-        Any value = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("never")) );
+        Any value = makeAny( OUString("never") );
 
-        pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), value );
+        pset->setPropertyValue( OUString("LastCompatibilityCheckID"), value );
         Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
     }
     catch (const Exception&) {}
@@ -360,20 +360,20 @@ bool Desktop::newInstallation()
                 comphelper::getProcessComponentContext() ) );
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                      makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
+        beans::NamedValue v( OUString("nodepath"),
+                      makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
-        Any result = pset->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")) );
+        Any result = pset->getPropertyValue( OUString("LastCompatibilityCheckID") );
 
         result >>= aLastCheckBuildID;
         if ( aLastCheckBuildID != aCurrentBuildID )
         {
             bNewInst = true;
             result <<= aCurrentBuildID;
-            pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), result );
+            pset->setPropertyValue( OUString("LastCompatibilityCheckID"), result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
 #ifdef DEBUG

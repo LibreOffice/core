@@ -156,7 +156,7 @@ namespace desktop {
                     rtl::OUString itemname = aFileStatus.getFileName();
                     // append trailing '/' if needed
                     if (newDstUnqPath.lastIndexOf(sal_Unicode('/')) != newDstUnqPath.getLength()-1)
-                        newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                        newDstUnqPath += rtl::OUString("/");
                     newDstUnqPath += itemname;
                     // recursion
                     err = copy_recursive(newSrcUnqPath, newDstUnqPath);

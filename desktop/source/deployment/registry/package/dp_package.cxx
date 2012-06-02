@@ -349,7 +349,7 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return comphelper::makeSequence(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(BACKEND_SERVICE_NAME)) );
+        OUString(BACKEND_SERVICE_NAME) );
 }
 
 // XPackageRegistry
@@ -620,7 +620,7 @@ bool BackendImpl::PackageImpl::checkPlatform(
     {
         ret = false;
         rtl::OUString msg(
-            RTL_CONSTASCII_USTRINGPARAM("unsupported platform"));
+            "unsupported platform");
         Any e(
             css::deployment::PlatformException(
                 msg, static_cast<OWeakObject *>(this), this));
@@ -647,7 +647,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         return true;
     } else {
         rtl::OUString msg(
-            RTL_CONSTASCII_USTRINGPARAM("unsatisfied dependencies"));
+            "unsatisfied dependencies");
         Any e(
             css::deployment::DependencyException(
                 msg, static_cast<OWeakObject *>(this), unsatisfied));

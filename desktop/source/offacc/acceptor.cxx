@@ -49,7 +49,7 @@ static Reference<XInterface> getComponentContext( const Reference<XMultiServiceF
     Reference<XInterface> rContext;
     Reference< XPropertySet > rPropSet( rFactory, UNO_QUERY );
     Any a = rPropSet->getPropertyValue(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) );
+        ::rtl::OUString( "DefaultContext"  ) );
     a >>= rContext;
     return rContext;
 }
@@ -66,10 +66,10 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
 {
     m_rSMgr = rFactory;
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.connection.Acceptor" ))),
+        rtl::OUString("com.sun.star.connection.Acceptor" )),
         UNO_QUERY );
     m_rBridgeFactory = Reference < XBridgeFactory > (m_rSMgr->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" ))),
+        rtl::OUString("com.sun.star.bridge.BridgeFactory" )),
         UNO_QUERY );
     // get component context
     m_rContext = getComponentContext(m_rSMgr);
@@ -172,7 +172,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
         // "<connectString>;<protocol>"
         sal_Int32 nIndex1 = m_aAcceptString.indexOf( (sal_Unicode) ';' );
         if (nIndex1 < 0) throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid accept-string format")), m_rContext, 1);
+            OUString("Invalid accept-string format"), m_rContext, 1);
         m_aConnectString = m_aAcceptString.copy( 0 , nIndex1 ).trim();
         nIndex1++;
         sal_Int32 nIndex2 = m_aAcceptString.indexOf( (sal_Unicode) ';' , nIndex1 );
@@ -198,7 +198,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     if (!bOk)
     {
         throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid initialization")), m_rContext, 1);
+            OUString("invalid initialization"), m_rContext, 1);
     }
 }
 
@@ -273,14 +273,14 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
     else if ( aName.compareToAscii("StarOffice.NamingService" ) == 0 )
     {
         Reference< XNamingService > rNamingService(
-            m_rSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.NamingService" ))),
+            m_rSMgr->createInstance( OUString("com.sun.star.uno.NamingService" )),
             UNO_QUERY );
         if ( rNamingService.is() )
         {
             rNamingService->registerObject(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )), m_rSMgr );
+                OUString("StarOffice.ServiceManager" ), m_rSMgr );
             rNamingService->registerObject(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ComponentContext" )), getComponentContext( m_rSMgr ));
+                OUString("StarOffice.ComponentContext" ), getComponentContext( m_rSMgr ));
             rInstance = rNamingService;
         }
     }
