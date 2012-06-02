@@ -97,6 +97,7 @@ private:
     ScDocument* mpDoc;
 
     DECL_LINK( TypeListHdl, void*);
+    DECL_LINK( ColFormatTypeHdl, void*);
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
