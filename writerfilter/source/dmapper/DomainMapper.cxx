@@ -122,7 +122,7 @@ LoggedStream(dmapper_logger, "DomainMapper"),
             (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream));
 
         uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OOXMLDocumentPropertiesImporter")),
+                                ::rtl::OUString("com.sun.star.document.OOXMLDocumentPropertiesImporter"),
                                 xContext);
 
         uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY_THROW );
@@ -3210,7 +3210,7 @@ void DomainMapper::lcl_startParagraphGroup()
 {
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
-    static ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("Standard") );
+    static ::rtl::OUString sDefault("Standard" );
     if (m_pImpl->GetTopContext())
     {
         if (!m_pImpl->IsInShape())
@@ -3666,23 +3666,23 @@ rtl::OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, 
     {
     case 1:
         if (bIsPrefix)
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(" ));
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ));
+            return rtl::OUString( "(" );
+        return rtl::OUString( ")" );
 
     case 2:
         if (bIsPrefix)
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "[" ));
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "]" ));
+            return rtl::OUString( "[" );
+        return rtl::OUString( "]" );
 
     case 3:
         if (bIsPrefix)
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "<" ));
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ">" ));
+            return rtl::OUString( "<" );
+        return rtl::OUString( ">" );
 
     case 4:
         if (bIsPrefix)
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "{" ));
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "}" ));
+            return rtl::OUString( "{" );
+        return rtl::OUString( "}" );
 
     case 0:
     default:

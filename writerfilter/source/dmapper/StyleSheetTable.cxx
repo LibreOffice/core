@@ -866,7 +866,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                         ( *aNextStyleIt )->sStyleName == pEntry->sNextStyleIdentifier)
                                 {
                                     beans::PropertyValue aNew;
-                                    aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
+                                    aNew.Name = ::rtl::OUString("FollowStyle");
                                     aNew.Value = uno::makeAny(ConvertStyleName( ( *aNextStyleIt )->sStyleIdentifierD ));
                                     aSortedPropVals.Insert( aNew );
                                     break;
@@ -1179,7 +1179,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         if(!m_pImpl->m_xTextDefaults.is())
         {
             m_pImpl->m_xTextDefaults = uno::Reference< beans::XPropertySet>(
-                m_pImpl->m_rDMapper.GetTextFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Defaults"))),
+                m_pImpl->m_rDMapper.GetTextFactory()->createInstance(::rtl::OUString("com.sun.star.text.Defaults")),
                 uno::UNO_QUERY_THROW );
         }
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -1230,7 +1230,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<container::XNameContainer> xCharStyles;
-    xStyleFamilies->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"))) >>= xCharStyles;
+    xStyleFamilies->getByName(::rtl::OUString("CharacterStyles")) >>= xCharStyles;
     //search for all character styles with the name sListLabel + <index>
     sal_Int32 nStyleFound = 0;
     uno::Sequence< ::rtl::OUString > aStyleNames = xCharStyles->getElementNames();

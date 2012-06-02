@@ -248,7 +248,7 @@ void XmlFilterBase::importDocumentProperties() throw()
     Reference< XStorage > xDocumentStorage (
             ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
     Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OOXMLDocumentPropertiesImporter")),
+            ::rtl::OUString("com.sun.star.document.OOXMLDocumentPropertiesImporter"),
             xContext);
     Reference< XOOXMLDocumentPropertiesImporter > xImporter( xTemp, UNO_QUERY );
     Reference< XDocumentPropertiesSupplier > xPropSupplier( xModel, UNO_QUERY);
@@ -368,7 +368,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const ::rtl::OUString& aFrag
             lcl_getComponentContext(getServiceFactory());
         Reference<XDocumentBuilder> xDomBuilder(
             xContext->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.dom.DocumentBuilder" )),
+                ::rtl::OUString("com.sun.star.xml.dom.DocumentBuilder" ),
                 xContext),
             UNO_QUERY_THROW );
 

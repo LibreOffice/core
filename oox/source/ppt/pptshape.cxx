@@ -142,14 +142,14 @@ void PPTShape::addShape(
             if ( sServiceName !=  "com.sun.star.drawing.GraphicObjectShape"  &&
                  sServiceName !=  "com.sun.star.drawing.OLE2Shape" )
             {
-                const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
+                const rtl::OUString sOutlinerShapeService( "com.sun.star.presentation.OutlinerShape"  );
                 OSL_TRACE("has master: %p", rSlidePersist.getMasterPersist().get());
                 switch( mnSubType )
                 {
                     case XML_ctrTitle :
                     case XML_title :
                     {
-                        const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.TitleTextShape" ) );
+                        const rtl::OUString sTitleShapeService( "com.sun.star.presentation.TitleTextShape"  );
                         sServiceName = sTitleShapeService;
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                     }
@@ -159,7 +159,7 @@ void PPTShape::addShape(
                         if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
                             sServiceName = rtl::OUString();
                         else {
-                            const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) );
+                            const rtl::OUString sTitleShapeService( "com.sun.star.presentation.SubtitleShape"  );
                             sServiceName = sTitleShapeService;
                             aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                         }
@@ -173,7 +173,7 @@ void PPTShape::addShape(
                     break;
                     case XML_body :
                     {
-                        const rtl::OUString sNotesShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.NotesShape" ) );
+                        const rtl::OUString sNotesShapeService( "com.sun.star.presentation.NotesShape"  );
                         if ( rSlidePersist.isNotesPage() )
                         {
                             sServiceName = sNotesShapeService;
@@ -188,35 +188,35 @@ void PPTShape::addShape(
                     break;
                     case XML_dt :
                     {
-                        const rtl::OUString sDateTimeShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.DateTimeShape" ) );
+                        const rtl::OUString sDateTimeShapeService( "com.sun.star.presentation.DateTimeShape"  );
                         sServiceName = sDateTimeShapeService;
                         bClearText = sal_True;
                     }
                     break;
                     case XML_hdr :
                     {
-                        const rtl::OUString sHeaderShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.HeaderShape" ) );
+                        const rtl::OUString sHeaderShapeService( "com.sun.star.presentation.HeaderShape"  );
                         sServiceName = sHeaderShapeService;
                         bClearText = sal_True;
                     }
                     break;
                     case XML_ftr :
                     {
-                        const rtl::OUString sFooterShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.FooterShape" ) );
+                        const rtl::OUString sFooterShapeService( "com.sun.star.presentation.FooterShape"  );
                         sServiceName = sFooterShapeService;
                         bClearText = sal_True;
                     }
                     break;
                     case XML_sldNum :
                     {
-                        const rtl::OUString sSlideNumberShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ) );
+                        const rtl::OUString sSlideNumberShapeService( "com.sun.star.presentation.SlideNumberShape"  );
                         sServiceName = sSlideNumberShapeService;
                         bClearText = sal_True;
                     }
                     break;
                     case XML_sldImg :
                     {
-                        const rtl::OUString sPageShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PageShape" ) );
+                        const rtl::OUString sPageShapeService( "com.sun.star.presentation.PageShape"  );
                         sServiceName = sPageShapeService;
                     }
                     break;
@@ -224,7 +224,7 @@ void PPTShape::addShape(
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
                         else {
-                            const rtl::OUString sChartService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.ChartShape" ) );
+                            const rtl::OUString sChartService( "com.sun.star.presentation.ChartShape"  );
                             sServiceName = sChartService;
                         }
                     break;
@@ -232,7 +232,7 @@ void PPTShape::addShape(
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
                         else {
-                            const rtl::OUString sTableService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.TableShape" ) );
+                            const rtl::OUString sTableService( "com.sun.star.presentation.TableShape"  );
                             sServiceName = sTableService;
                         }
                     break;
@@ -240,7 +240,7 @@ void PPTShape::addShape(
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
                         else {
-                            const rtl::OUString sGraphicObjectService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.GraphicObjectShape" ) );
+                            const rtl::OUString sGraphicObjectService( "com.sun.star.presentation.GraphicObjectShape"  );
                             sServiceName = sGraphicObjectService;
                         }
                     break;
@@ -248,7 +248,7 @@ void PPTShape::addShape(
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
                         else {
-                            const rtl::OUString sMediaService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.MediaShape" ) );
+                            const rtl::OUString sMediaService( "com.sun.star.presentation.MediaShape"  );
                             sServiceName = sMediaService;
                         }
                     break;

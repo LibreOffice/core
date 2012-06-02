@@ -110,10 +110,10 @@ sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< lang::XMultiServiceFac
     bool bResult(sal_False);
     try
     {
-        rtl::OUString writerConfig = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common"));
+        rtl::OUString writerConfig = rtl::OUString( "org.openoffice.Office.Common");
 
         uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rFac, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
-        ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Filter/Microsoft/Import" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImportWWFieldsAsEnhancedFields" ) ) ) >>= bResult;
+        ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, rtl::OUString( "Filter/Microsoft/Import"  ), rtl::OUString( "ImportWWFieldsAsEnhancedFields"  ) ) >>= bResult;
 
     }
     catch( uno::Exception& )
@@ -128,19 +128,19 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
     if ( rxFieldProps.is() )
     {
         if ( !pFFDataHandler->getName().isEmpty() )
-            rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ), uno::makeAny( pFFDataHandler->getName() ) );
+            rxFieldProps->setPropertyValue( rtl::OUString( "Name" ), uno::makeAny( pFFDataHandler->getName() ) );
 
         const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
         uno::Sequence< rtl::OUString > sItems( rEntries.size() );
         ::std::copy( rEntries.begin(), rEntries.end(), ::comphelper::stl_begin(sItems));
         if ( sItems.getLength() )
-            rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Items") ), uno::makeAny( sItems ) );
+            rxFieldProps->setPropertyValue( rtl::OUString( "Items" ), uno::makeAny( sItems ) );
 
         sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
         if ( nResult )
-            rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItem") ), uno::makeAny( sItems[ nResult ] ) );
+            rxFieldProps->setPropertyValue( rtl::OUString( "SelectedItem" ), uno::makeAny( sItems[ nResult ] ) );
         if ( !pFFDataHandler->getHelpText().isEmpty() )
-             rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Help") ), uno::makeAny( pFFDataHandler->getHelpText() ) );
+             rxFieldProps->setPropertyValue( rtl::OUString( "Help" ), uno::makeAny( pFFDataHandler->getHelpText() ) );
     }
 }
 
@@ -240,7 +240,7 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
         if (xSupplier.is())
-            xSupplier->getStyleFamilies()->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"))) >>= m_xPageStyles;
+            xSupplier->getStyleFamilies()->getByName(::rtl::OUString("PageStyles")) >>= m_xPageStyles;
     }
     return m_xPageStyles;
 }
@@ -261,7 +261,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
     if( !m_xDocumentSettings.is() && m_xTextFactory.is())
     {
         m_xDocumentSettings = uno::Reference< beans::XPropertySet >(
-            m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings"))), uno::UNO_QUERY );
+            m_xTextFactory->createInstance(::rtl::OUString("com.sun.star.document.Settings")), uno::UNO_QUERY );
     }
     return m_xDocumentSettings;
 }
@@ -1136,7 +1136,7 @@ void DomainMapper_Impl::appendTextContent(
 
 void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
-    static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
+    static const rtl::OUString sEmbeddedService("com.sun.star.text.TextEmbeddedObject");
     try
     {
         uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
@@ -1183,7 +1183,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
     val.getAny() >>= formula;
     if( formula.is() )
     {
-        static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
+        static const rtl::OUString sEmbeddedService("com.sun.star.text.TextEmbeddedObject");
         try
         {
             uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
@@ -1232,7 +1232,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             xCursor->gotoEnd( true );
             //the paragraph after this new section is already inserted
             xCursor->goLeft(1, true);
-            static const rtl::OUString sSectionService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextSection"));
+            static const rtl::OUString sSectionService("com.sun.star.text.TextSection");
             uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sSectionService), uno::UNO_QUERY_THROW );
             xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
             xRet = uno::Reference< beans::XPropertySet > (xSection, uno::UNO_QUERY );
@@ -1343,7 +1343,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         if (GetTextFactory().is())
             xFootnoteText.set( GetTextFactory()->createInstance(
             bIsFootnote ?
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Footnote") ) : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote") )),
+                ::rtl::OUString( "com.sun.star.text.Footnote" ) : ::rtl::OUString( "com.sun.star.text.Endnote" )),
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
         pTopContext->SetFootnote( xFootnote );
@@ -1465,10 +1465,10 @@ void DomainMapper_Impl::PushAnnotation()
         if (!GetTextFactory().is())
             return;
         m_xAnnotationField = uno::Reference< beans::XPropertySet >( GetTextFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.Annotation") ) ),
+                ::rtl::OUString( "com.sun.star.text.TextField.Annotation" ) ),
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XText > xAnnotationText;
-        m_xAnnotationField->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextRange"))) >>= xAnnotationText;
+        m_xAnnotationField->getPropertyValue(::rtl::OUString( "TextRange")) >>= xAnnotationText;
         m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ));
     }
     catch( uno::Exception& )
@@ -1516,7 +1516,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         dmapper_logger->unoPropertySet(xProps);
 #endif
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
-        bool bIsGraphic = xSInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) );
+        bool bIsGraphic = xSInfo->supportsService( rtl::OUString( "com.sun.star.drawing.GraphicObjectShape"  ) );
 
         // If there are position properties, the shape should not be inserted "as character".
         sal_Int32 nHoriPosition = 0, nVertPosition = 0;
@@ -1533,7 +1533,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             xProps->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_OPAQUE ),
                     uno::makeAny( true ) );
-        if (xSInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextFrame"))))
+        if (xSInfo->supportsService(rtl::OUString("com.sun.star.text.TextFrame")))
         {
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
             uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
@@ -1739,7 +1739,7 @@ extract a parameter (with or without quotes) between the command and the followi
     }
     else
     {
-        nEndIndex = rCommand.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \\")), nStartIndex);
+        nEndIndex = rCommand.indexOf( ::rtl::OUString(" \\"), nStartIndex);
     }
     ::rtl::OUString sRet;
     if( nEndIndex > nStartIndex + 1 )
@@ -1834,10 +1834,10 @@ void DomainMapper_Impl::SetNumberFormat( const ::rtl::OUString& rCommand,
 {
     OUString sFormatString = lcl_ParseFormat( rCommand );
     // find \h - hijri/luna calendar todo: what about saka/era calendar?
-    bool bHijri = 0 < rCommand.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\h ")));
+    bool bHijri = 0 < rCommand.indexOf( ::rtl::OUString("\\h "));
     lang::Locale aUSLocale;
-    aUSLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aUSLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+    aUSLocale.Language = ::rtl::OUString("en");
+    aUSLocale.Country = ::rtl::OUString("US");
 
     //determine current locale - todo: is it necessary to initialize this locale?
     lang::Locale aCurrentLocale = aUSLocale;
@@ -2047,67 +2047,67 @@ if(!bFilled)
 {
     static const FieldConversion aFields[] =
     {
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ADDRESSBLOCK")),  "",                         "", FIELD_ADDRESSBLOCK  },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ADVANCE")),       "",                         "", FIELD_ADVANCE       },
-        {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ASK")),           "SetExpression",             "SetExpression", FIELD_ASK      },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUM")),       "SetExpression",            "SetExpression", FIELD_AUTONUM   },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMLGL")),     "SetExpression",            "SetExpression", FIELD_AUTONUMLGL },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMOUT")),     "SetExpression",            "SetExpression", FIELD_AUTONUMOUT },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTHOR")),        "DocInfo.CreateAuthor",                   "", FIELD_AUTHOR       },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE")),          "DateTime",                 "", FIELD_DATE         },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COMMENTS")),      "DocInfo.Description",      "", FIELD_COMMENTS     },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATEDATE")),    "DocInfo.CreateDateTime",   "", FIELD_CREATEDATE   },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCPROPERTY")),   "",                         "", FIELD_DOCPROPERTY },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCVARIABLE")),   "User",                     "", FIELD_DOCVARIABLE  },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITTIME")),      "DocInfo.EditTime",         "", FIELD_EDITTIME     },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILLIN")),        "Input",                    "", FIELD_FILLIN       },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILENAME")),      "FileName",                 "", FIELD_FILENAME     },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILESIZE")),      "",                         "", FIELD_FILESIZE     },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "DropDown",                           "", FIELD_FORMDROPDOWN},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Input", "", FIELD_FORMTEXT},
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IF")),            "ConditionalText",          "", FIELD_IF           },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INFO")),      "","", FIELD_INFO         },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INCLUDEPICTURE")), "",                        "", FIELD_INCLUDEPICTURE},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEYWORDS")),      "DocInfo.KeyWords",         "", FIELD_KEYWORDS     },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LASTSAVEDBY")),   "DocInfo.ChangeAuthor",                         "", FIELD_LASTSAVEDBY  },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MACROBUTTON")),   "Macro",                         "", FIELD_MACROBUTTON  },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGEFIELD")),    "Database",                 "Database", FIELD_MERGEFIELD},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGEREC")),      "DatabaseNumberOfSet",      "", FIELD_MERGEREC     },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MERGESEQ")),      "",                         "", FIELD_MERGESEQ     },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXT")),          "DatabaseNextSet",          "", FIELD_NEXT         },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXTIF")),        "DatabaseNextSet",          "", FIELD_NEXTIF       },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGE")),          "PageNumber",               "", FIELD_PAGE         },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGEREF")),       "GetReference",             "", FIELD_PAGEREF      },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REF")),           "GetReference",             "", FIELD_REF          },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVNUM")),        "DocInfo.Revision",         "", FIELD_REVNUM       },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SAVEDATE")),      "DocInfo.Change",           "", FIELD_SAVEDATE     },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTION")),       "",                         "", FIELD_SECTION      },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTIONPAGES")),  "",                         "", FIELD_SECTIONPAGES },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SEQ")),           "SetExpression",            "SetExpression", FIELD_SEQ          },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET")),           "","", FIELD_SET          },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SKIPIF")),"",                                 "", FIELD_SKIPIF       },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("STYLEREF")),"",                               "", FIELD_STYLEREF     },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBJECT")),       "DocInfo.Subject",          "", FIELD_SUBJECT      },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYMBOL")),"",                                 "", FIELD_SYMBOL       },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEMPLATE")),      "TemplateName",             "", FIELD_TEMPLATE},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME")),          "DateTime",                 "", FIELD_TIME         },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TITLE")),         "DocInfo.Title",            "", FIELD_TITLE        },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERINITIALS")),  "Author",                   "", FIELD_USERINITIALS       },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERADDRESS")),   "",                         "", FIELD_USERADDRESS  },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")), "Author",                   "", FIELD_USERNAME       },
+//            {::rtl::OUString("ADDRESSBLOCK"),  "",                         "", FIELD_ADDRESSBLOCK  },
+//            {::rtl::OUString("ADVANCE"),       "",                         "", FIELD_ADVANCE       },
+        {::rtl::OUString("ASK"),           "SetExpression",             "SetExpression", FIELD_ASK      },
+            {::rtl::OUString("AUTONUM"),       "SetExpression",            "SetExpression", FIELD_AUTONUM   },
+            {::rtl::OUString("AUTONUMLGL"),     "SetExpression",            "SetExpression", FIELD_AUTONUMLGL },
+            {::rtl::OUString("AUTONUMOUT"),     "SetExpression",            "SetExpression", FIELD_AUTONUMOUT },
+            {::rtl::OUString("AUTHOR"),        "DocInfo.CreateAuthor",                   "", FIELD_AUTHOR       },
+            {::rtl::OUString("DATE"),          "DateTime",                 "", FIELD_DATE         },
+            {::rtl::OUString("COMMENTS"),      "DocInfo.Description",      "", FIELD_COMMENTS     },
+            {::rtl::OUString("CREATEDATE"),    "DocInfo.CreateDateTime",   "", FIELD_CREATEDATE   },
+            {::rtl::OUString("DOCPROPERTY"),   "",                         "", FIELD_DOCPROPERTY },
+            {::rtl::OUString("DOCVARIABLE"),   "User",                     "", FIELD_DOCVARIABLE  },
+            {::rtl::OUString("EDITTIME"),      "DocInfo.EditTime",         "", FIELD_EDITTIME     },
+            {::rtl::OUString("FILLIN"),        "Input",                    "", FIELD_FILLIN       },
+            {::rtl::OUString("FILENAME"),      "FileName",                 "", FIELD_FILENAME     },
+//            {::rtl::OUString("FILESIZE"),      "",                         "", FIELD_FILESIZE     },
+//            {::rtl::OUString("FORMULA"),     "",                           "", FIELD_FORMULA },
+            {::rtl::OUString("FORMCHECKBOX"),     "",                           "", FIELD_FORMCHECKBOX},
+            {::rtl::OUString("FORMDROPDOWN"),     "DropDown",                           "", FIELD_FORMDROPDOWN},
+            {::rtl::OUString("FORMTEXT"),     "Input", "", FIELD_FORMTEXT},
+//            {::rtl::OUString("GOTOBUTTON"),    "",                         "", FIELD_GOTOBUTTON   },
+            {::rtl::OUString("HYPERLINK"),     "",                         "", FIELD_HYPERLINK    },
+            {::rtl::OUString("IF"),            "ConditionalText",          "", FIELD_IF           },
+//            {::rtl::OUString("INFO"),      "","", FIELD_INFO         },
+//            {::rtl::OUString("INCLUDEPICTURE"), "",                        "", FIELD_INCLUDEPICTURE},
+            {::rtl::OUString("KEYWORDS"),      "DocInfo.KeyWords",         "", FIELD_KEYWORDS     },
+            {::rtl::OUString("LASTSAVEDBY"),   "DocInfo.ChangeAuthor",                         "", FIELD_LASTSAVEDBY  },
+            {::rtl::OUString("MACROBUTTON"),   "Macro",                         "", FIELD_MACROBUTTON  },
+            {::rtl::OUString("MERGEFIELD"),    "Database",                 "Database", FIELD_MERGEFIELD},
+            {::rtl::OUString("MERGEREC"),      "DatabaseNumberOfSet",      "", FIELD_MERGEREC     },
+//            {::rtl::OUString("MERGESEQ"),      "",                         "", FIELD_MERGESEQ     },
+            {::rtl::OUString("NEXT"),          "DatabaseNextSet",          "", FIELD_NEXT         },
+            {::rtl::OUString("NEXTIF"),        "DatabaseNextSet",          "", FIELD_NEXTIF       },
+            {::rtl::OUString("PAGE"),          "PageNumber",               "", FIELD_PAGE         },
+            {::rtl::OUString("PAGEREF"),       "GetReference",             "", FIELD_PAGEREF      },
+            {::rtl::OUString("REF"),           "GetReference",             "", FIELD_REF          },
+            {::rtl::OUString("REVNUM"),        "DocInfo.Revision",         "", FIELD_REVNUM       },
+            {::rtl::OUString("SAVEDATE"),      "DocInfo.Change",           "", FIELD_SAVEDATE     },
+//            {::rtl::OUString("SECTION"),       "",                         "", FIELD_SECTION      },
+//            {::rtl::OUString("SECTIONPAGES"),  "",                         "", FIELD_SECTIONPAGES },
+            {::rtl::OUString("SEQ"),           "SetExpression",            "SetExpression", FIELD_SEQ          },
+//            {::rtl::OUString("SET"),           "","", FIELD_SET          },
+//            {::rtl::OUString("SKIPIF"),"",                                 "", FIELD_SKIPIF       },
+//            {::rtl::OUString("STYLEREF"),"",                               "", FIELD_STYLEREF     },
+            {::rtl::OUString("SUBJECT"),       "DocInfo.Subject",          "", FIELD_SUBJECT      },
+//            {::rtl::OUString("SYMBOL"),"",                                 "", FIELD_SYMBOL       },
+            {::rtl::OUString("TEMPLATE"),      "TemplateName",             "", FIELD_TEMPLATE},
+            {::rtl::OUString("TIME"),          "DateTime",                 "", FIELD_TIME         },
+            {::rtl::OUString("TITLE"),         "DocInfo.Title",            "", FIELD_TITLE        },
+            {::rtl::OUString("USERINITIALS"),  "Author",                   "", FIELD_USERINITIALS       },
+//            {::rtl::OUString("USERADDRESS"),   "",                         "", FIELD_USERADDRESS  },
+            {::rtl::OUString("USERNAME"), "Author",                   "", FIELD_USERNAME       },
 
 
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TOC")), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TC")), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMCHARS")), "CharacterCount", "", FIELD_NUMCHARS},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMWORDS")), "WordCount", "", FIELD_NUMWORDS},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMPAGES")), "PageCount", "", FIELD_NUMPAGES},
+            {::rtl::OUString("TOC"), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
+            {::rtl::OUString("TC"), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
+            {::rtl::OUString("NUMCHARS"), "CharacterCount", "", FIELD_NUMCHARS},
+            {::rtl::OUString("NUMWORDS"), "WordCount", "", FIELD_NUMWORDS},
+            {::rtl::OUString("NUMPAGES"), "PageCount", "", FIELD_NUMPAGES},
 
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), "", "", FIELD_},
+//            {::rtl::OUString(""), "", "", FIELD_},
 
         };
         size_t nConversions = SAL_N_ELEMENTS(aFields);
@@ -2134,9 +2134,9 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
     {
         static const FieldConversion aEnhancedFields[] =
         {
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "FormFieldmark",                           "", FIELD_FORMCHECKBOX},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "FormFieldmark",                           "", FIELD_FORMDROPDOWN},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Fieldmark", "", FIELD_FORMTEXT},
+            {::rtl::OUString("FORMCHECKBOX"),     "FormFieldmark",                           "", FIELD_FORMCHECKBOX},
+            {::rtl::OUString("FORMDROPDOWN"),     "FormFieldmark",                           "", FIELD_FORMDROPDOWN},
+            {::rtl::OUString("FORMTEXT"),     "Fieldmark", "", FIELD_FORMTEXT},
         };
 
         size_t nConversions = SAL_N_ELEMENTS(aEnhancedFields);
@@ -2204,7 +2204,7 @@ void DomainMapper_Impl::handleAutoNum
     uno::Reference< beans::XPropertySet > xMaster =
     FindOrCreateFieldMaster
         ("com.sun.star.text.FieldMaster.SetExpression",
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoNr") ));
+        rtl::OUString("AutoNr" ));
 
     xMaster->setPropertyValue( rPropNameSupplier.GetName(PROP_SUB_TYPE),
         uno::makeAny(text::SetVariableType::SEQUENCE));
@@ -2317,7 +2317,7 @@ void DomainMapper_Impl::handleAuthor
         {
             //create a custom property field
             sServiceName +=
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocInfo.Custom"));
+                ::rtl::OUString("DocInfo.Custom");
             bIsCustomField = true;
         }
         else
@@ -2636,7 +2636,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 if( bCreateField || bCreateEnhancedField )
                 {
                     //add the service prefix
-                    OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text."));
+                    OUString sServiceName("com.sun.star.text.");
                     if ( bCreateEnhancedField )
                     {
                         FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
@@ -2646,7 +2646,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     else
                     {
-                        sServiceName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextField."));
+                        sServiceName += rtl::OUString( "TextField.");
                         sServiceName += ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName );
                     }
 
@@ -2743,7 +2743,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_FILENAME:
                     {
-                        sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\p")));
+                        sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf( ::rtl::OUString("\\p"));
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName(PROP_FILE_FORMAT),
@@ -2872,7 +2872,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.Database", sParam );
 
     //                    xFieldProperties->setPropertyValue(
-    //                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldCode")),
+    //                             ::rtl::OUString("FieldCode"),
     //                             uno::makeAny( pContext->GetCommand().copy( nIndex + 1 )));
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
@@ -3249,7 +3249,7 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
     {
         if( aBookmarkIter != m_aBookmarkMap.end() )
         {
-            static const rtl::OUString sBookmarkService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
+            static const rtl::OUString sBookmarkService("com.sun.star.text.Bookmark");
             if (m_xTextFactory.is())
             {
                 uno::Reference< text::XTextContent > xBookmark( m_xTextFactory->createInstance( sBookmarkService ), uno::UNO_QUERY_THROW );
@@ -3490,7 +3490,7 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
             pCurrent->m_sAuthor = sAuthor;
     }
     else
-        m_xAnnotationField->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Author")),
+        m_xAnnotationField->setPropertyValue(rtl::OUString("Author"),
                 uno::makeAny(sAuthor));
 }
 
@@ -3503,7 +3503,7 @@ void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
             pCurrent->m_sDate = sDate;
     }
     else
-        m_xAnnotationField->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
+        m_xAnnotationField->setPropertyValue(rtl::OUString("DateTimeValue"),
                 uno::makeAny(lcl_DateStringToDateTime(sDate)));
 }
 
@@ -3549,7 +3549,7 @@ void DomainMapper_Impl::ApplySettingsTable()
         try
         {
             uno::Reference< beans::XPropertySet > xTextDefaults(
-                                                                m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Defaults"))), uno::UNO_QUERY_THROW );
+                                                                m_xTextFactory->createInstance(::rtl::OUString("com.sun.star.text.Defaults")), uno::UNO_QUERY_THROW );
             sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
             xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
             if (m_pSettingsTable->GetLinkStyles())

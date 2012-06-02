@@ -105,23 +105,23 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
     // keep the XUriReference implementation happy )
     // add mspath to represent the 'source' of this stream
-    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) + msPath );
+    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( "file:///"  ) + msPath );
 
-    static rtl::OUString sType(RTL_CONSTASCII_USTRINGPARAM("Type"));
-    static rtl::OUString sId(RTL_CONSTASCII_USTRINGPARAM("Id"));
-    static rtl::OUString sDocumentType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"));
-    static rtl::OUString sStylesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"));
-    static rtl::OUString sNumberingType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"));
-    static rtl::OUString sFonttableType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable"));
-    static rtl::OUString sFootnotesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes"));
-    static rtl::OUString sEndnotesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes"));
-    static rtl::OUString sCommentsType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"));
-    static rtl::OUString sThemeType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"));
-    static rtl::OUString sSettingsType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"));
-    static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
-    static rtl::OUString sTargetMode(RTL_CONSTASCII_USTRINGPARAM("TargetMode"));
-    static rtl::OUString sExternal(RTL_CONSTASCII_USTRINGPARAM("External"));
-    static rtl::OUString sVBAProjectType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.microsoft.com/office/2006/relationships/vbaProject"));
+    static rtl::OUString sType("Type");
+    static rtl::OUString sId("Id");
+    static rtl::OUString sDocumentType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
+    static rtl::OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
+    static rtl::OUString sNumberingType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering");
+    static rtl::OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
+    static rtl::OUString sFootnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes");
+    static rtl::OUString sEndnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes");
+    static rtl::OUString sCommentsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
+    static rtl::OUString sThemeType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
+    static rtl::OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
+    static rtl::OUString sTarget("Target");
+    static rtl::OUString sTargetMode("TargetMode");
+    static rtl::OUString sExternal("External");
+    static rtl::OUString sVBAProjectType("http://schemas.microsoft.com/office/2006/relationships/vbaProject");
 
     rtl::OUString sStreamType;
 
@@ -280,7 +280,7 @@ uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
 
     uno::Reference<xml::sax::XParser> xParser
         (xFactory->createInstanceWithContext
-        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")),
+        ( rtl::OUString("com.sun.star.xml.sax.Parser"),
           mxContext ),
         uno::UNO_QUERY );
 

@@ -296,7 +296,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                     //todo: this cannot be the right way to replace a part of the string!
                     aNewFormat[nI] = 'Y';
                     aNewFormat[nI + 1] = 'Y';
-                    aNewFormat.insert(nI + 2, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YY")));
+                    aNewFormat.insert(nI + 2, ::rtl::OUString("YY"));
                     nLen+=2;
                     nI+=3;
                 }
@@ -309,7 +309,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                     //todo: this cannot be the right way to replace a part of the string!
                     aNewFormat[nI] = 'y';
                     aNewFormat[nI + 1] = 'y';
-                    aNewFormat.insert(nI + 2, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yy")));
+                    aNewFormat.insert(nI + 2, ::rtl::OUString("yy"));
                     nLen+=2;
                     nI+=3;
                 }
@@ -320,7 +320,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                 // MM We have to escape '/' in case it's used as a char
                 //todo: this cannot be the right way to replace a part of the string!
                 aNewFormat[nI] = '\\';
-                aNewFormat.insert(nI + 1, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
+                aNewFormat.insert(nI + 1, ::rtl::OUString("/"));
                 nI++;
                 nLen++;
             }
@@ -333,18 +333,18 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
 
     if (bForceJapanese)
     {
-        rLocale.Language =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ja"));
-        rLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JP"));
+        rLocale.Language =  ::rtl::OUString("ja");
+        rLocale.Country = ::rtl::OUString("JP");
     }
 
     if (bForceNatNum)
     {
-        aNewFormat.insert( 0, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[NatNum1][$-411]")));
+        aNewFormat.insert( 0, ::rtl::OUString("[NatNum1][$-411]"));
     }
 
     if (bHijri)
     {
-        aNewFormat.insert( 0, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[~hijri]")));
+        aNewFormat.insert( 0, ::rtl::OUString("[~hijri]"));
     }
     return aNewFormat.makeStringAndClear();
 

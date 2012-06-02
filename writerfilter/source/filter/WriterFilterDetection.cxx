@@ -53,7 +53,7 @@ WriterFilterDetection::~WriterFilterDetection()
 
 OUString WriterFilterDetection_getImplementationName () throw (uno::RuntimeException)
 {
-   return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WriterFilterDetector" ) );
+   return OUString ( "com.sun.star.comp.Writer.WriterFilterDetector"  );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
@@ -93,10 +93,10 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
             {
                 SotStorageRef xStg = new SotStorage( pStream, sal_False );
 
-                bool bTable2 = xStg->IsContained( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1Table")));
+                bool bTable2 = xStg->IsContained( rtl::OUString("1Table"));
                 SotStorageStreamRef xRef =
 
-                    xStg->OpenSotStream(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordDocument")),
+                    xStg->OpenSotStream(rtl::OUString("WordDocument"),
 
                             STREAM_STD_READ | STREAM_NOCREATE );
 
@@ -156,7 +156,7 @@ uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) thr
 {
    uno::Sequence < OUString > aRet(1);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
+   pArray[0] =  OUString ( SERVICE_NAME1  );
    return aRet;
 }
 #undef SERVICE_NAME1
