@@ -51,7 +51,7 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
         OSQLColumns::Vector::const_iterator aIter;
-        static const ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        static const ::rtl::OUString aName("Name");
 
         for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
         {
@@ -131,7 +131,7 @@ sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnN
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
-    return m_aTableName;//::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    return m_aTableName;//::rtl::OUString("TABLE");
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)

@@ -53,14 +53,14 @@ OCalcResultSet::OCalcResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCalcResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.calc.ResultSet"));
+    return ::rtl::OUString("com.sun.star.sdbcx.calc.ResultSet");
 }
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OCalcResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
-    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------

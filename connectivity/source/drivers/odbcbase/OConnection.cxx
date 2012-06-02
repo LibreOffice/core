@@ -168,7 +168,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     {
         ::rtl::OUString sVersion;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
-        m_bUseOldDateFormat =  sVersion == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.50")) || sVersion == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.00"));
+        m_bUseOldDateFormat =  sVersion == ::rtl::OUString("02.50") || sVersion == ::rtl::OUString("02.00");
     }
     catch(Exception&)
     {
@@ -195,7 +195,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD, aSysDrvSettings;
+    ::rtl::OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
     const char* pUser       = "user";
@@ -242,12 +242,12 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
-            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UID=")) + aUID;
+            aDSN = aDSN + ::rtl::OUString(";UID=") + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
-            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";PWD=")) + aPWD;
+            aDSN = aDSN + ::rtl::OUString(";PWD=") + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -256,7 +256,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
-            aDSN += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+            aDSN += ::rtl::OUString(";");
             aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii(pCharSet))

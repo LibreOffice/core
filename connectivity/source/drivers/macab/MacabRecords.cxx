@@ -566,7 +566,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 multiLabelString = CFStringToOUString(localizedMultiLabel);
                 CFRelease(multiLabel);
                 CFRelease(localizedMultiLabel);
-                headerNameString = multiPropertyString + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + fixLabel(multiLabelString);
+                headerNameString = multiPropertyString + ::rtl::OUString(": ") + fixLabel(multiLabelString);
                 headerNames[i] = new macabfield;
                 headerNames[i]->value = OUStringToCFString(headerNameString);
                 headerNames[i]->type = multiType;
@@ -617,7 +617,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     if(multiValue && multiLabel)
                     {
                         localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
-                        multiLabelString = multiPropertyString + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + fixLabel(CFStringToOUString(localizedMultiLabel));
+                        multiLabelString = multiPropertyString + ::rtl::OUString(": ") + fixLabel(CFStringToOUString(localizedMultiLabel));
                         CFRelease(multiLabel);
                         CFRelease(localizedMultiLabel);
                         multiLabel = OUStringToCFString(multiLabelString);
@@ -705,7 +705,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 dictType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
                 localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                 dictKeyString = CFStringToOUString(localizedDictKey);
-                dictLabelString = propertyNameString + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + fixLabel(dictKeyString);
+                dictLabelString = propertyNameString + ::rtl::OUString(": ") + fixLabel(dictKeyString);
                 dictLabel = OUStringToCFString(dictLabelString);
                 dictHeaders[i] = createHeaderForProperty(dictType, dictValues[i], dictLabel);
                 if (!dictHeaders[i])
@@ -845,7 +845,7 @@ void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_I
             // There is probably a better way to do this...
             ::rtl::OUString newName = CFStringToOUString((CFStringRef) _headerNames[i]->value);
             CFRelease(_headerNames[i]->value);
-            newName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) + ::rtl::OUString::valueOf(count) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+            newName += ::rtl::OUString(" (") + ::rtl::OUString::valueOf(count) + ::rtl::OUString(")");
             _headerNames[i]->value = OUStringToCFString(newName);
         }
     }
@@ -966,7 +966,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     {
                         bPlaced = sal_False;
                         i++;
-                        columnName = ::rtl::OUString(_propertyName) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) + ::rtl::OUString::valueOf(i) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                        columnName = ::rtl::OUString(_propertyName) + ::rtl::OUString(" (") + ::rtl::OUString::valueOf(i) + ::rtl::OUString(")");
                     }
 
                     // success!
@@ -1038,7 +1038,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                     dictKeyString = CFStringToOUString(localizedDictKey);
                     CFRelease(localizedDictKey);
-                    newPropertyName = _propertyName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + fixLabel(dictKeyString);
+                    newPropertyName = _propertyName + ::rtl::OUString(": ") + fixLabel(dictKeyString);
                     insertPropertyIntoMacabRecord(_abrecord, _header, newPropertyName, dictValues[i]);
                 }
 
@@ -1081,7 +1081,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
 
                     localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
                     multiLabelString = CFStringToOUString(localizedMultiLabel);
-                    newPropertyName = _propertyName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + fixLabel(multiLabelString);
+                    newPropertyName = _propertyName + ::rtl::OUString(": ") + fixLabel(multiLabelString);
                     insertPropertyIntoMacabRecord(multiType, _abrecord, _header, newPropertyName, multiValue);
 
                     /* free our variables */

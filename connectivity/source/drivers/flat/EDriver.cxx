@@ -48,7 +48,7 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.flat.ODriver"));
+    return rtl::OUString("com.sun.star.comp.sdbc.flat.ODriver");
 }
 
 //------------------------------------------------------------------
@@ -83,7 +83,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
-    return url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:flat:")),10) == 0;
+    return url.compareTo(::rtl::OUString("sdbc:flat:"),10) == 0;
 }
 // -----------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
@@ -93,42 +93,42 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-        aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        aBoolean[0] = ::rtl::OUString("0");
+        aBoolean[1] = ::rtl::OUString("1");
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Field separator."))
+                ::rtl::OUString("FieldDelimiter")
+                ,::rtl::OUString("Field separator.")
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderLine"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text contains headers."))
+                ::rtl::OUString("HeaderLine")
+                ,::rtl::OUString("Text contains headers.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringDelimiter"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text separator."))
+                ::rtl::OUString("StringDelimiter")
+                ,::rtl::OUString("Text separator.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalDelimiter"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Decimal separator."))
+                ::rtl::OUString("DecimalDelimiter")
+                ,::rtl::OUString("Decimal separator.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ThousandDelimiter"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thousands separator."))
+                ::rtl::OUString("ThousandDelimiter")
+                ,::rtl::OUString("Thousands separator.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),

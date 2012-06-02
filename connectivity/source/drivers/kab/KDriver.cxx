@@ -130,7 +130,7 @@ bool KabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "kabdrv1" ) ));
+    const ::rtl::OUString sModuleName( SAL_MODULENAME( "kabdrv1"  ));
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -196,17 +196,17 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
                 comphelper::getComponentContext( m_xORB ) ) );
         Sequence< Any > aCreationArgs(1);
         aCreationArgs[0] <<= PropertyValue(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ),
+                                ::rtl::OUString(  "nodepath"  ),
                                 0,
                                 makeAny( KabDriver::impl_getConfigurationSettingsPath() ),
                                 PropertyState_DIRECT_VALUE );
         Reference< XPropertySet > xSettings( xConfigProvider->createInstanceWithArguments(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                ::rtl::OUString(  "com.sun.star.configuration.ConfigurationAccess"  ),
                 aCreationArgs ),
             UNO_QUERY_THROW );
 
         sal_Bool bDisableCheck = sal_False;
-        xSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableKDEMaximumVersionCheck" ) ) ) >>= bDisableCheck;
+        xSettings->getPropertyValue( ::rtl::OUString(  "DisableKDEMaximumVersionCheck"  ) ) >>= bDisableCheck;
 
         return bDisableCheck != sal_False;
     }
@@ -244,7 +244,7 @@ void KabImplModule::impl_throwGenericSQLException( const ::rtl::OUString& _rMess
 {
     SQLException aError;
     aError.Message = _rMessage;
-    aError.SQLState = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+    aError.SQLState = ::rtl::OUString(  "S1000"  );
     aError.ErrorCode = 0;
     throw aError;
 }
@@ -260,7 +260,7 @@ void KabImplModule::impl_throwKdeTooNewException()
             "$major$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
             "$minor$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
          );
-    aError.SQLState = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+    aError.SQLState = ::rtl::OUString(  "S1000"  );
     aError.ErrorCode = 0;
 
     SQLContext aDetails;
@@ -326,7 +326,7 @@ KabDriver::KabDriver(
     try
     {
         Reference< XDesktop > xDesktop(
-            m_xMSFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+            m_xMSFactory->createInstance( ::rtl::OUString(  "com.sun.star.frame.Desktop"  ) ),
             UNO_QUERY_THROW );
         xDesktop->addTerminateListener( this );
     }
@@ -364,7 +364,7 @@ Sequence< ::rtl::OUString > KabDriver::getSupportedServiceNames_Static(  ) throw
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
 
     return aSNS;
 }
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:kab:")), 16));
+    return (!url.compareTo(::rtl::OUString("sdbc:address:kab:"), 16));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)

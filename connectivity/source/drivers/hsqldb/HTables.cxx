@@ -60,9 +60,9 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-    static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-    static const ::rtl::OUString s_sAll(RTL_CONSTASCII_USTRINGPARAM("%"));
+    static const ::rtl::OUString s_sTableTypeView("VIEW");
+    static const ::rtl::OUString s_sTableTypeTable("TABLE");
+    static const ::rtl::OUString s_sAll("%");
 
     Sequence< ::rtl::OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
@@ -137,14 +137,14 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
+        ::rtl::OUString aSql(  "DROP " );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
-        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))) // here we have a view
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
+        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString("VIEW")))) // here we have a view
+            aSql += ::rtl::OUString("VIEW ");
         else
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
+            aSql += ::rtl::OUString("TABLE ");
 
         ::rtl::OUString sComposedName(
             ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );

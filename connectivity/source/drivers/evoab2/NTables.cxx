@@ -56,10 +56,10 @@ using namespace dbtools;
 
 ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
 {
-    ::rtl::OUString aSchema( RTL_CONSTASCII_USTRINGPARAM( "%" ));
+    ::rtl::OUString aSchema(  "%" );
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    aTypes[0] = ::rtl::OUString("TABLE");
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);

@@ -323,13 +323,13 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                 if(io_nPrecisions)
                 {
                     io_nType = DataType::DECIMAL;
-                    static const ::rtl::OUString s_sDECIMAL(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+                    static const ::rtl::OUString s_sDECIMAL("DECIMAL");
                     o_sTypeName = s_sDECIMAL;
                 }
                 else
                 {
                     io_nType = DataType::DOUBLE;
-                    static const ::rtl::OUString s_sDOUBLE(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
+                    static const ::rtl::OUString s_sDOUBLE("DOUBLE");
                     o_sTypeName = s_sDOUBLE;
                 }
             }
@@ -348,21 +348,21 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                 case NUMBERFORMAT_DATE:
                     io_nType = DataType::DATE;
                     {
-                        static const ::rtl::OUString s_sDATE(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+                        static const ::rtl::OUString s_sDATE("DATE");
                         o_sTypeName = s_sDATE;
                     }
                     break;
                 case NUMBERFORMAT_DATETIME:
                     io_nType = DataType::TIMESTAMP;
                     {
-                        static const ::rtl::OUString s_sTIMESTAMP(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+                        static const ::rtl::OUString s_sTIMESTAMP("TIMESTAMP");
                         o_sTypeName = s_sTIMESTAMP;
                     }
                     break;
                 case NUMBERFORMAT_TIME:
                     io_nType = DataType::TIME;
                     {
-                        static const ::rtl::OUString s_sTIME(RTL_CONSTASCII_USTRINGPARAM("TIME"));
+                        static const ::rtl::OUString s_sTIME("TIME");
                         o_sTypeName = s_sTIME;
                     }
                     break;
@@ -371,7 +371,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                     io_nPrecisions = 0; // nyi: Data can be longer!
                     io_nScales = 0;
                     {
-                        static const ::rtl::OUString s_sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+                        static const ::rtl::OUString s_sVARCHAR("VARCHAR");
                         o_sTypeName = s_sVARCHAR;
                     }
             };
@@ -429,11 +429,11 @@ void OFlatTable::construct()
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier")),aArg),UNO_QUERY);
-    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))),UNO_QUERY);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
+    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString("com.sun.star.util.NumberFormatter")),UNO_QUERY);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
     Reference<XPropertySet> xProp(xSupplier->getNumberFormatSettings(),UNO_QUERY);
-    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= m_aNullDate;
+    xProp->getPropertyValue(::rtl::OUString("NullDate")) >>= m_aNullDate;
 
     INetURLObject aURL;
     aURL.SetURL(getEntry());
@@ -478,7 +478,7 @@ String OFlatTable::getEntry()
 
         INetURLObject aURL;
         xDir->beforeFirst();
-        static const ::rtl::OUString s_sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        static const ::rtl::OUString s_sSeparator("/");
         while(xDir->next())
         {
             sName = xRow->getString(1);

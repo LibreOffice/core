@@ -77,18 +77,18 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "GRANT USAGE ON * TO " ));
+    ::rtl::OUString aSql(  "GRANT USAGE ON * TO " );
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" @\"%\" "));
+                + ::rtl::OUString(" @\"%\" ");
     ::rtl::OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( !sPassword.isEmpty() )
     {
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IDENTIFIED BY '"));
+        aSql += ::rtl::OUString(" IDENTIFIED BY '");
         aSql += sPassword;
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+        aSql += ::rtl::OUString("'");
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
@@ -102,7 +102,7 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
 // XDrop
 void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "REVOKE ALL ON * FROM " ));
+    ::rtl::OUString aSql(  "REVOKE ALL ON * FROM " );
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     aSql += ::dbtools::quoteName(aQuote,_sElementName);
 

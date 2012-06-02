@@ -176,7 +176,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         // set fields to fetch
         Sequence< OUString > aProps(1);
         OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[ 0 ] = OUString("Title");
 
         try
         {
@@ -403,7 +403,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
     Reference<XDynamicResultSet> xContent;
     Sequence< ::rtl::OUString > aProps(1);
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    pProps[ 0 ] = ::rtl::OUString("Title");
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
@@ -446,7 +446,7 @@ void OConnection::throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::O
                 "$URL$", _rsUrl
             );
 
-    aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
+    aError.SQLState = ::rtl::OUString("S1000");
     aError.ErrorCode = 0;
     aError.Context = static_cast< XConnection* >(this);
     if (!_rsMessage.isEmpty())

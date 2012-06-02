@@ -101,7 +101,7 @@ void OFileTable::refreshColumns()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshColumns" );
     TStringVector aVector;
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                    m_SchemaName,m_Name,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+                                                    m_SchemaName,m_Name,::rtl::OUString("%"));
 
     if(xResult.is())
     {

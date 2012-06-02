@@ -65,7 +65,7 @@ namespace
         aSecurity.getHomeDir( aConfigPath );
     #endif
 
-        return aConfigPath + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        return aConfigPath + ::rtl::OUString("/");
     }
 
     // -------------------------------------------------------------------

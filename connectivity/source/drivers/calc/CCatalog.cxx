@@ -56,7 +56,7 @@ void OCalcCatalog::refreshTables()
     Sequence< ::rtl::OUString > aTypes;
     OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),aTypes);
+        ::rtl::OUString("%"),::rtl::OUString("%"),aTypes);
 
     if(xResult.is())
     {

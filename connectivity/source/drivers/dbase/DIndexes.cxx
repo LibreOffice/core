@@ -51,7 +51,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
     sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;
-    sFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ndx"));
+    sFile += ::rtl::OUString(".ndx");
     if ( !UCBContentHelper::Exists(sFile) )
     {
         const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(

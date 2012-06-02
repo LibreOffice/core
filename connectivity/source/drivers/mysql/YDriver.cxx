@@ -111,7 +111,7 @@ namespace connectivity
         //--------------------------------------------------------------------
         sal_Bool isNativeUrl(const ::rtl::OUString& _sUrl)
         {
-            return (!_sUrl.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:")), sizeof("sdbc:mysql:mysqlc:")-1));
+            return (!_sUrl.compareTo(::rtl::OUString("sdbc:mysql:mysqlc:"), sizeof("sdbc:mysql:mysqlc:")-1));
         }
         //--------------------------------------------------------------------
         T_DRIVERTYPE lcl_getDriverType(const ::rtl::OUString& _sUrl)
@@ -128,14 +128,14 @@ namespace connectivity
         {
             ::rtl::OUString sNewUrl = _sUrl.copy(11);
             if ( isOdbcUrl( _sUrl ) )
-                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sNewUrl;
+                sNewUrl = ::rtl::OUString("sdbc:") + sNewUrl;
             else if ( isNativeUrl( _sUrl ) )
-                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sNewUrl;
+                sNewUrl = ::rtl::OUString("sdbc:") + sNewUrl;
             else
             {
                 sNewUrl = sNewUrl.copy(5);
 
-                ::rtl::OUString sTempUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:mysql://"));
+                ::rtl::OUString sTempUrl = ::rtl::OUString("jdbc:mysql://");
 
                 sTempUrl += sNewUrl;
                 sNewUrl = sTempUrl;
@@ -145,7 +145,7 @@ namespace connectivity
         //--------------------------------------------------------------------
         Reference< XDriver > lcl_loadDriver(const Reference< XMultiServiceFactory >& _rxFactory,const ::rtl::OUString& _sUrl)
         {
-            Reference<XDriverAccess> xDriverAccess(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ),UNO_QUERY);
+            Reference<XDriverAccess> xDriverAccess(_rxFactory->createInstance(::rtl::OUString("com.sun.star.sdbc.DriverManager") ),UNO_QUERY);
             OSL_ENSURE(xDriverAccess.is(),"Could not load driver manager!");
             Reference< XDriver > xDriver;
             if ( xDriverAccess.is() )
@@ -168,12 +168,12 @@ namespace connectivity
             if ( _eType == D_ODBC )
             {
                 aProps.push_back( PropertyValue(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"))
+                                    ::rtl::OUString("Silent")
                                     ,0
                                     ,makeAny(sal_True)
                                     ,PropertyState_DIRECT_VALUE) );
                 aProps.push_back( PropertyValue(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreventGetVersionColumns"))
+                                    ::rtl::OUString("PreventGetVersionColumns")
                                     ,0
                                     ,makeAny(sal_True)
                                     ,PropertyState_DIRECT_VALUE) );
@@ -181,31 +181,31 @@ namespace connectivity
             else if ( _eType == D_JDBC )
             {
                 aProps.push_back( PropertyValue(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
+                                    ::rtl::OUString("JavaDriverClass")
                                     ,0
-                                    ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver")))
+                                    ,makeAny(::rtl::OUString("com.mysql.jdbc.Driver"))
                                     ,PropertyState_DIRECT_VALUE) );
             }
             else
             {
                 aProps.push_back( PropertyValue(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PublicConnectionURL"))
+                                    ::rtl::OUString("PublicConnectionURL")
                                     ,0
                                     ,makeAny(_sUrl)
                                     ,PropertyState_DIRECT_VALUE) );
             }
             aProps.push_back( PropertyValue(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
+                                ::rtl::OUString("IsAutoRetrievingEnabled")
                                 ,0
                                 ,makeAny(sal_True)
                                 ,PropertyState_DIRECT_VALUE) );
             aProps.push_back( PropertyValue(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
+                                ::rtl::OUString("AutoRetrievingStatement")
                                 ,0
-                                ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT LAST_INSERT_ID()")))
+                                ,makeAny(::rtl::OUString("SELECT LAST_INSERT_ID()"))
                                 ,PropertyState_DIRECT_VALUE) );
             aProps.push_back( PropertyValue(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
+                                ::rtl::OUString("ParameterNameSubstitution")
                                 ,0
                                 ,makeAny(sal_True)
                                 ,PropertyState_DIRECT_VALUE) );
@@ -234,7 +234,7 @@ namespace connectivity
         else
         {
             ::comphelper::NamedValueCollection aSettings( info );
-            ::rtl::OUString sDriverClass(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"));
+            ::rtl::OUString sDriverClass("com.mysql.jdbc.Driver");
             sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
 
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
@@ -272,18 +272,18 @@ namespace connectivity
                             ::rtl::OUString sAdd;
                             if ( RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding() )
                             {
-                                static const ::rtl::OUString s_sCharSetOp(RTL_CONSTASCII_USTRINGPARAM("useUnicode=true&"));
+                                static const ::rtl::OUString s_sCharSetOp("useUnicode=true&");
                                 if ( !sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp) )
                                 {
                                     sAdd = s_sCharSetOp;
                                 } // if ( !sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp) )
                             } // if ( RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding() )
                             if ( sCuttedUrl.indexOf('?') == -1 )
-                                sCuttedUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+                                sCuttedUrl += ::rtl::OUString("?");
                             else
-                                sCuttedUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+                                sCuttedUrl += ::rtl::OUString("&");
                             sCuttedUrl += sAdd;
-                            sCuttedUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("characterEncoding="));
+                            sCuttedUrl += ::rtl::OUString("characterEncoding=");
                             sCuttedUrl += sIanaName;
                         }
                     }
@@ -329,32 +329,32 @@ namespace connectivity
             return Sequence< DriverPropertyInfo >();
 
         Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-        aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        aBoolean[0] = ::rtl::OUString("0");
+        aBoolean[1] = ::rtl::OUString("1");
 
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
+                ::rtl::OUString("CharSet")
+                ,::rtl::OUString("CharSet of the database.")
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SuppressVersionColumns"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Display version columns (when available)."))
+                ::rtl::OUString("SuppressVersionColumns")
+                ,::rtl::OUString("Display version columns (when available).")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         const T_DRIVERTYPE eType = lcl_getDriverType( url );
         if ( eType == D_JDBC )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The JDBC driver class name."))
+                    ::rtl::OUString("JavaDriverClass")
+                    ,::rtl::OUString("The JDBC driver class name.")
                     ,sal_True
-                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"))
+                    ,::rtl::OUString("com.mysql.jdbc.Driver")
                     ,Sequence< ::rtl::OUString >())
                     );
         }
@@ -442,14 +442,14 @@ namespace connectivity
     //------------------------------------------------------------------------------
     rtl::OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.drivers.MySQL.Driver"));
+        return rtl::OUString("org.openoffice.comp.drivers.MySQL.Driver");
     }
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 2 );
-        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
-        aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
+        aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
+        aSNS[1] = ::rtl::OUString("com.sun.star.sdbcx.Driver");
         return aSNS;
     }
     //------------------------------------------------------------------

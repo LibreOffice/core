@@ -69,7 +69,7 @@ namespace connectivity
             // -----------------------------------------------------------------------------
             virtual ::rtl::OUString getDropForeignKey() const
             {
-                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP FOREIGN KEY "));
+                return ::rtl::OUString(" DROP FOREIGN KEY ");
             }
         public:
             OMySQLKeysHelper(   OTableHelper* _pTable,
@@ -237,12 +237,12 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
                 ::rtl::OUString sTypeName;
                 descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
-                static ::rtl::OUString s_sAutoIncrement(RTL_CONSTASCII_USTRINGPARAM("auto_increment"));
+                static ::rtl::OUString s_sAutoIncrement("auto_increment");
                 if ( bAutoIncrement )
                 {
                     if ( sTypeName.indexOf(s_sAutoIncrement) == -1 )
                     {
-                        sTypeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                        sTypeName += ::rtl::OUString(" ");
                         sTypeName += s_sAutoIncrement;
                     }
                 }
@@ -280,10 +280,10 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) && !bColumnNameChanged )
         {
             ::rtl::OUString sSql = getAlterTableColumnPart();
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
+            sSql += ::rtl::OUString(" CHANGE ");
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+            sSql += ::rtl::OUString(" ");
             sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(descriptor,getConnection(),static_cast<OTables*>(m_pTables),getTypeCreatePattern()));
             executeStatement(sSql);
         }
@@ -303,10 +303,10 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
 void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
+    sSql += ::rtl::OUString(" CHANGE ");
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+    sSql += ::rtl::OUString(" ");
 
     OColumn* pColumn = new OColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
@@ -319,19 +319,19 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
 // -----------------------------------------------------------------------------
 ::rtl::OUString OMySQLTable::getTypeCreatePattern() const
 {
-    static const ::rtl::OUString s_sCreatePattern(RTL_CONSTASCII_USTRINGPARAM("(M,D)"));
+    static const ::rtl::OUString s_sCreatePattern("(M,D)");
     return s_sCreatePattern;
 }
 // -----------------------------------------------------------------------------
 void OMySQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER "));
+    sSql += ::rtl::OUString(" ALTER ");
 
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SET DEFAULT '")) + _sNewDefault;
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+    sSql += ::rtl::OUString(" SET DEFAULT '") + _sNewDefault;
+    sSql += ::rtl::OUString("'");
 
     executeStatement(sSql);
 }
@@ -339,18 +339,18 @@ void OMySQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::
 void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER "));
+    sSql += ::rtl::OUString(" ALTER ");
 
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP DEFAULT"));
+    sSql += ::rtl::OUString(" DROP DEFAULT");
 
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OMySQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
+    ::rtl::OUString sSql(  "ALTER TABLE " );
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName(
@@ -364,7 +364,7 @@ void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 {
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(")"));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )
@@ -376,7 +376,7 @@ void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 // -----------------------------------------------------------------------------
 ::rtl::OUString OMySQLTable::getRenameStart() const
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RENAME TABLE "));
+    return ::rtl::OUString("RENAME TABLE ");
 }
 
 

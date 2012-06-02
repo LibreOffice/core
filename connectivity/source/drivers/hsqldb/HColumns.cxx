@@ -64,7 +64,7 @@ OHSQLColumn::OHSQLColumn(   sal_Bool    _bCase)
 // -------------------------------------------------------------------------
 void OHSQLColumn::construct()
 {
-    m_sAutoIncrement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IDENTITY"));
+    m_sAutoIncrement = ::rtl::OUString("IDENTITY");
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
@@ -81,7 +81,7 @@ void OHSQLColumn::construct()
 Sequence< ::rtl::OUString > SAL_CALL OHSQLColumn::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Column"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.Column");
 
     return aSupported;
 }

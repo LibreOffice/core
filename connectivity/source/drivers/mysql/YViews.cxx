@@ -111,7 +111,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP VIEW" ));
+        ::rtl::OUString aSql(  "DROP VIEW" );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
@@ -134,13 +134,13 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
 
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE VIEW " ));
+    ::rtl::OUString aSql(  "CREATE VIEW " );
     ::rtl::OUString aQuote  = xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sSchema,sCommand;
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
 
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AS "));
+    aSql += ::rtl::OUString(" AS ");
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 

@@ -45,7 +45,7 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.dbase.ODriver"));
+    return rtl::OUString("com.sun.star.comp.sdbc.dbase.ODriver");
 }
 
 //------------------------------------------------------------------
@@ -79,7 +79,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
 {
-    return !url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")),11);
+    return !url.compareTo(::rtl::OUString("sdbc:dbase:"),11);
 }
 // -----------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
@@ -89,28 +89,28 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-        aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        aBoolean[0] = ::rtl::OUString("0");
+        aBoolean[1] = ::rtl::OUString("1");
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
+                ::rtl::OUString("CharSet")
+                ,::rtl::OUString("CharSet of the database.")
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowDeleted"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Display inactive records."))
+                ::rtl::OUString("ShowDeleted")
+                ,::rtl::OUString("Display inactive records.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EnableSQL92Check"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Use SQL92 naming constraints."))
+                ::rtl::OUString("EnableSQL92Check")
+                ,::rtl::OUString("Use SQL92 naming constraints.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,::rtl::OUString("0")
                 ,aBoolean)
                 );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());

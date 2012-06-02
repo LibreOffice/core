@@ -138,8 +138,8 @@ namespace connectivity
     {
         if ( !m_xDriver.is() )
         {
-            ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:db"));
-            Reference<XDriverAccess> xDriverAccess(m_xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ),UNO_QUERY);
+            ::rtl::OUString sURL("jdbc:hsqldb:db");
+            Reference<XDriverAccess> xDriverAccess(m_xFactory->createInstance(::rtl::OUString("com.sun.star.sdbc.DriverManager") ),UNO_QUERY);
             OSL_ENSURE(xDriverAccess.is(),"Could not load driver manager!");
             if ( xDriverAccess.is() )
                 m_xDriver = xDriverAccess->getDriverByURL(sURL);
@@ -231,42 +231,42 @@ namespace connectivity
                 ::rtl::OUString sKey = StorageContainer::registerStorage( xStorage, sConnPartURL );
                 aProperties.put( "storage_key", sKey );
                 aProperties.put( "storage_class_name",
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.comp.hsqldb.StorageAccess" ) ) );
+                    ::rtl::OUString(  "com.sun.star.sdbcx.comp.hsqldb.StorageAccess"  ) );
                 aProperties.put( "fileaccess_class_name",
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess" ) ) );
+                    ::rtl::OUString(  "com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess"  ) );
 
                 // JDBC driver and driver's classpath
                 aProperties.put( "JavaDriverClass",
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.hsqldb.jdbcDriver" ) ) );
+                    ::rtl::OUString(  "org.hsqldb.jdbcDriver"  ) );
                 aProperties.put( "JavaDriverClassPath",
                     ::rtl::OUString(
 #ifdef SYSTEM_HSQLDB
-                        RTL_CONSTASCII_USTRINGPARAM(HSQLDB_JAR
-                        " vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/sdbc_hsqldb.jar" )
+                        HSQLDB_JAR
+                        " vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/sdbc_hsqldb.jar"
 #else
-                        RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/hsqldb.jar"
-                        " vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/sdbc_hsqldb.jar" )
+                        "vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/hsqldb.jar"
+                        " vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/sdbc_hsqldb.jar"
 #endif
                         ) );
 
                 // auto increment handling
                 aProperties.put( "IsAutoRetrievingEnabled", true );
                 aProperties.put( "AutoRetrievingStatement",
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CALL IDENTITY()" ) ) );
+                    ::rtl::OUString(  "CALL IDENTITY()" ) );
                 aProperties.put( "IgnoreDriverPrivileges", true );
 
                 // don't want to expose HSQLDB's schema capabilities which exist since 1.8.0RC10
                 aProperties.put( "default_schema",
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+                    ::rtl::OUString(  "true"  ) );
 
                 // security: permitted Java classes
                 NamedValue aPermittedClasses(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hsqldb.method_class_names" ) ),
+                    ::rtl::OUString(  "hsqldb.method_class_names"  ),
                     makeAny( lcl_getPermittedJavaMethods_nothrow( m_xFactory ) )
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
 
-                const ::rtl::OUString sProperties( RTL_CONSTASCII_USTRINGPARAM( "properties" ) );
+                const ::rtl::OUString sProperties(  "properties"  );
                 ::rtl::OUString sMessage;
                 try
                 {
@@ -332,17 +332,17 @@ namespace connectivity
                 if ( xProp.is() )
                 {
                     sal_Int32 nMode = 0;
-                    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"))) >>= nMode;
+                    xProp->getPropertyValue(::rtl::OUString("OpenMode")) >>= nMode;
                     if ( (nMode & ElementModes::WRITE) != ElementModes::WRITE )
                     {
-                        aProperties.put( "readonly", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+                        aProperties.put( "readonly", ::rtl::OUString(  "true"  ) );
                     }
                 }
 
                 Sequence< PropertyValue > aConnectionArgs;
                 aProperties >>= aConnectionArgs;
 
-                ::rtl::OUString sConnectURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:"));
+                ::rtl::OUString sConnectURL("jdbc:hsqldb:");
 
                 sConnectURL += sConnPartURL;
                 Reference<XConnection> xOrig;
@@ -382,7 +382,7 @@ namespace connectivity
                     static Reference< XTerminateListener> s_xTerminateListener;
                     if( !s_xTerminateListener.is() )
                     {
-                        Reference< XDesktop > xDesktop( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+                        Reference< XDesktop > xDesktop( m_xFactory->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
                         if( xDesktop.is() )
                         {
@@ -421,24 +421,24 @@ namespace connectivity
             return Sequence< DriverPropertyInfo >();
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the storage where the database will be stored."))
+                ::rtl::OUString("Storage")
+                ,::rtl::OUString("Defines the storage where the database will be stored.")
                 ,sal_True
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the url of the data source."))
+                ::rtl::OUString("URL")
+                ,::rtl::OUString("Defines the url of the data source.")
                 ,sal_True
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the statement which will be executed to retrieve auto increment values."))
+                ::rtl::OUString("AutoRetrievingStatement")
+                ,::rtl::OUString("Defines the statement which will be executed to retrieve auto increment values.")
                 ,sal_False
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CALL IDENTITY()"))
+                ,::rtl::OUString("CALL IDENTITY()")
                 ,Sequence< ::rtl::OUString >())
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
@@ -500,14 +500,14 @@ namespace connectivity
     //------------------------------------------------------------------------------
     rtl::OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.Driver"));
+        return rtl::OUString("com.sun.star.sdbcx.comp.hsqldb.Driver");
     }
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 2 );
-        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
-        aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
+        aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
+        aSNS[1] = ::rtl::OUString("com.sun.star.sdbcx.Driver");
         return aSNS;
     }
     //------------------------------------------------------------------
@@ -551,12 +551,12 @@ namespace connectivity
                 Reference<XStatement> xStmt = _xConnection->createStatement();
                 if ( xStmt.is() )
                 {
-                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
+                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'")),UNO_QUERY);
                     Reference<XRow> xRow(xRes,UNO_QUERY);
                     if ( xRow.is() && xRes->next() )
                         bLastOne = xRow->getInt(1) == 1;
                     if ( bLastOne )
-                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHUTDOWN")));
+                        xStmt->execute(::rtl::OUString("SHUTDOWN"));
                 }
             }
         }
@@ -661,7 +661,7 @@ namespace connectivity
                         Reference< XStatement> xStmt = xConnection->createStatement();
                         OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
                         if ( xStmt.is() )
-                            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
+                            xStmt->execute( ::rtl::OUString(  "SET WRITE_DELAY 0"  ) );
 
                         sal_Bool bPreviousAutoCommit = xConnection->getAutoCommit();
                         xConnection->setAutoCommit( sal_False );
@@ -669,7 +669,7 @@ namespace connectivity
                         xConnection->setAutoCommit( bPreviousAutoCommit );
 
                         if ( xStmt.is() )
-                            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
+                            xStmt->execute( ::rtl::OUString(  "SET WRITE_DELAY 60"  ) );
                     }
                 }
                 catch(Exception&)
@@ -832,7 +832,7 @@ namespace connectivity
         //..............................................................
         ::rtl::OUString lcl_getSystemLocale( const Reference< XMultiServiceFactory >& _rxORB )
         {
-            ::rtl::OUString sLocaleString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
+            ::rtl::OUString sLocaleString = ::rtl::OUString(  "en-US"  );
             try
             {
                 //.........................................................
@@ -844,13 +844,13 @@ namespace connectivity
                 // arguments for creating the config access
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
-                ::rtl::OUString sNodePath(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/L10N" ));
-                aArguments[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0,
+                ::rtl::OUString sNodePath("/org.openoffice.Setup/L10N" );
+                aArguments[0] <<= PropertyValue( ::rtl::OUString("nodepath"), 0,
                     makeAny( sNodePath ), PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0,
+                    ::rtl::OUString("depth"), 0,
                     makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
                 );
 
@@ -858,7 +858,7 @@ namespace connectivity
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                        ::rtl::OUString("com.sun.star.configuration.ConfigurationAccess"),
                         aArguments ),
                     UNO_QUERY );
                 OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );
@@ -866,7 +866,7 @@ namespace connectivity
                 //.........................................................
                 // ask for the system locale setting
                 if ( xNode.is() )
-                    xNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupSystemLocale" ) ) ) >>= sLocaleString;
+                    xNode->getPropertyValue( ::rtl::OUString(  "ooSetupSystemLocale"  ) ) >>= sLocaleString;
             }
             catch( const Exception& )
             {

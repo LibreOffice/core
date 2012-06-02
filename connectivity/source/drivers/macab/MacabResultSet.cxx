@@ -888,7 +888,7 @@ Any SAL_CALL MacabResultSet::getBookmark() throw( SQLException,  RuntimeExceptio
 
     if (m_nRowPos != -1 && m_nRowPos != nRecords)
     {
-        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UID")));
+        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,::rtl::OUString("UID"));
         if(uidField != NULL)
         {
             if(uidField->type == kABStringProperty)
@@ -910,7 +910,7 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQ
 
     for (sal_Int32 nRow = 0; nRow < nRecords; nRow++)
     {
-        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UID")));
+        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,::rtl::OUString("UID"));
         if(uidField != NULL)
         {
             if(uidField->type == kABStringProperty)

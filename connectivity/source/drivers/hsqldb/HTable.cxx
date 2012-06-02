@@ -215,10 +215,10 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
             ::rtl::OUString sSql = getAlterTableColumnPart();
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
+            sSql += ::rtl::OUString(" ALTER COLUMN ");
             sSql += ::dbtools::quoteName(sQuote,colName);
 
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" RENAME TO "));
+            sSql += ::rtl::OUString(" RENAME TO ");
             sSql += ::dbtools::quoteName(sQuote,sNewColumnName);
 
             executeStatement(sSql);
@@ -271,7 +271,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCol
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
 
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
+    sSql += ::rtl::OUString(" ALTER COLUMN ");
 #if OSL_DEBUG_LEVEL > 0
     try
     {
@@ -301,12 +301,12 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCol
 void OHSQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
+    sSql += ::rtl::OUString(" ALTER COLUMN ");
 
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SET DEFAULT '")) + _sNewDefault;
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+    sSql += ::rtl::OUString(" SET DEFAULT '") + _sNewDefault;
+    sSql += ::rtl::OUString("'");
 
     executeStatement(sSql);
 }
@@ -314,18 +314,18 @@ void OHSQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::r
 void OHSQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER COLUMN "));
+    sSql += ::rtl::OUString(" ALTER COLUMN ");
 
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP DEFAULT"));
+    sSql += ::rtl::OUString(" DROP DEFAULT");
 
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OHSQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
+    ::rtl::OUString sSql(  "ALTER TABLE " );
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
@@ -338,7 +338,7 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 {
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(")"));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )
@@ -389,11 +389,11 @@ void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLExce
 
     if(!isNew())
     {
-        ::rtl::OUString sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER "));
-        if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
+        ::rtl::OUString sSql = ::rtl::OUString("ALTER ");
+        if ( m_Type == ::rtl::OUString("VIEW") )
+            sSql += ::rtl::OUString(" VIEW ");
         else
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
+            sSql += ::rtl::OUString(" TABLE ");
 
         ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
@@ -403,7 +403,7 @@ void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLExce
         ::rtl::OUString sComposedName(
             ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInDataManipulation ) );
         sSql += sComposedName
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" RENAME TO "));
+            + ::rtl::OUString(" RENAME TO ");
         sSql += ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
 
         executeStatement(sSql);

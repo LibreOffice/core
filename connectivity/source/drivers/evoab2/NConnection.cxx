@@ -53,12 +53,12 @@ using namespace ::com::sun::star::lang;
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
      if( aExceptionType.getLength() == 0 )
-         aExceptionType =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown")) ;
+         aExceptionType =  ::rtl::OUString("Unknown") ;
 
-     ::rtl::OUString aTypeLine( RTL_CONSTASCII_USTRINGPARAM("\nType: " ) );
+     ::rtl::OUString aTypeLine( "\nType: "  );
      aTypeLine += aExceptionType;
 
-     ::rtl::OUString aMessageLine( RTL_CONSTASCII_USTRINGPARAM("\nMessage: " ) );
+     ::rtl::OUString aMessageLine( "\nMessage: "  );
          aMessageLine += ::rtl::OUString( e.Message );
 
      ::rtl::OUString aMsg(aTypeLine);

@@ -155,7 +155,7 @@ CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
     CellContentType eCellType = xCell->getType();
     if ( eCellType == CellContentType_FORMULA )
     {
-        static const ::rtl::OUString s_sFormulaResultType(RTL_CONSTASCII_USTRINGPARAM("FormulaResultType"));
+        static const ::rtl::OUString s_sFormulaResultType("FormulaResultType");
         Reference<XPropertySet> xProp( xCell, UNO_QUERY );
         try
         {
@@ -274,7 +274,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
             sal_Int16 nNumType = NumberFormat::NUMBER;
             try
             {
-                static ::rtl::OUString s_NumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"));
+                static ::rtl::OUString s_NumberFormat("NumberFormat");
                 sal_Int32 nKey = 0;
 
                 if ( xProp->getPropertyValue( s_NumberFormat ) >>= nKey )
@@ -486,24 +486,24 @@ void OCalcTable::fillColumns()
         {
             case DataType::VARCHAR:
                 {
-                    static const ::rtl::OUString s_sType(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+                    static const ::rtl::OUString s_sType("VARCHAR");
                     aTypeName = s_sType;
                 }
                 break;
             case DataType::DECIMAL:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+                aTypeName = ::rtl::OUString("DECIMAL");
                 break;
             case DataType::BIT:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOL"));
+                aTypeName = ::rtl::OUString("BOOL");
                 break;
             case DataType::DATE:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+                aTypeName = ::rtl::OUString("DATE");
                 break;
             case DataType::TIME:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME"));
+                aTypeName = ::rtl::OUString("TIME");
                 break;
             case DataType::TIMESTAMP:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+                aTypeName = ::rtl::OUString("TIMESTAMP");
                 break;
             default:
                 OSL_FAIL("missing type name");
@@ -578,7 +578,7 @@ void OCalcTable::construct()
             Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
             if ( xDocProp.is() )
             {
-                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges")) ),UNO_QUERY);
+                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( ::rtl::OUString("DatabaseRanges") ),UNO_QUERY);
 
                 if ( xRanges.is() && xRanges->hasByName( m_Name ) )
                 {
@@ -592,7 +592,7 @@ void OCalcTable::construct()
                         sal_Bool bRangeHeader = sal_True;
                         Reference<XPropertySet> xFiltProp( xDBRange->getFilterDescriptor(), UNO_QUERY );
                         if ( xFiltProp.is() )
-                            xFiltProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainsHeader"))) >>= bRangeHeader;
+                            xFiltProp->getPropertyValue(::rtl::OUString("ContainsHeader")) >>= bRangeHeader;
 
                         Reference<XSheetCellRange> xSheetRange( xRefer->getReferredCells(), UNO_QUERY );
                         Reference<XCellRangeAddressable> xAddr( xSheetRange, UNO_QUERY );
@@ -626,7 +626,7 @@ void OCalcTable::construct()
         if (xProp.is())
         {
             ::com::sun::star::util::Date aDateStruct;
-            if ( xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate")) ) >>= aDateStruct )
+            if ( xProp->getPropertyValue( ::rtl::OUString("NullDate") ) >>= aDateStruct )
                 m_aNullDate = ::Date( aDateStruct.Day, aDateStruct.Month, aDateStruct.Year );
         }
     }

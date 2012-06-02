@@ -60,7 +60,7 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         {
             m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
             ::rtl::OUString sVersion = getDriverVersion();
-            m_bOdbc3        =  sVersion != ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.50")) && sVersion != ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.00"));
+            m_bOdbc3        =  sVersion != ::rtl::OUString("02.50") && sVersion != ::rtl::OUString("02.00");
         }
         catch(SQLException& )
         { // doesn't matter here
@@ -1197,7 +1197,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
     ::rtl::OUString aValue = m_pConnection->getURL();
     if ( aValue.isEmpty() )
     {
-        aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:"));
+        aValue = ::rtl::OUString("sdbc:odbc:");
         aValue += getURLImpl();
     }
     return aValue;

@@ -121,23 +121,23 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName,
                 Any aCatalog;
                 if ( !sCatalog.isEmpty() )
                     aCatalog <<= sCatalog;
-                xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+                xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,::rtl::OUString("%"));
             }
             break;
     }
 
     if ( xRes.is() )
     {
-        static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
-        static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
-        static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
-        static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
-        static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
-        static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
-        static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
-        static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
-        static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
-        static const ::rtl::OUString sYes( RTL_CONSTASCII_USTRINGPARAM( "YES" ));
+        static const ::rtl::OUString sSELECT(  "SELECT" );
+        static const ::rtl::OUString sINSERT(  "INSERT" );
+        static const ::rtl::OUString sUPDATE(  "UPDATE" );
+        static const ::rtl::OUString sDELETE(  "DELETE" );
+        static const ::rtl::OUString sREAD(  "READ" );
+        static const ::rtl::OUString sCREATE(  "CREATE" );
+        static const ::rtl::OUString sALTER(  "ALTER" );
+        static const ::rtl::OUString sREFERENCE(  "REFERENCE" );
+        static const ::rtl::OUString sDROP(  "DROP" );
+        static const ::rtl::OUString sYes(  "YES" );
 
         nRightsWithGrant = nRights = 0;
 
@@ -236,12 +236,12 @@ void SAL_CALL OHSQLUser::grantPrivileges( const ::rtl::OUString& objName, sal_In
     if(!sPrivs.isEmpty())
     {
         ::rtl::OUString sGrant;
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANT "));
+        sGrant += ::rtl::OUString("GRANT ");
         sGrant += sPrivs;
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "));
+        sGrant += ::rtl::OUString(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
+        sGrant += ::rtl::OUString(" TO ");
         sGrant += m_Name;
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
@@ -266,12 +266,12 @@ void SAL_CALL OHSQLUser::revokePrivileges( const ::rtl::OUString& objName, sal_I
     if(!sPrivs.isEmpty())
     {
         ::rtl::OUString sGrant;
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVOKE "));
+        sGrant += ::rtl::OUString("REVOKE ");
         sGrant += sPrivs;
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "));
+        sGrant += ::rtl::OUString(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "));
+        sGrant += ::rtl::OUString(" FROM ");
         sGrant += m_Name;
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
@@ -287,11 +287,11 @@ void SAL_CALL OHSQLUser::changePassword( const ::rtl::OUString& /*oldPassword*/,
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
     ::rtl::OUString sAlterPwd;
-    sAlterPwd = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET PASSWORD FOR "));
+    sAlterPwd = ::rtl::OUString("SET PASSWORD FOR ");
     sAlterPwd += m_Name;
-    sAlterPwd += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("@\"%\" = PASSWORD('")) ;
+    sAlterPwd += ::rtl::OUString("@\"%\" = PASSWORD('") ;
     sAlterPwd += newPassword;
-    sAlterPwd += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("')")) ;
+    sAlterPwd += ::rtl::OUString("')") ;
 
 
     Reference<XStatement> xStmt = m_xConnection->createStatement();
@@ -306,41 +306,41 @@ void SAL_CALL OHSQLUser::changePassword( const ::rtl::OUString& /*oldPassword*/,
 {
     ::rtl::OUString sPrivs;
     if((nRights & Privilege::INSERT) == Privilege::INSERT)
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT"));
+        sPrivs += ::rtl::OUString("INSERT");
 
     if((nRights & Privilege::DELETE) == Privilege::DELETE)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE"));
+            sPrivs += ::rtl::OUString(",");
+        sPrivs += ::rtl::OUString("DELETE");
     }
 
     if((nRights & Privilege::UPDATE) == Privilege::UPDATE)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE"));
+            sPrivs += ::rtl::OUString(",");
+        sPrivs += ::rtl::OUString("UPDATE");
     }
 
     if((nRights & Privilege::ALTER) == Privilege::ALTER)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER"));
+            sPrivs += ::rtl::OUString(",");
+        sPrivs += ::rtl::OUString("ALTER");
     }
 
     if((nRights & Privilege::SELECT) == Privilege::SELECT)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT"));
+            sPrivs += ::rtl::OUString(",");
+        sPrivs += ::rtl::OUString("SELECT");
     }
 
     if((nRights & Privilege::REFERENCE) == Privilege::REFERENCE)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REFERENCES"));
+            sPrivs += ::rtl::OUString(",");
+        sPrivs += ::rtl::OUString("REFERENCES");
     }
 
     return sPrivs;

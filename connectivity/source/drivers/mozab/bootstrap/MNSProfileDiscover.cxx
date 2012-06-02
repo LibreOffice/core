@@ -159,7 +159,7 @@ namespace connectivity
 #endif
             ::rtl::OUString regDir = getRegistryDir(product);
             ::rtl::OUString profilesIni( regDir );
-            profilesIni += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("profiles.ini"));
+            profilesIni += ::rtl::OUString("profiles.ini");
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 

@@ -358,13 +358,13 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
         {
             case 'C':
                 eType = DataType::VARCHAR;
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+                aTypeName = ::rtl::OUString("VARCHAR");
                 break;
             case 'F':
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+                aTypeName = ::rtl::OUString("DECIMAL");
             case 'N':
                 if ( aDBFColumn.db_typ == 'N' )
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMERIC"));
+                    aTypeName = ::rtl::OUString("NUMERIC");
                 eType = DataType::DECIMAL;
 
                 // for numeric fields two characters more are written, than the precision of the column description predescribes,
@@ -374,40 +374,40 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
                 break;
             case 'L':
                 eType = DataType::BIT;
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOLEAN"));
+                aTypeName = ::rtl::OUString("BOOLEAN");
                 break;
             case 'Y':
                 bIsCurrency = sal_True;
                 eType = DataType::DOUBLE;
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
+                aTypeName = ::rtl::OUString("DOUBLE");
                 break;
             case 'D':
                 eType = DataType::DATE;
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+                aTypeName = ::rtl::OUString("DATE");
                 break;
             case 'T':
                 eType = DataType::TIMESTAMP;
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+                aTypeName = ::rtl::OUString("TIMESTAMP");
                 break;
             case 'I':
                 eType = DataType::INTEGER;
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INTEGER"));
+                aTypeName = ::rtl::OUString("INTEGER");
                 break;
             case 'M':
                 if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x04 ) == 0x04 )
                 {
                     eType = DataType::LONGVARBINARY;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARBINARY"));
+                    aTypeName = ::rtl::OUString("LONGVARBINARY");
                 }
                 else
                 {
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARCHAR"));
+                    aTypeName = ::rtl::OUString("LONGVARCHAR");
                     eType = DataType::LONGVARCHAR;
                 }
                 nPrecision = 2147483647;
                 break;
             case 'P':
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARBINARY"));
+                aTypeName = ::rtl::OUString("LONGVARBINARY");
                 eType = DataType::LONGVARBINARY;
                 nPrecision = 2147483647;
                 break;
@@ -415,12 +415,12 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
             case 'B':
                 if ( m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto )
                 {
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
+                    aTypeName = ::rtl::OUString("DOUBLE");
                     eType = DataType::DOUBLE;
                 }
                 else
                 {
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARBINARY"));
+                    aTypeName = ::rtl::OUString("LONGVARBINARY");
                     eType = DataType::LONGVARBINARY;
                     nPrecision = 2147483647;
                 }
@@ -627,7 +627,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _s
         ::rtl::OUString sName;
         ::rtl::OUString sExt;
         INetURLObject aURL;
-        static const ::rtl::OUString s_sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        static const ::rtl::OUString s_sSeparator("/");
         xDir->beforeFirst();
         while(xDir->next())
         {
@@ -1049,7 +1049,7 @@ sal_Bool ODbaseTable::CreateImpl()
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
         if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-            aIdent += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aIdent += ::rtl::OUString("/");
         aIdent += m_Name;
         aName = aIdent.getStr();
     }
@@ -1088,7 +1088,7 @@ sal_Bool ODbaseTable::CreateImpl()
         try
         {
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
+            aContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
         {
@@ -1116,7 +1116,7 @@ sal_Bool ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-                aMemoContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
+                aMemoContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
             }
             catch(const Exception&)
             {
@@ -1132,7 +1132,7 @@ sal_Bool ODbaseTable::CreateImpl()
         {
             aURL.setExtension(aExt);      // kill dbf file
             Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-            aMemoContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
+            aMemoContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
             return sal_False;
         }
         m_aHeader.db_typ = dBaseIIIMemo;
@@ -1470,7 +1470,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
             try
             {
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
-                aDeleteContent.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
+                aDeleteContent.executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
             }
             catch(const Exception&)
             {
@@ -2314,7 +2314,7 @@ namespace
         {
             ::rtl::OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
             if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-                aIdent += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                aIdent += ::rtl::OUString("/");
             aIdent += oldName;
             aName = aIdent;
         }
@@ -2331,11 +2331,11 @@ namespace
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
 
             Sequence< PropertyValue > aProps( 1 );
-            aProps[0].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            aProps[0].Name      = ::rtl::OUString("Title");
             aProps[0].Handle    = -1; // n/a
             aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
             Sequence< Any > aValues;
-            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues")),makeAny(aProps) ) >>= aValues;
+            aContent.executeCommand( rtl::OUString("setPropertyValues"),makeAny(aProps) ) >>= aValues;
             if(aValues.getLength() && aValues[0].hasValue())
                 throw Exception();
         }
@@ -2496,7 +2496,7 @@ String ODbaseTable::createTempFile()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::createTempFile" );
     ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-        aIdent += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aIdent += ::rtl::OUString("/");
     String sTempName(aIdent);
     String sExt;
     sExt.AssignAscii(".");

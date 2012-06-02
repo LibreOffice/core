@@ -79,7 +79,7 @@ const ::rtl::OUString & MacabAddressBook::getDefaultTableName()
 {
     /* This string probably needs to be localized. */
     static const ::rtl::OUString aDefaultTableName
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Address Book")));
+        (::rtl::OUString("Address Book"));
 
     return aDefaultTableName;
 }
@@ -245,9 +245,9 @@ void MacabAddressBook::manageDuplicateGroups(::std::vector<MacabGroup *> _xGroup
         if(count != 1)
         {
             ::rtl::OUString sName = (*iter1)->getName();
-            sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
+            sName += ::rtl::OUString(" (") +
                 ::rtl::OUString::valueOf(count) +
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                ::rtl::OUString(")");
             (*iter1)->setName(sName);
         }
     }

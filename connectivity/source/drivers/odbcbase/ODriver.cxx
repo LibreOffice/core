@@ -67,7 +67,7 @@ void ODBCDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.ODBCDriver"));
+    return rtl::OUString("com.sun.star.comp.sdbc.ODBCDriver");
         // this name is referenced in the configuration and in the odbc.xml
         // Please take care when changing it.
 }
@@ -77,7 +77,7 @@ typedef Sequence< ::rtl::OUString > SS;
 SS ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     SS aSNS( 1 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
     return aSNS;
 }
 
@@ -128,7 +128,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& ur
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:")),10));
+    return (!url.compareTo(::rtl::OUString("sdbc:odbc:"),10));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
@@ -138,70 +138,70 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< ::rtl::OUString > aBooleanValues(2);
-        aBooleanValues[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
-        aBooleanValues[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+        aBooleanValues[0] = ::rtl::OUString(  "false"  );
+        aBooleanValues[1] = ::rtl::OUString(  "true"  );
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
+                ::rtl::OUString("CharSet")
+                ,::rtl::OUString("CharSet of the database.")
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalog"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Use catalog for file-based databases."))
+                ::rtl::OUString("UseCatalog")
+                ,::rtl::OUString("Use catalog for file-based databases.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,::rtl::OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemDriverSettings"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Driver settings."))
+                ::rtl::OUString("SystemDriverSettings")
+                ,::rtl::OUString("Driver settings.")
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Change named parameters with '?'."))
+                ::rtl::OUString("ParameterNameSubstitution")
+                ,::rtl::OUString("Change named parameters with '?'.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,::rtl::OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
+                ::rtl::OUString("IgnoreDriverPrivileges")
+                ,::rtl::OUString("Ignore the privileges from the database driver.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,::rtl::OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Retrieve generated values."))
+                ::rtl::OUString("IsAutoRetrievingEnabled")
+                ,::rtl::OUString("Retrieve generated values.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,::rtl::OUString(  "false"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Auto-increment statement."))
+                ::rtl::OUString("AutoRetrievingStatement")
+                ,::rtl::OUString("Auto-increment statement.")
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenerateASBeforeCorrelationName"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Generate AS before table correlation names."))
+                ::rtl::OUString("GenerateASBeforeCorrelationName")
+                ,::rtl::OUString("Generate AS before table correlation names.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,::rtl::OUString(  "true"  )
                 ,aBooleanValues)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
+                ::rtl::OUString("EscapeDateTime")
+                ,::rtl::OUString("Escape date time format.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,::rtl::OUString(  "true"  )
                 ,aBooleanValues)
                 );
 

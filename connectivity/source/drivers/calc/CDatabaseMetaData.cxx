@@ -89,7 +89,7 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.reserve(18);
 
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"))));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)65535));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
@@ -111,35 +111,35 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOL")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("BOOL"));
         aRow[2] = new ORowSetValueDecorator(DataType::BIT);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)20);
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = new ORowSetValueDecorator((sal_Int32)15);
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("DATE"));
         aRow[2] = new ORowSetValueDecorator(DataType::DATE);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("TIME"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIME);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
@@ -228,10 +228,10 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
                     switch(sal_Int32(aRow[11]->getValue()))
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO")));
+                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString("NO"));
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES")));
+                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString("YES"));
                         break;
                     default:
                         aRow[18]  = new ORowSetValueDecorator(::rtl::OUString());
@@ -256,7 +256,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:calc:")) + m_pConnection->getURL();
+    return ::rtl::OUString("sdbc:calc:") + m_pConnection->getURL();
 }
 
 // -------------------------------------------------------------------------
@@ -307,7 +307,7 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
         if (xProp.is())
         {
             sal_Bool bVisible = sal_Bool();
-            Any aVisAny = xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")) );
+            Any aVisAny = xProp->getPropertyValue( ::rtl::OUString("IsVisible") );
             if ( aVisAny >>= bVisible )
                 if (!bVisible)
                     return sal_True;                // hidden
@@ -350,7 +350,7 @@ sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::
         {
             try
             {
-                Any aUserAny = xRangeProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUserDefined")) );
+                Any aUserAny = xRangeProp->getPropertyValue( ::rtl::OUString("IsUserDefined") );
                 sal_Bool bUserDefined = sal_Bool();
                 if ( aUserAny >>= bUserDefined )
                     bUnnamed = !bUserDefined;
@@ -381,7 +381,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    ::rtl::OUString aTable("TABLE");
 
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
@@ -435,7 +435,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
     if ( xDocProp.is() )
     {
-        Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges")) );
+        Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString("DatabaseRanges") );
         Reference<XDatabaseRanges> xRanges;
         if ( aRangesAny >>= xRanges )
         {

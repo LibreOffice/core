@@ -60,9 +60,9 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-    static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-    static const ::rtl::OUString s_sAll(RTL_CONSTASCII_USTRINGPARAM("%"));
+    static const ::rtl::OUString s_sTableTypeView("VIEW");
+    static const ::rtl::OUString s_sTableTypeTable("TABLE");
+    static const ::rtl::OUString s_sAll("%");
 
     Sequence< ::rtl::OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
@@ -154,14 +154,14 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
+        ::rtl::OUString aSql(  "DROP " );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString("VIEW");
         if(bIsView) // here we have a view
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
+            aSql += ::rtl::OUString("VIEW ");
         else
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
+            aSql += ::rtl::OUString("TABLE ");
 
         ::rtl::OUString sComposedName(
             ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );
@@ -185,7 +185,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 ::rtl::OUString OTables::adjustSQL(const ::rtl::OUString& _sSql)
 {
     ::rtl::OUString sSQL = _sSql;
-    static const ::rtl::OUString s_sUNSIGNED(RTL_CONSTASCII_USTRINGPARAM("UNSIGNED"));
+    static const ::rtl::OUString s_sUNSIGNED("UNSIGNED");
     sal_Int32 nIndex = sSQL.indexOf(s_sUNSIGNED);
     while(nIndex != -1 )
     {
@@ -201,7 +201,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-    static const ::rtl::OUString s_sCreatePattern(RTL_CONSTASCII_USTRINGPARAM("(M,D)"));
+    static const ::rtl::OUString s_sCreatePattern("(M,D)");
     const ::rtl::OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,this,s_sCreatePattern));
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )
