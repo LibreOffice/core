@@ -122,17 +122,17 @@ void PDFTestOutputStream::write( const com::sun::star::uno::Reference< com::sun:
 void doTestCode()
 {
     static const char* pHome = getenv( "HOME"  );
-    rtl::OUString aTestFile( RTL_CONSTASCII_USTRINGPARAM( "file://" ) );
+    rtl::OUString aTestFile( "file://"  );
     aTestFile += rtl::OUString( pHome, strlen( pHome ), RTL_TEXTENCODING_MS_1252 );
-    aTestFile += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/pdf_export_test.pdf" ) );
+    aTestFile += rtl::OUString( "/pdf_export_test.pdf"  );
 
     PDFWriter::PDFWriterContext aContext;
     aContext.URL            = aTestFile;
     aContext.Version        = PDFWriter::PDF_1_4;
     aContext.Tagged         = true;
     aContext.InitialPage    = 2;
-    aContext.DocumentInfo.Title = OUString( RTL_CONSTASCII_USTRINGPARAM( "PDF export test document" ) );
-    aContext.DocumentInfo.Producer = OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL" ) );
+    aContext.DocumentInfo.Title = OUString( "PDF export test document"  );
+    aContext.DocumentInfo.Producer = OUString( "VCL"  );
 
     PDFWriter aWriter( aContext );
     aWriter.NewPage( 595, 842 );
@@ -358,53 +358,53 @@ void doTestCode()
     aWriter.DrawRect( aRect );
     aWriter.DrawText( aRect, String( RTL_CONSTASCII_USTRINGPARAM( "www.heise.de" ) ) );
     sal_Int32 nURILink = aWriter.CreateLink( aRect );
-    aWriter.SetLinkURL( nURILink, OUString( RTL_CONSTASCII_USTRINGPARAM( "http://www.heise.de" ) ) );
+    aWriter.SetLinkURL( nURILink, OUString( "http://www.heise.de"  ) );
 
     aWriter.SetLinkDest( nFirstLink, nFirstDest );
     aWriter.SetLinkDest( nSecondLink, nSecondDest );
 
     // include a button
     PDFWriter::PushButtonWidget aBtn;
-    aBtn.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "testButton" ) );
-    aBtn.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A test button" ) );
-    aBtn.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "hit me" ) );
+    aBtn.Name = OUString( "testButton"  );
+    aBtn.Description = OUString( "A test button"  );
+    aBtn.Text = OUString( "hit me"  );
     aBtn.Location = Rectangle( Point( 4500, 9000 ), Size( 4500, 3000 ) );
     aBtn.Border = aBtn.Background = true;
     aWriter.CreateControl( aBtn );
 
     // include a uri button
     PDFWriter::PushButtonWidget aUriBtn;
-    aUriBtn.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "wwwButton" ) );
-    aUriBtn.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A URI button" ) );
-    aUriBtn.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "to www" ) );
+    aUriBtn.Name = OUString( "wwwButton"  );
+    aUriBtn.Description = OUString( "A URI button"  );
+    aUriBtn.Text = OUString( "to www"  );
     aUriBtn.Location = Rectangle( Point( 9500, 9000 ), Size( 4500, 3000 ) );
     aUriBtn.Border = aUriBtn.Background = true;
-    aUriBtn.URL = OUString( RTL_CONSTASCII_USTRINGPARAM( "http://www.heise.de" ) );
+    aUriBtn.URL = OUString( "http://www.heise.de"  );
     aWriter.CreateControl( aUriBtn );
 
     // include a dest button
     PDFWriter::PushButtonWidget aDstBtn;
-    aDstBtn.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "destButton" ) );
-    aDstBtn.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A Dest button" ) );
-    aDstBtn.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "to paragraph" ) );
+    aDstBtn.Name = OUString( "destButton"  );
+    aDstBtn.Description = OUString( "A Dest button"  );
+    aDstBtn.Text = OUString( "to paragraph"  );
     aDstBtn.Location = Rectangle( Point( 14500, 9000 ), Size( 4500, 3000 ) );
     aDstBtn.Border = aDstBtn.Background = true;
     aDstBtn.Dest = nFirstDest;
     aWriter.CreateControl( aDstBtn );
 
     PDFWriter::CheckBoxWidget aCBox;
-    aCBox.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "textCheckBox" ) );
-    aCBox.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A test check box" ) );
-    aCBox.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "check me" ) );
+    aCBox.Name = OUString( "textCheckBox"  );
+    aCBox.Description = OUString( "A test check box"  );
+    aCBox.Text = OUString( "check me"  );
     aCBox.Location = Rectangle( Point( 4500, 13500 ), Size( 3000, 750 ) );
     aCBox.Checked = true;
     aCBox.Border = aCBox.Background = false;
     aWriter.CreateControl( aCBox );
 
     PDFWriter::CheckBoxWidget aCBox2;
-    aCBox2.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "textCheckBox2" ) );
-    aCBox2.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "Another test check box" ) );
-    aCBox2.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "check me right" ) );
+    aCBox2.Name = OUString( "textCheckBox2"  );
+    aCBox2.Description = OUString( "Another test check box"  );
+    aCBox2.Text = OUString( "check me right"  );
     aCBox2.Location = Rectangle( Point( 4500, 14250 ), Size( 3000, 750 ) );
     aCBox2.Checked = true;
     aCBox2.Border = aCBox2.Background = false;
@@ -412,9 +412,9 @@ void doTestCode()
     aWriter.CreateControl( aCBox2 );
 
     PDFWriter::RadioButtonWidget aRB1;
-    aRB1.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "rb1_1" ) );
-    aRB1.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "radio 1 button 1" ) );
-    aRB1.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "Despair" ) );
+    aRB1.Name = OUString( "rb1_1"  );
+    aRB1.Description = OUString( "radio 1 button 1"  );
+    aRB1.Text = OUString( "Despair"  );
     aRB1.Location = Rectangle( Point( 4500, 15000 ), Size( 6000, 1000 ) );
     aRB1.Selected = true;
     aRB1.RadioGroup = 1;
@@ -427,27 +427,27 @@ void doTestCode()
     aWriter.CreateControl( aRB1 );
 
     PDFWriter::RadioButtonWidget aRB2;
-    aRB2.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "rb2_1" ) );
-    aRB2.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "radio 2 button 1" ) );
-    aRB2.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "Joy" ) );
+    aRB2.Name = OUString( "rb2_1"  );
+    aRB2.Description = OUString( "radio 2 button 1"  );
+    aRB2.Text = OUString( "Joy"  );
     aRB2.Location = Rectangle( Point( 10500, 15000 ), Size( 3000, 1000 ) );
     aRB2.Selected = true;
     aRB2.RadioGroup = 2;
     aWriter.CreateControl( aRB2 );
 
     PDFWriter::RadioButtonWidget aRB3;
-    aRB3.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "rb1_2" ) );
-    aRB3.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "radio 1 button 2" ) );
-    aRB3.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "Desperation" ) );
+    aRB3.Name = OUString( "rb1_2"  );
+    aRB3.Description = OUString( "radio 1 button 2"  );
+    aRB3.Text = OUString( "Desperation"  );
     aRB3.Location = Rectangle( Point( 4500, 16000 ), Size( 3000, 1000 ) );
     aRB3.Selected = true;
     aRB3.RadioGroup = 1;
     aWriter.CreateControl( aRB3 );
 
     PDFWriter::EditWidget aEditBox;
-    aEditBox.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "testEdit" ) );
-    aEditBox.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "A test edit field" ) );
-    aEditBox.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "A little test text" ) );
+    aEditBox.Name = OUString( "testEdit"  );
+    aEditBox.Description = OUString( "A test edit field"  );
+    aEditBox.Text = OUString( "A little test text"  );
     aEditBox.TextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER;
     aEditBox.Location = Rectangle( Point( 10000, 18000 ), Size( 5000, 1500 ) );
     aEditBox.MaxLen = 100;
@@ -457,48 +457,48 @@ void doTestCode()
 
     // normal list box
     PDFWriter::ListBoxWidget aLstBox;
-    aLstBox.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "testListBox" ) );
-    aLstBox.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "One" ) );
-    aLstBox.Description = OUString( RTL_CONSTASCII_USTRINGPARAM( "select me" ) );
+    aLstBox.Name = OUString( "testListBox"  );
+    aLstBox.Text = OUString( "One"  );
+    aLstBox.Description = OUString( "select me"  );
     aLstBox.Location = Rectangle( Point( 4500, 18000 ), Size( 3000, 1500 ) );
     aLstBox.Sort = true;
     aLstBox.MultiSelect = true;
     aLstBox.Border = aLstBox.Background = true;
     aLstBox.BorderColor = Color( COL_BLACK );
-    aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "One" ) ) );
-    aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Two" ) ) );
-    aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Three" ) ) );
-    aLstBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Four" ) ) );
+    aLstBox.Entries.push_back( OUString( "One"  ) );
+    aLstBox.Entries.push_back( OUString( "Two"  ) );
+    aLstBox.Entries.push_back( OUString( "Three"  ) );
+    aLstBox.Entries.push_back( OUString( "Four"  ) );
     aLstBox.SelectedEntries.push_back( 1 );
     aLstBox.SelectedEntries.push_back( 2 );
     aWriter.CreateControl( aLstBox );
 
     // dropdown list box
-    aLstBox.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "testDropDownListBox" ) );
+    aLstBox.Name = OUString( "testDropDownListBox"  );
     aLstBox.DropDown = true;
     aLstBox.Location = Rectangle( Point( 4500, 19500 ), Size( 3000, 500 ) );
     aWriter.CreateControl( aLstBox );
 
     // combo box
     PDFWriter::ComboBoxWidget aComboBox;
-    aComboBox.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "testComboBox" ) );
-    aComboBox.Text = OUString( RTL_CONSTASCII_USTRINGPARAM( "test a combobox" ) );
-    aComboBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Larry" ) ) );
-    aComboBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Curly" ) ) );
-    aComboBox.Entries.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "Moe" ) ) );
+    aComboBox.Name = OUString( "testComboBox"  );
+    aComboBox.Text = OUString( "test a combobox"  );
+    aComboBox.Entries.push_back( OUString( "Larry"  ) );
+    aComboBox.Entries.push_back( OUString( "Curly"  ) );
+    aComboBox.Entries.push_back( OUString( "Moe"  ) );
     aComboBox.Location = Rectangle( Point( 4500, 20000 ), Size( 3000, 500 ) );
     aWriter.CreateControl( aComboBox );
 
     // test outlines
     sal_Int32 nPage1OL = aWriter.CreateOutlineItem();
-    aWriter.SetOutlineItemText( nPage1OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Page 1" ) ) );
+    aWriter.SetOutlineItemText( nPage1OL, OUString( "Page 1"  ) );
     aWriter.SetOutlineItemDest( nPage1OL, nSecondDest );
-    aWriter.CreateOutlineItem( nPage1OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Dest 2" ) ), nSecondDest );
-    aWriter.CreateOutlineItem( nPage1OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Dest 2 revisited" ) ), nSecondDest );
-    aWriter.CreateOutlineItem( nPage1OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Dest 2 again" ) ), nSecondDest );
+    aWriter.CreateOutlineItem( nPage1OL, OUString( "Dest 2"  ), nSecondDest );
+    aWriter.CreateOutlineItem( nPage1OL, OUString( "Dest 2 revisited"  ), nSecondDest );
+    aWriter.CreateOutlineItem( nPage1OL, OUString( "Dest 2 again"  ), nSecondDest );
     sal_Int32 nPage2OL = aWriter.CreateOutlineItem();
-    aWriter.SetOutlineItemText( nPage2OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Page 2" ) ) );
-    aWriter.CreateOutlineItem( nPage2OL, OUString( RTL_CONSTASCII_USTRINGPARAM( "Dest 1" ) ), nFirstDest );
+    aWriter.SetOutlineItemText( nPage2OL, OUString( "Page 2"  ) );
+    aWriter.CreateOutlineItem( nPage2OL, OUString( "Dest 1"  ), nFirstDest );
 
     aWriter.EndStructureElement(); // close document
     aWriter.Emit();
@@ -4628,21 +4628,21 @@ we check in the following sequence:
                 {
                     sal_Int32 bChangeFileExtensionToPDF = false;
                     //examine the file type (.odm .odt. .odp, odg, ods)
-                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odm" ) ) ) )
+                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odm"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odt" ) ) ) )
+                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odt"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odp" ) ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odp"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odg" ) ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odg"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ods" ) ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "ods"  ) ) )
                         bChangeFileExtensionToPDF = true;
                     if( bChangeFileExtensionToPDF )
-                        aTargetURL.setExtension(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
+                        aTargetURL.setExtension(rtl::OUString( "pdf"  ) );
                 }
 //check if extension is pdf, see if GoToR should be forced
-                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
+                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(rtl::OUString( "pdf"  ) );
                 if( m_aContext.ForcePDFAction && bTargetHasPDFExtension )
                     nSetGoToRMode++;
             }
@@ -4835,13 +4835,13 @@ sal_Int32 PDFWriterImpl::getBestBuiltinFont( const Font& rFont )
     OUString aFontName( rFont.GetName() );
     aFontName = aFontName.toAsciiLowerCase();
 
-    if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "times" ) ) ) != -1 )
+    if( aFontName.indexOf( OUString( "times"  ) ) != -1 )
         nBest = 8;
-    else if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "courier" ) ) ) != -1 )
+    else if( aFontName.indexOf( OUString( "courier"  ) ) != -1 )
         nBest = 0;
-    else if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "dingbats" ) ) ) != -1 )
+    else if( aFontName.indexOf( OUString( "dingbats"  ) ) != -1 )
         nBest = 13;
-    else if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ) ) != -1 )
+    else if( aFontName.indexOf( OUString( "symbol"  ) ) != -1 )
         nBest = 12;
     if( nBest < 12 )
     {
@@ -6100,7 +6100,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
 // need to set the name of the destination the same way it will be encoded
 // in an Internet link
             INetURLObject aLocalURL(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "http://ahost.ax" ) ) ); //dummy location, won't be used
+                OUString( "http://ahost.ax"  ) ); //dummy location, won't be used
             aLocalURL.SetMark( rDest.m_aDestName );
 
             const rtl::OUString aName   = aLocalURL.GetMark( INetURLObject::NO_DECODE ); //same coding as
@@ -6231,7 +6231,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "sRGB IEC61966-2.1" ) );
+    rtl::OUString aComment( "sRGB IEC61966-2.1"  );
     appendLiteralStringEncrypt( aComment ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
@@ -6251,19 +6251,19 @@ static void escapeStringXML( const rtl::OUString& rStr, rtl::OUString &rValue)
         switch( *pUni )
         {
         case sal_Unicode('&'):
-            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&amp;" ) );
+            rValue += rtl::OUString( "&amp;"  );
         break;
         case sal_Unicode('<'):
-            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&lt;" ) );
+            rValue += rtl::OUString( "&lt;"  );
         break;
         case sal_Unicode('>'):
-            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&gt;" ) );
+            rValue += rtl::OUString( "&gt;"  );
         break;
         case sal_Unicode('\''):
-            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&apos;" ) );
+            rValue += rtl::OUString( "&apos;"  );
         break;
         case sal_Unicode('"'):
-            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&quot;" ) );
+            rValue += rtl::OUString( "&quot;"  );
         break;
         default:
             rValue += rtl::OUString( *pUni );
@@ -10556,7 +10556,7 @@ sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
         if( xFact.is() )
         {
             m_xTrans = uno::Reference < util::XURLTransformer >(
-                xFact->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ) ), uno::UNO_QUERY );
+                xFact->createInstance( OUString( "com.sun.star.util.URLTransformer"  ) ), uno::UNO_QUERY );
         }
     }
 
@@ -11606,7 +11606,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rRadioButton.m_aKidsIndex.push_back( nNewWidget );
         rNewWidget.m_nParent = rRadioButton.m_nObject;
 
-        rNewWidget.m_aValue     = OUString( RTL_CONSTASCII_USTRINGPARAM( "Off" ) );
+        rNewWidget.m_aValue     = OUString( "Off"  );
         rNewWidget.m_aOnValue   = rBtn.OnValue;
         if( rRadioButton.m_aValue.isEmpty() && rBtn.Selected )
         {
@@ -11627,7 +11627,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_nTextStyle =
                 TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
 
-        rNewWidget.m_aValue = rBox.Checked ? OUString(RTL_CONSTASCII_USTRINGPARAM("Yes")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Off" ));
+        rNewWidget.m_aValue = rBox.Checked ? OUString("Yes") : OUString("Off" );
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }
@@ -11722,7 +11722,7 @@ void PDFWriterImpl::addStream( const String& rMimeType, PDFOutputStream* pStream
         PDFAddStream& rStream = m_aAdditionalStreams.back();
         rStream.m_aMimeType = rMimeType.Len()
                               ? OUString( rMimeType )
-                              : OUString( RTL_CONSTASCII_USTRINGPARAM( "application/octet-stream" ) );
+                              : OUString( "application/octet-stream"  );
         rStream.m_pStream = pStream;
         rStream.m_bCompress = bCompress;
     }

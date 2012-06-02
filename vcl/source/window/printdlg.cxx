@@ -626,8 +626,8 @@ void PrintDialog::JobTabPage::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateBox" ) ) );
+    aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
+                              rtl::OUString( "CollateBox"  ) );
     if( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("alwaysoff")) )
     {
         mnCollateUIMode = 1;
@@ -637,8 +637,8 @@ void PrintDialog::JobTabPage::readFromSettings()
     else
     {
         mnCollateUIMode = 0;
-        aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+        aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
+                                  rtl::OUString( "Collate"  ) );
         maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
     }
     Resize();
@@ -647,13 +647,13 @@ void PrintDialog::JobTabPage::readFromSettings()
 void PrintDialog::JobTabPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "CopyCount"  ),
                      maCopyCountField.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
-                     maCollateBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "Collate"  ),
+                     maCollateBox.IsChecked() ? rtl::OUString("true") :
+                                                rtl::OUString("false") );
 }
 
 PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rResId )
@@ -690,8 +690,8 @@ void PrintDialog::OutputOptPage::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateSingleJobs" ) ) );
+    aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
+                              rtl::OUString( "CollateSingleJobs"  ) );
     if ( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
     {
         maCollateSingleJobsBox.Check( sal_True );
@@ -706,14 +706,14 @@ void PrintDialog::OutputOptPage::readFromSettings()
 void PrintDialog::OutputOptPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
-                     maToFileBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"))
-                                             : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateSingleJobs" ) ),
-                     maCollateSingleJobsBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "ToFile"  ),
+                     maToFileBox.IsChecked() ? rtl::OUString("true")
+                                             : rtl::OUString("false") );
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "CollateSingleJobs"  ),
+                     maCollateSingleJobsBox.IsChecked() ? rtl::OUString("true") :
+                                                rtl::OUString("false") );
 }
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
@@ -780,8 +780,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     {
         // fall back to last printer
         SettingsConfigItem* pItem = SettingsConfigItem::get();
-        String aValue( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinter" ) ) ) );
+        String aValue( pItem->getValue( rtl::OUString( "PrintDialog"  ),
+                                        rtl::OUString( "LastPrinter"  ) ) );
         if( maJobPage.maPrinters.GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
             maJobPage.maPrinters.SelectEntry( aValue );
@@ -974,8 +974,8 @@ void PrintDialog::readFromSettings()
 
     // read last selected tab page; if it exists, actiavte it
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) );
+    rtl::OUString aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
+                                            rtl::OUString( "LastPage"  ) );
     sal_uInt16 nCount = maTabCtrl.GetPageCount();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
@@ -989,8 +989,8 @@ void PrintDialog::readFromSettings()
     maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
 
     // persistent window state
-    rtl::OUString aWinState( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WindowState" ) ) ) );
+    rtl::OUString aWinState( pItem->getValue( rtl::OUString( "PrintDialog"  ),
+                                              rtl::OUString( "WindowState"  ) ) );
     if( !aWinState.isEmpty() )
         SetWindowState( rtl::OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
@@ -1009,15 +1009,15 @@ void PrintDialog::storeToSettings()
 
     // store last selected printer
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinter" ) ),
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "LastPrinter"  ),
                      maJobPage.maPrinters.GetSelectEntry() );
 
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ),
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "LastPage"  ),
                      maTabCtrl.GetPageText( maTabCtrl.GetCurPageId() ) );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WindowState" ) ),
+    pItem->setValue( rtl::OUString( "PrintDialog"  ),
+                     rtl::OUString( "WindowState"  ),
                      rtl::OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
                      );
     pItem->Commit();
@@ -2042,7 +2042,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:OK" ) ), &maOKButton );
+            pHelp->Start( rtl::OUString( ".HelpID:vcl:PrintDialog:OK"  ), &maOKButton );
         }
     }
     else if( pButton == &maForwardBtn )
@@ -2119,7 +2119,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     }
     else if( pButton == &maJobPage.maCollateBox )
     {
-        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
+        maPController->setValue( rtl::OUString( "Collate"  ),
                                  makeAny( sal_Bool(isCollate()) ) );
         checkControlDependencies();
     }
@@ -2127,7 +2127,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         sal_Bool bChecked = maJobPage.maReverseOrderBox.IsChecked();
         maPController->setReversePrint( bChecked );
-        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverse" ) ),
+        maPController->setValue( rtl::OUString( "PrintReverse"  ),
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
@@ -2163,9 +2163,9 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     }
     else if( pEdit == &maJobPage.maCopyCountField )
     {
-        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
+        maPController->setValue( rtl::OUString( "CopyCount"  ),
                                makeAny( sal_Int32(maJobPage.maCopyCountField.GetValue()) ) );
-        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
+        maPController->setValue( rtl::OUString( "Collate"  ),
                                makeAny( sal_Bool(isCollate()) ) );
     }
     return 0;

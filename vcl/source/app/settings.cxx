@@ -350,7 +350,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
+    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( "en" ), rtl::OUString(), rtl::OUString() ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -498,38 +498,38 @@ void StyleSettings::Set3DColors( const Color& rColor )
 {
     switch ( nStyle )
     {
-        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
-        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hicontrast"));
-        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango")); // industrial is dead
-        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("crystal"));
-        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango"));
-        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen"));
-        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic"));
-        case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human"));
+        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString("default");
+        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString("hicontrast");
+        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString("tango"); // industrial is dead
+        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString("crystal");
+        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString("tango");
+        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString("oxygen");
+        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString("classic");
+        case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString("human");
     }
 
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto"));
+    return ::rtl::OUString("auto");
 }
 
 // -----------------------------------------------------------------------
 
 sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
 {
-    if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")) )
+    if ( rName == ::rtl::OUString("default") )
         return STYLE_SYMBOLS_DEFAULT;
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hicontrast")) )
+    else if ( rName == ::rtl::OUString("hicontrast") )
         return STYLE_SYMBOLS_HICONTRAST;
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("industrial")) )
+    else if ( rName == ::rtl::OUString("industrial") )
         return STYLE_SYMBOLS_TANGO; // industrial is dead
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("crystal")) )
+    else if ( rName == ::rtl::OUString("crystal") )
         return STYLE_SYMBOLS_CRYSTAL;
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango")) )
+    else if ( rName == ::rtl::OUString("tango") )
         return STYLE_SYMBOLS_TANGO;
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen")) )
+    else if ( rName == ::rtl::OUString("oxygen") )
         return STYLE_SYMBOLS_OXYGEN;
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic")) )
+    else if ( rName == ::rtl::OUString("classic") )
         return STYLE_SYMBOLS_CLASSIC;
-    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human")) )
+    else if ( rName == ::rtl::OUString("human") )
         return STYLE_SYMBOLS_HUMAN;
 
     return STYLE_SYMBOLS_AUTO;
@@ -957,8 +957,8 @@ sal_Bool MiscSettings::GetDisablePrinting() const
     {
         rtl::OUString aEnable =
             vcl::SettingsConfigItem::get()->
-            getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
-                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ) );
+            getValue( rtl::OUString( "DesktopManagement"  ),
+                      rtl::OUString( "DisablePrinting"  ) );
         mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0;
     }
 
@@ -1013,8 +1013,8 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
         {
             rtl::OUString aEnable =
                 vcl::SettingsConfigItem::get()->
-                getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
-                          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
+                getValue( rtl::OUString( "Accessibility"  ),
+                          rtl::OUString( "EnableATToolSupport"  ) );
             mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0;
         }
         else
@@ -1072,9 +1072,9 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
         }
 
         vcl::SettingsConfigItem::get()->
-            setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
-                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
-                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
+            setValue( rtl::OUString( "Accessibility"  ),
+                      rtl::OUString( "EnableATToolSupport"  ),
+                      bEnable ? rtl::OUString("true") : rtl::OUString("false" ) );
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }
@@ -1506,11 +1506,11 @@ bool AllSettings::GetLayoutRTL() const
         nUIMirroring = 0; // ask configuration only once
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/I18N/CTL")) );    // note: case sensisitive !
+            OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
             sal_Bool bTmp = sal_Bool();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("UIMirroring")) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
             if( aValue >>= bTmp )
             {
                 // found true or false; if it was nil, nothing is changed

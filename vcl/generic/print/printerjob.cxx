@@ -113,7 +113,7 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
     nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
     if (nError != osl::File::E_None)
         return NULL;
-    aFileURL = maSpoolDirName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/")) + aFileURL;
+    aFileURL = maSpoolDirName + rtl::OUString("/") + aFileURL;
 
     pFile = new osl::File (aFileURL);
     nError = pFile->open (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
@@ -335,7 +335,7 @@ PrinterJob::StartJob (
     maSpoolDirName = createSpoolDir ();
     maJobTitle = rJobName;
 
-    rtl::OUString aExt(RTL_CONSTASCII_USTRINGPARAM (".ps"));
+    rtl::OUString aExt(".ps");
     mpJobHeader  = CreateSpoolFile (rtl::OUString("psp_head"), aExt);
     mpJobTrailer = CreateSpoolFile (rtl::OUString("psp_tail"), aExt);
     if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
@@ -601,12 +601,10 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     InitPaperSize (rJobSetup);
 
     rtl::OUString aPageNo = rtl::OUString::valueOf ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
-    rtl::OUString aExt    = aPageNo + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (".ps"));
+    rtl::OUString aExt    = aPageNo + rtl::OUString(".ps");
 
-    osl::File* pPageHeader = CreateSpoolFile (
-                                              rtl::OUString("psp_pghead"), aExt);
-    osl::File* pPageBody   = CreateSpoolFile (
-                                              rtl::OUString("psp_pgbody"), aExt);
+    osl::File* pPageHeader = CreateSpoolFile ( rtl::OUString("psp_pghead"), aExt);
+    osl::File* pPageBody   = CreateSpoolFile ( rtl::OUString("psp_pgbody"), aExt);
 
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);

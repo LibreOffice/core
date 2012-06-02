@@ -86,9 +86,9 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     rtl::OLocale aLoc( pLoc );
 
     rtl::OUString aName = aBaseName + aPng;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("-")) +
+    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
                                   aLoc.getLanguage() +
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) +
+                                  rtl::OUString("_") +
                                   aLoc.getCountry() + aPng );
 
     return ( loadPng ("$BRAND_BASE_DIR/program/edition", aLocaleName, rBitmap) ||
@@ -108,9 +108,9 @@ vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
     rtl::OLocale aLoc( pLoc );
 
     rtl::OUString aName = aBaseName + aSvg;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("-")) +
+    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
                                   aLoc.getLanguage() +
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) +
+                                  rtl::OUString("_") +
                                   aLoc.getCountry() + aSvg );
 
     vcl::RenderGraphicRasterizer aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aLocaleName);

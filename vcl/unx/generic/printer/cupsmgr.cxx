@@ -172,11 +172,11 @@ CUPSWrapper::CUPSWrapper()
         : m_pLib( NULL ),
           m_bPPDThreadRunning( false )
 {
-    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( CUPS_LIB_NAME ) );
+    OUString aLib( CUPS_LIB_NAME  );
     m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( ! m_pLib )
     {
-        aLib = OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "cups" ) ) );
+        aLib = OUString( SAL_MODULENAME( "cups"  ) );
         m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     }
 
@@ -1100,11 +1100,11 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
 {
     const char* pRet = NULL;
 
-    OUString aLib(RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ));
+    OUString aLib(_XSALSET_LIBNAME );
     oslModule pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( pLib )
     {
-        OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_authenticateQuery" ) );
+        OUString aSym( "Sal_authenticateQuery"  );
         bool (*getpw)( const OString& rServer, OString& rUser, OString& rPw) =
             (bool(*)(const OString&,OString&,OString&))osl_getFunctionSymbol( pLib, aSym.pData );
         if( getpw )

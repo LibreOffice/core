@@ -384,38 +384,38 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             XSynchronize( m_pDisplay, True );
 #endif
             // clipboard selection
-            m_nCLIPBOARDAtom    = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
+            m_nCLIPBOARDAtom    = getAtom( OUString("CLIPBOARD") );
 
             // special targets
-            m_nTARGETSAtom      = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("TARGETS")) );
-            m_nTIMESTAMPAtom    = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")) );
-            m_nTEXTAtom         = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT")) );
-            m_nINCRAtom         = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("INCR")) );
-            m_nCOMPOUNDAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("COMPOUND_TEXT")) );
-            m_nMULTIPLEAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("MULTIPLE")) );
-            m_nUTF16Atom        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("ISO10646-1")) );
-            m_nImageBmpAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("image/bmp")) );
+            m_nTARGETSAtom      = getAtom( OUString("TARGETS") );
+            m_nTIMESTAMPAtom    = getAtom( OUString("TIMESTAMP") );
+            m_nTEXTAtom         = getAtom( OUString("TEXT") );
+            m_nINCRAtom         = getAtom( OUString("INCR") );
+            m_nCOMPOUNDAtom     = getAtom( OUString("COMPOUND_TEXT") );
+            m_nMULTIPLEAtom     = getAtom( OUString("MULTIPLE") );
+            m_nUTF16Atom        = getAtom( OUString("ISO10646-1") );
+            m_nImageBmpAtom     = getAtom( OUString("image/bmp") );
 
             // Atoms for Xdnd protocol
-            m_nXdndAware        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndAware")) );
-            m_nXdndEnter        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndEnter")) );
-            m_nXdndLeave        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndLeave")) );
-            m_nXdndPosition     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndPosition")) );
-            m_nXdndStatus       = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndStatus")) );
-            m_nXdndDrop         = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndDrop")) );
-            m_nXdndFinished     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndFinished")) );
-            m_nXdndSelection    = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndSelection")) );
-            m_nXdndTypeList     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndTypeList")) );
-            m_nXdndProxy        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndProxy")) );
-            m_nXdndActionCopy   = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndActionCopy")) );
-            m_nXdndActionMove   = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndActionMove")) );
-            m_nXdndActionLink   = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndActionLink")) );
-            m_nXdndActionAsk    = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndActionAsk")) );
-            m_nXdndActionPrivate= getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("XdndActionPrivate")) );
+            m_nXdndAware        = getAtom( OUString("XdndAware") );
+            m_nXdndEnter        = getAtom( OUString("XdndEnter") );
+            m_nXdndLeave        = getAtom( OUString("XdndLeave") );
+            m_nXdndPosition     = getAtom( OUString("XdndPosition") );
+            m_nXdndStatus       = getAtom( OUString("XdndStatus") );
+            m_nXdndDrop         = getAtom( OUString("XdndDrop") );
+            m_nXdndFinished     = getAtom( OUString("XdndFinished") );
+            m_nXdndSelection    = getAtom( OUString("XdndSelection") );
+            m_nXdndTypeList     = getAtom( OUString("XdndTypeList") );
+            m_nXdndProxy        = getAtom( OUString("XdndProxy") );
+            m_nXdndActionCopy   = getAtom( OUString("XdndActionCopy") );
+            m_nXdndActionMove   = getAtom( OUString("XdndActionMove") );
+            m_nXdndActionLink   = getAtom( OUString("XdndActionLink") );
+            m_nXdndActionAsk    = getAtom( OUString("XdndActionAsk") );
+            m_nXdndActionPrivate= getAtom( OUString("XdndActionPrivate") );
 
             // initialize map with member none
-            m_aAtomToString[ 0 ]= OUString(RTL_CONSTASCII_USTRINGPARAM("None"));
-            m_aAtomToString[ XA_PRIMARY ] = OUString(RTL_CONSTASCII_USTRINGPARAM("PRIMARY"));
+            m_aAtomToString[ 0 ]= OUString("None");
+            m_aAtomToString[ XA_PRIMARY ] = OUString("PRIMARY");
 
             // create a (invisible) message window
             m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
@@ -677,7 +677,7 @@ bool SelectionManager::convertData(
                 aEncoding = getTextPlainEncoding( aFlavor.MimeType );
             if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
             {
-                aFlavor.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16"));
+                aFlavor.MimeType = OUString("text/plain;charset=utf-16");
                 aFlavor.DataType = getCppuType( (OUString *) 0 );
                 if( xTransferable->isDataFlavorSupported( aFlavor ) )
                 {
@@ -869,7 +869,7 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
             rOutTypeList.push_front( XA_STRING );
             rOutTypeList.push_front( m_nCOMPOUNDAtom );
         }
-        convertTypeToNative( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-8")), targetselection, nFormat, rOutTypeList, true );
+        convertTypeToNative( OUString("text/plain;charset=utf-8"), targetselection, nFormat, rOutTypeList, true );
     }
     if( targetselection != m_nXdndSelection )
         rOutTypeList.push_back( m_nMULTIPLEAtom );
@@ -1402,7 +1402,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             Sequence< DataFlavor > aTemp( nNewFlavors );
             for( i = 0; i < nNewFlavors-1; i++ )
                 aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
-            aTemp.getArray()[0].MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16"));
+            aTemp.getArray()[0].MimeType = OUString("text/plain;charset=utf-16");
             aTemp.getArray()[0].DataType = getCppuType( (OUString*)0 );
             rTypes = aTemp;
 
@@ -1522,7 +1522,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                         try
                         {
                             Any aResult =
-                                m_xBitmapConverter->invoke( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")),
+                                m_xBitmapConverter->invoke( OUString("convert-bitmap-depth"),
                                                             aArgs, aOutIndex, aOutArgs );
                             if( aResult >>= xBM )
                                 aData = xBM->getDIB();
@@ -2071,7 +2071,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
     // notification about success/failure of one of our conversion requests
 #if OSL_DEBUG_LEVEL > 1
     OUString aSelection( getString( rNotify.selection ) );
-    OUString aProperty(RTL_CONSTASCII_USTRINGPARAM("None"));
+    OUString aProperty("None");
     if( rNotify.property )
         aProperty = getString( rNotify.property );
     fprintf( stderr, "handleSelectionNotify for selection %s and property %s (0x%lx)\n",
@@ -3764,7 +3764,7 @@ void SelectionManager::run( void* pThis )
     css::uno::Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
     if( xFact.is() )
     {
-        This->m_xDesktop.set(xFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY);
+        This->m_xDesktop.set(xFact->createInstance( ::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY);
         if (This->m_xDesktop.is())
             This->m_xDesktop->addTerminateListener(This);
     }
@@ -4163,7 +4163,7 @@ void SelectionManagerHolder::startDrag(
 
 OUString SelectionManagerHolder::getImplementationName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(XDND_IMPLEMENTATION_NAME));
+    return OUString(XDND_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------
