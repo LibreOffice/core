@@ -1755,7 +1755,7 @@ void TextView::ImpShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
 
             sal_uInt16 nTextPortionStart = 0;
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, sal_True );
-            TETextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
                 if ( mpImpl->mpTextEngine->IsRightToLeft() )

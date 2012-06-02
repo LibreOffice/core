@@ -91,14 +91,13 @@ public:
 
 
 
-typedef TETextPortion* TextPortionPtr;
-SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0 )
+typedef std::vector<TETextPortion*> TextPortionArray;
 
 class TETextPortionList : public TextPortionArray
 {
 public:
-            TETextPortionList();
-            ~TETextPortionList();
+    TETextPortionList();
+    ~TETextPortionList();
 
     void    Reset();
     sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False );

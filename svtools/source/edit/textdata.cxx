@@ -76,31 +76,31 @@ TETextPortionList::~TETextPortionList()
 
 void TETextPortionList::Reset()
 {
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
-        delete GetObject( nPortion );
-    Remove( 0, Count() );
+    for ( iterator it = begin(); it != end(); ++it )
+        delete *it;
+    clear();
 }
 
 void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
 {
-    DBG_ASSERT( ( nDelFrom < Count() ) || ( (nDelFrom == 0) && (Count() == 0) ), "DeleteFromPortion: Out of range" );
-    for ( sal_uInt16 nP = nDelFrom; nP < Count(); nP++ )
-        delete GetObject( nP );
-    Remove( nDelFrom, Count()-nDelFrom );
+    DBG_ASSERT( ( nDelFrom < size() ) || ( (nDelFrom == 0) && (size() == 0) ), "DeleteFromPortion: Out of range" );
+    for ( iterator it = begin() + nDelFrom; it != end(); ++it )
+        delete *it;
+    erase( begin() + nDelFrom, end() );
 }
 
 sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion )
 {
     // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
     sal_uInt16 nTmpPos = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
+    for ( sal_uInt16 nPortion = 0; nPortion < size(); nPortion++ )
     {
-        TETextPortion* pPortion = GetObject( nPortion );
+        TETextPortion* pPortion = operator[]( nPortion );
         nTmpPos = nTmpPos + pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
             // take this one if we don't prefer the starting portion, or if it's the last one
-            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == Count() - 1 ) )
+            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == size() - 1 ) )
             {
                 nPortionStart = nTmpPos - pPortion->GetLen();
                 return nPortion;
@@ -108,7 +108,7 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
         }
     }
     OSL_FAIL( "FindPortion: Nicht gefunden!" );
-    return ( Count() - 1 );
+    return ( size() - 1 );
 }
 
 
