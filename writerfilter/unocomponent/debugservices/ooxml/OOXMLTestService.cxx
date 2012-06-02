@@ -83,8 +83,8 @@ xContext( xContext_ )
 sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >& aArguments ) throw (uno::RuntimeException)
 {
     uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    aUcbInitSequence[0] <<= rtl::OUString("Local");
+    aUcbInitSequence[1] <<= rtl::OUString("Office");
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
@@ -155,14 +155,14 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
 ::rtl::OUString ScannerTestService_getImplementationName ()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::IMPLEMENTATION_NAME ));
+    return rtl::OUString(ScannerTestService::IMPLEMENTATION_NAME );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::SERVICE_NAME ));
+    pArray[0] =  rtl::OUString(ScannerTestService::SERVICE_NAME );
     return aRet;
 }
 

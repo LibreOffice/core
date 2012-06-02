@@ -97,8 +97,8 @@ public:
               xContext), uno::UNO_QUERY_THROW);
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
-        mLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
-        mCRLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\r\n"));
+        mLF = rtl::OUString("\n");
+        mCRLF = rtl::OUString("\r\n");
     }
 
     rtl::OUString getURL()
@@ -155,9 +155,8 @@ sal_Int32 SAL_CALL AnalyzeService::run
     throw (uno::RuntimeException)
 {
     uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<=
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    aUcbInitSequence[0] <<= rtl::OUString("Local");
+    aUcbInitSequence[1] <<= rtl::OUString("Office");
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiComponentFactory>
@@ -265,7 +264,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
 ::rtl::OUString AnalyzeService_getImplementationName ()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::IMPLEMENTATION_NAME ));
+    return rtl::OUString(AnalyzeService::IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL AnalyzeService_supportsService( const ::rtl::OUString& ServiceName )
@@ -276,7 +275,7 @@ uno::Sequence< rtl::OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::SERVICE_NAME ));
+    pArray[0] =  rtl::OUString(AnalyzeService::SERVICE_NAME );
     return aRet;
 }
 
