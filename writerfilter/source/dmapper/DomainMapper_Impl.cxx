@@ -2310,8 +2310,7 @@ void DomainMapper_Impl::handleAuthor
                 break;
             }
         }
-        ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM
-            ("com.sun.star.text.TextField."));
+        ::rtl::OUString sServiceName("com.sun.star.text.TextField.");
         bool bIsCustomField = false;
         if(sFieldServiceName.isEmpty())
         {
@@ -2465,8 +2464,7 @@ void DomainMapper_Impl::handleToc
         xTOC.set(
                 m_xTextFactory->createInstance
                 ( bTableOfFigures ?
-                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                      ("com.sun.star.text.IllustrationsIndex"))
+                  ::rtl::OUString("com.sun.star.text.IllustrationsIndex")
                   : sTOCServiceName),
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
