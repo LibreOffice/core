@@ -95,7 +95,7 @@ std::vector<rtl::OUString> getContents(rtl::OUString const & url) {
         std::vector<rtl::OUString> cs;
         ucbhelper::Content c(content(url));
         css::uno::Sequence<rtl::OUString> args(1);
-        args[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        args[0] = rtl::OUString("Title");
         css::uno::Reference<css::sdbc::XResultSet> res(
             c.createCursor(args, ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS),
             css::uno::UNO_SET_THROW);
@@ -123,7 +123,7 @@ std::vector<rtl::OUString> getContents(rtl::OUString const & url) {
 rtl::OUString getCasePreservingUrl(INetURLObject url) {
     return
         content(url).executeCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCasePreservingURL")),
+            rtl::OUString("getCasePreservingURL"),
             css::uno::Any()).
         get<rtl::OUString>();
 }
@@ -202,7 +202,7 @@ bool utl::UCBContentHelper::GetTitle(
     try {
         *title = content(url).
             getPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"))).
+                rtl::OUString("Title")).
             get<rtl::OUString>();
         return true;
     } catch (css::uno::RuntimeException const &) {
@@ -224,7 +224,7 @@ bool utl::UCBContentHelper::GetTitle(
 bool utl::UCBContentHelper::Kill(rtl::OUString const & url) {
     try {
         content(url).executeCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
+            rtl::OUString("delete"),
             css::uno::makeAny(true));
         return true;
     } catch (css::uno::RuntimeException const &) {
@@ -264,9 +264,7 @@ bool utl::UCBContentHelper::MakeFolder(
                         comphelper::getProcessServiceFactory(),
                         css::uno::UNO_SET_THROW)->
                      createInstance(
-                         rtl::OUString(
-                             RTL_CONSTASCII_USTRINGPARAM(
-                                 "com.sun.star.uui.InteractionHandler")))),
+                         rtl::OUString( "com.sun.star.uui.InteractionHandler"))),
                     css::uno::UNO_QUERY_THROW),
                 css::uno::Reference<css::ucb::XProgressHandler>()),
             parent)
@@ -293,7 +291,7 @@ bool utl::UCBContentHelper::MakeFolder(
                     continue;
                 }
                 css::uno::Sequence<rtl::OUString> keys(1);
-                keys[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+                keys[0] = rtl::OUString("Title");
                 css::uno::Sequence<css::uno::Any> values(1);
                 values[0] <<= title;
                 if (parent.insertNewContent(info[i].Type, keys, values, result))
@@ -341,7 +339,7 @@ sal_Int64 utl::UCBContentHelper::GetSize(rtl::OUString const & url) {
     try {
         return
             content(url).getPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size"))).
+                rtl::OUString("Size")).
             get<sal_Int64>();
     } catch (css::uno::RuntimeException const &) {
         throw;
@@ -366,11 +364,11 @@ bool utl::UCBContentHelper::IsYounger(
         return
             convert(
                 content(younger).getPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified"))).
+                    rtl::OUString("DateModified")).
                 get<css::util::DateTime>())
             > convert(
                 content(older).getPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified"))).
+                    rtl::OUString("DateModified")).
                 get<css::util::DateTime>());
     } catch (css::uno::RuntimeException const &) {
         throw;
@@ -487,8 +485,7 @@ bool utl::UCBContentHelper::EqualURLs(
     ucbhelper::ContentBroker * broker = ucbhelper::ContentBroker::get();
     if (broker == 0) {
         throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("no ucbhelper::ContentBroker")),
+            rtl::OUString( "no ucbhelper::ContentBroker"),
             css::uno::Reference<css::uno::XInterface>());
     }
     return

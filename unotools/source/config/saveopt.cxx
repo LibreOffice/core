@@ -388,7 +388,7 @@ Sequence< OUString > GetPropertyNames()
 // -----------------------------------------------------------------------
 
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
-    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Save")) )
+    : ConfigItem( OUString("Office.Common/Save") )
     , nAutoSaveTime( 0 )
     , bUseUserData( sal_False )
     , bBackup( sal_False )
@@ -562,18 +562,18 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     {
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::comphelper::getProcessServiceFactory(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
+        ::rtl::OUString("org.openoffice.Office.Recovery"),
         ::comphelper::ConfigurationHelper::E_READONLY);
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled"))) >>= bAutoSave;
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("Enabled")) >>= bAutoSave;
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall"))) >>= nAutoSaveTime;
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("TimeIntervall")) >>= nAutoSaveTime;
     }
     catch(const css::uno::Exception&)
         { OSL_FAIL("Could not find needed informations for AutoSave feature."); }
@@ -749,19 +749,19 @@ void SvtSaveOptions_Impl::Commit()
 
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::comphelper::getProcessServiceFactory(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
+        ::rtl::OUString("org.openoffice.Office.Recovery"),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall")),
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("TimeIntervall"),
         css::uno::makeAny(nAutoSaveTime));
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("Enabled"),
         css::uno::makeAny(bAutoSave));
 
     ::comphelper::ConfigurationHelper::flush(xCFG);
@@ -793,7 +793,7 @@ public:
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
-    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Load")) )
+    : ConfigItem( OUString("Office.Common/Load") )
     , bLoadUserDefinedSettings( sal_False )
 {
     Sequence< OUString > aNames(1);

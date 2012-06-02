@@ -73,10 +73,10 @@ rtl::OUString getParentName( const rtl::OUString& aFileName )
     rtl::OUString aParent = aFileName.copy( 0,lastIndex );
 
     if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-        aParent += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aParent += rtl::OUString("/");
 
     if( 0 == aParent.compareToAscii( "file://" ) )
-        aParent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
+        aParent = rtl::OUString("file:///");
 
     return aParent;
 }

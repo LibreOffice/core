@@ -66,8 +66,8 @@ using ::rtl::OString;
 using ::rtl::OStringToOUString;
 
 #define SEARCHPATH_DELIMITER  ';'
-#define SIGN_STARTVARIABLE    OUString( RTL_CONSTASCII_USTRINGPARAM( "$(" ) )
-#define SIGN_ENDVARIABLE      OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) )
+#define SIGN_STARTVARIABLE    OUString( "$("  )
+#define SIGN_ENDVARIABLE      OUString( ")" )
 
 // Supported variables by the old SvtPathOptions implementation
 #define SUBSTITUTE_INSTPATH   "$(instpath)"
@@ -428,15 +428,14 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
     // Create necessary services
     m_xPathSettings = Reference< XFastPropertySet >( xSMgr->createInstance(
-                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                        "com.sun.star.util.PathSettings" ))),
+                                                    ::rtl::OUString( "com.sun.star.util.PathSettings" )),
                                                 UNO_QUERY );
     if ( !m_xPathSettings.is() )
     {
         // #112719#: check for existance
         OSL_FAIL( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
         throw RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSettings cannot be created" )),
+            ::rtl::OUString( "Service com.sun.star.util.PathSettings cannot be created" ),
             Reference< XInterface >() );
     }
 

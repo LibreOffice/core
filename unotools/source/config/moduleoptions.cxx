@@ -71,17 +71,17 @@ namespace css = ::com::sun::star;
                     e.g.:
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
-#define ROOTNODE_FACTORIES                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office/Factories"        ))
-#define PATHSEPERATOR                       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"                             ))
+#define ROOTNODE_FACTORIES                  ::rtl::OUString("Setup/Office/Factories"        )
+#define PATHSEPERATOR                       ::rtl::OUString("/"                             )
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
 //            special code that uses hard coded strings to return them.
-#define PROPERTYNAME_SHORTNAME              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"       ))
-#define PROPERTYNAME_TEMPLATEFILE           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryTemplateFile"    ))
-#define PROPERTYNAME_WINDOWATTRIBUTES       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryWindowAttributes"))
-#define PROPERTYNAME_EMPTYDOCUMENTURL       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryEmptyDocumentURL"))
-#define PROPERTYNAME_DEFAULTFILTER          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDefaultFilter"   ))
-#define PROPERTYNAME_ICON                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryIcon"            ))
+#define PROPERTYNAME_SHORTNAME              ::rtl::OUString("ooSetupFactoryShortName"       )
+#define PROPERTYNAME_TEMPLATEFILE           ::rtl::OUString("ooSetupFactoryTemplateFile"    )
+#define PROPERTYNAME_WINDOWATTRIBUTES       ::rtl::OUString("ooSetupFactoryWindowAttributes")
+#define PROPERTYNAME_EMPTYDOCUMENTURL       ::rtl::OUString("ooSetupFactoryEmptyDocumentURL")
+#define PROPERTYNAME_DEFAULTFILTER          ::rtl::OUString("ooSetupFactoryDefaultFilter"   )
+#define PROPERTYNAME_ICON                   ::rtl::OUString("ooSetupFactoryIcon"            )
 
 #define PROPERTYHANDLE_SHORTNAME            0
 #define PROPERTYHANDLE_TEMPLATEFILE         1
@@ -92,16 +92,16 @@ namespace css = ::com::sun::star;
 
 #define PROPERTYCOUNT                       6
 
-#define FACTORYNAME_WRITER                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"                ))
-#define FACTORYNAME_WRITERWEB               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"                 ))
-#define FACTORYNAME_WRITERGLOBAL            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"              ))
-#define FACTORYNAME_CALC                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"        ))
-#define FACTORYNAME_DRAW                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"          ))
-#define FACTORYNAME_IMPRESS                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"))
-#define FACTORYNAME_MATH                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"        ))
-#define FACTORYNAME_CHART                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument"             ))
-#define FACTORYNAME_DATABASE                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"       ))
-#define FACTORYNAME_STARTMODULE             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule"                ))
+#define FACTORYNAME_WRITER                  ::rtl::OUString("com.sun.star.text.TextDocument"                )
+#define FACTORYNAME_WRITERWEB               ::rtl::OUString("com.sun.star.text.WebDocument"                 )
+#define FACTORYNAME_WRITERGLOBAL            ::rtl::OUString("com.sun.star.text.GlobalDocument"              )
+#define FACTORYNAME_CALC                    ::rtl::OUString("com.sun.star.sheet.SpreadsheetDocument"        )
+#define FACTORYNAME_DRAW                    ::rtl::OUString("com.sun.star.drawing.DrawingDocument"          )
+#define FACTORYNAME_IMPRESS                 ::rtl::OUString("com.sun.star.presentation.PresentationDocument")
+#define FACTORYNAME_MATH                    ::rtl::OUString("com.sun.star.formula.FormulaProperties"        )
+#define FACTORYNAME_CHART                   ::rtl::OUString("com.sun.star.chart2.ChartDocument"             )
+#define FACTORYNAME_DATABASE                ::rtl::OUString("com.sun.star.sdb.OfficeDatabaseDocument"       )
+#define FACTORYNAME_STARTMODULE             ::rtl::OUString("com.sun.star.frame.StartModule"                )
 
 #define FACTORYCOUNT                        10
 
@@ -285,16 +285,12 @@ struct FactoryInfo
                 xSubstVars
                     = css::uno::Reference< css::util::XStringSubstitution >(
                         xSMgr->createInstance(
-                            ::rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.util.PathSubstitution" ) ) ),
+                            ::rtl::OUString( "com.sun.star.util.PathSubstitution"  ) ),
                             css::uno::UNO_QUERY );
                 if ( !xSubstVars.is() )
                     throw css::uno::RuntimeException(
-                        ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "Cannot instanciate service "
-                                "com.sun.star.util.PathSubstitution" ) ),
+                        ::rtl::OUString( "Cannot instanciate service "
+                                "com.sun.star.util.PathSubstitution"  ),
                         css::uno::Reference< css::uno::XInterface >() );
             }
             return xSubstVars;
@@ -655,25 +651,25 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     ::rtl::OUString sShortName;
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER        :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter"));
+        case SvtModuleOptions::E_WRITER        :  sShortName = ::rtl::OUString("swriter");
                                                   break;
-        case SvtModuleOptions::E_WRITERWEB     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web"));
+        case SvtModuleOptions::E_WRITERWEB     :  sShortName = ::rtl::OUString("swriter/web");
                                                   break;
-        case SvtModuleOptions::E_WRITERGLOBAL  :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument"));
+        case SvtModuleOptions::E_WRITERGLOBAL  :  sShortName = ::rtl::OUString("swriter/GlobalDocument");
                                                   break;
-        case SvtModuleOptions::E_CALC          :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc"));
+        case SvtModuleOptions::E_CALC          :  sShortName = ::rtl::OUString("scalc");
                                                   break;
-        case SvtModuleOptions::E_DRAW          :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw"));
+        case SvtModuleOptions::E_DRAW          :  sShortName = ::rtl::OUString("sdraw");
                                                   break;
-        case SvtModuleOptions::E_IMPRESS       :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress"));
+        case SvtModuleOptions::E_IMPRESS       :  sShortName = ::rtl::OUString("simpress");
                                                   break;
-        case SvtModuleOptions::E_MATH          :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath"));
+        case SvtModuleOptions::E_MATH          :  sShortName = ::rtl::OUString("smath");
                                                   break;
-        case SvtModuleOptions::E_CHART         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart"));
+        case SvtModuleOptions::E_CHART         :  sShortName = ::rtl::OUString("schart");
                                                   break;
-        case SvtModuleOptions::E_BASIC         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sbasic"));
+        case SvtModuleOptions::E_BASIC         :  sShortName = ::rtl::OUString("sbasic");
                                                   break;
-        case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdatabase"));
+        case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString("sdatabase");
                                                   break;
         default:
             OSL_FAIL( "unknown factory" );
@@ -707,25 +703,25 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     ::rtl::OUString sURL;
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER        :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
+        case SvtModuleOptions::E_WRITER        :  sURL = ::rtl::OUString("private:factory/swriter");
                                                   break;
-        case SvtModuleOptions::E_WRITERWEB     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter/web"));
+        case SvtModuleOptions::E_WRITERWEB     :  sURL = ::rtl::OUString("private:factory/swriter/web");
                                                   break;
-        case SvtModuleOptions::E_WRITERGLOBAL  :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter/GlobalDocument"));
+        case SvtModuleOptions::E_WRITERGLOBAL  :  sURL = ::rtl::OUString("private:factory/swriter/GlobalDocument");
                                                   break;
-        case SvtModuleOptions::E_CALC          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc"));
+        case SvtModuleOptions::E_CALC          :  sURL = ::rtl::OUString("private:factory/scalc");
                                                   break;
-        case SvtModuleOptions::E_DRAW          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw"));
+        case SvtModuleOptions::E_DRAW          :  sURL = ::rtl::OUString("private:factory/sdraw");
                                                   break;
-        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress?slot=6686"));
+        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString("private:factory/simpress?slot=6686");
                                                   break;
-        case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/smath"));
+        case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString("private:factory/smath");
                                                   break;
-        case SvtModuleOptions::E_CHART         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
+        case SvtModuleOptions::E_CHART         :  sURL = ::rtl::OUString("private:factory/schart");
                                                   break;
-        case SvtModuleOptions::E_BASIC         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sbasic"));
+        case SvtModuleOptions::E_BASIC         :  sURL = ::rtl::OUString("private:factory/sbasic");
                                                   break;
-        case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase?Interactive"));
+        case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString("private:factory/sdatabase?Interactive");
                                                   break;
         default:
             OSL_FAIL( "unknown factory" );
@@ -1236,16 +1232,16 @@ namespace
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Web")); }
-        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Global")); }
-        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
-        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
-        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
-        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
-        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
-        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
-        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
+        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString("Writer"); }
+        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString("Web"); }
+        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString("Global"); }
+        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString("Calc"); }
+        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString("Draw"); }
+        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString("Impress"); }
+        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString("Math"); }
+        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString("Chart"); }
+        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString("Basic"); }
+        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString("Database"); }
         default:
             OSL_FAIL( "unknown module" );
             break;
@@ -1325,9 +1321,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"))), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString("com.sun.star.document.FilterFactory")), css::uno::UNO_QUERY);
         xTypeCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString("com.sun.star.document.TypeDetection")), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -1337,13 +1333,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")), ::rtl::OUString());
+    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString("FilterName"), ::rtl::OUString());
     if (!sFilterName.isEmpty())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
+            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString("DocumentService"), ::rtl::OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != E_UNKNOWN_FACTORY)
@@ -1356,7 +1352,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     }
 
     // is there already a type inside the descriptor?
-    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")), ::rtl::OUString());
+    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString("TypeName"), ::rtl::OUString());
     if (sTypeName.isEmpty())
     {
         // no :-(
@@ -1373,9 +1369,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString());
+        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString("PreferredFilter"), ::rtl::OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
+        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString("DocumentService"), ::rtl::OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != E_UNKNOWN_FACTORY)

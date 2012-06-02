@@ -180,7 +180,7 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
+        pProps[0] = ::rtl::OUString("Url");
 
         try
         {

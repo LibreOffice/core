@@ -82,7 +82,7 @@ public:
 
 
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/SearchOptions")) )
+    ConfigItem( OUString("Office.Common/SearchOptions") )
 {
     RTL_LOGFILE_CONTEXT(aLog, "unotools SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
     nFlags = 0x0003FFFF;    // set all options values to 'true'

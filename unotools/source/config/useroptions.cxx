@@ -794,7 +794,7 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
     sFullName = GetFirstName();
     sFullName.trim();
     if ( !sFullName.isEmpty() )
-        sFullName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        sFullName += ::rtl::OUString(" ");
     sFullName += GetLastName();
     sFullName.trim();
 
