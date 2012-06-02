@@ -30,21 +30,13 @@
 
 #include <stdlib.h>
 
-SV_IMPL_PTRARR( TextCharAttribs, TextCharAttribPtr );
-
 
 
 // Vergleichmethode wird von QuickSort gerufen...
 
-extern "C" {
-int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
+static bool CompareStart( const TextCharAttrib* pFirst, const TextCharAttrib* pSecond )
 {
-    if ( (*((TextCharAttrib**)pFirst))->GetStart() < (*((TextCharAttrib**)pSecond))->GetStart() )
-        return (-1);
-    else if ( (*((TextCharAttrib**)pFirst))->GetStart() > (*((TextCharAttrib**)pSecond))->GetStart() )
-        return (1);
-    return 0;
-}
+    return pFirst->GetStart() < pSecond->GetStart();
 }
 
 // -------------------------------------------------------------------------
@@ -86,9 +78,9 @@ TextCharAttribList::~TextCharAttribList()
 void TextCharAttribList::Clear( sal_Bool bDestroyAttribs )
 {
     if ( bDestroyAttribs )
-        TextCharAttribs::DeleteAndDestroy( 0, Count() );
-    else
-        TextCharAttribs::Remove( 0, Count() );
+        for(iterator it = begin(); it != end(); ++it)
+            delete *it;
+    TextCharAttribs::clear();
 }
 
 
@@ -97,27 +89,27 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
     if ( pAttrib->IsEmpty() )
         mbHasEmptyAttribs = sal_True;
 
-    const sal_uInt16 nCount = Count();
+    const sal_uInt16 nCount = size();
     const sal_uInt16 nStart = pAttrib->GetStart(); // vielleicht besser fuer Comp.Opt.
     sal_Bool bInserted = sal_False;
     for ( sal_uInt16 x = 0; x < nCount; x++ )
     {
-        TextCharAttrib* pCurAttrib = GetObject( x );
+        TextCharAttrib* pCurAttrib = GetAttrib( x );
         if ( pCurAttrib->GetStart() > nStart )
         {
-            Insert( pAttrib, x );
+            insert( begin() + x, pAttrib );
             bInserted = sal_True;
             break;
         }
     }
     if ( !bInserted )
-        Insert( pAttrib, nCount );
+        push_back( pAttrib );
 }
 
 void TextCharAttribList::ResortAttribs()
 {
-    if ( Count() )
-        qsort( (void*)GetData(), Count(), sizeof( TextCharAttrib* ), CompareStart );
+    if ( !empty() )
+        std::sort( begin(), end(), CompareStart );
 }
 
 TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
@@ -125,9 +117,9 @@ TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nP
     // Rueckwaerts, falls eins dort endet, das naechste startet.
     // => Das startende gilt...
 
-    for ( sal_uInt16 nAttr = Count(); nAttr; )
+    for ( sal_uInt16 nAttr = size(); nAttr; )
     {
-        TextCharAttrib* pAttr = GetObject( --nAttr );
+        TextCharAttrib* pAttr = GetAttrib( --nAttr );
 
         if ( pAttr->GetEnd() < nPos )
             return 0;
@@ -141,10 +133,10 @@ TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nP
 TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos ) const
 {
     DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
-    const sal_uInt16 nAttribs = Count();
+    const sal_uInt16 nAttribs = size();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
-        TextCharAttrib* pAttr = GetObject( nAttr );
+        TextCharAttrib* pAttr = GetAttrib( nAttr );
         if ( ( pAttr->GetStart() >= nFromPos ) &&
              ( pAttr->GetEnd() <= nMaxPos ) &&
              ( pAttr->Which() == nWhich ) )
@@ -155,9 +147,9 @@ TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt1
 
 sal_Bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 {
-    for ( sal_uInt16 nAttr = Count(); nAttr; )
+    for ( sal_uInt16 nAttr = size(); nAttr; )
     {
-        const TextCharAttrib* pAttr = GetObject( --nAttr );
+        const TextCharAttrib* pAttr = GetAttrib( --nAttr );
         if ( pAttr->Which() == nWhich )
             return sal_True;
     }
@@ -168,9 +160,9 @@ sal_Bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
 {
     // Rueckwaerts, falls eins dort endet, das naechste startet.
     // => Das startende gilt...
-    for ( sal_uInt16 nAttr = Count(); nAttr; )
+    for ( sal_uInt16 nAttr = size(); nAttr; )
     {
-        TextCharAttrib* pAttr = GetObject( --nAttr );
+        TextCharAttrib* pAttr = GetAttrib( --nAttr );
 
         if ( pAttr->GetEnd() < nBound )
             return sal_False;
@@ -186,10 +178,10 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt
     if ( !mbHasEmptyAttribs )
         return 0;
 
-    const sal_uInt16 nAttribs = Count();
+    const sal_uInt16 nAttribs = size();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
-        TextCharAttrib* pAttr = GetObject( nAttr );
+        TextCharAttrib* pAttr = GetAttrib( nAttr );
         if ( pAttr->GetStart() > nPos )
             return 0;
 
@@ -201,12 +193,12 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt
 
 void TextCharAttribList::DeleteEmptyAttribs()
 {
-    for ( sal_uInt16 nAttr = 0; nAttr < Count(); nAttr++ )
+    for ( sal_uInt16 nAttr = 0; nAttr < size(); nAttr++ )
     {
-        TextCharAttrib* pAttr = GetObject( nAttr );
+        TextCharAttrib* pAttr = GetAttrib( nAttr );
         if ( pAttr->IsEmpty() )
         {
-            Remove( nAttr );
+            erase( begin() + nAttr );
             delete pAttr;
             nAttr--;
         }

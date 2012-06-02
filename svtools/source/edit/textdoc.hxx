@@ -34,9 +34,9 @@
 #include <svtools/txtattr.hxx>
 
 #include <tools/string.hxx>
+#include <vector>
 
-typedef TextCharAttrib* TextCharAttribPtr;
-SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0 )
+typedef std::vector<TextCharAttrib*> TextCharAttribs;
 
 class TextCharAttribList : private TextCharAttribs
 {
@@ -50,10 +50,10 @@ public:
                     ~TextCharAttribList();
 
     void            Clear( sal_Bool bDestroyAttribs );
-    sal_uInt16          Count() const               { return TextCharAttribs::Count(); }
+    sal_uInt16          Count() const               { return TextCharAttribs::size(); }
 
-    TextCharAttrib* GetAttrib( sal_uInt16 n ) const { return TextCharAttribs::GetObject( n ); }
-    void            RemoveAttrib( sal_uInt16 n )    { TextCharAttribs::Remove( n, 1 ); }
+    TextCharAttrib* GetAttrib( sal_uInt16 n ) const { return TextCharAttribs::operator[]( n ); }
+    void            RemoveAttrib( sal_uInt16 n )    { TextCharAttribs::erase( begin() + n ); }
 
     void            InsertAttrib( TextCharAttrib* pAttrib );
 
