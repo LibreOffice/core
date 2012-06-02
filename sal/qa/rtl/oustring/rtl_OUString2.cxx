@@ -57,7 +57,7 @@ namespace rtl_OUString
         /// test of OUString(rtl_uString*)
         void ctors_001()
             {
-                rtl::OUString *pStr = new rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("a String") );
+                rtl::OUString *pStr = new rtl::OUString( "a String" );
 
                 rtl::OUString aStrToTest(pStr->pData);
                 delete pStr;
@@ -344,21 +344,21 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         void test() {
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int32 >(-0x76543210),
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-76543210")).
+                (rtl::OUString("-76543210").
                  toInt32(16)));
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int32 >(0xFEDCBA98),
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("+FEDCBA98")).
+                (rtl::OUString("+FEDCBA98").
                  toInt32(16)));
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int64 >(-SAL_CONST_INT64(0x76543210FEDCBA98)),
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("-76543210FEDCBA98")).
+                    "-76543210FEDCBA98").
                  toInt64(16)));
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< sal_Int64 >(SAL_CONST_INT64(0xFEDCBA9876543210)),
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("+FEDCBA9876543210")).
+                    "+FEDCBA9876543210").
                  toInt64(16)));
         }
 
@@ -690,88 +690,88 @@ public:
     void lastIndexOf_test_oustring_offset_001()
         {
             // search for sun, start at the end, found (pos==0)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring_offset(aStr, aSearchStr, 0, aStr.getLength());
         }
 
     void lastIndexOf_test_oustring_offset_002()
         {
             // search for sun, start at pos = 3, found (pos==0)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring_offset(aStr, aSearchStr, 0, 3);
         }
 
     void lastIndexOf_test_oustring_offset_003()
         {
             // search for sun, start at pos = 2, found (pos==-1)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 2);
         }
 
     void lastIndexOf_test_oustring_offset_004()
         {
             // search for sun, start at the end, found (pos==0)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring_offset(aStr, aSearchStr, -1, -1);
         }
 
     void lastIndexOf_test_oustring_001()
         {
             // search for sun, found (pos==0)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring(aStr, aSearchStr, 0);
         }
 
     void lastIndexOf_test_oustring_002()
         {
             // search for sun, found (pos==4)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("the sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring(aStr, aSearchStr, 4);
         }
 
     void lastIndexOf_test_oustring_003()
         {
             // search for sun, found (pos==8)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("the sun sun java system");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring(aStr, aSearchStr, 8);
         }
 
     void lastIndexOf_test_oustring_004()
         {
             // search for sun, found (pos==8)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("the sun sun");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring(aStr, aSearchStr, 8);
         }
 
     void lastIndexOf_test_oustring_005()
         {
             // search for sun, found (pos==4)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun su"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("the sun su");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring(aStr, aSearchStr, 4);
         }
 
     void lastIndexOf_test_oustring_006()
         {
             // search for sun, found (pos==-1)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the su su"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
+            rtl::OUString aStr("the su su");
+            rtl::OUString aSearchStr("sun");
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
 
     void lastIndexOf_test_oustring_007()
         {
             // search for earth, not found (-1)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the su su"));
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("earth"));
+            rtl::OUString aStr("the su su");
+            rtl::OUString aSearchStr("earth");
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
 
@@ -779,7 +779,7 @@ public:
         {
             // search for earth, not found (-1)
             rtl::OUString aStr = rtl::OUString();
-            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("earth"));
+            rtl::OUString aSearchStr("earth");
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
 
@@ -795,7 +795,7 @@ public:
     void lastIndexOf_test_salunicode_001()
         {
             // search for 's', found (19)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
+            rtl::OUString aStr("the sun sun java system");
             sal_Unicode suChar = L's';
             lastIndexOf_salunicode(aStr, suChar, 19);
         }
@@ -803,7 +803,7 @@ public:
     void lastIndexOf_test_salunicode_002()
         {
             // search for 'x', not found (-1)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
+            rtl::OUString aStr("the sun sun java system");
             sal_Unicode suChar = L'x';
             lastIndexOf_salunicode(aStr, suChar, -1);
         }
@@ -811,21 +811,21 @@ public:
     void lastIndexOf_test_salunicode_offset_001()
         {
             // search for 's', start from pos last char, found (19)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
+            rtl::OUString aStr("the sun sun java system");
             sal_Unicode cuChar = L's';
             lastIndexOf_salunicode_offset(aStr, cuChar, 19, aStr.getLength());
         }
     void lastIndexOf_test_salunicode_offset_002()
         {
             // search for 's', start pos is last occur from search behind, found (17)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
+            rtl::OUString aStr("the sun sun java system");
             sal_Unicode cuChar = L's';
             lastIndexOf_salunicode_offset(aStr, cuChar, 17, 19);
         }
     void lastIndexOf_test_salunicode_offset_003()
         {
             // search for 't', start pos is 1, found (0)
-            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
+            rtl::OUString aStr("the sun sun java system");
             sal_Unicode cuChar = L't';
             lastIndexOf_salunicode_offset(aStr, cuChar, 0, 1);
         }
@@ -884,7 +884,7 @@ public:
 
     void getToken_001()
         {
-            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("a;b"));
+            rtl::OUString suTokenStr("a;b");
 
             sal_Int32 nIndex = 0;
 
@@ -898,7 +898,7 @@ public:
 
     void getToken_002()
         {
-            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("a;b.c"));
+            rtl::OUString suTokenStr("a;b.c");
 
             sal_Int32 nIndex = 0;
 
@@ -915,7 +915,7 @@ public:
 
     void getToken_003()
         {
-            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("a;;b"));
+            rtl::OUString suTokenStr("a;;b");
 
             sal_Int32 nIndex = 0;
 
@@ -932,7 +932,7 @@ public:
 
     void getToken_004()
         {
-            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("longer.then.ever."));
+            rtl::OUString suTokenStr("longer.then.ever.");
 
             sal_Int32 nIndex = 0;
 
@@ -952,7 +952,7 @@ public:
         }
 
     void getToken_005() {
-        rtl::OUString ab(RTL_CONSTASCII_USTRINGPARAM("ab"));
+        rtl::OUString ab("ab");
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_MESSAGE(
             "token should be 'ab'", ab.getToken(0, '-', n) == ab);
@@ -1001,13 +1001,13 @@ public:
     void construct()
     {
 #ifdef RTL_INLINE_STRINGS
-        ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
+        ::rtl::OUString aFoo( "foo" );
         CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[0] == 'f');
         CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[1] == 'o');
         CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[2] == 'o');
         CPPUNIT_ASSERT_MESSAGE("string length", aFoo.getLength() == 3);
 
-        ::rtl::OUString aBaa( RTL_CONSTASCII_USTRINGPARAM("this is a very long string with a lot of long things inside it and it goes on and on and on forever etc.") );
+        ::rtl::OUString aBaa( "this is a very long string with a lot of long things inside it and it goes on and on and on forever etc." );
         CPPUNIT_ASSERT_MESSAGE("string length", aBaa.getLength() == 104);
         // Dig at the internals ... FIXME: should we have the bit-flag defines public ?
         CPPUNIT_ASSERT_MESSAGE("string static flags", (aBaa.pData->refCount & 1<<30) != 0);
@@ -1018,9 +1018,9 @@ public:
     {
         // The empty string is 'static' a special case ...
         rtl::OUString aEmpty = rtl::OUString().intern();
-        rtl::OUString aEmpty2 = rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "" ) );
+        rtl::OUString aEmpty2 = rtl::OUString::intern( ""  );
 
-        ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
+        ::rtl::OUString aFoo( "foo" );
         ::rtl::OUString aFooIntern = aFoo.intern();
         CPPUNIT_ASSERT_MESSAGE( "string contents", aFooIntern == "foo" );
         CPPUNIT_ASSERT_MESSAGE("string length", aFooIntern.getLength() == 3);
@@ -1094,23 +1094,23 @@ void indexOfAscii::test() {
         rtl::OUString().lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")).indexOfAsciiL(
+        rtl::OUString("foo").indexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo")));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")).lastIndexOfAsciiL(
+        rtl::OUString("foo").lastIndexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo")));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(2),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fofoobar")).indexOfAsciiL(
+        rtl::OUString("fofoobar").indexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo")));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(3),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foofoofob")).
+        rtl::OUString("foofoofob").
         lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(3),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foofoobar")).indexOfAsciiL(
+        rtl::OUString("foofoobar").indexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo"), 1));
 }
 
@@ -1132,15 +1132,15 @@ void endsWith::test() {
         rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
     CPPUNIT_ASSERT_EQUAL(
         true,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bar")).endsWithAsciiL(
+        rtl::OUString("bar").endsWithAsciiL(
             RTL_CONSTASCII_STRINGPARAM("bar")));
     CPPUNIT_ASSERT_EQUAL(
         true,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobar")).endsWithAsciiL(
+        rtl::OUString("foobar").endsWithAsciiL(
             RTL_CONSTASCII_STRINGPARAM("bar")));
     CPPUNIT_ASSERT_EQUAL(
         false,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FOOBAR")).endsWithAsciiL(
+        rtl::OUString("FOOBAR").endsWithAsciiL(
             RTL_CONSTASCII_STRINGPARAM("bar")));
 }
 

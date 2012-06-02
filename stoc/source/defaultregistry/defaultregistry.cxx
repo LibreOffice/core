@@ -65,13 +65,13 @@ namespace stoc_bootstrap
 Sequence< OUString > defreg_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    seqNames.getArray()[0] = OUString(SERVICENAME);
     return seqNames;
 }
 
 OUString defreg_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 }
 
@@ -980,7 +980,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
         if ( lastIndex == 0 )
             resolvedName = m_name + aLinkName;
         else
-            resolvedName = m_name + OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + aLinkName;
+            resolvedName = m_name + OUString( "/" ) + aLinkName;
     }
 
     if ( m_localKey.is() && m_localKey->isValid() )
@@ -1034,7 +1034,7 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
         if ( lastIndex == 0 )
             resolvedName = m_name + rLinkName;
         else
-            resolvedName = m_name + OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rLinkName;
+            resolvedName = m_name + OUString( "/" ) + rLinkName;
     }
 
     if ( m_localKey.is() && m_localKey->isValid() &&
@@ -1078,7 +1078,7 @@ OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
         if ( lastIndex == 0 )
             resolvedName = m_name + rLinkName;
         else
-            resolvedName = m_name + OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rLinkName;
+            resolvedName = m_name + OUString( "/" ) + rLinkName;
     }
 
     OUString linkTarget;
@@ -1176,8 +1176,8 @@ Any RegistryEnumueration::nextElement(  )
     }
     else
     {
-        throw NoSuchElementException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "NestedRegistry: no nextElement() !" ) ),Reference< XInterface > () );
+        throw NoSuchElementException( OUString(
+            "NestedRegistry: no nextElement() !" ),Reference< XInterface > () );
     }
     return a;
 }
@@ -1266,7 +1266,7 @@ void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'open' method is not specified for a nested registry")),
+            OUString("the 'open' method is not specified for a nested registry"),
             Reference< XInterface >() );
 }
 
@@ -1302,7 +1302,7 @@ void SAL_CALL NestedRegistryImpl::close(  )
     }
 /*
     throw InvalidRegistryException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'close' method is not specified for a nested registry")),
+            OUString("the 'close' method is not specified for a nested registry"),
             Reference< XInterface >() );
 */
 }
@@ -1312,7 +1312,7 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'destroy' method is not specified for a nested registry")),
+            OUString("the 'destroy' method is not specified for a nested registry"),
             Reference< XInterface >() );
 }
 

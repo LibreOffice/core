@@ -379,7 +379,7 @@ namespace osl_Socket
         {
 //#if defined(LINUX)
             ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            AcceptorThread myAcceptorThread( asSocket, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")) );
+            AcceptorThread myAcceptorThread( asSocket, rtl::OUString("127.0.0.1") );
             myAcceptorThread.create();
 
             thread_sleep( 1 );
@@ -398,7 +398,7 @@ namespace osl_Socket
         void close_003()
         {
             ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            AcceptorThread myAcceptorThread( asSocket, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0.0.0.0")) );
+            AcceptorThread myAcceptorThread( asSocket, rtl::OUString("0.0.0.0") );
             myAcceptorThread.create();
 
             thread_sleep( 1 );
@@ -440,13 +440,13 @@ namespace osl_Socket
         void getLocalAddr_001()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT8 );
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT8 );
             ::osl::SocketAddr saLocalSocketAddr;
 
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
-            ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
+            ::rtl::OUString suError1 = ::rtl::OUString("Socket bind fail:") + sSocket.getErrorAsString();
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
 
             sSocket.getLocalAddr( saLocalSocketAddr );
@@ -488,13 +488,13 @@ namespace osl_Socket
         void getLocalPort_001()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT7 );  // aHostIp1 localhost
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT7 );  // aHostIp1 localhost
             ::osl::SocketAddr saLocalSocketAddr;
 
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
-            ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
+            ::rtl::OUString suError1 = ::rtl::OUString("Socket bind fail:") + sSocket.getErrorAsString();
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
             sal_Bool bOK = ( IP_PORT_MYPORT7 == sSocket.getLocalPort( )  );
 
@@ -512,7 +512,7 @@ namespace osl_Socket
     */
         void getLocalPort_002()
         {
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.45.67.89")), IP_PORT_TELNET);
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("123.45.67.89"), IP_PORT_TELNET);
 #ifdef WNT
             ::osl::Socket sSocket(sHandle);
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); // sal_True);
@@ -525,7 +525,7 @@ namespace osl_Socket
             (void)bOK;
 #else
             //on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
-            ::rtl::OUString suError (RTL_CONSTASCII_USTRINGPARAM("on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT, but can not create Addr of that case"));
+            ::rtl::OUString suError ("on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT, but can not create Addr of that case");
 #endif
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_False );
 
@@ -539,10 +539,10 @@ namespace osl_Socket
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
-            ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
+            ::rtl::OUString suError1 = ::rtl::OUString("Socket bind fail:") + sSocket.getErrorAsString();
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
             ::rtl::OUString suError = outputError(::rtl::OUString::valueOf(sSocket.getLocalPort( )),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("34463")),
+                ::rtl::OUString("34463"),
                 "test for getLocalPort function: first create a new socket, then an invalid socket address, bind them, and check the port assigned");
             sal_Bool bOK = ( sSocket.getLocalPort( ) >= 1 &&  sSocket.getLocalPort( ) <= 65535);
 
@@ -586,12 +586,12 @@ namespace osl_Socket
         {
             ::osl::Socket sSocket(sHandle);
             //port number from IP_PORT_HTTP1 to IP_PORT_MYPORT6, mindyliu
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT6 );
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT6 );
 
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
-            ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
+            ::rtl::OUString suError1 = ::rtl::OUString("Socket bind fail:") + sSocket.getErrorAsString();
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
             sal_Bool bOK;
             ::rtl::OUString suError;
@@ -613,13 +613,13 @@ namespace osl_Socket
         void getLocalHost_002()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.45.67.89")), IP_PORT_POP3);
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("123.45.67.89"), IP_PORT_POP3);
             ::osl::SocketAddr saLocalSocketAddr;
 
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
             sSocket.bind( saBindSocketAddr );
             //Invalid IP, so bind should fail
-            sal_Bool bOK = compareUString( sSocket.getLocalHost( ), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) ) ;
+            sal_Bool bOK = compareUString( sSocket.getLocalHost( ), rtl::OUString("") ) ;
             ::rtl::OUString suError = outputError(sSocket.getLocalHost( ), rtl::OUString(), "test for getLocalHost function: getLocalHost with invalid SocketAddr");
 
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
@@ -667,9 +667,9 @@ namespace osl_Socket
 
         void getPeer_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString("129.158.217.202"), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
             /// launch server socket
@@ -743,7 +743,7 @@ namespace osl_Socket
         void bind_002()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.45.67.89")), IP_PORT_NETBIOS );
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("123.45.67.89"), IP_PORT_NETBIOS );
             ::osl::SocketAddr saLocalSocketAddr;
 
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1); // sal_True);
@@ -795,9 +795,9 @@ namespace osl_Socket
 
         void isRecvReady_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT1 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT1 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT1 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT1 );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString("129.158.217.202"), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
             /// launch server socket
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); // sal_True);
@@ -858,9 +858,9 @@ namespace osl_Socket
 
         void isSendReady_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString("129.158.217.202"), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -1211,7 +1211,7 @@ namespace osl_Socket
 
         void enableNonBlockingMode_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -1249,7 +1249,7 @@ namespace osl_Socket
 
         void isNonBlockingMode_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -1300,7 +1300,7 @@ namespace osl_Socket
         void clearError_001()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.45.67.89")), IP_PORT_HTTP2 );
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("123.45.67.89"), IP_PORT_HTTP2 );
             ::osl::SocketAddr saLocalSocketAddr;
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
             sSocket.bind( saBindSocketAddr );//build an error "osl_Socket_E_AddrNotAvail"
@@ -1342,7 +1342,7 @@ namespace osl_Socket
         void getError_001()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP );
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_FTP );
             ::osl::SocketAddr saLocalSocketAddr;
 
             CPPUNIT_ASSERT_MESSAGE( "test for getError function: should get no error.",
@@ -1352,7 +1352,7 @@ namespace osl_Socket
         void getError_002()
         {
             ::osl::Socket sSocket(sHandle);
-            ::osl::SocketAddr saBindSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.45.67.89")), IP_PORT_FTP );
+            ::osl::SocketAddr saBindSocketAddr( rtl::OUString("123.45.67.89"), IP_PORT_FTP );
             ::osl::SocketAddr saLocalSocketAddr;
             sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
             sSocket.bind( saBindSocketAddr );//build an error "osl_Socket_E_AddrNotAvail"

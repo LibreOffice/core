@@ -93,7 +93,7 @@ OUString SAL_CALL ExampleComponent1Impl::getImplementationName(  )
     throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME1) );
+    return OUString( IMPLNAME1 );
 }
 
 //*************************************************************************
@@ -120,7 +120,7 @@ Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames(  )
 //*************************************************************************
 Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1) );
+    OUString aName( SERVICENAME1 );
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -128,7 +128,7 @@ Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames_Stat
 OUString SAL_CALL ExampleComponent1Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("Lalelu nur der Mann im Mond schaut zu ..."));
+    return OUString("Lalelu nur der Mann im Mond schaut zu ...");
 }
 
 
@@ -163,7 +163,7 @@ sal_Bool SAL_CALL component_writeInfo(
             // ExampleComponent1
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME1 "/UNO/SERVICES") ) ) );
+                    OUString( "/" IMPLNAME1 "/UNO/SERVICES" ) ) );
 
             const Sequence< OUString > & rSNL =
                 ::excomp_impl::ExampleComponent1Impl::getSupportedServiceNames_Static();
@@ -190,7 +190,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME1) ),
+            OUString( IMPLNAME1 ),
             ::excomp_impl::ExampleComponent1_CreateInstance,
             ::excomp_impl::ExampleComponent1Impl::getSupportedServiceNames_Static() ) );
 

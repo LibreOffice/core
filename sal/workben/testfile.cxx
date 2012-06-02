@@ -161,7 +161,7 @@ sal_Bool Initialize( void )
         iniFileURL=rtl::OUString( rtl_uString_getStr(strExeFileURL) ,(int) (pExeFileCount-rtl_uString_getStr(strExeFileURL)) );
 
         // add "/testfile.ini" to iniFileURL
-        iniFileURL+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testfile.ini"));
+        iniFileURL+=rtl::OUString("/testfile.ini");
 
         // Open the ini-File
         pFile=new File( iniFileURL );
@@ -904,7 +904,7 @@ void FileCopyAndMoveTest( void )
     // FileCopyTest
     //--------------------------------------------------
 
-    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    destPath+=rtl::OUString("/");
     destPath+=file3;
 
     printf( "Copy the file ");
@@ -938,7 +938,7 @@ void FileCopyAndMoveTest( void )
     //--------------------------------------------------
 
     destPath=rtl::OUString( dir_not_exist );
-    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    destPath+=rtl::OUString("/");
     destPath+=file3;
 
     printf( "Copy a file to a not existing directory \n");
@@ -971,7 +971,7 @@ void FileCopyAndMoveTest( void )
     //--------------------------------------------------
 
     destPath=rtl::OUString( dir2 );
-    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    destPath+=rtl::OUString("/");
     destPath+=file3;
 
     printf( "Move the file ");
@@ -1020,7 +1020,7 @@ void FileCopyAndMoveTest( void )
     //--------------------------------------------------
 
     destPath=rtl::OUString( dir_not_exist );
-    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    destPath+=rtl::OUString("/");
     destPath+=file3;
 
     printf( "Move a file to a not existing directory: \n");
@@ -2300,15 +2300,15 @@ void AbsolutePathTest(void)
     printf( "AbsolutePath-Test\n" );
     printf( "--------------------------------------------\n\n" );
 
-    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
-    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
-    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../..")));
-    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../HUHU")));
+    DoAbsolutePathTest(dir1, rtl::OUString("."));
+    DoAbsolutePathTest(dir1, rtl::OUString(".."));
+    DoAbsolutePathTest(dir1, rtl::OUString("../.."));
+    DoAbsolutePathTest(dir1, rtl::OUString("../HUHU"));
 
-    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
-    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
-    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../..")));
-    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../HUHU")));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString("."));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString(".."));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString("../.."));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString("../HUHU"));
 
     PressKey();
     return;
@@ -2418,7 +2418,7 @@ void SearchPathTest(void)
     printFileName( file3 );
     printf( "\n" );
 
-    rc=FileBase::searchFileURL( file3 , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) , strResultPath );
+    rc=FileBase::searchFileURL( file3 , rtl::OUString("") , strResultPath );
 
     if ( rc == FileBase::E_None )
     {
@@ -2455,7 +2455,7 @@ void SearchPathTest(void)
     //------------------------------------------------------------
 
     rtl::OUString       strSearchPath( dir_not_exist );
-    strSearchPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+    strSearchPath+=rtl::OUString(";");
     strSearchPath+=dir_on_server;
 
     printf( "\nsearchFileURL:  File : ");

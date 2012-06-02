@@ -72,14 +72,14 @@ void oldtests::test_OUString()
     //          "Mein erster RTL OUString\n"
     //           |    |    |    |    |
     //  Index    0    5    10   15   20
-    OUString s1(OUString(RTL_CONSTASCII_USTRINGPARAM("Mein erster RTL OUString\n")));
-    TEST_ENSURE( s1 == OUString(RTL_CONSTASCII_USTRINGPARAM("Mein erster RTL OUString\n")), "test_OWString error 1");
+    OUString s1(OUString("Mein erster RTL OUString\n"));
+    TEST_ENSURE( s1 == OUString("Mein erster RTL OUString\n"), "test_OWString error 1");
     TEST_ENSURE( s1.getLength() == 25, "test_OWString error 2");
 
     OUString s2 = s1;
     TEST_ENSURE( s2[16] == (sal_Unicode)'O', "test_OWString error 3");
     TEST_ENSURE( s2.equals(s1), "test_OWString error 4");
-    TEST_ENSURE( OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("hallo"))) == OUString(RTL_CONSTASCII_USTRINGPARAM("hallo")), "test_OWString error 4");
+    TEST_ENSURE( OUString( OUString("hallo")) == OUString("hallo"), "test_OWString error 4");
     TEST_ENSURE( s2.indexOf((sal_Unicode)'O') == 16, "test_OWString error 5");
     TEST_ENSURE( s2.indexOf((sal_Unicode)'O', 5) == 16, "test_OWString error 5a");
     TEST_ENSURE( s2.lastIndexOf((sal_Unicode)'r') == 20, "test_OWString error 6");
@@ -94,24 +94,24 @@ void oldtests::test_OUString()
     //           |    |    |    |    |    |    |    |    |    |    |    |
     //  Index    0    5    10   15   20   25   30   35   40   45   50   55
     OUString s3 = s2.copy(0, s2.getLength() - 1);
-    OUString s4 = s3.concat( OUString(RTL_CONSTASCII_USTRINGPARAM(" ist ein String aus der RTL Library\n")) );
+    OUString s4 = s3.concat( OUString(" ist ein String aus der RTL Library\n") );
     TEST_ENSURE( s4.getLength() == 60, "test_OWString error 11");
 
     s1 = s4.copy(0, 39);
     OUString s5;
-    s5 = s1 + OUString(RTL_CONSTASCII_USTRINGPARAM(" aus der RTL Library\n"));
+    s5 = s1 + OUString(" aus der RTL Library\n");
     TEST_ENSURE( s5.compareTo(s4) == 0 , "test_OWString error 12");
-    TEST_ENSURE( s5.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("RTL"))) == 12, "test_OWString error 13");
-    TEST_ENSURE( s5.lastIndexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("RTL"))) == 48, "test_OWString error 13");
+    TEST_ENSURE( s5.indexOf(OUString("RTL")) == 12, "test_OWString error 13");
+    TEST_ENSURE( s5.lastIndexOf(OUString("RTL")) == 48, "test_OWString error 13");
 
     sal_Bool b = sal_False;
     OUString s6 = s5.valueOf(b);
-//  TEST_ENSURE( s6.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("False"))) == 0, "test_OWString error 14");
+//  TEST_ENSURE( s6.compareTo(OUString("False")) == 0, "test_OWString error 14");
     s6 = s5.valueOf((sal_Unicode)'H');
-    TEST_ENSURE( s6.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("H"))) == 0, "test_OWString error 15");
+    TEST_ENSURE( s6.compareTo(OUString("H")) == 0, "test_OWString error 15");
     sal_Int32 n = 123456789L;
     s6 = s5.valueOf(n);
-    TEST_ENSURE( s6.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("123456789"))) == 0, "test_OWString error 16");
+    TEST_ENSURE( s6.compareTo(OUString("123456789")) == 0, "test_OWString error 16");
 
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
@@ -119,64 +119,64 @@ void oldtests::test_OUString()
     sal_Int64 m = -3223372036854775807;
 #endif
     s6 = s5.valueOf(m);
-    TEST_ENSURE( s6.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("-3223372036854775807")) ) == 0, "test_OWString error 17");
+    TEST_ENSURE( s6.compareTo( OUString("-3223372036854775807") ) == 0, "test_OWString error 17");
 
      OUString s7;
-    OUString s8(OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO ICH BIN EIN SS")));
-    s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("          "));
-    s8 = s7 + s8 + OUString(RTL_CONSTASCII_USTRINGPARAM("          "));
-    TEST_ENSURE( s8 == OUString(RTL_CONSTASCII_USTRINGPARAM("          HALLO ICH BIN EIN SS          ")),
+    OUString s8(OUString("HALLO ICH BIN EIN SS"));
+    s7 = OUString("          ");
+    s8 = s7 + s8 + OUString("          ");
+    TEST_ENSURE( s8 == OUString("          HALLO ICH BIN EIN SS          "),
                   "test_OWString error 22");
 
     s7 = s8.trim();
-    TEST_ENSURE( s7 == OUString(RTL_CONSTASCII_USTRINGPARAM("HALLO ICH BIN EIN SS")), "test_OWString error 23");
+    TEST_ENSURE( s7 == OUString("HALLO ICH BIN EIN SS"), "test_OWString error 23");
 
-    s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo"));
-    s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("aber Hallo"));
+    s7 = OUString("Hallo");
+    s8 = OUString("aber Hallo");
 
     TEST_ENSURE( s7 < s8, "test_OWString error 25");
     TEST_ENSURE( s8 > s7, "test_OWString error 26");
     TEST_ENSURE( s7 != s8, "test_OWString error 27");
-    TEST_ENSURE( s7 != OUString(RTL_CONSTASCII_USTRINGPARAM("blabla")), "test_OWString error 28");
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("blabla")) != s7, "test_OWString error 29");
+    TEST_ENSURE( s7 != OUString("blabla"), "test_OWString error 28");
+    TEST_ENSURE( OUString("blabla") != s7, "test_OWString error 29");
 
-    s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo"));
+    s8 = OUString("Hallo");
     TEST_ENSURE( s7 <= s8, "test_OWString error 30");
     TEST_ENSURE( s7 >= s8, "test_OwString error 31");
 
     s8 = s8.replace((sal_Unicode)'l', (sal_Unicode)'r');
-    TEST_ENSURE( s8 == OUString(RTL_CONSTASCII_USTRINGPARAM("Harro")), "test_OWString error 32");
+    TEST_ENSURE( s8 == OUString("Harro"), "test_OWString error 32");
 
     //       "Ich bin ein String mit einem A und C und vielen m, m, m, m"
     //        |    |    |    |    |    |    |    |    |    |    |    |
     //index   0    5    10   15   20   25   30   35   40   45   50   55
-    s8 = OUString(RTL_CONSTASCII_USTRINGPARAM("Ich bin ein String mit einem A und C und vielen m, m, m, m"));
+    s8 = OUString("Ich bin ein String mit einem A und C und vielen m, m, m, m");
 
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")) ) < 0, "test_OWString error 46" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")) ) == 0, "test_OWString error 46" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")) ) > 0, "test_OWString error 47" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")) ) < 0, "test_OWString error 48" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("bbbb")) ) < 0, "test_OWString error 49" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("aaaa")) ) < 0, "test_OWString error 50" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("aaaa")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("aaa")) ) > 0, "test_OWString error 51" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("bbbb")).compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")) ) > 0, "test_OWString error 52" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")) == OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")), "test_OWString error 53" );
-    TEST_ENSURE( OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")) == OUString(RTL_CONSTASCII_USTRINGPARAM("bbb")), "test_OWString error 54" );
+    TEST_ENSURE( OUString("aaa").compareTo( OUString("bbb") ) < 0, "test_OWString error 46" );
+    TEST_ENSURE( OUString("aaa").compareTo( OUString("aaa") ) == 0, "test_OWString error 46" );
+    TEST_ENSURE( OUString("bbb").compareTo( OUString("aaa") ) > 0, "test_OWString error 47" );
+    TEST_ENSURE( OUString("aaaa").compareTo( OUString("bbb") ) < 0, "test_OWString error 48" );
+    TEST_ENSURE( OUString("aaa").compareTo( OUString("bbbb") ) < 0, "test_OWString error 49" );
+    TEST_ENSURE( OUString("aaa").compareTo( OUString("aaaa") ) < 0, "test_OWString error 50" );
+    TEST_ENSURE( OUString("aaaa").compareTo( OUString("aaa") ) > 0, "test_OWString error 51" );
+    TEST_ENSURE( OUString("bbbb").compareTo( OUString("bbb") ) > 0, "test_OWString error 52" );
+    TEST_ENSURE( OUString("bbb") == OUString("bbb"), "test_OWString error 53" );
+    TEST_ENSURE( OUString("bbb") == OUString("bbb"), "test_OWString error 54" );
 
     {
-        OUString uStr = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo"));
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo")), 5 ) == 0, "test_OWString error 54.2.1" );
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("Halloa")), 6 ) < 0 , "test_OWString error 54.2.2" );
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("1Hallo")), 6 ) > 0, "test_OWString error 54.2.3" );
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("Aallo")), 5 ) > 0, "test_OWString error 54.2.4" );
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("Halla")), 5 ) > 0, "test_OWString error 54.2.5" );
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("Mallo")), 5 ) < 0, "test_OWString error 54.2.6" );
-        TEST_ENSURE( uStr.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("Hallp")), 5 ) < 0, "test_OWString error 54.2.7" );
+        OUString uStr = OUString("Hallo");
+        TEST_ENSURE( uStr.compareTo( OUString("Hallo"), 5 ) == 0, "test_OWString error 54.2.1" );
+        TEST_ENSURE( uStr.compareTo( OUString("Halloa"), 6 ) < 0 , "test_OWString error 54.2.2" );
+        TEST_ENSURE( uStr.compareTo( OUString("1Hallo"), 6 ) > 0, "test_OWString error 54.2.3" );
+        TEST_ENSURE( uStr.compareTo( OUString("Aallo"), 5 ) > 0, "test_OWString error 54.2.4" );
+        TEST_ENSURE( uStr.compareTo( OUString("Halla"), 5 ) > 0, "test_OWString error 54.2.5" );
+        TEST_ENSURE( uStr.compareTo( OUString("Mallo"), 5 ) < 0, "test_OWString error 54.2.6" );
+        TEST_ENSURE( uStr.compareTo( OUString("Hallp"), 5 ) < 0, "test_OWString error 54.2.7" );
     }
 
 #if OSL_DEBUG_LEVEL == 0
 //YD will fail copy assert on indexes, because ':' returns -1
-    s7 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo jetzt komm ich"));
+    s7 = OUString("Hallo jetzt komm ich");
     s8 = s7.copy(0, s7.indexOf((sal_Unicode)':'));
     TEST_ENSURE( s8.getLength() == 0, "test_OWString error 55");
     TEST_ENSURE( s8.compareTo(OUString()) == 0, "test_OWString error 56");
@@ -221,7 +221,7 @@ void oldtests::test_OUString()
     TEST_ENSURE( nCompareResult21_Len13 > 0, "test_OWString error 66" );
 
     {
-        OUString uStr = OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo"));
+        OUString uStr = OUString("Hallo");
         TEST_ENSURE( uStr.equalsAsciiL( "Hallo", 5 ), "test_OWString error 66.1.1" );
         TEST_ENSURE( !uStr.equalsAsciiL( "Hallo1", 6 ), "test_OWString error 66.1.2" );
         TEST_ENSURE( !uStr.equalsAsciiL( "1Hallo", 6 ), "test_OWString error 66.1.3" );
@@ -238,14 +238,14 @@ void oldtests::test_OUString()
     }
 
     // toInt64
-    OUString s9( OUString(RTL_CONSTASCII_USTRINGPARAM(" -3223372036854775807")) );
+    OUString s9( OUString(" -3223372036854775807") );
     sal_Int64 ln1 = s9.toInt64();
 #if (defined UNX)
     TEST_ENSURE( ln1 == -3223372036854775807LL, "test_OWString error 67" );
 #else
     TEST_ENSURE( ln1 == -3223372036854775807, "test_OWString error 67" );
 #endif
-    OUString s10( OUString(RTL_CONSTASCII_USTRINGPARAM("13243A65f1H45")) );
+    OUString s10( OUString("13243A65f1H45") );
     sal_Int64 ln2 = s10.toInt64();
     TEST_ENSURE( ln2 == 13243, "test_OWString error 68" );
 
@@ -256,16 +256,16 @@ void oldtests::test_OUString()
     TEST_ENSURE( ln3 == 0x13243A65F1, "test_OWString error 69" );
 #endif
     // Exotic base
-    OUString s11( OUString(RTL_CONSTASCII_USTRINGPARAM("H4A")) );
+    OUString s11( OUString("H4A") );
     sal_Int64 ln4 = s11.toInt64( 23 );
     TEST_ENSURE( ln4 == 23*23*17 + 4 * 23 + 10, "test_OWString error 70" );
 
     // toInt32
-    OUString s12( OUString(RTL_CONSTASCII_USTRINGPARAM(" -220368507")) );
+    OUString s12( OUString(" -220368507") );
     sal_Int32 n1 = s12.toInt32();
     TEST_ENSURE( n1 == -220368507, "test_OWString error 71" );
 
-    OUString s13( OUString(RTL_CONSTASCII_USTRINGPARAM("4423A61H45")) );
+    OUString s13( OUString("4423A61H45") );
     sal_Int64 n2 = s13.toInt32();
     TEST_ENSURE( n2 == 4423, "test_OWString error 72" );
 

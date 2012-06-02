@@ -62,7 +62,7 @@ int main (int argc, char **argv)
 
     // create service manager
     Reference< XMultiServiceFactory > xSMgr = createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ) );
+        OUString( "applicat.rdb"  ) );
 
     Reference < XImplementationRegistration > xReg;
     Reference < XSimpleRegistry > xSimpleReg;
@@ -71,7 +71,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
+            OUString("com.sun.star.registry.ImplementationRegistration") );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -88,7 +88,7 @@ int main (int argc, char **argv)
         for( int n = 2 ; n <argc ; n ++ ) {
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
             xReg->registerImplementation(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+                OUString("com.sun.star.loader.SharedLibrary"),
                 aDllName,
                 xSimpleReg );
         }
@@ -109,13 +109,13 @@ int main (int argc, char **argv)
 #if defined(SAL_W32)
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
-        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM("lib"));
+        OUString aDllName("lib");
         aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
-        aDllName += OUString(RTL_CONSTASCII_USTRINGPARAM(".so"));
+        aDllName += OUString(".so");
 #endif
 
         xReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ,
+            OUString("com.sun.star.loader.SharedLibrary") ,
             aDllName,
             xSimpleReg );
     }

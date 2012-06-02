@@ -306,7 +306,7 @@ int _cdecl main( int argc, char * argv[] )
     }
 
     RegistryKey singletonKey;
-    if ( indexRoot.createKey(OUString(RTL_CONSTASCII_USTRINGPARAM("SINGLETONS")), singletonKey) )
+    if ( indexRoot.createKey(OUString("SINGLETONS"), singletonKey) )
     {
         fprintf(stderr, "%s: open/create SINGLETONS key of registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getIndexReg().c_str());

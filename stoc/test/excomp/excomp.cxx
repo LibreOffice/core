@@ -70,35 +70,35 @@ OUString getExePath()
 SAL_IMPLEMENT_MAIN()
 {
 #ifdef UNX
-    OUString compName1(RTL_CONSTASCII_USTRINGPARAM("libexcomp1.so"));
-    OUString compName2(RTL_CONSTASCII_USTRINGPARAM("libexcomp2.so"));
+    OUString compName1("libexcomp1.so");
+    OUString compName2("libexcomp2.so");
 #else
-    OUString compName1(RTL_CONSTASCII_USTRINGPARAM("excomp1"));
-    OUString compName2(RTL_CONSTASCII_USTRINGPARAM("excomp2"));
+    OUString compName1("excomp1");
+    OUString compName2("excomp2");
 #endif
 
     OUString exePath( getExePath() );
     OUString excompRdb(exePath);
 
-    excompRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("excomp.rdb"));
+    excompRdb += OUString("excomp.rdb");
 
     Reference< XMultiServiceFactory > xSMgr  = ::cppu::createRegistryServiceFactory( excompRdb );
     OSL_ENSURE( xSMgr.is(), "excomp error 0" );
 
     typelib_TypeDescription* pTypeDesc = NULL;
-    OUString sType(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.XTextDocument"));
+    OUString sType("com.sun.star.text.XTextDocument");
     typelib_typedescription_getByName( &pTypeDesc, sType.pData);
 //  typelib_InterfaceTypeDescription* pInterDesc = (typelib_InterfaceTypeDescription*)pTypeDesc;
 
-    Reference< XInterface > xIFace = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")));
+    Reference< XInterface > xIFace = xSMgr->createInstance(OUString("com.sun.star.registry.ImplementationRegistration"));
     Reference< XImplementationRegistration > xImpReg( xIFace, UNO_QUERY);
     OSL_ENSURE( xImpReg.is(), "excomp error 1" );
     try
     {
-        xImpReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+        xImpReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
                                         compName1,
                                         Reference< XSimpleRegistry >() );
-        xImpReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+        xImpReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
                                         compName2,
                                         Reference< XSimpleRegistry >() );
     }
@@ -107,10 +107,10 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( e.Message.getLength(), OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
 
-    Reference< XTest > xTest1( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("example.ExampleComponent1"))),
+    Reference< XTest > xTest1( xSMgr->createInstance(OUString("example.ExampleComponent1")),
                                UNO_QUERY);
     OSL_ENSURE( xTest1.is(), "excomp error 2" );
-    Reference< XTest > xTest2( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("example.ExampleComponent2"))),
+    Reference< XTest > xTest2( xSMgr->createInstance(OUString("example.ExampleComponent2")),
                                UNO_QUERY);
     OSL_ENSURE( xTest2.is(), "excomp error 3" );
 

@@ -133,9 +133,9 @@ inline void printPipeError( ::osl::Pipe aPipe )
 //------------------------------------------------------------------------
 // pipe name and transfer contents
 //------------------------------------------------------------------------
-const rtl::OUString aTestPipeName(RTL_CONSTASCII_USTRINGPARAM("testpipe2"));
-const rtl::OUString aTestPipe1(RTL_CONSTASCII_USTRINGPARAM("testpipe1"));
-const rtl::OUString aTestString(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems"));
+const rtl::OUString aTestPipeName("testpipe2");
+const rtl::OUString aTestPipe1("testpipe1");
+const rtl::OUString aTestString("Sun Microsystems");
 
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");

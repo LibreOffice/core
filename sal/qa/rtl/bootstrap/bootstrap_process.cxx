@@ -43,14 +43,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     //custom .ini/rc file
     Bootstrap aBs_custom( OUString::createFromAscii(argv[3]) );
     OUString suValue;
-    OUString suDefault( RTL_CONSTASCII_USTRINGPARAM("mydefault") );
+    OUString suDefault( "mydefault" );
     int flag = atoi( argv[1] );
 
     switch( flag ) {
     case 1:
         // parameters may be passed by command line arguments
         aBootstrap.getFrom(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_SERVICES")),
+            OUString("UNO_SERVICES"),
             suValue );
         if ( suValue == "service.rdb" )
         {
@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     case 2:
         // parameters may be passed by ini file
         aBootstrap.getFrom(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
+            OUString("EXECUTABLE_RC"),
             suValue );
         if ( suValue == "true" )
         {
@@ -72,7 +72,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     case 3:
         // parameters may be passed by command line arguments
         aBootstrap.getFrom(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("QADEV_BOOTSTRAP")),
+            OUString("QADEV_BOOTSTRAP"),
             suValue );
         if ( suValue == "sun&ms" )
         {
@@ -83,7 +83,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     case 4:
         // parameters may be passed by custom .ini/rc file
         aBs_custom.getFrom(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("RTLVALUE")),
+            OUString("RTLVALUE"),
             suValue );
         if ( suValue == "qadev17" )
         {
@@ -94,7 +94,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     case 5:
         // parameters may be passed by inheritance
         aBs_custom.getFrom(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
+            OUString("EXECUTABLE_RC"),
             suValue );
         if ( suValue == "true" )
         {
@@ -105,7 +105,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     default:
         // parameters may be passed by inheritance
         aBs_custom.getFrom(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("ABCDE")),
+            OUString("ABCDE"),
             suValue, suDefault );
         if ( suValue == "mydefault" )
         {

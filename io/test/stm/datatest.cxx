@@ -120,7 +120,7 @@ void ODataStreamTest::testInvariant(
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) == TestName ) {
+    if( OUString("com.sun.star.io.DataInputStream") == TestName ) {
         Reference < XConnectable > connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSink > active( TestObject , UNO_QUERY );
         Reference < XInputStream >  input( TestObject , UNO_QUERY );
@@ -133,7 +133,7 @@ void ODataStreamTest::testInvariant(
 
 
     }
-    else if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) == TestName ) {
+    else if( OUString("com.sun.star.io.DataInputStream") == TestName ) {
         Reference < XConnectable >  connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSource > active( TestObject , UNO_QUERY );
         Reference < XOutputStream > output( TestObject , UNO_QUERY );
@@ -151,7 +151,7 @@ void ODataStreamTest::testInvariant(
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( OUString(RTL_CONSTASCII_USTRINGPARAM("bla bluzb")) ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService( OUString("bla bluzb") ) , "XServiceInfo test failed" );
     }
 
 }
@@ -164,8 +164,8 @@ sal_Int32 ODataStreamTest::test(
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) == TestName ||
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream")) == TestName )  {
+    if( OUString("com.sun.star.io.DataInputStream") == TestName ||
+        OUString("com.sun.star.io.DataOutputStream") == TestName )  {
 
         try
         {
@@ -181,21 +181,21 @@ sal_Int32 ODataStreamTest::test(
 
 
                 Reference < XInterface > x = m_rFactory->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe" )));
+                    OUString( "com.sun.star.io.Pipe" ));
 
                 Reference < XInputStream >   rPipeInput( x , UNO_QUERY );
                 Reference < XOutputStream >  rPipeOutput( x , UNO_QUERY );
 
                 if( ! rSink.is() ) {
                     x = m_rFactory->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) );
+                        OUString( "com.sun.star.io.DataInputStream") );
                     rInput = Reference < XDataInputStream > ( x , UNO_QUERY);
                     rSink = Reference<  XActiveDataSink > ( x , UNO_QUERY );
                 }
                 else if ( !rSource.is() )
                 {
                     x = m_rFactory->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream") ) );
+                        OUString( "com.sun.star.io.DataOutputStream" ) );
                     rOutput = Reference< XDataOutputStream > ( x , UNO_QUERY );
                     rSource = Reference< XActiveDataSource > ( x, UNO_QUERY );
                 }
@@ -290,8 +290,8 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     rOutput->writeHyper( 0x123456789abcdefLL );
     ERROR_ASSERT( rInput->readHyper() == 0x123456789abcdefLL , "int64 read/write mismatch" );
 
-    rOutput->writeUTF( OUString(RTL_CONSTASCII_USTRINGPARAM("Live long and prosper !")) );
-    ERROR_ASSERT( rInput->readUTF() == OUString(RTL_CONSTASCII_USTRINGPARAM("Live long and prosper !")) ,
+    rOutput->writeUTF( OUString("Live long and prosper !") );
+    ERROR_ASSERT( rInput->readUTF() == OUString("Live long and prosper !") ,
                     "UTF read/write mismatch" );
 
     Sequence<sal_Unicode> wc(0x10001);
@@ -365,10 +365,10 @@ Sequence<OUString> ODataStreamTest_getSupportedServiceNames( int i) throw ()
 OUString     ODataStreamTest_getServiceName( int i) throw ()
 {
     if( 1 == i ) {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.DataInputStream" ));
+        return OUString( "test.com.sun.star.io.DataInputStream" );
     }
     else {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.DataOutputStream" ));
+        return OUString( "test.com.sun.star.io.DataOutputStream" );
     }
 }
 
@@ -376,11 +376,10 @@ OUString    ODataStreamTest_getImplementationName( int i) throw ()
 {
     if( 1 == i ) {
         return OUString(
-            RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.comp.extensions.stm.DataInputStream") );
+            "test.com.sun.star.comp.extensions.stm.DataInputStream" );
     }
     else {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "test.com.sun.star.comp.extensions.stm.DataOutputStream" ) );
+        return OUString( "test.com.sun.star.comp.extensions.stm.DataOutputStream"  );
     }
 }
 
@@ -394,7 +393,7 @@ public:
         m_b( sal_True ),
         m_byte( 42 ),
         m_c( 429 ),
-        m_s( OUString( RTL_CONSTASCII_USTRINGPARAM( "foo" ) ) )
+        m_s( OUString( "foo"  ) )
         {}
     MyPersistObject( const OUString & sServiceName ) : m_sServiceName( sServiceName )
         {}
@@ -639,12 +638,12 @@ Sequence<OUString> OMyPersistObject_getSupportedServiceNames( ) throw ()
 
 OUString     OMyPersistObject_getServiceName( ) throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.PersistTest" ));
+    return OUString( "test.com.sun.star.io.PersistTest" );
 }
 
 OUString    OMyPersistObject_getImplementationName( ) throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.io.PersistTest" ) );
+    return OUString( "test.com.sun.star.io.PersistTest"  );
 }
 
 class OObjectStreamTest :
@@ -680,7 +679,7 @@ void OObjectStreamTest::testInvariant( const OUString& TestName,
     throw ( IllegalArgumentException, RuntimeException)
 {
 
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.ObjectInputStream" ) )
+    if( OUString( "com.sun.star.io.ObjectInputStream"  )
                   == TestName )
     {
         ODataStreamTest::testInvariant( TestName , TestObject );
@@ -689,7 +688,7 @@ void OObjectStreamTest::testInvariant( const OUString& TestName,
         ERROR_ASSERT( dataInput.is() , "XObjectInputStream cannot be queried" );
         ERROR_ASSERT(   markable.is() , "XMarkableStream cannot be queried" );
     }
-    else if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectOutputStream") )
+    else if( OUString( "com.sun.star.io.ObjectOutputStream" )
              == TestName )
     {
         ODataStreamTest::testInvariant( TestName , TestObject );
@@ -704,7 +703,7 @@ void OObjectStreamTest::testInvariant( const OUString& TestName,
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( OUString(RTL_CONSTASCII_USTRINGPARAM("bla bluzb")) ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService( OUString("bla bluzb") ) , "XServiceInfo test failed" );
     }
 
 }
@@ -726,7 +725,7 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
             else if( DATASTREAM_TEST_MAX_HANDLE >= hTestHandle ) {
                 sal_Int32 hOldHandle = hTestHandle;
                 hTestHandle = ODataStreamTest::test(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream" )),
+                    OUString( "com.sun.star.io.DataInputStream" ),
                     TestObject , hTestHandle );
                 if( hTestHandle == -1 ){
                     hTestHandle = hOldHandle;
@@ -742,19 +741,19 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
 
 
                 Reference < XInterface > x = m_rFactory->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe" )) );
+                    OUString( "com.sun.star.io.Pipe" ) );
 
                 Reference <XInputStream > rPipeInput( x , UNO_QUERY );
                 Reference <XOutputStream >  rPipeOutput( x , UNO_QUERY );
 
                 x = m_rFactory->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream") ) );
+                    OUString( "com.sun.star.io.MarkableInputStream" ) );
 
                 Reference <XInputStream > markableInput( x , UNO_QUERY );
                 Reference <XActiveDataSink> markableSink( x , UNO_QUERY );
 
                 x = m_rFactory->createInstance( OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableOutputStream" ) ) );
+                    "com.sun.star.io.MarkableOutputStream"  ) );
                 Reference <XOutputStream >  markableOutput( x , UNO_QUERY );
                 Reference <XActiveDataSource >  markableSource( x , UNO_QUERY );
 
@@ -768,13 +767,13 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
 
                 if( ! rSink.is() ) {
                     x = m_rFactory->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectInputStream") ));
+                        OUString( "com.sun.star.io.ObjectInputStream" ));
                     rInput = Reference < XObjectInputStream > ( x , UNO_QUERY );
                     rSink = Reference < XActiveDataSink > ( x , UNO_QUERY );
                 }
                 else if ( !rSource.is() ) {
                     x = m_rFactory->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectOutputStream" )));
+                        OUString( "com.sun.star.io.ObjectOutputStream" ));
                     rOutput = Reference <XObjectOutputStream > ( x , UNO_QUERY );
                     rSource = Reference <XActiveDataSource>( x, UNO_QUERY );
                 }
@@ -822,57 +821,57 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
 {
     sal_Bool b = sal_True;
 
-    if( r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ).getValueType() == getCppuVoidType() ||
-        r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ).getValueType() == getCppuVoidType() ) {
+    if( r1->getPropertyValue( OUString("long") ).getValueType() == getCppuVoidType() ||
+        r2->getPropertyValue( OUString("long") ).getValueType() == getCppuVoidType() ) {
 
         // one of the objects is not the correct propertyset !
         fprintf( stderr, "compareMyPropertySet: 1\n" );
         return sal_False;
     }
 
-    b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ) ==
-                r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ) );
+    b = b && (  r1->getPropertyValue( OUString("long") ) ==
+                r2->getPropertyValue( OUString("long") ) );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 2\n" );
 
-    b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) ==
-                r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) );
+    b = b && (  r1->getPropertyValue( OUString("float") ) ==
+                r2->getPropertyValue( OUString("float") ) );
     if( ! b ){
         float f1(0.0);
         float f2(0.0);
-        r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f1;
-        r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f2;
+        r1->getPropertyValue( OUString("float") ) >>= f1;
+        r2->getPropertyValue( OUString("float") ) >>= f2;
         fprintf( stderr, "compareMyPropertySet: %f %f 3\n",f1,f2 );
     }
 
-    b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("double")) ) ==
-                r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("double" ))) );
+    b = b && (  r1->getPropertyValue( OUString("double") ) ==
+                r2->getPropertyValue( OUString("double" )) );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 4\n" );
 
     sal_Bool b1(sal_False), b2(sal_False);
-    Any a =r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
+    Any a =r1->getPropertyValue( OUString("bool") );
     a >>= b1;
-    a = r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
+    a = r2->getPropertyValue( OUString("bool") );
     a >>= b2;
     b = b && ( (b1 && b2) || b1 == b2 );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 5\n" );
 
-//      b = b &&    r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) ) ==
-//                  r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) ) );
+//      b = b &&    r1->getPropertyValue( OUString("bool") ) ==
+//                  r2->getPropertyValue( OUString("bool") ) );
 
-    b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("byte")) ) ==
-                r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("byte")) ) );
+    b = b && (  r1->getPropertyValue( OUString("byte") ) ==
+                r2->getPropertyValue( OUString("byte") ) );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 6\n" );
 
-    b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("char")) ) ==
-                r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("char")) ) );
+    b = b && (  r1->getPropertyValue( OUString("char") ) ==
+                r2->getPropertyValue( OUString("char") ) );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 7\n" );
 
-    b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("string")) ) ==
-                r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("string")) ));
+    b = b && (  r1->getPropertyValue( OUString("string") ) ==
+                r2->getPropertyValue( OUString("string") ));
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 8\n" );
 
-    Any o1 = r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")) );
-    Any o2 = r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")) );
+    Any o1 = r1->getPropertyValue( OUString("object") );
+    Any o2 = r2->getPropertyValue( OUString("object") );
 
     if( o1.getValueType() == getCppuType( (Reference<XPersistObject>*)0 ) ) {
 
@@ -916,7 +915,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
     // reading the data behind the object !
     {
         Reference < XInterface > x = * new MyPersistObject(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("bla blubs")) );
+            OUString( "bla blubs") );
 
         Reference< XPersistObject > persistRef( x , UNO_QUERY );
         ERROR_ASSERT( persistRef.is() , "couldn't instantiate PersistTest object" );
@@ -942,7 +941,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
 
     {
         Reference < XInterface > x = m_rFactory->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.PersistTest")));
+            OUString( "test.com.sun.star.io.PersistTest"));
         Reference< XPersistObject > persistRef( x , UNO_QUERY );
 
         ERROR_ASSERT( persistRef.is() , "couldn't instantiate PersistTest object" );
@@ -953,34 +952,34 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         Any any;
         sal_Int32 i = 0x83482;
         any <<= i;
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("long")) , any );
+        rProp->setPropertyValue( OUString( "long") , any );
 
         float f = (float)42.23;
         any <<= f;
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("float")) , any );
+        rProp->setPropertyValue( OUString( "float") , any );
 
         double d = 233.321412;
         any <<= d;
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("double")) , any );
+        rProp->setPropertyValue( OUString( "double") , any );
 
         sal_Bool b = sal_True;
         any.setValue( &b , getCppuBooleanType() );
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("bool")) , any );
+        rProp->setPropertyValue( OUString( "bool") , any );
 
         sal_Int8 by = 120;
         any <<= by;
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("byte")) , any );
+        rProp->setPropertyValue( OUString( "byte") , any );
 
         sal_Unicode c = 'h';
         any.setValue( &c , getCppuCharType() );
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("char")) , any );
+        rProp->setPropertyValue( OUString( "char") , any );
 
-        OUString str( RTL_CONSTASCII_USTRINGPARAM( "hi du !" ) );
+        OUString str( "hi du !"  );
         any <<= str;
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("string")) , any );
+        rProp->setPropertyValue( OUString( "string") , any );
 
         any <<= persistRef;
-        rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("object")) , any );
+        rProp->setPropertyValue( OUString( "object") , any );
 
         // do read and write
         rOut->writeObject( persistRef );
@@ -991,8 +990,8 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         ERROR_ASSERT( compareMyPropertySet( rProp , rPropRead ) , "objects has not been read properly !" );
 
         // destroy selfreferences
-        rProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")), Any() );
-        rPropRead->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")), Any() );
+        rProp->setPropertyValue( OUString("object"), Any() );
+        rPropRead->setPropertyValue( OUString("object"), Any() );
     }
 
     {
@@ -1003,7 +1002,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         // buffering and marks work correctly
         for( int i = 0 ; i < 2000 ; i ++ ) {
 
-            Reference < XInterface > x = m_rFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.PersistTest")));
+            Reference < XInterface > x = m_rFactory->createInstance(OUString("test.com.sun.star.io.PersistTest"));
             Reference< XPersistObject >  persistRef( x , UNO_QUERY );
 
             Reference < XPropertySet >  rProp( persistRef , UNO_QUERY );
@@ -1012,39 +1011,39 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             Any any;
             sal_Int32 i = 0x83482;
             any <<= i;
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("long")) , any );
+            rProp->setPropertyValue( OUString( "long") , any );
 
             float f = 42.23;
             any <<= f;
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("float")) , any );
+            rProp->setPropertyValue( OUString( "float") , any );
 
             double d = 233.321412;
             any <<= d;
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("double")) , any );
+            rProp->setPropertyValue( OUString( "double") , any );
 
             sal_Bool b = sal_True;
             any.setValue( &b , getCppuBooleanType() );
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("bool")) , any );
+            rProp->setPropertyValue( OUString( "bool") , any );
 
             sal_Int8 by = 120;
             any <<= by;
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("byte")) , any );
+            rProp->setPropertyValue( OUString( "byte") , any );
 
             sal_Unicode c = 'h';
             any.setValue( &c , getCppuCharType() );
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("char")) , any );
+            rProp->setPropertyValue( OUString( "char") , any );
 
-            OUString str( RTL_CONSTASCII_USTRINGPARAM( "hi du !" ) );
+            OUString str( "hi du !"  );
             any <<= str;
-            rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("string")) , any );
+            rProp->setPropertyValue( OUString( "string") , any );
 
-            x = m_rFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.PersistTest")));
+            x = m_rFactory->createInstance(OUString("test.com.sun.star.io.PersistTest"));
             Reference <XPersistObject > persist2ndRef( x , UNO_QUERY );
 
             // Note : persist2ndRef contains coincident values, but also coincident values must be
             // saved properly !
             any <<= persist2ndRef;
-            rProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")) , any );
+            rProp->setPropertyValue( OUString("object") , any );
 
             // simply test, if markable operations and object operations do not interfere
             sal_Int32 nMark = markableOut->createMark();
@@ -1090,20 +1089,20 @@ Sequence<OUString> OObjectStreamTest_getSupportedServiceNames( int i) throw ()
 OUString     OObjectStreamTest_getServiceName( int i) throw ()
 {
     if( 1 == i ) {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.ObjectInputStream" ));
+        return OUString( "test.com.sun.star.io.ObjectInputStream" );
     }
     else {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.ObjectOutputStream"));
+        return OUString( "test.com.sun.star.io.ObjectOutputStream");
     }
 }
 
 OUString    OObjectStreamTest_getImplementationName( int i) throw ()
 {
     if( 1 == i ) {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.comp.extensions.stm.ObjectInputStream" ));
+        return OUString( "test.com.sun.star.comp.extensions.stm.ObjectInputStream" );
     }
     else {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.comp.extensions.stm.ObjectOutputStream"));
+        return OUString( "test.com.sun.star.comp.extensions.stm.ObjectOutputStream");
     }
 }
 

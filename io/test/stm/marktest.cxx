@@ -119,7 +119,7 @@ void OMarkableOutputStreamTest::testInvariant( const OUString& TestName,
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
         ERROR_ASSERT( ! info->supportsService(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("bla bluzb")) ) , "XServiceInfo test failed" );
+            OUString( "bla bluzb") ) , "XServiceInfo test failed" );
     }
 }
 
@@ -130,7 +130,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
     sal_Int32 hTestHandle)
     throw ( IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableOutputStream") )
+    if( OUString( "com.sun.star.io.MarkableOutputStream" )
                   == TestName  )  {
         try
         {
@@ -140,7 +140,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
             }
             else
             {
-                Reference < XInterface > x = m_rFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
+                Reference < XInterface > x = m_rFactory->createInstance( OUString("com.sun.star.io.Pipe"));
                 Reference< XOutputStream >  rPipeOutput( x , UNO_QUERY );
                 Reference < XInputStream >  rPipeInput( x , UNO_QUERY );
 
@@ -395,12 +395,12 @@ Sequence<OUString> OMarkableOutputStreamTest_getSupportedServiceNames(void) thro
 
 OUString     OMarkableOutputStreamTest_getServiceName() throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.MarkableOutputStream"));
+    return OUString( "test.com.sun.star.io.MarkableOutputStream");
 }
 
 OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.starextensions.stm.MarkableOutputStream"));
+    return OUString( "test.com.sun.starextensions.stm.MarkableOutputStream");
 }
 
 
@@ -474,7 +474,7 @@ void OMarkableInputStreamTest::testInvariant(
     const OUString& TestName, const Reference < XInterface >& TestObject )
     throw ( IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream"))
+    if( OUString( "com.sun.star.io.MarkableInputStream")
         == TestName )  {
         Reference <XServiceInfo >  info( TestObject, UNO_QUERY );
         ERROR_ASSERT( info.is() , "XServiceInfo not supported !" );
@@ -483,7 +483,7 @@ void OMarkableInputStreamTest::testInvariant(
             ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
             ERROR_ASSERT(
                 ! info->supportsService(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("bla bluzb")) ) ,
+                    OUString("bla bluzb") ) ,
                 "XServiceInfo test failed" );
         }
     }
@@ -499,7 +499,7 @@ sal_Int32 OMarkableInputStreamTest::test(
     const Reference < XInterface >& TestObject,
     sal_Int32 hTestHandle)  throw ( IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream")) == TestName )
+    if( OUString( "com.sun.star.io.MarkableInputStream") == TestName )
     {
         try
         {
@@ -507,7 +507,7 @@ sal_Int32 OMarkableInputStreamTest::test(
                 testInvariant( TestName , TestObject );
             }
             else  {
-                Reference < XInterface > x = m_rFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
+                Reference < XInterface > x = m_rFactory->createInstance( OUString("com.sun.star.io.Pipe"));
                 Reference< XOutputStream >  rPipeOutput( x , UNO_QUERY );
                 Reference < XInputStream >  rPipeInput( x , UNO_QUERY );
 
@@ -667,12 +667,12 @@ Sequence<OUString> OMarkableInputStreamTest_getSupportedServiceNames(void) throw
 
 OUString     OMarkableInputStreamTest_getServiceName() throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.MarkableInputStream"));
+    return OUString( "test.com.sun.star.io.MarkableInputStream");
 }
 
 OUString    OMarkableInputStreamTest_getImplementationName() throw ()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.extensions.stm.MarkableInputStream" ));
+    return OUString( "test.com.sun.star.extensions.stm.MarkableInputStream" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

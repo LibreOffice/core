@@ -132,7 +132,7 @@ void OPumpTest::testInvariant( const OUString& TestName, const Reference < XInte
     {
           ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
         ERROR_ASSERT( ! info->supportsService(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("bla bluzb") ) ), "XServiceInfo test failed" );
+            OUString( "bla bluzb" ) ), "XServiceInfo test failed" );
     }
 
     Reference < XActiveDataSource > xActiveDataSource( TestObject, UNO_QUERY );
@@ -151,7 +151,7 @@ sal_Int32 OPumpTest::test(
     sal_Int32 hTestHandle)
     throw  (    IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pump") ) == TestName )  {
+    if( OUString( "com.sun.star.io.Pump" ) == TestName )  {
         try
         {
             if( 0 == hTestHandle ) {
@@ -321,7 +321,7 @@ private:
     Reference< XOutputStream > createPipe()
     {
         Reference< XOutputStream > rOut( m_rSmgr->createInstance(
-             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))),UNO_QUERY);
+             OUString("com.sun.star.io.Pipe")),UNO_QUERY);
         return rOut;
     }
 };
@@ -413,9 +413,9 @@ void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
     Reference< XActiveDataControl > rControl( r, UNO_QUERY );
 
     Reference< XInputStream > rIn( m_rSmgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream"))),UNO_QUERY);
+        OUString("com.sun.star.io.DataInputStream")),UNO_QUERY);
     Reference< XOutputStream > rOut( m_rSmgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream"))),UNO_QUERY);
+        OUString("com.sun.star.io.DataOutputStream")),UNO_QUERY);
 
     rSink->setInputStream( rIn );
     rSource->setOutputStream( rOut );
@@ -439,12 +439,12 @@ Sequence<OUString> OPumpTest_getSupportedServiceNames(void) throw()
 }
 OUString     OPumpTest_getServiceName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.io.Pump" ) );
+    return OUString( "test.com.sun.star.io.Pump"  );
 }
 
 OUString    OPumpTest_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.comp.io.Pump") );
+    return OUString( "test.com.sun.star.comp.io.Pump" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

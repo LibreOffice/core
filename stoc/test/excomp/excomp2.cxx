@@ -163,7 +163,7 @@ OUString SAL_CALL ExampleComponent2Impl::getImplementationName(  )
     throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME2) );
+    return OUString( IMPLNAME2 );
 }
 
 //*************************************************************************
@@ -190,7 +190,7 @@ Sequence<OUString> SAL_CALL ExampleComponent2Impl::getSupportedServiceNames(  )
 //*************************************************************************
 Sequence<OUString> SAL_CALL ExampleComponent2Impl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME2) );
+    OUString aName( SERVICENAME2 );
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -198,7 +198,7 @@ Sequence<OUString> SAL_CALL ExampleComponent2Impl::getSupportedServiceNames_Stat
 OUString SAL_CALL ExampleComponent2Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("Alle meine Entchen schwimmen auf dem See, schwimmen auf dem See ..."));
+    return OUString("Alle meine Entchen schwimmen auf dem See, schwimmen auf dem See ...");
 }
 
 
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL component_writeInfo(
             // ExampleComponent2
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME2 "/UNO/SERVICES") ) ) );
+                    OUString( "/" IMPLNAME2 "/UNO/SERVICES" ) ) );
 
             const Sequence< OUString > & rSNL =
                 ::excomp2_impl::ExampleComponent2Impl::getSupportedServiceNames_Static();
@@ -261,7 +261,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME2) ),
+            OUString( IMPLNAME2 ),
             ::excomp2_impl::ExampleComponent2_CreateInstance,
             ::excomp2_impl::ExampleComponent2Impl::getSupportedServiceNames_Static() ) );
 

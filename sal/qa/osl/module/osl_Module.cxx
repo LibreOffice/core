@@ -66,9 +66,9 @@ inline void printUString( const ::rtl::OUString & str )
 inline ::rtl::OUString getDllURL( void )
 {
 #if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
-    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("test_Module_DLL.dll") );
+    ::rtl::OUString libPath( "test_Module_DLL.dll" );
 #else
-    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("libtest_Module_DLL.so") );
+    ::rtl::OUString libPath( "libtest_Module_DLL.so" );
 #endif
 
     ::rtl::OUString dirPath, dllPath;
@@ -81,7 +81,7 @@ inline ::rtl::OUString getDllURL( void )
 
 inline sal_Bool isURL( const ::rtl::OUString pathname )
 {
-    ::rtl::OUString aPreURL( RTL_CONSTASCII_USTRINGPARAM("file:///") );
+    ::rtl::OUString aPreURL( "file:///" );
     return ( ( pathname.indexOf( aPreURL ) == 0 ) ? sal_True : sal_False );
 }
 
@@ -243,7 +243,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("firstfunc")) );
+            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
 
             OUString aFileURL;
             bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
@@ -366,7 +366,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("firstfunc")) );
+            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
             bRes = sal_False;
             if ( pFunc )
                 bRes = pFunc( bRes );
@@ -413,7 +413,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            ::rtl::OUString funcName( RTL_CONSTASCII_USTRINGPARAM("firstfunc") );
+            ::rtl::OUString funcName( "firstfunc" );
 
             FuncPtr pFunc = ( FuncPtr ) osl_getSymbol( (oslModule)aMod, funcName.pData );
             bRes = sal_False;
@@ -446,7 +446,7 @@ namespace osl_Module
 #if !defined( MACOSX )
             // TODO: Find out why this fails on Mac OS X
             ::osl::Module aMod( getDllURL( ) );
-            oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("firstfunc")) );
+            oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString("firstfunc") );
             ::rtl::OUString aLibraryURL;
             bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
             aMod.unload();

@@ -72,7 +72,7 @@ void setStarUserRegistry()
     RegistryKey rootKey, rKey, rKey2;
 
     OUString userReg = getExePath();
-    userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
+    userReg += OUString("user.rdb");
     if(myRegistry->open(userReg, REG_READWRITE))
     {
         OSL_VERIFY(!myRegistry->create(userReg));
