@@ -422,7 +422,7 @@ DemoWindow::DemoWindow() :
     maUpdateTimer(),
     mbSlideDisplayed( false )
 {
-    SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Slideshow Demo" )) );
+    SetText( rtl::OUString("Slideshow Demo" ) );
     SetSizePixel( Size( 640, 480 ) );
     EnablePaint( true );
 
@@ -447,7 +447,7 @@ void DemoWindow::init()
                 uno::UNO_QUERY_THROW );
 
             uno::Reference< uno::XInterface > xInt( xFactory->createInstance(
-                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlideShow")) ));
+                                                        ::rtl::OUString("com.sun.star.presentation.SlideShow") ));
 
             mxShow.set( xInt,
                         uno::UNO_QUERY_THROW );
@@ -466,7 +466,7 @@ void DemoWindow::init()
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(
-                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RehearseTimings")),
+                                     rtl::OUString("RehearseTimings"),
                                      0,
                                      uno::makeAny( sal_True ),
                                      beans::PropertyState_DIRECT_VALUE ));
@@ -561,8 +561,8 @@ void DemoApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     DemoWindow pWindow;

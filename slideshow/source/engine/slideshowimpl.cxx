@@ -623,7 +623,7 @@ SlideShowImpl::SlideShowImpl(
             // #i82460# try to retrieve special transition factory
             mxOptionalTransitionFactory.set(
                 xFactory->createInstanceWithContext(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.TransitionFactory" )),
+                    ::rtl::OUString("com.sun.star.presentation.TransitionFactory" ),
                     mxComponentContext ),
                 uno::UNO_QUERY );
         }
@@ -1455,17 +1455,17 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     uno::Reference< beans::XPropertySet > xLayerPropSet(xDrawnInSlideshow, uno::UNO_QUERY);
 
     //Layer Name which enables to catch annotations
-    rtl::OUString layerName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DrawnInSlideshow"));
+    rtl::OUString layerName = rtl::OUString("DrawnInSlideshow");
     uno::Any aPropLayer;
 
     aPropLayer <<= layerName;
-    xLayerPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aPropLayer);
+    xLayerPropSet->setPropertyValue(rtl::OUString("Name"), aPropLayer);
 
     aPropLayer <<= true;
-    xLayerPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")), aPropLayer);
+    xLayerPropSet->setPropertyValue(rtl::OUString("IsVisible"), aPropLayer);
 
     aPropLayer <<= false;
-    xLayerPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsLocked")), aPropLayer);
+    xLayerPropSet->setPropertyValue(rtl::OUString("IsLocked"), aPropLayer);
 
     PolygonMap::iterator aIter=maPolygons.begin();
 
@@ -1497,7 +1497,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                 {
                     //create the PolyLineShape
                     uno::Reference< uno::XInterface > polyshape(xDocFactory->createInstance(
-                                                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyLineShape")) ) );
+                                                                    rtl::OUString("com.sun.star.drawing.PolyLineShape") ) );
                     uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
 
                     //Add the shape to the slide
@@ -1527,27 +1527,27 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     //Give the built PointSequenceSequence.
                     uno::Any aParam;
                     aParam <<= aRetval;
-                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aParam );
+                    aXPropSet->setPropertyValue( rtl::OUString("PolyPolygon"), aParam );
 
                     //LineStyle : SOLID by default
                     uno::Any            aAny;
                     drawing::LineStyle  eLS;
                     eLS = drawing::LineStyle_SOLID;
                     aAny <<= eLS;
-                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), aAny );
+                    aXPropSet->setPropertyValue( rtl::OUString("LineStyle"), aAny );
 
                     //LineColor
                     sal_uInt32          nLineColor;
                     nLineColor = pPolyPoly->getRGBALineColor();
                     //Transform polygon color from RRGGBBAA to AARRGGBB
                     aAny <<= RGBAColor2UnoColor(nLineColor);
-                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny );
+                    aXPropSet->setPropertyValue( rtl::OUString("LineColor"), aAny );
 
                     //LineWidth
                     double              fLineWidth;
                     fLineWidth = pPolyPoly->getStrokeWidth();
                     aAny <<= (sal_Int32)fLineWidth;
-                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineWidth")), aAny );
+                    aXPropSet->setPropertyValue( rtl::OUString("LineWidth"), aAny );
 
                     // make polygons special
                     xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);
@@ -2172,7 +2172,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
         !getPropertyValue( nChange,
                            xPropSet,
                            ::rtl::OUString(
-                               RTL_CONSTASCII_USTRINGPARAM("Change"))) )
+                               "Change")) )
     {
         OSL_TRACE(
             "queryAutomaticSlideTransition(): "
@@ -2185,7 +2185,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
         !getPropertyValue( nAutomaticNextSlideTimeout,
                            xPropSet,
                            ::rtl::OUString(
-                               RTL_CONSTASCII_USTRINGPARAM("Duration"))) )
+                               "Duration")) )
     {
         OSL_TRACE(
             "queryAutomaticSlideTransition(): "

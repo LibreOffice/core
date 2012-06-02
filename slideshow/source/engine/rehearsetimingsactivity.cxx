@@ -70,7 +70,7 @@ public:
                  ActivitySharedPtr const&                                 rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
 #if OSL_DEBUG_LEVEL > 1
-        Event(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WakeupEvent"))),
+        Event(::rtl::OUString("WakeupEvent")),
 #endif
         maTimer(pTimeBase),
         mnNextTime(0.0),
@@ -175,7 +175,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     Rectangle rect;
     const FontMetric metric( blackHole.GetFontMetric() );
     blackHole.GetTextBoundRect(
-        rect, String(RTL_CONSTASCII_USTRINGPARAM("XX:XX:XX")) );
+        rect, String("XX:XX:XX") );
     maSpriteSizePixel.setX( rect.getWidth() * 12 / 10 );
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));

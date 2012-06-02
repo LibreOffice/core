@@ -223,7 +223,7 @@ namespace slideshow
             if( xPropSet.is() &&
                 getPropertyValue( xParentWindow,
                                   xPropSet,
-                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" ))) )
+                                  ::rtl::OUString("Window" )) )
             {
                 const awt::Rectangle aRect( xParentWindow->getPosSize() );
 
@@ -289,15 +289,13 @@ namespace slideshow
                         if (xPropSet.is())
                         {
                             if ((xPropSet->getPropertyValue(
-                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "PrivateTempFileURL"))) >>= aURL)
+                                  ::rtl::OUString( "PrivateTempFileURL")) >>= aURL)
                                 && !aURL.isEmpty())
                             {
                                 implInitializeMediaPlayer( aURL );
                             }
                             else if (xPropSet->getPropertyValue(
-                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "MediaURL"))) >>= aURL)
+                                  ::rtl::OUString( "MediaURL")) >>= aURL)
                             {
                                 implInitializeMediaPlayer( aURL );
                             }
@@ -359,19 +357,19 @@ namespace slideshow
                     sal_Bool bLoop( false );
                     getPropertyValue( bLoop,
                                       rxProps,
-                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Loop" )));
+                                      ::rtl::OUString( "Loop" ));
                     mxPlayer->setPlaybackLoop( bLoop );
 
                     sal_Bool bMute( false );
                     getPropertyValue( bMute,
                                       rxProps,
-                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Mute" )));
+                                      ::rtl::OUString( "Mute" ));
                     mxPlayer->setMute( bMute || !mbIsSoundEnabled);
 
                     sal_Int16 nVolumeDB(0);
                     getPropertyValue( nVolumeDB,
                                       rxProps,
-                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" )));
+                                      ::rtl::OUString( "VolumeDB" ));
                     mxPlayer->setVolumeDB( nVolumeDB );
 
                     if( mxPlayerWindow.is() )
@@ -379,7 +377,7 @@ namespace slideshow
                         media::ZoomLevel eZoom(media::ZoomLevel_FIT_TO_WINDOW);
                         getPropertyValue( eZoom,
                                           rxProps,
-                                          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" )));
+                                          ::rtl::OUString( "Zoom" ));
                         mxPlayerWindow->setZoomLevel( eZoom );
                     }
                 }
@@ -407,8 +405,7 @@ namespace slideshow
                 catch( const uno::Exception& )
                 {
                     throw lang::NoSupportException(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                           "No video support for ") ) + rMediaURL,
+                        rtl::OUString( "No video support for " ) + rMediaURL,
                         uno::Reference<uno::XInterface>() );
                 }
             }

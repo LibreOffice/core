@@ -87,7 +87,7 @@ bool importShapeGraphic(
     }
 
     rtl::OUString const aVndUrl(
-        RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+        "vnd.sun.star.GraphicObject:"  );
     sal_Int32 nIndex( aURL.indexOf( aVndUrl ) );
 
     if(nIndex != -1)
@@ -303,9 +303,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // (Netscape)Plugin shape. This is a special object
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
-                                  ::rtl::OUString(
-                                      RTL_CONSTASCII_USTRINGPARAM(
-                                          "com.sun.star.comp.sfx2.PluginObject" )),
+                                  ::rtl::OUString( "com.sun.star.comp.sfx2.PluginObject" ),
                                   aPropertyValues,
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
@@ -325,9 +323,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // (Java)Applet shape. This is a special object
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
-                                  ::rtl::OUString(
-                                      RTL_CONSTASCII_USTRINGPARAM(
-                                          "com.sun.star.comp.sfx2.AppletObject" )),
+                                  ::rtl::OUString( "com.sun.star.comp.sfx2.AppletObject" ),
                                   aPropertyValues,
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
@@ -460,7 +456,7 @@ bool ShapeImporter::isSkip(
         rtl::OUString layerName;
         uno::Reference<beans::XPropertySet> xPropLayerSet(
                                                           xLayer, uno::UNO_QUERY );
-        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))) );
+        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString("Name")) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {
