@@ -187,7 +187,7 @@ void XMLTextMarkImportContext::StartElement(
     {
         if (m_sBookmarkName.isEmpty())
         {
-            m_sBookmarkName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
+            m_sBookmarkName = ::rtl::OUString("Unknown");
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
@@ -197,14 +197,10 @@ void XMLTextMarkImportContext::EndElement()
 {
     SvXMLImportContext::EndElement();
 
-    static const OUString sAPI_reference_mark(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ReferenceMark"));
-    static const OUString sAPI_bookmark(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
-    static const OUString sAPI_fieldmark(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Fieldmark"));
-    static const OUString sAPI_formfieldmark(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FormFieldmark"));
+    static const OUString sAPI_reference_mark( "com.sun.star.text.ReferenceMark");
+    static const OUString sAPI_bookmark( "com.sun.star.text.Bookmark");
+    static const OUString sAPI_fieldmark( "com.sun.star.text.Fieldmark");
+    static const OUString sAPI_formfieldmark( "com.sun.star.text.FormFieldmark");
 
     if (!m_sBookmarkName.isEmpty())
     {

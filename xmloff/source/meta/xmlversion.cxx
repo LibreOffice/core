@@ -357,12 +357,12 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
         DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
 
         Reference< XInterface > xWriter (xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
+                OUString("com.sun.star.xml.sax.Writer")));
         DBG_ASSERT( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
 
         // check whether there's already a sub storage with the version info
         // and delete it
-        OUString sVerName( RTL_CONSTASCII_USTRINGPARAM( XMLN_VERSIONSLIST ) );
+        OUString sVerName( XMLN_VERSIONSLIST  );
 
         try {
             // open (create) the sub storage with the version info
@@ -400,7 +400,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 {
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag > aVersions;
 
-    const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_VERSIONSLIST ) );
+    const OUString sDocName( XMLN_VERSIONSLIST  );
     uno::Reference< container::XNameAccess > xRootNames( xRoot, uno::UNO_QUERY );
 
     try {
@@ -417,7 +417,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( xProps.is() )
             {
                 try {
-                    xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) ) >>= aParserInput.sSystemId;
+                    xProps->getPropertyValue( ::rtl::OUString("URL") ) >>= aParserInput.sSystemId;
                 }
                 catch( uno::Exception& )
                 {}
@@ -437,7 +437,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 
             // get parser
             Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+                OUString("com.sun.star.xml.sax.Parser") );
             DBG_ASSERT( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
 
@@ -470,14 +470,14 @@ uno::Sequence< rtl::OUString > SAL_CALL XMLVersionListPersistence_getSupportedSe
     throw()
 {
     const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.DocumentRevisionListPersistence" ) );
+        "com.sun.star.document.DocumentRevisionListPersistence"  );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 rtl::OUString SAL_CALL XMLVersionListPersistence_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLVersionListPersistence" ) );
+    return rtl::OUString( "XMLVersionListPersistence"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLVersionListPersistence_createInstance(
@@ -491,14 +491,14 @@ uno::Sequence< rtl::OUString > SAL_CALL XMLVersionImExportOOO_getSupportedServic
     throw()
 {
     const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.DocumentRevisionListPersistence" ) );
+        "com.sun.star.document.DocumentRevisionListPersistence"  );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 rtl::OUString SAL_CALL XMLVersionImExportOOO_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLVersionImExportOOo" ) );
+    return rtl::OUString( "XMLVersionImExportOOo"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLVersionImExportOOO_createInstance(

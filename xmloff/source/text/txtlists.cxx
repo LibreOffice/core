@@ -238,7 +238,7 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 ::rtl::OUString XMLTextListsHelper::GenerateNewListId() const
 {
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    ::rtl::OUString sTmpStr( RTL_CONSTASCII_USTRINGPARAM( "list" ) );
+    ::rtl::OUString sTmpStr( "list"  );
     sal_Int64 n = Time( Time::SYSTEM ).GetTime();
     n += Date( Date::SYSTEM ).GetDate();
     n += rand();
@@ -446,8 +446,7 @@ XMLTextListsHelper::MakeNumRule(
     sal_Bool* o_pRestartNumbering,
     sal_Bool* io_pSetDefaults)
 {
-    static ::rtl::OUString s_NumberingRules(
-        RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
+    static ::rtl::OUString s_NumberingRules( "NumberingRules");
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
     if ( !i_StyleName.isEmpty() && i_StyleName != i_ParentStyleName )
     {

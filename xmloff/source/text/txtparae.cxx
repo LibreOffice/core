@@ -173,9 +173,9 @@ namespace
 
     static bool lcl_ShapeFilter(const Reference<XTextContent>& xTxtContent)
     {
-        static const OUString sTextFrameService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"));
-        static const OUString sTextGraphicService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextGraphicObject"));
-        static const OUString sTextEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
+        static const OUString sTextFrameService("com.sun.star.text.TextFrame");
+        static const OUString sTextGraphicService("com.sun.star.text.TextGraphicObject");
+        static const OUString sTextEmbeddedService("com.sun.star.text.TextEmbeddedObject");
         Reference<XShape> xShape(xTxtContent, UNO_QUERY);
         if(!xShape.is())
             return false;
@@ -336,8 +336,8 @@ void BoundFrames::Fill(const filter_t& rFilter)
     const Reference< XEnumeration > xEnum = m_xEnumAccess->createEnumeration();
     if(!xEnum.is())
         return;
-    const OUString our_sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
-    const OUString our_sAnchorFrame(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame"));
+    const OUString our_sAnchorType("AnchorType");
+    const OUString our_sAnchorFrame("AnchorFrame");
     while(xEnum->hasMoreElements())
     {
         Reference<XPropertySet> xPropSet(xEnum->nextElement(), UNO_QUERY);
@@ -413,14 +413,14 @@ void FieldParamExporter::Export()
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
                 Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
+                        rtl::OUString("OLELinks"), embed::ElementModes::WRITE );
 
                 if ( !xDstStg->hasByName( sValue ) ) {
                     Reference< XStorageBasedDocument > xStgDoc (
                             m_pExport->GetModel( ), UNO_QUERY );
                     Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
                     Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::READ );
+                            rtl::OUString("OLELinks"), embed::ElementModes::READ );
 
                     xOleStg->copyElementTo( sValue, xDstStg, sValue );
                     Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
@@ -433,7 +433,7 @@ void FieldParamExporter::Export()
         {
             sal_Bool bValue = false;
             aValue >>= bValue;
-            ExportParameter(*pCurrent, (bValue ? OUString(RTL_CONSTASCII_USTRINGPARAM( "true" )) : OUString(RTL_CONSTASCII_USTRINGPARAM("false"))) );
+            ExportParameter(*pCurrent, (bValue ? OUString("true" ) : OUString("false")) );
         }
         else if(aValueType == aSeqType)
         {
@@ -528,14 +528,14 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     {
                         Reference < XPropertySet > xNumPropSet( xNumRule,
                                                                 UNO_QUERY );
-                        const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                        const OUString sIsAutomatic( "IsAutomatic"  );
                         if( xNumPropSet.is() &&
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( sIsAutomatic ) )
                         {
                             bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
                             // Check on outline style (#i73361#)
-                            const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+                            const OUString sNumberingIsOutline( "NumberingIsOutline"  );
                             if ( bAdd &&
                                  xNumPropSet->getPropertySetInfo()
                                            ->hasPropertyByName( sNumberingIsOutline ) )
@@ -645,14 +645,14 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             {
                 Reference < XPropertySet > xNumPropSet( xNumRule,
                                                         UNO_QUERY );
-                const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                const OUString sIsAutomatic( "IsAutomatic"  );
                 if( xNumPropSet.is() &&
                     xNumPropSet->getPropertySetInfo()
                                ->hasPropertyByName( sIsAutomatic ) )
                 {
                     bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
                     // Check on outline style (#i73361#)
-                    const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+                    const OUString sNumberingIsOutline( "NumberingIsOutline"  );
                     if ( bAdd &&
                          xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( sNumberingIsOutline ) )
@@ -1172,91 +1172,91 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     bOpenRuby( sal_False ),
     mpTextListsHelper( 0 ),
     maTextListsHelperStack(),
-    sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
+    sActualSize("ActualSize"),
     // Implement Title/Description Elements UI (#i73249#)
-    sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
-    sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
-    sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
-    sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
-    sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
-    sBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice")),
-    sBookmark(RTL_CONSTASCII_USTRINGPARAM("Bookmark")),
-    sCategory(RTL_CONSTASCII_USTRINGPARAM("Category")),
-    sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
-    sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
-    sCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
-    sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")),
-    sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
-    sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
-    sEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
-    sFootnote(RTL_CONSTASCII_USTRINGPARAM("Footnote")),
-    sFootnoteCounting(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting")),
-    sFrame(RTL_CONSTASCII_USTRINGPARAM("Frame")),
-    sFrameHeightAbsolute(RTL_CONSTASCII_USTRINGPARAM("FrameHeightAbsolute")),
-    sFrameHeightPercent(RTL_CONSTASCII_USTRINGPARAM("FrameHeightPercent")),
-    sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
-    sFrameWidthAbsolute(RTL_CONSTASCII_USTRINGPARAM("FrameWidthAbsolute")),
-    sFrameWidthPercent(RTL_CONSTASCII_USTRINGPARAM("FrameWidthPercent")),
-    sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter")),
-    sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
-    sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")),
-    sHeight(RTL_CONSTASCII_USTRINGPARAM("Height")),
-    sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
-    sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")),
-    sHyperLinkName(RTL_CONSTASCII_USTRINGPARAM("HyperLinkName")),
-    sHyperLinkTarget(RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget")),
-    sHyperLinkURL(RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL")),
-    sIsAutomaticContour(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticContour")),
-    sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
-    sIsPixelContour(RTL_CONSTASCII_USTRINGPARAM("IsPixelContour")),
-    sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
-    sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth")),
-    sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight")),
-    sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
-    sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-    sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName")),
-    sPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName")),
-    sParaChapterNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel")),
-    sParaConditionalStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName")),
-    sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
-    sParaStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
-    sPositionEndOfDoc(RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc")),
-    sPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix")),
-    sRedline(RTL_CONSTASCII_USTRINGPARAM("Redline")),
-    sReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId")),
-    sReferenceMark(RTL_CONSTASCII_USTRINGPARAM("ReferenceMark")),
-    sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight")),
-    sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth")),
-    sRuby(RTL_CONSTASCII_USTRINGPARAM("Ruby")),
-    sRubyAdjust(RTL_CONSTASCII_USTRINGPARAM("RubyAdjust")),
-    sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName")),
-    sRubyText(RTL_CONSTASCII_USTRINGPARAM("RubyText")),
-    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
-    sShapeService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape")),
-    sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType")),
-    sSoftPageBreak( RTL_CONSTASCII_USTRINGPARAM( "SoftPageBreak" ) ),
-    sStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt")),
-    sSuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix")),
-    sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
-    sText(RTL_CONSTASCII_USTRINGPARAM("Text")),
-    sTextContentService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextContent")),
-    sTextEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject")),
-    sTextEndnoteService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote")),
-    sTextField(RTL_CONSTASCII_USTRINGPARAM("TextField")),
-    sTextFieldService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField")),
-    sTextFrameService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
-    sTextGraphicService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextGraphicObject")),
-    sTextPortionType(RTL_CONSTASCII_USTRINGPARAM("TextPortionType")),
-    sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
-    sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
-    sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
-    sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")),
-    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
-    sWidth(RTL_CONSTASCII_USTRINGPARAM("Width")),
-    sWidthType( RTL_CONSTASCII_USTRINGPARAM( "WidthType" ) ),
-    sTextFieldStart( RTL_CONSTASCII_USTRINGPARAM( "TextFieldStart" ) ),
-    sTextFieldEnd( RTL_CONSTASCII_USTRINGPARAM( "TextFieldEnd" ) ),
-    sTextFieldStartEnd( RTL_CONSTASCII_USTRINGPARAM( "TextFieldStartEnd" ) ),
+    sTitle("Title"),
+    sDescription("Description"),
+    sAnchorCharStyleName("AnchorCharStyleName"),
+    sAnchorPageNo("AnchorPageNo"),
+    sAnchorType("AnchorType"),
+    sBeginNotice("BeginNotice"),
+    sBookmark("Bookmark"),
+    sCategory("Category"),
+    sChainNextName("ChainNextName"),
+    sCharStyleName("CharStyleName"),
+    sCharStyleNames("CharStyleNames"),
+    sContourPolyPolygon("ContourPolyPolygon"),
+    sDocumentIndex("DocumentIndex"),
+    sDocumentIndexMark("DocumentIndexMark"),
+    sEndNotice("EndNotice"),
+    sFootnote("Footnote"),
+    sFootnoteCounting("FootnoteCounting"),
+    sFrame("Frame"),
+    sFrameHeightAbsolute("FrameHeightAbsolute"),
+    sFrameHeightPercent("FrameHeightPercent"),
+    sFrameStyleName("FrameStyleName"),
+    sFrameWidthAbsolute("FrameWidthAbsolute"),
+    sFrameWidthPercent("FrameWidthPercent"),
+    sGraphicFilter("GraphicFilter"),
+    sGraphicRotation("GraphicRotation"),
+    sGraphicURL("GraphicURL"),
+    sHeight("Height"),
+    sHoriOrient("HoriOrient"),
+    sHoriOrientPosition("HoriOrientPosition"),
+    sHyperLinkName("HyperLinkName"),
+    sHyperLinkTarget("HyperLinkTarget"),
+    sHyperLinkURL("HyperLinkURL"),
+    sIsAutomaticContour("IsAutomaticContour"),
+    sIsCollapsed("IsCollapsed"),
+    sIsPixelContour("IsPixelContour"),
+    sIsStart("IsStart"),
+    sIsSyncHeightToWidth("IsSyncHeightToWidth"),
+    sIsSyncWidthToHeight("IsSyncWidthToHeight"),
+    sNumberingRules("NumberingRules"),
+    sNumberingType("NumberingType"),
+    sPageDescName("PageDescName"),
+    sPageStyleName("PageStyleName"),
+    sParaChapterNumberingLevel("ParaChapterNumberingLevel"),
+    sParaConditionalStyleName("ParaConditionalStyleName"),
+    sParagraphService("com.sun.star.text.Paragraph"),
+    sParaStyleName("ParaStyleName"),
+    sPositionEndOfDoc("PositionEndOfDoc"),
+    sPrefix("Prefix"),
+    sRedline("Redline"),
+    sReferenceId("ReferenceId"),
+    sReferenceMark("ReferenceMark"),
+    sRelativeHeight("RelativeHeight"),
+    sRelativeWidth("RelativeWidth"),
+    sRuby("Ruby"),
+    sRubyAdjust("RubyAdjust"),
+    sRubyCharStyleName("RubyCharStyleName"),
+    sRubyText("RubyText"),
+    sServerMap("ServerMap"),
+    sShapeService("com.sun.star.drawing.Shape"),
+    sSizeType("SizeType"),
+    sSoftPageBreak( "SoftPageBreak"  ),
+    sStartAt("StartAt"),
+    sSuffix("Suffix"),
+    sTableService("com.sun.star.text.TextTable"),
+    sText("Text"),
+    sTextContentService("com.sun.star.text.TextContent"),
+    sTextEmbeddedService("com.sun.star.text.TextEmbeddedObject"),
+    sTextEndnoteService("com.sun.star.text.Endnote"),
+    sTextField("TextField"),
+    sTextFieldService("com.sun.star.text.TextField"),
+    sTextFrameService("com.sun.star.text.TextFrame"),
+    sTextGraphicService("com.sun.star.text.TextGraphicObject"),
+    sTextPortionType("TextPortionType"),
+    sTextSection("TextSection"),
+    sUnvisitedCharStyleName("UnvisitedCharStyleName"),
+    sVertOrient("VertOrient"),
+    sVertOrientPosition("VertOrientPosition"),
+    sVisitedCharStyleName("VisitedCharStyleName"),
+    sWidth("Width"),
+    sWidthType( "WidthType"  ),
+    sTextFieldStart( "TextFieldStart"  ),
+    sTextFieldEnd( "TextFieldEnd"  ),
+    sTextFieldStartEnd( "TextFieldStartEnd"  ),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
@@ -1279,8 +1279,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_AUTO_FRAME );
     xAutoFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                                   GetExport() );
-    sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME) );
-    aPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "fr" ) );
+    sFamily = OUString( XML_STYLE_FAMILY_SD_GRAPHICS_NAME );
+    aPrefix = OUString( "fr"  );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_FRAME, sFamily,
                               xAutoFramePropMapper, aPrefix );
 
@@ -1288,14 +1288,14 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xSectionPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = OUString( GetXMLToken( XML_SECTION ) );
-    aPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "Sect" ) );
+    aPrefix = OUString( "Sect"  );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
                               xSectionPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
     xRubyPropMapper = new SvXMLExportPropertyMapper( xPropMapper );
     sFamily = OUString( GetXMLToken( XML_RUBY ) );
-    aPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "Ru" ) );
+    aPrefix = OUString( "Ru"  );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_RUBY, sFamily,
                               xRubyPropMapper, aPrefix );
 
@@ -1456,17 +1456,17 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
         {
             if ( 0 == i )
             {
-                sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
+                sName = OUString( "CharacterStyles"  );
                 nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
             }
             else if ( 1 == i )
             {
-                sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "RubyStyles" ) );
+                sName = OUString( "RubyStyles"  );
                 nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
             }
             else
             {
-                sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
+                sName = OUString( "ParagraphStyles"  );
                 nFamily = XML_STYLE_FAMILY_TEXT_PARAGRAPH;
             }
 
@@ -1501,7 +1501,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
             {
                 Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
                 Reference < XText > xText;
-                Any a = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextRange")) );
+                Any a = xSet->getPropertyValue( ::rtl::OUString("TextRange") );
                 a >>= xText;
                 if ( xText.is() )
                 {
@@ -1603,7 +1603,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
         Reference< XIndexAccess > xNumberingRules = xNumberingRulesSupp->getNumberingRules();
         nCount = xNumberingRules->getCount();
         // Custom outline assignment lost after re-importing sxw (#i73361#)
-        const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+        const OUString sNumberingIsOutline( "NumberingIsOutline"  );
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
             Reference< XIndexReplace > xNumRule( xNumberingRules->getByIndex( i ), UNO_QUERY );
@@ -1618,7 +1618,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
                 {
                     Reference < XPropertySet > xNumPropSet( xNumRule,
                                                             UNO_QUERY );
-                    const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                    const OUString sIsAutomatic( "IsAutomatic"  );
                     if( xNumPropSet.is() &&
                         xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( sIsAutomatic ) )
@@ -1686,7 +1686,7 @@ void XMLTextParagraphExport::exportText(
             {
                 // fixme: move string to class member, couldn't do now because
                 //        of no incompatible build
-                OUString sHasLevels( RTL_CONSTASCII_USTRINGPARAM("HasLevels") );
+                OUString sHasLevels( "HasLevels" );
                 if (xInfo->hasPropertyByName( sHasLevels ) )
                 {
                     xPropertySet->getPropertyValue(sHasLevels) >>= bExportLevels;
@@ -2048,7 +2048,7 @@ void XMLTextParagraphExport::exportParagraph(
                                 {
                                     Reference< XPropertySet > xNumRulePropSet( xNumRule, UNO_QUERY );
                                     xNumRulePropSet->getPropertyValue(
-                                        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) ) >>= sOutlineName;
+                                        OUString("Name") ) >>= sOutlineName;
                                     bAssignedtoOutlineStyle = ( sListStyleName == sOutlineName );
                                 }
                             }
@@ -2179,7 +2179,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         sal_Bool bAutoStyles, sal_Bool bIsProgress,
         sal_Bool bPrvChrIsSpc )
 {
-    static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
+    static OUString sMeta("InContentMetadata");
     bool bPrevCharIsSpace = bPrvChrIsSpc;
 
     /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
@@ -2524,7 +2524,7 @@ sal_Bool lcl_txtpara_isBoundAsChar(
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     sal_Bool bIsBoundAsChar = sal_False;
-    OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+    OUString sAnchorType( "AnchorType"  );
     if( rPropSetInfo->hasPropertyByName( sAnchorType ) )
     {
         TextContentAnchorType eAnchor;
@@ -2732,7 +2732,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
                                       sValue.makeStringAndClear() );
     }
 
-    OUString sZOrder( RTL_CONSTASCII_USTRINGPARAM( "ZOrder" ) );
+    OUString sZOrder( "ZOrder"  );
     if( xPropSetInfo->hasPropertyByName( sZOrder ) )
     {
         sal_Int32 nZIndex = 0;
@@ -3150,7 +3150,7 @@ void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rP
     GetExport().GetEventExport().Export(xEventsSupp);
 
     // image map
-    OUString sImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap"));
+    OUString sImageMap("ImageMap");
     if (rPropSet->getPropertySetInfo()->hasPropertyByName(sImageMap))
         GetExport().GetImageMapExport().Export( rPropSet );
 }
@@ -3323,8 +3323,8 @@ void XMLTextParagraphExport::exportTextRange(
         if( bHyperlink )
         {
             // export events (if supported)
-            OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
-                "HyperLinkEvents"));
+            OUString sHyperLinkEvents(
+                "HyperLinkEvents");
             if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
             {
                 Reference<XNameReplace> xName(xPropSet->getPropertyValue(sHyperLinkEvents), uno::UNO_QUERY);
@@ -3512,7 +3512,7 @@ void XMLTextParagraphExport::exportTextDeclarations()
     {
         OUString sUrl;
         OUString sIndexAutoMarkFileURL(
-            RTL_CONSTASCII_USTRINGPARAM("IndexAutoMarkFileURL"));
+            "IndexAutoMarkFileURL");
         if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
             sIndexAutoMarkFileURL))
         {
@@ -3694,7 +3694,7 @@ void XMLTextParagraphExport::exportMeta(
     const Reference<XPropertySet> & i_xPortion,
     sal_Bool i_bAutoStyles, sal_Bool i_isProgress)
 {
-    static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
+    static OUString sMeta("InContentMetadata");
 
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
@@ -3757,7 +3757,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         {
             //            Reference<XPropertySet> xPropSet( xControlShape, UNO_QUERY );
             //            Reference<XTextContent> xTextContent;
-            //            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) ) ) >>= xTextContent;
+            //            xPropSet->getPropertyValue( OUString( "TextRange"  ) ) >>= xTextContent;
 
             Reference<XTextContent> xTextContent( xControlShape, UNO_QUERY );
             if( xTextContent.is() )

@@ -461,13 +461,13 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         OUString sRelPath, sName;
         Reference< XPropertySetInfo > xPropSetInfo =
             m_xPropSet->getPropertySetInfo();
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
+        OUString sPropName( "StreamRelPath"  );
         if( xPropSetInfo->hasPropertyByName(sPropName) )
         {
             aAny = m_xPropSet->getPropertyValue(sPropName);
             aAny >>= sRelPath;
         }
-        sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamName" ) );
+        sPropName = OUString( "StreamName"  );
         if( xPropSetInfo->hasPropertyByName(sPropName) )
         {
             aAny = m_xPropSet->getPropertyValue(sPropName);
@@ -475,7 +475,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         }
         if( !sName.isEmpty() )
         {
-            m_aExtPathPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM("../" ) );
+            m_aExtPathPrefix = OUString( "../"  );
 
             // If there is a rel path within a package, then append
             // additional '../'. If the rel path contains an ':', then it is
@@ -887,7 +887,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_SHAPEID:
                 {
-                    OUString sNewValue( RTL_CONSTASCII_USTRINGPARAM( "shape" ) );
+                    OUString sNewValue( "shape"  );
                     sNewValue += rAttrValue;
                     pMutableAttrList->SetValueByIndex( i, sNewValue );
                     break;
@@ -1074,8 +1074,8 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
                                 ->xCharClass =
                                     Reference < XCharacterClassification >(
                                 xFactory->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.CharacterClassification_Unicode")) ),
+                                    OUString(
+                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
                                 UNO_QUERY );
 
                             OSL_ENSURE( xCharClass.is(),
@@ -1488,9 +1488,9 @@ bool XMLTransformerBase::isWriter() const
 {
     Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
     return  xSI.is() &&
-        (   xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) ||
-            xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) ||
-            xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ) );
+        (   xSI->supportsService( OUString( "com.sun.star.text.TextDocument"  ) ) ||
+            xSI->supportsService( OUString( "com.sun.star.text.WebDocument"  ) ) ||
+            xSI->supportsService( OUString( "com.sun.star.text.GlobalDocument"  ) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

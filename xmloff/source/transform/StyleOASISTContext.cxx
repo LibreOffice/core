@@ -515,7 +515,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( !aNewAttrValue.isEmpty() )
                             {
-                                aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
+                                aNewAttrValue += rtl::OUString(" " );
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )

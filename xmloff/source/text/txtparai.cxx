@@ -420,10 +420,10 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     {
         if( IsXMLToken( sShow, XML_NEW ) )
             pHint->SetTargetFrameName(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("_blank" ) ) );
+                    OUString( "_blank"  ) );
         else if( IsXMLToken( sShow, XML_REPLACE ) )
             pHint->SetTargetFrameName(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("_self" ) ) );
+                    OUString( "_self"  ) );
     }
     rHints.push_back( pHint );
 }
@@ -914,8 +914,8 @@ void XMLMetaImportContext::InsertMeta(
         const uno::Reference<rdf::XMetadatable> xMeta(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.text.InContentMetadata")),
+                OUString(
+                    "com.sun.star.text.InContentMetadata"),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
@@ -993,8 +993,8 @@ void XMLMetaFieldImportContext::InsertMeta(
         const Reference<XPropertySet> xPropertySet(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.text.textfield.MetadataField")),
+                OUString(
+                    "com.sun.star.text.textfield.MetadataField"),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);
@@ -1011,11 +1011,11 @@ void XMLMetaFieldImportContext::InsertMeta(
             if (-1 != nKey)
             {
                 static ::rtl::OUString sPropertyIsFixedLanguage(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")) );
+                    ::rtl::OUString("IsFixedLanguage") );
                 Any any;
                 any <<= nKey;
                 xPropertySet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")), any);
+                    OUString("NumberFormat"), any);
                 if ( xPropertySet->getPropertySetInfo()->
                         hasPropertyByName( sPropertyIsFixedLanguage ) )
                 {
@@ -1099,7 +1099,7 @@ XMLIndexMarkImportContext_Impl::XMLIndexMarkImportContext_Impl(
     enum XMLTextPElemTokens eTok,
     XMLHints_Impl& rHnts) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+        sAlternativeText("AlternativeText"),
         rHints(rHnts),
         eToken(eTok)
 {
@@ -1268,8 +1268,8 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_TOK_TEXT_TOC_MARK_START:
         case XML_TOK_TEXT_TOC_MARK_END:
         {
-            OUString sTmp(RTL_CONSTASCII_USTRINGPARAM(
-                sAPI_com_sun_star_text_ContentIndexMark));
+            OUString sTmp(
+                sAPI_com_sun_star_text_ContentIndexMark);
             sServiceName = sTmp;
             break;
         }
@@ -1278,8 +1278,8 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_TOK_TEXT_USER_INDEX_MARK_START:
         case XML_TOK_TEXT_USER_INDEX_MARK_END:
         {
-            OUString sTmp(RTL_CONSTASCII_USTRINGPARAM(
-                sAPI_com_sun_star_text_UserIndexMark));
+            OUString sTmp(
+                sAPI_com_sun_star_text_UserIndexMark);
             sServiceName = sTmp;
             break;
         }
@@ -1288,8 +1288,8 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
         case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
         {
-            OUString sTmp(RTL_CONSTASCII_USTRINGPARAM(
-                sAPI_com_sun_star_text_DocumentIndexMark));
+            OUString sTmp(
+                sAPI_com_sun_star_text_DocumentIndexMark);
             sServiceName = sTmp;
             break;
         }
@@ -1355,7 +1355,7 @@ XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
     enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
         XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
                                        nTok, rHnts),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
+        sLevel("Level")
 {
 }
 
@@ -1420,8 +1420,8 @@ XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
     enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
         XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
                                        nTok, rHnts),
-        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
+        sUserIndexName("UserIndexName"),
+        sLevel("Level")
 {
 }
 
@@ -1499,12 +1499,12 @@ XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
     enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
         XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
                                        nTok, rHnts),
-        sPrimaryKey(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey")),
-        sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey")),
-        sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading")),
-        sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading")),
-        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading")),
-        sMainEntry(RTL_CONSTASCII_USTRINGPARAM("IsMainEntry"))
+        sPrimaryKey("PrimaryKey"),
+        sSecondaryKey("SecondaryKey"),
+        sTextReading("TextReading"),
+        sPrimaryKeyReading("PrimaryKeyReading"),
+        sSecondaryKeyReading("SecondaryKeyReading"),
+        sMainEntry("IsMainEntry")
 {
 }
 
@@ -1572,7 +1572,7 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
     ,sal_uInt8              nSFConvFlags
                                               )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
-,   sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
+,   sTextFrame("TextFrame")
 ,   rHints( rHnts )
 ,   pHint( 0  )
 ,   rIgnoreLeadingSpace( rIgnLeadSpace )
@@ -1662,7 +1662,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             UNO_QUERY );
 
         const OUString sHyperLinkURL(
-            RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
+            "HyperLinkURL");
 
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sHyperLinkURL))
         {
@@ -2100,7 +2100,7 @@ XMLParaContext::~XMLParaContext()
             if (bIsListHeader)
             {
                 OUString sNumberingIsNumber
-                    (RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
+                    ("NumberingIsNumber");
                 if(xPropSet->getPropertySetInfo()->
                    hasPropertyByName(sNumberingIsNumber))
                 {
@@ -2111,9 +2111,9 @@ XMLParaContext::~XMLParaContext()
             if (bIsRestart)
             {
                 OUString sParaIsNumberingRestart
-                    (RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart"));
+                    ("ParaIsNumberingRestart");
                 OUString sNumberingStartValue
-                    (RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue"));
+                    ("NumberingStartValue");
                 if (xPropSet->getPropertySetInfo()->
                     hasPropertyByName(sParaIsNumberingRestart))
                 {
@@ -2167,9 +2167,7 @@ XMLParaContext::~XMLParaContext()
                         // borrow from XMLTextMarkImportContext
                         XMLTextMarkImportContext::CreateAndInsertMark(
                             GetImport(),
-                            OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.text.ReferenceMark")),
+                            OUString( "com.sun.star.text.ReferenceMark"),
                             rRefName,
                             xRange);
                     }
@@ -2230,7 +2228,7 @@ XMLParaContext::~XMLParaContext()
                             TextContentAnchorType eAnchorType =
                                             TextContentAnchorType_AT_PARAGRAPH;
                             {
-                                OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+                                OUString sAnchorType( "AnchorType"  );
                                 Any aAny = xPropSet->getPropertyValue( sAnchorType );
                                 aAny >>= eAnchorType;
                             }
@@ -2240,7 +2238,7 @@ XMLParaContext::~XMLParaContext()
                                 Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                                 Any aPos;
                                 aPos <<= xRange;
-                                OUString sTextRange( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) );
+                                OUString sTextRange( "TextRange"  );
                                 xPropSet->setPropertyValue(sTextRange, aPos);
                             }
                         }
@@ -2262,7 +2260,7 @@ XMLParaContext::~XMLParaContext()
                         Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
                         TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
                         {
-                            OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+                            OUString sAnchorType( "AnchorType"  );
                             Any aAny = xPropSet->getPropertyValue( sAnchorType );
                             aAny >>= eAnchorType;
                         }
@@ -2272,7 +2270,7 @@ XMLParaContext::~XMLParaContext()
                             Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                             Any aPos;
                             aPos <<= xRange;
-                            OUString sTextRange( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) );
+                            OUString sTextRange( "TextRange"  );
                             xPropSet->setPropertyValue(sTextRange, aPos);
                         }
                     }

@@ -499,7 +499,7 @@ sal_Bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, 
 {
     sal_Bool bRet = sal_False;
 
-    const OUString astrHSL( RTL_CONSTASCII_USTRINGPARAM( "hsl" ) );
+    const OUString astrHSL( "hsl"  );
     if( rStrImpValue.matchIgnoreAsciiCase( astrHSL ) )
     {
         sal_Int32 nOpen = rStrImpValue.indexOf( '(' );
@@ -547,13 +547,13 @@ sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
         Sequence< double > aHSL;
         if( (rValue >>= aHSL) && (aHSL.getLength() == 3) )
         {
-            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("hsl(")) );
+            aOut.append( OUString("hsl(") );
             aOut.append( aHSL[0] );
-            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM(",")) );
+            aOut.append( OUString(",") );
             aOut.append( aHSL[1] * 100.0 );
-            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("%,")) );
+            aOut.append( OUString("%,") );
             aOut.append( aHSL[2] * 100.0 );
-            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("%)")) );
+            aOut.append( OUString("%)") );
             rStrExpValue = aOut.makeStringAndClear();
 
             bRet = sal_True;

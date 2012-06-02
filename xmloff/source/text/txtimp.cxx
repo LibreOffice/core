@@ -906,7 +906,7 @@ namespace
         {
             Sequence<OUString> vListEntriesSeq(vListEntries.size());
             copy(vListEntries.begin(), vListEntries.end(), ::comphelper::stl_begin(vListEntriesSeq));
-            vOutParams[OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = makeAny(vListEntriesSeq);
+            vOutParams[OUString(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
         }
         for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
             pCurrent != vOutParams.end();
@@ -934,7 +934,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     , m_pBackpatcherImpl( MakeBackpatcherImpl() )
 {
     static ::rtl::OUString s_PropNameDefaultListId(
-        RTL_CONSTASCII_USTRINGPARAM("DefaultListId"));
+        "DefaultListId");
 
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -982,35 +982,35 @@ XMLTextImportHelper::XMLTextImportHelper(
     {
         Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
-        const OUString aParaStyles(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"));
+        const OUString aParaStyles("ParagraphStyles");
         if( xFamilies->hasByName( aParaStyles ) )
         {
             m_pImpl->m_xParaStyles.set(xFamilies->getByName(aParaStyles),
                 UNO_QUERY);
         }
 
-        const OUString aCharStyles(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"));
+        const OUString aCharStyles("CharacterStyles");
         if( xFamilies->hasByName( aCharStyles ) )
         {
             m_pImpl->m_xTextStyles.set(xFamilies->getByName(aCharStyles),
                 UNO_QUERY);
         }
 
-        const OUString aNumStyles(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"));
+        const OUString aNumStyles("NumberingStyles");
         if( xFamilies->hasByName( aNumStyles ) )
         {
             m_pImpl->m_xNumStyles.set(xFamilies->getByName(aNumStyles),
                 UNO_QUERY);
         }
 
-        const OUString aFrameStyles(RTL_CONSTASCII_USTRINGPARAM("FrameStyles"));
+        const OUString aFrameStyles("FrameStyles");
         if( xFamilies->hasByName( aFrameStyles ) )
         {
             m_pImpl->m_xFrameStyles.set(xFamilies->getByName(aFrameStyles),
                 UNO_QUERY);
         }
 
-        const OUString aPageStyles(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
+        const OUString aPageStyles("PageStyles");
         if( xFamilies->hasByName( aPageStyles ) )
         {
             m_pImpl->m_xPageStyles.set(xFamilies->getByName(aPageStyles),
@@ -1292,8 +1292,8 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                     rFlags &= ~(CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH);
                                     OUString sFontName;
                                     rProp.maValue >>= sFontName;
-                                    OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM("StarBats" ) );
-                                    OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM("StarMath" ) );
+                                    OUString sStarBats( "StarBats"  );
+                                    OUString sStarMath( "StarMath"  );
                                     if( sFontName.equalsIgnoreAsciiCase( sStarBats  ) )
                                         rFlags |= CONV_FROM_STAR_BATS;
                                     else if( sFontName.equalsIgnoreAsciiCase( sStarMath ) )
@@ -1453,32 +1453,19 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         // Numberings/Bullets in table not visible aftzer save/reload (#i80724#)
         sal_Bool bSetListAttrs )
 {
-    static ::rtl::OUString s_ParaStyleName(
-        RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
-    static ::rtl::OUString s_CharStyleName(
-        RTL_CONSTASCII_USTRINGPARAM("CharStyleName"));
-    static ::rtl::OUString s_NumberingRules(
-        RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
-    static ::rtl::OUString s_NumberingIsNumber(
-        RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
-    static ::rtl::OUString s_NumberingLevel(
-        RTL_CONSTASCII_USTRINGPARAM("NumberingLevel"));
-    static ::rtl::OUString s_ParaIsNumberingRestart(
-        RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart"));
-    static ::rtl::OUString s_NumberingStartValue(
-        RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue"));
-    static ::rtl::OUString s_PropNameListId(
-        RTL_CONSTASCII_USTRINGPARAM("ListId"));
-    static ::rtl::OUString s_PageDescName(
-        RTL_CONSTASCII_USTRINGPARAM("PageDescName"));
-    static ::rtl::OUString s_ServiceCombinedCharacters(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.text.TextField.CombinedCharacters"));
-    static ::rtl::OUString s_Content(RTL_CONSTASCII_USTRINGPARAM("Content"));
-    static ::rtl::OUString s_OutlineLevel(
-        RTL_CONSTASCII_USTRINGPARAM("OutlineLevel"));
-    static ::rtl::OUString s_NumberingStyleName(
-            RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName"));
+    static ::rtl::OUString s_ParaStyleName( "ParaStyleName");
+    static ::rtl::OUString s_CharStyleName( "CharStyleName");
+    static ::rtl::OUString s_NumberingRules( "NumberingRules");
+    static ::rtl::OUString s_NumberingIsNumber( "NumberingIsNumber");
+    static ::rtl::OUString s_NumberingLevel( "NumberingLevel");
+    static ::rtl::OUString s_ParaIsNumberingRestart( "ParaIsNumberingRestart");
+    static ::rtl::OUString s_NumberingStartValue( "NumberingStartValue");
+    static ::rtl::OUString s_PropNameListId( "ListId");
+    static ::rtl::OUString s_PageDescName( "PageDescName");
+    static ::rtl::OUString s_ServiceCombinedCharacters( "com.sun.star.text.TextField.CombinedCharacters");
+    static ::rtl::OUString s_Content("Content");
+    static ::rtl::OUString s_OutlineLevel( "OutlineLevel");
+    static ::rtl::OUString s_NumberingStyleName( "NumberingStyleName");
 
     const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                      : XML_STYLE_FAMILY_TEXT_TEXT;
@@ -1909,7 +1896,7 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
     static ::rtl::OUString s_HeadingStyleName(
-        RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"));
+        "HeadingStyleName");
 
     // style name empty?
     if( rStyleName.isEmpty() )
@@ -1973,10 +1960,8 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
 
 void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
-    static ::rtl::OUString s_NumberingStyleName(
-            RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName"));
-    static ::rtl::OUString s_HeadingStyleName(
-        RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"));
+    static ::rtl::OUString s_NumberingStyleName( "NumberingStyleName");
+    static ::rtl::OUString s_HeadingStyleName( "HeadingStyleName");
 
     if ((m_pImpl->m_pOutlineStylesCandidates != NULL || bSetEmptyLevels) &&
          m_pImpl->m_xChapterNumbering.is() &&
@@ -2005,7 +1990,7 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         {
             Reference<XPropertySet> xChapterNumRule(
                 m_pImpl->m_xChapterNumbering, UNO_QUERY);
-            const OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+            const OUString sName("Name");
             xChapterNumRule->getPropertyValue(sName) >>= sOutlineStyleName;
         }
 
@@ -2081,18 +2066,12 @@ void XMLTextImportHelper::SetHyperlink(
     const OUString& rVisitedStyleName,
     XMLEventsImportContext* pEvents)
 {
-    static ::rtl::OUString s_HyperLinkURL(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
-    static ::rtl::OUString s_HyperLinkName(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkName"));
-    static ::rtl::OUString s_HyperLinkTarget(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget"));
-    static ::rtl::OUString s_UnvisitedCharStyleName(
-        RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName"));
-    static ::rtl::OUString s_VisitedCharStyleName(
-        RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName"));
-    static ::rtl::OUString s_HyperLinkEvents(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkEvents"));
+    static ::rtl::OUString s_HyperLinkURL( "HyperLinkURL");
+    static ::rtl::OUString s_HyperLinkName( "HyperLinkName");
+    static ::rtl::OUString s_HyperLinkTarget( "HyperLinkTarget");
+    static ::rtl::OUString s_UnvisitedCharStyleName( "UnvisitedCharStyleName");
+    static ::rtl::OUString s_VisitedCharStyleName( "VisitedCharStyleName");
+    static ::rtl::OUString s_HyperLinkEvents( "HyperLinkEvents");
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference < XPropertySetInfo > xPropSetInfo(
@@ -2167,8 +2146,8 @@ void XMLTextImportHelper::SetRuby(
 {
     Reference<XPropertySet> xPropSet(rCursor, UNO_QUERY);
 
-    OUString sRubyText(RTL_CONSTASCII_USTRINGPARAM("RubyText"));
-    OUString sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName"));
+    OUString sRubyText("RubyText");
+    OUString sRubyCharStyleName("RubyCharStyleName");
 
     // if we have one Ruby property, we assume all of them are present
     if (xPropSet.is() &&
@@ -2676,10 +2655,8 @@ void XMLTextImportHelper::ConnectFrameChains(
         const OUString& rNextFrmName,
         const Reference < XPropertySet >& rFrmPropSet )
 {
-    static ::rtl::OUString s_ChainNextName(
-        RTL_CONSTASCII_USTRINGPARAM("ChainNextName"));
-    static ::rtl::OUString s_ChainPrevName(
-        RTL_CONSTASCII_USTRINGPARAM("ChainPrevName"));
+    static ::rtl::OUString s_ChainNextName( "ChainNextName");
+    static ::rtl::OUString s_ChainPrevName( "ChainPrevName");
 
     if( rFrmName.isEmpty() )
         return;
@@ -2727,8 +2704,7 @@ void XMLTextImportHelper::ConnectFrameChains(
 
 sal_Bool XMLTextImportHelper::IsInFrame() const
 {
-    static ::rtl::OUString s_TextFrame(
-        RTL_CONSTASCII_USTRINGPARAM("TextFrame"));
+    static ::rtl::OUString s_TextFrame( "TextFrame");
 
     sal_Bool bIsInFrame = sal_False;
 

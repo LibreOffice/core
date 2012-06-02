@@ -77,8 +77,8 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     )
 :   SvXMLExport(util::MeasureUnit::INCH, xServiceFactory, XML_AUTO_TEXT, nFlags)
 ,
-        sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-        sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
+        sEventType("EventType"),
+        sNone("None")
 {
 }
 
@@ -136,7 +136,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
                 // get filter component
                 Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                     xFactory->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
+                    OUString("com.sun.star.comp.Oasis2OOoTransformer"),
                                 aArgs), UNO_QUERY);
                 OSL_ENSURE( xTmpDocHandler.is(),
                     "can't instantiate OASIS transformer component" );
@@ -237,8 +237,7 @@ Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames()
 
 OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter" ) );
+    return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"  );
 }
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
@@ -260,8 +259,7 @@ Sequence< OUString > SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames
 
 OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLAutotextEventsExporter" ) );
+    return OUString( "com.sun.star.comp.Writer.XMLAutotextEventsExporter"  );
 }
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(

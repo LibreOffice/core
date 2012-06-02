@@ -232,7 +232,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
             SvXMLExport& rExp,
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
     rExport( rExp ),
-    sPrefix( OUString(RTL_CONSTASCII_USTRINGPARAM("N")) ),
+    sPrefix( OUString("N") ),
     pFormatter( NULL ),
     pCharClass( NULL ),
     pLocaleData( NULL )

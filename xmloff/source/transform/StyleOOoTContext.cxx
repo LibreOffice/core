@@ -928,7 +928,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( !aStyleMirrorAttrValue.isEmpty() )
                     {
-                        aStyleMirrorAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
+                        aStyleMirrorAttrValue += rtl::OUString(" " );
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )

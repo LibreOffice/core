@@ -306,9 +306,9 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 
 :   SvXMLImportContext( rImport, nPrfx, rLName )
-,   sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) )
-,   sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
-,   sNumFormat( OUString(RTL_CONSTASCII_USTRINGPARAM("1")) )
+,   sStarBats( "StarBats"  )
+,   sStarMath( "StarMath"  )
+,   sNumFormat( OUString("1") )
 ,   nLevel( -1L )
 ,   nSpaceBefore( 0L )
 ,   nMinLabelWidth( 0L )
@@ -510,47 +510,47 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         beans::PropertyValue *pProps = aPropSeq.getArray();
         sal_Int32 nPos = 0;
         pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_NUMBERINGTYPE ));
+                OUString(XML_UNO_NAME_NRULE_NUMBERINGTYPE );
         pProps[nPos++].Value <<= (sal_Int16)eType ;
 
-        pProps[nPos].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_PREFIX ));
+        pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_PREFIX );
         pProps[nPos++].Value <<= sPrefix;
 
-        pProps[nPos].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_SUFFIX ));
+        pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_SUFFIX );
         pProps[nPos++].Value <<= sSuffix;
 
-        pProps[nPos].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_ADJUST ));
+        pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_ADJUST );
         pProps[nPos++].Value <<= eAdjust;
 
         sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_LEFT_MARGIN ));
+            OUString(XML_UNO_NAME_NRULE_LEFT_MARGIN );
         pProps[nPos++].Value <<= (sal_Int32)nLeftMargin;
 
         sal_Int32 nFirstLineOffset = -nMinLabelWidth;
 
         pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET ));
+                OUString(XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET );
         pProps[nPos++].Value <<= (sal_Int32)nFirstLineOffset;
 
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE));
+            OUString(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE);
         pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
 
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE));
+            OUString(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE);
         pProps[nPos++].Value <<= (sal_Int16)ePosAndSpaceMode;
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY));
+            OUString(XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY);
         pProps[nPos++].Value <<= (sal_Int16)eLabelFollowedBy;
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION));
+            OUString(XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION);
         pProps[nPos++].Value <<= (sal_Int32)nListtabStopPosition;
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_FIRST_LINE_INDENT));
+            OUString(XML_UNO_NAME_NRULE_FIRST_LINE_INDENT);
         pProps[nPos++].Value <<= (sal_Int32)nFirstLineIndent;
         pProps[nPos].Name =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_INDENT_AT));
+            OUString(XML_UNO_NAME_NRULE_INDENT_AT);
         pProps[nPos++].Value <<= (sal_Int32)nIndentAt;
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
@@ -559,7 +559,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         if( !sStyleName.isEmpty() && pI18NMap )
             sStyleName = pI18NMap->Get( SFX_STYLE_FAMILY_CHAR, sStyleName );
         pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME ));
+                OUString(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME );
         pProps[nPos++].Value <<= sDisplayTextStyleName;
 
         if( bBullet )
@@ -585,8 +585,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                     bStarSymbol = sal_True;
                 }
                 if( bStarSymbol )
-                    aFDesc.Name =
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("StarSymbol" ) );
+                    aFDesc.Name = OUString( "StarSymbol"  );
             }
 
             if( cBullet )
@@ -594,12 +593,11 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 OUStringBuffer sTmp(1);
                 sTmp.append( cBullet );
                 pProps[nPos].Name =
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_CHAR ));
+                        OUString(XML_UNO_NAME_NRULE_BULLET_CHAR );
                 pProps[nPos++].Value <<= sTmp.makeStringAndClear();
             }
 
-            pProps[nPos].Name =
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_FONT ));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_BULLET_FONT );
             pProps[nPos++].Value <<= aFDesc;
 
         }
@@ -619,42 +617,36 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 
             if( !sStr.isEmpty() )
             {
-                pProps[nPos].Name =
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_GRAPHICURL ));
+                pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_GRAPHICURL );
                 pProps[nPos++].Value <<= sStr;
             }
 
             awt::Size aSize( nImageWidth, nImageHeight );
-            pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_GRAPHIC_SIZE ));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_GRAPHIC_SIZE );
             pProps[nPos++].Value <<= aSize;
 
-            pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_VERT_ORIENT ));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_VERT_ORIENT );
             pProps[nPos++].Value <<= (sal_Int16)eImageVertOrient;
         }
 
         if( bNum )
         {
-            pProps[nPos].Name =
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_START_WITH ));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_START_WITH );
             pProps[nPos++].Value <<= (sal_Int16)nNumStartValue;
 
-            pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM(XML_UNO_NAME_NRULE_PARENT_NUMBERING));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_PARENT_NUMBERING);
             pProps[nPos++].Value <<= (sal_Int16)nNumDisplayLevels;
         }
 
         if( ( bNum || bBullet ) && nRelSize )
         {
-            pProps[nPos].Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_RELSIZE ));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_BULLET_RELSIZE );
             pProps[nPos++].Value <<= nRelSize;
         }
 
         if( !bImage && bHasColor )
         {
-            pProps[nPos].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_COLOR ));
+            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_BULLET_COLOR );
             pProps[nPos++].Value <<= m_nColor;
         }
 
@@ -1109,10 +1101,10 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bOutl )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
-,   sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
-,   sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
-,   sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
+,   sIsPhysical( "IsPhysical"  )
+,   sNumberingRules( "NumberingRules"  )
+,   sName( "Name"  )
+,   sIsContinuousNumbering( "IsContinuousNumbering"  )
 ,   pLevelStyles( 0 )
 ,   nLevels( 0 )
 ,   bConsecutive( sal_False )
@@ -1260,7 +1252,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
             if( !xFactory.is() )
                 return;
 
-            Reference < XInterface > xIfc = xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.NumberingStyle")) );
+            Reference < XInterface > xIfc = xFactory->createInstance(OUString("com.sun.star.style.NumberingStyle") );
             if( !xIfc.is() )
                 return;
             Reference < XStyle > xTmp( xIfc, UNO_QUERY );
@@ -1333,7 +1325,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
     if( !xFactory.is() )
         return xNumRule;
 
-    Reference < XInterface > xIfc = xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.NumberingRules")) );
+    Reference < XInterface > xIfc = xFactory->createInstance(OUString("com.sun.star.text.NumberingRules") );
     if( !xIfc.is() )
         return xNumRule;
 
@@ -1352,7 +1344,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     beans::PropertyValue *pProps = aPropSeq.getArray();
 
     pProps->Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_NUMBERINGTYPE ));
+                OUString(XML_UNO_NAME_NRULE_NUMBERINGTYPE );
     (pProps++)->Value <<= (sal_Int16)(bOrdered ? NumberingType::ARABIC
                                                  : NumberingType::CHAR_SPECIAL );
     if( !bOrdered )
@@ -1361,9 +1353,9 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         awt::FontDescriptor aFDesc;
         aFDesc.Name = OUString(
 #if defined UNX
-                        RTL_CONSTASCII_USTRINGPARAM( "starbats" )
+                        "starbats"
 #else
-                        RTL_CONSTASCII_USTRINGPARAM( "StarBats" )
+                        "StarBats"
 #endif
                                         );
         aFDesc.Family = FAMILY_DONTKNOW ;
@@ -1371,18 +1363,17 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         aFDesc.CharSet = RTL_TEXTENCODING_SYMBOL ;
         aFDesc.Weight = WEIGHT_DONTKNOW;
         pProps->Name =
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_FONT ));
+                    OUString(XML_UNO_NAME_NRULE_BULLET_FONT );
         (pProps++)->Value <<= aFDesc;
 
         OUStringBuffer sTmp(1);
         sTmp.append( (sal_Unicode)(0xF000 + 149) );
         pProps->Name =
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_CHAR ));
+                    OUString(XML_UNO_NAME_NRULE_BULLET_CHAR );
         (pProps++)->Value <<= sTmp.makeStringAndClear();
         pProps->Name =
-                OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME ));
-        (pProps++)->Value <<=
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Numbering Symbols" ) );
+                OUString(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME );
+        (pProps++)->Value <<= OUString( "Numbering Symbols"  );
     }
 
     Any aAny;
