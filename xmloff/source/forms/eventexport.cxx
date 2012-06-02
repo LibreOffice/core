@@ -105,7 +105,7 @@ namespace xmloff
     void SAL_CALL OEventDescriptorMapper::replaceByName( const ::rtl::OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         throw IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("replacing is not implemented for this wrapper class.")), static_cast< ::cppu::OWeakObject* >(this), 1);
+            ::rtl::OUString("replacing is not implemented for this wrapper class."), static_cast< ::cppu::OWeakObject* >(this), 1);
     }
 
     //---------------------------------------------------------------------
@@ -114,7 +114,7 @@ namespace xmloff
         ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
             throw NoSuchElementException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("There is no element named ")) += _rName,
+                ::rtl::OUString("There is no element named ") += _rName,
                 static_cast< ::cppu::OWeakObject* >(this));
 
         return makeAny(aPos->second);

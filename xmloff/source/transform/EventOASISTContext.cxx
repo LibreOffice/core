@@ -146,7 +146,7 @@ bool ParseURLAsString(
     const OUString& rAttrValue,
     OUString* pName, OUString* pLocation )
 {
-    OUString SCHEME( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) );
+    OUString SCHEME( "vnd.sun.star.script:"  );
 
     sal_Int32 params = rAttrValue.indexOf( '?' );
     if ( rAttrValue.indexOf( SCHEME ) != 0 || params < 0 )
@@ -201,8 +201,8 @@ bool ParseURL(
         xSMgr = ::comphelper::getProcessServiceFactory();
 
     Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory" )) ), UNO_QUERY );
+        xFactory( xSMgr->createInstance( OUString(
+            "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -304,7 +304,7 @@ void XMLEventOASISTransformerContext::StartElement(
                             GetXMLToken( XML_LANGUAGE ) ) );
 
                         pMutableAttrList->SetValueByIndex( idx,
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
+                            OUString("StarBasic") );
 
                         OUString aLocQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -356,7 +356,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     GetXMLToken( XML_LANGUAGE ) ) );
 
                     pMutableAttrList->SetValueByIndex( idx,
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
+                    OUString("StarBasic") );
 
                     OUString aLocQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(

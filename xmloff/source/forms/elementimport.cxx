@@ -493,7 +493,7 @@ namespace xmloff
     {
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
-        static const ::rtl::OUString sUnnamedName(RTL_CONSTASCII_USTRINGPARAM("unnamed"));
+        static const ::rtl::OUString sUnnamedName("unnamed");
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::implGetDefaultName: no parent container!");
         if (!m_xParentContainer.is())
             return sUnnamedName;
@@ -1581,7 +1581,7 @@ namespace xmloff
         PropertyValueArray::iterator aDefaultControlPropertyPos = ::std::find_if(
             m_aValues.begin(),
             m_aValues.end(),
-            EqualName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultControl" ) ) )
+            EqualName( ::rtl::OUString( "DefaultControl"  ) )
         );
         if ( aDefaultControlPropertyPos != m_aValues.end() )
         {
@@ -1651,12 +1651,12 @@ namespace xmloff
             const Reference< XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
-        static const ::rtl::OUString s_sOptionElementName(RTL_CONSTASCII_USTRINGPARAM("option"));
+        static const ::rtl::OUString s_sOptionElementName("option");
         if (s_sOptionElementName == _rLocalName)
             return new OListOptionImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // is it the "item" sub tag of a combobox ?
-        static const ::rtl::OUString s_sItemElementName(RTL_CONSTASCII_USTRINGPARAM("item"));
+        static const ::rtl::OUString s_sItemElementName("item");
         if (s_sItemElementName == _rLocalName)
             return new OComboItemImport(GetImport(), _nPrefix, _rLocalName, this);
 
@@ -1737,7 +1737,7 @@ namespace xmloff
             // (somewhere else) to determine that a non-standard binding should be created.
             // This hack is acceptable for OOo 1.1.1, since the file format for value
             // bindings of form controls is to be changed afterwards, anyway.
-            sBoundCellAddress += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":index" ) );
+            sBoundCellAddress += ::rtl::OUString( ":index"  );
         }
 
         OControlImport::doRegisterCellValueBinding( sBoundCellAddress );
@@ -1868,9 +1868,9 @@ namespace xmloff
         // the label and the value
         const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
         const ::rtl::OUString sLabelAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("label")));
+            GetPrefix(), ::rtl::OUString("label"));
         const ::rtl::OUString sValueAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")));
+            GetPrefix(), ::rtl::OUString("value"));
 
         // -------------------
         // the label attribute
