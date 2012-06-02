@@ -185,7 +185,7 @@ void SvxModifyControl::DoubleClick()
         return;
 
     Sequence<PropertyValue> aArgs;
-    execute(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save")), aArgs);
+    execute(OUString(".uno:Save"), aArgs);
 }
 
 

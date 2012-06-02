@@ -63,7 +63,7 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
 {
     INetURLObject aURL( rBaseURL );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-    String aFileName( String( RTL_CONSTASCII_USTRINGPARAM( "sg" ) ) );
+    String aFileName( String( "sg"  ) );
 
     aURL.Append( ( aFileName += String::CreateFromInt32( nFileNumber ) ) += String( RTL_CONSTASCII_USTRINGPARAM( ".thm" ) ) );
     aThmURL = ImplGetURLIgnoreCase( aURL );
@@ -270,7 +270,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
         ::ucbhelper::Content                       aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
-        aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
+        aProps.getArray()[ 0 ] = OUString("Url");
 
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
@@ -312,10 +312,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
             if( xContentAccess.is() )
             {
-                static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
-                static const ::rtl::OUString s_sIsReadOnly(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly"));
-                static const ::rtl::OUString s_sSDG_EXT(RTL_CONSTASCII_USTRINGPARAM("sdg"));
-                static const ::rtl::OUString s_sSDV_EXT(RTL_CONSTASCII_USTRINGPARAM("sdv"));
+                static const ::rtl::OUString s_sTitle("Title");
+                static const ::rtl::OUString s_sIsReadOnly("IsReadOnly");
+                static const ::rtl::OUString s_sSDG_EXT("sdg");
+                static const ::rtl::OUString s_sSDV_EXT("sdv");
 
                 while( xResultSet->next() )
                 {

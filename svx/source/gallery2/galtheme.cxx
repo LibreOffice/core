@@ -1183,12 +1183,12 @@ sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, s
         ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
         sal_Bool        bFolder = false;
 
-        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")) ) >>= bFolder;
+        aCnt.getPropertyValue( OUString("IsFolder") ) >>= bFolder;
 
         if( bFolder )
         {
             uno::Sequence< OUString > aProps( 1 );
-            aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
+            aProps.getArray()[ 0 ] = OUString("Url");
             uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
             if( xContentAccess.is() )

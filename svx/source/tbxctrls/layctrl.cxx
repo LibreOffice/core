@@ -336,9 +336,9 @@ void TableWindow::PopupModeEnd()
     if ( !IsPopupModeCanceled() && nCol && nLine )
     {
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
+        aArgs[0].Name = ::rtl::OUString( "Columns" );
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rows" ));
+        aArgs[1].Name = ::rtl::OUString( "Rows" );
         aArgs[1].Value = makeAny( sal_Int16( nLine ));
 
         TableDialog( aArgs );
@@ -378,7 +378,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     {
         com::sun::star::util::URL aTargetURL;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                    rtl::OUString("com.sun.star.util.URLTransformer")),
                 UNO_QUERY );
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );
@@ -698,9 +698,9 @@ void ColumnsWindow::PopupModeEnd()
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
+        aArgs[0].Name = ::rtl::OUString( "Columns" );
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Modifier" ));
+        aArgs[1].Name = ::rtl::OUString( "Modifier" );
         aArgs[1].Value = makeAny( sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ));
 
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
