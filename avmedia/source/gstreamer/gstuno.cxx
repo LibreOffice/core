@@ -46,11 +46,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_C
 
     if( rtl_str_compare( pImplName, "com.sun.star.comp.media.Manager_GStreamer" ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.media.Manager_GStreamer" )) );
+        const ::rtl::OUString aServiceName( ::rtl::OUString("com.sun.star.media.Manager_GStreamer" ) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.media.Manager_GStreamer" )),
+                        ::rtl::OUString("com.sun.star.comp.media.Manager_GStreamer" ),
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
     }
 

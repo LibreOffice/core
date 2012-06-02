@@ -159,7 +159,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 }
 
 #define DECLARE_ASCII( SASCIIVALUE ) \
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
+        ::rtl::OUString( SASCIIVALUE  )
 
 #define IMPLEMENTATIONNAME_SOUNDHANDLER DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler")
 #define SERVICENAME_CONTENTHANDLER DECLARE_ASCII("com.sun.star.frame.ContentHandler")
@@ -423,7 +423,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wav_Wave_Audio_File"));
+        sTypeName = ::rtl::OUString("wav_Wave_Audio_File");
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

@@ -252,9 +252,9 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    static const ::rtl::OUString    aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    static const ::rtl::OUString    aWildcard( "*."  );
     FilterNameVector                aFilters;
-    const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    const ::rtl::OUString           aSeparator( ";"  );
     ::rtl::OUString                 aAllTypes;
 
     aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
@@ -294,7 +294,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     }
 
     // add filter for all types
-    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), String( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
+    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), String( "*.*"  ) );
 
     uno::Reference<ui::dialogs::XFilePicker> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
