@@ -30,9 +30,7 @@
 #define SW_UNDO_DRAW_HXX
 
 #include <undobj.hxx>
-
 #include <svx/svdundo.hxx>
-
 
 struct SwUndoGroupObjImpl;
 class SdrMark;
@@ -42,13 +40,12 @@ class SdrObjGroup;
 class SdrUndoAction;
 class SwDrawFrmFmt;
 
-//--------------------------------------------------------------------
 // ----------- Undo for Draw Objects ---------------------------------
-
 class SwSdrUndo : public SwUndo
 {
     SdrUndoAction* pSdrUndo;
     SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
+
 public:
     SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList );
 
@@ -108,19 +105,19 @@ public:
 
 class SwUndoDrawUnGroupConnectToLayout : public SwUndo
 {
-    private:
-        std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > > aDrawFmtsAndObjs;
+private:
+    std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > > aDrawFmtsAndObjs;
 
-    public:
-        SwUndoDrawUnGroupConnectToLayout();
+public:
+    SwUndoDrawUnGroupConnectToLayout();
 
-        virtual ~SwUndoDrawUnGroupConnectToLayout();
+    virtual ~SwUndoDrawUnGroupConnectToLayout();
 
-        virtual void UndoImpl( ::sw::UndoRedoContext & );
-        virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-        void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
-                           SdrObject* pDrawObject );
+    void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
+                       SdrObject* pDrawObject );
 };
 
 class SwUndoDrawDelete : public SwUndo

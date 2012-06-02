@@ -30,9 +30,7 @@
 #define SW_UNDO_OVERWRITE_HXX
 
 #include <undobj.hxx>
-
 #include <com/sun/star/uno/Sequence.h>
-
 
 class SwRedlineSaveDatas;
 class SwTxtNode;
@@ -40,7 +38,6 @@ class SwTxtNode;
 namespace utl {
     class TransliterationWrapper;
 }
-
 
 class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
 {
@@ -75,8 +72,6 @@ public:
 
     sal_Bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
-
-//--------------------------------------------------------------------
 
 struct _UndoTransliterate_Data;
 class SwUndoTransliterate : public SwUndo, public SwUndRng

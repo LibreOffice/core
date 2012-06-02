@@ -30,11 +30,8 @@
 #define SW_UNDO_ATTRIBUTE_HXX
 
 #include <undobj.hxx>
-
 #include <memory>
-
 #include <svl/itemset.hxx>
-
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <set>
@@ -44,7 +41,6 @@ class SwFmt;
 class SwFtnInfo;
 class SwEndNoteInfo;
 
-
 class SwUndoAttr : public SwUndo, private SwUndRng
 {
     SfxItemSet m_AttrSet;                           // attributes for Redo
@@ -53,7 +49,7 @@ class SwUndoAttr : public SwUndo, private SwUndRng
     ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
     ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    sal_uLong m_nNodeIndex;                             // Offset: for Redlining
+    sal_uLong m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
 
     void RemoveIdx( SwDoc& rDoc );
@@ -71,7 +67,6 @@ public:
     void SaveRedlineData( const SwPaM& rPam, sal_Bool bInsCntnt );
 
     SwHistory& GetHistory() { return *m_pHistory; }
-
 };
 
 class SwUndoResetAttr : public SwUndo, private SwUndRng
@@ -95,7 +90,6 @@ public:
     void SetAttrs( const std::set<sal_uInt16> &rAttrs );
 
     SwHistory& GetHistory() { return *m_pHistory; }
-
 };
 
 class SwUndoFmtAttr : public SwUndo
@@ -198,7 +192,6 @@ public:
     SwUndoFmtAttr* ReleaseUndo()    { return m_pUndo.release(); }
 };
 
-
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -219,9 +212,6 @@ public:
 
 };
 
-
-//--------------------------------------------------------------------
-
 class SwUndoDefaultAttr : public SwUndo
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -238,9 +228,6 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
-
-
-//--------------------------------------------------------------------
 
 class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 {

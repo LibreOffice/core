@@ -30,9 +30,7 @@
 #define SW_UNDO_DELETE_HXX
 
 #include <undobj.hxx>
-
 #include <tools/mempool.hxx>
-
 
 class SwRedlineSaveDatas;
 class SwTxtNode;
@@ -40,7 +38,6 @@ class SwTxtNode;
 namespace sfx2 {
     class MetadatableUndo;
 }
-
 
 class SwUndoDelete
     : public SwUndo
@@ -73,6 +70,7 @@ class SwUndoDelete
 
     sal_Bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
+
 public:
     SwUndoDelete( SwPaM&,
             sal_Bool bFullPara = sal_False, sal_Bool bCalledByTblCpy = sal_False );

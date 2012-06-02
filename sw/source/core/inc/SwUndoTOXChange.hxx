@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SW_UNDO_TOX_CHANGE_HXX
 #define SW_UNDO_TOX_CHANGE_HXX
 

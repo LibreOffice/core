@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SW_XMLBLOCKLISTCONTEXT_HXX
 #define _SW_XMLBLOCKLISTCONTEXT_HXX
 
@@ -37,6 +38,7 @@ class SwXMLBlockListContext : public SvXMLImportContext
 {
 private:
     SwXMLBlockListImport & rLocalRef;
+
 public:
     SwXMLBlockListContext( SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,
@@ -50,10 +52,12 @@ public:
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
 };
+
 class SwXMLBlockContext : public SvXMLImportContext
 {
 private:
     SwXMLBlockListImport & rLocalRef;
+
 public:
     SwXMLBlockContext(     SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,
@@ -67,6 +71,7 @@ class SwXMLTextBlockDocumentContext : public SvXMLImportContext
 {
 private:
     SwXMLTextBlockImport & rLocalRef;
+
 public:
     SwXMLTextBlockDocumentContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
@@ -79,10 +84,12 @@ public:
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockDocumentContext ( void );
 };
+
 class SwXMLTextBlockBodyContext : public SvXMLImportContext
 {
 private:
     SwXMLTextBlockImport & rLocalRef;
+
 public:
     SwXMLTextBlockBodyContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
@@ -95,10 +102,12 @@ public:
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockBodyContext ( void );
 };
+
 class SwXMLTextBlockTextContext : public SvXMLImportContext
 {
 private:
     SwXMLTextBlockImport & rLocalRef;
+
 public:
     SwXMLTextBlockTextContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
@@ -111,10 +120,12 @@ public:
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockTextContext ( void );
 };
+
 class SwXMLTextBlockParContext : public SvXMLImportContext
 {
 private:
     SwXMLTextBlockImport & rLocalRef;
+
 public:
     SwXMLTextBlockParContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
@@ -124,6 +135,7 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
     ~SwXMLTextBlockParContext ( void );
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

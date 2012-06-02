@@ -30,9 +30,7 @@
 #define SW_UNDOCORE_HXX
 
 #include <undobj.hxx>
-
 #include <calbck.hxx>
-
 
 class SfxItemSet;
 class SwFmtColl;
@@ -48,13 +46,10 @@ namespace sw {
     class IShellCursorSupplier;
 }
 
-
 typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
 SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8 )
 
-
 namespace sw {
-
 class SW_DLLPRIVATE UndoRedoContext
     : public SfxUndoContext
 {
@@ -116,8 +111,6 @@ private:
 
 } // namespace sw
 
-
-
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {
     String aFmtName;
@@ -162,13 +155,12 @@ public:
 
 };
 
-
 class SwUndoSetFlyFmt : public SwUndo, public SwClient
 {
-    SwFrmFmt* pFrmFmt;                  // das gespeicherte FlyFormat
-    SwFrmFmt* pOldFmt;                  // die alte Fly Vorlage
-    SwFrmFmt* pNewFmt;                  // die neue Fly Vorlage
-    SfxItemSet* pItemSet;               // die zurueck-/ gesetzten Attribute
+    SwFrmFmt* pFrmFmt;                  // saved FlyFormat
+    SwFrmFmt* pOldFmt;
+    SwFrmFmt* pNewFmt;
+    SfxItemSet* pItemSet;               // the re-/ set attributes
     sal_uLong nOldNode, nNewNode;
     xub_StrLen nOldCntnt, nNewCntnt;
     sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;
@@ -189,12 +181,10 @@ public:
     void DeRegisterFromFormat( SwFmt& );
 };
 
-
-//------------ Undo von verschieben/stufen von Gliederung ----------------
-
 class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
 {
     short nOffset;
+
 public:
     SwUndoOutlineLeftRight( const SwPaM& rPam, short nOffset );
 
@@ -202,7 +192,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 };
-
 
 const int nUndoStringLength = 20;
 
@@ -250,7 +239,6 @@ ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr);
    @return the denoted string
 */
 String DenoteSpecialCharacters(const String & rStr);
-
 
 #endif // SW_UNDOCORE_HXX
 

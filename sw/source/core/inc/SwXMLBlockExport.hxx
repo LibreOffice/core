@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SW_XMLBLOCKEXPORT_HXX
 #define _SW_XMLBLOCKEXPORT_HXX
 
@@ -37,6 +38,7 @@ class SwXMLBlockListExport : public SvXMLExport
 {
 private:
     SwXMLTextBlocks &rBlockList;
+
 public:
     SwXMLBlockListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -55,6 +57,7 @@ class SwXMLTextBlockExport : public SvXMLExport
 {
 private:
     SwXMLTextBlocks &rBlockList;
+
 public:
     SwXMLTextBlockExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -69,6 +72,7 @@ public:
     void _ExportMasterStyles () {}
     void _ExportContent() {}
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

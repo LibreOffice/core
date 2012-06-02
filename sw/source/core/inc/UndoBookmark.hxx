@@ -31,7 +31,6 @@
 
 #include <undobj.hxx>
 
-
 class SwHistoryBookmark;
 
 namespace sw {
@@ -39,7 +38,6 @@ namespace sw {
         class IMark;
     }
 }
-
 
 class SwUndoBookmark : public SwUndo
 {

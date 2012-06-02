@@ -30,16 +30,12 @@
 #define SW_UNDO_MANAGER_HXX
 
 #include <IDocumentUndoRedo.hxx>
-
 #include <memory>
-
 #include <svl/undo.hxx>
-
 
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentState;
-
 
 namespace sw {
 
@@ -48,7 +44,6 @@ class UndoManager
     , public SfxUndoManager
 {
 public:
-
     UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
         IDocumentDrawModelAccess & rDrawModelAccess,
         IDocumentRedlineAccess & rRedlineAccess,
@@ -66,7 +61,7 @@ public:
     virtual void UnLockUndoNoModifiedPosition();
     virtual void SetUndoNoResetModified();
     virtual bool IsUndoNoResetModified() const;
-//    virtual bool Undo();
+
     virtual SwUndoId StartUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
@@ -75,7 +70,7 @@ public:
     virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
                 SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
-//    virtual bool Redo();
+
     virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     virtual SwUndoComments_t GetRedoComments() const;
     virtual bool Repeat(::sw::RepeatContext & rContext,

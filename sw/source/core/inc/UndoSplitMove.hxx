@@ -31,7 +31,6 @@
 
 #include <undobj.hxx>
 
-
 class SwUndoSplitNode: public SwUndo
 {
     SwHistory* pHistory;
@@ -53,7 +52,6 @@ public:
 
     void SetTblFlag()       { bTblFlag = sal_True; }
 };
-
 
 class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 {
@@ -91,7 +89,6 @@ public:
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
-
 };
 
 #endif // SW_UNDO_MOVE_HXX

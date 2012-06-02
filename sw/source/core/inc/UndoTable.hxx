@@ -30,13 +30,11 @@
 #define SW_UNDO_TABLE_HXX
 
 #include <undobj.hxx>
-
 #include <memory>
 #include <vector>
 #include <set>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
-
 #include "boost/noncopyable.hpp"
 #include "boost/scoped_ptr.hpp"
 
@@ -56,7 +54,6 @@ class SwStartNode;
 class SwTableNode;
 class SwTableAutoFmt;
 class SwTableSortBoxes;
-
 
 class SwUndoInsTbl : public SwUndo
 {
@@ -83,7 +80,6 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
     virtual SwRewriter GetRewriter() const;
-
 };
 
 class SwUndoTxtToTbl : public SwUndo, public SwUndRng
@@ -103,7 +99,6 @@ public:
                     const SwTableAutoFmt* pAFmt );
 
     virtual ~SwUndoTxtToTbl();
-
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
@@ -145,6 +140,7 @@ class SwUndoAttrTbl : public SwUndo
     sal_uLong nSttNode;
     _SaveTable* pSaveTbl;
     sal_Bool bClearTabCol : 1;
+
 public:
     SwUndoAttrTbl( const SwTableNode& rTblNd, sal_Bool bClearTabCols = sal_False );
 
@@ -195,6 +191,7 @@ class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;
     sal_Bool bFlag;
     sal_Bool bSameHeight;                   // only used for SplitRow
+
 public:
     SwUndoTblNdsChg( SwUndoId UndoId,
                     const SwSelBoxes& rBoxes,
@@ -217,7 +214,6 @@ public:
     void SaveSection( SwStartNode* pSttNd );
     void ReNewBoxes( const SwSelBoxes& rBoxes );
 
-
     void SetColWidthParam( sal_uLong nBoxIdx, sal_uInt16 nMode, sal_uInt16 nType,
                             SwTwips nAbsDif, SwTwips nRelDif )
     {
@@ -227,7 +223,6 @@ public:
         nAbsDiff = (sal_uInt16)nAbsDif;
         nRelDiff = (sal_uInt16)nRelDif;
     }
-
 };
 
 class SwUndoTblMerge : public SwUndo, private SwUndRng
@@ -255,9 +250,7 @@ public:
         { aNewSttNds.push_back( nSttNdIdx ); }
 
     void SaveCollection( const SwTableBox& rBox );
-
 };
-
 
 class SwUndoTblNumFmt : public SwUndo
 {
@@ -298,6 +291,7 @@ class SwUndoTblCpyTbl : public SwUndo
     //redlining attributes for the new and the old table cell content
     SwUndo* PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
                 const SwPosition& rPos, bool& rJoin, bool bRedo );
+
 public:
     SwUndoTblCpyTbl();
 
@@ -318,6 +312,7 @@ class SwUndoCpyTbl : public SwUndo
 {
     SwUndoDelete* pDel;
     sal_uLong nTblNode;
+
 public:
     SwUndoCpyTbl();
 
@@ -337,6 +332,7 @@ class SwUndoSplitTbl : public SwUndo
     SwHistory* pHistory;
     sal_uInt16 nMode, nFmlEnd;
     sal_Bool bCalcNewSize;
+
 public:
     SwUndoSplitTbl( const SwTableNode& rTblNd, SwSaveRowSpan* pRowSp,
             sal_uInt16 nMode, sal_Bool bCalcNewSize );
@@ -360,6 +356,7 @@ class SwUndoMergeTbl : public SwUndo
     SwHistory* pHistory;
     sal_uInt16 nMode;
     sal_Bool bWithPrev;
+
 public:
     SwUndoMergeTbl( const SwTableNode& rTblNd, const SwTableNode& rDelTblNd,
                     sal_Bool bWithPrev, sal_uInt16 nMode );
@@ -373,14 +370,12 @@ public:
     void SaveFormula( SwHistory& rHistory );
 };
 
-
-//--------------------------------------------------------------------
-
 class SwUndoTblHeadline : public SwUndo
 {
     sal_uLong nTblNd;
     sal_uInt16 nOldHeadline;
     sal_uInt16 nNewHeadline;
+
 public:
     SwUndoTblHeadline( const SwTable&, sal_uInt16 nOldHdl,  sal_uInt16 nNewHdl );
 

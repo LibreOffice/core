@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SW_UNDO_PAGE_DESC_HXX
 #define SW_UNDO_PAGE_DESC_HXX
 
@@ -33,7 +34,6 @@
 
 class SwDoc;
 class SwPageDesc;
-
 
 class SwUndoPageDesc : public SwUndo
 {

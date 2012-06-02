@@ -25,8 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #define _SW_XMLTEXTBLOCKS_HXX
+
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <swblocks.hxx>

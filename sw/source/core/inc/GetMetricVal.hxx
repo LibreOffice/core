@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _GETMETRICVAL_HXX
 #define _GETMETRICVAL_HXX
 
@@ -50,7 +51,6 @@ inline sal_uInt16 GetMetricVal( int n )
         nVal /= 2;
     return nVal;
 }
-
 
 #endif
 

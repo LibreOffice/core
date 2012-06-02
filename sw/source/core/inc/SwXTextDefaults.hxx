@@ -27,10 +27,10 @@
  ************************************************************************/
 #ifndef _SW_XTEXT_DEFAULTS_HXX
 #define _SW_XTEXT_DEFAULTS_HXX
+
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svl/itemprop.hxx>
 
@@ -45,6 +45,7 @@ class SwXTextDefaults :  public cppu::WeakImplHelper3
 {
     const SfxItemPropertySet*   m_pPropSet;
     SwDoc *                     m_pDoc;
+
 public:
     SwXTextDefaults ( SwDoc * pNewDoc );
     ~SwXTextDefaults ();

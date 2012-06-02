@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SW_XMLBLOCKIMPORT_HXX
 #define _SW_XMLBLOCKIMPORT_HXX
 
@@ -35,14 +36,15 @@ class SwXMLBlockListImport : public SvXMLImport
 {
 private:
     SwXMLTextBlocks &rBlockList;
-protected:
 
+protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const ::rtl::OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
 public:
     SwXMLBlockListImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -60,14 +62,15 @@ class SwXMLTextBlockImport : public SvXMLImport
 {
 private:
     SwXMLTextBlocks &rBlockList;
-protected:
 
+protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const ::rtl::OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
 public:
     sal_Bool bTextOnly;
     String &m_rText;
@@ -84,6 +87,7 @@ public:
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

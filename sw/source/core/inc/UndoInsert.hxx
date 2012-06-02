@@ -30,18 +30,14 @@
 #define SW_UNDO_INSERT_HXX
 
 #include <undobj.hxx>
-
 #include <tools/mempool.hxx>
-
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
-
 
 class Graphic;
 class SwGrfNode;
 class SwUndoDelete;
 class SwUndoFmtAttr;
-
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 {
@@ -88,12 +84,8 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
-
-
-//--------------------------------------------------------------------
 
 SwRewriter SW_DLLPRIVATE
 MakeUndoReplaceRewriter(sal_uLong const ocurrences,
@@ -139,9 +131,6 @@ private:
     ::std::auto_ptr<Impl> m_pImpl;
 };
 
-
-//--------------------------------------------------------------------
-
 class SwUndoReRead : public SwUndo
 {
     Graphic *pGrf;
@@ -161,18 +150,16 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
-//--------------------------------------------------------------------
-
 class SwUndoInsertLabel : public SwUndo
 {
     union {
         struct {
-            // fuer NoTxtFrms
+            // for NoTxtFrms
             SwUndoInsLayFmt* pUndoFly;
             SwUndoFmtAttr* pUndoAttr;
         } OBJECT;
         struct {
-            // fuer Tabelle/TextRahmen
+            // for tables or TxtFrms
             SwUndoDelete* pUndoInsNd;
             sal_uLong nNode;
         } NODE;
@@ -186,7 +173,7 @@ class SwUndoInsertLabel : public SwUndo
     // #i26791# - re-store of drawing object position no longer needed
     sal_uInt16 nFldId;
     SwLabelType eType;
-    sal_uInt8 nLayerId;              // fuer Zeichen-Objekte
+    sal_uInt8 nLayerId;              // for character objects
     sal_Bool bBefore        :1;
     sal_Bool bUndoKeep      :1;
     sal_Bool bCpyBrd        :1;

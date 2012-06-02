@@ -25,13 +25,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SW_UNDO_TXT_FMT_COLL_HXX
 #define SW_UNDO_TXT_FMT_COLL_HXX
 
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <numrule.hxx>
-
 
 class SwDoc;
 class SwTxtFmtColl;
@@ -51,7 +51,6 @@ protected:
     sal_Bool bAuto;
 
 public:
-
     SwUndoFmtCreate(SwUndoId nUndoId, SwFmt * pNew, SwFmt * pDerivedFrom,
                     SwDoc * pDoc);
     virtual ~SwUndoFmtCreate();

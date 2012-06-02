@@ -32,16 +32,11 @@
 #include <undobj.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-
 struct SwSortOptions;
 class SwTableNode;
 class SwUndoAttrTbl;
 
-
-/*--------------------------------------------------------------------
-    Undo for Sorting
- --------------------------------------------------------------------*/
-
+//-------------------- Undo for Sorting ------------------------------
 struct SwSortUndoElement
 {
     union {
@@ -92,7 +87,6 @@ public:
 
     void Insert( const String& rOrgPos, const String& rNewPos );
     void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );
-
 };
 
 #endif // SW_UNDO_SORT_HXX

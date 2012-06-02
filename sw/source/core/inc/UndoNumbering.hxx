@@ -34,10 +34,7 @@
 #include <boost/shared_ptr.hpp>
 #include <numrule.hxx>
 
-
-//--------------------------------------------------------------------
 //----------- Undo for Numbering -------------------------------------
-
 class SwUndoInsNum : public SwUndo, private SwUndRng
 {
     SwNumRule aNumRule;
@@ -46,6 +43,7 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
     SwNumRule* pOldNumRule;
     String sReplaceRule;
     sal_uInt16 nLRSavePos;
+
 public:
     SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
@@ -79,6 +77,7 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
     };
     std::vector<NodeLevel> aNodes;
     SwHistory* pHistory;
+
 public:
     SwUndoDelNum( const SwPaM& rPam );
 
@@ -90,13 +89,13 @@ public:
 
     void AddNode( const SwTxtNode& rNd, sal_Bool bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
-
 };
 
 class SwUndoMoveNum : public SwUndo, private SwUndRng
 {
     sal_uLong nNewStt;
     long nOffset;
+
 public:
     SwUndoMoveNum( const SwPaM& rPam, long nOffset, sal_Bool bIsOutlMv = sal_False );
 
@@ -110,6 +109,7 @@ public:
 class SwUndoNumUpDown : public SwUndo, private SwUndRng
 {
     short nOffset;
+
 public:
     SwUndoNumUpDown( const SwPaM& rPam, short nOffset );
 
@@ -138,6 +138,7 @@ class SwUndoNumRuleStart : public SwUndo
     sal_uInt16 nOldStt, nNewStt;
     sal_Bool bSetSttValue : 1;
     sal_Bool bFlag : 1;
+
 public:
     SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bDelete );
     SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt );

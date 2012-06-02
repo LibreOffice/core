@@ -30,11 +30,8 @@
 #define SW_UNDO_SECTION_HXX
 
 #include <undobj.hxx>
-
 #include <memory>
-
 #include <swdllapi.h>
-
 
 class SfxItemSet;
 class SwTxtNode;
@@ -42,9 +39,7 @@ class SwSectionData;
 class SwSectionFmt;
 class SwTOXBase;
 
-
 //------------ Undo of Insert-/Delete-Section ----------------------
-
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
 private:

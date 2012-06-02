@@ -25,10 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SW_PORTIONHANDLER_HXX
 #define _SW_PORTIONHANDLER_HXX
 
 #include <tools/solar.h>
+
 class String;
 
 /** The SwPortionHandler interface implements a visitor for the layout

@@ -34,9 +34,8 @@
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 
-namespace sw { namespace mark
-{
-
+namespace sw {
+    namespace mark {
     typedef boost::unordered_map<rtl::OUString, sal_Int32, rtl::OUStringHash> MarkBasenameMapUniqueOffset_t;
 
     class MarkManager
@@ -99,7 +98,9 @@ namespace sw { namespace mark
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
             SwDoc * const m_pDoc;
     };
-}}
+    } // namespace mark
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,6 +45,7 @@
 class SwGrammarMarkUp : public SwWrongList
 {
     std::vector< xub_StrLen > maSentence;
+
 public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
     SwGrammarMarkUp( const SwGrammarMarkUp* );

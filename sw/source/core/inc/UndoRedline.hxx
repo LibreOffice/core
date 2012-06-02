@@ -31,14 +31,10 @@
 
 #include <undobj.hxx>
 
-
 struct SwSortOptions;
 class SwRedline;
 class SwRedlineSaveDatas;
 class SwUndoDelete;
-
-
-//--------------------------------------------------------------------
 
 class SwUndoRedline : public SwUndo, public SwUndRng
 {
@@ -124,14 +120,13 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
-//--------------------------------------------------------------------
-
 class SwUndoCompDoc : public SwUndo, public SwUndRng
 {
     SwRedlineData* pRedlData;
     SwUndoDelete* pUnDel, *pUnDel2;
     SwRedlineSaveDatas* pRedlSaveData;
     sal_Bool bInsert;
+
 public:
     SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns );
     SwUndoCompDoc( const SwRedline& rRedl );
