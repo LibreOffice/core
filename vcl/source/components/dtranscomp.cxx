@@ -138,13 +138,13 @@ GenericClipboard::~GenericClipboard()
 
 rtl::OUString GenericClipboard::getImplementationName_static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.VCLGenericClipboard" ) );
+    return rtl::OUString( "com.sun.star.datatransfer.VCLGenericClipboard"  );
 }
 
 Sequence< rtl::OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
+    aRet[0] = OUString("com.sun.star.datatransfer.clipboard.SystemClipboard");
     return aRet;
 }
 
@@ -203,7 +203,7 @@ void GenericClipboard::setContents(
 
 rtl::OUString GenericClipboard::getName() throw( RuntimeException )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CLIPBOARD" ) );
+    return rtl::OUString( "CLIPBOARD"  );
 }
 
 sal_Int8 GenericClipboard::getRenderingCapabilities() throw( RuntimeException )
@@ -279,13 +279,13 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
 OUString SAL_CALL Clipboard_getImplementationName()
 {
     #if defined UNX
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+    return OUString(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.X11ClipboardSupport"
     #else
     "com.sun.star.datatransfer.clipboard.AquaClipboard"
     #endif
-    ) );
+     );
     #else
     return GenericClipboard::getImplementationName_static();
     #endif
@@ -325,13 +325,13 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.GenericDragSource"));
+        aRet[0] = OUString("com.sun.star.datatransfer.dnd.GenericDragSource");
         return aRet;
     }
 
     static OUString getImplementationName_static()
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.VclGenericDragSource"));
+        return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
     }
 };
 
@@ -369,13 +369,13 @@ void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception )
 Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
     #if defined UNX
-    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aServiceName(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.X11DragSource"
     #else
     "com.sun.star.datatransfer.dnd.OleDragSource"
     #endif
-                                                              ) );
+                                                               );
     return Sequence< OUString >(&aServiceName, 1);
     #else
     return GenericDragSource::getSupportedServiceNames_static();
@@ -385,13 +385,13 @@ Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 OUString SAL_CALL DragSource_getImplementationName()
 {
     #if defined UNX
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+    return OUString(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.XdndSupport"
     #else
     "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
     #endif
-                                                 ) );
+                                                  );
     #else
     return GenericDragSource::getImplementationName_static();
     #endif
@@ -436,13 +436,13 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.GenericDropTarget"));
+        aRet[0] = OUString("com.sun.star.datatransfer.dnd.GenericDropTarget");
         return aRet;
     }
 
     static OUString getImplementationName_static()
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.VclGenericDropTarget"));
+        return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget");
     }
 };
 
@@ -483,13 +483,13 @@ void GenericDropTarget::setDefaultActions( sal_Int8) throw()
 Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 {
     #if defined UNX
-    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aServiceName(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.X11DropTarget"
     #else
     "com.sun.star.datatransfer.dnd.OleDropTarget"
     #endif
-                                                              ) );
+                                                               );
     return Sequence< OUString >(&aServiceName, 1);
     #else
     return GenericDropTarget::getSupportedServiceNames_static();
@@ -499,13 +499,13 @@ Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 OUString SAL_CALL DropTarget_getImplementationName()
 {
     #if defined UNX
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+    return OUString(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.XdndDropTarget"
     #else
     "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
     #endif
-                    ) );
+                     );
     #else
     return GenericDropTarget::getImplementationName_static();
     #endif

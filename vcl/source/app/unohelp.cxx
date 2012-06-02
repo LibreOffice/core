@@ -101,7 +101,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
         {
             pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
             uno::Reference < registry::XImplementationRegistration > xReg(
-                pSVData->maAppData.mxMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))), uno::UNO_QUERY );
+                pSVData->maAppData.mxMSF->createInstance( OUString("com.sun.star.registry.ImplementationRegistration")), uno::UNO_QUERY );
 
             if( xReg.is() )
             {
@@ -114,7 +114,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
                         try
                         {
                             xReg->registerImplementation(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),aComponentPathString, NULL );
+                                OUString("com.sun.star.loader.SharedLibrary"),aComponentPathString, NULL );
                         }
                         catch( ::com::sun::star::uno::Exception & )
                         {
@@ -140,7 +140,7 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.BreakIterator") );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
@@ -156,7 +156,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.CharacterClassification") );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
@@ -179,18 +179,18 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     {
         aLibName += aDLLSuffix;
     }
-    aLibName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".dll" ));
+    aLibName += rtl::OUString( ".dll" );
 #else
-    aLibName = OUString( RTL_CONSTASCII_USTRINGPARAM( "lib" ));
+    aLibName = OUString( "lib" );
     aLibName += OUString::createFromAscii( pModName );
     if ( bSUPD )
     {
         aLibName += aDLLSuffix;
     }
 #ifdef MACOSX
-    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".dylib" ));
+    aLibName += OUString( ".dylib" );
 #else
-    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".so" ));
+    aLibName += OUString( ".so" );
 #endif
 #endif
 

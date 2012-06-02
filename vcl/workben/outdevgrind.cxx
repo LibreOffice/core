@@ -80,7 +80,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutDev grinding")) );
+            SetText( rtl::OUString("OutDev grinding") );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -123,7 +123,7 @@ void setupMethodStubs( functor_vector_type& res )
     aPoly3.Rotate( aPoly3.GetBoundRect().Center(),
                    900 );
 
-    const String      aString(RTL_CONSTASCII_USTRINGPARAM("This is a test"));
+    const String      aString("This is a test");
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
     // unfortunately, VDevs have inaccessible copy constructors
@@ -954,8 +954,8 @@ int GrindApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;

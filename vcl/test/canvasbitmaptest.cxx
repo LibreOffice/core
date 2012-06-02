@@ -77,7 +77,7 @@ SAL_IMPLEMENT_MAIN()
 
     uno::Reference< lang::XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ),
+        rtl::OUString( "applicat.rdb"  ),
         sal_True );
 
     InitVCL( xMS );
@@ -120,7 +120,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CanvasBitmap test harness")) );
+            SetText( rtl::OUString("CanvasBitmap test harness") );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -1033,7 +1033,7 @@ void Main()
 {
     TestWindow aWindow;
     aWindow.Execute();
-    aWindow.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL - canvasbitmaptest" ) ) );
+    aWindow.SetText( XubString( "VCL - canvasbitmaptest"  ) );
 
     Application::Execute();
 }

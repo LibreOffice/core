@@ -55,21 +55,21 @@ using ::rtl::OUString;
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
+    aRet[0] = OUString("com.sun.star.datatransfer.clipboard.SystemClipboard");
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
+    aRet[0] = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
+    aRet[0] = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
     return aRet;
 }
 
@@ -110,7 +110,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     else
     {
         // default atom is clipboard selection
-        nSelection = rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
+        nSelection = rManager.getAtom( OUString("CLIPBOARD") );
     }
 
     ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );

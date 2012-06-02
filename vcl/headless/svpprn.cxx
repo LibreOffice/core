@@ -109,7 +109,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->mnPaperBin = 0xffff;
     if( rData.m_pParser )
-        pKey                    = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        pKey                    = rData.m_pParser->getKey( String( "InputSlot"  ) );
     if( pKey )
         pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -129,7 +129,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
-        pKey = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+        pKey = rData.m_pParser->getKey( String( "Duplex"  ) );
     if( pKey )
         pValue = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )

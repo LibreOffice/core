@@ -215,7 +215,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     long nTextHeight = pWindow->GetTextHeight();
-    long nTextWidth = pWindow->GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "aemnnxEM" ) ) );
+    long nTextWidth = pWindow->GetTextWidth( XubString( "aemnnxEM"  ) );
     long nSymHeight = nTextHeight*4;
     // Make the basis wider if the font is too narrow
     // such that the dialog looks symmetrical and does not become too narrow.
@@ -336,7 +336,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
 
         if ( ! aUserInterfaceFont.Len() )
         {
-            String aFallbackFont (RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ));
+            String aFallbackFont ("Andale Sans UI" );
             if ( mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aFallbackFont ) )
                 aUserInterfaceFont = aFallbackFont;
         }
@@ -496,10 +496,10 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Accessibility")) );    // note: case sensisitive !
+            OUString("org.openoffice.Office.Common/Accessibility") );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AutoDetectSystemHC")) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("AutoDetectSystemHC") );
             if( aValue >>= bTmp )
                 bAutoHCMode = bTmp;
         }
@@ -848,7 +848,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         {
             // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
             throw ::com::sun::star::uno::RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not create system window!" ) ),
+                OUString( "Could not create system window!"  ),
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
             //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         }
@@ -4840,7 +4840,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
                 if( aStrHelpId.Len() > 0 )
                     pHelp->Start( aStrHelpId, this );
                 else
-                    pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OOO_HELP_INDEX ) ), this );
+                    pHelp->Start( rtl::OUString( OOO_HELP_INDEX  ), this );
             }
         }
     }
@@ -8267,15 +8267,15 @@ uno::Reference< XDragSource > Window::GetDragSource()
                         Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                         OUString aDragSourceSN, aDropTargetSN;
 #if defined WNT
-                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
-                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
+                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
+                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
                         aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
                         aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
 #elif defined QUARTZ
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
-                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
-                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
+                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
+                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
                         aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                         aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined IOS
@@ -8284,15 +8284,15 @@ uno::Reference< XDragSource > Window::GetDragSource()
              * meaningless), or intra-app? Anyway, use the same code
              * as for MacOSX for now, even if meaningless...
              */
-                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
-                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
+                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
+                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
                         aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                         aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
                         aDropTargetAL.realloc( 3 );
                         aDragSourceAL.realloc( 3 );
-                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
-                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
+                        aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
+                        aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
 
                         aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                         aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
@@ -8347,10 +8347,10 @@ uno::Reference< XClipboard > Window::GetClipboard()
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboardExt")) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboardExt") ), UNO_QUERY );
 
                     if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
-                        mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), UNO_QUERY );
+                        mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
@@ -8361,7 +8361,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
                         {
                             Sequence< Any > aArgumentList( 3 );
                             aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                            aArgumentList[ 1 ] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
+                            aArgumentList[ 1 ] = makeAny( OUString("CLIPBOARD") );
                             aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
                             xInit->initialize( aArgumentList );
@@ -8404,19 +8404,19 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
 #if defined(UNX) && !defined(QUARTZ)
                     Sequence< Any > aArgumentList( 3 );
                       aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aArgumentList[ 1 ] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("PRIMARY")) );
+                    aArgumentList[ 1 ] = makeAny( OUString("PRIMARY") );
                     aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
                     mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xFactory->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")), aArgumentList ), UNO_QUERY );
+                    OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"), aArgumentList ), UNO_QUERY );
 #       else
                     static uno::Reference< XClipboard > s_xSelection;
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboardExt")) ), UNO_QUERY );
+                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboardExt") ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard")) ), UNO_QUERY );
+                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboard") ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #       endif
@@ -9358,8 +9358,7 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
         static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory> xStaticCanvasFactory(
             uno::Reference<lang::XMultiServiceFactory>(
                 xFactory->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.rendering.CanvasFactory") ) ),
+                    OUString( "com.sun.star.rendering.CanvasFactory" ) ),
                 UNO_QUERY ));
         uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
 
@@ -9376,10 +9375,8 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
             {
                 xCanvas.set( xCanvasFactory->createInstanceWithArguments(
                                  bSpriteCanvas ?
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                               "com.sun.star.rendering.SpriteCanvas.MultiScreen" )) :
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                               "com.sun.star.rendering.Canvas" )),
+                                 OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
+                                 OUString( "com.sun.star.rendering.Canvas" ),
                                  aArg ),
                              UNO_QUERY );
 
@@ -9389,10 +9386,8 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
 #endif
                 xCanvas.set( xCanvasFactory->createInstanceWithArguments(
                                  bSpriteCanvas ?
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                               "com.sun.star.rendering.SpriteCanvas" )) :
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                               "com.sun.star.rendering.Canvas" )),
+                                 OUString( "com.sun.star.rendering.SpriteCanvas" ) :
+                                 OUString( "com.sun.star.rendering.Canvas" ),
                                  aArg ),
                              UNO_QUERY );
 

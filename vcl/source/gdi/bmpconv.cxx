@@ -118,7 +118,7 @@ Any SAL_CALL BmpConverter::getValue( const OUString& ) throw( UnknownPropertyExc
 
 sal_Bool SAL_CALL BmpConverter::hasMethod( const OUString& rName ) throw()
 {
-    return rName.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) );
+    return rName.equalsIgnoreAsciiCase( OUString("convert-bitmap-depth") );
 }
 
 sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& ) throw()
@@ -135,7 +135,7 @@ Any SAL_CALL BmpConverter::invoke(
 {
     Any aRet;
 
-    if( rFunction.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) ) )
+    if( rFunction.equalsIgnoreAsciiCase( OUString("convert-bitmap-depth") ) )
     {
         Reference< XBitmap > xBM;
         sal_uInt16 nTargetDepth = 0;

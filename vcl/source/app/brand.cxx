@@ -77,9 +77,9 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 {
     // TODO - if we want more flexibility we could add a branding path
     // in an rc file perhaps fallback to "about.bmp"
-    rtl::OUString aBaseName = ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+    rtl::OUString aBaseName = ( rtl::OUString("/") +
                                 rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aPng( RTL_CONSTASCII_USTRINGPARAM(".png") );
+    rtl::OUString aPng( ".png" );
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
@@ -99,9 +99,9 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 
 vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
 {
-    rtl::OUString aBaseName = ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+    rtl::OUString aBaseName = ( rtl::OUString("/") +
                                 rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM(".svg") );
+    rtl::OUString aSvg( ".svg" );
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);

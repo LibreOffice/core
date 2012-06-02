@@ -78,7 +78,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
     else
     {
         m_rSelectionManager.registerHandler( XA_PRIMARY, *this );
-        m_rSelectionManager.registerHandler( m_rSelectionManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ), *this );
+        m_rSelectionManager.registerHandler( m_rSelectionManager.getAtom( OUString("CLIPBOARD") ), *this );
     }
 }
 
@@ -96,7 +96,7 @@ X11Clipboard::~X11Clipboard()
     else
     {
         m_rSelectionManager.deregisterHandler( XA_PRIMARY );
-        m_rSelectionManager.deregisterHandler( m_rSelectionManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ) );
+        m_rSelectionManager.deregisterHandler( m_rSelectionManager.getAtom( OUString("CLIPBOARD") ) );
     }
 }
 
@@ -181,7 +181,7 @@ void SAL_CALL X11Clipboard::setContents(
     else
     {
         m_rSelectionManager.requestOwnership( XA_PRIMARY );
-        m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ) );
+        m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( OUString("CLIPBOARD") ) );
     }
 
     // notify old owner on loss of ownership
@@ -260,7 +260,7 @@ Reference< XInterface > X11Clipboard::getReference() throw()
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(X11_CLIPBOARD_IMPLEMENTATION_NAME));
+    return OUString(X11_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------

@@ -173,7 +173,7 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
     setStyle(style);
 
     exists = false;
-    const rtl::OUString sBrandURLSuffix(RTL_CONSTASCII_USTRINGPARAM("_brand"));
+    const rtl::OUString sBrandURLSuffix("_brand");
     for (Paths::iterator i(m_paths.begin()); i != m_paths.end() && !exists; ++i) {
         ::rtl::OUString aURL = i->first;
         sal_Int32 nFromIndex = aURL.getLength() - sBrandURLSuffix.getLength();
@@ -224,7 +224,7 @@ bool ImplImageTree::loadDefaultImage(
     BitmapEx& bitmap)
 {
     return doLoadImage(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("res/grafikde.png")),
+        rtl::OUString("res/grafikde.png"),
         style, bitmap, false);
 }
 
@@ -301,7 +301,7 @@ void ImplImageTree::resetPaths() {
     m_paths.clear();
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition/images"));
+            "$BRAND_BASE_DIR/program/edition/images");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -312,7 +312,7 @@ void ImplImageTree::resetPaths() {
     }
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));
+            "$BRAND_BASE_DIR/share/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -328,9 +328,7 @@ void ImplImageTree::resetPaths() {
                 css::uno::Reference< css::container::XNameAccess >()));
     }
     {
-        rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "$BRAND_BASE_DIR/share/config/images_brand"));
+        rtl::OUString url( "$BRAND_BASE_DIR/share/config/images_brand");
         rtl::Bootstrap::expandMacros(url);
         m_paths.push_back(
             std::make_pair(
@@ -338,7 +336,7 @@ void ImplImageTree::resetPaths() {
     }
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));
+            "$BRAND_BASE_DIR/share/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -354,9 +352,7 @@ void ImplImageTree::resetPaths() {
     }
     if ( m_style == "default" )
     {
-        rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "$BRAND_BASE_DIR/share/config/images"));
+        rtl::OUString url( "$BRAND_BASE_DIR/share/config/images");
         rtl::Bootstrap::expandMacros(url);
         m_paths.push_back(
             std::make_pair(
@@ -414,9 +410,7 @@ bool ImplImageTree::find(
             try {
                 i->second.set(
                     comphelper::createProcessComponentWithArguments(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.packages.zip.ZipFileAccess")),
+                        rtl::OUString( "com.sun.star.packages.zip.ZipFileAccess"),
                         args),
                     css::uno::UNO_QUERY_THROW);
             } catch (css::uno::RuntimeException &) {

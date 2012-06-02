@@ -198,7 +198,7 @@ Window* ImplGetDefaultWindow()
         {
             DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
             pSVData->mpDefaultWin = new WorkWindow( 0, WB_DEFAULTWIN );
-            pSVData->mpDefaultWin->SetText( OUString( RTL_CONSTASCII_USTRINGPARAM( "VCL ImplGetDefaultWindow" ) ) );
+            pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
         }
         Application::GetSolarMutex().release();
     }
@@ -376,14 +376,14 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                         new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
 
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
+                            OUString("com.sun.star.accessibility.AccessBridge"),
                             arguments
                         );
                 }
                 else
                 {
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
+                            OUString("com.sun.star.accessibility.AccessBridge"),
                             arguments
                         );
                 }
@@ -499,11 +499,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
             String aTitle;
             String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
 
-            if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassNotFound")), 13) )
+            if( 0 == e.Message.compareTo(::rtl::OUString("ClassNotFound"), 13) )
             {
                 aTitle = ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr).toString();
             }
-            else if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NoSuchMethod")), 12) )
+            else if( 0 == e.Message.compareTo(::rtl::OUString("NoSuchMethod"), 12) )
             {
                 aTitle = ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr).toString();
             }

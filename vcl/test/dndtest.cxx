@@ -137,7 +137,7 @@ public:
     {
         DataFlavor df;
 
-        df.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16"));
+        df.MimeType = OUString("text/plain;charset=utf-16");
         df.DataType = getCppuType( static_cast < OUString * > ( 0 ) );
 
          m_aFlavorList[0] = df;
@@ -161,7 +161,7 @@ void MyApp::Main()
 
         osl_getCommandArg( n, &aArg.pData );
 
-        if( aArg.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("-r")), 2 ) == 0 )
+        if( aArg.compareTo( OUString("-r"), 2 ) == 0 )
         {
             if ( n + 1 < nmax )
                 osl_getCommandArg( ++n, &aRegistry.pData );
@@ -190,7 +190,7 @@ void MyApp::Main()
 
 
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Drag And Drop - Workbench" ) ) );
+    aMainWin.SetText( XubString( "Drag And Drop - Workbench"  ) );
     aMainWin.Show();
 
     // test the clipboard code
@@ -208,7 +208,7 @@ void MyApp::Main()
 
     MyListBox aListBox( &aMainWin );
     aListBox.SetPosSizePixel( 10, 10, 100, 100 );
-    aListBox.InsertEntry( OUString(RTL_CONSTASCII_USTRINGPARAM("TestItem")));
+    aListBox.InsertEntry( OUString("TestItem"));
     aListBox.Show();
 
     Execute();
@@ -294,7 +294,7 @@ void SAL_CALL MyDragAndDropListener::dragGestureRecognized( const DragGestureEve
     printf( "XDragGestureListener::dragGestureRecognized called ( Window: %p, %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 " ).\n", m_pWindow, dge.DragOriginX, dge.DragOriginY );
 
     Reference< XDragSource > xDragSource( dge.DragSource, UNO_QUERY );
-    xDragSource->startDrag( dge, -1, 0, 0, new StringTransferable( OUString(RTL_CONSTASCII_USTRINGPARAM("TestString")) ), this );
+    xDragSource->startDrag( dge, -1, 0, 0, new StringTransferable( OUString("TestString") ), this );
     printf( "XDragSource::startDrag returned.\n" );
 }
 
@@ -383,7 +383,7 @@ void SAL_CALL MyDragAndDropListener::disposing( const EventObject& ) throw(Runti
 // -----------------------------------------------------------------------
 
 MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
-    OUString(RTL_CONSTASCII_USTRINGPARAM("dragging over this box should result in another window id in the drag log.")) )
+    OUString("dragging over this box should result in another window id in the drag log.") )
 {
     Reference< XDropTargetListener > xListener = new MyDragAndDropListener( this );
 
