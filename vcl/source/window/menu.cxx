@@ -2943,11 +2943,11 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                 {
                     // This restores the normal menu or menu bar text
                     // color for when it is no longer highlighted.
-            if ( bIsMenuBar )
-                pWin->SetTextColor( rSettings.GetMenuBarTextColor() );
-            else
-                pWin->SetTextColor( rSettings.GetMenuTextColor() );
-         }
+                    if ( bIsMenuBar )
+                        pWin->SetTextColor( rSettings.GetMenuBarTextColor() );
+                    else
+                        pWin->SetTextColor( rSettings.GetMenuTextColor() );
+                }
             }
             if( bLayout )
             {
