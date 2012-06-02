@@ -60,9 +60,9 @@ public:
 
         uno::Sequence<uno::Any> aUcbInitSequence(2);
         aUcbInitSequence[0] <<=
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+            rtl::OUString("Local");
         aUcbInitSequence[1] <<=
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+            rtl::OUString("Office");
 
         uno::Reference<lang::XMultiServiceFactory>
             xServiceFactory(xFactory, uno::UNO_QUERY);
