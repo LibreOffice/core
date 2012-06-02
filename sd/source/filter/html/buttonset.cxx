@@ -100,7 +100,7 @@ bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvi
     if( xInputStream.is() && xGraphicProvider.is() ) try
     {
         Sequence< PropertyValue > aMediaProperties( 1 );
-        aMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
+        aMediaProperties[0].Name = ::rtl::OUString("InputStream"  );
         aMediaProperties[0].Value <<= xInputStream;
         Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
 
@@ -160,7 +160,7 @@ public:
 
 ButtonSetImpl::ButtonSetImpl()
 {
-    const OUString sSubPath( RTL_CONSTASCII_USTRINGPARAM( "/wizard/web/buttons" ) );
+    const OUString sSubPath( "/wizard/web/buttons"  );
 
     OUString sSharePath( SvtPathOptions().GetConfigPath() );
     sSharePath += sSubPath;
@@ -266,7 +266,7 @@ Reference< XGraphicProvider > ButtonSetImpl::getGraphicProvider()
         {
             Reference< XGraphicProvider > xGraphProvider(
                 xServiceManager->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ), UNO_QUERY_THROW );
+                    ::rtl::OUString( "com.sun.star.graphic.GraphicProvider"  ) ), UNO_QUERY_THROW );
 
             mxGraphicProvider = xGraphProvider;
         }

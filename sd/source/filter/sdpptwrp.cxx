@@ -86,7 +86,7 @@ sal_Bool SdPPTFilter::Import()
         /* check if there is a dualstorage, then the
         document is propably a PPT95 containing PPT97 */
         SvStorageRef xDualStorage;
-        String sDualStorage( RTL_CONSTASCII_USTRINGPARAM( "PP97_DUALSTORAGE" ) );
+        String sDualStorage( "PP97_DUALSTORAGE"  );
         if ( pStorage->IsContained( sDualStorage ) )
         {
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, STREAM_STD_READ );

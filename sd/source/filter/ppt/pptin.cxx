@@ -116,7 +116,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     sal_uInt32 nImportFlags = 0;
 
 #ifdef DBG_UTIL
-    PropRead* pSummaryInformation = new PropRead( rStorage, String( RTL_CONSTASCII_USTRINGPARAM( "\005SummaryInformation" ) ) );
+    PropRead* pSummaryInformation = new PropRead( rStorage, String( "\005SummaryInformation"  ) );
     if ( pSummaryInformation->IsValid() )
     {
         pSummaryInformation->Read();
@@ -132,7 +132,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
             {
                 String aComment;
                 aPropItem.Read( aComment );
-                if ( aComment.Search( String( RTL_CONSTASCII_USTRINGPARAM( "Applixware" ) ), 0 ) != STRING_NOTFOUND )
+                if ( aComment.Search( String( "Applixware"  ), 0 ) != STRING_NOTFOUND )
                 {
                     nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
                 }
