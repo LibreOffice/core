@@ -214,14 +214,14 @@ Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(
 
 Sequence< OUString > SAL_CALL SwXModule_getSupportedServiceNames() throw()
 {
-    OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalSettings"));
+    OUString sService( "com.sun.star.text.GlobalSettings");
     const Sequence< OUString > aSeq( &sService, 1 );
     return aSeq;
 }
 
 OUString SAL_CALL SwXModule_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SwXModule" ) );
+    return OUString( "SwXModule"  );
 }
 
 SwXModule::SwXModule() :
@@ -587,7 +587,7 @@ SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 {
     // This property only exists if we have a view (ie, not at the module )
     if ( !pView )
-        mpInfo->remove ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "HelpURL" ) ) );
+        mpInfo->remove ( OUString ( "HelpURL"  ) );
 
 }
 
@@ -724,8 +724,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 break;
                 default:
                     throw IllegalArgumentException(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "SwXViewSettings: invalid zoom type")), 0, 0);
+                        ::rtl::OUString( "SwXViewSettings: invalid zoom type"), 0, 0);
                 break;
             }
             if(eZoom < USHRT_MAX)

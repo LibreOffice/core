@@ -206,7 +206,7 @@ SwFilterDetect::~SwFilterDetect()
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since impossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( OSL_LOG_PREFIX  ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;
@@ -283,12 +283,12 @@ SwFilterDetect::~SwFilterDetect()
                                     if ( nIndexOfInteractionHandler != -1 )
                                         lDescriptor[nIndexOfInteractionHandler].Value <<= uno::Reference< XInteractionHandler >( static_cast< task::XInteractionHandler* >( xHandler.get() ) );
 
-                                    aMedium.SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                                    aMedium.SetError( ERRCODE_ABORT, ::rtl::OUString( OSL_LOG_PREFIX  ) );
                                 }
                             }
                             else
                                 // no interaction, error handling as usual
-                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( OSL_LOG_PREFIX  ) );
 
                             if ( !bRepairAllowed )
                             {
@@ -355,7 +355,7 @@ SwFilterDetect::~SwFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString("InputStream");
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -364,7 +364,7 @@ SwFilterDetect::~SwFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString("UCBContent");
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -374,7 +374,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString("ReadOnly");
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -385,7 +385,7 @@ SwFilterDetect::~SwFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString("RepairPackage");
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
         bOpenAsTemplate = sal_True;
@@ -397,7 +397,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString("AsTemplate");
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -411,7 +411,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString("DocumentTitle");
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -454,16 +454,16 @@ UNOSEQUENCE< rtl::OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames()
 UNOSEQUENCE< rtl::OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOSEQUENCE< rtl::OUString > seqServiceNames( 3 );
-    seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
-    seqServiceNames.getArray() [1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.FormatDetector"  ));
-    seqServiceNames.getArray() [2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.W4WFormatDetector"  ));
+    seqServiceNames.getArray() [0] = ::rtl::OUString("com.sun.star.frame.ExtendedTypeDetection"  );
+    seqServiceNames.getArray() [1] = ::rtl::OUString("com.sun.star.text.FormatDetector"  );
+    seqServiceNames.getArray() [2] = ::rtl::OUString("com.sun.star.text.W4WFormatDetector"  );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SwFilterDetect::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.writer.FormatDetector" ));
+    return ::rtl::OUString("com.sun.star.comp.writer.FormatDetector" );
 }
 
 /* Helper for registry */
