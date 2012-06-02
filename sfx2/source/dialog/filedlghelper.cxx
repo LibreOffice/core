@@ -124,7 +124,7 @@ using namespace ::cppu;
 
 #define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 #define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
-#define USERITEM_NAME           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserItem" ))
+#define USERITEM_NAME           ::rtl::OUString("UserItem" )
 
 //-----------------------------------------------------------------------------
 
@@ -133,9 +133,9 @@ namespace sfx2
 
 const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
-    static const OUString aSD_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ) );
-    static const OUString aSI_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ) );
-    static const OUString aSW_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SwExportLastFilter" ) );
+    static const OUString aSD_EXPORT_IDENTIFIER( "SdExportLastFilter"  );
+    static const OUString aSI_EXPORT_IDENTIFIER( "SiExportLastFilter"  );
+    static const OUString aSW_EXPORT_IDENTIFIER( "SwExportLastFilter"  );
 
     const OUString* pRet = NULL;
 
@@ -491,7 +491,7 @@ void FileDialogHelper_Impl::updateExportButton()
     uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {
-        OUString sEllipses( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+        OUString sEllipses( "..."  );
         OUString sOldLabel( xCtrlAccess->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
 
         // initialize button label; we need the label with the mnemonic char
@@ -507,7 +507,7 @@ void FileDialogHelper_Impl::updateExportButton()
         OUString sLabel = maButtonLabel;
         // filter with options -> append ellipses on export button label
         if ( CheckFilterOptionsCapability( getCurentSfxFilter() ) )
-            sLabel += OUString( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            sLabel += OUString( "..."  );
 
         if ( sOldLabel != sLabel )
         {
@@ -1072,26 +1072,26 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         else
         {
             aInitArguments[0] <<= NamedValue(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateDescription" ) ),
+                                    ::rtl::OUString( "TemplateDescription"  ),
                                     makeAny( nTemplateDescription )
                                 );
 
             ::rtl::OUString sStandardDirTemp = ::rtl::OUString( sStandardDir );
 
             aInitArguments[1] <<= NamedValue(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ),
+                                    ::rtl::OUString( "StandardDir"  ),
                                     makeAny( sStandardDirTemp )
                                 );
 
             aInitArguments[2] <<= NamedValue(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BlackList" ) ),
+                                    ::rtl::OUString( "BlackList"  ),
                                     makeAny( rBlackList )
                                 );
 
 
             if ( mpPreferredParentWindow )
                 aInitArguments[3] <<= NamedValue(
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
+                                        ::rtl::OUString( "ParentWindow"  ),
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
         }
@@ -1208,7 +1208,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     // forward these ids to the file picker
     try
     {
-        const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( INET_HID_SCHEME ) );
+        const ::rtl::OUString sHelpIdPrefix( INET_HID_SCHEME  );
         // the ids for the single controls
         uno::Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
         if ( xControlAccess.is() )
@@ -1799,7 +1799,7 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
 
     uno::Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< XContainerQuery > xFilterCont(
-        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"))),
+        xSMGR->createInstance(::rtl::OUString("com.sun.star.document.FilterFactory")),
         UNO_QUERY);
     if ( ! xFilterCont.is() )
         return;
@@ -2328,9 +2328,9 @@ FileDialogHelper::FileDialogHelper(
     if ( aExtName.indexOf( (sal_Unicode)'*' ) != 0 )
     {
         if ( !aExtName.isEmpty() && aExtName.indexOf( (sal_Unicode)'.' ) != 0 )
-            aWildcard = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+            aWildcard = ::rtl::OUString( "*."  );
         else
-            aWildcard = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
+            aWildcard = ::rtl::OUString( "*"  );
     }
 
     aWildcard += aExtName;
@@ -2695,7 +2695,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
 
 ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, SfxItemSet* pSet)
 {
-    uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))), UNO_QUERY );
+    uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
     if( xInteractionHandler.is() )
     {
         // TODO: need a save way to distinguish MS filters from other filters
@@ -2723,8 +2723,8 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, Sf
                     if ( aEncryptionKey.getLength() )
                     {
                         ::comphelper::SequenceAsHashMap aHashData;
-                        aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ) ] <<= aEncryptionKey;
-                        aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ) ] <<= aUniqueID;
+                        aHashData[ ::rtl::OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
+                        aHashData[ ::rtl::OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
 
                         pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
                     }
@@ -2743,7 +2743,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, Sf
             if ( bMSType )
             {
                 // the empty password has 0 as Hash
-                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
+                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( "com.sun.star.text.TextDocument"  ).equals( pCurrentFilter->GetServiceName() ) );
                 if ( nHash )
                     pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
             }

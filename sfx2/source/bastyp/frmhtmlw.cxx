@@ -147,7 +147,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
     // Who we are
     String sGenerator( SfxResId( STR_HTML_GENERATOR ) );
-    ::rtl::OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+    ::rtl::OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
     sGenerator.SearchAndReplaceAscii( "%1", os );
     OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, sal_False, eDestEnc, pNonConvertableChars );
@@ -227,7 +227,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
         uno::Reference < script::XTypeConverter > xConverter(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
+                ::rtl::OUString("com.sun.star.script.Converter")),
                 uno::UNO_QUERY_THROW );
         uno::Reference<beans::XPropertySet> xUserDefinedProps(
             i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
@@ -267,7 +267,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
     {
         rtl::OStringBuffer sOut;
         ::rtl::OUString aStr;
-        uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")) );
+        uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString("FrameURL") );
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             String aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
@@ -283,7 +283,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             }
         }
 
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameName") );
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
@@ -294,13 +294,13 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         sal_Int32 nVal = SIZE_NOT_SET;
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameMarginWidth") );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginwidth)
                 .append('=').append(nVal);
         }
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameMarginHeight") );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginheight)
@@ -308,10 +308,10 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         sal_Bool bVal = sal_True;
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsAutoScroll") );
         if ( (aAny >>= bVal) && !bVal )
         {
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsScrollingMode") );
             if ( aAny >>= bVal )
             {
                 const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
@@ -321,10 +321,10 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         // frame border (MS+Netscape-Extension)
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsAutoBorder") );
         if ( (aAny >>= bVal) && !bVal )
         {
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsBorder") );
             if ( aAny >>= bVal )
             {
                 const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;

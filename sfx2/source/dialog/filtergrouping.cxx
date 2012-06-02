@@ -162,8 +162,8 @@ namespace sfx2
     void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const ::rtl::OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
-        static const ::rtl::OUString sDisplaNameNodeName( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ) );
-        static const ::rtl::OUString sSubFiltersNodeName( RTL_CONSTASCII_USTRINGPARAM( "Filters" ) );
+        static const ::rtl::OUString sDisplaNameNodeName( "DisplayName"  );
+        static const ::rtl::OUString sSubFiltersNodeName( "Filters"  );
 
             // the description node for the current class
         OConfigurationNode aClassDesc = _rClassesNode.openNode( _rLogicalClassName );
@@ -885,7 +885,7 @@ namespace sfx2
         {
             ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
             ::rtl::OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
-                                                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
+                                                             ::rtl::OUString("Name"),
                                                              ::rtl::OUString());
             if (!sFilterName.isEmpty())
                 m_lFilters.push_back(sFilterName);
@@ -1187,9 +1187,9 @@ namespace sfx2
                                   const ::rtl::OUString& _rExtension,
                                   sal_Bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
     {
-        static ::rtl::OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
-        static ::rtl::OUString sOpenBracket( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-        static ::rtl::OUString sCloseBracket( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+        static ::rtl::OUString sAllFilter( "(*.*)" );
+        static ::rtl::OUString sOpenBracket( " ("  );
+        static ::rtl::OUString sCloseBracket( ")" );
         ::rtl::OUString sRet = _rDisplayText;
 
         if ( sRet.indexOf( sAllFilter ) == -1 )

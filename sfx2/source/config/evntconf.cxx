@@ -169,17 +169,17 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(3);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            ::rtl::OUString aType(RTL_CONSTASCII_USTRINGPARAM( STAR_BASIC ));
+            ::rtl::OUString aType(STAR_BASIC );
             ::rtl::OUString aLib  = pMacro->GetLibName();
             ::rtl::OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
+            pValues[ 0 ].Name = ::rtl::OUString(PROP_EVENT_TYPE );
             pValues[ 0 ].Value <<= aType;
 
-            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_LIBRARY ));
+            pValues[ 1 ].Name = ::rtl::OUString(PROP_LIBRARY );
             pValues[ 1 ].Value <<= aLib;
 
-            pValues[ 2 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
+            pValues[ 2 ].Name = ::rtl::OUString(PROP_MACRO_NAME );
             pValues[ 2 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -192,10 +192,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             ::rtl::OUString aLib   = pMacro->GetLibName();
             ::rtl::OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
+            pValues[ 0 ].Name = ::rtl::OUString(PROP_EVENT_TYPE );
             pValues[ 0 ].Value <<= aLib;
 
-            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_SCRIPT ));
+            pValues[ 1 ].Name = ::rtl::OUString(PROP_SCRIPT );
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -207,10 +207,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 
             ::rtl::OUString aMacro  = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
-            pValues[ 0 ].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
+            pValues[ 0 ].Name = ::rtl::OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= ::rtl::OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
 
-            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
+            pValues[ 1 ].Name = ::rtl::OUString(PROP_MACRO_NAME );
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -241,7 +241,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
     {
         xSupplier = uno::Reference < document::XEventsSupplier >
                 ( ::comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))), uno::UNO_QUERY );
+                rtl::OUString("com.sun.star.frame.GlobalEventBroadcaster")), uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )

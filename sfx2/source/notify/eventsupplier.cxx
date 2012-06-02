@@ -242,8 +242,8 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 ::com::sun::star::uno::Reference
                     < ::com::sun::star::util::XURLTransformer > xTrans(
                         ::comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.util.URLTransformer" )) ),
+                            rtl::OUString(
+                                "com.sun.star.util.URLTransformer" ) ),
                         UNO_QUERY );
 
                 ::com::sun::star::util::URL aURL;
@@ -264,8 +264,8 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                     xProv = ::com::sun::star::uno::Reference
                         < ::com::sun::star::frame::XDispatchProvider > (
                             ::comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.frame.Desktop" )) ),
+                                rtl::OUString(
+                                    "com.sun.star.frame.Desktop" ) ),
                             UNO_QUERY );
                 }
 
@@ -484,13 +484,13 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         }
         else if ( !aMacroName.isEmpty() )
         {
-            aScript = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
+            aScript = rtl::OUString( MACRO_PRFIX  );
             if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
                 aScript += String('.');
 
             aScript += String('/');
             aScript += aMacroName;
-            aScript += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
+            aScript += rtl::OUString( MACRO_POSTFIX  );
         }
         else
             // wrong properties
@@ -549,7 +549,7 @@ css::uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (m_pEnumerationIt == m_lModels.end())
         throw css::container::NoSuchElementException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("End of model enumeration reached.")),
+                    ::rtl::OUString("End of model enumeration reached."),
                     static_cast< css::container::XEnumeration* >(this));
     css::uno::Reference< css::frame::XModel > xModel(*m_pEnumerationIt, UNO_QUERY);
     ++m_pEnumerationIt;
@@ -575,7 +575,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference
     pImp                   = new GlobalEventConfig();
     m_xEvents              = pImp;
     m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >(
-                        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.JobExecutor"))),
+                        xSMGR->createInstance(::rtl::OUString("com.sun.star.task.JobExecutor")),
                         UNO_QUERY);
     m_refCount--;
 }
@@ -698,7 +698,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant locate at least the model parameter.")),
+                ::rtl::OUString("Cant locate at least the model parameter."),
                 static_cast< css::container::XSet* >(this),
                 0);
 
@@ -735,7 +735,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant locate at least the model parameter.")),
+                ::rtl::OUString("Cant locate at least the model parameter."),
                 static_cast< css::container::XSet* >(this),
                 0);
 
