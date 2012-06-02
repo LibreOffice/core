@@ -33,10 +33,9 @@
 #include <tools/datetime.hxx>
 #include <tools/string.hxx>
 #include <vcl/timer.hxx>
-#include <svl/svarray.hxx>
 
 class SwGlossaries;
-class SvStringsISortDtor;
+class vector;
 
 struct AutoTextGroup
 {
@@ -66,7 +65,7 @@ public:
         SwGlossaryList();
         ~SwGlossaryList();
 
-    sal_Bool            HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames );
+    bool HasLongName(const String& rBegin, std::vector<String> *pLongNames);
     sal_Bool            GetShortName(const String& rLongName,
                                         String& rShortName, String& rGroupName );
 

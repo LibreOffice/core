@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <svl/svstdarr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -423,7 +422,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     passendem Anfang zurueckgeben
 ********************************************************************/
 
-sal_Bool SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames )
+bool SwGlossaryList::HasLongName(const String& rBegin, std::vector<String> *pLongNames)
 {
     if(!bFilled)
         Update();
@@ -441,8 +440,7 @@ sal_Bool SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* p
             if( rSCmp.isEqual( sBlock.Copy(0, nBeginLen), rBegin ) &&
                 nBeginLen + 1 < sBlock.Len())
             {
-                String* pBlock = new String(sBlock);
-                pLongNames->Insert(pBlock);
+                pLongNames->push_back( sBlock );
                 nFound++;
                 if(FIND_MAX_GLOS == nFound)
                     break;
