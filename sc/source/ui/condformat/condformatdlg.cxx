@@ -73,6 +73,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
 
     maLbType.SelectEntryPos(1);
     maLbType.SetSelectHdl( LINK( this, ScCondFrmtEntry, TypeListHdl ) );
+    maLbColorFormat.SetSelectHdl( LINK( this, ScCondFrmtEntry, ColFormatTypeHdl ) );
     maLbCondType.SelectEntryPos(0);
     maEdVal2.Hide();
 
@@ -87,6 +88,20 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
 
     //disable entries for color formats
     maLbColorFormat.SelectEntryPos(0);
+    maLbEntryTypeMin.SelectEntryPos(0);
+    Point aPointLb = maLbEntryTypeMiddle.GetPosPixel();
+    Point aPointEd = maEdMiddle.GetPosPixel();
+    const long nMovePos = 150;
+    aPointLb.X() += nMovePos;
+    aPointEd.X() += nMovePos;
+    maLbEntryTypeMiddle.SetPosPixel(aPointLb);
+    maEdMiddle.SetPosPixel(aPointEd);
+    maLbEntryTypeMiddle.SelectEntryPos(3);
+    aPointLb.X() += nMovePos;
+    aPointEd.X() += nMovePos;
+    maLbEntryTypeMax.SelectEntryPos(1);
+    maLbEntryTypeMax.SetPosPixel(aPointLb);
+    maEdMax.SetPosPixel(aPointEd);
     SetCondType();
 }
 
@@ -178,6 +193,7 @@ void ScCondFrmtEntry::SetCondType()
     maEdVal1.Show();
     maEdVal2.Show();
     maLbStyle.Show();
+    maLbCondType.Show();
     maFtStyle.Show();
     HideColorScaleElements();
     HideDataBarElements();
@@ -202,11 +218,20 @@ void ScCondFrmtEntry::SetColorScaleType()
     HideDataBarElements();
     maLbColorFormat.Show();
     if(maLbColorFormat.GetSelectEntryPos() == 0)
+    {
+	maEdMiddle.Hide();
+	maLbEntryTypeMiddle.Hide();
 	maLbColScale2.Show();
+	maLbColScale3.Hide();
+    }
     else
+    {
+	maEdMiddle.Show();
+	maLbEntryTypeMiddle.Show();
+	maLbColScale2.Hide();
 	maLbColScale3.Show();
+    }
     maLbEntryTypeMin.Show();
-    maLbEntryTypeMiddle.Show();
     maLbEntryTypeMax.Show();
     maEdMin.Show();
     maEdMiddle.Show();
@@ -230,7 +255,7 @@ void ScCondFrmtEntry::Select()
     Size aSize = GetSizePixel();
     aSize.Height() = 130;
     SetSizePixel(aSize);
-    SetControlBackground(Color(COL_RED));
+    SetControlForeground(Color(COL_RED));
     SwitchToType(meType);
     mbActive = true;
 }
@@ -270,6 +295,16 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
 	default:
 	    break;
     }
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCondFrmtEntry, ColFormatTypeHdl)
+{
+    if(maLbColorFormat.GetSelectEntryPos() < 2)
+	SetColorScaleType();
+    else
+	SetDataBarType();
+
     return 0;
 }
 
