@@ -45,6 +45,8 @@
 
 #include "vcl/vclenum.hxx"
 #include "vcl/fontmanager.hxx"
+#include <vcl/decoview.hxx>
+
 typedef struct _cairo_font_options cairo_font_options_t;
 const char* const tabPrelitDataName="libreoffice-tab-is-prelit";
 
@@ -243,6 +245,8 @@ static Rectangle NWGetToolbarRect( SalX11Screen nScreen,
                                    ControlState nState,
                                    const ImplControlValue& aValue,
                                    const OUString& rCaption );
+
+static int getFrameWidth(GtkWidget* widget);
 //---
 
 static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPart, Rectangle aAreaRect );
@@ -581,6 +585,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
                 return true;
             break;
 
+        case CTRL_FRAME:
         case CTRL_WINDOW_BACKGROUND:
             return true;
 
@@ -768,7 +773,6 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     // get a GC with current clipping region set
     GetFontGC();
 
-
     // theme changed ?
     if( GtkSalGraphics::bThemeChanged )
     {
@@ -916,6 +920,11 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     else if( nType == CTRL_WINDOW_BACKGROUND )
     {
         returnVal = NWPaintGTKWindowBackground( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+    }
+
+    if(nType==CTRL_FRAME)
+    {
+        returnVal = NWPaintGTKFrame( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
     }
 
     if( pixmap )
@@ -1144,6 +1153,33 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeBoundingRegion = rNativeContentRegion = aRect;
         returnVal = sal_True;
     }
+    if( nType == CTRL_FRAME && nPart == PART_BORDER )
+    {
+        int frameWidth = getFrameWidth(m_pWindow);
+        rNativeBoundingRegion = rControlRegion;
+        sal_uInt16 nStyle = aValue.getNumericVal();
+        int x1=rControlRegion.Left();
+        int y1=rControlRegion.Top();
+        int x2=rControlRegion.Right();
+        int y2=rControlRegion.Bottom();
+
+        if( nStyle & FRAME_DRAW_NODRAW )
+        {
+            if( (nStyle & FRAME_DRAW_TOPBOTTOM) == FRAME_DRAW_TOPBOTTOM )
+                rNativeContentRegion = Rectangle(x1,
+                                                 y1+frameWidth,
+                                                 x2,
+                                                 y2-frameWidth);
+            else
+                rNativeContentRegion = Rectangle(x1+frameWidth,
+                                                 y1+frameWidth,
+                                                 x2-frameWidth,
+                                                 y2-frameWidth);
+        }
+        else
+            rNativeContentRegion = rControlRegion;
+        returnVal=true;
+    }
 
     return( returnVal );
 }
@@ -1151,6 +1187,73 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 /************************************************************************
  * Individual control drawing functions
  ************************************************************************/
+sal_Bool GtkSalGraphics::NWPaintGTKFrame(
+            GdkDrawable* gdkDrawable,
+            ControlType, ControlPart,
+            const Rectangle& rControlRectangle,
+            const clipList& rClipList,
+            ControlState /* nState */, const ImplControlValue& aValue,
+            const OUString& )
+{
+    GdkRectangle clipRect;
+    int frameWidth=getFrameWidth(m_pWindow);
+    GtkShadowType shadowType=GTK_SHADOW_IN;
+    sal_uInt16 nStyle = aValue.getNumericVal();
+    if( nStyle & FRAME_DRAW_IN )
+        shadowType=GTK_SHADOW_OUT;
+    if( nStyle & FRAME_DRAW_OUT )
+        shadowType=GTK_SHADOW_IN;
+
+    for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
+    {
+        clipRect.x = it->Left();
+        clipRect.y = it->Top();
+        clipRect.width = it->GetWidth();
+        clipRect.height = it->GetHeight();
+
+        // Draw background first
+
+        // Top
+        gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_OUT,&clipRect,
+                         m_pWindow,"base",
+                         rControlRectangle.Left(),
+                         rControlRectangle.Top(),
+                         rControlRectangle.GetWidth(),
+                         frameWidth);
+        // Bottom
+        gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_OUT,&clipRect,
+                         m_pWindow,"base",
+                         rControlRectangle.Left(),
+                         rControlRectangle.Top()+rControlRectangle.GetHeight()-frameWidth,
+                         rControlRectangle.GetWidth(),
+                         frameWidth);
+        // Left
+        gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_OUT,&clipRect,
+                         m_pWindow,"base",
+                         rControlRectangle.Left(),
+                         rControlRectangle.Top(),
+                         2*frameWidth,
+                         rControlRectangle.GetHeight());
+        // Right
+        gtk_paint_flat_box(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_OUT,&clipRect,
+                         m_pWindow,"base",
+                         rControlRectangle.Left()+rControlRectangle.GetWidth()-frameWidth,
+                         rControlRectangle.Top(),
+                         2*frameWidth,
+                         rControlRectangle.GetHeight());
+
+        // Now render the frame
+        gtk_paint_shadow(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,shadowType,&clipRect,
+                         m_pWindow,"base",
+                         rControlRectangle.Left(),
+                         rControlRectangle.Top(),
+                         rControlRectangle.GetWidth(),
+                         rControlRectangle.GetHeight());
+    }
+
+    return sal_True;
+}
+
 sal_Bool GtkSalGraphics::NWPaintGTKWindowBackground(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart,
@@ -3265,6 +3368,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
 }
 
 //----
+
+static int getFrameWidth(GtkWidget* widget)
+{
+    return widget->style->xthickness;
+}
 
 static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
                                          ControlType,
