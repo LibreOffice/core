@@ -172,7 +172,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                     Reference< XComponentContext >  xCtx;
                     xPSMPropertySet->getPropertyValue(
                     String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xCtx;
-                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ), xCtx  ), UNO_QUERY_THROW );
+                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( "com.sun.star.reflection.ProxyFactory"  ), xCtx  ), UNO_QUERY_THROW );
                     m_xAggProxy = xProxyFac->createProxy( xIf );
                 }
                 catch(const Exception& )
@@ -273,7 +273,7 @@ DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< 
         sal_Int32 nSbxCount = n - 1;
         if ( nParamsCount < nSbxCount - nSbxOptional )
         {
-            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "wrong number of parameters!" ) ), Reference< XInterface >() );
+            throw RuntimeException( ::rtl::OUString( "wrong number of parameters!"  ), Reference< XInterface >() );
         }
     }
     // set parameters
@@ -458,7 +458,7 @@ uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Referen
     try
     {
         uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
-        xVBACompat.set( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY );
+        xVBACompat.set( xModelProps->getPropertyValue( ::rtl::OUString( "BasicLibraries"  ) ), uno::UNO_QUERY );
     }
     catch(const uno::Exception& )
     {
@@ -488,7 +488,7 @@ public:
         uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         if ( xFactory.is() )
     {
-            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), uno::UNO_QUERY );
+            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( rtl::OUString( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY );
            if ( xDeskTop.is() )
                xDeskTop->terminate();
         }
@@ -506,7 +506,7 @@ void VBAUnlockDocuments( StarBASIC* pBasic )
 {
     if ( pBasic && pBasic->IsDocBasic() )
     {
-        SbUnoObject* pGlobs = dynamic_cast< SbUnoObject* >( pBasic->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ), SbxCLASS_DONTCARE ) );
+        SbUnoObject* pGlobs = dynamic_cast< SbUnoObject* >( pBasic->Find( ::rtl::OUString( "ThisComponent"  ), SbxCLASS_DONTCARE ) );
         if ( pGlobs )
         {
             uno::Reference< frame::XModel > xModel( pGlobs->getUnoAny(), uno::UNO_QUERY );
@@ -2191,7 +2191,7 @@ SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::Mod
     SetModuleType( mInfo.ModuleType );
     if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
-        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Form" )) );
+        SetClassName( rtl::OUString("Form" ) );
     }
     else if ( mInfo.ModuleObject.is() )
         SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
@@ -2210,13 +2210,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException 
     pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Worksheet" )) ) )
+    if( xServiceInfo->supportsService( rtl::OUString("ooo.vba.excel.Worksheet" ) ) )
     {
-        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Worksheet" )) );
+        SetClassName( rtl::OUString("Worksheet" ) );
     }
-    else if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Workbook" )) ) )
+    else if( xServiceInfo->supportsService( rtl::OUString("ooo.vba.excel.Workbook" ) ) )
     {
-        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Workbook" )) );
+        SetClassName( rtl::OUString("Workbook" ) );
     }
 }
 
@@ -2361,9 +2361,9 @@ public:
                     aParams[0] <<= nCancel;
                     aParams[1] <<= nCloseMode;
 
-                    mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ),
+                    mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ),
                                                 aParams);
-                    xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cancel")), aParams[0]);
+                    xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( "Cancel"), aParams[0]);
                     // If we don't cancel then we want to make sure the dialog
                     // really is gone to make sure when we attempt to raise it again
                     // it will actually generate an initialise event
@@ -2378,7 +2378,7 @@ public:
             }
         }
 
-        mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ) );
+        mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ) );
     }
 
 
@@ -2533,14 +2533,14 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
 void SbUserFormModule::triggerActivateEvent( void )
 {
     OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
-    triggerMethod( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm_Activate") ) );
+    triggerMethod( rtl::OUString( "UserForm_Activate" ) );
     OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
 }
 
 void SbUserFormModule::triggerDeactivateEvent( void )
 {
     OSL_TRACE("**** SbUserFormModule::triggerDeactivate");
-    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_Deactivate") ) );
+    triggerMethod( rtl::OUString("Userform_Deactivate" ) );
 }
 
 void SbUserFormModule::triggerInitializeEvent( void )
@@ -2621,7 +2621,7 @@ void SbUserFormModule::Unload()
     aParams[0] <<= nCancel;
     aParams[1] <<= nCloseMode;
 
-    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ), aParams);
+    triggerMethod( rtl::OUString("Userform_QueryClose" ), aParams);
 
     aParams[0] >>= nCancel;
     // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
@@ -2678,20 +2678,20 @@ void SbUserFormModule::InitObject()
             uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= m_xModel;
-            rtl::OUString sDialogUrl( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:" ) );
-            rtl::OUString sProjectName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+            rtl::OUString sDialogUrl( "vnd.sun.star.script:"  );
+            rtl::OUString sProjectName( "Standard" );
 
             try
             {
                 Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
                 sProjectName = xVBAMode->getProjectName();
             }
             catch(const Exception& ) {}
 
-            sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
+            sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( "?location=document" ) );
 
-            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DialogProvider")), aArgs  ), uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( rtl::OUString( "com.sun.star.awt.DialogProvider"), aArgs  ), uno::UNO_QUERY_THROW );
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
@@ -2700,7 +2700,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
             aArgs[ 3 ] <<= sProjectName;
-            pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
+            pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( "ooo.vba.msforms.UserForm"), aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 

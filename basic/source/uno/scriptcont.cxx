@@ -136,14 +136,14 @@ sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const String& rLibraryNa
 
 // Ctor for service
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( void )
-    :maScriptLanguage( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) )
+    :maScriptLanguage( "StarBasic"  )
 {
     // all initialisation has to be done
     // by calling XInitialization::initialize
 }
 
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embed::XStorage >& xStorage )
-    :maScriptLanguage( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) )
+    :maScriptLanguage( "StarBasic"  )
 {
     init( OUString(), xStorage );
 }
@@ -191,7 +191,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
     // Create sax writer
     Reference< XExtendedDocumentHandler > xHandler(
         mxMSF->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
+            OUString( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
         OSL_FAIL( "### couldn't create sax-writer component\n" );
@@ -219,16 +219,16 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
         switch( aModInfo.ModuleType )
         {
         case ModuleType::NORMAL:
-            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("normal") );
+            aMod.aModuleType = OUString( "normal" );
             break;
         case ModuleType::CLASS:
-            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("class") );
+            aMod.aModuleType = OUString( "class" );
             break;
         case ModuleType::FORM:
-            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("form") );
+            aMod.aModuleType = OUString( "form" );
             break;
         case ModuleType::DOCUMENT:
-            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("document") );
+            aMod.aModuleType = OUString( "document" );
             break;
         case ModuleType::UNKNOWN:
             // nothing
@@ -248,7 +248,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     Any aRetAny;
 
     Reference< XParser > xParser( mxMSF->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
+        OUString( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
     if( !xParser.is() )
     {
         OSL_FAIL( "### couldn't create sax parser component\n" );
@@ -318,7 +318,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         {
             Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+            xFactory->createInstance( ::rtl::OUString( "ooo.vba.VBAGlobals"  ) );
         }
         catch(const Exception& )
         {
@@ -348,7 +348,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
             {
                 Reference<frame::XModel > xModel( mxOwnerDocument );
                 Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY_THROW );
-                mxCodeNameAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider" ) ) ), UNO_QUERY );
+                mxCodeNameAccess.set( xSF->createInstance( rtl::OUString("ooo.vba.VBAObjectModuleObjectProvider"  ) ), UNO_QUERY );
             }
             catch(const Exception& ) {}
 
@@ -555,7 +555,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
                 if( bKillUncryptedFiles )
                     aElementInetObj.setExtension( maLibElementFileExtension );
                 else
-                    aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
+                    aElementInetObj.setExtension( OUString( "pba" ) );
                 String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if( mxSFI->exists( aElementPath ) )
@@ -689,7 +689,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         throw uno::RuntimeException();
 
                     String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                    OUString aMime( "text/xml" );
                     xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                     // Set encryption key
@@ -745,7 +745,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, sal_False,
                     INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
-                aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
+                aElementInetObj.setExtension( OUString( "pba" ) );
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
@@ -773,7 +773,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     SbModule* pMod = pBasicLib->FindModule( aElementName );
                     if( pMod )
                     {
-                        OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
+                        OUString aCodeStreamName( "code.bin" );
 
                         uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
                                             aCodeStreamName,
@@ -796,7 +796,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     }
 
                     // Write encrypted source stream
-                    OUString aSourceStreamName( RTL_CONSTASCII_USTRINGPARAM("source.xml") );
+                    OUString aSourceStreamName( "source.xml" );
 
                     uno::Reference< io::XStream > xSourceStream;
                     try
@@ -825,7 +825,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     if ( !xProps.is() )
                         throw uno::RuntimeException();
                     String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                    OUString aMime( "text/xml" );
                     xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
@@ -1023,7 +1023,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, sal_False,
                     INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
-                aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
+                aElementInetObj.setExtension( OUString( "pba" ) );
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 uno::Reference< embed::XStorage > xElementRootStorage;
@@ -1049,7 +1049,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         }
 
                         try {
-                            OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
+                            OUString aCodeStreamName( "code.bin" );
                             uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
                                                                         aCodeStreamName,
                                                                         embed::ElementModes::READ );
@@ -1079,7 +1079,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     if( bLoadSource || bVerifyPasswordOnly )
                     {
                         // Access encrypted source stream
-                        OUString aSourceStreamName( RTL_CONSTASCII_USTRINGPARAM("source.xml") );
+                        OUString aSourceStreamName( "source.xml" );
                         try {
                             uno::Reference< io::XStream > xSourceStream = xElementRootStorage->openEncryptedStreamElement(
                                                                     aSourceStreamName,
@@ -1165,9 +1165,9 @@ Sequence< ::rtl::OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServ
 Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentScriptLibraryContainer" ));
+    aServiceNames[0] = OUString("com.sun.star.script.DocumentScriptLibraryContainer" );
     // plus, for compatibility:
-    aServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ));
+    aServiceNames[1] = OUString("com.sun.star.script.ScriptLibraryContainer" );
     return aServiceNames;
 }
 
@@ -1179,7 +1179,7 @@ OUString SfxScriptLibraryContainer::getImplementationName_static()
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sfx2.ScriptLibraryContainer" ));
+        aImplName = OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
         bNeedsInit = sal_False;
     }
     return aImplName;

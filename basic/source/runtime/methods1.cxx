@@ -76,7 +76,7 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
         if( xSMgr.is() )
         {
             xCalendar = Reference< XCalendar3 >( xSMgr->createInstance
-                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.LocaleCalendar" )) ), UNO_QUERY );
+                ( ::rtl::OUString("com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
         }
     }
 
@@ -2575,7 +2575,7 @@ void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUStri
             Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                xFunc.set( xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.FunctionAccess"))), UNO_QUERY_THROW);
+                xFunc.set( xFactory->createInstance(::rtl::OUString("com.sun.star.sheet.FunctionAccess")), UNO_QUERY_THROW);
             }
         }
         Any aRet = xFunc->callFunction( sFuncName, aArgs );
@@ -2610,7 +2610,7 @@ RTLFUNC(SYD)
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
     aParams[ 3 ] <<= makeAny( rPar.Get(4)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYD") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "SYD" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(SLN)
@@ -2633,7 +2633,7 @@ RTLFUNC(SLN)
     aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SLN") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "SLN" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(Pmt)
@@ -2678,7 +2678,7 @@ RTLFUNC(Pmt)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Pmt") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "Pmt" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(PPmt)
@@ -2725,7 +2725,7 @@ RTLFUNC(PPmt)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PPmt") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "PPmt" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(PV)
@@ -2770,7 +2770,7 @@ RTLFUNC(PV)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PV") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "PV" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(NPV)
@@ -2798,7 +2798,7 @@ RTLFUNC(NPV)
 
     aParams[ 1 ] <<= aValues;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NPV") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "NPV" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(NPer)
@@ -2843,7 +2843,7 @@ RTLFUNC(NPer)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NPer") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "NPer" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(MIRR)
@@ -2874,7 +2874,7 @@ RTLFUNC(MIRR)
     aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
     aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MIRR") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "MIRR" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(IRR)
@@ -2911,7 +2911,7 @@ RTLFUNC(IRR)
     aParams[ 0 ] <<= aValues;
     aParams[ 1 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IRR") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "IRR" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(IPmt)
@@ -2958,7 +2958,7 @@ RTLFUNC(IPmt)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IPmt") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "IPmt" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(FV)
@@ -3003,7 +3003,7 @@ RTLFUNC(FV)
     aParams[ 3 ] <<= pv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FV") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "FV" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(DDB)
@@ -3042,7 +3042,7 @@ RTLFUNC(DDB)
     aParams[ 3 ] <<= period;
     aParams[ 4 ] <<= factor;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DDB") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "DDB" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(Rate)
@@ -3101,7 +3101,7 @@ RTLFUNC(Rate)
     aParams[ 4 ] <<= type;
     aParams[ 5 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Rate") ), rPar.Get( 0 ) );
+    CallFunctionAccessFunction( aParams, rtl::OUString( "Rate" ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(StrReverse)

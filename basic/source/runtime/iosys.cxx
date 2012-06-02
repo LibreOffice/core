@@ -224,7 +224,7 @@ sal_Bool needSecurityRestrictions( void )
         if( !xSMgr.is() )
             return sal_True;
         Reference< XBridgeFactory > xBridgeFac( xSMgr->createInstance
-            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" )) ), UNO_QUERY );
+            ( ::rtl::OUString("com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
 
         Sequence< Reference< XBridge > > aBridgeSeq;
         sal_Int32 nBridgeCount = 0;
@@ -294,7 +294,7 @@ sal_Bool hasUno( void )
             Reference< XContentProviderManager > xManager( xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                     ( "com.sun.star.ucb.UniversalContentBroker" )) ), UNO_QUERY );
 
-            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "file:///" )) ).is() ) )
+            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
             {
                 // No UCB
                 bRetVal = sal_False;
@@ -560,7 +560,7 @@ SbError SbiStream::Open
         if( xSMgr.is() )
         {
             Reference< XSimpleFileAccess >
-                xSFI( xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
+                xSFI( xSMgr->createInstance( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
             if( xSFI.is() )
             {
                 try

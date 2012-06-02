@@ -199,7 +199,7 @@ static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void 
         if( xSMgr.is() )
         {
             xSFI = com::sun::star::uno::Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
+                ( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         }
     }
     return xSFI;
@@ -2585,11 +2585,11 @@ RTLFUNC(Dir)
                         {
                             if( pRTLData->nCurDirPos == -2 )
                             {
-                                aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "." ));
+                                aPath = ::rtl::OUString("." );
                             }
                             else if( pRTLData->nCurDirPos == -1 )
                             {
-                                aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".." ));
+                                aPath = ::rtl::OUString(".." );
                             }
                             pRTLData->nCurDirPos++;
                         }
@@ -2692,11 +2692,11 @@ RTLFUNC(Dir)
                     {
                         if( pRTLData->nCurDirPos == -2 )
                         {
-                            aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "." ));
+                            aPath = ::rtl::OUString("." );
                         }
                         else if( pRTLData->nCurDirPos == -1 )
                         {
-                            aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".." ));
+                            aPath = ::rtl::OUString(".." );
                         }
                         pRTLData->nCurDirPos++;
                     }
@@ -3388,7 +3388,7 @@ rtl::OUString getBasicTypeName( SbxDataType eType )
 
 String getObjectTypeName( SbxVariable* pVar )
 {
-    rtl::OUString sRet( RTL_CONSTASCII_USTRINGPARAM("Object") );
+    rtl::OUString sRet( "Object" );
     if ( pVar )
     {
         SbxBase* pObj = pVar->GetObject();
@@ -3428,7 +3428,7 @@ String getObjectTypeName( SbxVariable* pVar )
                         {
                             try
                             {
-                                xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sRet;
+                                xInv->getValue( rtl::OUString( "$GetTypeName" ) ) >>= sRet;
                             }
                             catch(const Exception& )
                             {

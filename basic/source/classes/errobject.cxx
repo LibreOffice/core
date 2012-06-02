@@ -165,7 +165,7 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 ::rtl::OUString SAL_CALL
 ErrObject::getDefaultPropertyName(  ) throw (uno::RuntimeException)
 {
-    static rtl::OUString sDfltPropName( RTL_CONSTASCII_USTRINGPARAM("Number") );
+    static rtl::OUString sDfltPropName( "Number" );
     return sDfltPropName;
 }
 
@@ -173,7 +173,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
     throw (uno::RuntimeException)
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Missing Required Paramater")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;
