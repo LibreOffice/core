@@ -95,28 +95,9 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRM_FTNBOSS     0x0006
 #define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY|FRM_TAB|FRM_CELL|FRM_PAGE)
 
-        //Weils so schon ist das ganze als Bitfeld....
-//0000 0000 0000 0001   ROOT
-//0000 0000 0000 0010   PAGE
-//0000 0000 0000 0100   COLUMN
-//0000 0000 0000 1000   HEADER
-//0000 0000 0001 0000   FOOTER
-//0000 0000 0010 0000   FTNCONT
-//0000 0000 0100 0000   FTN
-//0000 0000 1000 0000   BODY
-//0000 0001 0000 0000   FLY
-//0000 0010 0000 0000   SECTION
-//0000 0100 0000 0000   UNUSED
-//0000 1000 0000 0000   TAB
-//0001 0000 0000 0000   ROW
-//0010 0000 0000 0000   CELL
-//0100 0000 0000 0000   TXT
-//1000 0000 0000 0000   NOTXT
-
 // The type of the frame is internal represented by the 4-bit value nType,
 // which can expanded to the types above by shifting a bit (0x1 << nType)
 // Here are the corresponding defines for the compressed representation:
-
 #define FRMC_ROOT        0
 #define FRMC_PAGE        1
 #define FRMC_COLUMN      2
@@ -246,7 +227,6 @@ enum MakePageType
     MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
-
 /**
  * Base class of the Writer layout elements.
  *
@@ -274,8 +254,6 @@ class SwFrm: public SwClient, public SfxBroadcaster
     friend void ValidateSz( SwFrm *pFrm );
     // implemented in text/txtftn.cxx, prevents Ftn oscillation
     friend void ValidateTxt( SwFrm *pFrm );
-
-//  friend void CalcAnchorAndKeep( SwFlyFrm * );
 
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );
 
@@ -353,7 +331,6 @@ class SwFrm: public SwClient, public SfxBroadcaster
     */
     SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
 
-
     void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
     SwFrm* _GetIndNext();
     void SetDirFlags( sal_Bool bVert );
@@ -366,31 +343,31 @@ protected:
     SwRect  aFrm;   // absolute position in document and size of the Frm
     SwRect  aPrt;   // position relatively to Frm and size of PrtArea
 
-    sal_uInt16 bReverse:        1; // Next line above/at the right side instead
-                               // under/at the left side of the previous line.
-    sal_uInt16 bInvalidR2L:     1;
-    sal_uInt16 bDerivedR2L:     1;
-    sal_uInt16 bRightToLeft:    1;
-    sal_uInt16 bInvalidVert:    1;
-    sal_uInt16 bDerivedVert:    1;
-    sal_uInt16 bVertical:       1;
+    sal_uInt16 bReverse     : 1; // Next line above/at the right side instead
+                                 // under/at the left side of the previous line
+    sal_uInt16 bInvalidR2L  : 1;
+    sal_uInt16 bDerivedR2L  : 1;
+    sal_uInt16 bRightToLeft : 1;
+    sal_uInt16 bInvalidVert : 1;
+    sal_uInt16 bDerivedVert : 1;
+    sal_uInt16 bVertical    : 1;
     // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    sal_uInt16 bVertLR:         1;
-    sal_uInt16 nType:         4;  //Who am I?
+    sal_uInt16 bVertLR      : 1;
+    sal_uInt16 nType        : 4;  //Who am I?
 
-    sal_Bool bValidPos:         1;
-    sal_Bool bValidPrtArea:     1;
-    sal_Bool bValidSize:        1;
-    sal_Bool bValidLineNum:     1;
-    sal_Bool bFixSize:          1;
-    sal_Bool bUnUsed1:          1;
+    sal_Bool bValidPos      : 1;
+    sal_Bool bValidPrtArea  : 1;
+    sal_Bool bValidSize     : 1;
+    sal_Bool bValidLineNum  : 1;
+    sal_Bool bFixSize       : 1;
+    sal_Bool bUnUsed1       : 1;
     // if sal_True, frame will be painted completely even content was changed
     // only partially. For CntntFrms a border (from Action) will exclusively
     // painted if <bCompletePaint> is sal_True.
     sal_Bool bCompletePaint : 1;
     sal_Bool bRetouche      : 1; // frame is responsible for retouching
 public:
-    sal_Bool bUnUsed2:          1;
+    sal_Bool bUnUsed2       : 1;
 protected:
     sal_Bool bInfInvalid    : 1;  // InfoFlags are invalid
     sal_Bool bInfBody       : 1;  // Frm is in document body
@@ -598,11 +575,10 @@ public:
 
         @return boolean, indicating, if frame is moveable in given environment
     */
-//    sal_Bool IsMoveable() const;
     bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = 0L ) const;
 
     // Is it permitted for the (Txt)Frm to add a footnote in the current
-    // environment (not e.g. for repeating table headlines)?
+    // environment (not e.g. for repeating table headlines)
     sal_Bool IsFtnAllowed() const;
 
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
@@ -738,11 +714,11 @@ public:
 
     // Only invalidate Frm
     // #i28701# - add call to method <_ActionOnInvalidation(..)>
-    // for all invalidation methods.
+    //            for all invalidation methods.
     // #i28701# - use method <_InvalidationAllowed(..)> to
-    // decide, if invalidation will to be performed or not.
+    //            decide, if invalidation will to be performed or not.
     // #i26945# - no additional invalidation, if it's already
-    // invalidate.
+    //            invalidate.
     void _InvalidateSize()
     {
         if ( bValidSize && _InvalidationAllowed( INVALID_SIZE ) )
@@ -991,17 +967,14 @@ inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
 {
     return (SwLayoutFrm*)((const SwFrm*)this)->GetNextLayoutLeaf();
 }
-
 inline SwLayoutFrm *SwFrm::GetPrevLayoutLeaf()
 {
     return (SwLayoutFrm*)((const SwFrm*)this)->GetPrevLayoutLeaf();
 }
-
 inline const SwLayoutFrm *SwFrm::GetNextLayoutLeaf() const
 {
     return ImplGetNextLayoutLeaf( true );
 }
-
 inline const SwLayoutFrm *SwFrm::GetPrevLayoutLeaf() const
 {
     return ImplGetNextLayoutLeaf( false );
@@ -1027,7 +1000,6 @@ inline void SwFrm::InvalidateLineNum()
     if ( bValidLineNum )
         ImplInvalidateLineNum();
 }
-
 inline void SwFrm::InvalidateAll()
 {
     if ( _InvalidationAllowed( INVALID_ALL ) )
@@ -1040,7 +1012,6 @@ inline void SwFrm::InvalidateAll()
         _ActionOnInvalidation( INVALID_ALL );
     }
 }
-
 inline void SwFrm::InvalidateNextPos( sal_Bool bNoFtn )
 {
     if ( pNext && !pNext->IsSctFrm() )

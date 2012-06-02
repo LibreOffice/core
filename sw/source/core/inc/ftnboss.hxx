@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FTNBOSS_HXX
 #define _FTNBOSS_HXX
 
@@ -65,10 +66,11 @@ class SwFtnBossFrm: public SwLayoutFrm
     SwFtnContFrm *MakeFtnCont();
     SwFtnFrm     *FindFirstFtn();
     sal_uInt8 _NeighbourhoodAdjustment( const SwFrm* pFrm ) const;
-protected:
 
+protected:
     void          InsertFtn( SwFtnFrm * );
     static void   ResetFtn( const SwFtnFrm *pAssumed );
+
 public:
     inline SwFtnBossFrm( SwFrmFmt* pFmt, SwFrm* pSib ) : SwLayoutFrm( pFmt, pSib ) {}
 
@@ -109,9 +111,9 @@ public:
                               SvPtrarr&           _rFtnArr,
                               const sal_Bool      _bCollectOnlyPreviousFtns = sal_False,
                               const SwFtnBossFrm* _pRefFtnBossFrm = NULL);
-    /// OD 03.04.2003 #108446# - add parameter <_bCollectOnlyPreviousFtns> in
-    /// order to control, if only footnotes, which are positioned before the
-    /// footnote boss frame <this> have to be collected.
+    // The parameter <_bCollectOnlyPreviousFtns> controls if only footnotes
+    // that are positioned before the footnote boss-frame <this> have to be
+    // collected.
     void    CollectFtns( const SwCntntFrm* _pRef,
                          SwFtnBossFrm*     _pOld,
                          SvPtrarr&         _rFtnArr,
@@ -129,11 +131,12 @@ inline const SwLayoutFrm *SwFtnBossFrm::FindBodyCont() const
 {
     return ((SwFtnBossFrm*)this)->FindBodyCont();
 }
+
 inline const SwFtnContFrm *SwFtnBossFrm::FindFtnCont() const
 {
     return ((SwFtnBossFrm*)this)->FindFtnCont();
 }
 
-#endif  //_FTNBOSS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

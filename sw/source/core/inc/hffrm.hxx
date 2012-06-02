@@ -25,13 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _HFFRM_HXX
 #define _HFFRM_HXX
 
 #include <tools/mempool.hxx>
-
 #include "layfrm.hxx"
-
 
 class SwHeadFootFrm : public SwLayoutFrm
 {
@@ -39,6 +38,7 @@ protected:
     void FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs);
     void FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs);
     inline sal_Bool GetEatSpacing() const; // in hffrm.cxx
+
 public:
     SwHeadFootFrm(SwFrmFmt * pFrm, SwFrm*, sal_uInt16 aType);
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
@@ -67,6 +67,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrm)
 };
 
-#endif  //_HFFRM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

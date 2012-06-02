@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FRMINF_HXX
 #define _FRMINF_HXX
 
@@ -33,10 +34,6 @@
 class SwTxtFrm;
 class SwPaM;
 class SwTxtCursor;
-
-/*************************************************************************
- *                      class SwTxtFrmInfo
- *************************************************************************/
 
 class SwTxtFrmInfo
 {
@@ -77,8 +74,6 @@ public:
     sal_uInt16 GetBigIndent( xub_StrLen& rFndPos,
                         const SwTxtFrm *pNextFrm = 0 ) const;
 };
-
-
 
 #endif
 

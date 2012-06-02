@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _ENVIRONMENTOFANCHOREDOBJECT_HXX
 #define _ENVIRONMENTOFANCHOREDOBJECT_HXX
 
@@ -99,7 +100,7 @@ namespace objectpositioning
             */
             const SwLayoutFrm& GetVertEnvironmentLayoutFrm( const SwFrm& _rVertOrientFrm ) const;
     };
-} // namespace objectpositioning
+}
 
 #endif
 

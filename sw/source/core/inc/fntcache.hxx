@@ -30,7 +30,6 @@
 
 #include <vcl/font.hxx>
 #include <tools/mempool.hxx>
-
 #include "swtypes.hxx"
 #include "swcache.hxx"
 
@@ -42,10 +41,6 @@ class SwDrawTextInfo;   // DrawText
 class ViewShell;
 class SwSubFont;
 class MapMode;
-
-/*************************************************************************
- *                      class SwFntCache
- *************************************************************************/
 
 class SwFntCache : public SwCache
 {
@@ -68,10 +63,6 @@ extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 extern sal_uInt8 *pMagicNo;
 extern Color *pWaveCol;
-
-/*************************************************************************
- *                      class SwFntObj
- *************************************************************************/
 
 class SwFntObj : public SwCacheObj
 {
@@ -138,11 +129,6 @@ public:
     void CreatePrtFont( const OutputDevice& rOut );
 };
 
-/*************************************************************************
- *                      class SwFntAccess
- *************************************************************************/
-
-
 class SwFntAccess : public SwCacheAccess
 {
     ViewShell *pShell;
@@ -155,7 +141,6 @@ public:
                  sal_Bool bCheck = sal_False  );
     inline SwFntObj* Get() { return (SwFntObj*) SwCacheAccess::Get(); };
 };
-
 
 #endif
 

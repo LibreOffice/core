@@ -25,8 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FRMTOOL_HXX
 #define _FRMTOOL_HXX
+
 #include "swtypes.hxx"
 #include "layfrm.hxx"
 #include "frmatr.hxx"
@@ -57,17 +59,17 @@ struct SwFindRowSpanCacheObj;
 #define GRFNUM_REPLACE 2
 
 // draw background with brush or graphics
-// - add 6th parameter to indicate that method should
-//     consider background transparency, saved in the color of the brush item
+// The 6th parameter indicates that the method should consider background
+// transparency, saved in the color of the brush item.
 void DrawGraphic( const SvxBrushItem *, OutputDevice *,
                   const SwRect &rOrg, const SwRect &rOut, const sal_uInt8 nGrfNum = GRFNUM_NO,
                   const sal_Bool bConsiderBackgroundTransparency = sal_False );
 
-// - method to align rectangle
+// method to align rectangle.
 // Created declaration here to avoid <extern> declarations
 void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 
-// - method to align graphic rectangle
+// method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
@@ -120,6 +122,7 @@ const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos );
 
 sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj );
 
+// FIXME: EasyHack (refactoring): rename method and parameter name in all files
 const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp );
 
 sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
@@ -127,9 +130,12 @@ sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
 const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
 
 // used by SwCntntNode::GetFrm and SwFlyFrm::GetFrm
-SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const&, sal_uInt16 const nFrmType, const Point* = 0,
-                        const SwPosition *pPos = 0,
-                        const sal_Bool bCalcFrm = sal_False );
+SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
+                       SwModify const&,
+                       sal_uInt16 const nFrmType,
+                       const Point* = 0,
+                       const SwPosition *pPos = 0,
+                       const sal_Bool bCalcFrm = sal_False );
 
 // Should extra data (reline stroke, line numbers) be painted?
 sal_Bool IsExtraData( const SwDoc *pDoc );
@@ -175,6 +181,7 @@ class SwLayNotify : public SwFrmNotify
     sal_Bool bLowersComplete;
 
     SwLayoutFrm *GetLay() { return (SwLayoutFrm*)pFrm; }
+
 public:
     SwLayNotify( SwLayoutFrm *pLayFrm );
     ~SwLayNotify();
@@ -188,6 +195,7 @@ class SwFlyNotify : public SwLayNotify
     SwPageFrm *pOldPage;
     const SwRect aFrmAndSpace;
     SwFlyFrm *GetFly() { return (SwFlyFrm*)pFrm; }
+
 public:
     SwFlyNotify( SwFlyFrm *pFlyFrm );
     ~SwFlyNotify();
@@ -244,26 +252,25 @@ class SwBorderAttrs : public SwCacheObj
 
     // the following bool values set the cached values to INVALID - until they
     // are calculated for the first time
-    sal_Bool bTopLine       :1;
-    sal_Bool bBottomLine    :1;
-    sal_Bool bLeftLine      :1;
-    sal_Bool bRightLine     :1;
-    sal_Bool bTop           :1;
-    sal_Bool bBottom        :1;
-    sal_Bool bLine          :1;
+    sal_Bool bTopLine     : 1;
+    sal_Bool bBottomLine  : 1;
+    sal_Bool bLeftLine    : 1;
+    sal_Bool bRightLine   : 1;
+    sal_Bool bTop         : 1;
+    sal_Bool bBottom      : 1;
+    sal_Bool bLine        : 1;
 
     sal_Bool bIsLine      : 1; // border on at least one side?
 
     sal_Bool bCacheGetLine        : 1; // cache GetTopLine(), GetBottomLine()?
     sal_Bool bCachedGetTopLine    : 1; // is GetTopLine() cached?
     sal_Bool bCachedGetBottomLine : 1; // is GetBottomLine() cached?
-    // - booleans indicating, if values <bJoinedWithPrev>
-    //          and <bJoinedWithNext> are cached and valid.
-    //          Caching depends on value of <bCacheGetLine>.
-    mutable sal_Bool bCachedJoinedWithPrev :1;
-    mutable sal_Bool bCachedJoinedWithNext :1;
-    // - booleans indicating, if borders are joined
-    //          with previous/next frame.
+    // Booleans indicate that <bJoinedWithPrev> and <bJoinedWithNext> are
+    // cached and valid.
+    // Caching depends on value of <bCacheGetLine>.
+    mutable sal_Bool bCachedJoinedWithPrev : 1;
+    mutable sal_Bool bCachedJoinedWithNext : 1;
+    // Booleans indicate that borders are joined with previous/next frame.
     sal_Bool bJoinedWithPrev :1;
     sal_Bool bJoinedWithNext :1;
 
@@ -289,24 +296,20 @@ class SwBorderAttrs : public SwCacheObj
 
     void _IsLine();
 
-    // #i25029# - add optional 2nd parameter <_pPrevFrm>
-    // If set, its value is taken for testing, if borders/shadow have to joined
-    // with previous frame.
+    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // borders/shadow have to be joined with previous frame.
     void _GetTopLine   ( const SwFrm& _rFrm,
                          const SwFrm* _pPrevFrm = 0L );
     void _GetBottomLine( const SwFrm& _rFrm );
 
-    // - private methods to calculate cached values
-    // <bJoinedWithPrev> and <bJoinedWithNext>.
-    // #i25029# - add optional 2nd parameter <_pPrevFrm>
-    // If set, its value is taken for testing, if borders/shadow have to joined
-    // with previous frame.
+    // calculate cached values <bJoinedWithPrev> and <bJoinedWithNext>
+    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // borders/shadow have to be joined with previous frame.
     void _CalcJoinedWithPrev( const SwFrm& _rFrm,
                               const SwFrm* _pPrevFrm = 0L );
     void _CalcJoinedWithNext( const SwFrm& _rFrm );
 
-    // - internal helper method for methods
-    // <_CalcJoinedWithPrev> and <_CalcJoinedWithNext>.
+    // internal helper method for _CalcJoinedWithPrev and _CalcJoinedWithNext
     sal_Bool _JoinWithCmp( const SwFrm& _rCallerFrm,
                        const SwFrm& _rCmpFrm ) const;
 
@@ -342,19 +345,17 @@ public:
 
     inline sal_Bool IsBorderDist() const { return bBorderDist; }
 
-    //Sollen obere bzw. untere Umrandung fuer den Frm ausgewertet werden?
-    // #i25029# - add optional 2nd parameter <_pPrevFrm>
-    // If set, its value is taken for testing, if borders/shadow have to joined
-    // with previous frame.
+    // Should upper (or lower) border be evaluated for this frame?
+    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // borders/shadow have to be joined with previous frame.
     inline sal_uInt16 GetTopLine   ( const SwFrm& _rFrm,
                                  const SwFrm* _pPrevFrm = 0L ) const;
     inline sal_uInt16 GetBottomLine( const SwFrm& _rFrm ) const;
     inline void   SetGetCacheLine( sal_Bool bNew ) const;
-    // - accessors for cached values <bJoinedWithPrev>
-    // and <bJoinedWithPrev>
-    // #i25029# - add optional 2nd parameter <_pPrevFrm>
-    // If set, its value is taken for testing, if borders/shadow have to joined
-    // with previous frame.
+
+    // Accessors for cached values <bJoinedWithPrev> and <bJoinedWithPrev>
+    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // borders/shadow have to be joined with previous frame.
     sal_Bool JoinedWithPrev( const SwFrm& _rFrm,
                          const SwFrm* _pPrevFrm = 0L ) const;
     sal_Bool JoinedWithNext( const SwFrm& _rFrm ) const;
@@ -381,6 +382,7 @@ class SwOrderIter
     const SwPageFrm *pPage;
     const SdrObject *pCurrent;
     const sal_Bool bFlysOnly;
+
 public:
     SwOrderIter( const SwPageFrm *pPage, sal_Bool bFlysOnly = sal_True );
 
@@ -393,11 +395,11 @@ public:
     const SdrObject *Prev();
 };
 
-
 class StackHack
 {
     static sal_uInt8 nCnt;
     static sal_Bool bLocked;
+
 public:
     StackHack()
     {
@@ -437,8 +439,7 @@ inline void SwBorderAttrs::SetGetCacheLine( sal_Bool bNew ) const
     ((SwBorderAttrs*)this)->bCacheGetLine = bNew;
     ((SwBorderAttrs*)this)->bCachedGetBottomLine =
     ((SwBorderAttrs*)this)->bCachedGetTopLine = sal_False;
-    // - invalidate cache for values <bJoinedWithPrev>
-    // and <bJoinedWithNext>.
+    // invalidate cache for values <bJoinedWithPrev> and <bJoinedWithNext>
     bCachedJoinedWithPrev = sal_False;
     bCachedJoinedWithNext = sal_False;
 }
@@ -532,13 +533,11 @@ const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell_ );
 
 class SwDeletionChecker
 {
-    private:
-
+private:
     const SwFrm* mpFrm;
     const SwModify* mpRegIn;
 
-    public:
-
+public:
     SwDeletionChecker( const SwFrm* pFrm )
             : mpFrm( pFrm ),
               mpRegIn( pFrm ? const_cast<SwFrm*>(pFrm)->GetRegisteredIn() : 0 )
@@ -553,6 +552,6 @@ class SwDeletionChecker
     bool HasBeenDeleted();
 };
 
-#endif  //_FRMTOOL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

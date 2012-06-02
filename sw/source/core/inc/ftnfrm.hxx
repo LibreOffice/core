@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FTNFRM_HXX
 #define _FTNFRM_HXX
 
@@ -76,7 +77,6 @@ protected:
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 #endif
 
-
 public:
     SwFtnFrm( SwFrmFmt*, SwFrm*, SwCntntFrm*, SwTxtFtn* );
 
@@ -88,8 +88,6 @@ public:
     sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
 
 #ifdef DBG_UTIL
-    // in a non pro version test if the attribute has the same
-    // meaning which his reference is
     const SwCntntFrm *GetRef() const;
          SwCntntFrm  *GetRef();
 #else
@@ -135,11 +133,10 @@ public:
     {
         return mbUnlockPosOfLowerObjs;
     }
+
     /** search for last content in the current footnote frame
 
         OD 2005-12-02 #i27138#
-
-        @author OD
 
         @return SwCntntFrm*
         pointer to found last content frame. NULL, if none is found.
@@ -147,6 +144,6 @@ public:
     SwCntntFrm* FindLastCntnt();
 };
 
-#endif  //_FTNFRM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

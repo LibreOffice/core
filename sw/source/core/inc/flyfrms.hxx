@@ -27,7 +27,9 @@
  ************************************************************************/
 #ifndef _FLYFRMS_HXX
 #define _FLYFRMS_HXX
+
 #include "flyfrm.hxx"
+
 // #i28701#
 class SwFlyAtCntFrm;
 
@@ -55,8 +57,6 @@ class SwFlyFreeFrm : public SwFlyFrm
         return <true>, if such a frame is found and it has 'auto' size.
         otherwise <false> is returned.
 
-        @author OD
-
         @return boolean indicating, that direct environment has 'auto' size
     */
     bool HasEnvironmentAutoSize() const;
@@ -67,7 +67,6 @@ protected:
     friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint);
-
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
 public:
@@ -233,6 +232,7 @@ inline void SwFlyInCntFrm::InvalidateCntnt() const
 {
     ((SwFlyInCntFrm*)this)->bInvalidCntnt = sal_True;
 }
+
 inline void SwFlyInCntFrm::ValidateLayout() const
 {
     ((SwFlyInCntFrm*)this)->bInvalidLayout = sal_False;
