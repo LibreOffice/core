@@ -58,7 +58,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::logging;
 using namespace ::osl;
 
-#define SERVICE_SDBC_DRIVER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"))
+#define SERVICE_SDBC_DRIVER     ::rtl::OUString("com.sun.star.sdbc.Driver")
 
 void throwNoSuchElementException() throw(NoSuchElementException)
 {
@@ -184,10 +184,10 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         try
         {
             // some strings we need
-            const ::rtl::OUString sDriverManagerConfigLocation( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.DataAccess/DriverManager" ));
-            const ::rtl::OUString sDriverPreferenceLocation( RTL_CONSTASCII_USTRINGPARAM( "DriverPrecedence" ));
-            const ::rtl::OUString sNodePathArgumentName( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-            const ::rtl::OUString sNodeAccessServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
+            const ::rtl::OUString sDriverManagerConfigLocation(  "org.openoffice.Office.DataAccess/DriverManager" );
+            const ::rtl::OUString sDriverPreferenceLocation(  "DriverPrecedence" );
+            const ::rtl::OUString sNodePathArgumentName(  "nodepath" );
+            const ::rtl::OUString sNodeAccessServiceName(  "com.sun.star.configuration.ConfigurationAccess" );
 
             // create a configuration provider
             Reference< XMultiServiceFactory > xConfigurationProvider(
@@ -549,7 +549,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::Create( const Reference< XM
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSDBCDriverManager::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.OSDBCDriverManager"));
+    return ::rtl::OUString("com.sun.star.comp.sdbc.OSDBCDriverManager");
 }
 
 //--------------------------------------------------------------------------
@@ -563,7 +563,7 @@ Sequence< ::rtl::OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceName
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSDBCDriverManager::getSingletonName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.DriverManager" ) );
+    return ::rtl::OUString(  "com.sun.star.sdbc.DriverManager"  );
 }
 
 //--------------------------------------------------------------------------

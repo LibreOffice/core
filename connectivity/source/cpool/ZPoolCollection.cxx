@@ -50,31 +50,31 @@ using namespace connectivity;
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getConnectionPoolNodeName()
 {
-    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.DataAccess/ConnectionPool" ));
+    static ::rtl::OUString s_sNodeName(  "org.openoffice.Office.DataAccess/ConnectionPool" );
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getEnablePoolingNodeName()
 {
-    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "EnablePooling" ));
+    static ::rtl::OUString s_sNodeName(  "EnablePooling" );
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getDriverNameNodeName()
 {
-    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "DriverName" ));
+    static ::rtl::OUString s_sNodeName(  "DriverName" );
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
 static const ::rtl::OUString& getDriverSettingsNodeName()
 {
-    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "DriverSettings" ));
+    static ::rtl::OUString s_sNodeName(  "DriverSettings" );
     return s_sNodeName;
 }
 //--------------------------------------------------------------------------
 static const ::rtl::OUString& getEnableNodeName()
 {
-    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "Enable" ));
+    static ::rtl::OUString s_sNodeName(  "Enable" );
     return s_sNodeName;
 }
 
@@ -83,13 +83,13 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     :m_xServiceFactory(_rxFactory)
 {
     // bootstrap all objects supporting the .sdb.Driver service
-    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ), UNO_QUERY);
+    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
     m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
     OSL_ENSURE(m_xDriverAccess.is(), "have no (or an invalid) driver manager!");
 
     m_xProxyFactory = Reference< XProxyFactory >(
         m_xServiceFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),
+            ::rtl::OUString("com.sun.star.reflection.ProxyFactory")),
         UNO_QUERY);
     OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
 
@@ -100,7 +100,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     osl_incrementInterlockedCount( &m_refCount );
     {
 
-        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY);
+        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY);
         if ( m_xDesktop.is() )
             m_xDesktop->addTerminateListener(this);
 
@@ -183,14 +183,14 @@ Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.OConnectionPool"));
+    return ::rtl::OUString("com.sun.star.sdbc.OConnectionPool");
 }
 
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ConnectionPool"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ConnectionPool");
     return aSupported;
 }
 // -----------------------------------------------------------------------------
@@ -365,13 +365,11 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
     Sequence< Any > args(1);
     args[0] = makeAny(
         NamedValue(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+            rtl::OUString("nodepath"),
             makeAny(_rPath)));
     Reference< XInterface > xInterface(
         _rxConfProvider->createInstanceWithArguments(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationAccess")),
+            rtl::OUString( "com.sun.star.configuration.ConfigurationAccess"),
             args));
     OSL_ENSURE(
         xInterface.is(),

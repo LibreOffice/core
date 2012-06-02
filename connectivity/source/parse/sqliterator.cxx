@@ -275,9 +275,9 @@ namespace
     {
         ::rtl::OUString sComposedName;
 
-        static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-        static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-        static const ::rtl::OUString s_sWildcard( RTL_CONSTASCII_USTRINGPARAM( "%" ));
+        static const ::rtl::OUString s_sTableTypeView("VIEW");
+        static const ::rtl::OUString s_sTableTypeTable("TABLE");
+        static const ::rtl::OUString s_sWildcard(  "%" );
 
         // we want all catalogues, all schemas, all tables
         Sequence< ::rtl::OUString > sTableTypes(3);
@@ -898,7 +898,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             }
             else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
             {
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+                aTypeName = ::rtl::OUString("VARCHAR");
             }
 
             if (!aTypeName.isEmpty())
@@ -940,7 +940,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
         // SELECT * ...
-        setSelectColumnName(m_aSelectColumns,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aEmptyString,aEmptyString);
+        setSelectColumnName(m_aSelectColumns,::rtl::OUString("*"), aEmptyString,aEmptyString);
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
@@ -960,7 +960,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 // All the table's columns
                 ::rtl::OUString aTableRange;
                 pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-                setSelectColumnName(m_aSelectColumns,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aEmptyString,aTableRange);
+                setSelectColumnName(m_aSelectColumns,::rtl::OUString("*"), aEmptyString,aTableRange);
                 continue;
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))
@@ -1136,7 +1136,7 @@ namespace
 {
     ::rtl::OUString lcl_generateParameterName( const OSQLParseNode& _rParentNode, const OSQLParseNode& _rParamNode )
     {
-        ::rtl::OUString sColumnName( RTL_CONSTASCII_USTRINGPARAM( "param" ) );
+        ::rtl::OUString sColumnName(  "param"  );
         const sal_Int32 nCount = (sal_Int32)_rParentNode.count();
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -1467,7 +1467,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                         ?   _rColumnAlias
                         :   !_aColumnName.isEmpty()
                         ?   _aColumnName
-                        :   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+                        :   ::rtl::OUString("?");
     }
     else if (SQL_ISPUNCTUATION(pMark,":"))
     {
@@ -1673,8 +1673,8 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const ::rtl::OUString& 
         NULL,
         sal_False,
         rTableName,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Table")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New Created Table")),
+        ::rtl::OUString("Table"),
+        ::rtl::OUString("New Created Table"),
         rSchemaName,
         rCatalogName
     );
@@ -1780,7 +1780,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                 // did not find a column with this name in any of the tables
                 OParseColumn* pColumn = new OParseColumn(
                     aNewColName,
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR")),
+                    ::rtl::OUString("VARCHAR"),
                         // TODO: does this match with _nType?
                         // Or should be fill this from the getTypeInfo of the connection?
                     ::rtl::OUString(),
@@ -2135,7 +2135,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
 
         sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( sPlaceHolder1 ), sPlaceHolder1.getLength(), *_pReplaceToken1 );
         if ( _pReplaceToken2 )
-            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#2")) ), 2, *_pReplaceToken2 );
+            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( ::rtl::OUString("#2") ), 2, *_pReplaceToken2 );
     }
 
     impl_appendError( SQLException(
