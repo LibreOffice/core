@@ -34,6 +34,8 @@
 
 #include <vcl/timer.hxx>
 #include <svl/svarray.hxx>
+#include <vector>
+#include <algorithm>
 
 
 using namespace ::com::sun::star::uno;
@@ -99,9 +101,22 @@ SvLinkSource_Entry_Impl::~SvLinkSource_Entry_Impl()
 {
 }
 
-typedef SvLinkSource_Entry_Impl* SvLinkSource_Entry_ImplPtr;
-SV_DECL_PTRARR_DEL( SvLinkSource_Array_Impl, SvLinkSource_Entry_ImplPtr, 4 )
-SV_IMPL_PTRARR( SvLinkSource_Array_Impl, SvLinkSource_Entry_ImplPtr );
+class SvLinkSource_Array_Impl : public std::vector<SvLinkSource_Entry_Impl*>
+{
+public:
+    void DeleteAndDestroy(SvLinkSource_Entry_Impl* p)
+    {
+        iterator it = std::find(begin(), end(), p);
+        if( it != end() )
+            erase(it);
+    }
+
+    ~SvLinkSource_Array_Impl()
+    {
+        for(const_iterator it = begin(); it != end(); ++it)
+            delete *it;
+    }
+};
 
 class SvLinkSource_EntryIter_Impl
 {
@@ -112,34 +127,34 @@ public:
     SvLinkSource_EntryIter_Impl( const SvLinkSource_Array_Impl& rArr );
     ~SvLinkSource_EntryIter_Impl();
     SvLinkSource_Entry_Impl* Curr()
-                            { return nPos < aArr.Count() ? aArr[ nPos ] : 0; }
+                            { return nPos < aArr.size() ? aArr[ nPos ] : 0; }
     SvLinkSource_Entry_Impl* Next();
     sal_Bool IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry );
 };
 
 SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
         const SvLinkSource_Array_Impl& rArr )
-    : rOrigArr( rArr ), nPos( 0 )
+    : aArr( rArr ), rOrigArr( rArr ), nPos( 0 )
 {
-    aArr.Insert( &rArr, 0 );
 }
 SvLinkSource_EntryIter_Impl::~SvLinkSource_EntryIter_Impl()
 {
-    aArr.Remove( 0, aArr.Count() );
+    aArr.clear();
 }
 
 sal_Bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
 {
-    return ( nPos < aArr.Count() && aArr[nPos] == pEntry && USHRT_MAX != rOrigArr.GetPos( pEntry ) );
+    return ( nPos < aArr.size() && aArr[nPos] == pEntry
+       && std::find( rOrigArr.begin(), rOrigArr.end(), pEntry ) != rOrigArr.end() );
 }
 
 SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
 {
-    SvLinkSource_Entry_ImplPtr pRet = 0;
-    if( nPos + 1 < aArr.Count() )
+    SvLinkSource_Entry_Impl* pRet = 0;
+    if( nPos + 1 < (sal_uInt16)aArr.size() )
     {
         ++nPos;
-        if( rOrigArr.Count() == aArr.Count() &&
+        if( rOrigArr.size() == aArr.size() &&
             rOrigArr[ nPos ] == aArr[ nPos ] )
             pRet = aArr[ nPos ];
         else
@@ -147,13 +162,13 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
             // then we must search the current (or the next) in the orig
             do {
                 pRet = aArr[ nPos ];
-                if( USHRT_MAX != rOrigArr.GetPos( pRet ))
+                if( std::find(rOrigArr.begin(), rOrigArr.end(), pRet ) != rOrigArr.end() )
                     break;
                 pRet = 0;
                 ++nPos;
-            } while( nPos < aArr.Count() );
+            } while( nPos < aArr.size() );
 
-            if( nPos >= aArr.Count() )
+            if( nPos >= aArr.size() )
                 pRet = 0;
         }
     }
@@ -234,7 +249,7 @@ void SvLinkSource::SetUpdateTimeout( sal_uIntPtr nTimeout )
 void SvLinkSource::SendDataChanged()
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
-    for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
+    for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
     {
         if( p->bIsDataSink )
         {
@@ -253,9 +268,7 @@ void SvLinkSource::SendDataChanged()
 
                 if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                 {
-                    sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
-                    if( USHRT_MAX != nFndPos )
-                        pImpl->aArr.DeleteAndDestroy( nFndPos );
+                    pImpl->aArr.DeleteAndDestroy( p );
                 }
 
             }
@@ -276,7 +289,7 @@ void SvLinkSource::NotifyDataChanged()
     else
     {
         SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
-        for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
+        for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
             if( p->bIsDataSink )
             {
                 Any aVal;
@@ -290,9 +303,7 @@ void SvLinkSource::NotifyDataChanged()
 
                     if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                     {
-                        sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
-                        if( USHRT_MAX != nFndPos )
-                            pImpl->aArr.DeleteAndDestroy( nFndPos );
+                        pImpl->aArr.DeleteAndDestroy( p );
                     }
                 }
             }
@@ -319,7 +330,7 @@ void SvLinkSource::DataChanged( const String & rMimeType,
     else
     {
         SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
-        for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
+        for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
         {
             if( p->bIsDataSink )
             {
@@ -330,9 +341,7 @@ void SvLinkSource::DataChanged( const String & rMimeType,
 
                 if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                 {
-                    sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
-                    if( USHRT_MAX != nFndPos )
-                        pImpl->aArr.DeleteAndDestroy( nFndPos );
+                    pImpl->aArr.DeleteAndDestroy( p );
                 }
             }
         }
@@ -350,39 +359,35 @@ void SvLinkSource::DataChanged( const String & rMimeType,
 void SvLinkSource::AddDataAdvise( SvBaseLink * pLink, const String& rMimeType,
                                     sal_uInt16 nAdviseModes )
 {
-    SvLinkSource_Entry_ImplPtr pNew = new SvLinkSource_Entry_Impl(
+    SvLinkSource_Entry_Impl* pNew = new SvLinkSource_Entry_Impl(
                     pLink, rMimeType, nAdviseModes );
-    pImpl->aArr.Insert( pNew, pImpl->aArr.Count() );
+    pImpl->aArr.push_back( pNew );
 }
 
 void SvLinkSource::RemoveAllDataAdvise( SvBaseLink * pLink )
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
-    for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
+    for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
         if( p->bIsDataSink && &p->xSink == pLink )
         {
-            sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
-            if( USHRT_MAX != nFndPos )
-                pImpl->aArr.DeleteAndDestroy( nFndPos );
+            pImpl->aArr.DeleteAndDestroy( p );
         }
 }
 
 // only one link is correct
 void SvLinkSource::AddConnectAdvise( SvBaseLink * pLink )
 {
-    SvLinkSource_Entry_ImplPtr pNew = new SvLinkSource_Entry_Impl( pLink );
-    pImpl->aArr.Insert( pNew, pImpl->aArr.Count() );
+    SvLinkSource_Entry_Impl* pNew = new SvLinkSource_Entry_Impl( pLink );
+    pImpl->aArr.push_back( pNew );
 }
 
 void SvLinkSource::RemoveConnectAdvise( SvBaseLink * pLink )
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
-    for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
+    for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
         if( !p->bIsDataSink && &p->xSink == pLink )
         {
-            sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
-            if( USHRT_MAX != nFndPos )
-                pImpl->aArr.DeleteAndDestroy( nFndPos );
+            pImpl->aArr.DeleteAndDestroy( p );
         }
 }
 
@@ -390,7 +395,7 @@ sal_Bool SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
 {
     sal_Bool bRet = sal_False;
     const SvLinkSource_Entry_Impl* p;
-    for( sal_uInt16 n = 0, nEnd = pImpl->aArr.Count(); n < nEnd; ++n )
+    for( sal_uInt16 n = 0, nEnd = pImpl->aArr.size(); n < nEnd; ++n )
         if( ( p = pImpl->aArr[ n ] )->bIsDataSink &&
             ( !pLink || &p->xSink == pLink ) )
         {
