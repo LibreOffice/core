@@ -31,19 +31,18 @@
 // #i28701#
 class SwFlyAtCntFrm;
 
-//Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
-//also die nicht _im_ Inhalt gebundenen Flys.
+// Base class for those Flys that can "move freely" or better that are not
+// bound in Cntnt.
 class SwFlyFreeFrm : public SwFlyFrm
 {
-    SwPageFrm *pPage;   //Bei dieser Seite ist der Fly angemeldet.
+    SwPageFrm *pPage;   // page where the Fly is registered
 
     // #i34753# - flag for at-page anchored Writer fly frames
     // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
     // fly frame is already clipped during its format by the object formatter.
     bool mbNoMakePos;
 
-    // #i37068# - flag to prevent move in method
-    // <CheckClip(..)>
+    // #i37068# - flag to prevent move in method <CheckClip(..)>
     bool mbNoMoveOnCheckClip;
 
     void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
@@ -119,8 +118,7 @@ public:
     virtual bool IsFormatPossible() const;
 };
 
-
-//Die Fly's, die an einem Layoutfrm haengen und nicht inhaltsgebunden sind
+// Flys that are bound to LayoutFrms and not to Cntnt
 class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
@@ -133,7 +131,7 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 };
 
-//Die Flys, die an einem Cntnt haengen nicht aber im Inhalt
+// Flys that are bound to Cntnt but not in Cntnt
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
 protected:
@@ -171,7 +169,7 @@ public:
     virtual bool IsFormatPossible() const;
 };
 
-//Die Flys, die an einem Zeichen in einem Cntnt haengen.
+// Flys that are bound to a character in Cntnt
 class SwFlyInCntFrm : public SwFlyFrm
 {
     Point aRef;  //Relativ zu diesem Point wird die AbsPos berechnet.
@@ -209,23 +207,21 @@ public:
     sal_Bool IsInvalidLayout() const { return bInvalidLayout; }
     sal_Bool IsInvalidCntnt() const { return bInvalidCntnt; }
 
-
-    //BP 26.11.93: vgl. tabfrm.hxx, gilt bestimmt aber fuer andere auch...
-    //Zum Anmelden der Flys nachdem ein FlyCnt erzeugt _und_ eingefuegt wurde.
-    //Muss vom Erzeuger gerufen werden, denn erst nach dem Konstruieren wird
-    //Das Teil gepastet; mithin ist auch erst dann die Seite zum Anmelden der
-    //Flys erreichbar.
+    // (26.11.93, see tabfrm.hxx, but might also be valid for others)
+    // For creation of a Fly after a FlyCnt was created _and_ inserted.
+    // Must be called by creator because can be pasted only after creation.
+    // Sometimes the page for registering the Flys is not visible until then
+    // as well.
     void RegistFlys();
 
-    //siehe layact.cxx
+    //see layact.cxx
     void AddRefOfst( long nOfst ) { aRef.Y() += nOfst; }
 
     // #i26791#
     virtual void MakeObjPos();
 
-    // invalidate anchor frame on invalidation
-    // of the position, because the position is calculated during the
-    // format of the anchor frame
+    // invalidate anchor frame on invalidation of the position, because the
+    // position is calculated during the format of the anchor frame
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
 };
 

@@ -50,14 +50,13 @@ class SwPageDesc;
 class SwTableBox;
 struct SwFindRowSpanCacheObj;
 
-#define FAR_AWAY       LONG_MAX - 20000        //Initale Position der Flys.
-#define BROWSE_HEIGHT   56700L * 10L               //10 Meter
-
+#define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly
+#define BROWSE_HEIGHT 56700L * 10L // 10 Meters
 #define GRFNUM_NO 0
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2
 
-//Painten des Hintergrunds. Mit Brush oder Graphic.
+// draw background with brush or graphics
 // - add 6th parameter to indicate that method should
 //     consider background transparency, saved in the color of the brush item
 void DrawGraphic( const SvxBrushItem *, OutputDevice *,
@@ -72,45 +71,42 @@ void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 // Created declaration here to avoid <extern> declarations
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
-//Fly besorgen, wenn keine List hineingereicht wird, wir die der aktuellen
-//Shell benutzt.
-//Implementierung in feshview.cxx
+// get Fly, if no List is given use the current shell
+// Implementation in feshview.cxx
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh );
 
-//Nicht gleich die math.lib anziehen.
 sal_uLong SqRt( BigInt nX );
 
 SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart );
 void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
 
-//CntntNodes besorgen, CntntFrms erzeugen und in den LayFrm haengen.
+// Get CntntNodes, create CntntFrms, and add them to LayFrm.
 void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  sal_Bool bPages = sal_False, sal_uLong nEndIndex = 0,
                  SwFrm *pPrv = 0 );
 
-//Erzeugen der Frames fuer einen bestimmten Bereich, verwendet _InsertCnt
+// Creation of frames for a specific section (uses _InsertCnt)
 void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             const SwNodeIndex &rEndIdx );
 
-//Um z.B. fuer Tabelleheadlines das Erzeugen der Flys in _InsertCnt zu unterbinden.
+// prevent creation of Flys in _InsertCnt, e.g. for table headlines
 extern sal_Bool bDontCreateObjects;
 
-//Fuer FlyCnts, siehe SwFlyAtCntFrm::MakeAll()
+// for FlyCnts, see SwFlyAtCntFrm::MakeAll()
 extern sal_Bool bSetCompletePaintOnInvalidate;
 
-//Fuer Tabelleneinstellung per Tastatur.
+// for table settings via keyboard
 long CalcRowRstHeight( SwLayoutFrm *pRow );
 long CalcHeightWidthFlys( const SwFrm *pFrm );
 
-//Neue Seite einsetzen
 SwPageFrm *InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
                           sal_Bool bOdd, sal_Bool bInsertEmpty, sal_Bool bFtn,
                           SwFrm *pSibling );
 
-//Flys bei der Seite anmelden.
+// connect Flys with page
 void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 
-//Benachrichtung des Fly Hintergrundes wenn Notwendig.
+// notification of Fly's background if needed
 void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
              const SwRect* pOldRect = 0 );
 
@@ -130,13 +126,12 @@ sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
 
 const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
 
-// wird von SwCntntNode::GetFrm und von SwFlyFrm::GetFrm
-//              gerufen
+// used by SwCntntNode::GetFrm and SwFlyFrm::GetFrm
 SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const&, sal_uInt16 const nFrmType, const Point* = 0,
                         const SwPosition *pPos = 0,
                         const sal_Bool bCalcFrm = sal_False );
 
-//Sollen ExtraDaten (Reline-Strich, Zeilennummern) gepaintet werden?
+// Should extra data (reline stroke, line numbers) be painted?
 sal_Bool IsExtraData( const SwDoc *pDoc );
 
 // #i11760# - method declaration <CalcCntnt(..)>
@@ -144,10 +139,8 @@ void CalcCntnt( SwLayoutFrm *pLay,
                 bool bNoColl = false,
                 bool bNoCalcFollow = false );
 
-
-//Die Notify-Klassen merken sich im CTor die aktuellen Groessen und fuehren
-//im DTor ggf. die notwendigen Benachrichtigungen durch.
-
+// Notify classes memorize the current sizes in their constructor and do
+// the necessary notifications in their destructor if needed
 class SwFrmNotify
 {
 protected:
@@ -231,15 +224,11 @@ public:
     }
 };
 
-//SwBorderAttrs kapselt die Berechnung fuer die Randattribute inclusive
-//Umrandung. Die Attribute und die errechneten Werte werden gecached.
-//Neu: Die gesammte Klasse wird gecached.
-
-//!!!Achtung: Wenn weitere Attribute gecached werden muss unbedingt die
-//Methode Modify::Modify mitgepflegt werden!!!
-
-// - delete old method <SwBorderAttrs::CalcRight()> and
-// the stuff that belongs to it.
+// SwBorderAttrs encapsulates the calculation for margin attributes including
+// border. The whole class is cached.
+//
+// WARNING! If more attributes should be cached also adjust the method
+//          Modify::Modify!
 class SwBorderAttrs : public SwCacheObj
 {
     const SwAttrSet      &rAttrSet;
@@ -248,13 +237,13 @@ class SwBorderAttrs : public SwCacheObj
     SvxLRSpaceItem rLR;
     const SvxBoxItem     &rBox;
     const SvxShadowItem  &rShadow;
-    const Size            aFrmSize;     //Die FrmSize
+    const Size            aFrmSize;
 
-    sal_Bool bBorderDist    :1;             //Ist's ein Frm der auch ohne Linie
-                                        //einen Abstand haben kann?
+    // Is it a frame that can have a margin without a border?
+    sal_Bool bBorderDist  : 1;
 
-    //Mit den Folgenden Bools werden die gecache'ten Werte fuer UNgueltig
-    //erklaert - bis sie einmal berechnet wurden.
+    // the following bool values set the cached values to INVALID - until they
+    // are calculated for the first time
     sal_Bool bTopLine       :1;
     sal_Bool bBottomLine    :1;
     sal_Bool bLeftLine      :1;
@@ -263,11 +252,11 @@ class SwBorderAttrs : public SwCacheObj
     sal_Bool bBottom        :1;
     sal_Bool bLine          :1;
 
-    sal_Bool bIsLine        :1; //Umrandung an mind. einer Kante?
+    sal_Bool bIsLine      : 1; // border on at least one side?
 
-    sal_Bool bCacheGetLine        :1; //GetTopLine(), GetBottomLine() cachen?
-    sal_Bool bCachedGetTopLine    :1; //GetTopLine() gecached?
-    sal_Bool bCachedGetBottomLine :1; //GetBottomLine() gecached?
+    sal_Bool bCacheGetLine        : 1; // cache GetTopLine(), GetBottomLine()?
+    sal_Bool bCachedGetTopLine    : 1; // is GetTopLine() cached?
+    sal_Bool bCachedGetBottomLine : 1; // is GetBottomLine() cached?
     // - booleans indicating, if values <bJoinedWithPrev>
     //          and <bJoinedWithNext> are cached and valid.
     //          Caching depends on value of <bCacheGetLine>.
@@ -278,7 +267,7 @@ class SwBorderAttrs : public SwCacheObj
     sal_Bool bJoinedWithPrev :1;
     sal_Bool bJoinedWithNext :1;
 
-    //Die gecache'ten Werte, undefiniert bis sie einmal berechnet wurden.
+    // The cached values (un-defined until calculated for the first time)
     sal_uInt16 nTopLine,
            nBottomLine,
            nLeftLine,
@@ -288,13 +277,13 @@ class SwBorderAttrs : public SwCacheObj
            nGetTopLine,
            nGetBottomLine;
 
-    //Nur die Lines + Shadow errechnen.
+    // only calculate lines and shadow
     void _CalcTopLine();
     void _CalcBottomLine();
     void _CalcLeftLine();
     void _CalcRightLine();
 
-    //Lines + Shadow + Abstaende
+    // lines + shadow + margin
     void _CalcTop();
     void _CalcBottom();
 
@@ -321,8 +310,7 @@ class SwBorderAttrs : public SwCacheObj
     sal_Bool _JoinWithCmp( const SwFrm& _rCallerFrm,
                        const SwFrm& _rCmpFrm ) const;
 
-     //Rechte und linke Linie sowie LRSpace gleich?
-    // - change name of 1st parameter - "rAttrs" -> "rCmpAttrs".
+    // Are the left and right line and the LRSpace equal?
     sal_Bool CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
                        const SwFrm *pCaller,
                        const SwFrm *pCmp ) const;
@@ -374,7 +362,8 @@ public:
 
 class SwBorderAttrAccess : public SwCacheAccess
 {
-    const SwFrm *pConstructor;      //opt: Zur weitergabe an SwBorderAttrs
+    const SwFrm *pConstructor;      //opt: for passing on to SwBorderAttrs
+
 protected:
     virtual SwCacheObj *NewObj();
 
@@ -384,11 +373,9 @@ public:
     SwBorderAttrs *Get();
 };
 
-//---------------------------------------------------------------------
-//Iterator fuer die DrawObjecte einer Seite. Die Objecte werden Nach ihrer
-//Z-Order iteriert.
-//Das iterieren ist nicht eben billig, denn fuer alle Operationen muss jeweils
-//ueber das gesamte SortArray iteriert werden.
+// Iterator for draw objects of a page. The objects will be iterated sorted by
+// their Z-order. Iterating is not cheap since for each operation the _whole_
+// SortArray needs to be traversed.
 class SwOrderIter
 {
     const SwPageFrm *pPage;
@@ -427,11 +414,9 @@ public:
     static sal_uInt8 Count()        { return StackHack::nCnt; }
 };
 
-
-//Sollen obere bzw. untere Umrandung fuer den Frm ausgewertet werden?
-// #i25029# - add optional 2nd parameter <_pPrevFrm>
-// If set, its value is taken for testing, if borders/shadow have to joined
-// with previous frame.
+// Should upper (or lower) border be evaluated for this frame?
+// #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+// borders/shadow have to be joined with previous frame.
 inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrm& _rFrm,
                                           const SwFrm* _pPrevFrm ) const
 {
@@ -541,8 +526,8 @@ const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell_ );
 
 
 /** helper class to check if a frame has been deleted during an operation
- *  !!!WARNING!!! This should only be used as a last and desperate means
- *  to make the code robust.
+ *  WARNING! This should only be used as a last and desperate means to make the
+ *  code robust.
  */
 
 class SwDeletionChecker

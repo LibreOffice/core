@@ -35,12 +35,10 @@ class SwTxtFtn;
 class SwBorderAttrs;
 class SwFtnFrm;
 
-//Fuer Fussnoten gibt es einen Speziellen Bereich auf der Seite. Dieser
-//Bereich ist ein SwFtnContFrm.
-//Jede Fussnote ist durch einen SwFtnFrm abgegrenzt, dieser nimmt die
-//Fussnotenabsaetze auf. SwFtnFrm koennen aufgespalten werden, sie gehen
-//dann auf einer anderen Seite weiter.
-
+// There exists a special section on a page for footnotes. It's called
+// SwFtnContFrm. Each footnote is separated by a SwFtnFrm which contains
+// the paragraphs of a footnote. SwFtnFrm can be splitted and will then
+// continue on another page.
 class SwFtnContFrm: public SwLayoutFrm
 {
 public:
@@ -59,17 +57,17 @@ public:
 
 class SwFtnFrm: public SwLayoutFrm
 {
-    //Zeiger auf den FtnFrm in dem die Fussnote weitergefuehrt wird:
-    // 0     wenn kein Follow vorhanden,
-    // this  beim letzten
-    // der Follow sonst.
+    // Pointer to FtnFrm in which the footnote will be continued:
+    //  - 0     no following existent
+    //  - this  for the last one
+    //  - otherwise the following FtnFrm
     SwFtnFrm     *pFollow;
-    SwFtnFrm     *pMaster;      //Der FtnFrm dessen Follow ich bin.
-    SwCntntFrm   *pRef;         //In diesem CntntFrm steht die Fussnotenref.
-    SwTxtFtn     *pAttr;        //Fussnotenattribut (zum wiedererkennen)
+    SwFtnFrm     *pMaster;      // FtnFrm from which I am the following
+    SwCntntFrm   *pRef;         // in this CntntFrm is the footnote reference
+    SwTxtFtn     *pAttr;        // footnote attribute (for recognition)
 
-    sal_Bool bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
-                                //nicht rueckwaerts fliessen.
+    // if true paragraphs in this footnote are NOT permitted to flow backwards
+    sal_Bool bBackMoveLocked : 1;
     // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
 #ifdef DBG_UTIL
@@ -120,7 +118,7 @@ public:
     void UnlockBackMove()   { bBackMoveLocked = sal_False;}
     sal_Bool IsBackMoveLocked() { return bBackMoveLocked; }
 
-    // Verhindert, dass der letzte Inhalt den SwFtnFrm mitloescht (Cut())
+    // prevents that the last content deletes the SwFtnFrm as well (Cut())
     inline void ColLock()       { bColLocked = sal_True; }
     inline void ColUnlock()     { bColLocked = sal_False; }
 

@@ -30,10 +30,9 @@
 
 #include "swtypes.hxx"
 
-class SwTxtFrm;     // SwTxtFrmInfo
-class SwPaM;        // SwTxtFrmInfo
-class SwTxtCursor;  // SwTxtFrmInfo
-
+class SwTxtFrm;
+class SwPaM;
+class SwTxtCursor;
 
 /*************************************************************************
  *                      class SwTxtFrmInfo
@@ -43,39 +42,38 @@ class SwTxtFrmInfo
 {
     const SwTxtFrm *pFrm;
 
-    // Wo beginnt der Text (ohne whitespaces)? (Dokument global !!)
+    // Where does the text (w/o whitespaces) start (document is global!)?
     SwTwips GetLineStart( const SwTxtCursor &rLine ) const;
 
 public:
     inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }
 
-    // Passt der Absatz in eine Zeile?
+    // Does the paragraph fit into a single line?
     sal_Bool IsOneLine() const;
 
-    // Ist die Zeile zu X% gefuellt?
+    // Is the line filled to X%?
     sal_Bool IsFilled( const sal_uInt8 nPercent ) const;
 
-    // Wo beginnt der Text (ohne whitespaces)? (rel. im Frame !!)
+    // Where does the text (w/o whitespaces) start (rel. in frame)?
     SwTwips GetLineStart() const;
 
-    //returne die mittel Position des n. Charakters
+    // return center position of the next character
     SwTwips GetCharPos( xub_StrLen nChar, sal_Bool bCenter = sal_True ) const;
 
-    // Sammelt die whitespaces am Zeilenbeginn und -ende im Pam
+    // collect all whitespaces at the beginning and end of a line in Pam
     void GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const;
 
-    // Ist an der ersten Textposition ein Bullet/Symbol etc?
+    // Is a bullet point/symbol/etc. at the first text position?
     sal_Bool IsBullet( xub_StrLen nTxtPos ) const;
 
-    // Ermittelt Erstzeileneinzug
+    // determine intentation for first line
     SwTwips GetFirstIndent() const;
 
-    // setze und erfrage den Frame;
     const SwTxtFrm* GetFrm() const { return pFrm; }
     SwTxtFrmInfo& SetFrm( const SwTxtFrm* pNew )
         { pFrm = pNew; return *this; }
 
-    // liegt eine Gegenueberstellung vor? (returnt Pos im Frame)
+    // Is it a comparison? Returns position in frame.
     sal_uInt16 GetBigIndent( xub_StrLen& rFndPos,
                         const SwTxtFrm *pNextFrm = 0 ) const;
 };

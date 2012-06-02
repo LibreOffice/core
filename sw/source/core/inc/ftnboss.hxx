@@ -35,9 +35,8 @@ class SwFtnContFrm;
 class SwFtnFrm;
 class SwTxtFtn;
 
-
-//Setzen des maximalen Fussnotenbereiches. Restaurieren des alten Wertes im DTor.
-//Implementierung im ftnfrm.cxx
+// Set max. footnote area.
+// Restoration of the old value in DTor. Implementation in ftnfrm.cxx
 class SwSaveFtnHeight
 {
     SwFtnBossFrm *pBoss;
@@ -55,12 +54,12 @@ public:
 
 class SwFtnBossFrm: public SwLayoutFrm
 {
-    //Fuer die privaten Fussnotenoperationen
+    // for private footnote operations
     friend class SwFrm;
     friend class SwSaveFtnHeight;
-    friend class SwPageFrm; // fuer das Setzen der MaxFtnHeight
+    friend class SwPageFrm; // for setting of MaxFtnHeight
 
-    //Maximale Hoehe des Fussnotencontainers fuer diese Seite.
+    // max. height of the footnote container on this page
     SwTwips nMaxFtnHeight;
 
     SwFtnContFrm *MakeFtnCont();
@@ -77,7 +76,7 @@ public:
     inline const SwLayoutFrm *FindBodyCont() const;
     inline void SetMaxFtnHeight( const SwTwips nNewMax ) { nMaxFtnHeight = nNewMax; }
 
-    //Fussnotenschnittstelle
+    // footnote interface
     void AppendFtn( SwCntntFrm *, SwTxtFtn * );
     void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, sal_Bool bPrep = sal_True );
     static       SwFtnFrm     *FindFtn( const SwCntntFrm *, const SwTxtFtn * );
@@ -91,21 +90,20 @@ public:
     void RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock = sal_False,
                         const SwTxtFtn *pAttr = 0 );
 
-    //SS damit der Textformatierer Temporaer die Fussnotenhoehe begrenzen
-    //kann. DeadLine in Dokumentkoordinaten.
+    // Set DeadLine (in document coordinates) so that the text formatter can
+    // temporarily limit footnote height.
     void    SetFtnDeadLine( const SwTwips nDeadLine );
     SwTwips GetMaxFtnHeight() const { return nMaxFtnHeight; }
 
-    //Liefert den Wert, der noch uebrig ist, bis der Body seine minimale
-    //Hoehe erreicht hat.
+    // returns value for remaining space until the body reaches minimal height
     SwTwips GetVarSpace() const;
 
-        //Layoutseitig benoetigte Methoden
-    /// OD 03.04.2003 #108446# - add parameters <_bCollectOnlyPreviousFtns> and
-    /// <_pRefFtnBossFrm> in order to control, if only footnotes, which are positioned
-    /// before the given reference footnote boss frame have to be collected.
-    /// Note: if parameter <_bCollectOnlyPreviousFtns> is true, then parameter
-    /// <_pRefFtnBossFrm> have to be referenced to an object.
+    // methods needed for layouting
+    // The parameters <_bCollectOnlyPreviousFtns> and <_pRefFtnBossFrm> control
+    // if only footnotes that are positioned before the given reference
+    // footnote boss-frame have to be collected.
+    // Note: if parameter <_bCollectOnlyPreviousFtns> is true, then parameter
+    // <_pRefFtnBossFrm> has to be referenced by an object.
     static void _CollectFtns( const SwCntntFrm*   _pRef,
                               SwFtnFrm*           _pFtn,
                               SvPtrarr&           _rFtnArr,
@@ -121,7 +119,8 @@ public:
     void    _MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc = sal_False );
     void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                       SwTxtFtn *pAttr );
-    // Sollte AdjustNeighbourhood gerufen werden (oder Grow/Shrink)?
+
+    // should AdjustNeighbourhood be called (or Grow/Shrink)?
     sal_uInt8 NeighbourhoodAdjustment( const SwFrm* pFrm ) const
         { return IsPageFrm() ? NA_ONLY_ADJUST : _NeighbourhoodAdjustment( pFrm ); }
 };

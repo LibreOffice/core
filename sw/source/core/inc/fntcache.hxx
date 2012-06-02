@@ -63,7 +63,7 @@ public:
     void Flush();
 };
 
-// Font-Cache, globale Variable, in txtinit.Cxx angelegt/zerstoert
+// Font cache, global variable, created/destroyed in txtinit.cxx
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 extern sal_uInt8 *pMagicNo;

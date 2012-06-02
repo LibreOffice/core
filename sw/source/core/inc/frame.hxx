@@ -33,9 +33,9 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svl/svarray.hxx>
 #include <editeng/borderline.hxx>
-#include "swtypes.hxx"  // fuer SwTwips
+#include "swtypes.hxx"
 #include "swrect.hxx"
-#include "calbck.hxx"   // fuer SwClient
+#include "calbck.hxx"
 #include <svl/brdcst.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 
@@ -67,12 +67,11 @@ class SwSortedObjs;
 class SwAnchoredObject;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
-//Jeder FrmTyp findet sich hier in einem Bit wieder.
-//Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
-//werden kann was fuer ein FrmTyp eine Instanz ist _und_ von welchen Klassen
-//sie abgeleitet ist.
-//Der Frm hat in der Basisklasse einen Member der von den CToren der
-//einzelnen Frms entsprechend gesetzt werden muss.
+// Each FrmType is represented here as a bit.
+// The bits must be set in a way that it can be determined with masking of
+// which kind of FrmType an instance is _and_ from what classes it was derived.
+// Each frame has in its base class a member that must be set by the
+// constructors accordingly.
 #define FRM_ROOT        0x0001
 #define FRM_PAGE        0x0002
 #define FRM_COLUMN      0x0004
@@ -90,7 +89,7 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRM_TXT         0x4000
 #define FRM_NOTXT       0x8000
 
-//Fuer den internen Gebrauch ein paar gebraeuchliche Verknuepfungen.
+// for internal use some common combinations
 #define FRM_LAYOUT      0x3FFF
 #define FRM_CNTNT       0xC000
 #define FRM_FTNBOSS     0x0006
@@ -237,13 +236,13 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
 
-//Fuer GetNextLeaf/GetPrevLeaf.
+// for GetNextLeaf/GetPrevLeaf.
 enum MakePageType
 {
-    MAKEPAGE_NONE,      //Keine Seite bzw. Fussnote anlegen
-    MAKEPAGE_APPEND,    //Nur ggf. Seite anhaengen
-    MAKEPAGE_INSERT,    //Seite ggf. anhaengen oder einfuegen.
-    MAKEPAGE_FTN,       //Fussnote ggf. einfuegen.
+    MAKEPAGE_NONE,      // do not create page/footnote
+    MAKEPAGE_APPEND,    // only append page if needed
+    MAKEPAGE_INSERT,    // add or append page if needed
+    MAKEPAGE_FTN,       // add footnote if needed
     MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
@@ -257,30 +256,30 @@ enum MakePageType
  */
 class SwFrm: public SwClient, public SfxBroadcaster
 {
-    //Der verkappte Frm
+    // the hidden Frm
     friend class SwFlowFrm;
-    friend class SwLayoutFrm;       // Sw3FrameIo: fuer pNext, pPrev
-    friend class SwLooping;         // LoopControlling  (layouter.cxx)
+    friend class SwLayoutFrm;
+    friend class SwLooping;
 
-    //Hebt die Lower waehrend eines Spaltenumbaus auf.
+    // voids lower during creation of a column
     friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart = NULL );
     friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
 #ifdef DBG_UTIL
-    //removes empty SwSectionFrms from a chain
+    // remove empty SwSectionFrms from a chain
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
 #endif
 
-        //Zum validieren eines unsinnig invalidierten in SwCntntFrm::MakeAll
+    // for validating a mistakenly invalidated one in SwCntntFrm::MakeAll
     friend void ValidateSz( SwFrm *pFrm );
-        // Implementiert in text/txtftn.cxx, verhindert Ftn-Oszillation
+    // implemented in text/txtftn.cxx, prevents Ftn oscillation
     friend void ValidateTxt( SwFrm *pFrm );
 
 //  friend void CalcAnchorAndKeep( SwFlyFrm * );
 
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );
 
-    //Cache fuer (Umrandungs-)Attribute.
+    // cache for (border) attributes
     static SwCache *pCache;
 
     // #i65250#
@@ -362,10 +361,10 @@ class SwFrm: public SwClient, public SfxBroadcaster
     const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
 protected:
-    SwSortedObjs* pDrawObjs;    //Hier haengen die DrawObjs, kann 0 sein
+    SwSortedObjs* pDrawObjs;    // draw objects, can be 0
 
-    SwRect  aFrm;   //Absolute Dokumentposition und groesse des Frm
-    SwRect  aPrt;   //Position der PrtArea rel zum Frm und groesse der PrtArea
+    SwRect  aFrm;   // absolute position in document and size of the Frm
+    SwRect  aPrt;   // position relatively to Frm and size of PrtArea
 
     sal_uInt16 bReverse:        1; // Next line above/at the right side instead
                                // under/at the left side of the previous line.
@@ -385,23 +384,22 @@ protected:
     sal_Bool bValidLineNum:     1;
     sal_Bool bFixSize:          1;
     sal_Bool bUnUsed1:          1;
-    sal_Bool bCompletePaint:    1;  //Frame wird ganz gepaintet wenn sal_True, auch
-                                //wenn der Inhalt nur teilw. veraendert ist;
-                                //Bei CntntFrms wird ausschliesslich wenn sal_True
-                                //der Border (von Action) gemalt.
-    sal_Bool bRetouche:         1;  //Der Frame ist fuer Retusche verantwortlich
-                                //wenn sal_True.
+    // if sal_True, frame will be painted completely even content was changed
+    // only partially. For CntntFrms a border (from Action) will exclusively
+    // painted if <bCompletePaint> is sal_True.
+    sal_Bool bCompletePaint : 1;
+    sal_Bool bRetouche      : 1; // frame is responsible for retouching
 public:
     sal_Bool bUnUsed2:          1;
 protected:
-    sal_Bool bInfInvalid:       1;  //InfoFlags sind Invalid.
-    sal_Bool bInfBody:          1;  //Frm steht im DokumentBody.
-    sal_Bool bInfTab:           1;  //Frm steht in einer Tabelle.
-    sal_Bool bInfFly:           1;  //Frm steht in einem Fly.
-    sal_Bool bInfFtn:           1;  //Frm steht in einer Fussnote.
-    sal_Bool bInfSct:           1;  //Frm steht in einem Bereich.
-    sal_Bool bColLocked:        1;  //Grow/Shrink sperren bei spaltigen Section-
-                                //oder Fly-Frames, wird im Format gesetzt
+    sal_Bool bInfInvalid    : 1;  // InfoFlags are invalid
+    sal_Bool bInfBody       : 1;  // Frm is in document body
+    sal_Bool bInfTab        : 1;  // Frm is in a table
+    sal_Bool bInfFly        : 1;  // Frm is in a Fly
+    sal_Bool bInfFtn        : 1;  // Frm is in a footnote
+    sal_Bool bInfSct        : 1;  // Frm is in a section
+    sal_Bool bColLocked     : 1;  // lock Grow/Shrink for column-wise section
+                                  // or fly frames, will be set in Format
 
     void ColLock()      { bColLocked = sal_True; }
     void ColUnlock()    { bColLocked = sal_False; }
@@ -415,16 +413,16 @@ protected:
     void PrepareMake();
     void OptPrepareMake();
     void MakePos();
-    // method formats next frame of table frame to assure keep attribute.
-    // in case of nested tables method <SwFrm::MakeAll()> is called to
-    // avoid format of superior table frame.
+    // Format next frame of table frame to assure keeping attributes.
+    // In case of nested tables method <SwFrm::MakeAll()> is called to
+    // avoid formating of superior table frame.
     friend SwFrm* lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
 
     virtual void MakeAll() = 0;
-        //Adjustierung der Frames einer Seite
+    // adjust frames of a page
     SwTwips AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst = sal_False );
 
-        //Aendern nur die Framesize, nicht die PrtArea-SSize
+    // change only frame size not the size of PrtArea
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
 
@@ -456,14 +454,14 @@ protected:
     */
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
 
-        //Schatten und Umrandung painten
+    // draw shadow and borders
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
     virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
 
     virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
 
 public:
-    TYPEINFO(); //Bereits in Basisklasse Client drin.
+    TYPEINFO(); // already in base class
 
     sal_uInt16 GetType() const { return 0x1 << nType; }
 
@@ -471,25 +469,24 @@ public:
     static SwCache *GetCachePtr()             { return pCache;  }
     static void     SetCache( SwCache *pNew ) { pCache = pNew;  }
 
-        //Aendern die PrtArea-SSize und die FrmSize.
+    // change PrtArea size and FrmSize
     SwTwips Shrink( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     SwTwips Grow  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 
-    //Wir brauchen unterschiedliche Methoden (wg. Performance) fuer das
-    //Einfuegenin den Layout Baum:
+    // different methods for inserting in layout tree (for performance reasons)
 
-    //Einfuegen vor pBehind  oder am Ende der Kette unter pUpper
+    // insert before pBehind or at the end of the chain below pUpper
     void InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind );
-    //Einfuegen hinter pBefore oder am Anfang der Kette unter pUpper
+    // insert after pBefore or at the beginnig of the chain below pUpper
     void InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore );
-    //Einfuegen vor pBehind oder am Ende der Kette, unter Beruecksichtigung
-    //der Geschwister von pSct
+    // insert before pBehind or at the end of the chain while considering
+    // the siblings of pSct
     void InsertGroupBefore( SwFrm* pParent, SwFrm* pWhere, SwFrm* pSct );
     void Remove();
 
-    //For internal use only; wer es anders macht wird
-    //in einen Sack gesteckt und muss zwei Tage drin hocken bleiben.
-    //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch (Tabellen).
+    // For internal use only - who ignores this will be put in a sack and has
+    // to stay there for two days
+    // Does special treatment for _Get[Next|Prev]Leaf() (for tables).
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, sal_Bool bFwd );
     SwLayoutFrm *GetNextLeaf   ( MakePageType eMakePage );
     SwLayoutFrm *GetNextFtnLeaf( MakePageType eMakePage );
@@ -508,7 +505,7 @@ public:
     void AppendDrawObj( SwAnchoredObject& _rNewObj );
     void RemoveDrawObj( SwAnchoredObject& _rToRemoveObj );
 
-    //Arbeiten mit der Kette der FlyFrms
+    // work with chain of FlyFrms
     void  AppendFly( SwFlyFrm *pNew );
     void  RemoveFly( SwFlyFrm *pToRemove );
     const SwSortedObjs *GetDrawObjs() const { return pDrawObjs; }
@@ -531,7 +528,8 @@ public:
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;
 
-    //Retouche, nicht im Bereich des uebergebenen Rect!
+// FIXME: EasyHack (refactoring): rename method name in all files
+    // retouch, not in the area of the given Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
     sal_Bool GetBackgroundBrush( const SvxBrushItem*& rpBrush,
@@ -547,10 +545,10 @@ public:
     inline void ResetRetouche() const;
     inline sal_Bool IsRetouche() const { return bRetouche; }
 
-    void SetInfFlags();                 //Setzen der InfoFlags
+    void SetInfFlags();
     inline void InvalidateInfFlags() { bInfInvalid = sal_True; }
-    inline sal_Bool IsInDocBody() const;    //Benutzen die InfoFlags.
-    inline sal_Bool IsInFtn() const;        //ggf. werden die Flags ermittelt.
+    inline sal_Bool IsInDocBody() const;    // use InfoFlags, determine flags
+    inline sal_Bool IsInFtn() const;        // if necessary
     inline sal_Bool IsInTab() const;
     inline sal_Bool IsInFly() const;
     inline sal_Bool IsInSct() const;
@@ -603,8 +601,8 @@ public:
 //    sal_Bool IsMoveable() const;
     bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = 0L ) const;
 
-    //Ist es fuer den (Txt)Frm in der aktuellen Umgebung erlaubt eine
-    //Fussnote einzufuegen (nicht z.B. in wiederholten TabellenHeadlines).
+    // Is it permitted for the (Txt)Frm to add a footnote in the current
+    // environment (not e.g. for repeating table headlines)?
     sal_Bool IsFtnAllowed() const;
 
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
@@ -618,10 +616,10 @@ public:
     inline sal_Bool HasFixSize() const { return bFixSize; }
     inline void SetFixSize( sal_Bool bNew ) { bFixSize = bNew; }
 
-    //Prueft alle Seiten ab der Uebergebenen und korrigiert ggf.
+    // check all pages (starting from the given) and correct them if needed
     static void CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields = sal_True );
 
-        //Koennen 0 liefern, einmal const einmal nicht
+    // might return 0, with and without const
     SwFrm               *GetNext()  { return pNext; }
     SwFrm               *GetPrev()  { return pPrev; }
     SwLayoutFrm         *GetUpper() { return pUpper; }
@@ -693,8 +691,8 @@ public:
         { return ( pNext || !IsInSct() ) ? pNext : _GetIndNext(); }
     const SwFrm* GetIndNext() const { return ((SwFrm*)this)->GetIndNext(); }
 
-    sal_uInt16 GetPhyPageNum() const;   //Seitennummer ohne Offset
-    sal_uInt16 GetVirtPageNum() const;  //Seitenummer mit Offset
+    sal_uInt16 GetPhyPageNum() const;   // page number without offset
+    sal_uInt16 GetVirtPageNum() const;  // page number with offset
     sal_Bool OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     sal_Bool WannaRightPage() const;
 
@@ -703,25 +701,25 @@ public:
     inline SwLayoutFrm *GetPrevLayoutLeaf();
     inline SwLayoutFrm *GetNextLayoutLeaf();
 
-    inline void Calc() const;       //Hier wird ggf. 'Formatiert'
-    inline void OptCalc() const;    //Hier wird zur Optimierung davon ausgegangen,
-                                    //das die Vorgaenger bereits formatiert sind.
+    inline void Calc() const;       // here might be "formatted"
+    inline void OptCalc() const;    // here we assume (for optimization) that
+                                    // the predecessors are already formatted
 
     inline Point   GetRelPos() const;
     const  SwRect &Frm() const { return aFrm; }
     const  SwRect &Prt() const { return aPrt; }
 
-    // The PaintArea is the area, where content may be displayed.
-    // The margin of the page or the space between columns belongs to her.
+    // PaintArea is the area where content might be displayed.
+    // The margin of a page or the space between columns belongs to it.
     const SwRect PaintArea() const;
-    // The UnionFrm is the union of frm- and prt-area, normally identical
-    // to the frm-area except the case of negative prt-margins.
+    // UnionFrm is the union of Frm- and PrtArea, normally identical
+    // to the FrmArea except in case of negative Prt margins.
     const SwRect UnionFrm( sal_Bool bBorder = sal_False ) const;
 
-    //Der Zugriff auf die Member wird hier ausnahmsweiste gestattet,
-    //dies soll aber nicht dazu dienen die Werte wahllos zu veraendern;
-    //es ist nur die einzige Moeglichkeit die Compilerprobleme zu umgehen
-    //(gleiche Methode mal public mal protected).
+    // HACK: Here we exceptionally allow direct access to members.
+    // This should not delude into changing those value randomly; it is the
+    // only option to circumvent compiler problems (same method with public
+    // and protected).
     SwRect &Frm() { return aFrm; }
     SwRect &Prt() { return aPrt; }
 
@@ -738,7 +736,7 @@ public:
     sal_Bool GetValidLineNumFlag()const { return bValidLineNum; }
     sal_Bool IsValid() const { return bValidPos && bValidSize && bValidPrtArea; }
 
-    //Invalideren nur den Frm
+    // Only invalidate Frm
     // #i28701# - add call to method <_ActionOnInvalidation(..)>
     // for all invalidation methods.
     // #i28701# - use method <_InvalidationAllowed(..)> to
@@ -786,7 +784,7 @@ public:
             _ActionOnInvalidation( INVALID_ALL );
         }
     }
-    //Benachrichtigen gleich die Seite mit.
+    // also notify page at the same time
     inline void InvalidateSize();
     inline void InvalidatePrt();
     inline void InvalidatePos();
@@ -816,25 +814,25 @@ public:
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
 
-    // der "kurze Dienstweg" zwischen den Frames und der Formatierung.
-    // Wer den void* falsch Casted ist selbst schuld!
-    // Auf jedenfall muss der void* auf 0 geprueft werden.
+    // HACK: shortcut between frame and formatting
+    // It's your own fault if you cast void* incorrectly! In any case check
+    // the void* for 0.
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, sal_Bool bNotify = sal_True );
 
-    //sal_True wenn's die richtige Klasse ist, sal_False sonst
+    // sal_True if it is the correct class, sal_False otherwise
     inline sal_Bool IsLayoutFrm() const;
     inline sal_Bool IsRootFrm() const;
     inline sal_Bool IsPageFrm() const;
     inline sal_Bool IsColumnFrm() const;
-    inline sal_Bool IsFtnBossFrm() const; // Fussnotenbosse sind PageFrms und ColumnFrms
+    inline sal_Bool IsFtnBossFrm() const;  // footnote bosses might be PageFrms or ColumnFrms
     inline sal_Bool IsHeaderFrm() const;
     inline sal_Bool IsFooterFrm() const;
     inline sal_Bool IsFtnContFrm() const;
     inline sal_Bool IsFtnFrm() const;
     inline sal_Bool IsBodyFrm() const;
-    inline sal_Bool IsColBodyFrm() const;   // in layfrm.hxx implementiert, BodyFrm unterhalb ColumnFrm
-    inline sal_Bool IsPageBodyFrm() const;  // in layfrm.hxx implementiert, BodyFrm unterhalb PageFrm
+    inline sal_Bool IsColBodyFrm() const;  // implemented in layfrm.hxx, BodyFrm above ColumnFrm
+    inline sal_Bool IsPageBodyFrm() const; // implemented in layfrm.hxx, BodyFrm above PageFrm
     inline sal_Bool IsFlyFrm() const;
     inline sal_Bool IsSctFrm() const;
     inline sal_Bool IsTabFrm() const;
@@ -843,17 +841,18 @@ public:
     inline sal_Bool IsCntntFrm() const;
     inline sal_Bool IsTxtFrm() const;
     inline sal_Bool IsNoTxtFrm() const;
-    inline sal_Bool IsFlowFrm() const;      //Frms deren PrtArea von den Nachbarn
-                                        //abhaengen und die halt im Inhaltsfluss
-                                        //stehen.
-    inline sal_Bool IsRetoucheFrm() const;  //Frms die Retouchefaehig sind bzw. die
-                                        //u.U. hinter sich Retouchieren muessen.
+    // Frms where its PrtArea depends on their neighbors and that are
+    // positioned in the content flow
+    inline sal_Bool IsFlowFrm() const;
+    // Frms that are capable of retouching or that might need to retouch behind
+    // themselves
+    inline sal_Bool IsRetoucheFrm() const;
     inline sal_Bool IsAccessibleFrm() const;
 
-    void PrepareCrsr();                 //Die CrsrShell darf.
+    void PrepareCrsr();                 // CrsrShell is allowed to call this
 
-    //Ist der Frm (bzw. die Section in der er steht) geschuetzt?
-    //Auch Fly in Fly in ... und Fussnoten
+    // Is the Frm (or the section containing it) protected? Same for Fly in
+    // Fly in ... and footnotes
     sal_Bool IsProtected() const;
 
     sal_Bool IsColLocked()  const { return bColLocked; }
@@ -905,8 +904,7 @@ public:
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 
 public:
-    /** if writer is NULL, dumps the layout structure as XML in layout.xml
-      */
+    // if writer is NULL, dumps the layout structure as XML in layout.xml
     virtual void dumpAsXml(xmlTextWriterPtr writer = NULL);
     virtual void dumpInfosAsXml(xmlTextWriterPtr writer);
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
@@ -1047,7 +1045,7 @@ inline void SwFrm::InvalidateNextPos( sal_Bool bNoFtn )
 {
     if ( pNext && !pNext->IsSctFrm() )
         pNext->InvalidatePos();
-#ifndef C30 // vielleicht geht es ja bei C40 ?
+#ifndef C30 // maybe it works for C40?
     else
         ImplInvalidateNextPos( bNoFtn );
 #else
@@ -1070,8 +1068,7 @@ inline void SwFrm::OptCalc() const
 inline Point SwFrm::GetRelPos() const
 {
     Point aRet( aFrm.Pos() );
-        //hier wird gecasted, weil die Klasse SwLayoutFrm nur vorward-
-        //declariert ist.
+    // here we cast since SwLayoutFrm is declared only as forwarded
     aRet -= ((SwFrm*)GetUpper())->Prt().Pos();
     aRet -= ((SwFrm*)GetUpper())->Frm().Pos();
     return aRet;
