@@ -236,8 +236,7 @@ public:
 };
 
 
-SV_DECL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *, 4 )
-SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *)
+class SfxDdeDocTopics_Impl : public std::vector<SfxDdeDocTopic_Impl*> {};
 
 //========================================================================
 
@@ -607,11 +606,12 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
         return;
 
     SfxDdeDocTopic_Impl* pTopic;
-    for( sal_uInt16 n = pAppData_Impl->pDocTopics->Count(); n; )
+    for( sal_uInt16 n = pAppData_Impl->pDocTopics->size(); n; )
         if( ( pTopic = (*pAppData_Impl->pDocTopics)[ --n ])->pSh == pSh )
         {
             pAppData_Impl->pDdeService->RemoveTopic( *pTopic );
-            pAppData_Impl->pDocTopics->DeleteAndDestroy( n );
+            delete pTopic;
+            pAppData_Impl->pDocTopics->erase( pAppData_Impl->pDocTopics->begin() + n );
         }
 }
 
