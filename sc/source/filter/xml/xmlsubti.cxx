@@ -811,7 +811,7 @@ void ScMyTables::SetMatrix(const ScRange& rScRange, const rtl::OUString& rFormul
     aMark.SelectTable( rScRange.aStart.Tab(), sal_True );
     ScTokenArray* pCode = new ScTokenArray;
     pCode->AddStringXML( rFormula );
-    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (!rFormulaNmsp.isEmpty() > 0) )
+    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !rFormulaNmsp.isEmpty() )
         pCode->AddStringXML( rFormulaNmsp );
     pDoc->InsertMatrixFormula(
         rScRange.aStart.Col(), rScRange.aStart.Row(),
