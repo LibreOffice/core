@@ -863,7 +863,7 @@ namespace drawinglayer
                             uno::Reference< beans::XPropertySetInfo > xPropertyInfo(xModelProperties.is()
                                 ? xModelProperties->getPropertySetInfo()
                                 : uno::Reference< beans::XPropertySetInfo >());
-                            const ::rtl::OUString sPrintablePropertyName(RTL_CONSTASCII_USTRINGPARAM("Printable"));
+                            const ::rtl::OUString sPrintablePropertyName("Printable");
 
                             if(xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
                             {
