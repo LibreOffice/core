@@ -215,15 +215,13 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
             else
                 maVirDev.DrawText( aTxtPos, pItem->maText );
         }
-        else if ( pItem->meType == THUMBNAILITEM_COLOR )
-        {
-            maVirDev.SetFillColor( pItem->maColor );
-            maVirDev.DrawRect( aRect );
-        }
         else
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            if ( IsColor() )
+
+            if ( pItem->maColor.GetTransparency() == 0 )
+                maVirDev.SetFillColor( pItem->maColor );
+            else if ( IsColor() )
                 maVirDev.SetFillColor( maColor );
             else if ( nStyle & WB_MENUSTYLEVALUESET )
                 maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
@@ -231,35 +229,29 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
                 maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
             else
                 maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
+
             maVirDev.DrawRect( aRect );
 
-            if ( pItem->meType == THUMBNAILITEM_USERDRAW )
+            // Draw thumbnail
+            Size    aImageSize = pItem->maImage.GetSizePixel();
+            Size    aRectSize = aRect.GetSize();
+            Point   aPos( aRect.Left(), aRect.Top() );
+            aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
+            aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
+
+            sal_uInt16  nImageStyle  = 0;
+            if( !IsEnabled() )
+                nImageStyle  |= IMAGE_DRAW_DISABLE;
+
+            if ( (aImageSize.Width()  > aRectSize.Width()) ||
+                 (aImageSize.Height() > aRectSize.Height()) )
             {
-                UserDrawEvent aUDEvt( &maVirDev, aRect, pItem->mnId );
-                UserDraw( aUDEvt );
+                maVirDev.SetClipRegion( Region( aRect ) );
+                maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
+                maVirDev.SetClipRegion();
             }
             else
-            {
-                Size    aImageSize = pItem->maImage.GetSizePixel();
-                Size    aRectSize = aRect.GetSize();
-                Point   aPos( aRect.Left(), aRect.Top() );
-                aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
-                aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
-
-                sal_uInt16  nImageStyle  = 0;
-                if( !IsEnabled() )
-                    nImageStyle  |= IMAGE_DRAW_DISABLE;
-
-                if ( (aImageSize.Width()  > aRectSize.Width()) ||
-                     (aImageSize.Height() > aRectSize.Height()) )
-                {
-                    maVirDev.SetClipRegion( Region( aRect ) );
-                    maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
-                    maVirDev.SetClipRegion();
-                }
-                else
-                    maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
-            }
+                maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
         }
     }
 }
