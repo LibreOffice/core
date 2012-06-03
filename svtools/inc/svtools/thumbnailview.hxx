@@ -335,6 +335,16 @@ protected:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+protected:
+
+    // Drawing item related functions, override them to make your own custom ones.
+
+    virtual void DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect);
+
+    virtual void DrawItemText (const rtl::OUString &rStr );
+
+    virtual void DrawSelectedItem (const sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
+
 private:
 
     friend class ThumbnailViewAcc;
@@ -346,9 +356,6 @@ private:
     SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem( ThumbnailViewItem* pItem, Rectangle aRect );
-    SVT_DLLPRIVATE void         ImplDrawItemText( const rtl::OUString &rStr );
-    SVT_DLLPRIVATE void         ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel );
     SVT_DLLPRIVATE void         ImplDrawSelect();
     SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
     SVT_DLLPRIVATE void         ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection = true );

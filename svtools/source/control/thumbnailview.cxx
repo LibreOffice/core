@@ -182,7 +182,7 @@ void ThumbnailView::ImplInitScrollBar()
     }
 }
 
-void ThumbnailView::ImplFormatItem( ThumbnailViewItem *pItem, Rectangle aRect )
+void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 {
     WinBits nStyle = GetStyle();
 
@@ -486,7 +486,7 @@ void ThumbnailView::Format()
             maNoneItemRect.Right()      = maNoneItemRect.Left()+aWinSize.Width()-x-1;
             maNoneItemRect.Bottom()     = y+nNoneHeight-1;
 
-            ImplFormatItem( mpNoneItem, maNoneItemRect );
+            DrawItem( mpNoneItem, maNoneItemRect );
 
             y += nNoneHeight+nNoneSpace;
         }
@@ -524,7 +524,7 @@ void ThumbnailView::Format()
                 }
 
                 pItem->mbVisible = true;
-                ImplFormatItem( pItem, Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ) );
+                DrawItem( pItem, Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ) );
 
                 if ( !((i+1) % mnCols) )
                 {
@@ -578,7 +578,7 @@ void ThumbnailView::Format()
     delete pDelScrBar;
 }
 
-void ThumbnailView::ImplDrawItemText( const rtl::OUString& rText )
+void ThumbnailView::DrawItemText( const rtl::OUString& rText )
 {
     if ( !(GetStyle() & WB_NAMEFIELD) )
         return;
@@ -615,18 +615,18 @@ void ThumbnailView::ImplDrawSelect()
     if ( !bFocus && !bDrawSel )
     {
         rtl::OUString aEmptyStr;
-        ImplDrawItemText( aEmptyStr );
+        DrawItemText( aEmptyStr );
         return;
     }
 
-    ImplDrawSelect( mnSelItemId, bFocus, bDrawSel );
+    DrawSelectedItem( mnSelItemId, bFocus, bDrawSel );
     if (mbHighlight)
     {
-        ImplDrawSelect( mnHighItemId, bFocus, bDrawSel );
+        DrawSelectedItem( mnHighItemId, bFocus, bDrawSel );
     }
 }
 
-void ThumbnailView::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+void ThumbnailView::DrawSelectedItem( const sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
 {
     ThumbnailViewItem* pItem;
     Rectangle aRect;
@@ -774,7 +774,7 @@ void ThumbnailView::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const
                 ShowFocus( aRect2 );
         }
 
-        ImplDrawItemText( pItem->maText );
+        DrawItemText( pItem->maText );
     }
 }
 
@@ -1411,7 +1411,7 @@ void ThumbnailView::StateChanged( StateChangedType nType )
     {
         if ( mpNoneItem && !mbFormat && IsReallyVisible() && IsUpdateMode() )
         {
-            ImplFormatItem( mpNoneItem, maNoneItemRect );
+            DrawItem( mpNoneItem, maNoneItemRect );
             Invalidate( maNoneItemRect );
         }
     }
@@ -1830,7 +1830,7 @@ void ThumbnailView::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
         const Rectangle aRect = ImplGetItemRect(nPos);
-        ImplFormatItem( pItem, aRect );
+        DrawItem( pItem, aRect );
         Invalidate( aRect );
     }
     else
@@ -1861,7 +1861,7 @@ void ThumbnailView::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
         const Rectangle aRect = ImplGetItemRect(nPos);
-        ImplFormatItem( pItem, aRect );
+        DrawItem( pItem, aRect );
         Invalidate( aRect );
     }
     else
@@ -1893,7 +1893,7 @@ void ThumbnailView::SetItemData( sal_uInt16 nItemId, void* pData )
         if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
         {
             const Rectangle aRect = ImplGetItemRect(nPos);
-            ImplFormatItem( pItem, aRect );
+            DrawItem( pItem, aRect );
             Invalidate( aRect );
         }
         else
@@ -1938,7 +1938,7 @@ void ThumbnailView::SetItemText( sal_uInt16 nItemId, const rtl::OUString& rText 
             nTempId = mnHighItemId;
 
         if ( nTempId == nItemId )
-            ImplDrawItemText( pItem->maText );
+            DrawItemText( pItem->maText );
     }
 
     if (ImplHasAccessibleListeners())
