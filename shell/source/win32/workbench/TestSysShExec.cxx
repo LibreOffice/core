@@ -98,7 +98,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
         return 0;
 
     // Get global factory for uno services.
-    OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
+    OUString rdbName = OUString( RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.
@@ -115,7 +115,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     //-------------------------------------------------
 
     Reference< XSystemShellExecute > xSysShExec(
-        g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute")) ), UNO_QUERY );
+        g_xFactory->createInstance( OUString("com.sun.star.system.SystemShellExecute") ), UNO_QUERY );
 
     if ( !xSysShExec.is() )
     {

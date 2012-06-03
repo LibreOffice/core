@@ -185,7 +185,7 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     else if( 0 == aName.compareToAscii( "attachment" ) &&  m_Attachments.getLength() )
         return makeAny( m_Attachments );
 
-   throw NoSuchElementException( OUString(RTL_CONSTASCII_USTRINGPARAM("key not found: ")) + aName,
+   throw NoSuchElementException( OUString("key not found: ") + aName,
         static_cast < XNameAccess * > (this) );
 }
 
@@ -200,22 +200,22 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     Sequence< OUString > aRet( 6 );
 
     if( !m_aOriginator.isEmpty() )
-        aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("from"));
+        aRet[nItems++] = OUString("from");
 
     if( !m_aRecipient.isEmpty() )
-        aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("to"));
+        aRet[nItems++] = OUString("to");
 
     if( m_CcRecipients.getLength() )
-        aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("cc"));
+        aRet[nItems++] = OUString("cc");
 
     if( m_BccRecipients.getLength() )
-        aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("bcc"));
+        aRet[nItems++] = OUString("bcc");
 
     if( !m_aSubject.isEmpty() )
-        aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("subject"));
+        aRet[nItems++] = OUString("subject");
 
     if( m_Attachments.getLength() )
-        aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("attachment"));
+        aRet[nItems++] = OUString("attachment");
 
     aRet.realloc( nItems );
     return aRet;

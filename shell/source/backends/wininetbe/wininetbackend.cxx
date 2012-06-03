@@ -211,12 +211,12 @@ WinInetBackend::WinInetBackend()
 
                 ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, rtl::OUString());
                 ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "http" ) ) );
+                    "http"  ) );
                 ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "https" ) ) );
+                    "https"  ) );
 
                 ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ftp" ) ) );
+                    "ftp"  ) );
 
                 if( aTypeIndepProxy.Server.getLength() )
                 {
@@ -307,7 +307,7 @@ void WinInetBackend::setPropertyValue(
 {
     throw css::lang::IllegalArgumentException(
         rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+            "setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -350,7 +350,7 @@ css::uno::Any WinInetBackend::getPropertyValue(
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL WinInetBackend::getBackendName(void) {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.WinInetBackend")) ;
+    return rtl::OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
 
 //------------------------------------------------------------------------------
@@ -366,7 +366,7 @@ rtl::OUString SAL_CALL WinInetBackend::getImplementationName(void)
 uno::Sequence<rtl::OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServiceNameList(1);
-    aServiceNameList[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.WinInetBackend")) ;
+    aServiceNameList[0] = rtl::OUString( "com.sun.star.configuration.backend.WinInetBackend") ;
 
     return aServiceNameList ;
 }

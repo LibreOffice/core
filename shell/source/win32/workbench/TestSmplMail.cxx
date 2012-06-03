@@ -88,7 +88,7 @@ int SAL_CALL main(int , char*, char* )
     //-------------------------------------------------
 
     // Get global factory for uno services.
-    OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
+    OUString rdbName = OUString( RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.
@@ -107,7 +107,7 @@ int SAL_CALL main(int , char*, char* )
     try
     {
         Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
-            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SimpleSystemMail")) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString("com.sun.star.system.SimpleSystemMail") ), UNO_QUERY );
 
         if ( !xSmplMailClientSuppl.is() )
         {
@@ -125,30 +125,30 @@ int SAL_CALL main(int , char*, char* )
 
             if ( xSmplMailMsg.is( ) )
             {
-                xSmplMailMsg->setRecipient( OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com")) );
-                xSmplMailMsg->setOriginator( OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com")) );
+                xSmplMailMsg->setRecipient( OUString("tino.rachui@germany.sun.com") );
+                xSmplMailMsg->setOriginator( OUString("tino.rachui@germany.sun.com") );
 
                 Sequence< OUString > ccRecips( 1 );
-                ccRecips[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com"));
+                ccRecips[0] = OUString("tino.rachui@germany.sun.com");
 
                 xSmplMailMsg->setCcRecipient( ccRecips );
 
                 Sequence< OUString > bccRecips( 1 );
-                bccRecips[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com"));
+                bccRecips[0] = OUString("tino.rachui@germany.sun.com");
 
                 xSmplMailMsg->setBccRecipient( bccRecips );
 
-                xSmplMailMsg->setSubject( OUString(RTL_CONSTASCII_USTRINGPARAM("Mapi Test")) );
+                xSmplMailMsg->setSubject( OUString("Mapi Test") );
 
                 Sequence< OUString > attachements( 2 );
 
-                OUString aFile(RTL_CONSTASCII_USTRINGPARAM("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe"));
+                OUString aFile("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe");
                 OUString aFileURL;
 
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
                 attachements[0] = aFileURL;
 
-                aFile = OUString(RTL_CONSTASCII_USTRINGPARAM("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe"));
+                aFile = OUString("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe");
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
 
                 attachements[1] = aFile;

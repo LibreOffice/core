@@ -119,7 +119,7 @@ static OUString xdg_user_dir_lookup (const char *type)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-        osl::FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp")), aDocumentsDirURL);
+        osl::FileBase::getFileURLFromSystemPath(rtl::OUString("/tmp"), aDocumentsDirURL);
         return aDocumentsDirURL;
     }
 
@@ -127,12 +127,12 @@ static OUString xdg_user_dir_lookup (const char *type)
     if (config_home == NULL || config_home[0] == 0)
     {
         aConfigFileURL = OUString(aHomeDirURL);
-        aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/.config/user-dirs.dirs"));
+        aConfigFileURL += OUString("/.config/user-dirs.dirs");
     }
     else
     {
         aConfigFileURL = OUString::createFromAscii(config_home);
-        aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/user-dirs.dirs"));
+        aConfigFileURL += OUString("/user-dirs.dirs");
     }
 
     if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
@@ -433,7 +433,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             if( aCompleteName != "Unknown" )
             {
-                if( aCompleteName.trim().indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")), 0) != -1 )
+                if( aCompleteName.trim().indexOf(rtl::OUString(" "), 0) != -1 )
                     return sal_True;
             }
         }

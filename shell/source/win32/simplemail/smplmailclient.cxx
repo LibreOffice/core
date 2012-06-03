@@ -60,14 +60,14 @@ using css::system::SimpleMailClientFlags::NO_LOGON_DIALOG;
 
 typedef std::vector<rtl::OUString> StringList_t;
 
-const rtl::OUString TO(RTL_CONSTASCII_USTRINGPARAM("--to"));
-const rtl::OUString CC(RTL_CONSTASCII_USTRINGPARAM("--cc"));
-const rtl::OUString BCC(RTL_CONSTASCII_USTRINGPARAM("--bcc"));
-const rtl::OUString FROM(RTL_CONSTASCII_USTRINGPARAM("--from"));
-const rtl::OUString SUBJECT(RTL_CONSTASCII_USTRINGPARAM("--subject"));
-const rtl::OUString ATTACH(RTL_CONSTASCII_USTRINGPARAM("--attach"));
-const rtl::OUString FLAG_MAPI_DIALOG(RTL_CONSTASCII_USTRINGPARAM("--mapi-dialog"));
-const rtl::OUString FLAG_MAPI_LOGON_UI(RTL_CONSTASCII_USTRINGPARAM("--mapi-logon-ui"));
+const rtl::OUString TO("--to");
+const rtl::OUString CC("--cc");
+const rtl::OUString BCC("--bcc");
+const rtl::OUString FROM("--from");
+const rtl::OUString SUBJECT("--subject");
+const rtl::OUString ATTACH("--attach");
+const rtl::OUString FLAG_MAPI_DIALOG("--mapi-dialog");
+const rtl::OUString FLAG_MAPI_LOGON_UI("--mapi-logon-ui");
 
 namespace /* private */
 {
@@ -106,9 +106,7 @@ namespace /* private */
 
         if (senddocUrl.getLength() == 0)
         {
-            senddocUrl = rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/program/senddoc.exe"));
+            senddocUrl = rtl::OUString( "$BRAND_BASE_DIR/program/senddoc.exe");
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;
@@ -228,7 +226,7 @@ void CSmplMailClient::assembleCommandLine(
         osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(attachments[i], sysPath);
         if (err != osl::FileBase::E_None)
             throw IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid attachment file URL")),
+                rtl::OUString("Invalid attachment file URL"),
                 static_cast<XSimpleMailClient*>(this),
                 1);
 
@@ -254,7 +252,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
 
     if (!executeSenddoc(senddocParams))
         throw Exception(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Send email failed")),
+            rtl::OUString("Send email failed"),
             static_cast<XSimpleMailClient*>(this));
 }
 
@@ -263,7 +261,7 @@ void CSmplMailClient::validateParameter(
 {
     if (!xSimpleMailMessage.is())
         throw IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty mail message reference")),
+            rtl::OUString("Empty mail message reference"),
             static_cast<XSimpleMailClient*>(this),
             1);
 
@@ -272,14 +270,14 @@ void CSmplMailClient::validateParameter(
     // check the flags, the allowed range is 0 - (2^n - 1)
     if (aFlag < 0 || aFlag > 3)
         throw IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid flag value")),
+            rtl::OUString("Invalid flag value"),
             static_cast<XSimpleMailClient*>(this),
             2);
 
     // check if a recipient is specified of the flags NO_USER_INTERFACE is specified
     if ((aFlag & NO_USER_INTERFACE) && !xSimpleMailMessage->getRecipient().getLength())
         throw IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No recipient specified")),
+            rtl::OUString("No recipient specified"),
             static_cast<XSimpleMailClient*>(this),
             1);
 }

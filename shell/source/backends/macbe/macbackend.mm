@@ -217,7 +217,7 @@ void MacOSXBackend::setPropertyValue(
 {
     throw css::lang::IllegalArgumentException(
         rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+            "setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -417,7 +417,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
                 CFStringRef rException = (CFStringRef) CFArrayGetValueAtIndex(rExceptionsList, idx);
 
                 if (idx>0)
-                    aProxyBypassList += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+                    aProxyBypassList += rtl::OUString(";");
 
                 aProxyBypassList += CFStringToOUString(rException);
             }
@@ -445,7 +445,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
 rtl::OUString SAL_CALL MacOSXBackend::getBackendName(void)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.MacOSXBackend"));
+    return rtl::OUString("com.sun.star.comp.configuration.backend.MacOSXBackend");
 }
 
 //------------------------------------------------------------------------------
@@ -461,7 +461,7 @@ rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServiceNameList(1);
-    aServiceNameList[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.MacOSXBackend"));
+    aServiceNameList[0] = rtl::OUString( "com.sun.star.configuration.backend.MacOSXBackend");
 
     return aServiceNameList;
 }

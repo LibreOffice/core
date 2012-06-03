@@ -48,7 +48,7 @@ namespace // private
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SimpleSystemMail"));
+        aRet[0] = OUString("com.sun.star.sys.shell.SimpleSystemMail");
         return aRet;
     }
 
@@ -83,7 +83,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 OUString SAL_CALL CSmplMailSuppl::getImplementationName()
     throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(COMP_IMPL_NAME));
+    return OUString(COMP_IMPL_NAME);
 }
 
 sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)

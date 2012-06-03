@@ -82,7 +82,7 @@ namespace // private
     Sequence< OUString > SAL_CALL ShellExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SystemShellExecute"));
+        aRet[0] = OUString("com.sun.star.sys.shell.SystemShellExecute");
         return aRet;
     }
 }
@@ -113,7 +113,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
         if (xCurrentContext.is())
         {
             Any aValue = xCurrentContext->getValueByName(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "system.desktop-environment" ) ) );
+                OUString( "system.desktop-environment"  ) );
 
             OUString aDesktopEnvironment;
             if (aValue >>= aDesktopEnvironment)
@@ -150,9 +150,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( aURL.isEmpty() && !aCommand.isEmpty() )
         {
             throw RuntimeException(
-                (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "Cannot translate URI reference to external format: "))
+                (OUString( "Cannot translate URI reference to external format: ")
                  + aCommand),
                 static_cast< cppu::OWeakObject * >(this));
         }
@@ -187,29 +185,25 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         com::sun::star::uno::Reference< com::sun::star::util::XMacroExpander >
             exp;
         if (!(m_xContext->getValueByName(
-                  rtl::OUString(
-                      RTL_CONSTASCII_USTRINGPARAM(
-                          "/singletons/com.sun.star.util.theMacroExpander")))
+                  rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"))
               >>= exp)
             || !exp.is())
         {
             throw SystemShellExecuteException(
                 rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "component context fails to supply singleton"
                         " com.sun.star.util.theMacroExpander of type"
-                        " com.sun.star.util.XMacroExpander")),
+                        " com.sun.star.util.XMacroExpander"),
                 static_cast< XSystemShellExecute * >(this), ENOENT);
         }
         OUString aProgramURL;
         try {
             aProgramURL = exp->expandMacros(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/")));
+                rtl::OUString( "$BRAND_BASE_DIR/program/"));
         } catch (com::sun::star::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not expand $BRAND_BASE_DIR path")),
+                OUString("Could not expand $BRAND_BASE_DIR path"),
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
@@ -217,7 +211,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
         {
             throw SystemShellExecuteException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")),
+                OUString("Cound not convert executable path"),
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
@@ -262,9 +256,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     {
         throw css::lang::IllegalArgumentException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "XSystemShellExecute.execute URIS_ONLY with non-absolute"
-                    " URI reference "))
+                    " URI reference ")
              + aCommand),
             static_cast< cppu::OWeakObject * >(this), 0);
     } else {
@@ -312,7 +305,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 OUString SAL_CALL ShellExec::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( SHELLEXEC_IMPL_NAME ));
+    return OUString(SHELLEXEC_IMPL_NAME );
 }
 
 // -------------------------------------------------

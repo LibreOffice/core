@@ -183,7 +183,7 @@ static rtl::OUString ImplGetLocale(int category)
 
     // Return "en-US" for C locales
     if( (locale == NULL) || ( locale[0] == 'C' && locale[1] == '\0' ) )
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
+        return rtl::OUString( "en-US"  );
 
 
     const char *cp;
@@ -284,7 +284,7 @@ void LocaleBackend::setPropertyValue(
 {
     throw css::lang::IllegalArgumentException(
         rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+            "setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -319,7 +319,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL LocaleBackend::getBackendName(void) {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.LocaleBackend")) ;
+    return rtl::OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
 }
 
 //------------------------------------------------------------------------------
@@ -335,7 +335,7 @@ rtl::OUString SAL_CALL LocaleBackend::getImplementationName(void)
 uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServiceNameList(1);
-    aServiceNameList[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.LocaleBackend")) ;
+    aServiceNameList[0] = rtl::OUString( "com.sun.star.configuration.backend.LocaleBackend") ;
     return aServiceNameList ;
 }
 

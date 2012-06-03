@@ -93,7 +93,7 @@ int SAL_CALL main(int, char*, char* )
     //-------------------------------------------------
 
     // Get global factory for uno services.
-    OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
+    OUString rdbName = OUString( RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.
@@ -112,7 +112,7 @@ int SAL_CALL main(int, char*, char* )
     try
     {
         Reference< XProxySettings > xProxySettings(
-            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemProxySettings")) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString("com.sun.star.system.SystemProxySettings") ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {
@@ -139,7 +139,7 @@ int SAL_CALL main(int, char*, char* )
         printf( "Test of SystemProxySettings successful\n" );
 
         xProxySettings = Reference< XProxySettings >(
-            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SOProxySettings")) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString("com.sun.star.system.SOProxySettings") ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {

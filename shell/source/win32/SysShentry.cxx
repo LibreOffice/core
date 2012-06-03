@@ -79,7 +79,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
     if ( 0 == rtl_str_compare( pImplName, SYSSHEXEC_IMPL_NAME ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_SERVICE_NAME ));
+        aSNS.getArray( )[0] = OUString(SYSSHEXEC_SERVICE_NAME );
 
         Reference< XSingleComponentFactory > xFactory ( createSingleComponentFactory(
             createInstance,

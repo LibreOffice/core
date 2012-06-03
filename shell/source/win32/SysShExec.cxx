@@ -85,7 +85,7 @@ namespace // private
     Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SystemShellExecute"));
+        aRet[0] = OUString("com.sun.star.sys.shell.SystemShellExecute");
         return aRet;
     }
 
@@ -202,8 +202,8 @@ namespace // private
     // trying to identify a jump mark
     //-----------------------------------------
 
-    const OUString    JUMP_MARK_HTM(RTL_CONSTASCII_USTRINGPARAM(".htm#"));
-    const OUString    JUMP_MARK_HTML(RTL_CONSTASCII_USTRINGPARAM(".html#"));
+    const OUString    JUMP_MARK_HTM(".htm#");
+    const OUString    JUMP_MARK_HTML(".html#");
     const sal_Unicode HASH_MARK      = (sal_Unicode)'#';
 
     bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = NULL)
@@ -284,13 +284,13 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     // parameter checking
     if (0 == aCommand.getLength())
         throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command")),
+            OUString("Empty command"),
             static_cast< XSystemShellExecute* >( this ),
             1 );
 
     if ((nFlags & ~(NO_SYSTEM_ERROR_MESSAGE | URIS_ONLY)) != 0)
         throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid Flags specified")),
+            OUString("Invalid Flags specified"),
             static_cast< XSystemShellExecute* >( this ),
             3 );
 
@@ -302,9 +302,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         {
             throw css::lang::IllegalArgumentException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "XSystemShellExecute.execute URIS_ONLY with"
-                        " non-absolute URI reference "))
+                        " non-absolute URI reference ")
                  + aCommand),
                 static_cast< cppu::OWeakObject * >(this), 0);
         }
@@ -356,7 +355,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             psxErr = MapError(psxErr);
 
         throw SystemShellExecuteException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Error executing command")),
+            OUString("Error executing command"),
             static_cast< XSystemShellExecute* >(this),
             psxErr);
     }
@@ -369,7 +368,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 OUString SAL_CALL CSysShExec::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_IMPL_NAME ));
+    return OUString(SYSSHEXEC_IMPL_NAME );
 }
 
 // -------------------------------------------------
