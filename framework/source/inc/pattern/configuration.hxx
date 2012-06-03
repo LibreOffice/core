@@ -141,13 +141,13 @@ class ConfigurationHelper
                 css::uno::Sequence< css::uno::Any > lParams(c);
                 css::beans::PropertyValue           aParam;
 
-                aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+                aParam.Name    = ::rtl::OUString("nodepath");
                 aParam.Value <<= sPath.makeStringAndClear();
                 lParams[0]   <<= aParam;
 
                 if (bAllLocales)
                 {
-                    aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    aParam.Name    = ::rtl::OUString("*");
                     aParam.Value <<= sal_True;
                     lParams[1]   <<= aParam;
                 }
