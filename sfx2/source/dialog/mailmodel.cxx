@@ -166,7 +166,7 @@ sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XMode
         css::uno::Reference< css::beans::XPropertySet > xPropSet( xModel, css::uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
-            Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasValidSignatures" )));
+            Any a = xPropSet->getPropertyValue( rtl::OUString( "HasValidSignatures" ));
             sal_Bool bReturn = sal_Bool();
             if ( a >>= bReturn )
                 return bReturn;
@@ -200,7 +200,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xFilterCFG =
                 uno::Reference< container::XNameAccess >(
                     xSMGR->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ), uno::UNO_QUERY );
+                        ::rtl::OUString("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
         css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
 
         if ( !xFilterCFG.is() )
@@ -237,11 +237,11 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 String aOkSendText( SfxResId( STR_PDF_EXPORT_SEND ));
 
                                 uno::Sequence< beans::PropertyValue > aFilterDataValue(1);
-                                aFilterDataValue[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_OkButtonString" ));
+                                aFilterDataValue[0].Name = ::rtl::OUString( "_OkButtonString" );
                                 aFilterDataValue[0].Value = css::uno::makeAny( ::rtl::OUString( aOkSendText ));
 
                                 //add to the filterdata property, the only one the PDF export filter dialog will care for
-                                aPropsForDialog[0].Name =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ));
+                                aPropsForDialog[0].Name =  ::rtl::OUString( "FilterData" );
                                 aPropsForDialog[0].Value = css::uno::makeAny( aFilterDataValue );
 
                                 //when executing the dialog will merge the persistent FilterData properties
@@ -325,7 +325,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     if (!xSMGR.is())
         return eRet;
 
-    const rtl::OUString aModuleManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ));
+    const rtl::OUString aModuleManager( "com.sun.star.frame.ModuleManager" );
     css::uno::Reference< css::frame::XModuleManager > xModuleManager( xSMGR->createInstance( aModuleManager ), css::uno::UNO_QUERY_THROW );
     if ( !xModuleManager.is() )
         return eRet;
@@ -386,16 +386,16 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
                 xSMGR->createInstance( rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ))),
+                    "com.sun.star.document.FilterFactory" )),
                     css::uno::UNO_QUERY );
 
             if ( bStoreTo )
             {
                 // Retrieve filter from type
                 css::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
-                aQuery[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
+                aQuery[0].Name  = rtl::OUString( "Type" );
                 aQuery[0].Value = css::uno::makeAny( aTypeName );
-                aQuery[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ));
+                aQuery[1].Name  = rtl::OUString( "DocumentService" );
                 aQuery[1].Value = css::uno::makeAny( aModule );
                 if( bSendAsPDF )
                 {
@@ -404,7 +404,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // exact flag value as detailed in the filter configuration to get it
                     // this seems to be a bug
                     // without flags we get an import filter here, which is also unwanted
-                    aQuery[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Flags" ));
+                    aQuery[2].Name  = rtl::OUString( "Flags" );
                     aQuery[2].Value = css::uno::makeAny( sal_Int32(0x80042) ); // EXPORT ALIEN 3RDPARTY
                 }
 
@@ -415,7 +415,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
                     aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
+                                                ::rtl::OUString("Name"),
                                                 ::rtl::OUString() );
                 }
 
@@ -424,7 +424,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // Retrieve filter from media descriptor
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     rtl::OUString aOrgFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" )),
+                                    ::rtl::OUString( "FilterName" ),
                                     ::rtl::OUString() );
                     if ( aOrgFilterName == aFilterName )
                     {
@@ -442,7 +442,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // Retrieve filter from media descriptor
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     aFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" )),
+                                    ::rtl::OUString( "FilterName" ),
                                     ::rtl::OUString() );
                 }
 
@@ -454,7 +454,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         ::comphelper::SequenceAsHashMap aFilterPropsHM( xNameAccess->getByName( aModule ) );
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDefaultFilter")),
+                                                    ::rtl::OUString("ooSetupFactoryDefaultFilter"),
                                                     ::rtl::OUString() );
                         css::uno::Reference< css::container::XNameAccess > xNameAccess2(
                             xContainerQuery, css::uno::UNO_QUERY );
@@ -462,7 +462,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         {
                             ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess2->getByName( aFilterName ) );
                             aTypeName = aFilterPropsHM2.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")),
+                                                        ::rtl::OUString("Type"),
                                                         ::rtl::OUString() );
                         }
                     }
@@ -491,7 +491,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             {
                 css::uno::Reference< container::XNameAccess > xTypeDetection(
                     xSMGR->createInstance( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),
+                        "com.sun.star.document.TypeDetection" )),
                     css::uno::UNO_QUERY );
 
 
@@ -501,7 +501,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         ::comphelper::SequenceAsHashMap aTypeNamePropsHM( xTypeDetection->getByName( aTypeName ) );
                         uno::Sequence< ::rtl::OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extensions")),
+                                                        ::rtl::OUString("Extensions"),
                                                         ::uno::Sequence< ::rtl::OUString >() );
                         if ( aExtensions.getLength() )
                             aExtension = aExtensions[0];
@@ -519,7 +519,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 if ( !bHasLocation )
                 {
                     // Create a noname file name with the correct extension
-                    const rtl::OUString aNoNameFileName( RTL_CONSTASCII_USTRINGPARAM( "noname" ));
+                    const rtl::OUString aNoNameFileName( "noname" );
                     aFileName = aNoNameFileName;
                 }
                 else
@@ -550,9 +550,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             rtl::OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::NO_DECODE );
 
             sal_Int32 nNumArgs(0);
-            const rtl::OUString aPasswordPropName( RTL_CONSTASCII_USTRINGPARAM( "Password" ));
+            const rtl::OUString aPasswordPropName( "Password" );
             css::uno::Sequence< css::beans::PropertyValue > aArgs( ++nNumArgs );
-            aArgs[nNumArgs-1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+            aArgs[nNumArgs-1].Name  = rtl::OUString( "FilterName" );
             aArgs[nNumArgs-1].Value = css::uno::makeAny( aFilterName );
 
             ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
@@ -571,7 +571,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
             css::uno::Reference< css::util::XURLTransformer > xURLTransformer(
-                        xSMGR->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                        xSMGR->createInstance( rtl::OUString( "com.sun.star.util.URLTransformer" )),
                         css::uno::UNO_QUERY );
             if( !bSendAsPDF )
             {
@@ -581,7 +581,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                     if ( xURLTransformer.is() )
                     {
-                        aPrepareURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrepareMailExport" ));
+                        aPrepareURL.Complete = rtl::OUString( ".uno:PrepareMailExport" );
                         xURLTransformer->parseStrict( aPrepareURL );
                     }
 
@@ -653,7 +653,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         // #i30432# notify that export is finished - the Writer may want to restore removed content
                         if ( xURLTransformer.is() )
                         {
-                            aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MailExportFinished" ));
+                            aURL.Complete = rtl::OUString( ".uno:MailExportFinished" );
                             xURLTransformer->parseStrict( aURL );
                         }
 
@@ -701,7 +701,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             {
                 // We need 1:1 copy of the document to preserve an added signature.
                 aArgs.realloc( ++nNumArgs );
-                aArgs[nNumArgs-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyStreamIfPossible" ) );
+                aArgs[nNumArgs-1].Name = ::rtl::OUString( "CopyStreamIfPossible"  );
                 aArgs[nNumArgs-1].Value = css::uno::makeAny( (sal_Bool)sal_True );
 
                 try
@@ -807,13 +807,13 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
             // Prefer the SimpleSystemMail service if available
             xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
-                xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
+                xMgr->createInstance( OUString( "com.sun.star.system.SimpleSystemMail" )),
                 UNO_QUERY );
 
             if ( ! xSimpleMailClientSupplier.is() )
             {
                 xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
-                    xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleCommandMail" ))),
+                    xMgr->createInstance( OUString( "com.sun.star.system.SimpleCommandMail" )),
                     UNO_QUERY );
             }
 
@@ -895,7 +895,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                         OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
                         OUString subject( baseName );
                         if ( maAttachedDocuments.size() > 1 )
-                            subject += OUString(RTL_CONSTASCII_USTRINGPARAM(", ..."));
+                            subject += OUString(", ...");
                         xSimpleMailMessage->setSubject( subject );
                     }
                     xSimpleMailMessage->setAttachement( aAttachmentSeq );

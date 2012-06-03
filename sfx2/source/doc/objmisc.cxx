@@ -262,7 +262,7 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
 void SfxObjectShell::ResetError()
 {
     if( pImp->lErr != ERRCODE_NONE )
-        AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Resetting Error." ) ) );
+        AddLog( ::rtl::OUString( OSL_LOG_PREFIX "Resetting Error."  ) );
 
     pImp->lErr=0;
     SfxMedium * pMed = GetMedium();
@@ -1134,9 +1134,9 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
     try
     {
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aVersion;
-        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasEncryptedEntries" ) ) ) >>= bIsEncrypted;
-        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasNonEncryptedEntries" ) ) ) >>= bHasNonEncrypted;
+        xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
+        xPropSet->getPropertyValue( ::rtl::OUString( "HasEncryptedEntries"  ) ) >>= bIsEncrypted;
+        xPropSet->getPropertyValue( ::rtl::OUString( "HasNonEncryptedEntries"  ) ) >>= bHasNonEncrypted;
     }
     catch( uno::Exception& )
     {
@@ -1381,7 +1381,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
             ForgetMedium();
             if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( OSL_LOG_PREFIX  ) );
             else
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
@@ -1588,7 +1588,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             {
                 Sequence< uno::Any > aArgs( 1 );
                 aArgs[ 0 ] = *pCaller;
-                xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Caller")), uno::makeAny( aArgs ) );
+                xProps->setPropertyValue( rtl::OUString("Caller"), uno::makeAny( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
@@ -2002,7 +2002,7 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
         try
         {
             uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aVersion;
+            xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
         }
         catch( uno::Exception& )
         {
@@ -2010,7 +2010,7 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[0] <<= aVersion;
 
-        uno::Reference< security::XDocumentDigitalSignatures > xSigner( comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY_THROW );
+        uno::Reference< security::XDocumentDigitalSignatures > xSigner( comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures"  ), aArgs ), uno::UNO_QUERY_THROW );
 
         if ( nScriptingSignatureState == SIGNATURESTATE_UNKNOWN
           || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
@@ -2120,24 +2120,24 @@ void SfxObjectShell::StoreLog()
     if ( pImp->m_xLogRing.is() )
     {
 #ifdef WNT
-        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+        ::rtl::OUString aFileURL = ::rtl::OUString( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"  );
 #else
-        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}" ) );
+        ::rtl::OUString aFileURL = ::rtl::OUString( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}"  );
 #endif
 
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
 #ifdef WNT
-        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+        ::rtl::OUString aBuildID = ::rtl::OUString( "${$BRAND_BASE_DIR/program/setup.ini:buildid}"  );
 #else
-        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setuprc:buildid}" ) );
+        ::rtl::OUString aBuildID = ::rtl::OUString( "${$BRAND_BASE_DIR/program/setuprc:buildid}"  );
 #endif
 
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
         if ( !aFileURL.isEmpty() )
         {
-            aFileURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/temp/document_io_logring.txt" ) );
+            aFileURL += ::rtl::OUString( "/user/temp/document_io_logring.txt"  );
             try
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );

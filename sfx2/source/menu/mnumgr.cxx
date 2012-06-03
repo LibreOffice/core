@@ -152,7 +152,7 @@ static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
 
     Graphic aGraphic;
-    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    const String aFilterName( IMP_PNG  );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -208,7 +208,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
                 String aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
-                ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusFromContext?WordReplace:string=") );
+                ::rtl::OUString aCmd(".uno:ThesaurusFromContext?WordReplace:string=" );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
@@ -224,7 +224,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         pThesSubMenu->InsertSeparator();
         const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusDialog")) );
+        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(".uno:ThesaurusDialog") );
 
         pSVMenu->InsertSeparator();
         const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );

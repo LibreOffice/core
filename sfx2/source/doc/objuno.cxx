@@ -391,13 +391,13 @@ void SfxDocumentInfoObject_Impl::Reset(uno::Reference<document::XDocumentPropert
                     : sName + ::rtl::OUString::valueOf(i+1);
                 while (std::find(names.begin(), names.end(), name)
                        != names.end()) {
-                    name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+                    name += ::rtl::OUString("'");
                 }
                 // FIXME there is a race condition here
                 try {
                     xPropContainer->addProperty(name,
                         beans::PropertyAttribute::REMOVEABLE,
-                        uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))));
+                        uno::makeAny(::rtl::OUString("")));
                 } catch (const uno::RuntimeException&) {
                     throw;
                 } catch (const uno::Exception&) {
@@ -440,14 +440,14 @@ SfxDocumentInfoObject::initialize(const uno::Sequence< uno::Any > & aArguments)
         uno::Any any = aArguments[0];
         uno::Reference<document::XDocumentProperties> xDoc;
         if (!(any >>= xDoc) || !xDoc.is()) throw lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SfxDocumentInfoObject::initialize: no XDocumentProperties given")),
+            ::rtl::OUString(
+                "SfxDocumentInfoObject::initialize: no XDocumentProperties given"),
                 *this, 0);
         _pImp->Reset(xDoc);
     } else {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SfxDocumentInfoObject::initialize: no argument given")),
+            ::rtl::OUString(
+                "SfxDocumentInfoObject::initialize: no argument given"),
                 *this, 0);
     }
 }
@@ -866,7 +866,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                     _pImp->m_xDocProps->setAutoloadSecs(60); // default
                 } else if ( !bBoolVal && (0 != _pImp->m_xDocProps->getAutoloadSecs()) ) {
                     _pImp->m_xDocProps->setAutoloadSecs(0);
-                    _pImp->m_xDocProps->setAutoloadURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+                    _pImp->m_xDocProps->setAutoloadURL(::rtl::OUString(""));
                 }
                 break;
             default:
@@ -1116,7 +1116,7 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
                 try {
                     xPropContainer->addProperty(aName,
                         beans::PropertyAttribute::REMOVEABLE,
-                        uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))));
+                        uno::makeAny(::rtl::OUString("")));
                     _pImp->m_UserDefined[nIndex] = aName;
                 } catch (const beans::PropertyExistException&) {
                     _pImp->m_UserDefined[nIndex] = aName;
@@ -1192,8 +1192,8 @@ SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::s
     , _xFactory( xFactory )
 {
     uno::Reference< lang::XInitialization > xDocProps(
-        _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.document.DocumentProperties"))), uno::UNO_QUERY_THROW);
+        _xFactory->createInstance( ::rtl::OUString(
+            "com.sun.star.document.DocumentProperties")), uno::UNO_QUERY_THROW);
     uno::Any a;
     a <<= xDocProps;
     uno::Sequence<uno::Any> args(1);
@@ -1271,8 +1271,8 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 
     ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
     uno::Reference< document::XDocumentProperties > xDocProps(
-        _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.document.DocumentProperties"))), uno::UNO_QUERY_THROW);
+        _xFactory->createInstance( ::rtl::OUString(
+            "com.sun.star.document.DocumentProperties")), uno::UNO_QUERY_THROW);
     _pImp->Reset(xDocProps);
     aGuard.clear();
 
@@ -1282,9 +1282,9 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
         try
         {
             uno::Sequence<beans::PropertyValue> medium(2);
-            medium[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentBaseURL"));
+            medium[0].Name = ::rtl::OUString("DocumentBaseURL");
             medium[0].Value <<= aURL;
-            medium[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+            medium[1].Name = ::rtl::OUString("URL");
             medium[1].Value <<= aURL;
             _pImp->m_xDocProps->loadFromStorage(xStorage, medium);
             _pImp->Reset(_pImp->m_xDocProps);
@@ -1297,7 +1297,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     else
     {
         uno::Reference < document::XStandaloneDocumentInfo > xBinary( _xFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStandaloneDocumentInfo" ) ) ), uno::UNO_QUERY );
+            ::rtl::OUString("com.sun.star.document.BinaryStandaloneDocumentInfo"  ) ), uno::UNO_QUERY );
         if ( xBinary.is() )
         {
             xBinary->loadFromURL( aURL );
@@ -1322,9 +1322,9 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
         try
         {
             uno::Sequence<beans::PropertyValue> medium(2);
-            medium[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentBaseURL"));
+            medium[0].Name = ::rtl::OUString("DocumentBaseURL");
             medium[0].Value <<= aURL;
-            medium[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+            medium[1].Name = ::rtl::OUString("URL");
             medium[1].Value <<= aURL;
 
             _pImp->m_xDocProps->storeToStorage(xStorage, medium);
@@ -1345,7 +1345,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
     else
     {
         uno::Reference < document::XStandaloneDocumentInfo > xBinary( _xFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStandaloneDocumentInfo" ) ) ), uno::UNO_QUERY );
+            ::rtl::OUString("com.sun.star.document.BinaryStandaloneDocumentInfo"  ) ), uno::UNO_QUERY );
         if ( xBinary.is() )
         {
             Copy( this, xBinary );

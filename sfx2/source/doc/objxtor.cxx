@@ -144,7 +144,7 @@ static VBAConstantNameMap s_aRegisteredVBAConstants;
     if( xProps.is() ) try
     {
         ::rtl::OUString aConstName;
-        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobalConstantName" ) ) ) >>= aConstName;
+        xProps->getPropertyValue( ::rtl::OUString( "VBAGlobalConstantName"  ) ) >>= aConstName;
         return ::rtl::OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
     }
     catch (const uno::Exception&) // not supported
@@ -1021,46 +1021,46 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
 
     if ( aFact.EqualsAscii("swriter") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.text.TextDocument");
     }
     else if ( aFact.EqualsAscii("sweb") || aFact.EqualsAscii("swriter/web") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.text.WebDocument");
     }
     else if ( aFact.EqualsAscii("sglobal") || aFact.EqualsAscii("swriter/globaldocument") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.text.GlobalDocument");
     }
     else if ( aFact.EqualsAscii("scalc") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.sheet.SpreadsheetDocument");
     }
     else if ( aFact.EqualsAscii("sdraw") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.drawing.DrawingDocument");
     }
     else if ( aFact.EqualsAscii("simpress") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.presentation.PresentationDocument");
     }
     else if ( aFact.EqualsAscii("schart") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.chart.ChartDocument");
     }
     else if ( aFact.EqualsAscii("smath") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"));
+        aServiceName = ::rtl::OUString("com.sun.star.formula.FormulaProperties");
     }
 #ifndef DISABLE_SCRIPTING
     else if ( aFact.EqualsAscii("sbasic") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.BasicIDE"));
+        aServiceName = ::rtl::OUString("com.sun.star.script.BasicIDE");
     }
 #endif
 #ifndef DISABLE_DBCONNECTIVITY
     else if ( aFact.EqualsAscii("sdatabase") )
     {
-        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
+        aServiceName = ::rtl::OUString("com.sun.star.sdb.OfficeDatabaseDocument");
     }
 #endif
 
@@ -1103,7 +1103,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
     SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
     ::rtl::OUString aURL;
-    ::rtl::OUString aTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+    ::rtl::OUString aTarget("_blank");
     if ( pFileNameItem )
         aURL = pFileNameItem->GetValue();
     if ( pTargetItem )
@@ -1116,7 +1116,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     }
     else
         xLoader = uno::Reference < frame::XComponentLoader >( comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY );
+            ::rtl::OUString("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
 
     Reference <lang::XComponent> xComp;
     try

@@ -388,7 +388,7 @@ void ContentListBox_Impl::RequestingChildren( SvLBoxEntry* pParent )
                     else
                     {
                         pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
-                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String(RTL_CONSTASCII_USTRINGPARAM("TargetURL" ) ) ) );
+                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String("TargetURL"  ) ) );
                         rtl::OUString aTargetURL;
                         if ( aAny >>=  aTargetURL )
                             pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
@@ -3058,7 +3058,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 
     ::rtl::OUString sHelpURL;
 
-    bool bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
+    bool bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString("vnd.sun.star.help"),0);
 
     if (bComplete)
         sHelpURL = ::rtl::OUString(aEntry);
