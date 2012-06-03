@@ -471,7 +471,6 @@ void ThumbnailView::Format()
                 mpNoneItem = new ThumbnailViewItem( *this );
 
             mpNoneItem->mnId            = 0;
-            mpNoneItem->meType          = THUMBNAILITEM_NONE;
             mpNoneItem->mbVisible       = true;
             maNoneItemRect.Left()       = x;
             maNoneItemRect.Top()        = y;
@@ -1465,7 +1464,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t 
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = THUMBNAILITEM_IMAGE;
     pItem->maImage  = rImage;
     ImplInsertItem( pItem, nPos );
 }
@@ -1474,7 +1472,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t 
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = THUMBNAILITEM_COLOR;
     pItem->maColor  = rColor;
     ImplInsertItem( pItem, nPos );
 }
@@ -1484,7 +1481,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = THUMBNAILITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
     ImplInsertItem( pItem, nPos );
@@ -1495,7 +1491,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Color& rColor,
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = THUMBNAILITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
     ImplInsertItem( pItem, nPos );
@@ -1505,7 +1500,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = THUMBNAILITEM_USERDRAW;
     ImplInsertItem( pItem, nPos );
 }
 
@@ -1816,7 +1810,6 @@ void ThumbnailView::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         return;
 
     ThumbnailViewItem* pItem = mItemList[nPos];
-    pItem->meType  = THUMBNAILITEM_IMAGE;
     pItem->maImage = rImage;
 
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
@@ -1847,7 +1840,6 @@ void ThumbnailView::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
         return;
 
     ThumbnailViewItem* pItem = mItemList[nPos];
-    pItem->meType  = THUMBNAILITEM_COLOR;
     pItem->maColor = rColor;
 
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
@@ -1880,17 +1872,14 @@ void ThumbnailView::SetItemData( sal_uInt16 nItemId, void* pData )
     ThumbnailViewItem* pItem = mItemList[nPos];
     pItem->mpData = pData;
 
-    if ( pItem->meType == THUMBNAILITEM_USERDRAW )
+    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
-        if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-        {
-            const Rectangle aRect = ImplGetItemRect(nPos);
-            DrawItem( pItem, aRect );
-            Invalidate( aRect );
-        }
-        else
-            mbFormat = true;
+        const Rectangle aRect = ImplGetItemRect(nPos);
+        DrawItem( pItem, aRect );
+        Invalidate( aRect );
     }
+    else
+        mbFormat = true;
 }
 
 void* ThumbnailView::GetItemData( sal_uInt16 nItemId ) const

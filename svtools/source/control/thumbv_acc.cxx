@@ -1021,7 +1021,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
     sal_uInt32 nColor;
-    if (mpParent && mpParent->meType == THUMBNAILITEM_COLOR)
+    if (mpParent->maColor.GetTransparency() == 0)
         nColor = mpParent->maColor.GetColor();
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();

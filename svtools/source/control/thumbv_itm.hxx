@@ -37,21 +37,12 @@
 
 #define THUMBNAILVIEW_ITEM_NONEITEM      0xFFFE
 
-enum ThumbnailViewItemType
-{
-    THUMBNAILITEM_NONE,
-    THUMBNAILITEM_IMAGE,
-    THUMBNAILITEM_COLOR,
-    THUMBNAILITEM_USERDRAW
-};
-
 class ThumbnailView;
 
 struct ThumbnailViewItem
 {
     ThumbnailView &mrParent;
     sal_uInt16 mnId;
-    sal_uInt8 meType;
     bool mbVisible;
     Image maImage;
     Color maColor;

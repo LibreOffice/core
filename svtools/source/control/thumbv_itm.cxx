@@ -36,7 +36,6 @@ using namespace ::com::sun::star;
 ThumbnailViewItem::ThumbnailViewItem( ThumbnailView& rParent )
     : mrParent(rParent)
     , mnId(0)
-    , meType(THUMBNAILITEM_NONE)
     , mbVisible(true)
     , mpData(NULL)
     , mpxAcc(NULL)
