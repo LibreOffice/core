@@ -2571,12 +2571,12 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
                     ::comphelper::getProcessServiceFactory()->
-                    createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
+                    createInstance( ::rtl::OUString(
+                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xUICommands;
         if ( xNameAccess.is() )
         {
-            rtl::OUString sTextDoc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
+            rtl::OUString sTextDoc("com.sun.star.text.TextDocument");
             if(xNameAccess->hasByName(sTextDoc))
             {
                 uno::Any a = xNameAccess->getByName( sTextDoc );
@@ -2588,18 +2588,18 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         try
         {
             uno::Sequence< beans::PropertyValue > aPropSeq;
-            uno::Any aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleNewByExample")));
+            uno::Any aCommand = xUICommands->getByName(::rtl::OUString(".uno:StyleNewByExample"));
             ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleUpdateByExample")));
+            aCommand = xUICommands->getByName(::rtl::OUString(".uno:StyleUpdateByExample"));
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LoadStyles")));
+            aCommand = xUICommands->getByName(::rtl::OUString(".uno:LoadStyles"));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
             pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");

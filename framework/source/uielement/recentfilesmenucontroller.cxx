@@ -175,7 +175,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     else
                     {
                         menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = rtl::OUString( menuShortCut );
+                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(menuShortCut) );
                     }
                 }
                 else

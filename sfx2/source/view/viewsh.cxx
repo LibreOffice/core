@@ -245,7 +245,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         {
             xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
                 xSMGR->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+                    ::rtl::OUString( "com.sun.star.frame.ModuleManager" )),
                     css::uno::UNO_QUERY_THROW );
             s_xModuleManager = xModuleManager;
         }
@@ -256,7 +256,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         {
             xNameAccess = css::uno::Reference< css::container::XNameAccess >(
                 xSMGR->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ))),
+                    ::rtl::OUString( "com.sun.star.frame.UICommandDescription" )),
                     css::uno::UNO_QUERY_THROW );
             s_xNameAccess = xNameAccess;
         }
@@ -326,9 +326,9 @@ static ::rtl::OUString impl_retrieveFilterNameFromTypeAndModule(
 {
     // Retrieve filter from type
     css::uno::Sequence< css::beans::NamedValue > aQuery( 2 );
-    aQuery[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
+    aQuery[0].Name  = rtl::OUString( "Type" );
     aQuery[0].Value = css::uno::makeAny( rType );
-    aQuery[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ));
+    aQuery[1].Name  = rtl::OUString( "DocumentService" );
     aQuery[1].Value = css::uno::makeAny( rModuleIdentifier );
 
     css::uno::Reference< css::container::XEnumeration > xEnumeration =
@@ -339,11 +339,11 @@ static ::rtl::OUString impl_retrieveFilterNameFromTypeAndModule(
     {
         ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
         ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
+            ::rtl::OUString("Name"),
             ::rtl::OUString() );
 
         sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),
+            ::rtl::OUString("Flags"),
             sal_Int32( 0 ) );
 
         if ( nFilterFlags & nFlags )
@@ -369,7 +369,7 @@ enum ETypeFamily
 ::rtl::OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
                                                   ETypeFamily                                eTypeFamily)
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER("com.sun.star.frame.ModuleManager");
 
     try
     {
@@ -384,32 +384,32 @@ enum ETypeFamily
             case E_MS_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_MS_Word_97" ));
+                    sType = ::rtl::OUString( "writer_MS_Word_97" );
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_MS_Excel_97" ));
+                    sType = ::rtl::OUString( "calc_MS_Excel_97" );
                 else
                 if ( sModule == "com.sun.star.drawing.DrawingDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
+                    sType = ::rtl::OUString( "impress_MS_PowerPoint_97" );
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
+                    sType = ::rtl::OUString( "impress_MS_PowerPoint_97" );
             }
             break;
 
             case E_OOO_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer8" ));
+                    sType = ::rtl::OUString( "writer8" );
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc8" ));
+                    sType = ::rtl::OUString( "calc8" );
                 else
                 if ( sModule == "com.sun.star.drawing.DrawingDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw8" ));
+                    sType = ::rtl::OUString( "draw8" );
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress8" ));
+                    sType = ::rtl::OUString( "impress8" );
             }
             break;
         }
@@ -481,20 +481,20 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {
-                        rtl::OUString aTextResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/textobjectbar" ));
+                        rtl::OUString aTextResString( "private:resource/toolbar/textobjectbar" );
                         uno::Reference< ui::XUIElement > xElement = xLayoutManager->getElement( aTextResString );
                         if(!xElement.is())
                         {
-                            rtl::OUString aFrameResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/frameobjectbar" ));
+                            rtl::OUString aFrameResString( "private:resource/toolbar/frameobjectbar" );
                             xElement = xLayoutManager->getElement( aFrameResString );
                         }
                         if(!xElement.is())
                         {
-                            rtl::OUString aOleResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/oleobjectbar" ));
+                            rtl::OUString aOleResString( "private:resource/toolbar/oleobjectbar" );
                             xElement = xLayoutManager->getElement( aOleResString );
                         }
                         if(xElement.is())
@@ -575,7 +575,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
                 else
                 if ( nId == SID_MAIL_SENDDOCASPDF )
-                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" )));
+                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString( "pdf_Portable_Document_Format" ));
                 else
                 if ( nId == SID_MAIL_SENDDOCASMS )
                 {
@@ -615,7 +615,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 
-            const rtl::OUString aModuleManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ));
+            const rtl::OUString aModuleManager( "com.sun.star.frame.ModuleManager" );
             css::uno::Reference< css::frame::XModuleManager > xModuleManager( xSMGR->createInstance( aModuleManager ), css::uno::UNO_QUERY_THROW );
             if ( !xModuleManager.is() )
             {
@@ -648,9 +648,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( xModel.is() && xStorable.is() )
             {
                 rtl::OUString aFilterName;
-                rtl::OUString aTypeName( RTL_CONSTASCII_USTRINGPARAM( HTML_DOCUMENT_TYPE ));
+                rtl::OUString aTypeName( HTML_DOCUMENT_TYPE );
                 rtl::OUString aFileName;
-                rtl::OUString aExtension( RTL_CONSTASCII_USTRINGPARAM( "htm" ));
+                rtl::OUString aExtension( "htm" );
 
                 rtl::OUString aLocation = xStorable->getLocation();
                 INetURLObject aFileObj( aLocation );
@@ -660,7 +660,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
                     xSMGR->createInstance( rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ))),
+                        "com.sun.star.document.FilterFactory" )),
                         css::uno::UNO_QUERY_THROW );
 
                 // Retrieve filter from type
@@ -670,7 +670,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     // Draw/Impress uses a different type. 2nd chance try to use alternative type name
                     aFilterName = impl_retrieveFilterNameFromTypeAndModule(
-                        xContainerQuery, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( HTML_GRAPHIC_TYPE )), aModule, nFilterFlags );
+                        xContainerQuery, ::rtl::OUString( HTML_GRAPHIC_TYPE ), aModule, nFilterFlags );
                 }
 
                 // No filter found => error
@@ -685,7 +685,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 if ( !bHasLocation )
                 {
                     // Create a default file name with the correct extension
-                    const rtl::OUString aPreviewFileName( RTL_CONSTASCII_USTRINGPARAM( "webpreview" ));
+                    const rtl::OUString aPreviewFileName( "webpreview" );
                     aFileName = aPreviewFileName;
                 }
                 else
@@ -708,7 +708,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 rtl::OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+                aArgs[0].Name  = rtl::OUString( "FilterName" );
                 aArgs[0].Value = css::uno::makeAny( aFilterName );
 
                 // Store document in the html format
@@ -841,7 +841,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 
                             ::rtl::OUStringBuffer aBuffer( 60 );
                             aBuffer.append( RetrieveLabelFromCommand(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrintDefault" )),
+                                ::rtl::OUString( ".uno:PrintDefault" ),
                                 xFrame ));
                             aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
                             aBuffer.append( aPrinterName );

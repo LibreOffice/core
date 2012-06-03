@@ -141,10 +141,10 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
             setValue( rProps[nProp].Name, rProps[nProp].Value );
 
         Sequence< beans::PropertyValue > aRenderOptions( 3 );
-        aRenderOptions[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
-        aRenderOptions[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) );
+        aRenderOptions[0].Name = rtl::OUString( "ExtraPrintUIOptions"  );
+        aRenderOptions[1].Name = rtl::OUString( "View"  );
         aRenderOptions[1].Value = i_rViewProp;
-        aRenderOptions[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
+        aRenderOptions[2].Name = rtl::OUString( "IsPrinter"  );
         aRenderOptions[2].Value <<= sal_True;
         try
         {
@@ -169,10 +169,10 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
     }
 
     // set some job parameters
-    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ), makeAny( i_bApi ) );
-    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ), makeAny( i_bDirect ) );
-    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) ), makeAny( sal_True ) );
-    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) ), i_rViewProp );
+    setValue( rtl::OUString( "IsApi"  ), makeAny( i_bApi ) );
+    setValue( rtl::OUString( "IsDirect"  ), makeAny( i_bDirect ) );
+    setValue( rtl::OUString( "IsPrinter"  ), makeAny( sal_True ) );
+    setValue( rtl::OUString( "View"  ), i_rViewProp );
 }
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
@@ -195,7 +195,7 @@ SfxPrinterController::~SfxPrinterController()
 
 const Any& SfxPrinterController::getSelectionObject() const
 {
-    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) ) );
+    const beans::PropertyValue* pVal = getValue( rtl::OUString( "PrintSelectionOnly"  ) );
     if( pVal )
     {
         sal_Bool bSel = sal_False;
@@ -204,7 +204,7 @@ const Any& SfxPrinterController::getSelectionObject() const
     }
 
     sal_Int32 nChoice = 0;
-    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+    pVal = getValue( rtl::OUString( "PrintContent"  ) );
     if( pVal )
         pVal->Value >>= nChoice;
     return (nChoice > 1) ? maSelection : maCompleteSelection;
@@ -222,7 +222,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
     }
 
     Sequence< beans::PropertyValue > aRenderOptions( 1 );
-    aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+    aRenderOptions[ 0 ].Name = rtl::OUString( "RenderDevice"  );
     aRenderOptions[ 0 ].Value <<= mxDevice;
 
     aRenderOptions = getJobProperties( aRenderOptions );
@@ -633,15 +633,15 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     pImp->m_pPrinterController = pController;
 
     SfxObjectShell *pObjShell = GetObjectShell();
-    pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
+    pController->setValue( rtl::OUString( "JobName"  ),
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
 
     // FIXME: job setup
     SfxPrinter* pDocPrt = GetPrinter(sal_False);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     if( bIsDirect )
-        aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
-                            String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+        aJobSetup.SetValue( String( "IsQuickJob"  ),
+                            String( "true"  ) );
 
     Printer::PrintJob( pController, aJobSetup );
 }
@@ -718,19 +718,19 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
                 {
                     if ( aProps[nProp].Name == "Copies" )
-                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount"));
+                        aProps[nProp]. Name = rtl::OUString("CopyCount");
                     else if ( aProps[nProp].Name == "RangeText" )
-                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pages"));
+                        aProps[nProp]. Name = rtl::OUString("Pages");
                     if ( aProps[nProp].Name == "Asynchron" )
                     {
-                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
+                        aProps[nProp]. Name = rtl::OUString("Wait");
                         sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
                     if ( aProps[nProp].Name == "Silent" )
                     {
-                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MonitorVisible"));
+                        aProps[nProp]. Name = rtl::OUString("MonitorVisible");
                         sal_Bool bPrintSilent = sal_False;
                         aProps[nProp].Value >>= bPrintSilent;
                         aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
@@ -746,7 +746,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 sal_Int32 nLen = aProps.getLength();
                 aProps.realloc( nLen + 1 );
-                aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
+                aProps[nLen].Name = rtl::OUString( "PrintSelectionOnly"  );
                 aProps[nLen].Value = makeAny( bSelection );
             }
 

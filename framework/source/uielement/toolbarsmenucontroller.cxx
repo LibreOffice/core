@@ -748,7 +748,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     sal_Int32 nIndex = aCmd.indexOf( '=' );
                     if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
                     {
-                        rtl::OUStringBuffer aBuf( rtl::OUString( STATIC_PRIVATE_TB_RESOURCE ));
+                        rtl::OUStringBuffer aBuf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_PRIVATE_TB_RESOURCE )));
                         aBuf.append( aCmd.copy( nIndex+1 ));
 
                         sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));

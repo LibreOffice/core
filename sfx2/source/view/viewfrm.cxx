@@ -216,7 +216,7 @@ static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteracti
                 else
                 {
                     // the binary format
-                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
+                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( "com.sun.star.text.TextDocument"  ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
                 }
             }
             else
@@ -696,7 +696,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 if (!pInteractionItem)
                 {
-                    Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))), UNO_QUERY );
+                    Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
                     if (xHdl.is())
                         pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
                 }
@@ -1968,12 +1968,12 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     else
         aTransformLoadArgs.remove( "Hidden" );
 
-    ::rtl::OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "private:object" ) );
+    ::rtl::OUString sURL( "private:object"  );
     if ( sURL.isEmpty() )
         sURL = i_rDoc.GetFactory().GetFactoryURL();
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
-    xLoader->loadComponentFromURL( sURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0,
+    xLoader->loadComponentFromURL( sURL, ::rtl::OUString("_self"), 0,
         aTransformLoadArgs.getPropertyValues() );
 
     SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
@@ -2342,16 +2342,16 @@ void SfxViewFrame::ExecView_Impl
 */
 sal_Bool impl_maxOpenDocCountReached()
 {
-    static ::rtl::OUString SERVICE_DESKTOP(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
+    static ::rtl::OUString SERVICE_DESKTOP("com.sun.star.frame.Desktop");
 
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 xSMGR,
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/")),
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc")),
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxOpenDocuments")),
+                                ::rtl::OUString("org.openoffice.Office.Common/"),
+                                ::rtl::OUString("Misc"),
+                                ::rtl::OUString("MaxOpenDocuments"),
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -2643,7 +2643,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         String aLocation;
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
         Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.UriReferenceFactory")) ), UNO_QUERY );
+            ::rtl::OUString("com.sun.star.uri.UriReferenceFactory") ), UNO_QUERY );
         if ( xFactory.is() )
         {
             Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
@@ -2660,7 +2660,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
                     aMacroName = aName.getToken( 0, cTok, nIndex );
 
                 // get location
-                ::rtl::OUString aLocKey(RTL_CONSTASCII_USTRINGPARAM("location"));
+                ::rtl::OUString aLocKey("location");
                 if ( xUrl->hasParameter( aLocKey ) )
                     aLocation = xUrl->getParameter( aLocKey );
             }
@@ -2814,7 +2814,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_RECORDMACRO :
         {
             // try to find any active recorder on this frame
-            ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier"));
+            ::rtl::OUString sProperty("DispatchRecorderSupplier");
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
                     GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
@@ -2859,11 +2859,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                         com::sun::star::uno::UNO_QUERY);
 
                 xRecorder = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >(
-                        xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchRecorder"))),
+                        xFactory->createInstance(rtl::OUString("com.sun.star.frame.DispatchRecorder")),
                         com::sun::star::uno::UNO_QUERY);
 
                 xSupplier = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >(
-                        xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchRecorderSupplier"))),
+                        xFactory->createInstance(rtl::OUString("com.sun.star.frame.DispatchRecorderSupplier")),
                         com::sun::star::uno::UNO_QUERY);
 
                 xSupplier->setDispatchRecorder(xRecorder);
@@ -2890,7 +2890,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
                     aValue >>= xLayoutManager;
                 }
                 catch ( Exception& )
@@ -2900,7 +2900,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
             if ( xLayoutManager.is() )
             {
-                rtl::OUString aStatusbarResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
+                rtl::OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
                 // Evaluate parameter.
                 SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), sal_False);
                 sal_Bool bShow( sal_True );
@@ -2944,7 +2944,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     {
                         try
                         {
-                            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                            Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
                             aValue >>= xLayoutManager;
                         }
                         catch ( Exception& )
@@ -2961,7 +2961,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             try
                             {
                                 xLMPropSet->setPropertyValue(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HideCurrentUI" )),
+                                    ::rtl::OUString( "HideCurrentUI" ),
                                     makeAny( bNewFullScreenMode ));
                             }
                             catch ( ::com::sun::star::beans::UnknownPropertyException& )
@@ -3020,7 +3020,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier"));
+                    ::rtl::OUString sProperty("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
@@ -3045,7 +3045,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    ::rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier"));
+                    ::rtl::OUString sProperty("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
@@ -3064,13 +3064,13 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
                     com::sun::star::uno::Any aProp = xSet->getPropertyValue(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
+                        rtl::OUString( "LayoutManager" ) );
 
                     if ( !( aProp >>= xLayoutManager ))
                         rSet.Put( SfxBoolItem( nWhich, sal_False ));
                     else
                     {
-                        rtl::OUString aStatusbarResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
+                        rtl::OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
                         sal_Bool bShow = xLayoutManager->isElementVisible( aStatusbarResString );
                         rSet.Put( SfxBoolItem( nWhich, bShow ));
                     }
@@ -3149,20 +3149,20 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         else
         {
             ::com::sun::star::util::URL aTargetURL;
-            aTargetURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/DataSourceBrowser"));
-            Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+            aTargetURL.Complete = ::rtl::OUString(".component:DB/DataSourceBrowser");
+            Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
             xTrans->parseStrict( aTargetURL );
 
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < ::com::sun::star::frame::XDispatch > xDisp;
             if ( xProv.is() )
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")), 31 );
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString("_beamer"), 31 );
             if ( xDisp.is() )
             {
                 Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
                 ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-                pArg[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
+                pArg[0].Name = rtl::OUString("Referer");
+                pArg[0].Value <<= ::rtl::OUString("private:user");
                 xDisp->dispatch( aTargetURL, aArgs );
             }
         }

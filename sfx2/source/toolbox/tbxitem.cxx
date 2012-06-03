@@ -143,7 +143,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
 
     URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
     if ( !aTargetURL.Arguments.isEmpty() )
         return NULL;
@@ -438,7 +438,7 @@ void SfxToolBoxControl::Dispatch(
         ::com::sun::star::util::URL aTargetURL;
         aTargetURL.Complete = rCommand;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                                            rtl::OUString("com.sun.star.util.URLTransformer")),
                                           UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
@@ -708,7 +708,7 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             try
             {
-                xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))) >>= aSubToolBarResName;
+                xPropSet->getPropertyValue( ::rtl::OUString( "ResourceURL" )) >>= aSubToolBarResName;
             }
             catch ( com::sun::star::beans::UnknownPropertyException& )
             {
@@ -742,7 +742,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Reference< ::com::sun::star::beans::XPropertySet > xProp( xUIElement, UNO_QUERY );
             if ( xSubToolBar.is() && xProp.is() )
             {
-                rtl::OUString aPersistentString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
+                rtl::OUString aPersistentString( "Persistent" );
                 try
                 {
                     Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
@@ -758,7 +758,7 @@ throw (::com::sun::star::uno::RuntimeException)
                         xLayoutManager->setElementPos( aSubToolBarResName, aEvent.FloatingPosition );
                         xLayoutManager->showElement( aSubToolBarResName );
 
-                        xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" )), a );
+                        xProp->setPropertyValue( rtl::OUString( "Persistent" ), a );
                     }
                 }
                 catch ( ::com::sun::star::uno::RuntimeException& )
@@ -803,18 +803,17 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
         {
             xUIEementFactory = Reference< XUIElementFactory >(
                 xServiceManager->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ui.UIElementFactoryManager" ))),
+                    rtl::OUString( "com.sun.star.ui.UIElementFactoryManager" )),
                 UNO_QUERY );
             xWeakUIElementFactory = xUIEementFactory;
         }
 
         Sequence< PropertyValue > aPropSeq( 3 );
-        aPropSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aPropSeq[0].Name = rtl::OUString( "Frame" );
         aPropSeq[0].Value <<= xFrame;
-        aPropSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
+        aPropSeq[1].Name = rtl::OUString( "Persistent" );
         aPropSeq[1].Value <<= sal_False;
-        aPropSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMode" ));
+        aPropSeq[2].Name = rtl::OUString( "PopupMode" );
         aPropSeq[2].Value <<= sal_True;
 
         try
@@ -1604,7 +1603,7 @@ void SfxAppToolBoxControl_Impl::Select( sal_Bool bMod1 )
             aTargetURL.Complete = aLastURL;
             getURLTransformer()->parseStrict( aTargetURL );
 
-            ::rtl::OUString aTarget( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")));
+            ::rtl::OUString aTarget( ::rtl::OUString("_default"));
             if ( pMenu )
             {
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
@@ -1620,8 +1619,8 @@ void SfxAppToolBoxControl_Impl::Select( sal_Bool bMod1 )
             {
                 Sequence< PropertyValue > aArgs( 1 );
 
-                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-                aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )) );
+                aArgs[0].Name = ::rtl::OUString("Referer");
+                aArgs[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ) );
 
                 ExecuteInfo* pExecuteInfo = new ExecuteInfo;
                 pExecuteInfo->xDispatch     = xDispatch;
@@ -1652,7 +1651,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
     URL aTargetURL;
     aTargetURL.Complete = aURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                                            rtl::OUString("com.sun.star.util.URLTransformer")),
                                           UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
@@ -1664,7 +1663,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
             xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         else
         {
-            ::rtl::OUString aTargetFrame( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")) );
+            ::rtl::OUString aTargetFrame( ::rtl::OUString("_blank") );
             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                 (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 

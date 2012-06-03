@@ -46,15 +46,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL OPackageStructureCreator::impl_getStaticSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.PackageStructureCreator"));
-    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.PackageStructureCreator"));
+    aRet[0] = ::rtl::OUString("com.sun.star.embed.PackageStructureCreator");
+    aRet[1] = ::rtl::OUString("com.sun.star.comp.embed.PackageStructureCreator");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OPackageStructureCreator::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.PackageStructureCreator"));
+    return ::rtl::OUString("com.sun.star.comp.embed.PackageStructureCreator");
 }
 
 //-------------------------------------------------------------------------
