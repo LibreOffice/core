@@ -462,7 +462,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
             {
                 uno::Reference< graphic::XGraphicProvider > xGraphProvider(
                     xServiceManager->createInstance(
-                        ::rtl::OUString("com.sun.star.graphic.GraphicProvider") ),
+                        "com.sun.star.graphic.GraphicProvider") ,
                     uno::UNO_QUERY );
                 if ( xGraphProvider.is() )
                 {
@@ -470,16 +470,16 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
                     aURL += ::rtl::OUString::valueOf( nResID );
 
                     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                    aMediaProps[0].Name = ::rtl::OUString("URL");
+                    aMediaProps[0].Name = "URL";
                     aMediaProps[0].Value <<= aURL;
 
                     uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
                     if ( xGraphic.is() )
                     {
                         uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
-                        aStoreProps[0].Name = ::rtl::OUString("OutputStream");
+                        aStoreProps[0].Name = "OutputStream";
                         aStoreProps[0].Value <<= xStream;
-                        aStoreProps[1].Name = ::rtl::OUString("MimeType");
+                        aStoreProps[1].Name = "MimeType";
                         aStoreProps[1].Value <<= ::rtl::OUString("image/png");
 
                         xGraphProvider->storeGraphic( xGraphic, aStoreProps );
