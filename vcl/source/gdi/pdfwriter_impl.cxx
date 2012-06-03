@@ -71,7 +71,7 @@
 #include <textlayout.hxx>
 #include <salgdi.hxx>
 
-#include <icc/sRGB-IEC61966-2.1.hxx>
+#include <lcms2.h>
 
 #include <comphelper/processfactory.hxx>
 
@@ -6202,7 +6202,15 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     osl_getFilePos( m_aFile, &nBeginStreamPos );
     beginCompression();
     checkAndEnableStreamEncryption( nICCObject );
-    sal_Int32 nStreamSize = writeBuffer( nsRGB_ICC_profile, (sal_Int32) sizeof( nsRGB_ICC_profile ) );
+    cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
+    sal_uInt32 nBytesNeeded = 0;
+    cmsSaveProfileToMem(hProfile, NULL, &nBytesNeeded);
+    if (!nBytesNeeded)
+      return 0;
+    std::vector<unsigned char> xBuffer(nBytesNeeded);
+    cmsSaveProfileToMem(hProfile, &xBuffer[0], &nBytesNeeded);
+    cmsCloseProfile(hProfile);
+    sal_Int32 nStreamSize = writeBuffer( &xBuffer[0], (sal_Int32) xBuffer.size() );
     disableStreamEncryption();
     endCompression();
     sal_uInt64 nEndStreamPos = 0;

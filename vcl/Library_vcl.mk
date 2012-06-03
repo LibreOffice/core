@@ -93,6 +93,7 @@ endif
 $(eval $(call gb_Library_use_externals,vcl,\
 	icule \
 	icuuc \
+	lcms2 \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\

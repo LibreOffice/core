@@ -1,3 +1,0 @@
-mkdir: %_DEST%\inc\icc
-
-..\%__SRC%\bin\sRGB*.hxx %_DEST%\inc\icc\sRGB*.hxx

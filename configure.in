@@ -1133,11 +1133,6 @@ AC_ARG_WITH(system-nss,
         [Use NSS/nspr libraries already on system.]),,
     [with_system_nss="$with_system_libs"])
 
-AC_ARG_WITH(system-sampleicc,
-    AS_HELP_STRING([--with-system-sampleicc],
-        [Use SampleICC libraries already on system (used only during build).]),,
-    [with_system_sampleicc="$with_system_libs"])
-
 AC_ARG_WITH(mozilla-version,
     AS_HELP_STRING([--with-mozilla-version],
         [Choose which version of Mozilla to use while building Mozilla.
@@ -7944,26 +7939,6 @@ AC_SUBST(SYSTEM_GRAPHITE)
 AC_SUBST(GRAPHITE_LIBS)
 AC_SUBST(GRAPHITE_CFLAGS)
 AC_SUBST([MINGW_GRAPHITE2_DLL])
-
-dnl ===================================================================
-dnl SampleICC
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use system SampleICC])
-if test "$with_system_sampleicc" = "yes"; then
-    AC_MSG_RESULT([yes])
-    SYSTEM_SAMPLEICC=YES
-    PKG_CHECK_MODULES(SAMPLEICC, sampleicc)
-else
-    AC_MSG_RESULT([no])
-    SYSTEM_SAMPLEICC=NO
-fi
-AC_SUBST(SYSTEM_SAMPLEICC)
-AC_SUBST(SAMPLEICC_LIBS)
-AC_SUBST(SAMPLEICC_CFLAGS)
-
-if test $_os = Darwin -o $_os = iOS -o $_os = Android; then
-    enable_gtk=no
-fi
 
 dnl ===================================================================
 dnl Check for nsplugin
