@@ -33,9 +33,6 @@
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
-
 SecurityEngine::SecurityEngine( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF )
     :mxMSF( rxMSF ),
      m_nIdOfTemplateEC(-1),

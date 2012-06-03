@@ -40,9 +40,6 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.SignatureCreator"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureCreatorImpl"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
-
 SignatureCreatorImpl::SignatureCreatorImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF )
     :m_nIdOfBlocker(-1)
 {

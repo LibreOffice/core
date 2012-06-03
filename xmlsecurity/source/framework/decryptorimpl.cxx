@@ -40,9 +40,6 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.Decryptor"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.DecryptorImpl"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
-
 DecryptorImpl::DecryptorImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF)
 {
     mxMSF = rxMSF;

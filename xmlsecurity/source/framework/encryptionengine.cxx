@@ -38,9 +38,6 @@ namespace cssxw = com::sun::star::xml::wrapper;
 
 #define ENCRYPTION_TEMPLATE "com.sun.star.xml.crypto.XMLEncryptionTemplate"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
-
 EncryptionEngine::EncryptionEngine( )
         :m_nIdOfBlocker(-1)
 {

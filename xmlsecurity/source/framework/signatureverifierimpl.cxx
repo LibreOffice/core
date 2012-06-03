@@ -39,9 +39,6 @@ namespace cssxc = com::sun::star::xml::crypto;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.SignatureVerifier"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureVerifierImpl"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
-
 SignatureVerifierImpl::SignatureVerifierImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF)
 {
     mxMSF = rxMSF;

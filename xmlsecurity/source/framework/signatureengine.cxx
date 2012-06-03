@@ -39,9 +39,6 @@ namespace cssxw = com::sun::star::xml::wrapper;
 
 #define SIGNATURE_TEMPLATE "com.sun.star.xml.crypto.XMLSignatureTemplate"
 
-#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
-
 SignatureEngine::SignatureEngine( )
     :m_nTotalReferenceNumber(-1)
 {
