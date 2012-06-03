@@ -195,16 +195,12 @@ public:
     void InsertItem( sal_uInt16 nItemId, const Image& rImage,
                      size_t nPos = THUMBNAILVIEW_APPEND );
 
-    void InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                     size_t nPos = THUMBNAILVIEW_APPEND );
-
     void InsertItem( sal_uInt16 nItemId,
                      const Image& rImage, const rtl::OUString &rStr,
                      size_t nPos = THUMBNAILVIEW_APPEND );
 
     void InsertItem( sal_uInt16 nItemId,
-                     const Color& rColor, const rtl::OUString &rStr,
-                     size_t nPos = THUMBNAILVIEW_APPEND );
+                     const rtl::OUString &rText, size_t nPosPEND );
 
     void InsertItem( sal_uInt16 nItemId, size_t nPos = THUMBNAILVIEW_APPEND );
 
@@ -258,10 +254,6 @@ public:
     void SetItemImage( sal_uInt16 nItemId, const Image& rImage );
 
     Image GetItemImage( sal_uInt16 nItemId ) const;
-
-    void SetItemColor( sal_uInt16 nItemId, const Color& rColor );
-
-    Color GetItemColor( sal_uInt16 nItemId ) const;
 
     void SetItemData( sal_uInt16 nItemId, void* pData );
 

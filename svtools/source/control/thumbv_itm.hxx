@@ -30,7 +30,6 @@
 #define THUMBV_ITM_HXX
 
 #include <osl/mutex.hxx>
-#include <tools/color.hxx>
 #include <vcl/image.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -45,7 +44,6 @@ struct ThumbnailViewItem
     sal_uInt16 mnId;
     bool mbVisible;
     Image maImage;
-    Color maColor;
     rtl::OUString maText;
     void* mpData;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;

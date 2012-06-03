@@ -1020,12 +1020,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground(  )
 sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
-    sal_uInt32 nColor;
-    if (mpParent->maColor.GetTransparency() == 0)
-        nColor = mpParent->maColor.GetColor();
-    else
-        nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
-    return static_cast<sal_Int32>(nColor);
+    return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor());
 }
 
 sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw( uno::RuntimeException )

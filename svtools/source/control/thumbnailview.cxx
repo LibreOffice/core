@@ -219,9 +219,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-            if ( pItem->maColor.GetTransparency() == 0 )
-                maVirDev.SetFillColor( pItem->maColor );
-            else if ( IsColor() )
+            if ( IsColor() )
                 maVirDev.SetFillColor( maColor );
             else if ( nStyle & WB_MENUSTYLEVALUESET )
                 maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
@@ -1475,14 +1473,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t 
     ImplInsertItem( pItem, nPos );
 }
 
-void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos )
-{
-    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->maColor  = rColor;
-    ImplInsertItem( pItem, nPos );
-}
-
 void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const rtl::OUString& rText, size_t nPos )
 {
@@ -1493,12 +1483,11 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     ImplInsertItem( pItem, nPos );
 }
 
-void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                           const rtl::OUString& rText, size_t nPos )
+void ThumbnailView::InsertItem( sal_uInt16 nItemId,
+                                const rtl::OUString& rText, size_t nPos )
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->maColor  = rColor;
     pItem->maText   = rText;
     ImplInsertItem( pItem, nPos );
 }
@@ -1837,36 +1826,6 @@ Image ThumbnailView::GetItemImage( sal_uInt16 nItemId ) const
         return mItemList[nPos]->maImage;
     else
         return Image();
-}
-
-void ThumbnailView::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-        return;
-
-    ThumbnailViewItem* pItem = mItemList[nPos];
-    pItem->maColor = rColor;
-
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-    {
-        const Rectangle aRect = ImplGetItemRect(nPos);
-        DrawItem( pItem, aRect );
-        Invalidate( aRect );
-    }
-    else
-        mbFormat = true;
-}
-
-Color ThumbnailView::GetItemColor( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        return mItemList[nPos]->maColor;
-    else
-        return Color();
 }
 
 void ThumbnailView::SetItemData( sal_uInt16 nItemId, void* pData )
