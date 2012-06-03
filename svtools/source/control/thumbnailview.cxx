@@ -252,6 +252,13 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
             }
             else
                 maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
+
+            // Draw centered text below thumbnail
+            aPos.Y() += 5 + aImageSize.Height();
+            aPos.X() = aRect.Left() + (aRectSize.Width() - maVirDev.GetTextWidth(pItem->maText))/2;
+
+            maVirDev.DrawText(aPos,pItem->maText);
+
         }
     }
 }
