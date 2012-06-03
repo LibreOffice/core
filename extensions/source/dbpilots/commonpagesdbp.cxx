@@ -143,15 +143,16 @@ namespace dbp
             OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString("CommandType") ) >>= nCommandType );
 
             // search the entry of the given type with the given name
-            XubString sLookup( sCommand );
             for ( sal_uInt16 nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
             {
-                if ( m_aTable.GetEntry( nLookup ) == sLookup )
+                if (sCommand.equals(m_aTable.GetEntry(nLookup)))
+                {
                     if ( reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )
                     {
                         m_aTable.SelectEntryPos( nLookup );
                         break;
                     }
+                }
             }
         }
         catch(const Exception&)
