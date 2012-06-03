@@ -189,7 +189,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
     if ( !m_bVectorInit )
     {
-        const rtl::OUString aCommandImageList( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST ));
+        const rtl::OUString aCommandImageList( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST );
         Sequence< OUString > aCmdImageSeq;
         uno::Reference< XNameAccess > xCmdDesc( m_xServiceManager->createInstance(
                                                 SERVICENAME_UICOMMANDDESCRIPTION ),
@@ -237,7 +237,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
         // Create a image name vector that must be provided to the vcl imagelist. We also need
         // a command to image name map to speed up access time for image retrieval.
-        OUString aUNOString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+        OUString aUNOString( ".uno:" );
         String   aEmptyString;
         const sal_uInt32 nCount = m_aImageCommandNameVector.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
@@ -458,11 +458,11 @@ void ImageManagerImpl::implts_initialize()
 
         try
         {
-            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
+            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString(IMAGE_FOLDER ),
                                                                             nModes );
             if ( m_xUserImageStorage.is() )
             {
-                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
+                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString(BITMAPS_FOLDER ),
                                                                                  nModes );
             }
         }
@@ -692,8 +692,8 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
     , m_pDefaultImageList( 0 )
-    , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
-    , m_aResourceString( RTL_CONSTASCII_USTRINGPARAM( ModuleImageList ))
+    , m_aXMLPostfix( ".xml" )
+    , m_aResourceString( ModuleImageList )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_bUseGlobal(_bUseGlobal)
     , m_bReadOnly( true )
@@ -791,7 +791,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
             if ( xPropSet.is() )
             {
                 long nOpenMode = 0;
-                if ( xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ))) >>= nOpenMode )
+                if ( xPropSet->getPropertyValue( rtl::OUString( "OpenMode" )) >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
         }
@@ -1352,11 +1352,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     {
         long nModes = ElementModes::READWRITE;
 
-        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
+        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString(IMAGE_FOLDER ),
                                                                                     nModes );
         if ( xUserImageStorage.is() )
         {
-            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
+            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString(BITMAPS_FOLDER ),
                                                                                                     nModes );
             for ( sal_Int32 i = 0; i < ImageType_COUNT; i++ )
             {

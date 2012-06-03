@@ -156,8 +156,8 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_aConfigCategoryAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
-    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_NAME )),
+    m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),
+    m_aPropUIName( CONFIGURATION_PROPERTY_NAME ),
     m_xGenericUICategories( rGenericUICategories ),
     m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
@@ -166,7 +166,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUStr
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::ConfigurationAccess_UICategory" );
     // Create configuration hierachical access name
     m_aConfigCategoryAccess += aModuleName;
-    m_aConfigCategoryAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_CATEGORY_ELEMENT_ACCESS ));
+    m_aConfigCategoryAccess += rtl::OUString( CONFIGURATION_CATEGORY_ELEMENT_ACCESS );
 
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY );
 }
@@ -374,7 +374,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPropValue.Name  = rtl::OUString( "nodepath" );
         aPropValue.Value <<= m_aConfigCategoryAccess;
         aArgs[0] <<= aPropValue;
 
@@ -447,12 +447,12 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
     UICommandDescription(xServiceManager,true)
 {
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericCategories( RTL_CONSTASCII_USTRINGPARAM( "GenericCategories" ));
+    rtl::OUString aGenericCategories( "GenericCategories" );
     m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, xServiceManager );
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GENERIC_MODULE_NAME )), aGenericCategories ));
+        rtl::OUString(GENERIC_MODULE_NAME ), aGenericCategories ));
 
     UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
     if ( pCatIter != m_aUICommandsHashMap.end() )
