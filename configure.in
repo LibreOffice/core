@@ -2523,7 +2523,7 @@ AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
     if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
@@ -2533,7 +2533,6 @@ if test "$_os" = "WINNT"; then
         CL_X64="TRUE"
         AC_MSG_RESULT([yes])
     fi
-    AC_SUBST(CL_X64)
 
     AC_MSG_CHECKING([whether to use DirectX])
     if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
@@ -2543,7 +2542,6 @@ if test "$_os" = "WINNT"; then
         ENABLE_DIRECTX=""
         AC_MSG_RESULT([no])
     fi
-    AC_SUBST(ENABLE_DIRECTX)
 
     AC_MSG_CHECKING([whether to use ActiveX])
     if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
@@ -2554,26 +2552,26 @@ if test "$_os" = "WINNT"; then
         DISABLE_ACTIVEX="TRUE"
         AC_MSG_RESULT([no])
     fi
-    AC_SUBST(DISABLE_ACTIVEX)
 
     AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE"; then
+    if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
         DISABLE_ATL=""
         AC_MSG_RESULT([yes])
-    elif test "$enable_atl" = ""; then
-        if test "$WITH_MINGW" = "yes"; then
-            DISABLE_ATL="TRUE"
-            AC_MSG_RESULT([no])
-        else
-            DISABLE_ATL=""
-            AC_MSG_RESULT([yes])
-        fi
     else
         DISABLE_ATL="TRUE"
         AC_MSG_RESULT([no])
     fi
-    AC_SUBST(DISABLE_ATL)
+else
+    CL_X64=""
+    ENABLE_DIRECTX=""
+    DISABLE_ACTIVEX="TRUE"
+    DISABLE_ATL="TRUE"
 fi
+
+AC_SUBST(CL_X64)
+AC_SUBST(ENABLE_DIRECTX)
+AC_SUBST(DISABLE_ACTIVEX)
+AC_SUBST(DISABLE_ATL)
 
 dnl ===================================================================
 dnl  Test the gcc version
