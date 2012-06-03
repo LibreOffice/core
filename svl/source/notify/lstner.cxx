@@ -32,10 +32,8 @@
 #include <svl/hint.hxx>
 #include <svl/brdcst.hxx>
 
-SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0 )
-
-#define _SFX_LSTNER_CXX
 #include <svl/lstner.hxx>
+#include <algorithm>
 
 //====================================================================
 DBG_NAME(SfxListener)
@@ -56,19 +54,19 @@ SfxListener::SfxListener( const SfxListener &rListener )
 {
     DBG_CTOR(SfxListener, 0);
 
-    for ( sal_uInt16 n = 0; n < rListener.aBCs.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < rListener.aBCs.size(); ++n )
         StartListening( *rListener.aBCs[n] );
 }
 //--------------------------------------------------------------------
 
-// unregisteres the SfxListener from its SfxBroadcasters
+// unregisters the SfxListener from its SfxBroadcasters
 
 SfxListener::~SfxListener()
 {
     DBG_DTOR(SfxListener, 0);
 
-    // unregister at all remainding broadcasters
-    for ( sal_uInt16 nPos = 0; nPos < aBCs.Count(); ++nPos )
+    // unregister at all remaining broadcasters
+    for ( sal_uInt16 nPos = 0; nPos < aBCs.size(); ++nPos )
     {
         SfxBroadcaster *pBC = aBCs[nPos];
         pBC->RemoveListener(*this);
@@ -77,19 +75,18 @@ SfxListener::~SfxListener()
 
 //--------------------------------------------------------------------
 
-// unregisteres at a specific SfxBroadcaster
+// unregisters a specific SfxBroadcaster
 
-void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBC )
+void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
-    const SfxBroadcaster *pBC = &rBC;
-    aBCs.Remove( aBCs.GetPos(pBC), 1 );
+    aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
 }
 
 //--------------------------------------------------------------------
 
-// registeres at a specific SfxBroadcaster
+// registers a specific SfxBroadcaster
 
 sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPreventDups )
 {
@@ -99,8 +96,7 @@ sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPr
     {
         if ( rBroadcaster.AddListener(*this) )
         {
-            const SfxBroadcaster *pBC = &rBroadcaster;
-            aBCs.Insert( pBC, aBCs.Count() );
+            aBCs.push_back( &rBroadcaster );
 
             DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
             return sal_True;
@@ -112,7 +108,7 @@ sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPr
 
 //--------------------------------------------------------------------
 
-// unregisteres at a specific SfxBroadcaster
+// unregisters a specific SfxBroadcaster
 
 sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllDups )
 {
@@ -124,8 +120,7 @@ sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllD
     do
     {
         rBroadcaster.RemoveListener(*this);
-        const SfxBroadcaster *pBC = &rBroadcaster;
-        aBCs.Remove( aBCs.GetPos(pBC), 1 );
+        aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
     }
     while ( bAllDups && IsListening( rBroadcaster ) );
     return sal_True;
@@ -133,18 +128,18 @@ sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllD
 
 //--------------------------------------------------------------------
 
-// unregisteres all Broadcasters
+// unregisters all Broadcasters
 
 void SfxListener::EndListeningAll()
 {
     DBG_CHKTHIS(SfxListener, 0);
 
     // MI: bei Optimierung beachten: Seiteneffekte von RemoveListener beachten!
-    while ( aBCs.Count() )
+    while ( !aBCs.empty() )
     {
-        SfxBroadcaster *pBC = aBCs.GetObject(0);
+        SfxBroadcaster *pBC = aBCs.front();
         pBC->RemoveListener(*this);
-        aBCs.Remove( 0, 1 );
+        aBCs.pop_front();
     }
 }
 
@@ -152,8 +147,7 @@ void SfxListener::EndListeningAll()
 
 sal_Bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 {
-    const SfxBroadcaster *pBC = &rBroadcaster;
-    return USHRT_MAX != aBCs.GetPos( pBC );
+    return aBCs.end() != std::find( aBCs.begin(), aBCs.end(), &rBroadcaster );
 }
 
 //--------------------------------------------------------------------
@@ -161,14 +155,13 @@ sal_Bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 // base implementation of notification handler
 
 #ifdef DBG_UTIL
-void SfxListener::Notify( SfxBroadcaster& rBC, const SfxHint& )
+void SfxListener::Notify( SfxBroadcaster& rBroadcaster, const SfxHint& )
 #else
 void SfxListener::Notify( SfxBroadcaster&, const SfxHint& )
 #endif
 {
     #ifdef DBG_UTIL
-    const SfxBroadcaster *pBC = &rBC;
-    DBG_ASSERT( USHRT_MAX != aBCs.GetPos(pBC),
+    DBG_ASSERT(aBCs.end() != std::find(aBCs.begin(), aBCs.end(), &rBroadcaster),
                 "notification from unregistered broadcaster" );
     #endif
 }

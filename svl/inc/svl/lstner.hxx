@@ -31,13 +31,12 @@
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 #include <svl/svarray.hxx>
+#include <deque>
 
 class SfxBroadcaster;
 class SfxHint;
 
-#ifndef _SFX_LSTNER_CXX
-typedef SvPtrarr SfxBroadcasterArr_Impl;
-#endif
+typedef std::deque<SfxBroadcaster*> SfxBroadcasterArr_Impl;
 
 #define SFX_NOTIFY( rBC, rBCT, rHint, rHintT ) \
         Notify( rBC, rHint )
@@ -64,9 +63,9 @@ public:
     sal_Bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 
     sal_uInt16              GetBroadcasterCount() const
-                        { return aBCs.Count(); }
+                        { return aBCs.size(); }
     SfxBroadcaster*     GetBroadcasterJOE( sal_uInt16 nNo ) const
-                        { return (SfxBroadcaster*) aBCs.GetObject(nNo); }
+                        { return aBCs[nNo]; }
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
