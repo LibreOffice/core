@@ -101,7 +101,7 @@ sal_Bool SAL_CALL PluginObject::load(
     const uno::Reference < frame::XFrame >& xFrame )
 throw( uno::RuntimeException )
 {
-    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
+    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
     if (!xPMgr.is() )
         return sal_False;
 
@@ -145,9 +145,9 @@ throw( uno::RuntimeException )
                     uno::Reference< beans::XPropertySet > xProp( xModel, ::uno::UNO_QUERY );
                     if( xProp.is() )
                     {
-                        uno::Any aValue = xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
+                        uno::Any aValue = xProp->getPropertyValue( ::rtl::OUString( "URL"  ) );
                         aValue >>= maURL;
-                        aValue = xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TYPE" ) ) );
+                        aValue = xProp->getPropertyValue( ::rtl::OUString( "TYPE"  ) );
                         aValue >>= maMimeType;
                     }
                 }

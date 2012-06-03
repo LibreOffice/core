@@ -154,12 +154,12 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
 
     oslGenericFunction pTmpInit = NULL;
     oslGenericFunction pTmpDeInit = NULL;
-    if ( pPlugin->loadRelative( &thisModule, OUString (RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
+    if ( pPlugin->loadRelative( &thisModule, OUString (STRING( PLUGIN_NAME  ) ) ) )
     {
         pTmpInit = pPlugin->getFunctionSymbol(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_init_sys_tray" ) ) );
+            OUString( "plugin_init_sys_tray"  ) );
         pTmpDeInit = pPlugin->getFunctionSymbol(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_shutdown_sys_tray" ) ) );
+            OUString( "plugin_shutdown_sys_tray"  ) );
     }
     if ( !pTmpInit || !pTmpDeInit )
     {
@@ -297,7 +297,7 @@ void ShutdownIcon::OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& 
             aDispatchURL.Complete = aURL;
 
             Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
+                ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.util.URLTransformer") ),
                 com::sun::star::uno::UNO_QUERY );
             if ( xURLTransformer.is() )
             {
@@ -346,8 +346,8 @@ void ShutdownIcon::FromTemplate()
             xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
 
         URL aTargetURL;
-        aTargetURL.Complete = OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) );
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+        aTargetURL.Complete = OUString( "slot:5500"  );
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
         Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
@@ -357,14 +357,14 @@ void ShutdownIcon::FromTemplate()
             if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
                 xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
             else
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0 );
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString("_blank"), 0 );
         }
         if ( xDisp.is() )
         {
             Sequence<PropertyValue> aArgs(1);
             PropertyValue* pArg = aArgs.getArray();
-            pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-            pArg[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
+            pArg[0].Name = rtl::OUString("Referer");
+            pArg[0].Value <<= ::rtl::OUString("private:user");
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
             {
@@ -452,18 +452,18 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 Sequence< PropertyValue >   aArgs(3);
 
                 Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.task.InteractionHandler") ),
                     com::sun::star::uno::UNO_QUERY );
 
-                aArgs[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
+                aArgs[0].Name = OUString("InteractionHandler");
                 aArgs[0].Value <<= xInteraction;
 
                 sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
-                aArgs[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+                aArgs[1].Name = OUString("MacroExecutionMode");
                 aArgs[1].Value <<= nMacroExecMode;
 
                 sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
-                aArgs[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("UpdateDocMode"));
+                aArgs[2].Name = OUString("UpdateDocMode");
                 aArgs[2].Value <<= nUpdateDoc;
 
                 // use the filedlghelper to get the current filter name,
@@ -485,7 +485,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                     if ( bReadOnly )
                     {
                         aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+                        aArgs[nArgs-1].Name  = OUString("ReadOnly");
                         aArgs[nArgs-1].Value <<= bReadOnly;
                     }
 
@@ -500,7 +500,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                         sal_Int16   uVersion = (sal_Int16)iVersion;
 
                         aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("Version"));
+                        aArgs[nArgs-1].Name  = OUString("Version");
                         aArgs[nArgs-1].Value <<= uVersion;
                     }
 
@@ -525,26 +525,26 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                         if ( !aFilterName.isEmpty() )
                         {
                             aArgs.realloc( ++nArgs );
-                            aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+                            aArgs[nArgs-1].Name  = OUString("FilterName");
                             aArgs[nArgs-1].Value <<= aFilterName;
                         }
                     }
                 }
 
                 if ( 1 == nFiles )
-                    OpenURL( sFiles[0], OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), aArgs );
+                    OpenURL( sFiles[0], OUString( "_default"  ), aArgs );
                 else
                 {
                     OUString    aBaseDirURL = sFiles[0];
                     if ( !aBaseDirURL.isEmpty() && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
-                        aBaseDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                        aBaseDirURL += OUString("/");
 
                     int iFiles;
                     for ( iFiles = 1; iFiles < nFiles; iFiles++ )
                     {
                         OUString    aURL = aBaseDirURL;
                         aURL += sFiles[iFiles];
-                        OpenURL( aURL, OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), aArgs );
+                        OpenURL( aURL, OUString( "_default"  ), aArgs );
                     }
                 }
             }
@@ -806,9 +806,9 @@ static OUString getAutostartDir( bool bCreate = false )
         OUString aHomeURL;
         osl::Security().getHomeDir( aHomeURL );
         ::osl::File::getSystemPathFromFileURL( aHomeURL, aShortcut );
-        aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/.config" ) );
+        aShortcut += OUString( "/.config"  );
     }
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/autostart" ) );
+    aShortcut += OUString( "/autostart"  );
     if (bCreate)
     {
         OUString aShortcutUrl;
@@ -825,7 +825,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     return OUString();
 #else
 
-    OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
+    OUString aShortcutName( "StarOffice 6.0"  );
     ResMgr* pMgr = SfxResId::GetResMgr();
     if( pMgr )
     {
@@ -833,14 +833,14 @@ rtl::OUString ShutdownIcon::getShortcutName()
         aShortcutName = SFX2_RESSTR(STR_QUICKSTART_LNKNAME);
     }
 #ifdef WNT
-    aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
+    aShortcutName += OUString( ".lnk"  );
 
     OUString aShortcut(GetAutostartFolderNameW32());
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
+    aShortcut += OUString( "\\"  );
     aShortcut += aShortcutName;
 #else // UNX
     OUString aShortcut = getAutostartDir();
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/qstart.desktop" ) );
+    aShortcut += OUString( "/qstart.desktop"  );
 #endif // UNX
     return aShortcut;
 #endif // ENABLE_QUICKSTART_APPLET
@@ -880,7 +880,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #else // UNX
         getAutostartDir( true );
 
-        OUString aPath( RTL_CONSTASCII_USTRINGPARAM("${BRAND_BASE_DIR}/share/xdg/qstart.desktop" ) );
+        OUString aPath( "${BRAND_BASE_DIR}/share/xdg/qstart.desktop"  );
         Bootstrap::expandMacros( aPath );
 
         OUString aDesktopFile;

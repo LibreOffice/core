@@ -374,7 +374,7 @@ void SfxRequest_Impl::Record
                 com::sun::star::uno::UNO_QUERY);
 
         com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > xTransform(
-                xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                xFactory->createInstance(rtl::OUString("com.sun.star.util.URLTransformer")),
                 com::sun::star::uno::UNO_QUERY);
 
         com::sun::star::util::URL aURL;
@@ -826,7 +826,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
 
     if(xSet.is())
     {
-        com::sun::star::uno::Any aProp = xSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier")));
+        com::sun::star::uno::Any aProp = xSet->getPropertyValue(rtl::OUString("DispatchRecorderSupplier"));
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())

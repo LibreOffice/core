@@ -116,7 +116,7 @@ static rtl::OUString HelpLocaleString()
     static rtl::OUString aLocaleStr;
     if (aLocaleStr.isEmpty())
     {
-        const rtl::OUString aEnglish( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
+        const rtl::OUString aEnglish( "en"  );
         // detect installed locale
         aLocaleStr = utl::ConfigManager::getLocale();
         bool bOk = !aLocaleStr.isEmpty();
@@ -188,7 +188,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                              Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
+        if ( ( aCnt.getPropertyValue( ::rtl::OUString("AnchorName") ) >>= sAnchor ) )
         {
 
             if ( !sAnchor.isEmpty() )
@@ -242,7 +242,7 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
 }
 
 SfxHelpOptions_Impl::SfxHelpOptions_Impl()
-    : ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.SFX/Help")) )
+    : ConfigItem( ::rtl::OUString("Office.SFX/Help") )
 {
     Sequence< ::rtl::OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -360,7 +360,7 @@ SfxHelp::SfxHelp() :
     // if it's set, you will see debug output on active help
     {
         ::rtl::OUString sHelpDebug;
-        ::rtl::OUString sEnvVarName( RTL_CONSTASCII_USTRINGPARAM( "HELP_DEBUG" ) );
+        ::rtl::OUString sEnvVarName( "HELP_DEBUG"  );
         osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
         bIsDebug = !sHelpDebug.isEmpty();
     }
@@ -489,13 +489,13 @@ String SfxHelp::GetHelpModuleName_Impl()
     {
         // Map some module identifiers to their "real" help module string.
         if ( aFactoryShortName == "chart2" )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
+            aFactoryShortName = rtl::OUString( "schart"  );
         else if ( aFactoryShortName == "BasicIDE" )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
+            aFactoryShortName = rtl::OUString( "sbasic"  );
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sweb"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sglobal"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swxform")) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
+            aFactoryShortName = rtl::OUString( "swriter"  );
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbquery"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbrelation"))
@@ -505,7 +505,7 @@ String SfxHelp::GetHelpModuleName_Impl()
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swreport"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swform")) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+            aFactoryShortName = rtl::OUString( "sdatabase"  );
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbibliography"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StartModule")) )
             aFactoryShortName = sDefaultModule;
@@ -672,17 +672,17 @@ sal_Bool SfxHelp::Start( const String& rURL, const Window* pWindow )
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp( const String& rURL )
 {
-    String aInternal( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
+    String aInternal( "vnd.sun.star.help://"  );
     if ( rURL.Len() <= aInternal.Len() || rURL.Copy( 0, aInternal.Len() ) != aInternal )
         return false;
 
-    rtl::OUString aHelpLink( RTL_CONSTASCII_USTRINGPARAM( "http://help.libreoffice.org/" ) );
+    rtl::OUString aHelpLink( "http://help.libreoffice.org/"  );
     aHelpLink += rURL.Copy( aInternal.Len() );
     try
     {
         Reference< XSystemShellExecute > xSystemShell(
                 ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                    rtl::OUString( "com.sun.star.system.SystemShellExecute"  ) ),
                 UNO_QUERY );
 
         if ( xSystemShell.is() )
@@ -840,7 +840,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
                 URL aURL;
                 aURL.Complete = CreateHelpURL_Impl( rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), UNO_QUERY );
+                    ::rtl::OUString("com.sun.star.util.URLTransformer") ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
 
                 Reference < XFrame > xCurrentFrame;
@@ -853,7 +853,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
                 Reference< XDispatch > xHelpDispatch;
                 if ( xDispProv.is() )
                     xHelpDispatch = xDispProv->queryDispatch(
-                        aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_helpagent")),
+                        aURL, ::rtl::OUString("_helpagent"),
                         FrameSearchFlag::PARENT | FrameSearchFlag::SELF );
 
                 DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );

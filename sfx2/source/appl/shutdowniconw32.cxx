@@ -181,7 +181,7 @@ static HMENU createSystrayMenu( )
     ::std::set< ::rtl::OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
-    const ::rtl::OUString sURLKey( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+    const ::rtl::OUString sURLKey( "URL"  );
 
     const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
     const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
@@ -236,7 +236,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, aEmpty);
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString(RTL_CONSTASCII_USTRINGPARAM("SHELL32")));
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString("SHELL32"));
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
 #endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, aEmpty );
@@ -446,22 +446,22 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                         ShutdownIcon::FileOpen();
                 break;
                 case IDM_WRITER:
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( WRITER_URL  ), OUString( "_default"  ) );
                 break;
                 case IDM_CALC:
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( CALC_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( CALC_URL  ), OUString( "_default"  ) );
                 break;
                 case IDM_IMPRESS:
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_WIZARD_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( IMPRESS_WIZARD_URL  ), OUString( "_default"  ) );
                 break;
                 case IDM_DRAW:
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( DRAW_URL  ), OUString( "_default"  ) );
                 break;
                 case IDM_BASE:
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( BASE_URL  ), OUString( "_default"  ) );
                 break;
                 case IDM_MATH:
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( MATH_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( MATH_URL  ), OUString( "_default"  ) );
                 break;
                 case IDM_TEMPLATE:
                     if ( !ShutdownIcon::bModalMode )
@@ -839,7 +839,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
         aOfficepath = aOfficepath.copy(0, i);
 
     OUString quickstartExe(aOfficepath);
-    quickstartExe += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\quickstart.exe" ) );
+    quickstartExe += OUString( "\\quickstart.exe"  );
 
     return FileExistsW( reinterpret_cast<LPCWSTR>(quickstartExe.getStr()) );
 }
@@ -855,7 +855,7 @@ void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
         aOfficepath = aOfficepath.copy(0, i);
 
     OUString quickstartExe(aOfficepath);
-    quickstartExe += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\quickstart.exe" ) );
+    quickstartExe += OUString( "\\quickstart.exe"  );
 
     CreateShortcut( quickstartExe, aOfficepath, aShortcut, OUString(), OUString() );
 }

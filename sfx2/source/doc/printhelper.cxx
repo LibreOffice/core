@@ -655,7 +655,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sFileURL;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
+                aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sTemp );
             }
             else
@@ -671,7 +671,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sTemp;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
+                aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sPath );
             }
             else
@@ -689,7 +689,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
+                aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }
@@ -714,7 +714,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
             {
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate"));
+                aCheckedArgs[nProps].Name = rtl::OUString("Collate");
                 aCheckedArgs[nProps++].Value <<= bTemp;
             }
             else

@@ -412,7 +412,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
                     pShell->TakeFrameOwnerShip_Impl();
             }
 
-            throw com::sun::star::util::CloseVetoException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Controller disagree ...")),static_cast< ::cppu::OWeakObject*>(this));
+            throw com::sun::star::util::CloseVetoException(::rtl::OUString("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
         }
     }
 }
@@ -1217,7 +1217,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
-        rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+        rtl::OUString aCmdPrefix( ".uno:" );
 
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
         for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
@@ -1297,8 +1297,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     {
                         uno::Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
                         uno::Reference< beans::XPropertySet > xLayouterProps(
-                            xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ), uno::UNO_QUERY_THROW );
-                        xLayouterProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreserveContentSize" ) ), uno::makeAny( sal_True ) );
+                            xFrameProps->getPropertyValue( ::rtl::OUString( "LayoutManager"  ) ), uno::UNO_QUERY_THROW );
+                        xLayouterProps->setPropertyValue( ::rtl::OUString( "PreserveContentSize"  ), uno::makeAny( sal_True ) );
                     }
                     catch (const uno::Exception&)
                     {

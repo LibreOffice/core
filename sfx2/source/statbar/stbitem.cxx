@@ -87,7 +87,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     util::URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
     uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
+        rtl::OUString("com.sun.star.util.URLTransformer")), uno::UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
     SfxObjectShell* pObjShell = NULL;
