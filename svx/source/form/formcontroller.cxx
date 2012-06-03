@@ -484,7 +484,7 @@ public:
     {
     }
 
-    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit"));}
+    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString("Edit");}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException );
 
 protected:
@@ -569,7 +569,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
                   ,m_aFilterListeners(m_aMutex)
                   ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_xFormOperations()
-                  ,m_aMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) ) )
+                  ,m_aMode( ::rtl::OUString( "DataMode"  ) )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )
                   ,m_aActivationEvent( LINK( this, FormController, OnActivated ) )
@@ -715,7 +715,7 @@ sal_Bool SAL_CALL FormController::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FormController::getImplementationName() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svx.FormController"));
+    return ::rtl::OUString("org.openoffice.comp.svx.FormController");
 }
 
 //------------------------------------------------------------------------------
@@ -724,7 +724,7 @@ Sequence< ::rtl::OUString> SAL_CALL FormController::getSupportedServiceNames(voi
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
     Sequence< ::rtl::OUString > aNonCreatableServiceNames( 1 );
-    aNonCreatableServiceNames[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.FormControllerDispatcher" ) );
+    aNonCreatableServiceNames[ 0 ] = ::rtl::OUString( "com.sun.star.form.FormControllerDispatcher"  );
 
     // services which can be used to created an instance at a service factory
     Sequence< ::rtl::OUString > aCreatableServiceNames( getSupportedServiceNames_Static() );
@@ -753,7 +753,7 @@ Sequence< ::rtl::OUString> FormController::getSupportedServiceNames_Static(void)
     {
         aServices.realloc(2);
         aServices.getArray()[0] = FM_FORM_CONTROLLER;
-        aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.control.TabController"));
+        aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.control.TabController");
     }
     return aServices;
 }
@@ -3122,7 +3122,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         {
             Reference< XMultiServiceFactory > xFactory( xConnection, UNO_QUERY_THROW );
             m_xComposer.set(
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ),
+                xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer"  ) ),
                 UNO_QUERY_THROW );
 
             Reference< XPropertySet > xSet( xForm, UNO_QUERY );
@@ -3195,7 +3195,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         xQueryColumns->getByName(pRefValues[j].Name) >>= xSet;
 
                         // get the RealName
-                        xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RealName"))) >>= aRealName;
+                        xSet->getPropertyValue(::rtl::OUString("RealName")) >>= aRealName;
 
                         // compare the condition field name and the RealName
                         if (aCompare(aRealName, pRefValues[j].Name))
@@ -3208,7 +3208,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         for (sal_Int32 n = 0, nCount = xColumnsByIndex->getCount(); n < nCount; n++)
                         {
                             xColumnsByIndex->getByIndex(n) >>= xSet;
-                            xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RealName"))) >>= aRealName;
+                            xSet->getPropertyValue(::rtl::OUString("RealName")) >>= aRealName;
                             if (aCompare(aRealName, pRefValues[j].Name))
                             {
                                 // get the column by its alias
@@ -3236,10 +3236,10 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         if (aRow.find((*iter).xText) != aRow.end())
                         {
                             ::rtl::OUString aCompText = aRow[(*iter).xText];
-                            aCompText += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                            aCompText += ::rtl::OUString(" ");
                             ::rtl::OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
                             aCompText += ::rtl::OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
-                            aCompText += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                            aCompText += ::rtl::OUString(" ");
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
                             aRow[(*iter).xText] = aCompText;
                         }
@@ -3329,7 +3329,7 @@ void FormController::startFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) ) );
+                xSelector->setMode( ::rtl::OUString( "FilterMode"  ) );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3385,9 +3385,9 @@ void FormController::startFiltering()
                 {
                     // create a filter control
                     Sequence< Any > aCreationArgs( 3 );
-                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MessageParent")), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
-                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatter")), makeAny( xFormatter ) );
-                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlModel")), makeAny( xModel ) );
+                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString("MessageParent"), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
+                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString("NumberFormatter"), makeAny( xFormatter ) );
+                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString("ControlModel"), makeAny( xModel ) );
                     Reference< XControl > xFilterControl(
                         m_aContext.createComponentWithArguments( "com.sun.star.form.control.FilterControl", aCreationArgs ),
                         UNO_QUERY
@@ -3459,7 +3459,7 @@ void FormController::stopFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) ) );
+                xSelector->setMode( ::rtl::OUString( "DataMode"  ) );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3558,8 +3558,8 @@ Sequence< ::rtl::OUString > SAL_CALL FormController::getSupportedModes(void) thr
     {
         aModes.realloc(2);
         ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
-        pModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) );
+        pModes[0] = ::rtl::OUString( "DataMode"  );
+        pModes[1] = ::rtl::OUString( "FilterMode"  );
     }
     return aModes;
 }
@@ -3689,7 +3689,7 @@ namespace
     {
         try
         {
-            static ::rtl::OUString s_sFormsCheckRequiredFields( RTL_CONSTASCII_USTRINGPARAM( "FormsCheckRequiredFields" ) );
+            static ::rtl::OUString s_sFormsCheckRequiredFields( "FormsCheckRequiredFields"  );
 
             // first, check whether the form has a property telling us the answer
             // this allows people to use the XPropertyContainer interface of a form to control
@@ -3711,7 +3711,7 @@ namespace
                 return sal_True;
 
             Reference< XPropertySet > xDataSourceSettings(
-                xDataSource->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ) ),
+                xDataSource->getPropertyValue( ::rtl::OUString( "Settings"  ) ),
                 UNO_QUERY_THROW );
 
             sal_Bool bShouldValidate = true;
@@ -4273,7 +4273,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler.set( m_aContext.createComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), UNO_QUERY );
+    m_xInteractionHandler.set( m_aContext.createComponent( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }

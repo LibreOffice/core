@@ -256,7 +256,7 @@ void FontPrevWin_Impl::_CheckScript()
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xBreak = Reference< XBreakIterator >(xMSF->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),UNO_QUERY);
+                ::rtl::OUString("com.sun.star.i18n.BreakIterator") ),UNO_QUERY);
     }
     if( xBreak.is() )
     {

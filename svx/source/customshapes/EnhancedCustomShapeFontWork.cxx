@@ -435,8 +435,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 
     sal_Bool bSameLetterHeights = sal_False;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
-    const rtl::OUString sSameLetterHeights( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
+    const rtl::OUString sTextPath( "TextPath"  );
+    const rtl::OUString sSameLetterHeights( "SameLetterHeights"  );
     com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
     if ( pAny )
         *pAny >>= bSameLetterHeights;
@@ -839,7 +839,7 @@ Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator
     if ( !mxBreakIterator.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
+        Reference < XInterface > xI = xMSF->createInstance( rtl::OUString("com.sun.star.i18n.BreakIterator") );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );

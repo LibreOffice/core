@@ -553,7 +553,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     aNew.RecoveryState = E_NOT_RECOVERED_YET;
 
     // patch DisplayName! Because the document title contain more then the file name ...
-    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")));
+    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString(" - "));
     if (i > 0)
         aNew.DisplayName = aNew.DisplayName.copy(0, i);
 
@@ -1030,9 +1030,9 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     FreeResource();
 
-    ::rtl::OUString CFG_PACKAGE_RECOVERY( RTL_CONSTASCII_USTRINGPARAM  ( "org.openoffice.Office.Recovery/" ));
-    ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
-    ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
+    ::rtl::OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/" );
+    ::rtl::OUString CFG_PATH_CRASHREPORTER( "CrashReporter"                 );
+    ::rtl::OUString CFG_ENTRY_ENABLED( "Enabled"                       );
 
     sal_Bool bCrashRepEnabled( sal_False );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
@@ -1995,16 +1995,16 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
 
 #if defined(WNT)
-            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
+            OUString    ustrValue = OUString("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #elif defined( MACOSX )
-            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
+            OUString    ustrValue = OUString("~");
 #else
-            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
+            OUString    ustrValue = OUString("$SYSUSERCONFIG");
 #endif
             Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT)
-            ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
+            ustrValue += OUString("/user/crashdata");
 #endif
             return ustrValue;
         }
@@ -2019,8 +2019,8 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
             ::rtl::OUString aURL = GetCrashConfigDir();
 
-            aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-            aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRVFILE ) );
+            aURL += ::rtl::OUString( "/"  );
+            aURL += ::rtl::OUString( PRVFILE  );
 
             return aURL;
         }
@@ -2078,7 +2078,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             String  aPreview = LoadCrashFile( GetPreviewURL() );
             ErrorRepSendDialog *pMainDlg = (ErrorRepSendDialog *)_pParent;
 
-            String aSeperator = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\r\n\r\n================\r\n\r\n" ) );
+            String aSeperator = ::rtl::OUString( "\r\n\r\n================\r\n\r\n"  );
 
             String aContent = pMainDlg->GetDocType();
             if ( aContent.Len() > 0 )
