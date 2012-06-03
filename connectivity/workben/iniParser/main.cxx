@@ -99,7 +99,7 @@ public:
             sal_uInt64 nSize = 0;
 
             osl_getFileSize(handle, &nSize);
-            OUString sectionName( RTL_CONSTASCII_USTRINGPARAM( "no name section" ));
+            OUString sectionName( "no name section" );
             while (true)
             {
                 sal_uInt64 nPos;
@@ -130,7 +130,7 @@ public:
                         sectionName =  OStringToOUString(
                             line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                         if (!sectionName.getLength())
-                            sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
+                            sectionName = OUString("no name section");
 
                         ini_Section *aSection = &mAllSection[sectionName];
                         aSection->sName = sectionName;
@@ -186,7 +186,7 @@ int _cdecl main( int argc, char * argv[] )
 
 {
 
-    IniParser parser(OUString(RTL_CONSTASCII_USTRINGPARAM("test.ini")));
+    IniParser parser(OUString("test.ini"));
     parser.Dump();
     return 0;
 }
