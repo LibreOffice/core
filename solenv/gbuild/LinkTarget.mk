@@ -630,8 +630,15 @@ $$(call gb_Output_error,\
  gb_LinkTarget_add_api: use gb_LinkTarget_use_api instead.)
 endef
 
+define gb_LinkTarget__use_api
+$(call gb_LinkTarget_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
+$(call gb_LinkTarget_use_package,$(1),$(2)_inc)
+$(call gb_LinkTarget__add_include,$(1),$(OUTDIR)/inc/$(2))
+
+endef
+
 define gb_LinkTarget_use_api
-$(foreach api,$(2),$(call gb_LinkTarget__use_internal_api_one,$(1),$(api)))
+$(foreach api,$(2),$(call gb_LinkTarget__use_api,$(1),$(api)))
 
 endef
 
