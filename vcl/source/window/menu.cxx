@@ -2348,19 +2348,14 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
 
 Size Menu::ImplCalcSize( Window* pWin )
 {
-    // | Checked| Image| Text| Accel/Popup|
+    // | Check/Radio/Image| Text| Accel/Popup|
 
     // for symbols: nFontHeight x nFontHeight
     long nFontHeight = pWin->GetTextHeight();
     long nExtra = nFontHeight/4;
 
-
-    Size aSz;
-    Size aMaxImgSz;
-    long nMaxWidth = 0;
     long nMinMenuItemHeight = nFontHeight;
     long nCheckHeight = 0, nRadioHeight = 0;
-    long nCheckWidth = 0;
     Size aMaxSize = ImplGetNativeCheckAndRadioSize(pWin, nCheckHeight, nRadioHeight);
     if( aMaxSize.Height() > nMinMenuItemHeight )
         nMinMenuItemHeight = aMaxSize.Height();
@@ -2368,6 +2363,8 @@ Size Menu::ImplCalcSize( Window* pWin )
     // When no native rendering of the checkbox & no image in the menu, we
     // have to add some extra space even in the MENU_FLAG_SHOWCHECKIMAGES case
     bool bSpaceForCheckbox = ( aMaxSize.Height() == 0 );
+
+    Size aMaxImgSz;
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
@@ -2394,6 +2391,10 @@ Size Menu::ImplCalcSize( Window* pWin )
             }
         }
     }
+
+    Size aSz;
+    long nCheckWidth = 0;
+    long nMaxWidth = 0;
 
     for ( size_t n = pItemList->size(); n; )
     {
