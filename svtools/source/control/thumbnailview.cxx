@@ -185,35 +185,6 @@ void ThumbnailView::ImplInitScrollBar()
 void ThumbnailView::ImplFormatItem( ThumbnailViewItem *pItem, Rectangle aRect )
 {
     WinBits nStyle = GetStyle();
-    if ( nStyle & WB_ITEMBORDER )
-    {
-        aRect.Left()++;
-        aRect.Top()++;
-        aRect.Right()--;
-        aRect.Bottom()--;
-        if ( nStyle & WB_FLATVALUESET )
-        {
-            if ( nStyle  & WB_DOUBLEBORDER )
-            {
-                aRect.Left()    += 2;
-                aRect.Top()     += 2;
-                aRect.Right()   -= 2;
-                aRect.Bottom()  -= 2;
-            }
-            else
-            {
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-            }
-        }
-        else
-        {
-            DecorationView aView( &maVirDev );
-            aRect = aView.DrawFrame( aRect, mnFrameStyle );
-        }
-    }
 
     if ( pItem == mpNoneItem )
         pItem->maText = GetText();
@@ -304,7 +275,7 @@ void ThumbnailView::Format()
     size_t      nItemCount = mItemList.size();
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
-    long        nOff;
+    long        nOff = 0;
     long        nNoneHeight;
     long        nNoneSpace;
     ScrollBar*  pDelScrBar = NULL;
@@ -321,17 +292,6 @@ void ThumbnailView::Format()
             mpScrBar = NULL;
         }
     }
-
-    // calculate item offset
-    if ( nStyle & WB_ITEMBORDER )
-    {
-        if ( nStyle & WB_DOUBLEBORDER )
-            nOff = ITEM_OFFSET_DOUBLE;
-        else
-            nOff = ITEM_OFFSET;
-    }
-    else
-        nOff = 0;
 
     // consider size, if NameField does exist
     if ( nStyle & WB_NAMEFIELD )
@@ -446,7 +406,7 @@ void ThumbnailView::Format()
 
     // nothing is changed in case of too small items
     if ( (mnItemWidth <= 0) ||
-         (mnItemHeight <= (( nStyle & WB_ITEMBORDER ) ? 4 : 2)) ||
+         (mnItemHeight <= 2) ||
          !nItemCount )
     {
         mbHasVisibleItems = false;
@@ -473,10 +433,7 @@ void ThumbnailView::Format()
         mbHasVisibleItems = true;
 
         // determine Frame-Style
-        if ( nStyle & WB_DOUBLEBORDER )
-            mnFrameStyle = FRAME_DRAW_DOUBLEIN;
-        else
-            mnFrameStyle = FRAME_DRAW_IN;
+        mnFrameStyle = FRAME_DRAW_IN;
 
         // determine selected color and width
         // if necessary change the colors, to make the selection
@@ -492,11 +449,7 @@ void ThumbnailView::Format()
             mbBlackSel = false;
 
         // draw the selection with double width if the items are bigger
-        if ( (nStyle & WB_DOUBLEBORDER) &&
-             ((mnItemWidth >= 25) && (mnItemHeight >= 20)) )
-            mbDoubleSel = true;
-        else
-            mbDoubleSel = false;
+        mbDoubleSel = false;
 
         // calculate offsets
         long nStartX;
@@ -746,13 +699,6 @@ void ThumbnailView::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const
             aRect.Top()     += 3;
             aRect.Right()   -= 3;
             aRect.Bottom()  -= 3;
-            if ( nStyle & WB_DOUBLEBORDER )
-            {
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-            }
 
             if ( bFocus )
                 ShowFocus( aRect );
@@ -2024,18 +1970,6 @@ void ThumbnailView::SetColor( const Color& rColor )
         ImplDraw();
 }
 
-void ThumbnailView::SetExtraSpacing( sal_uInt16 nNewSpacing )
-{
-    if ( GetStyle() & WB_ITEMBORDER )
-    {
-        mnSpacing = nNewSpacing;
-
-        mbFormat = true;
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
-    }
-}
-
 void ThumbnailView::StartSelection()
 {
     mbHighlight     = true;
@@ -2129,20 +2063,7 @@ Size ThumbnailView::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesi
     Size        aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
-    long        n;
-
-    if ( nStyle & WB_ITEMBORDER )
-    {
-        if ( nStyle & WB_DOUBLEBORDER )
-            n = ITEM_OFFSET_DOUBLE;
-        else
-            n = ITEM_OFFSET;
-
-        aSize.Width()  += n*nCalcCols;
-        aSize.Height() += n*nCalcLines;
-    }
-    else
-        n = 0;
+    long        n = 0;
 
     if ( mnSpacing )
     {
@@ -2166,35 +2087,6 @@ Size ThumbnailView::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesi
 
     // sum possible ScrollBar width
     aSize.Width() += GetScrollWidth();
-
-    return aSize;
-}
-
-Size ThumbnailView::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
-{
-    Size aSize = rItemSize;
-
-    WinBits nStyle = GetStyle();
-    if ( nStyle & WB_ITEMBORDER )
-    {
-        long n;
-
-        if ( nStyle & WB_DOUBLEBORDER )
-            n = ITEM_OFFSET_DOUBLE;
-        else
-            n = ITEM_OFFSET;
-
-        if ( bOut )
-        {
-            aSize.Width()  += n;
-            aSize.Height() += n;
-        }
-        else
-        {
-            aSize.Width()  -= n;
-            aSize.Height() -= n;
-        }
-    }
 
     return aSize;
 }

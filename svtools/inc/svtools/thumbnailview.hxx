@@ -63,15 +63,7 @@ class ThumbnailViewItemAcc;
                         is at least 8 pixel smaller on each side than the item
                         and also WB_DOUBLEBORDER is set and as color
                         COL_WINDOWWORKSPACE is specified.
-    WB_FLATVALUESET     Flat Look (if you set WB_ITEMBORDER or WB_DOUBLEBORDER,
-                        then you get extra border space, but the Borders
-                        aren't painted),
-    WB_ITEMBORDER       Items will be bordered
-    WB_DOUBLEBORDER     Items will be bordered twice. Additionally WB_ITEMBORDER
-                        has to be set, as otherwise this WinBit wouldn't have any
-                        effect. It is needed if there are items with a white
-                        background, since otherwise the 3D effect wouldn't be
-                        recognizable.
+    WB_FLATVALUESET     Flat Look.
     WB_NAMEFIELD        There is a namefield, where the name of an item will be
                         shown.
     WB_NONEFIELD        There is a NoSelection field which can be selected if
@@ -171,8 +163,6 @@ class ThumbnailViewItemAcc;
 /* ThumbnailView types */
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
-#define WB_ITEMBORDER           ((WinBits)0x00010000)
-#define WB_DOUBLEBORDER         ((WinBits)0x00020000)
 #define WB_NAMEFIELD            ((WinBits)0x00040000)
 #define WB_NONEFIELD            ((WinBits)0x00080000)
 #define WB_FLATVALUESET         ((WinBits)0x02000000)
@@ -192,7 +182,7 @@ class SVT_DLLPUBLIC ThumbnailView : public Control
 {
 public:
 
-    ThumbnailView ( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER, bool bDisableTransientChildren = false );
+    ThumbnailView ( Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false );
 
     ThumbnailView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
 
@@ -289,10 +279,6 @@ public:
 
     bool IsColor() const { return maColor.GetTransparency() == 0; }
 
-    void SetExtraSpacing( sal_uInt16 nNewSpacing );
-
-    sal_uInt16 GetExtraSpacing() { return mnSpacing; }
-
     void            Format();
 
     void            StartSelection();
@@ -302,8 +288,6 @@ public:
     Size            CalcWindowSizePixel( const Size& rItemSize,
                                          sal_uInt16 nCalcCols = 0,
                                          sal_uInt16 nCalcLines = 0 );
-
-    Size            CalcItemSizePixel( const Size& rSize, bool bOut = true ) const;
 
     long            GetScrollWidth() const;
 
