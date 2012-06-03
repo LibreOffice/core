@@ -31,11 +31,17 @@
 
 #include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
+#include <sfx2/dispatch.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 
 #include "anyrefdg.hxx"
 #include "document.hxx"
 #include "conditio.hxx"
 #include "stlpool.hxx"
+#include "tabvwsh.hxx"
+
+#include "globstr.hrc"
 
 #include <iostream>
 
@@ -84,6 +90,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     }
     maLbStyle.SetSeparatorPos(0);
     maLbStyle.SelectEntryPos(1);
+    maLbStyle.SetSelectHdl( LINK( this, ScCondFrmtEntry, StyleSelectHdl ) );
 
     //disable entries for color formats
     maLbColorFormat.SelectEntryPos(0);
@@ -340,6 +347,57 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, ColFormatTypeHdl)
     }
 
     SetHeight();
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCondFrmtEntry, StyleSelectHdl)
+{
+    if(maLbStyle.GetSelectEntryPos() == 0)
+    {
+	// call new style dialog
+	SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
+	SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+
+	// unlock the dispatcher so SID_STYLE_NEW can be executed
+	// (SetDispatcherLock would affect all Calc documents)
+	ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+	SfxDispatcher* pDisp = pViewShell->GetDispatcher();
+	sal_Bool bLocked = pDisp->IsLocked();
+	if (bLocked)
+	    pDisp->Lock(false);
+
+	// Execute the "new style" slot, complete with undo and all necessary updates.
+	// The return value (SfxUInt16Item) is ignored, look for new styles instead.
+	pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
+		&aFamilyItem,
+		&aRefItem,
+		0L );
+
+	if (bLocked)
+	    pDisp->Lock(sal_True);
+
+	// Find the new style and add it into the style list boxes
+	rtl::OUString aNewStyle;
+	SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+	for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+	{
+	    rtl::OUString aName = pStyle->GetName();
+	    if ( maLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
+	    {
+		maLbStyle.InsertEntry(aName);
+		maLbStyle.SelectEntry(aName);
+	    }
+	}
+    }
+
+    rtl::OUString aStyleName = maLbStyle.GetSelectEntry();
+    SfxStyleSheetBase* pStyleSheet = mpDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+    if(pStyleSheet)
+    {
+	const SfxItemSet& rSet = pStyleSheet->GetItemSet();
+	maWdPreview.Init( rSet );
+    }
 
     return 0;
 }

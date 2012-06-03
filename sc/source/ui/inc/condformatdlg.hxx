@@ -102,6 +102,7 @@ private:
 
     DECL_LINK( TypeListHdl, void*);
     DECL_LINK( ColFormatTypeHdl, void*);
+    DECL_LINK( StyleSelectHdl, void* );
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
