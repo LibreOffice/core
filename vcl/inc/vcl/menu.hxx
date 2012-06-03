@@ -158,8 +158,7 @@ private:
     sal_uInt16              nSelectedId;
 
     // Fuer Ausgabe:
-    sal_uInt16              nCheckPos;
-    sal_uInt16              nImagePos;
+    sal_uInt16              nImgOrChkPos;
     sal_uInt16              nTextPos;
 
     sal_Bool                bIsMenuBar  : 1,        // Handelt es sich um den MenuBar

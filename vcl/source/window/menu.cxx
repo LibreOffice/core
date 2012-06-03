@@ -2501,22 +2501,20 @@ Size Menu::ImplCalcSize( Window* pWin )
             nMaxWidth = nScreenWidth/2;
 
         sal_uInt16 gfxExtra = (sal_uInt16) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
-        nCheckPos = (sal_uInt16)nExtra;
+        nImgOrChkPos = (sal_uInt16)nExtra;
         if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
         {
             long nImgOrChkWidth = 0;
-            nImagePos = nCheckPos;
             if( aMaxSize.Height() > 0 ) // NWF case
                 nImgOrChkWidth = aMaxSize.Height() + nExtra;
             else // non NWF case
                 nImgOrChkWidth = nFontHeight/2 + gfxExtra;
             nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
-            nTextPos = (sal_uInt16)(nImagePos + nImgOrChkWidth);
+            nTextPos = (sal_uInt16)(nImgOrChkPos + nImgOrChkWidth);
         }
         else
         {
-            nImagePos = nCheckPos;
-            nTextPos = (sal_uInt16)(nImagePos + Max( aMaxImgSz.Width(), nCheckWidth ));
+            nTextPos = (sal_uInt16)(nImgOrChkPos + Max( aMaxImgSz.Width(), nCheckWidth ));
         }
         nTextPos = nTextPos + gfxExtra;
 
@@ -2732,7 +2730,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     }
                 }
 
-                Rectangle aOuterCheckRect( Point( aPos.X()+nCheckPos, aPos.Y() ), Size( pData->aSz.Height(), pData->aSz.Height() ) );
+                Rectangle aOuterCheckRect( Point( aPos.X()+nImgOrChkPos, aPos.Y() ), Size( pData->aSz.Height(), pData->aSz.Height() ) );
                 aOuterCheckRect.Left()      += 1;
                 aOuterCheckRect.Right()     -= 1;
                 aOuterCheckRect.Top()       += 1;
