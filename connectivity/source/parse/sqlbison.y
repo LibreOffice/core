@@ -193,25 +193,25 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_CALL SQL_TOKEN_D SQL_TOKEN_FN SQL_TOKEN_T SQL_TOKEN_TS SQL_TOKEN_OJ
 /* string functions */
 %token <pParseNode> SQL_TOKEN_ASCII SQL_TOKEN_BIT_LENGTH  SQL_TOKEN_CHAR  SQL_TOKEN_CHAR_LENGTH  SQL_TOKEN_SQL_TOKEN_INTNUM
-%token <pParseNode> SQL_TOKEN_CONCAT          
-%token <pParseNode> SQL_TOKEN_DIFFERENCE  SQL_TOKEN_INSERT SQL_TOKEN_LCASE  SQL_TOKEN_LEFT SQL_TOKEN_LENGTH  SQL_TOKEN_LOCATE          
-%token <pParseNode> SQL_TOKEN_LOCATE_2 SQL_TOKEN_LTRIM SQL_TOKEN_POSITION SQL_TOKEN_REPEAT SQL_TOKEN_REPLACE         
-%token <pParseNode> SQL_TOKEN_RIGHT SQL_TOKEN_RTRIM SQL_TOKEN_SOUNDEX SQL_TOKEN_SPACE  SQL_TOKEN_SUBSTRING SQL_TOKEN_UCASE           
+%token <pParseNode> SQL_TOKEN_CONCAT
+%token <pParseNode> SQL_TOKEN_DIFFERENCE  SQL_TOKEN_INSERT SQL_TOKEN_LCASE  SQL_TOKEN_LEFT SQL_TOKEN_LENGTH  SQL_TOKEN_LOCATE
+%token <pParseNode> SQL_TOKEN_LOCATE_2 SQL_TOKEN_LTRIM SQL_TOKEN_POSITION SQL_TOKEN_REPEAT SQL_TOKEN_REPLACE
+%token <pParseNode> SQL_TOKEN_RIGHT SQL_TOKEN_RTRIM SQL_TOKEN_SOUNDEX SQL_TOKEN_SPACE  SQL_TOKEN_SUBSTRING SQL_TOKEN_UCASE
 
 /* time and date functions */
-%token <pParseNode> SQL_TOKEN_CURRENT_DATE SQL_TOKEN_CURRENT_TIME SQL_TOKEN_CURRENT_TIMESTAMP SQL_TOKEN_CURDATE SQL_TOKEN_CURTIME          
-%token <pParseNode> SQL_TOKEN_DAYNAME  SQL_TOKEN_DAYOFMONTH  SQL_TOKEN_DAYOFWEEK  SQL_TOKEN_DAYOFYEAR SQL_TOKEN_EXTRACT          
+%token <pParseNode> SQL_TOKEN_CURRENT_DATE SQL_TOKEN_CURRENT_TIME SQL_TOKEN_CURRENT_TIMESTAMP SQL_TOKEN_CURDATE SQL_TOKEN_CURTIME
+%token <pParseNode> SQL_TOKEN_DAYNAME  SQL_TOKEN_DAYOFMONTH  SQL_TOKEN_DAYOFWEEK  SQL_TOKEN_DAYOFYEAR SQL_TOKEN_EXTRACT
 %token <pParseNode> SQL_TOKEN_HOUR SQL_TOKEN_MINUTE  SQL_TOKEN_MONTH  SQL_TOKEN_MONTHNAME SQL_TOKEN_NOW SQL_TOKEN_QUARTER SQL_TOKEN_DATEDIFF
-%token <pParseNode> SQL_TOKEN_SECOND SQL_TOKEN_TIMESTAMPADD SQL_TOKEN_TIMESTAMPDIFF SQL_TOKEN_TIMEVALUE SQL_TOKEN_WEEK SQL_TOKEN_YEAR 
+%token <pParseNode> SQL_TOKEN_SECOND SQL_TOKEN_TIMESTAMPADD SQL_TOKEN_TIMESTAMPDIFF SQL_TOKEN_TIMEVALUE SQL_TOKEN_WEEK SQL_TOKEN_YEAR
 
 /* numeric functions */
-%token <pParseNode> SQL_TOKEN_ABS SQL_TOKEN_ACOS SQL_TOKEN_ASIN SQL_TOKEN_ATAN SQL_TOKEN_ATAN2 SQL_TOKEN_CEILING 
+%token <pParseNode> SQL_TOKEN_ABS SQL_TOKEN_ACOS SQL_TOKEN_ASIN SQL_TOKEN_ATAN SQL_TOKEN_ATAN2 SQL_TOKEN_CEILING
 %token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_FLOOR SQL_TOKEN_LOGF  SQL_TOKEN_LOG SQL_TOKEN_LN
 %token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND SQL_TOKEN_ROUNDMAGIC
 %token <pParseNode> SQL_TOKEN_ROUND   SQL_TOKEN_SIGN    SQL_TOKEN_SIN     SQL_TOKEN_SQRT    SQL_TOKEN_TAN SQL_TOKEN_TRUNCATE
 
 // computational operation
-%token <pParseNode> SQL_TOKEN_EVERY SQL_TOKEN_INTERSECTION SQL_TOKEN_FUSION SQL_TOKEN_COLLECT SQL_TOKEN_VAR_POP SQL_TOKEN_VAR_SAMP 
+%token <pParseNode> SQL_TOKEN_EVERY SQL_TOKEN_INTERSECTION SQL_TOKEN_FUSION SQL_TOKEN_COLLECT SQL_TOKEN_VAR_POP SQL_TOKEN_VAR_SAMP
 %token <pParseNode> SQL_TOKEN_STDDEV_SAMP SQL_TOKEN_STDDEV_POP
 
 %token <pParseNode> SQL_TOKEN_RANK SQL_TOKEN_DENSE_RANK	SQL_TOKEN_PERCENT_RANK	SQL_TOKEN_CUME_DIST SQL_TOKEN_PERCENTILE_CONT SQL_TOKEN_PERCENTILE_DISC SQL_TOKEN_WITHIN SQL_TOKEN_ARRAY_AGG
@@ -222,7 +222,7 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_SESSION_USER SQL_TOKEN_SYSTEM_USER SQL_TOKEN_VARCHAR SQL_TOKEN_VARBINARY SQL_TOKEN_VARYING SQL_TOKEN_OBJECT SQL_TOKEN_NCLOB SQL_TOKEN_NATIONAL
 %token <pParseNode> SQL_TOKEN_LARGE SQL_TOKEN_CLOB SQL_TOKEN_BLOB SQL_TOKEN_BIGINT SQL_TOKEN_BINARY SQL_TOKEN_WITHOUT SQL_TOKEN_BOOLEAN SQL_TOKEN_INTERVAL
 // window function
-%token <pParseNode> SQL_TOKEN_OVER SQL_TOKEN_ROW_NUMBER SQL_TOKEN_NTILE SQL_TOKEN_LEAD SQL_TOKEN_LAG SQL_TOKEN_RESPECT SQL_TOKEN_IGNORE SQL_TOKEN_NULLS 
+%token <pParseNode> SQL_TOKEN_OVER SQL_TOKEN_ROW_NUMBER SQL_TOKEN_NTILE SQL_TOKEN_LEAD SQL_TOKEN_LAG SQL_TOKEN_RESPECT SQL_TOKEN_IGNORE SQL_TOKEN_NULLS
 %token <pParseNode> SQL_TOKEN_FIRST_VALUE SQL_TOKEN_LAST_VALUE SQL_TOKEN_NTH_VALUE SQL_TOKEN_FIRST SQL_TOKEN_LAST
 %token <pParseNode> SQL_TOKEN_EXCLUDE SQL_TOKEN_OTHERS SQL_TOKEN_TIES SQL_TOKEN_FOLLOWING SQL_TOKEN_UNBOUNDED SQL_TOKEN_PRECEDING SQL_TOKEN_RANGE SQL_TOKEN_ROWS
 %token <pParseNode> SQL_TOKEN_PARTITION SQL_TOKEN_WINDOW SQL_TOKEN_NO
@@ -263,8 +263,8 @@ using namespace connectivity;
 %type <pParseNode> where_clause opt_group_by_clause column_ref_commalist opt_having_clause
 %type <pParseNode> search_condition predicate comparison_predicate comparison_predicate_part_2 between_predicate between_predicate_part_2
 %type <pParseNode> like_predicate opt_escape test_for_null null_predicate_part_2 in_predicate in_predicate_part_2 character_like_predicate_part_2 other_like_predicate_part_2
-%type <pParseNode> all_or_any_predicate any_all_some existence_test subquery quantified_comparison_predicate_part_2 
-%type <pParseNode> scalar_exp_commalist parameter_ref literal parenthesized_boolean_value_expression 
+%type <pParseNode> all_or_any_predicate any_all_some existence_test subquery quantified_comparison_predicate_part_2
+%type <pParseNode> scalar_exp_commalist parameter_ref literal parenthesized_boolean_value_expression
 %type <pParseNode> column_ref data_type column cursor parameter range_variable user /*like_check*/
 /* neue Regeln bei OJ */
 %type <pParseNode> derived_column as_clause table_name num_primary term num_value_exp
@@ -281,9 +281,9 @@ using namespace connectivity;
 %type <pParseNode> extract_source char_length_exp octet_length_exp bit_length_exp select_sublist string_value_exp
 %type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct fold
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
-%type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source 
+%type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source
 %type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
-%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument 
+%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument
 %type <pParseNode> all query_primary sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
@@ -292,7 +292,7 @@ using namespace connectivity;
 %type <pParseNode> ordered_set_function inverse_distribution_function hypothetical_set_function hypothetical_set_function_value_expression_list rank_function_type within_group_specification inverse_distribution_function_type array_aggregate_function inverse_distribution_function_argument
 %type <pParseNode> case_expression else_clause result_expression result case_abbreviation case_specification searched_when_clause simple_when_clause searched_case simple_case
 %type <pParseNode> when_operand_list when_operand case_operand
-%type <pParseNode> trigger_definition trigger_name trigger_action_time trigger_event transition_table_or_variable_list triggered_action trigger_column_list triggered_when_clause triggered_SQL_statement SQL_procedure_statement old_transition_variable_name new_transition_variable_name 
+%type <pParseNode> trigger_definition trigger_name trigger_action_time trigger_event transition_table_or_variable_list triggered_action trigger_column_list triggered_when_clause triggered_SQL_statement SQL_procedure_statement old_transition_variable_name new_transition_variable_name
 %type <pParseNode> op_referencing op_trigger_columnlist op_triggered_action_for opt_row trigger_for SQL_procedure_statement_list transition_table_or_variable old_transition_table_name new_transition_table_name transition_table_name
 %type <pParseNode> searched_when_clause_list simple_when_clause_list predefined_type opt_char_set_spec opt_collate_clause character_string_type national_character_string_type
 %type <pParseNode> binary_string_type numeric_type boolean_type datetime_type interval_type opt_paren_precision paren_char_length opt_paren_char_large_length paren_character_large_object_length
@@ -323,7 +323,7 @@ sql_single_statement:
 
 	/* schema definition language */
 	/* Note: other ``sql:sal_Unicode() rules appear later in the grammar */
-	
+
 sql:
 		manipulative_statement
 	|	schema_element
@@ -332,7 +332,7 @@ sql:
 		$$->append($1);
 	   }
 	;
-	
+
 /***
 
 op_authorization:
@@ -945,7 +945,7 @@ selection:
 opt_result_offset_clause:
 		/* empty */ {$$ = SQL_NEW_RULE;}
 	|	result_offset_clause
-	;	
+	;
 result_offset_clause:
 	SQL_TOKEN_OFFSET offset_row_count row_or_rows
 	{
@@ -960,11 +960,11 @@ opt_fetch_first_row_count:
 	|	fetch_first_row_count
 	;
 first_or_next:
-		SQL_TOKEN_FIRST 
+		SQL_TOKEN_FIRST
 	|	SQL_TOKEN_NEXT
 	;
 row_or_rows:
-		SQL_TOKEN_ROW 
+		SQL_TOKEN_ROW
 	|	SQL_TOKEN_ROWS
 	;
 opt_fetch_first_clause:
@@ -1090,7 +1090,7 @@ table_ref:
 			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
-		}	
+		}
 	;
 where_clause:
 		SQL_TOKEN_WHERE search_condition
@@ -1231,7 +1231,7 @@ predicate:
 	|       in_predicate
 	|       like_predicate
 	;
-comparison_predicate_part_2:	
+comparison_predicate_part_2:
 		comparison row_value_constructor
 		{
 			$$ = SQL_NEW_RULE; // comparison_predicate: rule 1
@@ -1295,10 +1295,10 @@ comparison:
 between_predicate_part_2:
 	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // between_predicate: rule 2 
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // between_predicate: rule 2
 			{
 				$$ = SQL_NEW_RULE;
-				
+
 				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$3,$2,$5);
 				if(nErg == 1)
 				{
@@ -1310,7 +1310,7 @@ between_predicate_part_2:
 					pBetween_predicate->append(pColumnRef);
 					pBetween_predicate->append($$);
 					$$ = pBetween_predicate;
-					
+
 					delete pTemp;
 					delete $4;
 				}
@@ -1332,7 +1332,7 @@ between_predicate_part_2:
 		}
 between_predicate:
 		row_value_constructor between_predicate_part_2
-		{	
+		{
 			$$ = SQL_NEW_RULE; // between_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
@@ -1734,7 +1734,7 @@ char_length_exp:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	
+
 	;
 octet_length_exp:
 		SQL_TOKEN_OCTET_LENGTH '(' value_exp ')'
@@ -1977,85 +1977,85 @@ string_function_1Argument:
 	|	SQL_TOKEN_SPACE
 	|	SQL_TOKEN_UCASE
 	;
-	
+
 string_function_2Argument:
-		SQL_TOKEN_REPEAT        
+		SQL_TOKEN_REPEAT
 	|	SQL_TOKEN_LEFT
 	|	SQL_TOKEN_RIGHT
 	;
 string_function_3Argument:
-		SQL_TOKEN_REPLACE       
+		SQL_TOKEN_REPLACE
 	;
 string_function_4Argument:
 		SQL_TOKEN_INSERT
 	;
-	
+
 string_function:
 		SQL_TOKEN_CHAR
 	|	SQL_TOKEN_CONCAT
 	|	SQL_TOKEN_DIFFERENCE
-	|	SQL_TOKEN_LOCATE_2      
-	|	SQL_TOKEN_SOUNDEX       
+	|	SQL_TOKEN_LOCATE_2
+	|	SQL_TOKEN_SOUNDEX
 	;
 date_function_0Argument:
-		SQL_TOKEN_CURDATE             
-	|	SQL_TOKEN_CURTIME             
-	|	SQL_TOKEN_NOW                 
+		SQL_TOKEN_CURDATE
+	|	SQL_TOKEN_CURTIME
+	|	SQL_TOKEN_NOW
 	;
 date_function_1Argument:
-		SQL_TOKEN_DAYOFWEEK           
-	|	SQL_TOKEN_DAYOFMONTH          
-	|	SQL_TOKEN_DAYOFYEAR           
-	|	SQL_TOKEN_MONTH               
-	|	SQL_TOKEN_DAYNAME             
-	|	SQL_TOKEN_MONTHNAME           
-	|	SQL_TOKEN_QUARTER             
-	|	SQL_TOKEN_HOUR                
-	|	SQL_TOKEN_MINUTE              
-	|	SQL_TOKEN_SECOND         
+		SQL_TOKEN_DAYOFWEEK
+	|	SQL_TOKEN_DAYOFMONTH
+	|	SQL_TOKEN_DAYOFYEAR
+	|	SQL_TOKEN_MONTH
+	|	SQL_TOKEN_DAYNAME
+	|	SQL_TOKEN_MONTHNAME
+	|	SQL_TOKEN_QUARTER
+	|	SQL_TOKEN_HOUR
+	|	SQL_TOKEN_MINUTE
+	|	SQL_TOKEN_SECOND
 	|	SQL_TOKEN_YEAR
 	|	SQL_TOKEN_DAY
 	|	SQL_TOKEN_TIMEVALUE
 	|	SQL_TOKEN_DATEVALUE
 	;
-	
+
 date_function:
-		SQL_TOKEN_TIMESTAMPADD        
-	|	SQL_TOKEN_TIMESTAMPDIFF       
+		SQL_TOKEN_TIMESTAMPADD
+	|	SQL_TOKEN_TIMESTAMPDIFF
 	;
 numeric_function_0Argument:
-		SQL_TOKEN_PI              
+		SQL_TOKEN_PI
 	;
 numeric_function_1Argument:
 		SQL_TOKEN_ABS
-	|	SQL_TOKEN_ACOS            
-	|	SQL_TOKEN_ASIN            
-	|	SQL_TOKEN_ATAN            
-	|	SQL_TOKEN_CEILING         
-	|	SQL_TOKEN_COS             
-	|	SQL_TOKEN_COT             
-	|	SQL_TOKEN_DEGREES         
-	|	SQL_TOKEN_FLOOR           
-	|	SQL_TOKEN_SIGN            
-	|	SQL_TOKEN_SIN             
-	|	SQL_TOKEN_SQRT            
-	|	SQL_TOKEN_TAN             
-	|	SQL_TOKEN_EXP             
-	|	SQL_TOKEN_LOG10           
+	|	SQL_TOKEN_ACOS
+	|	SQL_TOKEN_ASIN
+	|	SQL_TOKEN_ATAN
+	|	SQL_TOKEN_CEILING
+	|	SQL_TOKEN_COS
+	|	SQL_TOKEN_COT
+	|	SQL_TOKEN_DEGREES
+	|	SQL_TOKEN_FLOOR
+	|	SQL_TOKEN_SIGN
+	|	SQL_TOKEN_SIN
+	|	SQL_TOKEN_SQRT
+	|	SQL_TOKEN_TAN
+	|	SQL_TOKEN_EXP
+	|	SQL_TOKEN_LOG10
 	|	SQL_TOKEN_LN
 	|	SQL_TOKEN_RADIANS
 	|	SQL_TOKEN_ROUNDMAGIC
 	;
 numeric_function_2Argument:
-		SQL_TOKEN_ATAN2           
-	|	SQL_TOKEN_MOD             
-	|	SQL_TOKEN_POWER           
+		SQL_TOKEN_ATAN2
+	|	SQL_TOKEN_MOD
+	|	SQL_TOKEN_POWER
 	;
 numeric_function:
-		SQL_TOKEN_RAND            
+		SQL_TOKEN_RAND
 	|	SQL_TOKEN_TRUNCATE
 	;
-	
+
 window_function:
 	window_function_type SQL_TOKEN_OVER window_name_or_specification
 	{
@@ -2108,7 +2108,7 @@ number_of_tiles :
 	;
 opt_lead_or_lag_function:
 	/* empty */      {$$ = SQL_NEW_RULE;}
-	| ',' offset 
+	| ',' offset
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode(",", SQL_NODE_PUNCTUATION));
@@ -2127,7 +2127,7 @@ opt_null_treatment:
 		/* empty */      {$$ = SQL_NEW_RULE;}
 	|	null_treatment
 	;
-	
+
 lead_or_lag_function:
 	lead_or_lag '(' lead_or_lag_extent opt_lead_or_lag_function ')'	opt_null_treatment
 	{
@@ -2141,7 +2141,7 @@ lead_or_lag_function:
 	}
 	;
 lead_or_lag:
-		SQL_TOKEN_LEAD 
+		SQL_TOKEN_LEAD
 	|	SQL_TOKEN_LAG
 	;
 lead_or_lag_extent:
@@ -2154,7 +2154,7 @@ default_expression:
 	value_exp
 	;
 null_treatment:
-		SQL_TOKEN_RESPECT SQL_TOKEN_NULLS 
+		SQL_TOKEN_RESPECT SQL_TOKEN_NULLS
 	|	SQL_TOKEN_IGNORE SQL_TOKEN_NULLS
 	;
 first_or_last_value_function:
@@ -2169,7 +2169,7 @@ first_or_last_value_function:
 	}
 	;
 first_or_last_value :
-		SQL_TOKEN_FIRST_VALUE 
+		SQL_TOKEN_FIRST_VALUE
 	|	SQL_TOKEN_LAST_VALUE
 	;
 opt_from_first_or_last:
@@ -2215,7 +2215,7 @@ window_name_or_specification:
 		window_name
 	|	in_line_window_specification
 	;
-in_line_window_specification: 
+in_line_window_specification:
 	window_specification
 	;
 opt_window_clause:
@@ -2263,11 +2263,11 @@ opt_existing_window_name:
 		/* empty */      {$$ = SQL_NEW_RULE;}
 	|	existing_window_name
 	;
-opt_window_partition_clause:	
+opt_window_partition_clause:
 	/* empty */      {$$ = SQL_NEW_RULE;}
 	|	window_partition_clause
 	;
-opt_window_frame_clause:	
+opt_window_frame_clause:
 	/* empty */      {$$ = SQL_NEW_RULE;}
 	|	window_frame_clause
 	;
@@ -2316,7 +2316,7 @@ window_frame_clause:
 		$$->append($1);
 		$$->append($2);
 		$$->append($3);
-	}	
+	}
 	;
 window_frame_units:
 		SQL_TOKEN_ROWS
@@ -2332,14 +2332,14 @@ window_frame_start:
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-		}	
+		}
 	|	window_frame_preceding
 	|	SQL_TOKEN_CURRENT SQL_TOKEN_ROW
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-		}	
+		}
 	;
 window_frame_preceding:
 	unsigned_value_spec SQL_TOKEN_PRECEDING
@@ -2526,7 +2526,7 @@ set_fct_type:
 	|   SQL_TOKEN_INTERSECTION
 	;
 
-ordered_set_function:	
+ordered_set_function:
 		hypothetical_set_function
 	|	inverse_distribution_function
 	;
@@ -2569,8 +2569,8 @@ within_group_specification:
 	;
 hypothetical_set_function_value_expression_list:
 	value_exp_commalist
-	; 
-	
+	;
+
 inverse_distribution_function:
 	inverse_distribution_function_type '('inverse_distribution_function_argument ')' within_group_specification
 	{
@@ -2588,7 +2588,7 @@ inverse_distribution_function_type:
 		SQL_TOKEN_PERCENTILE_CONT
 	|	SQL_TOKEN_PERCENTILE_DISC
 	;
-	
+
 array_aggregate_function:
 	SQL_TOKEN_ARRAY_AGG '(' value_exp opt_order_by_clause ')'
 	{
@@ -2600,7 +2600,7 @@ array_aggregate_function:
 		$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
-	
+
 rank_function_type:
 		SQL_TOKEN_RANK
 	|	SQL_TOKEN_DENSE_RANK
@@ -3093,7 +3093,7 @@ value_exp_commalist:
 		}
 	;
 function_arg:
-		result 
+		result
 	|	value_exp comparison value_exp
 		{
 			$$ = SQL_NEW_RULE;
@@ -3136,7 +3136,7 @@ function_args_commalist:
 				YYERROR;
 		}
 	;
-	
+
 value_exp:
 		num_value_exp /*[^')']*/
 	  | string_value_exp
@@ -3402,7 +3402,7 @@ trim_operands:
 		}
 	| value_exp
 	;
-	
+
 trim_spec:
         SQL_TOKEN_BOTH
 	|	SQL_TOKEN_LEADING
@@ -3440,7 +3440,7 @@ catalog_name:
 		}
 ;
 schema_name:
-		SQL_TOKEN_NAME '.' table_name 
+		SQL_TOKEN_NAME '.' table_name
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -3464,7 +3464,7 @@ column_ref:
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);}
-*/	
+*/
 	|       SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -3524,7 +3524,7 @@ column_val:
 data_type:
 	predefined_type
 	;
-opt_char_set_spec:	
+opt_char_set_spec:
 	{$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_CHARACTER SQL_TOKEN_SET SQL_TOKEN_NAME
 		{
@@ -3532,7 +3532,7 @@ opt_char_set_spec:
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
-		}	
+		}
 	;
 opt_collate_clause:
 	{$$ = SQL_NEW_RULE;}
@@ -3610,7 +3610,7 @@ opt_paren_char_large_length:
 		{$$ = SQL_NEW_RULE;}
 	|	paren_character_large_object_length
 	;
-paren_character_large_object_length:	
+paren_character_large_object_length:
 	'(' large_object_length ')'
 	{
 		$$ = SQL_NEW_RULE;
@@ -3619,7 +3619,7 @@ paren_character_large_object_length:
 		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
-	
+
 large_object_length:
 	SQL_TOKEN_INTNUM opt_multiplier
 	{
@@ -4056,7 +4056,7 @@ result_expression:
 case_operand:
 	row_value_constructor_elem
 	;
-	
+
 cursor:	SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);}
@@ -4091,7 +4091,7 @@ procedure:      SQL_TOKEN_NAME
 	;
 ***/
 
-range_variable: 
+range_variable:
         {$$ = SQL_NEW_RULE;}
     |   opt_as SQL_TOKEN_NAME
         {$$ = SQL_NEW_RULE;
@@ -4203,7 +4203,7 @@ op_triggered_action_for:
     }
 	;
 trigger_for:
-		SQL_TOKEN_ROW 
+		SQL_TOKEN_ROW
 	|	SQL_TOKEN_STATEMENT
 	;
 triggered_when_clause:
@@ -4230,12 +4230,12 @@ triggered_SQL_statement:
     }
 	;
 SQL_procedure_statement_list:
-		SQL_procedure_statement 
+		SQL_procedure_statement
 		{
 			$$ = SQL_NEW_LISTRULE;
 			$$->append($1);
 		}
-	|	SQL_procedure_statement_list ';' SQL_procedure_statement 
+	|	SQL_procedure_statement_list ';' SQL_procedure_statement
 		{
 			$1->append($3);
 			$$ = $1;
@@ -4244,7 +4244,7 @@ SQL_procedure_statement_list:
 SQL_procedure_statement:
 	sql
 	;
-	
+
 transition_table_or_variable_list:
 		transition_table_or_variable
 		{
@@ -4542,7 +4542,7 @@ const double fMilliSecondsPerDay = 86400000.0;
 		    sSearch.appendAscii("*?",2);
 		    sReplace.appendAscii("%_",2);
 		}
-		
+
 		for (sal_Int32 i = 0; i < nLen; i++)
 		{
 			const sal_Unicode c = aMatchStr[i];
@@ -4594,7 +4594,7 @@ void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
  */
 static ::rtl::OUString delComment( const ::rtl::OUString& rQuery )
 {
-    // First a quick search if there is any "--" or "//" or "/*", if not then the whole 
+    // First a quick search if there is any "--" or "//" or "/*", if not then the whole
     // copying loop is pointless.
     if (rQuery.indexOfAsciiL( "--", 2, 0) < 0 && rQuery.indexOfAsciiL( "//", 2, 0) < 0 &&
             rQuery.indexOfAsciiL( "/*", 2, 0) < 0)
@@ -4784,14 +4784,14 @@ sal_Int16 OSQLParser::buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,
 		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::between_predicate_part_2));
 	else
 		pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
-	
+
 	pComp->append(pColumnRef);
 	pComp->append(pCompare);
 	pComp->append(pLiteral);
 	if ( pLiteral2 )
 	{
 		pComp->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD,SQL_TOKEN_AND));
-		pComp->append(pLiteral2);		
+		pComp->append(pLiteral2);
 	}
 	pAppend->append(pComp);
 	return 1;
@@ -4848,7 +4848,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 	{
 		aValue.appendAscii(" ");
 	}
-	
+
 	aValue.append(pLiteral->getChild(1)->getTokenValue());
 
 	pLiteral = new OSQLInternalNode(aValue.makeStringAndClear(),SQL_NODE_STRING);
