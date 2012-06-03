@@ -747,7 +747,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bNeedListening( sal_False ),
     aPos( rPos )
 {
-    pCode = rCell.pCode->Clone();
+    pCode = (rCell.pCode) ? rCell.pCode->Clone() : NULL;
 
     if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
         pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
@@ -912,7 +912,8 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 void ScFormulaCell::Compile( const String& rFormula, sal_Bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
-    if ( pDocument->IsClipOrUndo() ) return;
+    //#118851#, the initialization code for pCode after it can not be gnored if it is still NULL
+    if ( pCode && pDocument->IsClipOrUndo() ) return;
     sal_Bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
     if ( bWasInFormulaTree )
         pDocument->RemoveFromFormulaTree( this );
