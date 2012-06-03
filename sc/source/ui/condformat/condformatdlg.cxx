@@ -51,6 +51,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maEdVal2( this, ScResId( ED_VAL2 ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
+    maWdPreview( this, ScResId( WD_PREVIEW ) ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
     maLbColScale3( this, ScResId( LB_COL_SCALE3 ) ),
@@ -62,11 +63,9 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maEdMax( this, ScResId( ED_COL_SCALE ) ),
     mpDoc(pDoc)
 {
-    Size aSize = GetSizePixel();
-    aSize.Height() = 40;
-    SetSizePixel(aSize);
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     SwitchToType(COLLAPSED);
+    SetHeight();
     FreeResource();
 
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
@@ -96,7 +95,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     aPointEd.X() += nMovePos;
     maLbEntryTypeMiddle.SetPosPixel(aPointLb);
     maEdMiddle.SetPosPixel(aPointEd);
-    maLbEntryTypeMiddle.SelectEntryPos(3);
+    maLbEntryTypeMiddle.SelectEntryPos(2);
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     maLbEntryTypeMax.SelectEntryPos(1);
@@ -165,16 +164,13 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
 		maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
 		maFtCondition.SetText(maCondText.makeStringAndClear());
 		maFtCondition.Show();
-		maEdVal2.Hide();
-		maEdVal1.Hide();
 	    }
 	    break;
 	default:
+	    meType = eType;
 	    maLbType.Show();
 	    maFtCondition.SetText(rtl::OUString(""));
 	    maFtCondition.Hide();
-	    maEdVal1.Show();
-	    maEdVal2.Show();
 	    break;
     }
 }
@@ -186,6 +182,7 @@ void ScCondFrmtEntry::HideCondElements()
     maLbStyle.Hide();
     maFtStyle.Hide();
     maLbCondType.Hide();
+    maWdPreview.Hide();
 }
 
 void ScCondFrmtEntry::SetCondType()
@@ -195,8 +192,10 @@ void ScCondFrmtEntry::SetCondType()
     maLbStyle.Show();
     maLbCondType.Show();
     maFtStyle.Show();
+    maWdPreview.Show();
     HideColorScaleElements();
     HideDataBarElements();
+    SwitchToType(CONDITION);
 }
 
 void ScCondFrmtEntry::HideColorScaleElements()
@@ -210,6 +209,39 @@ void ScCondFrmtEntry::HideColorScaleElements()
     maEdMin.Hide();
     maEdMiddle.Hide();
     maEdMax.Hide();
+}
+
+void ScCondFrmtEntry::SetHeight()
+{
+    if(mbActive)
+    {
+	Size aSize = GetSizePixel();
+	switch (meType)
+	{
+	    case CONDITION:
+		std::cout << "CONDITION: set height 120" << std::endl;
+		aSize.Height() = 120;
+		break;
+	    case COLORSCALE:
+		std::cout << "set height 200" << std::endl;
+		aSize.Height() = 200;
+		break;
+	    case DATABAR:
+		std::cout << "DATABAR: set height 120" << std::endl;
+		aSize.Height() = 120;
+		break;
+	    default:
+		break;
+	}
+	SetSizePixel(aSize);
+    }
+    else
+    {
+	std::cout << "set height 40" << std::endl;
+	Size aSize = GetSizePixel();
+	aSize.Height() = 40;
+	SetSizePixel(aSize);
+    }
 }
 
 void ScCondFrmtEntry::SetColorScaleType()
@@ -234,8 +266,8 @@ void ScCondFrmtEntry::SetColorScaleType()
     maLbEntryTypeMin.Show();
     maLbEntryTypeMax.Show();
     maEdMin.Show();
-    maEdMiddle.Show();
     maEdMax.Show();
+    SwitchToType(COLORSCALE);
 }
 
 void ScCondFrmtEntry::HideDataBarElements()
@@ -245,6 +277,7 @@ void ScCondFrmtEntry::HideDataBarElements()
 
 void ScCondFrmtEntry::SetDataBarType()
 {
+    SwitchToType(DATABAR);
     HideCondElements();
     HideColorScaleElements();
     maLbColorFormat.Show();
@@ -252,22 +285,18 @@ void ScCondFrmtEntry::SetDataBarType()
 
 void ScCondFrmtEntry::Select()
 {
-    Size aSize = GetSizePixel();
-    aSize.Height() = 130;
-    SetSizePixel(aSize);
     SetControlForeground(Color(COL_RED));
     SwitchToType(meType);
     mbActive = true;
+    SetHeight();
 }
 
 void ScCondFrmtEntry::Deselect()
 {
-    Size aSize = GetSizePixel();
-    aSize.Height() = 40;
-    SetSizePixel(aSize);
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     SwitchToType(COLLAPSED);
     mbActive = false;
+    SetHeight();
 }
 
 bool ScCondFrmtEntry::IsSelected() const
@@ -295,15 +324,22 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
 	default:
 	    break;
     }
+    SetHeight();
     return 0;
 }
 
 IMPL_LINK_NOARG(ScCondFrmtEntry, ColFormatTypeHdl)
 {
     if(maLbColorFormat.GetSelectEntryPos() < 2)
+    {
 	SetColorScaleType();
+    }
     else
+    {
 	SetDataBarType();
+    }
+
+    SetHeight();
 
     return 0;
 }

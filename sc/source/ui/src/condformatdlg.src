@@ -194,8 +194,16 @@ Control RID_COND_ENTRY
     };
     Edit ED_COL_SCALE
     {
-	Pos = MAP_APPFONT( 5, 50 );
+	Pos = MAP_APPFONT( 5, 48 );
 	Size = MAP_APPFONT( 40, 12 );
+	Border = TRUE;
+    };
+    Window WD_PREVIEW
+    {
+	Pos = MAP_APPFONT( 90, 32 );
+	Size = MAP_APPFONT( 40, 14 );
+	Text [ en-US ] = "Example";
+	Border = TRUE;
     };
 };
 

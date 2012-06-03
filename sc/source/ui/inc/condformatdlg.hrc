@@ -50,5 +50,6 @@
 #define LB_COL_SCALE3 24
 #define LB_TYPE_COL_SCALE 25
 #define ED_COL_SCALE 28
+#define WD_PREVIEW 26
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
