@@ -320,7 +320,7 @@ void TabWindowService::impl_initializePropInfo()
 
     impl_addPropertyInfo(
         css::beans::Property(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Window")),
+            rtl::OUString("Window"),
             TABWINDOWSERVICE_PROPHANDLE_WINDOW,
             ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
             css::beans::PropertyAttribute::TRANSIENT));
@@ -438,7 +438,7 @@ void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
        )
     {
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab index out of bounds.")),
+                ::rtl::OUString("Tab index out of bounds."),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     }
 }
@@ -452,7 +452,7 @@ TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID
     TTabPageInfoHash::iterator pIt = m_lTabPageInfos.find(nID);
     if (pIt == m_lTabPageInfos.end ())
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab index out of bounds.")),
+                ::rtl::OUString("Tab index out of bounds."),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     return pIt;
 }

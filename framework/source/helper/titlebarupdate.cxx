@@ -206,24 +206,24 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer"));
+            sDesktopName = ::rtl::OUString("writer");
         else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc"));
+            sDesktopName = ::rtl::OUString("calc");
         else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress"));
+            sDesktopName = ::rtl::OUString("impress");
         else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw"));
+            sDesktopName = ::rtl::OUString("draw");
         else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math"));
+            sDesktopName = ::rtl::OUString("math");
         else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("base"));
+            sDesktopName = ::rtl::OUString("base");
         else
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
+            sDesktopName = ::rtl::OUString("startcenter");
         sApplicationID = utl::ConfigManager::getProductName().
             toAsciiLowerCase();
         sApplicationID += ::rtl::OUString(sal_Unicode('-'));

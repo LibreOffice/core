@@ -211,7 +211,7 @@ namespace {
 
 ::rtl::OUString lcl_getLocalizedMessage(::sal_Int32 nID)
 {
-    ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Unknown error."));
+    ::rtl::OUString sMessage("Unknown error.");
 
     switch(nID)
     {
@@ -242,8 +242,8 @@ void lcl_throwCorruptedUIConfigurationException(
         lcl_getLocalizedMessage(id),
         css::uno::Reference< css::uno::XInterface >(),
         (exception.getValueTypeName() +
-         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": \"")) + e.Message +
-         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""))));
+         rtl::OUString(": \"") + e.Message +
+         rtl::OUString("\"")));
 }
 
 }
@@ -275,7 +275,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Note: May be an user uses URLs without a final slash! Check it ...
     nPos = sShareLayer.lastIndexOf('/');
     if (nPos != sShareLayer.getLength()-1)
-        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sShareLayer += ::rtl::OUString("/");
 
     sShareLayer += RELPATH_SHARE_LAYER; // folder
     /*
@@ -330,7 +330,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Note: May be an user uses URLs without a final slash! Check it ...
     sal_Int32 nPos = sUserLayer.lastIndexOf('/');
     if (nPos != sUserLayer.getLength()-1)
-        sUserLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sUserLayer += ::rtl::OUString("/");
 
     sUserLayer  += RELPATH_USER_LAYER; // storage file
 
@@ -429,7 +429,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         if (!xDocumentRoot.is())
             throw css::uno::RuntimeException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("There is valid root storage, where the UI configuration can work on.")),
+                    ::rtl::OUString("There is valid root storage, where the UI configuration can work on."),
                     css::uno::Reference< css::uno::XInterface >());
         m_lDocumentStorages.setRootStorage(xDocumentRoot);
         xShare = xDocumentRoot;

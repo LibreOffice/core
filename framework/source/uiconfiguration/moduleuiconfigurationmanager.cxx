@@ -128,7 +128,7 @@ static const char       RESOURCEURL_CUSTOM_ELEMENT[] = "custom_";
 static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL )
 {
 
-    if (( aResourceURL.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
+    if (( aResourceURL.indexOf( OUString( RESOURCEURL_PREFIX )) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         OUString    aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
@@ -149,7 +149,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL 
 
 static OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
 {
-    if (( aResourceURL.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
+    if (( aResourceURL.indexOf( OUString( RESOURCEURL_PREFIX )) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );
@@ -169,7 +169,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
     UIElementDataHashMap& rUserElements = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::const_iterator pUserIter = rUserElements.begin();
 
-    OUString aCustomUrlPrefix( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_CUSTOM_ELEMENT ));
+    OUString aCustomUrlPrefix( RESOURCEURL_CUSTOM_ELEMENT );
     while ( pUserIter != rUserElements.end() )
     {
         sal_Int32 nIndex = pUserIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
@@ -744,9 +744,9 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager( com::sun::star::uno:
     , m_bModified( false )
     , m_bConfigRead( false )
     , m_bDisposed( false )
-    , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
-    , m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))
-    , m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
+    , m_aXMLPostfix( ".xml" )
+    , m_aPropUIName( "UIName" )
+    , m_aPropResourceURL( "ResourceURL" )
     , m_xServiceManager( xServiceManager )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
@@ -826,8 +826,8 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleShortName")), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString("ModuleIdentifier"), ::rtl::OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString("ModuleShortName"), ::rtl::OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -863,7 +863,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
             if ( xPropSet.is() )
             {
                 long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" )));
+                Any a = xPropSet->getPropertyValue( rtl::OUString( "OpenMode" ));
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
@@ -1352,13 +1352,13 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
         Sequence< Any > aPropSeq( 3 );
         PropertyValue aPropValue;
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
+        aPropValue.Name  = rtl::OUString( "UserConfigStorage" );
         aPropValue.Value = makeAny( m_xUserConfigStorage );
         aPropSeq[0] = makeAny( aPropValue );
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aPropValue.Name  = rtl::OUString( "ModuleIdentifier" );
         aPropValue.Value = makeAny( m_aModuleIdentifier );
         aPropSeq[1] = makeAny( aPropValue );
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
+        aPropValue.Name  = rtl::OUString( "UserRootCommit" );
         aPropValue.Value = makeAny( m_xUserRootCommit );
         aPropSeq[2] = makeAny( aPropValue );
 
@@ -1384,7 +1384,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
         Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
 
         PropertyValue aProp;
-        aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier"));
+        aProp.Name    = ::rtl::OUString("ModuleIdentifier");
         aProp.Value <<= aModule;
 
         Sequence< Any > lArgs(1);

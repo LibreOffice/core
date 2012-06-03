@@ -176,8 +176,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
 {
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
-    const ::rtl::OUString providerKey(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.ScriptProviderFor"));
-    const ::rtl::OUString languageProviderName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.LanguageScriptProvider"));
+    const ::rtl::OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
+    const ::rtl::OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );

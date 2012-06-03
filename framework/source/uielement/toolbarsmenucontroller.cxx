@@ -130,7 +130,7 @@ Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >
 
     try
     {
-        xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
+        xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xLayoutManager;
     }
     catch ( const UnknownPropertyException& )
     {
@@ -155,8 +155,8 @@ DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
 ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     svt::PopupMenuControllerBase( xServiceManager ),
-    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" )),
-    m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" )),
+    m_aPropUIName( "UIName" ),
+    m_aPropResourceURL( "ResourceURL" ),
     m_bModuleIdentified( sal_False ),
     m_bResetActive( sal_False ),
     m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() )
@@ -182,7 +182,7 @@ void ToolbarsMenuController::addCommand(
     Reference< awt::XMenuExtended > xMenuExtended( m_xPopupMenu, UNO_QUERY );
     xMenuExtended->setCommand( nItemId, rCommandURL );
 
-    bool bInternal = ( rCommandURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0);
+    bool bInternal = ( rCommandURL.indexOf( rtl::OUString( STATIC_INTERNAL_CMD_PART )) == 0);
     if ( !bInternal )
     {
         if ( !getDispatchFromCommandURL( rCommandURL ).is() )
@@ -315,8 +315,8 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
             {
                 rtl::OUString   aResName;
                 sal_Int16       nType( -1 );
-                xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ))) >>= nType;
-                xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))) >>= aResName;
+                xPropSet->getPropertyValue( rtl::OUString( "Type" )) >>= nType;
+                xPropSet->getPropertyValue( rtl::OUString( "ResourceURL" )) >>= aResName;
 
                 if (( nType == ::com::sun::star::ui::UIElementType::TOOLBAR ) &&
                     !aResName.isEmpty() )
@@ -396,7 +396,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         std::vector< ToolBarEntry > aSortedTbs;
-        rtl::OUString               aStaticCmdPart( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ));
+        rtl::OUString               aStaticCmdPart( STATIC_CMD_PART );
 
         Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeqFrameToolBars = getLayoutManagerToolbars( xLayoutManager );
         fillHashMap( aSeqFrameToolBars, aToolbarHashMap );
@@ -499,21 +499,21 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
                  m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( CMD_COLORBAR ), aEmptyString );
             else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( CMD_INPUTLINEBAR ), aEmptyString );
             else
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( CMD_FORMULABAR ), aEmptyString );
         }
 
         sal_Bool          bAddCommand( sal_True );
         SvtCommandOptions aCmdOptions;
-        rtl::OUString     aConfigureToolbar( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS ));
+        rtl::OUString     aConfigureToolbar( CONFIGURE_TOOLBARS );
 
         if ( aCmdOptions.HasEntries( SvtCommandOptions::CMDOPTION_DISABLED ))
         {
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS_CMD ))))
+                                     rtl::OUString( CONFIGURE_TOOLBARS_CMD )))
                 bAddCommand = sal_False;
         }
 
@@ -541,7 +541,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         String aLabelStr = String( FwkResId( STR_RESTORE_TOOLBARS ));
-        rtl::OUString aRestoreCmd( RTL_CONSTASCII_USTRINGPARAM( CMD_RESTOREVISIBILITY ));
+        rtl::OUString aRestoreCmd( CMD_RESTOREVISIBILITY );
         addCommand( m_xPopupMenu, aRestoreCmd, aLabelStr );
     }
 }
@@ -638,7 +638,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
             rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
-            if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0 )
+            if ( aCmd.indexOf( rtl::OUString( STATIC_INTERNAL_CMD_PART )) == 0 )
             {
                 // Command to restore the visibility of all context sensitive toolbars
                 Reference< XNameReplace > xNameReplace( xPersistentWindowState, UNO_QUERY );
@@ -697,7 +697,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                 {
                                     try
                                     {
-                                        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RefreshContextToolbarVisibility" )), makeAny( sal_True ));
+                                        xPropSet->setPropertyValue( rtl::OUString( "RefreshContextToolbarVisibility" ), makeAny( sal_True ));
                                     }
                                     catch ( const RuntimeException& )
                                     {
@@ -719,7 +719,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     }
                 }
             }
-            else if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ))) < 0 )
+            else if ( aCmd.indexOf( rtl::OUString( STATIC_CMD_PART )) < 0 )
             {
                 URL                     aTargetURL;
                 Sequence<PropertyValue> aArgs;
@@ -748,7 +748,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     sal_Int32 nIndex = aCmd.indexOf( '=' );
                     if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
                     {
-                        rtl::OUStringBuffer aBuf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_PRIVATE_TB_RESOURCE )));
+                        rtl::OUStringBuffer aBuf( rtl::OUString( STATIC_PRIVATE_TB_RESOURCE ));
                         aBuf.append( aCmd.copy( nIndex+1 ));
 
                         sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
@@ -787,7 +787,7 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
     const sal_uInt32 nCount = aCmdVector.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        bool bInternal = ( aCmdVector[i].indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0);
+        bool bInternal = ( aCmdVector[i].indexOf( rtl::OUString( STATIC_INTERNAL_CMD_PART )) == 0);
 
         if ( !bInternal )
         {

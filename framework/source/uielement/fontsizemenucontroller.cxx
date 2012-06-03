@@ -188,7 +188,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             nSizeCount++;
 
         sal_uInt16 nPos = 0;
-        const rtl::OUString aFontHeightCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight?FontHeight.Height:float=" ));
+        const rtl::OUString aFontHeightCommand( ".uno:FontHeight?FontHeight.Height:float=" );
 
         // first insert font size names (for simplified/traditional chinese)
         float           fPoint;
@@ -320,7 +320,7 @@ void FontSizeMenuController::impl_setPopupMenu()
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     // Register for font name updates which gives us info about the current font!
-    aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" ));
+    aTargetURL.Complete = rtl::OUString( ".uno:CharFontName" );
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 }
@@ -333,7 +333,7 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
     com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" ));
+    aTargetURL.Complete = rtl::OUString( ".uno:CharFontName" );
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();
 

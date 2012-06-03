@@ -132,7 +132,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
         // New vnd.sun.star.popup: command URL to support direct dispatches
-        const rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:RecentFileList?entry=" ));
+        const rtl::OUString aCmdPrefix( "vnd.sun.star.popup:RecentFileList?entry=" );
 
         m_aRecentFilesItems.clear();
         if (( nPickListMenuItems > 0 ) && !m_bDisabled )
@@ -171,17 +171,17 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 if ( i <= 9 )
                 {
                     if ( i == 9 )
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1~0: " ));
+                        aMenuShortCut = rtl::OUString( "1~0: " );
                     else
                     {
                         menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
+                        aMenuShortCut = rtl::OUString( menuShortCut );
                     }
                 }
                 else
                 {
                     aMenuShortCut = rtl::OUString::valueOf((sal_Int32)( i + 1 ));
-                    aMenuShortCut += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ));
+                    aMenuShortCut += rtl::OUString( ": " );
                 }
 
                 // Abbreviate URL
@@ -296,11 +296,11 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         sal_Int32 nSize = 2;
         aArgsList.realloc(nSize);
-        aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
+        aArgsList[0].Name = ::rtl::OUString( "Referer" );
+        aArgsList[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ));
 
         // documents in the picklist will never be opened as templates
-        aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
+        aArgsList[1].Name = ::rtl::OUString( "AsTemplate" );
         aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
 
         if (!m_aModuleName.isEmpty())
@@ -311,7 +311,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
             aArgsList[nSize-1].Value <<= m_aModuleName;
         }
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString("_default"), 0 );
     }
 
     if ( xDispatch.is() )
@@ -440,7 +440,7 @@ throw( RuntimeException )
         sal_Int32 nQueryPart = aURL.Complete.indexOf( '?', m_aBaseURL.getLength() );
         if ( nQueryPart > 0 )
         {
-            const rtl::OUString aEntryArgStr( RTL_CONSTASCII_USTRINGPARAM( "entry=" ));
+            const rtl::OUString aEntryArgStr( "entry=" );
             sal_Int32 nEntryArg = aURL.Complete.indexOf( aEntryArgStr, nQueryPart );
             sal_Int32 nEntryPos = nEntryArg + aEntryArgStr.getLength();
             if (( nEntryArg > 0 ) && ( nEntryPos < aURL.Complete.getLength() ))

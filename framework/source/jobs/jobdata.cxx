@@ -425,15 +425,15 @@ JobData::EEnvironment JobData::getEnvironment() const
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
-            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTOR"));
+            sDescriptor = ::rtl::OUString("EXECUTOR");
             break;
 
         case E_DISPATCH :
-            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISPATCH"));
+            sDescriptor = ::rtl::OUString("DISPATCH");
             break;
 
         case E_DOCUMENTEVENT :
-            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCUMENTEVENT"));
+            sDescriptor = ::rtl::OUString("DOCUMENTEVENT");
             break;
         default:
             break;
@@ -583,7 +583,7 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
         we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
         to "~" ...
      */
-    static ::rtl::OUString PATTERN_ISO8601(RTL_CONSTASCII_USTRINGPARAM("\?\?\?\?-\?\?-\?\?*\0"));
+    static ::rtl::OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*\0");
     WildCard aISOPattern(PATTERN_ISO8601);
 
     sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);

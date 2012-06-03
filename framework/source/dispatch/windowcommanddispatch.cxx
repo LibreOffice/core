@@ -151,11 +151,11 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     switch (nCommand)
     {
         case SHOWDIALOG_ID_PREFERENCES :
-                sCommand = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:OptionsTreeDialog"));
+                sCommand = rtl::OUString(".uno:OptionsTreeDialog");
                 break;
 
         case SHOWDIALOG_ID_ABOUT :
-                sCommand = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:About"));
+                sCommand = rtl::OUString(".uno:About");
                 break;
 
         default :

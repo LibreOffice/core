@@ -295,14 +295,14 @@ DEFINE_XTYPEPROVIDER_7  (   ConfigurationAccess_WindowState         ,
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const rtl::OUString& aModuleName, const Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_aConfigWindowAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
+    m_aConfigWindowAccess( CONFIGURATION_ROOT_ACCESS ),
     m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
     m_bModified( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
-    m_aConfigWindowAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_WINDOWSTATE_ACCESS ));
+    m_aConfigWindowAccess += rtl::OUString( CONFIGURATION_WINDOWSTATE_ACCESS );
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance( SERVICENAME_CFGPROVIDER ), UNO_QUERY );
 
     // Initialize access array with property names.
@@ -1224,7 +1224,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     Sequence< PropertyValue > aPropSeq;
-    ::rtl::OUString                  aDelim( RTL_CONSTASCII_USTRINGPARAM(",") );
+    ::rtl::OUString                  aDelim( "," );
 
     for ( i = 0; i < nCount; i++ )
     {
@@ -1309,10 +1309,10 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPropValue.Name  = rtl::OUString( "nodepath" );
         aPropValue.Value <<= m_aConfigWindowAccess;
         aArgs[0] <<= aPropValue;
-        aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ));
+        aPropValue.Name = rtl::OUString( "lazywrite" );
         aPropValue.Value <<= sal_True;
         aArgs[1] <<= aPropValue;
 

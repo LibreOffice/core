@@ -152,7 +152,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     else
     {
         aInfo.lURLPattern.realloc(1);
-        aInfo.lURLPattern[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+        aInfo.lURLPattern[0] = ::rtl::OUString("*");
     }
 
     // SAFE {

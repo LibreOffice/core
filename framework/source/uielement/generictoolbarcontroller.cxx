@@ -168,7 +168,7 @@ throw ( RuntimeException )
              !m_aCommandURL.isEmpty() )
         {
             xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                                                                rtl::OUString( "com.sun.star.util.URLTransformer" )),
                                                             UNO_QUERY );
 
             aCommandURL = m_aCommandURL;
@@ -184,7 +184,7 @@ throw ( RuntimeException )
         Sequence<PropertyValue>   aArgs( 1 );
 
         // Add key modifier to argument list
-        aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+        aArgs[0].Name  = rtl::OUString( "KeyModifier" );
         aArgs[0].Value <<= KeyModifier;
 
         aTargetURL.Complete = aCommandURL;
@@ -251,7 +251,7 @@ throw ( RuntimeException )
                 {
                     String aResStr = String( FwkResId( STR_UPDATEDOC ));
                     rtl::OUString aTmp( aResStr );
-                    aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+                    aTmp += rtl::OUString( " " );
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
@@ -364,7 +364,7 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
     if ( !pMenu )
     {
         Reference< XDispatchProvider > xDispatch;
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString( "com.sun.star.util.URLTransformer" )), UNO_QUERY );
         pMenu = new Toolbarmenu();
         m_xMenuManager.set( new MenuBarManager( m_xServiceManager, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
         if ( m_xMenuManager.is() )

@@ -166,16 +166,16 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
         {
             Sequence<Any> args(1);
             PropertyValue val(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath") ),
+                rtl::OUString( "nodepath" ),
                 0,
-                Any(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Help/StartCenter"))),
+                Any(rtl::OUString( "/org.openoffice.Office.Common/Help/StartCenter")),
                 PropertyState_DIRECT_VALUE);
             args.getArray()[0] <<= val;
             Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
             if( xNameAccess.is() )
             {
                 //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                Any value( xNameAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCenterHideExternalLinks"))) );
+                Any value( xNameAccess->getByName(rtl::OUString("StartCenterHideExternalLinks")) );
                 mnHideExternalLinks = value.get<sal_Int32>();
             }
         }
@@ -202,19 +202,19 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.InsertItem( nItemId_TplRep, Image() );
     maToolbox.SetItemText( nItemId_TplRep, aTplRepHelpText );
     maToolbox.SetQuickHelpText( nItemId_TplRep, aTplRepHelpText );
-    maToolbox.SetItemCommand( nItemId_TplRep, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateRepository" ) ) );
+    maToolbox.SetItemCommand( nItemId_TplRep, String( ".HelpId:StartCenter:TemplateRepository"  ) );
     maToolbox.ShowItem( nItemId_TplRep );
 
     maToolbox.InsertItem( nItemId_Extensions, Image() );
     maToolbox.SetQuickHelpText( nItemId_Extensions, aExtHelpText );
     maToolbox.SetItemText( nItemId_Extensions, aExtHelpText );
-    maToolbox.SetItemCommand( nItemId_Extensions, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Extensions" ) ) );
+    maToolbox.SetItemCommand( nItemId_Extensions, String( ".HelpId:StartCenter:Extensions"  ) );
     maToolbox.ShowItem( nItemId_Extensions );
 
     maToolbox.InsertItem( nItemId_Info, Image() );
     maToolbox.SetItemText( nItemId_Info, aInfoHelpText );
     maToolbox.SetQuickHelpText( nItemId_Info, aInfoHelpText );
-    maToolbox.SetItemCommand( nItemId_Info, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Info" ) ) );
+    maToolbox.SetItemCommand( nItemId_Info, String( ".HelpId:StartCenter:Info"  ) );
     maToolbox.ShowItem( nItemId_Info );
 
     // get dispatch provider
@@ -326,24 +326,24 @@ void BackingWindow::prepareRecentFileMenu()
             rArgsList.realloc( nArgs );
 
             nArgs--;
-            rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+            rArgsList[nArgs].Name = rtl::OUString( "FilterName" );
             rArgsList[nArgs].Value = makeAny( aFilter );
 
             if( !aFilterOpt.isEmpty() )
             {
                 nArgs--;
-                rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+                rArgsList[nArgs].Name = rtl::OUString( "FilterOptions" );
                 rArgsList[nArgs].Value = makeAny( aFilterOpt );
             }
 
             // documents in the picklist will never be opened as templates
             nArgs--;
-            rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
+            rArgsList[nArgs].Name = rtl::OUString( "AsTemplate" );
             rArgsList[nArgs].Value = makeAny( (sal_Bool) sal_False );
 
             nArgs--;
-            rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-            rArgsList[nArgs].Value = makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) ) );
+            rArgsList[nArgs].Name = rtl::OUString( "Referer" );
+            rArgsList[nArgs].Value = makeAny( rtl::OUString( "private:user"  ) );
 
             // and finally create an entry in the popupmenu
             rtl::OUString   aMenuTitle;
@@ -474,7 +474,7 @@ void BackingWindow::initControls()
     std::set< rtl::OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
-    const rtl::OUString sURLKey( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+    const rtl::OUString sURLKey( "URL"  );
 
     const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
     const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
@@ -861,7 +861,7 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
             {
                 Sequence<Any> args(1);
                 PropertyValue val(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath") ),
+                    rtl::OUString( "nodepath" ),
                     0,
                     Any(rtl::OUString::createFromAscii(pNodePath)),
                     PropertyState_DIRECT_VALUE);
@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                         comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                            rtl::OUString( "com.sun.star.system.SystemShellExecute"  ) ),
                         UNO_QUERY_THROW);
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
                     xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
@@ -896,27 +896,27 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
     // dispatch the appropriate URL and end the dialog
     if( pButton == &maWriterButton )
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(WRITER_URL) ) );
+        dispatchURL( rtl::OUString( WRITER_URL ) );
     else if( pButton == &maCalcButton )
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(CALC_URL) ) );
+        dispatchURL( rtl::OUString( CALC_URL ) );
     else if( pButton == &maImpressButton )
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(IMPRESS_WIZARD_URL) ) );
+        dispatchURL( rtl::OUString( IMPRESS_WIZARD_URL ) );
     else if( pButton == &maDrawButton )
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(DRAW_URL) ) );
+        dispatchURL( rtl::OUString( DRAW_URL ) );
     else if( pButton == &maDBButton )
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(BASE_URL) ) );
+        dispatchURL( rtl::OUString( BASE_URL ) );
     else if( pButton == &maMathButton )
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(MATH_URL) ) );
+        dispatchURL( rtl::OUString( MATH_URL ) );
     else if( pButton == &maOpenButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
+        pArg[0].Name = rtl::OUString("Referer");
+        pArg[0].Value <<= rtl::OUString("private:user");
 
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(OPEN_URL) ), rtl::OUString(), xFrame, aArgs );
+        dispatchURL( rtl::OUString( OPEN_URL ), rtl::OUString(), xFrame, aArgs );
     }
     else if( pButton == &maTemplateButton )
     {
@@ -924,10 +924,10 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
+        pArg[0].Name = rtl::OUString("Referer");
+        pArg[0].Value <<= rtl::OUString("private:user");
 
-        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
+        dispatchURL( rtl::OUString( TEMPLATE_URL ), rtl::OUString(), xFrame, aArgs );
     }
     return 0;
 }
@@ -1004,7 +1004,7 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     aDispatchURL.Complete = i_rURL;
 
     Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer") ),
         com::sun::star::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
     {

@@ -104,7 +104,7 @@ Sequence< Any > make_seq_out_of_struct(
     {
         throw RuntimeException(
             type.getTypeName() +
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("is no struct or exception!") ),
+            ::rtl::OUString( "is no struct or exception!" ),
             Reference< XInterface >() );
     }
     typelib_TypeDescription * pTD = 0;
@@ -113,7 +113,7 @@ Sequence< Any > make_seq_out_of_struct(
     if (! pTD)
     {
         throw RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get type descr of type ") ) +
+            ::rtl::OUString( "cannot get type descr of type " ) +
             type.getTypeName(),
             Reference< XInterface >() );
     }
@@ -130,7 +130,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         , m_xSMGR            ( xSMGR                         )
-        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), css::uno::UNO_QUERY )
+        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString("com.sun.star.script.Converter")), css::uno::UNO_QUERY )
 {
 }
 
@@ -343,7 +343,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     ::rtl::OUStringBuffer aArgumentBuffer(1000);
     ::rtl::OUString       sArrayName;
     // this value is used to name the arrays of aArgumentBuffer
-    sArrayName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("args"));
+    sArrayName = ::rtl::OUString("args");
     sArrayName += ::rtl::OUString::valueOf((sal_Int32)m_nRecordingID);
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
@@ -445,8 +445,7 @@ com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  t
 {
     if (idx >= (sal_Int32)m_aStatements.size()) {
         throw com::sun::star::lang::IndexOutOfBoundsException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "Dispatch recorder out of bounds") ),
+            ::rtl::OUString( "Dispatch recorder out of bounds" ),
                     Reference< XInterface >() );
 
     }
@@ -462,15 +461,13 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
     if (element.getValueType() !=
         ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL)) {
                         throw com::sun::star::lang::IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "Illegal argument in dispatch recorder") ),
+                        ::rtl::OUString( "Illegal argument in dispatch recorder" ),
                         Reference< XInterface >(), 2 );
     }
 
     if (idx >= (sal_Int32)m_aStatements.size()) {
                 throw com::sun::star::lang::IndexOutOfBoundsException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "Dispatch recorder out of bounds") ),
+                        ::rtl::OUString( "Dispatch recorder out of bounds" ),
                         Reference< XInterface >() );
 
         }

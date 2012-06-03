@@ -192,7 +192,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
                 throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Optional list of arguments seem to be corrupted.")),
+                    ::rtl::OUString("Optional list of arguments seem to be corrupted."),
                     xLoader,
                     4);
 
@@ -782,8 +782,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
-    static ::rtl::OUString TYPEPROP_PREFERREDFILTER(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter"));
-    static ::rtl::OUString FILTERPROP_FLAGS        (RTL_CONSTASCII_USTRINGPARAM("Flags"));
+    static ::rtl::OUString TYPEPROP_PREFERREDFILTER("PreferredFilter");
+    static ::rtl::OUString FILTERPROP_FLAGS        ("Flags");
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
@@ -966,9 +966,9 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 xSMGR,
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/")),
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc")),
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxOpenDocuments")),
+                                ::rtl::OUString("org.openoffice.Office.Common/"),
+                                ::rtl::OUString("Misc"),
+                                ::rtl::OUString("MaxOpenDocuments"),
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -1258,7 +1258,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     // <- SAFE
 
     css::util::URL aCmd;
-    aCmd.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:JumpToMark"));
+    aCmd.Complete = ::rtl::OUString(".uno:JumpToMark");
 
     css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
     xParser->parseStrict(aCmd);
@@ -1268,7 +1268,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     ::comphelper::SequenceAsHashMap lArgs;
-    lArgs[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"))] <<= aURL.Mark;
+    lArgs[::rtl::OUString("Bookmark")] <<= aURL.Mark;
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
 
@@ -1707,9 +1707,9 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
             css::uno::Any const a =
                 ::comphelper::ConfigurationHelper::readDirectKey(
                   xSMGR,
-                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
-                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
-                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
+                  ::rtl::OUString("org.openoffice.Office.Common/View"),
+                  ::rtl::OUString("NewDocumentHandling"),
+                  ::rtl::OUString("ForceFocusAndToFront"),
                   ::comphelper::ConfigurationHelper::E_READONLY);
             a >>= bForceFrontAndFocus;
         }
@@ -1724,7 +1724,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    static ::rtl::OUString PACKAGE_SETUP_MODULES(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
+    static ::rtl::OUString PACKAGE_SETUP_MODULES("/org.openoffice.Setup/Office/Factories");
 
     // no window -> action not possible
     if (!xWindow.is())

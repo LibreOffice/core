@@ -116,7 +116,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
         }
         sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 
-        const rtl::OUString aFontNameCommandPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName?CharFontName.FamilyName:string=" ));
+        const rtl::OUString aFontNameCommandPrefix( ".uno:CharFontName?CharFontName.FamilyName:string=" );
         const sal_Int16 nCount = (sal_Int16)aVector.size();
         for ( sal_Int16 i = 0; i < nCount; i++ )
         {
@@ -222,7 +222,7 @@ void FontMenuController::impl_setPopupMenu()
 
     com::sun::star::util::URL aTargetURL;
     // Register for font list updates to get the current font list from the controller
-    aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
+    aTargetURL.Complete = rtl::OUString( ".uno:FontNameList" );
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 }
@@ -234,7 +234,7 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
     com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
+    aTargetURL.Complete = rtl::OUString( ".uno:FontNameList" );
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();
 

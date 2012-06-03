@@ -259,7 +259,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     // for aCmd_Dialog and aCmd_Language
 
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
-    const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
+    const OUString sAsterix("*");  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
     std::map< sal_Int16, OUString > aLangMap;
     std::set< OUString >::const_iterator it;
@@ -351,10 +351,10 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 
         if ( m_bInitialized )
         {
-            m_aLangStatusCommandURL               = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LanguageStatus" ));
+            m_aLangStatusCommandURL               = OUString( ".uno:LanguageStatus" );
             m_aMenuCommandURL_Lang                = m_aLangStatusCommandURL;
-            m_aMenuCommandURL_Font                = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialog" ));
-            m_aMenuCommandURL_CharDlgForParagraph = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialogForParagraph" ));
+            m_aMenuCommandURL_Font                = OUString( ".uno:FontDialog" );
+            m_aMenuCommandURL_CharDlgForParagraph = OUString( ".uno:FontDialogForParagraph" );
         }
     }
 }

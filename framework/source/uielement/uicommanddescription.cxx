@@ -208,15 +208,15 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
 //*****************************************************************************************************************
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XMultiServiceFactory >& rServiceManager ) :
     ThreadHelpBase(),
-    m_aConfigCmdAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
-    m_aConfigPopupAccess( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_ROOT_ACCESS )),
-    m_aPropUILabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_LABEL )),
-    m_aPropUIContextLabel( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_PROPERTY_CONTEXT_LABEL )),
-    m_aPropLabel( RTL_CONSTASCII_USTRINGPARAM( PROPSET_LABEL )),
-    m_aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPSET_NAME )),
-    m_aPropPopup( RTL_CONSTASCII_USTRINGPARAM( PROPSET_POPUP )),
-    m_aPropProperties( RTL_CONSTASCII_USTRINGPARAM( PROPSET_PROPERTIES )),
-    m_aPrivateResourceURL( RTL_CONSTASCII_USTRINGPARAM( PRIVATE_RESOURCE_URL )),
+    m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
+    m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
+    m_aPropUILabel( CONFIGURATION_PROPERTY_LABEL ),
+    m_aPropUIContextLabel( CONFIGURATION_PROPERTY_CONTEXT_LABEL ),
+    m_aPropLabel( PROPSET_LABEL ),
+    m_aPropName( PROPSET_NAME ),
+    m_aPropPopup( PROPSET_POPUP ),
+    m_aPropProperties( PROPSET_PROPERTIES ),
+    m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xGenericUICommands( rGenericUICommands ),
     m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
@@ -225,12 +225,12 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
 {
     // Create configuration hierachical access name
     m_aConfigCmdAccess += aModuleName;
-    m_aConfigCmdAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_CMD_ELEMENT_ACCESS ));
+    m_aConfigCmdAccess += rtl::OUString( CONFIGURATION_CMD_ELEMENT_ACCESS );
 
     m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY );
 
     m_aConfigPopupAccess += aModuleName;
-    m_aConfigPopupAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_POP_ELEMENT_ACCESS ));
+    m_aConfigPopupAccess += rtl::OUString( CONFIGURATION_POP_ELEMENT_ACCESS );
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
@@ -425,7 +425,7 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         try
         {
             if ( m_xGenericUICommands->getByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))) >>= aCommandNameSeq )
+                    rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aCommandNameSeq )
                 m_aCommandRotateImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandRotateImageList, aCommandNameSeq );
         }
         catch (const RuntimeException&)
@@ -439,7 +439,7 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         try
         {
             if ( m_xGenericUICommands->getByName(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))) >>= aCommandNameSeq )
+                    rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aCommandNameSeq )
                 m_aCommandMirrorImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
         }
         catch (const RuntimeException&)
@@ -546,7 +546,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPropValue.Name  = rtl::OUString( "nodepath" );
         aPropValue.Value <<= m_aConfigCmdAccess;
         aArgs[0] <<= aPropValue;
 
@@ -642,12 +642,12 @@ DEFINE_INIT_SERVICE                     (   UICommandDescription, {} )
 
 UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase(),
-    m_aPrivateResourceURL( RTL_CONSTASCII_USTRINGPARAM( PRIVATE_RESOURCE_URL )),
+    m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xServiceManager( xServiceManager )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::UICommandDescription" );
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericUICommand( RTL_CONSTASCII_USTRINGPARAM("GenericCommands") );
+    rtl::OUString aGenericUICommand( "GenericCommands" );
     m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, xServiceManager );
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");

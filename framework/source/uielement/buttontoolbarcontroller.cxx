@@ -245,7 +245,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( !m_xURLTransformer.is() )
             {
                 m_xURLTransformer = uno::Reference< util::XURLTransformer >(
-                    m_xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                    m_xServiceManager->createInstance( rtl::OUString( "com.sun.star.util.URLTransformer" )),
                     uno::UNO_QUERY_THROW );
             }
 
@@ -270,7 +270,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Sequence<PropertyValue>   aArgs( 1 );
 
             // Provide key modifier information to dispatch function
-            aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+            aArgs[0].Name   = rtl::OUString( "KeyModifier" );
             aArgs[0].Value  <<= KeyModifier;
 
             xDispatch->dispatch( aTargetURL, aArgs );

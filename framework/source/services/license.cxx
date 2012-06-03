@@ -209,7 +209,7 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
+    ::rtl::OUString aUTCString("Z");
 
     ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
     ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
@@ -266,11 +266,11 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         aLangString = aLocale.Language;
         if ( !aLocale.Country.isEmpty() )
         {
-            aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+            aLangString += ::rtl::OUString("-");
             aLangString += aLocale.Country;
             if ( !aLocale.Variant.isEmpty() )
             {
-                aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                aLangString += ::rtl::OUString("-");
                 aLangString += aLocale.Variant;
             }
         }
@@ -278,36 +278,36 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szWNTLicenseName)
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
+            + ::rtl::OUString("_")
             + aLangString
             + ::rtl::OUString::createFromAscii(szWNTLicenseExt);
 #else
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szUNXLicenseName)
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
+            + ::rtl::OUString("_")
             + aLangString
             + ::rtl::OUString::createFromAscii(szUNXLicenseExt);
 #endif
         // check if we need to show the license at all
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
         ::rtl::OUString sConfigSrvc = SERVICENAME_CFGPROVIDER;
-        ::rtl::OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
+        ::rtl::OUString sAccessSrvc("com.sun.star.configuration.ConfigurationUpdateAccess");
 
         // get configuration provider
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
         m_xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
         NamedValue v;
-        v.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
-        v.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office"));
+        v.Name = ::rtl::OUString("NodePath");
+        v.Value <<= ::rtl::OUString("org.openoffice.Setup/Office");
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
 
         // if we find a date there, compare it to baseinstall license date
         ::rtl::OUString aAcceptDate;
-        if (pset->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLicenseAcceptDate"))) >>= aAcceptDate)
+        if (pset->getPropertyValue(::rtl::OUString("ooLicenseAcceptDate")) >>= aAcceptDate)
         {
             // get LicenseFileDate from base install
             ::rtl::OUString aLicenseURL = aLicensePath;
@@ -341,7 +341,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
             // write org.openoffice.Setup/ooLicenseAcceptDate
             aAcceptDate = _getCurrentDateString();
-            pset->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLicenseAcceptDate")), makeAny(aAcceptDate));
+            pset->setPropertyValue(::rtl::OUString("ooLicenseAcceptDate"), makeAny(aAcceptDate));
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             // enable quickstarter
@@ -352,7 +352,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aSeq[1] <<= bAutostart;
 
             Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))),UNO_QUERY );
+                ::rtl::OUString("com.sun.star.office.Quickstart")),UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
 

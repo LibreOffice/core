@@ -209,7 +209,7 @@ MenuBarManager::MenuBarManager(
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MenuBarManager" );
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
-        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
+        getServiceFactory()->createInstance( rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
         UNO_QUERY );
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
 }
@@ -545,7 +545,7 @@ throw ( RuntimeException )
                     {
                         String aResStr = String( FwkResId( STR_UPDATEDOC ));
                         rtl::OUString aTmp( aResStr );
-                        aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+                        aTmp += rtl::OUString( " " );
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
@@ -921,7 +921,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             ::rtl::OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
                             if ( aItemCommand.isEmpty() )
                             {
-                                aItemCommand = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                                aItemCommand = ::rtl::OUString( "slot:" );
                                 aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
                                 pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
                             }
@@ -1099,8 +1099,8 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
                     {
                         // bookmark menu item selected
                         aArgs.realloc( 1 );
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-                        aArgs[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
+                        aArgs[0].Name = ::rtl::OUString( "Referer" );
+                        aArgs[0].Value <<= ::rtl::OUString( SFX_REFERER_USER );
                     }
 
                     xDispatch = pMenuItemHandler->xMenuItemDispatch;
@@ -1187,17 +1187,17 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
         Sequence< Any > aSeq( 2 );
         PropertyValue aPropValue;
 
-        aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+        aPropValue.Name         = rtl::OUString( "ModuleName" );
         aPropValue.Value      <<= m_aModuleIdentifier;
         aSeq[0] <<= aPropValue;
-        aPropValue.Name         = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aPropValue.Name         = rtl::OUString( "Frame" );
         aPropValue.Value      <<= m_xFrame;
         aSeq[1] <<= aPropValue;
 
         Reference< XComponentContext > xComponentContext;
         Reference< XPropertySet >      xProps( getServiceFactory(), UNO_QUERY );
 
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
+        xProps->getPropertyValue( rtl::OUString( "DefaultContext" )) >>=
             xComponentContext;
 
         Reference< XPopupMenuController > xPopupMenuController(
@@ -1370,7 +1370,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         pPopup->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 
                         // Set item command for popup menu to enable it for GetImageFromURL
-                        const ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                        const ::rtl::OUString aSlotString( "slot:" );
                         ::rtl::OUString aNewItemCommand( aSlotString );
                         aNewItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
                         pPopup->SetItemCommand( ITEMID_ADDONLIST, aNewItemCommand );
@@ -1948,7 +1948,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
             // Just use the main part of the URL for popup menu controllers
             sal_Int32     nQueryPart( 0 );
             sal_Int32     nSchemePart( 0 );
-            rtl::OUString aMainURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
+            rtl::OUString aMainURL( "vnd.sun.star.popup:" );
             rtl::OUString aMenuURL( pItemHandler->aMenuItemURL );
 
             nSchemePart = aMenuURL.indexOf( ':' );
@@ -2004,7 +2004,7 @@ sal_uInt16 MenuBarManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
     if ( _rItemCommand.isEmpty() )
     {
-        const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+        const static ::rtl::OUString aSlotString( "slot:" );
         _rItemCommand = aSlotString;
         _rItemCommand += ::rtl::OUString::valueOf( (sal_Int32)nItemId );
         _pMenu->SetItemCommand( nItemId, _rItemCommand );
@@ -2024,7 +2024,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
 
     rtl::OUString aModuleIdentifier;
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
-        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
+        getServiceFactory()->createInstance( rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
         UNO_QUERY );
 
     Reference< XStatusListener > xStatusListener;

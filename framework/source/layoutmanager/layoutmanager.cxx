@@ -144,24 +144,24 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_xPersistentWindowStateSupplier( Reference< XNameAccess >(
                 xServiceManager->createInstance( SERVICENAME_WINDOWSTATECONFIGURATION ), UNO_QUERY ))
         , m_pGlobalSettings( 0 )
-        , m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
-        , m_aProgressBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
-        , m_aPropDocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKED ))
-        , m_aPropVisible( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_VISIBLE ))
-        , m_aPropDockingArea( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
-        , m_aPropDockPos( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKPOS ))
-        , m_aPropPos( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_POS ))
-        , m_aPropSize( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_SIZE ))
-        , m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ))
-        , m_aPropStyle( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_STYLE ))
-        , m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
-        , m_aCustomizeCmd( RTL_CONSTASCII_USTRINGPARAM( "ConfigureDialog" ))
+        , m_aStatusBarAlias( "private:resource/statusbar/statusbar" )
+        , m_aProgressBarAlias( "private:resource/progressbar/progressbar" )
+        , m_aPropDocked( WINDOWSTATE_PROPERTY_DOCKED )
+        , m_aPropVisible( WINDOWSTATE_PROPERTY_VISIBLE )
+        , m_aPropDockingArea( WINDOWSTATE_PROPERTY_DOCKINGAREA )
+        , m_aPropDockPos( WINDOWSTATE_PROPERTY_DOCKPOS )
+        , m_aPropPos( WINDOWSTATE_PROPERTY_POS )
+        , m_aPropSize( WINDOWSTATE_PROPERTY_SIZE )
+        , m_aPropUIName( WINDOWSTATE_PROPERTY_UINAME )
+        , m_aPropStyle( WINDOWSTATE_PROPERTY_STYLE )
+        , m_aPropLocked( WINDOWSTATE_PROPERTY_LOCKED )
+        , m_aCustomizeCmd( "ConfigureDialog" )
         , m_aListenerContainer( m_aLock.getShareableOslMutex() )
         , m_pToolbarManager( 0 )
 {
     // Initialize statusbar member
     const sal_Bool bRefreshVisibility = sal_False;
-    m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
+    m_aStatusBarElement.m_aType = rtl::OUString( "statusbar" );
     m_aStatusBarElement.m_aName = m_aStatusBarAlias;
 
     m_pToolbarManager = new ToolbarLayoutManager( xServiceManager, m_xUIElementFactoryManager, this );
@@ -212,7 +212,7 @@ void LayoutManager::impl_clearUpMenuBar()
                 {
                     try
                     {
-                        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
+                        xPropSet->getPropertyValue( ::rtl::OUString( "XMenuBar" )) >>= xMenuBar;
                     }
                     catch (const beans::UnknownPropertyException&)
                     {
@@ -652,7 +652,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
         try
         {
             // Check persistent flag of the user interface element
-            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ))) >>= bPersistent;
+            xPropSet->getPropertyValue( ::rtl::OUString( "Persistent" )) >>= bPersistent;
         }
         catch (const beans::UnknownPropertyException&)
         {
@@ -733,9 +733,9 @@ Reference< XUIElement > LayoutManager::implts_createElement( const rtl::OUString
 
     ReadGuard   aReadLock( m_aLock );
     Sequence< PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropSeq[0].Name = ::rtl::OUString( "Frame" );
     aPropSeq[0].Value <<= m_xFrame;
-    aPropSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
+    aPropSeq[1].Name = ::rtl::OUString( "Persistent" );
     aPropSeq[1].Value <<= sal_True;
 
     try
@@ -1514,7 +1514,7 @@ throw (RuntimeException)
                         {
                             try
                             {
-                                xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
+                                xPropSet->getPropertyValue( ::rtl::OUString( "XMenuBar" )) >>= xMenuBar;
                             }
                             catch (const beans::UnknownPropertyException&)
                             {
@@ -2492,7 +2492,7 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
     {
         sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
         Reference< beans::XPropertySet > xDisplayInfo( xDisplayAccess->getByIndex( nDisplay ), UNO_QUERY_THROW );
-        OSL_VERIFY( xDisplayInfo->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WorkArea" ) ) ) >>= aWorkArea );
+        OSL_VERIFY( xDisplayInfo->getPropertyValue( ::rtl::OUString( "WorkArea"  ) ) >>= aWorkArea );
     }
     catch( const Exception& )
     {
@@ -2676,8 +2676,8 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
 
     xDispatcher->executeDispatch(
         xProvider,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+        ::rtl::OUString(".uno:CloseWin"),
+        ::rtl::OUString("_self"),
         0,
         uno::Sequence< beans::PropertyValue >());
 
@@ -3024,7 +3024,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
             Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
             if ( xElementSettings.is() )
             {
-                ::rtl::OUString aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+                ::rtl::OUString aConfigSourcePropName( "ConfigurationSource" );
                 uno::Reference< XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
@@ -3074,7 +3074,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
             if ( xElementSettings.is() )
             {
                 bool                      bNoSettings( false );
-                ::rtl::OUString           aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+                ::rtl::OUString           aConfigSourcePropName( "ConfigurationSource" );
                 Reference< XInterface >   xElementCfgMgr;
                 Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
 
@@ -3157,7 +3157,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
             Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
             if ( xElementSettings.is() )
             {
-                ::rtl::OUString           aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+                ::rtl::OUString           aConfigSourcePropName( "ConfigurationSource" );
                 Reference< XInterface >   xElementCfgMgr;
                 Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
 

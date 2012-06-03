@@ -348,7 +348,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         if ( !bWithPassword && !aTestURL.Password.isEmpty() )
         {
             // Exchange password text with other placeholder string
-            aTestURL.Password = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<******>"));
+            aTestURL.Password = ::rtl::OUString("<******>");
             assemble( aTestURL );
         }
 

@@ -227,9 +227,9 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     sRelPathBuf.append     (sModuleName            );
     sRelPathBuf.appendAscii("\"]"                  );
 
-    ::rtl::OUString sPackage(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/"));
+    ::rtl::OUString sPackage("org.openoffice.Setup/");
     ::rtl::OUString sRelPath = sRelPathBuf.makeStringAndClear();
-    ::rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryWindowAttributes"));
+    ::rtl::OUString sKey("ooSetupFactoryWindowAttributes");
 
     try
     {
@@ -257,9 +257,9 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
     sRelPathBuf.append     (sModuleName            );
     sRelPathBuf.appendAscii("\"]"                  );
 
-    ::rtl::OUString sPackage(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/"));
+    ::rtl::OUString sPackage("org.openoffice.Setup/");
     ::rtl::OUString sRelPath = sRelPathBuf.makeStringAndClear();
-    ::rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryWindowAttributes"));
+    ::rtl::OUString sKey("ooSetupFactoryWindowAttributes");
 
     try
     {

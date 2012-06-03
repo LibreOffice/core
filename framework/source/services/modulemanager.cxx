@@ -117,7 +117,7 @@ ModuleManager::~ModuleManager()
        )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Given module is not a frame nor a window, controller or model.")),
+                ::rtl::OUString("Given module is not a frame nor a window, controller or model."),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
@@ -147,7 +147,7 @@ ModuleManager::~ModuleManager()
 
     if (sModule.isEmpty())
         throw css::frame::UnknownModuleException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find suitable module for the given component.")),
+                ::rtl::OUString("Cant find suitable module for the given component."),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     return sModule;
@@ -164,7 +164,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No properties given to replace part of module.")),
+                ::rtl::OUString("No properties given to replace part of module."),
                 static_cast< css::container::XNameAccess* >(this),
                 2);
     }
@@ -191,7 +191,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Was not able to get write access to the requested module entry inside configuration.")),
+                ::rtl::OUString("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< css::container::XNameAccess* >(this));
     }
 
@@ -223,7 +223,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Was not able to get write access to the requested module entry inside configuration.")),
+                ::rtl::OUString("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< css::container::XNameAccess* >(this));
     }
 

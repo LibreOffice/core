@@ -189,7 +189,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     {
         try
         {
-            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
+            xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" )) >>= xLayoutManager;
         }
         catch (const RuntimeException&)
         {
@@ -280,7 +280,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString("CreateDialog")))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
 
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -417,9 +417,9 @@ void ToolBarManager::UpdateImageOrientation()
         Sequence< rtl::OUString > aSeqMirrorCmd;
         Sequence< rtl::OUString > aSeqRotateCmd;
         m_xUICommandLabels->getByName(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))) >>= aSeqMirrorCmd;
+            rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aSeqMirrorCmd;
         m_xUICommandLabels->getByName(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))) >>= aSeqRotateCmd;
+            rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aSeqRotateCmd;
 
         CommandToInfoMap::iterator pIter;
         for ( i = 0; i < aSeqMirrorCmd.getLength(); i++ )
@@ -472,7 +472,7 @@ void ToolBarManager::UpdateControllers()
         Reference< XLayoutManager > xLayoutManager;
         Reference< XPropertySet > xFramePropSet( m_xFrame, UNO_QUERY );
         if ( xFramePropSet.is() )
-            a = xFramePropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            a = xFramePropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" ));
         a >>= xLayoutManager;
         Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
         if ( xLayoutManager.is() && xDockable.is() )
@@ -912,7 +912,7 @@ void ToolBarManager::CreateControllers()
     SvtCommandOptions   aCmdOptions;
 
     if ( xProps.is() )
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
+        xProps->getPropertyValue( rtl::OUString( "DefaultContext" )) >>= xComponentContext;
 
     for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
@@ -920,7 +920,7 @@ void ToolBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
+        rtl::OUString                aLoadURL( ".uno:OpenUrl" );
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
         sal_Bool                     bCreate( sal_True );
@@ -950,22 +950,22 @@ void ToolBarManager::CreateControllers()
                 PropertyValue aPropValue;
                 std::vector< Any > aPropertyVector;
 
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                aPropValue.Name     = rtl::OUString( "ModuleName" );
                 aPropValue.Value    <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                aPropValue.Name     = rtl::OUString( "Frame" );
                 aPropValue.Value    <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                aPropValue.Name     = rtl::OUString( "ServiceManager" );
                 aPropValue.Value    <<= m_xServiceManager;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                aPropValue.Name     = rtl::OUString( "ParentWindow" );
                 aPropValue.Value    <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
 
                 if ( nWidth > 0 )
                 {
-                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
+                    aPropValue.Name     = rtl::OUString( "Width" );
                     aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
@@ -1060,25 +1060,25 @@ void ToolBarManager::CreateControllers()
                 PropertyValue aPropValue;
                 std::vector< Any > aPropertyVector;
 
-                aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                aPropValue.Name = ::rtl::OUString( "Frame" );
                 aPropValue.Value <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+                aPropValue.Name = ::rtl::OUString( "CommandURL" );
                 aPropValue.Value <<= aCommandURL;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                aPropValue.Name = ::rtl::OUString( "ServiceManager" );
                 aPropValue.Value <<= m_xServiceManager;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                aPropValue.Name = rtl::OUString( "ParentWindow" );
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                aPropValue.Name = rtl::OUString( "ModuleName" );
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
 
                 if ( nWidth > 0 )
                 {
-                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
+                    aPropValue.Name     = rtl::OUString( "Width" );
                     aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
@@ -1088,10 +1088,10 @@ void ToolBarManager::CreateControllers()
 
                 if (pController)
                 {
-                    if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
-                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) ||
-                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) ||
-                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaRightToLeft" ))
+                    if(aCommandURL == rtl::OUString( ".uno:SwitchXFormsDesignMode" ) ||
+                       aCommandURL == rtl::OUString( ".uno:ViewDataSourceBrowser" ) ||
+                       aCommandURL == rtl::OUString( ".uno:ParaLeftToRight" ) ||
+                       aCommandURL == rtl::OUString( ".uno:ParaRightToLeft" )
                        )
                         pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
                 }
@@ -1123,7 +1123,7 @@ void ToolBarManager::CreateControllers()
             try
             {
                 sal_Bool bSupportVisible = sal_True;
-                Any a( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisible" ))) );
+                Any a( xPropSet->getPropertyValue( ::rtl::OUString( "SupportsVisible" )) );
                 a >>= bSupportVisible;
                 if (bSupportVisible)
                 {
@@ -1167,7 +1167,7 @@ void ToolBarManager::AddImageOrientationListener()
         m_xImageOrientationListener = Reference< XComponent >( static_cast< ::cppu::OWeakObject *>(
                                         pImageOrientation ), UNO_QUERY );
         pImageOrientation->addStatusListener(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ImageOrientation" )));
+            rtl::OUString( ".uno:ImageOrientation" ));
         pImageOrientation->bindListener();
     }
 }
@@ -1347,9 +1347,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                          ::rtl::OUString sShortCut;
                          if( RetrieveShortcut( aCommandURL, sShortCut ) )
                          {
-                             sQuickHelp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+                             sQuickHelp += rtl::OUString( " ("  );
                              sQuickHelp += sShortCut;
-                             sQuickHelp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+                             sQuickHelp += rtl::OUString( ")" );
                          }
 
                         m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
@@ -1488,7 +1488,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         try
         {
             rtl::OUString aUIName;
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
+            xPropSet->getPropertyValue( rtl::OUString( "UIName" )) >>= aUIName;
             if ( !aUIName.isEmpty() )
                 m_pToolBar->SetText( aUIName );
         }
@@ -1733,7 +1733,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
     if ( m_xFrame.is() )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-        aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
+        aURL.Complete = ::rtl::OUString( ".uno:ConfigureDialog" );
         m_xURLTransformer->parseStrict( aURL );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
@@ -1900,7 +1900,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 if ( m_xFrame.is() )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-                    aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
+                    aURL.Complete = ::rtl::OUString( ".uno:ConfigureDialog" );
                     m_xURLTransformer->parseStrict( aURL );
                     if ( xProv.is() )
                         xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
@@ -1911,7 +1911,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                     Sequence< PropertyValue > aPropSeq( 1 );
 
                     aPropSeq[ 0 ].Name =
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ResourceURL"));
+                        rtl::OUString( "ResourceURL");
                     aPropSeq[ 0 ].Value <<= m_aResourceName;
 
                     xDisp->dispatch( aURL, aPropSeq );
@@ -2021,7 +2021,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                             if ( xPropSet.is() )
                                             {
                                                 Reference< XUIConfigurationPersistence > xUICfgMgr;
-                                                if (( xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ConfigurationSource" ))) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
+                                                if (( xPropSet->getPropertyValue( rtl::OUString( "ConfigurationSource" )) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
                                                     xUICfgMgr->store();
                                             }
                                         }

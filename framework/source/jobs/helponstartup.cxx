@@ -58,26 +58,26 @@ namespace framework{
 // definitions
 
 // path to module config
-static ::rtl::OUString CFG_PACKAGE_MODULES     (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
-static ::rtl::OUString CFG_PACKAGE_SETUP       (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
-static ::rtl::OUString CFG_PACKAGE_COMMON      (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common"));
-static ::rtl::OUString CFG_PATH_L10N           (RTL_CONSTASCII_USTRINGPARAM("L10N"));
-static ::rtl::OUString CFG_PATH_HELP           (RTL_CONSTASCII_USTRINGPARAM("Help"));
-static ::rtl::OUString CFG_KEY_LOCALE          (RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
-static ::rtl::OUString CFG_KEY_HELPSYSTEM      (RTL_CONSTASCII_USTRINGPARAM("System"));
+static ::rtl::OUString CFG_PACKAGE_MODULES     ("/org.openoffice.Setup/Office/Factories");
+static ::rtl::OUString CFG_PACKAGE_SETUP       ("/org.openoffice.Setup");
+static ::rtl::OUString CFG_PACKAGE_COMMON      ("/org.openoffice.Office.Common");
+static ::rtl::OUString CFG_PATH_L10N           ("L10N");
+static ::rtl::OUString CFG_PATH_HELP           ("Help");
+static ::rtl::OUString CFG_KEY_LOCALE          ("ooLocale");
+static ::rtl::OUString CFG_KEY_HELPSYSTEM      ("System");
 
 // props of job environment
-static ::rtl::OUString PROP_ENVIRONMENT        (RTL_CONSTASCII_USTRINGPARAM("Environment"));
-static ::rtl::OUString PROP_JOBCONFIG          (RTL_CONSTASCII_USTRINGPARAM("JobConfig"));
-static ::rtl::OUString PROP_ENVTYPE            (RTL_CONSTASCII_USTRINGPARAM("EnvType"));
-static ::rtl::OUString PROP_MODEL              (RTL_CONSTASCII_USTRINGPARAM("Model"));
+static ::rtl::OUString PROP_ENVIRONMENT        ("Environment");
+static ::rtl::OUString PROP_JOBCONFIG          ("JobConfig");
+static ::rtl::OUString PROP_ENVTYPE            ("EnvType");
+static ::rtl::OUString PROP_MODEL              ("Model");
 
 // props of module config
-static ::rtl::OUString PROP_HELP_BASEURL       (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryHelpBaseURL"));
-static ::rtl::OUString PROP_AUTOMATIC_HELP     (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryHelpOnOpen"));
+static ::rtl::OUString PROP_HELP_BASEURL       ("ooSetupFactoryHelpBaseURL");
+static ::rtl::OUString PROP_AUTOMATIC_HELP     ("ooSetupFactoryHelpOnOpen");
 
 // special value of job environment
-static ::rtl::OUString ENVTYPE_DOCUMENTEVENT   (RTL_CONSTASCII_USTRINGPARAM("DOCUMENTEVENT"));
+static ::rtl::OUString ENVTYPE_DOCUMENTEVENT   ("DOCUMENTEVENT");
 
 //-----------------------------------------------
 

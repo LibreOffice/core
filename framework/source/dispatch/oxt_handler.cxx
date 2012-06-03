@@ -74,7 +74,7 @@ namespace framework{
 //  non exported definitions
 //_________________________________________________________________________________________________________________
 
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+#define UNISTRING(s) rtl::OUString(s)
 
 //_________________________________________________________________________________________________________________
 //  declarations
@@ -256,7 +256,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxt_OpenOffice_Extension"));
+        sTypeName = ::rtl::OUString("oxt_OpenOffice_Extension");
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

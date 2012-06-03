@@ -326,7 +326,7 @@ NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::
     m_bNewMenu( sal_False ),
     m_bModuleIdentified( sal_False ),
     m_bAcceleratorCfg( sal_False ),
-    m_aTargetFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ))
+    m_aTargetFrame( "_default" )
 {
 }
 
@@ -440,8 +440,8 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
 
             xURLTransformer->parseStrict( aTargetURL );
 
-            aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-            aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
+            aArgsList[0].Name = ::rtl::OUString( "Referer" );
+            aArgsList[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ));
 
             rtl::OUString aTargetFrame( m_aTargetFrame );
             AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );

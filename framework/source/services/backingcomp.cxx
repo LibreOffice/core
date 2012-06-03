@@ -457,17 +457,17 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // check some required states
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already attached")),
+                ::rtl::OUString("already attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid frame reference")),
+                ::rtl::OUString("invalid frame reference"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("instance seams to be not or wrong initialized")),
+                ::rtl::OUString("instance seams to be not or wrong initialized"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // safe the frame reference
@@ -653,7 +653,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unexpected source or called twice")),
+                ::rtl::OUString("unexpected source or called twice"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     m_xWindow = css::uno::Reference< css::awt::XWindow >();
@@ -747,7 +747,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
     throw(css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not supported")),
+            ::rtl::OUString("not supported"),
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
@@ -794,7 +794,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (m_xWindow.is())
         throw css::uno::Exception(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already initialized")),
+                ::rtl::OUString("already initialized"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
@@ -805,7 +805,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
        )
     {
         throw css::uno::Exception(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wrong or corrupt argument list")),
+                ::rtl::OUString("wrong or corrupt argument list"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -816,7 +816,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("couldn't create component window")),
+                ::rtl::OUString("couldn't create component window"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // start listening for window disposing

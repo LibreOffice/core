@@ -103,9 +103,9 @@ TaskCreator::~TaskCreator()
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
-    static ::rtl::OUString PACKAGE(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.TabBrowse"));
-    static ::rtl::OUString RELPATH(RTL_CONSTASCII_USTRINGPARAM("TaskCreatorService"));
-    static ::rtl::OUString KEY(RTL_CONSTASCII_USTRINGPARAM("ImplementationName"));
+    static ::rtl::OUString PACKAGE("org.openoffice.Office.TabBrowse");
+    static ::rtl::OUString RELPATH("TaskCreatorService");
+    static ::rtl::OUString KEY("ImplementationName");
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
