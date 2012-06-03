@@ -75,7 +75,7 @@ SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uI
     : SfxToolBoxControl( nSlotId, nId, rBox ),
     pAccExec( 0 )
 {
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CurrentURL" )));
+    addStatusListener( rtl::OUString( ".uno:CurrentURL" ));
 }
 
 SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
@@ -112,7 +112,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
     if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
         URL             aTargetURL;
-        ::rtl::OUString aTarget( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")));
+        ::rtl::OUString aTarget( ::rtl::OUString("_default"));
 
         aTargetURL.Complete = aName;
 
@@ -121,17 +121,17 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
         if ( xDispatch.is() )
         {
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-            aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
-            aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+            aArgs[0].Name = ::rtl::OUString("Referer");
+            aArgs[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ));
+            aArgs[1].Name = ::rtl::OUString( "FileName" );
             aArgs[1].Value = makeAny( ::rtl::OUString( aName ));
 
             if ( aFilter.Len() )
             {
                 aArgs.realloc( 4 );
-                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
+                aArgs[2].Name = ::rtl::OUString("FilterOptions");
                 aArgs[2].Value = makeAny( ::rtl::OUString( aOptions ));
-                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+                aArgs[3].Name = ::rtl::OUString("FilterName");
                 aArgs[3].Value = makeAny( ::rtl::OUString( aFilter ));
             }
 
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
     if ( m_xServiceManager.is() )
     {
         Reference< XFramesSupplier > xDesktop( m_xServiceManager->createInstance(
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
+                                                ::rtl::OUString("com.sun.star.frame.Desktop")),
                                              UNO_QUERY );
         Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
         if ( xFrame.is() )

@@ -404,7 +404,7 @@ template< typename T >
     ::boost::unordered_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
 {
     static rtlRandomPool s_Pool( rtl_random_createPool() );
-    const ::rtl::OUString prefix(RTL_CONSTASCII_USTRINGPARAM(s_prefix));
+    const ::rtl::OUString prefix(s_prefix);
     typename ::boost::unordered_map< ::rtl::OUString, T, ::rtl::OUStringHash >
         ::const_iterator iter;
     ::rtl::OUString id;
@@ -521,8 +521,8 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
 {
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId"), 0, 0);
     }
 
     const XmlIdList_t * pList( LookupElementList(i_rStreamName, i_rIdref) );
@@ -687,15 +687,15 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
 
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId"), 0, 0);
     }
     if (i_rObject.IsInContent()
         ?   !isContentFile(i_rStreamName)
         :   !isStylesFile(i_rStreamName))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId: wrong stream")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId: wrong stream"), 0, 0);
     }
 
     ::rtl::OUString old_path;
@@ -990,8 +990,8 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
 {
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId"), 0, 0);
     }
 
     const ClipboardXmlIdMap_t::const_iterator iter( m_XmlIdMap.find(i_rIdref) );
@@ -1119,15 +1119,15 @@ XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
 
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId"), 0, 0);
     }
     if (i_rObject.IsInContent()
         ?   !isContentFile(i_rStreamName)
         :   !isStylesFile(i_rStreamName))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId: wrong stream")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId: wrong stream"), 0, 0);
     }
 
     ::rtl::OUString old_path;
@@ -1256,8 +1256,8 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
 
     if (!isValidXmlId(i_rReference.First, i_rReference.Second))
     {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "illegal XmlId")), 0, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "illegal XmlId"), 0, 0);
     }
 
     if (!i_isLatent)
@@ -1349,8 +1349,8 @@ Metadatable::SetMetadataReference(
         else
         {
             throw lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Metadatable::"
-                    "SetMetadataReference: argument is invalid")), /*this*/0, 0);
+                ::rtl::OUString("Metadatable::"
+                    "SetMetadataReference: argument is invalid"), /*this*/0, 0);
         }
     }
 }
@@ -1616,8 +1616,8 @@ throw (uno::RuntimeException)
     if (!pObject)
     {
         throw uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "MetadatableMixin: cannot get core object; not inserted?")),
+            ::rtl::OUString(
+                "MetadatableMixin: cannot get core object; not inserted?"),
             *this);
     }
     return pObject->GetMetadataReference();
@@ -1634,8 +1634,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
     if (!pObject)
     {
         throw uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "MetadatableMixin: cannot get core object; not inserted?")),
+            ::rtl::OUString(
+                "MetadatableMixin: cannot get core object; not inserted?"),
             *this);
     }
     return pObject->SetMetadataReference(i_rReference);
@@ -1650,8 +1650,8 @@ throw (uno::RuntimeException)
     if (!pObject)
     {
         throw uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "MetadatableMixin: cannot get core object; not inserted?")),
+            ::rtl::OUString(
+                "MetadatableMixin: cannot get core object; not inserted?"),
             *this);
     }
     return pObject->EnsureMetadataReference();
