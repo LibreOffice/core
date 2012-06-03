@@ -163,9 +163,8 @@ throw ( Exception, RuntimeException )
             if ( !xScripts.is() )
             {
                 throw lang::IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "The given document does not support embedding scripts into it, and cannot be associated with such a document."
-                    ) ),
+                    ::rtl::OUString( "The given document does not support embedding scripts into it, and cannot be associated with such a document."
+                     ),
                     *this,
                     1
                 );
@@ -270,11 +269,11 @@ throw ( provider::ScriptFrameworkErrorException,
     // need to get the language from the string
 
     Reference< uri::XUriReferenceFactory > xFac (
-         m_xMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
+         m_xMgr->createInstanceWithContext( rtl::OUString(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
     if ( !xFac.is() )
     {
-        ::rtl::OUString message(RTL_CONSTASCII_USTRINGPARAM("Failed to instantiate  UriReferenceFactory"));
+        ::rtl::OUString message("Failed to instantiate  UriReferenceFactory");
         throw provider::ScriptFrameworkErrorException(
             message, Reference< XInterface >(),
             scriptURI, ::rtl::OUString(),
@@ -296,8 +295,8 @@ throw ( provider::ScriptFrameworkErrorException,
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
 
-    ::rtl::OUString langKey(RTL_CONSTASCII_USTRINGPARAM("language"));
-    ::rtl::OUString locKey(RTL_CONSTASCII_USTRINGPARAM("location"));
+    ::rtl::OUString langKey("language");
+    ::rtl::OUString locKey("location");
 
     if ( sfUri->hasParameter( langKey ) == sal_False ||
          sfUri->hasParameter( locKey ) == sal_False ||
@@ -316,7 +315,7 @@ throw ( provider::ScriptFrameworkErrorException,
 
     // if script us located in uno pkg
     sal_Int32 index = -1;
-    ::rtl::OUString pkgTag(RTL_CONSTASCII_USTRINGPARAM(":uno_packages"));
+    ::rtl::OUString pkgTag(":uno_packages");
     // for languages other than basic,  scripts located in uno packages
     // are merged into the user/share location context.
     // For other languages the location attribute in script url has the form
@@ -815,8 +814,8 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
     }
     else
     {
-        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM(
-            "MasterScriptProvider::getAllProviders, cache not initialised"));
+        ::rtl::OUString errorMsg(
+            "MasterScriptProvider::getAllProviders, cache not initialised");
         throw RuntimeException( errorMsg.concat( errorMsg ),
             Reference< XInterface >() );
     }
@@ -827,8 +826,7 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 ::rtl::OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 throw( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.provider.MasterScriptProvider" ) );
+    return ::rtl::OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
 }
 
 //*************************************************************************
@@ -853,12 +851,9 @@ throw( RuntimeException )
 {
     ::rtl::OUString names[3];
 
-    names[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.provider.MasterScriptProvider" ) );
-    names[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.browse.BrowseNode" ) );
-    names[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.provider.ScriptProvider" ) );
+    names[0] = ::rtl::OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
+    names[1] = ::rtl::OUString( "com.sun.star.script.browse.BrowseNode"  );
+    names[2] = ::rtl::OUString( "com.sun.star.script.provider.ScriptProvider"  );
 
     return Sequence< ::rtl::OUString >( names, 3 );
 }
@@ -888,12 +883,9 @@ Sequence< ::rtl::OUString > sp_getSupportedServiceNames( )
 {
     ::rtl::OUString names[3];
 
-    names[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.provider.MasterScriptProvider" ) );
-    names[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.browse.BrowseNode" ) );
-    names[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.provider.ScriptProvider" ) );
+    names[0] = ::rtl::OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
+    names[1] = ::rtl::OUString( "com.sun.star.script.browse.BrowseNode"  );
+    names[2] = ::rtl::OUString( "com.sun.star.script.provider.ScriptProvider"  );
 
     return Sequence< ::rtl::OUString >( names, 3 );
 }
@@ -902,8 +894,7 @@ Sequence< ::rtl::OUString > sp_getSupportedServiceNames( )
 ::rtl::OUString sp_getImplementationName( )
 SAL_THROW(())
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
-        "com.sun.star.script.provider.MasterScriptProvider" ) );
+    return ::rtl::OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
 }
 
 // ***** registration or ScriptingFrameworkURIHelper
@@ -918,8 +909,8 @@ Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
     SAL_THROW(())
 {
     ::rtl::OUString serviceNameList[] = {
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.script.provider.ScriptURIHelper" )) };
+        ::rtl::OUString(
+            "com.sun.star.script.provider.ScriptURIHelper" ) };
 
     Sequence< ::rtl::OUString > serviceNames = Sequence <
         ::rtl::OUString > ( serviceNameList, 1 );
@@ -930,8 +921,8 @@ Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
 ::rtl::OUString urihelper_getImplementationName( )
     SAL_THROW(())
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.provider.ScriptURIHelper"));
+    return ::rtl::OUString(
+        "com.sun.star.script.provider.ScriptURIHelper");
 }
 
 static struct cppu::ImplementationEntry s_entries [] =

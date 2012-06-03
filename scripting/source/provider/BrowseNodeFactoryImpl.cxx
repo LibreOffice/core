@@ -323,8 +323,8 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             xCtx->getValueByName(
                 OUSTR("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")) ) ), UNO_QUERY_THROW );
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("share")) ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("user") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("share") ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
     catch( const Exception& e )
@@ -409,8 +409,7 @@ public:
             Reference< lang::XMultiComponentFactory > xMFac( m_xCtx->getServiceManager(), UNO_QUERY_THROW );
             Reference< reflection::XProxyFactory > xProxyFac(
                 xMFac->createInstanceWithContext(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.reflection.ProxyFactory" ) ),
+                        rtl::OUString( "com.sun.star.reflection.ProxyFactory"  ),
                         m_xCtx  ), UNO_QUERY_THROW );
             m_xAggProxy = xProxyFac->createProxy( m_xWrappedBrowseNode );
         }
@@ -568,7 +567,7 @@ public:
         {
             m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
         }
-        m_Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root"));
+        m_Name = ::rtl::OUString("Root");
     }
 
     ~DefaultRootBrowseNode()
@@ -636,7 +635,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getName()
         throw ( RuntimeException )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root"));
+        return ::rtl::OUString("Root");
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -734,8 +733,8 @@ Sequence< ::rtl::OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
     SAL_THROW(())
 {
-    ::rtl::OUString str_name(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.browse.BrowseNodeFactory"));
+    ::rtl::OUString str_name(
+        "com.sun.star.script.browse.BrowseNodeFactory");
 
     return Sequence< ::rtl::OUString >( &str_name, 1 );
 }
@@ -744,8 +743,8 @@ bnf_getSupportedServiceNames( )
 bnf_getImplementationName( )
     SAL_THROW(())
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.browse.BrowseNodeFactory" ));
+    return ::rtl::OUString(
+        "com.sun.star.script.browse.BrowseNodeFactory" );
 }
 
 Reference< XInterface > SAL_CALL

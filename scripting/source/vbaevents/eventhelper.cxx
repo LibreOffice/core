@@ -108,11 +108,11 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
-#define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
+#define MAP_CHAR_LEN(x) ::rtl::OUString(x)
 #define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
 // Some constants
-const static rtl::OUString DELIM(RTL_CONSTASCII_USTRINGPARAM("::"));
+const static rtl::OUString DELIM("::");
 const static sal_Int32 DELIMLEN = DELIM.getLength();
 
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
@@ -409,8 +409,8 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "VBAInterop" ));
+        evtDesc.ScriptType = rtl::OUString(
+            "VBAInterop" );
         return true;
     }
     return false;
@@ -422,7 +422,7 @@ ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ) 
     Reference < beans::XPropertySet > xProps(
         ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
     m_xCtx.set( xProps->getPropertyValue( rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
+        "DefaultContext" )),
         uno::UNO_QUERY_THROW );
 }
 
@@ -437,7 +437,7 @@ ScriptEventHelper::getEventListeners()
     {
         Reference< beans::XIntrospection > xIntrospection(
             xMFac->createInstanceWithContext( rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection"  ) ), m_xCtx ), UNO_QUERY );
+                "com.sun.star.beans.Introspection"   ), m_xCtx ), UNO_QUERY );
 
         Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
     if  ( xIntrospection.is() )
@@ -517,18 +517,18 @@ public:
 
     virtual void SAL_CALL insertByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString("ReadOnly container"), Reference< XInterface >() );
 
     }
     virtual void SAL_CALL removeByName( const ::rtl::OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString("ReadOnly container"), Reference< XInterface >() );
     }
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString("ReadOnly container"), Reference< XInterface >() );
 
     }
 
@@ -612,7 +612,7 @@ private:
 typedef ::cppu::WeakImplHelper3< XScriptListener, util::XCloseListener, lang::XInitialization > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
-#define EVENTLSTNR_PROPERTY_MODEL            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
+#define EVENTLSTNR_PROPERTY_MODEL            ::rtl::OUString( "Model"  )
 
 class EventListener : public EventListener_BASE
     ,public ::comphelper::OMutexAndBroadcastHelper
@@ -694,7 +694,7 @@ OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
-    msProject = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+    msProject = rtl::OUString("Standard");
 }
 
 void
@@ -716,7 +716,7 @@ EventListener::setShellFromModel()
     try
     {
         uno::Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
         msProject = xVBAMode->getProjectName();
     }
     catch ( uno::Exception& ) {}
@@ -919,7 +919,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
 {
     OSL_TRACE("EventListener::firing_Impl( FAKE VBA_EVENTS )");
     static const ::rtl::OUString vbaInterOp =
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop"));
+        ::rtl::OUString("VBAInterop");
 
     // let default handlers deal with non vba stuff
     if ( !evt.ScriptType.equals( vbaInterOp ) )
@@ -929,7 +929,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     OSL_TRACE("evt.MethodName is  %s", rtl::OUStringToOString( evt.MethodName, RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Argument[0] is  %s", rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[0] ), RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Getting Control");
-    rtl::OUString sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm") );
+    rtl::OUString sName = rtl::OUString( "UserForm" );
     OSL_TRACE("Getting Name");
 
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
@@ -961,7 +961,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             uno::Reference< beans::XPropertySet > xProps;
             OSL_TRACE("Getting properties");
             xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sName;
+            xProps->getPropertyValue( rtl::OUString( "Name" ) ) >>= sName;
         }
     }
     //dumpEvent( evt );
@@ -993,8 +993,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     if ( sScriptCode.indexOf( '.' ) == -1 )
     {
        //'Project' is a better default but I want to force failures
-       //rtl::OUString sMacroLoc(RTL_CONSTASCII_USTRINGPARAM("Project"));
-        sProject = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+       //rtl::OUString sMacroLoc("Project");
+        sProject = rtl::OUString("Standard");
 
         if ( pBasicManager->GetName().Len() > 0 )
             sProject =  pBasicManager->GetName();
@@ -1006,8 +1006,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
         sScriptCode = sScriptCode.copy( nIndex + 1 );
     }
         rtl::OUString sMacroLoc = sProject;
-        sMacroLoc = sMacroLoc.concat(  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
-        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
+        sMacroLoc = sMacroLoc.concat(  rtl::OUString(".") );
+        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString(".") );
 
         OSL_TRACE("sMacroLoc is %s", rtl::OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
         for ( ; txInfo != txInfo_end; ++txInfo )
@@ -1052,7 +1052,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                             RTL_TEXTENCODING_UTF8 ).getStr() );
                     try
                     {
-                        uno::Any aDummyCaller = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error")) );
+                        uno::Any aDummyCaller = uno::makeAny( rtl::OUString("Error") );
                         if ( pRet )
                             ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
                         else
@@ -1118,7 +1118,7 @@ namespace evtlstner
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.EventListener" ) );
+                static ::rtl::OUString aImplName( "ooo.vba.EventListener"  );
                 pImplName = &aImplName;
             }
         }
@@ -1148,7 +1148,7 @@ namespace ooevtdescgen
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAToOOEventDesc" ) );
+                static ::rtl::OUString aImplName( "ooo.vba.VBAToOOEventDesc"  );
                 pImplName = &aImplName;
             }
         }

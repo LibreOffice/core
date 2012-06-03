@@ -69,8 +69,8 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     {
         m_xSimpleFileAccess = uno::Reference< ucb::XSimpleFileAccess >(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.SimpleFileAccess")),
+                OUString(
+                    "com.sun.star.ucb.SimpleFileAccess"),
                 xContext), uno::UNO_QUERY_THROW);
     }
     catch (uno::Exception&)
@@ -82,8 +82,8 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     {
         m_xUriReferenceFactory = uno::Reference< uri::XUriReferenceFactory >(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.uri.UriReferenceFactory")),
+                OUString(
+                    "com.sun.star.uri.UriReferenceFactory"),
             xContext ), uno::UNO_QUERY_THROW );
     }
     catch (uno::Exception&)
@@ -106,26 +106,26 @@ throw ( uno::Exception, uno::RuntimeException )
          args[0].getValueType() != ::getCppuType((const OUString*)NULL) ||
          args[1].getValueType() != ::getCppuType((const OUString*)NULL) )
     {
-        throw uno::RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "ScriptingFrameworkURIHelper got invalid argument list" )),
+        throw uno::RuntimeException( OUString(
+            "ScriptingFrameworkURIHelper got invalid argument list" ),
                 uno::Reference< uno::XInterface >() );
     }
 
     if ( (args[0] >>= m_sLanguage) == sal_False ||
          (args[1] >>= m_sLocation) == sal_False )
     {
-        throw uno::RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "ScriptingFrameworkURIHelper error parsing args" )),
+        throw uno::RuntimeException( OUString(
+            "ScriptingFrameworkURIHelper error parsing args" ),
                 uno::Reference< uno::XInterface >() );
     }
 
-    SCRIPTS_PART = OUString(RTL_CONSTASCII_USTRINGPARAM("/Scripts/"));
+    SCRIPTS_PART = OUString("/Scripts/");
     SCRIPTS_PART = SCRIPTS_PART.concat( m_sLanguage.toAsciiLowerCase() );
 
     if ( !initBaseURI() )
     {
-        throw uno::RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "ScriptingFrameworkURIHelper cannot find script directory")),
+        throw uno::RuntimeException( OUString(
+            "ScriptingFrameworkURIHelper cannot find script directory"),
                 uno::Reference< uno::XInterface >() );
     }
 }
@@ -138,31 +138,31 @@ ScriptingFrameworkURIHelper::initBaseURI()
 
     if ( m_sLocation.equalsAscii(USER))
     {
-        test = OUString(RTL_CONSTASCII_USTRINGPARAM(USER));
-        uri = OUString(RTL_CONSTASCII_USTRINGPARAM(USER_URI));
+        test = OUString(USER);
+        uri = OUString(USER_URI);
         bAppendScriptsPart = true;
     }
     else if ( m_sLocation.equalsAscii(USER_UNO_PACKAGES))
     {
-        test = OUString(RTL_CONSTASCII_USTRINGPARAM("uno_packages"));
-        uri = OUString(RTL_CONSTASCII_USTRINGPARAM(USER_URI));
-        uri = uri.concat(OUString(RTL_CONSTASCII_USTRINGPARAM(USER_UNO_PACKAGES_DIR)));
+        test = OUString("uno_packages");
+        uri = OUString(USER_URI);
+        uri = uri.concat(OUString(USER_UNO_PACKAGES_DIR));
     }
     else if (m_sLocation.equalsAscii(SHARE))
     {
-        test = OUString(RTL_CONSTASCII_USTRINGPARAM(SHARE));
-        uri = OUString(RTL_CONSTASCII_USTRINGPARAM(SHARE_URI));
+        test = OUString(SHARE);
+        uri = OUString(SHARE_URI);
         bAppendScriptsPart = true;
     }
     else if (m_sLocation.equalsAscii(SHARE_UNO_PACKAGES))
     {
-        test = OUString(RTL_CONSTASCII_USTRINGPARAM("uno_packages"));
-        uri = OUString(RTL_CONSTASCII_USTRINGPARAM(SHARE_UNO_PACKAGES_URI));
+        test = OUString("uno_packages");
+        uri = OUString(SHARE_UNO_PACKAGES_URI);
     }
-    else if (m_sLocation.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(TDOC_SCHEME))) == 0)
+    else if (m_sLocation.indexOf(OUString(TDOC_SCHEME)) == 0)
     {
         m_sBaseURI = m_sLocation.concat( SCRIPTS_PART );
-        m_sLocation = OUString(RTL_CONSTASCII_USTRINGPARAM( DOCUMENT ));
+        m_sLocation = OUString(DOCUMENT );
         return true;
     }
     else
@@ -259,13 +259,13 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
     catch ( uno::Exception& )
     {
         throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Script URI not valid")),
+            OUString("Script URI not valid"),
                 uno::Reference< uno::XInterface >(), 1 );
     }
 
     ::rtl::OUStringBuffer buf(120);
     buf.append(m_sBaseURI);
-    buf.append(OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
+    buf.append(OUString("/"));
     buf.append(getLanguagePath(sLanguagePart));
 
     OUString result = buf.makeStringAndClear();
@@ -284,16 +284,16 @@ OUString SAL_CALL
 ScriptingFrameworkURIHelper::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.provider.ScriptURIHelper" ));
+    return OUString(
+        "com.sun.star.script.provider.ScriptURIHelper" );
 }
 
 sal_Bool SAL_CALL
 ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
     throw( uno::RuntimeException )
 {
-    OUString m_sServiceName(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.provider.ScriptURIHelper" ));
+    OUString m_sServiceName(
+        "com.sun.star.script.provider.ScriptURIHelper" );
 
     if ( serviceName.equals( m_sServiceName ) )
     {
@@ -307,8 +307,8 @@ ScriptingFrameworkURIHelper::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     ::rtl::OUString serviceNameList[] = {
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.script.provider.ScriptURIHelper" )) };
+        ::rtl::OUString(
+            "com.sun.star.script.provider.ScriptURIHelper" ) };
 
     uno::Sequence< ::rtl::OUString > serviceNames = uno::Sequence <
         ::rtl::OUString > ( serviceNameList, 1 );

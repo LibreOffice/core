@@ -112,8 +112,8 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     // get scheme of url
 
     Reference< uri::XUriReferenceFactory > xFac (
-         m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")) ) , UNO_QUERY );
+         m_xFactory->createInstance( rtl::OUString(
+            "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
     if ( xFac.is() )
     {
         Reference<  uri::XUriReference > uriRef(
@@ -246,7 +246,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             aException = ::cppu::getCaughtException();
 
-            ::rtl::OUString reason = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScriptProtocolHandler::dispatch: caught " ) );
+            ::rtl::OUString reason = ::rtl::OUString( "ScriptProtocolHandler::dispatch: caught "  );
 
             invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
 
@@ -255,9 +255,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        ::rtl::OUString reason(RTL_CONSTASCII_USTRINGPARAM(
+        ::rtl::OUString reason(
         "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
-        ));
+        );
         invokeResult <<= reason;
     }
 
@@ -395,13 +395,13 @@ void ScriptProtocolHandler::createScriptProvider()
             Reference< XPropertySet > xProps( m_xFactory, UNO_QUERY_THROW );
 
             ::rtl::OUString dc(
-                RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) );
+                "DefaultContext"  );
 
             Reference< XComponentContext > xCtx(
                 xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
 
-            ::rtl::OUString tmspf(RTL_CONSTASCII_USTRINGPARAM(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory"));
+            ::rtl::OUString tmspf(
+                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");
 
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );

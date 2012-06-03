@@ -55,9 +55,9 @@ namespace func_provider
 
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
-    userDirString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
-    shareDirString =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("share"));
-    bundledDirString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"));
+    userDirString = ::rtl::OUString("user");
+    shareDirString =  ::rtl::OUString("share");
+    bundledDirString = ::rtl::OUString("bundled");
 }
 
 ActiveMSPList::~ActiveMSPList()
@@ -67,7 +67,7 @@ ActiveMSPList::~ActiveMSPList()
 Reference< provider::XScriptProvider >
 ActiveMSPList::createNewMSP( const uno::Any& context )
 {
-    ::rtl::OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.MasterScriptProvider"));
+    ::rtl::OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
     Sequence< Any > args( &context, 1 );
 
     Reference< provider::XScriptProvider > msp(
@@ -294,7 +294,7 @@ ActiveMSPList::createNonDocMSPs()
             return;
         }
         // do creation of user and share MSPs here
-        ::rtl::OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.MasterScriptProvider"));
+        ::rtl::OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
         Sequence< Any > args(1);
 
         args[ 0 ] <<= userDirString;

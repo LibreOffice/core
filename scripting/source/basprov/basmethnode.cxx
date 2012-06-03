@@ -52,8 +52,8 @@ using namespace ::sf_misc;
 #define BASPROV_PROPERTY_ID_URI         1
 #define BASPROV_PROPERTY_ID_EDITABLE    2
 
-#define BASPROV_PROPERTY_URI            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URI" ) )
-#define BASPROV_PROPERTY_EDITABLE       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Editable" ) )
+#define BASPROV_PROPERTY_URI            ::rtl::OUString( "URI"  )
+#define BASPROV_PROPERTY_EDITABLE       ::rtl::OUString( "Editable"  )
 
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
 
@@ -85,17 +85,17 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:"));
+                    m_sURI = ::rtl::OUString("vnd.sun.star.script:");
                     m_sURI += pBasic->GetName();
-                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+                    m_sURI += ::rtl::OUString(".");
                     m_sURI += pModule->GetName();
-                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+                    m_sURI += ::rtl::OUString(".");
                     m_sURI += m_pMethod->GetName();
-                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?language=Basic&location="));
+                    m_sURI += ::rtl::OUString("?language=Basic&location=");
                     if ( m_bIsAppScript )
-                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application"));
+                        m_sURI += ::rtl::OUString("application");
                     else
-                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document"));
+                        m_sURI += ::rtl::OUString("document");
                 }
             }
         }
@@ -264,7 +264,7 @@ namespace basprov
                 if ( xSMgr.is() )
                 {
                     Reference< frame::XDesktop > xDesktop( xSMgr->createInstanceWithContext(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), m_xContext ), UNO_QUERY );
+                        ::rtl::OUString( "com.sun.star.frame.Desktop"  ), m_xContext ), UNO_QUERY );
 
                     if ( xDesktop.is() )
                     {
@@ -273,22 +273,22 @@ namespace basprov
                         if ( xProv.is() )
                         {
                             Reference< frame::XDispatchHelper > xHelper( xSMgr->createInstanceWithContext(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DispatchHelper" ) ), m_xContext ), UNO_QUERY );
+                                ::rtl::OUString( "com.sun.star.frame.DispatchHelper"  ), m_xContext ), UNO_QUERY );
 
                             if ( xHelper.is() )
                             {
                                 Sequence < PropertyValue > aArgs(7);
-                                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"));
+                                aArgs[0].Name = ::rtl::OUString("Document");
                                 aArgs[0].Value <<= sDocURL;
-                                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LibName"));
+                                aArgs[1].Name = ::rtl::OUString("LibName");
                                 aArgs[1].Value <<= sLibName;
-                                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                                aArgs[2].Name = ::rtl::OUString("Name");
                                 aArgs[2].Value <<= sModName;
-                                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
-                                aArgs[3].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Module"));
-                                aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Line"));
+                                aArgs[3].Name = ::rtl::OUString("Type");
+                                aArgs[3].Value <<= ::rtl::OUString("Module");
+                                aArgs[4].Name = ::rtl::OUString("Line");
                                 aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                                xHelper->executeDispatch( xProv, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:BasicIDEAppear")), ::rtl::OUString(), 0, aArgs );
+                                xHelper->executeDispatch( xProv, ::rtl::OUString(".uno:BasicIDEAppear"), ::rtl::OUString(), 0, aArgs );
                             }
                         }
                     }
@@ -298,7 +298,7 @@ namespace basprov
         else
         {
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicMethodNodeImpl::invoke: function name not supported!" ) ),
+                ::rtl::OUString( "BasicMethodNodeImpl::invoke: function name not supported!"  ),
                 Reference< XInterface >(), 1 );
         }
 
@@ -315,7 +315,7 @@ namespace basprov
         (void)aValue;
 
         throw UnknownPropertyException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicMethodNodeImpl::setValue: property name is unknown!" ) ),
+            ::rtl::OUString( "BasicMethodNodeImpl::setValue: property name is unknown!"  ),
             Reference< XInterface >() );
     }
 
@@ -326,7 +326,7 @@ namespace basprov
         (void)aPropertyName;
 
         throw UnknownPropertyException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicMethodNodeImpl::getValue: property name is unknown!" ) ),
+            ::rtl::OUString( "BasicMethodNodeImpl::getValue: property name is unknown!"  ),
             Reference< XInterface >() );
     }
 

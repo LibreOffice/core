@@ -90,8 +90,8 @@ Sequence< ::rtl::OUString > SAL_CALL
 mspf_getSupportedServiceNames( )
     SAL_THROW(())
 {
-    ::rtl::OUString str_name(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.provider.MasterScriptProviderFactory"));
+    ::rtl::OUString str_name(
+        "com.sun.star.script.provider.MasterScriptProviderFactory");
 
     return Sequence< ::rtl::OUString >( &str_name, 1 );
 }
@@ -100,8 +100,8 @@ mspf_getSupportedServiceNames( )
 mspf_getImplementationName( )
     SAL_THROW(())
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.provider.MasterScriptProviderFactory"));
+    return ::rtl::OUString(
+        "com.sun.star.script.provider.MasterScriptProviderFactory");
 }
 
 Reference< XInterface > SAL_CALL

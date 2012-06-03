@@ -83,7 +83,7 @@ namespace basprov
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.scripting.ScriptProviderForBasic" ) );
+                static ::rtl::OUString aImplName( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
                 pImplName = &aImplName;
             }
         }
@@ -101,10 +101,10 @@ namespace basprov
             if ( !pNames )
             {
                 static Sequence< ::rtl::OUString > aNames(4);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.provider.ScriptProviderForBasic" ) );
-                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.provider.LanguageScriptProvider" ) );
-                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.provider.ScriptProvider" ) );
-                aNames.getArray()[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.browse.BrowseNode" ) );
+                aNames.getArray()[0] = ::rtl::OUString( "com.sun.star.script.provider.ScriptProviderForBasic"  );
+                aNames.getArray()[1] = ::rtl::OUString( "com.sun.star.script.provider.LanguageScriptProvider"  );
+                aNames.getArray()[2] = ::rtl::OUString( "com.sun.star.script.provider.ScriptProvider"  );
+                aNames.getArray()[3] = ::rtl::OUString( "com.sun.star.script.browse.BrowseNode"  );
                 pNames = &aNames;
             }
         }
@@ -148,8 +148,8 @@ namespace basprov
                 Reference< lang::XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
                 if ( xSMgr.is() )
                 {
-                    xUriFac.set( xSMgr->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.uri.UriReferenceFactory" )), m_xContext ), UNO_QUERY );
+                    xUriFac.set( xSMgr->createInstanceWithContext( ::rtl::OUString(
+                        "com.sun.star.uri.UriReferenceFactory" ), m_xContext ), UNO_QUERY );
                 }
 
                 if ( xUriFac.is() )
@@ -173,7 +173,7 @@ namespace basprov
                                 aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                                 Reference<util::XMacroExpander> xMacroExpander(
                                     m_xContext->getValueByName(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.util.theMacroExpander")) ),
+                                    ::rtl::OUString("/singletons/com.sun.star.util.theMacroExpander") ),
                                     UNO_QUERY );
                                 if ( xMacroExpander.is() )
                                     aFileURL = xMacroExpander->expandMacros( aDecodedURL );
@@ -191,8 +191,8 @@ namespace basprov
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
                 ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                ::rtl::OUString aSearchURL1( RTL_CONSTASCII_USTRINGPARAM( "share/basic" ) );
-                ::rtl::OUString aSearchURL2( RTL_CONSTASCII_USTRINGPARAM( "share/uno_packages" ) );
+                ::rtl::OUString aSearchURL1( "share/basic"  );
+                ::rtl::OUString aSearchURL2( "share/uno_packages"  );
                 if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 || aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 )
                     bIsShared = true;
             }
@@ -243,7 +243,7 @@ namespace basprov
         if ( aArguments.getLength() != 1 )
         {
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect argument count." ) ),
+                ::rtl::OUString( "BasicProviderImpl::initialize: incorrect argument count."  ),
                 *this,
                 1
             );
@@ -258,7 +258,7 @@ namespace basprov
             if ( !xModel.is() )
             {
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context." ) ),
+                    ::rtl::OUString( "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context."  ),
                     *this,
                     1
                 );
@@ -269,7 +269,7 @@ namespace basprov
             if ( !( aArguments[0] >>= m_sScriptingContext ) )
             {
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect argument type " )  ).concat(  aArguments[0].getValueTypeName() ),
+                    ::rtl::OUString( "BasicProviderImpl::initialize: incorrect argument type "   ).concat(  aArguments[0].getValueTypeName() ),
                     *this,
                     1
                 );
@@ -307,7 +307,7 @@ namespace basprov
             {
                 /*
                 throw RuntimeException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: no scripting context!" ) ),
+                    ::rtl::OUString( "BasicProviderImpl::initialize: no scripting context!"  ),
                     Reference< XInterface >() );
                 */
             }
@@ -336,8 +336,8 @@ namespace basprov
         Reference< provider::XScript > xScript;
         Reference< lang::XMultiComponentFactory > xMcFac ( m_xContext->getServiceManager() );
         Reference< uri::XUriReferenceFactory > xFac (
-            xMcFac->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
+            xMcFac->createInstanceWithContext( rtl::OUString(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
 
         if ( !xFac.is() )
         {
@@ -354,7 +354,7 @@ namespace basprov
 
         if ( !uriRef.is() || !sfUri.is() )
         {
-            ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("BasicProviderImpl::getScript: failed to parse URI: "));
+            ::rtl::OUString errorMsg("BasicProviderImpl::getScript: failed to parse URI: ");
             errorMsg = errorMsg.concat( scriptURI );
             throw provider::ScriptFrameworkErrorException(
                 errorMsg, Reference< XInterface >(),
@@ -365,7 +365,7 @@ namespace basprov
 
         ::rtl::OUString aDescription = sfUri->getName();
         ::rtl::OUString aLocation = sfUri->getParameter(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("location")) );
+            ::rtl::OUString("location") );
 
         sal_Int32 nIndex = 0;
         // In some strange circumstances the Library name can have an
@@ -467,7 +467,7 @@ namespace basprov
 
         SolarMutexGuard aGuard;
 
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic"));
+        return ::rtl::OUString("Basic");
     }
 
     // -----------------------------------------------------------------------------

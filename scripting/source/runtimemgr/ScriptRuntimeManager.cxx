@@ -54,10 +54,10 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_runtimemgr
 {
 
-static OUString s_implName(RTL_CONSTASCII_USTRINGPARAM(
- "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" ));
-static OUString s_serviceName(RTL_CONSTASCII_USTRINGPARAM(
- "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" ));
+static OUString s_implName(
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
+static OUString s_serviceName(
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
 ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
@@ -129,8 +129,8 @@ throw( RuntimeException )
     {
         Reference< XInterface > xInterface(
             m_xMgr->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" )),
+                OUString(
+                    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ),
                 m_xContext
             ),
             UNO_SET_THROW
@@ -211,8 +211,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                              aOutParamIndex, aOutParam );
 
         // need to dispose of filesystem storage
-        OUString filesysString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "location=filesystem" ));
+        OUString filesysString( "location=filesystem" );
         if ( scriptURI.indexOf( filesysString ) != -1 )
         {
             Any a = m_xContext->getValueByName(

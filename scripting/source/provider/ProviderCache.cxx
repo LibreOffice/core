@@ -150,8 +150,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     try
     {
-        ::rtl::OUString languageProviderName( RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.script.provider.LanguageScriptProvider" ) );
+        ::rtl::OUString languageProviderName( "com.sun.star.script.provider.LanguageScriptProvider"  );
 
         Reference< container::XContentEnumerationAccess > xEnumAccess = Reference< container::XContentEnumerationAccess >( m_xMgr, UNO_QUERY_THROW );
         Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
@@ -166,8 +165,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
 
             if ( serviceNames.getLength() > 0 )
             {
-                ::rtl::OUString searchString( RTL_CONSTASCII_USTRINGPARAM (
-                    "com.sun.star.script.provider.ScriptProviderFor" ) );
+                ::rtl::OUString searchString( "com.sun.star.script.provider.ScriptProviderFor"  );
 
                 for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
                 {
@@ -202,7 +200,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     }
     catch ( const RuntimeException& e )
     {
-        ::rtl::OUString temp(RTL_CONSTASCII_USTRINGPARAM("ProviderCache::createProvider() Error creating provider from factory!!!\n"));
+        ::rtl::OUString temp("ProviderCache::createProvider() Error creating provider from factory!!!\n");
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 

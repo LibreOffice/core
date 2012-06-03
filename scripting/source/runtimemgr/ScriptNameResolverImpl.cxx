@@ -52,10 +52,10 @@ namespace scripting_runtimemgr
 {
 
 const sal_Char* const LANGUAGE_TO_RESOLVE_ON[] = { "All" }; // should be configurable
-OUString nrs_implName(RTL_CONSTASCII_USTRINGPARAM(
-    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ));
-OUString nrs_serviceName(RTL_CONSTASCII_USTRINGPARAM(
-    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ));
+OUString nrs_implName(
+    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" );
+OUString nrs_serviceName(
+    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" );
 Sequence< OUString > nrs_serviceNames = Sequence< OUString >( &nrs_serviceName, 1 );
 
 const char* const SCRIPTSTORAGEMANAGER_SERVICE =
@@ -169,10 +169,10 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
 
     OSL_TRACE( "ScriptNameResolverImpl::resolve Starting..." );
-    OUString docString(RTL_CONSTASCII_USTRINGPARAM("location=document"));
-    OUString userString(RTL_CONSTASCII_USTRINGPARAM("location=user"));
-    OUString shareString(RTL_CONSTASCII_USTRINGPARAM("location=share"));
-    OUString filesysString(RTL_CONSTASCII_USTRINGPARAM("location=filesystem"));
+    OUString docString("location=document");
+    OUString userString("location=user");
+    OUString shareString("location=share");
+    OUString filesysString("location=filesystem");
 
     // initialise vector with doc, user and share
 
@@ -219,8 +219,8 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         }
         Reference< XInterface > xInterface(
             m_xMultiComFac->createInstanceWithContext(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.SimpleFileAccess" )),
+                ::rtl::OUString(
+                    "com.sun.star.ucb.SimpleFileAccess" ),
                 m_xContext
             ),
             UNO_SET_THROW
@@ -262,7 +262,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         // b) an illegal location
 
         // detect illegal location
-        if (  scriptURI.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM("location=")) ) != -1 )
+        if (  scriptURI.indexOf( OUString("location=") ) != -1 )
         {
             OSL_TRACE(
                 "ScriptNameResolver::resolve, throwing IllegalArgException" );
@@ -416,7 +416,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
     try
     {
         OUString permissionURI = docURI;
-        OUString filesysString(RTL_CONSTASCII_USTRINGPARAM("location=filesystem"));
+        OUString filesysString("location=filesystem");
         if ( scriptURI.indexOf( filesysString ) != -1 )
         {
             // in the case of filesys scripts we're checking whether the
@@ -511,7 +511,7 @@ const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::sec
             ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) )
         {
             xScriptSecurity->checkPermission( permissionURI,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("execute")) );
+                OUString("execute") );
             // if we get here, the checkPermission hasn't thrown an
             // AccessControlException, ie. permission has been granted
             OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: got execute permission for ID=%d", sid );
@@ -550,7 +550,7 @@ throw( lang::IllegalArgumentException )
 {
         OUString filePath;
         OUString fileName;
-        OUString filesysString(RTL_CONSTASCII_USTRINGPARAM("location=filesystem"));
+        OUString filesysString("location=filesystem");
         sal_Int32 locationPos = scriptURI.indexOf( filesysString );
         // expect location=filesys:file:///foo/bar/myscript.bsh etc
         // except the file url at this point is encoded
@@ -567,7 +567,7 @@ throw( lang::IllegalArgumentException )
                                 endOfLocn - locationPos - filesysStrLen );
         }
         //file name shoul also be encoded so again ok to search for '&'
-        OUString functionKey(RTL_CONSTASCII_USTRINGPARAM("function="));
+        OUString functionKey("function=");
         sal_Int32 functionKeyLength = functionKey.getLength();
         sal_Int32 functionNamePos = scriptURI.indexOf( functionKey );
         if ( functionNamePos > 0 )
