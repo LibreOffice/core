@@ -27,10 +27,12 @@
 
 $(eval $(call gb_Package_Package,packimages_images,$(call gb_CustomTarget_get_workdir,packimages/images)))
 
-$(eval $(call gb_Package_add_file,packimages_images,bin/images.zip,images.zip))
 $(eval $(call gb_Package_add_file,packimages_images,bin/images_brand.zip,images_brand.zip))
 
-$(foreach theme,$(WITH_THEMES),\
+$(if $(filter default,$(WITH_THEMES)),\
+$(eval $(call gb_Package_add_file,packimages_images,bin/images.zip,images.zip)))
+
+$(foreach theme,$(filter-out default,$(WITH_THEMES)),\
 $(eval $(call gb_Package_add_file,packimages_images,bin/images_$(theme).zip,images_$(theme).zip)))
 
 # vim: set noet sw=4 ts=4:

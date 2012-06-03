@@ -35,8 +35,9 @@ packimages_CUSTOM_FALLBACK_1 := -c $(SRCDIR)/icon-themes/tango
 packimages_CUSTOM_FALLBACK_2 := -c $(SRCDIR)/icon-themes/industrial
 
 $(call gb_CustomTarget_get_target,packimages/images) : \
-	$(packimages_DIR)/images.zip $(packimages_DIR)/images_brand.zip $(foreach theme,$(WITH_THEMES),\
-		$(packimages_DIR)/images_$(theme).zip)
+	$(packimages_DIR)/images_brand.zip \
+	$(if $(filter default,$(WITH_THEMES)),$(packimages_DIR)/images.zip) \
+	$(foreach theme,$(filter-out default,$(WITH_THEMES)),$(packimages_DIR)/images_$(theme).zip)
 
 $(packimages_DIR)/images.zip : \
 		$(packimages_DIR)/sorted.lst $(packimages_DIR)/commandimagelist.ilst
