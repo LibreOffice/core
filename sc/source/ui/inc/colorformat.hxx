@@ -32,6 +32,8 @@
 #include <svtools/ctrlbox.hxx>
 #include "anyrefdg.hxx"
 
+class ScDataBarFormat;
+
 class ScColorScaleSettingsDlg : public ModalDialog
 {
 
@@ -66,8 +68,11 @@ private:
 
     DECL_LINK(OkBtnHdl, void*);
 
+    void Init();
+
 public:
     ScDataBarSettingsDlg(Window* pParent);
+    ScDataBarSettingsDlg(Window* pParent, ScDataBarFormat* pFormat);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

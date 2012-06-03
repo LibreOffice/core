@@ -27,6 +27,7 @@
  */
 
 #include "colorformat.hxx"
+#include "colorscale.hxx"
 
 #include "colorformat.hrc"
 
@@ -55,6 +56,94 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) )
 {
+    Init();
+    FreeResource();
+
+    maLbTypeMin.SelectEntryPos(0);
+    maLbTypeMax.SelectEntryPos(1);
+    maLbAxisPos.SelectEntryPos(0);
+}
+
+namespace {
+
+void SetType(ScColorScaleEntry* pEntry, ListBox& aLstBox)
+{
+    if(pEntry->GetMin())
+        aLstBox.SelectEntryPos(0);
+    else if(pEntry->GetMax())
+        aLstBox.SelectEntryPos(1);
+    else if(pEntry->GetPercentile())
+        aLstBox.SelectEntryPos(2);
+    else if(pEntry->GetPercent())
+        aLstBox.SelectEntryPos(3);
+    else if(pEntry->HasFormula())
+        aLstBox.SelectEntryPos(5);
+    else
+        aLstBox.SelectEntryPos(4);
+}
+
+void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
+{
+    if(pEntry->HasFormula())
+        aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+    else if(!pEntry->GetMin() && !pEntry->GetMax())
+        aEdit.SetText(rtl::OUString::valueOf(pEntry->GetValue()));
+    else
+        aEdit.Disable();
+}
+
+}
+
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDataBarFormat* pFormat):
+    ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
+    maBtnOk( this, ScResId( BTN_OK ) ),
+    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
+    maFlBarColors( this, ScResId( FL_BAR_COLORS ) ),
+    maFlAxes( this, ScResId( FL_AXIS ) ),
+    maFlValues( this, ScResId( FL_VALUES ) ),
+    maFtMin( this, ScResId( FT_MINIMUM ) ),
+    maFtMax( this, ScResId( FT_MAXIMUM ) ),
+    maFtPositive( this, ScResId( FT_POSITIVE ) ),
+    maFtNegative( this, ScResId( FT_NEGATIVE ) ),
+    maFtPosition( this, ScResId( FT_POSITION ) ),
+    maFtAxisColor( this, ScResId( FT_COLOR_AXIS ) ),
+    maLbPos( this, ScResId( LB_POS ) ),
+    maLbNeg( this, ScResId( LB_NEG ) ),
+    maLbAxisCol( this, ScResId( LB_COL_AXIS ) ),
+    maLbTypeMin( this, ScResId( LB_TYPE ) ),
+    maLbTypeMax( this, ScResId( LB_TYPE ) ),
+    maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
+    maEdMin( this, ScResId( ED_MIN ) ),
+    maEdMax( this, ScResId( ED_MAX ) )
+{
+    Init();
+    FreeResource();
+
+    const ScDataBarFormatData* pData = pFormat->GetDataBarData();
+    maLbPos.SelectEntry( pData->maPositiveColor );
+    if(pData->mpNegativeColor)
+        maLbNeg.SelectEntry( *pData->mpNegativeColor );
+
+    switch (pData->meAxisPosition)
+    {
+        case databar::NONE:
+            maLbAxisPos.SelectEntryPos(2);
+            break;
+        case databar::AUTOMATIC:
+            maLbAxisPos.SelectEntryPos(0);
+            break;
+        case databar::MIDDLE:
+            maLbAxisPos.SelectEntryPos(1);
+            break;
+    }
+    ::SetType(pData->mpLowerLimit.get(), maLbTypeMin);
+    ::SetType(pData->mpUpperLimit.get(), maLbTypeMax);
+    SetValue(pData->mpLowerLimit.get(), maEdMin);
+    SetValue(pData->mpUpperLimit.get(), maEdMax);
+}
+
+void ScDataBarSettingsDlg::Init()
+{
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
     XColorListRef       pColorTable;
@@ -67,9 +156,6 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
         if ( pItem != NULL )
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
-
-    DBG_ASSERT( pColorTable.is(), "ColorTable not found!" );
-
     if ( pColorTable.is() )
     {
         // filling the line color box
@@ -95,11 +181,6 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
         maLbNeg.SetUpdateMode( sal_True );
         maLbAxisCol.SetUpdateMode( sal_True );
     }
-    FreeResource();
-
-    maLbTypeMin.SelectEntryPos(0);
-    maLbTypeMax.SelectEntryPos(1);
-    maLbAxisPos.SelectEntryPos(0);
     maBtnOk.SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
     Point aPoint = maLbTypeMax.GetPosPixel();
