@@ -1473,16 +1473,12 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                 // Image:
                 if( pEntry->mbHasImage && bUseImages )
                 {
-                    // Don't render an image for a check thing
-                     /* if((nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES) || !pEntry->HasCheck() )*/
-                    {
-                        if( pEntry->mbChecked )
-                            ImplPaintCheckBackground( this, aOuterCheckRect, pThisOnly && bHighlighted );
-                        aTmpPos = aOuterCheckRect.TopLeft();
-                        aTmpPos.X() += (aOuterCheckRect.GetWidth()-pEntry->maImage.GetSizePixel().Width())/2;
-                        aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pEntry->maImage.GetSizePixel().Height())/2;
-                        DrawImage( aTmpPos, pEntry->maImage, nImageStyle );
-                    }
+                    if( pEntry->mbChecked )
+                        ImplPaintCheckBackground( this, aOuterCheckRect, pThisOnly && bHighlighted );
+                    aTmpPos = aOuterCheckRect.TopLeft();
+                    aTmpPos.X() += (aOuterCheckRect.GetWidth()-pEntry->maImage.GetSizePixel().Width())/2;
+                    aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pEntry->maImage.GetSizePixel().Height())/2;
+                    DrawImage( aTmpPos, pEntry->maImage, nImageStyle );
                 }
 
                 // Text:

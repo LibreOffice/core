@@ -101,9 +101,6 @@ typedef sal_uInt16 MenuItemBits;
 // overrides default hiding of disabled entries in popup menus
 #define MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES 0x0004
 
-// forces images & toggle visibility for toolbar config popup
-#define MENU_FLAG_SHOWCHECKIMAGES     0x0008
-
 struct ImplMenuDelData
 {
     ImplMenuDelData* mpNext;

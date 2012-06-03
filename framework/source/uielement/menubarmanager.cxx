@@ -831,7 +831,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             nFlag &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
         else
             nFlag |= MENU_FLAG_HIDEDISABLEDENTRIES;
-        pMenu->SetMenuFlags( nFlag | MENU_FLAG_SHOWCHECKIMAGES );
+        pMenu->SetMenuFlags( nFlag );
 
         if ( m_bActive )
             return 0;

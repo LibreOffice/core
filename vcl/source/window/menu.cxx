@@ -959,7 +959,7 @@ void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
     mpSalMenu       = NULL;
-    nMenuFlags      = MENU_FLAG_SHOWCHECKIMAGES;
+    nMenuFlags      = 0;
     nDefaultItem    = 0;
     //bIsMenuBar      = sal_False;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
@@ -2360,10 +2360,6 @@ Size Menu::ImplCalcSize( Window* pWin )
     if( aMaxSize.Height() > nMinMenuItemHeight )
         nMinMenuItemHeight = aMaxSize.Height();
 
-    // When no native rendering of the checkbox & no image in the menu, we
-    // have to add some extra space even in the MENU_FLAG_SHOWCHECKIMAGES case
-    bool bSpaceForCheckbox = ( aMaxSize.Height() == 0 );
-
     Size aMaxImgSz;
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
@@ -2379,9 +2375,6 @@ Size Menu::ImplCalcSize( Window* pWin )
                   )
                )
             {
-                // we have an icon, don't add the extra space
-                bSpaceForCheckbox = false;
-
                 Size aImgSz = pData->aImage.GetSizePixel();
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
                     aMaxImgSz.Height() = aImgSz.Height();
@@ -2432,12 +2425,9 @@ Size Menu::ImplCalcSize( Window* pWin )
             if ( !bIsMenuBar && pData->HasCheck() )
             {
                 nCheckWidth = aMaxSize.Width();
-                if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
-                {
-                    // checks / images take the same place
-                    if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
-                        nWidth += nCheckWidth + nExtra * 2;
-                }
+                // checks / images take the same place
+                if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
+                    nWidth += nCheckWidth + nExtra * 2;
             }
 
             // Text:
@@ -2503,20 +2493,13 @@ Size Menu::ImplCalcSize( Window* pWin )
 
         sal_uInt16 gfxExtra = (sal_uInt16) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nImgOrChkPos = (sal_uInt16)nExtra;
-        if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
-        {
-            long nImgOrChkWidth = 0;
-            if( aMaxSize.Height() > 0 ) // NWF case
-                nImgOrChkWidth = aMaxSize.Height() + nExtra;
-            else // non NWF case
-                nImgOrChkWidth = nFontHeight/2 + gfxExtra;
-            nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
-            nTextPos = (sal_uInt16)(nImgOrChkPos + nImgOrChkWidth);
-        }
-        else
-        {
-            nTextPos = (sal_uInt16)(nImgOrChkPos + Max( aMaxImgSz.Width(), nCheckWidth ));
-        }
+        long nImgOrChkWidth = 0;
+        if( aMaxSize.Height() > 0 ) // NWF case
+            nImgOrChkWidth = aMaxSize.Height() + nExtra;
+        else // non NWF case
+            nImgOrChkWidth = nFontHeight/2 + gfxExtra;
+        nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
+        nTextPos = (sal_uInt16)(nImgOrChkPos + nImgOrChkWidth);
         nTextPos = nTextPos + gfxExtra;
 
         aSz.Width() = nTextPos + nMaxWidth + nExtra;
@@ -2811,15 +2794,12 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                 if ( !bLayout && !bIsMenuBar && ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
                 {
                     // Don't render an image for a check thing
-                    if ((nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES) || !pData->HasCheck() )
-                    {
-                        if( pData->bChecked )
-                            ImplPaintCheckBackground( pWin, aOuterCheckRect, pThisItemOnly && bHighlighted );
-                        aTmpPos = aOuterCheckRect.TopLeft();
-                        aTmpPos.X() += (aOuterCheckRect.GetWidth()-pData->aImage.GetSizePixel().Width())/2;
-                        aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pData->aImage.GetSizePixel().Height())/2;
-                        pWin->DrawImage( aTmpPos, pData->aImage, nImageStyle );
-                    }
+                    if( pData->bChecked )
+                        ImplPaintCheckBackground( pWin, aOuterCheckRect, pThisItemOnly && bHighlighted );
+                    aTmpPos = aOuterCheckRect.TopLeft();
+                    aTmpPos.X() += (aOuterCheckRect.GetWidth()-pData->aImage.GetSizePixel().Width())/2;
+                    aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pData->aImage.GetSizePixel().Height())/2;
+                    pWin->DrawImage( aTmpPos, pData->aImage, nImageStyle );
                 }
 
                 // Text:

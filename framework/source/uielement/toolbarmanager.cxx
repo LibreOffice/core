@@ -1780,9 +1780,6 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
         if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
             aPopupMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, sal_False);
 
-        pItemMenu->SetMenuFlags (pItemMenu->GetMenuFlags () |
-                                 MENU_FLAG_SHOWCHECKIMAGES);
-
         for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {
             if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
@@ -1826,9 +1823,6 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
     {
         // create an own submenu to avoid auto-delete when resource menu is deleted
         PopupMenu *pItemMenu = new PopupMenu();
-
-        pItemMenu->SetMenuFlags (pItemMenu->GetMenuFlags () |
-                                 MENU_FLAG_SHOWCHECKIMAGES);
 
         for( i=0; i< aPopupMenu.GetPopupMenu( 1 )->GetItemCount(); i++)
             pItemMenu->CopyItem( *aPopupMenu.GetPopupMenu( 1 ), i, MENU_APPEND );
