@@ -109,8 +109,8 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) 
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
-    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"));
-    static ::rtl::OUString EVENT_QUIT_APP                (RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
+    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER("com.sun.star.frame.GlobalEventBroadcaster");
+    static ::rtl::OUString EVENT_QUIT_APP                ("OnCloseApp");
 
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
@@ -139,7 +139,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 ::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
 {
-    static const ::rtl::OUString IMPLNAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.SfxTerminateListener"));
+    static const ::rtl::OUString IMPLNAME("com.sun.star.comp.sfx2.SfxTerminateListener");
     return IMPLNAME;
 }
 
@@ -166,7 +166,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    static const ::rtl::OUString SERVICENAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TerminateListener"));
+    static const ::rtl::OUString SERVICENAME("com.sun.star.frame.TerminateListener");
     Sequence< ::rtl::OUString > lNames(1);
     lNames[0] = SERVICENAME;
     return lNames;
@@ -193,12 +193,12 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     {
         bDetermineFunction = true;
 
-        static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "cui" ) ) );
+        static ::rtl::OUString aLibName( SVLIBRARY( "cui"  ) );
         oslModule handleMod = osl_loadModuleRelative(
             &thisModule, aLibName.pData, 0 );
 
         // get symbol
-        ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "GetSpecialCharsForEdit" ) );
+        ::rtl::OUString aSymbol( "GetSpecialCharsForEdit"  );
         pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getFunctionSymbol( handleMod, aSymbol.pData );
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
     }
@@ -221,7 +221,7 @@ bool SfxApplication::Initialize_Impl()
 
     Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     if (!xDesktop.is())
-         throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't create mandatory desktop service!" )), xDesktop );
+         throw RuntimeException( rtl::OUString( "Couldn't create mandatory desktop service!" ), xDesktop );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
 
     Application::EnableAutoHelpId();

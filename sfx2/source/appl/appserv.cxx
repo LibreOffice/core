@@ -145,7 +145,7 @@ static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rU
     using namespace osl;
     DirectoryItem aDirItem;
 
-    rURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/") );
+    rURL = rtl::OUString( "$BRAND_BASE_DIR/" );
     rURL += rtl::OUString::createFromAscii( pName );
     rURL += rtl::OUString::createFromAscii( pExt );
     rtl::Bootstrap::expandMacros( rURL );
@@ -160,18 +160,18 @@ static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rU
 static void showDocument( const char* pBaseName )
 {
     try {
-        Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+        Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY );
         Sequence < com::sun::star::beans::PropertyValue > args(2);
-        args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
+        args[0].Name = ::rtl::OUString("ViewOnly");
         args[0].Value <<= sal_True;
-        args[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        args[1].Name = ::rtl::OUString("ReadOnly");
         args[1].Value <<= sal_True;
 
         rtl::OUString aURL;
         if ( checkURL ( pBaseName, ".odt", aURL ) ||
                 checkURL ( pBaseName, ".html", aURL ) ||
                 checkURL ( pBaseName, "", aURL ) ) {
-            xLoader->loadComponentFromURL( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args );
+            xLoader->loadComponentFromURL( aURL, ::rtl::OUString("_blank"), 0, args );
         }
     } catch (const ::com::sun::star::uno::Exception &) {
     }
@@ -430,7 +430,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("http://hub.libreoffice.org/file-a-bug/"));
+            ::rtl::OUString sURL("http://hub.libreoffice.org/file-a-bug/");
             try
             {
                 uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
@@ -619,7 +619,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     try
                     {
-                        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                        Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
                         aValue >>= xLayoutManager;
                     }
                     catch ( const ::com::sun::star::uno::RuntimeException& )
@@ -633,7 +633,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 if ( xLayoutManager.is() )
                 {
-                    rtl::OUString aToolbarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+                    rtl::OUString aToolbarResName( "private:resource/toolbar/" );
                     rtl::OUStringBuffer aBuf( aToolbarResName );
                     aBuf.append( pToolbarName->GetValue() );
 
@@ -789,14 +789,14 @@ extern "C" { static void SAL_CALL thisModule() {} }
 ::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
 {
     // get basctl dllname
-    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
+    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
+    ::rtl::OUString aSymbol( "basicide_choose_macro"  );
     basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_choose_macro in basctl
@@ -809,14 +809,14 @@ extern "C" { static void SAL_CALL thisModule() {} }
 void MacroOrganizer( sal_Int16 nTabId )
 {
     // get basctl dllname
-    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
+    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
+    ::rtl::OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_macro_organizer in basctl
@@ -857,7 +857,7 @@ namespace
 
     const ::rtl::OUString& lcl_getBasicIDEServiceName()
     {
-        static const ::rtl::OUString s_sBasicName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ) );
+        static const ::rtl::OUString s_sBasicName( "com.sun.star.script.BasicIDE"  );
         return s_sBasicName;
     }
 
@@ -989,9 +989,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 // read repository URL from configuration
                 ::rtl::OUString sTemplRepoURL =
                     getConfigurationStringValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dictionaries")),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepositoryURL")),
+                        ::rtl::OUString("org.openoffice.Office.Common"),
+                        ::rtl::OUString("Dictionaries"),
+                        ::rtl::OUString("RepositoryURL"),
                         ::rtl::OUString());
 
                 if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
@@ -1001,10 +1001,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                     // read locale from configuration
                     ::rtl::OUString sLocale = getConfigurationStringValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N")),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
+                        ::rtl::OUString("org.openoffice.Setup"),
+                        ::rtl::OUString("L10N"),
+                        ::rtl::OUString("ooLocale"),
+                        ::rtl::OUString("en-US"));
 
                     aURLBuf.append( sLocale );
                     xSystemShell->execute(
@@ -1041,7 +1041,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         SfxFrameLoader_Impl::impl_getStaticImplementationName() ), UNO_QUERY_THROW );
                     ::comphelper::NamedValueCollection aLoadArgs;
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );
-                    aLoadArgs.put( "URL", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sbasic" ) ) );
+                    aLoadArgs.put( "URL", ::rtl::OUString( "private:factory/sbasic"  ) );
 
                     Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( aContext ) );
                     if ( !xTargetFrame.is() )
@@ -1252,13 +1252,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
+                xORB->createInstance( ::rtl::OUString("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
                 Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
+                    xORB->createInstance( ::rtl::OUString("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
                 if ( xHelper.is() )
                 {
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
@@ -1282,13 +1282,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ModuleDispatcher"))), UNO_QUERY );
+                xORB->createInstance( ::rtl::OUString("com.sun.star.text.ModuleDispatcher")), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
                 Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
+                    xORB->createInstance( ::rtl::OUString("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
                 if ( xHelper.is() )
                 {
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
@@ -1308,7 +1308,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_ADDRESS_DATA_SOURCE:
         {
-            ::rtl::OUString sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AddressBookSourcePilot" ) );
+            ::rtl::OUString sDialogServiceName( "com.sun.star.ui.dialogs.AddressBookSourcePilot"  );
             try
             {
                 Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();

@@ -272,7 +272,7 @@ private:
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
         mxStorage->openStreamElement(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ),
+                ::rtl::OUString( "content.xml"  ),
                 embed::ElementModes::READ | embed::ElementModes::NOCREATE );
 
         // no exception -> success
@@ -322,7 +322,7 @@ sal_uInt32 CheckPasswd_Impl
             {
                 sal_Bool bIsEncrypted = sal_False;
                 try {
-                    xStorageProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasEncryptedEntries")) )
+                    xStorageProps->getPropertyValue( ::rtl::OUString("HasEncryptedEntries") )
                         >>= bIsEncrypted;
                 } catch( uno::Exception& )
                 {
@@ -678,7 +678,7 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
         return true;
 
     ::rtl::OUString aName = rFilter.GetFilterName();
-    if (aName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel"))) == 0)
+    if (aName.indexOf(::rtl::OUString("MS Excel")) == 0)
         // We can handle all Excel variants natively.
         return true;
 
@@ -928,7 +928,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
                                                                     ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))),
+                                                                    ::rtl::OUString("com.sun.star.document.TypeDetection")),
                                                                     UNO_QUERY );
         if ( xTypeDetection.is() )
         {
@@ -937,7 +937,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             aURL.Complete = aFileName;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+                                                    ::rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
             INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
@@ -981,14 +981,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     Sequence < ::rtl::OUString > aProtocols(2);
 
                     // add special protocols that always should be treated as internal
-                    aProtocols[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:*"));
-                    aProtocols[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.*"));
+                    aProtocols[0] = ::rtl::OUString("private:*");
+                    aProtocols[1] = ::rtl::OUString("vnd.sun.star.*");
 
                     try
                     {
                         // get registered protocol handlers from configuration
                         Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.ProtocolHandler/HandlerSet")), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
+                            ::rtl::OUString("org.openoffice.Office.ProtocolHandler/HandlerSet"), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
                         if ( xAccess.is() )
                         {
                             Sequence < ::rtl::OUString > aNames = xAccess->getElementNames();
@@ -1000,7 +1000,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 if ( xSet.is() )
                                 {
                                     // copy protocols
-                                    aRet = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Protocols")) );
+                                    aRet = xSet->getPropertyValue( ::rtl::OUString("Protocols") );
                                     Sequence < ::rtl::OUString > aTmp;
                                     aRet >>= aTmp;
 
@@ -1119,7 +1119,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         if (!pInteractionItem)
         {
-            Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))), UNO_QUERY );
+            Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
             if (xHdl.is())
                 rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
         }
@@ -1158,7 +1158,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             }
             else
             {
-                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY );
+                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.frame.Desktop")), UNO_QUERY );
             }
         }
 
@@ -1209,7 +1209,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             URL aURL;
             aURL.Complete = aFileName;
-            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
             Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
