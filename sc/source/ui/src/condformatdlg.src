@@ -118,6 +118,8 @@ Control RID_COND_ENTRY
 	    "not equal to";
 	    "between";
 	    "not between";
+	    "duplicate";
+	    "not duplicate";
 	};
     };
     FixedText FT_STYLE

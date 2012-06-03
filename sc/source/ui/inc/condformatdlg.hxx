@@ -41,6 +41,8 @@
 
 class ScDocument;
 class ScConditionalFormat;
+class ScCondFormatEntry;
+class ScConditionalFormat;
 
 enum ScCondFormatEntryType
 {
@@ -97,6 +99,7 @@ private:
     void HideDataBarElements();
 
     void SetHeight();
+    void Init();
 
     ScDocument* mpDoc;
 
@@ -106,6 +109,7 @@ private:
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
+    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCondFormatEntry* pFormatEntry );
 
     virtual long Notify( NotifyEvent& rNEvt );
 
@@ -131,6 +135,7 @@ private:
     void DoScroll(long nDiff);
 public:
     ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc );
+    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, ScConditionalFormat* pFormat);
 
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( RemoveBtnHdl, void* );
