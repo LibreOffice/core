@@ -459,7 +459,7 @@ sal_Bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 
 
 LngSvcMgr::LngSvcMgr()
-    : utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Linguistic")))
+    : utl::ConfigItem(OUString("Office.Linguistic"))
     , aEvtListeners(GetLinguMutex())
 {
     bDisposing = sal_False;
@@ -756,7 +756,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -821,7 +821,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -884,7 +884,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
 
                         }
@@ -951,7 +951,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -1632,7 +1632,7 @@ uno::Sequence< OUString > SAL_CALL
     OUString *pNames = aNames.getArray();
     if ( 0 == rServiceName.compareToAscii( SN_SPELLCHECKER ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/SpellCheckerList"));
+        OUString aNode( "ServiceManager/SpellCheckerList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1647,7 +1647,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( 0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/GrammarCheckerList"));
+        OUString aNode( "ServiceManager/GrammarCheckerList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1662,7 +1662,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( 0 == rServiceName.compareToAscii( SN_HYPHENATOR ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/HyphenatorList"));
+        OUString aNode( "ServiceManager/HyphenatorList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1677,7 +1677,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( 0 == rServiceName.compareToAscii( SN_THESAURUS ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/ThesaurusList"));
+        OUString aNode( "ServiceManager/ThesaurusList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {

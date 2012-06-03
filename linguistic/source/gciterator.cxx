@@ -764,7 +764,7 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         if ( xMSF.is() )
             xBreakIterator = uno::Reference < i18n::XBreakIterator >( xMSF->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ), uno::UNO_QUERY );
+                ::rtl::OUString("com.sun.star.i18n.BreakIterator") ), uno::UNO_QUERY );
     }
     sal_Int32 nTextLen = rText.getLength();
     sal_Int32 nEndPosition = nTextLen;
@@ -987,8 +987,7 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
             if (xMgr.is())
             {
                 xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+                        xMgr->createInstance( OUString( "com.sun.star.configuration.ConfigurationProvider"  ) ),
                         uno::UNO_QUERY_THROW ) ;
             }
 
