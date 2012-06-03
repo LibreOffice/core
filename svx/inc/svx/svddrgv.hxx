@@ -64,7 +64,7 @@ protected:
     SdrDragMethod*              mpCurrentSdrDragMethod;
     SdrUndoGeoObj*              pInsPointUndo;
     Rectangle                   aDragLimit;
-    XubString                   aInsPointUndoStr;
+    rtl::OUString               aInsPointUndoStr;
     SdrMarkList                 aFollowingEdges; // If nodes are dragged, all edges should follow as Xor
     SdrHdlKind                  eDragHdl;
 
