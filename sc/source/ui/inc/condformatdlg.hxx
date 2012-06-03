@@ -32,6 +32,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <svx/fntctrl.hxx>
 
 #include "rangelst.hxx"
 
@@ -68,6 +69,7 @@ private:
     Edit maEdVal2;
     FixedText maFtStyle;
     ListBox maLbStyle;
+    SvxFontPrevWindow maWdPreview;
 
     //color format ui elements
     ListBox maLbColorFormat;
@@ -93,6 +95,8 @@ private:
     void HideCondElements();
     void HideColorScaleElements();
     void HideDataBarElements();
+
+    void SetHeight();
 
     ScDocument* mpDoc;
 
