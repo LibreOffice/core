@@ -38,8 +38,8 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString("com.sun.star.embed.BitmapCreator");
-    aRet[1] = ::rtl::OUString("com.sun.star.comp.embed.BitmapCreator");
+    aRet[0] = "com.sun.star.embed.BitmapCreator";
+    aRet[1] = "com.sun.star.comp.embed.BitmapCreator";
     return aRet;
 }
 

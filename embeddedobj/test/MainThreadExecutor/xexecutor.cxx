@@ -94,7 +94,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 uno::Sequence< ::rtl::OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString("com.sun.star.comp.thread.MainThreadExecutor");
+    aRet[0] = "com.sun.star.comp.thread.MainThreadExecutor";
     return aRet;
 }
 
