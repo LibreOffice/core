@@ -211,16 +211,16 @@ void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
 void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const String& rTemplateName )
 {
     static const int nMaxPathSize = 16000;
-    static ::rtl::OUString SERVICE_FILTER_FACTORY(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"));
-    static ::rtl::OUString SERVICE_TYPE_DECTECTION(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"));
-    static ::rtl::OUString SERVICE_SIMPLE_ACCESS(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"));
+    static ::rtl::OUString SERVICE_FILTER_FACTORY("com.sun.star.document.FilterFactory");
+    static ::rtl::OUString SERVICE_TYPE_DECTECTION("com.sun.star.document.TypeDetection");
+    static ::rtl::OUString SERVICE_SIMPLE_ACCESS("com.sun.star.ucb.SimpleFileAccess");
 
-    static ::rtl::OUString CONF_ROOT(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
-    static ::rtl::OUString CONF_PATH  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Office/Factories/" )) + ::rtl::OUString( rServiceName );
-    static ::rtl::OUString PROP_DEF_TEMPL_CHANGED(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactorySystemDefaultTemplateChanged"));
-    static ::rtl::OUString PROP_ACTUAL_FILTER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryActualFilter"));
+    static ::rtl::OUString CONF_ROOT("/org.openoffice.Setup");
+    static ::rtl::OUString CONF_PATH  = ::rtl::OUString("Office/Factories/" ) + ::rtl::OUString( rServiceName );
+    static ::rtl::OUString PROP_DEF_TEMPL_CHANGED("ooSetupFactorySystemDefaultTemplateChanged");
+    static ::rtl::OUString PROP_ACTUAL_FILTER("ooSetupFactoryActualFilter");
 
-    static ::rtl::OUString DEF_TPL_STR(RTL_CONSTASCII_USTRINGPARAM("/soffice."));
+    static ::rtl::OUString DEF_TPL_STR("/soffice.");
 
     rtl::OUString sURL;
     String      sPath;
@@ -256,7 +256,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
                     aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
             ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
             uno::Sequence< ::rtl::OUString > aAllExt =
-                aProps1.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extensions")), uno::Sequence< ::rtl::OUString >() );
+                aProps1.getUnpackedValueOrDefault( ::rtl::OUString("Extensions"), uno::Sequence< ::rtl::OUString >() );
             //To-do: check if aAllExt is empty first
             ::rtl::OUString aExt = aAllExt[0];
 
@@ -268,7 +268,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
 
             ::rtl::OUString aBackupURL;
             ::osl::Security().getConfigDir(aBackupURL);
-            aBackupURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/temp"));
+            aBackupURL += ::rtl::OUString("/temp");
 
             if ( !xSimpleFileAccess->exists( aBackupURL ) )
                 xSimpleFileAccess->createFolder( aBackupURL );
@@ -284,21 +284,21 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
                 uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
                 ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
                 ::rtl::OUString aFilterName =
-                    aProps2.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString() );
+                    aProps2.getUnpackedValueOrDefault( ::rtl::OUString("PreferredFilter"), ::rtl::OUString() );
 
                 uno::Sequence< beans::PropertyValue > aArgs( 3 );
-                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+                aArgs[0].Name = ::rtl::OUString("FilterName");
                 aArgs[0].Value <<= aFilterName;
-                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                aArgs[1].Name = ::rtl::OUString("AsTemplate");
                 aArgs[1].Value <<= sal_True;
-                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+                aArgs[2].Name = ::rtl::OUString("URL");
                 aArgs[2].Value <<= ::rtl::OUString( rTemplateName );
 
                 uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( ::rtl::OUString( rServiceName ) ), uno::UNO_QUERY );
                 xLoadable->load( aArgs );
 
                 aArgs.realloc( 2 );
-                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
+                aArgs[1].Name = ::rtl::OUString("Overwrite");
                 aArgs[1].Value <<= sal_True;
 
                 uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
@@ -393,8 +393,8 @@ String SfxObjectFactory::GetFactoryURL() const
 
 String SfxObjectFactory::GetModuleName() const
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
-    static ::rtl::OUString PROP_MODULEUINAME        (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"));
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER("com.sun.star.frame.ModuleManager");
+    static ::rtl::OUString PROP_MODULEUINAME        ("ooSetupFactoryUIName");
 
     try
     {
