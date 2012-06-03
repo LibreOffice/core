@@ -256,14 +256,14 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         // during storing of the embedded object
         uno::Reference< lang::XInitialization > xInit(
             xSrvMgr->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.StatusIndicatorFactory" ))),
+                rtl::OUString( "com.sun.star.comp.framework.StatusIndicatorFactory" )),
             uno::UNO_QUERY_THROW );
         beans::PropertyValue aProperty;
         uno::Sequence< uno::Any > aArgs( 2 );
-        aProperty.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableReschedule" ));
+        aProperty.Name  = rtl::OUString( "DisableReschedule" );
         aProperty.Value = uno::makeAny( sal_True );
         aArgs[0] = uno::makeAny( aProperty );
-        aProperty.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aProperty.Name  = rtl::OUString( "Frame" );
         aProperty.Value = uno::makeAny( xFrame );
         aArgs[1] = uno::makeAny( aProperty );
 
@@ -276,7 +276,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             {
                 uno::Reference< task::XStatusIndicatorFactory > xStatusIndicatorFactory( xInit, uno::UNO_QUERY_THROW );
                 xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
-                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
+                xPropSet->setPropertyValue( rtl::OUString( "IndicatorInterception" ), uno::makeAny( xStatusIndicator ));
             }
             catch ( const uno::RuntimeException& )
             {
@@ -305,7 +305,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         if ( xPropSet.is() )
         {
             xStatusIndicator.clear();
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
+            xPropSet->setPropertyValue( rtl::OUString( "IndicatorInterception" ), uno::makeAny( xStatusIndicator ));
         }
     }
     catch ( const uno::RuntimeException& )
@@ -420,7 +420,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceCli
     uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
     try
     {
-        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) );
+        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString("LayoutManager") );
         aAny >>= xMan;
     }
     catch ( uno::Exception& )
@@ -917,11 +917,11 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                     uno::Reference< lang::XMultiServiceFactory > xEmptyFactory;
                     SfxStoringHelper aHelper( xEmptyFactory );
                     uno::Sequence< beans::PropertyValue > aDispatchArgs( 1 );
-                    aDispatchArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SaveTo" ) );
+                    aDispatchArgs[0].Name = ::rtl::OUString( "SaveTo"  );
                     aDispatchArgs[0].Value <<= (sal_Bool)sal_True;
 
                     aHelper.GUIStoreModel( xEmbModel,
-                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SaveAs" ) ),
+                                            ::rtl::OUString( "SaveAs"  ),
                                             aDispatchArgs,
                                             sal_False,
                                             ::rtl::OUString() );

@@ -96,9 +96,9 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
         uno::Sequence< OUString > aProps(3);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType"));
-        pProps[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+        pProps[0] = OUString("Title");
+        pProps[1] = OUString("ContentType");
+        pProps[2] = OUString("IsFolder");
 
         try
         {
@@ -180,14 +180,14 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
-                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), uno::UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler" ) ), uno::UNO_QUERY );
 
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+        pProps[0] = OUString("Title");
+        pProps[1] = OUString("IsFolder");
 
         try
         {
@@ -264,7 +264,7 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
-                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), uno::UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler" ) ), uno::UNO_QUERY );
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
         // open the "active help" stream
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();
@@ -298,7 +298,7 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
     {
         ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                       uno::Reference< ucb::XCommandEnvironment > () );
-        if ( !( aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsErrorDocument")) ) >>= bRet ) )
+        if ( !( aCnt.getPropertyValue( OUString("IsErrorDocument") ) >>= bRet ) )
         {
             SAL_WARN( "sfx2.bastyp", "Property 'IsErrorDocument' is missing" );
         }
@@ -321,7 +321,7 @@ sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
     try
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) ) >>= nTemp;
+        aCnt.getPropertyValue( OUString("Size") ) >>= nTemp;
     }
     catch( const ucb::CommandAbortedException& )
     {

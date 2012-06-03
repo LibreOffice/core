@@ -152,7 +152,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     if ( m_xSlaveDispatcher.is() )
         xResult = m_xSlaveDispatcher->queryDispatch( aURL, aTargetFrameName, nSearchFlags );
 
-    sal_Bool bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
+    sal_Bool bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString("vnd.sun.star.help"),0);
 
     if ( bHelpURL )
     {

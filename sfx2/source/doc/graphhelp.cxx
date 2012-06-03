@@ -116,7 +116,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 #ifdef WNT
     if ( pGDIMeta )
     {
-        String aStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".emf"));
+        String aStr = ::rtl::OUString(".emf");
         ::utl::TempFile aTempFile( ::rtl::OUString(),
                                    &aStr,
                                    NULL,
@@ -462,25 +462,25 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
             {
                 uno::Reference< graphic::XGraphicProvider > xGraphProvider(
                     xServiceManager->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ),
+                        ::rtl::OUString("com.sun.star.graphic.GraphicProvider") ),
                     uno::UNO_QUERY );
                 if ( xGraphProvider.is() )
                 {
-                    ::rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("private:resource/sfx/bitmapex/"));
+                    ::rtl::OUString aURL("private:resource/sfx/bitmapex/");
                     aURL += ::rtl::OUString::valueOf( nResID );
 
                     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+                    aMediaProps[0].Name = ::rtl::OUString("URL");
                     aMediaProps[0].Value <<= aURL;
 
                     uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
                     if ( xGraphic.is() )
                     {
                         uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
-                        aStoreProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
+                        aStoreProps[0].Name = ::rtl::OUString("OutputStream");
                         aStoreProps[0].Value <<= xStream;
-                        aStoreProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MimeType"));
-                        aStoreProps[1].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png"));
+                        aStoreProps[1].Name = ::rtl::OUString("MimeType");
+                        aStoreProps[1].Value <<= ::rtl::OUString("image/png");
 
                         xGraphProvider->storeGraphic( xGraphic, aStoreProps );
                         bResult = sal_True;
