@@ -572,7 +572,7 @@ String SfxDocumentTemplates::GetPath
     uno::Reference< XCommandEnvironment > aCmdEnv;
     if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, aTemplate ) )
     {
-        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+        OUString aPropName( TARGET_URL  );
         getTextProperty_Impl( aTemplate, aPropName, aResult );
         aResult = SvtPathOptions().SubstituteVariable( aResult );
     }
@@ -835,7 +835,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
         aTransferInfo.NameClash = NameClash::OVERWRITE;
 
         Any aArg = makeAny( aTransferInfo );
-        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_TRANSFER ) );
+        OUString aCmd( COMMAND_TRANSFER  );
 
         aTarget.executeCommand( aCmd, aArg );
     }
@@ -898,12 +898,12 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     }
     else
     {
-        OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DESKTOP ) );
+        OUString aService( SERVICENAME_DESKTOP  );
         uno::Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( aService ),
                                                 UNO_QUERY );
 
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+        aArgs[0].Name = ::rtl::OUString("Hidden");
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );
@@ -913,7 +913,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         {
             xStorable = uno::Reference< XStorable >(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
-                                                OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")),
+                                                OUString("_blank"),
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );
@@ -965,7 +965,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         if( Content::create( aTemplURL, aCmdEnv, aTemplCont ) )
         {
             OUString aTemplName;
-            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+            OUString aPropName( TARGET_URL  );
 
             if( getTextProperty_Impl( aTemplCont, aPropName, aTemplName ) )
             {
@@ -1676,7 +1676,7 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 
         if ( Content::create( GetHierarchyURL(), aCmdEnv, aRegion ) )
         {
-            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+            OUString aPropName( TARGET_URL  );
 
             getTextProperty_Impl( aRegion, aPropName, maTargetURL );
         }
@@ -1837,7 +1837,7 @@ const OUString& RegionData_Impl::GetTargetURL()
 
         if ( Content::create( GetHierarchyURL(), aCmdEnv, aRegion ) )
         {
-            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+            OUString aPropName( TARGET_DIR_URL  );
 
             getTextProperty_Impl( aRegion, aPropName, maTargetURL );
             // The targeturl must be substituted: $(baseinsturl) (#i32656#)
@@ -1974,8 +1974,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     // now get the content of the region
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
-    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
-    aProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
+    aProps[0] = OUString(TITLE );
+    aProps[1] = OUString(TARGET_URL );
 
     try
     {
@@ -2011,7 +2011,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
+    aProps[0] = OUString(TITLE );
 
     try
     {
@@ -2056,11 +2056,11 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     uno::Reference< XMultiServiceFactory >   xFactory;
     xFactory = ::comphelper::getProcessServiceFactory();
 
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
+    OUString aService( SERVICENAME_DOCINFO  );
     uno::Reference< XPersist > xInfo( xFactory->createInstance( aService ), UNO_QUERY );
     mxInfo = xInfo;
 
-    aService = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCTEMPLATES ) );
+    aService = OUString( SERVICENAME_DOCTEMPLATES  );
     uno::Reference< XDocumentTemplates > xTemplates( xFactory->createInstance( aService ), UNO_QUERY );
 
     if ( xTemplates.is() )
@@ -2073,7 +2073,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     Sequence< Any > aCompareArg(1);
     *(aCompareArg.getArray()) <<= xLocalizable->getLocale();;
     m_rCompareFactory = uno::Reference< XAnyCompareFactory >(
-                    xFactory->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.AnyCompareFactory")),
+                    xFactory->createInstanceWithArguments( OUString("com.sun.star.ucb.AnyCompareFactory"),
                                                            aCompareArg ),
                     UNO_QUERY );
 
@@ -2185,7 +2185,7 @@ sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
             uno::Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
             if ( aPropSet.is() )
             {
-                OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+                OUString aPropName( TITLE  );
                 Any aValue = aPropSet->getPropertyValue( aPropName );
                 aValue >>= aTitle;
             }

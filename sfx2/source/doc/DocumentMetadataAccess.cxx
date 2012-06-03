@@ -153,8 +153,8 @@ uno::Reference<rdf::XURI> createBaseURI(
         i_xContext->getServiceManager(), uno::UNO_SET_THROW);
     const uno::Reference<uri::XUriReferenceFactory> xUriFactory(
         xServiceFactory->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.uri.UriReferenceFactory")), i_xContext),
+            ::rtl::OUString(
+                "com.sun.star.uri.UriReferenceFactory"), i_xContext),
         uno::UNO_QUERY_THROW);
     uno::Reference< uri::XUriReference > xBaseURI;
 
@@ -325,8 +325,8 @@ addFile(struct DocumentMetadataAccess_Impl & i_rImpl,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "addFile: exception")), /*this*/0, uno::makeAny(e));
+            ::rtl::OUString(
+                "addFile: exception"), /*this*/0, uno::makeAny(e));
     }
 }
 
@@ -374,7 +374,7 @@ removeFile(struct DocumentMetadataAccess_Impl & i_rImpl,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("removeFile: exception")),
+            ::rtl::OUString("removeFile: exception"),
             0, uno::makeAny(e));
     }
 }
@@ -403,7 +403,7 @@ getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getAllParts: exception")),
+            ::rtl::OUString("getAllParts: exception"),
             0, uno::makeAny(e));
     }
 }
@@ -425,7 +425,7 @@ isPartOfType(struct DocumentMetadataAccess_Impl & i_rImpl,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("isPartOfType: exception")),
+            ::rtl::OUString("isPartOfType: exception"),
             0, uno::makeAny(e));
     }
 }
@@ -441,10 +441,10 @@ mkException( ::rtl::OUString const & i_rMessage,
     iaioe.Classification = task::InteractionClassification_ERROR;
     iaioe.Code = i_ErrorCode;
 
-    const beans::PropertyValue uriProp(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")),
+    const beans::PropertyValue uriProp(::rtl::OUString("Uri"),
         -1, uno::makeAny(i_rUri), static_cast<beans::PropertyState>(0));
     const beans::PropertyValue rnProp(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceName")),
+        ::rtl::OUString("ResourceName"),
         -1, uno::makeAny(i_rResource), static_cast<beans::PropertyState>(0));
     iaioe.Arguments = ::comphelper::makeSequence(
         uno::makeAny(uriProp), uno::makeAny(rnProp));
@@ -464,8 +464,8 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     const uno::Reference<task::XInteractionHandler> & i_xHandler)
 {
     if (!i_xHandler.is()) {
-        throw lang::WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "DocumentMetadataAccess::loadMetadataFromStorage: exception")),
+        throw lang::WrappedTargetException(::rtl::OUString(
+            "DocumentMetadataAccess::loadMetadataFromStorage: exception"),
             /* *this*/ 0, uno::makeAny(i_rException));
     }
 
@@ -488,8 +488,8 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
         return false;
     } else {
         OSL_ENSURE(pAbort->wasSelected(), "no continuation selected?");
-        throw lang::WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "DocumentMetadataAccess::loadMetadataFromStorage: exception")),
+        throw lang::WrappedTargetException(::rtl::OUString(
+            "DocumentMetadataAccess::loadMetadataFromStorage: exception"),
             /* *this*/ 0, uno::makeAny(i_rException));
     }
 }
@@ -501,8 +501,8 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
     ::rtl::OUString i_Path,
     std::set< ::rtl::OUString > & o_rFiles)
 {
-    static ::rtl::OUString content(RTL_CONSTASCII_USTRINGPARAM(s_content));
-    static ::rtl::OUString styles(RTL_CONSTASCII_USTRINGPARAM(s_styles ));
+    static ::rtl::OUString content(s_content);
+    static ::rtl::OUString styles(s_styles );
     try {
         if (i_xStorage->hasByName(content) &&
             i_xStorage->isStreamElement(content))
@@ -545,8 +545,8 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                 i_rImpl.m_xRepository->importGraph(rdf::FileFormat::RDF_XML,
                     xInStream, xURI, xBaseURI);
             } else {
-                throw mkException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "readStream: is not a stream")),
+                throw mkException(::rtl::OUString(
+                    "readStream: is not a stream"),
                     ucb::IOErrorCode_NO_FILE, i_rBaseURI + i_rPath, i_rPath);
             }
         } else {
@@ -572,8 +572,8 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                 buf.append(dir).append(static_cast<sal_Unicode>('/'));
                 readStream(i_rImpl, xDir, rest, buf.makeStringAndClear() );
             } else {
-                throw mkException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "readStream: is not a directory")),
+                throw mkException(::rtl::OUString(
+                    "readStream: is not a directory"),
                     ucb::IOErrorCode_NO_DIRECTORY, i_rBaseURI + dir, dir);
             }
         }
@@ -606,7 +606,7 @@ retry:
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("importFile: exception")),
+            ::rtl::OUString("importFile: exception"),
             0, uno::makeAny(e));
     }
 }
@@ -627,8 +627,8 @@ exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
-            uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_rdfxml))));
+            ::rtl::OUString("MediaType"),
+            uno::makeAny(::rtl::OUString(s_rdfxml)));
     }
     const uno::Reference<io::XOutputStream> xOutStream(
         xStream->getOutputStream(), uno::UNO_SET_THROW );
@@ -747,9 +747,9 @@ retry:
 
     if (rterr.hasValue()) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString(
                 "DocumentMetadataAccess::loadMetadataFromStorage: "
-                "exception")), 0, rterr);
+                "exception"), 0, rterr);
     }
 
     if (err) {
@@ -773,7 +773,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("init: unexpected exception")), 0,
+            ::rtl::OUString("init: unexpected exception"), 0,
             uno::makeAny(e));
     }
 
@@ -860,8 +860,8 @@ throw (uno::RuntimeException)
     const IXmlIdRegistry * pReg(
         m_pImpl->m_rXmlIdRegistrySupplier.GetXmlIdRegistry() );
     if (!pReg) {
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "DocumentMetadataAccess::getElementByXmlId: no registry")), *this);
+        throw uno::RuntimeException(::rtl::OUString(
+            "DocumentMetadataAccess::getElementByXmlId: no registry"), *this);
     }
     return pReg->GetElementByMetadataReference(i_rReference);
 }
@@ -872,8 +872,8 @@ DocumentMetadataAccess::getElementByURI(
 throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     if (!i_xURI.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "DocumentMetadataAccess::getElementByURI: URI is null")), *this, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "DocumentMetadataAccess::getElementByURI: URI is null"), *this, 0);
     }
 
     const ::rtl::OUString baseURI( m_pImpl->m_xBaseURI->getStringValue() );
@@ -898,9 +898,9 @@ DocumentMetadataAccess::getMetadataGraphsWithType(
 throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     if (!i_xType.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::getMetadataGraphsWithType: "
-            "type is null")), *this, 0);
+            "type is null"), *this, 0);
     }
 
     ::comphelper::SequenceAsVector< uno::Reference< rdf::XURI > > ret;
@@ -921,21 +921,21 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     container::ElementExistException)
 {
     if (!isFileNameValid(i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "DocumentMetadataAccess::addMetadataFile: invalid FileName")),
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "DocumentMetadataAccess::addMetadataFile: invalid FileName"),
             *this, 0);
     }
     if (isReservedFile(i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::addMetadataFile:"
-            "invalid FileName: reserved")), *this, 0);
+            "invalid FileName: reserved"), *this, 0);
     }
     for (sal_Int32 i = 0; i < i_rTypes.getLength(); ++i) {
         if (!i_rTypes[i].is()) {
             throw lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                ::rtl::OUString(
                     "DocumentMetadataAccess::addMetadataFile: "
-                    "null type")), *this, 2);
+                    "null type"), *this, 2);
         }
     }
 
@@ -946,8 +946,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         m_pImpl->m_xRepository->createGraph(xGraphName);
     } catch (const rdf::RepositoryException & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "DocumentMetadataAccess::addMetadataFile: exception")),
+            ::rtl::OUString(
+                "DocumentMetadataAccess::addMetadataFile: exception"),
             *this, uno::makeAny(e));
         // note: all other exceptions are propagated
     }
@@ -967,20 +967,20 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     container::ElementExistException, rdf::ParseException, io::IOException)
 {
     if (!isFileNameValid(i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "DocumentMetadataAccess::importMetadataFile: invalid FileName")),
+        throw lang::IllegalArgumentException(::rtl::OUString(
+            "DocumentMetadataAccess::importMetadataFile: invalid FileName"),
             *this, 0);
     }
     if (isReservedFile(i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::importMetadataFile:"
-            "invalid FileName: reserved")), *this, 0);
+            "invalid FileName: reserved"), *this, 0);
     }
     for (sal_Int32 i = 0; i < i_rTypes.getLength(); ++i) {
         if (!i_rTypes[i].is()) {
             throw lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "DocumentMetadataAccess::importMetadataFile: null type")),
+                ::rtl::OUString(
+                    "DocumentMetadataAccess::importMetadataFile: null type"),
                 *this, 5);
         }
     }
@@ -993,9 +993,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             i_Format, i_xInStream, xGraphName, i_xBaseURI);
     } catch (const rdf::RepositoryException & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString(
                 "DocumentMetadataAccess::importMetadataFile: "
-                "RepositoryException")), *this, uno::makeAny(e));
+                "RepositoryException"), *this, uno::makeAny(e));
         // note: all other exceptions are propagated
     }
 
@@ -1014,9 +1014,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         m_pImpl->m_xRepository->destroyGraph(i_xGraphName);
     } catch (const rdf::RepositoryException & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString(
                 "DocumentMetadataAccess::removeMetadataFile: "
-                "RepositoryException")), *this, uno::makeAny(e));
+                "RepositoryException"), *this, uno::makeAny(e));
         // note: all other exceptions are propagated
     }
 
@@ -1031,15 +1031,15 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     container::ElementExistException)
 {
     if (!isFileNameValid(i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::addContentOrStylesFile: "
-            "invalid FileName")), *this, 0);
+            "invalid FileName"), *this, 0);
     }
 
     if (!addContentOrStylesFileImpl(*m_pImpl, i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::addContentOrStylesFile: "
-            "invalid FileName: must end with content.xml or styles.xml")),
+            "invalid FileName: must end with content.xml or styles.xml"),
             *this, 0);
     }
 }
@@ -1051,9 +1051,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     container::NoSuchElementException)
 {
     if (!isFileNameValid(i_rFileName)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::removeContentOrStylesFile: "
-            "invalid FileName")), *this, 0);
+            "invalid FileName"), *this, 0);
     }
 
     try {
@@ -1066,9 +1066,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             uno::UNO_SET_THROW);
         if (!xEnum->hasMoreElements()) {
             throw container::NoSuchElementException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                ::rtl::OUString(
                     "DocumentMetadataAccess::removeContentOrStylesFile: "
-                    "cannot find stream in manifest graph: ")) + i_rFileName,
+                    "cannot find stream in manifest graph: ") + i_rFileName,
                 *this);
         }
 
@@ -1079,8 +1079,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "DocumentMetadataAccess::removeContentOrStylesFile: exception")),
+            ::rtl::OUString(
+                "DocumentMetadataAccess::removeContentOrStylesFile: exception"),
             *this, uno::makeAny(e));
     }
 }
@@ -1093,32 +1093,32 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     lang::WrappedTargetException)
 {
     if (!i_xStorage.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::loadMetadataFromStorage: "
-            "storage is null")), *this, 0);
+            "storage is null"), *this, 0);
     }
     if (!i_xBaseURI.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::loadMetadataFromStorage: "
-            "base URI is null")), *this, 1);
+            "base URI is null"), *this, 1);
     }
     const ::rtl::OUString baseURI( i_xBaseURI->getStringValue());
     if (baseURI.indexOf('#') >= 0) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::loadMetadataFromStorage: "
-            "base URI not absolute")), *this, 1);
+            "base URI not absolute"), *this, 1);
     }
     if (baseURI.isEmpty() || !baseURI.endsWithAsciiL("/", 1)) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::loadMetadataFromStorage: "
-            "base URI does not end with slash")), *this, 1);
+            "base URI does not end with slash"), *this, 1);
     }
 
     initLoading(*m_pImpl, i_xStorage, i_xBaseURI, i_xHandler);
 
     std::set< ::rtl::OUString > StgFiles;
     collectFilesFromStorage(i_xStorage,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), StgFiles);
+        ::rtl::OUString(""), StgFiles);
 
     std::vector< ::rtl::OUString > MfstMetadataFiles;
 
@@ -1185,9 +1185,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString(
                 "DocumentMetadataAccess::loadMetadataFromStorage: "
-                "exception")), *this, uno::makeAny(e));
+                "exception"), *this, uno::makeAny(e));
     }
 
     std::for_each(StgFiles.begin(), StgFiles.end(),
@@ -1204,9 +1204,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     lang::WrappedTargetException)
 {
     if (!i_xStorage.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::storeMetadataToStorage: "
-            "storage is null")), *this, 0);
+            "storage is null"), *this, 0);
     }
 
     // export manifest
@@ -1220,12 +1220,12 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const io::IOException & e) {
-        throw lang::WrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "storeMetadataToStorage: IO exception")), *this, uno::makeAny(e));
+        throw lang::WrappedTargetException( ::rtl::OUString(
+            "storeMetadataToStorage: IO exception"), *this, uno::makeAny(e));
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "storeMetadataToStorage: exception")), *this, uno::makeAny(e));
+            ::rtl::OUString(
+                "storeMetadataToStorage: exception"), *this, uno::makeAny(e));
     }
 
     // export metadata streams
@@ -1258,20 +1258,20 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 throw;
             } catch (const io::IOException & e) {
                 throw lang::WrappedTargetException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "storeMetadataToStorage: IO exception")),
+                    ::rtl::OUString(
+                        "storeMetadataToStorage: IO exception"),
                     *this, uno::makeAny(e));
             } catch (const uno::Exception & e) {
                 throw lang::WrappedTargetRuntimeException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "storeMetadataToStorage: exception")),
+                    ::rtl::OUString(
+                        "storeMetadataToStorage: exception"),
                     *this, uno::makeAny(e));
             }
         }
     } catch (const rdf::RepositoryException & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "storeMetadataToStorage: exception")), *this, uno::makeAny(e));
+            ::rtl::OUString(
+                "storeMetadataToStorage: exception"), *this, uno::makeAny(e));
     }
 }
 
@@ -1291,9 +1291,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
     if (!xIn.is() && URL.isEmpty()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::loadMetadataFromMedium: "
-            "inalid medium: no URL, no input stream")), *this, 0);
+            "inalid medium: no URL, no input stream"), *this, 0);
     }
     uno::Reference<embed::XStorage> xStorage;
     try {
@@ -1312,14 +1312,14 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                ::rtl::OUString(
                     "DocumentMetadataAccess::loadMetadataFromMedium: "
-                    "exception")), *this, uno::makeAny(e));
+                    "exception"), *this, uno::makeAny(e));
     }
     if (!xStorage.is()) {
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw uno::RuntimeException(::rtl::OUString(
             "DocumentMetadataAccess::loadMetadataFromMedium: "
-            "cannot get Storage")), *this);
+            "cannot get Storage"), *this);
     }
     uno::Reference<rdf::XURI> xBaseURI;
     try {
@@ -1347,9 +1347,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::rtl::OUString URL;
     md[ ::comphelper::MediaDescriptor::PROP_URL() ] >>= URL;
     if (URL.isEmpty()) {
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(::rtl::OUString(
             "DocumentMetadataAccess::storeMetadataToMedium: "
-            "invalid medium: no URL")), *this, 0);
+            "invalid medium: no URL"), *this, 0);
     }
 
     SfxMedium aMedium(i_rMedium);
@@ -1366,9 +1366,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     if (!xStorage.is()) {
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw uno::RuntimeException(::rtl::OUString(
             "DocumentMetadataAccess::storeMetadataToMedium: "
-            "cannot get Storage")), *this);
+            "cannot get Storage"), *this);
     }
     // set MIME type of the storage
     ::comphelper::MediaDescriptor::const_iterator iter

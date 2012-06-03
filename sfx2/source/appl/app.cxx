@@ -501,14 +501,14 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     return 0;
 #else
     // get basctl dllname
-    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
+    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_handle_basic_error" ) );
+    ::rtl::OUString aSymbol( "basicide_handle_basic_error"  );
     basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_handle_basic_error in basctl
@@ -532,8 +532,8 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
     ::com::sun::star::uno::Reference
         < ::com::sun::star::uri::XUriReferenceFactory >
             xFactory( xSMgr->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.uri.UriReferenceFactory" )) ),
+                ::rtl::OUString(
+                    "com.sun.star.uri.UriReferenceFactory" ) ),
                 ::com::sun::star::uno::UNO_QUERY );
 
     if ( xFactory.is() )
@@ -600,14 +600,14 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
     (void) nTabId;
 #else
     // get basctl dllname
-    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
+    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
+    ::rtl::OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_choose_macro in basctl
