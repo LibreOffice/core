@@ -71,7 +71,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_VERSION
     {
-        Text [ en-US ] = "version %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
+        Text [ en-US ] = "Version %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX %PRODUCTEXTENSION";
     };
     String ABOUT_STR_DESCRIPTION
     {
@@ -119,14 +119,11 @@ ModalDialog RID_DEFAULTABOUT
     };
     PushButton ABOUT_BTN_WEBSITE
     {
-        Text [ en-US ] = "libreoffice.org";
-        DefButton = TRUE ;
+        Text [ en-US ] = "Website";
     };
     CancelButton ABOUT_BTN_CANCEL
     {
         DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Close";
     };
     FixedImage ABOUT_IMAGE_LOGO
