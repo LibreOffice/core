@@ -129,6 +129,8 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/stdctrl \
     svtools/source/control/stdmenu \
     svtools/source/control/tabbar \
+    svtools/source/control/thumbv_itm \
+    svtools/source/control/thumbv_acc \
     svtools/source/control/thumbnailview \
     svtools/source/control/toolbarmenu \
     svtools/source/control/toolbarmenuacc \
