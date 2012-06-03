@@ -40,7 +40,7 @@
 // deklarations
 //------------------------------------------------------------------------
 
-const rtl::OUString TEXTPLAIN_PARAM_CHARSET = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("charset"));
+const rtl::OUString TEXTPLAIN_PARAM_CHARSET("charset");
 
 const rtl::OUString PRE_WINDOWS_CODEPAGE ("windows");
 const rtl::OUString PRE_OEM_CODEPAGE     ("cp");
