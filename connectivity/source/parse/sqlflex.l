@@ -732,8 +732,8 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
 	if (m_nCurrentPos < m_sStatement.getLength())
 	{
-		m_sErrorMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": "));
-		
+		m_sErrorMessage += ::rtl::OUString(": ");
+
 		::rtl::OUString aError;
 		static sal_Int32 BUFFERSIZE = 256;
 		static sal_Char* Buffer = 0;

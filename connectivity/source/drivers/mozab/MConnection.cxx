@@ -200,8 +200,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // * for windows system address book
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
-        m_sBindDN   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
-        m_sPassword = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
+        m_sBindDN   = rtl::OUString( "");
+        m_sPassword = rtl::OUString( "");
         m_bUseSSL   = sal_False;
 
     if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_MOZILLA ) ) == 0 ) {
@@ -288,19 +288,19 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             throwSQLException( STR_NO_HOSTNAME, *this );
 
         if ( nPortNumber > 0 ) {
-            m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(":") );
+            m_sMozillaURI += rtl::OUString( ":" );
             m_sMozillaURI += rtl::OUString::valueOf( nPortNumber );
         }
 
         if ( !sBaseDN.isEmpty() ) {
-            m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") );
+            m_sMozillaURI += rtl::OUString( "/" );
             m_sMozillaURI += sBaseDN;
         }
         else
             throwSQLException( STR_NO_BASEDN, *this );
 
         // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
-        m_sMozillaURI += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?(or(DisplayName,=,DontDoThisAtHome)))"));
+        m_sMozillaURI += ::rtl::OUString( "?(or(DisplayName,=,DontDoThisAtHome)))");
 
     }
     else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_MAPI ) ) == 0 ) {

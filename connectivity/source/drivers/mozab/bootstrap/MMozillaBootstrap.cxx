@@ -95,7 +95,7 @@ void MozillaBootstrap::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_MozillaBootstrap_IMPL_NAME));
+    return rtl::OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -103,7 +103,7 @@ Sequence< ::rtl::OUString > MozillaBootstrap::getSupportedServiceNames_Static(  
     // which service is supported
     // for more information @see com.sun.star.mozilla.MozillaBootstrap
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
+    aSNS[0] = ::rtl::OUString( "com.sun.star.mozilla.MozillaBootstrap");
     return aSNS;
 }
 
@@ -260,7 +260,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                 if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
                 {
                     Sequence< ::rtl::OUString > aSNS( 1 );
-                    aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
+                    aSNS[0] = ::rtl::OUString( "com.sun.star.mozilla.MozillaBootstrap");
 
                     xFactory = ::cppu::createSingleFactory(
                         reinterpret_cast< XMultiServiceFactory* > ( pServiceManager),
