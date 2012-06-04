@@ -118,24 +118,22 @@ TestPanel::TestPanel (::Window& i_rParent)
     ListBox* pBox = new ListBox (pScrollPanel->GetWindow());
     for (sal_Int32 i=1; i<=20; i++)
     {
-        XubString aString (XubString::CreateFromAscii("Text "));
-        aString.Append (XubString::CreateFromInt32(i));
-        aString.Append (XubString::CreateFromAscii("/20"));
-        pBox->InsertEntry (aString);
+        rtl::OUStringBuffer aString ("Text ");
+        aString.append(i).append("/20");
+        pBox->InsertEntry(aString.makeStringAndClear());
     }
     pScrollPanel->AddControl (
         ::std::auto_ptr<TreeNode>(new Wrapper (
             pScrollPanel, Size (200,300), pBox, true)),
-        String::CreateFromAscii ("First ListBox"),
+        rtl::OUString("First ListBox"),
         "");
 
     pBox = new ListBox (pScrollPanel->GetWindow());
     for (sal_Int32 i=1; i<=20; i++)
     {
-        XubString aString (XubString::CreateFromAscii("More Text "));
-        aString.Append (XubString::CreateFromInt32(i));
-        aString.Append (XubString::CreateFromAscii("/20"));
-        pBox->InsertEntry (aString);
+        rtl::OUStringBuffer aString("More Text ");
+        aString.append(i).append("/20");
+        pBox->InsertEntry(aString.makeStringAndClear());
     }
     pScrollPanel->AddControl (
         ::std::auto_ptr<TreeNode>(new Wrapper (
