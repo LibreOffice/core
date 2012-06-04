@@ -97,8 +97,6 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameAccess;
 
 
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 namespace pq_sdbc_driver
 {
 

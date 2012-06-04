@@ -46,9 +46,6 @@
 #include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
 
-#define THROW_SQL(x) \
-    OTools::ThrowException(x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
-
 namespace connectivity
 {
     namespace file

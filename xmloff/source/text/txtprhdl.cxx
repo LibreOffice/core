@@ -63,9 +63,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-
-#define CONSTASCII_USTRINGPARAM_CMP(s) s, sizeof(s)-1
-
 // ---------------------------------------------------------------------------
 
 SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =

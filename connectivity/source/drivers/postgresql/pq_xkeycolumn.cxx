@@ -69,8 +69,6 @@ using com::sun::star::beans::XPropertySet;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 KeyColumn::KeyColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
                       const Reference< com::sun::star::sdbc::XConnection > & connection,
                       ConnectionSettings *pSettings)

@@ -49,8 +49,6 @@
 using namespace com::sun::star;
 
 
-#define CSTRING_FROM_ANY(i) rtl::OUStringToOString( i.get< rtl::OUString >(), RTL_TEXTENCODING_UTF8 ).getStr()
-
 AtkListener::AtkListener( AtkObjectWrapper* pWrapper ) : mpWrapper( pWrapper )
 {
     if( mpWrapper )

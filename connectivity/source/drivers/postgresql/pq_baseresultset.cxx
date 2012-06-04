@@ -110,8 +110,6 @@ using com::sun::star::beans::Property;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
 {
     static ::cppu::IPropertyArrayHelper *pArrayHelper;

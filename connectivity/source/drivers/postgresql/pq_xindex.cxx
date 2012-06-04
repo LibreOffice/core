@@ -109,8 +109,6 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 Index::Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
           const Reference< com::sun::star::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings,

@@ -46,12 +46,6 @@
 // NOT FULLY DEFINED SERVICES
 
 
-
-#define AssertionOf(x)  \
-    {if (!(x)) {std::cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
-
-
-
 X2CParser::X2CParser( XmlElement & o_rDocumentData )
     :   // sFileName,
         nFileLine(0),

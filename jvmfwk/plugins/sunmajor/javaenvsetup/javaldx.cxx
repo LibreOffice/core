@@ -40,7 +40,6 @@
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-#define OUSTR(x) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);

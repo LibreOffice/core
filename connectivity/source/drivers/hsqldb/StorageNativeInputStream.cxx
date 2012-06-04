@@ -56,7 +56,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::connectivity::hsqldb;
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 /*****************************************************************************/
 /* exception macros */
 

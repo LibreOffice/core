@@ -38,8 +38,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-#define TO_ASCII(x) OUStringToOString( x , RTL_TEXTENCODING_ASCII_US).getStr()
-
 using rtl::OStringBuffer;
 using rtl::OUStringBuffer;
 using rtl::OUStringToOString;

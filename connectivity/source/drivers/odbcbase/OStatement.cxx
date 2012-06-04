@@ -54,18 +54,6 @@ using namespace ::comphelper;
 #define THROW_SQL(x) \
     OTools::ThrowException(m_pConnection,x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
 
-#if OSL_DEBUG_LEVEL > 1
-#define DEBUG_THROW                 \
-    try                                 \
-    {                                   \
-        THROW_SQL(nRetCode);            \
-    }                                   \
-    catch(const SQLException&)              \
-    {                                   \
-        OSL_FAIL("Exception in odbc caught"); \
-    }
-#endif
-
 
 
 using namespace connectivity::odbc;

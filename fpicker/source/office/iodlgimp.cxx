@@ -71,24 +71,6 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
     return String( aUserData );
 }
 
-
-// defines for the style of the BrowseBox
-
-#define STYLE_MULTI_SELECTION   \
-    CNTVIEWSTYLE_NODE_BUTTONS | \
-    CNTVIEWSTYLE_NODE_BUTTONS_AT_ROOT | \
-    CNTVIEWSTYLE_SHOW_MESSAGES | \
-    CNTVIEWSTYLE_SHOW_FOLDERS | \
-    CNTVIEWSTYLE_NO_SMARTHIGHLIGHT | \
-    CNTVIEWSTYLE_HIDE_OPENMENU | \
-    CNTVIEWSTYLE_DEFAULT_APPEARANCE | \
-    CNTVIEWSTYLE_SORT_BY_FOLDER
-
-#define STYLE_SINGLE_SELECTION  \
-    STYLE_MULTI_SELECTION | CNTVIEWSTYLE_SINGLE_SELECTION
-
-#define BOOL_NOT_INITIALIZE     ((sal_Bool)2)
-
 //*****************************************************************************
 // ResMgrHolder / SvtSimpleResId
 //*****************************************************************************

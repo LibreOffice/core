@@ -60,7 +60,6 @@ using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::beans::XMaterialHolder;
 
-#define USTR_ASCII(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 namespace pyuno
 {
 PyRef ustring2PyUnicode( const OUString & str )

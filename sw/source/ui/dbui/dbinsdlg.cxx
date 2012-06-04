@@ -175,10 +175,6 @@ struct _DB_Column
 SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
 
 
-#define DBCOLUMN_CONFIG_VERSION1    1
-#define DBCOLUMN_CONFIG_VERSION     DBCOLUMN_CONFIG_VERSION1
-#define DBCOLUMN_MAXDATA            5
-
 struct _DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
