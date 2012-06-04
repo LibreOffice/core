@@ -764,7 +764,7 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         if ( xMSF.is() )
             xBreakIterator = uno::Reference < i18n::XBreakIterator >( xMSF->createInstance(
-                ::rtl::OUString("com.sun.star.i18n.BreakIterator") ), uno::UNO_QUERY );
+                "com.sun.star.i18n.BreakIterator" ), uno::UNO_QUERY );
     }
     sal_Int32 nTextLen = rText.getLength();
     sal_Int32 nEndPosition = nTextLen;
@@ -987,19 +987,19 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
             if (xMgr.is())
             {
                 xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance( OUString( "com.sun.star.configuration.ConfigurationProvider"  ) ),
+                        xMgr->createInstance( "com.sun.star.configuration.ConfigurationProvider" ),
                         uno::UNO_QUERY_THROW ) ;
             }
 
             // get configuration update access
             beans::PropertyValue aValue;
-            aValue.Name  = A2OU( "nodepath" );
-            aValue.Value = uno::makeAny( A2OU("org.openoffice.Office.Linguistic/ServiceManager") );
+            aValue.Name  = "nodepath";
+            aValue.Value = uno::makeAny( ::rtl::OUString("org.openoffice.Office.Linguistic/ServiceManager") );
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
             m_xUpdateAccess = uno::Reference< util::XChangesBatch >(
                     xConfigurationProvider->createInstanceWithArguments(
-                        A2OU( "com.sun.star.configuration.ConfigurationUpdateAccess" ), aProps ),
+                        "com.sun.star.configuration.ConfigurationUpdateAccess", aProps ),
                         uno::UNO_QUERY_THROW );
         }
         catch (uno::Exception &)
@@ -1019,7 +1019,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
     {
         // get node names (locale iso strings) for configured grammar checkers
         uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( "GrammarCheckerList" ), uno::UNO_QUERY_THROW );
         const uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
         const OUString *pElementNames = aElementNames.getConstArray();
 
@@ -1138,14 +1138,14 @@ LinguDispatcher::DspType GrammarCheckingIterator::GetDspType() const
 
 static OUString GrammarCheckingIterator_getImplementationName() throw()
 {
-    return A2OU( "com.sun.star.lingu2.ProofreadingIterator" );
+    return ::rtl::OUString( "com.sun.star.lingu2.ProofreadingIterator" );
 }
 
 
 static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = A2OU( SN_GRAMMARCHECKINGITERATOR );
+    aSNS.getArray()[0] = SN_GRAMMARCHECKINGITERATOR ;
     return aSNS;
 }
 

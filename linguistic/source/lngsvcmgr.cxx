@@ -459,7 +459,7 @@ sal_Bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 
 
 LngSvcMgr::LngSvcMgr()
-    : utl::ConfigItem(OUString("Office.Linguistic"))
+    : utl::ConfigItem("Office.Linguistic")
     , aEvtListeners(GetLinguMutex())
 {
     bDisposing = sal_False;
@@ -478,10 +478,10 @@ LngSvcMgr::LngSvcMgr()
     // request notify events when properties (i.e. something in the subtree) changes
     uno::Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
-    pNames[0] = A2OU( "ServiceManager/SpellCheckerList" );
-    pNames[1] = A2OU( "ServiceManager/GrammarCheckerList" );
-    pNames[2] = A2OU( "ServiceManager/HyphenatorList" );
-    pNames[3] = A2OU( "ServiceManager/ThesaurusList" );
+    pNames[0] = "ServiceManager/SpellCheckerList";
+    pNames[1] = "ServiceManager/GrammarCheckerList";
+    pNames[2] = "ServiceManager/HyphenatorList";
+    pNames[3] = "ServiceManager/ThesaurusList";
     EnableNotification( aNames );
 }
 
@@ -501,10 +501,10 @@ LngSvcMgr::~LngSvcMgr()
 
 void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 {
-    const OUString aSpellCheckerList( A2OU("ServiceManager/SpellCheckerList") );
-    const OUString aGrammarCheckerList( A2OU("ServiceManager/GrammarCheckerList") );
-    const OUString aHyphenatorList( A2OU("ServiceManager/HyphenatorList") );
-    const OUString aThesaurusList( A2OU("ServiceManager/ThesaurusList") );
+    const OUString aSpellCheckerList( "ServiceManager/SpellCheckerList" );
+    const OUString aGrammarCheckerList( "ServiceManager/GrammarCheckerList" );
+    const OUString aHyphenatorList( "ServiceManager/HyphenatorList" );
+    const OUString aThesaurusList( "ServiceManager/ThesaurusList" );
 
     const uno::Sequence< OUString > aSpellCheckerListEntries( GetNodeNames( aSpellCheckerList ) );
     const uno::Sequence< OUString > aGrammarCheckerListEntries( GetNodeNames( aGrammarCheckerList ) );
@@ -682,7 +682,7 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList  )
             uno::Reference< lang::XMultiServiceFactory > xMgr(
                     comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
             xGCI = uno::Reference< linguistic2::XProofreadingIterator >(
-                    xMgr->createInstance( A2OU( SN_GRAMMARCHECKINGITERATOR ) ), uno::UNO_QUERY_THROW );
+                    xMgr->createInstance( SN_GRAMMARCHECKINGITERATOR ), uno::UNO_QUERY_THROW );
         }
         catch (uno::Exception &)
         {
@@ -737,8 +737,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
             uno::Reference< container::XEnumeration > xEnum;
             if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration(
-                        A2OU( SN_SPELLCHECKER ) );
+                xEnum = xEnumAccess->createContentEnumeration( SN_SPELLCHECKER );
 
             if (xEnum.is())
             {
@@ -756,7 +755,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
+                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -802,8 +801,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
             uno::Reference< container::XEnumeration > xEnum;
             if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration(
-                        A2OU( SN_GRAMMARCHECKER ) );
+                xEnum = xEnumAccess->createContentEnumeration( SN_GRAMMARCHECKER );
 
             if (xEnum.is())
             {
@@ -821,7 +819,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
+                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -866,7 +864,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
             uno::Reference< container::XEnumeration > xEnum;
             if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration( A2OU( SN_HYPHENATOR ) );
+                xEnum = xEnumAccess->createContentEnumeration( SN_HYPHENATOR );
 
             if (xEnum.is())
             {
@@ -884,7 +882,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
+                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
 
                         }
@@ -931,8 +929,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
             uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
             uno::Reference< container::XEnumeration > xEnum;
             if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration(
-                        A2OU( SN_THESAURUS ) );
+                xEnum = xEnumAccess->createContentEnumeration( SN_THESAURUS );
 
             if (xEnum.is())
             {
@@ -951,7 +948,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                             uno::Reference < uno::XComponentContext > xContext;
                             uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
 
-                            xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xContext;
+                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -1155,7 +1152,7 @@ uno::Reference< linguistic2::XSpellChecker > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 #if OSL_DEBUG_LEVEL > 1
-    getAvailableLocales( A2OU( SN_SPELLCHECKER ));
+    getAvailableLocales( SN_SPELLCHECKER );
 #endif
 
     uno::Reference< linguistic2::XSpellChecker > xRes;
@@ -1175,7 +1172,7 @@ uno::Reference< linguistic2::XHyphenator > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 #if OSL_DEBUG_LEVEL > 1
-    getAvailableLocales( A2OU( SN_HYPHENATOR ));
+    getAvailableLocales( SN_HYPHENATOR );
 #endif
 
     uno::Reference< linguistic2::XHyphenator >   xRes;
@@ -1195,7 +1192,7 @@ uno::Reference< linguistic2::XThesaurus > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 #if OSL_DEBUG_LEVEL > 1
-    getAvailableLocales( A2OU( SN_THESAURUS ));
+    getAvailableLocales( SN_THESAURUS );
 #endif
 
     uno::Reference< linguistic2::XThesaurus >    xRes;
@@ -1396,7 +1393,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pSpellDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( A2OU( SN_SPELLCHECKER ) );
+                SaveCfgSvcs( rtl::OUString(SN_SPELLCHECKER) );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1413,7 +1410,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pGrammarDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( A2OU( SN_GRAMMARCHECKER ) );
+                SaveCfgSvcs( rtl::OUString(SN_GRAMMARCHECKER) );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1429,7 +1426,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pHyphDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( A2OU( SN_HYPHENATOR ) );
+                SaveCfgSvcs( rtl::OUString(SN_HYPHENATOR) );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1445,7 +1442,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pThesDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( A2OU( SN_THESAURUS ) );
+                SaveCfgSvcs( rtl::OUString(SN_THESAURUS) );
             }
         }
     }
@@ -1466,28 +1463,28 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
         if (!pSpellDsp)
             GetSpellCheckerDsp_Impl();
         pDsp = pSpellDsp;
-        aLocales = getAvailableLocales( A2OU( SN_SPELLCHECKER ) );
+        aLocales = getAvailableLocales( SN_SPELLCHECKER );
     }
     else if (0 == rServiceName.CompareToAscii( SN_GRAMMARCHECKER ))
     {
         if (!pGrammarDsp)
             GetGrammarCheckerDsp_Impl();
         pDsp = pGrammarDsp;
-        aLocales = getAvailableLocales( A2OU( SN_GRAMMARCHECKER ) );
+        aLocales = getAvailableLocales( SN_GRAMMARCHECKER );
     }
     else if (0 == rServiceName.CompareToAscii( SN_HYPHENATOR ))
     {
         if (!pHyphDsp)
             GetHyphenatorDsp_Impl();
         pDsp = pHyphDsp;
-        aLocales = getAvailableLocales( A2OU( SN_HYPHENATOR ) );
+        aLocales = getAvailableLocales( SN_HYPHENATOR );
     }
     else if (0 == rServiceName.CompareToAscii( SN_THESAURUS ))
     {
         if (!pThesDsp)
             GetThesaurusDsp_Impl();
         pDsp = pThesDsp;
-        aLocales = getAvailableLocales( A2OU( SN_THESAURUS ) );
+        aLocales = getAvailableLocales( SN_THESAURUS );
     }
 
     if (pDsp  &&  aLocales.getLength())
@@ -1800,7 +1797,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
-    aSNS.getArray()[0] = A2OU( SN_LINGU_SERVCICE_MANAGER );
+    aSNS.getArray()[0] = SN_LINGU_SERVCICE_MANAGER;
     return aSNS;
 }
 

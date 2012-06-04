@@ -95,8 +95,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     uno::Reference< io::XInputStream > xIn;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
-                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
         xIn = xAccess->openFileRead( rMainURL );
     }
     catch (const uno::Exception &)
@@ -116,8 +115,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     uno::Reference< xml::sax::XParser > xParser;
     try
     {
-        xParser = uno::Reference< xml::sax::XParser >( xServiceFactory->createInstance(
-            A2OU( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
+        xParser = uno::Reference< xml::sax::XParser >( xServiceFactory->createInstance( "com.sun.star.xml.sax.Parser" ), UNO_QUERY );
     }
     catch (uno::Exception &)
     {
@@ -269,8 +267,7 @@ void ConvDic::Save()
     uno::Reference< io::XStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
-                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileReadWrite( aMainURL );
     }
     catch (const uno::Exception &)
@@ -289,8 +286,7 @@ void ConvDic::Save()
         try
         {
             xSaxWriter = uno::Reference< io::XActiveDataSource >(
-                    xServiceFactory->createInstance(
-                    OUString("com.sun.star.xml.sax.Writer") ), UNO_QUERY );
+                    xServiceFactory->createInstance( "com.sun.star.xml.sax.Writer" ), UNO_QUERY );
         }
         catch (uno::Exception &)
         {
@@ -721,7 +717,7 @@ uno::Sequence< OUString > ConvDic::getSupportedServiceNames_Static()
     throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = A2OU( SN_CONV_DICTIONARY );
+    aSNS.getArray()[0] = SN_CONV_DICTIONARY ;
     return aSNS;
 }
 

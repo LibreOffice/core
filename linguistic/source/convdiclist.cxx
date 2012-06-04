@@ -315,7 +315,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
         {
             ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            aCnt.executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( "delete", makeAny( sal_Bool( sal_True ) ) );
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
@@ -442,8 +442,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
     if (!pNameContainer)
     {
         pNameContainer = new ConvDicNameContainer( *this );
-        pNameContainer->AddConvDics( GetDictionaryWriteablePath(),
-                                     A2OU( CONV_DIC_EXT ) );
+        pNameContainer->AddConvDics( GetDictionaryWriteablePath(), ::rtl::OUString(CONV_DIC_EXT)  );
         xNameContainer = pNameContainer;
 
         // access list of text conversion dictionaries to activate
@@ -462,9 +461,9 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         // since there is no UI to active/deactivate the dictionaries
         // for chinese text conversion they should be activated by default
         uno::Reference< XConversionDictionary > xS2TDic(
-                    pNameContainer->GetByName( A2OU("ChineseS2T") ), UNO_QUERY );
+                    pNameContainer->GetByName( "ChineseS2T" ), UNO_QUERY );
         uno::Reference< XConversionDictionary > xT2SDic(
-                    pNameContainer->GetByName( A2OU("ChineseT2S") ), UNO_QUERY );
+                    pNameContainer->GetByName( "ChineseT2S" ), UNO_QUERY );
             if (xS2TDic.is())
                 xS2TDic->setActive( sal_True );
             if (xT2SDic.is())
@@ -666,7 +665,7 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
     throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = A2OU( SN_CONV_DICTIONARY_LIST );
+    aSNS.getArray()[0] = SN_CONV_DICTIONARY_LIST;
     return aSNS;
 }
 
