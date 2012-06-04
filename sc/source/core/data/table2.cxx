@@ -692,54 +692,6 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     }
 }
 
-void ScTable::CopyColorScales( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCsCOL nDx, SCsROW nDy, ScTable* pTable)
-{
-    std::map<sal_Int32, sal_Int32> aOldIdToNewId;
-    std::map<sal_Int32, ScRangeList> aIdToRange;
-
-    ScColorFormatList* pColorScaleList = mpColorFormatList.get();
-    ScColorFormatList* pOldColorScaleList = pTable->mpColorFormatList.get();
-    for(SCCOL i = nCol1; i <= nCol2; ++i)
-    {
-        ScAttrIterator* pIter = aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
-        SCROW nStartRow = 0, nEndRow = 0;
-        const ScPatternAttr* pPattern = pIter->Next( nStartRow, nEndRow );
-        sal_uInt32 nId = ((SfxUInt32Item&)pPattern->GetItem(ATTR_COLORSCALE)).GetValue();
-        if ( nId != 0)
-        {
-            if (aOldIdToNewId.find(nId) == aOldIdToNewId.end())
-            {
-                ScColorFormat* pFormat = pOldColorScaleList->GetFormat(nId);
-                ScColorFormat* pNewFormat = pFormat->Clone(pDocument);
-                sal_Int32 nNewId = pColorScaleList->size() + 1;
-                //not in list => create entries in both maps and new format
-                pColorScaleList->AddFormat(pNewFormat);
-                aOldIdToNewId.insert( std::pair<sal_Int32, sal_Int32>( nId, nNewId ) );
-                aIdToRange.insert( std::pair<sal_Int32, ScRangeList>( nId, ScRangeList() ) );
-            }
-
-            aIdToRange.find(nId)->second.Join( ScRange( i, nStartRow + nDy, nTab, i, nEndRow + nDy, nTab ) );
-        }
-    }
-
-    for(std::map<sal_Int32, ScRangeList>::const_iterator itr = aIdToRange.begin();
-            itr != aIdToRange.end(); ++itr)
-    {
-        sal_uInt32 nNewKey = aOldIdToNewId.find(itr->first)->second;
-        ScColorFormat* pFormat = pColorScaleList->GetFormat( nNewKey );
-        pFormat->UpdateReference(URM_MOVE, ScRange(nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab),
-                nDx, nDy, pTable->nTab - nTab);
-        pFormat->SetRange(itr->second);
-
-        ScPatternAttr aPattern( pDocument->GetPool() );
-        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nNewKey ) );
-        ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList(itr->second, true);
-        pDocument->ApplySelectionPattern( aPattern, aMarkData );
-    }
-}
-
 void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag,
                             bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable)
@@ -798,7 +750,6 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
             // create deep copies for conditional formatting
             CopyConditionalFormat( nCol1, nRow1, nCol2, nRow2, nDx, nDy, pTable);
-            CopyColorScales( nCol1, nRow1, nCol2, nRow2, nDx, nDy, pTable);
         }
         DecRecalcLevel();
     }

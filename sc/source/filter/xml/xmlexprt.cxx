@@ -3909,106 +3909,92 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
                         SvXMLElementExport aElementCondEntry(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITION, true, true);
                     }
-                }
-            }
-        }
-
-        if(pColorFormatList)
-        {
-            for(ScColorFormatList::const_iterator itr = pColorFormatList->begin();
-                    itr != pColorFormatList->end(); ++itr)
-            {
-                rtl::OUString sRangeList;
-                const ScRangeList& rRangeList = itr->GetRange();
-                ScRangeStringConverter::GetStringFromRangeList( sRangeList, &rRangeList, pDoc, formula::FormulaGrammar::CONV_ODF );
-                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, sRangeList);
-                SvXMLElementExport aElementColFormat(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, true, true);
-
-                if(itr->GetType() == COLORSCALE)
-                {
-                    SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
-                    const ScColorScaleFormat& mrColorScale = static_cast<const ScColorScaleFormat&>(*itr);
-                    for(ScColorScaleFormat::const_iterator it = mrColorScale.begin();
-                            it != mrColorScale.end(); ++it)
+                    else if(pFormatEntry->GetType() == condformat::COLORSCALE)
                     {
-                        if(it->HasFormula())
+                        SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
+                        const ScColorScaleFormat& mrColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
+                        for(ScColorScaleFormat::const_iterator it = mrColorScale.begin();
+                                it != mrColorScale.end(); ++it)
                         {
-                            rtl::OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                        }
-                        else
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(it->GetValue()));
+                            if(it->HasFormula())
+                            {
+                                rtl::OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                            }
+                            else
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(it->GetValue()));
 
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
+                            rtl::OUStringBuffer aBuffer;
+                            ::sax::Converter::convertColor(aBuffer, it->GetColor().GetColor());
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLOR, aBuffer.makeStringAndClear());
+                            SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
+                        }
+                    }
+                    else if(pFormatEntry->GetType() == condformat::DATABAR)
+                    {
+                        const ScDataBarFormatData* pFormatData = static_cast<const ScDataBarFormat&>(*pFormatEntry).GetDataBarData();
+                        if(!pFormatData->mbGradient)
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_FALSE);
+                        if(pFormatData->mbOnlyBar)
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
+
+                        if(pFormatData->mbNeg)
+                        {
+                            if(pFormatData->mpNegativeColor)
+                            {
+                                rtl::OUStringBuffer aBuffer;
+                                ::sax::Converter::convertColor(aBuffer, pFormatData->mpNegativeColor->GetColor());
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
+                            }
+                            else
+                            {
+                                rtl::OUStringBuffer aBuffer;
+                                ::sax::Converter::convertColor(aBuffer, Color(COL_LIGHTRED).GetColor());
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
+                            }
+                        }
+
+                        if(pFormatData->meAxisPosition != databar::AUTOMATIC)
+                        {
+                            if(pFormatData->meAxisPosition == databar::NONE)
+                            {
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, rtl::OUString("none"));
+                            }
+                            else
+                            {
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, rtl::OUString("middle"));
+                            }
+                        }
+
                         rtl::OUStringBuffer aBuffer;
-                        ::sax::Converter::convertColor(aBuffer, it->GetColor().GetColor());
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLOR, aBuffer.makeStringAndClear());
-                        SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
-                    }
-                }
-                else if(itr->GetType() == DATABAR)
-                {
-                    const ScDataBarFormatData* pFormatData = static_cast<const ScDataBarFormat&>(*itr).GetDataBarData();
-                    if(!pFormatData->mbGradient)
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_FALSE);
-                    if(pFormatData->mbOnlyBar)
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
+                        ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor.GetColor());
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
+                        SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
 
-                    if(pFormatData->mbNeg)
-                    {
-                        if(pFormatData->mpNegativeColor)
                         {
-                            rtl::OUStringBuffer aBuffer;
-                            ::sax::Converter::convertColor(aBuffer, pFormatData->mpNegativeColor->GetColor());
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
+                            if(pFormatData->mpLowerLimit->HasFormula())
+                            {
+                                rtl::OUString sFormula = pFormatData->mpLowerLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                            }
+                            else
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpLowerLimit->GetValue()));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
+                            SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
                         }
-                        else
-                        {
-                            rtl::OUStringBuffer aBuffer;
-                            ::sax::Converter::convertColor(aBuffer, Color(COL_LIGHTRED).GetColor());
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
-                        }
-                    }
 
-                    if(pFormatData->meAxisPosition != databar::AUTOMATIC)
-                    {
-                        if(pFormatData->meAxisPosition == databar::NONE)
                         {
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, rtl::OUString("none"));
+                            if(pFormatData->mpUpperLimit->HasFormula())
+                            {
+                                rtl::OUString sFormula = pFormatData->mpUpperLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                            }
+                            else
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpUpperLimit->GetValue()));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit));
+                            SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
                         }
-                        else
-                        {
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, rtl::OUString("middle"));
-                        }
-                    }
-
-                    rtl::OUStringBuffer aBuffer;
-                    ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor.GetColor());
-                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
-                    SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
-
-                    {
-                        if(pFormatData->mpLowerLimit->HasFormula())
-                        {
-                            rtl::OUString sFormula = pFormatData->mpLowerLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                        }
-                        else
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpLowerLimit->GetValue()));
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
-                        SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
-                    }
-
-                    {
-                        if(pFormatData->mpUpperLimit->HasFormula())
-                        {
-                            rtl::OUString sFormula = pFormatData->mpUpperLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
-                        }
-                        else
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpUpperLimit->GetValue()));
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit));
-                        SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
                     }
                 }
             }

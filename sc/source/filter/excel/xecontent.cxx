@@ -972,6 +972,10 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             {
                 if(pFormatEntry->GetType() == condformat::CONDITION)
                     maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), nIndex ) );
+                else if(pFormatEntry->GetType() == condformat::COLORSCALE)
+                    ;
+                else if(pFormatEntry->GetType() == condformat::DATABAR)
+                    ;
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
@@ -1084,18 +1088,6 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
             XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr ) );
             if( xCondfmtRec->IsValid() )
                 maCondfmtList.AppendRecord( xCondfmtRec );
-        }
-    }
-    if( const ScColorFormatList* pColorScaleList = GetDoc().GetColorScaleList(GetCurrScTab()) )
-    {
-        for( ScColorFormatList::const_iterator itr = pColorScaleList->begin();
-                itr != pColorScaleList->end(); ++itr)
-        {
-            if(itr->GetType() == COLORSCALE)
-            {
-                XclExpColorScaleList::RecordRefType xColorScaleRec( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*itr) ) );
-                maColorScaleList.AppendRecord( xColorScaleRec );
-            }
         }
     }
 }

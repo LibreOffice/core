@@ -475,25 +475,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                         sal_uLong nConditional = ((const SfxUInt32Item&)pPattern->
                                                 GetItem(ATTR_CONDITIONAL)).GetValue();
-                        sal_uLong nColorScale = ((const SfxUInt32Item&)pPattern->
-                                                GetItem(ATTR_COLORSCALE)).GetValue();
 
                         ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
                         const ScConditionalFormat* pCondForm = NULL;
                         if ( nConditional && pCondFormList )
                             pCondForm = pCondFormList->GetFormat( nConditional );
-
-                        ScColorFormatList* pColorFormatList = GetColorScaleList(nTab);
-                        const ScColorScaleFormat* pColorScale = NULL;
-                        const ScDataBarFormat* pDataBar = NULL;
-                        if ( nColorScale && pColorFormatList )
-                        {
-                            ScColorFormat* pFormat = pColorFormatList->GetFormat( nColorScale );
-                            if(pFormat->GetType() == COLORSCALE)
-                                pColorScale = static_cast<ScColorScaleFormat*>(pFormat);
-                            else if(pFormat->GetType() == DATABAR)
-                                pDataBar = static_cast<ScDataBarFormat*>(pFormat);
-                        }
 
                         do
                         {
@@ -554,12 +540,12 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                                 if ( pCondForm )
                                 {
-                                    String aStyle = pCondForm->GetCellStyle( pInfo->pCell,
+                                    ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
                                                         ScAddress( nX, nCurRow, nTab ) );
-                                    if (aStyle.Len())
+                                    if (!aData.aStyleName.isEmpty())
                                     {
                                         SfxStyleSheetBase* pStyleSheet =
-                                                pStlPool->Find( aStyle, SFX_STYLE_FAMILY_PARA );
+                                                pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
                                         if ( pStyleSheet )
                                         {
                                             //! Style-Sets cachen !!!
@@ -568,16 +554,15 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         }
                                         // if style is not there, treat like no condition
                                     }
-                                }
-                                if ( pColorScale )
-                                {
-                                    Color* pColor = pColorScale->GetColor( ScAddress( nX, nCurRow, nTab ) );
-                                    pInfo->pColorScale = pColor;
-                                }
-                                if( pDataBar )
-                                {
-                                    ScDataBarInfo* pDataBarInfo = pDataBar->GetDataBarInfo( ScAddress( nX, nCurRow, nTab ) );
-                                    pInfo->pDataBar = pDataBarInfo;
+                                    if(aData.pColorScale)
+                                    {
+                                        pInfo->pColorScale = aData.pColorScale;
+                                    }
+
+                                    if(aData.pDataBar)
+                                    {
+                                        pInfo->pDataBar = aData.pDataBar;
+                                    }
                                 }
 
                                 ++nArrY;

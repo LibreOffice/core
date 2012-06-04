@@ -31,6 +31,7 @@
 #include <formula/grammar.hxx>
 #include <tools/color.hxx>
 #include <rangelst.hxx>
+#include "conditio.hxx"
 
 #include <vector>
 
@@ -140,13 +141,7 @@ struct ScDataBarFormatData
     boost::scoped_ptr<ScColorScaleEntry> mpLowerLimit;
 };
 
-enum ScColorFormatType
-{
-    COLORSCALE,
-    DATABAR
-};
-
-class SC_DLLPUBLIC ScColorFormat
+class SC_DLLPUBLIC ScColorFormat : public ScFormatEntry
 {
 public:
     ScColorFormat(ScDocument* pDoc);
@@ -157,19 +152,13 @@ public:
     const ScRangeList& GetRange() const;
 
     virtual void DataChanged(const ScRange& rRange) = 0;
-    virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab) = 0;
-    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
-            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz ) = 0;
-
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const = 0;
-
-    virtual ScColorFormatType GetType() const = 0;
+    virtual void SetParent(ScConditionalFormat* pParent);
 
 protected:
     void getValues( std::vector<double>& rValues ) const;
 
     ScRangeList maRanges;
-    ScDocument* mpDoc;
+    ScConditionalFormat* mpParent;
 };
 
 class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat
@@ -198,7 +187,7 @@ public:
     virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    virtual ScColorFormatType GetType() const;
+    virtual condformat::ScFormatEntryType GetType() const;
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
     iterator begin();
@@ -224,7 +213,7 @@ public:
     virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    virtual ScColorFormatType GetType() const;
+    virtual condformat::ScFormatEntryType GetType() const;
 private:
     double getMin(double nMin, double nMax) const;
     double getMax(double nMin, double nMax) const;
@@ -262,7 +251,7 @@ public:
 
 // see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability
 //for MSVC we need:
-inline ScColorFormat* new_clone( const ScColorFormat& rFormat )
+inline ScFormatEntry* new_clone( const ScColorFormat& rFormat )
 {
     return rFormat.Clone();
 }
