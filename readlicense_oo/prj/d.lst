@@ -10,6 +10,7 @@ dos: echo =====================================================================
 
 ..\%__SRC%\misc\LICENSE.odt %_DEST%\bin\LICENSE.odt
 ..\%__SRC%\misc\CREDITS.odt %_DEST%\bin\CREDITS.odt
+..\%__SRC%\misc\NOTICE %_DEST%\bin\NOTICE
 
 # URE:
 mkdir: %_DEST%\bin\ure

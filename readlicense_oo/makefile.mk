@@ -11,6 +11,7 @@ TARGET=source
 # ------------------------------------------------------------------
 
 ALLTAR: $(MISC)/$/license.txt $(MISC)/$/LICENSE \
+	$(MISC)/$/NOTICE \
         $(MISC)$/LICENSE.odt $(MISC)$/CREDITS.odt \
         $(MISC)$/THIRDPARTYLICENSEREADME.html
 
@@ -40,3 +41,5 @@ $(MISC)$/CREDITS.odt: odt/CREDITS.odt
     $(COPY) odt/CREDITS.odt $@
 $(MISC)$/THIRDPARTYLICENSEREADME.html: html/THIRDPARTYLICENSEREADME.html
     $(COPY) html/THIRDPARTYLICENSEREADME.html $@
+$(MISC)$/NOTICE: txt/NOTICE
+    $(COPY) txt/NOTICE $@

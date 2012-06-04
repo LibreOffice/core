@@ -101,7 +101,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Txt_Package,
 	     gid_License_Txt,
 	     git_License_Odt,
-	     gid_Credits_Odt);
+	     gid_Credits_Odt,
+	     gid_Apache_Notice);
     Unixlinks = (gid_Brand_Unixlink_Program,
                  gid_Brand_Unixlink_Unopkg,
                  gid_Brand_Unixlink_Urelibs);
@@ -1475,5 +1476,16 @@ File gid_Credits_Odt
     Dir = gid_Dir_Brand_Root;
 #endif
     Name = "CREDITS.odt";
+    Styles = (PACKED);
+End
+
+File gid_Apache_Notice
+    BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Dir_Bundle_Contents;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "NOTICE";
     Styles = (PACKED);
 End
