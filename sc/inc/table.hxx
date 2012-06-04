@@ -73,8 +73,6 @@ class ScProgress;
 class ScRangeList;
 class ScSheetEvents;
 class ScSortInfoArray;
-class ScColorFormatList;
-class ScColorFormat;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScStyleSheet;
@@ -174,7 +172,6 @@ private:
     mutable ScRangeName* mpRangeName;
 
     boost::scoped_ptr<ScConditionalFormatList> mpCondFormatList;
-    boost::scoped_ptr<ScColorFormatList> mpColorFormatList;
 
     ScNotes         maNotes;
 
@@ -800,11 +797,7 @@ public:
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
 
-    sal_uLong          AddCondFormat( const ScConditionalFormat& rNew );
-    sal_uLong          AddColorFormat( ScColorFormat* pNew );
-    ScColorFormatList* GetColorFormatList();
-    const ScColorFormatList* GetColorFormatList() const;
-
+    sal_uLong          AddCondFormat( ScConditionalFormat* pNew );
 
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

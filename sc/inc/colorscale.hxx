@@ -99,6 +99,22 @@ struct ScDataBarFormatData
         meAxisPosition(databar::AUTOMATIC),
         mbOnlyBar(false){}
 
+    ScDataBarFormatData(const ScDataBarFormatData& r):
+        maPositiveColor(r.maPositiveColor),
+        mbGradient(r.mbGradient),
+        mbNeg(r.mbNeg),
+        meAxisPosition(r.meAxisPosition),
+        mbOnlyBar(r.mbOnlyBar)
+    {
+        if(r.mpNegativeColor)
+            mpNegativeColor.reset(new Color(*r.mpNegativeColor));
+
+        if(r.mpLowerLimit)
+            mpLowerLimit.reset( new ScColorScaleEntry(*r.mpLowerLimit));
+        if(r.mpUpperLimit)
+            mpUpperLimit.reset( new ScColorScaleEntry(*r.mpUpperLimit));
+    }
+
     /**
      * Color for all Positive Values and if mbNeg == false also for negative ones
      */
@@ -145,7 +161,6 @@ class SC_DLLPUBLIC ScColorFormat : public ScFormatEntry
 {
 public:
     ScColorFormat(ScDocument* pDoc);
-    ScColorFormat(ScDocument* pDoc, const ScColorFormat& rFormat);
     virtual ~ScColorFormat();
 
     void SetRange(const ScRangeList& rList);
@@ -157,7 +172,6 @@ public:
 protected:
     void getValues( std::vector<double>& rValues ) const;
 
-    ScRangeList maRanges;
     ScConditionalFormat* mpParent;
 };
 
@@ -220,40 +234,5 @@ private:
 
     boost::scoped_ptr<ScDataBarFormatData> mpFormatData;
 };
-
-class SC_DLLPUBLIC ScColorFormatList
-{
-private:
-    typedef boost::ptr_vector<ScColorFormat> ColorFormatContainer;
-    ColorFormatContainer maColorScaleFormats;
-public:
-    ScColorFormatList() {}
-    ScColorFormatList(const ScColorFormatList& rList);
-
-    typedef ColorFormatContainer::iterator iterator;
-    typedef ColorFormatContainer::const_iterator const_iterator;
-
-    ScColorFormat* GetFormat(sal_uInt32 nFormat);
-    void AddFormat( ScColorFormat* pFormat );
-
-    void DataChanged(const ScRange& rRange);
-    void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
-    void UpdateReference( UpdateRefMode eUpdateRefMode,
-            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-
-    iterator begin();
-    const_iterator begin() const;
-    iterator end();
-    const_iterator end() const;
-
-    size_t size() const;
-};
-
-// see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability
-//for MSVC we need:
-inline ScFormatEntry* new_clone( const ScColorFormat& rFormat )
-{
-    return rFormat.Clone();
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

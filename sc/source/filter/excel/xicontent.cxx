@@ -648,7 +648,7 @@ void XclImpCondFormat::Apply()
     {
         ScDocument& rDoc = GetDoc();
 
-        sal_uLong nKey = rDoc.AddCondFormat( *mxScCondFmt, maRanges.front()->aStart.Tab() );
+        sal_uLong nKey = rDoc.AddCondFormat( mxScCondFmt->Clone(), maRanges.front()->aStart.Tab() );
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
 

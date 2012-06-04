@@ -1508,8 +1508,6 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 
     if(mpCondFormatList)
         mpCondFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nNewSheets-1),0,0, nNewSheets);
-    if(mpColorFormatList)
-        mpColorFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nNewSheets-1),0,0, nNewSheets);
 }
 
 void ScTable::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo, SCTAB nSheets )
@@ -1545,8 +1543,6 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo, SC
 
     if(mpCondFormatList)
         mpCondFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nSheets-1),0,0, -1*nSheets);
-    if(mpColorFormatList)
-        mpColorFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nSheets-1),0,0, -1*nSheets);
 }
 
 void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
@@ -1570,8 +1566,6 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
 
     if(mpCondFormatList)
         mpCondFormatList->UpdateMoveTab(nOldPos, nNewPos);
-    if(mpColorFormatList)
-        mpColorFormatList->UpdateMoveTab(nOldPos, nNewPos);
 }
 
 void ScTable::UpdateCompile( bool bForceIfNameInUse )
@@ -2005,7 +1999,7 @@ ScDBData* ScTable::GetAnonymousDBData()
     return pDBDataNoName;
 }
 
-sal_uLong ScTable::AddCondFormat( const ScConditionalFormat& rNew )
+sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
 {
     if(!mpCondFormatList)
         mpCondFormatList.reset(new ScConditionalFormatList());
@@ -2019,21 +2013,15 @@ sal_uLong ScTable::AddCondFormat( const ScConditionalFormat& rNew )
             nMax = nKey;
     }
 
-    ScConditionalFormat* pNewFormat = rNew.Clone(pDocument);
-    pNewFormat->SetKey(nMax+1);
-    mpCondFormatList->InsertNew(pNewFormat);
+    pNew->SetKey(nMax+1);
+    mpCondFormatList->InsertNew(pNew);
 
     return nMax + 1;
 }
 
-ScColorFormatList* ScTable::GetColorFormatList()
+void ScTable::SetCondFormList( ScConditionalFormatList* pNew )
 {
-    return mpColorFormatList.get();
-}
-
-const ScColorFormatList* ScTable::GetColorFormatList() const
-{
-    return mpColorFormatList.get();
+    mpCondFormatList.reset( pNew );
 }
 
 ScConditionalFormatList* ScTable::GetCondFormList()
@@ -2047,15 +2035,6 @@ ScConditionalFormatList* ScTable::GetCondFormList()
 const ScConditionalFormatList* ScTable::GetCondFormList() const
 {
     return mpCondFormatList.get();
-}
-
-sal_uLong ScTable::AddColorFormat( ScColorFormat* pNew )
-{
-    if(!mpColorFormatList)
-        mpColorFormatList.reset(new ScColorFormatList());
-
-    mpColorFormatList->AddFormat( pNew );
-    return mpColorFormatList->size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

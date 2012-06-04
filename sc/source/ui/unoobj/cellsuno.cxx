@@ -2414,11 +2414,10 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                        formula::FormulaGrammar::GRAM_UNSPECIFIED :
                                        formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
-                                ScConditionalFormat aNew( 0, pDoc );    // Index wird beim Einfuegen gesetzt
-                                pFormat->FillFormat( aNew, pDoc, eGrammar );
-                                ScRangeListRef pRanges = new ScRangeList( aRanges );
-                                aNew.AddRangeInfo( pRanges );
-                                sal_uLong nIndex = pDoc->AddCondFormat( aNew, aRanges.front()->aStart.Tab() );
+                                ScConditionalFormat* pNew = new ScConditionalFormat( 0, pDoc );    // Index wird beim Einfuegen gesetzt
+                                pFormat->FillFormat( *pNew, pDoc, eGrammar );
+                                pNew->AddRange( aRanges );
+                                sal_uLong nIndex = pDoc->AddCondFormat( pNew, aRanges.front()->aStart.Tab() );
 
                                 ScPatternAttr aPattern( pDoc->GetPool() );
                                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
