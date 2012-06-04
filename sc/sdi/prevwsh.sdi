@@ -159,6 +159,9 @@ interface TablePrintPreview
     SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ] // ole() api()
     SID_PREVIEW_CLOSE   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CANCEL          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SID_SAVEDOC         [ StateMethod = GetState; Export = FALSE; ]
+    SID_SAVEASDOC       [ StateMethod = GetState; Export = FALSE; ]
 }
 
 

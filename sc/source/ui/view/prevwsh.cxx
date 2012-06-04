@@ -814,6 +814,8 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
             case SID_UNDO:
             case SID_REDO:
             case SID_REPEAT:
+            case SID_SAVEDOC:
+            case SID_SAVEASDOC:
                 rSet.DisableItem(nWhich);
                 break;
             case SID_PREVIEW_PREVIOUS:

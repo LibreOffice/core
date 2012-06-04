@@ -586,10 +586,19 @@ void ScModule::Execute( SfxRequest& rReq )
 
 void ScModule::GetState( SfxItemSet& rSet )
 {
+    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+    bool bTabView = pDocSh && (pDocSh->GetBestViewShell(true) != NULL);
+
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
-    while ( nWhich )
+    for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
     {
+        if (!bTabView)
+        {
+            // Not in the normal calc view shell (most likely in preview shell).  Disable all actions.
+            rSet.DisableItem(nWhich);
+            continue;
+        }
+
         switch ( nWhich )
         {
             case FID_AUTOCOMPLETE:
@@ -605,25 +614,13 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
                 break;
             case SID_AUTOSPELL_CHECK:
-                {
-                    sal_Bool bAuto;
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    if ( pDocSh )
-                        bAuto = pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
-                    else
-                    {
-                        sal_uInt16 nDummyLang, nDummyCjk, nDummyCtl;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto );
-                    }
-                    rSet.Put( SfxBoolItem( nWhich, bAuto ) );
-                }
+                rSet.Put( SfxBoolItem( nWhich, pDocSh->GetDocument()->GetDocOptions().IsAutoSpell()) );
                 break;
             case SID_ATTR_LANGUAGE:
             case ATTR_CJK_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CJK_LANGUAGE
             case ATTR_CTL_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CTL_LANGUAGE
                 {
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
+                    ScDocument* pDoc = pDocSh->GetDocument();
                     if ( pDoc )
                     {
                         LanguageType eLatin, eCjk, eCtl;
@@ -634,9 +631,7 @@ void ScModule::GetState( SfxItemSet& rSet )
                     }
                 }
                 break;
-
         }
-        nWhich = aIter.NextWhich();
     }
 }
 
