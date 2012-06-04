@@ -1087,11 +1087,10 @@ sal_Bool ORowSetCache::moveWindow()
                 for(; !aIter->is() && bCheck;++aIter, ++nPos)
                 {
                     OSL_ENSURE(aIter != m_pMatrix->end(),"Invalid iterator");
-                    if ( bCheck ) // resultset stands on right position
-                    {
-                        *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
-                        m_pCacheSet->fillValueRow(*aIter, nPos);
-                    }
+
+                    *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
+                    m_pCacheSet->fillValueRow(*aIter, nPos);
+
                     bCheck = m_pCacheSet->next();
                 }
             }
