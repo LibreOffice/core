@@ -1,0 +1,35 @@
+--- misc/liblangtag-0.2/liblangtag/lt-xml.c	2012-02-02 09:54:51.000000000 +0100
++++ misc/build/liblangtag-0.2/liblangtag/lt-xml.c	2012-06-04 17:39:32.010299830 +0200
+@@ -45,6 +45,14 @@
+ 
+ G_LOCK_DEFINE_STATIC (lt_xml);
+ 
++static const char* get_datadir()
++{
++    const char* pEnv = getenv( "LIBO_LANGTAG_DATADIR");
++    if (pEnv && *pEnv)
++        return pEnv;
++    return REGDATADIR;
++}
++
+ /*< private >*/
+ static gboolean
+ lt_xml_read_subtag_registry(lt_xml_t  *xml,
+@@ -62,7 +70,7 @@
+ 	if (!g_file_test(regfile, G_FILE_TEST_EXISTS)) {
+ 		g_free(regfile);
+ #endif
+-	regfile = g_build_filename(REGDATADIR, "language-subtag-registry.xml", NULL);
++	regfile = g_build_filename(get_datadir(), "language-subtag-registry.xml", NULL);
+ #ifdef GNOME_ENABLE_DEBUG
+ 	}
+ #endif
+@@ -120,7 +128,7 @@
+ 	if (!g_file_test(regfile, G_FILE_TEST_EXISTS)) {
+ 		g_free(regfile);
+ #endif
+-	regfile = g_build_filename(REGDATADIR, "common", "bcp47", filename, NULL);
++	regfile = g_build_filename(get_datadir(), "common", "bcp47", filename, NULL);
+ #ifdef GNOME_ENABLE_DEBUG
+ 	}
+ #endif

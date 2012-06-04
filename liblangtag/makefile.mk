@@ -14,8 +14,8 @@ TARGET=liblangtag
 LIBLANGTAG_MAJOR=0
 LIBLANGTAG_MINOR=2
 LIBLANGTAG_MICRO=0
-# currently liblangtag.so.0.1.0 is generated, presumably a bug?
-LIBLANGTAG_LIBMINOR=1
+# Currently liblangtag.so.0.1.0 is generated instead of 0.2.0, presumably a bug?
+# For new versions adapt symlink in prj/d.lst
 
 # --- Settings -----------------------------------------------------
 
@@ -36,12 +36,15 @@ PATCH_FILES=liblangtag-0.2-0001-Fix-a-memory-leak.patch
 # liblangtag cf8dfcf1604e534f4c9eccbd9a05571c8a9dc74d
 PATCH_FILES+=liblangtag-0.2-0002-Fix-invalid-memory-access.patch
 PATCH_FILES+=liblangtag-0.2-configure.patch
+PATCH_FILES+=liblangtag-0.2-datadir.patch
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
 
+CONFIGURE_FLAGS+= --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)$/install
+
 .IF "$(SYSTEM_LIBXML)"!="YES"
-CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)/external/libxml'
+CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external$/libxml'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
 CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)$/libxml2.lib'
 .ELSE
@@ -66,20 +69,11 @@ CONFIGURE_FLAGS+= --disable-glibtest
 
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) .$/configure
 
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
-
-.IF "$(GUI)"=="UNX"
-
-OUT2LIB= \
-	$(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_LIBMINOR).$(LIBLANGTAG_MICRO) \
-    $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR) \
-    $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST)
-
-.ENDIF	# "$(GUI)"=="UNX"
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS) && \
+			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install
 
 
 .IF "$(GUI)"=="WNT"
-
 .IF "$(COM)"=="GCC"
 
 CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
@@ -88,20 +82,11 @@ CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
-OUT2LIB= \
-	$(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_LIBMINOR).$(LIBLANGTAG_MICRO) \
-    $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR) \
-    $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST)
-
 .ELSE	# "$(COM)"=="GCC"
 
 PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 
-OUT2LIB= \
-	$(BUILD_DIR)$/liblangtag/.libs$/langtag.lib
-
 .ENDIF	# "$(COM)"=="GCC"
-
 .ENDIF	# "$(GUI)"=="WNT"
 
 
