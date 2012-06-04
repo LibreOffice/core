@@ -35,8 +35,6 @@
 #endif
 #   include <windows.h>
 #   include <shellapi.h>
-#   include <winbase.h>
-#   include <shlwapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif

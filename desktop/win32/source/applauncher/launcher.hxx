@@ -5,6 +5,8 @@
 #endif
 
 #include <windows.h>
+#include <winbase.h>
+#include <shlwapi.h>
 
 #ifndef _INC_TCHAR
 #   ifdef UNICODE
