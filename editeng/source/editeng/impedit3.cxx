@@ -1009,7 +1009,31 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                             pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), 0 );
                             // So no scrolling for oversized fields
                             if ( pPortion->GetSize().Width() > nXWidth )
+                            {
+                                sal_Int32 nWidthOrg         = pPortion->GetSize().Width();
+                                sal_Int32 nChars            = aFieldValue.Len();
+                                sal_Int32 nApproxWC         = nXWidth / ( nWidthOrg / nChars );
+                                ExtraPortionInfo *pExtraInfo= pPortion->GetExtraInfos();
+                                if( !nApproxWC ) nApproxWC++;
+                                if( pExtraInfo == NULL )
+                                {
+                                    pExtraInfo = new ExtraPortionInfo();
+                                    pExtraInfo->nOrgWidth = nXWidth;
+                                    pPortion->SetExtraInfos( pExtraInfo );
+                                }
+                                else
+                                {
+                                    pExtraInfo->lineBreaksList.clear();
+                                }
+
                                 pPortion->GetSize().Width() = nXWidth;
+
+                                while( nChars > 0 )
+                                {
+                                    pExtraInfo->lineBreaksList.push_back( aFieldValue.Len() - nChars );
+                                    nChars -= nApproxWC;
+                                }
+                            }
                         }
                         nTmpWidth += pPortion->GetSize().Width();
                         EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
@@ -2922,6 +2946,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // Over the Portions of the line ...
                     // --------------------------------------------------
                     sal_uInt16 nIndex = pLine->GetStart();
+                    bool bParsingFields = false;
+                    ::std::vector< sal_Int32 >::iterator itSubLines;
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Line without Textportion in Paint!" );
@@ -3098,12 +3124,48 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aText = ((EditCharAttribField*)pAttr)->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.Len();
+                                    ExtraPortionInfo *pExtraInfo = pTextPortion->GetExtraInfos();
+                                    // Do not split the Fields into different lines while editing
+                                    if( bStripOnly && !bParsingFields && pExtraInfo && pExtraInfo->lineBreaksList.size() )
+                                    {
+                                        bParsingFields = true;
+                                        itSubLines = pExtraInfo->lineBreaksList.begin();
+                                    }
+                                    if( bParsingFields )
+                                    {
+                                        if( itSubLines != pExtraInfo->lineBreaksList.begin() )
+                                        {
+                                            if ( !IsVertical() )
+                                            {
+                                                aStartPos.Y() += pLine->GetMaxAscent();
+                                                aTmpPos.Y() += pLine->GetHeight();
+                                            }
+                                            else
+                                            {
+                                                aTmpPos.X() -= pLine->GetMaxAscent();
+                                                aStartPos.X() -= pLine->GetHeight();
+                                            }
+                                        }
+                                        ::std::vector< sal_Int32 >::iterator curIt = itSubLines;
+                                        itSubLines++;
+                                        if( itSubLines != pExtraInfo->lineBreaksList.end() )
+                                        {
+                                            nTextStart = *curIt;
+                                            nTextLen = *itSubLines - nTextStart;
+                                        }
+                                        else
+                                        {
+                                            nTextStart = *curIt;
+                                            nTextLen = nTextLen - nTextStart;
+                                            bParsingFields = false;
+                                        }
+                                    }
 
                                     pTmpDXArray = new sal_Int32[ aText.Len() ];
                                     pDXArray = pTmpDXArray;
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.Len(), pTmpDXArray );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray );
                                     if ( aStatus.DoRestoreFont() )
                                         GetRefDevice()->SetFont( _aOldFont );
 
@@ -3483,7 +3545,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                             }
                             break;
                         }
-                        nIndex = nIndex + pTextPortion->GetLen();
+                        if( bParsingFields )
+                            y--;
+                        else
+                            nIndex = nIndex + pTextPortion->GetLen();
+
                     }
                 }
 
