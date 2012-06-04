@@ -341,7 +341,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-			-subMODULE=$(dir $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
+			-subMODULE=$(gb_ResTarget_DEFIMAGESLOCATION) \
 			-subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
 			-oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
 			$(filter-out $(gb_Helper_MISCDUMMY) $(gb_ResTarget_RSCTARGET),$^)" \
