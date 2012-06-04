@@ -1103,12 +1103,10 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         pPageInfo->m_pExtPage = new ExtensionsTabPage(
             this, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
-        Size aSize;
-        aSize.Width() = aSeparatorFL.GetSizePixel().Width();
-        aSize.Height() = aSeparatorFL.GetSizePixel().Height() - aTreeLB.GetPosPixel().Y();
-        Point aPos;
-        aPos.X() = aSeparatorFL.GetPosPixel().X();
-        aPos.Y() = aTreeLB.GetPosPixel().Y();
+
+        Point aPos(aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
+        Size aSize(aSeparatorFL.GetSizePixel().Width(),
+                   aSeparatorFL.GetPosPixel().Y() - aTreeLB.GetPosPixel().Y());
         pPageInfo->m_pExtPage->SetPosSizePixel( aPos, aSize );
     }
 
