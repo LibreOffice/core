@@ -143,14 +143,7 @@ private:
     SCTAB                               nCurrentSheet;
     ScMyTableData*                      pCurrentTab;
 
-    bool                                IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
-                                                const sal_Int32 nCol, const sal_Int32 nRow,
-                                                com::sun::star::table::CellRangeAddress& aCellAddress) const;
-    void                                UnMerge();
-    void                                DoMerge(sal_Int32 nCount = -1);
-    void                                InsertRow();
     void                                NewRow();
-    void                                InsertColumn();
     void                                NewColumn(bool bIsCovered);
 
     void                                SetTableStyle(const rtl::OUString& sStyleName);

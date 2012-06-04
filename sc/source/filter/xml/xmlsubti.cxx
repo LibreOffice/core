@@ -47,7 +47,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/CellInsertMode.hpp>
@@ -263,126 +262,6 @@ void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
     }
 }
 
-bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
-                            table::CellRangeAddress& aCellAddress) const
-{
-    uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
-    if (xMergeable.is())
-    {
-        uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeable, uno::UNO_QUERY);
-        uno::Reference<sheet::XSpreadsheet> xTable(xMergeSheetCellRange->getSpreadsheet());
-        uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor(xTable->createCursorByRange(xMergeSheetCellRange));
-        if (xMergeSheetCursor.is())
-        {
-            xMergeSheetCursor->collapseToMergedArea();
-            uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
-            if (xMergeCellAddress.is())
-            {
-                aCellAddress = xMergeCellAddress->getRangeAddress();
-                if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
-                    aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
-                    return false;
-                else
-                    return true;
-            }
-        }
-    }
-    return false;
-}
-
-void ScMyTables::UnMerge()
-{
-    if ( xCurrentCellRange.is() )
-    {
-        //extra step here until this area is fully converted
-        com::sun::star::table::CellAddress aCellPos;
-        ScAddress aScCellPos = GetRealScCellPos();
-        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
-
-        table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCurrentCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
-        {
-            //unmerge
-            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-            if (xMergeable.is())
-                xMergeable->merge(false);
-        }
-    }
-}
-
-void ScMyTables::DoMerge(sal_Int32 nCount)
-{
-    if ( xCurrentCellRange.is() )
-    {
-        //extra step here until this area is fully converted
-        com::sun::star::table::CellAddress aCellPos;
-        ScAddress aScCellPos = GetRealScCellPos();
-        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
-
-        table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCurrentCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
-        {
-            //unmerge
-            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-            if (xMergeable.is())
-                xMergeable->merge(false);
-        }
-
-        //merge
-        uno::Reference <table::XCellRange> xMergeCellRange;
-        if (nCount == -1)
-        {
-            const ScMyTableData& r = *pCurrentTab;
-            xMergeCellRange.set(
-                xCurrentCellRange->getCellRangeByPosition(
-                    aCellAddress.StartColumn, aCellAddress.StartRow,
-                    aCellAddress.EndColumn + r.GetColsPerCol(r.GetColumn()) - 1,
-                    aCellAddress.EndRow + r.GetRowsPerRow(r.GetRow()) - 1));
-        }
-        else
-            xMergeCellRange.set(
-                xCurrentCellRange->getCellRangeByPosition(
-                    aCellAddress.StartColumn, aCellAddress.StartRow,
-                    aCellAddress.StartColumn + nCount - 1,
-                    aCellAddress.EndRow));
-
-        uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
-        if (xMergeable.is())
-            xMergeable->merge(true);
-    }
-}
-
-void ScMyTables::InsertRow()
-{
-    if ( xCurrentCellRange.is() )
-    {
-        ScAddress aScCellPos = GetRealScCellPos();
-        table::CellRangeAddress aCellAddress;
-        SCROW nRow(aScCellPos.Row());
-        for (sal_Int32 j = 0; j < aScCellPos.Col() - pCurrentTab->GetColumn() - 1; ++j)
-        {
-            if (IsMerged(xCurrentCellRange, j, nRow - 1, aCellAddress))
-            {
-                //unmerge
-                uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-                if (xMergeable.is())
-                    xMergeable->merge(false);
-            }
-
-            //merge
-            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow + 1), uno::UNO_QUERY);
-            if (xMergeable.is())
-                xMergeable->merge(true);
-            j += aCellAddress.EndColumn - aCellAddress.StartColumn;
-        }
-        rImport.GetStylesImportHelper()->InsertRow(nRow, nCurrentSheet, rImport.GetDocument());
-    }
-}
-
 void ScMyTables::NewRow()
 {
     size_t n = maTables.size();
@@ -393,7 +272,7 @@ void ScMyTables::NewRow()
         maTables[n-2].GetRowsPerRow(maTables[n-2].GetRow()) - 1)
     {
         if (GetRealScCellPos().Col() > 0)
-            InsertRow();
+            rImport.GetStylesImportHelper()->InsertRow(GetRealScCellPos().Row(), nCurrentSheet, rImport.GetDocument());
 
         for (size_t i = n - 1; i > 0; --i)
         {
@@ -426,55 +305,6 @@ void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
     rImport.GetStylesImportHelper()->SetRowStyle(rCellStyleName);
 }
 
-void ScMyTables::InsertColumn()
-{
-    if ( xCurrentCellRange.is() )
-    {
-        //extra step here until this area is fully converted
-        com::sun::star::table::CellAddress aCellPos;
-        ScAddress aScCellPos = GetRealScCellPos();
-        ScUnoConversion::FillApiAddress( aCellPos, aScCellPos );
-
-        table::CellRangeAddress aCellAddress;
-        sal_Int32 nCol(aCellPos.Column);
-        sal_Int32 n = aCellPos.Row - pCurrentTab->GetRow() - 1;
-        for (sal_Int32 j = 0; j <= n; ++j)
-        {
-            table::CellRangeAddress aTempCellAddress;
-            if (IsMerged(xCurrentCellRange, nCol - 1, j, aCellAddress))
-            {
-                //unmerge
-                uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-                if (xMergeable.is())
-                    xMergeable->merge(false);
-                aTempCellAddress = aCellAddress;
-                aTempCellAddress.StartColumn = aTempCellAddress.EndColumn + 1;
-                aTempCellAddress.EndColumn = aTempCellAddress.StartColumn;
-            }
-            else
-            {
-                aTempCellAddress = aCellAddress;
-                aTempCellAddress.StartColumn += 1;
-                aTempCellAddress.EndColumn = aTempCellAddress.StartColumn;
-            }
-
-            //insert Cell
-            sheet::CellInsertMode aCellInsertMode(sheet::CellInsertMode_RIGHT);
-            uno::Reference <sheet::XCellRangeMovement>  xCellRangeMovement (xCurrentSheet, uno::UNO_QUERY);
-            xCellRangeMovement->insertCells(aTempCellAddress, aCellInsertMode);
-
-            //merge
-            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn + 1, aCellAddress.EndRow), uno::UNO_QUERY);
-            if (xMergeable.is())
-                xMergeable->merge(true);
-            j += aCellAddress.EndRow - aCellAddress.StartRow;
-        }
-        rImport.GetStylesImportHelper()->InsertCol(nCol, nCurrentSheet, rImport.GetDocument());
-    }
-}
-
 void ScMyTables::NewColumn(bool bIsCovered)
 {
     if (bIsCovered)
@@ -505,7 +335,7 @@ void ScMyTables::NewColumn(bool bIsCovered)
     {
         if (pCurrentTab->GetRow() == 0)
         {
-            InsertColumn();
+            rImport.GetStylesImportHelper()->InsertCol(GetRealScCellPos().Col(), nCurrentSheet, rImport.GetDocument());
             size_t n = maTables.size();
             for (size_t i = n - 1; i > 0; --i)
             {
@@ -535,15 +365,8 @@ void ScMyTables::AddColumn(bool bIsCovered)
     {
         NewColumn(bIsCovered);
         sal_Int32 nCol = pCurrentTab->GetColumn();
-        sal_Int32 nRow = pCurrentTab->GetRow();
         pCurrentTab->SetRealCols(
             nCol + 1, pCurrentTab->GetRealCols(nCol) + pCurrentTab->GetColsPerCol(nCol));
-
-        if ((!bIsCovered) || (bIsCovered && (pCurrentTab->GetColsPerCol(nCol) > 1)))
-        {
-            if ((pCurrentTab->GetRowsPerRow(nRow) > 1) || (pCurrentTab->GetColsPerCol(nCol) > 1))
-                DoMerge();
-        }
     }
 }
 
@@ -580,12 +403,6 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
     }
 
     pCurrentTab->SetSpannedCols(nTempSpannedCols);
-
-    if (nTables > 1)
-    {
-        maTables[nTables-2].SetSubTableSpanned(pCurrentTab->GetSpannedCols());
-        UnMerge();
-    }
 }
 
 void ScMyTables::UpdateRowHeights()
