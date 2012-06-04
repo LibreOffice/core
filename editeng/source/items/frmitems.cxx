@@ -1789,6 +1789,13 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
     }
+    else
+    {
+        if (DOUBLE == rSvxLine.GetStyle())
+        {   // fdo#46112: divide width by 3 for outer line, gap, inner line
+           rSvxLine.ScaleMetrics(1, 3);
+        }
+    }
 
     sal_Bool bRet = !rSvxLine.isEmpty();
     return bRet;
@@ -1858,7 +1865,9 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
     if ( rLine.LineWidth )
     {
         rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine.LineWidth ) : rLine.LineWidth );
-        bGuessWidth = sal_False;
+        // fdo#46112: double does not necessarily mean symmetric
+        // for backwards compatibility
+        bGuessWidth = (DOUBLE == nStyle);
     }
 
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, bGuessWidth);
