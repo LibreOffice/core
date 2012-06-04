@@ -479,10 +479,11 @@ static void lcl_FcFontSetRemove(FcFontSet* pFSet, int i)
     memmove(pFSet->fonts + i, pFSet->fonts + i + 1, nTail*sizeof(FcPattern*));
 }
 
-int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths )
+void PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths )
 {
+#if OSL_DEBUG_LEVEL > 1
     int nFonts = 0;
-
+#endif
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     FcFontSet* pFSet = rWrapper.getFontSet();
@@ -640,7 +641,9 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
                 fontID aFont = m_nNextFontID++;
                 m_aFonts[ aFont ] = pUpdate;
                 m_aFontFileToFontID[ aBase ].insert( aFont );
+#if OSL_DEBUG_LEVEL > 1
                 nFonts++;
+#endif
 #if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "inserted font %s as fontID %d\n", family, aFont );
 #endif
@@ -661,7 +664,6 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "inserted %d fonts from fontconfig\n", nFonts );
 #endif
-    return nFonts;
 }
 
 void PrintFontManager::deinitFontconfig()
