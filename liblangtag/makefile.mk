@@ -35,11 +35,37 @@ TARFILE_MD5=fa6a2f85bd28baab035b2c95e722713f
 PATCH_FILES=liblangtag-0.2-0001-Fix-a-memory-leak.patch
 # liblangtag cf8dfcf1604e534f4c9eccbd9a05571c8a9dc74d
 PATCH_FILES+=liblangtag-0.2-0002-Fix-invalid-memory-access.patch
+PATCH_FILES+=liblangtag-0.2-configure.patch
 
 CONFIGURE_DIR=.
+BUILD_DIR=$(CONFIGURE_DIR)
+
+.IF "$(SYSTEM_LIBXML)"!="YES"
+CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)/external/libxml'
+.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
+CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)$/libxml2.lib'
+.ELSE
+CONFIGURE_FLAGS+= LIBXML2_LIBS='-L$(SOLARLIBDIR) -lxml2'
+.ENDIF
+.ENDIF
+
+.IF "$(SYSTEM_GLIB)"!="YES"
+# we're cheating here.. pkg-config wouldn't find anything useful, see configure patch
+CONFIGURE_FLAGS+= LIBO_GLIB_CHEAT=YES
+CONFIGURE_FLAGS+= GLIB_CFLAGS='-I$(SOLARINCDIR)/external/glib-2.0'
+.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
+CONFIGURE_FLAGS+= GLIB_LIBS='$(SOLARLIBDIR)$/gio-2.0.lib $(SOLARLIBDIR)$/gobject-2.0.lib $(SOLARLIBDIR)$/gthread-2.0.lib $(SOLARLIBDIR)$/gmodule-2.0.lib $(SOLARLIBDIR)$/glib-2.0.lib'
+.ELSE
+CONFIGURE_FLAGS+= GLIB_LIBS='-L$(SOLARLIBDIR) -lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0'
+.ENDIF
+CONFIGURE_FLAGS+= GLIB_GENMARSHAL=glib-genmarshal
+CONFIGURE_FLAGS+= GLIB_MKENUMS=glib-mkenums
+CONFIGURE_FLAGS+= GOBJECT_QUERY=gobject-query
+CONFIGURE_FLAGS+= --disable-glibtest
+.ENDIF
+
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) .$/configure
 
-BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
 
 .IF "$(GUI)"=="UNX"
@@ -49,10 +75,35 @@ OUT2LIB= \
     $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR) \
     $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST)
 
-.ENDIF
+.ENDIF	# "$(GUI)"=="UNX"
+
 
 .IF "$(GUI)"=="WNT"
+
+.IF "$(COM)"=="GCC"
+
+CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
+
+OUT2LIB= \
+	$(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_LIBMINOR).$(LIBLANGTAG_MICRO) \
+    $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST).$(LIBLANGTAG_MAJOR) \
+    $(BUILD_DIR)$/liblangtag/.libs$/$(TARGET)$(DLLPOST)
+
+.ELSE	# "$(COM)"=="GCC"
+
+PATCH_FILES+=liblangtag-0.2-msc-configure.patch
+
+OUT2LIB= \
+	$(BUILD_DIR)$/liblangtag/.libs$/langtag.lib
+
+.ENDIF	# "$(COM)"=="GCC"
+
+.ENDIF	# "$(GUI)"=="WNT"
+
 
 # --- Targets ------------------------------------------------------
 

@@ -29,6 +29,7 @@ symlink: %_DEST%\lib\libgobject-2.0.so.0 %_DEST%\lib\libgobject-2.0.so
 ..\%__SRC%\lib\gthread-2.0.lib %_DEST%\lib\gthread-2.0.lib
 ..\%__SRC%\lib\glib-2.0.lib %_DEST%\lib\glib-2.0.lib
 ..\%__SRC%\lib\gobject-2.0.lib %_DEST%\lib\gobject-2.0.lib
+..\%__SRC%\lib\dirent.lib %_DEST%\lib\dirent.lib
 
 mkdir: %_DEST%\inc\external\gio-unix-2.0
 mkdir: %_DEST%\inc\external\gio-unix-2.0\gio
@@ -50,6 +51,7 @@ mkdir: %_DEST%\inc\external\glib-2.0
 ..\%__SRC%\inc\gmodule.h %_DEST%\inc\external\glib-2.0\gmodule.h
 ..\%__SRC%\inc\make.msc %_DEST%\inc\external\glib-2.0\make.msc
 ..\%__SRC%\inc\module.defs %_DEST%\inc\external\glib-2.0\module.defs
+..\%__SRC%\inc\dirent.h %_DEST%\inc\external\glib-2.0\dirent.h
 
 mkdir: %_DEST%\inc\external\glib-2.0\gio
 ..\%__SRC%\inc\gaction.h %_DEST%\inc\external\glib-2.0\gio\gaction.h
