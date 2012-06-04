@@ -70,6 +70,7 @@ enum ScConditionMode
 };
 
 class ScConditionalFormat;
+class ScDataBarInfo;
 
 namespace condformat
 {
@@ -83,9 +84,21 @@ enum ScFormatEntryType
 
 }
 
+struct ScCondFormatData
+{
+    ScCondFormatData():
+        pColorScale(NULL),
+        pDataBar(NULL) {}
+
+    Color* pColorScale;
+    ScDataBarInfo* pDataBar;
+    rtl::OUString aStyleName;
+};
+
 class SC_DLLPUBLIC ScFormatEntry
 {
 public:
+    ScFormatEntry(ScDocument* pDoc);
     virtual ~ScFormatEntry() {}
 
     virtual condformat::ScFormatEntryType GetType() const = 0;
@@ -93,9 +106,12 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz ) = 0;
     virtual void UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos ) = 0;
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc ) const = 0;
+    virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const = 0;
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
+protected:
+    ScDocument* mpDoc;
+
 };
 
 class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
@@ -120,7 +136,6 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     String              aSrcString;     // formula source position as text during XML import
     ScFormulaCell*      pFCell1;
     ScFormulaCell*      pFCell2;
-    ScDocument*         pDoc;
     bool                bRelRef1;
     bool                bRelRef2;
     bool                bFirstRun;
@@ -186,11 +201,11 @@ public:
 
     virtual condformat::ScFormatEntryType GetType() const { return condformat::CONDITION; }
 
-    virtual ScFormatEntry* Clone(ScDocument* pDoc) const;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
-    ScDocument*     GetDocument() const     { return pDoc; }
+    ScDocument*     GetDocument() const     { return mpDoc; }
     ScConditionalFormat*    pCondFormat;
 };
 
@@ -273,6 +288,8 @@ public:
     const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
     const String&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
+
+    ScCondFormatData GetData( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
     bool            EqualEntries( const ScConditionalFormat& r ) const;
 

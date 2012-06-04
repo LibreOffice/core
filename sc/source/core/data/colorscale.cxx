@@ -136,18 +136,23 @@ const Color& ScColorScaleEntry::GetColor() const
 }
 
 ScColorFormat::ScColorFormat(ScDocument* pDoc):
-    mpDoc(pDoc)
+    ScFormatEntry(pDoc)
 {
 }
 
 ScColorFormat::ScColorFormat(ScDocument* pDoc, const ScColorFormat& rFormat):
-    maRanges(rFormat.maRanges),
-    mpDoc(pDoc)
+    ScFormatEntry(pDoc),
+    maRanges(rFormat.maRanges)
 {
 }
 
 ScColorFormat::~ScColorFormat()
 {
+}
+
+void ScColorFormat::SetParent( ScConditionalFormat* pParent )
+{
+    mpParent = pParent;
 }
 
 ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
@@ -615,9 +620,9 @@ void ScColorScaleFormat::DataChanged(const ScRange& rRange)
     }
 }
 
-ScColorFormatType ScColorScaleFormat::GetType() const
+condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
 {
-    return COLORSCALE;
+    return condformat::COLORSCALE;
 }
 
 ScColorScaleFormat::iterator ScColorScaleFormat::begin()
@@ -665,9 +670,9 @@ ScColorFormat* ScDataBarFormat::Clone(ScDocument* pDoc) const
     return new ScDataBarFormat(pDoc, *this);
 }
 
-ScColorFormatType ScDataBarFormat::GetType() const
+condformat::ScFormatEntryType ScDataBarFormat::GetType() const
 {
-    return DATABAR;
+    return condformat::DATABAR;
 }
 
 void ScDataBarFormat::UpdateReference( UpdateRefMode eRefMode,
@@ -869,6 +874,13 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 }
 
 //-----------------------------------------------------------------
+
+ScColorFormatList::ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList)
+{
+    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
+    {
+    }
+}
 
 void ScColorFormatList::AddFormat( ScColorFormat* pFormat )
 {
