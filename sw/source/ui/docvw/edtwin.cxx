@@ -5656,27 +5656,33 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
     }
 }
 
+namespace {
+
+struct CompareIgnoreCaseAscii
+{
+    bool operator()(const String& s1, const String& s2) const
+    {
+        return s1.CompareIgnoreCaseToAscii(s2) == COMPARE_LESS;
+    }
+};
+
+struct EqualIgnoreCaseAscii
+{
+    bool operator()(const String& s1, const String& s2) const
+    {
+        return s1.CompareIgnoreCaseToAscii(s2) == COMPARE_EQUAL;
+    }
+};
+
+} // anonymous namespace
+
 // TODO - implement an i18n aware sort
 void QuickHelpData::SortAndFilter()
 {
-    struct CompareIgnoreCaseAscii
-    {
-        bool operator()(const String& s1, const String& s2) const
-        {
-            return s1.CompareIgnoreCaseToAscii(s2) == COMPARE_LESS;
-        }
-    };
     std::sort( pHelpStrings->begin(),
                pHelpStrings->end(),
                CompareIgnoreCaseAscii() );
 
-    struct EqualIgnoreCaseAscii
-    {
-        bool operator()(const String& s1, const String& s2) const
-        {
-            return s1.CompareIgnoreCaseToAscii(s2) == COMPARE_EQUAL;
-        }
-    };
     std::vector<String>::iterator it = std::unique( pHelpStrings->begin(),
                                                     pHelpStrings->end(),
                                                     EqualIgnoreCaseAscii() );
