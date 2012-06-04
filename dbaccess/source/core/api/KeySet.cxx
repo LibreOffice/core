@@ -94,6 +94,22 @@ namespace
             }
         }
     }
+
+    template < typename T > inline void tryDispose( Reference<T> &r )
+    {
+        try
+        {
+            ::comphelper::disposeComponent(r);
+        }
+        catch(const Exception&)
+        {
+            r = NULL;
+        }
+        catch(...)
+        {
+            OSL_FAIL("Unknown Exception occurred");
+        }
+    }
 }
 DBG_NAME(OKeySet)
 
@@ -124,18 +140,9 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
 
 OKeySet::~OKeySet()
 {
-    try
-    {
-        ::comphelper::disposeComponent(m_xStatement);
-    }
-    catch(const Exception&)
-    {
-        m_xStatement = NULL;
-    }
-    catch(...)
-    {
-        OSL_FAIL("Unknown Exception occurred");
-    }
+    tryDispose(m_xStatement);
+    tryDispose(m_xSet);
+
     m_xComposer = NULL;
 
     DBG_DTOR(OKeySet,NULL);
