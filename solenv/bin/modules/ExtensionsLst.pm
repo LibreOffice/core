@@ -268,7 +268,7 @@ sub EvaluateSelector($$)
             return $left_result || $right_result;
         }
     }
-    elsif ($expression =~ /^\s*(.+?)\s$/)
+    elsif ($expression =~ /^\s*(.+?)\s*$/)
     {
         return EvaluateTerm($1, $languages);
     }
