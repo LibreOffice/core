@@ -9,7 +9,6 @@ AdjustLuminance
 AdjustmentValues
 Address
 Align
-Anchor
 AnchorPosition
 ApplyFormDesignMode
 AreaLinks

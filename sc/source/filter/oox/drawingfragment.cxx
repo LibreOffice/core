@@ -277,8 +277,7 @@ void DrawingFragment::onEndElement()
 
                     basegfx::B2DHomMatrix aTransformation;
                     mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, &aShapeRectEmu32 );
-                    // apply Cell anchoring if necessary
-                    mxAnchor->applyToXShape( mxShape->getXShape() );
+
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
                     Rectangle aShapeRectHmm(

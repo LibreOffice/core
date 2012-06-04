@@ -266,34 +266,6 @@ Rectangle ShapeAnchor::calcAnchorRectHmm( const Size& rPageSizeHmm ) const
     return Rectangle( lclEmuToHmm( aAnchorRect.X ), lclEmuToHmm( aAnchorRect.Y ), lclEmuToHmm( aAnchorRect.Width ), lclEmuToHmm( aAnchorRect.Height ) );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-ShapeAnchor::getFromCell() const
-{
-    CellAddress aAddress;
-    aAddress.Sheet = getSheetIndex();
-    aAddress.Row = maFrom.mnRow;
-    aAddress.Column = maFrom.mnCol;
-    return getCell( aAddress );
-}
-
-void
-ShapeAnchor::applyToXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape )
-{
-    if ( ( meAnchorType == ANCHOR_TWOCELL || meAnchorType ==  ANCHOR_ONECELL ) && getFromCell().is() )
-    {
-        PropertySet aShapeProp( rxShape );
-        aShapeProp.setProperty( PROP_Anchor, getFromCell() );
-        CellAnchorModel offSets;
-        offSets.mnColOffset = maFrom.mnColOffset;
-        offSets.mnRowOffset = maFrom.mnRowOffset;
-        EmuPoint aPos = calcCellAnchorEmu( offSets );
-        aShapeProp.setProperty( PROP_HoriOrientPosition, lclEmuToHmm( aPos.X ) );
-        aShapeProp.setProperty( PROP_VertOrientPosition, lclEmuToHmm( aPos.Y ) );
-    }
-}
-
-// private --------------------------------------------------------------------
-
 EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 {
     // calculate position of top-left edge of the cell
