@@ -538,7 +538,7 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const Size& rNewSize,
-                                   sal_uLong nScaleFlag = BMP_SCALE_FAST );
+                                   sal_uLong nScaleFlag = BMP_SCALE_LANCZOS );
 
     /** Scale the bitmap
 
@@ -551,7 +551,7 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const double& rScaleX, const double& rScaleY,
-                                   sal_uLong nScaleFlag = BMP_SCALE_FAST );
+                                   sal_uLong nScaleFlag = BMP_SCALE_LANCZOS );
 
     /** Rotate bitmap by the specified angle
 
