@@ -126,7 +126,7 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
         {
             BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-            if( aBmpEx.Scale( aGrfSize, BMP_SCALE_INTERPOLATE ) )
+            if( aBmpEx.Scale( aGrfSize, BMP_SCALE_LANCZOS ) )
                 maGraphic = aBmpEx;
         }
     }

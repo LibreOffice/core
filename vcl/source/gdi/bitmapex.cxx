@@ -754,7 +754,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
         }
 
         aScaledSize = Size( imgNewWidth, imgNewHeight );
-        aRet.Scale( aScaledSize, BMP_SCALE_INTERPOLATE );
+        aRet.Scale( aScaledSize, BMP_SCALE_LANCZOS );
     }
     else
     {

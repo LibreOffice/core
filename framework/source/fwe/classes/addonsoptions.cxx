@@ -1358,13 +1358,13 @@ void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const ::rtl::OU
             if ( aBmpSize != aNoScaleSize )
             {
                 BitmapEx aNoScaleBmp( aBitmapEx );
-                aNoScaleBmp.Scale( aNoScaleSize, BMP_SCALE_INTERPOLATE );
+                aNoScaleBmp.Scale( aNoScaleSize, BMP_SCALE_LANCZOS );
             }
             else
                 aImageNoScale = Image( aBitmapEx );
 
             if ( aBmpSize != aSize )
-                aBitmapEx.Scale( aSize, BMP_SCALE_INTERPOLATE );
+                aBitmapEx.Scale( aSize, BMP_SCALE_LANCZOS );
 
             aImage = Image( aBitmapEx );
         }
@@ -1512,7 +1512,7 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
 
         // Scale bitmap to fit the correct size for the menu/toolbar. Use best quality
         if ( aBitmapEx.GetSizePixel() != aSize )
-            aBitmapEx.Scale( aSize, BMP_SCALE_INTERPOLATE );
+            aBitmapEx.Scale( aSize, BMP_SCALE_LANCZOS );
 
         if( !aBitmapEx.IsTransparent() )
         {

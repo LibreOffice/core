@@ -680,7 +680,7 @@ namespace
 
                 sal_Bool bModified( sal_False );
                 BitmapEx aBitmapEx = aImage.GetBitmapEx();
-                bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_INTERPOLATE );
+                bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_LANCZOS );
 
                 if ( bModified )
                     aImage = Image( aBitmapEx );

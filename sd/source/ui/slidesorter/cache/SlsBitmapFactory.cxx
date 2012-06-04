@@ -87,7 +87,7 @@ Bitmap BitmapFactory::CreateBitmap (
         false).GetBitmapEx().GetBitmap());
     if (bDoSuperSampling && gbAllowSuperSampling)
     {
-        aPreview.Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
+        aPreview.Scale(rPixelSize, BMP_SCALE_LANCZOS);
     }
 
     return aPreview;

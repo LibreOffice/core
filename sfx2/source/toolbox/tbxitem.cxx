@@ -1550,7 +1550,7 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
     if ( bBig && aImage.GetSizePixel() != aBigSize )
     {
         BitmapEx aScaleBmpEx( aImage.GetBitmapEx() );
-        aScaleBmpEx.Scale( aBigSize, BMP_SCALE_INTERPOLATE );
+        aScaleBmpEx.Scale( aBigSize, BMP_SCALE_LANCZOS );
         GetToolBox().SetItemImage( GetId(), Image( aScaleBmpEx ) );
     }
     else

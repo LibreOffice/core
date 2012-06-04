@@ -233,7 +233,7 @@ BitmapEx SlideRenderer::CreatePreview (
         BitmapEx aScaledPreview = aPreview.GetBitmapEx();
         aScaledPreview.Scale(
             Size(aPreviewSize.Width,aPreviewSize.Height),
-            BMP_SCALE_INTERPOLATE);
+            BMP_SCALE_LANCZOS);
         return aScaledPreview;
     }
 }

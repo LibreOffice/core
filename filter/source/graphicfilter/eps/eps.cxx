@@ -499,7 +499,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     {
         Size aSizeBitmap( ( aSizePoint.Width() + 7 ) & ~7, aSizePoint.Height() );
         Bitmap aTmpBitmap( pPreview->GetBitmap() );
-        aTmpBitmap.Scale( aSizeBitmap, BMP_SCALE_INTERPOLATE );
+        aTmpBitmap.Scale( aSizeBitmap, BMP_SCALE_LANCZOS );
         aTmpBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
         BitmapReadAccess* pAcc = aTmpBitmap.AcquireReadAccess();
         if ( pAcc )

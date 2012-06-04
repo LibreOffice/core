@@ -129,7 +129,7 @@ namespace vclcanvas
         BitmapEx aRes( mpBackBuffer->getBitmapReference() );
 
         aRes.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
-                     beFast ? BMP_SCALE_FAST : BMP_SCALE_INTERPOLATE );
+                     beFast ? BMP_SCALE_FAST : BMP_SCALE_LANCZOS );
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( aRes, *mpDevice, mpOutDevReference ) );
