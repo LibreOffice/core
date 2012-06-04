@@ -433,7 +433,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     aSql.append(m_aComposedTableName);
     aSql.append(::rtl::OUString(" WHERE "));
 
-    // list all cloumns that should be set
+    // list all columns that should be set
     const ::rtl::OUString aQuote    = getIdentifierQuoteString();
     static ::rtl::OUString aAnd(" AND ");
     static ::rtl::OUString aOr(" OR ");
