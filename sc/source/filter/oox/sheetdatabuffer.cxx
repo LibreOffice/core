@@ -793,8 +793,6 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
         {
             if( const EditTextObject* pEditObj = static_cast< const ScEditCell* >( rDoc.GetCell( rStart ) )->GetData() )
                 bTextWrap = pEditObj->GetParagraphCount() > 1;
-            if( bTextWrap )
-                setManualRowHeight(  rStart.Row() );
         }
     }
 }

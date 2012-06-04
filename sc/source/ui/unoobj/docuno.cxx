@@ -1683,11 +1683,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
             bool bOldAdjustHeightEnabled = pDoc->IsAdjustHeightEnabled();
             bool bAdjustHeightEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if( bOldAdjustHeightEnabled != bAdjustHeightEnabled )
-            {
                 pDoc->EnableAdjustHeight( bAdjustHeightEnabled );
-                if( bAdjustHeightEnabled )
-                    pDocShell->UpdateAllRowHeights();
-            }
         }
         else if ( aString.EqualsAscii( SC_UNO_ISEXECUTELINKENABLED ) )
         {
