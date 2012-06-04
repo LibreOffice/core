@@ -41,7 +41,7 @@
 
 ResId SaneResId( sal_uInt32 nID )
 {
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "san" );
+    static ResMgr* pResMgr = ResMgr::CreateResMgr( "scn" );
     return ResId( nID, *pResMgr );
 }
 
