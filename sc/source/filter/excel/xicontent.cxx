@@ -637,8 +637,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
     }
 
-    ScCondFormatEntry aEntry( eMode, xTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
-    mxScCondFmt->AddEntry( aEntry );
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry( eMode, xTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
+    mxScCondFmt->AddEntry( pEntry );
     ++mnCondIndex;
 }
 

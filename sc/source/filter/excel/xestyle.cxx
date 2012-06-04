@@ -2861,12 +2861,13 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
             for (ScConditionalFormatList::const_iterator itr = pList->begin();
                     itr != pList->end(); ++itr)
             {
-                sal_Int32 nEntryCount = itr->Count();
-                for (sal_Int32 nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
+                size_t nEntryCount = itr->size();
+                for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
-                    const ScCondFormatEntry* pEntry = itr->GetEntry(nFormatEntry);
-                    if (!pEntry)
+                    const ScFormatEntry* pFormatEntry = itr->GetEntry(nFormatEntry);
+                    if (!pFormatEntry || pFormatEntry->GetType() != condformat::CONDITION)
                         continue;
+                    const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
 
                     rtl::OUString aStyleName = pEntry->GetStyle();
                     if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())

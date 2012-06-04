@@ -93,7 +93,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     SetCondType();
 }
 
-ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScCondFormatEntry* pFormatEntry):
+ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
     meType(CONDITION),
@@ -120,11 +120,12 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScCond
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     FreeResource();
 
-    if(pFormatEntry)
+    if(pFormatEntry && pFormatEntry->GetType() == condformat::CONDITION)
     {
-	rtl::OUString aStyleName = pFormatEntry->GetStyle();
+	const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+	rtl::OUString aStyleName = pEntry->GetStyle();
 	maLbStyle.SelectEntry(aStyleName);
-	ScConditionMode eMode = pFormatEntry->GetOperation();
+	ScConditionMode eMode = pEntry->GetOperation();
 	maLbType.SelectEntryPos(1);
 	switch(eMode)
 	{
@@ -515,8 +516,8 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
 
     if(pFormat)
     {
-	sal_Int32 nCount = pFormat->Count();
-	for (sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex)
+	size_t nCount = pFormat->size();
+	for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
 	{
 	    maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex)));
 	}

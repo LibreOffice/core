@@ -41,7 +41,7 @@
 
 class ScDocument;
 class ScConditionalFormat;
-class ScCondFormatEntry;
+class ScFormatEntry;
 class ScConditionalFormat;
 
 enum ScCondFormatEntryType
@@ -109,7 +109,7 @@ private:
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCondFormatEntry* pFormatEntry );
+    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry );
 
     virtual long Notify( NotifyEvent& rNEvt );
 
