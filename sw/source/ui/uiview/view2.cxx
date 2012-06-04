@@ -1205,10 +1205,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 SwDocStat documentStats;
                 {
                     SwWait aWait( *GetDocShell(), sal_True );
-                    rShell.StartAction();
                     rShell.CountWords(selectionStats);
-                    documentStats = rShell.GetUpdatedDocStat();
-                    rShell.EndAction();
+                    documentStats = rShell.GetDoc()->GetUpdatedDocStat();
                 }
 
                 const sal_uInt32 stringId = selectionStats.nWord? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION;
