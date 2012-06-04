@@ -217,7 +217,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
-		$(LIBS) -lnsl -lsocket \
+		$(LIBS) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 		-o $(1))
 endef
@@ -255,6 +255,11 @@ gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
+gb_STDLIBS := \
+	m \
+	nsl \
+	socket \
+
 gb_Library_PLAINLIBS_NONE += \
 	dl \
 	fontconfig \
@@ -263,7 +268,9 @@ gb_Library_PLAINLIBS_NONE += \
 	GLU \
 	ICE \
 	m \
+	nsl \
 	pthread \
+	socket \
 	SM \
 	ICE \
 	X11 \
