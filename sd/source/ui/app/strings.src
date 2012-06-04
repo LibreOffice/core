@@ -1269,3 +1269,33 @@ String STR_INSERT_MOVIE
 {
      Text [ en-US ] = "Insert Movie";
 };
+
+String STRING_DRAG_AND_DROP_PAGES
+{
+     Text [ en-US ] = "Drag and Drop Pages" ;
+};
+
+String STRING_DRAG_AND_DROP_SLIDES
+{
+     Text [ en-US ] = "Drag and Drop Slides" ;
+};
+
+String STRING_START_SLIDESHOW
+{
+     Text [ en-US ] = "Start Slide Show" ;
+};
+
+String STRING_HIDE_SLIDE
+{
+     Text [ en-US ] = "Hide Slide" ;
+};
+
+String STRING_SHOW_SLIDE
+{
+     Text [ en-US ] = "Show Slide" ;
+};
+
+String STRING_DUPLICATE_SLIDE
+{
+     Text [ en-US ] = "Duplicate Slide" ;
+};

@@ -280,35 +280,4 @@ Resource RID_SLIDESORTER_ICONS
     {
         ImageBitmap = Bitmap { File = "slide_sorter_focus_border.png" ; };
     };
-
-
-    String STRING_DRAG_AND_DROP_PAGES
-    {
-        Text [ en-US ] = "Drag and Drop Pages" ;
-    };
-
-    String STRING_DRAG_AND_DROP_SLIDES
-    {
-        Text [ en-US ] = "Drag and Drop Slides" ;
-    };
-
-    String STRING_COMMAND1
-    {
-        Text [ en-US ] = "Start Slide Show" ;
-    };
-
-    String STRING_COMMAND2_A
-    {
-        Text [ en-US ] = "Hide Slide" ;
-    };
-
-    String STRING_COMMAND2_B
-    {
-        Text [ en-US ] = "Show Slide" ;
-    };
-
-    String STRING_COMMAND3
-    {
-        Text [ en-US ] = "Duplicate Slide" ;
-    };
 };

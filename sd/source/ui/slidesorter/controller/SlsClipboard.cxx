@@ -35,7 +35,6 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsResource.hrc"
 #include "view/SlsTheme.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"

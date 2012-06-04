@@ -100,12 +100,4 @@
 #define IMAGE_HIDE_SLIDE_OVERLAY        92
 #define IMAGE_FOCUS_BORDER              93
 
-#define STRING_DRAG_AND_DROP_PAGES      101
-#define STRING_DRAG_AND_DROP_SLIDES     102
-
-#define STRING_COMMAND1                 110
-#define STRING_COMMAND2_A               111
-#define STRING_COMMAND2_B               112
-#define STRING_COMMAND3                 113
-
 #endif
