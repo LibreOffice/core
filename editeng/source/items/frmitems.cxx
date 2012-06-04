@@ -1867,7 +1867,8 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
         rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine.LineWidth ) : rLine.LineWidth );
         // fdo#46112: double does not necessarily mean symmetric
         // for backwards compatibility
-        bGuessWidth = (DOUBLE == nStyle);
+        bGuessWidth = (DOUBLE == nStyle) &&
+            (rLine.InnerLineWidth > 0) && (rLine.OuterLineWidth > 0);
     }
 
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, bGuessWidth);
