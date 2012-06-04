@@ -88,6 +88,8 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetT
     sNextStyleIdentifier = rEntry.sNextStyleIdentifier;
     sStyleName = rEntry.sStyleName;
     sStyleName1 = rEntry.sStyleName1;
+    sStyleIdentifierI = rEntry.sStyleIdentifierI;
+    sStyleIdentifierD = rEntry.sStyleIdentifierD;
 
     m_nColBandSize = 1;
     m_nRowBandSize = 1;
