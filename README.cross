@@ -282,8 +282,8 @@ it's just a trick to bypass some tests in the configure script.
 For the iOS simulator, using Xcode 4.3 and clang both for the host and
 build platform:
 
-CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk
-CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk
+CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk -mmacosx-version-min=10.6
+CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk -mmacosx-version-min=10.6
 CC_FOR_BUILD=ccache clang -arch i386 -mmacosx-version-min=10.6
 CXX_FOR_BUILD=ccache clang++ -arch i386 -mmacosx-version-min=10.6
 --enable-werror
@@ -297,6 +297,10 @@ CXX_FOR_BUILD=ccache clang++ -arch i386 -mmacosx-version-min=10.6
 Note that you will have to install autoconf and automake yourself
 before running autogen.sh. They are no longer included in Xcode 4.3
 (not even in the add-on "command line tools").
+
+The -mmacosx-version-min=10.6 is necessary when building for the iOS
+simulator to avoid clang replacing simple calls to fprintf with calls
+to fwrite$UNIX2003 which Xcode then warns that doesn't exist on iOS.
 
 
 Android
