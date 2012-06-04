@@ -1860,11 +1860,27 @@ sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rR
     if( eStatus != noErr )
         return false;
 
-    const long nMinX = (long)(+aGlyphMetrics.topLeft.x * mfFontScale - 0.5);
-    const long nMaxX = (long)(aGlyphMetrics.width * mfFontScale + 0.5) + nMinX;
-    const long nMinY = (long)(-aGlyphMetrics.topLeft.y * mfFontScale - 0.5);
-    const long nMaxY = (long)(aGlyphMetrics.height * mfFontScale + 0.5) + nMinY;
-    rRect = Rectangle( nMinX, nMinY, nMaxX, nMaxY );
+    const long nMinX = (long)(+aGlyphMetrics.topLeft.x * mfFontScale + 0.5);
+    const long nMinY = (long)(-aGlyphMetrics.topLeft.y * mfFontScale + 0.5);
+    const long nWidth  = (long)(aGlyphMetrics.width * mfFontScale + 0.5);
+    const long nHeight = (long)(aGlyphMetrics.height * mfFontScale + 0.5);
+    Rectangle aRect(Point(nMinX, nMinY), Size(nWidth, nHeight));
+
+    if ( mnATSUIRotation == 0 )
+        rRect = aRect;
+    else
+    {
+        const double fRadians = mnATSUIRotation * (M_PI/0xB40000);
+        const double nSin = sin( fRadians );
+        const double nCos = cos( fRadians );
+
+        rRect.Left() =  nCos*aRect.Left() + nSin*aRect.Top();
+        rRect.Top()  = -nSin*aRect.Left() - nCos*aRect.Top();
+
+        rRect.Right()  =  nCos*aRect.Right() + nSin*aRect.Bottom();
+        rRect.Bottom() = -nSin*aRect.Right() - nCos*aRect.Bottom();
+    }
+
     return true;
 }
 
