@@ -337,6 +337,7 @@ namespace sfx2
     sal_Bool DocumentMacroMode::hasMacroLibrary() const
     {
         sal_Bool bHasMacroLib = sal_False;
+#ifndef DISABLE_SCRIPTING
         try
         {
             Reference< XEmbeddedScripts > xScripts( m_pData->m_rDocumentAccess.getEmbeddedDocumentScripts() );
@@ -408,7 +409,7 @@ namespace sfx2
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-
+#endif
         return bHasMacroLib;
     }
 
