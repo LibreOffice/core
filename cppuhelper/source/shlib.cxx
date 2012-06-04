@@ -541,6 +541,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     // First test library names that aren't app-specific.
     static lib_to_component_mapping non_app_specific_map[] = {
         { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
+        { "bootstrap.uno.a", bootstrap_component_getFactory },
         { "configmgr.uno.a", configmgr_component_getFactory },
         { "expwrap.uno.a", expwrap_component_getFactory },
         { "fastsax.uno.a", fastsax_component_getFactory },
@@ -568,6 +569,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     if ( pSym == NULL)
     {
+        // The call the app-specific lo_get_libmap() to get a mapping for the rest
         const lib_to_component_mapping *map = lo_get_libmap();
         for (int i = 0; pSym == NULL && map[i].lib != NULL; ++i)
         {

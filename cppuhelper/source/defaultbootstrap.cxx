@@ -450,6 +450,7 @@ void Parser::handleComponent() {
             reader_.getUrl() + ": <component> is missing \"uri\" attribute",
             css::uno::Reference< css::uno::XInterface >());
     }
+#ifndef DISABLE_DYNLOADING
     try {
         attrUri_ = rtl::Uri::convertRelToAbs(reader_.getUrl(), attrUri_);
     } catch (const rtl::MalformedUriException & e) {
@@ -457,6 +458,7 @@ void Parser::handleComponent() {
             reader_.getUrl() + ": bad \"uri\" attribute: " + e.getMessage(),
             css::uno::Reference< css::uno::XInterface >());
     }
+#endif
 }
 
 void Parser::handleImplementation() {
