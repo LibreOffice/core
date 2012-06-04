@@ -41,8 +41,8 @@ TARGET=cmis
     @echo "Using system libcmis..."
 .ENDIF
 
-TARFILE_NAME=libcmis-0.2.0
-TARFILE_MD5=36c168b03593dfa386fba23a0c32d11b
+TARFILE_NAME=libcmis-0.2.1
+TARFILE_MD5=aba670de3beaafac1e287a9399dcc023
 
 .IF "$(debug)" != ""
 CFLAGS+=-g
