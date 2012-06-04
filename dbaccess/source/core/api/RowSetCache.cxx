@@ -79,6 +79,14 @@ using namespace ::osl;
 
 #define CHECK_MATRIX_POS(M) OSL_ENSURE(((M) >= static_cast<ORowSetMatrix::difference_type>(0)) && ((M) < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!")
 
+// This class calls m_pCacheSet->FOO_checked(..., sal_False)
+// (where FOO is absolute, last, previous)
+// when it does not immediately care about the values in the row's columns.
+// As a corollary, m_pCacheSet may be left in an inconsistent state,
+// and all ->fillFOO calls (and ->getFOO) may fail or give wrong results,
+// until m_pCacheSet is moved (or refreshed) again.
+// So always make sure m_pCacheSet is moved or refreshed before accessing column values.
+
 DBG_NAME(ORowSetCache)
 
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
@@ -1075,7 +1083,7 @@ sal_Bool ORowSetCache::moveWindow()
                 aIter = m_pMatrix->begin();
 
                 nPos    = m_nStartPos + 1;
-                bCheck  = m_pCacheSet->absolute_checked(nPos, sal_False);
+                bCheck  = m_pCacheSet->absolute_checked(nPos, sal_True);
                 for(; !aIter->is() && bCheck;++aIter, ++nPos)
                 {
                     OSL_ENSURE(aIter != m_pMatrix->end(),"Invalid iterator");
