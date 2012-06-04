@@ -66,6 +66,9 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 
 #include <tools/postx.h>
 
+#include <svtools/langhelp.hxx>
+#include <vcl/svapp.hxx>
+
 #include <unx/salunx.h>
 #include <sal/types.h>
 #include "unx/i18n_im.hxx"
@@ -755,6 +758,7 @@ sal_uInt16 SalDisplay::GetIndicatorState() const
 
 rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
+    rtl::OUString aLang = Application::GetSettings().GetUILocale().Language;
     rtl::OUString aRet;
 
     // return an empty string for keysyms that are not bound to
@@ -766,13 +770,16 @@ rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
             aRet = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ) );
         else
         {
-            const char *pString = XKeysymToString( nKeySym );
-            int n = strlen( pString );
-
-            if( n > 2 && pString[n-2] == '_' )
-                aRet = rtl::OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
-            else
-                aRet = rtl::OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+            aRet = ::vcl_sal::getKeysymReplacementName( aLang, nKeySym );
+            if( aRet.isEmpty() )
+            {
+                const char *pString = XKeysymToString( nKeySym );
+                int n = strlen( pString );
+                if( n > 2 && pString[n-2] == '_' )
+                    aRet = rtl::OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+                else
+                    aRet = rtl::OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+            }
         }
     }
     return aRet;
