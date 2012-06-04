@@ -86,6 +86,11 @@ namespace {
         }
     }
 
+    void XShapeDumper::dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, aColor);
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -106,18 +111,21 @@ namespace {
     void XShapeDumper::dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
+        uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
+        rtl::OUString aName;
 
         dumpPositionAsAttribute(xShape->getPosition(), xmlWriter);
         dumpSizeAsAttribute(xShape->getSize(), xmlWriter);
         uno::Reference< drawing::XShapeDescriptor > xDescr(xShape, uno::UNO_QUERY_THROW);
         dumpShapeDescriptorAsAttribute(xDescr, xmlWriter);
 
+        // uno::Sequence<beans::Property> aProperties = xPropSetInfo->getProperties();
+
         uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
         uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
 
-        uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
         uno::Any aAny = xPropSet->getPropertyValue("Name");
-        rtl::OUString aName;
         if (aAny >>= aName)
         {
             if (!aName.isEmpty())
@@ -140,8 +148,15 @@ namespace {
             uno::Any anotherAny = xPropSet->getPropertyValue("FillStyle");
             drawing::FillStyle eFillStyle;
             if( anotherAny >>= eFillStyle)
-            {
                     dumpFillStyleAsAttribute(eFillStyle, xmlWriter);
+        }
+        else if(xServiceInfo->supportsService("com.sun.star.util.Color"))
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("FillColor");
+            sal_Int32 aColor;
+            if(anotherAny >>= aColor)
+            {
+                dumpFillColorAsAttribute(aColor, xmlWriter);
             }
         }
 
