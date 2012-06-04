@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
 #include "launcher.hxx"
-#include "appusermodelid.hxx"
-
 
 #ifndef _WINDOWS_
 #   define WIN32_LEAN_AND_MEAN
@@ -38,14 +35,17 @@
 #endif
 #   include <windows.h>
 #   include <shellapi.h>
+#   include <winbase.h>
+#   include <shlwapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
 #endif
 
-
 #include <stdlib.h>
 #include <malloc.h>
+
+#define PACKVERSION(major,minor) MAKELONG(minor,major)
 
 
 #ifdef __MINGW32__
@@ -54,10 +54,40 @@ extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
-	// Set an explicit Application User Model ID for the process
+    // Set an explicit Application User Model ID for the process
+    
+    WCHAR szShell32[MAX_PATH];
+    GetSystemDirectoryW(szShell32, MAX_PATH);
+    wcscat(szShell32, L"\\Shell32.dll");
 
-    // FIXME: Comment this out until I find a fix for minGW.
-    // SetExplicitAppUserModelID(APPUSERMODELID);
+    HINSTANCE hinstDll = LoadLibraryW(szShell32);
+
+    if(hinstDll)
+    {
+        DLLVERSIONINFO dvi;
+        ZeroMemory(&dvi, sizeof(dvi));
+        dvi.cbSize = sizeof(dvi);
+
+        DLLGETVERSIONPROC pDllGetVersion;
+        pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinstDll, "DllGetVersion");
+        HRESULT hr = (*pDllGetVersion)(&dvi);
+
+        if(SUCCEEDED(hr))
+        {
+            DWORD dwVersion = PACKVERSION(dvi.dwMajorVersion, dvi.dwMinorVersion);
+            if(dwVersion >= PACKVERSION(6,1)) // Shell32 version in Windows 7
+            {
+                typedef HRESULT (WINAPI *SETCURRENTPROCESSEXPLICITAPPUSERMODELID)(PCWSTR);
+                SETCURRENTPROCESSEXPLICITAPPUSERMODELID pSetCurrentProcessExplicitAppUserModelID;
+                pSetCurrentProcessExplicitAppUserModelID =
+                    (SETCURRENTPROCESSEXPLICITAPPUSERMODELID)GetProcAddress(hinstDll, "SetCurrentProcessExplicitAppUserModelID");
+
+                if(pSetCurrentProcessExplicitAppUserModelID)
+                    (*pSetCurrentProcessExplicitAppUserModelID) (APPUSERMODELID);
+            }
+        }
+    }
+    FreeLibrary(hinstDll);    
 
     // Retreive startup info
 

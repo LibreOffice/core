@@ -37,10 +37,6 @@ $(eval $(call gb_Executable_use_libraries,simpress,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,simpress,\
-   appusermodelid \
-))
-
 $(eval $(call gb_Executable_add_libs,simpress,\
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
 ))
