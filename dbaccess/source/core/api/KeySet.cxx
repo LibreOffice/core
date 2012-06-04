@@ -391,6 +391,8 @@ sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLExcept
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::moveToBookmark" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
+    if (m_aKeyIter != m_aKeyMap.end())
+        refreshRow();
     return m_aKeyIter != m_aKeyMap.end();
 }
 
