@@ -146,23 +146,6 @@ SotStorageStream::~SotStorageStream()
 }
 
 /*************************************************************************
-|*    SotStorageStream::SyncSvStream()
-|*
-|*    Beschreibung: Der SvStream wird auf den Zustand des Standard-Streams
-|*                  gesetzt. Der Puffer des SvStreams wird weggeworfen.
-*************************************************************************/
-void SotStorageStream::SyncSvStream()
-{
-    if( pOwnStm )
-    {
-        pOwnStm->Flush();
-        sal_uLong nPos = pOwnStm->Tell();
-        SetError( pOwnStm->GetError() );
-        SvStream::SyncSvStream( nPos );
-    }
-}
-
-/*************************************************************************
 |*    SotStorageStream::ResetError()
 |*
 |*    Beschreibung

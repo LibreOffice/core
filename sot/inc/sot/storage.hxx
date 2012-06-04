@@ -80,10 +80,6 @@ public:
                         SotStorageStream();
                         SO2_DECL_BASIC_CLASS_DLL(SotStorageStream,SOTDATA())
 
-    using SvStream::SyncSvStream;
-    virtual void        SyncSvStream();
-    void                SyncSysStream() { SvStream::SyncSysStream(); }
-
     virtual void        ResetError();
 
     virtual void        SetSize( sal_uLong nNewSize );
