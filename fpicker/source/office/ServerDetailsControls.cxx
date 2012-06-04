@@ -26,6 +26,8 @@
  * instead of those above.
  */
 
+#include <rtl/uri.hxx>
+
 #include "PlaceEditDialog.hrc"
 
 #include "fpsofficeResMgr.hxx"
@@ -279,10 +281,13 @@ INetURLObject CmisDetailsContainer::getUrl( )
     rtl::OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) && !sRepo.isEmpty() )
     {
-        sal_Int32 pos = sBindingUrl.indexOf( rtl::OUString::createFromAscii( "://" ) );
-        if ( pos > 0 )
-            sBindingUrl = sBindingUrl.copy( pos + 3 );
-        sUrl = "cmis+atom://" + sBindingUrl + "?repo-id=" + sRepo;
+        rtl::OUString sEncodedBinding = rtl::Uri::encode(
+                sBindingUrl + "#" + sRepo,
+                rtl_UriCharClassUricNoSlash,
+                rtl_UriEncodeKeepEscapes,
+                RTL_TEXTENCODING_UTF8 );
+        sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
+        INetURLObject test( sUrl );
     }
 
     return INetURLObject( sUrl );
@@ -294,38 +299,13 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        rtl::OUString sBindingUrl( "http://" );
-        sBindingUrl += rUrl.GetHost( );
-        if ( rUrl.HasPort( ) )
-            sBindingUrl += rtl::OUString::valueOf( sal_Int32( rUrl.GetPort( ) ) );
-        sBindingUrl += rUrl.GetURLPath( );
-
-        // Split the query into bits and locate the repo-id key
-        rtl::OUString sQuery = rUrl.GetParam( );
+        rtl::OUString sBindingUrl;
         rtl::OUString sRepositoryId;
 
-        while ( !sQuery.isEmpty() )
-        {
-            sal_Int32 nPos = sQuery.indexOfAsciiL( "&", 1 );
-            rtl::OUString sSegment;
-            if ( nPos > 0 )
-            {
-                sSegment = sQuery.copy( 0, nPos );
-                sQuery = sQuery.copy( nPos + 1 );
-            }
-            else
-            {
-                sSegment = sQuery;
-                sQuery = rtl::OUString();
-            }
-
-            sal_Int32 nEqPos = sSegment.indexOfAsciiL( "=", 1 );
-            rtl::OUString key = sSegment.copy( 0, nEqPos );
-            rtl::OUString value = sSegment.copy( nEqPos +1 );
-
-            if ( key == "repo-id" )
-                sRepositoryId = value;
-        }
+        rtl::OUString sDecodedHost = rUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        INetURLObject aHostUrl( sDecodedHost );
+        sBindingUrl = aHostUrl.GetURLNoMark( );
+        sRepositoryId = aHostUrl.GetMark( );
 
         static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->SetText( sBindingUrl );
         static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_REPOSITORY ) )->SetText( sRepositoryId );

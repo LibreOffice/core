@@ -39,25 +39,21 @@ namespace cmis
     class URL
     {
         private:
-            INetURLObject m_aUrl;
             rtl::OUString m_sBindingUrl;
             rtl::OUString m_sRepositoryId;
-
-            std::map< rtl::OUString, rtl::OUString > m_aQuery;
+            rtl::OUString m_sPath;
+            rtl::OUString m_sUser;
+            rtl::OUString m_sPass;
 
         public:
             URL( rtl::OUString const & urlStr );
 
             std::map< int, std::string > getSessionParams( );
-            rtl::OUString getObjectId( );
+            rtl::OUString getObjectPath( );
             rtl::OUString getBindingUrl( );
-            void setObjectId( rtl::OUString sId );
+            void setObjectPath( rtl::OUString sPath );
 
             rtl::OUString asString( );
-
-        private:
-
-            void updateUrlQuery( );
     };
 }
 

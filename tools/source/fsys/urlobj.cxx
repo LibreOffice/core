@@ -428,8 +428,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, true },
         { "sftp", "sftp://", 22, true, true, false, true, true, true, true,
           true },
-        { "cmis+atom", "cmis+atom://", 0, true, true, false,
-          true, true, true, true, true } };
+        { "vnd.libreoffice.cmis+atom", "vnd.libreoffice.cmis+atom://", 0, true, true, false,
+          false, true, false, true, true } };
 
 
 // static
@@ -957,6 +957,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
             }
 
             case INET_PROT_VND_SUN_STAR_PKG:
+            case INET_PROT_CMIS_ATOM:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
@@ -964,8 +965,10 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     return false;
                 }
                 aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
-                rtl::OUStringBuffer aSynAuthority;
-                while (pPos < pEnd
+                rtl::OUStringBuffer aSynUser;
+
+                bool bHasUser = false;
+                while (pPos < pEnd && *pPos != '@'
                        && *pPos != '/' && *pPos != '?'
                        && *pPos != nFragmentDelimiter)
                 {
@@ -973,9 +976,38 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
                                                  cEscapePrefix, eMechanism,
                                                  eCharset, eEscapeType);
-                    appendUCS4(aSynAuthority, nUTF32, eEscapeType, bOctets,
-                               PART_AUTHORITY, cEscapePrefix, eCharset,
+                    appendUCS4(aSynUser, nUTF32, eEscapeType, bOctets,
+                               PART_USER_PASSWORD, cEscapePrefix, eCharset,
                                false);
+
+                    bHasUser = *pPos == '@';
+                }
+
+                rtl::OUStringBuffer aSynAuthority;
+                if ( !bHasUser )
+                {
+                    aSynAuthority = aSynUser;
+                }
+                else
+                {
+                    m_aUser.set(aSynAbsURIRef,
+                            aSynUser.makeStringAndClear(),
+                            aSynAbsURIRef.getLength());
+                    aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("@"));
+                    ++pPos;
+
+                    while (pPos < pEnd
+                           && *pPos != '/' && *pPos != '?'
+                           && *pPos != nFragmentDelimiter)
+                    {
+                        EscapeType eEscapeType;
+                        sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                                     cEscapePrefix, eMechanism,
+                                                     eCharset, eEscapeType);
+                        appendUCS4(aSynAuthority, nUTF32, eEscapeType, bOctets,
+                                   PART_AUTHORITY, cEscapePrefix, eCharset,
+                                   false);
+                    }
                 }
                 if (aSynAuthority.getLength() == 0)
                 {
@@ -2133,7 +2165,6 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { ".uno:", "staroffice.uno:", INET_PROT_UNO,
               PrefixInfo::INTERNAL },
             { "cid:", 0, INET_PROT_CID, PrefixInfo::OFFICIAL },
-            { "cmis+atom:", 0, INET_PROT_CMIS_ATOM, PrefixInfo::INTERNAL },
             { "data:", 0, INET_PROT_DATA, PrefixInfo::OFFICIAL },
             { "db:", "staroffice.db:", INET_PROT_DB, PrefixInfo::INTERNAL },
             { "file:", 0, INET_PROT_FILE, PrefixInfo::OFFICIAL },
@@ -2203,6 +2234,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "telnet:", 0, INET_PROT_TELNET, PrefixInfo::OFFICIAL },
             { "vim:", "staroffice.vim:", INET_PROT_VIM,
               PrefixInfo::INTERNAL },
+            { "vnd.libreoffice.cmis+atom:", 0, INET_PROT_CMIS_ATOM, PrefixInfo::INTERNAL },
             { "vnd.sun.star.cmd:", 0, INET_PROT_VND_SUN_STAR_CMD,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.expand:", 0, INET_PROT_VND_SUN_STAR_EXPAND,

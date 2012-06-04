@@ -28,6 +28,8 @@
 
 #include <libcmis/session-factory.hxx>
 
+#include <rtl/uri.hxx>
+
 #include "cmis_url.hxx"
 
 using namespace std;
@@ -37,42 +39,24 @@ using namespace std;
 
 namespace cmis
 {
-    URL::URL( rtl::OUString const & urlStr ) :
-        m_aUrl( urlStr )
+    URL::URL( rtl::OUString const & urlStr )
     {
+        rtl::OUString sBindingUrl;
+        rtl::OUString sRepositoryId;
 
-        rtl::OUString bindingUrl( "http://" );
-        bindingUrl += m_aUrl.GetHostPort( );
-        bindingUrl += m_aUrl.GetURLPath( );
-        m_sBindingUrl = bindingUrl;
+        INetURLObject aUrl( urlStr );
 
-        // Split the query into bits and locate the repo-id key
-        rtl::OUString query = m_aUrl.GetParam( );
-        while ( !query.isEmpty() )
-        {
-            sal_Int32 nPos = query.indexOfAsciiL( "&", 1 );
-            rtl::OUString segment;
-            if ( nPos > 0 )
-            {
-                segment = query.copy( 0, nPos );
-                query = query.copy( nPos + 1 );
-            }
-            else
-            {
-                segment = query;
-                query = rtl::OUString();
-            }
+        // Decode the authority to get the binding URL and repository id
+        rtl::OUString sDecodedHost = aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        INetURLObject aHostUrl( sDecodedHost );
+        m_sBindingUrl = aHostUrl.GetURLNoMark( );
+        m_sRepositoryId = aHostUrl.GetMark( );
 
-            sal_Int32 nEqPos = segment.indexOfAsciiL( "=", 1 );
-            rtl::OUString key = segment.copy( 0, nEqPos );
-            rtl::OUString value = segment.copy( nEqPos +1 );
+        m_sUser = aUrl.GetUser( );
+        m_sPass = aUrl.GetPass( );
 
-            if ( key == "repo-id" )
-                m_sRepositoryId = value;
-            else
-                m_aQuery[key] = value;
-        }
-
+        // Store the path to the object
+        m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
     }
 
     map< int, string > URL::getSessionParams( )
@@ -80,19 +64,15 @@ namespace cmis
         map< int, string > params;
         params[ATOMPUB_URL] = OUSTR_TO_STDSTR( m_sBindingUrl );
         params[REPOSITORY_ID] = OUSTR_TO_STDSTR( m_sRepositoryId );
-        params[USERNAME] = OUSTR_TO_STDSTR( m_aUrl.GetUser() );
-        params[PASSWORD] = OUSTR_TO_STDSTR( m_aUrl.GetPass() );
+        params[USERNAME] = OUSTR_TO_STDSTR( m_sUser );
+        params[PASSWORD] = OUSTR_TO_STDSTR( m_sPass );
 
         return params;
     }
 
-    rtl::OUString URL::getObjectId( )
+    rtl::OUString URL::getObjectPath( )
     {
-        rtl::OUString sResult;
-        map< rtl::OUString, rtl::OUString >::iterator it = m_aQuery.find( "id" );
-        if ( it != m_aQuery.end( ) )
-            sResult = it->second;
-        return sResult;
+        return m_sPath;
     }
 
     rtl::OUString URL::getBindingUrl( )
@@ -100,21 +80,26 @@ namespace cmis
         return m_sBindingUrl;
     }
 
-    void URL::setObjectId( rtl::OUString sId )
+    void URL::setObjectPath( rtl::OUString sPath )
     {
-        m_aQuery["id"] = sId;
-        updateUrlQuery( );
+        m_sPath = sPath;
     }
 
     rtl::OUString URL::asString( )
     {
-        return m_aUrl.GetMainURL( INetURLObject::NO_DECODE );
-    }
+        rtl::OUString sUrl;
+        rtl::OUString sEncodedBinding = rtl::Uri::encode(
+                m_sBindingUrl + "#" + m_sRepositoryId,
+                rtl_UriCharClassUricNoSlash,
+                rtl_UriEncodeKeepEscapes,
+                RTL_TEXTENCODING_UTF8 );
+        sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
 
-    void URL::updateUrlQuery( )
-    {
-        rtl::OUString sParam =  "repo-id=" + m_sRepositoryId + "&id=" + m_aQuery["id"];
-        m_aUrl.SetParam( sParam );
+        if ( m_sPath[0] != '/' )
+            sUrl += "/";
+        sUrl += m_sPath;
+
+        return sUrl;
     }
 }
 

@@ -171,7 +171,7 @@ namespace cmis
             pProvider->registerSession( url.getBindingUrl( ), m_pSession );
         }
 
-        m_sObjectId = url.getObjectId( );
+        m_sObjectPath = url.getObjectPath( );
         m_sBindingUrl = url.getBindingUrl( );
     }
 
@@ -197,7 +197,7 @@ namespace cmis
             pProvider->registerSession( url.getBindingUrl( ), m_pSession );
         }
 
-        m_sObjectId = url.getObjectId( );
+        m_sObjectPath = url.getObjectPath( );
         m_sBindingUrl = url.getBindingUrl( );
 
         // Get the object type
@@ -215,12 +215,12 @@ namespace cmis
         {
             if ( !m_pObject.get() )
             {
-                if ( !m_sObjectId.isEmpty( ) )
-                    m_pObject = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+                if ( !m_sObjectPath.isEmpty( ) )
+                    m_pObject = m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
                 else
                 {
                     m_pObject = m_pSession->getRootFolder( );
-                    m_sObjectId = rtl::OUString::createFromAscii( m_pObject->getId( ).c_str( ) );
+                    m_sObjectPath = "/";
                 }
             }
         }
@@ -283,29 +283,48 @@ namespace cmis
             }
             else if ( rProp.Name == "Title" )
             {
-                string name = getObject()->getName();
-                xRow->appendString( rProp, rtl::OUString::createFromAscii( name.c_str() ) );
+                rtl::OUString sTitle;
+                if ( getObject() )
+                    sTitle = rtl::OUString::createFromAscii( getObject()->getName().c_str( ) );
+                else if ( m_pObjectProps.size() > 0 )
+                {
+                    map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                    if ( it != m_pObjectProps.end( ) )
+                    {
+                        vector< string > values = it->second->getStrings( );
+                        if ( values.size() > 0 )
+                            sTitle = rtl::OUString::createFromAscii( values.front( ).c_str( ) );
+                    }
+                }
+
+                // Nothing worked... get it from the path
+                if ( sTitle.isEmpty( ) )
+                {
+                    rtl::OUString sPath = m_sObjectPath;
+
+                    // Get rid of the trailing slash problem
+                    if ( sPath[ sPath.getLength( ) - 1 ] == '/' )
+                        sPath = sPath.copy( 0, sPath.getLength() - 1 );
+
+                    // Get the last segment
+                    sal_Int32 nPos = sPath.lastIndexOf( '/' );
+                    if ( nPos > 0 )
+                        sTitle = sPath.copy( nPos + 1 );
+                }
+
+                if ( !sTitle.isEmpty( ) )
+                    xRow->appendString( rProp, sTitle );
+                else
+                    xRow->appendVoid( rProp );
             }
             else if ( rProp.Name == "TitleOnServer" )
             {
                 string path;
-                libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
-                if ( NULL != document )
-                {
-                    vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
-                    if ( parents.size() > 0 )
-                        path = parents.front( )->getPath( );
-
-                    if ( path[ path.length() - 1 ] != '/' )
-                        path += "/";
-                    path += getObject()->getName( );
-                }
+                vector< string > paths = getObject( )->getPaths( );
+                if ( paths.size( ) > 0 )
+                    path = paths.front( );
                 else
-                {
-                    libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject().get( ) );
-                    if ( NULL != folder )
-                        path = folder->getPath( );
-                }
+                    path = getObject()->getName( );
 
                 xRow->appendString( rProp, rtl::OUString::createFromAscii( path.c_str() ) );
             }
@@ -352,8 +371,8 @@ namespace cmis
         bool bExists = true;
         try
         {
-            if ( !m_sObjectId.isEmpty( ) )
-                libcmis::ObjectPtr object = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+            if ( !m_sObjectPath.isEmpty( ) )
+                m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
             // No need to handle the root folder case... how can it not exists?
         }
         catch ( const libcmis::Exception& )
@@ -479,7 +498,7 @@ namespace cmis
             // For transient content, the URL is the one of the parent
             if ( m_bTransient )
             {
-                string sNewId;
+                rtl::OUString sNewPath;
 
                 // Try to get the object from the server if there is any
                 libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
@@ -503,7 +522,7 @@ namespace cmis
                     try
                     {
                         object = m_pSession->getObjectByPath( newPath );
-                        sNewId = object->getId( );
+                        sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -540,7 +559,7 @@ namespace cmis
                         if ( bIsFolder )
                         {
                             libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
-                            sNewId = pNew->getId( );
+                            sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
                         }
                         else
                         {
@@ -548,16 +567,16 @@ namespace cmis
                             uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                             copyData( xInputStream, xOutput );
                             libcmis::DocumentPtr pNew = pFolder->createDocument( m_pObjectProps, pOut, string() );
-                            sNewId = pNew->getId( );
+                            sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
                         }
                     }
 
-                    if ( !sNewId.empty( ) )
+                    if ( !sNewPath.isEmpty( ) )
                     {
                         // Update the current content: it's no longer transient
-                        m_sObjectId = rtl::OUString::createFromAscii( sNewId.c_str( ) );
+                        m_sObjectPath = sNewPath;
                         URL aUrl( m_sURL );
-                        aUrl.setObjectId( m_sObjectId );
+                        aUrl.setObjectPath( m_sObjectPath );
                         m_sURL = aUrl.asString( );
                         m_pObject.reset( );
                         m_pObjectType.reset( );
@@ -790,8 +809,7 @@ namespace cmis
 
         SAL_INFO( "cmisucp", "Content::getParentURL()" );
 
-        string parentId;
-
+        string parentPath;
         try
         {
             libcmis::ObjectPtr pObj = getObject( );
@@ -800,25 +818,25 @@ namespace cmis
             {
                 vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
                 if ( parents.size( ) > 0 )
-                    parentId = parents.front( )->getId( );
+                    parentPath = parents.front( )->getPath( );
             }
             else
             {
                 libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
                 if ( NULL != folder )
-                    parentId = folder->getFolderParent( )->getId( );
+                    parentPath = folder->getFolderParent( )->getPath( );
             }
         }
         catch ( const libcmis::Exception & )
         {
             // We may have an exception if we don't have the rights to
-            // get the parent ID
+            // get the parents
         }
 
-        if ( !parentId.empty() )
+        if ( !parentPath.empty() )
         {
             URL aUrl( m_sURL );
-            aUrl.setObjectId( rtl::OUString::createFromAscii( parentId.c_str( ) ) );
+            aUrl.setObjectPath( rtl::OUString::createFromAscii( parentPath.c_str( ) ) );
             sRet = aUrl.asString( );
         }
 

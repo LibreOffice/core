@@ -90,11 +90,15 @@ namespace cmis
 
         if ( getResult( nIndex ) )
         {
-            string sObjectId = maResults[nIndex]->pObject->getId( );
+            string sObjectPath;
+            vector< string > paths = maResults[nIndex]->pObject->getPaths( );
+            if ( paths.size( ) > 0 )
+                sObjectPath = paths.front( );
+            // TODO Handle the unfiled objects with their id... but can they manage to come here?
 
-            // Get the URL from the Id
+            // Get the URL from the Path
             URL aUrl( mxContent->getIdentifier( )->getContentIdentifier( ) );
-            aUrl.setObjectId( rtl::OUString::createFromAscii( sObjectId.c_str( ) ) );
+            aUrl.setObjectPath( rtl::OUString::createFromAscii( sObjectPath.c_str( ) ) );
             rtl::OUString aId = aUrl.asString( );
 
             maResults[ nIndex ]->aId = aId;
