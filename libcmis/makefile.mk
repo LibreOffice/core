@@ -44,6 +44,10 @@ TARGET=cmis
 TARFILE_NAME=libcmis-0.2.1
 TARFILE_MD5=aba670de3beaafac1e287a9399dcc023
 
+.IF "$(OS)$(COMP)" == "WNTMSC"
+PATCH_FILES+=boost-win.patch
+.ENDIF
+
 .IF "$(debug)" != ""
 CFLAGS+=-g
 .ELSE
