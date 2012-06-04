@@ -41,8 +41,8 @@ TARGET=cmis
     @echo "Using system libcmis..."
 .ENDIF
 
-TARFILE_NAME=libcmis-0.2.1
-TARFILE_MD5=aba670de3beaafac1e287a9399dcc023
+TARFILE_NAME=libcmis-0.2.2
+TARFILE_MD5=ce31ac7b92cb5e66459f67213bbb6168
 
 .IF "$(OS)$(COM)" == "WNTMSC"
 PATCH_FILES+=boost-win.patch
