@@ -29,6 +29,7 @@
 #include "ShapeFilterBase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/ole/vbaproject.hxx"
+#include "oox/drawingml/theme.hxx"
 
 namespace oox {
 namespace shape {
@@ -47,7 +48,12 @@ ShapeFilterBase::~ShapeFilterBase()
 
 const ::oox::drawingml::Theme* ShapeFilterBase::getCurrentTheme() const
 {
-    return 0;
+    return mpTheme.get();
+}
+
+void ShapeFilterBase::setCurrentTheme(::oox::drawingml::ThemePtr pTheme)
+{
+    mpTheme = pTheme;
 }
 
 ::oox::vml::Drawing* ShapeFilterBase::getVmlDrawing()
@@ -73,6 +79,42 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
 ::rtl::OUString ShapeFilterBase::implGetImplementationName() const
 {
     return ::rtl::OUString();
+}
+
+/// Graphic helper for shapes, that can manage color schemes.
+class ShapeGraphicHelper : public GraphicHelper
+{
+public:
+    explicit            ShapeGraphicHelper( const ShapeFilterBase& rFilter );
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+private:
+    const ShapeFilterBase& mrFilter;
+};
+
+ShapeGraphicHelper::ShapeGraphicHelper( const ShapeFilterBase& rFilter ) :
+    GraphicHelper( rFilter.getComponentContext(), rFilter.getTargetFrame(), rFilter.getStorage() ),
+    mrFilter( rFilter )
+{
+}
+
+sal_Int32 ShapeGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
+{
+    return mrFilter.getSchemeColor( nToken );
+}
+
+GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
+{
+    return new ShapeGraphicHelper( *this );
+}
+
+sal_Int32 ShapeFilterBase::getSchemeColor( sal_Int32 nToken ) const
+{
+    sal_Int32 nColor = 0;
+
+    if (mpTheme.get())
+        mpTheme->getClrScheme().getColor( nToken, nColor );
+
+    return nColor;
 }
 
 }

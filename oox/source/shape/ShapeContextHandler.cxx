@@ -26,11 +26,17 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+
 #include "ShapeContextHandler.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
+#include "oox/drawingml/shapegroupcontext.hxx"
+#include "oox/drawingml/shapestylecontext.hxx"
+#include "oox/drawingml/textbodycontext.hxx"
+#include "oox/drawingml/themefragmenthandler.hxx"
 
 namespace oox { namespace shape {
 
@@ -172,7 +178,21 @@ void SAL_CALL ShapeContextHandler::startFastElement
     mpThemePtr.reset(new Theme());
 
     if (Element == DGM_TOKEN(relIds))
+    {
+        // Parse the theme relation, if available; the diagram won't have colors without it.
+        if (!msRelationFragmentPath.isEmpty())
+        {
+            FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+            rtl::OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
+            uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
+            mxFilterBase->importFragment(new ThemeFragmentHandler(*mxFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
+            ShapeFilterBase* pShapeFilterBase(dynamic_cast<ShapeFilterBase*>(mxFilterBase.get()));
+            if (pShapeFilterBase)
+                pShapeFilterBase->setCurrentTheme(mpThemePtr);
+        }
+
         createFastChildContext(Element, Attribs);
+    }
 
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
 
@@ -252,6 +272,48 @@ void SAL_CALL ShapeContextHandler::characters(const ::rtl::OUString & aChars)
         xContextHandler->characters(aChars);
 }
 
+/// Generic (i.e. not specific to PPTX) handler for the prerendered diagram parsing.
+class ShapeExtDrawingFragmentHandler : public ::oox::core::FragmentHandler
+{
+public:
+    ShapeExtDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath,
+        oox::drawingml::ShapePtr pGroupShapePtr ) throw()
+        : FragmentHandler( rFilter, rFragmentPath ),
+        mpGroupShapePtr( pGroupShapePtr )
+    {
+    }
+
+    virtual ~ShapeExtDrawingFragmentHandler() throw()
+    {
+    }
+
+    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
+    {
+    }
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*Attribs*/ ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
+    {
+        uno::Reference< XFastContextHandler > xRet;
+
+        switch( Element )
+        {
+            case DSP_TOKEN( spTree ):
+                xRet.set( new ShapeGroupContext(*this, ShapePtr((Shape*)0), mpGroupShapePtr));
+                break;
+            default:
+                break;
+        }
+
+        if( !xRet.is() )
+            xRet = getFastContextHandler();
+
+        return xRet;
+    }
+
+private:
+        oox::drawingml::ShapePtr        mpGroupShapePtr;
+};
+
 // ::com::sun::star::xml::sax::XFastShapeContextHandler:
 uno::Reference< drawing::XShape > SAL_CALL
 ShapeContextHandler::getShape() throw (uno::RuntimeException)
@@ -270,8 +332,25 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         else if (mxDiagramShapeContext.is())
         {
             basegfx::B2DHomMatrix aMatrix;
-            mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
-            xResult = mpShape->getXShape();
+            if (mpShape->getExtDrawings().size() == 0)
+            {
+                xResult = mpShape->getXShape();
+                mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
+            }
+            else
+            {
+                // Prerendered diagram output is available, then use that, and throw away the original result.
+                for (std::vector<rtl::OUString>::const_iterator aIt = mpShape->getExtDrawings().begin(); aIt != mpShape->getExtDrawings().end(); ++aIt)
+                {
+                    DiagramGraphicDataContext* pDiagramGraphicDataContext = dynamic_cast<DiagramGraphicDataContext*>(mxDiagramShapeContext.get());
+                    rtl::OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(*aIt));
+                    oox::drawingml::ShapePtr pShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) );
+                    mxFilterBase->importFragment(new ShapeExtDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
+                    pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
+                    xResult = pShapePtr->getXShape();
+                }
+                mpShape.reset((Shape*)0);
+            }
         }
         else if (mpShape.get() != NULL)
         {

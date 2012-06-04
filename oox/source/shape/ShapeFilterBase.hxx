@@ -34,6 +34,7 @@
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 
 namespace oox {
 namespace shape {
@@ -54,6 +55,8 @@ public:
     /** Has to be implemented by each filter, returns the current theme. */
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
 
+    void setCurrentTheme(::oox::drawingml::ThemePtr pTheme);
+
     /** Has to be implemented by each filter to return the collection of VML shapes. */
     virtual ::oox::vml::Drawing* getVmlDrawing();
 
@@ -65,11 +68,15 @@ public:
     virtual bool importDocument() { return true; }
     virtual bool exportDocument() { return true; }
 
+    sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
+
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual rtl::OUString implGetImplementationName() const;
+    virtual GraphicHelper* implCreateGraphicHelper() const;
 
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
+    ::oox::drawingml::ThemePtr mpTheme;
 };
 
 // ============================================================================
