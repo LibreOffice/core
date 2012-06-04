@@ -5565,67 +5565,93 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 
 void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 {
-    salhelper::SingletonRef<SwCalendarWrapper>* pCalendar = s_getCalendarWrapper();
-    (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
+    enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
+    // Determine word capitalization
+    const CharClass& rCC = GetAppCharClass();
+    const String sWordLower = rCC.lowercase( rWord );
+    Capitalization aWordCase = CASE_OTHER;
+    if ( rWord.Len() > 0 )
     {
-        uno::Sequence< i18n::CalendarItem2 > aNames(
-                                            (*pCalendar)->getMonths() );
-        for( int n = 0; n < 2; ++n )
+        if ( rWord.GetChar(0) == sWordLower.GetChar(0) )
         {
-            for( long nPos = 0, nEnd = aNames.getLength(); nPos < nEnd; ++nPos )
+            if ( rWord == sWordLower )
+                aWordCase = CASE_LOWER;
+        }
+        else
+        {
+            // First character is not lower case i.e. assume upper or title case
+            String sWordSentence = sWordLower;
+            sWordSentence.SetChar( 0, rWord.GetChar(0) );
+            if ( rWord == sWordSentence )
+                aWordCase = CASE_SENTENCE;
+            else
             {
-                String sStr( aNames[ nPos ].FullName );
-                if( rWord.Len() + 1 < sStr.Len() &&
-
-//!!! UNICODE: missing interface
-                    COMPARE_EQUAL == rWord.CompareIgnoreCaseToAscii(
-                                        sStr, rWord.Len() ))
-                {
-                    pHelpStrings->push_back( sStr );
-                }
+                if ( rWord == static_cast<String>( rCC.uppercase( rWord ) ) )
+                    aWordCase = CASE_UPPER;
             }
-            if( !n )                    // get data for the second loop
-                aNames = (*pCalendar)->getDays();
         }
     }
 
-    // and than add all words from the AutoCompleteWord-List
-    const SwAutoCompleteWord& rACLst = rSh.GetAutoCompleteWords();
-    sal_uInt16 nStt, nEnd;
-    if( rACLst.GetRange( rWord, nStt, nEnd ) )
-    {
-        while( nStt < nEnd )
-        {
-            const String& rS = rACLst[ nStt ];
-            // only if the count of chars
-            // from the suggest greater as the
-            // actual word
-            if( rS.Len() > rWord.Len() )
-            {
-                CharClass &rCC = GetAppCharClass();
-                String aMatch;
-                int upper = 0, lower = 0, letters = 0;
-                for( xub_StrLen i = 0; i < rWord.Len(); i++ ) {
-                    sal_Int32 nCharType = rCC.getCharacterType( rWord, i );
-                    if( !CharClass::isLetterType( nCharType ) )
-                        continue;
-                    letters++;
-                    if( i18n::KCharacterType::LOWER & nCharType )
-                        lower++;
-                    if( i18n::KCharacterType::UPPER & nCharType )
-                        upper++;
-                }
-                if (lower == letters)
-                    aMatch = rCC.lowercase( rS );
-                else if (upper == letters)
-                    aMatch = rCC.uppercase( rS );
-                else // mixed case - use what we have
-                    aMatch = rS;
+    salhelper::SingletonRef<SwCalendarWrapper>* pCalendar = s_getCalendarWrapper();
+    (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
 
-                pHelpStrings->push_back( aMatch );
+    // Add matching calendar month and day names
+    uno::Sequence< i18n::CalendarItem2 > aNames( (*pCalendar)->getMonths() );
+    for ( sal_uInt16 i = 0; i < 2; ++i )
+    {
+        for ( long n = 0; n < aNames.getLength(); ++n )
+        {
+            const String& rStr( aNames[n].FullName );
+            // Check string longer than word and case insensitive match
+            if( rStr.Len() > rWord.Len() &&
+                static_cast<String>( rCC.lowercase( rStr, 0, rWord.Len() ) )
+                == sWordLower )
+            {
+                if ( aWordCase == CASE_LOWER )
+                    pHelpStrings->push_back( rCC.lowercase( rStr ) );
+                else if ( aWordCase == CASE_SENTENCE )
+                {
+                    String sTmp = rCC.lowercase( rStr );
+                    sTmp.SetChar( 0, rStr.GetChar(0) );
+                    pHelpStrings->push_back( sTmp );
+                }
+                else if ( aWordCase == CASE_UPPER )
+                    pHelpStrings->push_back( rCC.uppercase( rStr ) );
+                else // CASE_OTHER - use retrieved capitalization
+                    pHelpStrings->push_back( rStr );
             }
-            ++nStt;
+        }
+        // Data for second loop iteration
+        if ( i == 0 )
+            aNames = (*pCalendar)->getDays();
+    }
+
+    // Add matching words from AutoCompleteWord list
+    const SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
+    sal_uInt16 nPos, nEnd;
+    // TODO - GetRange only performs a case insensitive match for ASCII
+    if ( rACList.GetRange( rWord, nPos, nEnd ) )
+    {
+        for ( ; nPos < nEnd; ++nPos )
+        {
+            const String& rStr = rACList[nPos];
+            // Check string longer than word
+            if ( rStr.Len() > rWord.Len() )
+            {
+                if ( aWordCase == CASE_LOWER )
+                    pHelpStrings->push_back( rCC.lowercase( rStr ) );
+                else if ( aWordCase == CASE_SENTENCE )
+                {
+                    String sTmp = rCC.lowercase( rStr );
+                    sTmp.SetChar( 0, rStr.GetChar(0) );
+                    pHelpStrings->push_back( sTmp );
+                }
+                else if ( aWordCase == CASE_UPPER )
+                    pHelpStrings->push_back( rCC.uppercase( rStr ) );
+                else // CASE_OTHER - use retrieved capitalization
+                    pHelpStrings->push_back( rStr );
+            }
         }
     }
 }
