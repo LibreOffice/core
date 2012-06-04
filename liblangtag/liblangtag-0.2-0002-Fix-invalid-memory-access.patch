@@ -1,0 +1,50 @@
+From cf8dfcf1604e534f4c9eccbd9a05571c8a9dc74d Mon Sep 17 00:00:00 2001
+Message-Id: <cf8dfcf1604e534f4c9eccbd9a05571c8a9dc74d.1337190149.git.erack@redhat.com>
+From: Akira TAGOH <akira@tagoh.org>
+Date: Mon, 5 Mar 2012 18:10:10 +0900
+Subject: [PATCH] Fix invalid memory access
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------erAck-patch-parts"
+
+This is a multi-part message in MIME format.
+--------------erAck-patch-parts
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+---
+ liblangtag/lt-extension.c |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+
+--------------erAck-patch-parts
+Content-Type: text/x-patch; name="0001-Fix-invalid-memory-access.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-Fix-invalid-memory-access.patch"
+
+diff --git a/liblangtag/lt-extension.c b/liblangtag/lt-extension.c
+index 806712e..502bfd5 100644
+--- a/liblangtag/lt-extension.c
++++ misc/build/liblangtag-0.2/liblangtag/lt-extension.c
+@@ -196,6 +196,8 @@ lt_extension_cancel_tag(lt_extension_t *extension)
+ 				if (ll->prev)
+ 					ll->prev->next = NULL;
+ 				ll->prev = NULL;
++				if (ll == l)
++					l = NULL;
+ 				g_list_free(ll);
+ 				break;
+ 			}
+@@ -204,7 +206,8 @@ lt_extension_cancel_tag(lt_extension_t *extension)
+ 			else
+ 				g_string_append(extension->cached_tag, ll->data);
+ 		}
+-		g_list_free(l);
++		if (l)
++			g_list_free(l);
+ 		g_strfreev(tags);
+ 	}
+ }
+
+--------------erAck-patch-parts--
+
+

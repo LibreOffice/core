@@ -1,0 +1,3 @@
+lt	liblangtag	: soltools GLIB:glib LIBXML2:libxml2 NULL
+lt	liblangtag	usr1	-	all	lt_mkout NULL
+lt	liblangtag	nmake	-	all	lt_liblangtag NULL

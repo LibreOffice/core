@@ -1,0 +1,29 @@
+mkdir: %_DEST%\inc\liblangtag
+
+..\%__SRC%\misc\build\liblangtag*\liblangtag\langtag.h              %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-database.h          %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-error.h             %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-extension.h         %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-extlang-db.h        %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-extlang.h           %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-ext-module-data.h   %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-ext-module.h        %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-gobject.h           %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-grandfathered-db.h  %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-grandfathered.h     %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-lang-db.h           %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-lang.h              %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-redundant-db.h      %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-redundant.h         %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-region-db.h         %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-region.h            %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-script-db.h         %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-script.h            %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-tag.h               %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-variant-db.h        %_DEST%\inc\liblangtag\
+..\%__SRC%\misc\build\liblangtag*\liblangtag\lt-variant.h           %_DEST%\inc\liblangtag\
+
+..\%__SRC%\lib\* %_DEST%\lib\
+..\%__SRC%\bin\* %_DEST%\bin\
+
+linklib: liblangtag.*.*.*
