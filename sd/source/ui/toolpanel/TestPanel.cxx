@@ -116,8 +116,7 @@ TestPanel::TestPanel (::Window& i_rParent)
     ScrollPanel* pScrollPanel = new ScrollPanel (this);
 
     ListBox* pBox = new ListBox (pScrollPanel->GetWindow());
-    int i;
-    for (i=1; i<=20; i++)
+    for (sal_Int32 i=1; i<=20; i++)
     {
         XubString aString (XubString::CreateFromAscii("Text "));
         aString.Append (XubString::CreateFromInt32(i));
@@ -131,7 +130,7 @@ TestPanel::TestPanel (::Window& i_rParent)
         "");
 
     pBox = new ListBox (pScrollPanel->GetWindow());
-    for (i=1; i<=20; i++)
+    for (sal_Int32 i=1; i<=20; i++)
     {
         XubString aString (XubString::CreateFromAscii("More Text "));
         aString.Append (XubString::CreateFromInt32(i));
