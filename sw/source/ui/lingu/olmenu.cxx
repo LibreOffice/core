@@ -390,6 +390,7 @@ SwSpellPopup::SwSpellPopup(
     OSL_ENSURE(xSpellAlt.is(), "no spelling alternatives available");
 
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     nCheckedLanguage = LANGUAGE_NONE;
     if (xSpellAlt.is())
@@ -408,11 +409,15 @@ SwSpellPopup::SwSpellPopup(
     {
         Image aImage;
         OUString aSuggestionImageUrl;
-        uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
-        if (xNamed.is())
+
+        if (bUseImagesInMenus)
         {
-            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName() );
-            aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
+            uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
+            if (xNamed.is())
+            {
+                aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName() );
+                aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
+            }
         }
 
         InsertSeparator(0);
@@ -496,15 +501,18 @@ SwSpellPopup::SwSpellPopup(
                 pMenu->InsertItem( nItemId, xDicTmp->getName() );
                 aDicNameSingle = xDicTmp->getName();
 
-                uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
-                if (xSvcInfo.is())
+                if (bUseImagesInMenus)
                 {
-                    OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                            xSvcInfo->getImplementationName() ) );
-                    if (!aDictionaryImageUrl.isEmpty())
+                    uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
+                    if (xSvcInfo.is())
                     {
-                        Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
-                        pMenu->SetItemImage( nItemId, aImage );
+                        OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
+                                xSvcInfo->getImplementationName() ) );
+                        if (!aDictionaryImageUrl.isEmpty())
+                        {
+                            Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
+                            pMenu->SetItemImage( nItemId, aImage );
+                        }
                     }
                 }
 
@@ -550,10 +558,13 @@ SwSpellPopup::SwSpellPopup(
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, aLangTable_Paragraph );
     EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
 
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-    Image rImg = ::GetImage( xFrame,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
-    SetItemImage( MN_SPELLING_DLG, rImg );
+    if (bUseImagesInMenus)
+    {
+        uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+        Image rImg = ::GetImage( xFrame,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+        SetItemImage( MN_SPELLING_DLG, rImg );
+    }
 
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -576,12 +587,14 @@ bGrammarResults( true ),
 aInfo16( SW_RES(IMG_INFO_16) )
 {
     nCheckedLanguage = SvxLocaleToLanguage( rResult.aLocale );
+    bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     sal_uInt16 nPos = 0;
     OUString aMessageText( rResult.aErrors[ nErrorInResult ].aShortComment );
     InsertSeparator( nPos++ );
     InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
-    SetItemImage( MN_SHORT_COMMENT, aInfo16 );
+    if (bUseImagesInMenus)
+        SetItemImage( MN_SHORT_COMMENT, aInfo16 );
 
     // Add an item to show detailled infos if the FullCommentURL property is defined
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
@@ -611,11 +624,15 @@ aInfo16( SW_RES(IMG_INFO_16) )
     {
         Image aImage;
         OUString aSuggestionImageUrl;
-        uno::Reference< lang::XServiceInfo > xInfo( rResult.xProofreader, uno::UNO_QUERY );
-        if (xInfo.is())
+
+        if (bUseImagesInMenus)
         {
-            aSuggestionImageUrl = SvtLinguConfig().GetSpellAndGrammarContextSuggestionImage( xInfo->getImplementationName() );
-            aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
+            uno::Reference< lang::XServiceInfo > xInfo( rResult.xProofreader, uno::UNO_QUERY );
+            if (xInfo.is())
+            {
+                aSuggestionImageUrl = SvtLinguConfig().GetSpellAndGrammarContextSuggestionImage( xInfo->getImplementationName() );
+                aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
+            }
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;
@@ -696,10 +713,13 @@ aInfo16( SW_RES(IMG_INFO_16) )
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, aLangTable_Paragraph );
     EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
 
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-    Image rImg = ::GetImage( xFrame,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
-    SetItemImage( MN_SPELLING_DLG, rImg );
+    if (bUseImagesInMenus)
+    {
+        uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+        Image rImg = ::GetImage( xFrame,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+        SetItemImage( MN_SPELLING_DLG, rImg );
+    }
 
     //////////////////////////////////////////////////////////////////////////////////
 
