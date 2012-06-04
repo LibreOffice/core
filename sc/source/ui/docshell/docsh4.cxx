@@ -1788,10 +1788,17 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
 
 void ScDocShell::GetState( SfxItemSet &rSet )
 {
+    bool bTabView = GetBestViewShell(true) != NULL;
+
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
-    while ( nWhich )
+    for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
     {
+        if (!bTabView)
+        {
+            rSet.DisableItem(nWhich);
+            continue;
+        }
+
         switch (nWhich)
         {
             case FID_AUTO_CALC:
@@ -1856,8 +1863,6 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 }
                 break;
         }
-
-        nWhich = aIter.NextWhich();
     }
 }
 
