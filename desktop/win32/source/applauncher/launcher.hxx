@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include <winbase.h>
+#include <windef.h>
 #include <shlwapi.h>
 
 #ifndef _INC_TCHAR
