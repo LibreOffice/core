@@ -49,6 +49,10 @@ PathFormat()
     fi
 }
 
+if test -n "$SOLARENV" ; then
+    AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
+fi
+
 echo "********************************************************************"
 echo "*"
 echo "*   Running ${PACKAGE_NAME} build configuration."
