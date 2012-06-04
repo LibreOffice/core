@@ -197,11 +197,15 @@ ScTableConditionalFormat::ScTableConditionalFormat(
                 if (pDoc->IsInExternalReferenceMarking())
                     pFormat->MarkUsedExternalReferences();
 
-                sal_uInt16 nEntryCount = pFormat->Count();
-                for (sal_uInt16 i=0; i<nEntryCount; i++)
+                size_t nEntryCount = pFormat->size();
+                for (size_t i=0; i<nEntryCount; i++)
                 {
                     ScCondFormatEntryItem aItem;
-                    const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
+                    const ScFormatEntry* pFrmtEntry = pFormat->GetEntry(i);
+                    if(pFrmtEntry->GetType() != condformat::CONDITION)
+                        continue;
+
+                    const ScCondFormatEntry* pFormatEntry = static_cast<const ScCondFormatEntry*>(pFrmtEntry);
                     aItem.meMode = pFormatEntry->GetOperation();
                     aItem.maPos = pFormatEntry->GetValidSrcPos();
                     aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, eGrammar);
@@ -244,26 +248,26 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, aData.meGrammar1 );
         FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, aData.meGrammar2 );
 
-        ScCondFormatEntry aCoreEntry( aData.meMode, aData.maExpr1, aData.maExpr2,
+        ScCondFormatEntry* pCoreEntry = new ScCondFormatEntry( aData.meMode, aData.maExpr1, aData.maExpr2,
             pDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
 
         if ( aData.maPosStr.Len() )
-            aCoreEntry.SetSrcString( aData.maPosStr );
+            pCoreEntry->SetSrcString( aData.maPosStr );
 
         if ( aData.maTokens1.getLength() )
         {
             ScTokenArray aTokenArray;
             if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens1) )
-                aCoreEntry.SetFormula1(aTokenArray);
+                pCoreEntry->SetFormula1(aTokenArray);
         }
 
         if ( aData.maTokens2.getLength() )
         {
             ScTokenArray aTokenArray;
             if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens2) )
-                aCoreEntry.SetFormula2(aTokenArray);
+                pCoreEntry->SetFormula2(aTokenArray);
         }
-        rFormat.AddEntry( aCoreEntry );
+        rFormat.AddEntry( pCoreEntry );
     }
 }
 

@@ -3842,69 +3842,73 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                 ScRangeStringConverter::GetStringFromRangeList( sRanges, pRangeList, pDoc, formula::FormulaGrammar::CONV_ODF );
                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, sRanges);
                 SvXMLElementExport aElementCondFormat(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, true, true);
-                sal_Int32 nEntries = itr->Count();
-                for(sal_Int32 i = 0; i < nEntries; ++i)
+                size_t nEntries = itr->size();
+                for(size_t i = 0; i < nEntries; ++i)
                 {
-                    const ScCondFormatEntry* pEntry = itr->GetEntry(i);
-                    rtl::OUStringBuffer aCond;
-                    switch(pEntry->GetOperation())
+                    const ScFormatEntry* pFormatEntry = itr->GetEntry(i);
+                    if(pFormatEntry->GetType()==condformat::CONDITION)
                     {
-                        case SC_COND_EQUAL:
-                            aCond.append('=');
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            break;
-                        case SC_COND_LESS:
-                            aCond.append('<');
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            break;
-                        case SC_COND_GREATER:
-                            aCond.append('>');
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            break;
-                        case SC_COND_EQLESS:
-                            aCond.append("<=");
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            break;
-                        case SC_COND_EQGREATER:
-                            aCond.append(">=");
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            break;
-                        case SC_COND_NOTEQUAL:
-                            aCond.append("!=");
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            break;
-                        case SC_COND_BETWEEN:
-                            aCond.append(rtl::OUString("between("));
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            aCond.append(',');
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 1, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            aCond.append(')');
-                            break;
-                        case SC_COND_NOTBETWEEN:
-                            aCond.append(rtl::OUString("not-between("));
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            aCond.append(',');
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 1, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            aCond.append(')');
-                            break;
-                        case SC_COND_DUPLICATE:
-                            aCond.append("duplicate");
-                            break;
-                        case SC_COND_NOTDUPLICATE:
-                            aCond.append("unique");
-                            break;
-                        case SC_COND_DIRECT:
-                            aCond.append("formula-is(");
-                            aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
-                            aCond.append(')');
-                            break;
-                        case SC_COND_NONE:
-                            continue;
+                        const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+                        rtl::OUStringBuffer aCond;
+                        switch(pEntry->GetOperation())
+                        {
+                            case SC_COND_EQUAL:
+                                aCond.append('=');
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                break;
+                            case SC_COND_LESS:
+                                aCond.append('<');
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                break;
+                            case SC_COND_GREATER:
+                                aCond.append('>');
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                break;
+                            case SC_COND_EQLESS:
+                                aCond.append("<=");
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                break;
+                            case SC_COND_EQGREATER:
+                                aCond.append(">=");
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                break;
+                            case SC_COND_NOTEQUAL:
+                                aCond.append("!=");
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                break;
+                            case SC_COND_BETWEEN:
+                                aCond.append(rtl::OUString("between("));
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(',');
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 1, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(')');
+                                break;
+                            case SC_COND_NOTBETWEEN:
+                                aCond.append(rtl::OUString("not-between("));
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(',');
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 1, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(')');
+                                break;
+                            case SC_COND_DUPLICATE:
+                                aCond.append("duplicate");
+                                break;
+                            case SC_COND_NOTDUPLICATE:
+                                aCond.append("unique");
+                                break;
+                            case SC_COND_DIRECT:
+                                aCond.append("formula-is(");
+                                aCond.append(pEntry->GetExpression(pEntry->GetSrcPos(), 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(')');
+                                break;
+                            case SC_COND_NONE:
+                                continue;
+                        }
+                        rtl::OUString sStyle = pEntry->GetStyle();
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
+                        SvXMLElementExport aElementCondEntry(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITION, true, true);
                     }
-                    rtl::OUString sStyle = pEntry->GetStyle();
-                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
-                    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
-                    SvXMLElementExport aElementCondEntry(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITION, true, true);
                 }
             }
         }

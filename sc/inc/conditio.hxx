@@ -37,6 +37,7 @@
 #include "rangelst.hxx"
 
 #include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScBaseCell;
 class ScFormulaCell;
@@ -70,7 +71,34 @@ enum ScConditionMode
 
 class ScConditionalFormat;
 
-class SC_DLLPUBLIC ScConditionEntry
+namespace condformat
+{
+
+enum ScFormatEntryType
+{
+    CONDITION,
+    COLORSCALE,
+    DATABAR
+};
+
+}
+
+class SC_DLLPUBLIC ScFormatEntry
+{
+public:
+    virtual ~ScFormatEntry() {}
+
+    virtual condformat::ScFormatEntryType GetType() const = 0;
+    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz ) = 0;
+    virtual void UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos ) = 0;
+
+    virtual ScFormatEntry* Clone( ScDocument* pDoc ) const = 0;
+
+    virtual void SetParent( ScConditionalFormat* pNew ) = 0;
+};
+
+class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
 {
                                         // stored data:
     ScConditionMode     eOp;
@@ -125,7 +153,7 @@ public:
 
     int             operator== ( const ScConditionEntry& r ) const;
 
-    void            SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
+    virtual void SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
 
     bool            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
@@ -155,6 +183,10 @@ public:
     void            SourceChanged( const ScAddress& rChanged );
 
     bool            MarkUsedExternalReferences() const;
+
+    virtual condformat::ScFormatEntryType GetType() const { return condformat::CONDITION; }
+
+    virtual ScFormatEntry* Clone(ScDocument* pDoc) const;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
@@ -193,6 +225,7 @@ public:
 
     const String&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const String& rNew)  { aStyleName=rNew; }
+    virtual ScFormatEntry* Clone(ScDocument* pDoc) const;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
@@ -207,8 +240,9 @@ class SC_DLLPUBLIC ScConditionalFormat
     ScDocument*         pDoc;
     ScRangeList*        pAreas;             // area for Paint
     sal_uInt32          nKey;               // Index in attributes
-    ScCondFormatEntry** ppEntries;
-    sal_uInt16              nEntryCount;
+
+    typedef boost::ptr_vector<ScFormatEntry> CondFormatContainer;
+    CondFormatContainer maEntries;
     bool                bIsUsed;            // temporary at Save
     ScRangeListRef      pRanges;            // Ranges for conditional format
 
@@ -220,12 +254,12 @@ public:
     // true copy of formulas (for Ref-Undo / between documents)
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
 
-    void            AddEntry( const ScCondFormatEntry& rNew );
+    void            AddEntry( ScFormatEntry* pNew );
     void            AddRangeInfo( const ScRangeListRef& rRanges );
     const ScRangeListRef&  GetRangeInfo() const  { return pRanges; }
 
-    bool            IsEmpty() const         { return (nEntryCount == 0); }
-    sal_uInt16          Count() const           { return nEntryCount; }
+    bool IsEmpty() const         { return maEntries.empty(); }
+    size_t size() const           { return maEntries.size(); }
 
     void            CompileAll();
     void            CompileXML();
@@ -236,7 +270,7 @@ public:
 
     void            SourceChanged( const ScAddress& rAddr );
 
-    const ScCondFormatEntry* GetEntry( sal_uInt16 nPos ) const;
+    const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
     const String&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
 

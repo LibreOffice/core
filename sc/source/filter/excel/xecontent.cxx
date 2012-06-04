@@ -967,9 +967,12 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
-        for( sal_uInt16 nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
-            if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
-                maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry, nIndex ) );
+        for( size_t nIndex = 0, nCount = rCondFormat.size(); nIndex < nCount; ++nIndex )
+            if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
+            {
+                if(pFormatEntry->GetType() == condformat::CONDITION)
+                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), nIndex ) );
+            }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
 }

@@ -1793,10 +1793,14 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                         const ScConditionalFormat* pFormat = mpCondFormatList->GetFormat(nIndex);
                         if ( pFormat )
                         {
-                            sal_uInt16 nEntryCount = pFormat->Count();
-                            for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
+                            size_t nEntryCount = pFormat->size();
+                            for (size_t nEntry=0; nEntry<nEntryCount; nEntry++)
                             {
-                                String aStyleName = pFormat->GetEntry(nEntry)->GetStyle();
+                                const ScFormatEntry* pEntry = pFormat->GetEntry(nEntry);
+                                if(pEntry->GetType() != condformat::CONDITION)
+                                    continue;
+
+                                String aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
                                 if (aStyleName.Len())
                                 {
                                     SfxStyleSheetBase* pStyleSheet =

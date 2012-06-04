@@ -1191,6 +1191,11 @@ bool ScConditionEntry::MarkUsedExternalReferences() const
     return bAllMarked;
 }
 
+ScFormatEntry* ScConditionEntry::Clone(ScDocument* pDoc) const
+{
+    return new ScConditionEntry(pDoc, *this);
+}
+
 //------------------------------------------------------------------------
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
@@ -1244,14 +1249,17 @@ void ScCondFormatEntry::DataChanged( const ScRange* pModified ) const
         pCondFormat->DoRepaint( pModified );
 }
 
+ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
+{
+    return new ScCondFormatEntry( pDoc, *this );
+}
+
 //------------------------------------------------------------------------
 
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
     pAreas( NULL ),
     nKey( nNewKey ),
-    ppEntries( NULL ),
-    nEntryCount( 0 ),
     pRanges( NULL )
 {
 }
@@ -1260,19 +1268,15 @@ ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
     pDoc( r.pDoc ),
     pAreas( NULL ),
     nKey( r.nKey ),
-    ppEntries( NULL ),
-    nEntryCount( r.nEntryCount ),
     pRanges( NULL )
 {
-    if (nEntryCount)
+    for (CondFormatContainer::const_iterator itr = r.maEntries.begin(); itr != r.maEntries.end(); ++itr)
     {
-        ppEntries = new ScCondFormatEntry*[nEntryCount];
-        for (sal_uInt16 i=0; i<nEntryCount; i++)
-        {
-            ppEntries[i] = new ScCondFormatEntry(*r.ppEntries[i]);
-            ppEntries[i]->SetParent(this);
-        }
+        ScFormatEntry* pNewEntry = itr->Clone(r.pDoc);
+        maEntries.push_back( pNewEntry );
+        pNewEntry->SetParent(this);
     }
+
     if (r.pRanges)
         pRanges = new ScRangeList( *r.pRanges );
 }
@@ -1285,17 +1289,12 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
         pNewDoc = pDoc;
 
     ScConditionalFormat* pNew = new ScConditionalFormat(nKey, pNewDoc);
-    OSL_ENSURE(!pNew->ppEntries, "wo kommen die Eintraege her?");
 
-    if (nEntryCount)
+    for (CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        pNew->ppEntries = new ScCondFormatEntry*[nEntryCount];
-        for (sal_uInt16 i=0; i<nEntryCount; i++)
-        {
-            pNew->ppEntries[i] = new ScCondFormatEntry( pNewDoc, *ppEntries[i] );
-            pNew->ppEntries[i]->SetParent(pNew);
-        }
-        pNew->nEntryCount = nEntryCount;
+        ScFormatEntry* pNewEntry = itr->Clone(pNewDoc);
+        pNew->maEntries.push_back( pNewEntry );
+        pNewEntry->SetParent(pNew);
     }
     pNew->AddRangeInfo( pRanges );
 
@@ -1304,14 +1303,16 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
 
 bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
 {
-    if ( nEntryCount != r.nEntryCount )
+    if( size() != r.size())
         return false;
 
     //! auf gleiche Eintraege in anderer Reihenfolge testen ???
 
+    /*
     for (sal_uInt16 i=0; i<nEntryCount; i++)
         if ( ! (*ppEntries[i] == *r.ppEntries[i]) )
             return false;
+    */
 
     if (pRanges)
     {
@@ -1332,40 +1333,36 @@ void ScConditionalFormat::AddRangeInfo( const ScRangeListRef& rRanges )
     pRanges = new ScRangeList( *rRanges );
 }
 
-void ScConditionalFormat::AddEntry( const ScCondFormatEntry& rNew )
+void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
 {
-    ScCondFormatEntry** ppNew = new ScCondFormatEntry*[nEntryCount+1];
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        ppNew[i] = ppEntries[i];
-    ppNew[nEntryCount] = new ScCondFormatEntry(rNew);
-    ppNew[nEntryCount]->SetParent(this);
-    ++nEntryCount;
-    delete[] ppEntries;
-    ppEntries = ppNew;
+    maEntries.push_back(pNew);
+    pNew->SetParent(this);
 }
 
 ScConditionalFormat::~ScConditionalFormat()
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        delete ppEntries[i];
-    delete[] ppEntries;
-
     delete pAreas;
 }
 
-const ScCondFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
+const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
 {
-    if ( nPos < nEntryCount )
-        return ppEntries[nPos];
+    if ( nPos < size() )
+        return &maEntries[nPos];
     else
         return NULL;
 }
 
 const String& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        if ( ppEntries[i]->IsCellValid( pCell, rPos ) )
-            return ppEntries[i]->GetStyle();
+    for (CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        if(itr->GetType() == condformat::CONDITION)
+        {
+            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr);
+            if ( rEntry.IsCellValid( pCell, rPos ) )
+                return rEntry.GetStyle();
+        }
+    }
 
     return EMPTY_STRING;
 }
@@ -1431,6 +1428,7 @@ bool lcl_CutRange( ScRange& rRange, const ScRange& rOther )
 
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
+    /*
     SfxObjectShell* pSh = pDoc->GetDocumentShell();
     if (pSh)
     {
@@ -1510,6 +1508,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
             }
         }
     }
+    */
 }
 
 void ScConditionalFormat::InvalidateArea()
@@ -1520,14 +1519,16 @@ void ScConditionalFormat::InvalidateArea()
 
 void ScConditionalFormat::CompileAll()
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        ppEntries[i]->CompileAll();
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        if(itr->GetType() == condformat::CONDITION)
+            static_cast<ScCondFormatEntry&>(*itr).CompileAll();
 }
 
 void ScConditionalFormat::CompileXML()
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        ppEntries[i]->CompileXML();
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        if(itr->GetType() == condformat::CONDITION)
+            static_cast<ScCondFormatEntry&>(*itr).CompileXML();
 }
 
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -1535,8 +1536,8 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     if(pRanges)
         pRanges->UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        ppEntries[i]->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 
     delete pAreas;      // aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
     pAreas = NULL;
@@ -1544,9 +1545,13 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
 
 void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        if ( ppEntries[i]->GetStyle() == rOld )
-            ppEntries[i]->UpdateStyleName( rNew );
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        if(itr->GetType() == condformat::CONDITION)
+        {
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr);
+            if(rFormat.GetStyle() == rOld)
+                rFormat.UpdateStyleName( rNew );
+        }
 }
 
 void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
@@ -1585,8 +1590,8 @@ void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
         }
     }
 
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        ppEntries[i]->UpdateMoveTab( nOldPos, nNewPos );
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        itr->UpdateMoveTab( nOldPos, nNewPos );
 
     delete pAreas;      // aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
     pAreas = NULL;
@@ -1594,15 +1599,24 @@ void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
 void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        ppEntries[i]->SourceChanged( rAddr );
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+        if(itr->GetType() == condformat::CONDITION)
+        {
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr);
+            rFormat.SourceChanged( rAddr );
+        }
 }
 
 bool ScConditionalFormat::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
-    for (sal_uInt16 i=0; !bAllMarked && i<nEntryCount; i++)
-        bAllMarked = ppEntries[i]->MarkUsedExternalReferences();
+    for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end() && !bAllMarked; ++itr)
+        if(itr->GetType() == condformat::CONDITION)
+        {
+            const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*itr);
+            bAllMarked = rFormat.MarkUsedExternalReferences();
+        }
+
     return bAllMarked;
 }
 
