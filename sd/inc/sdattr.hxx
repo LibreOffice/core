@@ -61,7 +61,7 @@ public:
 class SdAttrLayerTitle : public SfxStringItem
 {
 public:
-    SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, XubString()) {}
+    SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, rtl::OUString()) {}
     SdAttrLayerTitle( const String& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
 };
 
@@ -70,7 +70,7 @@ public:
 class SdAttrLayerDesc : public SfxStringItem
 {
 public:
-    SdAttrLayerDesc() : SfxStringItem( ATTR_LAYER_DESC, XubString()) {}
+    SdAttrLayerDesc() : SfxStringItem( ATTR_LAYER_DESC, rtl::OUString()) {}
     SdAttrLayerDesc( const String& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
 };
 
