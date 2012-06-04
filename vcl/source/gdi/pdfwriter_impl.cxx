@@ -6203,7 +6203,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     beginCompression();
     checkAndEnableStreamEncryption( nICCObject );
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    sal_uInt32 nBytesNeeded = 0;
+    cmsUInt32Number nBytesNeeded = 0;
     cmsSaveProfileToMem(hProfile, NULL, &nBytesNeeded);
     if (!nBytesNeeded)
       return 0;
