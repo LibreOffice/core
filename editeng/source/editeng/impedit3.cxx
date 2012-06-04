@@ -1011,7 +1011,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                             if ( pPortion->GetSize().Width() > nXWidth )
                             {
                                 sal_Int32 nWidthOrg         = pPortion->GetSize().Width();
-                                sal_Int32 nChars            = aFieldValue.Len();
+                                sal_Int32 nChars            = aFieldValue.getLength();
                                 sal_Int32 nApproxWC         = nXWidth / ( nWidthOrg / nChars );
                                 ExtraPortionInfo *pExtraInfo= pPortion->GetExtraInfos();
                                 if( !nApproxWC ) nApproxWC++;
@@ -1030,7 +1030,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
 
                                 while( nChars > 0 )
                                 {
-                                    pExtraInfo->lineBreaksList.push_back( aFieldValue.Len() - nChars );
+                                    pExtraInfo->lineBreaksList.push_back( aFieldValue.getLength() - nChars );
                                     nChars -= nApproxWC;
                                 }
                             }
