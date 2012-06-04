@@ -115,9 +115,6 @@ void ScDocument::Broadcast( const ScHint& rHint )
         if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
             pCondFormList->SourceChanged( rHint.GetAddress() );
 
-        ScColorFormatList* pColorFormatList = GetColorScaleList(nTab);
-        if( pColorFormatList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-            pColorFormatList->DataChanged( rHint.GetAddress() );
     }
 
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
@@ -148,10 +145,6 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
         ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
         if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
             pCondFormList->SourceChanged( rHint.GetAddress() );
-
-        ScColorFormatList* pColorFormatList = GetColorScaleList(nTab);
-        if( pColorFormatList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
-            pColorFormatList->DataChanged( rHint.GetAddress() );
     }
 }
 
@@ -176,7 +169,6 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
             continue;
 
         ScConditionalFormatList* pCondFormList = (*itr)->GetCondFormList();
-
         if ( pCondFormList )
         {
             SCCOL nCol1;
@@ -202,11 +194,6 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
             }
         }
 
-        ScColorFormatList* pColorFormatList = (*itr)->GetColorFormatList();
-        if(pColorFormatList)
-        {
-            pColorFormatList->DataChanged(rRange);
-        }
     }
 }
 
@@ -491,10 +478,6 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
                 ScConditionalFormatList* pCondFormList = (*itr)->GetCondFormList();
                 if ( pCondFormList )
                     pCondFormList->SourceChanged( pTrack->aPos );
-
-                ScColorFormatList* pColorFormatList = (*itr)->GetColorFormatList();
-                if( pColorFormatList )
-                    pColorFormatList->DataChanged( pTrack->aPos );
             }
             // for "calculate" event, keep track of which sheets are affected by tracked formulas
             if ( bCalcEvent )

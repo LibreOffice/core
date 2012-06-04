@@ -592,42 +592,13 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uLong nFormat )
 //          bedingte Formate und Gueltigkeitsbereiche
 //
 
-sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew, SCTAB nTab )
-{
-    if (rNew.IsEmpty())
-        return 0;                   // leer ist immer 0
-
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->AddCondFormat( rNew );
-
-    return 0;
-}
-
-const ScColorFormatList* ScDocument::GetColorScaleList(SCTAB nTab) const
-{
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetColorFormatList();
-
-    return NULL;
-}
-
-ScColorFormatList* ScDocument::GetColorScaleList( SCTAB nTab )
-{
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetColorFormatList();
-
-    return NULL;
-}
-
-//takes ownership
-// returns a 1-based index, 0 is reserved for no entry
-sal_uLong ScDocument::AddColorFormat( ScColorFormat* pNew, SCTAB nTab )
+sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
 {
     if(!pNew)
         return 0;
 
     if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->AddColorFormat(pNew);
+        return maTabs[nTab]->AddCondFormat( pNew );
 
     return 0;
 }
@@ -715,7 +686,7 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
     return NULL;
 }
 
-const ScConditionalFormat* ScDocument::GetCondFormat(
+ScConditionalFormat* ScDocument::GetCondFormat(
                             SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     sal_uLong nIndex = ((const SfxUInt32Item*)GetAttr(nCol,nRow,nTab,ATTR_CONDITIONAL))->GetValue();

@@ -740,12 +740,12 @@ static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, S
     return bVal;
 }
 
-static bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, const ScAddress& rAddr, const ScRangeListRef& rRanges )
+static bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, const ScAddress& rAddr, const ScRangeList& rRanges )
 {
-    size_t nListCount = rRanges->size();
+    size_t nListCount = rRanges.size();
     for( size_t i = 0; i < nListCount; i++ )
     {
-        const ScRange *aRange = (*rRanges)[i];
+        const ScRange *aRange = rRanges[i];
         SCROW nRow = aRange->aEnd.Row();
         SCCOL nCol = aRange->aEnd.Col();
         for( SCROW r = aRange->aStart.Row(); r <= nRow; r++ )
@@ -839,8 +839,8 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
         case SC_COND_NOTDUPLICATE:
             if( pCondFormat )
             {
-                ScRangeListRef pRanges = pCondFormat->GetRangeInfo();
-                bValid = lcl_IsDuplicate( mpDoc, nArg, String(), rAddr, pRanges );
+                const ScRangeList& aRanges = pCondFormat->GetRange();
+                bValid = lcl_IsDuplicate( mpDoc, nArg, String(), rAddr, aRanges );
                 if( eOp == SC_COND_NOTDUPLICATE )
                     bValid = !bValid;
             }
@@ -867,8 +867,8 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
     {
         if( pCondFormat && rArg.Len() )
         {
-            ScRangeListRef pRanges = pCondFormat->GetRangeInfo();
-            bValid = lcl_IsDuplicate( mpDoc, 0.0, rArg, rAddr, pRanges );
+            const ScRangeList& aRanges = pCondFormat->GetRange();
+            bValid = lcl_IsDuplicate( mpDoc, 0.0, rArg, rAddr, aRanges );
             if( eOp == SC_COND_NOTDUPLICATE )
                 bValid = !bValid;
             return bValid;
@@ -1265,8 +1265,7 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
     pAreas( NULL ),
-    nKey( nNewKey ),
-    pRanges( NULL )
+    nKey( nNewKey )
 {
 }
 
@@ -1274,7 +1273,7 @@ ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
     pDoc( r.pDoc ),
     pAreas( NULL ),
     nKey( r.nKey ),
-    pRanges( NULL )
+    maRanges( r.maRanges )
 {
     for (CondFormatContainer::const_iterator itr = r.maEntries.begin(); itr != r.maEntries.end(); ++itr)
     {
@@ -1282,9 +1281,6 @@ ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
         maEntries.push_back( pNewEntry );
         pNewEntry->SetParent(this);
     }
-
-    if (r.pRanges)
-        pRanges = new ScRangeList( *r.pRanges );
 }
 
 ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
@@ -1302,7 +1298,7 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
         pNew->maEntries.push_back( pNewEntry );
         pNewEntry->SetParent(pNew);
     }
-    pNew->AddRangeInfo( pRanges );
+    pNew->AddRange( maRanges );
 
     return pNew;
 }
@@ -1320,23 +1316,12 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
             return false;
     */
 
-    if (pRanges)
-    {
-        if (r.pRanges)
-            return *pRanges == *r.pRanges;
-        else
-            return false;
-    }
-
-    // pRanges is NULL, which means r.pRanges must be NULL.
-    return r.pRanges.Is() == false;
+    return maRanges == r.maRanges;
 }
 
-void ScConditionalFormat::AddRangeInfo( const ScRangeListRef& rRanges )
+void ScConditionalFormat::AddRange( const ScRangeList& rRanges )
 {
-    if( !rRanges.Is() )
-        return;
-    pRanges = new ScRangeList( *rRanges );
+    maRanges = rRanges;
 }
 
 void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
@@ -1565,8 +1550,7 @@ void ScConditionalFormat::CompileXML()
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    if(pRanges)
-        pRanges->UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
+    maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 
@@ -1587,37 +1571,34 @@ void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew
 
 void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    if(pRanges)
+    size_t n = maRanges.size();
+    SCTAB nMinTab = std::min<SCTAB>(nOldPos, nNewPos);
+    SCTAB nMaxTab = std::max<SCTAB>(nOldPos, nNewPos);
+    for(size_t i = 0; i < n; ++i)
     {
-        size_t n = pRanges->size();
-        SCTAB nMinTab = std::min<SCTAB>(nOldPos, nNewPos);
-        SCTAB nMaxTab = std::max<SCTAB>(nOldPos, nNewPos);
-        for(size_t i = 0; i < n; ++i)
+        ScRange* pRange = maRanges[i];
+        SCTAB nTab = pRange->aStart.Tab();
+        if(nTab < nMinTab || nTab > nMaxTab)
         {
-            ScRange* pRange = (*pRanges)[i];
-            SCTAB nTab = pRange->aStart.Tab();
-            if(nTab < nMinTab || nTab > nMaxTab)
-            {
-                continue;
-            }
+            continue;
+        }
 
-            if(nTab == nOldPos)
-            {
-                pRange->aStart.SetTab(nNewPos);
-                pRange->aEnd.SetTab(nNewPos);
-                continue;
-            }
+        if(nTab == nOldPos)
+        {
+            pRange->aStart.SetTab(nNewPos);
+            pRange->aEnd.SetTab(nNewPos);
+            continue;
+        }
 
-            if(nNewPos < nOldPos)
-            {
-                pRange->aStart.IncTab();
-                pRange->aEnd.IncTab();
-            }
-            else
-            {
-                pRange->aStart.IncTab(-1);
-                pRange->aEnd.IncTab(-1);
-            }
+        if(nNewPos < nOldPos)
+        {
+            pRange->aStart.IncTab();
+            pRange->aEnd.IncTab();
+        }
+        else
+        {
+            pRange->aStart.IncTab(-1);
+            pRange->aEnd.IncTab(-1);
         }
     }
 

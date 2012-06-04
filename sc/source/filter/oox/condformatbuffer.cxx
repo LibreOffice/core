@@ -807,59 +807,81 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
     else if( mpColor )
     {
         ScDocument& rDoc = getScDocument();
-        ScColorScaleFormat* pFormat = new ScColorScaleFormat(&rDoc);
+        ScColorScaleFormat* pFormatEntry = new ScColorScaleFormat(&rDoc);
 
-        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat, getSheetIndex());
+        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
+        ScRange aRange;
+        ScUnoConversion::FillScRange(aRange, *rRanges.begin());
+
+        ScConditionalFormat* pFormat = rDoc.GetCondFormat( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
+        if(!pFormat)
+        {
+            pFormat = new ScConditionalFormat(0, &rDoc);
+            pFormat->AddEntry(pFormatEntry);
+            rDoc.AddCondFormat(pFormat, aRange.aStart.Tab());
+        }
+        else
+            pFormat->AddEntry(pFormatEntry);
+
+
+        sal_Int32 nIndex = pFormat->GetKey();
 
         ScRangeList aList;
         // apply attributes to cells
         //
-        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
         for( ApiCellRangeList::const_iterator itr = rRanges.begin(); itr != rRanges.end(); ++itr)
         {
-            ScRange aRange;
             ScUnoConversion::FillScRange(aRange, *itr);
             ScPatternAttr aPattern( rDoc.GetPool() );
-            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
             ScMarkData aMarkData;
             aMarkData.SetMarkArea(aRange);
             rDoc.ApplySelectionPattern( aPattern , aMarkData);
 
             aList.Append(aRange);
         }
-        pFormat->SetRange(aList);
         if(aList.size())
-            mpColor->AddEntries( pFormat, &rDoc, aList.front()->aStart );
+            mpColor->AddEntries( pFormatEntry, &rDoc, aList.front()->aStart );
         else
-            mpColor->AddEntries( pFormat, &rDoc, ScAddress() );
+            mpColor->AddEntries( pFormatEntry, &rDoc, ScAddress() );
+        pFormat->AddRange(aList);
     }
     else if (mpDataBar)
     {
         ScRangeList aList;
 
         ScDocument& rDoc = getScDocument();
-        ScDataBarFormat* pFormat = new ScDataBarFormat(&rDoc);
+        ScDataBarFormat* pFormatEntry = new ScDataBarFormat(&rDoc);
+        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
+        ScRange aRange;
+        ScUnoConversion::FillScRange(aRange, *rRanges.begin());
 
-        sal_Int32 nIndex = rDoc.AddColorFormat(pFormat, getSheetIndex());
+        ScConditionalFormat* pFormat = rDoc.GetCondFormat( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
+        if(!pFormat)
+        {
+            pFormat = new ScConditionalFormat(0, &rDoc);
+            sal_Int32 nKey = rDoc.AddCondFormat(pFormat, aRange.aStart.Tab());
+            pFormat->SetKey(nKey);
+        }
 
+        pFormat->AddEntry(pFormatEntry);
+        sal_Int32 nIndex = pFormat->GetKey();
         // apply attributes to cells
         //
-        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
         for( ApiCellRangeList::const_iterator itr = rRanges.begin(); itr != rRanges.end(); ++itr)
         {
-            ScRange aRange;
             ScUnoConversion::FillScRange(aRange, *itr);
             ScPatternAttr aPattern( rDoc.GetPool() );
-            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
             ScMarkData aMarkData;
             aMarkData.SetMarkArea(aRange);
             rDoc.ApplySelectionPattern( aPattern , aMarkData);
 
             aList.Append(aRange);
         }
-        pFormat->SetRange(aList);
+        mpDataBar->SetData( pFormatEntry, &rDoc, aList.front()->aStart );
 
-        mpDataBar->SetData( pFormat, &rDoc, aList.front()->aStart );
+        pFormat->AddRange(aList);
     }
 }
 

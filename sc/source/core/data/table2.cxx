@@ -682,7 +682,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         ScConditionalFormat* pFormat = mpCondFormatList->GetFormat( nNewKey );
         pFormat->UpdateReference(URM_MOVE, ScRange(nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab),
                 nDx, nDy, pTable->nTab - nTab);
-        pFormat->AddRangeInfo(new ScRangeList(itr->second));
+        pFormat->AddRange(itr->second);
 
         ScPatternAttr aPattern( pDocument->GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nNewKey ) );

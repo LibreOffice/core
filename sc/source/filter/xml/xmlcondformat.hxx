@@ -34,6 +34,7 @@ class ScColorScaleFormat;
 class ScColorScaleEntry;
 class ScDataBarFormat;
 struct ScDataBarFormatData;
+class ScConditionalFormat;
 
 class ScXMLConditionalFormatsContext : public SvXMLImportContext
 {
@@ -74,6 +75,7 @@ public:
 
 private:
 
+    ScConditionalFormat* mpFormat;
     ScRangeList maRange;
 };
 
@@ -85,7 +87,7 @@ private:
 
 public:
     ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ScRangeList& rRange);
+                        const ::rtl::OUString& rLName, ScConditionalFormat* pFormat);
 
     virtual ~ScXMLColorScaleFormatContext() {}
 
@@ -111,7 +113,7 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const ScRangeList& rRange);
+                        ScConditionalFormat* pFormat);
 
     virtual ~ScXMLDataBarFormatContext() {}
 

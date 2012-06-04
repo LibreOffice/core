@@ -3817,17 +3817,9 @@ rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
 void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 {
     ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);
-    ScColorFormatList* pColorFormatList = pDoc->GetColorScaleList(nTab);
-    if(pCondFormatList || pColorFormatList)
+    if(pCondFormatList)
     {
-        bool bExport = false;
         if(pCondFormatList && pCondFormatList->size())
-            bExport = true;
-
-        if(pColorFormatList && pColorFormatList->size())
-            bExport = true;
-
-        if(!bExport)
             return;
 
         SvXMLElementExport aElementCondFormats(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, true, true);
@@ -3838,8 +3830,8 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     itr != pCondFormatList->end(); ++itr)
             {
                 rtl::OUString sRanges;
-                const ScRangeList* pRangeList = itr->GetRangeInfo();
-                ScRangeStringConverter::GetStringFromRangeList( sRanges, pRangeList, pDoc, formula::FormulaGrammar::CONV_ODF );
+                const ScRangeList& rRangeList = itr->GetRange();
+                ScRangeStringConverter::GetStringFromRangeList( sRanges, &rRangeList, pDoc, formula::FormulaGrammar::CONV_ODF );
                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, sRanges);
                 SvXMLElementExport aElementCondFormat(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, true, true);
                 size_t nEntries = itr->size();

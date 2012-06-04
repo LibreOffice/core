@@ -30,6 +30,7 @@
 #include <xmloff/nmspmap.hxx>
 
 #include "colorscale.hxx"
+#include "conditio.hxx"
 #include "document.hxx"
 #include <sax/tools/converter.hxx>
 #include "rangelst.hxx"
@@ -46,6 +47,7 @@ ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rIm
                         const ::rtl::OUString& rLName):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    GetScImport().GetDocument()->SetCondFormList(new ScConditionalFormatList(), GetScImport().GetTables().GetCurrentSheet());
 }
 
 SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -99,6 +101,8 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
     ScRangeStringConverter::GetRangeListFromString(maRange, sRange, GetScImport().GetDocument(),
             formula::FormulaGrammar::CONV_ODF);
 
+    mpFormat = new ScConditionalFormat(0, GetScImport().GetDocument());
+    mpFormat->AddRange(maRange);
 }
 
 SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -112,10 +116,10 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
     switch (nToken)
     {
         case XML_TOK_CONDFORMAT_COLORSCALE:
-            pContext = new ScXMLColorScaleFormatContext( GetScImport(), nPrefix, rLocalName, maRange );
+            pContext = new ScXMLColorScaleFormatContext( GetScImport(), nPrefix, rLocalName, mpFormat );
             break;
         case XML_TOK_CONDFORMAT_DATABAR:
-            pContext = new ScXMLDataBarFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, maRange );
+            pContext = new ScXMLDataBarFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
             break;
         default:
             break;
@@ -126,15 +130,25 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
 
 void ScXMLConditionalFormatContext::EndElement()
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
+
+    sal_uLong nIndex = pDoc->AddCondFormat(mpFormat, GetScImport().GetTables().GetCurrentSheet());
+    mpFormat->SetKey(nIndex);
+
+    ScPatternAttr aPattern( pDoc->GetPool() );
+    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
+    ScMarkData aMarkData;
+    aMarkData.MarkFromRangeList(mpFormat->GetRange(), true);
+    pDoc->ApplySelectionPattern( aPattern , aMarkData);
 }
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ScRangeList& rRange):
+                        const ::rtl::OUString& rLName, ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pColorScaleFormat(NULL)
 {
     pColorScaleFormat = new ScColorScaleFormat(GetScImport().GetDocument());
-    pColorScaleFormat->SetRange(rRange);
+    pFormat->AddEntry(pColorScaleFormat);
 }
 
 SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -159,20 +173,12 @@ SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16
 
 void ScXMLColorScaleFormatContext::EndElement()
 {
-    ScDocument* pDoc = GetScImport().GetDocument();
 
-    sal_uLong nIndex = pDoc->AddColorFormat(pColorScaleFormat, GetScImport().GetTables().GetCurrentSheet());
-
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
-    ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList(pColorScaleFormat->GetRange(), true);
-    pDoc->ApplySelectionPattern( aPattern , aMarkData);
 }
 
 ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const ScRangeList& rRange):
+                        ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mpDataBarFormat(NULL),
     mpFormatData(NULL)
@@ -249,7 +255,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
         mpFormatData->mbOnlyBar = !bShowValue;
     }
 
-    mpDataBarFormat->SetRange(rRange);
+    pFormat->AddEntry(mpDataBarFormat);
 }
 
 SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -274,15 +280,6 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
 
 void ScXMLDataBarFormatContext::EndElement()
 {
-    ScDocument* pDoc = GetScImport().GetDocument();
-
-    sal_uLong nIndex = pDoc->AddColorFormat(mpDataBarFormat, GetScImport().GetTables().GetCurrentSheet());
-
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_COLORSCALE, nIndex ) );
-    ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList(mpDataBarFormat->GetRange(), true);
-    pDoc->ApplySelectionPattern( aPattern , aMarkData);
 }
 
 namespace {

@@ -259,7 +259,7 @@ class SC_DLLPUBLIC ScConditionalFormat
     typedef boost::ptr_vector<ScFormatEntry> CondFormatContainer;
     CondFormatContainer maEntries;
     bool                bIsUsed;            // temporary at Save
-    ScRangeListRef      pRanges;            // Ranges for conditional format
+    ScRangeList maRanges;            // Ranges for conditional format
 
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
@@ -270,8 +270,8 @@ public:
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
 
     void            AddEntry( ScFormatEntry* pNew );
-    void            AddRangeInfo( const ScRangeListRef& rRanges );
-    const ScRangeListRef&  GetRangeInfo() const  { return pRanges; }
+    void            AddRange( const ScRangeList& rRanges );
+    const ScRangeList&  GetRange() const  { return maRanges; }
 
     bool IsEmpty() const         { return maEntries.empty(); }
     size_t size() const           { return maEntries.size(); }

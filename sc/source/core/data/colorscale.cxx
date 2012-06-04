@@ -140,12 +140,6 @@ ScColorFormat::ScColorFormat(ScDocument* pDoc):
 {
 }
 
-ScColorFormat::ScColorFormat(ScDocument* pDoc, const ScColorFormat& rFormat):
-    ScFormatEntry(pDoc),
-    maRanges(rFormat.maRanges)
-{
-}
-
 ScColorFormat::~ScColorFormat()
 {
 }
@@ -161,7 +155,7 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
 }
 
 ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat):
-    ScColorFormat(pDoc, rFormat)
+    ScColorFormat(pDoc)
 {
     for(const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
     {
@@ -333,7 +327,7 @@ double ScColorScaleFormat::GetMinValue() const
         return itr->GetValue();
     else
     {
-        return getMinValue(maRanges, mpDoc);
+        return getMinValue(GetRange(), mpDoc);
     }
 }
 
@@ -345,7 +339,7 @@ double ScColorScaleFormat::GetMaxValue() const
         return itr->GetValue();
     else
     {
-        return getMaxValue(maRanges, mpDoc);
+        return getMaxValue(GetRange(), mpDoc);
     }
 }
 
@@ -355,22 +349,18 @@ void ScColorScaleFormat::calcMinMax(double& rMin, double& rMax) const
     rMax = GetMaxValue();
 }
 
-void ScColorFormat::SetRange(const ScRangeList& rList)
-{
-    maRanges = rList;
-}
-
 const ScRangeList& ScColorFormat::GetRange() const
 {
-    return maRanges;
+    return mpParent->GetRange();
 }
 
 void ScColorFormat::getValues(std::vector<double>& rValues) const
 {
-    size_t n = maRanges.size();
+    size_t n = GetRange().size();
+    const ScRangeList& aRanges = GetRange();
     for(size_t i = 0; i < n; ++i)
     {
-        const ScRange* pRange = maRanges[i];
+        const ScRange* pRange = aRanges[i];
         SCTAB nTab = pRange->aStart.Tab();
         for(SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
         {
@@ -517,57 +507,9 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     return new Color(aColor);
 }
 
-namespace {
-
-SCTAB UpdateMoveTabRangeList( ScRangeList& rList, SCTAB nOldTab, SCTAB nNewTab )
-{
-    size_t n = rList.size();
-    SCTAB nMinTab = std::min<SCTAB>(nOldTab, nNewTab);
-    SCTAB nMaxTab = std::max<SCTAB>(nOldTab, nNewTab);
-    SCTAB nThisTab = -1;
-    for(size_t i = 0; i < n; ++i)
-    {
-        ScRange* pRange = rList[i];
-        SCTAB nTab = pRange->aStart.Tab();
-        if(nTab < nMinTab || nTab > nMaxTab)
-        {
-            nThisTab = nTab;
-            continue;
-        }
-
-        if(nTab == nOldTab)
-        {
-            pRange->aStart.SetTab(nNewTab);
-            pRange->aEnd.SetTab(nNewTab);
-            nThisTab = nNewTab;
-            continue;
-        }
-
-        if(nNewTab < nOldTab)
-        {
-            pRange->aStart.IncTab();
-            pRange->aEnd.IncTab();
-            nThisTab = nTab + 1;
-        }
-        else
-        {
-            pRange->aStart.IncTab(-1);
-            pRange->aEnd.IncTab(-1);
-            nThisTab = nTab - 1;
-        }
-    }
-
-    if(nThisTab == -1)
-        nThisTab = 0;
-
-    return nThisTab;
-}
-
-}
-
 void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 {
-    SCTAB nThisTab = UpdateMoveTabRangeList(maRanges, nOldTab, nNewTab);
+    SCTAB nThisTab = GetRange().front()->aStart.Tab();
     for(iterator itr = begin(); itr != end(); ++itr)
     {
         itr->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
@@ -577,8 +519,6 @@ void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 void ScColorScaleFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    maRanges.UpdateReference( eUpdateRefMode, mpDoc, rRange, nDx, nDy, nDz );
-
     for(iterator itr = begin(); itr != end(); ++itr)
     {
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
@@ -602,7 +542,7 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
 
     // TODO: check also if the changed value is the new min/max
     // or has been the old min/max value
-    bNeedUpdate = bNeedUpdate && maRanges.Intersects(rRange);
+    bNeedUpdate = bNeedUpdate && GetRange().Intersects(rRange);
     return bNeedUpdate;
 }
 
@@ -611,10 +551,10 @@ void ScColorScaleFormat::DataChanged(const ScRange& rRange)
     bool bNeedUpdate = CheckEntriesForRel(rRange);
     if(bNeedUpdate)
     {
-        size_t n = maRanges.size();
+        size_t n = GetRange().size();
         for(size_t i = 0; i < n; ++i)
         {
-            ScRange* pRange = maRanges[i];
+            const ScRange* pRange = GetRange()[i];
             mpDoc->RepaintRange(*pRange);
         }
     }
@@ -651,7 +591,8 @@ ScDataBarFormat::ScDataBarFormat(ScDocument* pDoc):
 }
 
 ScDataBarFormat::ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat):
-    ScColorFormat(pDoc, rFormat)
+    ScColorFormat(pDoc),
+    mpFormatData(new ScDataBarFormatData(*rFormat.mpFormatData))
 {
 }
 
@@ -678,8 +619,6 @@ condformat::ScFormatEntryType ScDataBarFormat::GetType() const
 void ScDataBarFormat::UpdateReference( UpdateRefMode eRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    maRanges.UpdateReference( eRefMode, mpDoc, rRange, nDx, nDy, nDz );
-
     mpFormatData->mpUpperLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
     mpFormatData->mpLowerLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
 }
@@ -709,14 +648,14 @@ void ScDataBarFormat::DataChanged(const ScRange& rRange)
     bNeedUpdate = NeedUpdate(mpFormatData->mpUpperLimit.get());
     bNeedUpdate &= NeedUpdate(mpFormatData->mpLowerLimit.get());
 
-    bNeedUpdate &= maRanges.Intersects(rRange);
+    bNeedUpdate &= GetRange().Intersects(rRange);
 
     if(bNeedUpdate)
     {
-        size_t n = maRanges.size();
+        size_t n = GetRange().size();
         for(size_t i = 0; i < n; ++i)
         {
-            ScRange* pRange = maRanges[i];
+            const ScRange* pRange = GetRange()[i];
             mpDoc->RepaintRange(*pRange);
         }
     }
@@ -724,7 +663,7 @@ void ScDataBarFormat::DataChanged(const ScRange& rRange)
 
 void ScDataBarFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 {
-    SCTAB nThisTab = UpdateMoveTabRangeList(maRanges, nOldTab, nNewTab);
+    SCTAB nThisTab = GetRange().front()->aStart.Tab();
     mpFormatData->mpUpperLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
     mpFormatData->mpLowerLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
 }
@@ -777,8 +716,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     // now we have for sure a value
     //
-    double nValMin = getMinValue(maRanges, mpDoc);
-    double nValMax = getMaxValue(maRanges, mpDoc);
+    double nValMin = getMinValue(GetRange(), mpDoc);
+    double nValMax = getMaxValue(GetRange(), mpDoc);
     double nMin = getMin(nValMin, nValMax);
     double nMax = getMax(nValMin, nValMax);
 
@@ -871,79 +810,6 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     pInfo->mbShowValue = !mpFormatData->mbOnlyBar;
 
     return pInfo;
-}
-
-//-----------------------------------------------------------------
-
-ScColorFormatList::ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList)
-{
-    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-    {
-    }
-}
-
-void ScColorFormatList::AddFormat( ScColorFormat* pFormat )
-{
-    maColorScaleFormats.push_back( pFormat );
-}
-
-// attention nFormat is 1 based, 0 is reserved for no format
-ScColorFormat* ScColorFormatList::GetFormat(sal_uInt32 nFormat)
-{
-    if( nFormat > size() || !nFormat )
-        return NULL;
-
-    return &maColorScaleFormats[nFormat-1];
-}
-
-ScColorFormatList::iterator ScColorFormatList::begin()
-{
-    return maColorScaleFormats.begin();
-}
-
-ScColorFormatList::const_iterator ScColorFormatList::begin() const
-{
-    return maColorScaleFormats.begin();
-}
-
-ScColorFormatList::iterator ScColorFormatList::end()
-{
-    return maColorScaleFormats.end();
-}
-
-ScColorFormatList::const_iterator ScColorFormatList::end() const
-{
-    return maColorScaleFormats.end();
-}
-
-size_t ScColorFormatList::size() const
-{
-    return maColorScaleFormats.size();
-}
-
-void ScColorFormatList::DataChanged(const ScRange& rRange)
-{
-    for(iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->DataChanged(rRange);
-    }
-}
-
-void ScColorFormatList::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
-{
-    for(iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->UpdateMoveTab(nOldTab, nNewTab);
-    }
-}
-
-void ScColorFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
-            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
-{
-    for(iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

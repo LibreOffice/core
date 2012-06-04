@@ -97,7 +97,6 @@ class ScChartListenerCollection;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScColorFormat;
-class ScColorFormatList;
 class ScDBCollection;
 class ScDBData;
 class ScDetOpData;
@@ -1165,7 +1164,7 @@ public:
     const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
     ScPatternAttr*          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
 
-    const ScConditionalFormat* GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC ScConditionalFormat* GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC const SfxItemSet*  GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     const SfxPoolItem*  GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
 
@@ -1196,8 +1195,7 @@ public:
     void            ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    SC_DLLPUBLIC sal_uLong          AddCondFormat( const ScConditionalFormat& rNew, SCTAB nTab );
-    SC_DLLPUBLIC sal_uLong          AddColorFormat( ScColorFormat* pNew, SCTAB nTab );
+    SC_DLLPUBLIC sal_uLong AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, SCTAB nTab, ScRangeList& rRanges );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( sal_uLong nKey, SCTAB nTab );
@@ -1207,9 +1205,6 @@ public:
     SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uLong nIndex ) const;
 
     SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
-
-    SC_DLLPUBLIC const ScColorFormatList* GetColorScaleList(SCTAB nTab) const;
-    SC_DLLPUBLIC ScColorFormatList* GetColorScaleList(SCTAB nTab);
 
     ScValidationDataList* GetValidationList() const
                     { return pValidationList; }

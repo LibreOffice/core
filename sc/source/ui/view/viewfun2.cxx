@@ -3077,7 +3077,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 void ScViewFunc::SetConditionalFormat( const ScConditionalFormat& rNew )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    sal_uLong nIndex = pDoc->AddCondFormat(rNew, GetViewData()->GetTabNo());           // for it there is no Undo
+    sal_uLong nIndex = pDoc->AddCondFormat(rNew.Clone(), GetViewData()->GetTabNo());           // for it there is no Undo
     SfxUInt32Item aItem( ATTR_CONDITIONAL, nIndex );
 
     ApplyAttr( aItem );         // with Paint and Undo...
