@@ -264,6 +264,7 @@ define gb_CObject__command
 $(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	unset INCLUDE && \
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
@@ -284,6 +285,7 @@ define gb_CxxObject__command
 $(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	unset INCLUDE && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
@@ -337,6 +339,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(NATIVERES)) && \
+	unset INCLUDE && \
 	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
