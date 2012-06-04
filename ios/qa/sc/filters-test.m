@@ -120,6 +120,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "--protector",
         "dummy-libunobootstrapprotector",
         "unobootstrapprotector",
+        "placeholder-ure-internal-lib-dir",
         "placeholder-uno-types",
         "placeholder-uno-services"
     };
@@ -127,6 +128,8 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
     const int argc = sizeof(argv)/sizeof(*argv);
 
     NSString *app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+
+    argv[argc-3] = "-env:URE_INTERNAL_LIB_DIR=file:///";
 
     NSString *uno_types = @"-env:UNO_TYPES=";
 
