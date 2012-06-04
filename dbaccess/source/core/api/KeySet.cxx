@@ -48,6 +48,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
+#include <boost/static_assert.hpp>
 #include <list>
 #include <algorithm>
 #include <string.h>
@@ -1458,7 +1459,7 @@ sal_Bool OKeySet::fetchRow()
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aFRIter = aFullRow->get().begin();
         // Column 0 is reserved for the bookmark; unused here.
         ++aFRIter;
-        BOOST_STATIC_ASSERT_MSG(sizeof(int) >= sizeof(sal_Int32), "At least a 32 bit word expecteed");
+        BOOST_STATIC_ASSERT(sizeof(int) >= sizeof(sal_Int32)); // "At least a 32 bit word expected"
         for (int i = 1; i <= cc; ++i, ++aFRIter )
         {
             aFRIter->fill(i, m_xSetMetaData->getColumnType(i), m_xDriverRow);
