@@ -2295,16 +2295,15 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xParameters.is() && xParameters->hasByName("Name"))
                         {
                             const Any aValue = xParameters->getByName("Name");
-                            const Type aValueType = aValue.getValueType();
-                            if (aValueType == ::getCppuType((OUString*)0))
+                            OUString sValue;
+                            if (aValue >>= sValue)
                             {
-                                OUString sValue;
-                                aValue >>= sValue;
                                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sValue);
                             }
                         }
-                        GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
-                        GetExport().EndElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
+                        SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                            XML_NAMESPACE_TEXT, XML_BOOKMARK_START,
+                            sal_False, sal_False );
                         const OUString sFieldType = xFormField->getFieldType();
                         if (sFieldType ==  ODF_FORMTEXT)
                         {
@@ -2319,19 +2318,15 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                             openFieldMark = NONE;
                         }
                     }
-                    else
-                    {
-                        GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
-                        GetExport().EndElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_START, sal_False);
-                    }
                 }
             }
             else if (sType.equals(sTextFieldEnd))
             {
                 if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                        XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
+                        sal_False, sal_False );
                 }
                 else
                 {
@@ -2342,17 +2337,16 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xParameters.is() && xParameters->hasByName("Name"))
                         {
                             const Any aValue = xParameters->getByName("Name");
-                            const Type aValueType = aValue.getValueType();
-                            if (aValueType == ::getCppuType((OUString*)0))
+                            OUString sValue;
+                            if (aValue >>= sValue)
                             {
-                                OUString sValue;
-                                aValue >>= sValue;
                                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sValue);
                             }
                         }
                     }
-                    GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK_END, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_TEXT,XML_BOOKMARK_END, sal_False);
+                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                        XML_NAMESPACE_TEXT, XML_BOOKMARK_END,
+                        sal_False, sal_False );
                 }
             }
             else if (sType.equals(sTextFieldStartEnd))
@@ -2383,8 +2377,9 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                     }
-                    GetExport().StartElement(XML_NAMESPACE_TEXT, XML_BOOKMARK, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_TEXT, XML_BOOKMARK, sal_False);
+                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                        XML_NAMESPACE_TEXT, XML_BOOKMARK,
+                        sal_False, sal_False );
                 }
             }
             else if (sType.equals(sSoftPageBreak))
@@ -3348,15 +3343,11 @@ void XMLTextParagraphExport::exportTextRange(
                 SvXMLElementExport aElement( GetExport(), !sStyle.isEmpty(),
                                           XML_NAMESPACE_TEXT, XML_SPAN, sal_False,
                                           sal_False );
-                if (openFieldMark == TEXT)
-                {
-                    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_TEXT_INPUT, sal_False );
-                }
+
+                SvXMLElementExport aElem2( GetExport(), TEXT == openFieldMark,
+                    XML_NAMESPACE_TEXT, XML_TEXT_INPUT,
+                    sal_False, sal_False );
                 exportText( aText, rPrevCharIsSpace );
-                if (openFieldMark == TEXT)
-                {
-                    GetExport().EndElement( XML_NAMESPACE_TEXT, XML_TEXT_INPUT, sal_False );
-                }
                 openFieldMark = NONE;
             }
         }
