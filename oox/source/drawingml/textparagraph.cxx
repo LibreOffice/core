@@ -65,7 +65,7 @@ void TextParagraph::insertAt(
 
         sal_Int16 nLevel = maProperties.getLevel();
 
-        OSL_TRACE("TextParagraph::insertAt() - level %d", nLevel);
+        SAL_INFO("oox", "TextParagraph::insertAt() - level " << nLevel);
 
         const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
         if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
@@ -143,7 +143,7 @@ void TextParagraph::insertAt(
     }
     catch( Exception & )
     {
-        OSL_TRACE("OOX: exception in TextParagraph::insertAt");
+        SAL_INFO("oox", "exception in TextParagraph::insertAt");
     }
 }
 
