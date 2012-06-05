@@ -1204,7 +1204,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 SwDocStat selectionStats;
                 SwDocStat documentStats;
                 {
-                    SwWait aWait( *GetDocShell(), sal_True );
                     rShell.CountWords(selectionStats);
                     documentStats = rShell.GetDoc()->GetUpdatedDocStat();
                 }
