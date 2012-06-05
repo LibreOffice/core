@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "AAAACX///9s\u003d",
+        "filename": "pyuno/Executable_python.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-05T11:21:28Z",
+      "side": 1,
+      "message": "I have not tested it yet, because it is Windows specific.\nWill remove this",
+      "parentUuid": "AAAACX///+E\u003d",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACX///+A\u003d",
         "filename": "pyuno/Library_pythonloader.mk",
         "patchSetId": 4
@@ -81,6 +99,24 @@
       "writtenOn": "2012-06-05T09:42:46Z",
       "side": 1,
       "message": "there should be no need to add PYTHON_CFLAGS here, it should be done by gb_Library_use_externals, i.e. in RepositoryExternals.mk",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///9o\u003d",
+        "filename": "pyuno/Library_pythonloader.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-05T11:21:28Z",
+      "side": 1,
+      "message": "you  are right!\nI did it first this way, and then i extracted alle the stuff to RepositoryExternals.mk and forgot this.",
+      "parentUuid": "AAAACX///+A\u003d",
       "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +157,24 @@
     },
     {
       "key": {
+        "uuid": "AAAACX///9k\u003d",
+        "filename": "pyuno/Library_pyuno.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-05T11:21:28Z",
+      "side": 1,
+      "message": "will remove this",
+      "parentUuid": "AAAACX///94\u003d",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACX///90\u003d",
         "filename": "pyuno/Library_pyuno_wrapper.mk",
         "patchSetId": 4
@@ -132,6 +186,24 @@
       "writtenOn": "2012-06-05T09:42:46Z",
       "side": 1,
       "message": "this looks rather weird to me, i wonder if there is a good reason for it, but it shouldn\u0027t hurt to leave it in",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///9g\u003d",
+        "filename": "pyuno/Library_pyuno_wrapper.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-05T11:21:28Z",
+      "side": 1,
+      "message": "i\u0027m not sure if I really need --as-needed ... --no-as-needed, but without -ldl it doesn\u0027t work.",
+      "parentUuid": "AAAACX///90\u003d",
       "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
