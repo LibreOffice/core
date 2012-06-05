@@ -43,7 +43,6 @@ ScSortDlg::ScSortDlg( Window*           pParent,
                       pArgSet ),
         bIsHeaders  ( false ),
         bIsByRows   ( false )
-
 {
     AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
     AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );

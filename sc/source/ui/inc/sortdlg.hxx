@@ -38,9 +38,9 @@
 class ScSortDlg : public SfxTabDialog
 {
 public:
-                ScSortDlg( Window*           pParent,
-                           const SfxItemSet* pArgSet );
-                ~ScSortDlg();
+    ScSortDlg( Window*           pParent,
+            const SfxItemSet* pArgSet );
+    virtual ~ScSortDlg();
 
     void    SetHeaders( sal_Bool bHeaders );
     void    SetByRows ( sal_Bool bByRows );

@@ -59,9 +59,9 @@ struct ScSortParam;
 class ScTabPageSortFields : public SfxTabPage
 {
 public:
-                ScTabPageSortFields( Window*             pParent,
-                                     const SfxItemSet&   rArgSet );
-                ~ScTabPageSortFields();
+    ScTabPageSortFields( Window*             pParent,
+            const SfxItemSet&   rArgSet );
+    virtual ~ScTabPageSortFields();
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
@@ -120,9 +120,9 @@ class CollatorWrapper;
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
-                ScTabPageSortOptions( Window*            pParent,
-                                      const SfxItemSet&  rArgSet );
-                ~ScTabPageSortOptions();
+    ScTabPageSortOptions( Window*            pParent,
+            const SfxItemSet&  rArgSet );
+    virtual ~ScTabPageSortOptions();
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage

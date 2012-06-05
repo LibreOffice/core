@@ -86,6 +86,7 @@ ScSortKeyWindow::ScSortKeyWindow( Window* pParent, const ResId& rResId, ScSortKe
 
 ScSortKeyWindow::~ScSortKeyWindow()
 {
+    mrSortKeyItems.clear();
 }
 
 // -----------------------------------------------------------------------
