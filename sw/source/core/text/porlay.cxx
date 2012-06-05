@@ -142,13 +142,11 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 /*************************************************************************
  * SwLineLayout::~SwLineLayout()
  *
- * class SwLineLayout: Das Layout einer einzelnen Zeile. Dazu
- * gehoeren vor allen Dingen die Dimension, die Anzahl der
- * Character und der Wortzwischenraeume in der Zeile.
- * Zeilenobjekte werden in einem eigenen Pool verwaltet, um zu
- * erreichen, dass sie im Speicher moeglichst beeinander liegen
- * (d.h. zusammen gepaged werden und den Speicher nicht
- * fragmentieren).
+ * class SwLineLayout: This is the layout of a single line, which is made
+ * up of it's dimension, the character count and the word spacing in the
+ * line.
+ * Line objects are managed in an own pool, in order to store them continuously
+ * in memory so that they are paged out together and don't fragment memory.
  *************************************************************************/
 
 SwLineLayout::~SwLineLayout()
@@ -163,8 +161,8 @@ SwLineLayout::~SwLineLayout()
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
 {
-    // Erster Attributwechsel, Masse und Laengen
-    // aus *pCurr in die erste Textportion kopieren.
+   // First attribute change: copy mass and length from *pIns into the first
+   // text portion
     if( !pPortion )
     {
         if( GetLen() )
@@ -182,21 +180,21 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
             return pIns;
         }
     }
-    // mit Skope aufrufen, sonst Rekursion !
+    // Call with scope or we'll end up with recursion!
     return pPortion->SwLinePortion::Insert( pIns );
 }
 
 SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
 {
-    // Erster Attributwechsel, Masse und Laengen
-    // aus *pCurr in die erste Textportion kopieren.
+    // First attribute change: copy mass and length from *pIns into the first
+    // text portion
     if( !pPortion )
         pPortion = new SwTxtPortion( *(SwLinePortion*)this );
-    // mit Skope aufrufen, sonst Rekursion !
+    // Call with scope or we'll end up with recursion!
     return pPortion->SwLinePortion::Append( pIns );
 }
 
-// fuer die Sonderbehandlung bei leeren Zeilen
+// For special treatment of empty lines
 
 sal_Bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 {
@@ -212,7 +210,8 @@ sal_Bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 /*************************************************************************
  * SwLineLayout::CalcLeftMargin()
  *
- * Wir sammeln alle FlyPortions am Anfang der Zeile zu einer MarginPortion.
+ * We collect all FlyPortions at the beginning of the line and make that a
+ * MarginPortion.
  *************************************************************************/
 
 SwMarginPortion *SwLineLayout::CalcLeftMargin()
@@ -242,7 +241,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     {
         if( pPos->IsFlyPortion() )
         {
-            // Die FlyPortion wird ausgesogen ...
+            // The FlyPortion get's sucked out ...
             pLeft->Join( (SwGluePortion*)pPos );
             pPos = pLeft->GetPortion();
             if( GetpKanaComp() && !GetKanaComp().empty() )
@@ -291,7 +290,7 @@ bool lcl_HasOnlyBlanks( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nEnd 
 /*************************************************************************
  * SwLineLayout::CalcLine()
  *
- * Aus FormatLine() ausgelagert.
+ * Swapped out from FormatLine()
  *************************************************************************/
 
 void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
@@ -336,20 +335,19 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             SwLinePortion *pLast = this;
             KSHORT nMaxDescent = 0;
 
-            //  Eine Gruppe ist ein Abschnitt in der Portion-Kette von
-            //  pCurr oder einer Fix-Portion bis zum Ende bzw. zur naechsten
-            //  Fix-Portion.
+            // A group is a segment in the portion chain of pCurr or a fixed
+            // portion spanning to the end or the next fixed portion
             while( pPos )
             {
                 OSL_ENSURE( POR_LIN != pPos->GetWhichPor(),
                         "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
-                // Null-Portions werden eliminiert. Sie koennen entstehen,
-                // wenn zwei FlyFrms ueberlappen.
+                // Null portions are eliminated. They can form if two FlyFrms
+                // overlap.
                 if( !pPos->Compress() )
                 {
-                    // 8110: Hoehe und Ascent nur uebernehmen, wenn sonst in der
-                    // Zeile nichts mehr los ist.
+                    // Only take over Height and Ascent if the rest of the line
+                    // is empty.
                     if( !pPos->GetPortion() )
                     {
                         if( !Height() )
@@ -382,8 +380,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
                 bHasOnlyBlankPortions = false;
 
-                // Es gab Attributwechsel: Laengen und Masse aufaddieren;
-                // bzw.Maxima bilden.
+                // We had an attribute change: Sum up/build maxima of length and mass
 
                 KSHORT nPosHeight = pPos->Height();
                 KSHORT nPosAscent = pPos->GetAscent();
@@ -397,8 +394,9 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     rInf.GetParaPortion()->SetMargin( sal_True );
                 }
 
-                // Damit ein Paragraphende-Zeichen nicht durch ein Descent zu einer
-                // geaenderten Zeilenhoehe und zum Umformatieren fuehrt.
+                // To prevent that a paragraph-end-character does not change
+                // the line height through a Descent and thus causing the line
+                // to reformat.
                 if ( !pPos->IsBreakPortion() || !Height() )
                 {
                     bOnlyPostIts &= pPos->IsPostItsPortion();
@@ -1580,7 +1578,7 @@ sal_uInt8 SwScriptInfo::CompType( const xub_StrLen nPos ) const
 /*************************************************************************
  * SwScriptInfo::HasKana()
  * returns, if there are compressable kanas or specials
- * betwenn nStart and nEnd
+ * between nStart and nEnd
  *************************************************************************/
 
 sal_uInt16 SwScriptInfo::HasKana( xub_StrLen nStart, const xub_StrLen nLen ) const
@@ -1735,7 +1733,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     if( !IsKashidaLine(nStt))
         return STRING_LEN;
 
-    // evaluate kashida informatin in collected in SwScriptInfo
+    // evaluate kashida information in collected in SwScriptInfo
 
     sal_uInt16 nCntKash = 0;
     while( nCntKash < CountKashida() )
@@ -1996,7 +1994,7 @@ void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 }
 
 /*************************************************************************
- *                      SwScriptInfo::MarkKashidasInvalid()
+ * SwScriptInfo::MarkKashidasInvalid()
  *
  * mark the given character indices as invalid kashida positions
 ************************************************************************/
@@ -2139,7 +2137,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
  * HangingMargin()
  * looks for hanging punctuation portions in the paragraph
  * and return the maximum right offset of them.
- * If no such portion is found, the Margin/Hanging-flags will be atualized.
+ * If no such portion is found, the Margin/Hanging-flags will be updated.
  * --------------------------------------------------*/
 
 SwTwips SwLineLayout::_GetHangingMargin() const
@@ -2161,7 +2159,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
 
         pPor = pPor->GetPortion();
     }
-    if( !bFound ) // actualize the hanging-flag
+    if( !bFound ) // update the hanging-flag
         ((SwLineLayout*)this)->SetHanging( sal_False );
     return nDiff;
 }
@@ -2180,7 +2178,7 @@ SwTwips SwTxtFrm::HangingMargin() const
             nRet = nDiff;
         pLine = pLine->GetNext();
     } while ( pLine );
-    if( !nRet ) // actualize the margin-flag
+    if( !nRet ) // update the margin-flag
         ((SwParaPortion*)GetPara())->SetMargin( sal_False );
     return nRet;
 }
