@@ -69,7 +69,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::std;
 using namespace ::rtl;
@@ -351,7 +350,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             {
                                 Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), rxMSF ), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create(comphelper::ComponentContext(rxMSF).getUNOContext()) );
+                                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
 
                                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, bRemoveCropArea, aGraphicCropLogic );
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
@@ -371,7 +370,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                 rtl::OUString aDestMimeType( aSourceMimeType );
                 Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.io.TempFile"), rxMSF ), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( ::comphelper::ComponentContext(rxMSF).getUNOContext() ) );
+                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
